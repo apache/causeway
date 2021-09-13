@@ -23,6 +23,8 @@ import org.apache.isis.client.kroviz.core.model.SystemDM
 import org.apache.isis.client.kroviz.to.DomainTypes
 import org.apache.isis.client.kroviz.to.User
 import org.apache.isis.client.kroviz.to.Version
+import org.apache.isis.client.kroviz.utils.ImageUtils
+import org.apache.isis.client.kroviz.utils.UrlUtils
 
 class SystemAggregator() : BaseAggregator() {
 
@@ -36,7 +38,20 @@ class SystemAggregator() : BaseAggregator() {
             is User -> dpm.addData(obj)
             is Version -> dpm.addData(obj)
             is DomainTypes -> dpm.addData(obj)
-            else -> log(logEntry)
+            else -> {
+                if (logEntry.blob != null) {
+                    val icon = ImageUtils.extractIcon(logEntry)
+                    val url = logEntry.url
+                    val isApplicationIcon = UrlUtils.isApplicationIcon(url)
+                    when (isApplicationIcon) {
+                        url.contains("48") -> (dpm as SystemDM).addSmallIcon(icon)
+                        url.contains("256") -> (dpm as SystemDM).addLargeIcon(icon)
+                        else -> log(logEntry)
+                    }
+                } else {
+                    console.log("[SA.update] no blob/image")
+                }
+            }
         }
 
         if (dpm.canBeDisplayed()) {

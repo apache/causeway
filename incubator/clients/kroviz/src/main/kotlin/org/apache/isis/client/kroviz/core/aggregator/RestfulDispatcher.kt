@@ -29,11 +29,14 @@ class RestfulDispatcher() : BaseAggregator() {
         val restful = logEntry.getTransferObject() as Restful
         restful.links.forEach {
             when {
+                it.rel.endsWith(Relation.SELF.name) -> { }
                 it.rel.endsWith("/menuBars") -> invokeNavigation(it)
-                it.relation() == Relation.SELF -> {
-                }
                 it.rel.endsWith("/services") -> {
                 }
+/*                it.rel.endsWith("/brand-logo-signin") -> {
+                }
+                it.rel.endsWith("/brand-logo-header") -> {
+                }   */
                 else -> invokeSystem(it)
             }
         }

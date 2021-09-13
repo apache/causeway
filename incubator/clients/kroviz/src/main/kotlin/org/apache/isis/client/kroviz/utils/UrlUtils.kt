@@ -16,28 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.handler
+package org.apache.isis.client.kroviz.utils
 
-import kotlinx.serialization.json.Json
-import org.apache.isis.client.kroviz.layout.Layout
-import org.apache.isis.client.kroviz.to.TransferObject
-import org.apache.isis.client.kroviz.utils.UrlUtils
-import org.apache.isis.client.kroviz.utils.XmlHelper
+import org.apache.isis.client.kroviz.to.Relation
 
-class LayoutHandler : BaseHandler() {
+object UrlUtils {
 
-    override fun canHandle(response: String): Boolean {
-        val isJsonLayout = !XmlHelper.isXml(response)
-                && UrlUtils.isLayout(logEntry.url)
-        if (isJsonLayout) {
-            return super.canHandle(response)
-        }
-        return false
+    fun isIcon(url: String): Boolean {
+        return isApplicationIcon(url) || isObjectIcon(url)
     }
 
-
-    override fun parse(response: String): TransferObject {
-        return Json.decodeFromString(Layout.serializer(), response)
+    fun isObjectIcon(url: String): Boolean {
+         return url.endsWith(Relation.OBJECT_ICON.type)
     }
 
+    fun isApplicationIcon(url: String): Boolean {
+        return url.contains("/images/")
+    }
+
+    fun isProperties(url: String): Boolean {
+        return url.contains("/properties/")
+    }
+
+    fun isLayout(url: String): Boolean {
+        return url.endsWith(Relation.LAYOUT.type)
+    }
+
+    fun isObjectLayout(url: String): Boolean {
+        return url.endsWith(Relation.OBJECT_LAYOUT.type)
+    }
 }

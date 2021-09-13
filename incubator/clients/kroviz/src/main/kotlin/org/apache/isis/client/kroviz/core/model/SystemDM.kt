@@ -18,15 +18,14 @@
  */
 package org.apache.isis.client.kroviz.core.model
 
-import org.apache.isis.client.kroviz.to.DomainTypes
-import org.apache.isis.client.kroviz.to.TransferObject
-import org.apache.isis.client.kroviz.to.User
-import org.apache.isis.client.kroviz.to.Version
+import org.apache.isis.client.kroviz.to.*
 
 class SystemDM(override val title: String) : DisplayModel() {
     var user: User? = null
     var version: Version? = null
     private var domainTypes: DomainTypes? = null
+    var logoSmall: Icon? = null
+    var logoLarge: Icon? = null
 
     override fun canBeDisplayed(): Boolean {
         return !isRendered
@@ -40,6 +39,14 @@ class SystemDM(override val title: String) : DisplayModel() {
             else -> {
             }
         }
+    }
+
+    fun addSmallIcon(icon: Icon) {
+        logoSmall = icon
+    }
+
+    fun addLargeIcon(icon: Icon) {
+        logoLarge = icon
     }
 
 }

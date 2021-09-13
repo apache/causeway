@@ -27,6 +27,7 @@ import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.utils.StringUtils
+import org.apache.isis.client.kroviz.utils.UrlUtils
 import org.w3c.xhr.BLOB
 import org.w3c.xhr.XMLHttpRequest
 import org.w3c.xhr.XMLHttpRequestResponseType
@@ -53,7 +54,7 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
         xhr.setRequestHeader("Authorization", "Basic $credentials")
         xhr.setRequestHeader(CONTENT_TYPE, "application/$subType;charset=UTF-8")
         xhr.setRequestHeader(ACCEPT, "application/$subType, ${Constants.pngMimeType}")
-        if (url.endsWith("object-icon")) {
+        if (UrlUtils.isIcon(url)) {
             xhr.responseType = XMLHttpRequestResponseType.BLOB
         }
 

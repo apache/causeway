@@ -24,6 +24,7 @@ import org.apache.isis.client.kroviz.core.model.DisplayModel
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Constants
+import org.apache.isis.client.kroviz.utils.UrlUtils
 
 /**
  * An Aggregator:
@@ -76,11 +77,11 @@ abstract class BaseAggregator {
     }
 
     private fun Link.isLayout(): Boolean {
-        return href.isNotEmpty() && href.contains("layout")
+        return href.isNotEmpty() && UrlUtils.isLayout(href)
     }
 
     private fun Link.isIcon(): Boolean {
-        return href.isNotEmpty() && href.endsWith("object-icon")
+        return href.isNotEmpty() && UrlUtils.isObjectIcon(href)
     }
 
     protected fun invoke(
