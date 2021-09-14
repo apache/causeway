@@ -34,6 +34,7 @@ import java.util.stream.Stream;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.adapters.EncodingException;
+import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
@@ -80,15 +81,15 @@ implements TemporalValueFacet<T> {
     protected final BiFunction<TemporalAdjust, T, T> adjuster;
 
     public TemporalValueSemanticsProviderAbstract(
-            Class<? extends Facet> adapterFacetType,
-            TemporalCharacteristic temporalCharacteristic,
-            OffsetCharacteristic offsetCharacteristic,
-            FacetHolder holder,
-            Class<T> valueType,
-            int typicalLength,
-            int maxLength,
-            TemporalQuery<T> query,
-            BiFunction<TemporalAdjust, T, T> adjuster) {
+            final Class<? extends Facet> adapterFacetType,
+            final TemporalCharacteristic temporalCharacteristic,
+            final OffsetCharacteristic offsetCharacteristic,
+            final FacetHolder holder,
+            final Class<T> valueType,
+            final int typicalLength,
+            final int maxLength,
+            final TemporalQuery<T> query,
+            final BiFunction<TemporalAdjust, T, T> adjuster) {
 
         super(adapterFacetType, holder, valueType, typicalLength, maxLength,
                 Immutability.IMMUTABLE, EqualByContent.HONOURED, /*DEFAULT_VALUE*/ null);
@@ -111,15 +112,15 @@ implements TemporalValueFacet<T> {
         visitor.accept("offsetCharacteristic", getOffsetCharacteristic());
     }
 
-    protected void setEncodingFormatter(DateTimeFormatter encodingFormatter) {
+    protected void setEncodingFormatter(final DateTimeFormatter encodingFormatter) {
         this.encodingFormatter = encodingFormatter;
     }
 
-    protected void addNamedFormat(String name, String pattern) {
+    protected void addNamedFormat(final String name, final String pattern) {
         namedFormatters.put(name, DateTimeFormatter.ofPattern(pattern, Locale.getDefault()));
     }
 
-    protected Optional<FormatStyle> lookupFormatStyle(String styleName) {
+    protected Optional<FormatStyle> lookupFormatStyle(final String styleName) {
         if(styleName==null) {
             return Optional.empty();
         }
@@ -128,16 +129,16 @@ implements TemporalValueFacet<T> {
         .findFirst();
     }
 
-    protected Optional<DateTimeFormatter> lookupNamedFormatter(String formatName) {
+    protected Optional<DateTimeFormatter> lookupNamedFormatter(final String formatName) {
         return Optional.ofNullable(namedFormatters.get(formatName));
     }
 
-    protected DateTimeFormatter lookupNamedFormatterElseFail(String formatName) {
+    protected DateTimeFormatter lookupNamedFormatterElseFail(final String formatName) {
         return lookupNamedFormatter(formatName)
                 .orElseThrow(()->_Exceptions.noSuchElement("unknown format name %s", formatName));
     }
 
-    protected Optional<DateTimeFormatter> formatterFromPattern(String pattern) {
+    protected Optional<DateTimeFormatter> formatterFromPattern(final String pattern) {
         try {
             return Optional.of(DateTimeFormatter.ofPattern(pattern, Locale.getDefault()));
         } catch (Exception e) {
@@ -177,12 +178,12 @@ implements TemporalValueFacet<T> {
     // -- ENCODER/DECODER
 
     @Override
-    protected String doEncode(final T temporal) {
+    public String toEncodedString(final T temporal) {
         return encodingFormatter.format(temporal);
     }
 
     @Override
-    protected T doRestore(final String data) {
+    public T fromEncodedString(final String data) {
         try {
             return encodingFormatter.parse(data, query);
         } catch (final IllegalArgumentException e) {
@@ -194,8 +195,8 @@ implements TemporalValueFacet<T> {
 
     @Override
     protected T doParse(
-            final String entry,
-            final Object context) {
+            final Parser.Context context,
+            final String entry) {
 
         T contextTemporal = _Casts.uncheckedCast(context);
 
@@ -210,7 +211,7 @@ implements TemporalValueFacet<T> {
         return parse(temporalString, parsers);
     }
 
-    private T parse(String dateStr, Iterable<Function<String, T>> parsers) {
+    private T parse(final String dateStr, final Iterable<Function<String, T>> parsers) {
         for(val parser: parsers) {
             try {
                 return parser.apply(dateStr);
@@ -235,14 +236,7 @@ implements TemporalValueFacet<T> {
         return titleString(titleFormatter, temporal);
     }
 
-    @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
-        val temporal = _Casts.<T>uncheckedCast(value);
-        val formatter = DateTimeFormatter.ofPattern(usingMask, Locale.getDefault());
-        return titleString(formatter, temporal);
-    }
-
-    private String titleString(@NonNull DateTimeFormatter formatter, @Nullable T temporal) {
+    private String titleString(@NonNull final DateTimeFormatter formatter, @Nullable final T temporal) {
         return temporal != null ? formatter.format(temporal) : "";
     }
 

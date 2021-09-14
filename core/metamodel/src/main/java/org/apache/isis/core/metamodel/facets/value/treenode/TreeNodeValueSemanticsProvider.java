@@ -21,9 +21,11 @@ package org.apache.isis.core.metamodel.facets.value.treenode;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.Parser.Context;
 import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.graph.tree.TreeState;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
+import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.memento._Mementos;
 import org.apache.isis.commons.internal.memento._Mementos.Memento;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
@@ -32,7 +34,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 
 @SuppressWarnings("rawtypes")
-public class TreeNodeValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<TreeNode>
+public class TreeNodeValueSemanticsProvider
+extends ValueSemanticsProviderAndFacetAbstract<TreeNode>
 implements TreeNodeValueFacet {
 
     private static final int TYPICAL_LENGTH = 0;
@@ -62,17 +65,17 @@ implements TreeNodeValueFacet {
         return object != null ? ((TreeNode<?>)object).toString() : "[null]"; //TODO implement
     }
 
-    @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
-        return titleString(value);
-    }
-
     // //////////////////////////////////////////////////////////////////
     // Parser
     // //////////////////////////////////////////////////////////////////
 
     @Override
     public Parser<TreeNode> getParser() {
+        return null;
+    }
+
+    @Override
+    protected TreeNode doParse(final Context context, final String entry) {
         return null;
     }
 
@@ -90,7 +93,7 @@ implements TreeNodeValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final TreeNode treeNode) {
+    public String toEncodedString(final TreeNode treeNode) {
 
         final Memento memento = newMemento();
         memento.put("primaryValue", treeNode.getValue());
@@ -101,7 +104,7 @@ implements TreeNodeValueFacet {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected TreeNode<?> doRestore(final String input) {
+    public TreeNode<?> fromEncodedString(final String input) {
         final Memento memento = parseMemento(input);
         return TreeNode.of(
                 memento.get("primaryValue", Object.class),
@@ -124,7 +127,7 @@ implements TreeNodeValueFacet {
         return _Mementos.create(codec, serializer);
     }
 
-    private _Mementos.Memento parseMemento(String input){
+    private _Mementos.Memento parseMemento(final String input){
         final UrlEncodingService codec = getServiceRegistry().lookupServiceElseFail(UrlEncodingService.class);
         final SerializingAdapter serializer = getServiceRegistry().lookupServiceElseFail(SerializingAdapter.class);
         return _Mementos.parse(codec, serializer, input);

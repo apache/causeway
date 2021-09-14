@@ -88,11 +88,11 @@ implements BigDecimalValueFacet {
     // -- PARSER
 
     @Override
-    protected BigDecimal doParse(final Object context, final String entry) {
+    protected BigDecimal doParse(final Parser.Context context, final String entry) {
         try {
             return new BigDecimal(entry);
         } catch (final NumberFormatException e) {
-            throw new TextEntryParseException("Not an decimal " + entry, e);
+            throw new TextEntryParseException("Not a decimal " + entry, e);
         }
     }
 
@@ -103,32 +103,19 @@ implements BigDecimalValueFacet {
         return titleString(format, object);
     }
 
-    @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
-        return titleString(new DecimalFormat(usingMask), value);
-    }
-
     // -- ENCODER DECODER
 
     @Override
-    protected String doEncode(final BigDecimal object) {
-        // for dotnet compatibility - toString pre 1.3 was equivalent to
-        // toPlainString later.
+    public String toEncodedString(final BigDecimal object) {
         try {
-            final Class<?> type = object.getClass();
-            try {
-                return (String) type.getMethod("toPlainString", (Class[]) null).invoke(object, (Object[]) null);
-            } catch (final NoSuchMethodException nsm) {
-                return (String) type.getMethod("toString", (Class[]) null).invoke(object, (Object[]) null);
-            }
+            return object.toPlainString();
         } catch (final Exception e) {
             throw new UnrecoverableException(e);
         }
-
     }
 
     @Override
-    protected BigDecimal doRestore(final String data) {
+    public BigDecimal fromEncodedString(final String data) {
         return new BigDecimal(data);
     }
 
@@ -144,7 +131,6 @@ implements BigDecimalValueFacet {
     public String toString() {
         return "BigDecimalValueSemanticsProvider: " + format;
     }
-
 
 
 }

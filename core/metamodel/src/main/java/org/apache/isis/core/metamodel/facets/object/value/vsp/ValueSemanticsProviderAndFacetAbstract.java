@@ -167,14 +167,8 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
      *            - the proposed new object, as a string representation to be
      *            parsed
      */
-    protected T doParse(final Object context, final String entry) {
-        return doParse(entry, context);
-    }
+    protected abstract T doParse(final Parser.Context context, final String entry);
 
-    // REVIEW: this method used to take Localization as a third param, could now inline
-    protected T doParse(final String entry, final Object context) {
-        return doParse(context, entry);
-    }
 
     /**
      * Whether a non-null entry is required, used by parsing.
@@ -211,8 +205,6 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
      */
     protected abstract String titleString(Object object);
 
-    public abstract String titleStringWithMask(final Object value, final String usingMask);
-
     @Override
     public final int typicalLength() {
         return this.typicalLength;
@@ -231,34 +223,6 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
     public T getDefaultValue() {
         return this.defaultValue;
     }
-
-    // ///////////////////////////////////////////////////////////////////////////
-    // EncoderDecoder implementation
-    // ///////////////////////////////////////////////////////////////////////////
-
-    @Override
-    public String toEncodedString(final T object) {
-        return doEncode(object);
-    }
-
-    @Override
-    public T fromEncodedString(final String data) {
-        return doRestore(data);
-    }
-
-    /**
-     * Hook method to perform the actual encoding.
-     */
-    protected abstract String doEncode(T object);
-
-    /**
-     * Hook method to perform the actual restoring.
-     */
-    protected abstract T doRestore(String data);
-
-    // ///////////////////////////////////////////////////////////////////////////
-    // Helper: Locale handling
-    // ///////////////////////////////////////////////////////////////////////////
 
     // //////////////////////////////////////////////////////////
     // Helper: createAdapter
@@ -284,7 +248,6 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
         visitor.accept("equalByContent", this.equalByContent);
         visitor.accept("defaultValue", this.defaultValue);
     }
-
 
 
 }

@@ -32,8 +32,9 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 
-
-public class BigIntegerValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<BigInteger> implements BigIntegerValueFacet {
+public class BigIntegerValueSemanticsProvider
+extends ValueSemanticsProviderAndFacetAbstract<BigInteger>
+implements BigIntegerValueFacet {
 
     private static final int TYPICAL_LENGTH = 10;
 
@@ -74,7 +75,7 @@ public class BigIntegerValueSemanticsProvider extends ValueSemanticsProviderAndF
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected BigInteger doParse(final Object context, final String entry) {
+    protected BigInteger doParse(final Parser.Context context, final String entry) {
         try {
             return new BigInteger(entry);
         } catch (final NumberFormatException e) {
@@ -87,22 +88,17 @@ public class BigIntegerValueSemanticsProvider extends ValueSemanticsProviderAndF
         return titleString(format, object);
     }
 
-    @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
-        return titleString(new DecimalFormat(usingMask), value);
-    }
-
     // //////////////////////////////////////////////////////////////////
     // EncoderDecoder
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final BigInteger bigInt) {
+    public String toEncodedString(final BigInteger bigInt) {
         return bigInt.toString();
     }
 
     @Override
-    protected BigInteger doRestore(final String data) {
+    public BigInteger fromEncodedString(final String data) {
         return new BigInteger(data);
     }
 

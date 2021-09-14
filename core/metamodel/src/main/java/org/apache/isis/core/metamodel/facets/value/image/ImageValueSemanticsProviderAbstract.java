@@ -44,17 +44,12 @@ implements ImageValueFacet {
     }
 
     @Override
-    protected T doParse(final Object original, final String entry) {
+    protected T doParse(final Parser.Context context, final String entry) {
         throw new UnexpectedCallException();
     }
 
     @Override
     public String titleString(final Object value) {
-        return "image";
-    }
-
-    @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
         return "image";
     }
 

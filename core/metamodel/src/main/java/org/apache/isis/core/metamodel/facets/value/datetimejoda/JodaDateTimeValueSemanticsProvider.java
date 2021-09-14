@@ -173,12 +173,12 @@ extends ValueSemanticsProviderAbstractTemporal<DateTime> {
     }
 
     @Override
-    protected String doEncode(final DateTime dateTime) {
+    public String toEncodedString(final DateTime dateTime) {
         return encodingFormatter().print(dateTime);
     }
 
     @Override
-    protected DateTime doRestore(final String data) {
+    public DateTime fromEncodedString(final String data) {
         try {
             return encodingFormatter().parseDateTime(data);
         } catch (final IllegalArgumentException e) {

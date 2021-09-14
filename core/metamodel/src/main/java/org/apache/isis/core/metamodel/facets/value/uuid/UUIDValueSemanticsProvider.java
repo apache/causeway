@@ -27,8 +27,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-
-public class UUIDValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<UUID> implements UUIDValueFacet {
+public class UUIDValueSemanticsProvider
+extends ValueSemanticsProviderAndFacetAbstract<UUID>
+implements UUIDValueFacet {
 
     private static final Class<? extends Facet> type() {
         return UUIDValueFacet.class;
@@ -55,7 +56,7 @@ public class UUIDValueSemanticsProvider extends ValueSemanticsProviderAndFacetAb
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected UUID doParse(final Object context, final String entry) {
+    protected UUID doParse(final Parser.Context context, final String entry) {
         if (entry.trim().equals("")) {
             return null;
         } else {
@@ -68,22 +69,17 @@ public class UUIDValueSemanticsProvider extends ValueSemanticsProviderAndFacetAb
         return object == null ? "" : object.toString();
     }
 
-    @Override
-    public String titleStringWithMask(final Object object, final String usingMask) {
-        return titleString(object);
-    }
-
     // //////////////////////////////////////////////////////////////////
     // EncoderDecoder
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final UUID object) {
+    public String toEncodedString(final UUID object) {
         return object.toString();
     }
 
     @Override
-    protected UUID doRestore(final String data) {
+    public UUID fromEncodedString(final String data) {
         return UUID.fromString(data);
     }
 

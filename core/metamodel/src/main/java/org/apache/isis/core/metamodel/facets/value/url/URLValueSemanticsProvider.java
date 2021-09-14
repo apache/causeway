@@ -27,7 +27,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class URLValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<java.net.URL> implements URLValueFacet {
+public class URLValueSemanticsProvider
+extends ValueSemanticsProviderAndFacetAbstract<java.net.URL>
+implements URLValueFacet {
 
 
     private static final Class<? extends Facet> type() {
@@ -56,7 +58,7 @@ public class URLValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbs
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected java.net.URL doParse(final Object context, final String entry) {
+    protected java.net.URL doParse(final Parser.Context context, final String entry) {
         if (entry.trim().equals("")) {
             return null;
         }
@@ -74,22 +76,17 @@ public class URLValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbs
         return object != null? object.toString(): "";
     }
 
-    @Override
-    public String titleStringWithMask(final Object object, final String usingMask) {
-        return titleString(object);
-    }
-
     // //////////////////////////////////////////////////////////////////
     // EncoderDecoder
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final java.net.URL url) {
+    public String toEncodedString(final java.net.URL url) {
         return url != null? url.toString(): "NULL";
     }
 
     @Override
-    protected java.net.URL doRestore(final String data) {
+    public java.net.URL fromEncodedString(final String data) {
         if("NULL".equals(data)) {
             return null;
         }

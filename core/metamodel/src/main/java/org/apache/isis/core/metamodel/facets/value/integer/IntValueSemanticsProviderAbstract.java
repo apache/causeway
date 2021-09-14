@@ -24,13 +24,13 @@ import java.text.ParseException;
 import java.util.Locale;
 import java.util.function.BiConsumer;
 
+import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.commons.LocaleUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-
 
 public abstract class IntValueSemanticsProviderAbstract
 extends ValueSemanticsProviderAndFacetAbstract<Integer>
@@ -65,7 +65,7 @@ implements IntegerValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Integer doParse(final Object context, final String entry) {
+    protected Integer doParse(final Parser.Context context, final String entry) {
         try {
             return Integer.valueOf(format.parse(entry).intValue());
         } catch (final ParseException e) {
@@ -78,22 +78,18 @@ implements IntegerValueFacet {
         return titleString(format, value);
     }
 
-    @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
-        return titleString(new DecimalFormat(usingMask), value);
-    }
 
     // //////////////////////////////////////////////////////////////////
     // EncoderDecoder
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Integer object) {
+    public String toEncodedString(final Integer object) {
         return object.toString();
     }
 
     @Override
-    protected Integer doRestore(final String data) {
+    public Integer fromEncodedString(final String data) {
         return Integer.parseInt(data);
     }
 

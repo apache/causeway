@@ -24,13 +24,13 @@ import java.text.ParseException;
 import java.util.Locale;
 import java.util.function.BiConsumer;
 
+import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.commons.LocaleUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-
 
 public abstract class LongValueSemanticsProviderAbstract
 extends ValueSemanticsProviderAndFacetAbstract<Long>
@@ -61,7 +61,7 @@ implements LongValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Long doParse(final Object context, final String entry) {
+    protected Long doParse(final Parser.Context context, final String entry) {
         try {
             return Long.valueOf(format.parse(entry).longValue());
         } catch (final ParseException e) {
@@ -74,22 +74,17 @@ implements LongValueFacet {
         return titleString(format, value);
     }
 
-    @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
-        return titleString(new DecimalFormat(usingMask), value);
-    }
-
     // //////////////////////////////////////////////////////////////////
     // EncoderDecoder
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Long object) {
+    public String toEncodedString(final Long object) {
         return object.toString();
     }
 
     @Override
-    protected Long doRestore(final String data) {
+    public Long fromEncodedString(final String data) {
         return Long.parseLong(data);
     }
 

@@ -37,7 +37,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-
 public class JodaLocalDateTimeValueSemanticsProvider
 extends ValueSemanticsProviderAndFacetAbstract<LocalDateTime>
 implements JodaLocalDateTimeValueFacet {
@@ -81,6 +80,7 @@ implements JodaLocalDateTimeValueFacet {
     /**
      * @deprecated possible memory leak issue, because this one is never cleared up
      */
+    @Deprecated
     private static final ThreadLocal<String> OVERRIDE_TITLE_PATTERN = ThreadLocal.withInitial(()->null);
 
     private static final List<DateTimeFormatter> PARSE_FORMATTERS = _Lists.newArrayList();
@@ -133,7 +133,7 @@ implements JodaLocalDateTimeValueFacet {
     }
 
 
-    private void updateTitleStringFormatter(String titleStringFormatNameOrPattern) {
+    private void updateTitleStringFormatter(final String titleStringFormatNameOrPattern) {
         titleStringFormatter = NAMED_TITLE_FORMATTERS.get(titleStringFormatNameOrPattern);
         if (titleStringFormatter == null) {
             titleStringFormatter = DateTimeFormat.forPattern(titleStringFormatNameOrPattern);
@@ -148,21 +148,21 @@ implements JodaLocalDateTimeValueFacet {
 
     @Override
     protected LocalDateTime doParse(
-            final String entry,
-            final Object context) {
+            final Parser.Context context,
+            final String entry) {
 
         updateTitleStringFormatterIfOverridden();
 
-        LocalDateTime contextDateTime = (LocalDateTime) context;
+        //LocalDateTime contextDateTime = (LocalDateTime) context;
 
         final String dateString = entry.trim().toUpperCase();
-        if (dateString.startsWith("+") && contextDateTime != null) {
-            return JodaLocalDateTimeUtil.relativeDateTime(contextDateTime, dateString, true);
-        } else if (dateString.startsWith("-")  && contextDateTime != null) {
-            return JodaLocalDateTimeUtil.relativeDateTime(contextDateTime, dateString, false);
-        } else {
-            return parseDateTime(dateString, contextDateTime);
-        }
+//        if (dateString.startsWith("+") && contextDateTime != null) {
+//            return JodaLocalDateTimeUtil.relativeDateTime(contextDateTime, dateString, true);
+//        } else if (dateString.startsWith("-")  && contextDateTime != null) {
+//            return JodaLocalDateTimeUtil.relativeDateTime(contextDateTime, dateString, false);
+//        } else {
+            return parseDateTime(dateString);
+//        }
     }
 
     private void updateTitleStringFormatterIfOverridden() {
@@ -176,7 +176,7 @@ implements JodaLocalDateTimeValueFacet {
         updateTitleStringFormatter(overridePattern);
     }
 
-    private LocalDateTime parseDateTime(final String dateStr, final Object original) {
+    private LocalDateTime parseDateTime(final String dateStr) {
         return JodaLocalDateTimeUtil.parseDate(dateStr, PARSE_FORMATTERS);
     }
 
@@ -195,19 +195,12 @@ implements JodaLocalDateTimeValueFacet {
         return JodaLocalDateTimeUtil.titleString(f, dateTime);
     }
 
-    @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
-        final LocalDateTime dateTime = (LocalDateTime) value;
-        return JodaLocalDateTimeUtil.titleString(DateTimeFormat.forPattern(usingMask), dateTime);
-    }
-
-
     // //////////////////////////////////////////////////////////////////
     // EncoderDecoder
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final LocalDateTime localDateTime) {
+    public String toEncodedString(final LocalDateTime localDateTime) {
         return encode(localDateTime);
     }
 
@@ -216,7 +209,7 @@ implements JodaLocalDateTimeValueFacet {
     }
 
     @Override
-    protected LocalDateTime doRestore(final String data) {
+    public LocalDateTime fromEncodedString(final String data) {
         try {
             return parse(data);
         } catch (final IllegalArgumentException e) {

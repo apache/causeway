@@ -53,7 +53,7 @@ extends ImageValueSemanticsProviderAbstract<BufferedImage> {
     }
 
     @Override @Nullable
-    protected String doEncode(final @Nullable BufferedImage image) {
+    public String toEncodedString(final @Nullable BufferedImage image) {
         if(image==null) {
             return null;
         }
@@ -61,7 +61,7 @@ extends ImageValueSemanticsProviderAbstract<BufferedImage> {
     }
 
     @Override @Nullable
-    protected BufferedImage doRestore(final @Nullable String base64ImageData) {
+    public BufferedImage fromEncodedString(final @Nullable String base64ImageData) {
         if(_Strings.isNullOrEmpty(base64ImageData)) {
             return null;
         }

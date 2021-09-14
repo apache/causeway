@@ -56,8 +56,8 @@ implements ChangesDtoValueFacet {
 
 
     @Override
-    protected ChangesDto doParse(final Object context, final String str) {
-        return doRestore(str);
+    protected ChangesDto doParse(final Parser.Context context, final String str) {
+        return fromEncodedString(str);
     }
 
     @Override
@@ -66,12 +66,6 @@ implements ChangesDtoValueFacet {
         final ChangesDto changesDto = (ChangesDto) object;
         return ChangesDtoUtils.toXml(changesDto);
     }
-
-    @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
-        return titleString(value);
-    }
-
 
     @Override
     public String changesDtoValue(final ManagedObject object) {
@@ -90,12 +84,12 @@ implements ChangesDtoValueFacet {
 
 
     @Override
-    protected String doEncode(final ChangesDto changesDto) {
+    public String toEncodedString(final ChangesDto changesDto) {
         return ChangesDtoUtils.toXml(changesDto);
     }
 
     @Override
-    protected ChangesDto doRestore(final String xml) {
+    public ChangesDto fromEncodedString(final String xml) {
         return ChangesDtoUtils.fromXml(xml);
     }
 

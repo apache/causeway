@@ -52,7 +52,7 @@ implements StringValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doParse(final Object context, final String entry) {
+    protected String doParse(final Parser.Context context, final String entry) {
         if (entry.trim().equals("")) {
             return null;
         } else {
@@ -66,17 +66,12 @@ implements StringValueFacet {
         return string;
     }
 
-    @Override
-    public String titleStringWithMask(final Object object, final String usingMask) {
-        return titleString(object);
-    }
-
     // //////////////////////////////////////////////////////////////////
     // EncoderDecoder
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final String text) {
+    public String toEncodedString(final String text) {
         if (text.equals("NULL") || isEscaped(text)) {
             return escapeText(text);
         } else {
@@ -85,7 +80,7 @@ implements StringValueFacet {
     }
 
     @Override
-    protected String doRestore(final String data) {
+    public String fromEncodedString(final String data) {
         if (isEscaped(data)) {
             return data.substring(1);
         } else {

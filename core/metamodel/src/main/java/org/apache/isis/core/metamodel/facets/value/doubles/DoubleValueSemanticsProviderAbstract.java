@@ -24,13 +24,13 @@ import java.text.ParseException;
 import java.util.Locale;
 import java.util.function.BiConsumer;
 
+import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.commons.LocaleUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-
 
 public abstract class DoubleValueSemanticsProviderAbstract
 extends ValueSemanticsProviderAndFacetAbstract<Double>
@@ -60,7 +60,7 @@ implements DoubleFloatingPointValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Double doParse(final Object context, final String entry) {
+    protected Double doParse(final Parser.Context context, final String entry) {
         try {
             return Double.valueOf(format.parse(entry).doubleValue());
         } catch (final ParseException e) {
@@ -77,22 +77,17 @@ implements DoubleFloatingPointValueFacet {
         return titleString(format, value);
     }
 
-    @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
-        return titleString(new DecimalFormat(usingMask), value);
-    }
-
     // //////////////////////////////////////////////////////////////////
     // EncoderDecoder
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Double object) {
+    public String toEncodedString(final Double object) {
         return object.toString();
     }
 
     @Override
-    protected Double doRestore(final String data) {
+    public Double fromEncodedString(final String data) {
         return Double.valueOf(data);
     }
 

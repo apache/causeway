@@ -50,7 +50,7 @@ public class JodaLocalDateTimeValueSemanticsProviderTest {
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .build();
-        
+
         metaModelContext.getConfiguration();
 
         context.checking(new Expectations() {
@@ -61,7 +61,7 @@ public class JodaLocalDateTimeValueSemanticsProviderTest {
         });
 
         provider = new JodaLocalDateTimeValueSemanticsProvider(mockFacetHolder);
-        
+
 
     }
 
@@ -70,8 +70,8 @@ public class JodaLocalDateTimeValueSemanticsProviderTest {
 
         final LocalDateTime t0 = LocalDateTime.now();
 
-        final String encoded = provider.doEncode(t0);
-        final LocalDateTime t1 = provider.doRestore(encoded);
+        final String encoded = provider.toEncodedString(t0);
+        final LocalDateTime t1 = provider.fromEncodedString(encoded);
 
         assertThat(t0, is(equalTo(t1)));
     }

@@ -24,6 +24,7 @@ import java.text.ParseException;
 import java.util.Locale;
 import java.util.function.BiConsumer;
 
+import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.commons.LocaleUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -54,13 +55,12 @@ implements ByteValueFacet {
                 : NumberFormat.getNumberInstance(getConfiguration().getCore().getRuntime().getLocale().map(LocaleUtil::findLocale).orElse(Locale.getDefault()));
     }
 
-
     // //////////////////////////////////////////////////////////////////
     // Parser
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Byte doParse(final Object context, final String entry) {
+    protected Byte doParse(final Parser.Context context, final String entry) {
         try {
             return Byte.valueOf(format.parse(entry).byteValue());
         } catch (final ParseException e) {
@@ -78,18 +78,13 @@ implements ByteValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public String doEncode(final Byte object) {
+    public String toEncodedString(final Byte object) {
         return object.toString();
     }
 
     @Override
-    protected Byte doRestore(final String data) {
+    public Byte fromEncodedString(final String data) {
         return Byte.parseByte(data);
-    }
-
-    @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
-        return titleString(new DecimalFormat(usingMask), value);
     }
 
     // //////////////////////////////////////////////////////////////////

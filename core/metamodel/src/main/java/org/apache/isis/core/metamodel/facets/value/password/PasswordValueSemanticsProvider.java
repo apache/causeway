@@ -26,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-
 public class PasswordValueSemanticsProvider
 extends ValueSemanticsProviderAndFacetAbstract<Password>
 implements PasswordValueFacet {
@@ -54,7 +53,7 @@ implements PasswordValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Password doParse(final Object context, final String text) {
+    protected Password doParse(final Parser.Context context, final String text) {
         return new Password(text);
     }
 
@@ -63,22 +62,17 @@ implements PasswordValueFacet {
         return object == null ? "" : password(object).toString();
     }
 
-    @Override
-    public String titleStringWithMask(final Object object, final String usingMask) {
-        return titleString(object);
-    }
-
     // //////////////////////////////////////////////////////////////////
     // EncoderDecoder
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Password object) {
+    public String toEncodedString(final Password object) {
         return password(object).getPassword();
     }
 
     @Override
-    protected Password doRestore(final String data) {
+    public Password fromEncodedString(final String data) {
         return new Password(data);
     }
 

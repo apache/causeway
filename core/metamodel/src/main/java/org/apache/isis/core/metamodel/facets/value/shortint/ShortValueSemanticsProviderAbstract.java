@@ -24,13 +24,13 @@ import java.text.ParseException;
 import java.util.Locale;
 import java.util.function.BiConsumer;
 
+import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.commons.LocaleUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-
 
 public class ShortValueSemanticsProviderAbstract
 extends ValueSemanticsProviderAndFacetAbstract<Short>
@@ -63,7 +63,7 @@ implements ShortValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Short doParse(final Object context, final String entry) {
+    protected Short doParse(final Parser.Context context, final String entry) {
         try {
             return Short.valueOf(format.parse(entry).shortValue());
         } catch (final ParseException e) {
@@ -76,22 +76,17 @@ implements ShortValueFacet {
         return titleString(format, value);
     }
 
-    @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
-        return titleString(new DecimalFormat(usingMask), value);
-    }
-
     // //////////////////////////////////////////////////////////////////
     // EncoderDecoder
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Short object) {
+    public String toEncodedString(final Short object) {
         return object.toString();
     }
 
     @Override
-    protected Short doRestore(final String data) {
+    public Short fromEncodedString(final String data) {
         return Short.parseShort(data);
     }
 

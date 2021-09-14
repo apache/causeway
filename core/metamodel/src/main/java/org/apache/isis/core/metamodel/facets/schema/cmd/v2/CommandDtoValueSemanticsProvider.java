@@ -56,8 +56,8 @@ implements CommandDtoValueFacet {
 
 
     @Override
-    protected CommandDto doParse(final Object context, final String str) {
-        return doRestore(str);
+    protected CommandDto doParse(final Parser.Context context, final String str) {
+        return fromEncodedString(str);
     }
 
     @Override
@@ -66,12 +66,6 @@ implements CommandDtoValueFacet {
         val commandDto = (CommandDto) object;
         return CommandDtoUtils.toXml(commandDto);
     }
-
-    @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
-        return titleString(value);
-    }
-
 
     @Override
     public String commandDtoValue(final ManagedObject object) {
@@ -90,12 +84,12 @@ implements CommandDtoValueFacet {
 
 
     @Override
-    protected String doEncode(final CommandDto commandDto) {
+    public String toEncodedString(final CommandDto commandDto) {
         return CommandDtoUtils.toXml(commandDto);
     }
 
     @Override
-    protected CommandDto doRestore(final String xml) {
+    public CommandDto fromEncodedString(final String xml) {
         return CommandDtoUtils.fromXml(xml);
     }
 

@@ -55,18 +55,13 @@ implements MarkupValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Markup doParse(final Object context, final String html) {
-        return doRestore(html);
+    protected Markup doParse(final Parser.Context context, final String html) {
+        return fromEncodedString(html);
     }
 
     @Override
     public String titleString(final Object object) {
         return object != null? ((Markup)object).asHtml(): "[null]";
-    }
-
-    @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
-        return titleString(value);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -93,12 +88,12 @@ implements MarkupValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Markup markup) {
+    public String toEncodedString(final Markup markup) {
         return markup.asHtml();
     }
 
     @Override
-    protected Markup doRestore(final String html) {
+    public Markup fromEncodedString(final String html) {
         return new Markup(html);
     }
 

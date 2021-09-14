@@ -78,6 +78,7 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
     /**
      * @deprecated possible memory leak issue, because this one is never cleared up
      */
+    @Deprecated
     private static final ThreadLocal<String> OVERRIDE_TITLE_PATTERN = ThreadLocal.withInitial(()->null);
 
 
@@ -131,7 +132,7 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
     }
 
 
-    private void updateTitleStringFormatter(String titleStringFormatNameOrPattern) {
+    private void updateTitleStringFormatter(final String titleStringFormatNameOrPattern) {
         titleStringFormatter = NAMED_TITLE_FORMATTERS.get(titleStringFormatNameOrPattern);
         if (titleStringFormatter == null) {
             titleStringFormatter = DateTimeFormat.forPattern(titleStringFormatNameOrPattern);
@@ -146,21 +147,21 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
 
     @Override
     protected LocalDate doParse(
-            final String entry,
-            final Object context) {
+            final Parser.Context context,
+            final String entry) {
 
         updateTitleStringFormatterIfOverridden();
 
-        LocalDate contextDate = (LocalDate) context;
+        //LocalDate contextDate = (LocalDate) context;
 
         final String dateString = entry.trim().toUpperCase();
-        if (dateString.startsWith("+") && contextDate != null) {
-            return JodaLocalDateUtil.relativeDate(contextDate, dateString, true);
-        } else if (dateString.startsWith("-")  && contextDate != null) {
-            return JodaLocalDateUtil.relativeDate(contextDate, dateString, false);
-        } else {
-            return parseDate(dateString, contextDate);
-        }
+//        if (dateString.startsWith("+") && contextDate != null) {
+//            return JodaLocalDateUtil.relativeDate(contextDate, dateString, true);
+//        } else if (dateString.startsWith("-")  && contextDate != null) {
+//            return JodaLocalDateUtil.relativeDate(contextDate, dateString, false);
+//        } else {
+            return parseDate(dateString);
+//        }
     }
 
     private void updateTitleStringFormatterIfOverridden() {
@@ -174,7 +175,7 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
         updateTitleStringFormatter(overridePattern);
     }
 
-    private LocalDate parseDate(final String dateStr, final Object original) {
+    private LocalDate parseDate(final String dateStr) {
         return JodaLocalDateUtil.parseDate(dateStr, PARSE_FORMATTERS);
     }
 
@@ -193,19 +194,12 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
         return JodaLocalDateUtil.titleString(f, date);
     }
 
-    @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
-        final LocalDate date = (LocalDate) value;
-        return JodaLocalDateUtil.titleString(DateTimeFormat.forPattern(usingMask), date);
-    }
-
-
     // //////////////////////////////////////////////////////////////////
     // EncoderDecoder
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final LocalDate date) {
+    public String toEncodedString(final LocalDate date) {
         return encode(date);
     }
 
@@ -214,7 +208,7 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
     }
 
     @Override
-    protected LocalDate doRestore(final String data) {
+    public LocalDate fromEncodedString(final String data) {
         try {
             return parse(data);
         } catch (final IllegalArgumentException e) {

@@ -29,7 +29,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 
-
 public class ClobValueSemanticsProvider
 extends ValueSemanticsProviderAndFacetAbstract<Clob>
 implements ClobValueFacet {
@@ -59,18 +58,17 @@ implements ClobValueFacet {
         return object != null? ((Clob)object).getName(): "[null]";
     }
 
-    @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
-        return titleString(value);
-    }
-
-
     // //////////////////////////////////////////////////////////////////
     // Parser
     // //////////////////////////////////////////////////////////////////
 
     @Override
     public Parser<Clob> getParser() {
+        return null;
+    }
+
+    @Override
+    protected Clob doParse(final Context context, final String entry) {
         return null;
     }
 
@@ -88,12 +86,12 @@ implements ClobValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Clob clob) {
+    public String toEncodedString(final Clob clob) {
         return clob.getName() + ":" + clob.getMimeType().getBaseType() + ":" + clob.getChars();
     }
 
     @Override
-    protected Clob doRestore(final String data) {
+    public Clob fromEncodedString(final String data) {
         final int colonIdx = data.indexOf(':');
         final String name  = data.substring(0, colonIdx);
         final int colon2Idx  = data.indexOf(":", colonIdx+1);

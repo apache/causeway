@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.adapters.EncodingException;
+import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -82,7 +83,7 @@ implements DateValueFacet {
      * Allows the specific facet subclass to be specified (rather than use
      * {@link #type()}.
      */
-    public ValueSemanticsProviderAbstractTemporal(String propertyType, final Class<? extends Facet> facetType, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
+    public ValueSemanticsProviderAbstractTemporal(final String propertyType, final Class<? extends Facet> facetType, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
         super(facetType, holder, adaptedClass, typicalLength, -1, immutability, equalByContent, defaultValue);
         configureFormats();
 
@@ -124,8 +125,9 @@ implements DateValueFacet {
 
     @Override
     protected T doParse(
-            final String entry,
-            final Object context) {
+            final Parser.Context context,
+            final String entry) {
+
         buildDefaultFormatIfRequired();
         final String dateString = entry.trim();
         final String str = dateString.toLowerCase();
@@ -232,12 +234,6 @@ implements DateValueFacet {
         return format;
     }
 
-    @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
-        final Date date = dateValue(value);
-        return titleString(new SimpleDateFormat(usingMask), date);
-    }
-
     private String titleString(final DateFormat formatter, final Date date) {
         return date == null ? "" : formatter.format(date);
     }
@@ -247,7 +243,7 @@ implements DateValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final T object) {
+    public String toEncodedString(final T object) {
         final Date date = dateValue(object);
         return encode(date);
     }
@@ -257,7 +253,7 @@ implements DateValueFacet {
     }
 
     @Override
-    protected T doRestore(final String data) {
+    public T fromEncodedString(final String data) {
         final Calendar cal = Calendar.getInstance();
         cal.setTimeZone(UTC_TIME_ZONE);
 

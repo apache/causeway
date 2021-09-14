@@ -24,13 +24,13 @@ import java.text.ParseException;
 import java.util.Locale;
 import java.util.function.BiConsumer;
 
+import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.commons.LocaleUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-
 
 public class FloatValueSemanticsProviderAbstract
 extends ValueSemanticsProviderAndFacetAbstract<Float>
@@ -61,7 +61,7 @@ implements FloatingPointValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Float doParse(final Object context, final String entry) {
+    protected Float doParse(final Parser.Context context, final String entry) {
         try {
             return Float.valueOf(format.parse(entry).floatValue());
         } catch (final ParseException e) {
@@ -74,22 +74,17 @@ implements FloatingPointValueFacet {
         return titleString(format, value);
     }
 
-    @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
-        return titleString(new DecimalFormat(usingMask), value);
-    }
-
     // //////////////////////////////////////////////////////////////////
     // EncoderDecoder
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Float object) {
+    public String toEncodedString(final Float object) {
         return object.toString();
     }
 
     @Override
-    protected Float doRestore(final String data) {
+    public Float fromEncodedString(final String data) {
         return new Float(data);
     }
 

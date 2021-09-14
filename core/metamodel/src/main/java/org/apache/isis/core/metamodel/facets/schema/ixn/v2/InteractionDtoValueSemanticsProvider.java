@@ -56,8 +56,8 @@ implements InteractionDtoValueFacet {
 
 
     @Override
-    protected InteractionDto doParse(final Object context, final String str) {
-        return doRestore(str);
+    protected InteractionDto doParse(final Parser.Context context, final String str) {
+        return fromEncodedString(str);
     }
 
     @Override
@@ -66,12 +66,6 @@ implements InteractionDtoValueFacet {
         final InteractionDto interactionDto = (InteractionDto) object;
         return InteractionDtoUtils.toXml(interactionDto);
     }
-
-    @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
-        return titleString(value);
-    }
-
 
     @Override
     public String interactionDtoValue(final ManagedObject object) {
@@ -90,12 +84,12 @@ implements InteractionDtoValueFacet {
 
 
     @Override
-    protected String doEncode(final InteractionDto interactionDto) {
+    public String toEncodedString(final InteractionDto interactionDto) {
         return InteractionDtoUtils.toXml(interactionDto);
     }
 
     @Override
-    protected InteractionDto doRestore(final String xml) {
+    public InteractionDto fromEncodedString(final String xml) {
         return InteractionDtoUtils.fromXml(xml);
     }
 

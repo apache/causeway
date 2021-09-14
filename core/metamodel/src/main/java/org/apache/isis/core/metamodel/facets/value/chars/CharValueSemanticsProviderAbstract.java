@@ -18,16 +18,16 @@
  */
 package org.apache.isis.core.metamodel.facets.value.chars;
 
-import java.text.DecimalFormat;
-
+import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.exceptions.recoverable.InvalidEntryException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-
-public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Character> implements CharValueFacet {
+public abstract class CharValueSemanticsProviderAbstract
+extends ValueSemanticsProviderAndFacetAbstract<Character>
+implements CharValueFacet {
 
     private static Class<? extends Facet> type() {
         return CharValueFacet.class;
@@ -46,7 +46,7 @@ public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsP
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public Character doParse(final Object context, final String entry) {
+    public Character doParse(final Parser.Context context, final String entry) {
         if (entry.length() > 1) {
             throw new InvalidEntryException("Only a single character is required");
         } else {
@@ -59,22 +59,17 @@ public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsP
         return value == null ? "" : value.toString();
     }
 
-    @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
-        return titleString(new DecimalFormat(usingMask), value);
-    }
-
     // //////////////////////////////////////////////////////////////////
     // EncoderDecoder
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Character object) {
+    public String toEncodedString(final Character object) {
         return object.toString();
     }
 
     @Override
-    protected Character doRestore(final String data) {
+    public Character fromEncodedString(final String data) {
         return Character.valueOf(data.charAt(0));
     }
 

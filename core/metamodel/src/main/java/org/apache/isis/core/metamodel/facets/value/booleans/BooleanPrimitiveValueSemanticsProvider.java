@@ -24,8 +24,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-
-public class BooleanPrimitiveValueSemanticsProvider extends BooleanValueSemanticsProviderAbstract implements PropertyDefaultFacet {
+public class BooleanPrimitiveValueSemanticsProvider
+extends BooleanValueSemanticsProviderAbstract
+implements PropertyDefaultFacet {
 
     private static final Boolean DEFAULT_VALUE = Boolean.FALSE;
 

@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 
-
 public class BlobValueSemanticsProvider
 extends ValueSemanticsProviderAndFacetAbstract<Blob>
 implements BlobValueFacet {
@@ -64,18 +63,17 @@ implements BlobValueFacet {
         return object != null? ((Blob)object).getName(): "[null]";
     }
 
-    @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
-        return titleString(value);
-    }
-
-
     // //////////////////////////////////////////////////////////////////
     // Parser
     // //////////////////////////////////////////////////////////////////
 
     @Override
     public Parser<Blob> getParser() {
+        return null;
+    }
+
+    @Override
+    protected Blob doParse(final Context context, final String entry) {
         return null;
     }
 
@@ -93,13 +91,13 @@ implements BlobValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Blob blob) {
+    public String toEncodedString(final Blob blob) {
         return blob.getName() + ":" + blob.getMimeType().getBaseType() + ":" +
         _Strings.ofBytes(_Bytes.encodeToBase64(Base64.getEncoder(), blob.getBytes()), StandardCharsets.UTF_8);
     }
 
     @Override
-    protected Blob doRestore(final String data) {
+    public Blob fromEncodedString(final String data) {
         final int colonIdx = data.indexOf(':');
         final String name  = data.substring(0, colonIdx);
         final int colon2Idx  = data.indexOf(":", colonIdx+1);
@@ -119,5 +117,6 @@ implements BlobValueFacet {
     public String toString() {
         return "BlobValueSemanticsProvider";
     }
+
 
 }

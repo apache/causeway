@@ -178,12 +178,12 @@ extends ValueSemanticsProviderAbstractTemporal<Date> {
     }
 
     @Override //[ISIS-2005] java.sql.Date requires special treatment, so overriding the default
-    protected String doEncode(final Date date) {
+    public String toEncodedString(final Date date) {
         return date.toString();
     }
 
     @Override //[ISIS-2005] java.sql.Date requires special treatment, so overriding the default
-    protected Date doRestore(final String enString) {
+    public Date fromEncodedString(final String enString) {
         return Date.valueOf(enString);
     }
 

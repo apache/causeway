@@ -52,8 +52,8 @@ implements MarkdownValueFacet {
 
 
     @Override
-    protected Markdown doParse(final Object context, final String html) {
-        return doRestore(html);
+    protected Markdown doParse(final Parser.Context context, final String html) {
+        return fromEncodedString(html);
     }
 
     @Override
@@ -62,17 +62,12 @@ implements MarkdownValueFacet {
     }
 
     @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
-        return titleString(value);
-    }
-
-    @Override
-    protected String doEncode(final Markdown markdown) {
+    public String toEncodedString(final Markdown markdown) {
         return markdown.getMarkdown();
     }
 
     @Override
-    protected Markdown doRestore(final String markdown) {
+    public Markdown fromEncodedString(final String markdown) {
         return new Markdown(markdown);
     }
 

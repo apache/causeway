@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.value.booleans;
 
+import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -26,9 +27,9 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProv
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
-
 public abstract class BooleanValueSemanticsProviderAbstract
-extends ValueSemanticsProviderAndFacetAbstract<Boolean> implements BooleanValueFacet {
+extends ValueSemanticsProviderAndFacetAbstract<Boolean>
+implements BooleanValueFacet {
 
     private static Class<? extends Facet> type() {
         return BooleanValueFacet.class;
@@ -37,7 +38,7 @@ extends ValueSemanticsProviderAndFacetAbstract<Boolean> implements BooleanValueF
     private static final int MAX_LENGTH = 5;
     private static final int TYPICAL_LENGTH = MAX_LENGTH;
 
-    public BooleanValueSemanticsProviderAbstract(FacetHolder holder, Class<Boolean> adaptedClass, Boolean defaultValue) {
+    public BooleanValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Boolean> adaptedClass, final Boolean defaultValue) {
         super(type(), holder, adaptedClass, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, defaultValue);
     }
 
@@ -46,7 +47,7 @@ extends ValueSemanticsProviderAndFacetAbstract<Boolean> implements BooleanValueF
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Boolean doParse(final Object context, final String entry) {
+    protected Boolean doParse(final Parser.Context context, final String entry) {
         final String compareTo = entry.trim().toLowerCase();
         if ("true".equals(compareTo)) {
             return Boolean.TRUE;
@@ -62,22 +63,17 @@ extends ValueSemanticsProviderAndFacetAbstract<Boolean> implements BooleanValueF
         return value == null ? "" : isSet(value) ? "True" : "False";
     }
 
-    @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
-        return titleString(value);
-    }
-
     // //////////////////////////////////////////////////////////////////
     // Encode, Decode
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final Boolean object) {
+    public String toEncodedString(final Boolean object) {
         return isSet(object) ? "T" : "F";
     }
 
     @Override
-    protected Boolean doRestore(final String data) {
+    public Boolean fromEncodedString(final String data) {
         final int dataLength = data.length();
         if (dataLength == 1) {
             switch (data.charAt(0)) {
@@ -110,7 +106,7 @@ extends ValueSemanticsProviderAndFacetAbstract<Boolean> implements BooleanValueF
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public boolean isSet(ManagedObject adapter) {
+    public boolean isSet(final ManagedObject adapter) {
         if (ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
             return false;
         }

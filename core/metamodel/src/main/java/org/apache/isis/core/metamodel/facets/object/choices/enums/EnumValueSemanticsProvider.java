@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.choices.enums;
 import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
+import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
@@ -38,7 +39,6 @@ import lombok.val;
 public class EnumValueSemanticsProvider<T extends Enum<T>>
 extends ValueSemanticsProviderAndFacetAbstract<T>
 implements EnumFacet {
-
 
     private static Class<? extends Facet> type() {
         return EnumFacet.class;
@@ -59,13 +59,6 @@ implements EnumFacet {
     }
 
     private final Method titleMethod;
-
-//    /**
-//     * Required because {@link Parser} and {@link EncoderDecoder}.
-//     */
-//    public EnumValueSemanticsProvider() {
-//        this(EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED, null, null);
-//    }
 
     public EnumValueSemanticsProvider(
             final IntrospectionPolicy introspectionPolicy,
@@ -95,10 +88,10 @@ implements EnumFacet {
     }
 
     @Override
-    protected T doParse(final Object context, final String entry) {
+    protected T doParse(final Parser.Context context, final String entry) {
         final T[] enumConstants = getAdaptedClass().getEnumConstants();
         for (final T enumConstant : enumConstants) {
-            if (doEncode(enumConstant).equals(entry)) {
+            if (toEncodedString(enumConstant).equals(entry)) {
                 return enumConstant;
             }
         }
@@ -112,13 +105,13 @@ implements EnumFacet {
     }
 
     @Override
-    protected String doEncode(final T object) {
+    public String toEncodedString(final T object) {
         return titleString(object);
     }
 
     @Override
-    protected T doRestore(final String data) {
-        return doParse((Object)null, data);
+    public T fromEncodedString(final String data) {
+        return doParse(null, data);
     }
 
 
@@ -150,11 +143,6 @@ implements EnumFacet {
         val translationContext = TranslationContext.forEnum(objectAsEnum);
         final String friendlyNameOfEnum = Enums.getFriendlyNameOf(objectAsEnum.name());
         return translationService.translate(translationContext, friendlyNameOfEnum);
-    }
-
-    @Override
-    public String titleStringWithMask(final Object value, final String usingMask) {
-        return titleString(value);
     }
 
     @Override

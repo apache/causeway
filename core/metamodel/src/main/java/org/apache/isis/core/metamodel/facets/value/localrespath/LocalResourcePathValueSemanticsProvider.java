@@ -59,7 +59,7 @@ extends ValueSemanticsProviderAndFacetAbstract<LocalResourcePath> implements Loc
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected LocalResourcePath doParse(final Object context, final String entry) {
+    protected LocalResourcePath doParse(final Parser.Context context, final String entry) {
         if (entry.trim().equals("")) {
             return null;
         }
@@ -78,24 +78,19 @@ extends ValueSemanticsProviderAndFacetAbstract<LocalResourcePath> implements Loc
                 : "";
     }
 
-    @Override
-    public String titleStringWithMask(final Object object, final String usingMask) {
-        return titleString(object);
-    }
-
     // //////////////////////////////////////////////////////////////////
     // EncoderDecoder
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final LocalResourcePath localResourcePath) {
+    public String toEncodedString(final LocalResourcePath localResourcePath) {
         return localResourcePath != null
                 ? localResourcePath.getValue()
                 : "NULL";
     }
 
     @Override
-    protected LocalResourcePath doRestore(final String data) {
+    public LocalResourcePath fromEncodedString(final String data) {
         if("NULL".equals(data)) {
             return null;
         }
