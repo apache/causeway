@@ -49,13 +49,13 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testValue() {
-        assertEquals("32.5", getValue().displayTitleOf(doubleObj));
+        assertEquals("32.5", getValue().presentationValue(null, doubleObj));
     }
 
     @Test
     public void testInvalidParse() throws Exception {
         try {
-            getValue().parseTextEntry(null, "one");
+            getValue().parseTextRepresentation(null, "one");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -63,18 +63,18 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testTitleOf() {
-        assertEquals("35,000,000", getValue().displayTitleOf(Double.valueOf(35000000.0)));
+        assertEquals("35,000,000", getValue().presentationValue(null, Double.valueOf(35000000.0)));
     }
 
     @Test
     public void testParse() throws Exception {
-        final Object newValue = getValue().parseTextEntry(null, "120.56");
+        final Object newValue = getValue().parseTextRepresentation(null, "120.56");
         assertEquals(120.56, ((Double) newValue).doubleValue(), 0.0);
     }
 
     @Test
     public void testParse2() throws Exception {
-        final Object newValue = getValue().parseTextEntry(null, "1,20.0");
+        final Object newValue = getValue().parseTextRepresentation(null, "1,20.0");
         assertEquals(120, ((Double) newValue).doubleValue(), 0.0);
     }
 

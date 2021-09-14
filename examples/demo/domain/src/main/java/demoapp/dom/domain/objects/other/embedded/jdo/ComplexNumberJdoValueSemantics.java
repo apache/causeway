@@ -42,7 +42,7 @@ public class ComplexNumberJdoValueSemantics
 // tag::getParser[]
         return new Parser<ComplexNumberJdo>() {
             @Override
-            public ComplexNumberJdo parseTextEntry(Object contextPojo, String entry) {
+            public ComplexNumberJdo parseTextRepresentation(final Parser.Context context, final String entry) {
                 return ComplexNumberJdo.parse(entry).orElse(null);
             }
             @Override
@@ -50,16 +50,12 @@ public class ComplexNumberJdoValueSemantics
                 return 30;
             }
             @Override
-            public String displayTitleOf(ComplexNumberJdo object) {
+            public String presentationValue(final Parser.Context context, final ComplexNumberJdo object) {
                 return object!=null ? object.title() : "NaN";
             }
             @Override
-            public String displayTitleOf(ComplexNumberJdo object, String usingMask) {
-                return displayTitleOf(object);
-            }
-            @Override
-            public String parseableTitleOf(ComplexNumberJdo existing) {
-                return displayTitleOf(existing);
+            public String parseableTextRepresentation(final Parser.Context context, final ComplexNumberJdo existing) {
+                return presentationValue(context, existing);
             }
         };
     }
@@ -73,7 +69,7 @@ public class ComplexNumberJdoValueSemantics
 // tag::getEncoderDecoder[]
         return new EncoderDecoder<ComplexNumberJdo>() {
             @Override
-            public String toEncodedString(ComplexNumberJdo cn) {
+            public String toEncodedString(final ComplexNumberJdo cn) {
                 if(cn==null) {
                     return null;
                 }
@@ -83,7 +79,7 @@ public class ComplexNumberJdoValueSemantics
                         Long.toHexString(re), Long.toHexString(im));
             }
             @Override
-            public ComplexNumberJdo fromEncodedString(String str) {
+            public ComplexNumberJdo fromEncodedString(final String str) {
                 if(_NullSafe.isEmpty(str)) {
                     return null;
                 }

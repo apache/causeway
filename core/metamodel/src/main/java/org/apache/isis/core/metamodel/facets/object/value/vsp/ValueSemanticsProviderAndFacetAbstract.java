@@ -49,7 +49,7 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
         IMMUTABLE,
         NOT_IMMUTABLE;
 
-        public static Immutability of(boolean immutable) {
+        public static Immutability of(final boolean immutable) {
             return immutable? IMMUTABLE: NOT_IMMUTABLE;
         }
     }
@@ -58,7 +58,7 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
         HONOURED,
         NOT_HONOURED;
 
-        public static EqualByContent of(boolean equalByContent) {
+        public static EqualByContent of(final boolean equalByContent) {
             return equalByContent? HONOURED: NOT_HONOURED;
         }
     }
@@ -137,7 +137,7 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
     // ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    public T parseTextEntry(final Object context, final String entry) {
+    public T parseTextRepresentation(final Parser.Context context, final String entry) {
         if (entry == null) {
             throw new IllegalArgumentException();
         }
@@ -151,9 +151,9 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
         return doParse(context, entry);
     }
 
-    public Optional<Exception> tryParseTextEntry(final Object context, final String entry) {
+    public Optional<Exception> tryParseTextEntry(final Parser.Context context, final String entry) {
         try {
-            parseTextEntry(context, entry);
+            parseTextRepresentation(context, entry);
         } catch (Exception e) {
             return Optional.of(e);
         }
@@ -167,12 +167,12 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
      *            - the proposed new object, as a string representation to be
      *            parsed
      */
-    protected T doParse(Object context, String entry) {
+    protected T doParse(final Object context, final String entry) {
         return doParse(entry, context);
     }
 
     // REVIEW: this method used to take Localization as a third param, could now inline
-    protected T doParse(String entry, Object context) {
+    protected T doParse(final String entry, final Object context) {
         return doParse(context, entry);
     }
 
@@ -187,27 +187,19 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
     }
 
     @Override
-    public String displayTitleOf(final Object object) {
+    public String presentationValue(final Parser.Context context, final Object object) {
         if (object == null) {
             return "";
         }
         return titleString(object);
     }
 
-    @Override
-    public String displayTitleOf(final Object object, final String usingMask) {
-        if (object == null) {
-            return "";
-        }
-        return titleStringWithMask(object, usingMask);
-    }
-
     /**
-     * Defaults to {@link Parser#displayTitleOf(Object)}.
+     * Defaults to {@link Parser#presentationValue(org.apache.isis.applib.adapters.Parser.Context, Object)}.
      */
     @Override
-    public String parseableTitleOf(final Object existing) {
-        return displayTitleOf(existing);
+    public String parseableTextRepresentation(final Parser.Context context, final Object existing) {
+        return presentationValue(context, existing);
     }
 
     protected String titleString(final Format formatter, final Object object) {

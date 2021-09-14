@@ -21,6 +21,8 @@ package org.apache.isis.core.metamodel.facets.object.parseable.parser;
 import java.util.IllegalFormatException;
 import java.util.function.BiConsumer;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ParsingException;
@@ -30,6 +32,7 @@ import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -79,7 +82,7 @@ implements ParseableFacet {
 
     @Override
     public ManagedObject parseTextEntry(
-            final ManagedObject contextAdapter,
+            final @Nullable ManagedObject contextAdapter,
             final String entry,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -101,10 +104,8 @@ implements ParseableFacet {
             validate(parseValueContext);
         }
 
-        final Object context = UnwrapUtil.single(contextAdapter);
-
         try {
-            final Object parsed = parser.parseTextEntry(context, entry);
+            final Object parsed = parser.parseTextRepresentation(parserContext(), entry);
             if (parsed == null) {
                 return null;
             }
@@ -138,10 +139,20 @@ implements ParseableFacet {
      */
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public String parseableTitle(final ManagedObject contextAdapter) {
+    public String parseableTextRepresentation(final ManagedObject contextAdapter) {
         final Object pojo = UnwrapUtil.single(contextAdapter);
 
-        return ((Parser)parser).parseableTitleOf(pojo);
+        return ((Parser)parser).parseableTextRepresentation(parserContext(), pojo);
+    }
+
+    private Parser.Context parserContext() {
+        val iaProvider = super.getInteractionProvider();
+        if(iaProvider==null) {
+            return null; // JUnit context
+        }
+        return Parser.Context.of(
+                ((FacetHolderAbstract)getFacetHolder()).getFeatureIdentifier(),
+                iaProvider.currentInteractionContext().orElse(null));
     }
 
 }

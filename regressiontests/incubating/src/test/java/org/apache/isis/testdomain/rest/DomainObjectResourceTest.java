@@ -53,12 +53,12 @@ import org.apache.isis.viewer.restfulobjects.viewer.resources.serialization.Seri
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_headless.class,
                 Configuration_usingLayout.class,
                 Configuration_usingActionSemantics.class,
                 DomainObjectResourceTest.TestSetup.class
-        }, 
+        },
         properties = {
                 "isis.core.meta-model.introspector.mode=FULL",
                 "isis.applib.annotation.domain-object.editing=TRUE",
@@ -92,9 +92,9 @@ class DomainObjectResourceTest {
         val objectAdapter = objectManager.adapt(layoutDemo);
         val spec = objectAdapter.getSpecification();
         val domainType = spec.getLogicalTypeName();
-        val instanceId = objectManager.identifyObject(objectAdapter).getIdentifier(); //TODO also needs URL encoding
+        val instanceId = objectManager.bookmarkObject(objectAdapter).getIdentifier(); //TODO also needs URL encoding
 
-        val layoutResourceDescriptor = 
+        val layoutResourceDescriptor =
                 ResourceDescriptor
                 .of(RepresentationType.OBJECT_LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
@@ -114,7 +114,7 @@ class DomainObjectResourceTest {
                 .map(String::trim)
                 .collect(Collectors.joining());
 
-        assertTrue(filteredResult.contains(" 3,"), 
+        assertTrue(filteredResult.contains(" 3,"),
                 String.format("multiLine is expected to be populated, got '%s'", filteredResult));
 
     }
@@ -128,9 +128,9 @@ class DomainObjectResourceTest {
         val objectAdapter = objectManager.adapt(blobDemo);
         val spec = objectAdapter.getSpecification();
         val domainType = spec.getLogicalTypeName();
-        val instanceId = objectManager.identifyObject(objectAdapter).getIdentifier(); //TODO also needs URL encoding
+        val instanceId = objectManager.bookmarkObject(objectAdapter).getIdentifier(); //TODO also needs URL encoding
 
-        val layoutResourceDescriptor = 
+        val layoutResourceDescriptor =
                 ResourceDescriptor
                 .of(RepresentationType.OBJECT_LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
@@ -143,9 +143,9 @@ class DomainObjectResourceTest {
         assertNotNull(grid);
 
         val logoProperty = grid.getAllPropertiesById().get("logo");
-        
+
         assertNotNull(logoProperty);
-        
+
         val jaxbEntity = SerializationStrategy.JSON_INDENTED.entity(logoProperty);
         //System.out.println(jaxbEntity);
 
@@ -155,9 +155,9 @@ class DomainObjectResourceTest {
                 .map(String::trim)
                 .filter(s->s.contains("GET"))
                 .count();
-        
+
         assertEquals(1L, linkCountHavingGET);
-        
+
     }
 
 

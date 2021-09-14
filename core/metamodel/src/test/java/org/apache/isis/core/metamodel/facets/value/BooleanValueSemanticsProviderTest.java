@@ -47,32 +47,32 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testParseFalseString() throws Exception {
-        final Object parsed = value.parseTextEntry(null, "faLSe");
+        final Object parsed = value.parseTextRepresentation(null, "faLSe");
         assertEquals(Boolean.valueOf(false), parsed);
     }
 
     @Test
     public void testParseStringWithPrecedingSpace() throws Exception {
-        final Object parsed = value.parseTextEntry(null, " false");
+        final Object parsed = value.parseTextRepresentation(null, " false");
         assertEquals(Boolean.valueOf(false), parsed);
     }
 
     @Test
     public void testParseStringWithTrailingSpace() throws Exception {
-        final Object parsed = value.parseTextEntry(null, " false");
+        final Object parsed = value.parseTextRepresentation(null, " false");
         assertEquals(Boolean.valueOf(false), parsed);
     }
 
     @Test
     public void testParseTrueString() throws Exception {
-        final Object parsed = value.parseTextEntry(null, "TRue");
+        final Object parsed = value.parseTextRepresentation(null, "TRue");
         assertEquals(Boolean.valueOf(true), parsed);
     }
 
     @Test
     public void testParseInvalidString() throws Exception {
         try {
-            value.parseTextEntry(null, "yes");
+            value.parseTextRepresentation(null, "yes");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -80,7 +80,7 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testTitle() throws Exception {
-        assertEquals("True", value.displayTitleOf(booleanObj));
+        assertEquals("True", value.presentationValue(null, booleanObj));
     }
 
     @Test

@@ -49,14 +49,14 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testParseValidString() throws Exception {
-        final Object parsed = value.parseTextEntry(null, "21");
+        final Object parsed = value.parseTextRepresentation(null, "21");
         assertEquals(Byte.valueOf((byte) 21), parsed);
     }
 
     @Test
     public void testParseInvalidString() throws Exception {
         try {
-            value.parseTextEntry(null, "xs21z4xxx23");
+            value.parseTextRepresentation(null, "xs21z4xxx23");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -64,7 +64,7 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testTitleOf() throws Exception {
-        assertEquals("102", value.displayTitleOf(byteObj));
+        assertEquals("102", value.presentationValue(null, byteObj));
     }
 
     @Test

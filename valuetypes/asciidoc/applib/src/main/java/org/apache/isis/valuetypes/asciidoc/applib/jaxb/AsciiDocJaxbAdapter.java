@@ -46,7 +46,7 @@ public final class AsciiDocJaxbAdapter extends XmlAdapter<String, AsciiDoc> {
             return null;
         }
         final String adoc = _Strings.ofBytes(decoder.decode(v), StandardCharsets.UTF_8);
-        return AsciiDoc.valueOfAdoc(adoc);
+        return AsciiDoc.valueOf(adoc);
     }
 
     @Override

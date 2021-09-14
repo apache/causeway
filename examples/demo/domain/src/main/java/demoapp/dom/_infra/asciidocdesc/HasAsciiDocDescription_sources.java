@@ -43,7 +43,7 @@ public class HasAsciiDocDescription_sources {
     public AsciiDoc prop() {
         val packageName = hasAsciiDocDescription.getClass().getPackage().getName();
         val sourceLocation = packageName.replace('.', '/');
-        return AsciiDoc.valueOfAdoc(
+        return AsciiDoc.valueOf(
                 markupVariableResolverService.resolveVariables(
                         String.format("link:${SOURCES_DEMO}/%s[Sources] for this demo", sourceLocation)));
     }

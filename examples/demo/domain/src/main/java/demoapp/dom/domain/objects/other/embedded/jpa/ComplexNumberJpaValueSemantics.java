@@ -42,7 +42,7 @@ public class ComplexNumberJpaValueSemantics
 // tag::getParser[]
         return new Parser<ComplexNumberJpa>() {
             @Override
-            public ComplexNumberJpa parseTextEntry(Object contextPojo, String entry) {
+            public ComplexNumberJpa parseTextRepresentation(final Parser.Context context, final String entry) {
                 return ComplexNumberJpa.parse(entry).orElse(null);
             }
             @Override
@@ -50,16 +50,12 @@ public class ComplexNumberJpaValueSemantics
                 return 30;
             }
             @Override
-            public String displayTitleOf(ComplexNumberJpa object) {
+            public String presentationValue(final Parser.Context context, final ComplexNumberJpa object) {
                 return object!=null ? object.title() : "NaN";
             }
             @Override
-            public String displayTitleOf(ComplexNumberJpa object, String usingMask) {
-                return displayTitleOf(object);
-            }
-            @Override
-            public String parseableTitleOf(ComplexNumberJpa existing) {
-                return displayTitleOf(existing);
+            public String parseableTextRepresentation(final Parser.Context context, final ComplexNumberJpa existing) {
+                return presentationValue(context, existing);
             }
         };
     }
@@ -73,7 +69,7 @@ public class ComplexNumberJpaValueSemantics
 // tag::getEncoderDecoder[]
         return new EncoderDecoder<ComplexNumberJpa>() {
             @Override
-            public String toEncodedString(ComplexNumberJpa cn) {
+            public String toEncodedString(final ComplexNumberJpa cn) {
                 if(cn==null) {
                     return null;
                 }
@@ -83,7 +79,7 @@ public class ComplexNumberJpaValueSemantics
                         Long.toHexString(re), Long.toHexString(im));
             }
             @Override
-            public ComplexNumberJpa fromEncodedString(String str) {
+            public ComplexNumberJpa fromEncodedString(final String str) {
                 if(_NullSafe.isEmpty(str)) {
                     return null;
                 }

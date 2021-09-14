@@ -58,7 +58,7 @@ public class ParseableFacetUsingParserTest {
     public void setUp() throws Exception {
 
         metaModelContext = MetaModelContext_forTesting.builder()
-                .interactionProvider(mockInteractionProvider)
+                //.interactionProvider(mockInteractionProvider)
                 .build();
 
 
@@ -73,12 +73,15 @@ public class ParseableFacetUsingParserTest {
                 allowing(mockFacetHolder).containsFacet(ValueFacet.class);
                 will(returnValue(Boolean.FALSE));
 
+                allowing(mockFacetHolder).getInteractionProvider();
+                will(returnValue(null));
+
             }
         });
 
         final Parser<String> parser = new Parser<String>() {
             @Override
-            public String parseTextEntry(final Object contextPojo, final String entry) {
+            public String parseTextRepresentation(final Parser.Context context, final String entry) {
                 if (entry.equals("invalid")) {
                     throw new ParsingException();
                 }
@@ -97,17 +100,12 @@ public class ParseableFacetUsingParserTest {
             }
 
             @Override
-            public String displayTitleOf(final String object) {
+            public String presentationValue(final Parser.Context context, final String object) {
                 return null;
             }
 
             @Override
-            public String displayTitleOf(final String object, final String usingMask) {
-                return null;
-            }
-
-            @Override
-            public String parseableTitleOf(final String existing) {
+            public String parseableTextRepresentation(final Parser.Context context, final String existing) {
                 return null;
             }
         };

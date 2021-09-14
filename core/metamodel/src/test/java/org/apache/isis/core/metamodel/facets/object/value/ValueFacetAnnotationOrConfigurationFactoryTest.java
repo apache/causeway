@@ -150,24 +150,19 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         }
 
         @Override
-        public MyValueSemanticsProviderThatIsAParser parseTextEntry(
-                final Object context,
+        public MyValueSemanticsProviderThatIsAParser parseTextRepresentation(
+                final Parser.Context context,
                 final String entry) {
             return null;
         }
 
         @Override
-        public String displayTitleOf(final MyValueSemanticsProviderThatIsAParser object) {
+        public String presentationValue(final Parser.Context context, final MyValueSemanticsProviderThatIsAParser object) {
             return null;
         }
 
         @Override
-        public String displayTitleOf(final MyValueSemanticsProviderThatIsAParser object, final String usingMask) {
-            return null;
-        }
-
-        @Override
-        public String parseableTitleOf(final MyValueSemanticsProviderThatIsAParser existing) {
+        public String parseableTextRepresentation(final Parser.Context context, final MyValueSemanticsProviderThatIsAParser existing) {
             return null;
         }
 
@@ -322,24 +317,19 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         }
 
         @Override
-        public MyValueWithSemanticsProviderSpecifiedUsingConfiguration parseTextEntry(
-                final Object context,
+        public MyValueWithSemanticsProviderSpecifiedUsingConfiguration parseTextRepresentation(
+                final Parser.Context context,
                 final String entry) {
             return null;
         }
 
         @Override
-        public String displayTitleOf(final MyValueWithSemanticsProviderSpecifiedUsingConfiguration object) {
+        public String presentationValue(final Parser.Context context, final MyValueWithSemanticsProviderSpecifiedUsingConfiguration object) {
             return null;
         }
 
         @Override
-        public String displayTitleOf(final MyValueWithSemanticsProviderSpecifiedUsingConfiguration object, final String usingMask) {
-            return null;
-        }
-
-        @Override
-        public String parseableTitleOf(final MyValueWithSemanticsProviderSpecifiedUsingConfiguration existing) {
+        public String parseableTextRepresentation(final Parser.Context context, final MyValueWithSemanticsProviderSpecifiedUsingConfiguration existing) {
             return null;
         }
 
@@ -379,24 +369,19 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         }
 
         @Override
-        public NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration parseTextEntry(
-                final Object context,
+        public NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration parseTextRepresentation(
+                final Parser.Context context,
                 final String entry) {
             return null;
         }
 
         @Override
-        public String displayTitleOf(final NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration object) {
+        public String presentationValue(final Parser.Context context, final NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration object) {
             return null;
         }
 
         @Override
-        public String displayTitleOf(final NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration object, final String usingMask) {
-            return null;
-        }
-
-        @Override
-        public String parseableTitleOf(final NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration existing) {
+        public String parseableTextRepresentation(final Parser.Context context, final NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration existing) {
             return null;
         }
 

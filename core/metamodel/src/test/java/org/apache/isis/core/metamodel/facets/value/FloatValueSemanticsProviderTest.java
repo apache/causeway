@@ -51,7 +51,7 @@ extends ValueSemanticsProviderAbstractTestCase {
     @Test
     public void testInvalidParse() throws Exception {
         try {
-            value.parseTextEntry(null, "one");
+            value.parseTextRepresentation(null, "one");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -59,18 +59,18 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testTitleOf() {
-        assertEquals("32.5", value.displayTitleOf(float1));
+        assertEquals("32.5", value.presentationValue(null, float1));
     }
 
     @Test
     public void testParse() throws Exception {
-        final Object parsed = value.parseTextEntry(null, "120.50");
+        final Object parsed = value.parseTextRepresentation(null, "120.50");
         assertEquals(120.5f, ((Float) parsed).floatValue(), 0.0);
     }
 
     @Test
     public void testParseBadlyFormatedEntry() throws Exception {
-        final Object parsed = value.parseTextEntry(null, "1,20.0");
+        final Object parsed = value.parseTextRepresentation(null, "1,20.0");
         assertEquals(120.0f, ((Float) parsed).floatValue(), 0.0);
     }
 

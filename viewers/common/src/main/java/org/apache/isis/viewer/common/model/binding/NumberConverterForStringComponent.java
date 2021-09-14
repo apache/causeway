@@ -55,21 +55,21 @@ public final class NumberConverterForStringComponent implements BindingConverter
     }
 
     @Override
-    public ManagedObject wrap(String stringifiedNumber) {
+    public ManagedObject wrap(final String stringifiedNumber) {
 
         if(tryParse(stringifiedNumber).isPresent()) {
             // return an intermediate placeholder
             return ManagedObject.empty(getValueSpecification());
         }
 
-        val number = valueFacet.parseTextEntry(null, stringifiedNumber);
+        val number = valueFacet.parseTextRepresentation(null, stringifiedNumber);
         return ManagedObject.of(getValueSpecification(), number);
     }
 
     @Override
-    public String unwrap(ManagedObject object) {
+    public String unwrap(final ManagedObject object) {
         val number = (Number) ManagedObjects.UnwrapUtil.single(object);
-        return valueFacet.parseableTitleOf(number);
+        return valueFacet.parseableTextRepresentation(null, number);
     }
 
 
@@ -86,17 +86,17 @@ public final class NumberConverterForStringComponent implements BindingConverter
             FloatingPointValueFacet.class);
 
     @Override
-    public String toString(String value) {
+    public String toString(final String value) {
         return value; // identity
     }
 
     @Override
-    public String fromString(String stringifiedValue) {
+    public String fromString(final String stringifiedValue) {
         return stringifiedValue; // identity
     }
 
     @Override
-    public Optional<String> tryParse(String stringifiedValue) {
+    public Optional<String> tryParse(final String stringifiedValue) {
         return valueFacet.tryParseTextEntry(null, stringifiedValue)
                 .map(Exception::getMessage); // TODO should be passed through the ExceptionRecognizer
     }

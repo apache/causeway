@@ -39,7 +39,7 @@ public class IsisAsciiDocConverter implements AttributeConverter<AsciiDoc, Strin
     @Override
     public AsciiDoc convertToEntityAttribute(final String datastoreValue) {
         return datastoreValue != null
-                ? AsciiDoc.valueOfAdoc(datastoreValue)
+                ? AsciiDoc.valueOf(datastoreValue)
                 : null;
     }
 

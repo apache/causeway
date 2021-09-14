@@ -58,7 +58,7 @@ extends ValueSemanticsProviderAbstractTestCase {
     @Test
     public void testInvalidParse() throws Exception {
         try {
-            getValue().parseTextEntry(null, "invalid entry");
+            getValue().parseTextRepresentation(null, "invalid entry");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -72,7 +72,7 @@ extends ValueSemanticsProviderAbstractTestCase {
     @Test
     public void testTitleOf() {
         final String EXPECTED = DateFormat.getDateTimeInstance(SimpleDateFormat.MEDIUM, SimpleDateFormat.SHORT).format(new java.util.Date(0));
-        assertEquals(EXPECTED, getValue().displayTitleOf(date));
+        assertEquals(EXPECTED, getValue().presentationValue(null, date));
     }
 
     @Test
@@ -84,7 +84,7 @@ extends ValueSemanticsProviderAbstractTestCase {
         Locale.setDefault(Locale.UK);
         TimeZone.setDefault(TimeZone.getTimeZone("Etc/UTC"));
 
-        val parsedDate = getValue().parseTextEntry(null, "1980-01-01 10:40");
+        val parsedDate = getValue().parseTextRepresentation(null, "1980-01-01 10:40");
 
         // restore environment
         Locale.setDefault(defaultLocale);

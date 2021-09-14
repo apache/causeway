@@ -54,7 +54,7 @@ public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProvide
     @Test
     public void testInvalidParse() throws Exception {
         try {
-            adapter.parseTextEntry(null, "date");
+            adapter.parseTextRepresentation(null, "date");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -62,12 +62,12 @@ public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProvide
 
     @Test
     public void testTitleOf() {
-        assertEquals(DateFormat.getDateInstance(SimpleDateFormat.MEDIUM).format(new Date(0)), adapter.displayTitleOf(date));
+        assertEquals(DateFormat.getDateInstance(SimpleDateFormat.MEDIUM).format(new Date(0)), adapter.presentationValue(null, date));
     }
 
     @Test
     public void testParse() throws Exception {
-        final Object newValue = adapter.parseTextEntry(null, "1/1/1980");
+        final Object newValue = adapter.parseTextRepresentation(null, "1/1/1980");
 
         final Calendar calendar = Calendar.getInstance();
         calendar.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));

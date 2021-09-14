@@ -46,36 +46,36 @@ public class TemporalConverterForLocalDateComponent implements BindingConverter<
     }
 
     @Override
-    public ManagedObject wrap(LocalDate localDate) {
+    public ManagedObject wrap(final LocalDate localDate) {
         return ManagedObject.of(getValueSpecification(), localDate);
     }
 
     @Override
-    public LocalDate unwrap(ManagedObject object) {
+    public LocalDate unwrap(final ManagedObject object) {
         val localDate = (LocalDate) ManagedObjects.UnwrapUtil.single(object);
         return localDate;
     }
 
     @Override
-    public String toString(LocalDate value) {
-        return valueFacet.parseableTitleOf(value);
+    public String toString(final LocalDate value) {
+        return valueFacet.parseableTextRepresentation(null, value);
     }
 
     @Override
-    public LocalDate fromString(String stringifiedValue) {
-        val value = valueFacet.parseTextEntry(null, stringifiedValue);
+    public LocalDate fromString(final String stringifiedValue) {
+        val value = valueFacet.parseTextRepresentation(null, stringifiedValue);
         if(value==null) {
             return null;
         }
         if(value instanceof LocalDate) {
-            return (LocalDate) value;
+            return value;
         }
         // TODO might require additional cases
         throw _Exceptions.unmatchedCase(value.getClass());
     }
 
     @Override
-    public Optional<String> tryParse(String stringifiedValue) {
+    public Optional<String> tryParse(final String stringifiedValue) {
         return valueFacet.tryParseTextEntry(null, stringifiedValue)
                 .map(Exception::getMessage); // TODO should be passed through the ExceptionRecognizer
     }

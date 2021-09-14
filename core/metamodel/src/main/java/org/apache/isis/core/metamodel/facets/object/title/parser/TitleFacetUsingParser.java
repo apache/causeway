@@ -25,10 +25,12 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.NonNull;
+import lombok.val;
 
 public final class TitleFacetUsingParser
 extends FacetAbstract
@@ -61,21 +63,7 @@ implements TitleFacet {
         if (object == null) {
             return null;
         }
-        return parser.displayTitleOf(_Casts.uncheckedCast(object));
-    }
-
-    /**
-     * not API
-     */
-    public String title(final ManagedObject adapter, final String usingMask) {
-        if (adapter == null) {
-            return null;
-        }
-        final Object object = adapter.getPojo();
-        if (object == null) {
-            return null;
-        }
-        return parser.displayTitleOf(_Casts.uncheckedCast(object), usingMask);
+        return parser.presentationValue(parserContext(), _Casts.uncheckedCast(object));
     }
 
     @Override
@@ -84,5 +72,14 @@ implements TitleFacet {
         visitor.accept("parser", parser.toString());
     }
 
+    private Parser.Context parserContext() {
+        val iaProvider = super.getInteractionProvider();
+        if(iaProvider==null) {
+            return null; // JUnit context
+        }
+        return Parser.Context.of(
+                ((FacetHolderAbstract)getFacetHolder()).getFeatureIdentifier(),
+                iaProvider.currentInteractionContext().orElse(null));
+    }
 
 }

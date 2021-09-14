@@ -49,7 +49,7 @@ extends ValueSemanticsProviderAbstractTestCase {
     @Test
     public void testParseLongString() throws Exception {
         try {
-            value.parseTextEntry(null, "one");
+            value.parseTextRepresentation(null, "one");
             fail();
         } catch (final InvalidEntryException expected) {
         }
@@ -57,12 +57,12 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testTitleOf() {
-        assertEquals("r", value.displayTitleOf(character));
+        assertEquals("r", value.presentationValue(null, character));
     }
 
     @Test
     public void testValidParse() throws Exception {
-        final Object parse = value.parseTextEntry(null, "t");
+        final Object parse = value.parseTextRepresentation(null, "t");
         assertEquals(Character.valueOf('t'), parse);
     }
 

@@ -48,7 +48,7 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testTitleOf() {
-        assertEquals("myfile1.docx", value.displayTitleOf(blob));
+        assertEquals("myfile1.docx", value.presentationValue(null, blob));
     }
 
     @Test

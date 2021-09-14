@@ -50,5 +50,5 @@ public interface ParseableFacet extends Facet {
      * field. So, a date might be rendered via a {@link TitleFacet} as
      * <tt>May 2, 2007</tt>, but its parseable form might be <tt>20070502</tt>.
      */
-    String parseableTitle(ManagedObject obj);
+    String parseableTextRepresentation(ManagedObject obj);
 }

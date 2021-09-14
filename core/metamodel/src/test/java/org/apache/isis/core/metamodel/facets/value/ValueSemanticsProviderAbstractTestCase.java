@@ -107,7 +107,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         this.parseableFacet = ParseableFacetUsingParser.create(value, mockFacetHolder);
     }
 
-    protected <T> ValueSemanticsProviderAndFacetAbstract<T> getValue(Class<T> type) {
+    protected <T> ValueSemanticsProviderAndFacetAbstract<T> getValue(final Class<T> type) {
         return _Casts.uncheckedCast(valueSemanticsProvider);
     }
 
@@ -127,7 +127,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     public void testParseNull() throws Exception {
         Assume.assumeThat(valueSemanticsProvider.getParser(), is(not(nullValue())));
         try {
-            valueSemanticsProvider.parseTextEntry(null, null);
+            valueSemanticsProvider.parseTextRepresentation(null, null);
             fail();
         } catch (final IllegalArgumentException expected) {
         }
@@ -137,7 +137,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     public void testParseEmptyString() throws Exception {
         Assume.assumeThat(valueSemanticsProvider.getParser(), is(not(nullValue())));
 
-        final Object newValue = valueSemanticsProvider.parseTextEntry(null, "");
+        final Object newValue = valueSemanticsProvider.parseTextRepresentation(null, "");
         assertNull(newValue);
     }
 
@@ -158,6 +158,6 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testTitleOfForNullObject() {
-        assertEquals("", valueSemanticsProvider.displayTitleOf(null));
+        assertEquals("", valueSemanticsProvider.presentationValue(null, null));
     }
 }

@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
-import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
+import org.apache.isis.valuetypes.asciidoc.metamodel.semantics.AsciiDocValueSemanticsProvider;
 
 import lombok.val;
 
@@ -36,8 +36,7 @@ public class LibraryPreloadingService {
     @PostConstruct
     public void preloadLibraries() {
         val tasks = _ConcurrentTaskList.named("LibraryPreloading")
-        .addRunnable("Preload JRuby for AsciiDoc", ()->AsciiDoc.valueOfAdoc("Dummy").asHtml());
-
+        .addRunnable("Preload JRuby for AsciiDoc", AsciiDocValueSemanticsProvider::loadJRuby);
         tasks.submit(_ConcurrentContext.forkJoin());
     }
 

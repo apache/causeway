@@ -713,7 +713,7 @@ public class XmlSnapshot implements Snapshot {
                     final ParseableFacet parseableFacet = fieldNos.getFacet(ParseableFacet.class);
                     final EncodableFacet encodeableFacet = fieldNos.getFacet(EncodableFacet.class);
                     if (parseableFacet != null) {
-                        valueStr = parseableFacet.parseableTitle(value);
+                        valueStr = parseableFacet.parseableTextRepresentation(value);
                     } else if (encodeableFacet != null) {
                         valueStr = encodeableFacet.toEncodedString(value);
                     } else {

@@ -47,6 +47,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.val;
 
 /**
  * Represents a scalar of an entity, either a {@link Kind#PROPERTY property} or
@@ -183,12 +184,20 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         if (adapter == null) {
             return null;
         }
+        val spec = adapter.getSpecification();
+        if(spec.isValue()) {
+            val parseableFacet = getTypeOfSpecification().getFacet(ParseableFacet.class);
+            if (parseableFacet == null) {
+                throw new RuntimeException("unable to find a parser for " + spec.getFullIdentifier());
+            }
+            return parseableFacet.parseableTextRepresentation(adapter);
+        }
         return adapter.titleString();
     }
 
     public void setObjectAsString(final String enteredText) {
         // parse text to get adapter
-        ParseableFacet parseableFacet = getTypeOfSpecification().getFacet(ParseableFacet.class);
+        val parseableFacet = getTypeOfSpecification().getFacet(ParseableFacet.class);
         if (parseableFacet == null) {
             throw new RuntimeException("unable to find a parser for " + getTypeOfSpecification().getFullIdentifier());
         }

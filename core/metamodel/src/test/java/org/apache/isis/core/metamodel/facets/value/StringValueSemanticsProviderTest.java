@@ -45,12 +45,12 @@ public class StringValueSemanticsProviderTest extends ValueSemanticsProviderAbst
 
     @Test
     public void testTitleOf() {
-        assertEquals("text entry", value.displayTitleOf(string));
+        assertEquals("text entry", value.presentationValue(null, string));
     }
 
     @Test
     public void testParse() throws Exception {
-        final Object parsed = value.parseTextEntry(null, "tRUe");
+        final Object parsed = value.parseTextRepresentation(null, "tRUe");
         assertEquals("tRUe", parsed.toString());
     }
 

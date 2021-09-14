@@ -39,19 +39,16 @@ import lombok.experimental.Accessors;
  */
 @org.apache.isis.applib.annotation.Value(
         logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.AsciiDoc",
-        semanticsProviderName = "org.apache.isis.valuetypes.asciidoc.metamodel.facets.AsciiDocValueSemanticsProvider")
+        semanticsProviderName = "org.apache.isis.valuetypes.asciidoc.metamodel.semantics."
+                + "AsciiDocValueSemanticsProvider")
 @EqualsAndHashCode
 @XmlJavaTypeAdapter(AsciiDocJaxbAdapter.class)  // for JAXB view model support
 public final class AsciiDoc implements HasHtml, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static AsciiDoc valueOfAdoc(final String adoc) {
+    public static AsciiDoc valueOf(final String adoc) {
         return new AsciiDoc(adoc);
-    }
-
-    public static AsciiDoc valueOfAdocAndHtml(final String adoc, final String html) {
-        return null;
     }
 
     @Getter private final String adoc;

@@ -18,6 +18,11 @@
  */
 package org.apache.isis.applib.adapters;
 
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+
+import lombok.Value;
+
 /**
  * Provides a mechanism for parsing and rendering string representations of
  * objects.
@@ -40,9 +45,9 @@ package org.apache.isis.applib.adapters;
  * than having the framework do this).
  *
  * <p>
- * For third-party value types, 
- * eg see <a href="http://timeandmoney.sourceforge.net/">Time-and-Money</a> 
- * there is no ability to write <tt>title()</tt> methods; 
+ * For third-party value types,
+ * eg see <a href="http://timeandmoney.sourceforge.net/">Time-and-Money</a>
+ * there is no ability to write <tt>title()</tt> methods;
  * so this is the main reason that this
  * interface has to deal with titles and lengths.
  *
@@ -69,35 +74,20 @@ package org.apache.isis.applib.adapters;
  */
 public interface Parser<T> {
 
-    /**
-     * Parses a string to an instance of the object.
-     *
-     * <p>
-     * Note that here the implementing class is acting as a factory for itself.
-     * @param contextPojo
-     *            - the context domain object for which the text is being
-     *            parsed. For example +3 might mean add 3 to the current number.
-     */
-    T parseTextEntry(Object contextPojo, String entry);
+    @Value(staticConstructor = "of")
+    static class Context {
+        Identifier identifier;
+        InteractionContext interactionContext;
+    }
 
     /**
-     * The typical length of objects that can be parsed.
+     * The value in its read-only presentation form, eg. html. (irreversible)
      */
-    int typicalLength();
-
-    /**
-     * The title of the object.
-     */
-    String displayTitleOf(T object);
-
-    /**
-     * The title of the object using a mask.
-     */
-    String displayTitleOf(T object, String usingMask);
+    String presentationValue(Context context, T value);
 
     /**
      * A title for the object that is valid but which may be easier to edit than
-     * the title provided by a <code>TitleFacet</code>.
+     * the title provided by a <code>TitleFacet</code>. (bijective)
      *
      * <p>
      * The idea here is that the viewer can display a parseable title for an
@@ -105,7 +95,17 @@ public interface Parser<T> {
      * field. So, a date might be rendered via a <code>TitleFacet</code> as
      * <tt>May 2, 2007</tt>, but its editable form might be <tt>20070502</tt>.
      */
-    String parseableTitleOf(T existing);
+    String parseableTextRepresentation(Context context, T value);
+
+    /**
+     * Parses a string to an instance of the object. (bijective)
+     */
+    T parseTextRepresentation(Context context, String text);
+
+    /**
+     * The typical length of objects that can be parsed.
+     */
+    int typicalLength();
 
     /**
      * The max length of objects that can be parsed (if any).

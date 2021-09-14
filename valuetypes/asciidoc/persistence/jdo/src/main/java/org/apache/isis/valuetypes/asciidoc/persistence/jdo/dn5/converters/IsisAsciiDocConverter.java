@@ -39,7 +39,7 @@ public class IsisAsciiDocConverter implements TypeConverter<AsciiDoc, String>{
     @Override
     public AsciiDoc toMemberType(final String datastoreValue) {
         return datastoreValue != null
-                ? AsciiDoc.valueOfAdoc(datastoreValue)
+                ? AsciiDoc.valueOf(datastoreValue)
                 : null;
     }
 

@@ -88,7 +88,7 @@ implements ParseableFacet {
     }
 
     @Override
-    public String parseableTitle(final ManagedObject existing) {
-        return parseableFacetUsingParser.parseableTitle(existing);
+    public String parseableTextRepresentation(final ManagedObject existing) {
+        return parseableFacetUsingParser.parseableTextRepresentation(existing);
     }
 }

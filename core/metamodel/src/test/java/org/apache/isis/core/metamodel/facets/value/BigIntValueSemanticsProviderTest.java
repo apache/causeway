@@ -52,14 +52,14 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testParseValidString() throws Exception {
-        final Object newValue = getValue().parseTextEntry(null, "2142342334");
+        final Object newValue = getValue().parseTextRepresentation(null, "2142342334");
         assertEquals(new BigInteger("2142342334"), newValue);
     }
 
     @Test
     public void testParseInvalidString() throws Exception {
         try {
-            getValue().parseTextEntry(null, "214xxx2342334");
+            getValue().parseTextRepresentation(null, "214xxx2342334");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -67,7 +67,7 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testTitle() throws Exception {
-        assertEquals("132,199", getValue().displayTitleOf(bigInt));
+        assertEquals("132,199", getValue().presentationValue(null, bigInt));
     }
 
     @Test

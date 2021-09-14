@@ -74,7 +74,7 @@ public class AsciiDocReaderService {
     }
 
     private AsciiDoc toAsciiDoc(final StringReference adocRef, final Class<?> aClass) {
-        return AsciiDoc.valueOfAdoc(
+        return AsciiDoc.valueOf(
                 adocRef
                 .update(this::replaceVersion)
                 //.update(this::replaceJavaSourceReferences)

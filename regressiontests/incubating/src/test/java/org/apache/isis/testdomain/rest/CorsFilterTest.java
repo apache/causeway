@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.extensions.cors.impl.IsisModuleExtCorsImpl;
+import org.apache.isis.extensions.cors.impl.IsisModuleExtCors;
 import org.apache.isis.extensions.restclient.ResponseDigest;
 import org.apache.isis.extensions.restclient.log.ClientConversationFilter;
 import org.apache.isis.testdomain.conf.Configuration_headless;
@@ -64,34 +64,34 @@ import lombok.val;
     Configuration_headless.class,
     Configuration_usingRoSpec.class,
     IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
-    IsisModuleExtCorsImpl.class
+    IsisModuleExtCors.class
 })
 @TestMethodOrder(OrderAnnotation.class) // run tests in sequence, to ease debugging
 class CorsFilterTest {
 
-    @LocalServerPort int port; 
+    @LocalServerPort int port;
     @Inject RestEndpointService restService;
 
     private final RoSpecSampler refSampler = new RoSpecSampler();
     private final Can<ClientConversationFilter> conversationFilters = Can.empty();
-    
+
     // -- STRING
 
-    @Test @Order(1) 
+    @Test @Order(1)
     void requestWithValidOriginAndMethod_shouldSucceed() {
         val digest = digestUsingPost("string", String.class, builder->builder
                 .header("Origin", validOrigin()));
         assertHttpResponse200(digest);
     }
 
-    @Test @Order(2) 
+    @Test @Order(2)
     void requestWithInvalidOrigin_shouldFail() {
         val digest = digestUsingPost("string", String.class, builder->builder
                 .header("Origin", invalidOrigin()));
         assertHttpResponse403(digest);
     }
-    
-    @Test @Order(3) 
+
+    @Test @Order(3)
     void requestWithMissingOrigin_shouldSucceed() {
         val digest = digestUsingPost("string", String.class, builder->builder);
         assertHttpResponse200(digest);
@@ -107,41 +107,41 @@ class CorsFilterTest {
     // -- HELPER
 
     <T> ResponseDigest<T> digestUsingPost(
-            String actionName, 
-            Class<T> entityType, 
-            UnaryOperator<javax.ws.rs.client.Invocation.Builder> onRequestBuilder) {
+            final String actionName,
+            final Class<T> entityType,
+            final UnaryOperator<javax.ws.rs.client.Invocation.Builder> onRequestBuilder) {
 
         assertTrue(restService.getPort()>0);
 
         val useRequestDebugLogging = false;
         val client = restService.newClient(useRequestDebugLogging, conversationFilters);
 
-        val request = onRequestBuilder.apply( 
-                restService.newInvocationBuilder(client, 
+        val request = onRequestBuilder.apply(
+                restService.newInvocationBuilder(client,
                         String.format("services/testdomain.RoSpecSampler/actions/%s/invoke", actionName)));
-        
-        val args = client.arguments() 
+
+        val args = client.arguments()
                 .build();
-        
+
         val response = request.post(args);
         val digest = client.digest(response, entityType);
 
         return digest;
 
     }
-    
+
     <T> ResponseDigest<T> digestUsingGet(
-            String actionName, 
-            Class<T> entityType, 
-            UnaryOperator<javax.ws.rs.client.Invocation.Builder> onRequestBuilder) {
+            final String actionName,
+            final Class<T> entityType,
+            final UnaryOperator<javax.ws.rs.client.Invocation.Builder> onRequestBuilder) {
 
         assertTrue(restService.getPort()>0);
 
         val useRequestDebugLogging = false;
         val client = restService.newClient(useRequestDebugLogging, conversationFilters);
 
-        val request = onRequestBuilder.apply( 
-                restService.newInvocationBuilder(client, 
+        val request = onRequestBuilder.apply(
+                restService.newInvocationBuilder(client,
                         String.format("services/testdomain.RoSpecSampler/actions/%s/invoke", actionName)));
 
         val response = request.get();
@@ -149,25 +149,25 @@ class CorsFilterTest {
 
         return digest;
     }
-    
-    
+
+
     private String validOrigin() {
         return "http://www.google.com";
     }
-    
+
     private String invalidOrigin() {
         return "http://localhost";
     }
-   
-    private void assertHttpResponse200(ResponseDigest<String> digest) {
+
+    private void assertHttpResponse200(final ResponseDigest<String> digest) {
         if(!digest.isSuccess()) {
             fail(digest.getFailureCause());
         }
         val returnValue = digest.getEntities().getSingletonOrFail();
         assertEquals(refSampler.string(), returnValue);
     }
-    
-    private void assertHttpResponse403(ResponseDigest<String> digest) {
+
+    private void assertHttpResponse403(final ResponseDigest<String> digest) {
         assertNotNull(digest.getFailureCause(), "request was expected to fail, but succeeded");
         assertTrue(digest.getFailureCause().getMessage().contains("403"));
     }
