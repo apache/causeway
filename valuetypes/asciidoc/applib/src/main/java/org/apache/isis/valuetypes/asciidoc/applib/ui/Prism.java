@@ -22,10 +22,10 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum Prism {
-//    WICKET("1.24.1", "coy"),
-//    VAADIN("1.24.1", "coy"),
-    WICKET("1.20", "default"),
-    VAADIN("1.20", "default");
+    WICKET("1.24.1", "coy"),
+    VAADIN("1.24.1", "coy");
+//    WICKET("1.20", "default"),
+//    VAADIN("1.20", "default");
     final String version;
     final String theme;
     public String cssFile() {

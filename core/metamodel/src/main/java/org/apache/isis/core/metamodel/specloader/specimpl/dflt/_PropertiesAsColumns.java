@@ -58,6 +58,7 @@ class _PropertiesAsColumns implements HasMetaModelContext {
     @Getter(onMethod_ = {@Override})
     private final MetaModelContext metaModelContext;
 
+    //TODO there should be always a parent object, then we can use its spec and only require 2 args
     public final Stream<OneToOneAssociation> streamPropertiesForColumnRendering(
             final ObjectSpecification spec,
             final Identifier memberIdentifier,

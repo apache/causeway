@@ -39,7 +39,7 @@ import demoapp.dom._infra.resources.AsciiDocReaderService;
 public class DemoHomePage
         implements HasAsciiDocDescription {                     // <.>
 
-    @ObjectSupport public String title() {                                     // <.>
+    @ObjectSupport public String title() {                      // <.>
         return "Hello, " + userService.currentUserNameElseNobody();
     }
 
