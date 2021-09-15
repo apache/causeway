@@ -29,8 +29,8 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueSemanticsProvider;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxFractionalDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxTotalDigitsFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -38,15 +38,9 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 
-import lombok.val;
-
-
 public class BigDecimalInferredFromJdoColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
-
-    private static final int DEFAULT_LENGTH = BigDecimalValueSemanticsProvider.DEFAULT_LENGTH;
-    private static final int DEFAULT_SCALE = BigDecimalValueSemanticsProvider.DEFAULT_SCALE;
 
     @Inject
     public BigDecimalInferredFromJdoColumnAnnotationFacetFactory(final MetaModelContext mmc) {
@@ -62,47 +56,19 @@ implements MetaModelRefiner {
 
         final FacetedMethod holder = processMethodContext.getFacetHolder();
 
-        BigDecimalValueFacet existingFacet = holder.getFacet(BigDecimalValueFacet.class);
+        final var jdoColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
 
-        val jdoColumnAnnotation = processMethodContext.synthesizeOnMethod(Column.class)
-                .orElse(null);
+        addFacetIfPresent(
+                MaxTotalDigitsFacetInferredFromJdoColumn
+                .create(jdoColumnIfAny, holder));
 
-        if (jdoColumnAnnotation == null) {
-            if(existingFacet != null
-                    && !existingFacet.getPrecedence().isFallback()) {
-                // do nothing
-            } else {
-                addFacet(new BigDecimalFacetFallback(holder));
-            }
-        } else {
-
-            // obtain the existing facet's length and scale, to use as defaults if none are specified on the @Column
-            // this will mean a metamodel validation exception will only be fired later (see #refineMetaModelValidator)
-            // if there was an *explicit* value defined on the @Column annotation that is incompatible with existing.
-            Integer existingLength = null;
-            Integer existingScale = null;
-            if(existingFacet != null
-                    && !existingFacet.getPrecedence().isFallback()) {
-                existingLength = existingFacet.getPrecision();
-                existingScale = existingFacet.getScale();
-            }
-
-            Integer length = valueElseDefaults(jdoColumnAnnotation.length(), existingLength, DEFAULT_LENGTH);
-            Integer scale = valueElseDefaults(jdoColumnAnnotation.scale(), existingScale, DEFAULT_SCALE);
-            addFacet(new BigDecimalFacetInferredFromJdoColumn(holder, length, scale));
-        }
-    }
-
-    private static final Integer valueElseDefaults(final int value, final Integer underlying, int defaultVal) {
-        return value != -1
-                ? value
-                        : underlying != null
-                        ? underlying
-                                : defaultVal;
+        addFacetIfPresent(
+                MaxFractionalDigitsFacetInferredFromJdoColumn
+                .create(jdoColumnIfAny, holder));
     }
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
         programmingModel.addVisitingValidatorSkipManagedBeans(spec->{
 
             // only consider persistent entities
@@ -121,16 +87,29 @@ implements MetaModelRefiner {
         });
     }
 
-    private static void validateBigDecimalValueFacet(ObjectAssociation association) {
+    private static void validateBigDecimalValueFacet(final ObjectAssociation association) {
 
-        association.lookupFacet(BigDecimalValueFacet.class)
-        .map(BigDecimalValueFacet::getSharedFacetRankingElseFail)
+        association.lookupFacet(MaxTotalDigitsFacet.class)
+        .map(MaxTotalDigitsFacet::getSharedFacetRankingElseFail)
         .ifPresent(facetRanking->facetRanking
-                .visitTopRankPairsSemanticDiffering(BigDecimalValueFacet.class, (a, b)->{
+                .visitTopRankPairsSemanticDiffering(MaxTotalDigitsFacet.class, (a, b)->{
 
                     ValidationFailure.raiseFormatted(
                             association,
-                            "%s: inconsistent BigDecimalValue semantics specified in %s and %s.",
+                            "%s: inconsistent MaxTotalDigits semantics specified in %s and %s.",
+                            association.getFeatureIdentifier().toString(),
+                            a.getClass().getSimpleName(),
+                            b.getClass().getSimpleName());
+                }));
+
+        association.lookupFacet(MaxFractionalDigitsFacet.class)
+        .map(MaxFractionalDigitsFacet::getSharedFacetRankingElseFail)
+        .ifPresent(facetRanking->facetRanking
+                .visitTopRankPairsSemanticDiffering(MaxFractionalDigitsFacet.class, (a, b)->{
+
+                    ValidationFailure.raiseFormatted(
+                            association,
+                            "%s: inconsistent MaxFractionalDigits semantics specified in %s and %s.",
                             association.getFeatureIdentifier().toString(),
                             a.getClass().getSimpleName(),
                             b.getClass().getSimpleName());

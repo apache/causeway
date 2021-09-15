@@ -39,7 +39,8 @@ extends ReprRendererAbstract<ManagedObject> {
             final IResourceContext resourceContext,
             final LinkFollowSpecs linkFollower,
             final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, null, representation); // null for representationType (there is none)
+        // null for representationType (there is none)
+        super(resourceContext, linkFollower, null, representation);
     }
 
     /**

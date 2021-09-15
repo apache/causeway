@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.bigdecimal;
+package org.apache.isis.core.metamodel.facets.objectvalue.maxlen;
 
 import java.util.function.BiConsumer;
 
@@ -25,42 +25,50 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.experimental.Accessors;
 
-public abstract class BigDecimalValueFacetAbstract
+public abstract class MaxTotalDigitsFacetAbstract
 extends FacetAbstract
-implements BigDecimalValueFacet {
+implements MaxTotalDigitsFacet {
 
     private static final Class<? extends Facet> type() {
-        return BigDecimalValueFacet.class;
+        return MaxTotalDigitsFacet.class;
     }
 
-    @Getter(onMethod_ = {@Override}) private final int precision;
-    @Getter(onMethod_ = {@Override}) private final int scale;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private final int maxTotalDigits;
 
-    public BigDecimalValueFacetAbstract(
-            final int precision,
-            final int scale,
+    protected MaxTotalDigitsFacetAbstract(
+            final int maxTotalDigits,
             final FacetHolder holder) {
         super(type(), holder);
-        this.precision = precision;
-        this.scale = scale;
+        this.maxTotalDigits = maxTotalDigits;
     }
 
-    public BigDecimalValueFacetAbstract(
-            final int precision,
-            final int scale,
+    protected MaxTotalDigitsFacetAbstract(
+            final int maxTotalDigits,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
         super(type(), holder, precedence);
-        this.precision = precision;
-        this.scale = scale;
+        this.maxTotalDigits = maxTotalDigits;
     }
 
     @Override
-    public final void visitAttributes(final BiConsumer<String, Object> visitor) {
+    public boolean semanticEquals(@NonNull final Facet other) {
+        return other instanceof MaxTotalDigitsFacet
+                ? Integer.compare(
+                        this.maxTotalDigits(),
+                        ((MaxTotalDigitsFacet)other).maxTotalDigits()) == 0
+                : false;
+    }
+
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("precision", precision);
-        visitor.accept("scale", scale);
+        visitor.accept("maxTotalDigits", maxTotalDigits <0
+                ? "unlimited"
+                : String.valueOf(maxTotalDigits));
     }
 
 }

@@ -40,7 +40,7 @@ extends ValueFacetUsingSemanticsProviderFactory<String> {
         if (type != String.class) {
             return;
         }
-        addFacets(new StringValueSemanticsProvider(holder));
+        addValueFacet(new StringValueSemanticsProvider(holder));
     }
 
 }

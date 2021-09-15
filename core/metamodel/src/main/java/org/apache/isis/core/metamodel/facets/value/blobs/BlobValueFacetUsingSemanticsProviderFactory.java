@@ -40,7 +40,7 @@ extends ValueFacetUsingSemanticsProviderFactory<Blob> {
         if (type != Blob.class) {
             return;
         }
-        addFacets(new BlobValueSemanticsProvider(holder));
+        addValueFacet(new BlobValueSemanticsProvider(holder));
     }
 
 }

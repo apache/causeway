@@ -18,6 +18,16 @@
  */
 package org.apache.isis.applib.adapters;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
+import java.util.Optional;
+
+import org.springframework.lang.Nullable;
+
+import org.apache.isis.applib.adapters.Parser.Context;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+
 /**
  * @since 1.x {@index}
  */
@@ -42,5 +52,24 @@ implements ValueSemanticsProvider<T> {
         return (DefaultsProvider<T>) (this instanceof DefaultsProvider ? this : null);
     }
 
+    /**
+     * @param context - nullable in support of JUnit testing
+     * @return {@link Locale} from given context or else system's default
+     */
+    protected Locale getLocale(final @Nullable Context context) {
+        return Optional.ofNullable(context)
+        .map(Context::getInteractionContext)
+        .map(InteractionContext::getLocale)
+        .orElseGet(Locale::getDefault);
+    }
+
+    /**
+     * @param context - nullable in support of JUnit testing
+     * @return {@link NumberFormat} the default from from given context's locale
+     * or else system's default locale
+     */
+    protected DecimalFormat getNumberFormat(final @Nullable Context context) {
+        return (DecimalFormat)NumberFormat.getNumberInstance(getLocale(context));
+    }
 
 }

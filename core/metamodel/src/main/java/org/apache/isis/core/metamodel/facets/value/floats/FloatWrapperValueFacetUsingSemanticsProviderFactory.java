@@ -40,7 +40,7 @@ extends ValueFacetUsingSemanticsProviderFactory<Float> {
         if (type != Float.class) {
             return;
         }
-        addFacets(new FloatWrapperValueSemanticsProvider(holder));
+        addValueFacet(new FloatWrapperValueSemanticsProvider(holder));
     }
 
 }

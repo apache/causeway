@@ -38,13 +38,13 @@ implements MaxLengthFacet {
         return MaxLengthFacet.class;
     }
 
-    public MaxLengthFacetAbstract(
+    protected MaxLengthFacetAbstract(
             final int maxLength,
             final FacetHolder holder) {
         super(type(), holder, maxLength);
     }
 
-    public MaxLengthFacetAbstract(
+    protected MaxLengthFacetAbstract(
             final int maxLength,
             final FacetHolder holder,
             final Facet.Precedence precedence) {

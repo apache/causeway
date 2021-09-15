@@ -57,7 +57,7 @@ implements URLValueFacet {
             try {
                 return new java.net.URL(entry);
             } catch (final MalformedURLException ex) {
-                throw new IllegalArgumentException("Not parseable as a URL ('" + entry + "')", ex);
+                throw new IllegalArgumentException("Not parseable as an URL ('" + entry + "')", ex);
             }
         }
     }

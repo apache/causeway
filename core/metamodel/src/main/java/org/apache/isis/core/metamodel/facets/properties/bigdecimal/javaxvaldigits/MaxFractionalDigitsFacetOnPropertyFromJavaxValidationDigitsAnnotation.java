@@ -16,36 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.param.bigdecimal.javaxvaldigits;
+package org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigits;
 
 import java.util.Optional;
 
 import javax.validation.constraints.Digits;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxFractionalDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxFractionalDigitsFacetAbstract;
 
-public class BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation
-extends BigDecimalValueFacetAbstract {
+public class MaxFractionalDigitsFacetOnPropertyFromJavaxValidationDigitsAnnotation
+extends MaxFractionalDigitsFacetAbstract {
 
-     public static Optional<BigDecimalValueFacet> create(
+     public static Optional<MaxFractionalDigitsFacet> create(
              final Optional<Digits> digitsIfAny,
              final FacetHolder holder) {
 
          return digitsIfAny
          .map(digits->{
-             final int length = digits.integer() + digits.fraction();
-             final int scale = digits.fraction();
-             return new BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation(holder, length, scale);
+             return new MaxFractionalDigitsFacetOnPropertyFromJavaxValidationDigitsAnnotation(
+                     digits.fraction(), holder);
          });
     }
 
-    private BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation(
-            final FacetHolder holder, final int precision, final int scale) {
-        super(precision, scale, holder);
+    private MaxFractionalDigitsFacetOnPropertyFromJavaxValidationDigitsAnnotation(
+            final int maxFractionalDigits, final FacetHolder holder) {
+        super(maxFractionalDigits, holder);
     }
-
-
 
 }

@@ -40,7 +40,6 @@ import org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.notpersist
 
 import lombok.val;
 
-
 public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
@@ -49,7 +48,6 @@ implements MetaModelRefiner {
 
     public MaxLengthDerivedFromJdoColumnAnnotationFacetFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.PROPERTIES_ONLY);
-        this.jdoFacetContext = jdoFacetContext;
     }
 
     @Override
@@ -61,26 +59,16 @@ implements MetaModelRefiner {
             return;
         }
 
-
         if(String.class != processMethodContext.getMethod().getReturnType()) {
             return;
         }
-        val jdoColumnAnnotation = processMethodContext.synthesizeOnMethod(Column.class)
-                .orElse(null);
-
-        if (jdoColumnAnnotation==null) {
-            return;
-        }
-        if(jdoColumnAnnotation.length() == -1) {
-            return;
-        }
+        val jdoColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
 
         val facetHolder = processMethodContext.getFacetHolder();
 
-        FacetUtil.addFacet(
-                new MaxLengthFacetDerivedFromJdoColumn(
-                        jdoColumnAnnotation.length(),
-                        facetHolder));
+        FacetUtil.addFacetIfPresent(
+                MaxTotalDigitsFacetInferredFromJdoColumn
+                .create(jdoColumnIfAny, facetHolder));
     }
 
     @Override

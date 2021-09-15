@@ -42,7 +42,7 @@ extends ValueFacetUsingSemanticsProviderFactory<UUID> {
         if (type != UUID.class) {
             return;
         }
-        addFacets(new UUIDValueSemanticsProvider(holder));
+        addAllFacetsForValueSemantics(new UUIDValueSemantics(), holder);
     }
 
 }

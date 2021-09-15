@@ -40,7 +40,7 @@ extends ValueFacetUsingSemanticsProviderFactory<Integer> {
         if (type != Integer.class) {
             return;
         }
-        addFacets(new IntWrapperValueSemanticsProvider(holder));
+        addValueFacet(new IntWrapperValueSemanticsProvider(holder));
     }
 
 }

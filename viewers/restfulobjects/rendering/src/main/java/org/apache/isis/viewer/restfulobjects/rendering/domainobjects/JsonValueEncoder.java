@@ -190,10 +190,6 @@ public class JsonValueEncoder {
         return adapter != null? adapter.getPojo(): NullNode.getInstance();
     }
 
-//    ManagedObject adapterFor(Object pojo) {
-//        return objectAdapterProvider.adapterFor(pojo);
-//    }
-
     // -- NESTED TYPE DECLARATIONS
 
     public static class ExpectedStringRepresentingValueException extends IllegalArgumentException {

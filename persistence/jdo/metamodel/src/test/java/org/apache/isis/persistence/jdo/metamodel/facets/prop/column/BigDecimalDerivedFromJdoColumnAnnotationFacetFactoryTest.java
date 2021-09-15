@@ -24,10 +24,11 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxFractionalDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxTotalDigitsFacet;
 import org.apache.isis.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
 
 import lombok.val;
@@ -66,11 +67,7 @@ extends AbstractFacetFactoryTest {
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
-        final BigDecimalValueFacet facet = facetedMethod.getFacet(BigDecimalValueFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof BigDecimalFacetInferredFromJdoColumn);
-        assertThat(facet.getPrecision(), is(12));
-        assertThat(facet.getScale(), is(3));
+        assertBigDecimalSemantics(facetedMethod, 12, 3);
     }
 
     public void testAnnotationDefaultsLengthIfMissing() throws Exception {
@@ -79,10 +76,7 @@ extends AbstractFacetFactoryTest {
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
-        final BigDecimalValueFacet facet = facetedMethod.getFacet(BigDecimalValueFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof BigDecimalFacetInferredFromJdoColumn);
-        assertThat(facet.getPrecision(), is(18));
+        assertBigDecimalSemantics(facetedMethod, -1, 3);
     }
 
     public void testAnnotationDefaultsScaleIfMissing() throws Exception {
@@ -91,10 +85,7 @@ extends AbstractFacetFactoryTest {
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
-        final BigDecimalValueFacet facet = facetedMethod.getFacet(BigDecimalValueFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof BigDecimalFacetInferredFromJdoColumn);
-        assertThat(facet.getScale(), is(2));
+        assertBigDecimalSemantics(facetedMethod, 12, -1);
     }
 
     public void testNoFacetIfPropertyTypeIsNotBigDecimal() throws Exception {
@@ -104,19 +95,30 @@ extends AbstractFacetFactoryTest {
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(BigDecimalValueFacet.class);
-        assertNull(facet);
+        assertBigDecimalSemantics(facetedMethod, -1, -1);
     }
 
-    public void testFallbackFacetIfPropertyIsNotAnnotated() throws Exception {
+    // -- HELPER
 
-        final Class<?> cls = SimpleObjectWithBigDecimalColumnAnnotations.class;
-        final Method method = cls.getMethod("getBigDecimalPropertyWithoutColumnAnnotation");
-        facetFactory.process(ProcessMethodContext
-                .forTesting(cls, null, method, methodRemover, facetedMethod));
+    private void assertBigDecimalSemantics(
+            final FacetedMethod facetedMethod, final int maxTotalDigits, final int maxFractionalDigits) {
+        if(maxTotalDigits>=0) {
+            final MaxTotalDigitsFacet facet = facetedMethod.getFacet(MaxTotalDigitsFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof MaxTotalDigitsFacetInferredFromJdoColumn);
+            assertThat(facet.maxTotalDigits(), is(maxTotalDigits));
+        } else {
+            assertNull(facetedMethod.getFacet(MaxTotalDigitsFacet.class));
+        }
 
-        final Facet facet = facetedMethod.getFacet(BigDecimalValueFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof BigDecimalFacetFallback);
+        if(maxFractionalDigits>=0) {
+            final MaxFractionalDigitsFacet facet = facetedMethod.getFacet(MaxFractionalDigitsFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof MaxFractionalDigitsFacetInferredFromJdoColumn);
+            assertThat(facet.maxFractionalDigits(), is(maxFractionalDigits));
+        } else {
+            assertNull(facetedMethod.getFacet(MaxFractionalDigitsFacet.class));
+        }
     }
+
 }

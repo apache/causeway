@@ -40,7 +40,7 @@ extends ValueFacetUsingSemanticsProviderFactory<Long> {
         if (type != Long.class) {
             return;
         }
-        addFacets(new LongWrapperValueSemanticsProvider(holder));
+        addValueFacet(new LongWrapperValueSemanticsProvider(holder));
     }
 
 }

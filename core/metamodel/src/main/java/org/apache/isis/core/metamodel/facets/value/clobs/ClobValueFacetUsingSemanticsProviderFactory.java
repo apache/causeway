@@ -40,7 +40,7 @@ extends ValueFacetUsingSemanticsProviderFactory<Clob> {
         if (type != Clob.class) {
             return;
         }
-        addFacets(new ClobValueSemanticsProvider(holder));
+        addValueFacet(new ClobValueSemanticsProvider(holder));
     }
 
 }

@@ -23,8 +23,9 @@ import java.math.BigDecimal;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxFractionalDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxTotalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.string.StringValueSemanticsProvider;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
@@ -56,8 +57,9 @@ public interface ScalarUiModel {
      * @see #getLength()
      */
     default Integer getLength() {
-        final BigDecimalValueFacet facet = getMetaModel().getFacet(BigDecimalValueFacet.class);
-        return facet != null? facet.getPrecision(): null;
+        return getMetaModel().lookupFacet(MaxTotalDigitsFacet.class)
+                .map(MaxTotalDigitsFacet::maxTotalDigits)
+                .orElse(null);
     }
 
     /**
@@ -66,8 +68,9 @@ public interface ScalarUiModel {
      * @see #getScale()
      */
     default Integer getScale() {
-        final BigDecimalValueFacet facet = getMetaModel().getFacet(BigDecimalValueFacet.class);
-        return facet != null? facet.getScale(): null;
+        return getMetaModel().lookupFacet(MaxFractionalDigitsFacet.class)
+                .map(MaxFractionalDigitsFacet::maxFractionalDigits)
+                .orElse(null);
     }
 
     default int getTypicalLength() {

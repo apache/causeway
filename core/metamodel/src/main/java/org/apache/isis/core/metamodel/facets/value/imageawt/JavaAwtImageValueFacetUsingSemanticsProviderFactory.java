@@ -42,7 +42,7 @@ extends ValueFacetUsingSemanticsProviderFactory<BufferedImage> {
         if (!BufferedImage.class.isAssignableFrom(type)) {
             return;
         }
-        addFacets(new JavaAwtImageValueSemanticsProvider(holder));
+        addValueFacet(new JavaAwtImageValueSemanticsProvider(holder));
     }
 
 }

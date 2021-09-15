@@ -34,20 +34,20 @@ public interface BindingConverter<T> {
 
     ObjectSpecification getValueSpecification();
 
-    default T unwrap(ManagedObject object) {
+    default T unwrap(final ManagedObject object) {
         return _Casts.uncheckedCast(ManagedObjects.UnwrapUtil.single(object));
     }
 
-    default ManagedObject wrap(T pojo) {
+    default ManagedObject wrap(final T pojo) {
         return ManagedObject.of(getValueSpecification(), pojo);
     }
 
-    default Optional<? extends Facet> lookupFacet(final @NonNull Class<? extends Facet> facetType) {
+    default <X extends Facet> Optional<X> lookupFacet(final @NonNull Class<X> facetType) {
         return Optional.ofNullable(getValueSpecification().getFacet(facetType));
     }
 
     default Optional<? extends Facet> lookupFacetOneOf(
-            @NonNull Can<Class<? extends Facet>> facetTypes) {
+            @NonNull final Can<Class<? extends Facet>> facetTypes) {
         return facetTypes.stream()
         .map(getValueSpecification()::getFacet)
         .filter(_NullSafe::isPresent)

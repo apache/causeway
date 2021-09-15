@@ -40,7 +40,7 @@ extends ValueFacetUsingSemanticsProviderFactory<Character> {
         if (type != Character.class) {
             return;
         }
-        addFacets(new CharWrapperValueSemanticsProvider(holder));
+        addValueFacet(new CharWrapperValueSemanticsProvider(holder));
     }
 
 }

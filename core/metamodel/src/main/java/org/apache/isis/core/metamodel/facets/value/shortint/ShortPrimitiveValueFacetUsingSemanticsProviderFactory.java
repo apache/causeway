@@ -40,7 +40,7 @@ extends ValueFacetUsingSemanticsProviderFactory<Short> {
         if (type != short.class) {
             return;
         }
-        addFacets(new ShortPrimitiveValueSemanticsProvider(holder));
+        addValueFacet(new ShortPrimitiveValueSemanticsProvider(holder));
     }
 
 }

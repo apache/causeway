@@ -20,17 +20,19 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import com.fasterxml.jackson.databind.node.NullNode;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
-import org.apache.isis.core.metamodel.facets.value.biginteger.BigIntegerValueFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxFractionalDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxTotalDigitsFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -85,7 +87,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
     private Object addValue(final LinkFollowSpecs linkFollower) {
         val valueAdapterIfAny = objectMember.get(objectAdapter, getInteractionInitiatedBy());
 
-        // use the runtime type if we have a value, else the compile time type of the member otherwise
+        // use the runtime type if we have a value, otherwise the compile time type of the member
         val spec = valueAdapterIfAny != null
                 ? valueAdapterIfAny.getSpecification()
                 : objectMember.getSpecification();
@@ -93,27 +95,27 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
         val valueFacet = spec.getFacet(ValueFacet.class);
         if (valueFacet != null) {
             String format = null;
-            final Class<?> specClass = spec.getCorrespondingClass();
-            if(specClass == java.math.BigDecimal.class) {
+            final Class<?> valueType = spec.getCorrespondingClass();
+            if(valueType == java.math.BigDecimal.class) {
                 // look for facet on member, else on the value's spec
-                final BigDecimalValueFacet bigDecimalValueFacet =
-                        getFacet(BigDecimalValueFacet.class,
-                                objectMember,
-                                valueAdapterIfAny != null? valueAdapterIfAny.getSpecification(): null);
-                if(bigDecimalValueFacet != null) {
-                    final Integer precision = bigDecimalValueFacet.getPrecision();
-                    final Integer scale = bigDecimalValueFacet.getScale();
-                    format = String.format("big-decimal(%d,%d)", precision, scale);
-                }
-            } else if(specClass == java.math.BigInteger.class) {
+
+                final var facetHolders = Can.<FacetHolder>of(
+                        objectMember,
+                        valueAdapterIfAny != null ? valueAdapterIfAny.getSpecification() : null);
+
+                final int totalDigits = lookupFacet(MaxTotalDigitsFacet.class, facetHolders)
+                        .map(MaxTotalDigitsFacet::maxTotalDigits)
+                        .orElse(-1);
+
+                final int scale = lookupFacet(MaxFractionalDigitsFacet.class, facetHolders)
+                        .map(MaxFractionalDigitsFacet::maxFractionalDigits)
+                        .orElse(-1);
+
+                format = String.format("big-decimal(%d,%d)", totalDigits, scale);
+
+            } else if(valueType == java.math.BigInteger.class) {
                 // look for facet on member, else on the value's spec
-                final BigIntegerValueFacet bigIntegerValueFacet =
-                        getFacet(BigIntegerValueFacet.class,
-                                objectMember,
-                                valueAdapterIfAny != null? valueAdapterIfAny.getSpecification(): null);
-                if(bigIntegerValueFacet != null) {
-                    format = String.format("big-integer");
-                }
+                format = String.format("big-integer");
             }
             return jsonValueEncoder.appendValueAndFormat(valueAdapterIfAny, spec, representation, format, resourceContext.suppressMemberExtensions());
         }
@@ -157,17 +159,16 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
                 && Objects.equals(defaultViewFacet.value(), "table");
     }
 
-    private static <T extends Facet> T getFacet(final Class<T> facetType, final FacetHolder... holders) {
+    private static <T extends Facet> Optional<T> lookupFacet(
+            final Class<T> facetType,
+            final Can<FacetHolder> holders) {
         for (FacetHolder holder : holders) {
-            if(holder == null) {
-                continue;
-            }
             final T facet = holder.getFacet(facetType);
             if(facet != null) {
-                return facet;
+                return Optional.of(facet);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
 

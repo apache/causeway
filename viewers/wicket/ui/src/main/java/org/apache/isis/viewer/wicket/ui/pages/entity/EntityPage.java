@@ -69,8 +69,8 @@ public class EntityPage extends PageAbstract {
      * Specifically handled by <code>IsisWicketApplication#newPageFactory()</code>
      */
     public static EntityPage bookmarked(
-            IsisAppCommonContext commonContext,
-            PageParameters pageParameters) {
+            final IsisAppCommonContext commonContext,
+            final PageParameters pageParameters) {
 
         val entityModel = createEntityModel(commonContext, pageParameters);
         return new EntityPage(pageParameters, entityModel);
@@ -84,8 +84,8 @@ public class EntityPage extends PageAbstract {
      * @return An EntityModel for the requested OID
      */
     private static EntityModel createEntityModel(
-            IsisAppCommonContext commonContext,
-            PageParameters parameters) {
+            final IsisAppCommonContext commonContext,
+            final PageParameters parameters) {
 
         String oid = EntityModel.oidStr(parameters);
         if (Strings.isEmpty(oid)) {
@@ -102,15 +102,15 @@ public class EntityPage extends PageAbstract {
      * Ensures that any exception that might have occurred already (eg from an action invocation) is shown.
      */
     public EntityPage(
-            IsisAppCommonContext commonContext,
-            ManagedObject adapter) {
+            final IsisAppCommonContext commonContext,
+            final ManagedObject adapter) {
 
         this(PageParametersUtils.newPageParameters(), newEntityModel(commonContext, adapter));
     }
 
     private static EntityModel newEntityModel(
-            IsisAppCommonContext commonContext,
-            ManagedObject adapter) {
+            final IsisAppCommonContext commonContext,
+            final ManagedObject adapter) {
 
         val entityModel = EntityModel.ofAdapter(commonContext, adapter);
         return entityModel;
@@ -133,6 +133,7 @@ public class EntityPage extends PageAbstract {
         if(!isShowBreadcrumbs()) {
             return;
         }
+
         final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
         final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
         breadcrumbModel.visited(entityModel);
@@ -145,7 +146,7 @@ public class EntityPage extends PageAbstract {
     }
 
     @Override
-    public void renderHead(IHeaderResponse response) {
+    public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
         response.render(CssHeaderItem.forReference(WHERE_AM_I_CSS));
     }
@@ -214,8 +215,8 @@ public class EntityPage extends PageAbstract {
     }
 
     protected void addWhereAmIIfShown(
-            WebMarkupContainer entityPageContainer,
-            WhereAmIHelper whereAmIModel) {
+            final WebMarkupContainer entityPageContainer,
+            final WhereAmIHelper whereAmIModel) {
 
         val whereAmIContainer = new WebMarkupContainer("whereAmI-container");
         entityPageContainer.addOrReplace(whereAmIContainer);

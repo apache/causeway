@@ -35,6 +35,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
+import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
@@ -60,7 +62,8 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
 
     protected MetaModelContext metaModelContext;
 
-    private ValueSemanticsProviderAndFacetAbstract<?> valueSemanticsProvider;
+    //private ValueSemanticsProviderAndFacetAbstract<?> valueSemanticsProvider;
+    private ValueSemanticsProvider<?> valueSemanticsProvider;
     private EncodableFacetUsingEncoderDecoder encodeableFacet;
     private ParseableFacetUsingParser parseableFacet;
 
@@ -107,6 +110,15 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         this.parseableFacet = ParseableFacetUsingParser.create(value, mockFacetHolder);
     }
 
+    protected void setSemanitcs(final AbstractValueSemanticsProvider<?> valueSemantics) {
+        this.valueSemanticsProvider = valueSemantics;
+        this.encodeableFacet = new EncodableFacetUsingEncoderDecoder(
+                valueSemantics.getEncoderDecoder(),
+                mockFacetHolder);
+        this.parseableFacet = ParseableFacetUsingParser.create(valueSemantics.getParser(), mockFacetHolder);
+    }
+
+
     protected <T> ValueSemanticsProviderAndFacetAbstract<T> getValue(final Class<T> type) {
         return _Casts.uncheckedCast(valueSemanticsProvider);
     }
@@ -126,10 +138,17 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     @Test
     public void testParseNull() throws Exception {
         Assume.assumeThat(valueSemanticsProvider.getParser(), is(not(nullValue())));
-        try {
-            valueSemanticsProvider.parseTextRepresentation(null, null);
-            fail();
-        } catch (final IllegalArgumentException expected) {
+
+        if(valueSemanticsProvider instanceof ValueSemanticsProviderAndFacetAbstract) {
+
+            try {
+                ((ValueSemanticsProviderAndFacetAbstract<?>)valueSemanticsProvider).parseTextRepresentation(null, null);
+                fail();
+            } catch (final IllegalArgumentException expected) {
+            }
+
+        } else {
+            assertEquals(null, valueSemanticsProvider.getParser().parseTextRepresentation(null, null));
         }
     }
 
@@ -137,7 +156,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     public void testParseEmptyString() throws Exception {
         Assume.assumeThat(valueSemanticsProvider.getParser(), is(not(nullValue())));
 
-        final Object newValue = valueSemanticsProvider.parseTextRepresentation(null, "");
+        final Object newValue = valueSemanticsProvider.getParser().parseTextRepresentation(null, "");
         assertNull(newValue);
     }
 
@@ -158,6 +177,14 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testTitleOfForNullObject() {
-        assertEquals("", valueSemanticsProvider.presentationValue(null, null));
+
+        if(valueSemanticsProvider instanceof ValueSemanticsProviderAndFacetAbstract) {
+            assertEquals("",
+                    ((ValueSemanticsProviderAndFacetAbstract<?>)valueSemanticsProvider)
+                    .presentationValue(null, null));
+        } else {
+            assertEquals("", valueSemanticsProvider.getParser().presentationValue(null, null));
+        }
+
     }
 }

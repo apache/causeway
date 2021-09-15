@@ -40,7 +40,7 @@ extends ValueFacetUsingSemanticsProviderFactory<Double> {
         if (type != double.class) {
             return;
         }
-        addFacets(new DoublePrimitiveValueSemanticsProvider(holder));
+        addValueFacet(new DoublePrimitiveValueSemanticsProvider(holder));
     }
 
 }

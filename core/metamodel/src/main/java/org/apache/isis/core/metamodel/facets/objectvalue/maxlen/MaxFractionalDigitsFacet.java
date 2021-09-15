@@ -16,20 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.metamodel.facets.prop.column;
+package org.apache.isis.core.metamodel.facets.objectvalue.maxlen;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacetAbstract;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueSemanticsProvider;
+import javax.validation.constraints.Digits;
 
-public class BigDecimalFacetFallback
-extends BigDecimalValueFacetAbstract {
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
-    public BigDecimalFacetFallback(final FacetHolder holder) {
-        super(
-                BigDecimalValueSemanticsProvider.DEFAULT_LENGTH,
-                BigDecimalValueSemanticsProvider.DEFAULT_SCALE,
-                holder, Precedence.FALLBACK);
-    }
+/**
+ * The number of digits to the right of the decimal place (fractional part)
+ * for this decimal.
+ *
+ * <p>
+ * For example:
+ * <ul>
+ * <li><tt>12345.789</tt> has 3 fractional digits</li>
+ * <li><tt>12345</tt> has 0 fractional digits</li>
+ * <li><tt>12345.0</tt> has 1 fractional digit</li>
+ * </ul>
+ */
+public interface MaxFractionalDigitsFacet
+extends Facet {
+
+    /**
+     * eg. as provided by {@link Digits#fraction()}
+     */
+    int maxFractionalDigits();
 
 }

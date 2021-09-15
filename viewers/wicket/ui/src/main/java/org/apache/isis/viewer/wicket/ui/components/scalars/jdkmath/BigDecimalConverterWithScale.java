@@ -43,7 +43,7 @@ public class BigDecimalConverterWithScale extends BigDecimalConverter {
     /**
      * For {@link JavaMathBigDecimalPanelFactory} to call, so that there is a single instance.
      */
-    static AbstractNumberConverter<BigDecimal> newThreadSafeConverter(Integer scale) {
+    static AbstractNumberConverter<BigDecimal> newThreadSafeConverter(final Integer scale) {
         return new BigDecimalConverterWithScale(scale);
     }
 
@@ -51,14 +51,17 @@ public class BigDecimalConverterWithScale extends BigDecimalConverter {
     private final Integer scale;
 
     public BigDecimalConverterWithScale(final Integer scale) {
-        this.scale = scale;
+        this.scale = scale!=null
+                && scale>=0
+                ? scale
+                : null;
     }
 
     /**
      * Disables thousands separator grouping.
      */
     @Override
-    protected NumberFormat newNumberFormat(Locale locale) {
+    protected NumberFormat newNumberFormat(final Locale locale) {
         NumberFormat numberFormat = NumberFormat.getInstance(locale);
         numberFormat.setGroupingUsed(false);
         return numberFormat;
@@ -80,7 +83,7 @@ public class BigDecimalConverterWithScale extends BigDecimalConverter {
     }
 
     @Override
-    public BigDecimal convertToObject(String valueStr, Locale locale) throws ConversionException {
+    public BigDecimal convertToObject(final String valueStr, final Locale locale) throws ConversionException {
 
         DecimalFormat numberFormat = (DecimalFormat) getNumberFormat(locale);
         char groupingSeparator = numberFormat.getDecimalFormatSymbols().getGroupingSeparator();
@@ -120,7 +123,7 @@ public class BigDecimalConverterWithScale extends BigDecimalConverter {
         return new BigDecimalConverterWithScale(this.scale){
             private static final long serialVersionUID = 1L;
             @Override
-            public String convertToString(BigDecimal value, Locale locale) {
+            public String convertToString(final BigDecimal value, final Locale locale) {
                 NumberFormat fmt = BigDecimalConverterWithScale.this.getNumberFormat(locale);
                 fmt.setGroupingUsed(true);// re-enable for view mode
                 return fmt.format(value);

@@ -16,37 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigits;
+package org.apache.isis.core.metamodel.facets.param.bigdecimal.javaxvaldigits;
 
 import java.util.Optional;
 
 import javax.validation.constraints.Digits;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxTotalDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxTotalDigitsFacetAbstract;
 
+public class MaxTotalDigitsFacetOnParameterFromJavaxValidationDigitsAnnotation
+extends MaxTotalDigitsFacetAbstract {
 
-public class BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation
-extends BigDecimalValueFacetAbstract {
-
-    public static Optional<BigDecimalValueFacet> create(
-            final FacetHolder facetHolder,
-            final Optional<Digits> digitsIfAny) {
+    public static Optional<MaxTotalDigitsFacet> create(
+            final Optional<Digits> digitsIfAny,
+            final FacetHolder holder) {
 
         return digitsIfAny
         .map(digits->{
-            final int length = digits.integer() + digits.fraction();
-            final int scale = digits.fraction();
-            return new BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation(facetHolder, length, scale);
+            return new MaxTotalDigitsFacetOnParameterFromJavaxValidationDigitsAnnotation(
+                    digits.integer() + digits.fraction(), holder);
         });
-    }
+   }
 
-    private BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation(
-            final FacetHolder holder,
-            final int precision,
-            final int scale) {
-        super(precision, scale, holder);
-    }
+   private MaxTotalDigitsFacetOnParameterFromJavaxValidationDigitsAnnotation(
+           final int maxTotalDigits, final FacetHolder holder) {
+       super(maxTotalDigits, holder);
+   }
+
 
 }

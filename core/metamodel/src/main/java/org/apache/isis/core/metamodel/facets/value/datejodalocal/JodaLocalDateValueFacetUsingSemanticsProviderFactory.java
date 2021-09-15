@@ -43,7 +43,7 @@ extends ValueFacetUsingSemanticsProviderFactory<LocalDate> {
         if (type != LocalDate.class) {
             return;
         }
-        addFacets(new JodaLocalDateValueSemanticsProvider(holder));
+        addValueFacet(new JodaLocalDateValueSemanticsProvider(holder));
     }
 
 }

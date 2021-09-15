@@ -58,7 +58,7 @@ extends ValueFacetUsingSemanticsProviderFactory<T> {
             return;
         }
         val facetHolder = processClassContext.getFacetHolder();
-        addFacets(facetFactory.apply(facetHolder));
+        addValueFacet(facetFactory.apply(facetHolder));
     }
 
 

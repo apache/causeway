@@ -44,7 +44,7 @@ extends ValueFacetUsingSemanticsProviderFactory<Timestamp> {
         if (type != java.sql.Timestamp.class) {
             return;
         }
-        addFacets(new JavaSqlTimeStampValueSemanticsProvider(holder));
+        addValueFacet(new JavaSqlTimeStampValueSemanticsProvider(holder));
     }
 
 }

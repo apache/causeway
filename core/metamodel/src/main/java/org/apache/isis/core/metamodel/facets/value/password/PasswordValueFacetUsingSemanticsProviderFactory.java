@@ -41,7 +41,7 @@ extends ValueFacetUsingSemanticsProviderFactory<Password> {
         if (type != org.apache.isis.applib.value.Password.class) {
             return;
         }
-        addFacets(new PasswordValueSemanticsProvider(holder));
+        addValueFacet(new PasswordValueSemanticsProvider(holder));
     }
 
 }

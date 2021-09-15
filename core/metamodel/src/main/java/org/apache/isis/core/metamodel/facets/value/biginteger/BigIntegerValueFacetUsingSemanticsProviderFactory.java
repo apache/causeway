@@ -41,7 +41,7 @@ extends ValueFacetUsingSemanticsProviderFactory<BigInteger> {
         if (type != BigInteger.class) {
             return;
         }
-        addFacets(new BigIntegerValueSemanticsProvider(holder));
+        addValueFacet(new BigIntegerValueSemanticsProvider(holder));
     }
 
 }

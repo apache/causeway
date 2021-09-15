@@ -16,33 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.metamodel.facets.prop.column;
+package org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigits;
 
 import java.util.Optional;
 
-import javax.jdo.annotations.Column;
+import javax.validation.constraints.Digits;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxTotalDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxTotalDigitsFacetAbstract;
 
-public class MaxLengthFacetDerivedFromJdoColumn
-extends MaxLengthFacetAbstract {
+public class MaxTotalDigitsFacetOnPropertyFromJavaxValidationDigitsAnnotation
+extends MaxTotalDigitsFacetAbstract {
 
-    public static Optional<MaxLengthFacet> create(
-            final Optional<Column> jdoColumnIfAny,
+    public static Optional<MaxTotalDigitsFacet> create(
+            final Optional<Digits> digitsIfAny,
             final FacetHolder holder) {
 
-        return jdoColumnIfAny
-        .map(jdoColumn->
-            new MaxLengthFacetDerivedFromJdoColumn(
-                    jdoColumn.length(), holder));
-    }
+        return digitsIfAny
+        .map(digits->{
+            return new MaxTotalDigitsFacetOnPropertyFromJavaxValidationDigitsAnnotation(
+                    digits.integer() + digits.fraction(), holder);
+        });
+   }
 
-    private MaxLengthFacetDerivedFromJdoColumn(
-            final int maxLength, final FacetHolder holder) {
-        super(maxLength, holder);
-    }
+   private MaxTotalDigitsFacetOnPropertyFromJavaxValidationDigitsAnnotation(
+           final int maxTotalDigits, final FacetHolder holder) {
+       super(maxTotalDigits, holder);
+   }
 
 
 }

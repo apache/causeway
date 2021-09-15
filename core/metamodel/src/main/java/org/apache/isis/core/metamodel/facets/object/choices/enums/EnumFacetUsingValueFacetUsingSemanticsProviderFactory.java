@@ -43,7 +43,7 @@ extends ValueFacetUsingSemanticsProviderFactory<Enum<?>> {
             return;
         }
 
-        addFacets(_Casts.uncheckedCast(
+        addValueFacet(_Casts.uncheckedCast(
                 new EnumValueSemanticsProvider<>(
                         processClassContext.getIntrospectionPolicy(),
                         facetHolder,

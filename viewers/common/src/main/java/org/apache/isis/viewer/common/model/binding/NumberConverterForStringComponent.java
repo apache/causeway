@@ -20,38 +20,27 @@ package org.apache.isis.viewer.common.model.binding;
 
 import java.util.Optional;
 
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
-import org.apache.isis.core.metamodel.facets.value.biginteger.BigIntegerValueFacet;
-import org.apache.isis.core.metamodel.facets.value.bytes.ByteValueFacet;
-import org.apache.isis.core.metamodel.facets.value.doubles.DoubleFloatingPointValueFacet;
-import org.apache.isis.core.metamodel.facets.value.floats.FloatingPointValueFacet;
-import org.apache.isis.core.metamodel.facets.value.integer.IntegerValueFacet;
-import org.apache.isis.core.metamodel.facets.value.longs.LongValueFacet;
-import org.apache.isis.core.metamodel.facets.value.shortint.ShortValueFacet;
+import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
 import lombok.val;
 
-public final class NumberConverterForStringComponent implements BindingConverter<String> {
+public final class NumberConverterForStringComponent
+implements BindingConverter<String> {
 
     @Getter(onMethod_ = {@Override})
     private final ObjectSpecification valueSpecification;
-    private final ValueSemanticsProviderAndFacetAbstract<? extends Number> valueFacet;
+    private final ParseableFacet parsableFacet;
 
     @SuppressWarnings("unchecked")
     public NumberConverterForStringComponent(final ObjectSpecification valueSpecification) {
         this.valueSpecification = valueSpecification;
 
-        this.valueFacet = lookupFacetOneOf(getSupportedFacets())
-                .map(ValueSemanticsProviderAndFacetAbstract.class::cast)
-                .orElseThrow(()->_Exceptions.noSuchElement("missing 'number' value facet"));
+        this.parsableFacet = lookupFacet(ParseableFacet.class)
+                .orElseThrow(()->_Exceptions.noSuchElement("missing 'ParseableFacet'"));
     }
 
     @Override
@@ -62,28 +51,16 @@ public final class NumberConverterForStringComponent implements BindingConverter
             return ManagedObject.empty(getValueSpecification());
         }
 
-        val number = valueFacet.parseTextRepresentation(null, stringifiedNumber);
+        val number = //parsableFacet.parseTextRepresentation(null, stringifiedNumber);
+                0;
         return ManagedObject.of(getValueSpecification(), number);
     }
 
     @Override
     public String unwrap(final ManagedObject object) {
-        val number = (Number) ManagedObjects.UnwrapUtil.single(object);
-        return valueFacet.parseableTextRepresentation(null, number);
+        //val number = (Number) ManagedObjects.UnwrapUtil.single(object);
+        return "0";//parsableFacet.parseableTextRepresentation(null, number);
     }
-
-
-    // for performance reasons in order of likelihood (just guessing)
-    @Getter
-    private final static Can<Class<? extends Facet>> supportedFacets = Can.of(
-            IntegerValueFacet.class,
-            DoubleFloatingPointValueFacet.class,
-            ByteValueFacet.class,
-            LongValueFacet.class,
-            BigIntegerValueFacet.class,
-            BigDecimalValueFacet.class,
-            ShortValueFacet.class,
-            FloatingPointValueFacet.class);
 
     @Override
     public String toString(final String value) {
@@ -97,8 +74,9 @@ public final class NumberConverterForStringComponent implements BindingConverter
 
     @Override
     public Optional<String> tryParse(final String stringifiedValue) {
-        return valueFacet.tryParseTextEntry(null, stringifiedValue)
-                .map(Exception::getMessage); // TODO should be passed through the ExceptionRecognizer
+        return Optional.empty();
+//                parsableFacet.tryParseTextEntry(null, stringifiedValue)
+//                .map(Exception::getMessage); // TODO should be passed through the ExceptionRecognizer
     }
 
 }

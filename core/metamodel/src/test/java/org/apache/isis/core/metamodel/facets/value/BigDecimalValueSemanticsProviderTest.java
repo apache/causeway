@@ -27,14 +27,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueSemanticsProvider;
+import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueSemantics;
 
-public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
+public class BigDecimalValueSemanticsProviderTest
+extends ValueSemanticsProviderAbstractTestCase {
 
-    private BigDecimalValueSemanticsProvider value;
+    private BigDecimalValueSemantics value;
     private BigDecimal bigDecimal;
-    private FacetHolderAbstract holder;
 
     @Override
     @Before
@@ -43,9 +42,8 @@ public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProvider
 
         bigDecimal = new BigDecimal("34132.199");
         allowMockAdapterToReturn(bigDecimal);
-        holder = FacetHolderAbstract.forTesting(metaModelContext);
 
-        setValue(value = new BigDecimalValueSemanticsProvider(holder));
+        setSemanitcs(value = new BigDecimalValueSemantics());
     }
 
     @Test

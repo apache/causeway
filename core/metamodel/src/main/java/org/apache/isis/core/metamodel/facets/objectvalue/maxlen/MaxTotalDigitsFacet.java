@@ -16,17 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.uuid;
+package org.apache.isis.core.metamodel.facets.objectvalue.maxlen;
 
-import java.util.UUID;
+import javax.validation.constraints.Digits;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public interface UUIDValueFacet extends Facet {
+/**
+ * Maximum length of digits for this decimal.
+ *
+ * <p>
+ * For example:
+ * <ul>
+ * <li><tt>12345.789</tt> has a total of 8</li>
+ * <li><tt>12345</tt> has a total of 5</li>
+ * <li><tt>12345.0</tt> has a total of 6</li>
+ * </ul>
+ */
+public interface MaxTotalDigitsFacet
+extends Facet {
 
-    UUID uuidValue(ManagedObject object);
-
-    ManagedObject createValue(UUID value);
+    /**
+     * eg. as provided by {@link Digits#fraction()}
+     */
+    int maxTotalDigits();
 
 }

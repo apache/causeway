@@ -18,7 +18,9 @@
  */
 package org.apache.isis.core.metamodel.facets.object.value.vsp;
 
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -30,9 +32,16 @@ extends FacetFactoryAbstract {
         super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
-    protected void addFacets(final ValueSemanticsProviderAndFacetAbstract<T> adapter) {
+    protected final void addValueFacet(final ValueSemanticsProviderAndFacetAbstract<T> adapter) {
         FacetUtil.addFacet(
                 new ValueFacetUsingSemanticsProvider(adapter, adapter.getFacetHolder()));
+    }
+
+    protected final void addAllFacetsForValueSemantics(
+            final ValueSemanticsProvider<?> valueSemantics,
+            final FacetHolder holder) {
+        FacetUtil.addFacet(
+                new ValueFacetUsingSemanticsProvider(valueSemantics, holder));
     }
 
 }

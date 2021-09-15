@@ -40,7 +40,7 @@ extends ValueFacetUsingSemanticsProviderFactory<Boolean> {
         if (type != boolean.class) {
             return;
         }
-        addFacets(new BooleanPrimitiveValueSemanticsProvider(holder));
+        addValueFacet(new BooleanPrimitiveValueSemanticsProvider(holder));
     }
 
 }

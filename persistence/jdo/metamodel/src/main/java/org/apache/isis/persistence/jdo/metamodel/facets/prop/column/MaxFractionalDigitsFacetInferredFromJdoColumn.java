@@ -23,26 +23,27 @@ import java.util.Optional;
 import javax.jdo.annotations.Column;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxFractionalDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxFractionalDigitsFacetAbstract;
 
-public class MaxLengthFacetDerivedFromJdoColumn
-extends MaxLengthFacetAbstract {
+public class MaxFractionalDigitsFacetInferredFromJdoColumn
+extends MaxFractionalDigitsFacetAbstract {
 
-    public static Optional<MaxLengthFacet> create(
-            final Optional<Column> jdoColumnIfAny,
-            final FacetHolder holder) {
+     public static Optional<MaxFractionalDigitsFacet> create(
+             final Optional<Column> jdoColumnIfAny,
+             final FacetHolder holder) {
 
-        return jdoColumnIfAny
-        .map(jdoColumn->
-            new MaxLengthFacetDerivedFromJdoColumn(
-                    jdoColumn.length(), holder));
+         return jdoColumnIfAny
+         .filter(jdoColumn->jdoColumn.scale()>=0)
+         .map(jdoColumn->{
+             return new MaxFractionalDigitsFacetInferredFromJdoColumn(
+                     jdoColumn.scale(), holder);
+         });
     }
 
-    private MaxLengthFacetDerivedFromJdoColumn(
-            final int maxLength, final FacetHolder holder) {
-        super(maxLength, holder);
+    private MaxFractionalDigitsFacetInferredFromJdoColumn(
+            final int maxFractionalDigits, final FacetHolder holder) {
+        super(maxFractionalDigits, holder);
     }
-
 
 }

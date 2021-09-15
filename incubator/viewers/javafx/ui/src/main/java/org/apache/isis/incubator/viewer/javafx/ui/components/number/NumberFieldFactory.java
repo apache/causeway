@@ -20,7 +20,7 @@ package org.apache.isis.incubator.viewer.javafx.ui.components.number;
 
 import javax.inject.Inject;
 
-import org.springframework.core.annotation.Order;
+import org.springframework.util.ClassUtils;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.commons.internal.base._Strings;
@@ -32,13 +32,14 @@ import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerF
 import org.apache.isis.viewer.common.model.binding.NumberConverterForStringComponent;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
+
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.VBox;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @org.springframework.stereotype.Component
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
@@ -47,12 +48,14 @@ import lombok.extern.log4j.Log4j2;
 public class NumberFieldFactory implements UiComponentHandlerFx {
 
     @Override
-    public boolean isHandling(ComponentRequest request) {
-        return request.hasFeatureTypeFacetAnyOf(NumberConverterForStringComponent.getSupportedFacets());
+    public boolean isHandling(final ComponentRequest request) {
+        val type = request.getFeatureTypeSpec().getCorrespondingClass();
+        return Number.class.isAssignableFrom(
+                ClassUtils.resolvePrimitiveIfNecessary(type));
     }
 
     @Override
-    public Node handle(ComponentRequest request) {
+    public Node handle(final ComponentRequest request) {
 
         val uiComponent = new VBox();
         val uiField = _fx.add(uiComponent, new TextField());

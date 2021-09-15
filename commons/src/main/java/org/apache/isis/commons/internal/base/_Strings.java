@@ -218,6 +218,19 @@ public final class _Strings {
 
     /**
      * @param input
+     * @return null if the {@code input} is null or blank, the trimmed {@code input} otherwise
+     */
+    public static @Nullable String blankToNullOrTrim(final @Nullable String input) {
+        if(isEmpty(input)) {
+            return null;
+        }
+        return input.isBlank()
+                ? null
+                : input.trim();
+    }
+
+    /**
+     * @param input
      * @return the empty string if the {@code input} is null, the {@code input} otherwise
      */
     public static String nullToEmpty(final @Nullable String input) {
@@ -756,5 +769,7 @@ public final class _Strings {
                 StringBuilder::append,
                 StringBuilder::toString);
     }
+
+
 
 }

@@ -44,7 +44,7 @@ extends ValueFacetUsingSemanticsProviderFactory<Date> {
         if (type != Date.class) {
             return;
         }
-        addFacets(new JavaUtilDateValueSemanticsProvider(holder));
+        addValueFacet(new JavaUtilDateValueSemanticsProvider(holder));
     }
 
 }

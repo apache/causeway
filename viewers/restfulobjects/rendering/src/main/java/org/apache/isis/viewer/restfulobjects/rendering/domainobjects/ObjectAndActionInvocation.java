@@ -41,9 +41,9 @@ import lombok.val;
 public class ObjectAndActionInvocation {
 
     public static ObjectAndActionInvocation of(
-            @NonNull ActionInteraction.Result actionInteractionResult,
-            @NonNull JsonRepresentation argsJsonRepr,
-            @NonNull ActionResultReprRenderer.SelfLink selfLink) {
+            @NonNull final ActionInteraction.Result actionInteractionResult,
+            @NonNull final JsonRepresentation argsJsonRepr,
+            @NonNull final ActionResultReprRenderer.SelfLink selfLink) {
         return new ObjectAndActionInvocation(
                 actionInteractionResult.getManagedAction().getOwner(),
                 actionInteractionResult.getManagedAction().getAction(),
@@ -72,7 +72,12 @@ public class ObjectAndActionInvocation {
             return ActionResultRepresentation.ResultType.VOID;
         }
 
-        if (isVector(returnedAdapter.getSpecification())) {
+        //FIXME following decision tree should not depend on the returned runtime types
+        // but on the returnTypeSpec,
+        // which is introspected eagerly on application start and should be the binding contract
+        val actualReturnTypeSpec = returnedAdapter.getSpecification();
+
+        if (isVector(actualReturnTypeSpec)) {
 
             // though not strictly required, try to be consistent:  empty list vs populated list
             if(elementAdapters.get().isEmpty()) {
@@ -93,7 +98,7 @@ public class ObjectAndActionInvocation {
                     : ActionResultRepresentation.ResultType.SCALAR_VALUES;
         }
 
-        if (isScalarValue(returnedAdapter.getSpecification())) {
+        if (isScalarValue(actualReturnTypeSpec)) {
             return ActionResultRepresentation.ResultType.SCALAR_VALUE;
         }
 
@@ -126,11 +131,11 @@ public class ObjectAndActionInvocation {
 
     //TODO[2449] need to check whether that strategy holds consistently
     private static boolean isScalarValue(final @NonNull ObjectSpecification spec) {
-        return spec.getFacet(EncodableFacet.class)!=null;
+        return spec.containsFacet(EncodableFacet.class);
     }
 
     private static boolean isVector(final @NonNull ObjectSpecification spec) {
-        return spec.getFacet(CollectionFacet.class)!=null;
+        return spec.containsFacet(CollectionFacet.class);
     }
 
 

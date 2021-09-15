@@ -44,6 +44,6 @@ extends ValueFacetUsingSemanticsProviderFactory<CommandDto> {
             return;
         }
         val provider = new CommandDtoValueSemanticsProvider(holder);
-        addFacets(provider);
+        addValueFacet(provider);
     }
 }

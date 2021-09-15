@@ -40,7 +40,7 @@ extends ValueFacetUsingSemanticsProviderFactory<Byte> {
         if (type != Byte.class) {
             return;
         }
-        addFacets(new ByteWrapperValueSemanticsProvider(holder));
+        addValueFacet(new ByteWrapperValueSemanticsProvider(holder));
     }
 
 }

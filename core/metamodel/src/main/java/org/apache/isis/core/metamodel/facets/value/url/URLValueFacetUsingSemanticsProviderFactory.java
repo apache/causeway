@@ -42,7 +42,7 @@ extends ValueFacetUsingSemanticsProviderFactory<URL> {
         if (type != java.net.URL.class) {
             return;
         }
-        addFacets(new URLValueSemanticsProvider(holder));
+        addValueFacet(new URLValueSemanticsProvider(holder));
     }
 
 }

@@ -41,6 +41,6 @@ extends ValueFacetUsingSemanticsProviderFactory<Markup> {
         if (!(Markup.class.isAssignableFrom(type))) {
             return;
         }
-        addFacets(new MarkupValueSemanticsProvider(holder));
+        addValueFacet(new MarkupValueSemanticsProvider(holder));
     }
 }

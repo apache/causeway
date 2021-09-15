@@ -18,15 +18,32 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.facets.prop.column;
 
+import java.util.Optional;
+
+import javax.jdo.annotations.Column;
+
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxTotalDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxTotalDigitsFacetAbstract;
 
-public class BigDecimalFacetInferredFromJdoColumn
-extends BigDecimalValueFacetAbstract {
+public class MaxTotalDigitsFacetInferredFromJdoColumn
+extends MaxTotalDigitsFacetAbstract {
 
-    public BigDecimalFacetInferredFromJdoColumn(
-            final FacetHolder holder, final int precision, final int scale) {
-        super(precision, scale, holder, Precedence.INFERRED);
+    public static Optional<MaxTotalDigitsFacet> create(
+            final Optional<Column> jdoColumnIfAny,
+            final FacetHolder holder) {
+
+        return jdoColumnIfAny
+        .filter(jdoColumn->jdoColumn.length()>=0)
+        .map(jdoColumn->
+            new MaxTotalDigitsFacetInferredFromJdoColumn(
+                    jdoColumn.length(), holder));
     }
+
+    private MaxTotalDigitsFacetInferredFromJdoColumn(
+            final int maxTotalDigits, final FacetHolder holder) {
+        super(maxTotalDigits, holder);
+    }
+
 
 }

@@ -47,9 +47,12 @@ extends FacetFactoryAbstract {
         val digitsIfAny = processParameterContext.synthesizeOnParameter(Digits.class);
 
         addFacetIfPresent(
-                BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation
+                MaxTotalDigitsFacetOnParameterFromJavaxValidationDigitsAnnotation
                 .create(digitsIfAny, processParameterContext.getFacetHolder()));
 
+        addFacetIfPresent(
+                MaxFractionalDigitsFacetOnParameterFromJavaxValidationDigitsAnnotation
+                .create(digitsIfAny, processParameterContext.getFacetHolder()));
     }
 
 }

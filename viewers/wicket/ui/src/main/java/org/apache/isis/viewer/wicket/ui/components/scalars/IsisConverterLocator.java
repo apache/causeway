@@ -25,8 +25,8 @@ import org.apache.wicket.util.convert.converter.BigIntegerConverter;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxFractionalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.DateConverterForJavaSqlDate;
@@ -108,11 +108,10 @@ public class IsisConverterLocator {
             return _Casts.uncheckedCast(new BigIntegerConverter());
         }
         if (java.math.BigDecimal.class == correspondingClass) {
-            final BigDecimalValueFacet facet = objectSpecification.getFacet(BigDecimalValueFacet.class);
-            Integer scale = null;
-            if (facet != null) {
-                scale = facet.getScale();
-            }
+            final int scale = objectSpecification
+                .lookupFacet(MaxFractionalDigitsFacet.class)
+                .map(MaxFractionalDigitsFacet::maxFractionalDigits)
+                .orElse(-1);
             return _Casts.uncheckedCast(new BigDecimalConverterWithScale(scale).forViewMode());
         }
 

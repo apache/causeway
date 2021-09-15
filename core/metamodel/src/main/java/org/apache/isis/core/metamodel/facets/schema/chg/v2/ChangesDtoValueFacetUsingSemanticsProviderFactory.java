@@ -44,6 +44,6 @@ extends ValueFacetUsingSemanticsProviderFactory<ChangesDto> {
             return;
         }
         val provider = new ChangesDtoValueSemanticsProvider(holder);
-        addFacets(provider);
+        addValueFacet(provider);
     }
 }

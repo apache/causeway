@@ -41,8 +41,7 @@ extends ValueFacetUsingSemanticsProviderFactory<BigDecimal> {
         if (type != BigDecimal.class) {
             return;
         }
-        addFacets(new BigDecimalValueSemanticsProvider(holder));
-        return;
+        addAllFacetsForValueSemantics(new BigDecimalValueSemantics(), holder);
     }
 
 }
