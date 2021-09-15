@@ -32,9 +32,7 @@ import org.apache.isis.applib.annotation.Value;
  *
  * @since 1.x {@index}
  */
-@Value(
-        logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.Password",
-        semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.password.PasswordValueSemanticsProvider")
+@Value(logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.Password")
 @XmlAccessorType(XmlAccessType.FIELD)
 // @XmlJavaTypeAdapter(Password.JaxbToStringAdapter.class) // TODO: not automatically registered because not secure enough.  Instead we should set up some sort of mechanism to encrypt.
 @lombok.Value
@@ -56,7 +54,7 @@ public class Password implements Serializable {
         this("");
     }
 
-    public Password(String password) {
+    public Password(final String password) {
         this.password = password;
     }
 
@@ -75,14 +73,14 @@ public class Password implements Serializable {
 
     public static class JaxbToStringAdapter extends javax.xml.bind.annotation.adapters.XmlAdapter<String, Password> {
         @Override
-        public Password unmarshal(String str) throws Exception {
+        public Password unmarshal(final String str) throws Exception {
             return str != null
                     ? new Password(str)
                     : null;
         }
 
         @Override
-        public String marshal(Password password) throws Exception {
+        public String marshal(final Password password) throws Exception {
             return password != null
                     ? password.getPassword()
                     : null;

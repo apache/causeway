@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.value.markup;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.Markup;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -25,6 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
+@Component
 public class MarkupValueSemanticsProvider
 extends ValueSemanticsProviderAndFacetAbstract<Markup>
 implements MarkupValueFacet {
@@ -36,6 +39,10 @@ implements MarkupValueFacet {
     }
 
     private static final Markup DEFAULT_VALUE = null;
+
+    public MarkupValueSemanticsProvider() {
+        this(null);
+    }
 
     public MarkupValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, Markup.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE);

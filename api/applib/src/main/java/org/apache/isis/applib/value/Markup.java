@@ -35,10 +35,7 @@ import org.apache.isis.commons.internal.base._Strings;
  *
  * @since 2.0 {@index}
  */
-@Value(
-        logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.Markup",
-        semanticsProviderName =
-        "org.apache.isis.core.metamodel.facets.value.markup.MarkupValueSemanticsProvider")
+@Value(logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.Markup")
 @XmlJavaTypeAdapter(Markup.JaxbToStringAdapter.class)   // for JAXB view model support
 public final class Markup implements HasHtml, Serializable {
 
@@ -50,7 +47,7 @@ public final class Markup implements HasHtml, Serializable {
         this(null);
     }
 
-    public Markup(String html) {
+    public Markup(final String html) {
         this.html = html!=null ? html : "";
     }
 
@@ -100,14 +97,14 @@ public final class Markup implements HasHtml, Serializable {
         private final Base64.Decoder decoder = Base64.getDecoder(); // is thread-safe ?
 
         @Override
-        public Markup unmarshal(String v) throws Exception {
+        public Markup unmarshal(final String v) throws Exception {
             return v != null
                     ? new Markup(_Strings.ofBytes(decoder.decode(v), StandardCharsets.UTF_8))
                     : null;
         }
 
         @Override
-        public String marshal(Markup v) throws Exception {
+        public String marshal(final Markup v) throws Exception {
             return v != null
                     ? encoder.encodeToString(_Strings.toBytes(v.asHtml(), StandardCharsets.UTF_8))
                     : null;
@@ -115,7 +112,7 @@ public final class Markup implements HasHtml, Serializable {
     }
 
     /** syntactic sugar */
-    public static Markup valueOfHtml(String html) {
+    public static Markup valueOfHtml(final String html) {
         return new Markup(html);
     }
 

@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.valuetypes.ValueTypeDefinition;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProvider;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
+import org.apache.isis.valuetypes.markdown.metamodel.facets.MarkdownValueSemanticsProvider;
 
 /**
  * @since 2.0 {@index}
@@ -40,7 +41,10 @@ import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 @Configuration
 @Import({
         MarkdownMetaModelRefiner.class,
-        MarkdownValueTypeProvider.class
+        MarkdownValueTypeProvider.class,
+
+        MarkdownValueSemanticsProvider.class,
+
 })
 public class IsisModuleValMarkdownMetaModel {
 
@@ -50,7 +54,7 @@ public class IsisModuleValMarkdownMetaModel {
 @Named("isis.val.MarkdownMetaModelRefiner")
 class MarkdownMetaModelRefiner implements MetaModelRefiner {
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 //blueprint
 //        programmingModel.addFactory(
 //                ProgrammingModel.FacetProcessingOrder.G1_VALUE_TYPES,

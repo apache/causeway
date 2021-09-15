@@ -18,12 +18,18 @@
  */
 package org.apache.isis.valuetypes.asciidoc.metamodel.semantics;
 
+import javax.inject.Named;
+
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
+@Component
+@Named("isis.val.AsciiDocValueSemanticsProvider")
 public class AsciiDocValueSemanticsProvider
 implements
     ValueSemanticsProvider<AsciiDoc>,

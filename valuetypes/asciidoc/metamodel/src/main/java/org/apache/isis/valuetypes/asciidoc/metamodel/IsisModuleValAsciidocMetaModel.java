@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.valuetypes.ValueTypeDefinition;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProvider;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
+import org.apache.isis.valuetypes.asciidoc.metamodel.semantics.AsciiDocValueSemanticsProvider;
 
 /**
  * @since 2.0 {@index}
@@ -40,7 +41,9 @@ import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 @Configuration
 @Import({
         AsciiDocMetaModelRefiner.class,
-        AsciiDocValueTypeProvider.class
+        AsciiDocValueTypeProvider.class,
+
+        AsciiDocValueSemanticsProvider.class,
 })
 public class IsisModuleValAsciidocMetaModel {
 

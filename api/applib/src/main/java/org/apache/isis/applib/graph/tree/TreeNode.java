@@ -48,9 +48,7 @@ import lombok.SneakyThrows;
  *
  * @param <T> type constraint for values contained by this node
  */
-@Value(
-        logicalTypeName = IsisModuleApplib.NAMESPACE + ".graph.tree.TreeNode",
-        semanticsProviderName="org.apache.isis.core.metamodel.facets.value.treenode.TreeNodeValueSemanticsProvider")
+@Value(logicalTypeName = IsisModuleApplib.NAMESPACE + ".graph.tree.TreeNode")
 public class TreeNode<T> implements Vertex<T> {
 
     private final TreeState sharedState;

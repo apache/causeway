@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.value.treenode;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.graph.tree.TreeNode;
@@ -30,6 +32,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 
+@Component
 @SuppressWarnings("rawtypes")
 public class TreeNodeValueSemanticsProvider
 extends ValueSemanticsProviderAndFacetAbstract<TreeNode>
@@ -43,6 +46,10 @@ implements TreeNodeValueFacet {
 
     private static final TreeNode DEFAULT_VALUE = null;
     private static final Class<TreeNode> VALUE_TYPE = TreeNode.class;
+
+    public TreeNodeValueSemanticsProvider() {
+        this(null);
+    }
 
     public TreeNodeValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, VALUE_TYPE, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE,

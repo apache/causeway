@@ -20,14 +20,14 @@ package org.apache.isis.extensions.fullcalendar.applib.value;
 
 import java.time.Instant;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 
-/**
- * For internal use; allows Isis to parse etc.
- */
+@Component
 public class CalendarEventSemanticsProvider
 implements ValueSemanticsProvider<CalendarEvent> {
 

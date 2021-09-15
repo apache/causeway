@@ -21,6 +21,8 @@ package org.apache.isis.core.metamodel.facets.value.clobs;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.Clob;
@@ -28,6 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 
+@Component
 public class ClobValueSemanticsProvider
 extends ValueSemanticsProviderAndFacetAbstract<Clob>
 implements ClobValueFacet {
@@ -39,6 +42,10 @@ implements ClobValueFacet {
     }
 
     private static final Clob DEFAULT_VALUE = null;
+
+    public ClobValueSemanticsProvider() {
+        this(null);
+    }
 
     public ClobValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, Clob.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE);

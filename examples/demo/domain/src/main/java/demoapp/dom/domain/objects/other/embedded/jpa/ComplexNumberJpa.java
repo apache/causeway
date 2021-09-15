@@ -31,9 +31,9 @@ import lombok.val;
 import demoapp.dom.domain.objects.other.embedded.ComplexNumber;
 
 // tag::class[]
-//@Entity                                                                 // <.>
-@javax.persistence.Embeddable                                                             // <.>
-@Value(semanticsProviderClass = ComplexNumberJpaValueSemantics.class)   // <.>
+//@Entity                                                               // <.>
+@javax.persistence.Embeddable                                           // <.>
+@Value                                                                  // <.>
 @lombok.Getter                                                          // <.>
 @lombok.Setter(AccessLevel.PRIVATE)                                     // <.>
 @lombok.AllArgsConstructor(staticName = "of")

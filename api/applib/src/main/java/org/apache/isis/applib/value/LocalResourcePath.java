@@ -50,10 +50,7 @@ import lombok.NonNull;
  * @since 2.0 {@index}
  * @see OpenUrlStrategy
  */
-@Value(
-        logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.LocalResourcePath",
-        semanticsProviderName =
-        "org.apache.isis.core.metamodel.facets.value.localrespath.LocalResourcePathValueSemanticsProvider")
+@Value(logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.LocalResourcePath")
 @XmlJavaTypeAdapter(LocalResourcePath.JaxbToStringAdapter.class)   // for JAXB view model support
 public final class LocalResourcePath implements Serializable {
 

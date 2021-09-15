@@ -24,6 +24,8 @@ import java.util.Base64;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.Blob;
@@ -33,6 +35,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 
+@Component
 public class BlobValueSemanticsProvider
 extends ValueSemanticsProviderAndFacetAbstract<Blob>
 implements BlobValueFacet {
@@ -44,6 +47,10 @@ implements BlobValueFacet {
     }
 
     private static final Blob DEFAULT_VALUE = null;
+
+    public BlobValueSemanticsProvider() {
+        this(null);
+    }
 
     public BlobValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, Blob.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE);

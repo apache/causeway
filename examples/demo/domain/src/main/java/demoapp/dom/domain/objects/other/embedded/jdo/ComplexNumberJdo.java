@@ -33,7 +33,7 @@ import demoapp.dom.domain.objects.other.embedded.ComplexNumber;
 // tag::class[]
 @javax.jdo.annotations.PersistenceCapable                               // <.>
 @javax.jdo.annotations.EmbeddedOnly                                     // <.>
-@Value(semanticsProviderClass = ComplexNumberJdoValueSemantics.class)   // <.>
+@Value                                                                  // <.>
 @lombok.Getter                                                          // <.>
 @lombok.Setter(AccessLevel.PRIVATE)                                     // <.>
 @lombok.AllArgsConstructor(staticName = "of")

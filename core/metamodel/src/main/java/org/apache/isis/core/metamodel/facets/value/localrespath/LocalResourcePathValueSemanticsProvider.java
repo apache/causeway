@@ -20,6 +20,8 @@ package org.apache.isis.core.metamodel.facets.value.localrespath;
 
 import java.nio.file.InvalidPathException;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -27,6 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
+@Component
 public class LocalResourcePathValueSemanticsProvider
 extends ValueSemanticsProviderAndFacetAbstract<LocalResourcePath>
 implements LocalResourcePathValueFacet {
@@ -38,6 +41,10 @@ implements LocalResourcePathValueFacet {
     public static final int MAX_LENGTH = 2083;
     private static final int TYPICAL_LENGTH = 100;
     private static final LocalResourcePath DEFAULT_VALUE = null; // no default
+
+    public LocalResourcePathValueSemanticsProvider() {
+        this(null);
+    }
 
     public LocalResourcePathValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, LocalResourcePath.class,

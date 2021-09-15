@@ -20,6 +20,8 @@ package demoapp.dom.domain.objects.other.embedded.jdo;
 
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -30,6 +32,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import lombok.val;
 
 // tag::class[]
+@Component
 public class ComplexNumberJdoValueSemantics
         implements ValueSemanticsProvider<ComplexNumberJdo>{
 

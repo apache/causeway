@@ -28,6 +28,12 @@ import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeMalfo
 import org.apache.isis.core.metamodel.facets.schema.IsisSchemaMetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.schema.IsisSchemaValueTypeProvider;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueSemantics;
+import org.apache.isis.core.metamodel.facets.value.blobs.BlobValueSemanticsProvider;
+import org.apache.isis.core.metamodel.facets.value.clobs.ClobValueSemanticsProvider;
+import org.apache.isis.core.metamodel.facets.value.localrespath.LocalResourcePathValueSemanticsProvider;
+import org.apache.isis.core.metamodel.facets.value.markup.MarkupValueSemanticsProvider;
+import org.apache.isis.core.metamodel.facets.value.password.PasswordValueSemanticsProvider;
+import org.apache.isis.core.metamodel.facets.value.treenode.TreeNodeValueSemanticsProvider;
 import org.apache.isis.core.metamodel.facets.value.uuid.UUIDValueSemantics;
 import org.apache.isis.core.metamodel.inspect.IsisModuleCoreMetamodelInspection;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
@@ -83,6 +89,12 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         // Default Value Semantics
         BigDecimalValueSemantics.class,
         UUIDValueSemantics.class,
+        BlobValueSemanticsProvider.class,
+        ClobValueSemanticsProvider.class,
+        LocalResourcePathValueSemanticsProvider.class,
+        MarkupValueSemanticsProvider.class,
+        PasswordValueSemanticsProvider.class,
+        TreeNodeValueSemanticsProvider.class,
 
         // @Service's
         ObjectManagerDefault.class,

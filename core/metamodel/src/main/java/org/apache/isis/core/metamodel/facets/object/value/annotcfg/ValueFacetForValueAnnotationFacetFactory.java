@@ -18,16 +18,30 @@
  */
 package org.apache.isis.core.metamodel.facets.object.value.annotcfg;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.stream.Stream;
+
 import javax.inject.Inject;
 
+import org.springframework.core.ResolvableType;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.CollectionUtils;
 
+import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.collections.Cardinality;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.commons.internal.reflection._Generics;
+import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -88,78 +102,59 @@ extends ValueFacetUsingSemanticsProviderFactory {
 
         final var cls = processClassContext.getCls();
 
-        if(valueIfAny.isPresent()
-                && cls.getName().endsWith("VariantC")) {
-            System.out.printf("gotcha %s %s %n", cls, valueIfAny.get().logicalTypeName());
-        }
-
         addFacetIfPresent(
                 LogicalTypeFacetForValueAnnotation
                 .create(valueIfAny, cls, facetHolder));
 
         valueIfAny
-        .map(value->{
-            addAllFacetsForValue(value, facetHolder);
-            return valueSemanticsProviderOrNull(
-                    value.semanticsProviderClass(),
-                    value.semanticsProviderName());
-        })
-        .map(semanticsProviderClass->instantiate(semanticsProviderClass, facetHolder))
-        .map(ValueSemanticsProvider.class::cast)
-        .ifPresent(valueSemantics->{
-            addAllFacetsForValueSemantics(valueSemantics, facetHolder);
+        .ifPresent(value->{
+
+            final var candidates = lookupValueSemantics(cls);
+            if(candidates.isCardinalityOne()) {
+                super.addAllFacetsForValueSemantics(candidates.getFirstOrFail(), facetHolder);
+            } else {
+
+                if(candidates.isCardinalityMultiple()) {
+                    log.warn("found multiple ValueSemanticsProvider for value type {}; using the first", cls);
+                    super.addAllFacetsForValueSemantics(candidates.getFirstOrFail(), facetHolder);
+                } else {
+                    log.warn("could not find a ValueSemanticsProvider for value type {}; using a no-op fallback", cls);
+                    super.addAllFacetsForValueSemantics(new NoopValueSemantics(), facetHolder);
+                }
+
+            }
         });
+    }
+
+    // -- HELPER
+
+    private static class NoopValueSemantics implements ValueSemanticsProvider<Object> {
+
+        @Override
+        public Parser<Object> getParser() {
+            return null;
+        }
+
+        @Override
+        public EncoderDecoder<Object> getEncoderDecoder() {
+            return null;
+        }
+
+        @Override
+        public DefaultsProvider<Object> getDefaultsProvider() {
+            return null;
+        }
 
     }
 
-    // JUnit Support
-    private void addAllFacetsForValue(final Value value, final FacetHolder holder) {
-        holder.addFacet(new ImmutableFacetViaValueSemantics(holder));
-        holder.addFacet(new ValueFacetUsingSemanticsProvider(null, holder));
+    private <T> Can<ValueSemanticsProvider<T>> lookupValueSemantics(final Class<T> valueType) {
+        var resolvableType = ResolvableType.forClassWithGenerics(ValueSemanticsProvider.class, valueType);
+        return getServiceRegistry()
+                .select(ValueSemanticsProvider.class)
+                .stream()
+                .filter(resolvableType::isInstance)
+                .map(provider->_Casts.<ValueSemanticsProvider<T>>uncheckedCast(provider))
+                .collect(Can.toCan());
     }
-
-    @SneakyThrows
-    private static ValueSemanticsProvider<?> instantiate(
-            final Class<? extends ValueSemanticsProvider<?>> cls,
-            final FacetHolder facetHolder) {
-
-        if(ClassUtils.hasConstructor(cls, new Class[] {FacetHolder.class})) {
-            return ClassUtils.getConstructorIfAvailable(cls, new Class[] {FacetHolder.class})
-            .newInstance(facetHolder);
-        }
-
-        return (ValueSemanticsProvider<?>) ClassExtensions.newInstance(cls);
-    }
-
-
-    private static Class<? extends ValueSemanticsProvider<?>> valueSemanticsProviderOrNull(
-            final Class<?> candidateClass,
-            final String classCandidateName) {
-
-        final Class<? extends ValueSemanticsProvider<?>> clazz = candidateClass != null
-                ? _Casts.uncheckedCast(ClassUtil.implementingClassOrNull(
-                        candidateClass.getName(), ValueSemanticsProvider.class, FacetHolder.class))
-                : null;
-
-        if(clazz != null) {
-            return clazz;
-        }
-
-        final Class<? extends ValueSemanticsProvider<?>> classForName =
-                _Casts.uncheckedCast(ClassUtil.implementingClassOrNull(
-                        classCandidateName, ValueSemanticsProvider.class, FacetHolder.class));
-
-        if(classForName!=null) {
-            return classForName;
-        }
-
-        if(_Strings.isNotEmpty(classCandidateName)) {
-            log.warn("cannot find ValueSemanticsProvider referenced by class name {}", classCandidateName);
-        }
-
-        return null;
-
-    }
-
 
 }

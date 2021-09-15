@@ -26,7 +26,7 @@ import java.time.ZonedDateTime;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.IsisModuleApplib;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -40,7 +40,8 @@ import lombok.With;
  * @since 2.0 {@index}
  * @apiNote implements Comparable<CalendarEvent> based on epochMillis
  */
-@Value(semanticsProviderClass=CalendarEventSemanticsProvider.class)
+@org.apache.isis.applib.annotation.Value(
+        logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.CalendarEvent")
 @Getter @With
 @ToString @EqualsAndHashCode
 @AllArgsConstructor

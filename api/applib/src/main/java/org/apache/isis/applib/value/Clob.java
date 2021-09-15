@@ -60,9 +60,7 @@ import lombok.val;
  * @since 1.x {@index}
  */
 @Value(
-        logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.Clob",
-        semanticsProviderName =
-        "org.apache.isis.core.metamodel.facets.value.clobs.ClobValueSemanticsProvider")
+        logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.Clob")
 @XmlJavaTypeAdapter(Clob.JaxbToStringAdapter.class)   // for JAXB view model support
 //@Log4j2
 public final class Clob implements NamedWithMimeType {
@@ -100,7 +98,7 @@ public final class Clob implements NamedWithMimeType {
      * @param content - chars
      * @return new {@link Clob}
      */
-    public static Clob of(String name, CommonMimeType mimeType, CharSequence content) {
+    public static Clob of(final String name, final CommonMimeType mimeType, final CharSequence content) {
         val proposedFileExtension = mimeType.getProposedFileExtensions().getFirst().orElse("");
         val fileName = _Strings.asFileNameWithExtension(name, proposedFileExtension);
         return new Clob(fileName, mimeType.getMimeType(), content);
@@ -108,27 +106,27 @@ public final class Clob implements NamedWithMimeType {
 
     // --
 
-    public Clob(String name, String primaryType, String subType, char[] chars) {
+    public Clob(final String name, final String primaryType, final String subType, final char[] chars) {
         this(name, primaryType, subType, new String(chars));
     }
 
-    public Clob(String name, String mimeTypeBase, char[] chars) {
+    public Clob(final String name, final String mimeTypeBase, final char[] chars) {
         this(name, mimeTypeBase, new String(chars));
     }
 
-    public Clob(String name, MimeType mimeType, char[] chars) {
+    public Clob(final String name, final MimeType mimeType, final char[] chars) {
         this(name, mimeType, new String(chars));
     }
 
-    public Clob(String name, String primaryType, String subType, CharSequence chars) {
+    public Clob(final String name, final String primaryType, final String subType, final CharSequence chars) {
         this(name, CommonMimeType.newMimeType(primaryType, subType), chars);
     }
 
-    public Clob(String name, String mimeTypeBase, CharSequence chars) {
+    public Clob(final String name, final String mimeTypeBase, final CharSequence chars) {
         this(name, CommonMimeType.newMimeType(mimeTypeBase), chars);
     }
 
-    public Clob(String name, MimeType mimeType, CharSequence chars) {
+    public Clob(final String name, final MimeType mimeType, final CharSequence chars) {
         if(name == null) {
             throw new IllegalArgumentException("Name cannot be null");
         }
@@ -159,19 +157,19 @@ public final class Clob implements NamedWithMimeType {
     public CharSequence getChars() {
         return chars;
     }
-    
+
     // -- UTILITIES
 
     public Blob toBlob(final @NonNull Charset charset) {
         return new Blob(getName(), getMimeType(), _Strings.toBytes(getChars().toString(), charset));
-    } 
-    
+    }
+
     public void writeCharsTo(final Writer wr) throws IOException {
         if(wr!=null && chars!=null){
             wr.append(chars);
         }
     }
-    
+
     // -- OBJECT CONTRACT
 
     @Override
@@ -204,7 +202,7 @@ public final class Clob implements NamedWithMimeType {
         private final PrimitiveJaxbAdapters.BytesAdapter bytesAdapter = new PrimitiveJaxbAdapters.BytesAdapter(); // thread-safe
 
         @Override
-        public Clob unmarshal(String data) throws Exception {
+        public Clob unmarshal(final String data) throws Exception {
             if(data==null) {
                 return null;
             }
@@ -222,7 +220,7 @@ public final class Clob implements NamedWithMimeType {
         }
 
         @Override
-        public String marshal(Clob clob) throws Exception {
+        public String marshal(final Clob clob) throws Exception {
             if(clob==null) {
                 return null;
             }
@@ -237,5 +235,5 @@ public final class Clob implements NamedWithMimeType {
 
     }
 
-    
+
 }

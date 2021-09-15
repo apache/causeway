@@ -38,9 +38,7 @@ import lombok.experimental.Accessors;
  * @since 2.0 {@index}
  */
 @org.apache.isis.applib.annotation.Value(
-        logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.AsciiDoc",
-        semanticsProviderName = "org.apache.isis.valuetypes.asciidoc.metamodel.semantics."
-                + "AsciiDocValueSemanticsProvider")
+        logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.AsciiDoc")
 @EqualsAndHashCode
 @XmlJavaTypeAdapter(AsciiDocJaxbAdapter.class)  // for JAXB view model support
 public final class AsciiDoc implements HasHtml, Serializable {

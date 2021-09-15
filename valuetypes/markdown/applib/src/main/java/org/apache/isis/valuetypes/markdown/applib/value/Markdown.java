@@ -33,14 +33,13 @@ import lombok.Getter;
  *
  */
 @org.apache.isis.applib.annotation.Value(
-        logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.Markdown",
-        semanticsProviderName = "org.apache.isis.valuetypes.markdown.metamodel.facets.MarkdownValueSemanticsProvider")
+        logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.Markdown")
 @XmlJavaTypeAdapter(MarkdownJaxbAdapter.class)  // for JAXB view model support
 public class Markdown implements HasHtml, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static Markdown valueOfMarkdown(String markdown) {
+    public static Markdown valueOfMarkdown(final String markdown) {
         return new Markdown(markdown);
     }
 
@@ -51,7 +50,7 @@ public class Markdown implements HasHtml, Serializable {
         this(null);
     }
 
-    public Markdown(String markdown) {
+    public Markdown(final String markdown) {
         this.markdown = markdown !=null ? markdown : "";
     }
 

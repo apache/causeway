@@ -20,6 +20,9 @@ package demoapp.dom.domain.objects.other.embedded.jpa;
 
 import java.util.stream.Collectors;
 
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -29,7 +32,9 @@ import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.val;
 
+@Profile("demo-jpa")
 // tag::class[]
+@Component
 public class ComplexNumberJpaValueSemantics
         implements ValueSemanticsProvider<ComplexNumberJpa>{
 
