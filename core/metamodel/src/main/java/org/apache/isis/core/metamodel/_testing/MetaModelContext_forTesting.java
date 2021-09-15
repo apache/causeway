@@ -65,6 +65,8 @@ import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIconService;
+import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueSemantics;
+import org.apache.isis.core.metamodel.facets.value.uuid.UUIDValueSemantics;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -207,6 +209,8 @@ implements MetaModelContext {
                 repositoryService,
                 transactionService,
                 transactionState,
+                new BigDecimalValueSemantics(),
+                new UUIDValueSemantics(),
                 this);
 
         return Stream.concat(

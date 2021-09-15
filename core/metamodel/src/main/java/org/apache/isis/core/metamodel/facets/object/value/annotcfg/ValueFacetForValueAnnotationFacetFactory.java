@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ImmutableFacetViaValueSemantics;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProvider;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
+import org.apache.isis.core.metamodel.facets.value.annotation.LogicalTypeFacetForValueAnnotation;
 
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -85,14 +86,25 @@ extends ValueFacetUsingSemanticsProviderFactory {
         final var facetHolder = processClassContext.getFacetHolder();
         final var valueIfAny = processClassContext.synthesizeOnType(Value.class);
 
+        final var cls = processClassContext.getCls();
+
+        if(valueIfAny.isPresent()
+                && cls.getName().endsWith("VariantC")) {
+            System.out.printf("gotcha %s %s %n", cls, valueIfAny.get().logicalTypeName());
+        }
+
+        addFacetIfPresent(
+                LogicalTypeFacetForValueAnnotation
+                .create(valueIfAny, cls, facetHolder));
+
         valueIfAny
         .map(value->{
-            addAllFacetsForValue(facetHolder);
+            addAllFacetsForValue(value, facetHolder);
             return valueSemanticsProviderOrNull(
                     value.semanticsProviderClass(),
                     value.semanticsProviderName());
         })
-        .map(cls->instantiate(cls, facetHolder))
+        .map(semanticsProviderClass->instantiate(semanticsProviderClass, facetHolder))
         .map(ValueSemanticsProvider.class::cast)
         .ifPresent(valueSemantics->{
             addAllFacetsForValueSemantics(valueSemantics, facetHolder);
@@ -101,7 +113,7 @@ extends ValueFacetUsingSemanticsProviderFactory {
     }
 
     // JUnit Support
-    private void addAllFacetsForValue(final FacetHolder holder) {
+    private void addAllFacetsForValue(final Value value, final FacetHolder holder) {
         holder.addFacet(new ImmutableFacetViaValueSemantics(holder));
         holder.addFacet(new ValueFacetUsingSemanticsProvider(null, holder));
     }

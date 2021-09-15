@@ -22,6 +22,8 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.ParsePosition;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
@@ -30,6 +32,7 @@ import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.internal.base._Strings;
 
+@Component
 public class BigDecimalValueSemantics
 extends AbstractValueSemanticsProvider<BigDecimal>
 implements

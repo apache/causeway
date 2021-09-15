@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
@@ -29,9 +30,12 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSem
 public class UUIDValueFacetUsingSemanticsProviderFactory
 extends ValueFacetUsingSemanticsProviderFactory<UUID> {
 
-    @Inject
-    public UUIDValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+    @Inject private ValueSemanticsProvider<UUID> valueSemantics;
+
+    public UUIDValueFacetUsingSemanticsProviderFactory(
+            final MetaModelContext mmc) {
         super(mmc);
+        getServiceInjector().injectServicesInto(this);
     }
 
     @Override
@@ -42,7 +46,7 @@ extends ValueFacetUsingSemanticsProviderFactory<UUID> {
         if (type != UUID.class) {
             return;
         }
-        addAllFacetsForValueSemantics(new UUIDValueSemantics(), holder);
+        addAllFacetsForValueSemantics(valueSemantics, holder);
     }
 
 }

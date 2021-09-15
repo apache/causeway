@@ -26,7 +26,8 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacetAbstract;
 
-public class LogicalTypeFacetForValueAnnotation extends LogicalTypeFacetAbstract {
+public class LogicalTypeFacetForValueAnnotation
+extends LogicalTypeFacetAbstract {
 
     public static Optional<LogicalTypeFacetForValueAnnotation> create(
             final Optional<Value> valueIfAny,

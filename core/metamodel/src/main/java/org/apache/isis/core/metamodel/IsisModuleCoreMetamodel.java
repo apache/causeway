@@ -18,12 +18,17 @@
  */
 package org.apache.isis.core.metamodel;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.core.config.IsisModuleCoreConfig;
 import org.apache.isis.core.metamodel.context.MetaModelContexts;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeMalformedValidator;
 import org.apache.isis.core.metamodel.facets.schema.IsisSchemaMetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.schema.IsisSchemaValueTypeProvider;
+import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueSemantics;
+import org.apache.isis.core.metamodel.facets.value.uuid.UUIDValueSemantics;
 import org.apache.isis.core.metamodel.inspect.IsisModuleCoreMetamodelInspection;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
@@ -52,8 +57,6 @@ import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderForBuiltin;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderForCollections;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeRegistry;
 import org.apache.isis.core.security.IsisModuleCoreSecurity;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
@@ -76,6 +79,10 @@ import org.springframework.context.annotation.Import;
         ValueTypeProviderForCollections.class,
         ValueTypeProviderForBuiltin.class,
         ValueTypeRegistry.class,
+
+        // Default Value Semantics
+        BigDecimalValueSemantics.class,
+        UUIDValueSemantics.class,
 
         // @Service's
         ObjectManagerDefault.class,
