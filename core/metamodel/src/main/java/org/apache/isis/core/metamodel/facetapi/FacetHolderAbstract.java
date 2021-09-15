@@ -35,14 +35,13 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * For base subclasses or, more likely, to help write tests.
  */
 @AllArgsConstructor
 @RequiredArgsConstructor
-@Log4j2
+//@Log4j2
 public abstract class FacetHolderAbstract
 implements FacetHolder {
 
@@ -144,84 +143,9 @@ implements FacetHolder {
                     winningFacet.facetType(),
                     winningFacet);
 
-            // honor contributed facets via recursive lookup
-            collectChildren(snapshot, winningFacet);
-
         });
         return snapshot;
     }
-
-    private void collectChildren(final Map<Class<? extends Facet>, Facet> target, final Facet parentFacet) {
-        parentFacet.forEachContributedFacet(child->{
-            val added = addFacetOrKeepExistingBasedOnPrecedence(target, child);
-            if(added) {
-                collectChildren(target, child);
-            }
-        });
-    }
-
-    private boolean addFacetOrKeepExistingBasedOnPrecedence(
-            final @NonNull Map<Class<? extends Facet>, Facet> facetsByType,
-            final @NonNull Facet newFacet) {
-
-        val facetType = newFacet.facetType();
-
-        val existingFacet = facetsByType.get(facetType);
-        if(existingFacet==null) {
-            facetsByType.put(facetType, newFacet);
-            return true; // changes
-        }
-
-        val preferredFacet = preferredOf(existingFacet, newFacet);
-        if(newFacet==preferredFacet) {
-            facetsByType.put(facetType, preferredFacet);
-            return true; // changes
-        }
-        return false; // no changes
-    }
-
-    // on equal precedence returns b
-    private Facet preferredOf(final @NonNull Facet a, final @NonNull Facet b) {
-
-        // guard against args being the same object
-        if(a==b) {
-            return a;
-        }
-
-        // if args are semantically equal, prefer a
-        if(a.semanticEquals(b)) {
-            return a;
-        }
-
-        if(a.getPrecedence() == b.getPrecedence()) {
-
-            val msg = a.getClass()==b.getClass()
-                    ? String.format("Facets of identical type %s have equal semantics (precedence %s). "
-                            + "Undecidable, which to use. "
-                            + "Arbitrarily chosing the latter.",
-                            friendlyName(a.getClass()),
-                            a.getPrecedence().name())
-                    : String.format("Facets %s and %s have same precedence %s. "
-                            + "Undecidable, which to use. "
-                            + "Arbitrarily chosing the latter.",
-                            friendlyName(a.getClass()),
-                            friendlyName(b.getClass()),
-                            a.getPrecedence().name());
-
-            log.warn(msg);
-
-            return b;
-        }
-
-        return a.getPrecedence().ordinal() < b.getPrecedence().ordinal()
-                ? b
-                : a;
-    }
-
-    private static String friendlyName(final Class<?> cls) {
-        return cls.getName().replace("org.apache.isis", "o.a.i");
-    }
-
 
 
 }

@@ -22,13 +22,14 @@ import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacetAbstract;
 
-public class ValueFacetUsingSemanticsProvider extends ValueFacetAbstract {
+public class ValueFacetUsingSemanticsProvider
+extends ValueFacetAbstract {
 
     public ValueFacetUsingSemanticsProvider(
-            ValueSemanticsProvider<?> adapter,
-            FacetHolder holder) {
+            final ValueSemanticsProvider<?> valueSemantics,
+            final FacetHolder holder) {
 
-        super(adapter, AddFacetsIfInvalidStrategy.DO_ADD, holder, Precedence.DEFAULT);
+        super(valueSemantics, AddFacetsIfInvalidStrategy.DO_ADD, holder, Precedence.DEFAULT);
     }
 
 }

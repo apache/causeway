@@ -18,9 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facetapi;
 
-import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,7 +26,6 @@ import org.springframework.util.ClassUtils;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 
@@ -40,7 +37,6 @@ public abstract class FacetAbstract
 implements Facet, HasMetaModelContext {
 
     private final @NonNull Class<? extends Facet> facetType;
-    private Set<Facet> contributedFacets; // lazy init
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Facet.Precedence precedence;
 
@@ -118,23 +114,6 @@ implements Facet, HasMetaModelContext {
         .filter(marker->marker.isAssignableFrom(getClass()))
         .map(Class::getSimpleName)
         .collect(Collectors.joining(delimiter));
-    }
-
-    // -- CONTRIBUTED FACET SUPPORT
-
-    @Override
-    public void addContributedFacet(final Facet contributedFacet) {
-        if(contributedFacets==null) {
-            contributedFacets = _Sets.newHashSet();
-        }
-        contributedFacets.add(contributedFacet);
-    }
-
-    @Override
-    public void forEachContributedFacet(final Consumer<Facet> onContributedFacet) {
-        if(contributedFacets!=null) {
-            contributedFacets.forEach(onContributedFacet);
-        }
     }
 
     // -- HELPER

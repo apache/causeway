@@ -30,22 +30,18 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
-import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetAnnotation;
-import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetAnnotationOrConfigurationFactory;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderUtil;
+import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetForValueAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-
-import lombok.val;
 
 public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFacetFactoryTest {
 
-    private ValueFacetAnnotationOrConfigurationFactory facetFactory;
+    private ValueFacetForValueAnnotationFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new ValueFacetAnnotationOrConfigurationFactory(metaModelContext);
+        facetFactory = new ValueFacetForValueAnnotationFacetFactory(metaModelContext);
     }
 
     @Override
@@ -72,7 +68,7 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
 
         final ValueFacet facet = facetedMethod.getFacet(ValueFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof ValueFacetAnnotation);
+        //assertTrue(facet instanceof ValueFacetAnnotation);
     }
 
     public void testFacetFacetHolderStored() {
@@ -80,7 +76,7 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         facetFactory.process(ProcessClassContext
                 .forTesting(MyParseableUsingParserName2.class, methodRemover, facetedMethod));
 
-        final ValueFacetAnnotation valueFacet = (ValueFacetAnnotation) facetedMethod.getFacet(ValueFacet.class);
+        final var valueFacet = facetedMethod.getFacet(ValueFacet.class);
         assertEquals(facetedMethod, valueFacet.getFacetHolder());
     }
 
@@ -280,31 +276,9 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         assertNotNull(facet);
     }
 
-    public void testEqualByContentFacetsIsInstalledIfNoSemanticsProviderSpecified() {
-
-        @Value()
-        class MyNumberEqualByContentDefault {
-        }
-
-        facetFactory.process(ProcessClassContext
-                .forTesting(MyNumberEqualByContentDefault.class, methodRemover, facetedMethod));
-
-        final EqualByContentFacet facet = facetedMethod.getFacet(EqualByContentFacet.class);
-        assertNotNull(facet);
-    }
-
     @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.object.value.ValueFacetAnnotationOrConfigurationFactoryTest$MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic")
     public static class MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic extends AbstractValueSemanticsProvider<MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic> {
 
-    }
-
-    public void testEqualByContentFacetsIsInstalledIfSpecifiesEqualByContent() {
-
-        facetFactory.process(ProcessClassContext
-                .forTesting(MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic.class, methodRemover, facetedMethod));
-
-        final EqualByContentFacet facet = facetedMethod.getFacet(EqualByContentFacet.class);
-        assertNotNull(facet);
     }
 
     @Value()
@@ -339,28 +313,6 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         }
     }
 
-    public void testSemanticsProviderNameCanBePickedUpFromConfiguration() {
-
-        // given
-        val className = "org.apache.isis.core.metamodel.facets.object.value.ValueFacetAnnotationOrConfigurationFactoryTest$MyValueWithSemanticsProviderSpecifiedUsingConfiguration";
-        val configKey = ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_SUFFIX;
-
-        // when
-        metaModelContext
-        .runWithConfigProperties(
-            map->map.put(configKey, className),
-            ()->{
-                facetFactory.process(ProcessClassContext.forTesting(MyValueWithSemanticsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
-            });
-
-        // then
-        final ValueFacetAbstract facet = (ValueFacetAbstract) facetedMethod.getFacet(ValueFacet.class);
-        assertNotNull(facet);
-        // should also be a ParserFacet, since the VSP implements Parser
-        final ParseableFacet parseableFacet = facetedMethod.getFacet(ParseableFacet.class);
-        assertNotNull(parseableFacet);
-    }
-
     public static class NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration extends AbstractValueSemanticsProvider<NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration> implements Parser<NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration> {
         /**
          * Required since is a SemanticsProvider.
@@ -389,33 +341,6 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         public int typicalLength() {
             return 0;
         }
-    }
-
-    public void testNonAnnotatedValueCanPickUpSemanticsProviderFromConfiguration() {
-
-        // given
-        val className = "org.apache.isis.core.metamodel.facets.object.value.ValueFacetAnnotationOrConfigurationFactoryTest$NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration";
-        val configKey = ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_SUFFIX;
-
-        // when
-        metaModelContext
-        .runWithConfigProperties(
-            map->map.put(configKey, className),
-            ()->{
-
-                facetFactory.process(ProcessClassContext.forTesting(NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
-            });
-
-        // then
-        final ValueFacetAbstract facet = (ValueFacetAbstract) facetedMethod.getFacet(ValueFacet.class);
-        assertNotNull(facet);
-        // should also be a ParserFacet, since the VSP implements Parser
-        final ParseableFacet parseableFacet = facetedMethod.getFacet(ParseableFacet.class);
-        assertNotNull(parseableFacet);
-    }
-
-    private String canonical(final String className) {
-        return className.replace('$', '.');
     }
 
 }

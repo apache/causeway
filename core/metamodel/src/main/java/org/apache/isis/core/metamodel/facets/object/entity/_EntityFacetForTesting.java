@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.facets.object.entity;
 
 import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.repository.EntityState;
@@ -48,14 +47,6 @@ class _EntityFacetForTesting implements EntityFacet {
     @Override
     public Precedence getPrecedence() {
         return Precedence.DEFAULT;
-    }
-
-    @Override
-    public void addContributedFacet(final Facet contributedFacet) {
-    }
-
-    @Override
-    public void forEachContributedFacet(final Consumer<Facet> onContributedFacet) {
     }
 
     @Override

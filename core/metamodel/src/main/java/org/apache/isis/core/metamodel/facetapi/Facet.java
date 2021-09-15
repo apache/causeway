@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.facetapi;
 
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -169,19 +168,5 @@ extends
      * On same precedence, its unspecified, which one wins. (Warnings should be logged.)
      */
     public Precedence getPrecedence();
-
-    // -- FACET ALIAS SUPPORT
-
-    /**
-     * Adds a facet this facet contributes.
-     * @since 2.0
-     */
-    void addContributedFacet(Facet contributedFacet);
-
-    /**
-     * Traverses all contributed facets (if any).
-     * @since 2.0
-     */
-    void forEachContributedFacet(Consumer<Facet> onContributedFacet);
 
 }

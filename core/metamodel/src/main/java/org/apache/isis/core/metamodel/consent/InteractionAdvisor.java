@@ -19,9 +19,7 @@
 package org.apache.isis.core.metamodel.consent;
 
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.InteractionAdvisorFacet;
@@ -59,16 +57,6 @@ public interface InteractionAdvisor {
             @Override
             public FacetHolder getFacetHolder() {
                 return null;
-            }
-
-            @Override
-            public void addContributedFacet(final Facet contributedFacet) {
-                throw _Exceptions.unsupportedOperation();
-            }
-
-            @Override
-            public void forEachContributedFacet(final Consumer<Facet> onContributedFacet) {
-                throw _Exceptions.unsupportedOperation();
             }
 
             @Override

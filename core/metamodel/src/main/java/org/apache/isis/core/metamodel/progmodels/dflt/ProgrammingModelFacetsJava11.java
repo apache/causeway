@@ -60,7 +60,7 @@ import org.apache.isis.core.metamodel.facets.object.objectvalidprops.impl.Object
 import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.support.ObjectSupportFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetAnnotationOrConfigurationFactory;
+import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetForValueAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.param.bigdecimal.javaxvaldigits.BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethodFactory;
@@ -173,7 +173,7 @@ extends ProgrammingModelAbstract {
 
         addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, new LogicalTypeFacetDerivedFromClassNameFactory(mmc, classSubstitutorRegistry));
         addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, new DomainServiceFacetAnnotationFactory(mmc));
-        addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, new ValueAnnotationFacetFactory(mmc));
+        addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, new ValueFacetForValueAnnotationFacetFactory(mmc));
 
         addFactory(FacetProcessingOrder.C1_METHOD_REMOVING, new IteratorFilteringFacetFactory(mmc));
 
@@ -331,7 +331,7 @@ extends ProgrammingModelAbstract {
         addFactory(FacetProcessingOrder.Z1_FINALLY, new ParentedFacetSinceCollectionFactory(mmc));
 
         // so we can dogfood the applib "value" types
-        addFactory(FacetProcessingOrder.Z1_FINALLY, new ValueFacetAnnotationOrConfigurationFactory(mmc));
+        addFactory(FacetProcessingOrder.Z1_FINALLY, new ValueFacetForValueAnnotationFacetFactory(mmc));
 
 
         // should come near the end, after any facets that install PropertySetterFacet have run.

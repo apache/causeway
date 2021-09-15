@@ -18,19 +18,13 @@
  */
 package org.apache.isis.core.metamodel.facets.object.value;
 
-import org.apache.isis.applib.adapters.DefaultsProvider;
-import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider;
-import org.apache.isis.core.metamodel.facets.object.encodeable.encoder.EncodableFacetUsingEncoderDecoder;
-import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
-import org.apache.isis.core.metamodel.facets.object.title.parser.TitleFacetUsingParser;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 public abstract class ValueFacetAbstract
@@ -53,20 +47,17 @@ implements ValueFacet {
 
     private final ValueSemanticsProvider<?> semanticsProvider;
 
+    @RequiredArgsConstructor
     public enum AddFacetsIfInvalidStrategy {
         DO_ADD(true), DONT_ADD(false);
-        private boolean addFacetsIfInvalid;
-
-        private AddFacetsIfInvalidStrategy(final boolean addFacetsIfInvalid) {
-            this.addFacetsIfInvalid = addFacetsIfInvalid;
-        }
+        private final boolean addFacetsIfInvalid;
 
         public boolean shouldAddFacetsIfInvalid() {
             return addFacetsIfInvalid;
         }
     }
 
-    public ValueFacetAbstract(
+    protected ValueFacetAbstract(
             final Class<?> semanticsProviderClass,
             final AddFacetsIfInvalidStrategy addFacetsIfInvalid,
             final FacetHolder holder,
@@ -75,7 +66,7 @@ implements ValueFacet {
         this(newValueSemanticsProviderOrNull(semanticsProviderClass, holder), addFacetsIfInvalid, holder, precedence);
     }
 
-    public ValueFacetAbstract(
+    protected ValueFacetAbstract(
             final ValueSemanticsProvider<?> semanticsProvider,
             final AddFacetsIfInvalidStrategy addFacetsIfInvalid,
             final FacetHolder holder,
@@ -105,52 +96,7 @@ implements ValueFacet {
         val facetHolder = super.getFacetHolder();
 
         facetHolder.addFacet(this); // add just ValueFacet.class
-        // initially.
 
-        // we used to add aggregated here, but this was wrong.
-        // An immutable value is not aggregated, it is shared.
-
-        this.addContributedFacet(new ImmutableFacetViaValueSemantics(holder));
-        this.addContributedFacet(new EqualByContentFacetViaValueSemantics(holder));
-
-        if (semanticsProvider != null) {
-
-            // install the EncodeableFacet if we've been given an EncoderDecoder
-            final EncoderDecoder<?> encoderDecoder = semanticsProvider.getEncoderDecoder();
-            if (encoderDecoder != null) {
-                getServiceInjector().injectServicesInto(encoderDecoder);
-                this.addContributedFacet(new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder));
-            }
-
-            // install the ParseableFacet and other facets if we've been given a
-            // Parser
-            final Parser<?> parser = semanticsProvider.getParser();
-            if (parser != null) {
-
-                facetHolder.getServiceInjector().injectServicesInto(parser);
-
-                facetHolder.addFacet(ParseableFacetUsingParser.create(parser, holder));
-                facetHolder.addFacet(TitleFacetUsingParser.create(parser, holder));
-                facetHolder.addFacet(new TypicalLengthFacetUsingParser(parser, holder));
-                final int maxLength = parser.maxLength();
-                if(maxLength >=0) {
-                    this.addContributedFacet(new MaxLengthFacetUsingParser(parser, holder));
-                }
-            }
-
-            // install the DefaultedFacet if we've been given a DefaultsProvider
-            final DefaultsProvider<?> defaultsProvider = semanticsProvider.getDefaultsProvider();
-            if (defaultsProvider != null) {
-                facetHolder.getServiceInjector().injectServicesInto(defaultsProvider);
-                this.addContributedFacet(new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder));
-            }
-
-            // if the SemanticsProvider is a facet then add it as a contributing facet
-            if(semanticsProvider instanceof Facet) {
-                this.addContributedFacet(((Facet) semanticsProvider));
-            }
-
-        }
     }
 
     protected boolean hasSemanticsProvider() {

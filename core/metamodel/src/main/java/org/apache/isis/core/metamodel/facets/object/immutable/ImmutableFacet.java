@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.facets.object.immutable;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.EqualByContentFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -31,11 +30,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
  * Indicates that the instances of this class are immutable and so may not be
  * modified either through the viewer or indeed programmatically.
  *
- * <p>
- * In the standard Apache Isis Programming Model, typically corresponds to
- * applying the <tt>@Immutable</tt> annotation at the class level.
- *
- * @see EqualByContentFacet
  * @see ValueFacet
  */
 public interface ImmutableFacet

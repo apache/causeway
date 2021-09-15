@@ -101,6 +101,7 @@ public @interface Value {
      * Implementation note: the default value provided here is simply an empty
      * string because <tt>null</tt> is not a valid default.
      */
+    @Deprecated // use Spring managed ValueSemanticsProvider instead
     String semanticsProviderName() default "";
 
     /**
@@ -111,6 +112,7 @@ public @interface Value {
      * Implementation note: the default value provided here is simply the
      * {@link Value}'s own class, because <tt>null</tt> is not a valid default.
      */
+    @Deprecated // use Spring managed ValueSemanticsProvider instead
     Class<?> semanticsProviderClass() default Value.class;
 
 }
