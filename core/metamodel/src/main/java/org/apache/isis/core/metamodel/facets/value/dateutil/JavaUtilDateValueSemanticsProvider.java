@@ -28,8 +28,6 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -63,14 +61,6 @@ extends ValueSemanticsProviderAbstractTemporal<java.util.Date> {
     @Setter
     private String configuredFormat;
 
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public JavaUtilDateValueSemanticsProvider() {
-        this(null);
-    }
-
     public JavaUtilDateValueSemanticsProvider(final FacetHolder holder) {
         super("datetime", type(), holder, Date.class, 18, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, null);
 
@@ -81,7 +71,6 @@ extends ValueSemanticsProviderAbstractTemporal<java.util.Date> {
             setMask(configuredFormat);
         }
     }
-
 
     // //////////////////////////////////////////////////////////////////
     // temporal-specific stuff
@@ -100,11 +89,6 @@ extends ValueSemanticsProviderAbstractTemporal<java.util.Date> {
         final DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, locale);
         dateFormat.setTimeZone(timeZone);
         return dateFormat;
-    }
-
-    @Override
-    public String toString() {
-        return "JavaDateTimeValueSemanticsProvider: " + format;
     }
 
     @Override

@@ -24,7 +24,6 @@ import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
@@ -49,14 +48,6 @@ implements BigDecimalValueFacet {
 
     private final NumberFormat format;
 
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public BigDecimalValueSemanticsProvider() {
-        this(null);
-    }
-
     public BigDecimalValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, BigDecimal.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
         final String formatRequired = getConfiguration().getValueTypes().getJavaMath().getBigDecimal().getFormat();
@@ -67,10 +58,6 @@ implements BigDecimalValueFacet {
             final Locale inLocale = getConfiguration().getCore().getRuntime().getLocale().map(LocaleUtil::findLocale).orElse(Locale.getDefault());
             format = NumberFormat.getNumberInstance(inLocale);
         }
-    }
-
-    public void setLocale(final Locale l) {
-
     }
 
     // -- SCALE, PRECISION
@@ -124,13 +111,5 @@ implements BigDecimalValueFacet {
         super.visitAttributes(visitor);
         visitor.accept("format", format);
     }
-
-    // -- TO STRING
-
-    @Override
-    public String toString() {
-        return "BigDecimalValueSemanticsProvider: " + format;
-    }
-
 
 }

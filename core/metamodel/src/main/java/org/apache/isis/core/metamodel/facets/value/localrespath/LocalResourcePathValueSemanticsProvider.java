@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.facets.value.localrespath;
 
 import java.nio.file.InvalidPathException;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -29,8 +28,8 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProv
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class LocalResourcePathValueSemanticsProvider
-extends ValueSemanticsProviderAndFacetAbstract<LocalResourcePath> implements LocalResourcePathValueFacet {
-
+extends ValueSemanticsProviderAndFacetAbstract<LocalResourcePath>
+implements LocalResourcePathValueFacet {
 
     private static final Class<? extends Facet> type() {
         return LocalResourcePathValueFacet.class;
@@ -39,14 +38,6 @@ extends ValueSemanticsProviderAndFacetAbstract<LocalResourcePath> implements Loc
     public static final int MAX_LENGTH = 2083;
     private static final int TYPICAL_LENGTH = 100;
     private static final LocalResourcePath DEFAULT_VALUE = null; // no default
-
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public LocalResourcePathValueSemanticsProvider() {
-        this(null);
-    }
 
     public LocalResourcePathValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, LocalResourcePath.class,
@@ -114,13 +105,6 @@ extends ValueSemanticsProviderAndFacetAbstract<LocalResourcePath> implements Loc
     @Override
     public ManagedObject createValue(final LocalResourcePath value) {
         return getObjectManager().adapt(value);
-    }
-
-    // /////// toString ///////
-
-    @Override
-    public String toString() {
-        return "LocalResourcePathValueSemanticsProvider";
     }
 
 }

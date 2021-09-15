@@ -25,7 +25,6 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
-import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._Bytes;
@@ -45,14 +44,6 @@ implements BlobValueFacet {
     }
 
     private static final Blob DEFAULT_VALUE = null;
-
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public BlobValueSemanticsProvider() {
-        this(null);
-    }
 
     public BlobValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, Blob.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE);
@@ -109,13 +100,6 @@ implements BlobValueFacet {
         } catch (MimeTypeParseException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    // /////// toString ///////
-
-    @Override
-    public String toString() {
-        return "BlobValueSemanticsProvider";
     }
 
 

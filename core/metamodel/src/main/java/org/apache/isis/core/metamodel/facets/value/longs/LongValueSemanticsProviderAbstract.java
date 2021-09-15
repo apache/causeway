@@ -102,12 +102,6 @@ implements LongValueFacet {
         return value == null ? null : getObjectManager().adapt(value);
     }
 
-    // // ///// toString ///////
-    @Override
-    public String toString() {
-        return "LongValueSemanticsProvider: " + format;
-    }
-
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);

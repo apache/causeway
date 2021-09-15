@@ -22,7 +22,6 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
-import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -40,14 +39,6 @@ implements ClobValueFacet {
     }
 
     private static final Clob DEFAULT_VALUE = null;
-
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public ClobValueSemanticsProvider() {
-        this(null);
-    }
 
     public ClobValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, Clob.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE);
@@ -102,14 +93,6 @@ implements ClobValueFacet {
         } catch (MimeTypeParseException e) {
             throw new RuntimeException(e);
         }
-    }
-
-
-    // /////// toString ///////
-
-    @Override
-    public String toString() {
-        return "ClobValueSemanticsProvider";
     }
 
 }

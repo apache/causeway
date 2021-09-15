@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.facets.value.url;
 
 import java.net.MalformedURLException;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -39,14 +38,6 @@ implements URLValueFacet {
     public static final int MAX_LENGTH = 2083;
     private static final int TYPICAL_LENGTH = 100;
     private static final java.net.URL DEFAULT_VALUE = null; // no default
-
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public URLValueSemanticsProvider() {
-        this(null);
-    }
 
     public URLValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, java.net.URL.class,
@@ -110,13 +101,6 @@ implements URLValueFacet {
     @Override
     public ManagedObject createValue(final java.net.URL value) {
         return getObjectManager().adapt(value);
-    }
-
-    // /////// toString ///////
-
-    @Override
-    public String toString() {
-        return "URLValueSemanticsProvider";
     }
 
 }

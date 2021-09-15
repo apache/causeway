@@ -101,13 +101,6 @@ implements ByteValueFacet {
         return getObjectManager().adapt(value);
     }
 
-    // ///// toString ///////
-
-    @Override
-    public String toString() {
-        return "ByteValueSemanticsProvider: " + format;
-    }
-
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);

@@ -53,13 +53,6 @@ implements ImageValueFacet {
         return "image";
     }
 
-    // -- toString
-
-    @Override
-    public String toString() {
-        return "ImageValueSemanticsProvider";
-    }
-
     // -- DEPRECATED
 
     //  protected abstract T setPixels(int[][] pixels);

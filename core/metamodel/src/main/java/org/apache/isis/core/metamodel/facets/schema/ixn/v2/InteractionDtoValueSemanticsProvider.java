@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.schema.ixn.v2;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -42,18 +41,9 @@ implements InteractionDtoValueFacet {
 
     private static final InteractionDto DEFAULT_VALUE = null;
 
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public InteractionDtoValueSemanticsProvider() {
-        this(null);
-    }
-
     public InteractionDtoValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, InteractionDto.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE);
     }
-
 
     @Override
     protected InteractionDto doParse(final Parser.Context context, final String str) {
@@ -91,12 +81,6 @@ implements InteractionDtoValueFacet {
     @Override
     public InteractionDto fromEncodedString(final String xml) {
         return InteractionDtoUtils.fromXml(xml);
-    }
-
-
-    @Override
-    public String toString() {
-        return "InteractionDtoValueSemanticsProvider";
     }
 
 }

@@ -18,20 +18,10 @@
  */
 package org.apache.isis.core.metamodel.facets.value.shortint;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-
-public class ShortWrapperValueSemanticsProvider extends ShortValueSemanticsProviderAbstract {
-
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public ShortWrapperValueSemanticsProvider() {
-        this(null);
-    }
+public class ShortWrapperValueSemanticsProvider
+extends ShortValueSemanticsProviderAbstract {
 
     public ShortWrapperValueSemanticsProvider(final FacetHolder holder) {
         super(holder, Short.class);

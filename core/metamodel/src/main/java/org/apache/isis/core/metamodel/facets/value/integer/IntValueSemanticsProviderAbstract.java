@@ -107,13 +107,6 @@ implements IntegerValueFacet {
         return value == null ? null : getObjectManager().adapt(value);
     }
 
-    // /////// toString ///////
-
-    @Override
-    public String toString() {
-        return "IntegerValueSemanticsProvider: " + format;
-    }
-
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);

@@ -105,12 +105,6 @@ implements DoubleFloatingPointValueFacet {
         return getObjectManager().adapt(value);
     }
 
-    // /////// toString ///////
-    @Override
-    public String toString() {
-        return "DoubleValueSemanticsProvider: " + format;
-    }
-
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);

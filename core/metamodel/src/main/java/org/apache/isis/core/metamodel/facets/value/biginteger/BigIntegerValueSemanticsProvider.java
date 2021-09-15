@@ -24,7 +24,6 @@ import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.commons.LocaleUtil;
@@ -45,14 +44,6 @@ implements BigIntegerValueFacet {
     private static final BigInteger DEFAULT_VALUE = BigInteger.valueOf(0);
 
     private final NumberFormat format;
-
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public BigIntegerValueSemanticsProvider() {
-        this(null);
-    }
 
     public BigIntegerValueSemanticsProvider(final FacetHolder holder) {
 
@@ -100,13 +91,6 @@ implements BigIntegerValueFacet {
     @Override
     public BigInteger fromEncodedString(final String data) {
         return new BigInteger(data);
-    }
-
-    // /////// toString ///////
-
-    @Override
-    public String toString() {
-        return "BigIntegerValueSemanticsProvider: " + format;
     }
 
     @Override

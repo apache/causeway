@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.value.password;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -36,13 +35,6 @@ implements PasswordValueFacet {
 
     private static final Password DEFAULT_VALUE = null; // no default
     private static final int TYPICAL_LENGTH = 12;
-
-    /**
-     * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
-     */
-    public PasswordValueSemanticsProvider() {
-        this(null);
-    }
 
     public PasswordValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, Password.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
@@ -101,13 +93,6 @@ implements PasswordValueFacet {
         } else {
             return (Password) object;
         }
-    }
-
-    // /////// toString ///////
-
-    @Override
-    public String toString() {
-        return "PasswordValueSemanticsProvider";
     }
 
 }

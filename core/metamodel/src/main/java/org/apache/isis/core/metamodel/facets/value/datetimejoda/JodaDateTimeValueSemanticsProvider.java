@@ -31,9 +31,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.EncodingException;
-import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTemporal;
@@ -55,14 +53,6 @@ extends ValueSemanticsProviderAbstractTemporal<DateTime> {
     @Getter @Setter
     private String configuredFormat;
 
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public JodaDateTimeValueSemanticsProvider() {
-        this(null);
-    }
-
     public JodaDateTimeValueSemanticsProvider(
             final FacetHolder holder) {
         super("date", type(), holder, DateTime.class, 12, Immutability.IMMUTABLE, EqualByContent.HONOURED, null);
@@ -74,8 +64,6 @@ extends ValueSemanticsProviderAbstractTemporal<DateTime> {
             setMask(configuredFormat);
         }
     }
-
-
 
     // //////////////////////////////////////////////////////////////////
     // temporal-specific stuff
@@ -99,11 +87,6 @@ extends ValueSemanticsProviderAbstractTemporal<DateTime> {
     @Override
     protected Map<String, DateFormat> formats() {
         return FORMATS;
-    }
-
-    @Override
-    public String toString() {
-        return "DateValueSemanticsProvider: " + format;
     }
 
     @Override

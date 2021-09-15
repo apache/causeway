@@ -18,20 +18,10 @@
  */
 package org.apache.isis.core.metamodel.facets.value.chars;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-
-public class CharWrapperValueSemanticsProvider extends CharValueSemanticsProviderAbstract {
-
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public CharWrapperValueSemanticsProvider() {
-        this(null);
-    }
+public class CharWrapperValueSemanticsProvider
+extends CharValueSemanticsProviderAbstract {
 
     public CharWrapperValueSemanticsProvider(final FacetHolder holder) {
         super(holder, Character.class);

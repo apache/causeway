@@ -18,24 +18,13 @@
  */
 package org.apache.isis.core.metamodel.facets.value.chars;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-
 public class CharPrimitiveValueSemanticsProvider
 extends CharValueSemanticsProviderAbstract
 implements PropertyDefaultFacet {
-
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public CharPrimitiveValueSemanticsProvider() {
-        this(null);
-    }
 
     public CharPrimitiveValueSemanticsProvider(final FacetHolder holder) {
         super(holder, char.class);

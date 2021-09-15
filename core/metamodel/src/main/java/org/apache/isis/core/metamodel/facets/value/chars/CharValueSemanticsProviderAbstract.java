@@ -87,11 +87,4 @@ implements CharValueFacet {
         return getObjectManager().adapt(value);
     }
 
-    // /////// toString ///////
-
-    @Override
-    public String toString() {
-        return "CharacterValueSemanticsProvider";
-    }
-
 }

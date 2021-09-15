@@ -240,12 +240,4 @@ implements TemporalValueFacet<T> {
         return temporal != null ? formatter.format(temporal) : "";
     }
 
-    // --
-
-    @Override
-    public String toString() {
-        return this.getClass().getSimpleName()+ ": " + titleFormatter;
-    }
-
-
 }

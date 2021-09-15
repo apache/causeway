@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.value.markup;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.Markup;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -37,14 +36,6 @@ implements MarkupValueFacet {
     }
 
     private static final Markup DEFAULT_VALUE = null;
-
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public MarkupValueSemanticsProvider() {
-        this(null);
-    }
 
     public MarkupValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, Markup.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE);
@@ -95,13 +86,6 @@ implements MarkupValueFacet {
     @Override
     public Markup fromEncodedString(final String html) {
         return new Markup(html);
-    }
-
-    // /////// toString ///////
-
-    @Override
-    public String toString() {
-        return "MarkupValueSemanticsProvider";
     }
 
 }

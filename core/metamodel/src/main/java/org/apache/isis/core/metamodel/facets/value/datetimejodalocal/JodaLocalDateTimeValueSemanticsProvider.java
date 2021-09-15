@@ -27,7 +27,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -112,14 +111,6 @@ implements JodaLocalDateTimeValueFacet {
     // //////////////////////////////////////
     // constructor
     // //////////////////////////////////////
-
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public JodaLocalDateTimeValueSemanticsProvider() {
-        this(null);
-    }
 
     /**
      * Uses {@link #type()} as the facet type.
@@ -235,12 +226,5 @@ implements JodaLocalDateTimeValueFacet {
         return getObjectManager().adapt(date);
     }
 
-
-    // //////////////////////////////////////
-
-    @Override
-    public String toString() {
-        return "JodaLocalDateTimeValueSemanticsProvider: " + titleStringFormatter;
-    }
 
 }

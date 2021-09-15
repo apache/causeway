@@ -18,22 +18,13 @@
  */
 package org.apache.isis.core.metamodel.facets.value.longs;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-
-public class LongPrimitiveValueSemanticsProvider extends LongValueSemanticsProviderAbstract implements PropertyDefaultFacet {
-
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public LongPrimitiveValueSemanticsProvider() {
-        this(null);
-    }
+public class LongPrimitiveValueSemanticsProvider
+extends LongValueSemanticsProviderAbstract
+implements PropertyDefaultFacet {
 
     public LongPrimitiveValueSemanticsProvider(final FacetHolder holder) {
         super(holder, long.class);

@@ -28,8 +28,6 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.exceptions.recoverable.InvalidEntryException;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -51,14 +49,6 @@ extends ValueSemanticsProviderAbstractTemporal<Timestamp> {
     @Getter @Setter
     private String configuredFormat;
 
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public JavaSqlTimeStampValueSemanticsProvider() {
-        this(null);
-    }
-
     public JavaSqlTimeStampValueSemanticsProvider(final FacetHolder holder) {
         super("timestamp", type(), holder, java.sql.Timestamp.class, 25, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, null);
 
@@ -74,11 +64,6 @@ extends ValueSemanticsProviderAbstractTemporal<Timestamp> {
     @Override
     protected Timestamp add(final Timestamp original, final int years, final int months, final int days, final int hours, final int minutes) {
         return original;
-    }
-
-    @Override
-    public String toString() {
-        return "TimeStampValueSemanticsProvider: " + format;
     }
 
     @Override

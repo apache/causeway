@@ -104,13 +104,6 @@ implements ShortValueFacet {
         return (Short) (object == null ? null : object.getPojo());
     }
 
-    // /////// toString ///////
-
-    @Override
-    public String toString() {
-        return "ShortValueSemanticsProvider: " + format;
-    }
-
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);

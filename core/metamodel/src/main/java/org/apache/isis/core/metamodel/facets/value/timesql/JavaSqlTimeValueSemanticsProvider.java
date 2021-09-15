@@ -28,8 +28,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -54,14 +52,6 @@ extends ValueSemanticsProviderAbstractTemporal<Time> {
     @Getter @Setter
     private String configuredFormat;
 
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public JavaSqlTimeValueSemanticsProvider() {
-        this(null);
-    }
-
     public JavaSqlTimeValueSemanticsProvider(final FacetHolder holder) {
         super("time", type(), holder, java.sql.Time.class, 8, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, null);
 
@@ -78,11 +68,6 @@ extends ValueSemanticsProviderAbstractTemporal<Time> {
         cal.set(Calendar.YEAR, 1970);
         cal.set(Calendar.MONTH, 0);
         cal.set(Calendar.DAY_OF_MONTH, 1);
-    }
-
-    @Override
-    public String toString() {
-        return "TimeValueSemanticsProvider: " + format;
     }
 
     @Override

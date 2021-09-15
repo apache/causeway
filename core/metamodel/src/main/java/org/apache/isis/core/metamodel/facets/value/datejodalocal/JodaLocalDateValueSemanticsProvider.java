@@ -26,7 +26,6 @@ import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -36,8 +35,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-
-public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<LocalDate> implements JodaLocalDateValueFacet {
+public class JodaLocalDateValueSemanticsProvider
+extends ValueSemanticsProviderAndFacetAbstract<LocalDate>
+implements JodaLocalDateValueFacet {
 
     public static final int MAX_LENGTH = 12;
     public static final int TYPICAL_LENGTH = MAX_LENGTH;
@@ -91,8 +91,6 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
         PARSE_FORMATTERS.add(DateTimeFormat.forPattern("yyyyMMdd"));
     }
 
-
-
     private static final Class<? extends Facet> type() {
         return JodaLocalDateValueFacet.class;
     }
@@ -111,14 +109,6 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
     // //////////////////////////////////////
     // constructor
     // //////////////////////////////////////
-
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public JodaLocalDateValueSemanticsProvider() {
-        this(null);
-    }
 
     /**
      * Uses {@link #type()} as the facet type.
@@ -232,14 +222,6 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
     @Override
     public final ManagedObject createValue(final LocalDate date) {
         return getObjectManager().adapt(date);
-    }
-
-
-    // //////////////////////////////////////
-
-    @Override
-    public String toString() {
-        return "JodaLocalDateValueSemanticsProvider: " + titleStringFormatter;
     }
 
 }

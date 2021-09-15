@@ -18,22 +18,13 @@
  */
 package org.apache.isis.core.metamodel.facets.value.shortint;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-
-public class ShortPrimitiveValueSemanticsProvider extends ShortValueSemanticsProviderAbstract implements PropertyDefaultFacet {
-
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public ShortPrimitiveValueSemanticsProvider() {
-        this(null);
-    }
+public class ShortPrimitiveValueSemanticsProvider
+extends ShortValueSemanticsProviderAbstract
+implements PropertyDefaultFacet {
 
     public ShortPrimitiveValueSemanticsProvider(final FacetHolder holder) {
         super(holder, short.class);

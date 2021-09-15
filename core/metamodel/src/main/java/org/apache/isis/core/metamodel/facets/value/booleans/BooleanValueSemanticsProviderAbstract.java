@@ -115,11 +115,4 @@ implements BooleanValueFacet {
         return objectAsBoolean.booleanValue();
     }
 
-    // /////// toString ///////
-
-    @Override
-    public String toString() {
-        return "BooleanValueSemanticsProvider";
-    }
-
 }

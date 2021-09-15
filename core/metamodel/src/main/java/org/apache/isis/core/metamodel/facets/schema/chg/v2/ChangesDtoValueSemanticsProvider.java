@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.schema.chg.v2;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -41,14 +40,6 @@ implements ChangesDtoValueFacet {
     }
 
     private static final ChangesDto DEFAULT_VALUE = null;
-
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public ChangesDtoValueSemanticsProvider() {
-        this(null);
-    }
 
     public ChangesDtoValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, ChangesDto.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE);
@@ -91,12 +82,6 @@ implements ChangesDtoValueFacet {
     @Override
     public ChangesDto fromEncodedString(final String xml) {
         return ChangesDtoUtils.fromXml(xml);
-    }
-
-
-    @Override
-    public String toString() {
-        return "InteractionDtoValueSemanticsProvider";
     }
 
 }

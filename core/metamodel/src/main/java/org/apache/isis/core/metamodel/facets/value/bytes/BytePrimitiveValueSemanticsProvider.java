@@ -18,22 +18,13 @@
  */
 package org.apache.isis.core.metamodel.facets.value.bytes;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-
-public class BytePrimitiveValueSemanticsProvider extends ByteValueSemanticsProviderAbstract implements PropertyDefaultFacet {
-
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public BytePrimitiveValueSemanticsProvider() {
-        this(null);
-    }
+public class BytePrimitiveValueSemanticsProvider
+extends ByteValueSemanticsProviderAbstract
+implements PropertyDefaultFacet {
 
     public BytePrimitiveValueSemanticsProvider(final FacetHolder holder) {
         super(holder, byte.class);

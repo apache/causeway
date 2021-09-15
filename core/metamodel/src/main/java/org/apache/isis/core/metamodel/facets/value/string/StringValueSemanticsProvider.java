@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.value.string;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -34,14 +33,6 @@ implements StringValueFacet {
 
     public static final int TYPICAL_LENGTH = 25;
     private static final String DEFAULT_VALUE = null; // no default
-
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public StringValueSemanticsProvider() {
-        this(null);
-    }
 
     public StringValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, String.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
@@ -94,19 +85,6 @@ implements StringValueFacet {
 
     private String escapeText(final String text) {
         return "/" + text;
-    }
-
-    // //////////////////////////////////////////////////////////////////
-    // StringValueFacet
-    // //////////////////////////////////////////////////////////////////
-
-
-
-    // /////// toString ///////
-
-    @Override
-    public String toString() {
-        return "StringValueSemanticsProvider";
     }
 
 }

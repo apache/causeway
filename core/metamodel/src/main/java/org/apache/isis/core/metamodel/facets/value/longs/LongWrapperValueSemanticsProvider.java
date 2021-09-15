@@ -18,20 +18,10 @@
  */
 package org.apache.isis.core.metamodel.facets.value.longs;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-
-public class LongWrapperValueSemanticsProvider extends LongValueSemanticsProviderAbstract {
-
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public LongWrapperValueSemanticsProvider() {
-        this(null);
-    }
+public class LongWrapperValueSemanticsProvider
+extends LongValueSemanticsProviderAbstract {
 
     public LongWrapperValueSemanticsProvider(final FacetHolder holder) {
         super(holder, Long.class);

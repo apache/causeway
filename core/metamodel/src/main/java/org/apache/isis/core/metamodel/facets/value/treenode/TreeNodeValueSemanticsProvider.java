@@ -19,13 +19,10 @@
 package org.apache.isis.core.metamodel.facets.value.treenode;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
-import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.adapters.Parser.Context;
 import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.graph.tree.TreeState;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
-import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.memento._Mementos;
 import org.apache.isis.commons.internal.memento._Mementos.Memento;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
@@ -46,14 +43,6 @@ implements TreeNodeValueFacet {
 
     private static final TreeNode DEFAULT_VALUE = null;
     private static final Class<TreeNode> VALUE_TYPE = TreeNode.class;
-
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public TreeNodeValueSemanticsProvider() {
-        this(null);
-    }
 
     public TreeNodeValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, VALUE_TYPE, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE,
@@ -110,13 +99,6 @@ implements TreeNodeValueFacet {
                 memento.get("primaryValue", Object.class),
                 memento.get("adapterClass", Class.class),
                 memento.get("treeState", TreeState.class));
-    }
-
-    // /////// toString ///////
-
-    @Override
-    public String toString() {
-        return "TreeNodeValueSemanticsProvider";
     }
 
     // -- HELPER

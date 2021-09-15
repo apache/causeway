@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.facets.value.uuid;
 
 import java.util.UUID;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -38,14 +37,6 @@ implements UUIDValueFacet {
     public static final int MAX_LENGTH = 36;
     public static final int TYPICAL_LENGTH = MAX_LENGTH;
     private static final UUID DEFAULT_VALUE = null; // no default
-
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public UUIDValueSemanticsProvider() {
-        this(null);
-    }
 
     public UUIDValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, UUID.class, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
@@ -95,13 +86,6 @@ implements UUIDValueFacet {
     @Override
     public ManagedObject createValue(final UUID value) {
         return getObjectManager().adapt(value);
-    }
-
-    // /////// toString ///////
-
-    @Override
-    public String toString() {
-        return "UuidValueSemanticsProvider";
     }
 
 }

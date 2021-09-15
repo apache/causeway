@@ -70,11 +70,6 @@ extends ImageValueSemanticsProviderAbstract<BufferedImage> {
         /*sonar-ignore-off*/
     }
 
-    @Override
-    public String toString() {
-        return "JavaAwtImageValueSemanticsProvider: ";
-    }
-
     // -- HELPER
 
     private Optional<BufferedImage> unwrap(final @Nullable ManagedObject adapter) {

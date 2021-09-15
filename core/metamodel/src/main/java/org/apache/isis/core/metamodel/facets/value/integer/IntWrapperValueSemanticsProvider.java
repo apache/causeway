@@ -18,20 +18,10 @@
  */
 package org.apache.isis.core.metamodel.facets.value.integer;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-
-public class IntWrapperValueSemanticsProvider extends IntValueSemanticsProviderAbstract {
-
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public IntWrapperValueSemanticsProvider() {
-        this(null);
-    }
+public class IntWrapperValueSemanticsProvider
+extends IntValueSemanticsProviderAbstract {
 
     public IntWrapperValueSemanticsProvider(final FacetHolder holder) {
         super(holder, Integer.class);

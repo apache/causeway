@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.value.booleans;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -29,14 +27,6 @@ extends BooleanValueSemanticsProviderAbstract
 implements PropertyDefaultFacet {
 
     private static final Boolean DEFAULT_VALUE = Boolean.FALSE;
-
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public BooleanPrimitiveValueSemanticsProvider() {
-        this(null);
-    }
 
     public BooleanPrimitiveValueSemanticsProvider(final FacetHolder holder) {
         super(holder, boolean.class, DEFAULT_VALUE);
@@ -50,6 +40,5 @@ implements PropertyDefaultFacet {
     public ManagedObject getDefault(final ManagedObject inObject) {
         return createAdapter(boolean.class, Boolean.FALSE);
     }
-
 
 }

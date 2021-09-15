@@ -38,14 +38,6 @@ implements MarkdownValueFacet {
 
     private static final Markdown DEFAULT_VALUE = null;
 
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public MarkdownValueSemanticsProvider() {
-        this(null);
-    }
-
     public MarkdownValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, Markdown.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE);
     }
@@ -69,12 +61,6 @@ implements MarkdownValueFacet {
     @Override
     public Markdown fromEncodedString(final String markdown) {
         return new Markdown(markdown);
-    }
-
-
-    @Override
-    public String toString() {
-        return "MarkdownValueSemanticsProvider";
     }
 
     // -- MarkdownValueFacet

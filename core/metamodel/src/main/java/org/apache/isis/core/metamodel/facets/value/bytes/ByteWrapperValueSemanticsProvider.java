@@ -18,20 +18,10 @@
  */
 package org.apache.isis.core.metamodel.facets.value.bytes;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-
-public class ByteWrapperValueSemanticsProvider extends ByteValueSemanticsProviderAbstract {
-
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public ByteWrapperValueSemanticsProvider() {
-        this(null);
-    }
+public class ByteWrapperValueSemanticsProvider
+extends ByteValueSemanticsProviderAbstract {
 
     public ByteWrapperValueSemanticsProvider(final FacetHolder holder) {
         super(holder, Byte.class);

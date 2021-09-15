@@ -85,7 +85,7 @@ implements FloatingPointValueFacet {
 
     @Override
     public Float fromEncodedString(final String data) {
-        return new Float(data);
+        return Float.valueOf(data);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -100,13 +100,6 @@ implements FloatingPointValueFacet {
     @Override
     public ManagedObject createValue(final Float value) {
         return getObjectManager().adapt(value);
-    }
-
-    // /////// toString ///////
-
-    @Override
-    public String toString() {
-        return "FloatValueSemanticsProvider: " + format;
     }
 
     @Override

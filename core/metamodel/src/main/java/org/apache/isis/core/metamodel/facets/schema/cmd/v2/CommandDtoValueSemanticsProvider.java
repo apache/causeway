@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.schema.cmd.v2;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -42,18 +41,9 @@ implements CommandDtoValueFacet {
 
     private static final CommandDto DEFAULT_VALUE = null;
 
-    /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
-     */
-    public CommandDtoValueSemanticsProvider() {
-        this(null);
-    }
-
     public CommandDtoValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, CommandDto.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE);
     }
-
 
     @Override
     protected CommandDto doParse(final Parser.Context context, final String str) {
@@ -91,12 +81,6 @@ implements CommandDtoValueFacet {
     @Override
     public CommandDto fromEncodedString(final String xml) {
         return CommandDtoUtils.fromXml(xml);
-    }
-
-
-    @Override
-    public String toString() {
-        return "InteractionDtoValueSemanticsProvider";
     }
 
 }
