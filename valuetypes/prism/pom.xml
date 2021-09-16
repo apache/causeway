@@ -27,9 +27,9 @@
 	<packaging>pom</packaging>
 	
 	<modules>
-		<module>res</module>
-		<module>wkt</module>
-<!-- 		<module>vaa</module> incubator -->
+		<module>resources</module>
+		<module>wicket</module>
+<!-- 		<module>vaadin</module> incubator -->
 	</modules>
 
 </project>
