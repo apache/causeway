@@ -101,7 +101,6 @@ import org.apache.isis.core.metamodel.facets.value.floats.FloatWrapperValueFacet
 import org.apache.isis.core.metamodel.facets.value.imageawt.JavaAwtImageValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.integer.IntPrimitiveValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.integer.IntWrapperValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.facets.value.localrespath.LocalResourcePathValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.longs.LongPrimitiveValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.longs.LongWrapperValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.password.PasswordValueFacetUsingSemanticsProviderFactory;
@@ -289,7 +288,6 @@ extends ProgrammingModelAbstract {
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory(mmc));
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JavaUtilDateValueFacetUsingSemanticsProviderFactory(mmc));
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new StringValueFacetUsingSemanticsProviderFactory(mmc));
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new LocalResourcePathValueFacetUsingSemanticsProviderFactory(mmc));
 
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JavaAwtImageValueFacetUsingSemanticsProviderFactory(mmc));
 

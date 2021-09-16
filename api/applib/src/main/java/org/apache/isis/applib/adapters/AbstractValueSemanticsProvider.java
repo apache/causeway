@@ -81,7 +81,9 @@ implements ValueSemanticsProvider<T> {
     }
 
     protected String render(final T value, final Function<T, String> toString) {
-        return value != null ? toString.apply(value) : NULL_REPRESENTATION;
+        return Optional.ofNullable(value)
+                .map(toString)
+                .orElse(NULL_REPRESENTATION);
     }
 
 }
