@@ -115,7 +115,7 @@ public interface UiComponentFactory<B, C> {
                     : false;
         }
 
-        public boolean hasValueFacet(final @Nullable Class<?> valueType) {
+        public boolean hasFacetForValueType(final @Nullable Class<?> valueType) {
             return valueType!=null
                     ? getFeatureTypeSpec().lookupFacet(ValueFacet.class)
                             .map(ValueFacet::getValueType)

@@ -33,7 +33,7 @@ public class ClobFieldFactory implements UiComponentHandlerVaa {
 
     @Override
     public boolean isHandling(final ComponentRequest request) {
-        return request.hasValueFacet(Clob.class);
+        return request.hasFacetForValueType(Clob.class);
     }
 
     @Override

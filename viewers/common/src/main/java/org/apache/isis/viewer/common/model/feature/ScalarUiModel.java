@@ -26,7 +26,6 @@ import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFa
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxFractionalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxTotalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.facets.value.string.StringValueSemanticsProvider;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 
@@ -73,9 +72,9 @@ public interface ScalarUiModel {
                 .orElse(null);
     }
 
-    default int getTypicalLength() {
+    default Integer getTypicalLength() {
         final TypicalLengthFacet facet = getMetaModel().getFacet(TypicalLengthFacet.class);
-        return facet != null? facet.value() : StringValueSemanticsProvider.TYPICAL_LENGTH;
+        return facet != null? facet.value() : null;
     }
 
     default String getFileAccept() {

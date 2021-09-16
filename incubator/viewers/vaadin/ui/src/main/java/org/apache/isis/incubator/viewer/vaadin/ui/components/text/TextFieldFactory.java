@@ -22,7 +22,6 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.textfield.TextField;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.core.metamodel.facets.value.string.StringValueFacet;
 import org.apache.isis.incubator.viewer.vaadin.ui.binding.BindingsVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
@@ -35,7 +34,7 @@ public class TextFieldFactory implements UiComponentHandlerVaa {
 
     @Override
     public boolean isHandling(final ComponentRequest request) {
-        return request.hasFeatureTypeFacet(StringValueFacet.class);
+        return request.hasFacetForValueType(String.class);
     }
 
     @Override

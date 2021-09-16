@@ -36,7 +36,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
-import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.commons.internal.base._Casts;
@@ -50,6 +49,7 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.encoder.Encodable
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.core.metamodel.facets.value.string.StringValueSemantics;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public abstract class ValueSemanticsProviderAbstractTestCase {
@@ -158,7 +158,14 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         Assume.assumeThat(valueSemanticsProvider.getParser(), is(not(nullValue())));
 
         final Object newValue = valueSemanticsProvider.getParser().parseTextRepresentation(null, "");
-        assertNull(newValue);
+
+        if(valueSemanticsProvider instanceof StringValueSemantics) {
+            // string parsing is an unary identity
+            assertEquals("", newValue);
+        } else {
+            assertNull(newValue);
+        }
+
     }
 
     @Test
@@ -183,6 +190,10 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
             assertEquals("",
                     ((ValueSemanticsProviderAndFacetAbstract<?>)valueSemanticsProvider)
                     .presentationValue(null, null));
+        } else if(valueSemanticsProvider instanceof StringValueSemantics) {
+            // string representation has null-to-empty semantics
+            assertEquals("",
+                    valueSemanticsProvider.getRenderer().presentationValue(null, null));
         } else {
             assertEquals(AbstractValueSemanticsProvider.NULL_REPRESENTATION,
                     valueSemanticsProvider.getRenderer().presentationValue(null, null));

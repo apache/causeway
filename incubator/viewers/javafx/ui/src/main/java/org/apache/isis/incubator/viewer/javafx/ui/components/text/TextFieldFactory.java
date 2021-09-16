@@ -22,10 +22,7 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import org.springframework.core.annotation.Order;
-
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.core.metamodel.facets.value.string.StringValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -34,11 +31,12 @@ import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerF
 import org.apache.isis.viewer.common.model.binding.BindingConverter;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 
-import javafx.scene.Node;
-import javafx.scene.control.TextField;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+
+import javafx.scene.Node;
+import javafx.scene.control.TextField;
 
 @org.springframework.stereotype.Component
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
@@ -46,12 +44,12 @@ import lombok.val;
 public class TextFieldFactory implements UiComponentHandlerFx {
 
     @Override
-    public boolean isHandling(ComponentRequest request) {
-        return request.hasFeatureTypeFacet(StringValueFacet.class);
+    public boolean isHandling(final ComponentRequest request) {
+        return request.hasFacetForValueType(String.class);
     }
 
     @Override
-    public Node handle(ComponentRequest request) {
+    public Node handle(final ComponentRequest request) {
 
         val uiComponent = new TextField();
         val valueSpec = request.getFeatureTypeSpec();
@@ -94,17 +92,17 @@ public class TextFieldFactory implements UiComponentHandlerFx {
         private final ObjectSpecification valueSpecification;
 
         @Override
-        public String toString(String value) {
+        public String toString(final String value) {
             return value; // identity
         }
 
         @Override
-        public String fromString(String stringifiedValue) {
+        public String fromString(final String stringifiedValue) {
             return stringifiedValue; // identity
         }
 
         @Override
-        public Optional<String> tryParse(String stringifiedValue) {
+        public Optional<String> tryParse(final String stringifiedValue) {
             return Optional.empty(); // always ok
         }
 

@@ -105,7 +105,6 @@ import org.apache.isis.core.metamodel.facets.value.longs.LongPrimitiveValueFacet
 import org.apache.isis.core.metamodel.facets.value.longs.LongWrapperValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.shortint.ShortPrimitiveValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.shortint.ShortWrapperValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.facets.value.string.StringValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.temporal.localdate.LocalDateValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.temporal.localdatetime.LocalDateTimeValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.temporal.localtime.LocalTimeValueFacetUsingSemanticsProviderFactory;
@@ -286,7 +285,6 @@ extends ProgrammingModelAbstract {
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JavaSqlTimeValueFacetUsingSemanticsProviderFactory(mmc));
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory(mmc));
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JavaUtilDateValueFacetUsingSemanticsProviderFactory(mmc));
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new StringValueFacetUsingSemanticsProviderFactory(mmc));
 
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JavaAwtImageValueFacetUsingSemanticsProviderFactory(mmc));
 
