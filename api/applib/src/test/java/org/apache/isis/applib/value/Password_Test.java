@@ -28,8 +28,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import lombok.val;
 
 class Password_Test {
-    
-    private static final String STARS = "********************";
+
+    private static final String STARS = "*";
 
     @Nested
     public class checkPassword {
