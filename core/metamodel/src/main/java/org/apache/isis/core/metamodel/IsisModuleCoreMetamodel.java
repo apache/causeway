@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.facets.schema.IsisSchemaMetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.schema.IsisSchemaValueTypeProvider;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueSemantics;
 import org.apache.isis.core.metamodel.facets.value.blobs.BlobValueSemanticsProvider;
+import org.apache.isis.core.metamodel.facets.value.booleans.BooleanValueSemantics;
 import org.apache.isis.core.metamodel.facets.value.clobs.ClobValueSemanticsProvider;
 import org.apache.isis.core.metamodel.facets.value.localrespath.LocalResourcePathValueSemanticsProvider;
 import org.apache.isis.core.metamodel.facets.value.markup.MarkupValueSemanticsProvider;
@@ -91,6 +92,7 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         BigDecimalValueSemantics.class,
         UUIDValueSemantics.class,
         URLValueSemantics.class,
+        BooleanValueSemantics.class,
         //TODO convert to non-facets ...
         BlobValueSemanticsProvider.class,
         ClobValueSemanticsProvider.class,

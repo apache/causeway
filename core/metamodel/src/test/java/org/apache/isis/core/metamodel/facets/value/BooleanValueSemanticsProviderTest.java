@@ -25,24 +25,19 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
-import org.apache.isis.core.metamodel.facets.value.booleans.BooleanValueSemanticsProviderAbstract;
-import org.apache.isis.core.metamodel.facets.value.booleans.BooleanWrapperValueSemanticsProvider;
+import org.apache.isis.core.metamodel.facets.value.booleans.BooleanValueSemantics;
 
 public class BooleanValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {
 
-    private BooleanValueSemanticsProviderAbstract value;
+    private BooleanValueSemantics value;
 
     private Boolean booleanObj;
-    private FacetHolder facetHolder;
 
     @Before
     public void setUpObjects() throws Exception {
         booleanObj = Boolean.valueOf(true);
-        facetHolder = FacetHolderAbstract.forTesting(metaModelContext);
-        setValue(value = new BooleanWrapperValueSemanticsProvider(facetHolder));
+        setSemanitcs(value = new BooleanValueSemantics());
     }
 
     @Test
@@ -85,7 +80,7 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testTitleWhenNotSet() throws Exception {
-        assertEquals("", value.titleString(null));
+        assertEquals("", value.presentationValue(null, null));
     }
 
     @Test
@@ -99,15 +94,4 @@ extends ValueSemanticsProviderAbstractTestCase {
         assertEquals(Boolean.valueOf(true), parsed);
     }
 
-    @Test
-    public void testIsSet() {
-        allowMockAdapterToReturn(Boolean.valueOf(true));
-        assertEquals(true, value.isSet(mockAdapter));
-    }
-
-    @Test
-    public void testIsNotSet() {
-        allowMockAdapterToReturn(Boolean.valueOf(false));
-        assertEquals(false, value.isSet(mockAdapter));
-    }
 }

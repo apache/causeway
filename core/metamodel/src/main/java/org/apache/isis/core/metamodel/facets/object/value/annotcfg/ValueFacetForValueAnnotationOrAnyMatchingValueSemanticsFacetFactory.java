@@ -18,15 +18,10 @@
  */
 package org.apache.isis.core.metamodel.facets.object.value.annotcfg;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.stream.Stream;
-
 import javax.inject.Inject;
 
 import org.springframework.core.ResolvableType;
 import org.springframework.util.ClassUtils;
-import org.springframework.util.CollectionUtils;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
@@ -34,31 +29,18 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.collections.Cardinality;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Collections;
-import org.apache.isis.commons.internal.reflection._Generics;
-import org.apache.isis.commons.internal.reflection._Reflect;
-import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
-import org.apache.isis.core.metamodel.commons.ClassExtensions;
-import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
-import org.apache.isis.core.metamodel.facets.object.value.ImmutableFacetViaValueSemantics;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProvider;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.annotation.LogicalTypeFacetForValueAnnotation;
 
 import lombok.Getter;
-import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -155,14 +137,14 @@ extends ValueFacetUsingSemanticsProviderFactory {
     @Getter(lazy = true)
     private final Can<ValueSemanticsProvider<?>> fallbackValueSemantics = Can.of(new NoopValueSemantics());
 
-
     @Getter(lazy = true)
     private final Can<ValueSemanticsProvider<?>> allValueSemanticsProviders = getServiceRegistry()
             .select(ValueSemanticsProvider.class)
             .map(_Casts::uncheckedCast);
 
     private <T> Can<ValueSemanticsProvider<T>> lookupValueSemantics(final Class<T> valueType) {
-        var resolvableType = ResolvableType.forClassWithGenerics(ValueSemanticsProvider.class, valueType);
+        var resolvableType = ResolvableType
+                .forClassWithGenerics(ValueSemanticsProvider.class, ClassUtils.resolvePrimitiveIfNecessary(valueType));
         return getAllValueSemanticsProviders()
                 .stream()
                 .filter(resolvableType::isInstance)
