@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.choices.enums;
 import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
@@ -88,7 +88,7 @@ implements EnumFacet {
     }
 
     @Override
-    protected T doParse(final Parser.Context context, final String entry) {
+    protected T doParse(final ValueSemanticsProvider.Context context, final String entry) {
         final T[] enumConstants = getAdaptedClass().getEnumConstants();
         for (final T enumConstant : enumConstants) {
             if (toEncodedString(enumConstant).equals(entry)) {

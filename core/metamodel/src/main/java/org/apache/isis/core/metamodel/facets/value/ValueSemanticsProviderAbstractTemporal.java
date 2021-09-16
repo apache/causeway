@@ -31,7 +31,7 @@ import java.util.TimeZone;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.adapters.EncodingException;
-import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -125,7 +125,7 @@ implements DateValueFacet {
 
     @Override
     protected T doParse(
-            final Parser.Context context,
+            final ValueSemanticsProvider.Context context,
             final String entry) {
 
         buildDefaultFormatIfRequired();

@@ -24,7 +24,7 @@ import java.text.ParseException;
 import java.util.Locale;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.commons.LocaleUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -61,7 +61,7 @@ implements LongValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Long doParse(final Parser.Context context, final String entry) {
+    protected Long doParse(final ValueSemanticsProvider.Context context, final String entry) {
         try {
             return Long.valueOf(format.parse(entry).longValue());
         } catch (final ParseException e) {

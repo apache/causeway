@@ -26,24 +26,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
 import org.apache.isis.applib.value.Clob;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
-import org.apache.isis.core.metamodel.facets.value.clobs.ClobValueSemanticsProvider;
+import org.apache.isis.core.metamodel.facets.value.clobs.ClobValueSemantics;
 
 public class ClobValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {
 
-    private ClobValueSemanticsProvider value;
+    private ClobValueSemantics value;
     private Clob clob;
-    private FacetHolder holder;
 
     @Before
     public void setUpObjects() throws Exception {
         clob = new Clob("myfile1.xml", "application", "xml", "abcdef");
         allowMockAdapterToReturn(clob);
-        holder = FacetHolderAbstract.forTesting(metaModelContext);
 
-        setValue(value = new ClobValueSemanticsProvider(holder));
+        setSemanitcs(value = new ClobValueSemantics());
     }
 
     @Test

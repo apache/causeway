@@ -23,6 +23,8 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.Renderer;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.value.Markup;
 
 @Component
@@ -30,7 +32,8 @@ public class MarkupValueSemantics
 extends AbstractValueSemanticsProvider<Markup>
 implements
     EncoderDecoder<Markup>,
-    Parser<Markup> {
+    Parser<Markup>,
+    Renderer<Markup>{
 
     // -- ENCODER DECODER
 
@@ -44,20 +47,22 @@ implements
         return new Markup(html);
     }
 
-    // -- PARSER
+    // -- RENDERER
 
     @Override
-    public String presentationValue(final Context context, final Markup value) {
+    public String presentationValue(final ValueSemanticsProvider.Context context, final Markup value) {
         return value != null? value.asHtml(): "[null]";
     }
 
+    // -- PARSER
+
     @Override
-    public String parseableTextRepresentation(final Context context, final Markup value) {
+    public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final Markup value) {
         return toEncodedString(value);
     }
 
     @Override
-    public Markup parseTextRepresentation(final Context context, final String text) {
+    public Markup parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
         return fromEncodedString(text);
     }
 

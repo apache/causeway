@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.value;
 
 import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
@@ -61,18 +62,13 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
 
         @Override
         public MyValueWithSemanticsProviderSpecifiedUsingConfiguration parseTextRepresentation(
-                final Parser.Context context,
+                final ValueSemanticsProvider.Context context,
                 final String entry) {
             return null;
         }
 
         @Override
-        public String presentationValue(final Parser.Context context, final MyValueWithSemanticsProviderSpecifiedUsingConfiguration object) {
-            return null;
-        }
-
-        @Override
-        public String parseableTextRepresentation(final Parser.Context context, final MyValueWithSemanticsProviderSpecifiedUsingConfiguration existing) {
+        public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final MyValueWithSemanticsProviderSpecifiedUsingConfiguration existing) {
             return null;
         }
 
@@ -91,18 +87,13 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
 
         @Override
         public NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration parseTextRepresentation(
-                final Parser.Context context,
+                final ValueSemanticsProvider.Context context,
                 final String entry) {
             return null;
         }
 
         @Override
-        public String presentationValue(final Parser.Context context, final NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration object) {
-            return null;
-        }
-
-        @Override
-        public String parseableTextRepresentation(final Parser.Context context, final NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration existing) {
+        public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration existing) {
             return null;
         }
 

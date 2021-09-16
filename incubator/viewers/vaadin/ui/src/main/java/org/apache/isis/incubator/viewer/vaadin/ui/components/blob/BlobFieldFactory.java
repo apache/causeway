@@ -22,7 +22,6 @@ import com.vaadin.flow.component.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.core.metamodel.facets.value.blobs.BlobValueFacet;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 
@@ -34,7 +33,7 @@ public class BlobFieldFactory implements UiComponentHandlerVaa {
 
     @Override
     public boolean isHandling(final ComponentRequest request) {
-        return request.hasFeatureTypeFacet(BlobValueFacet.class);
+        return request.hasValueFacet(Blob.class);
     }
 
     @Override

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.value.chars;
 
-import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.recoverable.InvalidEntryException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -46,7 +46,7 @@ implements CharValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public Character doParse(final Parser.Context context, final String entry) {
+    public Character doParse(final ValueSemanticsProvider.Context context, final String entry) {
         if (entry.length() > 1) {
             throw new InvalidEntryException("Only a single character is required");
         } else {

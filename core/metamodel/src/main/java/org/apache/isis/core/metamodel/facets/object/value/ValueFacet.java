@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.object.value;
 
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
@@ -30,5 +31,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * defined elsewhere.
  */
 public interface ValueFacet extends Facet {
+
+    LogicalType getValueType();
 
 }

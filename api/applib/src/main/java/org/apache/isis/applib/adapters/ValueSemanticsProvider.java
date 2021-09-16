@@ -19,7 +19,9 @@
 
 package org.apache.isis.applib.adapters;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 
 /**
  * Provides a mechanism for providing a set of value semantics.
@@ -41,6 +43,17 @@ import org.apache.isis.applib.annotation.Value;
  * @since 1.x {@index}
  */
 public interface ValueSemanticsProvider<T> {
+
+    @lombok.Value(staticConstructor = "of")
+    class Context {
+        Identifier identifier;
+        InteractionContext interactionContext;
+    }
+
+    /**
+     * The {@link Renderer}, if any.
+     */
+    Renderer<T> getRenderer();
 
     /**
      * The {@link Parser}, if any.

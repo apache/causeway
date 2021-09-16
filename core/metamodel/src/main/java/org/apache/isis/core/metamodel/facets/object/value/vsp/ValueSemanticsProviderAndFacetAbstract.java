@@ -25,6 +25,7 @@ import java.util.function.BiConsumer;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.recoverable.InvalidEntryException;
 import org.apache.isis.applib.exceptions.unrecoverable.UnknownTypeException;
@@ -37,7 +38,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 @Deprecated
 public abstract class ValueSemanticsProviderAndFacetAbstract<T>
 extends FacetAbstract
-implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProvider<T> {
+implements ValueSemanticsProvider<T>, Renderer<T>, EncoderDecoder<T>, Parser<T>, DefaultsProvider<T> {
 
     private final Class<T> adaptedClass;
     private final int typicalLength;
@@ -124,6 +125,11 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
     }
 
     @Override
+    public Renderer<T> getRenderer() {
+        return this;
+    }
+
+    @Override
     public Parser<T> getParser() {
         return this;
     }
@@ -138,7 +144,7 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
     // ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    public T parseTextRepresentation(final Parser.Context context, final String entry) {
+    public T parseTextRepresentation(final ValueSemanticsProvider.Context context, final String entry) {
         if (entry == null) {
             throw new IllegalArgumentException();
         }
@@ -152,7 +158,7 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
         return doParse(context, entry);
     }
 
-    public Optional<Exception> tryParseTextEntry(final Parser.Context context, final String entry) {
+    public Optional<Exception> tryParseTextEntry(final ValueSemanticsProvider.Context context, final String entry) {
         try {
             parseTextRepresentation(context, entry);
         } catch (Exception e) {
@@ -168,7 +174,7 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
      *            - the proposed new object, as a string representation to be
      *            parsed
      */
-    protected abstract T doParse(final Parser.Context context, final String entry);
+    protected abstract T doParse(final ValueSemanticsProvider.Context context, final String entry);
 
 
     /**
@@ -182,7 +188,7 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
     }
 
     @Override
-    public String presentationValue(final Parser.Context context, final Object object) {
+    public String presentationValue(final ValueSemanticsProvider.Context context, final Object object) {
         if (object == null) {
             return "";
         }
@@ -193,7 +199,7 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
      * Defaults to {@link Parser#presentationValue(org.apache.isis.applib.adapters.Parser.Context, Object)}.
      */
     @Override
-    public String parseableTextRepresentation(final Parser.Context context, final Object existing) {
+    public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final Object existing) {
         return presentationValue(context, existing);
     }
 

@@ -26,6 +26,8 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.Renderer;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Strings;
 
 @Component
@@ -33,7 +35,8 @@ public class URLValueSemantics
 extends AbstractValueSemanticsProvider<java.net.URL>
 implements
     EncoderDecoder<java.net.URL>,
-    Parser<java.net.URL> {
+    Parser<java.net.URL>,
+    Renderer<java.net.URL> {
 
     // -- ENCODER DECODER
 
@@ -54,20 +57,22 @@ implements
         }
     }
 
-    // -- PARSER
+    // -- RENDERER
 
     @Override
-    public String presentationValue(final Context context, final URL value) {
+    public String presentationValue(final ValueSemanticsProvider.Context context, final URL value) {
         return value != null ? value.toString(): "";
     }
 
+    // -- PARSER
+
     @Override
-    public String parseableTextRepresentation(final Context context, final URL value) {
+    public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final URL value) {
         return value != null ? value.toString(): null;
     }
 
     @Override
-    public URL parseTextRepresentation(final Context context, final String text) {
+    public URL parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
         final var input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
             return null;

@@ -20,7 +20,8 @@ package org.apache.isis.core.metamodel.facets.object.title.parser;
 
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.Renderer;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -32,25 +33,25 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import lombok.NonNull;
 import lombok.val;
 
-public final class TitleFacetUsingParser
+public final class TitleFacetUsingRenderer
 extends FacetAbstract
 implements TitleFacet {
 
-    private final @NonNull Parser<?> parser;
+    private final @NonNull Renderer<?> renderer;
 
-    public static TitleFacetUsingParser create(final Parser<?> parser, final FacetHolder holder) {
-        return new TitleFacetUsingParser(parser, holder);
+    public static TitleFacetUsingRenderer create(final Renderer<?> parser, final FacetHolder holder) {
+        return new TitleFacetUsingRenderer(parser, holder);
     }
 
-    private TitleFacetUsingParser(final Parser<?> parser, final FacetHolder holder) {
+    private TitleFacetUsingRenderer(final Renderer<?> parser, final FacetHolder holder) {
         super(TitleFacet.class, holder, Precedence.LOW);
-        this.parser = parser;
+        this.renderer = parser;
     }
 
     @Override
     public boolean semanticEquals(final @NonNull Facet other) {
-        return other instanceof TitleFacetUsingParser
-                ? this.parser.getClass() == ((TitleFacetUsingParser)other).parser.getClass()
+        return other instanceof TitleFacetUsingRenderer
+                ? this.renderer.getClass() == ((TitleFacetUsingRenderer)other).renderer.getClass()
                 : false;
     }
 
@@ -63,21 +64,21 @@ implements TitleFacet {
         if (object == null) {
             return null;
         }
-        return parser.presentationValue(parserContext(), _Casts.uncheckedCast(object));
+        return renderer.presentationValue(valueSemanticsContext(), _Casts.uncheckedCast(object));
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("parser", parser.toString());
+        visitor.accept("parser", renderer.toString());
     }
 
-    private Parser.Context parserContext() {
+    private ValueSemanticsProvider.Context valueSemanticsContext() {
         val iaProvider = super.getInteractionProvider();
         if(iaProvider==null) {
             return null; // JUnit context
         }
-        return Parser.Context.of(
+        return ValueSemanticsProvider.Context.of(
                 ((FacetHolderAbstract)getFacetHolder()).getFeatureIdentifier(),
                 iaProvider.currentInteractionContext().orElse(null));
     }

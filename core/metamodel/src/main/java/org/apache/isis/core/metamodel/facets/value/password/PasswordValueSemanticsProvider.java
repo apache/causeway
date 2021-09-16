@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.value.password;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -52,7 +52,7 @@ implements PasswordValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Password doParse(final Parser.Context context, final String text) {
+    protected Password doParse(final ValueSemanticsProvider.Context context, final String text) {
         return new Password(text);
     }
 

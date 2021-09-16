@@ -23,9 +23,11 @@ import java.util.stream.Collectors;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
@@ -36,9 +38,23 @@ import lombok.val;
 // tag::class[]
 @Component
 public class ComplexNumberJpaValueSemantics
-        implements ValueSemanticsProvider<ComplexNumberJpa>{
+        extends AbstractValueSemanticsProvider<ComplexNumberJpa>{
 
 // end::class[]
+// tag::getRenderer[]
+    @Override
+    public Renderer<ComplexNumberJpa> getRenderer() {
+// end::getRenderer[]
+        // ...
+// tag::getRenderer[]
+        return new Renderer<ComplexNumberJpa>() {
+            @Override
+            public String presentationValue(final ValueSemanticsProvider.Context context, final ComplexNumberJpa object) {
+                return object!=null ? object.title() : "NaN";
+            }
+        };
+    }
+// end::getRenderer[]
 // tag::getParser[]
     @Override
     public Parser<ComplexNumberJpa> getParser() {
@@ -47,7 +63,7 @@ public class ComplexNumberJpaValueSemantics
 // tag::getParser[]
         return new Parser<ComplexNumberJpa>() {
             @Override
-            public ComplexNumberJpa parseTextRepresentation(final Parser.Context context, final String entry) {
+            public ComplexNumberJpa parseTextRepresentation(final ValueSemanticsProvider.Context context, final String entry) {
                 return ComplexNumberJpa.parse(entry).orElse(null);
             }
             @Override
@@ -55,12 +71,8 @@ public class ComplexNumberJpaValueSemantics
                 return 30;
             }
             @Override
-            public String presentationValue(final Parser.Context context, final ComplexNumberJpa object) {
-                return object!=null ? object.title() : "NaN";
-            }
-            @Override
-            public String parseableTextRepresentation(final Parser.Context context, final ComplexNumberJpa existing) {
-                return presentationValue(context, existing);
+            public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final ComplexNumberJpa existing) {
+                return existing!=null ? existing.title() : null;
             }
         };
     }

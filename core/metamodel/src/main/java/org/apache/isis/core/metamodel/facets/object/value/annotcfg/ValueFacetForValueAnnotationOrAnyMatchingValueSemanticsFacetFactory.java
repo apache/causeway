@@ -26,6 +26,7 @@ import org.springframework.util.ClassUtils;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.collections.Can;
@@ -116,6 +117,11 @@ extends ValueFacetUsingSemanticsProviderFactory {
     // -- HELPER
 
     private static class NoopValueSemantics implements ValueSemanticsProvider<Object> {
+
+        @Override
+        public Renderer<Object> getRenderer() {
+            return null;
+        }
 
         @Override
         public Parser<Object> getParser() {

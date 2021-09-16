@@ -55,14 +55,14 @@ This class defines some behaviour:
 +
 [source,java,indent=0]
 ----
-include::ComplexNumberJdo.java[tags=title]
+include::jdo/ComplexNumberJdo.java[tags=title]
 ----
 
 * how to parse a string:
 +
 [source,java]
 ----
-include::ComplexNumberJdo.java[tags=parse,indent=0]
+include::jdo/ComplexNumberJdo.java[tags=parse,indent=0]
 ----
 +
 This is used by the "value semantics provider", discussed in the next section.
@@ -73,7 +73,7 @@ The `NumberConstantJdo_updateNumber` mixin allows the value of the complex numbe
 [source,java]
 .NumberConstantJdo_updateNumber.java
 ----
-include::NumberConstantJdo_updateNumber.java[tags=class]
+include::jdo/NumberConstantJdo_updateNumber.java[tags=class]
 ----
 
 
@@ -84,16 +84,23 @@ As mentioned in the previous section, the framework uses an implementation of `V
 [source,java]
 .ComplexNumberJdoValueSemantics.java
 ----
-include::ComplexNumberJdoValueSemantics.java[tags=class]
+include::jdo/ComplexNumberJdoValueSemantics.java[tags=class]
 ----
 
 where:
+
+* `getRenderer()` is responsible for rendering the value:
++
+[source,java,indent=0]
+----
+include::jdo/ComplexNumberJdoValueSemantics.java[tags=getRenderer]
+----
 
 * `getParser()` is responsible for parsing the entered string (for either an editable property or a parameter):
 +
 [source,java,indent=0]
 ----
-include::ComplexNumberJdoValueSemantics.java[tags=getParser]
+include::jdo/ComplexNumberJdoValueSemantics.java[tags=getParser]
 ----
 +
 In this case the implementation just delegates to the `ComplexNumberJdo` class itself.
@@ -102,13 +109,13 @@ In this case the implementation just delegates to the `ComplexNumberJdo` class i
 +
 [source,java,indent=0]
 ----
-include::ComplexNumberJdoValueSemantics.java[tags=getEncoderDecoder]
+include::jdo/ComplexNumberJdoValueSemantics.java[tags=getEncoderDecoder]
 ----
 
 * `getDefaultsProvider()` returns the default value to be used for non-optional parameters and properties:
 +
 [source,java,indent=0]
 ----
-include::ComplexNumberJdoValueSemantics.java[tags=getDefaultsProvider]
+include::jdo/ComplexNumberJdoValueSemantics.java[tags=getDefaultsProvider]
 ----
 

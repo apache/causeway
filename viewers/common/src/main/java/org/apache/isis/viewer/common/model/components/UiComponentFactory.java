@@ -24,11 +24,13 @@ import java.util.function.Consumer;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedFeature;
@@ -109,7 +111,17 @@ public interface UiComponentFactory<B, C> {
          */
         public <T extends Facet> boolean hasFeatureTypeFacet(final @Nullable Class<T> facetType) {
             return facetType!=null
-                    ? getFeatureTypeSpec().getFacet(facetType)!=null
+                    ? getFeatureTypeSpec().containsFacet(facetType)
+                    : false;
+        }
+
+        public boolean hasValueFacet(final @Nullable Class<?> valueType) {
+            return valueType!=null
+                    ? getFeatureTypeSpec().lookupFacet(ValueFacet.class)
+                            .map(ValueFacet::getValueType)
+                            .map(LogicalType::getCorrespondingClass)
+                            .map(valueType::equals)
+                            .orElse(false)
                     : false;
         }
 

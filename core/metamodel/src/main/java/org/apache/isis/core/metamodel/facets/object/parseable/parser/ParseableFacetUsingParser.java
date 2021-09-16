@@ -26,6 +26,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ParsingException;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
@@ -145,12 +146,12 @@ implements ParseableFacet {
         return ((Parser)parser).parseableTextRepresentation(parserContext(), pojo);
     }
 
-    private Parser.Context parserContext() {
+    private ValueSemanticsProvider.Context parserContext() {
         val iaProvider = super.getInteractionProvider();
         if(iaProvider==null) {
             return null; // JUnit context
         }
-        return Parser.Context.of(
+        return ValueSemanticsProvider.Context.of(
                 ((FacetHolderAbstract)getFacetHolder()).getFeatureIdentifier(),
                 iaProvider.currentInteractionContext().orElse(null));
     }

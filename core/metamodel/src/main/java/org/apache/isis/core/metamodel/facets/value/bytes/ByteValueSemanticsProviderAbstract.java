@@ -24,7 +24,7 @@ import java.text.ParseException;
 import java.util.Locale;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.commons.LocaleUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -60,7 +60,7 @@ implements ByteValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Byte doParse(final Parser.Context context, final String entry) {
+    protected Byte doParse(final ValueSemanticsProvider.Context context, final String entry) {
         try {
             return Byte.valueOf(format.parse(entry).byteValue());
         } catch (final ParseException e) {

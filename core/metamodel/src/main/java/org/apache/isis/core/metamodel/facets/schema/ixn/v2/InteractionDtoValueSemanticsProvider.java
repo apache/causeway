@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.schema.ixn.v2;
 
-import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -46,7 +46,7 @@ implements InteractionDtoValueFacet {
     }
 
     @Override
-    protected InteractionDto doParse(final Parser.Context context, final String str) {
+    protected InteractionDto doParse(final ValueSemanticsProvider.Context context, final String str) {
         return fromEncodedString(str);
     }
 

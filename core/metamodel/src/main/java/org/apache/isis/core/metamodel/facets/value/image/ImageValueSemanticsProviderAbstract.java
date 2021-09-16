@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.value.image;
 
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.unrecoverable.UnexpectedCallException;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
@@ -44,7 +45,7 @@ implements ImageValueFacet {
     }
 
     @Override
-    protected T doParse(final Parser.Context context, final String entry) {
+    protected T doParse(final ValueSemanticsProvider.Context context, final String entry) {
         throw new UnexpectedCallException();
     }
 

@@ -18,18 +18,14 @@
  */
 package org.apache.isis.core.metamodel.facets.object.value;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class ValueFacetSimple extends FacetAbstract implements ValueFacet {
+public class ValueFacetSimple
+extends ValueFacetAbstract {
 
-    private static final Class<? extends Facet> type() {
-        return ValueFacet.class;
-    }
-
-    public ValueFacetSimple(FacetHolder holder) {
-        super(type(), holder);
+    public ValueFacetSimple(final FacetHolder holder) {
+        super(Can.empty(), holder, Precedence.LOW);
     }
 
 }

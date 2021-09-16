@@ -28,6 +28,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ParsingException;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -81,7 +82,7 @@ public class ParseableFacetUsingParserTest {
 
         final Parser<String> parser = new Parser<String>() {
             @Override
-            public String parseTextRepresentation(final Parser.Context context, final String entry) {
+            public String parseTextRepresentation(final ValueSemanticsProvider.Context context, final String entry) {
                 if (entry.equals("invalid")) {
                     throw new ParsingException();
                 }
@@ -100,12 +101,7 @@ public class ParseableFacetUsingParserTest {
             }
 
             @Override
-            public String presentationValue(final Parser.Context context, final String object) {
-                return null;
-            }
-
-            @Override
-            public String parseableTextRepresentation(final Parser.Context context, final String existing) {
+            public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final String existing) {
                 return null;
             }
         };

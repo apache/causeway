@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.schema.chg.v2;
 
-import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -47,7 +47,7 @@ implements ChangesDtoValueFacet {
 
 
     @Override
-    protected ChangesDto doParse(final Parser.Context context, final String str) {
+    protected ChangesDto doParse(final ValueSemanticsProvider.Context context, final String str) {
         return fromEncodedString(str);
     }
 

@@ -28,6 +28,8 @@ import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.Renderer;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.internal.base._Strings;
@@ -38,7 +40,8 @@ extends AbstractValueSemanticsProvider<BigDecimal>
 implements
     DefaultsProvider<BigDecimal>,
     EncoderDecoder<BigDecimal>,
-    Parser<BigDecimal> {
+    Parser<BigDecimal>,
+    Renderer<BigDecimal> {
 
     public static final int DEFAULT_LENGTH = 18;
     public static final int DEFAULT_SCALE = 2;
@@ -64,18 +67,17 @@ implements
         return new BigDecimal(data);
     }
 
+    // -- RENDERER
+
+    @Override
+    public String presentationValue(final ValueSemanticsProvider.Context context, final BigDecimal value) {
+        return render(value, getNumberFormat(context)::format);
+    }
+
     // -- PARSER
 
     @Override
-    public String presentationValue(final Context context, final BigDecimal value) {
-        return value==null
-            ? ""
-            : getNumberFormat(context)
-                .format(value);
-    }
-
-    @Override
-    public String parseableTextRepresentation(final Context context, final BigDecimal value) {
+    public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final BigDecimal value) {
         return value==null
                 ? null
                 : getNumberFormat(context)
@@ -83,7 +85,7 @@ implements
     }
 
     @Override
-    public BigDecimal parseTextRepresentation(final Context context, final String text) {
+    public BigDecimal parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
         final var input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
             return null;

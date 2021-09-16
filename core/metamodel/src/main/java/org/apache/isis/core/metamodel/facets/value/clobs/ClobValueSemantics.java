@@ -23,65 +23,27 @@ import javax.activation.MimeTypeParseException;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.DefaultsProvider;
-import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.EncoderDecoder;
+import org.apache.isis.applib.adapters.Renderer;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.value.Clob;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 
 @Component
-public class ClobValueSemanticsProvider
-extends ValueSemanticsProviderAndFacetAbstract<Clob>
-implements ClobValueFacet {
+public class ClobValueSemantics
+extends AbstractValueSemanticsProvider<Clob>
+implements
+    EncoderDecoder<Clob>,
+    Renderer<Clob> {
 
-    private static final int TYPICAL_LENGTH = 0;
-
-    private static Class<? extends Facet> type() {
-        return ClobValueFacet.class;
-    }
-
-    private static final Clob DEFAULT_VALUE = null;
-
-    public ClobValueSemanticsProvider() {
-        this(null);
-    }
-
-    public ClobValueSemanticsProvider(final FacetHolder holder) {
-        super(type(), holder, Clob.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE);
-    }
+    // RENDERER
 
     @Override
-    public String titleString(final Object object) {
-        return object != null? ((Clob)object).getName(): "[null]";
+    public String presentationValue(final ValueSemanticsProvider.Context context, final Clob value) {
+        return render(value, Clob::getName);
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // Parser
-    // //////////////////////////////////////////////////////////////////
-
-    @Override
-    public Parser<Clob> getParser() {
-        return null;
-    }
-
-    @Override
-    protected Clob doParse(final Context context, final String entry) {
-        return null;
-    }
-
-    // //////////////////////////////////////////////////////////////////
-    // DefaultsProvider
-    // //////////////////////////////////////////////////////////////////
-
-    @Override
-    public DefaultsProvider<Clob> getDefaultsProvider() {
-        return null;
-    }
-
-    // //////////////////////////////////////////////////////////////////
-    // EncoderDecoder
-    // //////////////////////////////////////////////////////////////////
+    // -- ENCODER DECODER
 
     @Override
     public String toEncodedString(final Clob clob) {

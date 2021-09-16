@@ -26,24 +26,19 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
-import org.apache.isis.core.metamodel.facets.value.blobs.BlobValueSemanticsProvider;
+import org.apache.isis.core.metamodel.facets.value.blobs.BlobValueSemantics;
 
 public class BlobValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {
 
-    private BlobValueSemanticsProvider value;
+    private BlobValueSemantics value;
     private Blob blob;
-    private FacetHolder holder;
 
     @Before
     public void setUpObjects() throws Exception {
         blob = new Blob("myfile1.docx", "application", "vnd.ms-word", new byte[]{1,2,3,4});
         allowMockAdapterToReturn(blob);
-        holder = FacetHolderAbstract.forTesting(metaModelContext);
-
-        setValue(value = new BlobValueSemanticsProvider(holder));
+        setSemanitcs(value = new BlobValueSemantics());
     }
 
     @Test

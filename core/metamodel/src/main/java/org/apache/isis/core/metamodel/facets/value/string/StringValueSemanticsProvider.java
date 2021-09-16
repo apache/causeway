@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.value.string;
 
-import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
@@ -43,7 +43,7 @@ implements StringValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doParse(final Parser.Context context, final String entry) {
+    protected String doParse(final ValueSemanticsProvider.Context context, final String entry) {
         if (entry.trim().equals("")) {
             return null;
         } else {

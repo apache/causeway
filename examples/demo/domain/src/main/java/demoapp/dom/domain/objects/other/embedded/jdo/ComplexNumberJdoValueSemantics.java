@@ -22,9 +22,11 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
@@ -34,9 +36,23 @@ import lombok.val;
 // tag::class[]
 @Component
 public class ComplexNumberJdoValueSemantics
-        implements ValueSemanticsProvider<ComplexNumberJdo>{
+        extends AbstractValueSemanticsProvider<ComplexNumberJdo>{
 
-// end::class[]
+ // end::class[]
+ // tag::getRenderer[]
+     @Override
+     public Renderer<ComplexNumberJdo> getRenderer() {
+ // end::getRenderer[]
+         // ...
+ // tag::getRenderer[]
+         return new Renderer<ComplexNumberJdo>() {
+             @Override
+             public String presentationValue(final ValueSemanticsProvider.Context context, final ComplexNumberJdo object) {
+                 return object!=null ? object.title() : "NaN";
+             }
+         };
+     }
+ // end::getRenderer[]
 // tag::getParser[]
     @Override
     public Parser<ComplexNumberJdo> getParser() {
@@ -45,7 +61,7 @@ public class ComplexNumberJdoValueSemantics
 // tag::getParser[]
         return new Parser<ComplexNumberJdo>() {
             @Override
-            public ComplexNumberJdo parseTextRepresentation(final Parser.Context context, final String entry) {
+            public ComplexNumberJdo parseTextRepresentation(final ValueSemanticsProvider.Context context, final String entry) {
                 return ComplexNumberJdo.parse(entry).orElse(null);
             }
             @Override
@@ -53,12 +69,8 @@ public class ComplexNumberJdoValueSemantics
                 return 30;
             }
             @Override
-            public String presentationValue(final Parser.Context context, final ComplexNumberJdo object) {
-                return object!=null ? object.title() : "NaN";
-            }
-            @Override
-            public String parseableTextRepresentation(final Parser.Context context, final ComplexNumberJdo existing) {
-                return presentationValue(context, existing);
+            public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final ComplexNumberJdo existing) {
+                return existing!=null ? existing.title() : null;
             }
         };
     }

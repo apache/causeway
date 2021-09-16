@@ -18,11 +18,6 @@
  */
 package org.apache.isis.applib.adapters;
 
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.services.iactnlayer.InteractionContext;
-
-import lombok.Value;
-
 /**
  * Provides a mechanism for parsing and rendering string representations of
  * objects.
@@ -74,17 +69,6 @@ import lombok.Value;
  */
 public interface Parser<T> {
 
-    @Value(staticConstructor = "of")
-    static class Context {
-        Identifier identifier;
-        InteractionContext interactionContext;
-    }
-
-    /**
-     * The value in its read-only presentation form, eg. html. (irreversible)
-     */
-    String presentationValue(Context context, T value);
-
     /**
      * A title for the object that is valid but which may be easier to edit than
      * the title provided by a <code>TitleFacet</code>. (bijective)
@@ -95,12 +79,12 @@ public interface Parser<T> {
      * field. So, a date might be rendered via a <code>TitleFacet</code> as
      * <tt>May 2, 2007</tt>, but its editable form might be <tt>20070502</tt>.
      */
-    String parseableTextRepresentation(Context context, T value);
+    String parseableTextRepresentation(ValueSemanticsProvider.Context context, T value);
 
     /**
      * Parses a string to an instance of the object. (bijective)
      */
-    T parseTextRepresentation(Context context, String text);
+    T parseTextRepresentation(ValueSemanticsProvider.Context context, String text);
 
     /**
      * The typical length of objects that can be parsed.

@@ -16,10 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.blobs;
+package org.apache.isis.applib.adapters;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
+public interface Renderer<T> {
 
-public interface BlobValueFacet extends Facet {
+    /**
+     * The value in its read-only presentation form, eg. html. (irreversible)
+     */
+    String presentationValue(ValueSemanticsProvider.Context context, T value);
 
 }

@@ -24,6 +24,8 @@ import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.Renderer;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.internal.base._Strings;
@@ -37,22 +39,29 @@ extends AbstractValueSemanticsProvider<Boolean>
 implements
     DefaultsProvider<Boolean>,
     EncoderDecoder<Boolean>,
-    Parser<Boolean> {
+    Parser<Boolean>,
+    Renderer<Boolean> {
 
     @Override
     public Boolean getDefaultValue() {
-        return Boolean.TRUE;
+        return Boolean.FALSE;
     }
 
     // -- ENCODER DECODER
 
     @Override
-    public String toEncodedString(final Boolean object) {
-        return isSet(object) ? "T" : "F";
+    public String toEncodedString(final Boolean value) {
+        if(value==null) {
+            return null;
+        }
+        return value.booleanValue() ? "T" : "F";
     }
 
     @Override
     public Boolean fromEncodedString(final String data) {
+        if(data==null) {
+            return null;
+        }
         final int dataLength = data.length();
         if (dataLength == 1) {
             switch (data.charAt(0)) {
@@ -76,20 +85,22 @@ implements
         throw new UnrecoverableException("Invalid data for logical, expected 1, 4 or 5 bytes, got " + dataLength + ": " + data);
     }
 
+    // -- RENDERER
+
+    @Override
+    public String presentationValue(final ValueSemanticsProvider.Context context, final Boolean value) {
+        return render(value, v->v.booleanValue() ? "True" : "False");
+    }
+
     // -- PARSER
 
     @Override
-    public String presentationValue(final Context context, final Boolean value) {
-        return value == null ? "" : isSet(value) ? "True" : "False";
-    }
-
-    @Override
-    public String parseableTextRepresentation(final Context context, final Boolean value) {
+    public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final Boolean value) {
         return value != null ? value.toString(): null;
     }
 
     @Override
-    public Boolean parseTextRepresentation(final Context context, final String text) {
+    public Boolean parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
         final var input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
             return null;
@@ -111,12 +122,6 @@ implements
     @Override
     public int maxLength() {
         return 6;
-    }
-
-    // -- HELPER
-
-    private boolean isSet(final Boolean value) {
-        return value.booleanValue();
     }
 
 }

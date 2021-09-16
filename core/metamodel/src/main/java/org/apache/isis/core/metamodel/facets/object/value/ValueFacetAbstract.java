@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.value;
 
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -55,6 +56,11 @@ implements ValueFacet {
 
     protected boolean hasSemanticsProvider() {
         return !this.semanticsProviders.isEmpty();
+    }
+
+    @Override
+    public final LogicalType getValueType() {
+        return getFacetHolder().getFeatureIdentifier().getLogicalType();
     }
 
 }

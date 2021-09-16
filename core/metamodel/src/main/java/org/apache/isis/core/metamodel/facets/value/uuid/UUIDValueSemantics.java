@@ -23,13 +23,16 @@ import java.util.UUID;
 import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.Renderer;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Strings;
 
 public class UUIDValueSemantics
 extends AbstractValueSemanticsProvider<UUID>
 implements
     EncoderDecoder<UUID>,
-    Parser<UUID> {
+    Parser<UUID>,
+    Renderer<UUID> {
 
     // -- ENCODER DECODER
 
@@ -43,20 +46,22 @@ implements
         return UUID.fromString(data);
     }
 
-    // -- PARSER
+    // -- RENDERER
 
     @Override
-    public String presentationValue(final Context context, final UUID value) {
+    public String presentationValue(final ValueSemanticsProvider.Context context, final UUID value) {
         return value == null ? "" : value.toString();
     }
 
+    // -- PARSER
+
     @Override
-    public String parseableTextRepresentation(final Context context, final UUID value) {
+    public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final UUID value) {
         return value == null ? null : value.toString();
     }
 
     @Override
-    public UUID parseTextRepresentation(final Context context, final String text) {
+    public UUID parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
         final var input = _Strings.blankToNullOrTrim(text);
         return input!=null
                 ? UUID.fromString(input)

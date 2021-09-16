@@ -34,7 +34,7 @@ import java.util.stream.Stream;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.adapters.EncodingException;
-import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
@@ -195,7 +195,7 @@ implements TemporalValueFacet<T> {
 
     @Override
     protected T doParse(
-            final Parser.Context context,
+            final ValueSemanticsProvider.Context context,
             final String entry) {
 
         T contextTemporal = _Casts.uncheckedCast(context);

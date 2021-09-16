@@ -36,6 +36,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.commons.internal.base._Casts;
@@ -183,7 +184,8 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
                     ((ValueSemanticsProviderAndFacetAbstract<?>)valueSemanticsProvider)
                     .presentationValue(null, null));
         } else {
-            assertEquals("", valueSemanticsProvider.getParser().presentationValue(null, null));
+            assertEquals(AbstractValueSemanticsProvider.NULL_REPRESENTATION,
+                    valueSemanticsProvider.getRenderer().presentationValue(null, null));
         }
 
     }

@@ -24,7 +24,7 @@ import java.text.ParseException;
 import java.util.Locale;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.commons.LocaleUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -65,7 +65,7 @@ implements IntegerValueFacet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Integer doParse(final Parser.Context context, final String entry) {
+    protected Integer doParse(final ValueSemanticsProvider.Context context, final String entry) {
         try {
             return Integer.valueOf(format.parse(entry).intValue());
         } catch (final ParseException e) {

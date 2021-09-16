@@ -19,7 +19,7 @@
 package org.apache.isis.valuetypes.markdown.metamodel.facets;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
@@ -44,7 +44,7 @@ implements MarkdownValueFacet {
 
 
     @Override
-    protected Markdown doParse(final Parser.Context context, final String html) {
+    protected Markdown doParse(final ValueSemanticsProvider.Context context, final String html) {
         return fromEncodedString(html);
     }
 

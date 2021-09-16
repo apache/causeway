@@ -22,33 +22,36 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 @Component
 @Named("isis.val.AsciiDocValueSemanticsProvider")
 public class AsciiDocValueSemanticsProvider
+extends AbstractValueSemanticsProvider<AsciiDoc>
 implements
-    ValueSemanticsProvider<AsciiDoc>,
     //EncoderDecoder<AsciiDoc>,
+    Renderer<AsciiDoc>,
     Parser<AsciiDoc> {
 
     @Override
-    public String parseableTextRepresentation(final Parser.Context context, final AsciiDoc adoc) {
+    public String presentationValue(final ValueSemanticsProvider.Context context, final AsciiDoc adoc) {
+        return adoc != null? adoc.asHtml(): "[null]";
+    }
+
+    @Override
+    public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final AsciiDoc adoc) {
         return adoc!=null ? adoc.getAdoc() : null;
     }
 
     @Override
-    public AsciiDoc parseTextRepresentation(final Parser.Context context, final String adoc) {
+    public AsciiDoc parseTextRepresentation(final ValueSemanticsProvider.Context context, final String adoc) {
         return adoc!=null ? AsciiDoc.valueOf(adoc) : null;
-    }
-
-    @Override
-    public String presentationValue(final Parser.Context context, final AsciiDoc adoc) {
-        return adoc != null? adoc.asHtml(): "[null]";
     }
 
     @Override

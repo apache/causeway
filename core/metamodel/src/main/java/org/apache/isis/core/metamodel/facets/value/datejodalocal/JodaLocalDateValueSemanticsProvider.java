@@ -27,7 +27,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import org.apache.isis.applib.adapters.EncodingException;
-import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -137,7 +137,7 @@ implements JodaLocalDateValueFacet {
 
     @Override
     protected LocalDate doParse(
-            final Parser.Context context,
+            final ValueSemanticsProvider.Context context,
             final String entry) {
 
         updateTitleStringFormatterIfOverridden();

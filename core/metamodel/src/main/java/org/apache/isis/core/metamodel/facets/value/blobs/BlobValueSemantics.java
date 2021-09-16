@@ -26,67 +26,30 @@ import javax.activation.MimeTypeParseException;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.DefaultsProvider;
-import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.EncoderDecoder;
+import org.apache.isis.applib.adapters.Renderer;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider.Context;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 
 @Component
-public class BlobValueSemanticsProvider
-extends ValueSemanticsProviderAndFacetAbstract<Blob>
-implements BlobValueFacet {
+public class BlobValueSemantics
+extends AbstractValueSemanticsProvider<Blob>
+implements
+    EncoderDecoder<Blob>,
+    Renderer<Blob> {
 
-    private static final int TYPICAL_LENGTH = 0;
-
-    private static Class<? extends Facet> type() {
-        return BlobValueFacet.class;
-    }
-
-    private static final Blob DEFAULT_VALUE = null;
-
-    public BlobValueSemanticsProvider() {
-        this(null);
-    }
-
-    public BlobValueSemanticsProvider(final FacetHolder holder) {
-        super(type(), holder, Blob.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE);
-    }
+    // RENDERER
 
     @Override
-    public String titleString(final Object object) {
-        return object != null? ((Blob)object).getName(): "[null]";
+    public String presentationValue(final ValueSemanticsProvider.Context context, final Blob value) {
+        return render(value, Blob::getName);
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // Parser
-    // //////////////////////////////////////////////////////////////////
-
-    @Override
-    public Parser<Blob> getParser() {
-        return null;
-    }
-
-    @Override
-    protected Blob doParse(final Context context, final String entry) {
-        return null;
-    }
-
-    // //////////////////////////////////////////////////////////////////
-    // DefaultsProvider
-    // //////////////////////////////////////////////////////////////////
-
-    @Override
-    public DefaultsProvider<Blob> getDefaultsProvider() {
-        return null;
-    }
-
-    // //////////////////////////////////////////////////////////////////
-    // EncoderDecoder
-    // //////////////////////////////////////////////////////////////////
+    // -- ENCODER DECODER
 
     @Override
     public String toEncodedString(final Blob blob) {
@@ -108,6 +71,5 @@ implements BlobValueFacet {
             throw new RuntimeException(e);
         }
     }
-
 
 }

@@ -18,48 +18,55 @@
  */
 package org.apache.isis.applib.adapters;
 
-import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.adapters.Parser.Context;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 
 /**
- * @since 1.x {@index}
+ * @since 2.x {@index}
  */
 public abstract class AbstractValueSemanticsProvider<T>
 implements ValueSemanticsProvider<T> {
 
+    public static final String NULL_REPRESENTATION = "[none]";
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Renderer<T> getRenderer() {
+        return this instanceof Renderer ? (Renderer<T>)this : null;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public EncoderDecoder<T> getEncoderDecoder() {
-        return (EncoderDecoder<T>) (this instanceof EncoderDecoder ? this : null);
+        return this instanceof EncoderDecoder ? (EncoderDecoder<T>)this : null;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public Parser<T> getParser() {
-        return (Parser<T>) (this instanceof Parser ? this : null);
+        return this instanceof Parser ? (Parser<T>)this : null;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public DefaultsProvider<T> getDefaultsProvider() {
-        return (DefaultsProvider<T>) (this instanceof DefaultsProvider ? this : null);
+        return this instanceof DefaultsProvider ? (DefaultsProvider<T>)this : null;
     }
 
     /**
      * @param context - nullable in support of JUnit testing
      * @return {@link Locale} from given context or else system's default
      */
-    protected Locale getLocale(final @Nullable Context context) {
+    protected Locale getLocale(final @Nullable ValueSemanticsProvider.Context context) {
         return Optional.ofNullable(context)
-        .map(Context::getInteractionContext)
+        .map(ValueSemanticsProvider.Context::getInteractionContext)
         .map(InteractionContext::getLocale)
         .orElseGet(Locale::getDefault);
     }
@@ -69,20 +76,12 @@ implements ValueSemanticsProvider<T> {
      * @return {@link NumberFormat} the default from from given context's locale
      * or else system's default locale
      */
-    protected DecimalFormat getNumberFormat(final @Nullable Context context) {
+    protected DecimalFormat getNumberFormat(final @Nullable ValueSemanticsProvider.Context context) {
         return (DecimalFormat)NumberFormat.getNumberInstance(getLocale(context));
     }
 
-    @Deprecated
-    protected final URL doParse(final Context context, final String entry) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Deprecated
-    protected final String titleString(final Object object) {
-        // TODO Auto-generated method stub
-        return null;
+    protected String render(final T value, final Function<T, String> toString) {
+        return value != null ? toString.apply(value) : NULL_REPRESENTATION;
     }
 
 }
