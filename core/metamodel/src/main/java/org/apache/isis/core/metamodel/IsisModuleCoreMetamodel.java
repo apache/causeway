@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.facets.value.blobs.BlobValueSemanticsProvi
 import org.apache.isis.core.metamodel.facets.value.booleans.BooleanValueSemantics;
 import org.apache.isis.core.metamodel.facets.value.clobs.ClobValueSemanticsProvider;
 import org.apache.isis.core.metamodel.facets.value.localrespath.LocalResourcePathValueSemanticsProvider;
-import org.apache.isis.core.metamodel.facets.value.markup.MarkupValueSemanticsProvider;
+import org.apache.isis.core.metamodel.facets.value.markup.MarkupValueSemantics;
 import org.apache.isis.core.metamodel.facets.value.password.PasswordValueSemanticsProvider;
 import org.apache.isis.core.metamodel.facets.value.treenode.TreeNodeValueSemanticsProvider;
 import org.apache.isis.core.metamodel.facets.value.url.URLValueSemantics;
@@ -89,15 +89,15 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         ValueTypeRegistry.class,
 
         // Value Semantics (built-in defaults)
-        BigDecimalValueSemantics.class,
-        UUIDValueSemantics.class,
-        URLValueSemantics.class,
         BooleanValueSemantics.class,
+        BigDecimalValueSemantics.class,
+        MarkupValueSemantics.class,
+        URLValueSemantics.class,
+        UUIDValueSemantics.class,
         //TODO convert to non-facets ...
         BlobValueSemanticsProvider.class,
         ClobValueSemanticsProvider.class,
         LocalResourcePathValueSemanticsProvider.class,
-        MarkupValueSemanticsProvider.class,
         PasswordValueSemanticsProvider.class,
         TreeNodeValueSemanticsProvider.class,
 
