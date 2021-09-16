@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.facets.value.localrespath.LocalResourcePat
 import org.apache.isis.core.metamodel.facets.value.markup.MarkupValueSemanticsProvider;
 import org.apache.isis.core.metamodel.facets.value.password.PasswordValueSemanticsProvider;
 import org.apache.isis.core.metamodel.facets.value.treenode.TreeNodeValueSemanticsProvider;
+import org.apache.isis.core.metamodel.facets.value.url.URLValueSemantics;
 import org.apache.isis.core.metamodel.facets.value.uuid.UUIDValueSemantics;
 import org.apache.isis.core.metamodel.inspect.IsisModuleCoreMetamodelInspection;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
@@ -86,9 +87,11 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         ValueTypeProviderForBuiltin.class,
         ValueTypeRegistry.class,
 
-        // Default Value Semantics
+        // Value Semantics (built-in defaults)
         BigDecimalValueSemantics.class,
         UUIDValueSemantics.class,
+        URLValueSemantics.class,
+        //TODO convert to non-facets ...
         BlobValueSemanticsProvider.class,
         ClobValueSemanticsProvider.class,
         LocalResourcePathValueSemanticsProvider.class,

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.adapters;
 
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -70,6 +71,18 @@ implements ValueSemanticsProvider<T> {
      */
     protected DecimalFormat getNumberFormat(final @Nullable Context context) {
         return (DecimalFormat)NumberFormat.getNumberInstance(getLocale(context));
+    }
+
+    @Deprecated
+    protected final URL doParse(final Context context, final String entry) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Deprecated
+    protected final String titleString(final Object object) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }
