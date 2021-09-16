@@ -67,7 +67,7 @@ public class IsisTypesMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-clock")
+    @ActionLayout(cssClassFa="fa-key")
     public IsisPasswords passwords(){
         return new IsisPasswords();
     }

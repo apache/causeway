@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.isis.passwords.samples;
 
+import java.util.Random;
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
@@ -31,7 +32,9 @@ public class IsisPasswordsSamples implements Samples<Password> {
 
     @Override
     public Stream<Password> stream() {
-        return Stream.of();
+        return new Random().ints(5)
+                .mapToObj(Integer::toHexString)
+                .map(Password::of);
     }
 
 }

@@ -40,8 +40,6 @@ public class Password implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String STARS = "********************";
-
     private final String password;
 
     public static Password of(final String password) {
@@ -64,14 +62,11 @@ public class Password implements Serializable {
 
     @Override
     public String toString() {
-        if (password == null) {
-            return "";
-        }
-        return STARS;
+        return "*";
     }
 
-
-    public static class JaxbToStringAdapter extends javax.xml.bind.annotation.adapters.XmlAdapter<String, Password> {
+    public static class JaxbToStringAdapter
+    extends javax.xml.bind.annotation.adapters.XmlAdapter<String, Password> {
         @Override
         public Password unmarshal(final String str) throws Exception {
             return str != null

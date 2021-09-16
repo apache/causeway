@@ -24,21 +24,17 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
-import org.apache.isis.core.metamodel.facets.value.password.PasswordValueSemanticsProvider;
+import org.apache.isis.core.metamodel.facets.value.password.PasswordValueSemantics;
 
-public class PasswordValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
+public class PasswordValueSemanticsProviderTest
+extends ValueSemanticsProviderAbstractTestCase {
 
-    private PasswordValueSemanticsProvider adapter;
+    private PasswordValueSemantics adapter;
     private Password password;
-    private FacetHolder holder;
 
     @Before
     public void setUpObjects() throws Exception {
-        holder = FacetHolderAbstract.forTesting(MetaModelContext_forTesting.buildDefault());
-        setValue(adapter = new PasswordValueSemanticsProvider(holder));
+        setSemanitcs(adapter = new PasswordValueSemantics());
         password = new Password("secret");
     }
 

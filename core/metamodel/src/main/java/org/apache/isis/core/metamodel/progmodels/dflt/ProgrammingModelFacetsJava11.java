@@ -103,7 +103,6 @@ import org.apache.isis.core.metamodel.facets.value.integer.IntPrimitiveValueFace
 import org.apache.isis.core.metamodel.facets.value.integer.IntWrapperValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.longs.LongPrimitiveValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.longs.LongWrapperValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.facets.value.password.PasswordValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.shortint.ShortPrimitiveValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.shortint.ShortWrapperValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.string.StringValueFacetUsingSemanticsProviderFactory;
@@ -290,9 +289,6 @@ extends ProgrammingModelAbstract {
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new StringValueFacetUsingSemanticsProviderFactory(mmc));
 
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JavaAwtImageValueFacetUsingSemanticsProviderFactory(mmc));
-
-        // applib values
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new PasswordValueFacetUsingSemanticsProviderFactory(mmc));
 
         // jodatime values
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JodaLocalDateValueFacetUsingSemanticsProviderFactory(mmc));

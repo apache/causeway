@@ -18,7 +18,14 @@
  */
 package demoapp.dom.types.isis.passwords.persistence;
 
+import javax.inject.Inject;
+
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.ActionLayout.Position;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.value.Password;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
@@ -37,6 +44,33 @@ implements
     @Override
     public Password value() {
         return getReadOnlyProperty();
+    }
+
+    // -- PASSWORD CHECKER DEMO
+
+    @Inject private transient MessageService messageService;
+
+    @Action
+    @ActionLayout(associateWith = "readWriteProperty"
+        , position = Position.PANEL
+        , cssClass = "bg-warning")
+    public IsisPasswordEntity showPassword() {
+        messageService.informUser(String
+                .format("password: '%s'", getReadWriteProperty().getPassword()));
+        return this;
+    }
+
+    @Action
+    @ActionLayout(associateWith = "readWriteProperty"
+        , position = Position.PANEL
+        , promptStyle = PromptStyle.DIALOG_MODAL)
+    public IsisPasswordEntity checkPassword(final Password confirm) {
+        if(getReadWriteProperty().checkPassword(confirm.getPassword())) {
+            messageService.informUser("passwords did match");
+        } else {
+            messageService.warnUser("passwords did not match");
+        }
+        return this;
     }
 
 }

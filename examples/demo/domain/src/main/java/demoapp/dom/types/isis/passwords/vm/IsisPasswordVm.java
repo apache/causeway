@@ -52,7 +52,8 @@ public class IsisPasswordVm
         implements HasAsciiDocDescription, IsisPasswordHolder2 {
 
 //end::class[]
-    public IsisPasswordVm(Password initialValue) {
+
+    public IsisPasswordVm(final Password initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
