@@ -22,6 +22,7 @@ import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -46,16 +47,16 @@ extends FacetFactoryAbstract {
     @Deprecated
     protected final void addValueFacet(final ValueSemanticsProviderAndFacetAbstract<T> valueSemantics) {
         FacetUtil.addFacet(
-                new ValueFacetUsingSemanticsProvider(valueSemantics, valueSemantics.getFacetHolder()));
+                new ValueFacetUsingSemanticsProvider(Can.ofSingleton(valueSemantics), valueSemantics.getFacetHolder()));
         installRelatedFacets(valueSemantics, valueSemantics.getFacetHolder());
     }
 
     protected final void addAllFacetsForValueSemantics(
-            final ValueSemanticsProvider<?> valueSemantics,
+            final Can<ValueSemanticsProvider<?>> valueSemantics,
             final FacetHolder holder) {
         FacetUtil.addFacet(
                 new ValueFacetUsingSemanticsProvider(valueSemantics, holder));
-        installRelatedFacets(valueSemantics, holder);
+        installRelatedFacets(valueSemantics.getFirstOrFail(), holder);
     }
 
     // -- HELPER

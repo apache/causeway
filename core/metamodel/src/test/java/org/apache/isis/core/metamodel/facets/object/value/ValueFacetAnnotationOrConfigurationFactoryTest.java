@@ -24,17 +24,17 @@ import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetForValueAnnotationFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory;
 
 public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFacetFactoryTest {
 
-    private ValueFacetForValueAnnotationFacetFactory facetFactory;
+    private ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new ValueFacetForValueAnnotationFacetFactory(metaModelContext);
+        facetFactory = new ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory(metaModelContext);
     }
 
     @Override

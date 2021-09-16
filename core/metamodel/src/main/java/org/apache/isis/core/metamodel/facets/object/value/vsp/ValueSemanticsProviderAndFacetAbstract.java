@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+@Deprecated
 public abstract class ValueSemanticsProviderAndFacetAbstract<T>
 extends FacetAbstract
 implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProvider<T> {

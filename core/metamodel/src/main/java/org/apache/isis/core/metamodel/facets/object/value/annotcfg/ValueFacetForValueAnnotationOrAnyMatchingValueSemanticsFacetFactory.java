@@ -57,6 +57,7 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSem
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.annotation.LogicalTypeFacetForValueAnnotation;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
@@ -86,43 +87,47 @@ import lombok.extern.log4j.Log4j2;
  * Note that {@link ParentedCollectionFacet} is <i>not</i> installed.
  */
 @Log4j2
-public class ValueFacetForValueAnnotationFacetFactory
+public class ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory
 extends ValueFacetUsingSemanticsProviderFactory {
 
     @Inject
-    public ValueFacetForValueAnnotationFacetFactory(final MetaModelContext mmc) {
+    public ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory(final MetaModelContext mmc) {
         super(mmc);
     }
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
+        final var cls = processClassContext.getCls();
         final var facetHolder = processClassContext.getFacetHolder();
         final var valueIfAny = processClassContext.synthesizeOnType(Value.class);
-
-        final var cls = processClassContext.getCls();
 
         addFacetIfPresent(
                 LogicalTypeFacetForValueAnnotation
                 .create(valueIfAny, cls, facetHolder));
 
+        final var valueSemantics = lookupValueSemantics(cls);
+        //FIXME install them all, then enable qualifiers
+        if(!valueSemantics.isEmpty()) {
+            super.addAllFacetsForValueSemantics(valueSemantics, facetHolder);
+        }
+
+//        if(valueIfAny.isPresent()
+//                || ClassUtils.isPrimitiveOrWrapper(cls)
+//                || Number.class.isAssignableFrom(cls)) {
+//
+//        }
+
         valueIfAny
         .ifPresent(value->{
 
-            final var candidates = lookupValueSemantics(cls);
-            if(candidates.isCardinalityOne()) {
-                super.addAllFacetsForValueSemantics(candidates.getFirstOrFail(), facetHolder);
+            if(valueSemantics.isCardinalityMultiple()) {
+                log.warn("found multiple ValueSemanticsProvider for value type {}; using the first", cls);
             } else {
-
-                if(candidates.isCardinalityMultiple()) {
-                    log.warn("found multiple ValueSemanticsProvider for value type {}; using the first", cls);
-                    super.addAllFacetsForValueSemantics(candidates.getFirstOrFail(), facetHolder);
-                } else {
-                    log.warn("could not find a ValueSemanticsProvider for value type {}; using a no-op fallback", cls);
-                    super.addAllFacetsForValueSemantics(new NoopValueSemantics(), facetHolder);
-                }
-
+                log.warn("could not find a ValueSemanticsProvider for value type {}; using a no-op fallback", cls);
+                super.addAllFacetsForValueSemantics(getFallbackValueSemantics(), facetHolder);
             }
+
         });
     }
 
@@ -147,10 +152,18 @@ extends ValueFacetUsingSemanticsProviderFactory {
 
     }
 
+    @Getter(lazy = true)
+    private final Can<ValueSemanticsProvider<?>> fallbackValueSemantics = Can.of(new NoopValueSemantics());
+
+
+    @Getter(lazy = true)
+    private final Can<ValueSemanticsProvider<?>> allValueSemanticsProviders = getServiceRegistry()
+            .select(ValueSemanticsProvider.class)
+            .map(_Casts::uncheckedCast);
+
     private <T> Can<ValueSemanticsProvider<T>> lookupValueSemantics(final Class<T> valueType) {
         var resolvableType = ResolvableType.forClassWithGenerics(ValueSemanticsProvider.class, valueType);
-        return getServiceRegistry()
-                .select(ValueSemanticsProvider.class)
+        return getAllValueSemanticsProviders()
                 .stream()
                 .filter(resolvableType::isInstance)
                 .map(provider->_Casts.<ValueSemanticsProvider<T>>uncheckedCast(provider))

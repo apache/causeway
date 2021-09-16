@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.value.vsp;
 
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacetAbstract;
 
@@ -26,10 +27,10 @@ public class ValueFacetUsingSemanticsProvider
 extends ValueFacetAbstract {
 
     public ValueFacetUsingSemanticsProvider(
-            final ValueSemanticsProvider<?> valueSemantics,
+            final Can<ValueSemanticsProvider<?>> valueSemantics,
             final FacetHolder holder) {
 
-        super(valueSemantics, AddFacetsIfInvalidStrategy.DO_ADD, holder, Precedence.DEFAULT);
+        super(valueSemantics, holder, Precedence.DEFAULT);
     }
 
 }

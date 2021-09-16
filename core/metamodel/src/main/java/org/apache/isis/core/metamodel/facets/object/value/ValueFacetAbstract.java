@@ -19,13 +19,10 @@
 package org.apache.isis.core.metamodel.facets.object.value;
 
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
-import org.apache.isis.core.metamodel.commons.ClassExtensions;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-
-import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 public abstract class ValueFacetAbstract
 extends FacetAbstract
@@ -35,57 +32,16 @@ implements ValueFacet {
         return ValueFacet.class;
     }
 
-    private static ValueSemanticsProvider<?> newValueSemanticsProviderOrNull(
-            final Class<?> semanticsProviderClass, final FacetHolder holder) {
-        if (semanticsProviderClass == null) {
-            return null;
-        }
-
-        return (ValueSemanticsProvider<?>) ClassExtensions.newInstance(semanticsProviderClass,
-                new Class<?>[] { FacetHolder.class/*, ServiceInjector.class*/ }, new Object[] { holder });
-    }
-
-    private final ValueSemanticsProvider<?> semanticsProvider;
-
-    @RequiredArgsConstructor
-    public enum AddFacetsIfInvalidStrategy {
-        DO_ADD(true), DONT_ADD(false);
-        private final boolean addFacetsIfInvalid;
-
-        public boolean shouldAddFacetsIfInvalid() {
-            return addFacetsIfInvalid;
-        }
-    }
+    private final Can<ValueSemanticsProvider<?>> semanticsProviders;
 
     protected ValueFacetAbstract(
-            final Class<?> semanticsProviderClass,
-            final AddFacetsIfInvalidStrategy addFacetsIfInvalid,
-            final FacetHolder holder,
-            final Facet.Precedence precedence) {
-
-        this(newValueSemanticsProviderOrNull(semanticsProviderClass, holder), addFacetsIfInvalid, holder, precedence);
-    }
-
-    protected ValueFacetAbstract(
-            final ValueSemanticsProvider<?> semanticsProvider,
-            final AddFacetsIfInvalidStrategy addFacetsIfInvalid,
+            final Can<ValueSemanticsProvider<?>> semanticsProviders,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
 
         super(type(), holder, precedence);
 
-        this.semanticsProvider = semanticsProvider;
-
-        // note: we can't use the runtimeContext to inject dependencies into the
-        // semanticsProvider,
-        // because there won't be any PersistenceSession when initially building
-        // the metamodel.
-        // so, we defer until we use the parser.
-
-        if (!hasSemanticsProvider()
-                && !addFacetsIfInvalid.shouldAddFacetsIfInvalid()) {
-            return;
-        }
+        this.semanticsProviders = semanticsProviders;
 
         // we now figure add all the facets supported. Note that we do not use
         // FacetUtil.addFacet,
@@ -93,14 +49,12 @@ implements ValueFacet {
         // but have the
         // facets themselves reference this value's holder.
 
-        val facetHolder = super.getFacetHolder();
-
-        facetHolder.addFacet(this); // add just ValueFacet.class
+        super.getFacetHolder().addFacet(this); // add just ValueFacet.class
 
     }
 
     protected boolean hasSemanticsProvider() {
-        return this.semanticsProvider != null;
+        return !this.semanticsProviders.isEmpty();
     }
 
 }
