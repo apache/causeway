@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.value.booleans;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
@@ -34,8 +35,14 @@ import org.apache.isis.commons.internal.base._Strings;
 public class BooleanValueSemantics
 extends AbstractValueSemanticsProvider<Boolean>
 implements
+    DefaultsProvider<Boolean>,
     EncoderDecoder<Boolean>,
     Parser<Boolean> {
+
+    @Override
+    public Boolean getDefaultValue() {
+        return Boolean.TRUE;
+    }
 
     // -- ENCODER DECODER
 
