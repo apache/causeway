@@ -16,14 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.markdown.metamodel.facets;
+package org.apache.isis.valuetypes.prism;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import lombok.RequiredArgsConstructor;
 
-public interface MarkdownValueFacet extends Facet {
-
-    String markdownValue(ManagedObject object);
-    ManagedObject createValue(ManagedObject object, String html);
-
+@RequiredArgsConstructor
+public enum Prism {
+    WICKET("1.24.1", "coy"),
+    VAADIN("1.24.1", "coy");
+//    WICKET("1.20", "default"),
+//    VAADIN("1.20", "default");
+    final String version;
+    final String theme;
+    public String cssFile() {
+        return "css/prism" + version + "-" + theme + ".css";
+    }
+    public String jsFile() {
+        return "js/prism" + version + ".js";
+    }
 }

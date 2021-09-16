@@ -26,6 +26,7 @@ import com.vaadin.flow.component.html.Div;
 
 import org.apache.isis.incubator.viewer.vaadin.ui.util.LocalResourceUtil;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
+import org.apache.isis.valuetypes.prism.vaa.PrismResourcesVaa;
 
 public class AsciiDocFieldVaa extends CustomField<AsciiDoc> {
 
@@ -34,13 +35,13 @@ public class AsciiDocFieldVaa extends CustomField<AsciiDoc> {
     private final Div div = new Div();
     private AsciiDoc markup;
 
-    public AsciiDocFieldVaa(String label) {
+    public AsciiDocFieldVaa(final String label) {
         super();
         setLabel(label);
         add(div);
 
-        LocalResourceUtil.addStyleSheet(PrismResources.getCssResourceReference());
-        LocalResourceUtil.executeJavaScript(PrismResources::readJsResource);
+        LocalResourceUtil.addStyleSheet(PrismResourcesVaa.getCssResourceReference());
+        LocalResourceUtil.executeJavaScript(PrismResourcesVaa::readJsResource);
     }
 
     @Override
@@ -49,7 +50,7 @@ public class AsciiDocFieldVaa extends CustomField<AsciiDoc> {
     }
 
     @Override
-    protected void setPresentationValue(@Nullable AsciiDoc markup) {
+    protected void setPresentationValue(@Nullable final AsciiDoc markup) {
         this.markup = markup;
 
         div.removeAll();

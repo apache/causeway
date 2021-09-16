@@ -39,7 +39,7 @@ public class IsisMarkdownConverter implements TypeConverter<Markdown, String>{
     @Override
     public Markdown toMemberType(final String datastoreValue) {
         return datastoreValue != null
-                ? Markdown.valueOfMarkdown(datastoreValue)
+                ? Markdown.valueOf(datastoreValue)
                 : null;
     }
 

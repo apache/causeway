@@ -75,9 +75,7 @@ public final class AsciiDoc implements HasHtml, Serializable {
 
     @Override
     public String toString() {
-        return "AsciiDoc[length="+ adoc.length()+"]";
+        return "AsciiDoc[length=" + adoc.length() + "]";
     }
-
-
 
 }

@@ -16,49 +16,32 @@
 
 	<parent>
 		<groupId>org.apache.isis.valuetypes</groupId>
-		<artifactId>isis-valuetypes-asciidoc-ui</artifactId>
+		<artifactId>isis-valuetypes-prism</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-valuetypes-asciidoc-ui-wkt</artifactId>
-	<name>Apache Isis Val - Asciidoctor (ui wicket)</name>
-	
+	<artifactId>isis-valuetypes-prism-vaadin</artifactId>
+	<name>Apache Isis Val - Prism (Vaadin)</name>
+
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.asciidoc.ui.wkt</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/valuetypes/asciidoc/ui/wkt</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.prism.vaadin</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/valuetypes/prism/vaadin</git-plugin.propertiesDir>
 	</properties>
-
-	<build>
-		<plugins>
-			<plugin>
-				<!-- can be removed, once isis-viewer-wicket-ui does no longer need this switch -->
-				<!-- overrides defaults as configured in our core pom, 
-        			to make javadoc failures non fatal and let the build continue;
-        			this we can set on a per module basis, to apply only to those, 
-        			we don't know how to fix otherwise -->
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<failOnError>false</failOnError>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-
-	<dependencies>
 	
+	<dependencies>
 		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-viewer-wicket-ui</artifactId>
-            <scope>provided</scope>
+			<groupId>org.apache.isis.valuetypes</groupId>
+            <artifactId>isis-valuetypes-prism-resources</artifactId>
+            <version>${project.version}</version>
         </dependency>
         
         <dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-            <artifactId>isis-valuetypes-prism-wicket</artifactId>
+			<groupId>org.apache.isis.incubator.viewer</groupId>			
+    		<artifactId>isis-viewer-vaadin-ui</artifactId>        
             <version>${project.version}</version>
+            <optional>true</optional>
         </dependency>
-
+        
 	</dependencies>
 
 </project>

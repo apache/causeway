@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.valuetypes.markdown.applib.IsisModuleValMarkdownApplib;
-import org.apache.isis.valuetypes.markdown.ui.wkt.components.MarkdownPanelFactoriesForWicket;
+import org.apache.isis.valuetypes.markdown.ui.wkt.components.MarkdownPanelFactoriesWkt;
 
 /**
  * @since 2.0 {@index}
@@ -30,8 +30,9 @@ import org.apache.isis.valuetypes.markdown.ui.wkt.components.MarkdownPanelFactor
 @Configuration
 @Import({
     IsisModuleValMarkdownApplib.class,
-    MarkdownPanelFactoriesForWicket.Parented.class,
-    MarkdownPanelFactoriesForWicket.Standalone.class,
+    MarkdownPanelFactoriesWkt.Parented.class,
+    MarkdownPanelFactoriesWkt.Standalone.class,
 })
 public class IsisModuleValMarkdownUiWkt {
+
 }

@@ -23,26 +23,27 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
-import org.apache.isis.applib.adapters.DefaultsProvider;
-import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 @Component
-@Named("isis.val.AsciiDocValueSemanticsProvider")
-public class AsciiDocValueSemanticsProvider
+@Named("isis.val.AsciiDocValueSemantics")
+public class AsciiDocValueSemantics
 extends AbstractValueSemanticsProvider<AsciiDoc>
 implements
-    //EncoderDecoder<AsciiDoc>,
     Renderer<AsciiDoc>,
     Parser<AsciiDoc> {
 
+    // -- RENDERER
+
     @Override
     public String presentationValue(final ValueSemanticsProvider.Context context, final AsciiDoc adoc) {
-        return adoc != null? adoc.asHtml(): "[null]";
+        return render(adoc, AsciiDoc::asHtml);
     }
+
+    // -- PARSER
 
     @Override
     public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final AsciiDoc adoc) {
@@ -57,26 +58,6 @@ implements
     @Override
     public int typicalLength() {
         return 0;
-    }
-
-    @Override
-    public String toString() {
-        return this.getClass().getSimpleName();
-    }
-
-    @Override
-    public Parser<AsciiDoc> getParser() {
-        return this;
-    }
-
-    @Override
-    public EncoderDecoder<AsciiDoc> getEncoderDecoder() {
-        return null;
-    }
-
-    @Override
-    public DefaultsProvider<AsciiDoc> getDefaultsProvider() {
-        return null;
     }
 
     public static void loadJRuby() {

@@ -16,33 +16,20 @@
 
 	<parent>
 		<groupId>org.apache.isis.valuetypes</groupId>
-		<artifactId>isis-valuetypes-asciidoc-ui</artifactId>
+		<artifactId>isis-valuetypes</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-valuetypes-asciidoc-ui-vaa</artifactId>
-	<name>Apache Isis Val - Asciidoctor (ui vaadin)</name>
+	<artifactId>isis-valuetypes-prism</artifactId>
+	<name>Apache Isis Val - Prism (Parent)</name>
+	<description>Client Side Syntax Highlighting</description>
 
-	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.asciidoc.ui.vaa</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/valuetypes/asciidoc/ui/vaa</git-plugin.propertiesDir>
-	</properties>
-
-	<dependencies>
+	<packaging>pom</packaging>
 	
-        <dependency>
-			<groupId>org.apache.isis.incubator.viewer</groupId>
-            <artifactId>isis-viewer-vaadin-ui</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        
-        <dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-            <artifactId>isis-valuetypes-prism-vaadin</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-	</dependencies>
+	<modules>
+		<module>res</module>
+		<module>wkt</module>
+<!-- 		<module>vaa</module> incubator -->
+	</modules>
 
 </project>

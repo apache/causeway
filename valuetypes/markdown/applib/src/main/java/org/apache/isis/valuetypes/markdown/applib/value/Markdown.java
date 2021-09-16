@@ -19,6 +19,7 @@
 package org.apache.isis.valuetypes.markdown.applib.value;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -26,25 +27,34 @@ import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.value.HasHtml;
 import org.apache.isis.valuetypes.markdown.applib.jaxb.MarkdownJaxbAdapter;
 
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * Immutable value type holding pre-rendered HTML.
  *
+ * @since 2.0 {@index}
  */
 @org.apache.isis.applib.annotation.Value(
         logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.Markdown")
+@EqualsAndHashCode
 @XmlJavaTypeAdapter(MarkdownJaxbAdapter.class)  // for JAXB view model support
 public class Markdown implements HasHtml, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static Markdown valueOfMarkdown(final String markdown) {
+    public static Markdown valueOf(final String markdown) {
         return new Markdown(markdown);
     }
 
-    @Getter
-    private final String markdown;
+    @Getter private final String markdown;
+
+    @EqualsAndHashCode.Exclude
+    @Getter(lazy = true, value = AccessLevel.PRIVATE)
+    @Accessors(fluent = true)
+    private final String html = Converter.mdToHtml(getMarkdown());
 
     public Markdown() {
         this(null);
@@ -56,32 +66,16 @@ public class Markdown implements HasHtml, Serializable {
 
     @Override
     public String asHtml() {
-        return Converter.mdToHtml(markdown);
+        return html();
     }
 
     public boolean isEqualTo(final Markdown other) {
-        return other != null && this.markdown.equals(other.markdown);
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        return isEqualTo((Markdown) obj);
-    }
-
-    @Override
-    public int hashCode() {
-        return markdown.hashCode();
+        return Objects.equals(this, other);
     }
 
     @Override
     public String toString() {
-        return "Markdown[length="+ markdown.length()+", html="+ markdown +"]";
+        return "Markdown[length=" + markdown.length() + "]";
     }
 
 }

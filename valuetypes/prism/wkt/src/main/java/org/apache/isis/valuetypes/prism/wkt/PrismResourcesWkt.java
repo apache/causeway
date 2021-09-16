@@ -16,28 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.asciidoc.ui.wkt.components.prism;
+package org.apache.isis.valuetypes.prism.wkt;
 
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
-import org.apache.isis.valuetypes.asciidoc.applib.ui.Prism;
+import org.apache.isis.valuetypes.prism.Prism;
 
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public final class PrismResources {
+public final class PrismResourcesWkt{
+
+    //TODO convert to ContextRelativeResourceReference(s)
 
     @Getter(lazy = true) private static final ResourceReference cssResourceReferenceWkt =
             //new WebjarsCssResourceReference("prism/1.16.0/themes/prism.css");
-            new CssResourceReference(PrismResources.class,
+            new CssResourceReference(PrismResourcesWkt.class,
                     Prism.WICKET.cssFile());
 
     @Getter(lazy = true) private static final ResourceReference jsResourceReferenceWkt =
             //new WebjarsJavaScriptResourceReference("prism/1.16.0/components/prism-java.min.js");
-            new JavaScriptResourceReference(PrismResources.class,
+            new JavaScriptResourceReference(PrismResourcesWkt.class,
                     Prism.WICKET.jsFile());
 
 }

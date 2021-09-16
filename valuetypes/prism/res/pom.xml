@@ -16,33 +16,16 @@
 
 	<parent>
 		<groupId>org.apache.isis.valuetypes</groupId>
-		<artifactId>isis-valuetypes-asciidoc-ui</artifactId>
+		<artifactId>isis-valuetypes-prism</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-valuetypes-asciidoc-ui-vaa</artifactId>
-	<name>Apache Isis Val - Asciidoctor (ui vaadin)</name>
+	<artifactId>isis-valuetypes-prism-resources</artifactId>
+	<name>Apache Isis Val - Prism (resources)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.asciidoc.ui.vaa</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/valuetypes/asciidoc/ui/vaa</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.prism.resources</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/valuetypes/prism/resources</git-plugin.propertiesDir>
 	</properties>
-
-	<dependencies>
-	
-        <dependency>
-			<groupId>org.apache.isis.incubator.viewer</groupId>
-            <artifactId>isis-viewer-vaadin-ui</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        
-        <dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-            <artifactId>isis-valuetypes-prism-vaadin</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-	</dependencies>
 
 </project>

@@ -24,44 +24,39 @@ import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 
-import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.valuetypes.prism.wkt.PrismResourcesWkt;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent_reloadJs;
 
 import lombok.val;
 
-public class MarkdownComponent extends MarkupComponent {
+public class MarkdownComponentWkt extends MarkupComponent {
 
     private static final long serialVersionUID = 1L;
 
-    public MarkdownComponent(String id, IModel<?> model) {
+    public MarkdownComponentWkt(final String id, final IModel<?> model) {
         super(id, model);
     }
 
     @Override
-    public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+    public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag) {
         val htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
         replaceComponentTagBody(markupStream, openTag,
-                MarkupComponent_reloadJs.decorate(htmlContent, jsRef.get()));
+                MarkupComponent_reloadJs.decorate(htmlContent, jsRef()));
     }
 
     @Override
-    public void renderHead(IHeaderResponse response) {
+    public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
 
-        response.render(CssHeaderItem.forReference(
-                new CssResourceReference(MarkdownComponent.class, "css/prism.css")));
-
-        response.render(JavaScriptHeaderItem.forReference(jsRef.get()));
-
+        response.render(CssHeaderItem.forReference(PrismResourcesWkt.getCssResourceReferenceWkt()));
+        response.render(JavaScriptHeaderItem.forReference(jsRef()));
     }
 
-    // -- HELPER
-
-    private static final _Lazy<JavaScriptResourceReference> jsRef = _Lazy.threadSafe(()->
-    new JavaScriptResourceReference(MarkdownComponent.class, "js/prism1.14.js"));
+    private static final ResourceReference jsRef() {
+        return PrismResourcesWkt.getJsResourceReferenceWkt();
+    }
 
 }

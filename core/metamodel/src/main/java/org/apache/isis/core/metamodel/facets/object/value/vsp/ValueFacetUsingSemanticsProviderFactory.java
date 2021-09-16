@@ -104,11 +104,6 @@ extends FacetFactoryAbstract {
                 holder.addFacet(new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder));
             }
 
-            // if the SemanticsProvider is a facet then add it as a contributing facet
-            if(semanticsProvider instanceof Facet) {
-                holder.addFacet(((Facet) semanticsProvider));
-            }
-
         }
 
     }

@@ -16,18 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.asciidoc.ui.vaa.components;
+package org.apache.isis.valuetypes.prism.vaa;
 
 import java.io.InputStream;
 
 import org.apache.isis.incubator.viewer.vaadin.ui.util.LocalResourceUtil;
-import org.apache.isis.valuetypes.asciidoc.applib.ui.Prism;
+import org.apache.isis.valuetypes.prism.Prism;
 
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public final class PrismResources {
+public final class PrismResourcesVaa {
 
     @Getter(lazy = true) private static final LocalResourceUtil.ResourceDescriptor cssResourceReference =
             //LocalResourceUtil.ResourceDescriptor.webjars("prism/1.16.0/themes/prism.css");
@@ -39,7 +39,7 @@ public final class PrismResources {
             LocalResourceUtil.ResourceDescriptor.staticRoot("prism/" + Prism.VAADIN.jsFile());
 
     public static InputStream readJsResource() {
-        return PrismResources.class.getResourceAsStream("/static/prism/" + Prism.VAADIN.jsFile());
+        return PrismResourcesVaa.class.getResourceAsStream("/static/prism/" + Prism.VAADIN.jsFile());
     }
 
 

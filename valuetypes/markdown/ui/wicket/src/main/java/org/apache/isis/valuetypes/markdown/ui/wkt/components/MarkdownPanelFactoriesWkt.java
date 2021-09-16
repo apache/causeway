@@ -18,7 +18,8 @@
  */
 package org.apache.isis.valuetypes.markdown.ui.wkt.components;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
@@ -31,11 +32,11 @@ import lombok.val;
  * the {@link Markdown} value-type which requires client-side java-script to be
  * executed to enable syntax highlighting
  */
-public class MarkdownPanelFactoriesForWicket {
+public class MarkdownPanelFactoriesWkt {
 
     // -- PARENTED
 
-    @Programmatic
+    @Component
     public static class Parented extends MarkupPanelFactories.ParentedAbstract {
         private static final long serialVersionUID = 1L;
 
@@ -46,7 +47,7 @@ public class MarkdownPanelFactoriesForWicket {
         @Override
         protected MarkupComponentFactory getMarkupComponentFactory() {
             return (id, model) -> {
-                val markupComponent = new org.apache.isis.valuetypes.markdown.ui.wkt.components.MarkdownComponent(id, model);
+                val markupComponent = new MarkdownComponentWkt(id, model);
                 markupComponent.setEnabled(false);
                 return markupComponent;
             };
@@ -57,7 +58,7 @@ public class MarkdownPanelFactoriesForWicket {
 
     // -- STANDALONE
 
-    @Programmatic
+    @Component
     public static class Standalone extends MarkupPanelFactories.StandaloneAbstract {
         private static final long serialVersionUID = 1L;
 
@@ -67,10 +68,7 @@ public class MarkdownPanelFactoriesForWicket {
 
         @Override
         protected MarkupComponentFactory getMarkupComponentFactory() {
-            return (id, model) -> {
-                val markupComponent = new MarkdownComponent(id, model);
-                return markupComponent;
-            };
+            return MarkdownComponentWkt::new;
         }
 
     }

@@ -187,6 +187,7 @@
 <!-- 		<module>clients/kroviz</module> -->
 		<module>viewers/vaadin</module>
 		<module>viewers/javafx</module>
+		<module>../valuetypes/prism/vaadin</module>
 		<module>../valuetypes/asciidoc/ui/vaadin</module>
 	</modules>
 

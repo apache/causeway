@@ -39,7 +39,7 @@ public class IsisMarkdownConverter implements AttributeConverter<Markdown, Strin
     @Override
     public Markdown convertToEntityAttribute(final String datastoreValue) {
         return datastoreValue != null
-                ? Markdown.valueOfMarkdown(datastoreValue)
+                ? Markdown.valueOf(datastoreValue)
                 : null;
     }
 

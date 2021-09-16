@@ -33,41 +33,41 @@ import org.apache.isis.core.metamodel.valuetypes.ValueTypeDefinition;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProvider;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
-import org.apache.isis.valuetypes.markdown.metamodel.facets.MarkdownValueSemanticsProvider;
+import org.apache.isis.valuetypes.markdown.metamodel.semantics.MarkdownValueSemantics;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
 @Import({
-        MarkdownMetaModelRefiner.class,
-        MarkdownValueTypeProvider.class,
+        IsisModuleValMarkdownMetaModel.MarkdownMetaModelRefiner.class,
+        IsisModuleValMarkdownMetaModel.MarkdownValueTypeProvider.class,
 
-        MarkdownValueSemanticsProvider.class,
+        MarkdownValueSemantics.class,
 
 })
 public class IsisModuleValMarkdownMetaModel {
 
-}
-
-@Component
-@Named("isis.val.MarkdownMetaModelRefiner")
-class MarkdownMetaModelRefiner implements MetaModelRefiner {
-    @Override
-    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
-//blueprint
-//        programmingModel.addFactory(
-//                ProgrammingModel.FacetProcessingOrder.G1_VALUE_TYPES,
-//                MarkdownValueFacetUsingSemanticsProviderFactory.class);
+    @Component
+    @Named("isis.val.MarkdownMetaModelRefiner")
+    class MarkdownMetaModelRefiner implements MetaModelRefiner {
+        @Override
+        public void refineProgrammingModel(final ProgrammingModel programmingModel) {
+    //blueprint
+    //        programmingModel.addFactory(
+    //                ProgrammingModel.FacetProcessingOrder.G1_VALUE_TYPES,
+    //                MarkdownValueFacetUsingSemanticsProviderFactory.class);
+        }
     }
-}
 
-@Component
-@Named("isis.val.MarkdownValueTypeProvider")
-class MarkdownValueTypeProvider implements ValueTypeProvider {
-    @Override
-    public Collection<ValueTypeDefinition> definitions() {
-        return Collections.singletonList(
-                ValueTypeDefinition.of(Markdown.class, ValueType.STRING));
+    @Component
+    @Named("isis.val.MarkdownValueTypeProvider")
+    class MarkdownValueTypeProvider implements ValueTypeProvider {
+        @Override
+        public Collection<ValueTypeDefinition> definitions() {
+            return Collections.singletonList(
+                    ValueTypeDefinition.of(Markdown.class, ValueType.STRING));
+        }
     }
+
 }

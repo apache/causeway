@@ -43,13 +43,13 @@ public class MarkdownReaderService {
     public Markdown readFor(Class<?> aClass) {
         val markdownResourceName = String.format("%s.md", aClass.getSimpleName());
         val markdown = resourceReaderService.readResource(aClass, markdownResourceName);
-        return Markdown.valueOfMarkdown(markdown);
+        return Markdown.valueOf(markdown);
     }
 
     public Markdown readFor(Class<?> aClass, final String member) {
         val markdownResourceName = String.format("%s-%s.md", aClass.getSimpleName(), member);
         val markdown = resourceReaderService.readResource(aClass, markdownResourceName);
-        return Markdown.valueOfMarkdown(markdown);
+        return Markdown.valueOf(markdown);
     }
 
 

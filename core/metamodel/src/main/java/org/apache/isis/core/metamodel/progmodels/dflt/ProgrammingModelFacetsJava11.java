@@ -307,10 +307,6 @@ extends ProgrammingModelAbstract {
         // must come after CollectionFacetFactory
         addFactory(FacetProcessingOrder.Z1_FINALLY, new ParentedFacetSinceCollectionFactory(mmc));
 
-        // so we can dogfood the applib "value" types
-        addFactory(FacetProcessingOrder.Z1_FINALLY, new ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory(mmc));
-
-
         // should come near the end, after any facets that install PropertySetterFacet have run.
         addFactory(FacetProcessingOrder.Z1_FINALLY, new DisabledFacetOnPropertyInferredFactory(mmc));
 

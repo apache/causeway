@@ -33,40 +33,40 @@ import org.apache.isis.core.metamodel.valuetypes.ValueTypeDefinition;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProvider;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
-import org.apache.isis.valuetypes.asciidoc.metamodel.semantics.AsciiDocValueSemanticsProvider;
+import org.apache.isis.valuetypes.asciidoc.metamodel.semantics.AsciiDocValueSemantics;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
 @Import({
-        AsciiDocMetaModelRefiner.class,
-        AsciiDocValueTypeProvider.class,
+        IsisModuleValAsciidocMetaModel.AsciiDocMetaModelRefiner.class,
+        IsisModuleValAsciidocMetaModel.AsciiDocValueTypeProvider.class,
 
-        AsciiDocValueSemanticsProvider.class,
+        AsciiDocValueSemantics.class,
 })
 public class IsisModuleValAsciidocMetaModel {
 
-}
-
-@Component
-@Named("isis.val.AsciiDocMetaModelRefiner")
-class AsciiDocMetaModelRefiner implements MetaModelRefiner {
-    @Override
-    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
-// blueprint
-//        programmingModel.addFactory(
-//                ProgrammingModel.FacetProcessingOrder.G1_VALUE_TYPES,
-//                AsciiDocValueFacetUsingSemanticsProviderFactory.class);
+    @Component
+    @Named("isis.val.AsciiDocMetaModelRefiner")
+    class AsciiDocMetaModelRefiner implements MetaModelRefiner {
+        @Override
+        public void refineProgrammingModel(final ProgrammingModel programmingModel) {
+    // blueprint
+    //        programmingModel.addFactory(
+    //                ProgrammingModel.FacetProcessingOrder.G1_VALUE_TYPES,
+    //                AsciiDocValueFacetUsingSemanticsProviderFactory.class);
+        }
     }
-}
 
-@Component
-@Named("isis.val.AsciiDocValueTypeProvider")
-class AsciiDocValueTypeProvider implements ValueTypeProvider {
-    @Override
-    public Collection<ValueTypeDefinition> definitions() {
-        return Collections.singletonList(
-                ValueTypeDefinition.of(AsciiDoc.class, ValueType.STRING));
+    @Component
+    @Named("isis.val.AsciiDocValueTypeProvider")
+    class AsciiDocValueTypeProvider implements ValueTypeProvider {
+        @Override
+        public Collection<ValueTypeDefinition> definitions() {
+            return Collections.singletonList(
+                    ValueTypeDefinition.of(AsciiDoc.class, ValueType.STRING));
+        }
     }
+
 }

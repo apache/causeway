@@ -20,6 +20,10 @@ package org.apache.isis.valuetypes.asciidoc.ui.wkt.components;
 
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
+
+import lombok.val;
+
 public class AsciiDocForXmlComponentWkt extends AsciiDocComponentWkt {
 
     private static final long serialVersionUID = 1L;
@@ -29,13 +33,13 @@ public class AsciiDocForXmlComponentWkt extends AsciiDocComponentWkt {
         setEnabled(false);
     }
 
-//    /**
-//     * for convenience of subtypes.
-//     * @param xml
-//     */
-//    protected final String asHtml(String xml) {
-//        val adoc = "[source,xml]\n----\n" + xml + "\n----";
-//        return AsciiDoc.valueOf(adoc).asHtml();
-//    }
+    /**
+     * for convenience of subtypes.
+     * @param xml
+     */
+    protected final String asHtml(final String xml) {
+        val adoc = "[source,xml]\n----\n" + xml + "\n----";
+        return AsciiDoc.valueOf(adoc).asHtml();
+    }
 
 }

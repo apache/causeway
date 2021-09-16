@@ -28,6 +28,7 @@ import org.apache.isis.extensions.viewer.wicket.pdfjs.ui.IsisModuleExtPdfjsUi;
 import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
 import org.apache.isis.valuetypes.asciidoc.persistence.jpa.IsisModuleValAsciidocPersistenceJpa;
 import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
+import org.apache.isis.valuetypes.markdown.metamodel.IsisModuleValMarkdownMetaModel;
 import org.apache.isis.valuetypes.markdown.persistence.jpa.IsisModuleValMarkdownPersistenceJpa;
 import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
 import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
@@ -46,6 +47,7 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
 
     // Metamodel
     IsisModuleValAsciidocMetaModel.class,
+    IsisModuleValMarkdownMetaModel.class,
 
     // UI (Wicket Viewer)
     IsisModuleViewerWicketViewer.class,

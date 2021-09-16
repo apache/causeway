@@ -46,7 +46,7 @@ public final class MarkdownJaxbAdapter extends XmlAdapter<String, Markdown> {
             return null;
         }
         final String markdown = _Strings.ofBytes(decoder.decode(v), StandardCharsets.UTF_8);
-        return Markdown.valueOfMarkdown(markdown);
+        return Markdown.valueOf(markdown);
     }
 
     @Override

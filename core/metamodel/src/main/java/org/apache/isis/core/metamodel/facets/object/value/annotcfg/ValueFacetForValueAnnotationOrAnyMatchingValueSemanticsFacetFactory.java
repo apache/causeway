@@ -93,6 +93,7 @@ extends ValueFacetUsingSemanticsProviderFactory {
         //FIXME install them all, then enable qualifiers
         if(!valueSemantics.isEmpty()) {
             super.addAllFacetsForValueSemantics(valueSemantics, facetHolder);
+            log.debug("found ValueSemanticsProvider for value type {}", cls);
         }
 
 //        if(valueIfAny.isPresent()
@@ -106,8 +107,8 @@ extends ValueFacetUsingSemanticsProviderFactory {
 
             if(valueSemantics.isCardinalityMultiple()) {
                 log.warn("found multiple ValueSemanticsProvider for value type {}; using the first", cls);
-            } else {
-                log.warn("could not find a ValueSemanticsProvider for value type {}; using a no-op fallback", cls);
+            } else if(valueSemantics.isEmpty()) {
+                log.warn("could not find a ValueSemanticsProvider for value type {}; using a no-op fallback",cls);
                 super.addAllFacetsForValueSemantics(getFallbackValueSemantics(), facetHolder);
             }
 

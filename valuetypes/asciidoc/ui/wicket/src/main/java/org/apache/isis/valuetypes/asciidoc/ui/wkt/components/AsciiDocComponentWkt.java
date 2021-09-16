@@ -26,7 +26,7 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.ResourceReference;
 
-import org.apache.isis.valuetypes.asciidoc.ui.wkt.components.prism.PrismResources;
+import org.apache.isis.valuetypes.prism.wkt.PrismResourcesWkt;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent_reloadJs;
 
@@ -36,27 +36,27 @@ public class AsciiDocComponentWkt extends MarkupComponent {
 
     private static final long serialVersionUID = 1L;
 
-    public AsciiDocComponentWkt(String id, IModel<?> model) {
+    public AsciiDocComponentWkt(final String id, final IModel<?> model) {
         super(id, model);
     }
 
     @Override
-    public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+    public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag) {
         val htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
         replaceComponentTagBody(markupStream, openTag,
                 MarkupComponent_reloadJs.decorate(htmlContent, jsRef()));
     }
 
     @Override
-    public void renderHead(IHeaderResponse response) {
+    public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
 
-        response.render(CssHeaderItem.forReference(PrismResources.getCssResourceReferenceWkt()));
+        response.render(CssHeaderItem.forReference(PrismResourcesWkt.getCssResourceReferenceWkt()));
         response.render(JavaScriptHeaderItem.forReference(jsRef()));
     }
 
     private static final ResourceReference jsRef() {
-        return PrismResources.getJsResourceReferenceWkt();
+        return PrismResourcesWkt.getJsResourceReferenceWkt();
     }
 
 }
