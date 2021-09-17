@@ -89,9 +89,15 @@ class _BindingUtil {
         return bindableValue.mapToBindable(
                 value->{
                     final var pojo = ManagedObjects.UnwrapUtil.single(value);
-                    return parser.parseableTextRepresentation(context, pojo);
+                    final var text = parser.parseableTextRepresentation(context, pojo);
+                    System.err.printf("toText: %s -> '%s'%n", ""+value, text);
+                    return text;
                 },
-                text->ManagedObject.of(spec, parser.parseTextRepresentation(context, text)));
+                text->{
+                    final var value = ManagedObject.of(spec, parser.parseTextRepresentation(context, text));
+                    System.err.printf("fromText: '%s' -> %s%n", text, ""+value);
+                    return value;
+                });
     }
 
 }

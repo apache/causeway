@@ -46,8 +46,8 @@ implements ParameterUiModel {
 
     private final ActionParameterMemento paramMemento;
 
-    @Getter(onMethod = @__(@Override))
-    @Setter(onMethod = @__(@Override))
+    @Getter(onMethod_ = {@Override})
+    @Setter(onMethod_ = {@Override})
     private transient ParameterNegotiationModel pendingParameterModel;
 
     /**
@@ -154,7 +154,7 @@ implements ParameterUiModel {
     }
 
     @Override
-    public ManagedValue managedValue() {
+    public ManagedValue proposedValue() {
         return getPendingParameterModel().getParamModels().getElseFail(paramMemento.getNumber());
     }
 

@@ -20,6 +20,7 @@ package org.apache.isis.viewer.common.model.feature;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
@@ -28,6 +29,10 @@ public interface PropertyUiModel extends ScalarUiModel {
     /** prop meta model */
     @Override
     OneToOneAssociation getMetaModel();
+
+    // -- PENDING PROPERTY VALUE MODEL
+
+    PropertyNegotiationModel getPendingPropertyModel();
 
     // -- SHORTCUTS
 

@@ -179,24 +179,24 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
                 .anyMatch(x -> x.isAssignableFrom(scalarType));
     }
 
+    /** get the proposed value, subject to negotiation */
     public String getObjectAsString() {
-        final ManagedObject adapter = getObject();
-        if (adapter == null) {
-            return null;
-        }
-        final var spec = adapter.getSpecification();
-        if(spec.isValue()) {
-            managedValue().getValueAsParsableText().getValue();
-        }
-        return adapter.titleString();
+        final var proposedValue = proposedValue();
+        setObject(proposedValue.getValue().getValue()); // keep the wicket model in sync
+        return proposedValue.getValueAsParsableText().getValue();
     }
 
+    /**
+     * set the proposed value, subject to negotiation, only updates the negotiation model
+     * actual application of the proposed value is only applied after passing verification (not done here)
+     */
     public void setObjectAsString(final String enteredText) {
-        managedValue().getValueAsParsableText().setValue(enteredText);
-        setObject(managedValue().getValue().getValue());
+        final var proposedValue = proposedValue();
+        proposedValue.getValueAsParsableText().setValue(enteredText);
+        setObject(proposedValue.getValue().getValue()); // keep the wicket model in sync
     }
 
-    public abstract ManagedValue managedValue();
+    public abstract ManagedValue proposedValue();
 
     public abstract boolean whetherHidden();
 

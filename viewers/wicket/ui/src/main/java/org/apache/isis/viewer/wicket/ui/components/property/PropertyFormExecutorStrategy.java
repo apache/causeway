@@ -26,7 +26,8 @@ import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
 
-public class PropertyFormExecutorStrategy implements FormExecutorStrategy<ScalarPropertyModel> {
+public class PropertyFormExecutorStrategy
+implements FormExecutorStrategy<ScalarPropertyModel> {
 
     private final ScalarPropertyModel model;
 

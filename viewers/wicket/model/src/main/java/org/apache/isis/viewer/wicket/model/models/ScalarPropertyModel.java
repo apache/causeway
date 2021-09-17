@@ -42,6 +42,8 @@ implements PropertyUiModel {
 
     private final PropertyMemento propertyMemento;
 
+    private transient PropertyNegotiationModel pendingPropertyModel;
+
     /**
      * Creates a model representing a property of a parent object, with the
      * {@link #getObject() value of this model} to be current value of the
@@ -85,6 +87,14 @@ implements PropertyUiModel {
             //XXX ISIS-2830 recreate if owner had changed
             ? managedProperty = createManagedProperty(owner)
             : managedProperty;
+    }
+
+    @Override
+    public PropertyNegotiationModel getPendingPropertyModel() {
+        if(pendingPropertyModel==null) {
+            pendingPropertyModel = getManagedProperty().startNegotiation();
+        }
+        return pendingPropertyModel;
     }
 
     private ManagedProperty createManagedProperty(final @NonNull ManagedObject owner) {
@@ -131,14 +141,14 @@ implements PropertyUiModel {
     }
 
     public void reset() {
+        pendingPropertyModel = null; // invalidate
         val propertyValue = getManagedProperty().getPropertyValue();
-        val presentationValue = ManagedObjects.isNullOrUnspecifiedOrEmpty(propertyValue)
+        val presentedValue = ManagedObjects.isNullOrUnspecifiedOrEmpty(propertyValue)
                 ? null
                 : propertyValue;
 
-        this.setObject(presentationValue);
+        this.setObject(presentedValue);
     }
-
 
     @Override
     public ManagedObject load() {
@@ -156,8 +166,7 @@ implements PropertyUiModel {
     }
 
     public String getReasonInvalidIfAny() {
-        val associate = getObject();
-        return validate(associate);
+        return getPendingPropertyModel().getValidationMessage().getValue();
     }
 
     /**
@@ -165,7 +174,6 @@ implements PropertyUiModel {
      *
      * @return adapter, which may be different from the original
      */
-    @Deprecated // use managedValue() instead
     public ManagedObject applyValue() {
         val proposedNewValue = getObject();
         getManagedProperty().modifyProperty(proposedNewValue);
@@ -173,8 +181,8 @@ implements PropertyUiModel {
     }
 
     @Override
-    public ManagedValue managedValue() {
-        return getManagedProperty().startNegotiation();
+    public ManagedValue proposedValue() {
+        return getPendingPropertyModel();
     }
 
     @Override
