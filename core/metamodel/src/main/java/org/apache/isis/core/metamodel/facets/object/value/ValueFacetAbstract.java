@@ -18,49 +18,109 @@
  */
 package org.apache.isis.core.metamodel.facets.object.value;
 
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider.Context;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-public abstract class ValueFacetAbstract
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+public abstract class ValueFacetAbstract<T>
 extends FacetAbstract
-implements ValueFacet {
+implements ValueFacet<T> {
 
     private static final Class<? extends Facet> type() {
         return ValueFacet.class;
     }
 
-    private final Can<ValueSemanticsProvider<?>> semanticsProviders;
+    @Getter(onMethod_ = {@Override})
+    private final Can<ValueSemanticsProvider<T>> valueSemantics;
 
     protected ValueFacetAbstract(
-            final Can<ValueSemanticsProvider<?>> semanticsProviders,
+            final Can<ValueSemanticsProvider<T>> valueSemantics,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
 
         super(type(), holder, precedence);
-
-        this.semanticsProviders = semanticsProviders;
-
-        // we now figure add all the facets supported. Note that we do not use
-        // FacetUtil.addFacet,
-        // because we need to add them explicitly to our delegate facetholder
-        // but have the
-        // facets themselves reference this value's holder.
-
-        super.getFacetHolder().addFacet(this); // add just ValueFacet.class
-
+        this.valueSemantics = valueSemantics;
     }
 
     protected boolean hasSemanticsProvider() {
-        return !this.semanticsProviders.isEmpty();
+        return !this.valueSemantics.isEmpty();
     }
 
     @Override
     public final LogicalType getValueType() {
         return getFacetHolder().getFeatureIdentifier().getLogicalType();
+    }
+
+    @Override
+    public Optional<Parser<T>> selectParserForParameter(final ObjectActionParameter param) {
+        return streamParsers(s->true) // TODO filter by qualifier if any
+                .findFirst();
+    }
+
+    @Override
+    public Optional<Parser<T>> selectParserForProperty(final OneToOneAssociation prop) {
+        return streamParsers(s->true) // TODO filter by qualifier if any
+                .findFirst();
+    }
+
+    @Override
+    public Parser<T> fallbackParser(final Identifier featureIdentifier) {
+        return new ReadonlyMissingParserMessageParser<T>(String
+                .format("Could not find a parser for type %s "
+                        + "in the context of %s",
+                        getValueType(),
+                        featureIdentifier));
+    }
+
+    // -- HELPER
+
+    private Stream<Parser<T>> streamParsers(
+            final Predicate<ValueSemanticsProvider<T>> semanticsFilter) {
+        return getValueSemantics()
+                .stream()
+                .filter(semanticsFilter)
+                .map(ValueSemanticsProvider::getParser)
+                .filter(_NullSafe::isPresent);
+    }
+
+    @RequiredArgsConstructor
+    private final static class ReadonlyMissingParserMessageParser<T>
+    implements Parser<T> {
+
+        private final String message;
+
+        @Override
+        public String parseableTextRepresentation(final Context context, final T value) {
+            return message;
+        }
+
+        @Override
+        public T parseTextRepresentation(final Context context, final String text) {
+            throw _Exceptions.unsupportedOperation(message);
+        }
+
+        @Override
+        public int typicalLength() {
+            return 60;
+        }
+
     }
 
 }

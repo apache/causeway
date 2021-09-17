@@ -26,6 +26,7 @@ import org.apache.isis.commons.internal.binding._Bindables;
 import org.apache.isis.commons.internal.binding._Observables;
 import org.apache.isis.commons.internal.binding._Observables.LazyObservable;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -35,16 +36,16 @@ import lombok.val;
 
 public class PropertyNegotiationModel implements ManagedValue {
 
-    @NonNull private final _BindableAbstract<ManagedObject> proposedValue;
-    @NonNull private final LazyObservable<String> validation;
-    @NonNull private final _BindableAbstract<String> searchArgument;
-    @NonNull private final LazyObservable<Can<ManagedObject>> choices;
+    private final @NonNull _BindableAbstract<ManagedObject> proposedValue;
+    private final @NonNull LazyObservable<String> validation;
+    private final @NonNull _BindableAbstract<String> searchArgument;
+    private final @NonNull LazyObservable<Can<ManagedObject>> choices;
+    private final @NonNull ManagedProperty managedProperty;
+    private final @NonNull Bindable<String> proposedValueAsText;
 
-    @NonNull private final ManagedProperty managedProperty;
-
-    PropertyNegotiationModel(ManagedProperty managedProperty) {
+    PropertyNegotiationModel(final ManagedProperty managedProperty) {
         this.managedProperty = managedProperty;
-        val propMeta = managedProperty.getMetaModel();
+        final var propMeta = managedProperty.getMetaModel();
 
         validationFeedbackActive = _Bindables.forValue(false);
 
@@ -57,6 +58,21 @@ public class PropertyNegotiationModel implements ManagedValue {
         proposedValue.addListener((e,o,n)->{
             invalidateChoicesAndValidation();
         });
+
+        // value types should have associated parsers/formatters via value semantics
+        proposedValueAsText = propMeta.getOnType().lookupFacet(ValueFacet.class)
+        .map(valueFacet->valueFacet.selectParserForPropertyElseFallback(propMeta))
+        .map(parser->proposedValue
+                    .mapToBindable(
+                            value->parser.parseableTextRepresentation(null, value.getPojo()),
+                            text->ManagedObject.of(null, parser.parseTextRepresentation(null, text)))
+        )
+        .orElseGet(()->
+            // fallback Bindable that is floating free (unbound)
+            // writing to it has no effect on the domain
+            _Bindables.forValue(String.format("Could not find a ValueFacet for type %s",
+                    propMeta.getOnType().getLogicalType()))
+        );
 
         // has either autoComplete, choices, or none
         choices = propMeta.hasAutoComplete()
@@ -95,6 +111,11 @@ public class PropertyNegotiationModel implements ManagedValue {
     @Override
     public Bindable<ManagedObject> getValue() {
         return proposedValue;
+    }
+
+    @Override
+    public Bindable<String> getValueAsParsableText() {
+        return proposedValueAsText;
     }
 
     @Override
@@ -137,7 +158,6 @@ public class PropertyNegotiationModel implements ManagedValue {
     public void submit() {
         managedProperty.modifyProperty(getValue().getValue());
     }
-
 
 
 }

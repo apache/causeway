@@ -11,7 +11,8 @@ import org.apache.isis.valuetypes.asciidoc.metamodel.semantics.AsciiDocValueSema
 @Named("demo.AsciiDocValueSemantics")
 @Qualifier("adoc-pre-processor")
 public class AsciiDocValueSemanticsWithPreprocessing
-extends AsciiDocValueSemantics {
+//extends AsciiDocValueSemantics
+{
 
     //FIXME add pre-processing stuff
 

@@ -18,14 +18,19 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed;
 
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.binding.Bindable;
 import org.apache.isis.commons.binding.Observable;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.binding._BindableAbstract;
 import org.apache.isis.commons.internal.binding._Bindables;
 import org.apache.isis.commons.internal.binding._Observables;
@@ -34,6 +39,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -221,13 +227,17 @@ public class ParameterNegotiationModel {
         @Getter @NonNull private final _BindableAbstract<String> bindableParamSearchArgument;
         @Getter @NonNull private final LazyObservable<Can<ManagedObject>> observableParamChoices;
 
+        private final @NonNull Bindable<String> bindableParamAsText;
+
         private ParameterModel(
                 final int paramNr,
                 final @NonNull ParameterNegotiationModel negotiationModel,
                 final @NonNull ManagedObject initialValue) {
 
+            final var action = negotiationModel.getHead().getMetaModel();
+
             this.paramNr = paramNr;
-            this.metaModel = negotiationModel.getHead().getMetaModel().getParameters().getElseFail(paramNr);
+            this.metaModel = action.getParameters().getElseFail(paramNr);
             this.negotiationModel = negotiationModel;
 
             bindableParamValue = _Bindables.forValue(initialValue);
@@ -235,6 +245,20 @@ public class ParameterNegotiationModel {
                 getNegotiationModel().onNewParamValue();
             });
 
+            // value types should have associated parsers/formatters via value semantics
+            bindableParamAsText = action.getReturnType().lookupFacet(ValueFacet.class)
+            .map(valueFacet->valueFacet.selectParserForParameterElseFallback(metaModel))
+            .map(parser->bindableParamValue
+                        .mapToBindable(
+                                value->parser.parseableTextRepresentation(null, value.getPojo()),
+                                text->ManagedObject.of(null, parser.parseTextRepresentation(null, text)))
+            )
+            .orElseGet(()->
+                // fallback Bindable that is floating free (unbound)
+                // writing to it has no effect on the domain
+                _Bindables.forValue(String.format("Could not find a ValueFacet for type %s",
+                        action.getReturnType().getLogicalType()))
+            );
 
             // has either autoComplete, choices, or none
             observableParamChoices = metaModel.hasAutoComplete()
@@ -295,6 +319,11 @@ public class ParameterNegotiationModel {
         @Override
         public Bindable<ManagedObject> getValue() {
             return bindableParamValue;
+        }
+
+        @Override
+        public Bindable<String> getValueAsParsableText() {
+            return bindableParamAsText;
         }
 
         @Override

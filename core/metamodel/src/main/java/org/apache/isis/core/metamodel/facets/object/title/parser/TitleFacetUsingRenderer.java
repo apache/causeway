@@ -39,13 +39,13 @@ implements TitleFacet {
 
     private final @NonNull Renderer<?> renderer;
 
-    public static TitleFacetUsingRenderer create(final Renderer<?> parser, final FacetHolder holder) {
-        return new TitleFacetUsingRenderer(parser, holder);
+    public static TitleFacetUsingRenderer create(final Renderer<?> renderer, final FacetHolder holder) {
+        return new TitleFacetUsingRenderer(renderer, holder);
     }
 
-    private TitleFacetUsingRenderer(final Renderer<?> parser, final FacetHolder holder) {
+    private TitleFacetUsingRenderer(final Renderer<?> renderer, final FacetHolder holder) {
         super(TitleFacet.class, holder, Precedence.LOW);
-        this.renderer = parser;
+        this.renderer = renderer;
     }
 
     @Override
@@ -70,7 +70,7 @@ implements TitleFacet {
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("parser", renderer.toString());
+        visitor.accept("renderer", renderer.toString());
     }
 
     private ValueSemanticsProvider.Context valueSemanticsContext() {

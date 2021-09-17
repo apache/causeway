@@ -21,6 +21,8 @@ package org.apache.isis.viewer.wicket.model.models;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
+import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -48,21 +50,21 @@ implements PropertyUiModel {
     public ScalarPropertyModel(
             final EntityModel parentEntityModel,
             final PropertyMemento propertyMemento,
-            final EntityModel.Mode mode,
+            final EntityModel.Mode editingOrViewing,
             final EntityModel.RenderingHint renderingHint) {
 
-        super(parentEntityModel, propertyMemento, mode, renderingHint);
+        super(parentEntityModel, propertyMemento, editingOrViewing, renderingHint);
         this.propertyMemento = propertyMemento;
         reset();
     }
 
     public ScalarPropertyModel copyHaving(
-            final EntityModel.Mode mode,
+            final EntityModel.Mode editingOrViewing,
             final EntityModel.RenderingHint renderingHint) {
         return new ScalarPropertyModel(
                 getParentUiModel(),
                 propertyMemento,
-                mode,
+                editingOrViewing,
                 renderingHint);
     }
 
@@ -163,10 +165,16 @@ implements PropertyUiModel {
      *
      * @return adapter, which may be different from the original
      */
+    @Deprecated // use managedValue() instead
     public ManagedObject applyValue() {
         val proposedNewValue = getObject();
         getManagedProperty().modifyProperty(proposedNewValue);
         return getManagedProperty().getOwner();
+    }
+
+    @Override
+    public ManagedValue managedValue() {
+        return getManagedProperty().startNegotiation();
     }
 
     @Override

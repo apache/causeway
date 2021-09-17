@@ -27,10 +27,12 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 public interface ManagedValue {
 
     ObjectSpecification getSpecification();
+
     Bindable<ManagedObject> getValue();
+    Bindable<String> getValueAsParsableText();
+
     Observable<String> getValidationMessage();
     Bindable<String> getSearchArgument();
     Observable<Can<ManagedObject>> getChoices();
-
 
 }

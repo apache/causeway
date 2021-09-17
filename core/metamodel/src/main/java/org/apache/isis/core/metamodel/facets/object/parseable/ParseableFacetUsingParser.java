@@ -106,7 +106,7 @@ implements ParseableFacet {
         }
 
         try {
-            final Object parsed = parser.parseTextRepresentation(parserContext(), entry);
+            final Object parsed = parser.parseTextRepresentation(valueSemanticsContext(), entry);
             if (parsed == null) {
                 return null;
             }
@@ -138,10 +138,10 @@ implements ParseableFacet {
     public String parseableTextRepresentation(final ManagedObject contextAdapter) {
         final Object pojo = UnwrapUtil.single(contextAdapter);
 
-        return parser.parseableTextRepresentation(parserContext(), _Casts.uncheckedCast(pojo));
+        return parser.parseableTextRepresentation(valueSemanticsContext(), _Casts.uncheckedCast(pojo));
     }
 
-    private ValueSemanticsProvider.Context parserContext() {
+    private ValueSemanticsProvider.Context valueSemanticsContext() {
         val iaProvider = super.getInteractionProvider();
         if(iaProvider==null) {
             return null; // JUnit context

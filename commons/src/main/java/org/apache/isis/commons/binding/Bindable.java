@@ -18,6 +18,8 @@
  */
 package org.apache.isis.commons.binding;
 
+import java.util.function.Function;
+
 /**
  * @param <T>
  */
@@ -32,5 +34,7 @@ public interface Bindable<T> extends Observable<T>, Writable<T> {
     void bindBidirectional(Bindable<T> other);
 
     void unbindBidirectional(Bindable<T> other);
+
+    <R> Bindable<R> mapToBindable(Function<T, R> forwardMapper, Function<R, T> reverseMapper);
 
 }

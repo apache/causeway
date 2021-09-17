@@ -21,15 +21,20 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -90,7 +95,9 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
      * object, with the {@link #getObject() value of this model} to be default
      * value (if any) of that action parameter.
      */
-    protected ScalarModel(final EntityModel parentEntityModel, final ActionParameterMemento apm) {
+    protected ScalarModel(
+            final EntityModel parentEntityModel,
+            final ActionParameterMemento apm) {
 
         super(parentEntityModel.getCommonContext());
 
@@ -186,26 +193,34 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         }
         val spec = adapter.getSpecification();
         if(spec.isValue()) {
-            val parseableFacet = getTypeOfSpecification().getFacet(ParseableFacet.class);
-            if (parseableFacet == null) {
-                throw new RuntimeException("unable to find a parser for " + spec.getFullIdentifier());
-            }
-            return parseableFacet.parseableTextRepresentation(adapter);
+            managedValue().getValueAsParsableText().getValue();
+
+//            val parseableFacet = getTypeOfSpecification().getFacet(ParseableFacet.class);
+//            if (parseableFacet == null) {
+//                throw new RuntimeException("unable to find a parser for " + spec.getFullIdentifier());
+//            }
+//            return parseableFacet.parseableTextRepresentation(adapter);
         }
         return adapter.titleString();
     }
 
     public void setObjectAsString(final String enteredText) {
         // parse text to get adapter
-        val parseableFacet = getTypeOfSpecification().getFacet(ParseableFacet.class);
-        if (parseableFacet == null) {
-            throw new RuntimeException("unable to find a parser for " + getTypeOfSpecification().getFullIdentifier());
-        }
-        ManagedObject adapter = parseableFacet.parseTextEntry(getObject(), enteredText,
-                InteractionInitiatedBy.USER);
 
-        setObject(adapter);
+        managedValue().getValueAsParsableText().setValue(enteredText);
+        setObject(managedValue().getValue().getValue());
+
+//        val parseableFacet = getTypeOfSpecification().getFacet(ParseableFacet.class);
+//        if (parseableFacet == null) {
+//            throw new RuntimeException("unable to find a parser for " + getTypeOfSpecification().getFullIdentifier());
+//        }
+//        ManagedObject adapter = parseableFacet.parseTextEntry(getObject(), enteredText,
+//                InteractionInitiatedBy.USER);
+//
+//        setObject(adapter);
     }
+
+    public abstract ManagedValue managedValue();
 
     public abstract boolean whetherHidden();
 

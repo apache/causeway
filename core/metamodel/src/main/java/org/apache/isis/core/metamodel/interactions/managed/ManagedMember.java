@@ -43,7 +43,8 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @RequiredArgsConstructor
-public abstract class ManagedMember implements ManagedFeature {
+public abstract class ManagedMember
+implements ManagedFeature {
 
     // only used to create failure messages
     @RequiredArgsConstructor

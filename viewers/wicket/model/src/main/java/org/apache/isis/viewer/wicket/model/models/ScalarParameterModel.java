@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -54,7 +55,9 @@ implements ParameterUiModel {
      * object, with the {@link #getObject() value of this model} to be default
      * value (if any) of that action parameter.
      */
-    public ScalarParameterModel(final EntityModel parentEntityModel, final ActionParameterMemento paramMemento) {
+    public ScalarParameterModel(
+            final EntityModel parentEntityModel,
+            final ActionParameterMemento paramMemento) {
         super(parentEntityModel, paramMemento);
         this.paramMemento = paramMemento;
     }
@@ -148,6 +151,11 @@ implements ParameterUiModel {
     @Override
     public void setValue(final ManagedObject paramValue) {
         super.setObject(paramValue);
+    }
+
+    @Override
+    public ManagedValue managedValue() {
+        return getPendingParameterModel().getParamModels().getElseFail(paramMemento.getNumber());
     }
 
     // -- HELPER

@@ -19,6 +19,8 @@
 package org.apache.isis.commons.internal.binding;
 
 import java.lang.ref.WeakReference;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Function;
 
 import org.apache.isis.commons.binding.Bindable;
 import org.apache.isis.commons.binding.ChangeListener;
@@ -50,37 +52,37 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
     public _BindableAbstract() {
     }
 
-    public _BindableAbstract(T initialValue) {
+    public _BindableAbstract(final T initialValue) {
         this.value = initialValue;
     }
 
     @Override
-    public void addListener(InvalidationListener listener) {
+    public void addListener(final InvalidationListener listener) {
         util = InternalUtil.addListener(util, this, listener);
     }
 
     @Override
-    public void removeListener(InvalidationListener listener) {
+    public void removeListener(final InvalidationListener listener) {
         util = InternalUtil.removeListener(util, listener);
     }
 
     @Override
-    public void addListener(ChangeListener<? super T> listener) {
+    public void addListener(final ChangeListener<? super T> listener) {
         util = InternalUtil.addListener(util, this, listener);
     }
 
     @Override
-    public void removeListener(ChangeListener<? super T> listener) {
+    public void removeListener(final ChangeListener<? super T> listener) {
         util = InternalUtil.removeListener(util, listener);
     }
 
     @Override
-    public void bindBidirectional(Bindable<T> other) {
+    public void bindBidirectional(final Bindable<T> other) {
         InternalBidirectionalBinding.bind(this, other);
     }
 
     @Override
-    public void unbindBidirectional(Bindable<T> other) {
+    public void unbindBidirectional(final Bindable<T> other) {
         InternalBidirectionalBinding.unbind(this, other);
     }
 
@@ -93,7 +95,7 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
     }
 
     @Override
-    public void setValue(T newValue) {
+    public void setValue(final T newValue) {
         if (isBound()) {
             throw _Exceptions.unrecoverable("Cannot set value on a bound bindable.");
         }
@@ -137,6 +139,38 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
     protected void onInvalidated() {
     }
 
+    // -- COMPOSITION
+
+    @Override
+    public <R> Bindable<R> mapToBindable(
+            final Function<T, R> forwardMapper,
+            final Function<R, T> reverseMapper) {
+
+        final var isForwardUpdating = new AtomicBoolean();
+        final var isReverseUpdating = new AtomicBoolean();
+
+        final var newBindable = _Bindables.<R>forValue(forwardMapper.apply(getValue()));
+        addListener((e,o,n)->{
+            if(isReverseUpdating.get()) {
+                return;
+            }
+            isForwardUpdating.set(true);
+            newBindable.setValue(forwardMapper.apply(n));
+            isForwardUpdating.set(false);
+        });
+
+        newBindable.addListener((e,o,n)->{
+            if(isForwardUpdating.get()) {
+                return;
+            }
+            isReverseUpdating.set(true);
+            setValue(reverseMapper.apply(n));
+            isReverseUpdating.set(false);
+        });
+
+        return newBindable;
+    }
+
     // -- HELPER
 
     private void markInvalid() {
@@ -152,12 +186,12 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
 
         private final WeakReference<_BindableAbstract<?>> wref;
 
-        public WeakInvalidationListener(_BindableAbstract<?> ref) {
+        public WeakInvalidationListener(final _BindableAbstract<?> ref) {
             this.wref = new WeakReference<_BindableAbstract<?>>(ref);
         }
 
         @Override
-        public void invalidated(Observable<?> observable) {
+        public void invalidated(final Observable<?> observable) {
             _BindableAbstract<?> ref = wref.get();
             if (ref == null) {
                 observable.removeListener(this);
@@ -171,4 +205,6 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
             return wref.get() == null;
         }
     }
+
+
 }
