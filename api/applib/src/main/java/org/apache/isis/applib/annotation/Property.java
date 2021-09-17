@@ -303,7 +303,7 @@ public @interface Property {
      * @see Action#valueSemantics()
      * @see Collection#valueSemantics()
      * @apiNote the selection (qualifier inclusion/exclusion) mechanics is not yet finalized,
-     * currently we qualifiers declared here must exactly match that of the targeted bean
+     * currently a single qualifier declared here must exactly match that of the targeted bean
      */
     String valueSemantics()
             default "";

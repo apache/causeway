@@ -374,7 +374,7 @@ extends FacetFactoryAbstract {
     void processFileAccept(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
         val holder = processMethodContext.getFacetHolder();
 
-        // else search for @Property(maxLength=...)
+        // check for @Property(maxLength=...)
         addFacetIfPresent(
                 FileAcceptFacetForPropertyAnnotation
                 .create(propertyIfAny, holder));
@@ -383,7 +383,7 @@ extends FacetFactoryAbstract {
     void processValueSemantics(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
         val holder = processMethodContext.getFacetHolder();
 
-        // else search for @Property(maxLength=...)
+        // check for @Property(valueSemantics=...)
         addFacetIfPresent(
                 ValueSemanticsSelectingFacetForPropertyAnnotation
                 .create(propertyIfAny, holder));

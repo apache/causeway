@@ -78,4 +78,10 @@ public final class AsciiDoc implements HasHtml, Serializable {
         return "AsciiDoc[length=" + adoc.length() + "]";
     }
 
+    // -- UTILITY
+
+    public static void loadJRuby() {
+        Converter.getAsciidoctor();
+    }
+
 }

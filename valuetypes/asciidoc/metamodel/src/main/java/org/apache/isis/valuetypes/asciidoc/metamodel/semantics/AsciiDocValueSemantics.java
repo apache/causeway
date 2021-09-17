@@ -60,8 +60,4 @@ implements
         return 0;
     }
 
-    public static void loadJRuby() {
-        Converter.getAsciidoctor();
-    }
-
 }
