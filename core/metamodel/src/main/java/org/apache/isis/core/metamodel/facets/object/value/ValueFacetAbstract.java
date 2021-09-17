@@ -38,7 +38,6 @@ import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facets.objectvalue.valuesemantics.ValueSemanticsSelectingFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -84,13 +83,13 @@ implements ValueFacet<T> {
     }
 
     @Override
-    public ValueSemanticsProvider.Context createValueSemanticsContext() {
+    public ValueSemanticsProvider.Context createValueSemanticsContext(final Identifier featureIdentifier) {
         final var iaProvider = super.getInteractionProvider();
         if(iaProvider==null) {
             return null; // JUnit context
         }
         return ValueSemanticsProvider.Context.of(
-                ((FacetHolderAbstract)getFacetHolder()).getFeatureIdentifier(),
+                featureIdentifier,
                 iaProvider.currentInteractionContext().orElse(null));
     }
 

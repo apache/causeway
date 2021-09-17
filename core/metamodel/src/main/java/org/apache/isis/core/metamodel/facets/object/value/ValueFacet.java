@@ -44,7 +44,7 @@ public interface ValueFacet<T> extends Facet {
 
     LogicalType getValueType();
     Can<ValueSemanticsProvider<T>> getValueSemantics();
-    Context createValueSemanticsContext();
+    Context createValueSemanticsContext(Identifier featureIdentifier);
 
     // -- PARSER
 

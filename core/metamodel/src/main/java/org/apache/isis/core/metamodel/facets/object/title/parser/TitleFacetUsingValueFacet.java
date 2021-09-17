@@ -62,21 +62,27 @@ implements TitleFacet {
         // what property, collection, action return or action param this is to be rendered for ...
 
         if(renderRequest.getFeature() instanceof OneToOneAssociation) {
+            final var prop = (OneToOneAssociation)renderRequest.getFeature();
+            final var featureId = prop.getFeatureIdentifier();
             final Renderer renderer = valueFacet
-                    .selectRendererForPropertyElseFallback((OneToOneAssociation)renderRequest.getFeature());
-            return renderer.presentationValue(valueFacet.createValueSemanticsContext(), pojo);
+                    .selectRendererForPropertyElseFallback(prop);
+            return renderer.presentationValue(valueFacet.createValueSemanticsContext(featureId), pojo);
         }
         if(renderRequest.getFeature() instanceof ObjectActionParameter) {
+            final var param = (ObjectActionParameter)renderRequest.getFeature();
+            final var featureId = param.getFeatureIdentifier();
             final Renderer renderer = valueFacet
-                    .selectRendererForParameterElseFallback((ObjectActionParameter)renderRequest.getFeature());
-            return renderer.presentationValue(valueFacet.createValueSemanticsContext(), pojo);
+                    .selectRendererForParameterElseFallback(param);
+            return renderer.presentationValue(valueFacet.createValueSemanticsContext(featureId), pojo);
         }
 
         // fall back to default value semantics ...
 
+        final var featureId = getFacetHolder().getFeatureIdentifier();
+
         return valueFacet.selectDefaultRenderer()
         .map(renderer->(Renderer) renderer)
-        .map(renderer->renderer.presentationValue(valueFacet.createValueSemanticsContext(), pojo))
+        .map(renderer->renderer.presentationValue(valueFacet.createValueSemanticsContext(featureId), pojo))
         .orElseGet(()->String.format("Value type %s has no value semantics for title rendering.",
                 renderRequest.getObject().getSpecification().getCorrespondingClass()));
 
