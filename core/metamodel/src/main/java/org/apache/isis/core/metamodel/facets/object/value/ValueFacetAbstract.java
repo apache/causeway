@@ -74,7 +74,7 @@ implements ValueFacet<T> {
     @Override
     public boolean semanticEquals(@NonNull final Facet other) {
         return (other instanceof ValueFacetAbstract)
-                ? this.getValueSemantics().equals(((ValueFacetAbstract)other).getValueSemantics())
+                ? this.getValueSemantics().equals(((ValueFacetAbstract<?>)other).getValueSemantics())
                 : false;
     }
 
@@ -124,6 +124,16 @@ implements ValueFacet<T> {
     // -- RENDERER
 
     @Override
+    public Optional<Renderer<T>> selectDefaultRenderer() {
+        return getValueSemantics()
+                .stream()
+                .filter(isMatchingAnyOf(Can.empty()))
+                .map(ValueSemanticsProvider::getRenderer)
+                .filter(_NullSafe::isPresent)
+                .findFirst();
+    }
+
+    @Override
     public Optional<Renderer<T>> selectRendererForParameter(final ObjectActionParameter param) {
         return streamValueSemanticsHonoringQualifiers(param)
                 .map(ValueSemanticsProvider::getRenderer)
@@ -163,21 +173,12 @@ implements ValueFacet<T> {
         .map(_Strings::emptyToNull)
         .stream()
         .collect(Can.toCan());
-
-//      System.err.printf("got: %s %s%n",
-//      prop.getFeatureIdentifier(),
-//      qualifiersRequired);
-//if(prop.getFeatureIdentifier().getLogicalType().getClassName().contains("AsciiDocValueSemanticsWithPreprocessing")
-//      || prop.getFeatureIdentifier().getLogicalType().getClassName().contains("HasAsciiDocDescription")
-//      ) {
-//  System.out.println("bingo: " + qualifiersRequired);
-//}
     }
 
     private Predicate<ValueSemanticsProvider<T>> isMatchingAnyOf(final Can<String> qualifiersAccepted) {
         return valueSemantics->{
 
-            // qualifiers required vs. qualifiers present on bean type
+            // qualifiers accepted vs. qualifiers present on bean type
             // 1. empty     vs. empty      ->  accept
             // 2. empty     vs. not-empty  ->  reject
             // 3. not-empty vs. empty      ->  reject

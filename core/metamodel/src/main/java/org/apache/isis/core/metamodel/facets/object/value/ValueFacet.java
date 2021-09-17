@@ -65,6 +65,8 @@ public interface ValueFacet<T> extends Facet {
 
     // -- RENDERER
 
+    /** no qualifiers allowed when searching the default semantics provider*/
+    Optional<Renderer<T>> selectDefaultRenderer();
     Optional<Renderer<T>> selectRendererForParameter(final ObjectActionParameter param);
     Optional<Renderer<T>> selectRendererForProperty(final OneToOneAssociation prop);
 

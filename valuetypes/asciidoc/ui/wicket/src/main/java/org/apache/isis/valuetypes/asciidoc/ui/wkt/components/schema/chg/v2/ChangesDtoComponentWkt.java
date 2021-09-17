@@ -20,24 +20,25 @@ package org.apache.isis.valuetypes.asciidoc.ui.wkt.components.schema.chg.v2;
 
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.util.schema.ChangesDtoUtils;
-import org.apache.isis.schema.chg.v2.ChangesDto;
 import org.apache.isis.valuetypes.asciidoc.ui.wkt.components.AsciiDocForXmlComponentWkt;
 
+@Deprecated
 public class ChangesDtoComponentWkt extends AsciiDocForXmlComponentWkt {
 
     private static final long serialVersionUID = 1L;
 
-    public ChangesDtoComponentWkt(String id, IModel<?> model) {
+    public ChangesDtoComponentWkt(final String id, final IModel<?> model) {
         super(id, model);
     }
 
-    @Override
-    protected String asHtml(Object value) {
-        if(value instanceof ChangesDto) {
-            return asHtml(ChangesDtoUtils.toXml((ChangesDto) value));
-        }
-        return super.asHtml(value);
-    }
+
+//TODO provide custom value semantics instead
+//    @Override
+//    protected String asHtml(Object value) {
+//        if(value instanceof ChangesDto) {
+//            return asHtml(ChangesDtoUtils.toXml((ChangesDto) value));
+//        }
+//        return super.asHtml(value);
+//    }
 
 }

@@ -18,40 +18,43 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
 
+import java.util.Optional;
+
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.parser.XmlTag.TagType;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.value.HasHtml;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-
-import lombok.val;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
+import org.apache.isis.viewer.wicket.model.models.ValueModel;
 
 public class MarkupComponent extends WebComponent {
 
     private static final long serialVersionUID = 1L;
 
-    public MarkupComponent(final String id, IModel<?> model){
+    public MarkupComponent(final String id, final IModel<?> model){
         super(id, model);
     }
 
     @Override
     public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag){
-        val htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
+        final var htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
         replaceComponentTagBody(markupStream, openTag, htmlContent);
     }
 
     @Override
-    protected void onComponentTag(ComponentTag tag)	{
+    protected void onComponentTag(final ComponentTag tag)	{
         super.onComponentTag(tag);
         tag.setType(TagType.OPEN);
     }
 
     // -- HELPER
 
-    protected CharSequence extractHtmlOrElse(Object modelObject, final String fallback) {
+    protected CharSequence extractHtmlOrElse(final Object modelObject, final String fallback) {
 
         if(modelObject==null) {
             return fallback;
@@ -59,14 +62,16 @@ public class MarkupComponent extends WebComponent {
 
         if(modelObject instanceof ManagedObject) {
 
-            val adapter = (ManagedObject) modelObject;
+            final var adapter = (ManagedObject) modelObject;
 
-            if(adapter.getPojo()==null)
+            if(adapter.getPojo()==null) {
                 return fallback;
+            }
 
-            final Object value = adapter.getPojo();
+            final var asHtml = lookupObjectFeatureIn(getDefaultModel())
+            .map(feature->adapter.titleString(conf->conf.feature(feature)))
+            .orElseGet(adapter::titleString);
 
-            val asHtml = asHtml(value);
             if(asHtml != null) {
                 return asHtml;
             }
@@ -75,14 +80,22 @@ public class MarkupComponent extends WebComponent {
         }
 
         return modelObject.toString();
-
     }
 
-    protected String asHtml(Object value) {
-        if (value instanceof HasHtml) {
-            return ((HasHtml)value).asHtml();
+    // -- HELPER
+
+    protected Optional<ObjectFeature> lookupObjectFeatureIn(final IModel<?> model) {
+        if(model instanceof ScalarPropertyModel) {
+            return Optional.of(((ScalarPropertyModel)model).getMetaModel());
         }
-        return null;
+        if(model instanceof ScalarParameterModel) {
+            return Optional.of(((ScalarParameterModel)model).getMetaModel());
+        }
+        if(model instanceof ValueModel) {
+            return Optional.ofNullable(((ValueModel)model).getActionModelHint())
+                    .map(act->act.getMetaModel());
+        }
+        return Optional.empty();
     }
 
 }

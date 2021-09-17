@@ -24,20 +24,22 @@ import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.valuetypes.asciidoc.ui.wkt.components.AsciiDocForXmlComponentWkt;
 
+@Deprecated
 public class CommandDtoComponentWkt extends AsciiDocForXmlComponentWkt {
 
     private static final long serialVersionUID = 1L;
 
-    public CommandDtoComponentWkt(String id, IModel<?> model) {
+    public CommandDtoComponentWkt(final String id, final IModel<?> model) {
         super(id, model);
     }
 
-    @Override
-    protected String asHtml(Object value) {
-        if(value instanceof CommandDto) {
-            return asHtml(CommandDtoUtils.toXml((CommandDto) value));
-        }
-        return super.asHtml(value);
-    }
+  //TODO provide custom value semantics instead
+//    @Override
+//    protected String asHtml(Object value) {
+//        if(value instanceof CommandDto) {
+//            return asHtml(CommandDtoUtils.toXml((CommandDto) value));
+//        }
+//        return super.asHtml(value);
+//    }
 
 }

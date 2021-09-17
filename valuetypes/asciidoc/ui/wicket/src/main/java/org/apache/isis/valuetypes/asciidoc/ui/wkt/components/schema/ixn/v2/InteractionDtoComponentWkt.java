@@ -24,20 +24,22 @@ import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 import org.apache.isis.valuetypes.asciidoc.ui.wkt.components.AsciiDocForXmlComponentWkt;
 
+@Deprecated
 public class InteractionDtoComponentWkt extends AsciiDocForXmlComponentWkt {
 
     private static final long serialVersionUID = 1L;
 
-    public InteractionDtoComponentWkt(String id, IModel<?> model) {
+    public InteractionDtoComponentWkt(final String id, final IModel<?> model) {
         super(id, model);
     }
 
-    @Override
-    protected String asHtml(Object value) {
-        if(value instanceof InteractionDto) {
-            return asHtml(InteractionDtoUtils.toXml((InteractionDto) value));
-        }
-        return super.asHtml(value);
-    }
+  //TODO provide custom value semantics instead
+//    @Override
+//    protected String asHtml(Object value) {
+//        if(value instanceof InteractionDto) {
+//            return asHtml(InteractionDtoUtils.toXml((InteractionDto) value));
+//        }
+//        return super.asHtml(value);
+//    }
 
 }

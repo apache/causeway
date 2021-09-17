@@ -21,8 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.title.parser;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.adapters.Renderer;
-import org.apache.isis.applib.adapters.ValueSemanticsProvider;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -60,8 +58,8 @@ implements TitleFacet {
             return null;
         }
 
-        // support for qualified value semantics, requires a 'where' context,
-        // that is what property, collection, action return or action param this is to be rendered for ...
+        // support for qualified value semantics, requires a 'where' context, that is,
+        // what property, collection, action return or action param this is to be rendered for ...
 
         if(renderRequest.getFeature() instanceof OneToOneAssociation) {
             final Renderer renderer = valueFacet
@@ -76,10 +74,7 @@ implements TitleFacet {
 
         // fall back to default value semantics ...
 
-        return valueFacet.getValueSemantics().stream()
-        .map(ValueSemanticsProvider::getRenderer)
-        .filter(_NullSafe::isPresent)
-        .findFirst()
+        return valueFacet.selectDefaultRenderer()
         .map(renderer->(Renderer) renderer)
         .map(renderer->renderer.presentationValue(valueFacet.createValueSemanticsContext(), pojo))
         .orElseGet(()->String.format("Value type %s has no value semantics for title rendering.",
