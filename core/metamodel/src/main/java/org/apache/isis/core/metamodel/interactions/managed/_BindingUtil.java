@@ -90,12 +90,12 @@ class _BindingUtil {
                 value->{
                     final var pojo = ManagedObjects.UnwrapUtil.single(value);
                     final var text = parser.parseableTextRepresentation(context, pojo);
-                    System.err.printf("toText: %s -> '%s'%n", ""+value, text);
+                    //System.err.printf("toText: %s -> '%s'%n", ""+value, text);
                     return text;
                 },
                 text->{
                     final var value = ManagedObject.of(spec, parser.parseTextRepresentation(context, text));
-                    System.err.printf("fromText: '%s' -> %s%n", text, ""+value);
+                    //System.err.printf("fromText: '%s' -> %s%n", text, ""+value);
                     return value;
                 });
     }
