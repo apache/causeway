@@ -39,11 +39,17 @@ implements
 
     @Override
     public String toEncodedString(final Markup markup) {
+        if(markup==null) {
+            return null;
+        }
         return markup.asHtml();
     }
 
     @Override
     public Markup fromEncodedString(final String html) {
+        if(html==null) {
+            return null;
+        }
         return new Markup(html);
     }
 
