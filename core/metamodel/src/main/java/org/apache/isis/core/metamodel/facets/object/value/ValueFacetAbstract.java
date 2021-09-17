@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
-import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.valuesemantics.ValueSemanticsSelectingFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
@@ -168,8 +168,8 @@ implements ValueFacet<T> {
     }
 
     private Can<String> qualifiersAccepted(final FacetHolder feature) {
-        return feature.lookupFacet(FileAcceptFacet.class)
-        .map(FileAcceptFacet::value) // TODO use a new qualifier facet instead
+        return feature.lookupFacet(ValueSemanticsSelectingFacet.class)
+        .map(ValueSemanticsSelectingFacet::value)
         .map(_Strings::emptyToNull)
         .stream()
         .collect(Can.toCan());

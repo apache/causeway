@@ -24,6 +24,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
@@ -291,5 +292,22 @@ public @interface Property {
      */
     String regexPatternReplacement()
             default "Doesn't match pattern";
+
+    /**
+     * <i>Experimental Feature</i>
+     * <p>
+     * Allows to select {@link ValueSemanticsProvider}(s) by qualifiers.
+     *
+     * TODO not provided yet...
+     * @see Parameter#valueSemantics()
+     * @see Action#valueSemantics()
+     * @see Collection#valueSemantics()
+     * @apiNote the selection (qualifier inclusion/exclusion) mechanics is not yet finalized,
+     * currently we qualifiers declared here must exactly match that of the targeted bean
+     */
+    String valueSemantics()
+            default "";
+
+
 
 }

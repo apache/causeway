@@ -35,7 +35,6 @@ import org.springframework.stereotype.Service;
 
 import lombok.val;
 
-
 @Service
 @Named("demo.AsciiDocConverterService")
 public class AsciiDocConverterService {
@@ -48,7 +47,7 @@ public class AsciiDocConverterService {
     private final Options options;
 
     @Inject
-    public AsciiDocConverterService(ResourceReaderService resourceReaderService) {
+    public AsciiDocConverterService(final ResourceReaderService resourceReaderService) {
         this.resourceReaderService = resourceReaderService;
         this.asciidoctor = createAsciidoctor();
         this.options = OptionsBuilder.options()
@@ -67,12 +66,12 @@ public class AsciiDocConverterService {
         class LocalIncludeProcessor extends IncludeProcessor {
 
             @Override
-            public boolean handles(String target) {
+            public boolean handles(final String target) {
                 return true;
             }
 
             @Override
-            public void process(Document document, PreprocessorReader reader, String target, Map<String, Object> attributes) {
+            public void process(final Document document, final PreprocessorReader reader, final String target, final Map<String, Object> attributes) {
                 val contextClass = context.get();
                 val content = resourceReaderService.readResource(contextClass, target, attributes);
                 reader.push_include(content, target, target, 1, attributes);

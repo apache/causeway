@@ -1,5 +1,6 @@
 package demoapp.dom._infra.resources;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,12 +16,15 @@ import org.apache.isis.valuetypes.asciidoc.metamodel.semantics.AsciiDocValueSema
 public class AsciiDocValueSemanticsWithPreprocessing
 extends AsciiDocValueSemantics {
 
-    //FIXME add pre-processing stuff
+    @Inject AsciiDocConverterService asciiDocConverterService;
 
     @Override
     public String presentationValue(final ValueSemanticsProvider.Context context, final AsciiDoc adoc) {
-        return render(adoc, __->"Hello World!");
-                //AsciiDoc::asHtml);
+        return render(adoc, plainAdoc->
+            asciiDocConverterService
+            .adocToHtml(
+                    context.getIdentifier().getLogicalType().getCorrespondingClass(),
+                    plainAdoc.getAdoc()));
     }
 
 }
