@@ -44,6 +44,7 @@ import org.apache.isis.core.metamodel.facets.Evaluators.MethodEvaluator;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
@@ -114,14 +115,10 @@ implements ImperativeFacet {
     }
 
     @Override
-    public String title(final ManagedObject targetAdapter) {
-        return title(_Predicates.alwaysFalse(), targetAdapter);
-    }
+    public String title(final TitleRenderRequest titleRenderRequest) {
 
-    @Override
-    public String title(
-            final Predicate<ManagedObject> skipTitlePartEvaluator,
-            final ManagedObject targetAdapter) {
+        final ManagedObject targetAdapter = titleRenderRequest.getObject();
+
         val pojo = targetAdapter.getPojo();
         if(pojo==null) {
             return "";
@@ -137,10 +134,13 @@ implements ImperativeFacet {
                 }
                 // ignore context, if provided
                 val titlePartAdapter = objectManager.adapt(titlePart);
-                if(skipTitlePartEvaluator != null
-                        && skipTitlePartEvaluator.test(titlePartAdapter)) {
+                if(titleRenderRequest.getSkipTitlePartEvaluator().test(titlePartAdapter)) {
                     continue;
                 }
+
+                //TODO propagate the feature titleRenderRequest
+                //component.titleEvaluator.name();
+
                 String title = titleOf(titlePartAdapter);
                 if (_Strings.isNullOrEmpty(title)) {
                     // ... use the toString() otherwise
@@ -253,4 +253,5 @@ implements ImperativeFacet {
             return _Comparators.deweyOrderCompare(this.getDeweyOrdinal(), other.getDeweyOrdinal());
         }
     }
+
 }

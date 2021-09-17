@@ -55,6 +55,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
+import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
@@ -405,9 +406,9 @@ public final class ManagedObjects {
 
         // -- TITLE SUPPORT
 
-        String titleString(
-                final @Nullable ManagedObject managedObject,
-                final @NonNull Predicate<ManagedObject> isContextAdapter) {
+        String titleString(@NonNull final TitleRenderRequest titleRenderRequest) {
+
+            val managedObject = titleRenderRequest.getObject();
 
             if(!ManagedObjects.isSpecified(managedObject)) {
                 return "unspecified object";
@@ -417,19 +418,20 @@ public final class ManagedObjects {
                 val collectionFacet = managedObject.getSpecification().getFacet(CollectionFacet.class);
                 return collectionTitleString(managedObject, collectionFacet);
             } else {
-                return objectTitleString(managedObject, isContextAdapter)
+                return objectTitleString(titleRenderRequest)
                         .trim();
             }
         }
 
         // -- HELPER
 
-        private String objectTitleString(final ManagedObject managedObject, final Predicate<ManagedObject> isContextAdapter) {
+        private String objectTitleString(@NonNull final TitleRenderRequest titleRenderRequest) {
+            val managedObject = titleRenderRequest.getObject();
             if (managedObject.getPojo() instanceof String) {
                 return (String) managedObject.getPojo();
             }
             val spec = managedObject.getSpecification();
-            return Optional.ofNullable(spec.getTitle(isContextAdapter, managedObject))
+            return Optional.ofNullable(spec.getTitle(titleRenderRequest))
                     .orElseGet(()->getDefaultTitle(managedObject));
         }
 

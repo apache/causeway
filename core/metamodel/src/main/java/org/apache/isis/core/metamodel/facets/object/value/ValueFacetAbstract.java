@@ -22,21 +22,29 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider.Context;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 public abstract class ValueFacetAbstract<T>
@@ -64,26 +72,77 @@ implements ValueFacet<T> {
     }
 
     @Override
+    public boolean semanticEquals(@NonNull final Facet other) {
+        return (other instanceof ValueFacetAbstract)
+                ? this.getValueSemantics().equals(((ValueFacetAbstract)other).getValueSemantics())
+                : false;
+    }
+
+    @Override
     public final LogicalType getValueType() {
         return getFacetHolder().getFeatureIdentifier().getLogicalType();
     }
 
     @Override
+    public ValueSemanticsProvider.Context createValueSemanticsContext() {
+        final var iaProvider = super.getInteractionProvider();
+        if(iaProvider==null) {
+            return null; // JUnit context
+        }
+        return ValueSemanticsProvider.Context.of(
+                ((FacetHolderAbstract)getFacetHolder()).getFeatureIdentifier(),
+                iaProvider.currentInteractionContext().orElse(null));
+    }
+
+    // -- PARSER
+
+    @Override
     public Optional<Parser<T>> selectParserForParameter(final ObjectActionParameter param) {
-        return streamParsers(s->true) // TODO filter by qualifier if any
+        return streamValueSemanticsHonoringQualifiers(param)
+                .map(ValueSemanticsProvider::getParser)
+                .filter(_NullSafe::isPresent)
                 .findFirst();
     }
 
     @Override
     public Optional<Parser<T>> selectParserForProperty(final OneToOneAssociation prop) {
-        return streamParsers(s->true) // TODO filter by qualifier if any
+        return streamValueSemanticsHonoringQualifiers(prop)
+                .map(ValueSemanticsProvider::getParser)
+                .filter(_NullSafe::isPresent)
                 .findFirst();
     }
 
     @Override
     public Parser<T> fallbackParser(final Identifier featureIdentifier) {
-        return new ReadonlyMissingParserMessageParser<T>(String
+        return new PseudoParserWithMessage<T>(String
                 .format("Could not find a parser for type %s "
+                        + "in the context of %s",
+                        getValueType(),
+                        featureIdentifier));
+    }
+
+    // -- RENDERER
+
+    @Override
+    public Optional<Renderer<T>> selectRendererForParameter(final ObjectActionParameter param) {
+        return streamValueSemanticsHonoringQualifiers(param)
+                .map(ValueSemanticsProvider::getRenderer)
+                .filter(_NullSafe::isPresent)
+                .findFirst();
+    }
+
+    @Override
+    public Optional<Renderer<T>> selectRendererForProperty(final OneToOneAssociation prop) {
+        return streamValueSemanticsHonoringQualifiers(prop)
+                .map(ValueSemanticsProvider::getRenderer)
+                .filter(_NullSafe::isPresent)
+                .findFirst();
+    }
+
+    @Override
+    public Renderer<T> fallbackRenderer(final Identifier featureIdentifier) {
+        return new PseudoRendererWithMessage<T>(String
+                .format("Could not find a renderer for type %s "
                         + "in the context of %s",
                         getValueType(),
                         featureIdentifier));
@@ -91,17 +150,76 @@ implements ValueFacet<T> {
 
     // -- HELPER
 
-    private Stream<Parser<T>> streamParsers(
-            final Predicate<ValueSemanticsProvider<T>> semanticsFilter) {
+    private Stream<ValueSemanticsProvider<T>> streamValueSemanticsHonoringQualifiers(
+            final FacetHolder feature) {
         return getValueSemantics()
                 .stream()
-                .filter(semanticsFilter)
-                .map(ValueSemanticsProvider::getParser)
-                .filter(_NullSafe::isPresent);
+                .filter(isMatchingAnyOf(qualifiersAccepted(feature)));
+    }
+
+    private Can<String> qualifiersAccepted(final FacetHolder feature) {
+        return feature.lookupFacet(FileAcceptFacet.class)
+        .map(FileAcceptFacet::value) // TODO use a new qualifier facet instead
+        .map(_Strings::emptyToNull)
+        .stream()
+        .collect(Can.toCan());
+
+//      System.err.printf("got: %s %s%n",
+//      prop.getFeatureIdentifier(),
+//      qualifiersRequired);
+//if(prop.getFeatureIdentifier().getLogicalType().getClassName().contains("AsciiDocValueSemanticsWithPreprocessing")
+//      || prop.getFeatureIdentifier().getLogicalType().getClassName().contains("HasAsciiDocDescription")
+//      ) {
+//  System.out.println("bingo: " + qualifiersRequired);
+//}
+    }
+
+    private Predicate<ValueSemanticsProvider<T>> isMatchingAnyOf(final Can<String> qualifiersAccepted) {
+        return valueSemantics->{
+
+            // qualifiers required vs. qualifiers present on bean type
+            // 1. empty     vs. empty      ->  accept
+            // 2. empty     vs. not-empty  ->  reject
+            // 3. not-empty vs. empty      ->  reject
+            // 4. not-empty vs. not-empty  ->  accept when any match
+
+            final var qualifiersOnBean =
+            _Annotations
+            .synthesizeInherited(valueSemantics.getClass(), Qualifier.class) //TODO memoize somewhere
+            .map(Qualifier::value)
+            .stream()
+            .map(_Strings::emptyToNull)
+            .collect(Can.toCan());
+
+            if(qualifiersAccepted.isEmpty()
+                    && qualifiersOnBean.isEmpty()) {
+                return true;
+            }
+
+            if(qualifiersAccepted.isNotEmpty()
+                    && qualifiersOnBean.isNotEmpty()) {
+                return qualifiersAccepted.stream().anyMatch(qualifiersOnBean::contains);
+            }
+
+            return false;
+        };
     }
 
     @RequiredArgsConstructor
-    private final static class ReadonlyMissingParserMessageParser<T>
+    private final static class PseudoRendererWithMessage<T>
+    implements Renderer<T> {
+
+        private final String message;
+
+        @Override
+        public String presentationValue(final Context context, final T value) {
+            return message;
+        }
+
+    }
+
+    @RequiredArgsConstructor
+    private final static class PseudoParserWithMessage<T>
     implements Parser<T> {
 
         private final String message;

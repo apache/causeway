@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.Evaluators;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -257,7 +258,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 allowing(mockIntegerSpec).isParentedOrFreeCollection();
                 will(returnValue(false));
 
-                allowing(mockIntegerSpec).getTitle(with(any(Predicate.class)), with(any(ManagedObject.class)));
+                allowing(mockIntegerSpec).getTitle(with(any(TitleRenderRequest.class)));
                 will(returnValue("3"));
 
                 ignoring(mockIntegerSpec).assertPojoCompatible(with(any(Integer.class)));
@@ -265,7 +266,10 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
             }
         });
-        final String title = titleFacetViaTitleAnnotation.title(mockObjectAdapter);
+        final String title = titleFacetViaTitleAnnotation.title(
+                TitleRenderRequest.builder()
+                .object(mockObjectAdapter)
+                .build());
         assertThat(title, is("titleElement1 titleElement3 titleElement5 3 this needs to be trimmed"));
     }
 

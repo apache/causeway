@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.object.title;
 
-import java.util.function.Predicate;
-
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -39,23 +37,13 @@ public interface TitleFacet extends Facet {
     /**
      * Provide a title for the target object.
      */
-    String title(ManagedObject targetAdapter);
+    String title(TitleRenderRequest titleRenderRequest);
 
-    /**
-     * Provide a title for the target object, possibly abbreviated (according to supplied predicate)
-     *
-     * <p>
-     * One reason why the title might be abbreviated is if it is being evaluated in the context of another object,
-     * for example as a child object of a parented collection of some parent object. In such a context, the
-     * title might be shortened so that it does not needlessly incorporate the title of the parent (context)
-     * object.
-     * </p>
-     */
-    default String title(
-            final Predicate<ManagedObject> skipTitlePartEvaluator,
-            final ManagedObject targetAdapter) {
-        //Default implementation that simply delegates to {@link TitleFacet#title(ManagedObject)}.
-        return title(targetAdapter);
+    @Deprecated
+    default String title(final ManagedObject targetAdapter) {
+        return title(TitleRenderRequest.builder()
+                .object(targetAdapter)
+                .build());
     }
 
 }

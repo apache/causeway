@@ -191,7 +191,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         return new Label(id, title);
     }
 
-    private String titleAbbreviated(String titleString) {
+    private String titleAbbreviated(final String titleString) {
         int maxTitleLength = abbreviateTo(getModel(), titleString);
         return abbreviated(titleString, maxTitleLength);
     }
@@ -206,11 +206,11 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     private String determineTitle() {
         val managedObject = getModel().getObject();
         return managedObject != null
-                ? managedObject.titleString(this::isContextAdapter)
+                ? managedObject.titleString(conf->conf.skipTitlePartEvaluator(this::isContextAdapter))
                 : "(no object)";
     }
 
-    private int abbreviateTo(ObjectAdapterModel model, String titleString) {
+    private int abbreviateTo(final ObjectAdapterModel model, final String titleString) {
         if(model.getRenderingHint().isInStandaloneTableTitleColumn()) {
             return getWicketViewerSettings().getMaxTitleLengthInStandaloneTables();
         }
@@ -233,7 +233,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         return image;
     }
 
-    private boolean isContextAdapter(ManagedObject other) {
+    private boolean isContextAdapter(final ManagedObject other) {
         final ObjectAdapterModel model = getModel();
         return model.isContextAdapter(other);
     }

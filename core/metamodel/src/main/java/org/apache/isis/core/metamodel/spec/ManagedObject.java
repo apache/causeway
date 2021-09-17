@@ -20,17 +20,17 @@ package org.apache.isis.core.metamodel.spec;
 
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
+import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -75,12 +75,15 @@ public interface ManagedObject {
 
     // -- TITLE
 
-    public default String titleString() {
-        return titleString(_Predicates.alwaysFalse());
+    public default String titleString(final UnaryOperator<TitleRenderRequest.TitleRenderRequestBuilder> onBuilder) {
+        return ManagedObjects.TitleUtil
+                .titleString(onBuilder.apply(TitleRenderRequest.builder().object(this)).build());
     }
 
-    default String titleString(final @NonNull Predicate<ManagedObject> isContextAdapter) {
-        return ManagedObjects.TitleUtil.titleString(this, isContextAdapter);
+    public default String titleString() {
+        return ManagedObjects.TitleUtil.titleString(TitleRenderRequest.builder()
+                .object(this)
+                .build());
     }
 
     // -- SHORTCUTS - MM CONTEXT

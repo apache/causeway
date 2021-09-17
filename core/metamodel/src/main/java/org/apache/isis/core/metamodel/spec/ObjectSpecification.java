@@ -25,7 +25,6 @@ import java.lang.reflect.Modifier;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
@@ -58,6 +57,7 @@ import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
@@ -229,9 +229,9 @@ extends
      * of some other adapter (if any).
      *
      * <p>
-     * @see TitleFacet#title(Predicate, ManagedObject)
+     * @see TitleFacet#title(TitleRenderRequest)
      */
-    String getTitle(Predicate<ManagedObject> isContextAdapter, ManagedObject targetAdapter);
+    String getTitle(TitleRenderRequest titleRenderRequest);
 
     /**
      * Returns the name of an icon to use for the specified object.

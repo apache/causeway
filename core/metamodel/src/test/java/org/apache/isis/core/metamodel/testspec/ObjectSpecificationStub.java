@@ -44,6 +44,7 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactor
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -214,9 +215,7 @@ implements ObjectSpecification {
     }
 
     @Override
-    public String getTitle(
-            final Predicate<ManagedObject> isContextAdapter,
-            final ManagedObject targetAdapter) {
+    public String getTitle(final TitleRenderRequest titleRenderRequest) {
         return title;
     }
 

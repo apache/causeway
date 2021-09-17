@@ -32,12 +32,11 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.util.EventUtil;
-
-import lombok.val;
 
 public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent
 extends TitleFacetAbstract {
@@ -48,7 +47,7 @@ extends TitleFacetAbstract {
             final IsisConfiguration configuration,
             final FacetHolder facetHolder) {
 
-        val isPostForDefault = configuration
+        final var isPostForDefault = configuration
                 .getApplib()
                 .getAnnotation()
                 .getDomainObjectLayout()
@@ -89,7 +88,9 @@ extends TitleFacetAbstract {
     }
 
     @Override
-    public String title(final ManagedObject owningAdapter) {
+    public String title(final TitleRenderRequest titleRenderRequest) {
+
+        final ManagedObject owningAdapter = titleRenderRequest.getObject();
 
         if(owningAdapter == null) {
             return null;
@@ -108,7 +109,7 @@ extends TitleFacetAbstract {
             .orElse(null);
 
             if(underlyingTitleFacet!=null) {
-                return underlyingTitleFacet.title(owningAdapter);
+                return underlyingTitleFacet.title(titleRenderRequest);
             }
         }
 
@@ -130,7 +131,7 @@ extends TitleFacetAbstract {
 
     private static TranslationContext translationContextFor(final FacetHolder facetHolder) {
         if(facetHolder instanceof ObjectSpecification) {
-            val facetHolderAsSpec = (ObjectSpecification) facetHolder;
+            final var facetHolderAsSpec = (ObjectSpecification) facetHolder;
             return TranslationContext.forTranslationContextHolder(facetHolderAsSpec.getFeatureIdentifier());
         }
         return null;
@@ -150,6 +151,5 @@ extends TitleFacetAbstract {
             throw new UnrecoverableException(ex);
         }
     }
-
 
 }

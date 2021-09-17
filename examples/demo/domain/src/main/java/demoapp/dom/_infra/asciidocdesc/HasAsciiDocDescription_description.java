@@ -31,7 +31,8 @@ import lombok.RequiredArgsConstructor;
 
 import demoapp.dom._infra.resources.AsciiDocReaderService;
 
-@Property(snapshot = Snapshot.EXCLUDED)
+@Property(snapshot = Snapshot.EXCLUDED
+    , fileAccept = "demo-adoc-pre-processor") //TODO ISIS-2871 yet just a hack, used as a marker to select a different value-semantics
 @RequiredArgsConstructor
 public class HasAsciiDocDescription_description {
 

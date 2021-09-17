@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facets.HasImperativeAspect;
 import org.apache.isis.core.metamodel.facets.ImperativeAspect;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -61,8 +61,8 @@ implements HasImperativeAspect {
     }
 
     @Override
-    public String title(final ManagedObject domainObject) {
-        return imperativeAspect.eval(domainObject, "(not present)");
+    public String title(final TitleRenderRequest titleRenderRequest) {
+        return imperativeAspect.eval(titleRenderRequest.getObject(), "(not present)");
     }
 
     @Override

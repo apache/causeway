@@ -18,19 +18,14 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed;
 
-import java.util.Optional;
 import java.util.stream.IntStream;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.binding.Bindable;
 import org.apache.isis.commons.binding.Observable;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.binding._BindableAbstract;
 import org.apache.isis.commons.internal.binding._Bindables;
 import org.apache.isis.commons.internal.binding._Observables;
@@ -39,7 +34,6 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;

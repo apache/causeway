@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.facets.HasImperativeAspect;
 import org.apache.isis.core.metamodel.facets.ImperativeAspect;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
@@ -69,7 +70,10 @@ implements HasImperativeAspect {
     }
 
     @Override
-    public String title(final ManagedObject owningAdapter) {
+    public String title(final TitleRenderRequest titleRenderRequest) {
+
+        final ManagedObject owningAdapter = titleRenderRequest.getObject();
+
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(owningAdapter)) {
             return null;
         }
@@ -97,5 +101,7 @@ implements HasImperativeAspect {
         super.visitAttributes(visitor);
         imperativeAspect.visitAttributes(visitor);
     }
+
+
 
 }

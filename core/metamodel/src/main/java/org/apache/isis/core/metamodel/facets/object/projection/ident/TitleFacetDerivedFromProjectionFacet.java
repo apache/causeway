@@ -23,21 +23,26 @@ import java.util.function.BiConsumer;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.val;
 
-public class TitleFacetDerivedFromProjectionFacet extends TitleFacetAbstract {
+public class TitleFacetDerivedFromProjectionFacet
+extends TitleFacetAbstract {
 
     private final ProjectionFacet projectionFacet;
 
-    public TitleFacetDerivedFromProjectionFacet(final ProjectionFacet projectionFacet, final FacetHolder holder) {
+    public TitleFacetDerivedFromProjectionFacet(
+            final ProjectionFacet projectionFacet,
+            final FacetHolder holder) {
         super(holder);
         this.projectionFacet = projectionFacet;
     }
 
     @Override
-    public String title(final ManagedObject targetAdapter) {
+    public String title(final TitleRenderRequest titleRenderRequest) {
+        final ManagedObject targetAdapter = titleRenderRequest.getObject();
         val projectedAdapter = projectionFacet.projected(targetAdapter);
         return projectedAdapter.titleString();
     }
@@ -47,5 +52,6 @@ public class TitleFacetDerivedFromProjectionFacet extends TitleFacetAbstract {
         super.visitAttributes(visitor);
         visitor.accept("projectionFacet", projectionFacet.getClass().getName());
     }
+
 
 }

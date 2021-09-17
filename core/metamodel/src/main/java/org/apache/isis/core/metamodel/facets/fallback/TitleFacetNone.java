@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.fallback;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 
 public class TitleFacetNone extends TitleFacetAbstract {
 
@@ -29,7 +29,7 @@ public class TitleFacetNone extends TitleFacetAbstract {
     }
 
     @Override
-    public String title(final ManagedObject object) {
+    public String title(final TitleRenderRequest titleRenderRequest) {
         return null;
     }
 

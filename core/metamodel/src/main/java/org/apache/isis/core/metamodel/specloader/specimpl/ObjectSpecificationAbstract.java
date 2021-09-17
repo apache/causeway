@@ -69,6 +69,7 @@ import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
@@ -402,12 +403,9 @@ implements ObjectSpecification {
     }
 
     @Override
-    public String getTitle(
-            final Predicate<ManagedObject> isContextAdapter,
-            final ManagedObject targetAdapter) {
-
+    public String getTitle(final TitleRenderRequest titleRenderRequest) {
         if (titleFacet != null) {
-            val titleString = titleFacet.title(isContextAdapter, targetAdapter);
+            val titleString = titleFacet.title(titleRenderRequest);
             if (!_Strings.isEmpty(titleString)) {
                 return titleString;
             }

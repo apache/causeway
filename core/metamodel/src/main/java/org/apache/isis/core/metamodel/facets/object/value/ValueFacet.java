@@ -22,7 +22,9 @@ import java.util.Optional;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider.Context;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -42,6 +44,9 @@ public interface ValueFacet<T> extends Facet {
 
     LogicalType getValueType();
     Can<ValueSemanticsProvider<T>> getValueSemantics();
+    Context createValueSemanticsContext();
+
+    // -- PARSER
 
     Optional<Parser<T>> selectParserForParameter(final ObjectActionParameter param);
     Optional<Parser<T>> selectParserForProperty(final OneToOneAssociation prop);
@@ -57,5 +62,23 @@ public interface ValueFacet<T> extends Facet {
         return selectParserForProperty(prop)
                 .orElseGet(()->fallbackParser(prop.getFeatureIdentifier()));
     }
+
+    // -- RENDERER
+
+    Optional<Renderer<T>> selectRendererForParameter(final ObjectActionParameter param);
+    Optional<Renderer<T>> selectRendererForProperty(final OneToOneAssociation prop);
+
+    Renderer<T> fallbackRenderer(Identifier featureIdentifier);
+
+    default Renderer<T> selectRendererForParameterElseFallback(final ObjectActionParameter param) {
+        return selectRendererForParameter(param)
+                .orElseGet(()->fallbackRenderer(param.getFeatureIdentifier()));
+    }
+
+    default Renderer<T> selectRendererForPropertyElseFallback(final OneToOneAssociation prop) {
+        return selectRendererForProperty(prop)
+                .orElseGet(()->fallbackRenderer(prop.getFeatureIdentifier()));
+    }
+
 
 }
