@@ -227,7 +227,7 @@ public class ParameterNegotiationModel {
         @Getter @NonNull private final _BindableAbstract<String> bindableParamSearchArgument;
         @Getter @NonNull private final LazyObservable<Can<ManagedObject>> observableParamChoices;
 
-        private final @NonNull Bindable<String> bindableParamAsText;
+        private Bindable<String> bindableParamAsText;
 
         private ParameterModel(
                 final int paramNr,
@@ -244,21 +244,6 @@ public class ParameterNegotiationModel {
             bindableParamValue.addListener((e,o,n)->{
                 getNegotiationModel().onNewParamValue();
             });
-
-            // value types should have associated parsers/formatters via value semantics
-            bindableParamAsText = action.getReturnType().lookupFacet(ValueFacet.class)
-            .map(valueFacet->valueFacet.selectParserForParameterElseFallback(metaModel))
-            .map(parser->bindableParamValue
-                        .mapToBindable(
-                                value->parser.parseableTextRepresentation(null, value.getPojo()),
-                                text->ManagedObject.of(null, parser.parseTextRepresentation(null, text)))
-            )
-            .orElseGet(()->
-                // fallback Bindable that is floating free (unbound)
-                // writing to it has no effect on the domain
-                _Bindables.forValue(String.format("Could not find a ValueFacet for type %s",
-                        action.getReturnType().getLogicalType()))
-            );
 
             // has either autoComplete, choices, or none
             observableParamChoices = metaModel.hasAutoComplete()
@@ -323,6 +308,10 @@ public class ParameterNegotiationModel {
 
         @Override
         public Bindable<String> getValueAsParsableText() {
+            if(bindableParamAsText==null) {
+                // value types should have associated parsers/formatters via value semantics
+                bindableParamAsText = _BindingUtil.bindAsParsableText(metaModel, bindableParamValue);
+            }
             return bindableParamAsText;
         }
 

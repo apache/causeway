@@ -57,7 +57,6 @@ import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
-import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
@@ -372,15 +371,6 @@ extends
     default boolean isValueOrIsParented() {
         return isValue() || isParented();
     }
-
-    /**
-     * Determines if objects of this type can be set up from a text entry
-     * string.
-     *
-     * <p>
-     * In effect, means has got a {@link ParseableFacet}.
-     */
-    boolean isParseable();
 
     /**
      * Determines if objects of this type can be converted to a data-stream.

@@ -73,7 +73,7 @@ implements DoubleFloatingPointValueFacet {
     // ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    public String titleString(final Object value) {
+    public String asTitleString(final Double value) {
         return titleString(format, value);
     }
 

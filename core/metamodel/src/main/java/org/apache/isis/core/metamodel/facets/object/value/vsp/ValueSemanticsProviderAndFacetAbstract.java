@@ -38,7 +38,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 @Deprecated
 public abstract class ValueSemanticsProviderAndFacetAbstract<T>
 extends FacetAbstract
-implements ValueSemanticsProvider<T>, Renderer<T>, EncoderDecoder<T>, Parser<T>, DefaultsProvider<T> {
+implements
+    ValueSemanticsProvider<T>,
+    Renderer<T>, EncoderDecoder<T>, Parser<T>, DefaultsProvider<T> {
 
     private final Class<T> adaptedClass;
     private final int typicalLength;
@@ -188,29 +190,29 @@ implements ValueSemanticsProvider<T>, Renderer<T>, EncoderDecoder<T>, Parser<T>,
     }
 
     @Override
-    public String presentationValue(final ValueSemanticsProvider.Context context, final Object object) {
+    public String presentationValue(final ValueSemanticsProvider.Context context, final T object) {
         if (object == null) {
             return "";
         }
-        return titleString(object);
+        return asTitleString(object);
     }
 
     /**
-     * Defaults to {@link Parser#presentationValue(org.apache.isis.applib.adapters.Parser.Context, Object)}.
+     * Defaults to {@link Parser#parseableTextRepresentation(org.apache.isis.applib.adapters.ValueSemanticsProvider.Context, Object)
      */
     @Override
-    public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final Object existing) {
+    public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final T existing) {
         return presentationValue(context, existing);
     }
 
-    protected String titleString(final Format formatter, final Object object) {
+    protected String titleString(final Format formatter, final T object) {
         return object == null ? "" : formatter.format(object);
     }
 
     /**
      * Return a string representation of aforesaid object.
      */
-    protected abstract String titleString(Object object);
+    protected abstract String asTitleString(T object);
 
     @Override
     public final int typicalLength() {

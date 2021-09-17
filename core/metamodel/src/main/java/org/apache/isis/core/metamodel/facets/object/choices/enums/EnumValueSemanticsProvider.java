@@ -106,7 +106,7 @@ implements EnumFacet {
 
     @Override
     public String toEncodedString(final T object) {
-        return titleString(object);
+        return asTitleString(object);
     }
 
     @Override
@@ -116,7 +116,7 @@ implements EnumFacet {
 
 
     @Override
-    protected String titleString(final Object object) {
+    protected String asTitleString(final T object) {
         val translationService = getTranslationService();
 
         if (titleMethod != null) {
@@ -139,7 +139,7 @@ implements EnumFacet {
         }
 
         // simply translate the enum constant's name
-        val objectAsEnum = (Enum<?>) object;
+        val objectAsEnum = object;
         val translationContext = TranslationContext.forEnum(objectAsEnum);
         final String friendlyNameOfEnum = Enums.getFriendlyNameOf(objectAsEnum.name());
         return translationService.translate(translationContext, friendlyNameOfEnum);

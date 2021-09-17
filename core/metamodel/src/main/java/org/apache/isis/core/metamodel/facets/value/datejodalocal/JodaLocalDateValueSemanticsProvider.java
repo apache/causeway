@@ -175,11 +175,11 @@ implements JodaLocalDateValueFacet {
     // ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    public String titleString(final Object value) {
+    public String asTitleString(final LocalDate value) {
         if (value == null) {
             return null;
         }
-        final LocalDate date = (LocalDate) value;
+        final LocalDate date = value;
         DateTimeFormatter f = titleStringFormatter.withLocale(Locale.getDefault());
         return JodaLocalDateUtil.titleString(f, date);
     }

@@ -51,9 +51,9 @@ implements CommandDtoValueFacet {
     }
 
     @Override
-    public String titleString(final Object object) {
+    public String asTitleString(final CommandDto object) {
         if (object == null) return "[null]";
-        val commandDto = (CommandDto) object;
+        val commandDto = object;
         return CommandDtoUtils.toXml(commandDto);
     }
 

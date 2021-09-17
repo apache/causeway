@@ -70,7 +70,7 @@ implements FloatingPointValueFacet {
     }
 
     @Override
-    public String titleString(final Object value) {
+    public String asTitleString(final Float value) {
         return titleString(format, value);
     }
 

@@ -21,19 +21,13 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -52,7 +46,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import lombok.val;
 
 /**
  * Represents a scalar of an entity, either a {@link Kind#PROPERTY property} or
@@ -191,33 +184,16 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         if (adapter == null) {
             return null;
         }
-        val spec = adapter.getSpecification();
+        final var spec = adapter.getSpecification();
         if(spec.isValue()) {
             managedValue().getValueAsParsableText().getValue();
-
-//            val parseableFacet = getTypeOfSpecification().getFacet(ParseableFacet.class);
-//            if (parseableFacet == null) {
-//                throw new RuntimeException("unable to find a parser for " + spec.getFullIdentifier());
-//            }
-//            return parseableFacet.parseableTextRepresentation(adapter);
         }
         return adapter.titleString();
     }
 
     public void setObjectAsString(final String enteredText) {
-        // parse text to get adapter
-
         managedValue().getValueAsParsableText().setValue(enteredText);
         setObject(managedValue().getValue().getValue());
-
-//        val parseableFacet = getTypeOfSpecification().getFacet(ParseableFacet.class);
-//        if (parseableFacet == null) {
-//            throw new RuntimeException("unable to find a parser for " + getTypeOfSpecification().getFullIdentifier());
-//        }
-//        ManagedObject adapter = parseableFacet.parseTextEntry(getObject(), enteredText,
-//                InteractionInitiatedBy.USER);
-//
-//        setObject(adapter);
     }
 
     public abstract ManagedValue managedValue();

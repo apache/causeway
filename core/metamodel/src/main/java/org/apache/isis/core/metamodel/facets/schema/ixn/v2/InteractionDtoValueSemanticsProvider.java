@@ -51,9 +51,9 @@ implements InteractionDtoValueFacet {
     }
 
     @Override
-    public String titleString(final Object object) {
+    public String asTitleString(final InteractionDto object) {
         if (object == null) return "[null]";
-        final InteractionDto interactionDto = (InteractionDto) object;
+        final InteractionDto interactionDto = object;
         return InteractionDtoUtils.toXml(interactionDto);
     }
 

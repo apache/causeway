@@ -221,7 +221,7 @@ implements DateValueFacet {
     // ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    public String titleString(final Object value) {
+    public String asTitleString(final T value) {
         if (value == null) {
             return null;
         }

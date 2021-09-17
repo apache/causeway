@@ -36,7 +36,6 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
-import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.annotation.LogicalTypeFacetForValueAnnotation;
@@ -58,9 +57,6 @@ import lombok.extern.log4j.Log4j2;
  * <p>
  * In addition, the following facets may be installed:
  * <ul>
- * <li> {@link ParseableFacet} - if a {@link Parser} has been specified
- * explicitly in the annotation (or is picked up through an external
- * configuration file)</li>
  * <li> {@link EncodableFacet} - if an {@link EncoderDecoder} has been specified
  * explicitly in the annotation (or is picked up through an external
  * configuration file)</li>

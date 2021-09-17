@@ -46,8 +46,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.encoder.EncodableFacetUsingEncoderDecoder;
-import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
-import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacetUsingParser;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.facets.value.string.StringValueSemantics;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -66,7 +64,6 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     //private ValueSemanticsProviderAndFacetAbstract<?> valueSemanticsProvider;
     private ValueSemanticsProvider<?> valueSemanticsProvider;
     private EncodableFacetUsingEncoderDecoder encodeableFacet;
-    private ParseableFacetUsingParser parseableFacet;
 
     @Before
     public void setUp() throws Exception {
@@ -108,7 +105,6 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         this.encodeableFacet = new EncodableFacetUsingEncoderDecoder(
                 value,
                 mockFacetHolder);
-        this.parseableFacet = ParseableFacetUsingParser.create(value, mockFacetHolder);
     }
 
     protected void setSemanitcs(final AbstractValueSemanticsProvider<?> valueSemantics) {
@@ -116,9 +112,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         this.encodeableFacet = new EncodableFacetUsingEncoderDecoder(
                 valueSemantics.getEncoderDecoder(),
                 mockFacetHolder);
-        this.parseableFacet = ParseableFacetUsingParser.create(valueSemantics.getParser(), mockFacetHolder);
     }
-
 
     protected <T> ValueSemanticsProviderAndFacetAbstract<T> getValue(final Class<T> type) {
         return _Casts.uncheckedCast(valueSemanticsProvider);
@@ -126,10 +120,6 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
 
     protected EncodableFacet getEncodeableFacet() {
         return encodeableFacet;
-    }
-
-    protected ParseableFacet getParseableFacet() {
-        return parseableFacet;
     }
 
     protected ManagedObject createAdapter(final Object object) {

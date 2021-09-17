@@ -68,7 +68,6 @@ import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
-import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
@@ -850,11 +849,6 @@ implements ObjectSpecification {
     @Override
     public boolean isHidden() {
         return containsFacet(HiddenFacet.class);
-    }
-
-    @Override
-    public boolean isParseable() {
-        return containsFacet(ParseableFacet.class);
     }
 
     @Override

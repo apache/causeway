@@ -47,7 +47,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -57,7 +56,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -450,7 +448,7 @@ public class XmlSnapshot implements Snapshot {
         final ObjectSpecification nos = object.getSpecification();
         // HACK: really want a ObjectSpecification.hasField method to
         // check first.
-        val field = nos.getAssociation(fieldName).orElse(null);
+        final var field = nos.getAssociation(fieldName).orElse(null);
         if (field == null) {
             if (log.isInfoEnabled()) {
                 log.info("includeField(Pl, Vec, Str): could not locate field, skipping");
@@ -464,7 +462,7 @@ public class XmlSnapshot implements Snapshot {
         if (log.isDebugEnabled()) {
             log.debug("includeField(Pl, Vec, Str): locating corresponding XML element");
         }
-        val xmlFieldElements = elementsUnder(xmlElement, field.getId());
+        final var xmlFieldElements = elementsUnder(xmlElement, field.getId());
         if (xmlFieldElements.size() != 1) {
             if (log.isInfoEnabled()) {
                 log.info("includeField(Pl, Vec, Str): could not locate {}",
@@ -708,13 +706,10 @@ public class XmlSnapshot implements Snapshot {
                     // XML
                     isisMetaModel.setAttributesForValue(xmlValueElement, valueNos.getShortIdentifier());
 
-                    // return parsed string, else encoded string, else title.
+                    // return encoded string, else title.
                     String valueStr;
-                    final ParseableFacet parseableFacet = fieldNos.getFacet(ParseableFacet.class);
                     final EncodableFacet encodeableFacet = fieldNos.getFacet(EncodableFacet.class);
-                    if (parseableFacet != null) {
-                        valueStr = parseableFacet.parseableTextRepresentation(value);
-                    } else if (encodeableFacet != null) {
+                    if (encodeableFacet != null) {
                         valueStr = encodeableFacet.toEncodedString(value);
                     } else {
                         valueStr = value.titleString();

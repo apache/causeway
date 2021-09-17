@@ -74,7 +74,7 @@ implements IntegerValueFacet {
     }
 
     @Override
-    public String titleString(final Object value) {
+    public String asTitleString(final Integer value) {
         return titleString(format, value);
     }
 

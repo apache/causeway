@@ -52,9 +52,9 @@ implements ChangesDtoValueFacet {
     }
 
     @Override
-    public String titleString(final Object object) {
+    public String asTitleString(final ChangesDto object) {
         if (object == null) return "[null]";
-        final ChangesDto changesDto = (ChangesDto) object;
+        final ChangesDto changesDto = object;
         return ChangesDtoUtils.toXml(changesDto);
     }
 

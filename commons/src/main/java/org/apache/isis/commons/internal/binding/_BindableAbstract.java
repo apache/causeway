@@ -154,18 +154,24 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
             if(isReverseUpdating.get()) {
                 return;
             }
-            isForwardUpdating.set(true);
-            newBindable.setValue(forwardMapper.apply(n));
-            isForwardUpdating.set(false);
+            try {
+                isForwardUpdating.set(true);
+                newBindable.setValue(forwardMapper.apply(n));
+            } finally {
+                isForwardUpdating.set(false);
+            }
         });
 
         newBindable.addListener((e,o,n)->{
             if(isForwardUpdating.get()) {
                 return;
             }
-            isReverseUpdating.set(true);
-            setValue(reverseMapper.apply(n));
-            isReverseUpdating.set(false);
+            try {
+                isReverseUpdating.set(true);
+                setValue(reverseMapper.apply(n));
+            } finally {
+                isReverseUpdating.set(false);
+            }
         });
 
         return newBindable;

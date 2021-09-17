@@ -241,11 +241,6 @@ implements ObjectSpecification {
     }
 
     @Override
-    public boolean isParseable() {
-        return false;
-    }
-
-    @Override
     public boolean isParented() {
         return false;
     }

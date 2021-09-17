@@ -72,7 +72,7 @@ implements ShortValueFacet {
     }
 
     @Override
-    public String titleString(final Object value) {
+    public String asTitleString(final Short value) {
         return titleString(format, value);
     }
 

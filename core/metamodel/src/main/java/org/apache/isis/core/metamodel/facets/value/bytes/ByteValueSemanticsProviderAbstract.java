@@ -69,7 +69,7 @@ implements ByteValueFacet {
     }
 
     @Override
-    public String titleString(final Object value) {
+    public String asTitleString(final Byte value) {
         return titleString(format, value);
     }
 

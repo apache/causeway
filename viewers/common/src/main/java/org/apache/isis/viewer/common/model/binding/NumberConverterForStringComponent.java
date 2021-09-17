@@ -21,7 +21,7 @@ package org.apache.isis.viewer.common.model.binding;
 import java.util.Optional;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -33,14 +33,14 @@ implements BindingConverter<String> {
 
     @Getter(onMethod_ = {@Override})
     private final ObjectSpecification valueSpecification;
-    private final ParseableFacet parsableFacet;
+    private final ValueFacet valueFacet;
 
     @SuppressWarnings("unchecked")
     public NumberConverterForStringComponent(final ObjectSpecification valueSpecification) {
         this.valueSpecification = valueSpecification;
 
-        this.parsableFacet = lookupFacet(ParseableFacet.class)
-                .orElseThrow(()->_Exceptions.noSuchElement("missing 'ParseableFacet'"));
+        this.valueFacet = lookupFacet(ValueFacet.class)
+                .orElseThrow(()->_Exceptions.noSuchElement("missing 'ValueFacet'"));
     }
 
     @Override

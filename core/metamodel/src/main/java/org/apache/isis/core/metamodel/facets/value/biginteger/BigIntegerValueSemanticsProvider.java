@@ -75,7 +75,7 @@ implements BigIntegerValueFacet {
     }
 
     @Override
-    public String titleString(final Object object) {
+    public String asTitleString(final BigInteger object) {
         return titleString(format, object);
     }
 

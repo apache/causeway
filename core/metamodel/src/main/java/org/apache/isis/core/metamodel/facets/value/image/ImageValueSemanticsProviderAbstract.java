@@ -50,7 +50,7 @@ implements ImageValueFacet {
     }
 
     @Override
-    public String titleString(final Object value) {
+    public String asTitleString(final T value) {
         return "image";
     }
 

@@ -55,7 +55,7 @@ implements CharValueFacet {
     }
 
     @Override
-    public String titleString(final Object value) {
+    public String asTitleString(final Character value) {
         return value == null ? "" : value.toString();
     }
 

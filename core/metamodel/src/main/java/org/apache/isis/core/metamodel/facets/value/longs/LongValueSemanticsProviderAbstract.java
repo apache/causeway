@@ -70,7 +70,7 @@ implements LongValueFacet {
     }
 
     @Override
-    public String titleString(final Object value) {
+    public String asTitleString(final Long value) {
         return titleString(format, value);
     }
 
