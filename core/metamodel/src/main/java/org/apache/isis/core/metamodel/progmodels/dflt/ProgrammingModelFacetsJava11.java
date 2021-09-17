@@ -44,7 +44,6 @@ import org.apache.isis.core.metamodel.facets.object.ViewModelSemanticCheckingFac
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetFallbackFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.choices.enums.EnumFacetUsingValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.facets.object.defaults.annotcfg.DefaultedFacetAnnotationElseConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.DomainObjectLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainservice.annotation.DomainServiceFacetAnnotationFactory;
@@ -213,8 +212,6 @@ extends ProgrammingModelAbstract {
 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new BookmarkPolicyFacetFallbackFactory(mmc));
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new HomePageFacetAnnotationFactory(mmc));
-
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new DefaultedFacetAnnotationElseConfigurationFactory(mmc));
 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory(mmc));
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory(mmc));

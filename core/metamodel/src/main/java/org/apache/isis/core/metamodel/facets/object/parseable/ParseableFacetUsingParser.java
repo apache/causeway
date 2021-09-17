@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.parseable.parser;
+package org.apache.isis.core.metamodel.facets.object.parseable;
 
 import java.util.IllegalFormatException;
 import java.util.function.BiConsumer;
@@ -28,13 +28,13 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ParsingException;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
-import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
@@ -134,16 +134,11 @@ implements ParseableFacet {
         }
     }
 
-    /**
-     * TODO: need to fix genericity of using Parser<?>, for now suppressing
-     * warnings.
-     */
     @Override
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     public String parseableTextRepresentation(final ManagedObject contextAdapter) {
         final Object pojo = UnwrapUtil.single(contextAdapter);
 
-        return ((Parser)parser).parseableTextRepresentation(parserContext(), pojo);
+        return parser.parseableTextRepresentation(parserContext(), _Casts.uncheckedCast(pojo));
     }
 
     private ValueSemanticsProvider.Context parserContext() {

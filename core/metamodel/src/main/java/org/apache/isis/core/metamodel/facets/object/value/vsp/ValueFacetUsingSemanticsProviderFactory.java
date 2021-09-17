@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider;
 import org.apache.isis.core.metamodel.facets.object.encodeable.encoder.EncodableFacetUsingEncoderDecoder;
-import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
+import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacetUsingParser;
 import org.apache.isis.core.metamodel.facets.object.title.parser.TitleFacetUsingRenderer;
 import org.apache.isis.core.metamodel.facets.object.value.ImmutableFacetViaValueSemantics;
 import org.apache.isis.core.metamodel.facets.object.value.MaxLengthFacetUsingParser;
@@ -49,7 +49,7 @@ extends FacetFactoryAbstract {
     protected final void addValueFacet(final ValueSemanticsProviderAndFacetAbstract<T> valueSemantics) {
         FacetUtil.addFacet(
                 new ValueFacetUsingSemanticsProvider(Can.ofSingleton(valueSemantics), valueSemantics.getFacetHolder()));
-        installRelatedFacets(valueSemantics, valueSemantics.getFacetHolder());
+        installRelatedFacets(Can.of(valueSemantics), valueSemantics.getFacetHolder());
     }
 
     protected final void addAllFacetsForValueSemantics(
@@ -57,24 +57,25 @@ extends FacetFactoryAbstract {
             final FacetHolder holder) {
         FacetUtil.addFacet(
                 new ValueFacetUsingSemanticsProvider(valueSemantics, holder));
-        installRelatedFacets(valueSemantics.getFirstOrFail(), holder);
+        installRelatedFacets(valueSemantics, holder);
     }
 
     // -- HELPER
 
     private void installRelatedFacets(
-            final ValueSemanticsProvider<?> semanticsProvider,
+            final Can<ValueSemanticsProvider<?>> semanticsProviders,
             final FacetHolder holder) {
 
         holder.addFacet(new ImmutableFacetViaValueSemantics(holder));
 
-        if (semanticsProvider != null) {
+        semanticsProviders
+        .forEach(semanticsProvider->{
 
             // install the EncodeableFacet if we've been given an EncoderDecoder
             final EncoderDecoder<?> encoderDecoder = semanticsProvider.getEncoderDecoder();
             if (encoderDecoder != null) {
                 //getServiceInjector().injectServicesInto(encoderDecoder);
-                FacetUtil.addFacet(new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder));
+                holder.addFacet(new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder));
             }
 
             final Renderer<?> renderer = semanticsProvider.getRenderer();
@@ -104,7 +105,7 @@ extends FacetFactoryAbstract {
                 holder.addFacet(new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder));
             }
 
-        }
+        });
 
     }
 
