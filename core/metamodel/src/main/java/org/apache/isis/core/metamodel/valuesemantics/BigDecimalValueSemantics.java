@@ -16,11 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.bigdecimal;
+package org.apache.isis.core.metamodel.valuesemantics;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.ParsePosition;
+
+import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -35,6 +37,7 @@ import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.internal.base._Strings;
 
 @Component
+@Named("isis.val.BigDecimalValueSemantics")
 public class BigDecimalValueSemantics
 extends AbstractValueSemanticsProvider<BigDecimal>
 implements

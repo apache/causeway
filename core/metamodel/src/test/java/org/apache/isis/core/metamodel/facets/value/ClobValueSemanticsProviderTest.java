@@ -26,7 +26,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
 import org.apache.isis.applib.value.Clob;
-import org.apache.isis.core.metamodel.facets.value.clobs.ClobValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.ClobValueSemantics;
 
 public class ClobValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {

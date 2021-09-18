@@ -16,22 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.image;
+package org.apache.isis.core.metamodel.facets.value.temporal;
 
-import java.awt.image.BufferedImage;
-import java.util.Optional;
+import java.util.Locale;
+import java.util.function.Function;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.joda.time.format.DateTimeFormatter;
 
-public interface ImageValueSemantics {
+public final class JodaFunctions  {
 
-    int getHeight(ManagedObject object);
+    private JodaFunctions(){}
 
-    int getWidth(ManagedObject object);
+    public static Function<DateTimeFormatter, DateTimeFormatter> withLocale(final Locale locale) {
+        return new Function<DateTimeFormatter, DateTimeFormatter>() {
+            @Override
+            public DateTimeFormatter apply(DateTimeFormatter input) {
+                if (locale == null) {
+                    return input;
+                }
+                return input.withLocale(locale);
+            }
+        };
+    }
 
-    /**
-     * @return optionally the contents as a {@link BufferedImage} based on
-     * whether the wrapped content is not empty
-     */
-    Optional<BufferedImage> getImage(ManagedObject object);
 }

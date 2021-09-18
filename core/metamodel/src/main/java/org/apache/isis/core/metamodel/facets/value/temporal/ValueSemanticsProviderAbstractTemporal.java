@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value;
+package org.apache.isis.core.metamodel.facets.value.temporal;
 
 import java.text.DateFormat;
 import java.text.ParseException;

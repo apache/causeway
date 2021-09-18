@@ -16,7 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.booleans;
+package org.apache.isis.core.metamodel.valuesemantics;
+
+import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -34,6 +36,7 @@ import org.apache.isis.commons.internal.base._Strings;
  * due to auto-boxing also handles the primitive variant
  */
 @Component
+@Named("isis.val.BooleanValueSemantics")
 public class BooleanValueSemantics
 extends AbstractValueSemanticsProvider<Boolean>
 implements

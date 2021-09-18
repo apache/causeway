@@ -32,7 +32,7 @@ import org.apache.isis.applib.exceptions.recoverable.InvalidEntryException;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTemporal;
+import org.apache.isis.core.metamodel.facets.value.temporal.ValueSemanticsProviderAbstractTemporal;
 
 import lombok.Getter;
 import lombok.Setter;

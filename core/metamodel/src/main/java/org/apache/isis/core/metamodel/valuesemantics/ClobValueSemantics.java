@@ -16,13 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.blobs;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+package org.apache.isis.core.metamodel.valuesemantics;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -30,43 +28,39 @@ import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
-import org.apache.isis.applib.adapters.ValueSemanticsProvider.Context;
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.commons.internal.base._Bytes;
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.applib.value.Clob;
 
 @Component
-public class BlobValueSemantics
-extends AbstractValueSemanticsProvider<Blob>
+@Named("isis.val.ClobValueSemantics")
+public class ClobValueSemantics
+extends AbstractValueSemanticsProvider<Clob>
 implements
-    EncoderDecoder<Blob>,
-    Renderer<Blob> {
+    EncoderDecoder<Clob>,
+    Renderer<Clob> {
 
     // RENDERER
 
     @Override
-    public String presentationValue(final ValueSemanticsProvider.Context context, final Blob value) {
-        return render(value, Blob::getName);
+    public String presentationValue(final ValueSemanticsProvider.Context context, final Clob value) {
+        return render(value, Clob::getName);
     }
 
     // -- ENCODER DECODER
 
     @Override
-    public String toEncodedString(final Blob blob) {
-        return blob.getName() + ":" + blob.getMimeType().getBaseType() + ":" +
-        _Strings.ofBytes(_Bytes.encodeToBase64(Base64.getEncoder(), blob.getBytes()), StandardCharsets.UTF_8);
+    public String toEncodedString(final Clob clob) {
+        return clob.getName() + ":" + clob.getMimeType().getBaseType() + ":" + clob.getChars();
     }
 
     @Override
-    public Blob fromEncodedString(final String data) {
+    public Clob fromEncodedString(final String data) {
         final int colonIdx = data.indexOf(':');
         final String name  = data.substring(0, colonIdx);
         final int colon2Idx  = data.indexOf(":", colonIdx+1);
         final String mimeTypeBase = data.substring(colonIdx+1, colon2Idx);
-        final String payload = data.substring(colon2Idx+1);
-        final byte[] bytes = _Bytes.decodeBase64(Base64.getDecoder(), payload.getBytes(StandardCharsets.UTF_8));
+        final CharSequence chars = data.substring(colon2Idx+1);
         try {
-            return new Blob(name, new MimeType(mimeTypeBase), bytes);
+            return new Clob(name, new MimeType(mimeTypeBase), chars);
         } catch (MimeTypeParseException e) {
             throw new RuntimeException(e);
         }

@@ -16,10 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.url;
+package org.apache.isis.core.metamodel.valuesemantics;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.UUID;
+
+import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -31,67 +32,56 @@ import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Strings;
 
 @Component
-public class URLValueSemantics
-extends AbstractValueSemanticsProvider<java.net.URL>
+@Named("isis.val.UUIDValueSemantics")
+public class UUIDValueSemantics
+extends AbstractValueSemanticsProvider<UUID>
 implements
-    EncoderDecoder<java.net.URL>,
-    Parser<java.net.URL>,
-    Renderer<java.net.URL> {
+    EncoderDecoder<UUID>,
+    Parser<UUID>,
+    Renderer<UUID> {
 
     // -- ENCODER DECODER
 
     @Override
-    public String toEncodedString(final java.net.URL url) {
-        return url != null? url.toString(): "NULL";
+    public String toEncodedString(final UUID object) {
+        return object.toString();
     }
 
     @Override
-    public java.net.URL fromEncodedString(final String data) {
-        if("NULL".equals(data)) {
-            return null;
-        }
-        try {
-            return new java.net.URL(data);
-        } catch (MalformedURLException e) {
-            return null;
-        }
+    public UUID fromEncodedString(final String data) {
+        return UUID.fromString(data);
     }
 
     // -- RENDERER
 
     @Override
-    public String presentationValue(final ValueSemanticsProvider.Context context, final URL value) {
-        return value != null ? value.toString(): "";
+    public String presentationValue(final ValueSemanticsProvider.Context context, final UUID value) {
+        return value == null ? "" : value.toString();
     }
 
     // -- PARSER
 
     @Override
-    public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final URL value) {
-        return value != null ? value.toString(): null;
+    public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final UUID value) {
+        return value == null ? null : value.toString();
     }
 
     @Override
-    public URL parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
+    public UUID parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
         final var input = _Strings.blankToNullOrTrim(text);
-        if(input==null) {
-            return null;
-        }
-        try {
-            return new java.net.URL(input);
-        } catch (final MalformedURLException ex) {
-            throw new IllegalArgumentException("Not parseable as an URL ('" + input + "')", ex);
-        }
+        return input!=null
+                ? UUID.fromString(input)
+                : null;
     }
 
     @Override
     public int typicalLength() {
-        return 100;
+        return maxLength();
     }
 
     @Override
     public int maxLength() {
-        return 2083;
+        return 36;
     }
 
 }

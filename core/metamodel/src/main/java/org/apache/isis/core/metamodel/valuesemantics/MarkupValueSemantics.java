@@ -16,66 +16,69 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.uuid;
+package org.apache.isis.core.metamodel.valuesemantics;
 
-import java.util.UUID;
+import javax.inject.Named;
+
+import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
+import org.apache.isis.applib.adapters.HtmlRenderer;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.applib.value.Markup;
 
-public class UUIDValueSemantics
-extends AbstractValueSemanticsProvider<UUID>
+@Component
+@Named("isis.val.MarkupValueSemantics")
+public class MarkupValueSemantics
+extends AbstractValueSemanticsProvider<Markup>
 implements
-    EncoderDecoder<UUID>,
-    Parser<UUID>,
-    Renderer<UUID> {
+    EncoderDecoder<Markup>,
+    Parser<Markup>,
+    HtmlRenderer<Markup>{
 
     // -- ENCODER DECODER
 
     @Override
-    public String toEncodedString(final UUID object) {
-        return object.toString();
+    public String toEncodedString(final Markup markup) {
+        if(markup==null) {
+            return null;
+        }
+        return markup.asHtml();
     }
 
     @Override
-    public UUID fromEncodedString(final String data) {
-        return UUID.fromString(data);
+    public Markup fromEncodedString(final String html) {
+        if(html==null) {
+            return null;
+        }
+        return new Markup(html);
     }
 
     // -- RENDERER
 
     @Override
-    public String presentationValue(final ValueSemanticsProvider.Context context, final UUID value) {
-        return value == null ? "" : value.toString();
+    public String presentationValue(final ValueSemanticsProvider.Context context, final Markup value) {
+        return value != null? value.asHtml(): "[null]";
     }
 
     // -- PARSER
 
     @Override
-    public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final UUID value) {
-        return value == null ? null : value.toString();
+    public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final Markup value) {
+        return toEncodedString(value);
     }
 
     @Override
-    public UUID parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        final var input = _Strings.blankToNullOrTrim(text);
-        return input!=null
-                ? UUID.fromString(input)
-                : null;
+    public Markup parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
+        return fromEncodedString(text);
     }
 
     @Override
     public int typicalLength() {
-        return maxLength();
+        return 0;
     }
 
-    @Override
-    public int maxLength() {
-        return 36;
-    }
 
 }

@@ -26,7 +26,7 @@ import static org.junit.Assert.fail;
 
 import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.facets.value.booleans.BooleanValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.BooleanValueSemantics;
 
 public class BooleanValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {

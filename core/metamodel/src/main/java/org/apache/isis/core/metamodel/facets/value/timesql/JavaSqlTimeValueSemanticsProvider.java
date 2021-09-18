@@ -32,7 +32,7 @@ import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTemporal;
+import org.apache.isis.core.metamodel.facets.value.temporal.ValueSemanticsProviderAbstractTemporal;
 
 import lombok.Getter;
 import lombok.Setter;

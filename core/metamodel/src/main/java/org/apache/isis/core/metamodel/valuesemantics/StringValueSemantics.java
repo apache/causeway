@@ -16,13 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.string;
+package org.apache.isis.core.metamodel.valuesemantics;
+
+import javax.inject.Named;
+
+import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 
+@Component
+@Named("isis.val.StringValueSemantics")
 public class StringValueSemantics
 extends AbstractValueSemanticsProvider<String>
 implements

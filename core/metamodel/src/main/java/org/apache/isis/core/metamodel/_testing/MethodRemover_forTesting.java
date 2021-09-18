@@ -34,11 +34,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.Value;
 
-public class MethodRemoverForTesting implements MethodRemover {
+public class MethodRemover_forTesting 
+implements MethodRemover {
 
-    // ////////////////////////////////////////////////////////////
-    // removeMethod(...): void
-    // ////////////////////////////////////////////////////////////
     @Value
     static class RemoveMethodArgs {
         public String methodName;

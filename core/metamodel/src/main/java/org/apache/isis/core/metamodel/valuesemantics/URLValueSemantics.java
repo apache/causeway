@@ -16,9 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.localrespath;
+package org.apache.isis.core.metamodel.valuesemantics;
 
-import java.nio.file.InvalidPathException;
+import java.net.MalformedURLException;
+
+import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -26,34 +28,33 @@ import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
-import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Strings;
 
 @Component
-public class LocalResourcePathValueSemantics
-extends AbstractValueSemanticsProvider<LocalResourcePath>
+@Named("isis.val.URLValueSemantics")
+public class URLValueSemantics
+extends AbstractValueSemanticsProvider<java.net.URL>
 implements
-    EncoderDecoder<LocalResourcePath>,
-    Parser<LocalResourcePath>,
-    Renderer<LocalResourcePath> {
+    EncoderDecoder<java.net.URL>,
+    Parser<java.net.URL>,
+    Renderer<java.net.URL> {
 
     // -- ENCODER DECODER
 
     @Override
-    public String toEncodedString(final LocalResourcePath localResourcePath) {
-        return localResourcePath != null
-                ? localResourcePath.getValue()
-                : "NULL";
+    public String toEncodedString(final java.net.URL url) {
+        return url != null? url.toString(): "NULL";
     }
 
     @Override
-    public LocalResourcePath fromEncodedString(final String data) {
+    public java.net.URL fromEncodedString(final String data) {
         if("NULL".equals(data)) {
             return null;
         }
         try {
-            return new LocalResourcePath(data);
-        } catch (InvalidPathException e) {
+            return new java.net.URL(data);
+        } catch (MalformedURLException e) {
             return null;
         }
     }
@@ -61,27 +62,27 @@ implements
     // -- RENDERER
 
     @Override
-    public String presentationValue(final Context context, final LocalResourcePath value) {
-        return render(value, LocalResourcePath::getValue);
+    public String presentationValue(final ValueSemanticsProvider.Context context, final java.net.URL value) {
+        return value != null ? value.toString(): "";
     }
 
     // -- PARSER
 
     @Override
-    public String parseableTextRepresentation(final Context context, final LocalResourcePath value) {
-        return value != null ? value.getValue() : null;
+    public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final java.net.URL value) {
+        return value != null ? value.toString(): null;
     }
 
     @Override
-    public LocalResourcePath parseTextRepresentation(final Context context, final String text) {
+    public java.net.URL parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
         final var input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
             return null;
         }
         try {
-            return new LocalResourcePath(input);
-        } catch (final InvalidPathException ex) {
-            throw new IllegalArgumentException("Not parseable as a LocalResourcePath ('" + input + "')", ex);
+            return new java.net.URL(input);
+        } catch (final MalformedURLException ex) {
+            throw new IllegalArgumentException("Not parseable as an URL ('" + input + "')", ex);
         }
     }
 
@@ -94,6 +95,5 @@ implements
     public int maxLength() {
         return 2083;
     }
-
 
 }

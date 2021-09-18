@@ -16,7 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.password;
+package org.apache.isis.core.metamodel.valuesemantics;
+
+import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -28,6 +30,7 @@ import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.internal.base._Strings;
 
 @Component
+@Named("isis.val.PasswordValueSemantics")
 public class PasswordValueSemantics
 extends AbstractValueSemanticsProvider<Password>
 implements

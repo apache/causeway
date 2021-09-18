@@ -21,9 +21,9 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics;
 
-import org.apache.isis.core.metamodel.facets.value.string.StringValueSemantics;
+import static org.junit.Assert.assertEquals;
 
 public class StringValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {

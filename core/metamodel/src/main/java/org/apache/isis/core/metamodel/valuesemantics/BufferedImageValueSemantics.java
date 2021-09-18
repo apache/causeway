@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.imageawt;
+package org.apache.isis.core.metamodel.valuesemantics;
 
 import java.awt.image.BufferedImage;
 import java.util.Optional;
@@ -30,7 +30,6 @@ import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.image._Images;
-import org.apache.isis.core.metamodel.facets.value.image.ImageValueSemantics;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 

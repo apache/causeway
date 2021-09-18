@@ -33,7 +33,7 @@ import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.isis.core.metamodel._testing.MethodRemoverForTesting;
+import org.apache.isis.core.metamodel._testing.MethodRemover_forTesting;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -70,7 +70,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     protected InteractionProvider mockInteractionProvider;
     protected final InteractionContext iaContext = InteractionContextFactory.testing();
     protected SpecificationLoader mockSpecificationLoader;
-    protected MethodRemoverForTesting methodRemover;
+    protected MethodRemover_forTesting methodRemover;
 
     protected FacetHolder facetHolder;
     protected FacetedMethod facetedMethod;
@@ -84,7 +84,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
         // PRODUCTION
 
-        methodRemover = new MethodRemoverForTesting();
+        methodRemover = new MethodRemover_forTesting();
 
         mockInteractionProvider = context.mock(InteractionProvider.class);
         mockTranslationService = context.mock(TranslationService.class);

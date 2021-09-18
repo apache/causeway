@@ -24,7 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.facets.value.biginteger.BigIntegerValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.BigIntegerValueSemantics;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;

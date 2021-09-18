@@ -16,9 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.biginteger;
+package org.apache.isis.core.metamodel.valuesemantics;
 
 import java.math.BigInteger;
+
+import javax.inject.Named;
+
+import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.DefaultsProvider;
@@ -28,6 +32,8 @@ import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.internal.base._Strings;
 
+@Component
+@Named("isis.val.BigIntegerValueSemantics")
 public class BigIntegerValueSemantics
 extends AbstractValueSemanticsProvider<BigInteger>
 implements

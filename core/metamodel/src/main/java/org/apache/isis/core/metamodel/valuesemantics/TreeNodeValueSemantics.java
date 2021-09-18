@@ -16,9 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.treenode;
+package org.apache.isis.core.metamodel.valuesemantics;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -33,12 +34,12 @@ import org.apache.isis.commons.internal.memento._Mementos.Memento;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
 
 @Component
-@SuppressWarnings("rawtypes")
+@Named("isis.val.TreeNodeValueSemantics")
 public class TreeNodeValueSemantics
-extends AbstractValueSemanticsProvider<TreeNode>
+extends AbstractValueSemanticsProvider<TreeNode<?>>
 implements
-    EncoderDecoder<TreeNode>,
-    Renderer<TreeNode> {
+    EncoderDecoder<TreeNode<?>>,
+    Renderer<TreeNode<?>> {
 
     @Inject UrlEncodingService urlEncodingService;
     @Inject SerializingAdapter serializingAdapter;
@@ -46,14 +47,14 @@ implements
     // -- RENDERER
 
     @Override
-    public String presentationValue(final Context context, final TreeNode value) {
+    public String presentationValue(final Context context, final TreeNode<?> value) {
         return super.render(value, TreeNode::toString);
     }
 
     // -- ENCODER DECODER
 
     @Override
-    public String toEncodedString(final TreeNode treeNode) {
+    public String toEncodedString(final TreeNode<?> treeNode) {
 
         final Memento memento = newMemento();
         memento.put("primaryValue", treeNode.getValue());

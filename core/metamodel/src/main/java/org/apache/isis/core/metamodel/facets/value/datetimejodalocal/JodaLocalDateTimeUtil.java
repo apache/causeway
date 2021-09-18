@@ -27,7 +27,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.facets.value.JodaFunctions;
+import org.apache.isis.core.metamodel.facets.value.temporal.JodaFunctions;
 
 public final class JodaLocalDateTimeUtil  {
 

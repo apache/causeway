@@ -35,46 +35,46 @@ class FactoryService_forTesting implements FactoryService {
 
     @SneakyThrows
     @Override
-    public <T> T getOrCreate(Class<T> requiredType) {
-        return requiredType.newInstance();
+    public <T> T getOrCreate(final Class<T> requiredType) {
+        return requiredType.getDeclaredConstructor().newInstance();
     }
 
     @SneakyThrows
     @Override
-    public <T> T get(Class<T> requiredType) {
-        return requiredType.newInstance();
+    public <T> T get(final Class<T> requiredType) {
+        return requiredType.getDeclaredConstructor().newInstance();
     }
 
     @SneakyThrows
     @Override
-    public <T> T detachedEntity(Class<T> domainClass) {
-        return domainClass.newInstance();
+    public <T> T detachedEntity(final Class<T> domainClass) {
+        return domainClass.getDeclaredConstructor().newInstance();
     }
 
     @Override
-    public <T> T detachedEntity(@NonNull T entity) {
+    public <T> T detachedEntity(@NonNull final T entity) {
         return entity;
     }
 
     @Override
-    public <T> T mixin(Class<T> mixinClass, Object mixedIn) {
+    public <T> T mixin(final Class<T> mixinClass, final Object mixedIn) {
         throw new IllegalArgumentException("Not yet supported");
     }
 
     @Override
-    public <T> T viewModel(Class<T> viewModelClass, @Nullable String mementoStr) {
+    public <T> T viewModel(final Class<T> viewModelClass, @Nullable final String mementoStr) {
         throw new IllegalArgumentException("Not yet supported");
     }
 
     @Override
-    public <T> T viewModel(T viewModel) {
+    public <T> T viewModel(final T viewModel) {
         return viewModel;
     }
 
     @SneakyThrows
     @Override
-    public <T> T create(Class<T> domainClass) {
-        return domainClass.newInstance();
+    public <T> T create(final Class<T> domainClass) {
+        return domainClass.getDeclaredConstructor().newInstance();
     }
 
 

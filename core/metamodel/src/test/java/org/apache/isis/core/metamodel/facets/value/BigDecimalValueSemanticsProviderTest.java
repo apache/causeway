@@ -27,7 +27,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 
 public class BigDecimalValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {
