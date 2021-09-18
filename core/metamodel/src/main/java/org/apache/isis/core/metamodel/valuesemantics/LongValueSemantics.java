@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
-import java.math.BigDecimal;
-
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
@@ -29,51 +27,50 @@ import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
-import org.apache.isis.applib.adapters.ValueSemanticsProvider;
-import org.apache.isis.applib.exceptions.UnrecoverableException;
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.commons.internal.base._Strings;
 
+/**
+ * due to auto-boxing also handles the primitive variant
+ */
 @Component
-@Named("isis.val.BigDecimalValueSemantics")
-public class BigDecimalValueSemantics
-extends AbstractValueSemanticsProvider<BigDecimal>
+@Named("isis.val.ByteValueSemantics")
+public class LongValueSemantics
+extends AbstractValueSemanticsProvider<Long>
 implements
-    DefaultsProvider<BigDecimal>,
-    EncoderDecoder<BigDecimal>,
-    Parser<BigDecimal>,
-    Renderer<BigDecimal> {
+    DefaultsProvider<Long>,
+    EncoderDecoder<Long>,
+    Parser<Long>,
+    Renderer<Long> {
 
     @Override
-    public BigDecimal getDefaultValue() {
-        return BigDecimal.ZERO;
+    public Long getDefaultValue() {
+        return 0L;
     }
 
     // -- ENCODER DECODER
 
     @Override
-    public String toEncodedString(final BigDecimal value) {
-        try {
-            return value.toPlainString();
-        } catch (final Exception e) {
-            throw new UnrecoverableException(e);
-        }
+    public String toEncodedString(final Long object) {
+        return object.toString();
     }
 
     @Override
-    public BigDecimal fromEncodedString(final String data) {
-        return new BigDecimal(data);
+    public Long fromEncodedString(final String data) {
+        return Long.parseLong(data);
     }
 
     // -- RENDERER
 
     @Override
-    public String presentationValue(final ValueSemanticsProvider.Context context, final BigDecimal value) {
+    public String presentationValue(final Context context, final Long value) {
         return render(value, getNumberFormat(context)::format);
     }
 
     // -- PARSER
 
     @Override
-    public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final BigDecimal value) {
+    public String parseableTextRepresentation(final Context context, final Long value) {
         return value==null
                 ? null
                 : getNumberFormat(context)
@@ -81,13 +78,26 @@ implements
     }
 
     @Override
-    public BigDecimal parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        return super.parseDecimal(context, text);
+    public Long parseTextRepresentation(final Context context, final String text) {
+        final var input = _Strings.blankToNullOrTrim(text);
+        if(input==null) {
+            return null;
+        }
+        try {
+            return super.parseInteger(context, input).longValueExact();
+        } catch (final NumberFormatException | ArithmeticException e) {
+            throw new TextEntryParseException("Not a 64-bit signed integer " + input, e);
+        }
     }
 
     @Override
     public int typicalLength() {
-        return 10;
+        return maxLength();
+    }
+
+    @Override
+    public int maxLength() {
+        return 18;
     }
 
 }

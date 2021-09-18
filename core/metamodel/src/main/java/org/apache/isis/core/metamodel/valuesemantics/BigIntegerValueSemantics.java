@@ -29,8 +29,6 @@ import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
-import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.commons.internal.base._Strings;
 
 @Component
 @Named("isis.val.BigIntegerValueSemantics")
@@ -78,15 +76,7 @@ implements
 
     @Override
     public BigInteger parseTextRepresentation(final Context context, final String text) {
-        final var input = _Strings.blankToNullOrTrim(text);
-        if(input==null) {
-            return null;
-        }
-        try {
-            return new BigInteger(input);
-        } catch (final NumberFormatException e) {
-            throw new TextEntryParseException("Not an integer " + input, e);
-        }
+        return super.parseInteger(context, text);
     }
 
     @Override

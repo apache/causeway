@@ -18,15 +18,21 @@
  */
 package org.apache.isis.applib.adapters;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.ParsePosition;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.commons.internal.base._Strings;
 
 /**
  * @since 2.x {@index}
@@ -84,6 +90,47 @@ implements ValueSemanticsProvider<T> {
         return Optional.ofNullable(value)
                 .map(toString)
                 .orElse(NULL_REPRESENTATION);
+    }
+
+    // -- NUMBER PARSING
+
+    protected @Nullable BigInteger parseInteger(
+            final @Nullable ValueSemanticsProvider.Context context,
+            final @Nullable String text) {
+        final var input = _Strings.blankToNullOrTrim(text);
+        if(input==null) {
+            return null;
+        }
+        try {
+            return parseDecimal(context, input).toBigIntegerExact();
+        } catch (final NumberFormatException | ArithmeticException e) {
+            throw new TextEntryParseException("Not an integer value " + text, e);
+        }
+    }
+
+    protected @Nullable BigDecimal parseDecimal(
+            final @Nullable ValueSemanticsProvider.Context context,
+            final @Nullable String text) {
+        final var input = _Strings.blankToNullOrTrim(text);
+        if(input==null) {
+            return null;
+        }
+        final var format = getNumberFormat(context);
+        format.setParseBigDecimal(true);
+        final var position = new ParsePosition(0);
+
+        try {
+            final var number = (BigDecimal)format.parse(input, position);
+            if (position.getErrorIndex() != -1) {
+                throw new ParseException("could not parse input='" + input + "'", position.getErrorIndex());
+            } else if (position.getIndex() < input.length()) {
+                throw new ParseException("input='" + input + "' wasnt processed completely", position.getIndex());
+            }
+            return number;
+        } catch (final NumberFormatException | ParseException e) {
+            throw new TextEntryParseException("Not a decimal value " + input, e);
+        }
+
     }
 
 }

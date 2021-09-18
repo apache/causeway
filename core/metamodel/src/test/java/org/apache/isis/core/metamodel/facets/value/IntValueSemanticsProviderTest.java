@@ -21,30 +21,24 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.core.metamodel.valuesemantics.IntValueSemantics;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-
-import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
-import org.apache.isis.core.metamodel.facets.value.integer.IntValueSemanticsProviderAbstract;
-import org.apache.isis.core.metamodel.facets.value.integer.IntWrapperValueSemanticsProvider;
 
 public class IntValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {
 
-    private IntValueSemanticsProviderAbstract value;
+    private IntValueSemantics value;
     private Integer integer;
-    private FacetHolder holder;
 
     @Before
     public void setUpObjects() throws Exception {
         integer = Integer.valueOf(32);
         allowMockAdapterToReturn(integer);
 
-        holder = FacetHolderAbstract.forTesting(metaModelContext);
-
-        setValue(value = new IntWrapperValueSemanticsProvider(holder));
+        setSemanitcs(value = new IntValueSemantics());
     }
 
     @Test

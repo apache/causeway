@@ -84,9 +84,9 @@ implements
             return null;
         }
         try {
-            return Byte.valueOf(input);
-        } catch (final NumberFormatException e) {
-            throw new TextEntryParseException("Not a byte number " + input, e);
+            return super.parseInteger(context, input).byteValueExact();
+        } catch (final NumberFormatException | ArithmeticException e) {
+            throw new TextEntryParseException("Not a 8-bit signed integer " + input, e);
         }
     }
 
