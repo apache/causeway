@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.lang.Nullable;
 
@@ -44,6 +45,7 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsHiddenPanelFactory;
 
+import lombok.Getter;
 import lombok.val;
 
 public class CollectionSelectorHelper implements Serializable {
@@ -54,6 +56,7 @@ public class CollectionSelectorHelper implements Serializable {
 
     private final EntityCollectionModel collectionModel;
 
+    @Getter
     private final List<ComponentFactory> componentFactories;
     private final ComponentHintKey componentHintKey;
 
@@ -74,15 +77,24 @@ public class CollectionSelectorHelper implements Serializable {
                 : ComponentHintKey.noop();
     }
 
-    private List<ComponentFactory> locateComponentFactories(ComponentFactoryRegistry componentFactoryRegistry) {
-        final List<ComponentFactory> componentFactories = componentFactoryRegistry.findComponentFactories(ComponentType.COLLECTION_CONTENTS, collectionModel);
-        final List<ComponentFactory> otherFactories = _Lists.filter(componentFactories,
-                (final ComponentFactory input) ->
-        input.getClass() != CollectionContentsMultipleViewsPanelFactory.class);
-        return ordered(otherFactories);
-    }
+    private List<ComponentFactory> locateComponentFactories(final ComponentFactoryRegistry componentFactoryRegistry) {
 
-    public List<ComponentFactory> getComponentFactories() {
+        final List<ComponentFactory> ajaxFactoriesToEnd = _Lists.newArrayList();
+
+        final List<ComponentFactory> componentFactories = componentFactoryRegistry
+        .streamComponentFactories(ComponentType.COLLECTION_CONTENTS, collectionModel)
+        .filter(componentFactory -> componentFactory.getClass() != CollectionContentsMultipleViewsPanelFactory.class)
+        .filter(componentFactory -> {
+            if(componentFactory instanceof CollectionContentsAsAjaxTablePanelFactory) {
+                ajaxFactoriesToEnd.add(componentFactory);
+                return false;
+            }
+            return true;
+        })
+        .collect(Collectors.toList());
+
+        componentFactories.addAll(ajaxFactoriesToEnd);
+
         return componentFactories;
     }
 
@@ -152,36 +164,11 @@ public class CollectionSelectorHelper implements Serializable {
 
     }
 
-    private static List<ComponentFactory> ordered(List<ComponentFactory> componentFactories) {
-        return orderAjaxTableToEnd(componentFactories);
-    }
-
-    static List<ComponentFactory> orderAjaxTableToEnd(List<ComponentFactory> componentFactories) {
-        int ajaxTableIdx = findAjaxTable(componentFactories);
-        if (ajaxTableIdx >= 0) {
-            List<ComponentFactory> orderedFactories = _Lists.newArrayList(componentFactories);
-            ComponentFactory ajaxTableFactory = orderedFactories.remove(ajaxTableIdx);
-            orderedFactories.add(ajaxTableFactory);
-            return orderedFactories;
-        } else {
-            return componentFactories;
-        }
-    }
-
-    private static int findAjaxTable(List<ComponentFactory> componentFactories) {
-        for (int i = 0; i < componentFactories.size(); i++) {
-            if (componentFactories.get(i) instanceof CollectionContentsAsAjaxTablePanelFactory) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
     private static UiHintContainer getUiHintContainer(final Component component) {
         return UiHintContainer.Util.hintContainerOf(component, EntityCollectionModelParented.class);
     }
 
-    private static boolean hasRenderEagerlyFacet(IModel<?> model) {
+    private static boolean hasRenderEagerlyFacet(final IModel<?> model) {
         return toParentedEntityCollectionModel(model)
         .map(EntityCollectionModelParented::getMetaModel)
         .map(CollectionSelectorHelper::isRenderEagerly)
@@ -194,7 +181,7 @@ public class CollectionSelectorHelper implements Serializable {
     }
 
 
-    private static boolean hasDefaultViewFacet(IModel<?> model) {
+    private static boolean hasDefaultViewFacet(final IModel<?> model) {
         val entityCollectionModel = toParentedEntityCollectionModel(model).orElse(null);
         if (entityCollectionModel == null) {
             return false;

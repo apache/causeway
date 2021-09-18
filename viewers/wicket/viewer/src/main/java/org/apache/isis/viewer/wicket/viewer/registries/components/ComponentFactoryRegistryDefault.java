@@ -18,10 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.viewer.registries.components;
 
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
@@ -35,14 +33,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory.ApplicationAdvice;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar.ComponentFactoryList;
@@ -58,22 +55,21 @@ import lombok.val;
 @Named("isis.viewer.wicket.ComponentFactoryRegistryDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry {
+public class ComponentFactoryRegistryDefault
+implements ComponentFactoryRegistry {
 
     @Inject private ComponentFactoryRegistrar componentFactoryRegistrar;
     @Inject private MetaModelContext metaModelContext;
 
-    private ListMultimap<ComponentType, ComponentFactory> componentFactoriesByType;
+    private final ListMultimap<ComponentType, ComponentFactory> componentFactoriesByType =
+            _Multimaps.newListMultimap();
 
     @PostConstruct
     public void init() {
-        componentFactoriesByType = _Multimaps.newListMultimap();
         registerComponentFactories(componentFactoryRegistrar);
     }
 
-    // ///////////////////////////////////////////////////////
-    // Registration
-    // ///////////////////////////////////////////////////////
+    // -- REGISTRATION
 
     /**
      * Registers the provided set of component factories.
@@ -108,17 +104,13 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
 
     private void ensureAllComponentTypesRegistered() {
         for (val componentType : ComponentType.values()) {
-            final Collection<ComponentFactory> componentFactories = componentFactoriesByType.getOrElseEmpty(componentType);
-            if (componentFactories.isEmpty()) {
+            if (componentFactoriesByType.getOrElseEmpty(componentType).isEmpty()) {
                 throw new IllegalStateException("No component factories registered for " + componentType);
             }
         }
     }
 
-    // ///////////////////////////////////////////////////////
-    // Public API
-    // ///////////////////////////////////////////////////////
-
+    // -- PUBLIC API
 
     @Override
     public Component addOrReplaceComponent(final MarkupContainer markupContainer, final ComponentType componentType, final IModel<?> model) {
@@ -136,62 +128,36 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
 
     @Override
     public Component createComponent(final ComponentType componentType, final IModel<?> model) {
-        final ComponentFactory componentFactory = findComponentFactoryElseFailFast(componentType, model);
-        final Component component = componentFactory.createComponent(model);
-        return component;
+        return findComponentFactoryElseFail(componentType, model)
+                .createComponent(model);
     }
 
     @Override
     public Component createComponent(final ComponentType componentType, final String id, final IModel<?> model) {
-        final ComponentFactory componentFactory = findComponentFactoryElseFailFast(componentType, model);
-        final Component component = componentFactory.createComponent(id, model);
-        return component;
+        return findComponentFactoryElseFail(componentType, model)
+                .createComponent(id, model);
     }
 
     @Override
-    public List<ComponentFactory> findComponentFactories(final ComponentType componentType, final IModel<?> model) {
-        val componentFactoryList = componentFactoriesByType.get(componentType);
-        val matchingFactories = _Lists.<ComponentFactory>newArrayList();
-        for (val componentFactory : componentFactoryList) {
-            final ApplicationAdvice appliesTo = componentFactory.appliesTo(componentType, model);
-            if (appliesTo.applies()) {
-                matchingFactories.add(componentFactory);
-            }
-            if (appliesTo.exclusively()) {
-                break;
-            }
-        }
-        if (matchingFactories.isEmpty()) {
-            // will just be one
-            matchingFactories.addAll(componentFactoriesByType.get(ComponentType.UNKNOWN));
-        }
-        return matchingFactories;
+    public Stream<ComponentFactory> streamComponentFactories(final ComponentType componentType, final IModel<?> model) {
+        return Stream.concat(
+                componentFactoriesByType.streamElements(componentType)
+                .filter(componentFactory->componentFactory.appliesTo(componentType, model).applies()),
+                componentFactoriesByType.streamElements(ComponentType.UNKNOWN));
     }
 
-    @Override
-    public ComponentFactory findComponentFactory(final ComponentType componentType, final IModel<?> model) {
-        final Collection<ComponentFactory> componentFactories = findComponentFactories(componentType, model);
-        return firstOrNull(componentFactories);
+    // -- JUNIT SUPPORT
+
+    static ComponentFactoryRegistryDefault forTesting(final List<ComponentFactory> componentFactories) {
+        final var factory = new ComponentFactoryRegistryDefault();
+        _NullSafe.stream(componentFactories)
+        .forEach(componentFactory->
+            factory.componentFactoriesByType.putElement(
+                    componentFactory.getComponentType(),
+                    componentFactory));
+        return factory;
     }
 
-    @Override
-    public ComponentFactory findComponentFactoryElseFailFast(final ComponentType componentType, final IModel<?> model) {
-        final ComponentFactory componentFactory = findComponentFactory(componentType, model);
-        if (componentFactory == null) {
-            throw new RuntimeException(String.format("could not find component for componentType = '%s'; model object is of type %s", componentType, model.getClass().getName()));
-        }
-        return componentFactory;
-    }
 
-    private static <T> T firstOrNull(final Collection<T> collection) {
-        final Iterator<T> iterator = collection.iterator();
-        return iterator.hasNext() ? iterator.next() : null;
-    }
-
-    @Override
-    public Collection<ComponentFactory> listComponentFactories() {
-        return componentFactoriesByType.streamElements()
-                .collect(Collectors.toList());
-    }
 
 }

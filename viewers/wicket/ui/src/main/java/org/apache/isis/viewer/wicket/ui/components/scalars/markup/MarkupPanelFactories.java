@@ -52,7 +52,7 @@ public class MarkupPanelFactories {
 
         private final Class<?> valueType;
 
-        public ParentedAbstract(Class<?> valueType) {
+        public ParentedAbstract(final Class<?> valueType) {
             super(ComponentType.SCALAR_NAME_AND_VALUE, ParentedMarkupPanel.class);
             this.valueType = valueType;
         }
@@ -68,10 +68,10 @@ public class MarkupPanelFactories {
             val scalarType = scalarModel.getTypeOfSpecification().getCorrespondingClass();
 
             if(scalarType.equals(valueType)) {
-                return ApplicationAdvice.APPLIES_EXCLUSIVELY;
+                return ApplicationAdvice.APPLIES;
             }
 
-            return appliesIf( valueType.isAssignableFrom(scalarType) );
+            return appliesIf(valueType.isAssignableFrom(scalarType) );
 
         }
 
@@ -91,7 +91,7 @@ public class MarkupPanelFactories {
 
         private final Class<?> valueType;
 
-        public StandaloneAbstract(Class<?> valueType) {
+        public StandaloneAbstract(final Class<?> valueType) {
             super(ComponentType.VALUE, StandaloneMarkupPanel.class);
             this.valueType = valueType;
         }

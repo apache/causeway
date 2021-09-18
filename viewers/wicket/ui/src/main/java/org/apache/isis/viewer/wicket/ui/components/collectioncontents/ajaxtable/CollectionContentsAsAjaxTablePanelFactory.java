@@ -32,7 +32,9 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 /**
  * {@link ComponentFactory} for {@link CollectionContentsAsAjaxTablePanel}.
  */
-public class CollectionContentsAsAjaxTablePanelFactory extends ComponentFactoryAbstract implements CollectionContentsAsFactory {
+public class CollectionContentsAsAjaxTablePanelFactory
+extends ComponentFactoryAbstract
+implements CollectionContentsAsFactory {
 
     private static final long serialVersionUID = 1L;
 

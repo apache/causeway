@@ -18,8 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.app.registry;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -37,12 +36,24 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
  */
 public interface ComponentFactoryRegistry {
 
-    List<ComponentFactory> findComponentFactories(ComponentType componentType, IModel<?> model);
+    Stream<ComponentFactory> streamComponentFactories(ComponentType componentType, IModel<?> model);
 
     /**
      * Finds the "best" {@link ComponentFactory} for the viewId.
      */
-    ComponentFactory findComponentFactory(ComponentType componentType, IModel<?> model);
+    default ComponentFactory findComponentFactory(final ComponentType componentType, final IModel<?> model) {
+        return streamComponentFactories(componentType, model)
+            .findFirst()
+            .orElse(null);
+    }
+
+    default ComponentFactory findComponentFactoryElseFail(final ComponentType componentType, final IModel<?> model) {
+        return streamComponentFactories(componentType, model)
+                .findFirst()
+                .orElseThrow(()->new RuntimeException(String.format(
+                        "could not find component for componentType = '%s'; model object is of type %s",
+                        componentType, model.getClass().getName())));
+    }
 
     /**
      * As per
@@ -78,9 +89,5 @@ public interface ComponentFactoryRegistry {
      * If none can be found, will fail fast.
      */
     Component createComponent(ComponentType componentType, String id, IModel<?> model);
-
-    ComponentFactory findComponentFactoryElseFailFast(ComponentType componentType, IModel<?> model);
-
-    Collection<ComponentFactory> listComponentFactories();
 
 }

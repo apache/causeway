@@ -98,6 +98,10 @@ public class _Multimaps {
                     .flatMap(Collection::stream);
         }
 
+        default Stream<V> streamElements(final K key) {
+            return getOrElseEmpty(key).stream();
+        }
+
         /**
          * @return optionally the underlying map, based on whether it implements a {@link NavigableMap}
          */

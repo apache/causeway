@@ -97,13 +97,6 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
         return ApplicationAdvice.appliesIf(b);
     }
 
-    /**
-     * Convenience for subclasses to call from {@link #appliesTo(IModel)}
-     */
-    protected final ApplicationAdvice appliesExclusivelyIf(final boolean b) {
-        return b ? ApplicationAdvice.APPLIES_EXCLUSIVELY : ApplicationAdvice.DOES_NOT_APPLY;
-    }
-
     @Override
     public final Component createComponent(final IModel<?> model) {
         log.debug("creating component {}", getComponentType()::toString);

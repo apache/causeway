@@ -52,31 +52,15 @@ public interface ComponentFactory extends Serializable {
     ComponentType getComponentType();
 
     public enum ApplicationAdvice {
-        APPLIES(true, false),
-        APPLIES_EXCLUSIVELY(true, true),
-        DOES_NOT_APPLY(false, false);
-        private final boolean applies;
-        private final boolean exclusively;
-
-        private ApplicationAdvice(final boolean applies, final boolean exclusively) {
-            this.applies = applies;
-            this.exclusively = exclusively;
-        }
+        APPLIES,
+        DOES_NOT_APPLY;
 
         public boolean applies() {
-            return applies;
+            return this == APPLIES;
         }
 
-        /**
-         * Whether no other {@link ComponentFactory}s should apply (ie stop
-         * searching for other views).
-         */
-        public boolean exclusively() {
-            return exclusively;
-        }
-
-        public static final ApplicationAdvice appliesIf(final boolean b) {
-            return b ? ApplicationAdvice.APPLIES : ApplicationAdvice.DOES_NOT_APPLY;
+        public static final ApplicationAdvice appliesIf(final boolean condition) {
+            return condition ? ApplicationAdvice.APPLIES : ApplicationAdvice.DOES_NOT_APPLY;
         }
     }
 
