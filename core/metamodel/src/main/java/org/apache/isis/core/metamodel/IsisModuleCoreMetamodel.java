@@ -55,13 +55,14 @@ import org.apache.isis.core.metamodel.valuesemantics.BigIntegerValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.BlobValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.BooleanValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.BufferedImageValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.ByteValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.ClobValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.LocalResourcePathValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.MarkupValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.PasswordValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.TreeNodeValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.URLValueSemantics;
-import org.apache.isis.core.metamodel.valuesemantics.MarkupValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderDefault;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderForBuiltin;
@@ -93,6 +94,7 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
 
         // Value Semantics (built-in defaults)
         BooleanValueSemantics.class,
+        ByteValueSemantics.class,
         BigDecimalValueSemantics.class,
         BigIntegerValueSemantics.class,
         StringValueSemantics.class,
