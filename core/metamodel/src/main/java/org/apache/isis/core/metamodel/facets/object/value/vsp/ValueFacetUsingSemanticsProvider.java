@@ -23,11 +23,11 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacetAbstract;
 
-public class ValueFacetUsingSemanticsProvider
-extends ValueFacetAbstract {
+public class ValueFacetUsingSemanticsProvider<T>
+extends ValueFacetAbstract<T> {
 
     public ValueFacetUsingSemanticsProvider(
-            final Can<ValueSemanticsProvider<?>> valueSemantics,
+            final Can<ValueSemanticsProvider<T>> valueSemantics,
             final FacetHolder holder) {
 
         super(valueSemantics, holder, Precedence.DEFAULT);

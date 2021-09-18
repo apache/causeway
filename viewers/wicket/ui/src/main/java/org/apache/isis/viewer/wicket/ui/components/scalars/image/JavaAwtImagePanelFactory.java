@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.image;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.core.metamodel.facets.value.image.ImageValueFacet;
+import org.apache.isis.core.metamodel.facets.value.image.ImageValueSemantics;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -42,7 +42,8 @@ public class JavaAwtImagePanelFactory extends ComponentFactoryAbstract {
         }
         final ScalarModel scalarModel = (ScalarModel) model;
         final ObjectSpecification specification = scalarModel.getTypeOfSpecification();
-        return appliesIf(specification != null && specification.containsFacet(ImageValueFacet.class));
+        return appliesIf(specification != null
+                && specification.hasValueSemantics(ImageValueSemantics.class));
     }
 
     @Override

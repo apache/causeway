@@ -21,21 +21,48 @@ package org.apache.isis.core.metamodel.facets.value.imageawt;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import javax.inject.Named;
 
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
+
+import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.image._Images;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.value.image.ImageValueSemanticsProviderAbstract;
+import org.apache.isis.core.metamodel.facets.value.image.ImageValueSemantics;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
-public class JavaAwtImageValueSemanticsProvider
-extends ImageValueSemanticsProviderAbstract<BufferedImage> {
+@Component
+@Named("isis.val.BufferedImageValueSemantics")
+public class BufferedImageValueSemantics
+extends AbstractValueSemanticsProvider<BufferedImage>
+implements
+    ImageValueSemantics,
+    EncoderDecoder<BufferedImage> {
 
-    public JavaAwtImageValueSemanticsProvider(final FacetHolder holder) {
-        super(holder, BufferedImage.class);
+    // -- ENCODER DECODER
+
+    @Override
+    public String toEncodedString(final @Nullable BufferedImage image) {
+        if(image==null) {
+            return null;
+        }
+        return _Images.toBase64(image);
     }
+
+    @Override
+    public BufferedImage fromEncodedString(final @Nullable String base64ImageData) {
+        if(_Strings.isNullOrEmpty(base64ImageData)) {
+            return null;
+        }
+        /*sonar-ignore-on*/
+        return _Images.fromBase64(base64ImageData);
+        /*sonar-ignore-off*/
+    }
+
+    // -- FACET
 
     @Override
     public int getWidth(final @Nullable ManagedObject object) {
@@ -50,24 +77,6 @@ extends ImageValueSemanticsProviderAbstract<BufferedImage> {
     @Override
     public Optional<BufferedImage> getImage(final @Nullable ManagedObject object) {
         return unwrap(object);
-    }
-
-    @Override @Nullable
-    public String toEncodedString(final @Nullable BufferedImage image) {
-        if(image==null) {
-            return null;
-        }
-        return _Images.toBase64(image);
-    }
-
-    @Override @Nullable
-    public BufferedImage fromEncodedString(final @Nullable String base64ImageData) {
-        if(_Strings.isNullOrEmpty(base64ImageData)) {
-            return null;
-        }
-        /*sonar-ignore-on*/
-        return _Images.fromBase64(base64ImageData);
-        /*sonar-ignore-off*/
     }
 
     // -- HELPER

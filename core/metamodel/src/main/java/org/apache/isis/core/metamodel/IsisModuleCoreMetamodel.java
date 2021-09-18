@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueSem
 import org.apache.isis.core.metamodel.facets.value.blobs.BlobValueSemantics;
 import org.apache.isis.core.metamodel.facets.value.booleans.BooleanValueSemantics;
 import org.apache.isis.core.metamodel.facets.value.clobs.ClobValueSemantics;
+import org.apache.isis.core.metamodel.facets.value.imageawt.BufferedImageValueSemantics;
 import org.apache.isis.core.metamodel.facets.value.localrespath.LocalResourcePathValueSemantics;
 import org.apache.isis.core.metamodel.facets.value.markup.MarkupValueSemantics;
 import org.apache.isis.core.metamodel.facets.value.password.PasswordValueSemantics;
@@ -94,6 +95,7 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         BigDecimalValueSemantics.class,
         StringValueSemantics.class,
         PasswordValueSemantics.class,
+        BufferedImageValueSemantics.class,
         BlobValueSemantics.class,
         ClobValueSemantics.class,
         MarkupValueSemantics.class,

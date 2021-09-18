@@ -21,20 +21,20 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.image;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.wicket.extensions.markup.html.image.resource.ThumbnailImageResource;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.image.NonCachingImage;
 import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.core.metamodel.facets.value.image.ImageValueFacet;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.core.metamodel.facets.value.image.ImageValueSemantics;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -48,12 +48,12 @@ public class WicketImageUtil {
             return Optional.empty();
         }
 
-        val imageResource = new BufferedDynamicImageResource();
+        final var imageResource = new BufferedDynamicImageResource();
         imageResource.setImage(buffImg);
 
-        val thumbnailImageResource = new ThumbnailImageResource(imageResource, 300);
+        final var thumbnailImageResource = new ThumbnailImageResource(imageResource, 300);
 
-        val wicketImage = new NonCachingImage(id, thumbnailImageResource);
+        final var wicketImage = new NonCachingImage(id, thumbnailImageResource);
         wicketImage.setOutputMarkupId(true);
 
         return Optional.of(wicketImage);
@@ -65,26 +65,32 @@ public class WicketImageUtil {
             final @NonNull String id,
             final @Nullable Blob blob) {
 
-        val buffImg = Optional.ofNullable(blob)
+        final var buffImg = Optional.ofNullable(blob)
         .flatMap(Blob::asImage)
         .orElse(null);
 
         return asWicketImage(id, buffImg);
     }
 
-    public static Optional<Image> asWicketImage(
+    public Optional<Image> asWicketImage(
             final @NonNull String id,
             final @NonNull ScalarModel model) {
 
-      val imageValueFacet = model.getTypeOfSpecification().getFacet(ImageValueFacet.class);
-      val adapter = model.getObject();
-      if(imageValueFacet==null
-              || ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
+      final ManagedObject adapter = model.getObject();
+      if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
           return Optional.empty();
       }
 
-      val buffImg = imageValueFacet.getImage(adapter).orElse(null);
-      return asWicketImage(id, buffImg);
+      final var spec = model.getTypeOfSpecification();
+
+      return spec.streamValueSemantics(ImageValueSemantics.class)
+      .map(imageValueSemantics->imageValueSemantics.getImage(adapter).orElse(null))
+      .filter(_NullSafe::isPresent)
+      .map(buffImg->asWicketImage(id, buffImg).orElse(null))
+      .filter(_NullSafe::isPresent)
+      .findFirst();
+
     }
+
 
 }

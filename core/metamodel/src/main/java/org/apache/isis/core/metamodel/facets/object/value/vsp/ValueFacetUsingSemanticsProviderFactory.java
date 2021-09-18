@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.value.vsp;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -54,18 +53,18 @@ extends FacetFactoryAbstract {
     }
 
     protected final void addAllFacetsForValueSemantics(
-            final Can<ValueSemanticsProvider<?>> valueSemantics,
+            final Can<ValueSemanticsProvider<T>> valueSemantics,
             final FacetHolder holder) {
 
-        val valueFacet = new ValueFacetUsingSemanticsProvider(valueSemantics, holder);
+        val valueFacet = new ValueFacetUsingSemanticsProvider<>(valueSemantics, holder);
         installRelatedFacets(valueFacet, valueSemantics, holder);
     }
 
     // -- HELPER
 
     private void installRelatedFacets(
-            final ValueFacet<?> valueFacet,
-            final Can<ValueSemanticsProvider<?>> semanticsProviders,
+            final ValueFacet<T> valueFacet,
+            final Can<ValueSemanticsProvider<T>> semanticsProviders,
             final FacetHolder holder) {
 
         FacetUtil.addFacet(valueFacet);
@@ -80,6 +79,7 @@ extends FacetFactoryAbstract {
             final EncoderDecoder<?> encoderDecoder = semanticsProvider.getEncoderDecoder();
             if (encoderDecoder != null) {
                 //getServiceInjector().injectServicesInto(encoderDecoder);
+                //FIXME convert to using value-facet
                 holder.addFacet(new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder));
             }
 
@@ -89,10 +89,11 @@ extends FacetFactoryAbstract {
             if (parser != null) {
 
                 //holder.getServiceInjector().injectServicesInto(parser);
-
+               //FIXME convert to using value-facet
                 holder.addFacet(new TypicalLengthFacetUsingParser(parser, holder));
                 final int maxLength = parser.maxLength();
                 if(maxLength >=0) {
+                   //FIXME convert to using value-facet
                     holder.addFacet(new MaxLengthFacetUsingParser(parser, holder));
                 }
             }
@@ -101,6 +102,7 @@ extends FacetFactoryAbstract {
             final DefaultsProvider<?> defaultsProvider = semanticsProvider.getDefaultsProvider();
             if (defaultsProvider != null) {
                 //holder.getServiceInjector().injectServicesInto(defaultsProvider);
+                //FIXME convert to using value-facet
                 holder.addFacet(new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder));
             }
 
