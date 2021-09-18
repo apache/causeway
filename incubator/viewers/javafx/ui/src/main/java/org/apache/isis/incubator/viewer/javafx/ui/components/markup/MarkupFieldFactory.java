@@ -26,14 +26,15 @@ import javax.inject.Inject;
 import org.w3c.dom.events.EventTarget;
 import org.w3c.dom.html.HTMLAnchorElement;
 
+import org.apache.isis.applib.adapters.HtmlRenderer;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.value.HasHtml;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 import javafx.application.HostServices;
 import javafx.application.Platform;
@@ -55,15 +56,20 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
     private final HostServices hostServices;
 
     @Override
-    public boolean isHandling(ComponentRequest request) {
-        return request.isFeatureTypeInstanceOf(HasHtml.class);
+    public boolean isHandling(final ComponentRequest request) {
+        return request.getFeatureTypeSpec().hasValueSemantics(HtmlRenderer.class);
     }
 
     @Override
-    public Node handle(ComponentRequest request) {
-        val markupHtml = request.getFeatureValue(HasHtml.class)
-                .map(HasHtml::asHtml)
-                .orElse("");
+    public Node handle(final ComponentRequest request) {
+
+        val pojo = request.getFeatureValue(Object.class);
+
+        val markupHtml = request.getFeatureTypeSpec().streamValueSemantics(HtmlRenderer.class)
+        .map(htmlRenderer->htmlRenderer.presentationValue(null, pojo))
+        .filter(_NullSafe::isPresent)
+        .findFirst()
+        .orElse("");
 
         return new WebViewFitContent(hostServices::showDocument, markupHtml);
     }
@@ -88,7 +94,7 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
         private final WebView webview = new WebView();
         private final WebEngine webEngine = webview.getEngine();
 
-        public WebViewFitContent(Consumer<String> hrefHandler, String content) {
+        public WebViewFitContent(final Consumer<String> hrefHandler, final String content) {
 
             this.hrefHandler = hrefHandler;
 
@@ -106,7 +112,7 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
                 }
             });
 
-            webview.getChildrenUnmodifiable().addListener((ListChangeListener.Change<? extends Node> change) -> {
+            webview.getChildrenUnmodifiable().addListener((final ListChangeListener.Change<? extends Node> change) -> {
                 val scrolls = webview.lookupAll(".scroll-bar");
                 for (val scroll : scrolls) {
                     scroll.setVisible(false);
@@ -169,7 +175,7 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
 
 
 
-        private String getHtml(String content) {
+        private String getHtml(final String content) {
             return "<html><body>" +
                     "<div id=\"mydiv\">" + content + "</div>" +
                     "</body></html>";

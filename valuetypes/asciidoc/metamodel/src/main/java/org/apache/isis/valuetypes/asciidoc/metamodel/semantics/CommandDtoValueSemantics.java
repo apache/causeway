@@ -16,30 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.asciidoc.ui.wkt.components.schema.cmd.v2;
+package org.apache.isis.valuetypes.asciidoc.metamodel.semantics;
 
-import org.apache.wicket.model.IModel;
+import javax.inject.Named;
+
+import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.schema.cmd.v2.CommandDto;
-import org.apache.isis.valuetypes.asciidoc.ui.wkt.components.AsciiDocForXmlComponentWkt;
 
-@Deprecated
-public class CommandDtoComponentWkt extends AsciiDocForXmlComponentWkt {
+import lombok.NonNull;
 
-    private static final long serialVersionUID = 1L;
+@Component
+@Named("isis.val.CommandDtoValueSemantics")
+public class CommandDtoValueSemantics
+extends XmlValueSemanticsAbstract<CommandDto> {
 
-    public CommandDtoComponentWkt(final String id, final IModel<?> model) {
-        super(id, model);
+    @Override
+    protected String asXml(@NonNull final CommandDto value) {
+        return CommandDtoUtils.toXml(value);
     }
-
-  //TODO provide custom value semantics instead
-//    @Override
-//    protected String asHtml(Object value) {
-//        if(value instanceof CommandDto) {
-//            return asHtml(CommandDtoUtils.toXml((CommandDto) value));
-//        }
-//        return super.asHtml(value);
-//    }
 
 }

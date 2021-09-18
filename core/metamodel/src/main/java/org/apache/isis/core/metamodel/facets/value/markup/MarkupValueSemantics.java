@@ -22,8 +22,8 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
+import org.apache.isis.applib.adapters.HtmlRenderer;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.value.Markup;
 
@@ -33,7 +33,7 @@ extends AbstractValueSemanticsProvider<Markup>
 implements
     EncoderDecoder<Markup>,
     Parser<Markup>,
-    Renderer<Markup>{
+    HtmlRenderer<Markup>{
 
     // -- ENCODER DECODER
 

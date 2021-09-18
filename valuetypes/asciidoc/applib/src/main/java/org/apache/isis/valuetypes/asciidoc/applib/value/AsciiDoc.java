@@ -24,7 +24,6 @@ import java.util.Objects;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.value.HasHtml;
 import org.apache.isis.valuetypes.asciidoc.applib.jaxb.AsciiDocJaxbAdapter;
 
 import lombok.AccessLevel;
@@ -41,7 +40,7 @@ import lombok.experimental.Accessors;
         logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.AsciiDoc")
 @EqualsAndHashCode
 @XmlJavaTypeAdapter(AsciiDocJaxbAdapter.class)  // for JAXB view model support
-public final class AsciiDoc implements HasHtml, Serializable {
+public final class AsciiDoc implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -64,7 +63,6 @@ public final class AsciiDoc implements HasHtml, Serializable {
         this.adoc = adoc !=null ? adoc : "";
     }
 
-    @Override
     public String asHtml() {
         return html();
     }
@@ -80,6 +78,10 @@ public final class AsciiDoc implements HasHtml, Serializable {
 
     // -- UTILITY
 
+    /**
+     * Not strictly required, but allows for eager loading.
+     * Is a one-shot, that may take about 5 seconds.
+     */
     public static void loadJRuby() {
         Converter.getAsciidoctor();
     }

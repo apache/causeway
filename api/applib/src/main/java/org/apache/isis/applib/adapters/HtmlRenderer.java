@@ -16,14 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.applib.value;
+package org.apache.isis.applib.adapters;
 
 /**
- * @since 2.0 {@index}
+ * Indicates the underlying {@link Renderer} produces plain HTML.
+ * @since 2.x {@index}
  */
-public interface HasHtml {
-
-    String asHtml();
+public interface HtmlRenderer<T> extends Renderer<T> {
 
 }

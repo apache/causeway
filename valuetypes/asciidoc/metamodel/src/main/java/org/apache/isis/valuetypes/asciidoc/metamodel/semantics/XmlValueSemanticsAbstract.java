@@ -18,46 +18,35 @@
  */
 package org.apache.isis.valuetypes.asciidoc.metamodel.semantics;
 
-import javax.inject.Named;
-
-import org.springframework.stereotype.Component;
-
 import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.HtmlRenderer;
-import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
-@Component
-@Named("isis.val.AsciiDocValueSemantics")
-public class AsciiDocValueSemantics
-extends AbstractValueSemanticsProvider<AsciiDoc>
+import lombok.NonNull;
+
+/**
+ *  Provides a {@link Renderer} that generates syntax highlighted XML.
+ *  @implNote using ascii-doctor under the hoods
+ */
+abstract class XmlValueSemanticsAbstract<T>
+extends AbstractValueSemanticsProvider<T>
 implements
-    HtmlRenderer<AsciiDoc>,
-    Parser<AsciiDoc> {
+    HtmlRenderer<T> {
 
     // -- RENDERER
 
     @Override
-    public String presentationValue(final ValueSemanticsProvider.Context context, final AsciiDoc adoc) {
-        return render(adoc, AsciiDoc::asHtml);
+    public String presentationValue(final ValueSemanticsProvider.Context context, final T value) {
+        return render(value, xmlContainer->asHtml(asXml(xmlContainer)));
     }
 
-    // -- PARSER
+    protected abstract String asXml(@NonNull T value);
 
-    @Override
-    public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final AsciiDoc adoc) {
-        return adoc!=null ? adoc.getAdoc() : null;
-    }
-
-    @Override
-    public AsciiDoc parseTextRepresentation(final ValueSemanticsProvider.Context context, final String adoc) {
-        return adoc!=null ? AsciiDoc.valueOf(adoc) : null;
-    }
-
-    @Override
-    public int typicalLength() {
-        return 0;
+    private String asHtml(final String xml) {
+        final var adoc = "[source,xml]\n----\n" + xml + "\n----";
+        return AsciiDoc.valueOf(adoc).asHtml();
     }
 
 }

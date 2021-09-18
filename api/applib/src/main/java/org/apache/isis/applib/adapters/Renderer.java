@@ -18,10 +18,13 @@
  */
 package org.apache.isis.applib.adapters;
 
+/**
+ * @since 2.x {@index}
+ */
 public interface Renderer<T> {
 
     /**
-     * The value in its read-only presentation form, eg. html. (irreversible)
+     * The value in its read-only presentation form. (irreversible)
      */
     String presentationValue(ValueSemanticsProvider.Context context, T value);
 

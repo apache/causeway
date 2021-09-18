@@ -23,9 +23,6 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.valuetypes.asciidoc.applib.IsisModuleValAsciidocApplib;
 import org.apache.isis.valuetypes.asciidoc.ui.wkt.components.AsciiDocPanelFactoriesWkt;
-import org.apache.isis.valuetypes.asciidoc.ui.wkt.components.schema.chg.v2.ChangesDtoPanelFactoriesWkt;
-import org.apache.isis.valuetypes.asciidoc.ui.wkt.components.schema.cmd.v2.CommandDtoPanelFactoriesWkt;
-import org.apache.isis.valuetypes.asciidoc.ui.wkt.components.schema.ixn.v2.InteractionDtoPanelFactoriesWkt;
 
 /**
  * @since 2.0 {@index}
@@ -35,12 +32,6 @@ import org.apache.isis.valuetypes.asciidoc.ui.wkt.components.schema.ixn.v2.Inter
     IsisModuleValAsciidocApplib.class,
     AsciiDocPanelFactoriesWkt.Parented.class,
     AsciiDocPanelFactoriesWkt.Standalone.class,
-    InteractionDtoPanelFactoriesWkt.Parented.class,
-    InteractionDtoPanelFactoriesWkt.Standalone.class,
-    ChangesDtoPanelFactoriesWkt.Parented.class,
-    ChangesDtoPanelFactoriesWkt.Standalone.class,
-    CommandDtoPanelFactoriesWkt.Parented.class,
-    CommandDtoPanelFactoriesWkt.Standalone.class,
 })
 public class IsisModuleValAsciidocUiWkt {
 }

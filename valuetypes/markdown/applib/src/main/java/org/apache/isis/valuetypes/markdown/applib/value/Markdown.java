@@ -24,7 +24,6 @@ import java.util.Objects;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.value.HasHtml;
 import org.apache.isis.valuetypes.markdown.applib.jaxb.MarkdownJaxbAdapter;
 
 import lombok.AccessLevel;
@@ -41,7 +40,7 @@ import lombok.experimental.Accessors;
         logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.Markdown")
 @EqualsAndHashCode
 @XmlJavaTypeAdapter(MarkdownJaxbAdapter.class)  // for JAXB view model support
-public class Markdown implements HasHtml, Serializable {
+public class Markdown implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -64,7 +63,6 @@ public class Markdown implements HasHtml, Serializable {
         this.markdown = markdown !=null ? markdown : "";
     }
 
-    @Override
     public String asHtml() {
         return html();
     }

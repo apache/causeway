@@ -16,30 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.asciidoc.ui.wkt.components;
+package org.apache.isis.valuetypes.asciidoc.metamodel.semantics;
 
-import org.apache.wicket.model.IModel;
+import javax.inject.Named;
 
-import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
+import org.springframework.stereotype.Component;
 
-import lombok.val;
+import org.apache.isis.applib.util.schema.InteractionDtoUtils;
+import org.apache.isis.schema.ixn.v2.InteractionDto;
 
-public class AsciiDocForXmlComponentWkt extends AsciiDocComponentWkt {
+import lombok.NonNull;
 
-    private static final long serialVersionUID = 1L;
+@Component
+@Named("isis.val.InteractionDtoValueSemantics")
+public class InteractionDtoValueSemantics
+extends XmlValueSemanticsAbstract<InteractionDto> {
 
-    public AsciiDocForXmlComponentWkt(final String id, final IModel<?> model) {
-        super(id, model);
-        setEnabled(false);
-    }
-
-    /**
-     * for convenience of subtypes.
-     * @param xml
-     */
-    protected final String asHtml(final String xml) {
-        val adoc = "[source,xml]\n----\n" + xml + "\n----";
-        return AsciiDoc.valueOf(adoc).asHtml();
+    @Override
+    protected String asXml(@NonNull final InteractionDto value) {
+        return InteractionDtoUtils.toXml(value);
     }
 
 }

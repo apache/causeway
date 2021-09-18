@@ -16,29 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.asciidoc.ui.wkt.components.schema.chg.v2;
+package org.apache.isis.valuetypes.asciidoc.metamodel.semantics;
 
-import org.apache.wicket.model.IModel;
+import javax.inject.Named;
 
-import org.apache.isis.valuetypes.asciidoc.ui.wkt.components.AsciiDocForXmlComponentWkt;
+import org.springframework.stereotype.Component;
 
-@Deprecated
-public class ChangesDtoComponentWkt extends AsciiDocForXmlComponentWkt {
+import org.apache.isis.applib.util.schema.ChangesDtoUtils;
+import org.apache.isis.schema.chg.v2.ChangesDto;
 
-    private static final long serialVersionUID = 1L;
+import lombok.NonNull;
 
-    public ChangesDtoComponentWkt(final String id, final IModel<?> model) {
-        super(id, model);
+@Component
+@Named("isis.val.ChangesDtoValueSemantics")
+public class ChangesDtoValueSemantics
+extends XmlValueSemanticsAbstract<ChangesDto> {
+
+    @Override
+    protected String asXml(@NonNull final ChangesDto value) {
+        return ChangesDtoUtils.toXml(value);
     }
-
-
-//TODO provide custom value semantics instead
-//    @Override
-//    protected String asHtml(Object value) {
-//        if(value instanceof ChangesDto) {
-//            return asHtml(ChangesDtoUtils.toXml((ChangesDto) value));
-//        }
-//        return super.asHtml(value);
-//    }
 
 }

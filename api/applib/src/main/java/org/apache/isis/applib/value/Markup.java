@@ -29,19 +29,25 @@ import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.internal.base._Strings;
 
+import lombok.EqualsAndHashCode;
+
 /**
- * Intended to be used as a read-only property, to render arbitrary HTML
- * markup into the user interface.
+ * Intended to be used as a read-only property, to render plain HTML.
  *
  * @since 2.0 {@index}
  */
 @Value(logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.Markup")
 @XmlJavaTypeAdapter(Markup.JaxbToStringAdapter.class)   // for JAXB view model support
-public final class Markup implements HasHtml, Serializable {
+@EqualsAndHashCode
+public final class Markup implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private final String html;
+
+    public static Markup valueOf(final String html) {
+        return new Markup(html);
+    }
 
     public Markup() {
         this(null);
@@ -51,38 +57,8 @@ public final class Markup implements HasHtml, Serializable {
         this.html = html!=null ? html : "";
     }
 
-    @Override
     public String asHtml() {
         return html;
-    }
-
-    public boolean isEqualTo(final Markup other) {
-        return other==null ? false : this.html.equals(other.html);
-    }
-
-    public String title() {
-        return "Markup[length="+html.length()+"]";
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        return isEqualTo((Markup) obj);
-    }
-
-    @Override
-    public int hashCode() {
-        return html.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return "Markup[length="+html.length()+", html="+html+"]";
     }
 
     public static final class JaxbToStringAdapter extends XmlAdapter<String, Markup> {
@@ -111,9 +87,6 @@ public final class Markup implements HasHtml, Serializable {
         }
     }
 
-    /** syntactic sugar */
-    public static Markup valueOfHtml(final String html) {
-        return new Markup(html);
-    }
+
 
 }

@@ -136,7 +136,7 @@ public class ServerSentEventsServlet extends HttpServlet {
                     return false; // stop listening
                 }
 
-                val payload = marshaller.marshal(Markup.valueOfHtml(source.getPayload()));
+                val payload = marshaller.marshal(Markup.valueOf(source.getPayload()));
 
                 writer
                 .append("data: ")

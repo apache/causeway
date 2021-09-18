@@ -48,7 +48,7 @@ public class AsyncActionMenu {
     public AsyncActionDemo asyncActions(){
         val demo = factoryService.viewModel(new AsyncActionDemo());
         // demo.initDefaults();
-        demo.setProgressView(Markup.valueOfHtml("Please start a task!"));
+        demo.setProgressView(Markup.valueOf("Please start a task!"));
         return demo;
     }
 
