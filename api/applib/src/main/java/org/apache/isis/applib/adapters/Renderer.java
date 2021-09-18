@@ -24,8 +24,16 @@ package org.apache.isis.applib.adapters;
 public interface Renderer<T> {
 
     /**
-     * The value in its read-only presentation form. (irreversible)
+     * The value in its read-only summarizing text presentation form. (irreversible)
      */
-    String presentationValue(ValueSemanticsProvider.Context context, T value);
+    String simpleTextRepresentation(ValueSemanticsProvider.Context context, T value);
+
+    /**
+     * The value as read-only presentation form. (irreversible)
+     * @apiNote defaulting to the {@link String} type.
+     */
+    default Object presentationValue(final ValueSemanticsProvider.Context context, final T value) {
+        return simpleTextRepresentation(context, value);
+    }
 
 }

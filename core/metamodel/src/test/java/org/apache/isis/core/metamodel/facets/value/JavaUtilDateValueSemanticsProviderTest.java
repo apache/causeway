@@ -72,7 +72,7 @@ extends ValueSemanticsProviderAbstractTestCase {
     @Test
     public void testTitleOf() {
         final String EXPECTED = DateFormat.getDateTimeInstance(SimpleDateFormat.MEDIUM, SimpleDateFormat.SHORT).format(new java.util.Date(0));
-        assertEquals(EXPECTED, getValue().presentationValue(null, date));
+        assertEquals(EXPECTED, getValue().simpleTextRepresentation(null, date));
     }
 
     @Test

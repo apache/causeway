@@ -18,21 +18,17 @@
  */
 package demoapp.dom._infra.resources;
 
-import java.util.stream.Collectors;
-
 import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Refs.StringReference;
-import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-
 
 @Service
 @Named("demo.AsciiDocReaderService")
@@ -77,42 +73,7 @@ public class AsciiDocReaderService {
         return AsciiDoc.valueOf(
                 adocRef
                 .update(this::replaceVersion)
-                //.update(this::replaceJavaSourceReferences)
-                //.update(adoc->prependSource(adoc, aClass))
                 .getValue());
     }
-
-    // -- EXPERIMENTAL ... works within IDE, but not when packaged
-
-    private String replaceJavaSourceReferences(final String adoc) {
-        return _Text.getLines(adoc)
-        .stream()
-        .map(line->line.startsWith("include::")
-                        && line.contains(".java")
-                ? replaceJavaSourceReference(line)
-                : line
-        )
-        .collect(Collectors.joining("\n"));
-    }
-
-    //  "include::DemoHomePage.java" -> "include::{sourcedir}/DemoHomePage.java
-    private String replaceJavaSourceReference(final String line) {
-        val lineRef = _Refs.stringRef(line);
-        lineRef.cutAtIndexOfAndDrop("::");
-        val classFileSimpleName = lineRef.cutAtIndexOf(".java");
-        val remainder = lineRef.getValue();
-        return "include::{sourcedir}/" + classFileSimpleName + remainder;
-    }
-
-    // setting up the java source root relative to the current directory (application main)
-    //XXX dependent on the location of the 'main' class within the file system,
-    // if we ever want to improve on that, we should place a marker file on the project root,
-    // so we can search up the folder hierarchy on dynamically figure out how many ../
-    // actually are required
-    private String prependSource(final String adoc, final Class<?> aClass) {
-        val packagePath = aClass.getPackage().getName().replace('.', '/');
-        return ":sourcedir: ../../domain/src/main/java/" + packagePath + "\n\n" + adoc;
-    }
-
 
 }

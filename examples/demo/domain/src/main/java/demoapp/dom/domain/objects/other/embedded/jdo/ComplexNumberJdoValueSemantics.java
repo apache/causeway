@@ -47,7 +47,7 @@ public class ComplexNumberJdoValueSemantics
  // tag::getRenderer[]
          return new Renderer<ComplexNumberJdo>() {
              @Override
-             public String presentationValue(final ValueSemanticsProvider.Context context, final ComplexNumberJdo object) {
+             public String simpleTextRepresentation(final ValueSemanticsProvider.Context context, final ComplexNumberJdo object) {
                  return object!=null ? object.title() : "NaN";
              }
          };

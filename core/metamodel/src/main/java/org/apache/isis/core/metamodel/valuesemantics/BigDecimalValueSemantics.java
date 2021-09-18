@@ -66,7 +66,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String presentationValue(final ValueSemanticsProvider.Context context, final BigDecimal value) {
+    public String simpleTextRepresentation(final ValueSemanticsProvider.Context context, final BigDecimal value) {
         return render(value, getNumberFormat(context)::format);
     }
 

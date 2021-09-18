@@ -55,7 +55,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String presentationValue(final ValueSemanticsProvider.Context context, final UUID value) {
+    public String simpleTextRepresentation(final ValueSemanticsProvider.Context context, final UUID value) {
         return value == null ? "" : value.toString();
     }
 

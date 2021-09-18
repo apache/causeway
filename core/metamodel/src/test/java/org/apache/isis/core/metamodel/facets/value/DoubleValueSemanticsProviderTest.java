@@ -49,7 +49,7 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testValue() {
-        assertEquals("32.5", getValue().presentationValue(null, doubleObj));
+        assertEquals("32.5", getValue().simpleTextRepresentation(null, doubleObj));
     }
 
     @Test
@@ -63,7 +63,7 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testTitleOf() {
-        assertEquals("35,000,000", getValue().presentationValue(null, Double.valueOf(35000000.0)));
+        assertEquals("35,000,000", getValue().simpleTextRepresentation(null, Double.valueOf(35000000.0)));
     }
 
     @Test

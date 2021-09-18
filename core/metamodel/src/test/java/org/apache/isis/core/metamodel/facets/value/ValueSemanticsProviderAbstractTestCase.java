@@ -179,14 +179,14 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         if(valueSemanticsProvider instanceof ValueSemanticsProviderAndFacetAbstract) {
             assertEquals("",
                     ((ValueSemanticsProviderAndFacetAbstract<?>)valueSemanticsProvider)
-                    .presentationValue(null, null));
+                    .simpleTextRepresentation(null, null));
         } else if(valueSemanticsProvider instanceof StringValueSemantics) {
             // string representation has null-to-empty semantics
             assertEquals("",
-                    valueSemanticsProvider.getRenderer().presentationValue(null, null));
+                    valueSemanticsProvider.getRenderer().simpleTextRepresentation(null, null));
         } else {
             assertEquals(AbstractValueSemanticsProvider.NULL_REPRESENTATION,
-                    valueSemanticsProvider.getRenderer().presentationValue(null, null));
+                    valueSemanticsProvider.getRenderer().simpleTextRepresentation(null, null));
         }
 
     }

@@ -51,7 +51,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String presentationValue(final Context context, final String value) {
+    public String simpleTextRepresentation(final Context context, final String value) {
         return value == null ? "" : value;
     }
 

@@ -59,7 +59,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String presentationValue(final Context context, final Password value) {
+    public String simpleTextRepresentation(final Context context, final Password value) {
         return render(value, v->"*");
     }
 

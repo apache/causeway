@@ -212,7 +212,7 @@ implements ValueFacet<T> {
         private final String message;
 
         @Override
-        public String presentationValue(final Context context, final T value) {
+        public String simpleTextRepresentation(final Context context, final T value) {
             return message;
         }
 

@@ -19,7 +19,6 @@
 package org.apache.isis.valuetypes.asciidoc.metamodel.semantics;
 
 import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
-import org.apache.isis.applib.adapters.HtmlRenderer;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
@@ -33,12 +32,12 @@ import lombok.NonNull;
 abstract class XmlValueSemanticsAbstract<T>
 extends AbstractValueSemanticsProvider<T>
 implements
-    HtmlRenderer<T> {
+    Renderer<T> {
 
     // -- RENDERER
 
     @Override
-    public String presentationValue(final ValueSemanticsProvider.Context context, final T value) {
+    public String simpleTextRepresentation(final ValueSemanticsProvider.Context context, final T value) {
         return render(value, xmlContainer->asHtml(asXml(xmlContainer)));
     }
 

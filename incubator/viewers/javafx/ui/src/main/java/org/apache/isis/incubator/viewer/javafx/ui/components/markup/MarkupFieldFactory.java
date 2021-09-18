@@ -26,15 +26,9 @@ import javax.inject.Inject;
 import org.w3c.dom.events.EventTarget;
 import org.w3c.dom.html.HTMLAnchorElement;
 
-import org.apache.isis.applib.adapters.HtmlRenderer;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
-
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 import javafx.application.HostServices;
 import javafx.application.Platform;
@@ -46,6 +40,9 @@ import javafx.scene.Node;
 import javafx.scene.layout.Region;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 import netscape.javascript.JSException;
 
 @org.springframework.stereotype.Component
@@ -57,21 +54,24 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
 
     @Override
     public boolean isHandling(final ComponentRequest request) {
-        return request.getFeatureTypeSpec().hasValueSemantics(HtmlRenderer.class);
+        //return request.getFeatureTypeSpec().hasValueSemantics(HtmlRenderer.class);
+        //TODO
+        return false;
     }
 
     @Override
     public Node handle(final ComponentRequest request) {
 
-        val pojo = request.getFeatureValue(Object.class);
-
-        val markupHtml = request.getFeatureTypeSpec().streamValueSemantics(HtmlRenderer.class)
-        .map(htmlRenderer->htmlRenderer.presentationValue(null, pojo))
-        .filter(_NullSafe::isPresent)
-        .findFirst()
-        .orElse("");
-
-        return new WebViewFitContent(hostServices::showDocument, markupHtml);
+//        val pojo = request.getFeatureValue(Object.class);
+//
+//        val markupHtml = request.getFeatureTypeSpec().streamValueSemantics(HtmlRenderer.class)
+//        .map(htmlRenderer->htmlRenderer.simpleTextRepresentation(null, pojo))
+//        .filter(_NullSafe::isPresent)
+//        .findFirst()
+//        .orElse("");
+//
+//        return new WebViewFitContent(hostServices::showDocument, markupHtml);
+        return null;
     }
 
     // -- HELPER

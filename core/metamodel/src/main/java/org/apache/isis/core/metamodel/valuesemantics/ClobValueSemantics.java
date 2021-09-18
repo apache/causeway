@@ -41,7 +41,7 @@ implements
     // RENDERER
 
     @Override
-    public String presentationValue(final ValueSemanticsProvider.Context context, final Clob value) {
+    public String simpleTextRepresentation(final ValueSemanticsProvider.Context context, final Clob value) {
         return render(value, Clob::getName);
     }
 

@@ -63,7 +63,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String presentationValue(final Context context, final Short value) {
+    public String simpleTextRepresentation(final Context context, final Short value) {
         return render(value, getNumberFormat(context)::format);
     }
 

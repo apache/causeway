@@ -61,6 +61,11 @@ public final class Markup implements Serializable {
         return html;
     }
 
+    @Override
+    public String toString() {
+        return "Markup[length="+html.length()+"]";
+    }
+
     public static final class JaxbToStringAdapter extends XmlAdapter<String, Markup> {
 
         /**

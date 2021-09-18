@@ -190,7 +190,7 @@ implements
     }
 
     @Override
-    public String presentationValue(final ValueSemanticsProvider.Context context, final T object) {
+    public String simpleTextRepresentation(final ValueSemanticsProvider.Context context, final T object) {
         if (object == null) {
             return "";
         }
@@ -202,7 +202,7 @@ implements
      */
     @Override
     public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final T existing) {
-        return presentationValue(context, existing);
+        return simpleTextRepresentation(context, existing);
     }
 
     protected String titleString(final Format formatter, final T object) {

@@ -62,7 +62,7 @@ public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProvide
 
     @Test
     public void testTitleOf() {
-        assertEquals(DateFormat.getDateInstance(SimpleDateFormat.MEDIUM).format(new Date(0)), adapter.presentationValue(null, date));
+        assertEquals(DateFormat.getDateInstance(SimpleDateFormat.MEDIUM).format(new Date(0)), adapter.simpleTextRepresentation(null, date));
     }
 
     @Test
