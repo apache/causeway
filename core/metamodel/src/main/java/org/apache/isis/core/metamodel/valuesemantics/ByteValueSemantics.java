@@ -92,12 +92,14 @@ implements
 
     @Override
     public int typicalLength() {
-        return maxLength();
+        //-128
+        return 4;
     }
 
     @Override
     public int maxLength() {
-        return 4;
+        //-128.0
+        return 6;
     }
 
 }

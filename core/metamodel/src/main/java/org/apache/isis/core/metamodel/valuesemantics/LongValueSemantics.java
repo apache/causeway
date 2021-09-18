@@ -34,7 +34,7 @@ import org.apache.isis.commons.internal.base._Strings;
  * due to auto-boxing also handles the primitive variant
  */
 @Component
-@Named("isis.val.ByteValueSemantics")
+@Named("isis.val.LongValueSemantics")
 public class LongValueSemantics
 extends AbstractValueSemanticsProvider<Long>
 implements
@@ -92,12 +92,14 @@ implements
 
     @Override
     public int typicalLength() {
-        return maxLength();
+        // -9223372036854775808
+        return 20;
     }
 
     @Override
     public int maxLength() {
-        return 18;
+        // -9,223,372,036,854,775,808.0
+        return 28;
     }
 
 }
