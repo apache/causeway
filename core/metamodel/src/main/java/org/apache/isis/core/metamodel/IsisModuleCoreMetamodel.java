@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeMalfo
 import org.apache.isis.core.metamodel.facets.schema.IsisSchemaMetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.schema.IsisSchemaValueTypeProvider;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueSemantics;
+import org.apache.isis.core.metamodel.facets.value.biginteger.BigIntegerValueSemantics;
 import org.apache.isis.core.metamodel.facets.value.blobs.BlobValueSemantics;
 import org.apache.isis.core.metamodel.facets.value.booleans.BooleanValueSemantics;
 import org.apache.isis.core.metamodel.facets.value.clobs.ClobValueSemantics;
@@ -93,6 +94,7 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         // Value Semantics (built-in defaults)
         BooleanValueSemantics.class,
         BigDecimalValueSemantics.class,
+        BigIntegerValueSemantics.class,
         StringValueSemantics.class,
         PasswordValueSemantics.class,
         BufferedImageValueSemantics.class,

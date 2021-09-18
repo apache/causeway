@@ -67,7 +67,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
     @Test
     public void verifyProgrammingModelNumberOfFactories() {
-        assertEquals(92, programmingModel.streamFactories().count());
+        assertEquals(91, programmingModel.streamFactories().count());
     }
 
     @Test //verify we have the javac -parameter flag set when compiling this class

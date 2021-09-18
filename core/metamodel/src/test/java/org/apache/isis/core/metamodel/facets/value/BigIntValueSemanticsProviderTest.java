@@ -23,20 +23,17 @@ import java.math.BigInteger;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.core.metamodel.facets.value.biginteger.BigIntegerValueSemantics;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-
-import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.facets.value.biginteger.BigIntegerValueSemanticsProvider;
 
 public class BigIntValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {
 
+    private BigIntegerValueSemantics value;
     private BigInteger bigInt;
-    private FacetHolder holder;
 
     @Override
     @Before
@@ -44,22 +41,19 @@ extends ValueSemanticsProviderAbstractTestCase {
         super.setUp();
         bigInt = new BigInteger("132199");
         allowMockAdapterToReturn(bigInt);
-
-        holder = FacetHolderAbstract.forTesting(metaModelContext);
-
-        setValue(new BigIntegerValueSemanticsProvider(holder));
+        setSemanitcs(value = new BigIntegerValueSemantics());
     }
 
     @Test
     public void testParseValidString() throws Exception {
-        final Object newValue = getValue().parseTextRepresentation(null, "2142342334");
+        final Object newValue = value.parseTextRepresentation(null, "2142342334");
         assertEquals(new BigInteger("2142342334"), newValue);
     }
 
     @Test
     public void testParseInvalidString() throws Exception {
         try {
-            getValue().parseTextRepresentation(null, "214xxx2342334");
+            value.parseTextRepresentation(null, "214xxx2342334");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -67,24 +61,18 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testTitle() throws Exception {
-        assertEquals("132,199", getValue().presentationValue(null, bigInt));
+        assertEquals("132,199", value.presentationValue(null, bigInt));
     }
 
     @Test
     public void testEncode() throws Exception {
-        assertEquals("132199", getValue().toEncodedString(bigInt));
+        assertEquals("132199", value.toEncodedString(bigInt));
     }
 
     @Test
     public void testDecode() throws Exception {
-        final Object newValue = getValue().fromEncodedString("432289991");
+        final Object newValue = value.fromEncodedString("432289991");
         assertEquals(new BigInteger("432289991"), newValue);
-    }
-
-    // -- HELPER
-
-    private ValueSemanticsProviderAndFacetAbstract<BigInteger> getValue() {
-        return super.getValue(BigInteger.class);
     }
 
 }

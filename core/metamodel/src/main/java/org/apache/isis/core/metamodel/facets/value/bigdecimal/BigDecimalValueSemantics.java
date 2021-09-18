@@ -43,9 +43,6 @@ implements
     Parser<BigDecimal>,
     Renderer<BigDecimal> {
 
-    public static final int DEFAULT_LENGTH = 18;
-    public static final int DEFAULT_SCALE = 2;
-
     @Override
     public BigDecimal getDefaultValue() {
         return BigDecimal.ZERO;
