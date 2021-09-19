@@ -53,8 +53,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.action.form.FormPendingParamUiModel;
 import org.apache.isis.viewer.common.model.components.ComponentType;
+import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
@@ -119,25 +119,6 @@ implements ScalarModelSubscriber {
         NOTHING
     }
 
-    /** this is a hack for the ScalarParameterModel, which does not support usability constraints in the model*/
-    private transient Runnable postInit;
-    @Deprecated // properly implement ScalarParameterModel
-    public void postInit(final @NonNull FormPendingParamUiModel argAndConsents) {
-        this.postInit = () ->{
-            // visibility
-            val visibilityConsent = argAndConsents.getVisibilityConsent();
-            setVisible(visibilityConsent.isAllowed());
-
-            // usability
-            val usabilityConsent = argAndConsents.getUsabilityConsent();
-            if(usabilityConsent.isAllowed()) {
-                onInitializeEditable();
-            } else {
-                onInitializeReadonly(usabilityConsent.getReason());
-            }
-        };
-    }
-
     /**
      *
      * @param argsAndConsents - the action being invoked
@@ -146,19 +127,17 @@ implements ScalarModelSubscriber {
      * @return - true if changed as a result of these pending arguments.
      */
     public Repaint updateIfNecessary(
-            final @NonNull FormPendingParamUiModel argsAndConsents,
+            final @NonNull ParameterUiModel paramModel,
             final @NonNull Optional<AjaxRequestTarget> target) {
 
-        val argModel = argsAndConsents.getParamModel();
-
         // visibility
-        val visibilityConsent = argsAndConsents.getVisibilityConsent();
+        val visibilityConsent = paramModel.getPendingParameterModel().getVisibilityConsent(paramModel.getNumber());
         val visibilityBefore = isVisible();
         val visibilityAfter = visibilityConsent.isAllowed();
         setVisible(visibilityAfter);
 
         // usability
-        val usabilityConsent = argsAndConsents.getUsabilityConsent();
+        val usabilityConsent = paramModel.getPendingParameterModel().getUsabilityConsent(paramModel.getNumber());
         val usabilityBefore = isEnabled();
         val usabilityAfter = usabilityConsent.isAllowed();
         if(usabilityAfter) {
@@ -167,7 +146,7 @@ implements ScalarModelSubscriber {
             onNotEditable(usabilityConsent.getReason(), target);
         }
 
-        val paramValue = argModel.getValue();
+        val paramValue = paramModel.getValue();
         val valueChanged = !Objects.equals(scalarModel.getObject(), paramValue);
 
         if(valueChanged) {
@@ -268,12 +247,6 @@ implements ScalarModelSubscriber {
 
         final ScalarModel scalarModel = getModel();
 
-        if(postInit!=null) {
-            // ScalarParameterModel hack
-            postInit.run();
-            postInit=null;
-        } else {
-
         final String disableReasonIfAny = scalarModel.whetherDisabled();
         final boolean mustBeEditable = scalarModel.mustBeEditable();
         if (disableReasonIfAny != null) {
@@ -289,8 +262,6 @@ implements ScalarModelSubscriber {
                 onInitializeEditable();
             }
         }
-        }
-
 
     }
 

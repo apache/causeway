@@ -149,6 +149,21 @@ public class ParameterNegotiationModel {
         return paramModels.getElseFail(paramNr).getBindableParamSearchArgument();
     }
 
+    @NonNull public Consent getVisibilityConsent(final int paramNr) {
+        val pendingArgValues = getParamValues();
+        val paramMeta = getParamMetamodel(paramNr);
+        val head = this.getHead();
+        return paramMeta
+                .isVisible(head, pendingArgValues, InteractionInitiatedBy.USER);
+    }
+    @NonNull public Consent getUsabilityConsent(final int paramNr) {
+        val pendingArgValues = getParamValues();
+        val paramMeta = getParamMetamodel(paramNr);
+        val head = this.getHead();
+        return paramMeta
+                .isUsable(head, pendingArgValues, InteractionInitiatedBy.USER);
+    }
+
     // -- RATHER INTERNAL ...
 
     /** validates all, the action and each individual parameter */
@@ -178,6 +193,10 @@ public class ParameterNegotiationModel {
 
     public void setParamValue(final int paramNr, final @NonNull ManagedObject newParamValue) {
         paramModels.getElseFail(paramNr).getBindableParamValue().setValue(newParamValue);
+    }
+
+    public void clearParamValue(final int paramNr) {
+        setParamValue(paramNr, adaptParamValuePojo(paramNr, null));
     }
 
     @NonNull public ManagedObject adaptParamValuePojo(final int paramNr, final @Nullable Object newParamValuePojo) {
@@ -325,6 +344,5 @@ public class ParameterNegotiationModel {
         }
 
     }
-
 
 }

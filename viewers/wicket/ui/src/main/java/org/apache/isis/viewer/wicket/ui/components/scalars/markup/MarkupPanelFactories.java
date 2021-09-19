@@ -63,15 +63,11 @@ public class MarkupPanelFactories {
                 return ApplicationAdvice.DOES_NOT_APPLY;
             }
 
-            val scalarModel = (ScalarModel) model;
+            final var scalarModel = (ScalarModel) model;
+            final var scalarSpec = scalarModel.getTypeOfSpecification();
+            final var scalarType = scalarSpec.getCorrespondingClass();
 
-            val scalarType = scalarModel.getTypeOfSpecification().getCorrespondingClass();
-
-            if(scalarType.equals(valueType)) {
-                return ApplicationAdvice.APPLIES;
-            }
-
-            return appliesIf(valueType.isAssignableFrom(scalarType) );
+            return appliesIf(scalarType.equals(valueType));
 
         }
 
@@ -98,8 +94,10 @@ public class MarkupPanelFactories {
 
         @Override
         public ApplicationAdvice appliesTo(final IModel<?> model) {
-            if (!(model instanceof ValueModel))
+            if (!(model instanceof ValueModel)) {
                 return ApplicationAdvice.DOES_NOT_APPLY;
+            }
+
             val valueModel = (ValueModel) model;
             val objectAdapter = valueModel.getObject();
             if(objectAdapter==null || objectAdapter.getPojo()==null) {

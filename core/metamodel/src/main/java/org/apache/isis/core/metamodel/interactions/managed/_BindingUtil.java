@@ -80,6 +80,7 @@ class _BindingUtil {
 
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Bindable<String> bindAsParsableText(
             final @NonNull ObjectSpecification spec,
             final @NonNull _BindableAbstract<ManagedObject> bindableValue,

@@ -20,10 +20,7 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -31,12 +28,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.memento.ActionParameterMemento;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.val;
+import org.apache.isis.viewer.wicket.model.models.interaction.action.ParameterUiModelWkt;
 
 public class ScalarParameterModel
 extends ScalarModel
@@ -44,43 +37,26 @@ implements ParameterUiModel {
 
     private static final long serialVersionUID = 1L;
 
-    private final ActionParameterMemento paramMemento;
+    public static ScalarParameterModel wrap(final ParameterUiModelWkt delegate) {
+        return new ScalarParameterModel(delegate);
+    }
 
-    @Getter(onMethod_ = {@Override})
-    @Setter(onMethod_ = {@Override})
-    private transient ParameterNegotiationModel pendingParameterModel;
+    private final ParameterUiModel delegate;
 
     /**
      * Creates a model representing an action parameter of an action of a parent
      * object, with the {@link #getObject() value of this model} to be default
      * value (if any) of that action parameter.
      */
-    public ScalarParameterModel(
-            final EntityModel parentEntityModel,
-            final ActionParameterMemento paramMemento) {
-        super(parentEntityModel, paramMemento);
-        this.paramMemento = paramMemento;
+    private ScalarParameterModel(
+            final ParameterUiModelWkt delegate) {
+        super(EntityModel.ofAdapter(delegate.getCommonContext(), delegate.getOwner()));
+        this.delegate = delegate;
     }
-
-    private transient ObjectActionParameter actionParameter;
 
     @Override
     public ObjectActionParameter getMetaModel() {
-        if(actionParameter==null) {
-            actionParameter = paramMemento.getActionParameter(this::getSpecificationLoader);
-        }
-        return actionParameter;
-    }
-
-    private transient ManagedAction managedAction;
-
-    public ManagedAction getManagedAction() {
-        if(managedAction==null) {
-            val actionOwner = getParentUiModel().load();
-            // TODO 'where' is not used until whetherDisabled and whetherHidden are implemented
-            managedAction = ManagedAction.of(actionOwner, getMetaModel().getAction(), Where.ANYWHERE);
-        }
-        return managedAction;
+        return delegate.getMetaModel();
     }
 
     @Override
@@ -100,32 +76,17 @@ implements ParameterUiModel {
 
     @Override
     public String whetherDisabled() {
-        // always enabled TODO this is not true
-        return null;
+        return getPendingParameterModel().getUsabilityConsent(getNumber()).getReason();
     }
 
     @Override
     public boolean whetherHidden() {
-        // always enabled TODO this is not true
-        return false;
+        return getPendingParameterModel().getVisibilityConsent(getNumber()).isVetoed();
     }
 
     @Override
     public String validate(final ManagedObject proposedValue) {
-        final ObjectActionParameter parameter = getMetaModel();
-
-        val action = parameter.getAction();
-        try {
-            ManagedObject parentAdapter = getParentUiModel().load();
-
-            val head = action.interactionHead(parentAdapter);
-
-            final String invalidReasonIfAny = parameter
-                    .isValid(head, proposedValue, InteractionInitiatedBy.USER);
-            return invalidReasonIfAny;
-        } catch (final Exception ex) {
-            return ex.getLocalizedMessage();
-        }
+        return getPendingParameterModel().getObservableParamValidation(getNumber()).getValue();
     }
 
     @Override
@@ -135,7 +96,7 @@ implements ParameterUiModel {
 
     @Override
     public String toStringOf() {
-        return getFriendlyName() + ": " + paramMemento.toString();
+        return getFriendlyName() + ": " + getNumber();
     }
 
     @Override
@@ -155,7 +116,12 @@ implements ParameterUiModel {
 
     @Override
     public ManagedValue proposedValue() {
-        return getPendingParameterModel().getParamModels().getElseFail(paramMemento.getNumber());
+        return getPendingParameterModel().getParamModels().getElseFail(getNumber());
+    }
+
+    @Override
+    public ParameterNegotiationModel getPendingParameterModel() {
+        return delegate.getPendingParameterModel();
     }
 
     // -- HELPER
@@ -166,6 +132,7 @@ implements ParameterUiModel {
         }
         return ManagedObjects.emptyToDefault(!getMetaModel().isOptional(), adapter);
     }
+
 
 
 

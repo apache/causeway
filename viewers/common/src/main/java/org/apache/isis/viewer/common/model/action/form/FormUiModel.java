@@ -47,7 +47,7 @@ public interface FormUiModel extends HasTitle {
      */
     ManagedObject getOwner();
 
-    Stream<FormPendingParamUiModel> streamPendingParamUiModels();
+    Stream<? extends ParameterUiModel> streamPendingParamUiModels();
 
     // -- USABILITY
 
@@ -72,7 +72,6 @@ public interface FormUiModel extends HasTitle {
     default Consent getValidityConsent() {
 
         val proposedArguments = streamPendingParamUiModels()
-                .map(FormPendingParamUiModel::getParamModel)
                 .map(ParameterUiModel::getValue)
                 .collect(Can.toCan());
 
@@ -101,13 +100,11 @@ public interface FormUiModel extends HasTitle {
     @Override
     default String getTitle() {
         val target = getOwner();
-        val objectAction = getMetaModel();
 
         val buf = new StringBuilder();
 
         streamPendingParamUiModels()
-        .filter(argAndConsent->argAndConsent.getVisibilityConsent().isAllowed())
-        .map(FormPendingParamUiModel::getParamModel)
+        .filter(paramModel->paramModel.getPendingParameterModel().getVisibilityConsent(paramModel.getNumber()).isAllowed())
         .map(ParameterUiModel::getValue)
         .forEach(paramValue->{
             if(buf.length() > 0) {

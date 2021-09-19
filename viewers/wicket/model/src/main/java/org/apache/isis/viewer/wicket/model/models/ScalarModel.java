@@ -32,7 +32,6 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.memento.ActionParameterMemento;
 import org.apache.isis.core.metamodel.spec.feature.memento.PropertyMemento;
 import org.apache.isis.viewer.common.model.feature.ScalarUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
@@ -89,8 +88,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
      * value (if any) of that action parameter.
      */
     protected ScalarModel(
-            final EntityModel parentEntityModel,
-            final ActionParameterMemento apm) {
+            final EntityModel parentEntityModel) {
 
         super(parentEntityModel.getCommonContext());
 
@@ -225,7 +223,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     }
 
     @Override
-    public PromptStyle getPromptStyle() {
+    public final PromptStyle getPromptStyle() {
         final PromptStyleFacet facet = getFacet(PromptStyleFacet.class);
         if(facet == null) {
             // don't think this can happen actually, see PromptStyleFacetFallback

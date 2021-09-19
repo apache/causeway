@@ -18,21 +18,19 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.entity.fieldset;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.FieldSet;
-import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
@@ -40,9 +38,9 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.common.model.components.ComponentType;
+import org.apache.isis.viewer.common.model.feature.ScalarUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -69,7 +67,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
     private static final String ID_PROPERTY = "property";
 
     private final FieldSet fieldSet;
-    private final List<ScalarPanelAbstract> childScalarPanelAbstract2s;
+    private final Can<ScalarPanelAbstract> childScalarPanels;
     private final List<Component> childComponents;
 
     public PropertyGroup(final String id, final EntityModel model, final FieldSet fieldSet) {
@@ -78,11 +76,11 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
 
         // the UI is only ever built once.
         childComponents = buildGui();
-        childScalarPanelAbstract2s =
+        childScalarPanels =
                 _NullSafe.stream(childComponents)
                 .filter(ScalarPanelAbstract.class::isInstance)
                 .map(ScalarPanelAbstract.class::cast)
-                .collect(Collectors.toList());
+                .collect(Can.toCan());
 
     }
 
@@ -91,11 +89,10 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
         return (EntityModel) getDefaultModel();
     }
 
-
-
     private List<Component> buildGui() {
 
         final List<Component> childComponents = _Lists.newArrayList();
+        final List<LinkAndLabel> memberGroupActions = _Lists.newArrayList();
 
         setOutputMarkupPlaceholderTag(true);
         setOutputMarkupId(true);
@@ -103,28 +100,24 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
         final WebMarkupContainer div = new WebMarkupContainer(ID_MEMBER_GROUP);
         div.setMarkupId("fieldSet-" + fieldSet.getId());
 
-        String groupName = fieldSet.getName();
-
-        val associations = getObjectAssociations();
-
-        final List<LinkAndLabel> memberGroupActions = _Lists.newArrayList();
         final RepeatingView propertyRv = new RepeatingView(ID_PROPERTIES);
         div.addOrReplace(propertyRv);
 
-        for (val association : associations) {
+        final var properties = getPropertiesNotStaticallyHidden();
+
+        for (OneToOneAssociation property : properties) {
             final WebMarkupContainer propertyRvContainer = new WebMarkupContainer(propertyRv.newChildId());
             propertyRv.addOrReplace(propertyRvContainer);
-            final Component component = addPropertyToForm(getModel(), (OneToOneAssociation) association,
-                    propertyRvContainer, memberGroupActions::add);
-            childComponents.add(component);
+            childComponents.add(
+                    addPropertyToForm(getModel(), property, propertyRvContainer, memberGroupActions::add));
         }
 
         WebMarkupContainer panelHeading = new WebMarkupContainer("panelHeading");
         div.addOrReplace(panelHeading);
-        if(_Strings.isNullOrEmpty(groupName)) {
+        if(_Strings.isNullOrEmpty(fieldSet.getName())) {
             panelHeading.setVisibilityAllowed(false);
         } else {
-            panelHeading.addOrReplace(new Label(ID_MEMBER_GROUP_NAME, groupName));
+            panelHeading.addOrReplace(new Label(ID_MEMBER_GROUP_NAME, fieldSet.getName()));
             final Can<LinkAndLabel> actionsPanel = LinkAndLabel
                     .positioned(ActionLayout.Position.PANEL, memberGroupActions.stream());
             final Can<LinkAndLabel> actionsPanelDropDown = LinkAndLabel
@@ -140,7 +133,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
         }
 
         // either add the built content, or hide entire
-        if(associations.isEmpty()) {
+        if(properties.isEmpty()) {
             Components.permanentlyHide(this, div.getId());
         } else {
             this.addOrReplace(div);
@@ -149,18 +142,10 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
         return childComponents;
     }
 
-    private List<ObjectAssociation> getObjectAssociations() {
-        final List<PropertyLayoutData> properties = this.fieldSet.getProperties();
-        // changed to NO_CHECK because more complex BS3 layouts trip concurrency exception
-        // (haven't investigated as to why).
-        val adapter = getModel().getManagedObject();
-        return getObjectAssociations(properties, adapter);
-    }
+    private Can<OneToOneAssociation> getPropertiesNotStaticallyHidden() {
 
-    private List<ObjectAssociation> getObjectAssociations(
-            final List<PropertyLayoutData> properties,
-            final ManagedObject adapter) {
-
+        final var entity = getModel().getManagedObject();
+        final var propertyLayouts = this.fieldSet.getProperties();
         //
         // previously we filtered out any invisible properties.
         // However, the inline prompt/don't redirect logic introduced in 1.15.0 means that we keep the same page,
@@ -170,28 +155,25 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
         // or not moves to ScalarPanelAbstract2#onConfigure(...)
         //
 
-        val oas = _NullSafe.stream(properties)
-                .filter(propertyLayoutData -> propertyLayoutData.getMetadataError() == null)
-                .map(propertyLayoutData ->
-                    adapter.getSpecification()
-                    .getAssociation(propertyLayoutData.getId())
-                    .orElse(null)
-                )
-                .filter(_NullSafe::isPresent)
-                .filter(objectAssociation -> {
-                    val hiddenFacet = objectAssociation.getFacet(HiddenFacet.class);
-                    if(hiddenFacet != null) {
-                        // static invisible.
-                        if(hiddenFacet.where().isAlways()
-                                || hiddenFacet.where() == Where.OBJECT_FORMS) {
-                            return false;
-                        }
-                    }
-                    return true;
-                })
-                .collect(Collectors.toList());
-
-        return Collections.unmodifiableList(oas);
+        return _NullSafe.stream(propertyLayouts)
+        .filter(propertyLayoutData -> propertyLayoutData.getMetadataError() == null)
+        .map(propertyLayoutData ->
+            entity.getSpecification().getProperty(propertyLayoutData.getId())
+            .orElse(null)
+        )
+        .filter(_NullSafe::isPresent)
+        .filter(property -> {
+            val hiddenFacet = property.getFacet(HiddenFacet.class);
+            if(hiddenFacet != null) {
+                // static invisible.
+                if(hiddenFacet.where().isAlways()
+                        || hiddenFacet.where() == Where.OBJECT_FORMS) {
+                    return false;
+                }
+            }
+            return true;
+        })
+        .collect(Can.toCan());
     }
 
     private Component addPropertyToForm(
@@ -203,25 +185,24 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
         final ScalarModel scalarModel =
                 entityModel.getPropertyModel(property, EntityModel.Mode.VIEW, EntityModel.RenderingHint.REGULAR);
 
-        final Component component = getComponentFactoryRegistry()
+        final Component scalarNameAndValueComponent = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
-        if(component instanceof MarkupContainer) {
-            String identifier = scalarModel.getIdentifier();
-            CssClassAppender.appendCssClassTo((MarkupContainer)component, identifier);
+        if(scalarNameAndValueComponent instanceof MarkupContainer) {
+            CssClassAppender.appendCssClassTo((MarkupContainer)scalarNameAndValueComponent, scalarModel.getIdentifier());
         }
 
-        val adapter = entityModel.getManagedObject();
-        val associatedActions = ObjectAction.Util.findForAssociation(adapter, property);
+        val entity = entityModel.getManagedObject();
+        val associatedActions = ObjectAction.Util.findForAssociation(entity, property);
 
         LinkAndLabelUtil.asActionLinksForAdditionalLinksPanel(entityModel, associatedActions, null)
         .forEach(onEntityAction);
 
-        return component;
+        return scalarNameAndValueComponent;
     }
 
     @Override
     public void onConfigure() {
-        for (final ScalarPanelAbstract childComponent : childScalarPanelAbstract2s) {
+        for (final ScalarPanelAbstract childComponent : childScalarPanels) {
             childComponent.configure();
         }
         super.onConfigure();
@@ -236,12 +217,12 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
         // TODO: should remove this hack.  We need some sort of SPI for ScalarPanelAbstract2's and any other component,
         // (eg PdfJsViewer) that can implement.  It's "probably" just a matter of having PdfJsViewer do its work in the
         // correct Wicket callback (probably onConfigure).
-        if(childComponents.size() > childScalarPanelAbstract2s.size()) {
+        if(childComponents.size() > childScalarPanels.size()) {
             return true;
         }
         // HACK:END
 
-        for (final ScalarPanelAbstract childComponent : childScalarPanelAbstract2s) {
+        for (final ScalarPanelAbstract childComponent : childScalarPanels) {
             if(childComponent.isVisibilityAllowed()) {
                 return true;
             }

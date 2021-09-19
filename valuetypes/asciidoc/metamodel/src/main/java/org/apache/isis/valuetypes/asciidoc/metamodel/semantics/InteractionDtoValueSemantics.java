@@ -33,7 +33,7 @@ public class InteractionDtoValueSemantics
 extends XmlValueSemanticsAbstract<InteractionDto> {
 
     @Override
-    protected String asXml(@NonNull final InteractionDto value) {
+    protected String asXml(final Context context, @NonNull final InteractionDto value) {
         return InteractionDtoUtils.toXml(value);
     }
 

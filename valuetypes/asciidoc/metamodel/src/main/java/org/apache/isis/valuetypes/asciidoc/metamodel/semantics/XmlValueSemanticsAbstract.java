@@ -38,14 +38,19 @@ implements
 
     @Override
     public String simpleTextRepresentation(final ValueSemanticsProvider.Context context, final T value) {
-        return render(value, xmlContainer->asHtml(asXml(xmlContainer)));
+        return render(value, xmlContainer->presentationValue(context, value).asHtml());
     }
 
-    protected abstract String asXml(@NonNull T value);
+    @Override
+    public AsciiDoc presentationValue(final Context context, final T value) {
+        return asAdoc(asXml(context, value));
+    }
 
-    private String asHtml(final String xml) {
+    protected abstract String asXml(Context context, @NonNull T value);
+
+    private AsciiDoc asAdoc(final String xml) {
         final var adoc = "[source,xml]\n----\n" + xml + "\n----";
-        return AsciiDoc.valueOf(adoc).asHtml();
+        return AsciiDoc.valueOf(adoc);
     }
 
 }

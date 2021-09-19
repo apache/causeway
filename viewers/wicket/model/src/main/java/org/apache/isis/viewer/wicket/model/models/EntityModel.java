@@ -77,7 +77,7 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
 
     // -- FACTORIES
 
-    public static EntityModel ofParameters(
+    public static EntityModel ofPageParameters(
             final IsisAppCommonContext commonContext,
             final PageParameters pageParameters) {
 

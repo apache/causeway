@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed;
 
+import java.io.Serializable;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -78,7 +79,7 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
     @Getter
     private final Optional<ObjectAction> metamodel;
 
-    public ActionInteraction checkSemanticConstraint(@NonNull SemanticConstraint semanticConstraint) {
+    public ActionInteraction checkSemanticConstraint(@NonNull final SemanticConstraint semanticConstraint) {
 
         chain = chain.mapIfLeft(action->{
 
@@ -114,7 +115,7 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
         void onParameterInvalid(ManagedParameter managedParameter, InteractionVeto veto);
     }
 
-    public _Either<ManagedObject, InteractionVeto> invokeWith(ParameterNegotiationModel pendingArgs) {
+    public _Either<ManagedObject, InteractionVeto> invokeWith(final ParameterNegotiationModel pendingArgs) {
         pendingArgs.activateValidationFeedback();
         val veto = validate(pendingArgs);
         if(veto.isPresent()) {
@@ -151,10 +152,28 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
      * @throws X if there was any interaction veto within the originating chain
      */
     public <X extends Throwable>
-    ManagedAction getManagedActionElseThrow(Function<InteractionVeto, ? extends X> onFailure) throws X {
+    ManagedAction getManagedActionElseThrow(final Function<InteractionVeto, ? extends X> onFailure) throws X {
         return super.getManagedMemberElseThrow(onFailure);
     }
 
+    public <X extends Throwable>
+    ManagedAction getManagedActionElseFail() {
+        return getManagedActionElseThrow(veto->_Exceptions.unrecoverable("action vetoed: " + veto.getReason()));
+    }
 
+    // -- MEMENTO
+
+    public class Memento implements Serializable {
+        private static final long serialVersionUID = 1L;
+        public ActionInteraction restore() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+    }
+
+    public Memento memento() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

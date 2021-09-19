@@ -16,25 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.asciidoc.metamodel.semantics;
+package org.apache.isis.viewer.wicket.model.models.interaction.action;
 
-import javax.inject.Named;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 
-import org.springframework.stereotype.Component;
-
-import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.schema.cmd.v2.CommandDto;
-
-import lombok.NonNull;
-
-@Component
-@Named("isis.val.CommandDtoValueSemantics")
-public class CommandDtoValueSemantics
-extends XmlValueSemanticsAbstract<CommandDto> {
-
-    @Override
-    protected String asXml(final Context context, @NonNull final CommandDto value) {
-        return CommandDtoUtils.toXml(value);
-    }
+@FunctionalInterface
+public interface ObjectUiModelWkt
+extends ObjectUiModel {
 
 }

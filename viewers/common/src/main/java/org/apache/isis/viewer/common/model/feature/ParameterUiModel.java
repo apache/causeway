@@ -45,7 +45,6 @@ public interface ParameterUiModel extends ScalarUiModel {
     // -- PENDING PARAMETER MODEL
 
     ParameterNegotiationModel getPendingParameterModel();
-    void setPendingParameterModel(ParameterNegotiationModel pendingArgs);
 
     // -- SHORTCUTS
 

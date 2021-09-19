@@ -26,7 +26,6 @@ import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
-import org.apache.isis.applib.value.Markup;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 @Component
@@ -42,11 +41,6 @@ implements
     @Override
     public String simpleTextRepresentation(final ValueSemanticsProvider.Context context, final AsciiDoc adoc) {
         return render(adoc, AsciiDoc::asHtml);
-    }
-
-    @Override
-    public Markup presentationValue(final Context context, final AsciiDoc value) {
-        return Markup.valueOf(simpleTextRepresentation(context, value));
     }
 
     // -- PARSER

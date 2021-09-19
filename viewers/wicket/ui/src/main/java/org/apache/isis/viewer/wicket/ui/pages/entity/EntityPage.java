@@ -91,7 +91,7 @@ public class EntityPage extends PageAbstract {
         if (Strings.isEmpty(oid)) {
             throw new RestartResponseException(Application.get().getHomePage());
         }
-        return EntityModel.ofParameters(commonContext, parameters);
+        return EntityModel.ofPageParameters(commonContext, parameters);
     }
 
     private EntityPage(final PageParameters pageParameters, final EntityModel entityModel) {

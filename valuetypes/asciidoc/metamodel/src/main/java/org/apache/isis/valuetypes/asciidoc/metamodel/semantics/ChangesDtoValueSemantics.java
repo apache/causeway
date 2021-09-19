@@ -33,7 +33,7 @@ public class ChangesDtoValueSemantics
 extends XmlValueSemanticsAbstract<ChangesDto> {
 
     @Override
-    protected String asXml(@NonNull final ChangesDto value) {
+    protected String asXml(final Context context, @NonNull final ChangesDto value) {
         return ChangesDtoUtils.toXml(value);
     }
 

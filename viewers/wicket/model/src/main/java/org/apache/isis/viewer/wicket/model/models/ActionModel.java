@@ -49,9 +49,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
-import org.apache.isis.core.metamodel.interactions.InteractionHead;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
-import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -59,8 +58,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.memento.ActionMemento;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.common.model.action.form.FormPendingParamUiModel;
 import org.apache.isis.viewer.common.model.action.form.FormUiModel;
+import org.apache.isis.viewer.wicket.model.models.interaction.action.ActionInteractionModelWkt;
+import org.apache.isis.viewer.wicket.model.models.interaction.action.ParameterUiModelWkt;
 
 import lombok.NonNull;
 import lombok.val;
@@ -99,7 +99,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     public PageParameters getPageParametersWithoutUiHints() {
         val adapter = getOwner();
         val objectAction = getMetaModel();
-        return PageParameterUtil.createPageParametersForAction(adapter, objectAction, argCache().snapshot());
+        return PageParameterUtil.createPageParametersForAction(adapter, objectAction, snapshotArgs());
     }
 
     @Override
@@ -130,18 +130,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     private final ActionMemento actionMemento;
 
     // lazy in support of serialization of this class
-    private transient ActionArgumentCache argCache;
-    private ActionArgumentCache argCache() {
-        return argCache!=null
-                ? argCache
-                : (argCache = createActionArgumentCache());
-    }
-    private ActionArgumentCache createActionArgumentCache() {
-        return new ActionArgumentCache(
-                ownerModel,
-                actionMemento,
-                getMetaModel());
-    }
+    private transient ActionInteractionModelWkt actionInteractionModel;
 
     private ActionModel(final EntityModel entityModel, final ActionMemento actionMemento) {
         super(entityModel.getCommonContext());
@@ -156,7 +145,22 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         super(actionModel.getCommonContext());
         this.ownerModel = actionModel.ownerModel;
         this.actionMemento = actionModel.actionMemento;
-        this.argCache = actionModel.argCache().copy();
+    }
+
+    private ActionInteractionModelWkt actionInteractionModel() {
+        if(actionInteractionModel==null) {
+            actionInteractionModel = new ActionInteractionModelWkt(
+                    getCommonContext(),
+                    ActionInteraction.start(
+                            ownerModel.getManagedObject(),
+                            actionMemento.getIdentifier().getMemberLogicalName(),
+                            WHERE_FOR_ACTION_INVOCATION));
+        }
+        return actionInteractionModel;
+    }
+
+    private Can<ManagedObject> snapshotArgs() {
+        return actionInteractionModel().parameterNegotiationModel().get().getParamValues();
     }
 
     @Override
@@ -186,7 +190,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     private ManagedObject executeAction() {
 
         val targetAdapter = getOwner();
-        final Can<ManagedObject> arguments = argCache().snapshot();
+        final Can<ManagedObject> arguments = snapshotArgs();
         final ObjectAction action = getMetaModel();
 
         val head = action.interactionHead(targetAdapter);
@@ -217,23 +221,11 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         throw new UnsupportedOperationException("target adapter for ActionModel cannot be changed");
     }
 
-    public ParameterNegotiationModel getArgumentsAsParamModel() {
-        return getMetaModel().interactionHead(getOwner())
-                .model(argCache().snapshot());
-    }
-
-
     /** Resets arguments to their fixed point default values
      * @see ActionInteractionHead#defaults()
      */
     public void clearArguments() {
-
-        val defaultsFixedPoint = getMetaModel()
-                .interactionHead(getOwner())
-                .defaults()
-                .getParamValues();
-
-        argCache().resetTo(defaultsFixedPoint);
+        actionInteractionModel().resetParametersToDefault();
     }
 
     /**
@@ -394,40 +386,26 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     }
 
     public void setParameterValue(final ObjectActionParameter actionParameter, final ManagedObject newParamValue) {
-        argCache().setParameterValue(actionParameter, newParamValue);
+        actionInteractionModel().parameterNegotiationModel().get().setParamValue(actionParameter.getNumber(), newParamValue);
     }
 
     public void clearParameterValue(final ObjectActionParameter actionParameter) {
-        argCache().clearParameterValue(actionParameter);
+        actionInteractionModel().parameterNegotiationModel().get().clearParamValue(actionParameter.getNumber());
     }
 
     @Override
-    public Stream<FormPendingParamUiModel> streamPendingParamUiModels() {
-
-        val owner = this.getOwner();
-        val target = this.getMetaModel().realTargetAdapter(owner);
-        val pendingArgs = getArgumentsAsParamModel();
-
-        val head = InteractionHead.mixin(owner, target);
-
-        return argCache()
-        .streamParamUiModels()
-        .map(paramUiModel->{
-            return FormPendingParamUiModel.of(head, paramUiModel, pendingArgs);
-        });
-
+    public Stream<ParameterUiModelWkt> streamPendingParamUiModels() {
+        return actionInteractionModel().streamParameterUiModels();
     }
 
     public void reassessPendingParamUiModels(final int skipCount) {
 
-        val pendingArgs = getArgumentsAsParamModel();
-
-        argCache()
-        .streamParamUiModels()
+        actionInteractionModel().streamParameterUiModels()
         .skip(skipCount)
-        .forEach(actionArgumentModel->{
+        .forEach(paramUiModel->{
 
-            val actionParameter = actionArgumentModel.getMetaModel();
+            val pendingArgs = paramUiModel.getPendingParameterModel();
+            val actionParameter = paramUiModel.getMetaModel();
             val paramDefaultValue = actionParameter.getDefault(pendingArgs);
 
             if (ManagedObjects.isNullOrUnspecifiedOrEmpty(paramDefaultValue)) {

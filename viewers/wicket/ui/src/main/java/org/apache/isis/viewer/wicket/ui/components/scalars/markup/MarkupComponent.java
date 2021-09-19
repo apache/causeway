@@ -28,7 +28,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
+import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 
@@ -88,8 +88,8 @@ public class MarkupComponent extends WebComponent {
         if(model instanceof ScalarPropertyModel) {
             return Optional.of(((ScalarPropertyModel)model).getMetaModel());
         }
-        if(model instanceof ScalarParameterModel) {
-            return Optional.of(((ScalarParameterModel)model).getMetaModel());
+        if(model instanceof ParameterUiModel) {
+            return Optional.of(((ParameterUiModel)model).getMetaModel());
         }
         if(model instanceof ValueModel) {
             return Optional.ofNullable(((ValueModel)model).getActionModelHint())
