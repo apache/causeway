@@ -18,7 +18,10 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed;
 
+import java.io.Serializable;
 import java.util.Optional;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -30,13 +33,17 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
+import org.apache.isis.core.metamodel.spec.feature.memento.ActionMemento;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
+import lombok.RequiredArgsConstructor;
 
 public final class ManagedAction extends ManagedMember {
 
@@ -94,25 +101,43 @@ public final class ManagedAction extends ManagedMember {
 
     // -- INTERACTION
 
-    public _Either<ManagedObject, InteractionVeto> invoke(@NonNull Can<ManagedObject> actionParameters) {
+    //XXX potential misuse: param validation is not our responsibility here
+    // hence at least should not be public
+    @Deprecated
+    public _Either<ManagedObject, InteractionVeto> invoke(@NonNull final Can<ManagedObject> actionParameters) {
 
-        // param validation is not our responsibility here
+        final var action = getAction();
 
-        val action = getAction();
+        final var head = action.interactionHead(getOwner());
 
-        val head = action.interactionHead(getOwner());
-
-        val actionResult = action
+        final ManagedObject actionResult = action
                 .execute(head , actionParameters, InteractionInitiatedBy.USER);
 
+        return _Either.left(route(actionResult));
+
+    }
+
+    public ManagedObject invokeWithRuleChecking(
+            final @NonNull Can<ManagedObject> actionParameters) throws AuthorizationException {
+
+        final var action = getAction();
+        final var head = action.interactionHead(getOwner());
+
+        final ManagedObject actionResult = action
+                .executeWithRuleChecking(head , actionParameters, InteractionInitiatedBy.USER, getWhere());
+
+        return route(actionResult);
+    }
+
+    private ManagedObject route(final @Nullable ManagedObject actionResult) {
+
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(actionResult)) {
-            return _Either.left(ManagedObject.empty(action.getReturnType()));
+            return ManagedObject.empty(action.getReturnType());
         }
 
-        val resultPojo = actionResult.getPojo();
+        final var resultPojo = actionResult.getPojo();
 
-        //TODO same logic is in wkt's ActionModel, ultimately we want wkt to use this (common) one
-        val resultAdapter = getRoutingServices().stream()
+        final var resultAdapter = getRoutingServices().stream()
                 .filter(routingService->routingService.canRoute(resultPojo))
                 .map(routingService->routingService.route(resultPojo))
                 .filter(_NullSafe::isPresent)
@@ -123,16 +148,13 @@ public final class ManagedAction extends ManagedMember {
 
         // resolve injection-points for the result
         getServiceInjector().injectServicesInto(resultAdapter.getPojo());
-
-        //XXX are we sure in case of entities, that these are attached?
-
-        return _Either.left(resultAdapter);
-
+        return resultAdapter;
     }
+
 
     // -- POJO WRAPPING
 
-    private ManagedObject toManagedObject(Object pojo) {
+    private ManagedObject toManagedObject(final Object pojo) {
         return ManagedObject.lazy(mmc().getSpecificationLoader(), pojo);
     }
 
@@ -161,5 +183,39 @@ public final class ManagedAction extends ManagedMember {
     private ServiceRegistry getServiceRegistry() {
         return mmc().getServiceRegistry();
     }
+
+    // -- MEMENTO
+
+    public Memento getMemento() {
+        return Memento.create(this);
+    }
+
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class Memento implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        static Memento create(final ManagedAction managedAction) {
+            final var action = managedAction.getMetaModel();
+            return new Memento(
+                    action.getMemento(),
+                    action.getObjectManager()
+                        .getObjectMemorizer()
+                        .serialize(managedAction.getOwner()),
+                        managedAction.getWhere());
+        }
+
+        private final ActionMemento actionMemento;
+        private final ObjectMemento objectMemento;
+        private final Where where;
+        public ManagedAction getManagedAction(final MetaModelContext mmc) {
+
+            final var action = actionMemento.getAction(mmc::getSpecificationLoader);
+            final var spec = action.getOnType();
+            final var owner = mmc.getObjectManager().getObjectMemorizer().deserialize(spec, objectMemento);
+
+            return ManagedAction.of(owner, action, where);
+        }
+    }
+
 
 }

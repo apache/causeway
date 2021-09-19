@@ -26,12 +26,16 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
 
@@ -64,6 +68,12 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
         return new ActionInteraction(
                 managedAction.map(ManagedAction::getAction),
                 chain);
+    }
+
+    public static ActionInteraction wrap(final @NonNull ManagedAction managedAction) {
+        return new ActionInteraction(
+                Optional.of(managedAction.getAction()),
+                _Either.left(managedAction));
     }
 
     ActionInteraction(
@@ -117,13 +127,19 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
 
     public _Either<ManagedObject, InteractionVeto> invokeWith(final ParameterNegotiationModel pendingArgs) {
         pendingArgs.activateValidationFeedback();
-        val veto = validate(pendingArgs);
+        final var veto = validate(pendingArgs);
         if(veto.isPresent()) {
             return _Either.right(veto.get());
         }
-        val action = chain.leftIfAny();
-        val actionResultOrVeto = action.invoke(pendingArgs.getParamValues());
+        final var action = chain.leftIfAny();
+        final var actionResultOrVeto = action.invoke(pendingArgs.getParamValues());
         return actionResultOrVeto;
+    }
+
+    public ManagedObject invokeWithRuleChecking(
+            final ParameterNegotiationModel pendingArgs) throws AuthorizationException {
+        final var action = chain.leftIfAny();
+        return action.invokeWithRuleChecking(pendingArgs.getParamValues());
     }
 
     public Optional<InteractionVeto> validate(
@@ -163,17 +179,27 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
 
     // -- MEMENTO
 
-    public class Memento implements Serializable {
+    public Memento getMemento() {
+        return Memento.create(this);
+    }
+
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class Memento implements Serializable {
         private static final long serialVersionUID = 1L;
-        public ActionInteraction restore() {
-            // TODO Auto-generated method stub
-            return null;
+
+        static Memento create(final ActionInteraction actionInteraction) {
+            return new Memento(actionInteraction.getManagedAction()
+                    .map(ManagedAction::getMemento)
+                    .orElseThrow());
+        }
+
+        private final ManagedAction.Memento managedActionMemento;
+
+        public ActionInteraction getActionInteraction(final MetaModelContext mmc) {
+            final var managedAction = managedActionMemento.getManagedAction(mmc);
+            return ActionInteraction.wrap(managedAction);
         }
     }
 
-    public Memento memento() {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
 }

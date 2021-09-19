@@ -18,10 +18,10 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.memento.ObjectMemento;
 
 /**
  * Represents a standalone value.

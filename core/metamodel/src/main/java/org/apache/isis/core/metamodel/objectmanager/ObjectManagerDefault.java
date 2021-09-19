@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.objectmanager.detach.ObjectDetacher;
 import org.apache.isis.core.metamodel.objectmanager.identify.ObjectBookmarker;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemorizer;
 import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
 import org.apache.isis.core.metamodel.objectmanager.refresh.ObjectRefresher;
 import org.apache.isis.core.metamodel.objectmanager.serialize.ObjectSerializer;
@@ -59,6 +60,7 @@ public class ObjectManagerDefault implements ObjectManager {
     @Getter(onMethod = @__(@Override)) private ObjectRefresher objectRefresher;
     @Getter(onMethod = @__(@Override)) private ObjectDetacher objectDetacher;
     @Getter(onMethod = @__(@Override)) private ObjectSerializer objectSerializer;
+    @Getter(onMethod = @__(@Override)) private ObjectMemorizer objectMemorizer;
 
     @PostConstruct
     public void init() {
@@ -69,11 +71,12 @@ public class ObjectManagerDefault implements ObjectManager {
         objectRefresher = ObjectRefresher.createDefault();
         objectDetacher = ObjectDetacher.createDefault(metaModelContext);
         objectSerializer = ObjectSerializer.createDefault(metaModelContext);
+        objectMemorizer = ObjectMemorizer.createDefault(metaModelContext);
     }
 
 
     // JUnit support
-    public static ObjectManager forTesting(MetaModelContext metaModelContext) {
+    public static ObjectManager forTesting(final MetaModelContext metaModelContext) {
 
         val objectManager = new ObjectManagerDefault();
         objectManager.metaModelContext = metaModelContext;

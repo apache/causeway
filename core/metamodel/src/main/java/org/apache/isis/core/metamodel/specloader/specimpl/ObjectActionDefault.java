@@ -409,7 +409,7 @@ implements ObjectAction {
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val actionInvocationFacet = getFacet(ActionInvocationFacet.class);
+        final var actionInvocationFacet = getFacet(ActionInvocationFacet.class);
         return actionInvocationFacet
                 .invoke(this, head, argumentAdapters, interactionInitiatedBy);
     }

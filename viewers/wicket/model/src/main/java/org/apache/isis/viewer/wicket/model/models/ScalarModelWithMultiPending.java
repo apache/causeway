@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.core.runtime.memento.ObjectMemento;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

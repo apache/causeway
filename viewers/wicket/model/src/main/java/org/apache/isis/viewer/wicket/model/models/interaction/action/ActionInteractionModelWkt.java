@@ -49,7 +49,7 @@ extends ModelAbstract<ActionInteraction> {
             final IsisAppCommonContext commonContext,
             final ActionInteraction model) {
         super(commonContext, model);
-        this.memento = model.memento();
+        this.memento = model.getMemento();
 
         final int paramCount = model.getMetamodel().get().getParameterCount();
         this.childModels = IntStream.range(0, paramCount)
@@ -60,7 +60,7 @@ extends ModelAbstract<ActionInteraction> {
     @Override
     protected final ActionInteraction load() {
         childModels.forEach(childModel->childModel.attachToContainerModel(this));
-        return memento.restore();
+        return memento.getActionInteraction(getCommonContext().getMetaModelContext());
     }
 
     @Override
@@ -69,7 +69,7 @@ extends ModelAbstract<ActionInteraction> {
         super.detach();
     }
 
-    protected final ActionInteraction actionInteraction() {
+    public final ActionInteraction actionInteraction() {
         return getObject();
     }
 

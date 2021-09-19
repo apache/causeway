@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.memento;
+package org.apache.isis.core.metamodel.objectmanager.memento;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -55,8 +55,8 @@ public interface ObjectMemento extends HasLogicalType, Serializable {
     // -- FACTORIES
 
     static ObjectMemento wrapMementoList(
-            Collection<ObjectMemento> container,
-            LogicalType logicalType) {
+            final Collection<ObjectMemento> container,
+            final LogicalType logicalType) {
 
         // ArrayList is serializable
         if(container instanceof ArrayList) {
@@ -66,7 +66,7 @@ public interface ObjectMemento extends HasLogicalType, Serializable {
     }
 
     // ArrayList is serializable
-    static Optional<ArrayList<ObjectMemento>> unwrapList(ObjectMemento memento) {
+    static Optional<ArrayList<ObjectMemento>> unwrapList(final ObjectMemento memento) {
         if(memento==null) {
             return Optional.empty();
         }

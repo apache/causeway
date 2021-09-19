@@ -20,6 +20,7 @@ package org.apache.isis.core.runtime.memento;
 
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.NonNull;

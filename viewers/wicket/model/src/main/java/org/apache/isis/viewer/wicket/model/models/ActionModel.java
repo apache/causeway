@@ -154,7 +154,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
                     ActionInteraction.start(
                             ownerModel.getManagedObject(),
                             actionMemento.getIdentifier().getMemberLogicalName(),
-                            WHERE_FOR_ACTION_INVOCATION));
+                            Where.ANYWHERE));
         }
         return actionInteractionModel;
     }
@@ -180,40 +180,9 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         return results;
     }
 
-    // REVIEW: should provide this rendering context, rather than hardcoding.
-    // the net effect currently is that class members annotated with
-    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
-    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly)
-    // for any other value for Where
-    public static final Where WHERE_FOR_ACTION_INVOCATION = Where.ANYWHERE;
-
     private ManagedObject executeAction() {
-
-        val targetAdapter = getOwner();
-        final Can<ManagedObject> arguments = snapshotArgs();
-        final ObjectAction action = getMetaModel();
-
-        val head = action.interactionHead(targetAdapter);
-
-        val resultAdapter =
-                action.executeWithRuleChecking(
-                        head, arguments,
-                        InteractionInitiatedBy.USER,
-                        WHERE_FOR_ACTION_INVOCATION);
-
-        val resultPojo = resultAdapter != null ? resultAdapter.getPojo() : null;
-
-        return getServiceRegistry()
-                .select(RoutingService.class)
-                .stream()
-                .filter(routingService->routingService.canRoute(resultPojo))
-                .map(routingService->routingService.route(resultPojo))
-                .filter(_NullSafe::isPresent)
-                .map(super.getObjectManager()::adapt)
-                .filter(_NullSafe::isPresent)
-                .findFirst()
-                .orElse(resultAdapter);
-
+        val pendingArgs = actionInteractionModel().parameterNegotiationModel().get();
+        return actionInteractionModel().actionInteraction().invokeWithRuleChecking(pendingArgs);
     }
 
     @Override
@@ -413,41 +382,6 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
             } else {
                 setParameterValue(actionParameter, paramDefaultValue);
             }
-
-            // We could automatically make sure the parameter value is one of the (reassessed) choices,
-            // if not then blank it out.
-            // corner case: the parameter value might be non-scalar
-            //     we could remove from the parameter value (collection) all that no longer
-            //     conform to the available (reassessed) choices,
-
-            //XXX HOWEVER ...
-            // there are pros and cons to that depending on the situation
-            // I'd rather not risk a bad user experience by blanking out values,
-            // instead let the user control the situation, we have validation to signal what to do
-
-//            val paramIsScalar = actionParameter.getSpecification().isNotCollection();
-//
-//            boolean shouldBlankout = false;
-//
-//            if(!isEmpty && paramIsScalar) {
-//
-//                if(hasChoices) {
-//                    val choices = actionParameter
-//                            .getChoices(pendingArgs, InteractionInitiatedBy.USER);
-//
-//                    shouldBlankout =
-//                            ! isPartOfChoicesConsideringDependentArgs(paramValue, choices);
-//
-//                } else if(hasAutoComplete) {
-//
-//                    //don't blank-out, even though could fail validation later
-//                    shouldBlankout = false;
-//                }
-//            }
-//
-//            if(shouldBlankout) {
-//                clearParameterValue(actionParameter);
-//            }
 
         });
 
