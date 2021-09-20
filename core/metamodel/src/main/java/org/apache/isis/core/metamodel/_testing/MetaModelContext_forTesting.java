@@ -212,6 +212,7 @@ implements MetaModelContext {
                 repositoryService,
                 transactionService,
                 transactionState,
+                new ObjectMementoService_forTesting(),
                 new BigDecimalValueSemantics(),
                 new URLValueSemantics(),
                 new UUIDValueSemantics(),
