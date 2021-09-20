@@ -19,7 +19,9 @@
 package org.apache.isis.viewer.wicket.ui.components.welcome;
 
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.LambdaModel;
 
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.viewer.wicket.model.models.WelcomeModel;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -29,21 +31,15 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * {@link HomePage}).
  */
 public class WelcomePanel
-extends PanelAbstract<String, WelcomeModel> {
+extends PanelAbstract<IsisConfiguration.Viewer.Wicket.Welcome, WelcomeModel> {
 
     private static final long serialVersionUID = 1L;
 
     private static final String ID_MESSAGE = "message";
 
-    //@Inject private transient WebAppContextPath webAppContextPath;
-
-    public WelcomePanel(final String id, final WelcomeModel model) {
-        super(id, model);
-
-        String welcomeMessage = getIsisConfiguration().getViewer().getWicket().getWelcome().getText();
-
-        model.setObject(welcomeMessage);
-        final Label label = new Label(ID_MESSAGE, welcomeMessage);
+    public WelcomePanel(final String id, final WelcomeModel welcomeModel) {
+        super(id, welcomeModel);
+        final Label label = new Label(ID_MESSAGE, LambdaModel.of(()->welcomeModel.getObject().getText()));
         // safe to not escape, welcome message is read from file (part of deployed WAR)
         label.setEscapeModelStrings(false);
         add(label);

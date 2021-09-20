@@ -25,20 +25,21 @@ import javax.inject.Provider;
 import javax.servlet.ServletContext;
 
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LambdaModel;
 
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.viewer.wicket.model.models.AboutModel;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-
-import lombok.val;
 
 /**
  * {@link PanelAbstract Panel} displaying welcome message (as used on
  * {@link HomePage}).
  */
 public class AboutPanel
-extends PanelAbstract<String, AboutModel> {
+extends PanelAbstract<IsisConfiguration.Viewer.Wicket.Application, AboutModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -50,34 +51,30 @@ extends PanelAbstract<String, AboutModel> {
     public static class LabelVisibleOnlyIfNonEmpty extends Label {
 
         private static final long serialVersionUID = 1L;
-        private final String label;
+        private final IModel<String> label;
 
-        public LabelVisibleOnlyIfNonEmpty(final String id, final String label) {
+        public LabelVisibleOnlyIfNonEmpty(final String id, final IModel<String> label) {
             super(id, label);
             this.label = label;
         }
 
         @Override protected void onConfigure() {
             super.onConfigure();
-            setVisibilityAllowed(label != null && !label.isEmpty());
+            setVisibilityAllowed(label != null && !_NullSafe.isEmpty(label.getObject()));
         }
     }
 
     @Inject
     private ServletContext servletContext;
 
-    @Inject
-    private IsisConfiguration isisConfiguration;
-
     private JarManifestModel jarManifestModel;
 
-    public AboutPanel(final String id) {
+    public AboutPanel(final String id, final AboutModel aboutModel) {
         super(id);
 
-        val config = isisConfiguration.getViewer().getWicket().getApplication();
-        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_NAME, config.getName()));
-        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_VERSION, config.getVersion()));
-        add(new LabelVisibleOnlyIfNonEmpty(ID_ABOUT_MESSAGE, config.getAbout()));
+        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_NAME, LambdaModel.of(()->aboutModel.getObject().getName())));
+        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_VERSION, LambdaModel.of(()->aboutModel.getObject().getVersion())));
+        add(new LabelVisibleOnlyIfNonEmpty(ID_ABOUT_MESSAGE, LambdaModel.of(()->aboutModel.getObject().getAbout())));
 
         if(jarManifestModel == null) {
             Provider<InputStream> metaInfManifestProvider =

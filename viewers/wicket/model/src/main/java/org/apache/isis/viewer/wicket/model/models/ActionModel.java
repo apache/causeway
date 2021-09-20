@@ -35,16 +35,13 @@ import org.apache.wicket.util.resource.StringResourceStream;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.services.routing.RoutingService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.NamedWithMimeType;
 import org.apache.isis.applib.value.OpenUrlStrategy;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.viewer.web.WebAppContextPath;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
@@ -71,18 +68,30 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     private static final long serialVersionUID = 1L;
 
-    public ActionModel copy() {
-        return new ActionModel(this);
-    }
-
     // -- FACTORY METHODS
 
+    public static ActionModel wrap(final ActionInteractionModelWkt delegate, final EntityModel actionOwner) {
+        return new ActionModel(delegate, actionOwner);
+    }
+
     public static ActionModel of(final EntityModel actionOwner, final ObjectAction action) {
-        return of(actionOwner, action.getMemento());
+        final var delegate = new ActionInteractionModelWkt(
+                actionOwner.getCommonContext(),
+                ActionInteraction.start(
+                        actionOwner.getManagedObject(),
+                        action.getFeatureIdentifier().getMemberLogicalName(),
+                        Where.ANYWHERE));
+        return wrap(delegate, actionOwner);
     }
 
     public static ActionModel of(final EntityModel actionOwner, final ActionMemento actionMemento) {
-        return new ActionModel(actionOwner, actionMemento);
+        final var delegate = new ActionInteractionModelWkt(
+                actionOwner.getCommonContext(),
+                ActionInteraction.start(
+                        actionOwner.getManagedObject(),
+                        actionMemento.getIdentifier().getMemberLogicalName(),
+                        Where.ANYWHERE));
+        return wrap(delegate, actionOwner);
     }
 
     public static ActionModel ofPageParameters(
@@ -92,14 +101,28 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         return PageParameterUtil.actionModelFor(commonContext, pageParameters);
     }
 
+    // -- CONSTRUCTION
+
+    private final ActionInteractionModelWkt delegate;
+    private final EntityModel parentEntityModel;
+
+    private ActionModel(final ActionInteractionModelWkt delegate, final EntityModel parentEntityModel) {
+        super(delegate.getCommonContext());
+        this.delegate = delegate;
+        this.parentEntityModel = parentEntityModel;
+    }
+
+    // --
+
+    public void actionInteraction() {
+        delegate.actionInteraction();
+    }
 
     // -- BOOKMARKABLE
 
     @Override
     public PageParameters getPageParametersWithoutUiHints() {
-        val adapter = getOwner();
-        val objectAction = getMetaModel();
-        return PageParameterUtil.createPageParametersForAction(adapter, objectAction, snapshotArgs());
+        return PageParameterUtil.createPageParametersForAction(getOwner(), getMetaModel(), snapshotArgs());
     }
 
     @Override
@@ -111,7 +134,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     @Override
     public ObjectAction getMetaModel() {
-        return actionMemento.getAction(this::getSpecificationLoader);
+        return delegate.actionInteraction().getMetamodel().get();
     }
 
     @Override
@@ -121,68 +144,35 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     @Override
     public EntityModel getParentUiModel() {
-        return ownerModel;
+        return parentEntityModel;
+    }
+
+    public ActionModel copy() {
+        return wrap(delegate, parentEntityModel);
     }
 
     // -- HELPERS
 
-    private final EntityModel ownerModel;
-    private final ActionMemento actionMemento;
-
-    // lazy in support of serialization of this class
-    private transient ActionInteractionModelWkt actionInteractionModel;
-
-    private ActionModel(final EntityModel entityModel, final ActionMemento actionMemento) {
-        super(entityModel.getCommonContext());
-        this.ownerModel = entityModel;
-        this.actionMemento = actionMemento;
-    }
-
-    /**
-     * Copy constructor, as called by {@link #copy()}.
-     */
-    private ActionModel(final ActionModel actionModel) {
-        super(actionModel.getCommonContext());
-        this.ownerModel = actionModel.ownerModel;
-        this.actionMemento = actionModel.actionMemento;
-    }
-
-    private ActionInteractionModelWkt actionInteractionModel() {
-        if(actionInteractionModel==null) {
-            actionInteractionModel = new ActionInteractionModelWkt(
-                    getCommonContext(),
-                    ActionInteraction.start(
-                            ownerModel.getManagedObject(),
-                            actionMemento.getIdentifier().getMemberLogicalName(),
-                            Where.ANYWHERE));
-        }
-        return actionInteractionModel;
-    }
-
     private Can<ManagedObject> snapshotArgs() {
-        return actionInteractionModel().parameterNegotiationModel().get().getParamValues();
+        return delegate.parameterNegotiationModel().get().getParamValues();
     }
 
     @Override
     public ManagedObject getOwner() {
-        return ownerModel.load();
+        return delegate.actionInteraction().getManagedActionElseFail().getOwner();
+    }
+
+    public ManagedObject executeActionAndReturnResult() {
+        val pendingArgs = delegate.parameterNegotiationModel().get();
+        val result = delegate.actionInteraction().invokeWithRuleChecking(pendingArgs);
+        super.setObject(result); // memoize result
+        return result;
     }
 
     @Override
     protected ManagedObject load() {
-
-        // from getObject()/reExecute
-        detach(); // force re-execute
-
-        // TODO: think we need another field to determine if args have been populated.
-        val results = executeAction();
-
-        return results;
-    }
-
-    private ManagedObject executeAction() {
-        val pendingArgs = actionInteractionModel().parameterNegotiationModel().get();
-        return actionInteractionModel().actionInteraction().invokeWithRuleChecking(pendingArgs);
+        // -- no-op
+        return null;
     }
 
     @Override
@@ -194,7 +184,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
      * @see ActionInteractionHead#defaults()
      */
     public void clearArguments() {
-        actionInteractionModel().resetParametersToDefault();
+        delegate.resetParametersToDefault();
     }
 
     /**
@@ -207,20 +197,6 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         final boolean safeSemantics = action.getSemantics().isSafeInNature();
         return bookmarkPolicy.value() == BookmarkPolicy.AS_ROOT && safeSemantics;
     }
-
-    // //////////////////////////////////////
-
-    /**
-     * Simply executes the action.
-     *
-     * Previously there was exception handling code here also, but this has now been centralized
-     * within FormExecutorAbstract
-     */
-    public ManagedObject execute() {
-        final ManagedObject resultAdapter = this.getObject();
-        return resultAdapter;
-    }
-
 
     // //////////////////////////////////////
 
@@ -355,21 +331,21 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     }
 
     public void setParameterValue(final ObjectActionParameter actionParameter, final ManagedObject newParamValue) {
-        actionInteractionModel().parameterNegotiationModel().get().setParamValue(actionParameter.getNumber(), newParamValue);
+        delegate.parameterNegotiationModel().get().setParamValue(actionParameter.getNumber(), newParamValue);
     }
 
     public void clearParameterValue(final ObjectActionParameter actionParameter) {
-        actionInteractionModel().parameterNegotiationModel().get().clearParamValue(actionParameter.getNumber());
+        delegate.parameterNegotiationModel().get().clearParamValue(actionParameter.getNumber());
     }
 
     @Override
     public Stream<ParameterUiModelWkt> streamPendingParamUiModels() {
-        return actionInteractionModel().streamParameterUiModels();
+        return delegate.streamParameterUiModels();
     }
 
     public void reassessPendingParamUiModels(final int skipCount) {
 
-        actionInteractionModel().streamParameterUiModels()
+        delegate.streamParameterUiModels()
         .skip(skipCount)
         .forEach(paramUiModel->{
 

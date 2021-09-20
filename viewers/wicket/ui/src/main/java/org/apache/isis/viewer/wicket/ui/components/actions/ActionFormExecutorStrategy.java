@@ -70,11 +70,11 @@ public class ActionFormExecutorStrategy implements FormExecutorStrategy<ActionMo
 
     @Override
     public ManagedObject obtainResultAdapter() {
-        return model.execute();
+        return model.executeActionAndReturnResult();
     }
 
     @Override
-    public void redirectTo(ManagedObject resultAdapter, AjaxRequestTarget targetIfany) {
+    public void redirectTo(final ManagedObject resultAdapter, final AjaxRequestTarget targetIfany) {
 
         ActionResultResponse resultResponse = ActionResultResponseType
                 .determineAndInterpretResult(model, targetIfany, resultAdapter);

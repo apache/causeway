@@ -22,6 +22,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.viewer.common.model.components.ComponentType;
+import org.apache.isis.viewer.wicket.model.models.AboutModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 
@@ -43,7 +44,7 @@ public class AboutPanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        return new AboutPanel(id);
+        return new AboutPanel(id, new AboutModel(getCommonContext()));
     }
 
 

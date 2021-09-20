@@ -18,17 +18,24 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
+import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+
 /**
  * Model providing welcome text.
  */
-public final class AboutModel extends ModelAbstract<String> {
+public final class AboutModel
+extends ModelAbstract<IsisConfiguration.Viewer.Wicket.Application> {
 
     private static final long serialVersionUID = 1L;
 
+    public AboutModel(final IsisAppCommonContext commonContext) {
+        super(commonContext);
+    }
+
     @Override
-    protected String load() {
-        // not used
-        return null;
+    protected IsisConfiguration.Viewer.Wicket.Application load() {
+        return getCommonContext().getConfiguration().getViewer().getWicket().getApplication();
     }
 
 }
