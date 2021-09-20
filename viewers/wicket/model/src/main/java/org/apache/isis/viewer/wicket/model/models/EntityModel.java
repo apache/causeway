@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,7 +30,6 @@ import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
@@ -54,11 +52,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Backing model to represent a {@link ManagedObject}.
- *
- * <p>
- * So that the model is {@link Serializable}, the {@link ManagedObject} is
- * stored as a {@link ObjectMemento}.
+ * Backing model to represent a domain object as {@link ManagedObject}.
  */
 @Log4j2
 public class EntityModel
@@ -66,19 +60,6 @@ extends ManagedObjectModel
 implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel, BookmarkableModel {
 
     private static final long serialVersionUID = 1L;
-
-    private final Map<PropertyMemento, ScalarModel> propertyScalarModels;
-
-    @Setter
-    private @Nullable ObjectMemento contextAdapterIfAny;
-
-    @Getter(onMethod = @__(@Override))
-    @Setter(onMethod = @__(@Override))
-    private EitherViewOrEdit mode;
-
-    @Getter(onMethod = @__(@Override))
-    @Setter(onMethod = @__(@Override))
-    private RenderingHint renderingHint;
 
     // -- FACTORIES
 
@@ -94,8 +75,8 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     }
 
     public static EntityModel ofAdapter(
-            final IsisAppCommonContext commonContext,
-            final ManagedObject adapter) {
+            final @NonNull IsisAppCommonContext commonContext,
+            final @Nullable ManagedObject adapter) {
         val adapterMemento = commonContext.mementoFor(adapter);
         return ofMemento(commonContext, adapterMemento);
     }
@@ -104,17 +85,11 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
             final @NonNull IsisAppCommonContext commonContext,
             final @Nullable ObjectMemento adapterMemento) {
 
-        return ofMemento(commonContext, adapterMemento, /*propertyScalarModels*/null);
-    }
-
-    private static EntityModel ofMemento(
-            final @NonNull IsisAppCommonContext commonContext,
-            final @Nullable ObjectMemento adapterMemento,
-            final @Nullable Map<PropertyMemento, ScalarModel> propertyScalarModels) {
-
-        return new EntityModel(commonContext, adapterMemento, propertyScalarModels,
+        return new EntityModel(commonContext, adapterMemento,
                 EitherViewOrEdit.VIEW, RenderingHint.REGULAR);
     }
+
+    // -- CONSTRUCTORS
 
     /**
      * As used by TreeModel (same as {@link #ofAdapter(IsisAppCommonContext, ManagedObject)}
@@ -125,33 +100,21 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
 
         this(commonContext,
                 commonContext.mementoFor(adapter),
-                /*propertyScalarModels*/null,
                 EitherViewOrEdit.VIEW, RenderingHint.REGULAR);
-    }
-
-    /**
-     * As used by ScalarModel
-     */
-    protected EntityModel(final IsisAppCommonContext commonContext, final EitherViewOrEdit mode, final RenderingHint renderingHint) {
-        this(commonContext, null, _Maps.<PropertyMemento, ScalarModel>newHashMap(),
-                mode, renderingHint);
     }
 
     private EntityModel(
             final @NonNull IsisAppCommonContext commonContext,
             final @Nullable ObjectMemento adapterMemento,
-            final @Nullable Map<PropertyMemento, ScalarModel> propertyScalarModels,
             final EitherViewOrEdit mode,
             final RenderingHint renderingHint) {
 
         super(commonContext, adapterMemento);
-
-        this.propertyScalarModels = propertyScalarModels!=null
-                ? propertyScalarModels
-                : _Maps.<PropertyMemento, ScalarModel>newHashMap();
         this.mode = mode;
         this.renderingHint = renderingHint;
     }
+
+    // -- BOOKMARKABLE MODEL
 
     public static String oidStr(final PageParameters pageParameters) {
         return PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
@@ -160,12 +123,6 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     private static Optional<Bookmark> bookmarkFrom(final PageParameters pageParameters) {
         return Bookmark.parse(oidStr(pageParameters));
     }
-
-
-    //////////////////////////////////////////////////
-    // BookmarkableModel
-    //////////////////////////////////////////////////
-
 
     @Override
     public PageParameters getPageParameters() {
@@ -184,9 +141,15 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
         return false;
     }
 
-    // //////////////////////////////////////////////////////////
-    // Hint support
-    // //////////////////////////////////////////////////////////
+    // -- HINT SUPPORT
+
+    @Getter(onMethod = @__(@Override))
+    @Setter(onMethod = @__(@Override))
+    private EitherViewOrEdit mode;
+
+    @Getter(onMethod = @__(@Override))
+    @Setter(onMethod = @__(@Override))
+    private RenderingHint renderingHint;
 
     @Override
     public String getHint(final Component component, final String keyName) {
@@ -208,6 +171,7 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
         setHint(component, attributeName, null);
     }
 
+    // -- OTHER OBJECT SPECIFIC
 
     @Override
     public String getTitle() {
@@ -219,9 +183,15 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
         return getObject();
     }
 
-    // //////////////////////////////////////////////////////////
-    // PropertyModels
-    // //////////////////////////////////////////////////////////
+    // -- PROPERTY MODELS (CHILDREN)
+
+    private transient Map<PropertyMemento, ScalarPropertyModel> propertyScalarModels;
+    private Map<PropertyMemento, ScalarPropertyModel> propertyScalarModels() {
+        if(propertyScalarModels==null) {
+            propertyScalarModels = _Maps.<PropertyMemento, ScalarPropertyModel>newHashMap();
+        }
+        return propertyScalarModels;
+    }
 
     /**
      * Lazily populates with the current value of each property.
@@ -232,7 +202,7 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
             final RenderingHint renderingHint) {
 
         final var pm = property.getMemento();
-
+        final var propertyScalarModels = propertyScalarModels();
         final ScalarModel existingScalarModel = propertyScalarModels.get(pm);
         if (existingScalarModel == null) {
 
@@ -248,7 +218,7 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
 
             // future extensions might allow to add multiple UI models per single property model (typed tuple support)
             _Assert.assertEquals(1L, modelsAdded, ()->
-                String.format("unexpeced number of propertyScalarModels added %d", modelsAdded));
+                String.format("unexpected number of propertyScalarModels added %d", modelsAdded));
 
         }
         return propertyScalarModels.get(pm);
@@ -256,73 +226,52 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     }
 
     /**
-     * Resets the {@link #propertyScalarModels hash} of {@link ScalarModel}s for
+     * Resets the {@link #propertyScalarModels map} of {@link ScalarModel}s for
      * each {@link PropertyMemento property} to the value held in the underlying
      * {@link #getObject() entity}.
      */
     public void resetPropertyModels() {
-        //adapterMemento.resetVersion();
-        for (final PropertyMemento pm : propertyScalarModels.keySet()) {
-            OneToOneAssociation otoa = pm.getProperty(super::getSpecificationLoader);
-            val scalarModel = propertyScalarModels.get(pm);
-            val adapter = getObject();
-            val associatedAdapter =
-                    otoa.get(adapter, InteractionInitiatedBy.USER);
-            scalarModel.setObject(associatedAdapter);
-        }
+        propertyScalarModels().values()
+            .forEach(ScalarPropertyModel::syncUiWithModel);
     }
 
-    // //////////////////////////////////////////////////////////
+    // -- VIEW OR EDIT
 
     @Override
     public EntityModel toEditMode() {
         setMode(EitherViewOrEdit.EDIT);
-        for (final ScalarModel scalarModel : propertyScalarModels.values()) {
-            scalarModel.toEditMode();
-        }
+        propertyScalarModels().values()
+            .forEach(ScalarPropertyModel::toEditMode);
         return this;
     }
 
     @Override
     public EntityModel toViewMode() {
         setMode(EitherViewOrEdit.VIEW);
-        for (final ScalarModel scalarModel : propertyScalarModels.values()) {
-            scalarModel.toViewMode();
-        }
+        propertyScalarModels().values()
+            .forEach(ScalarPropertyModel::toViewMode);
         return this;
     }
 
-    // //////////////////////////////////////////////////////////
-    // detach
-    // //////////////////////////////////////////////////////////
+    // -- DETACH
 
     @Override
     protected void onDetach() {
+        propertyScalarModels().values()
+            .forEach(ScalarPropertyModel::detach);
         super.onDetach();
-        for (PropertyMemento propertyMemento : propertyScalarModels.keySet()) {
-            final ScalarModel scalarModel = propertyScalarModels.get(propertyMemento);
-            scalarModel.detach();
-        }
-        // we no longer clear these, because we want to call resetPropertyModels(...) after an object has been updated.
-        //propertyScalarModels.clear();
+        propertyScalarModels = null;
     }
 
+    // -- TAB AND COLUMN (metadata if any)
 
-    // //////////////////////////////////////////////////////////
-    // tab and column metadata (if any)
-    // //////////////////////////////////////////////////////////
-
+    @Getter @Setter
     private CollectionLayoutData collectionLayoutData;
 
-    public CollectionLayoutData getCollectionLayoutData() {
-        return collectionLayoutData;
-    }
-
-    public void setCollectionLayoutData(final CollectionLayoutData collectionLayoutData) {
-        this.collectionLayoutData = collectionLayoutData;
-    }
-
     private transient Optional<ManagedObject> contextObject;
+
+    @Setter
+    private @Nullable ObjectMemento contextAdapterIfAny;
 
     @Override @Synchronized
     public boolean isContextAdapter(final ManagedObject other) {

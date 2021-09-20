@@ -119,7 +119,7 @@ implements ScalarModelSubscriber {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onSubmit(AjaxRequestTarget target) {
+            public void onSubmit(final AjaxRequestTarget target) {
 
                 _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
                         + "originating from User clicking OK on an inline editing form or "
@@ -129,14 +129,14 @@ implements ScalarModelSubscriber {
             }
 
             @Override
-            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+            protected void updateAjaxAttributes(final AjaxRequestAttributes attributes) {
                 if (settings.isPreventDoubleClickForFormSubmit()) {
                     PanelUtil.disableBeforeReenableOnComplete(attributes, this);
                 }
             }
 
             @Override
-            protected void onError(AjaxRequestTarget target) {
+            protected void onError(final AjaxRequestTarget target) {
                 target.add(getForm());
             }
         }
@@ -144,19 +144,19 @@ implements ScalarModelSubscriber {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onSubmit(AjaxRequestTarget target) {
+            public void onSubmit(final AjaxRequestTarget target) {
                 onOkSubmittedOf(target, getForm(), this);
             }
 
             @Override
-            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+            protected void updateAjaxAttributes(final AjaxRequestAttributes attributes) {
                 if (settings.isPreventDoubleClickForFormSubmit()) {
                     PanelUtil.disableBeforeReenableOnComplete(attributes, this);
                 }
             }
 
             @Override
-            protected void onError(AjaxRequestTarget target) {
+            protected void onError(final AjaxRequestTarget target) {
                 target.add(getForm());
             }
         };
@@ -277,7 +277,7 @@ implements ScalarModelSubscriber {
             final Form<?> form);
 
     @Override
-    public void onError(AjaxRequestTarget target, ScalarPanelAbstract scalarPanel) {
+    public void onError(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
         if (scalarPanel != null) {
             // ensure that any feedback error associated with the providing component is shown.
             target.add(scalarPanel);
@@ -294,7 +294,7 @@ implements ScalarModelSubscriber {
 
         if (isWithinPrompt()) {
             if(formExecutorContext instanceof ScalarPropertyModel) {
-                ((ScalarPropertyModel)formExecutorContext).reset();
+                ((ScalarPropertyModel)formExecutorContext).syncUiWithModel();
             }
             rebuildGuiAfterInlinePromptDone(target);
         } else {
@@ -344,7 +344,7 @@ implements ScalarModelSubscriber {
         buffer.append(
                 "<div style=\"width:0px;height:0px;position:absolute;left:-100px;top:-100px;overflow:hidden\">");
         buffer.append("<input type=\"text\" tabindex=\"-1\" autocomplete=\"off\"/>");
-        Component submittingComponent = (Component) this.defaultSubmittingComponent();
+        Component submittingComponent = this.defaultSubmittingComponent();
         buffer.append("<input type=\"submit\" tabindex=\"-1\" name=\"");
         buffer.append(this.defaultSubmittingComponent().getInputName());
         buffer.append("\" onclick=\" var b=document.getElementById(\'");

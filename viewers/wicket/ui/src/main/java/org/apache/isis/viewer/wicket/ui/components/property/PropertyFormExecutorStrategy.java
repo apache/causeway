@@ -26,20 +26,17 @@ import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
 
+import lombok.Getter;
+
 public class PropertyFormExecutorStrategy
 implements FormExecutorStrategy<ScalarPropertyModel> {
 
+    @Getter(onMethod_ = {@Override})
     private final ScalarPropertyModel model;
 
     public PropertyFormExecutorStrategy(final ScalarPropertyModel scalarModel) {
         model = scalarModel;
     }
-
-    @Override
-    public ScalarPropertyModel getModel() {
-        return model;
-    }
-
 
     @Override
     public ManagedObject obtainTargetAdapter() {
@@ -59,7 +56,7 @@ implements FormExecutorStrategy<ScalarPropertyModel> {
 
     @Override
     public ManagedObject obtainResultAdapter() {
-        return this.model.applyValue();
+        return this.model.applyValueThenReturnOwner();
     }
 
 
@@ -68,9 +65,9 @@ implements FormExecutorStrategy<ScalarPropertyModel> {
             final ManagedObject resultAdapter,
             final AjaxRequestTarget target) {
 
-        final EntityPage entityPage = new EntityPage(model.getCommonContext(), resultAdapter);
-        final RequestCycle requestCycle = RequestCycle.get();
-        requestCycle.setResponsePage(entityPage);
+        RequestCycle
+            .get()
+            .setResponsePage(new EntityPage(model.getCommonContext(), resultAdapter));
     }
 
 

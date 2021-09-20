@@ -58,7 +58,7 @@ implements
 
     @Override
     public final IsisAppCommonContext getCommonContext() {
-        return containerModel.getCommonContext();
+        return containerModel().getCommonContext();
     }
 
     protected final T containerModel() {

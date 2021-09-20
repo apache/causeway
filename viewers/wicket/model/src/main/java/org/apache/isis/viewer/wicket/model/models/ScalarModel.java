@@ -32,7 +32,6 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.memento.PropertyMemento;
 import org.apache.isis.viewer.common.model.feature.ScalarUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.EitherViewOrEdit;
@@ -66,10 +65,10 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         PROPERTY,
         PARAMETER;
     }
-    @NonNull private final EitherParamOrProp kind;
-    public boolean isProperty() { return kind == EitherParamOrProp.PROPERTY; }
-    public boolean isParameter() { return kind == EitherParamOrProp.PARAMETER; }
 
+    @Getter @NonNull private final EitherParamOrProp paramOrProp;
+    public boolean isProperty() { return paramOrProp == EitherParamOrProp.PROPERTY; }
+    public boolean isParameter() { return paramOrProp == EitherParamOrProp.PARAMETER; }
 
     private final EntityModel parentEntityModel;
 
@@ -88,14 +87,8 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
      */
     protected ScalarModel(
             final EntityModel parentEntityModel) {
-
-        super(parentEntityModel.getCommonContext());
-
-        this.kind = EitherParamOrProp.PARAMETER;
-        this.parentEntityModel = parentEntityModel;
-        this.pendingModel = new PendingModel(this);
-        this.mode = ObjectUiModel.EitherViewOrEdit.EDIT;
-        this.renderingHint = ObjectUiModel.RenderingHint.REGULAR;
+        this(EitherParamOrProp.PARAMETER,
+                parentEntityModel, EitherViewOrEdit.EDIT, RenderingHint.REGULAR);
     }
 
     /**
@@ -105,17 +98,26 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
      */
     protected ScalarModel(
             final EntityModel parentEntityModel,
-            final PropertyMemento pm,
-            final ObjectUiModel.EitherViewOrEdit mode,
+            final ObjectUiModel.EitherViewOrEdit viewOrEdit,
             final ObjectUiModel.RenderingHint renderingHint) {
+        this(EitherParamOrProp.PROPERTY,
+                parentEntityModel, viewOrEdit, renderingHint);
+    }
+
+    private ScalarModel(
+            final @NonNull EitherParamOrProp paramOrProp,
+            final @NonNull EntityModel parentEntityModel,
+            final @NonNull ObjectUiModel.EitherViewOrEdit viewOrEdit,
+            final @NonNull ObjectUiModel.RenderingHint renderingHint) {
 
         super(parentEntityModel.getCommonContext());
-        this.kind = EitherParamOrProp.PROPERTY;
+        this.paramOrProp = paramOrProp;
         this.parentEntityModel = parentEntityModel;
         this.pendingModel = new PendingModel(this);
-        this.mode = mode;
+        this.mode = viewOrEdit;
         this.renderingHint = renderingHint;
     }
+
 
     protected ManagedObject loadFromSuper() {
         return super.load();
@@ -126,23 +128,9 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         return parentEntityModel;
     }
 
-    //XXX[ISIS-2383] don't cache always load from parent model
-    //private transient ManagedObject owner;
     @Override
     public ManagedObject getOwner() {
-//        if(owner==null) {
-//            owner = getParentUiModel().load();
-//        }
-//        return owner;
-        return getParentUiModel().load();
-    }
-
-    /**
-     * Whether the scalar represents a {@link EitherParamOrProp#PROPERTY property} or a
-     * {@link EitherParamOrProp#PARAMETER}.
-     */
-    public EitherParamOrProp getKind() {
-        return kind;
+        return getParentUiModel().getObject();
     }
 
     /**
@@ -319,7 +307,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
      */
     public boolean mustBeEditable() {
         return getMode() == EitherViewOrEdit.EDIT
-                || getKind() == EitherParamOrProp.PARAMETER
+                || getParamOrProp() == EitherParamOrProp.PARAMETER
                 || hasAssociatedActionWithInlineAsIfEdit();
     }
 

@@ -24,7 +24,6 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -58,10 +57,8 @@ implements PropertyUiModel {
             final EntityModel.EitherViewOrEdit viewOrEdit,
             final EntityModel.RenderingHint renderingHint) {
         super(EntityModel.ofAdapter(delegate.getCommonContext(), delegate.getOwner()),
-                delegate.getMetaModel().getMemento(),
                 viewOrEdit, renderingHint);
         this.delegate = delegate;
-        reset();
     }
 
     /** @return new instance bound to the same delegate */
@@ -123,19 +120,10 @@ implements PropertyUiModel {
                 .orElse(null);
     }
 
-    public void reset() {
-        //pendingPropertyModel = null; // invalidate
-        val propertyValue = getManagedProperty().getPropertyValue();
-        val presentedValue = ManagedObjects.isNullOrUnspecifiedOrEmpty(propertyValue)
-                ? null
-                : propertyValue;
-
-        this.setObject(presentedValue);
-    }
-
     @Override
     public ManagedObject load() {
-        return loadFromSuper();
+        // when getting attached, get the UI value (prop or param) from the underlying interaction model
+        return getManagedProperty().getPropertyValue();
     }
 
     @Override
@@ -145,9 +133,9 @@ implements PropertyUiModel {
 
     @Override
     public String toStringOf() {
-        final var id = delegate.getMetaModel().getFeatureIdentifier();
+        final var featureId = delegate.getMetaModel().getFeatureIdentifier();
         return getFriendlyName() + ": " +
-                id.getLogicalTypeName() + "#" + id.getMemberLogicalName();
+                featureId.getLogicalTypeName() + "#" + featureId.getMemberLogicalName();
 
     }
 
@@ -160,10 +148,17 @@ implements PropertyUiModel {
      *
      * @return adapter, which may be different from the original
      */
-    public ManagedObject applyValue() {
+    public ManagedObject applyValueThenReturnOwner() {
         val proposedNewValue = getObject();
+        System.err.printf("proposedNewValue %s%n", proposedNewValue);
         getManagedProperty().modifyProperty(proposedNewValue);
-        return getManagedProperty().getOwner();
+        syncUiWithModel(); // honor actual UI model value after modification attempt
+        return getOwner();
+    }
+
+    public void syncUiWithModel() {
+        // same as load()
+        setObject(getManagedProperty().getPropertyValue());
     }
 
     @Override
@@ -175,5 +170,7 @@ implements PropertyUiModel {
     protected Can<ObjectAction> calcAssociatedActions() {
         return getManagedProperty().getAssociatedActions();
     }
+
+
 
 }

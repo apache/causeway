@@ -27,36 +27,36 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import lombok.val;
 
 public class EntityModel_hintsTest {
 
-    @Rule public JUnitRuleMockery2 context = 
+    @Rule public JUnitRuleMockery2 context =
             JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     @Mock MarkupContainer mockParent;
     @Mock Component mockComponent1;
     @Mock Component mockComponent2;
-    
+
     EntityModel target;
     MetaModelContext metaModelContext;
 
     @Before
     public void setUp() throws Exception {
-        
+
         metaModelContext = MetaModelContext_forTesting.buildDefault();
         val commonContext = IsisAppCommonContext.of(metaModelContext);
-        
-        target = new EntityModel(commonContext, EntityModel.EitherViewOrEdit.VIEW, EntityModel.RenderingHint.REGULAR);
+
+        target = EntityModel.ofMemento(commonContext, null);
 
 //        mockParent = context.mock(MarkupContainer.class, "parent");
 //        mockComponent1 = context.mock(Component.class, "component1");

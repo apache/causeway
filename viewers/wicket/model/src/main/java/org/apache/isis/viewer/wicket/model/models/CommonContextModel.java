@@ -32,7 +32,7 @@ extends LoadableDetachableModel<IsisAppCommonContext> {
 
     public static CommonContextModel wrap(final IsisAppCommonContext commonContext) {
         val model = new CommonContextModel();
-        model.setObject(commonContext);;
+        model.setObject(commonContext);
         return model;
     }
 
