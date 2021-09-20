@@ -22,9 +22,6 @@ import org.apache.wicket.model.LoadableDetachableModel;
 
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
-import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
-
-import lombok.NonNull;
 
 /**
  * Adapter for {@link LoadableDetachableModel}s, providing access to some of the
@@ -36,21 +33,29 @@ implements HasCommonContext {
 
     private static final long serialVersionUID = 1L;
 
-    @NonNull private transient IsisAppCommonContext commonContext;
+    private final CommonContextModel commonContextModel;
 
-    public ModelAbstract(IsisAppCommonContext commonContext) {
-        this.commonContext = CommonContextUtils.computeIfAbsent(commonContext);
+    protected ModelAbstract() {
+        this.commonContextModel = new CommonContextModel();
     }
 
-    public ModelAbstract(IsisAppCommonContext commonContext, T t) {
-        super(t);
-        this.commonContext = CommonContextUtils.computeIfAbsent(commonContext);
+    protected ModelAbstract(final IsisAppCommonContext commonContext) {
+        this.commonContextModel = CommonContextModel.wrap(commonContext);
+    }
+
+    protected ModelAbstract(final IsisAppCommonContext commonContext, final T t) {
+        this.commonContextModel = CommonContextModel.wrap(commonContext);
+        setObject(t);
     }
 
     @Override
     public IsisAppCommonContext getCommonContext() {
-        return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
+        return commonContextModel.getObject();
     }
 
+//    @Override
+//    public final void setObject(final T object) {
+//        super.setObject(object);
+//    }
 
 }

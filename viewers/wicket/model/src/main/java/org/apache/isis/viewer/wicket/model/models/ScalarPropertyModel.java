@@ -28,7 +28,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.spec.feature.memento.PropertyMemento;
 import org.apache.isis.viewer.common.model.feature.PropertyUiModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.prop.PropertyUiModelWkt;
 
@@ -39,9 +38,6 @@ extends ScalarModel
 implements PropertyUiModel {
 
     private static final long serialVersionUID = 1L;
-
-    @Deprecated
-    private final PropertyMemento propertyMemento;
 
     private PropertyUiModelWkt delegate;
 
@@ -65,7 +61,6 @@ implements PropertyUiModel {
                 delegate.getMetaModel().getMemento(),
                 viewOrEdit, renderingHint);
         this.delegate = delegate;
-        this.propertyMemento = delegate.getMetaModel().getMemento();
         reset();
     }
 
@@ -150,7 +145,10 @@ implements PropertyUiModel {
 
     @Override
     public String toStringOf() {
-        return getFriendlyName() + ": " + propertyMemento.toString();
+        final var id = delegate.getMetaModel().getFeatureIdentifier();
+        return getFriendlyName() + ": " +
+                id.getLogicalTypeName() + "#" + id.getMemberLogicalName();
+
     }
 
     public String getReasonInvalidIfAny() {

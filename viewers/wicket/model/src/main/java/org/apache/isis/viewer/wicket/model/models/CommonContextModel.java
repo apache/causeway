@@ -18,17 +18,27 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-/**
- * Model providing welcome text.
- */
-public final class AboutModel extends ModelAbstract<String> {
+import org.apache.wicket.model.LoadableDetachableModel;
+
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
+
+import lombok.val;
+
+public final class CommonContextModel
+extends LoadableDetachableModel<IsisAppCommonContext> {
 
     private static final long serialVersionUID = 1L;
 
+    public static CommonContextModel wrap(final IsisAppCommonContext commonContext) {
+        val model = new CommonContextModel();
+        model.setObject(commonContext);;
+        return model;
+    }
+
     @Override
-    protected String load() {
-        // not used
-        return null;
+    protected IsisAppCommonContext load() {
+        return CommonContextUtils.getCommonContext();
     }
 
 }
