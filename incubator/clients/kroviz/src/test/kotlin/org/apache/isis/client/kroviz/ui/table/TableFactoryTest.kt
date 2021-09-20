@@ -18,13 +18,13 @@
  */
 package org.apache.isis.client.kroviz.ui.table
 
+import io.kvision.state.ObservableList
+import io.kvision.state.observableListOf
 import org.apache.isis.client.kroviz.core.model.Exposer
-import org.apache.isis.client.kroviz.to.Extensions
 import org.apache.isis.client.kroviz.to.Member
 import org.apache.isis.client.kroviz.to.MemberType
 import org.apache.isis.client.kroviz.to.TObject
-import io.kvision.state.ObservableList
-import io.kvision.state.observableListOf
+import org.apache.isis.client.kroviz.to.mb.Extensions
 
 
 class TableFactoryTest {

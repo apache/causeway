@@ -19,8 +19,8 @@
 package org.apache.isis.client.kroviz.core.model
 
 import org.apache.isis.client.kroviz.layout.PropertyLt
-import org.apache.isis.client.kroviz.to.Extensions
 import org.apache.isis.client.kroviz.to.Property
+import org.apache.isis.client.kroviz.to.mb.Extensions
 
 class CollectionProperties() {
     val list = mutableListOf<ColumnProperties>()
@@ -58,7 +58,7 @@ class CollectionProperties() {
         val id = description.id
         val cp = findOrCreate(id)
         val e: Extensions = description.extensions!!
-        cp.friendlyName = e.friendlyName
+        cp.friendlyName = e.getFriendlyName()
     }
 
     private fun findOrCreate(id: String): ColumnProperties {

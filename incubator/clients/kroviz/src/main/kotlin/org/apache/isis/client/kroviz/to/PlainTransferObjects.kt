@@ -16,11 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.client.kroviz.to
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.apache.isis.client.kroviz.to.mb.Extensions
 
 enum class ActionSemantics(val type: String) {
     IDEMPOTENT("idempotent"),
@@ -33,20 +33,6 @@ data class DomainTypes(override val links: List<Link> = emptyList(),
                        val values: List<Link> = emptyList(),
                        val extensions: Extensions? = null
 ) : TransferObject, HasLinks
-
-@Serializable
-data class Extensions(val oid: String = "",
-                      val isService: Boolean = false,
-                      val isPersistent: Boolean = false,
-                      val menuBar: String? = MenuBarPosition.PRIMARY.position,
-                      val actionSemantics: String? = null,
-                      val actionType: String = "",
-                      @SerialName("x-isis-format") val xIsisFormat: String? = null,
-                      val friendlyName: String = "",
-                      val collectionSemantics: String? = null,
-                      val pluralName: String = "",
-                      val description: String = ""
-) : TransferObject
 
 @Serializable
 data class HttpError(
@@ -85,6 +71,11 @@ enum class Method(val operation: String) {
     PUT("PUT"),
     POST("POST"),
 //    DELETE("DELETE")  not used - Apache Isis defines delete operations on DomainObjects
+}
+
+enum class Position(val type: String) {
+    PANEL("PANEL"),
+    PANEL_DROPDOWN("PANEL_DROPDOWN")
 }
 
 @Serializable
