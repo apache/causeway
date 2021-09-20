@@ -36,7 +36,7 @@ public interface ObjectMemorizer {
     /**
      * Does both, serialize or deserialize, depending on the request's type.
      * @apiNote Rather use the more convenient specialized variants
-     * {@link #serialize(ManagedObject)} and {@link #deserialize(ObjectSpecification, byte[])}
+     * {@link #serialize(ManagedObject)} and {@link #deserialize(ObjectSpecification, ObjectMemento))}
      * @param request
      */
     BiForm serializeObject(BiForm request);
@@ -101,16 +101,16 @@ public interface ObjectMemorizer {
         default BiForm handle(final BiForm request) {
             val spec = request.getSpecification();
             if(request.isSerialized()) {
-                val serializedObjectBytes = request.getSerializedObject().getMemento();
-                return BiForm.deSerializationResponse(ManagedObject.of(spec, deserialize(spec, serializedObjectBytes)));
+                val memento = request.getSerializedObject().getMemento();
+                return BiForm.deSerializationResponse(deserialize(spec, memento));
             } else {
-                val serializedObjectBytes = serialize(request.getObject());
-                return BiForm.serializationResponse(SerializedObject.of(spec, serializedObjectBytes));
+                val memento = serialize(request.getObject());
+                return BiForm.serializationResponse(SerializedObject.of(spec, memento));
             }
         }
 
         boolean isHandling(ObjectSpecification spec);
-        Object deserialize(ObjectSpecification spec, ObjectMemento memento);
+        ManagedObject deserialize(ObjectSpecification spec, ObjectMemento memento);
         ObjectMemento serialize(ManagedObject object);
     }
 
@@ -118,12 +118,15 @@ public interface ObjectMemorizer {
 
     public static ObjectMemorizer createDefault(final MetaModelContext metaModelContext) {
 
-        val chainOfHandlers = List.<ObjectMemorizer.Handler>of(
-                new ObjectMemorizer_builtinHandlers.MemorizeSerializable(),
+        final var serviceInjector = metaModelContext.getServiceInjector();
+        final var chainOfHandlers = List.<ObjectMemorizer.Handler>of(
+                new ObjectMemorizer_builtinHandlers.MemorizeViaObjectMementoService(),
                 new ObjectMemorizer_builtinHandlers.MemorizeOther()
                 );
 
-        val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
+        chainOfHandlers.forEach(serviceInjector::injectServicesInto);
+
+        final var chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
 
         return request -> chainOfRespo.handle(request).orElse(null);
 

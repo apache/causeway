@@ -18,47 +18,37 @@
  */
 package org.apache.isis.core.metamodel.objectmanager.memento;
 
+import javax.inject.Inject;
+
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-import lombok.Data;
-
 final class ObjectMemorizer_builtinHandlers {
 
+    public static class MemorizeViaObjectMementoService implements ObjectMemorizer.Handler {
 
-    //TODO if we ever manage to make sense of the ObjectMementoServiceWicket
-
-    @Data
-    public static class MemorizeSerializable implements ObjectMemorizer.Handler {
-
-        private MetaModelContext metaModelContext;
+        @Inject private ObjectMementoService objectMementoService;
 
         @Override
         public boolean isHandling(final ObjectSpecification spec) {
-            // TODO Auto-generated method stub
-            return false;
+            return !spec.getBeanSort().isUnknown()
+                    && !spec.getBeanSort().isAbstract();
         }
 
         @Override
-        public Object deserialize(final ObjectSpecification spec, final ObjectMemento memento) {
-            // TODO Auto-generated method stub
-            return null;
+        public ManagedObject deserialize(final ObjectSpecification spec, final ObjectMemento memento) {
+            return objectMementoService.reconstructObject(memento);
         }
 
         @Override
         public ObjectMemento serialize(final ManagedObject object) {
-            // TODO Auto-generated method stub
-            return null;
+            return objectMementoService.mementoForObject(object);
         }
 
     }
 
-    @Data
     public static class MemorizeOther implements ObjectMemorizer.Handler {
-
-        private MetaModelContext metaModelContext;
 
         @Override
         public boolean isHandling(final ObjectSpecification spec) {
@@ -74,7 +64,7 @@ final class ObjectMemorizer_builtinHandlers {
         }
 
         @Override
-        public Object deserialize(final ObjectSpecification spec, final ObjectMemento memento) {
+        public ManagedObject deserialize(final ObjectSpecification spec, final ObjectMemento memento) {
             throw _Exceptions.illegalArgument(
                     "None of the registered ObjectMemorizers knows how to de-serialize "
                     + "an object having ObjectSpecification %s",

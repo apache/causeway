@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.model.models.interaction.action;
+package org.apache.isis.viewer.wicket.model.models.interaction.act;
 
 import java.util.Optional;
 import java.util.stream.IntStream;
@@ -29,11 +29,21 @@ import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
+import org.apache.isis.viewer.wicket.model.models.interaction.InteractionHolderAbstract;
 
 /**
- *
- * The parent of multiple parameter models which implement
+ * The parent (container) model of multiple <i>parameter models</i> which implement
  * {@link _ActionInteractionHolder}.
+ * <pre>
+ * IModel[ActionInteraction] ... placeOrder(X x, Yy)
+ * |
+ * +-- ParameterUiModel ... bound to X x (ParameterNegotiationModel)
+ * +-- ParameterUiModel ... bound to Y y (ParameterNegotiationModel)
+ * </pre>
+ *
+ * @implSpec the state of pending parameters ParameterNegotiationModel is held transient,
+ * that means it does not survive a serialization/de-serialization cycle; instead
+ * is recreated with parameter defaults
  *
  * @see _ActionInteractionHolder
  */
@@ -65,7 +75,7 @@ extends ModelAbstract<ActionInteraction> {
 
     @Override
     public void detach() {
-        childModels.forEach(_ActionInteractionHolder::detachFromContainerModel);
+        childModels.forEach(InteractionHolderAbstract::detachFromContainerModel);
         super.detach();
     }
 

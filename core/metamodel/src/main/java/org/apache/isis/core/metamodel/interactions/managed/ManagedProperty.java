@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 import org.springframework.lang.Nullable;
@@ -29,12 +30,17 @@ import org.apache.isis.commons.internal.binding._Observables;
 import org.apache.isis.commons.internal.binding._Observables.LazyObservable;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.Veto;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.spec.feature.memento.PropertyMemento;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -162,6 +168,40 @@ extends ManagedMember {
 
     public ManagedObject getPropertyValue() {
         return getValue().getValue();
+    }
+
+    // -- MEMENTO
+
+    public Memento getMemento() {
+        return Memento.create(this);
+    }
+
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class Memento implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        static Memento create(final ManagedProperty managedProperty) {
+            final var prop = managedProperty.getMetaModel();
+            return new Memento(
+                    prop.getMemento(),
+                    prop.getObjectManager()
+                        .getObjectMemorizer()
+                        .serialize(managedProperty.getOwner()),
+                    managedProperty.getWhere());
+        }
+
+        private final PropertyMemento propertyMemento;
+        private final ObjectMemento objectMemento;
+        private final Where where;
+
+        public ManagedProperty getManagedProperty(final MetaModelContext mmc) {
+
+            final var prop = propertyMemento.getProperty(mmc::getSpecificationLoader);
+            final var spec = prop.getOnType();
+            final var owner = mmc.getObjectManager().getObjectMemorizer().deserialize(spec, objectMemento);
+
+            return ManagedProperty.of(owner, prop, where);
+        }
     }
 
 }

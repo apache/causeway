@@ -38,7 +38,7 @@ import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
-import org.apache.isis.viewer.wicket.model.models.interaction.action.ParameterUiModelWkt;
+import org.apache.isis.viewer.wicket.model.models.interaction.act.ParameterUiModelWkt;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.viewer.services.mementos;
+package org.apache.isis.core.runtimeservices.memento;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -50,28 +50,28 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-final class ObjectMementoWkt implements HasLogicalType, Serializable {
+final class _ObjectMemento implements HasLogicalType, Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * Factory method
      */
-    public static ObjectMementoWkt createOrNull(final ManagedObject adapter) {
+    public static _ObjectMemento createOrNull(final ManagedObject adapter) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
             return null;
         }
-        return new ObjectMementoWkt(adapter);
+        return new _ObjectMemento(adapter);
     }
 
     /**
      * Factory method
      */
-    static ObjectMementoWkt createPersistent(
+    static _ObjectMemento createPersistent(
             final Bookmark bookmark,
             final SpecificationLoader specificationLoader) {
 
-        return new ObjectMementoWkt(bookmark, specificationLoader);
+        return new _ObjectMemento(bookmark, specificationLoader);
     }
 
     private enum Cardinality {
@@ -82,23 +82,23 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
 
             @Override
             public ManagedObject asAdapter(
-                    final ObjectMementoWkt memento,
+                    final _ObjectMemento memento,
                     final MetaModelContext mmc) {
 
                 return memento.recreateStrategy.recreateObject(memento, mmc);
             }
 
             @Override
-            public int hashCode(final ObjectMementoWkt memento) {
+            public int hashCode(final _ObjectMemento memento) {
                 return memento.recreateStrategy.hashCode(memento);
             }
 
             @Override
-            public boolean equals(final ObjectMementoWkt memento, final Object other) {
-                if (!(other instanceof ObjectMementoWkt)) {
+            public boolean equals(final _ObjectMemento memento, final Object other) {
+                if (!(other instanceof _ObjectMemento)) {
                     return false;
                 }
-                final ObjectMementoWkt otherMemento = (ObjectMementoWkt) other;
+                final _ObjectMemento otherMemento = (_ObjectMemento) other;
                 if(otherMemento.cardinality != SCALAR) {
                     return false;
                 }
@@ -106,7 +106,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
             }
 
             @Override
-            public String asString(final ObjectMementoWkt memento) {
+            public String asString(final _ObjectMemento memento) {
                 return memento.recreateStrategy.toString(memento);
             }
         },
@@ -117,7 +117,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
 
             @Override
             public ManagedObject asAdapter(
-                    final ObjectMementoWkt memento,
+                    final _ObjectMemento memento,
                     final MetaModelContext mmc) {
 
                 final List<Object> listOfPojos =
@@ -126,16 +126,16 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
             }
 
             @Override
-            public int hashCode(final ObjectMementoWkt memento) {
+            public int hashCode(final _ObjectMemento memento) {
                 return memento.list.hashCode();
             }
 
             @Override
-            public boolean equals(final ObjectMementoWkt memento, final Object other) {
-                if (!(other instanceof ObjectMementoWkt)) {
+            public boolean equals(final _ObjectMemento memento, final Object other) {
+                if (!(other instanceof _ObjectMemento)) {
                     return false;
                 }
-                final ObjectMementoWkt otherMemento = (ObjectMementoWkt) other;
+                final _ObjectMemento otherMemento = (_ObjectMemento) other;
                 if(otherMemento.cardinality != VECTOR) {
                     return false;
                 }
@@ -143,7 +143,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
             }
 
             @Override
-            public String asString(final ObjectMementoWkt memento) {
+            public String asString(final _ObjectMemento memento) {
                 return memento.list.toString();
             }
         };
@@ -156,14 +156,14 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
         }
 
         public abstract ManagedObject asAdapter(
-                ObjectMementoWkt memento,
+                _ObjectMemento memento,
                 MetaModelContext mmc);
 
-        public abstract int hashCode(ObjectMementoWkt memento);
+        public abstract int hashCode(_ObjectMemento memento);
 
-        public abstract boolean equals(ObjectMementoWkt memento, Object other);
+        public abstract boolean equals(_ObjectMemento memento, Object other);
 
-        public abstract String asString(ObjectMementoWkt memento);
+        public abstract String asString(_ObjectMemento memento);
     }
 
     private enum RecreateStrategy {
@@ -175,7 +175,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
         ENCODEABLE {
             @Override
             public ManagedObject recreateObject(
-                    final ObjectMementoWkt memento,
+                    final _ObjectMemento memento,
                     final MetaModelContext mmc) {
 
                 EncodableFacet encodableFacet = mmc.getSpecificationLoader()
@@ -189,26 +189,26 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
 
             @Override
             public boolean equals(
-                    final ObjectMementoWkt memento,
-                    final ObjectMementoWkt otherMemento) {
+                    final _ObjectMemento memento,
+                    final _ObjectMemento otherMemento) {
 
                 return otherMemento.recreateStrategy == ENCODEABLE &&
                         memento.encodableValue.equals(otherMemento.encodableValue);
             }
 
             @Override
-            public int hashCode(final ObjectMementoWkt memento) {
+            public int hashCode(final _ObjectMemento memento) {
                 return memento.encodableValue.hashCode();
             }
 
             @Override
-            public String toString(final ObjectMementoWkt memento) {
+            public String toString(final _ObjectMemento memento) {
                 return memento.encodableValue;
             }
 
             @Override
             public void resetVersion(
-                    final ObjectMementoWkt memento,
+                    final _ObjectMemento memento,
                     final MetaModelContext mmc) {
             }
         },
@@ -219,7 +219,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
         LOOKUP {
             @Override
             public @Nullable ManagedObject recreateObject(
-                    final ObjectMementoWkt memento,
+                    final _ObjectMemento memento,
                     final MetaModelContext mmc) {
 
                 if(_NullSafe.isEmpty(memento.persistentOidStr)) {
@@ -249,7 +249,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
 
             @Override
             public void resetVersion(
-                    final ObjectMementoWkt memento,
+                    final _ObjectMemento memento,
                     final MetaModelContext mmc) {
 
                 //XXX REVIEW: this may be redundant because recreateAdapter also guarantees the version will be reset.
@@ -259,18 +259,18 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
             }
 
             @Override
-            public boolean equals(final ObjectMementoWkt oam, final ObjectMementoWkt other) {
+            public boolean equals(final _ObjectMemento oam, final _ObjectMemento other) {
                 return other.recreateStrategy == LOOKUP
                         && oam.persistentOidStr.equals(other.persistentOidStr);
             }
 
             @Override
-            public int hashCode(final ObjectMementoWkt oam) {
+            public int hashCode(final _ObjectMemento oam) {
                 return oam.persistentOidStr.hashCode();
             }
 
             @Override
-            public String toString(final ObjectMementoWkt oam) {
+            public String toString(final _ObjectMemento oam) {
                 return oam.persistentOidStr;
             }
 
@@ -282,7 +282,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
         SERIALIZABLE {
             @Override
             public ManagedObject recreateObject(
-                    final ObjectMementoWkt memento,
+                    final _ObjectMemento memento,
                     final MetaModelContext mmc) {
                 ObjectSpecification spec = mmc.getSpecificationLoader()
                         .specForLogicalTypeElseFail(memento.logicalType);
@@ -292,45 +292,45 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
 
             @Override
             public boolean equals(
-                    final ObjectMementoWkt memento,
-                    final ObjectMementoWkt otherMemento) {
+                    final _ObjectMemento memento,
+                    final _ObjectMemento otherMemento) {
                 return otherMemento.recreateStrategy == SERIALIZABLE
                         && Objects.equals(memento.logicalType, otherMemento.logicalType)
                         && Objects.equals(memento.serializedObject, otherMemento.serializedObject);
             }
 
             @Override
-            public int hashCode(final ObjectMementoWkt memento) {
+            public int hashCode(final _ObjectMemento memento) {
                 return Arrays.hashCode(memento.serializedObject); // potentially expensive, unfortunately cannot be cached in enum
             }
 
             @Override
-            public String toString(final ObjectMementoWkt memento) {
+            public String toString(final _ObjectMemento memento) {
                 return "ObjectMementoWkt {SERIALIZABLE " + memento.getLogicalTypeName() + "}";
             }
 
             @Override
             public void resetVersion(
-                    final ObjectMementoWkt memento,
+                    final _ObjectMemento memento,
                     final MetaModelContext mmc) {
                 // nope
             }
         };
 
         public abstract @Nullable ManagedObject recreateObject(
-                ObjectMementoWkt memento,
+                _ObjectMemento memento,
                 MetaModelContext mmc);
 
         public abstract boolean equals(
-                ObjectMementoWkt memento,
-                ObjectMementoWkt otherMemento);
+                _ObjectMemento memento,
+                _ObjectMemento otherMemento);
 
-        public abstract int hashCode(ObjectMementoWkt memento);
+        public abstract int hashCode(_ObjectMemento memento);
 
-        public abstract String toString(ObjectMementoWkt memento);
+        public abstract String toString(_ObjectMemento memento);
 
         public abstract void resetVersion(
-                ObjectMementoWkt memento,
+                _ObjectMemento memento,
                 MetaModelContext mmc);
     }
 
@@ -390,10 +390,10 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
     /**
      * populated only if {@link #getCardinality() sort} is {@link Cardinality#VECTOR vector}
      */
-    private ArrayList<ObjectMementoWkt> list;
+    private ArrayList<_ObjectMemento> list;
 
-    private ObjectMementoWkt(
-            final ArrayList<ObjectMementoWkt> list,
+    private _ObjectMemento(
+            final ArrayList<_ObjectMemento> list,
             final LogicalType logicalType) {
 
         this.cardinality = Cardinality.VECTOR;
@@ -401,7 +401,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
         this.logicalType = logicalType;
     }
 
-    private ObjectMementoWkt(final Bookmark bookmark, final SpecificationLoader specificationLoader) {
+    private _ObjectMemento(final Bookmark bookmark, final SpecificationLoader specificationLoader) {
 
         // -- // TODO[2112] do we ever need to create ENCODEABLE here?
         val logicalTypeName = bookmark.getLogicalTypeName();
@@ -425,14 +425,14 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
         this.recreateStrategy = RecreateStrategy.LOOKUP;
     }
 
-    private ObjectMementoWkt(final @NonNull ManagedObject adapter) {
+    private _ObjectMemento(final @NonNull ManagedObject adapter) {
         this.cardinality = Cardinality.SCALAR;
         val spec = adapter.getSpecification();
         this.logicalType = spec.getLogicalType();
         init(adapter);
     }
 
-    private ObjectMementoWkt(final LogicalType logicalType, final String encodableValue) {
+    private _ObjectMemento(final LogicalType logicalType, final String encodableValue) {
         this.cardinality = Cardinality.SCALAR;
         this.logicalType = logicalType;
         this.encodableValue = encodableValue;
@@ -546,7 +546,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     private static final class Functions {
 
-        private static Function<ObjectMementoWkt, Object> toPojo(
+        private static Function<_ObjectMemento, Object> toPojo(
                 final MetaModelContext mmc) {
 
             return memento->{

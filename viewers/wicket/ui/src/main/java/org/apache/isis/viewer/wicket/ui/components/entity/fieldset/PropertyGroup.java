@@ -183,7 +183,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
             final Consumer<LinkAndLabel> onEntityAction) {
 
         final ScalarModel scalarModel =
-                entityModel.getPropertyModel(property, EntityModel.Mode.VIEW, EntityModel.RenderingHint.REGULAR);
+                entityModel.getPropertyModel(property, EntityModel.EitherViewOrEdit.VIEW, EntityModel.RenderingHint.REGULAR);
 
         final Component scalarNameAndValueComponent = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);

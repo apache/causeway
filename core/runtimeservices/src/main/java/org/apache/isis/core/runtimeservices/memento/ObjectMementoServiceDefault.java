@@ -16,20 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.viewer.services.mementos;
+package org.apache.isis.core.runtimeservices.memento;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import org.springframework.lang.Nullable;
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -39,10 +39,10 @@ import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoCollection;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoForEmpty;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.memento.ObjectMementoService;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -55,28 +55,27 @@ import lombok.val;
  *
  */
 @Service
-@Named("isis.viewer.wicket.ObjectMementoServiceWicket")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Qualifier("Wicket")
-@Singleton
-public class ObjectMementoServiceWicket implements ObjectMementoService {
+@Named("isis.runtimeservices.ObjectMementoServiceDefault")
+@Priority(PriorityPrecedence.MIDPOINT)
+@Qualifier("Default")
+public class ObjectMementoServiceDefault implements ObjectMementoService {
 
     @Inject @Getter private SpecificationLoader specificationLoader;
     @Inject private MetaModelContext mmc;
     @Inject private ObjectManager objectManager;
 
     @Override
-    public ObjectMemento mementoForBookmark(@NonNull Bookmark bookmark) {
+    public ObjectMemento mementoForBookmark(@NonNull final Bookmark bookmark) {
 //        _Probe.errOut("mementoForRootOid %s", oid);
-        val mementoAdapter = ObjectMementoWkt.createPersistent(bookmark, specificationLoader);
+        val mementoAdapter = _ObjectMemento.createPersistent(bookmark, specificationLoader);
         return ObjectMementoAdapter.of(mementoAdapter);
     }
 
     @Override
-    public ObjectMemento mementoForObject(@Nullable ManagedObject adapter) {
+    public ObjectMemento mementoForObject(@Nullable final ManagedObject adapter) {
         assertSingleton(adapter);
 //        _Probe.errOut("mementoForObject %s", adapter);
-        val mementoAdapter = ObjectMementoWkt.createOrNull(adapter);
+        val mementoAdapter = _ObjectMemento.createOrNull(adapter);
         if(mementoAdapter==null) {
             // sonar-ignore-on (fails to detect this as null guard)
             return ManagedObjects.isSpecified(adapter)
@@ -88,10 +87,10 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
     }
 
     @Override
-    public ObjectMemento mementoForParameter(@NonNull ManagedObject paramAdapter) {
+    public ObjectMemento mementoForParameter(@NonNull final ManagedObject paramAdapter) {
 //        _Probe.errOut("mementoForParameter %s", paramAdapter);
         assertSingleton(paramAdapter);
-        val mementoAdapter = ObjectMementoWkt.createOrNull(paramAdapter);
+        val mementoAdapter = _ObjectMemento.createOrNull(paramAdapter);
         if(mementoAdapter==null) {
             return new ObjectMementoForEmpty(paramAdapter.getSpecification().getLogicalType());
         }
@@ -100,7 +99,7 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
 
 
     @Override
-    public ObjectMemento mementoForPojo(Object pojo) {
+    public ObjectMemento mementoForPojo(final Object pojo) {
         //_Probe.errOut("mementoForPojo %s", ""+pojo);
         assertSingleton(pojo);
 
@@ -109,7 +108,7 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
     }
 
     @Override
-    public ObjectMemento mementoForPojos(Iterable<Object> iterablePojos, LogicalType logicalType) {
+    public ObjectMemento mementoForPojos(final Iterable<Object> iterablePojos, final LogicalType logicalType) {
 //        _Probe.errOut("mementoForPojos");
         val listOfMementos = _NullSafe.stream(iterablePojos)
                 .map(pojo->mementoForPojo(pojo))
@@ -119,7 +118,7 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
     }
 
     @Override
-    public ManagedObject reconstructObject(@Nullable ObjectMemento memento) {
+    public ManagedObject reconstructObject(@Nullable final ObjectMemento memento) {
 
         if(memento==null) {
             return null;
@@ -156,7 +155,7 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
     }
 
 //TODO 2x remove if no longer required for debugging ...
-    private void assertSingleton(ManagedObject adapter) {
+    private void assertSingleton(final ManagedObject adapter) {
 //        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
 //            return;
 //        }
@@ -169,7 +168,7 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
 //        }
     }
 
-    private void assertSingleton(Object pojo) {
+    private void assertSingleton(final Object pojo) {
 //        if(_NullSafe.streamAutodetect(pojo).limit(2).count()>1L) {
 //            throw _Exceptions.illegalArgument("cardinality 0 or 1 expect");
 //        }
@@ -180,7 +179,7 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
 
         private static final long serialVersionUID = 1L;
 
-        private final ObjectMementoWkt delegate;
+        private final _ObjectMemento delegate;
 
         @Override
         public String asString() {
@@ -202,7 +201,7 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
             return delegate.getLogicalType();
         }
 
-        ManagedObject reconstructObject(MetaModelContext mmc) {
+        ManagedObject reconstructObject(final MetaModelContext mmc) {
             return delegate.reconstructObject(mmc);
         }
 

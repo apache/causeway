@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
-import org.apache.isis.viewer.wicket.model.models.interaction.action.ParameterUiModelWkt;
+import org.apache.isis.viewer.wicket.model.models.interaction.act.ParameterUiModelWkt;
 
 public class ScalarParameterModel
 extends ScalarModel

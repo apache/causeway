@@ -378,7 +378,7 @@ implements ScalarModelSubscriber {
 
         // prevent from tabbing into non-editable widgets.
         if(scalarModel.isProperty()
-                && scalarModel.getMode() == EntityModel.Mode.VIEW
+                && scalarModel.getMode() == EntityModel.EitherViewOrEdit.VIEW
                 && (scalarModel.getPromptStyle().isDialog()
                         || !scalarModel.canEnterEditMode())) {
             getScalarValueComponent().add(new AttributeAppender("tabindex", "-1"));

@@ -30,8 +30,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.spec.feature.memento.PropertyMemento;
 import org.apache.isis.viewer.common.model.feature.PropertyUiModel;
+import org.apache.isis.viewer.wicket.model.models.interaction.prop.PropertyUiModelWkt;
 
-import lombok.NonNull;
 import lombok.val;
 
 public class ScalarPropertyModel
@@ -40,66 +40,54 @@ implements PropertyUiModel {
 
     private static final long serialVersionUID = 1L;
 
+    @Deprecated
     private final PropertyMemento propertyMemento;
 
-    private transient PropertyNegotiationModel pendingPropertyModel;
+    private PropertyUiModelWkt delegate;
+
+    public static ScalarPropertyModel wrap(
+            final PropertyUiModelWkt delegate,
+            final EntityModel.EitherViewOrEdit viewOrEdit,
+            final EntityModel.RenderingHint renderingHint) {
+        return new ScalarPropertyModel(delegate, viewOrEdit, renderingHint);
+    }
 
     /**
      * Creates a model representing a property of a parent object, with the
      * {@link #getObject() value of this model} to be current value of the
      * property.
      */
-    public ScalarPropertyModel(
-            final EntityModel parentEntityModel,
-            final PropertyMemento propertyMemento,
-            final EntityModel.Mode editingOrViewing,
+    private ScalarPropertyModel(
+            final PropertyUiModelWkt delegate,
+            final EntityModel.EitherViewOrEdit viewOrEdit,
             final EntityModel.RenderingHint renderingHint) {
-
-        super(parentEntityModel, propertyMemento, editingOrViewing, renderingHint);
-        this.propertyMemento = propertyMemento;
+        super(EntityModel.ofAdapter(delegate.getCommonContext(), delegate.getOwner()),
+                delegate.getMetaModel().getMemento(),
+                viewOrEdit, renderingHint);
+        this.delegate = delegate;
+        this.propertyMemento = delegate.getMetaModel().getMemento();
         reset();
     }
 
+    /** @return new instance bound to the same delegate */
     public ScalarPropertyModel copyHaving(
-            final EntityModel.Mode editingOrViewing,
+            final EntityModel.EitherViewOrEdit viewOrEdit,
             final EntityModel.RenderingHint renderingHint) {
-        return new ScalarPropertyModel(
-                getParentUiModel(),
-                propertyMemento,
-                editingOrViewing,
-                renderingHint);
+        return wrap(delegate, viewOrEdit, renderingHint);
     }
 
     @Override
     public OneToOneAssociation getMetaModel() {
-        return propertyMemento.getProperty(this::getSpecificationLoader);
+        return delegate.getMetaModel();
     }
 
-    // not strictly required, used for caching
-    private transient ManagedProperty managedProperty;
-
     public ManagedProperty getManagedProperty() {
-        val owner = getParentUiModel().getObject();
-        if(managedProperty==null) {
-            return managedProperty = createManagedProperty(owner);
-        }
-        return managedProperty.getOwner()!=owner
-            //XXX ISIS-2830 recreate if owner had changed
-            ? managedProperty = createManagedProperty(owner)
-            : managedProperty;
+        return delegate.propertyInteraction().getManagedProperty().get();
     }
 
     @Override
     public PropertyNegotiationModel getPendingPropertyModel() {
-        if(pendingPropertyModel==null) {
-            pendingPropertyModel = getManagedProperty().startNegotiation();
-        }
-        return pendingPropertyModel;
-    }
-
-    private ManagedProperty createManagedProperty(final @NonNull ManagedObject owner) {
-        val where = this.getRenderingHint().asWhere();
-        return ManagedProperty.of(owner, getMetaModel(), where);
+        return delegate.getPendingPropertyModel();
     }
 
     @Override
@@ -141,7 +129,7 @@ implements PropertyUiModel {
     }
 
     public void reset() {
-        pendingPropertyModel = null; // invalidate
+        //pendingPropertyModel = null; // invalidate
         val propertyValue = getManagedProperty().getPropertyValue();
         val presentedValue = ManagedObjects.isNullOrUnspecifiedOrEmpty(propertyValue)
                 ? null

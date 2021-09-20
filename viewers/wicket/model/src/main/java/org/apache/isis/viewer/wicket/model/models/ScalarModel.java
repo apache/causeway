@@ -35,8 +35,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.memento.PropertyMemento;
 import org.apache.isis.viewer.common.model.feature.ScalarUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel.EitherViewOrEdit;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
-import org.apache.isis.viewer.common.model.object.ObjectUiModel.Mode;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
@@ -47,8 +47,8 @@ import lombok.NonNull;
 import lombok.Setter;
 
 /**
- * Represents a scalar of an entity, either a {@link Kind#PROPERTY property} or
- * a {@link Kind#PARAMETER parameter}.
+ * Represents a scalar of an entity, either a {@link EitherParamOrProp#PROPERTY property} or
+ * a {@link EitherParamOrProp#PARAMETER parameter}.
  *
  * <p>
  * Is the backing model to each of the fields that appear in forms (for entities
@@ -62,25 +62,24 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     private static final long serialVersionUID = 1L;
 
-    private enum Kind {
+    private enum EitherParamOrProp {
         PROPERTY,
         PARAMETER;
     }
-    @NonNull private final Kind kind;
-    public boolean isProperty() { return kind == Kind.PROPERTY; }
-    public boolean isParameter() { return kind == Kind.PARAMETER; }
+    @NonNull private final EitherParamOrProp kind;
+    public boolean isProperty() { return kind == EitherParamOrProp.PROPERTY; }
+    public boolean isParameter() { return kind == EitherParamOrProp.PARAMETER; }
 
 
     private final EntityModel parentEntityModel;
 
     @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
-    private Mode mode;
+    private EitherViewOrEdit mode;
 
     @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
     private RenderingHint renderingHint;
-
 
     /**
      * Creates a model representing an action parameter of an action of a parent
@@ -92,10 +91,10 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
         super(parentEntityModel.getCommonContext());
 
-        this.kind = Kind.PARAMETER;
+        this.kind = EitherParamOrProp.PARAMETER;
         this.parentEntityModel = parentEntityModel;
         this.pendingModel = new PendingModel(this);
-        this.mode = ObjectUiModel.Mode.EDIT;
+        this.mode = ObjectUiModel.EitherViewOrEdit.EDIT;
         this.renderingHint = ObjectUiModel.RenderingHint.REGULAR;
     }
 
@@ -107,11 +106,11 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     protected ScalarModel(
             final EntityModel parentEntityModel,
             final PropertyMemento pm,
-            final ObjectUiModel.Mode mode,
+            final ObjectUiModel.EitherViewOrEdit mode,
             final ObjectUiModel.RenderingHint renderingHint) {
 
         super(parentEntityModel.getCommonContext());
-        this.kind = Kind.PROPERTY;
+        this.kind = EitherParamOrProp.PROPERTY;
         this.parentEntityModel = parentEntityModel;
         this.pendingModel = new PendingModel(this);
         this.mode = mode;
@@ -139,10 +138,10 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     }
 
     /**
-     * Whether the scalar represents a {@link Kind#PROPERTY property} or a
-     * {@link Kind#PARAMETER}.
+     * Whether the scalar represents a {@link EitherParamOrProp#PROPERTY property} or a
+     * {@link EitherParamOrProp#PARAMETER}.
      */
-    public Kind getKind() {
+    public EitherParamOrProp getKind() {
         return kind;
     }
 
@@ -319,8 +318,8 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
      * @return <tt>true</tt> if the widget for this model must be editable.
      */
     public boolean mustBeEditable() {
-        return getMode() == Mode.EDIT
-                || getKind() == Kind.PARAMETER
+        return getMode() == EitherViewOrEdit.EDIT
+                || getKind() == EitherParamOrProp.PARAMETER
                 || hasAssociatedActionWithInlineAsIfEdit();
     }
 

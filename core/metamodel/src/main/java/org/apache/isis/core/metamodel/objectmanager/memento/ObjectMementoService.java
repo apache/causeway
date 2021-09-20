@@ -16,12 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.model.models.interaction.action;
+package org.apache.isis.core.metamodel.objectmanager.memento;
 
-import org.apache.isis.viewer.common.model.object.ObjectUiModel;
+import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-@FunctionalInterface
-public interface ObjectUiModelWkt
-extends ObjectUiModel {
+import lombok.NonNull;
+
+/**
+ * @since 2.0
+ */
+public interface ObjectMementoService {
+
+    ObjectMemento mementoForBookmark(@NonNull Bookmark bookmark);
+
+    ObjectMemento mementoForObject(ManagedObject adapter);
+
+    ObjectMemento mementoForPojo(Object pojo);
+
+    ObjectMemento mementoForPojos(Iterable<Object> iterablePojos, LogicalType logicalType);
+
+    ManagedObject reconstructObject(ObjectMemento memento);
+
+    ObjectMemento mementoForParameter(@NonNull ManagedObject paramAdapter);
+
 
 }

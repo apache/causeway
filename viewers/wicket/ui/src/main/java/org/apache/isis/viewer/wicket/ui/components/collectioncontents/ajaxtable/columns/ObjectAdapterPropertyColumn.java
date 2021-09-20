@@ -114,7 +114,7 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObj
         final ScalarModel scalarModel = entityModel
                 .getPropertyModel(
                         property,
-                        EntityModel.Mode.VIEW,
+                        EntityModel.EitherViewOrEdit.VIEW,
                         collectionVariant.getColumnRenderingHint());
 
         final ComponentFactory componentFactory = findComponentFactory(ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);

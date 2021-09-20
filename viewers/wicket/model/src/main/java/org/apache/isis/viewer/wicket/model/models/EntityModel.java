@@ -29,8 +29,11 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
+import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -40,6 +43,7 @@ import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
+import org.apache.isis.viewer.wicket.model.models.interaction.prop.PropertyInteractionModelWkt;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 
 import lombok.Getter;
@@ -47,6 +51,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.Synchronized;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Backing model to represent a {@link ManagedObject}.
@@ -55,7 +60,7 @@ import lombok.val;
  * So that the model is {@link Serializable}, the {@link ManagedObject} is
  * stored as a {@link ObjectMemento}.
  */
-//@Log4j2
+@Log4j2
 public class EntityModel
 extends ManagedObjectModel
 implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel, BookmarkableModel {
@@ -69,7 +74,7 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
 
     @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
-    private Mode mode;
+    private EitherViewOrEdit mode;
 
     @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
@@ -108,7 +113,7 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
             final @Nullable Map<PropertyMemento, ScalarModel> propertyScalarModels) {
 
         return new EntityModel(commonContext, adapterMemento, propertyScalarModels,
-                Mode.VIEW, RenderingHint.REGULAR);
+                EitherViewOrEdit.VIEW, RenderingHint.REGULAR);
     }
 
     /**
@@ -121,13 +126,13 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
         this(commonContext,
                 commonContext.mementoFor(adapter),
                 /*propertyScalarModels*/null,
-                Mode.VIEW, RenderingHint.REGULAR);
+                EitherViewOrEdit.VIEW, RenderingHint.REGULAR);
     }
 
     /**
      * As used by ScalarModel
      */
-    protected EntityModel(final IsisAppCommonContext commonContext, final Mode mode, final RenderingHint renderingHint) {
+    protected EntityModel(final IsisAppCommonContext commonContext, final EitherViewOrEdit mode, final RenderingHint renderingHint) {
         this(commonContext, null, _Maps.<PropertyMemento, ScalarModel>newHashMap(),
                 mode, renderingHint);
     }
@@ -136,7 +141,7 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
             final @NonNull IsisAppCommonContext commonContext,
             final @Nullable ObjectMemento adapterMemento,
             final @Nullable Map<PropertyMemento, ScalarModel> propertyScalarModels,
-            final Mode mode,
+            final EitherViewOrEdit mode,
             final RenderingHint renderingHint) {
 
         super(commonContext, adapterMemento);
@@ -223,18 +228,30 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
      */
     public ScalarModel getPropertyModel(
             final OneToOneAssociation property,
-            final Mode mode,
+            final EitherViewOrEdit viewOrEdit,
             final RenderingHint renderingHint) {
 
-        val pm = property.getMemento();
+        final var pm = property.getMemento();
 
-        ScalarModel scalarModel = propertyScalarModels.get(pm);
-        if (scalarModel == null) {
-            scalarModel = new ScalarPropertyModel(this, pm, mode, renderingHint);
+        final ScalarModel existingScalarModel = propertyScalarModels.get(pm);
+        if (existingScalarModel == null) {
 
-            propertyScalarModels.put(pm, scalarModel);
+            final var propertyInteraction =
+                    PropertyInteraction.wrap(ManagedProperty.of(this.getManagedObject(), property, renderingHint.asWhere()));
+            final var propertyInteractionModel = new PropertyInteractionModelWkt(getCommonContext(), propertyInteraction);
+
+            final long modelsAdded = propertyInteractionModel.streamPropertyUiModels()
+            .map(uiModel->ScalarPropertyModel.wrap(uiModel, viewOrEdit, renderingHint))
+            .peek(scalarModel->log.info("adding: {}", scalarModel))
+            .filter(scalarModel->propertyScalarModels.put(pm, scalarModel)==null)
+            .count();
+
+            // future extensions might allow to add multiple UI models per single property model (typed tuple support)
+            _Assert.assertEquals(1L, modelsAdded, ()->
+                String.format("unexpeced number of propertyScalarModels added %d", modelsAdded));
+
         }
-        return scalarModel;
+        return propertyScalarModels.get(pm);
 
     }
 
@@ -259,7 +276,7 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
 
     @Override
     public EntityModel toEditMode() {
-        setMode(Mode.EDIT);
+        setMode(EitherViewOrEdit.EDIT);
         for (final ScalarModel scalarModel : propertyScalarModels.values()) {
             scalarModel.toEditMode();
         }
@@ -268,7 +285,7 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
 
     @Override
     public EntityModel toViewMode() {
-        setMode(Mode.VIEW);
+        setMode(EitherViewOrEdit.VIEW);
         for (final ScalarModel scalarModel : propertyScalarModels.values()) {
             scalarModel.toViewMode();
         }

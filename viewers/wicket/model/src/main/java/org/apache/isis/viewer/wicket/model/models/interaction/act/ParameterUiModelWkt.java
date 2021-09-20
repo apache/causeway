@@ -16,48 +16,43 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.model.models.interaction.action;
+package org.apache.isis.viewer.wicket.model.models.interaction.act;
 
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.common.model.HasParentUiModel;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
-import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
-import org.apache.isis.viewer.common.model.object.ObjectUiModel.Mode;
-import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.links.LinksProvider;
+import org.apache.isis.viewer.wicket.model.models.interaction.InteractionHolderAbstract;
+import org.apache.isis.viewer.wicket.model.models.interaction.ObjectUiModelWkt;
 
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 
+/**
+ * <i>Action Parameter</i> model bound to its container {@link ActionInteractionModelWkt}.
+ * @see ActionInteractionModelWkt
+ */
 public final class ParameterUiModelWkt
-extends _ActionInteractionHolder
+extends InteractionHolderAbstract<ActionInteraction, ActionInteractionModelWkt>
 implements
     HasParentUiModel<ObjectUiModelWkt>,
-    HasRenderingHints, ParameterUiModel, LinksProvider {
+    ParameterUiModel {
 
     private static final long serialVersionUID = 1L;
 
     final int paramIndex;
 
-    public ParameterUiModelWkt(
+    ParameterUiModelWkt(
             final ActionInteractionModelWkt model,
             final int paramIndex) {
         super(model);
         this.paramIndex = paramIndex;
     }
 
-    @Getter(onMethod = @__(@Override))
-    @Setter(onMethod = @__(@Override))
-    private Mode mode;
-
-    @Getter(onMethod = @__(@Override))
-    @Setter(onMethod = @__(@Override))
-    private RenderingHint renderingHint;
+    public ActionInteraction actionInteraction() {
+        return getObject();
+    }
 
     @Override
     public ObjectUiModelWkt getParentUiModel() {
@@ -72,16 +67,6 @@ implements
     @Override
     public ObjectActionParameter getMetaModel() {
         return actionInteraction().getMetamodel().get().getParameters().getElseFail(paramIndex);
-    }
-
-    @Override
-    public Can<LinkAndLabel> getLinks() {
-        return Can.empty();
-    }
-
-    @Override
-    public boolean isInlinePrompt() {
-        return false;
     }
 
     @Override

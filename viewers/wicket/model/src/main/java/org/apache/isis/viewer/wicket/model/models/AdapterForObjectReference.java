@@ -22,7 +22,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.common.model.object.ObjectUiModel.Mode;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel.EitherViewOrEdit;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
 
 import lombok.val;
@@ -63,12 +63,12 @@ public class AdapterForObjectReference implements ObjectAdapterModel {
     }
 
     @Override
-    public EntityModel.Mode getMode() {
-        return EntityModel.Mode.VIEW;
+    public EntityModel.EitherViewOrEdit getMode() {
+        return EntityModel.EitherViewOrEdit.VIEW;
     }
 
     @Override
-    public void setMode(Mode mode) {
+    public void setMode(EitherViewOrEdit mode) {
         // no-op
     }
 

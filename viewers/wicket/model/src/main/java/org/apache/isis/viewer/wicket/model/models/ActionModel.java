@@ -59,8 +59,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.memento.ActionMemento;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.action.form.FormUiModel;
-import org.apache.isis.viewer.wicket.model.models.interaction.action.ActionInteractionModelWkt;
-import org.apache.isis.viewer.wicket.model.models.interaction.action.ParameterUiModelWkt;
+import org.apache.isis.viewer.wicket.model.models.interaction.act.ActionInteractionModelWkt;
+import org.apache.isis.viewer.wicket.model.models.interaction.act.ParameterUiModelWkt;
 
 import lombok.NonNull;
 import lombok.val;

@@ -18,18 +18,23 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed;
 
+import java.io.Serializable;
 import java.util.Optional;
 import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
+import lombok.AccessLevel;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-public final class PropertyInteraction extends MemberInteraction<ManagedProperty, PropertyInteraction> {
+public final class PropertyInteraction
+extends MemberInteraction<ManagedProperty, PropertyInteraction> {
 
     public static final PropertyInteraction start(
             final @NonNull ManagedObject owner,
@@ -45,8 +50,17 @@ public final class PropertyInteraction extends MemberInteraction<ManagedProperty
         return new PropertyInteraction(chain);
     }
 
-    PropertyInteraction(@NonNull _Either<ManagedProperty, InteractionVeto> chain) {
+    public static PropertyInteraction wrap(final @NonNull ManagedProperty managedProperty) {
+        return new PropertyInteraction(_Either.left(managedProperty));
+    }
+
+    PropertyInteraction(@NonNull final _Either<ManagedProperty, InteractionVeto> chain) {
         super(chain);
+    }
+
+    public Optional<PropertyNegotiationModel> startPropertyNegotiation() {
+        return getManagedProperty()
+            .map(ManagedProperty::startNegotiation);
     }
 
     public PropertyInteraction modifyProperty(
@@ -74,9 +88,32 @@ public final class PropertyInteraction extends MemberInteraction<ManagedProperty
      * @throws X if there was any interaction veto within the originating chain
      */
     public <X extends Throwable>
-    ManagedProperty getManagedPropertyElseThrow(Function<InteractionVeto, ? extends X> onFailure) throws X {
+    ManagedProperty getManagedPropertyElseThrow(final Function<InteractionVeto, ? extends X> onFailure) throws X {
         return super.getManagedMemberElseThrow(onFailure);
     }
 
+    // -- MEMENTO
+
+    public Memento getMemento() {
+        return Memento.create(this);
+    }
+
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class Memento implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        static Memento create(final PropertyInteraction propertyInteraction) {
+            return new Memento(propertyInteraction.getManagedProperty()
+                    .map(ManagedProperty::getMemento)
+                    .orElseThrow());
+        }
+
+        private final ManagedProperty.Memento managedPropertyMemento;
+
+        public PropertyInteraction getPropertyInteraction(final MetaModelContext mmc) {
+            final var managedProperty = managedPropertyMemento.getManagedProperty(mmc);
+            return PropertyInteraction.wrap(managedProperty);
+        }
+    }
 
 }

@@ -56,7 +56,7 @@ public class EntityModel_hintsTest {
         metaModelContext = MetaModelContext_forTesting.buildDefault();
         val commonContext = IsisAppCommonContext.of(metaModelContext);
         
-        target = new EntityModel(commonContext, EntityModel.Mode.VIEW, EntityModel.RenderingHint.REGULAR);
+        target = new EntityModel(commonContext, EntityModel.EitherViewOrEdit.VIEW, EntityModel.RenderingHint.REGULAR);
 
 //        mockParent = context.mock(MarkupContainer.class, "parent");
 //        mockComponent1 = context.mock(Component.class, "component1");

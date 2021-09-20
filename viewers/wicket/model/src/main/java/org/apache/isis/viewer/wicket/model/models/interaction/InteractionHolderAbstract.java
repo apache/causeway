@@ -16,63 +16,68 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.model.models.interaction.action;
+package org.apache.isis.viewer.wicket.model.models.interaction;
 
 import java.io.Serializable;
 
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
+import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
+import org.apache.isis.viewer.wicket.model.models.interaction.act.ActionInteractionModelWkt;
+import org.apache.isis.viewer.wicket.model.models.interaction.prop.PropertyInteractionModelWkt;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Implemented by a <i>Parameter Interaction Model</i>,
- * which is a holder of a shared <i>Action Interaction Model</i>.
+ * Implemented by a <i>UI Models</i> that are children to
+ * a shared <i>Interaction Model</i>.
  * <p>
- * Multiple param models share a single action interaction.
  * This sharing relation must survive a de-serialze/serialize cycle.
+ *
  * @apiNote {@link Serializable}, but not an {@link IModel}, such that the
- * parent <i>Action Interaction Model</i> can take full control of serialization.
+ * parent <i>Interaction Model</i> can take full control of serialization.
  * That is, it will inject the shared parent instance into this model
  * which is a <i>transient</i> field.
+ *
+ * @see ActionInteractionModelWkt
+ * @see PropertyInteractionModelWkt
  */
 @RequiredArgsConstructor
-abstract class _ActionInteractionHolder
+public abstract class InteractionHolderAbstract<I, T extends ModelAbstract<I>>
 implements
     HasCommonContext,
     Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private transient @NonNull ActionInteractionModelWkt actionInteractionModelWkt;
+    private transient @NonNull T containerModel;
 
     @Override
     public final IsisAppCommonContext getCommonContext() {
-        return actionInteractionModelWkt.getCommonContext();
+        return containerModel.getCommonContext();
     }
 
-    protected final ActionInteractionModelWkt containerModel() {
-        _Assert.assertNotNull(actionInteractionModelWkt, "detached from container model");
-        return actionInteractionModelWkt;
+    protected final T containerModel() {
+        _Assert.assertNotNull(containerModel, "detached from container model");
+        return containerModel;
     }
 
-    public final ActionInteraction actionInteraction() {
-        _Assert.assertNotNull(this.actionInteractionModelWkt, "already detached from container model");
-        return actionInteractionModelWkt.actionInteraction();
+    public final I getObject() {
+        _Assert.assertNotNull(this.containerModel, "already detached from container model");
+        return containerModel.getObject();
     }
 
-    public void attachToContainerModel(final @NonNull ActionInteractionModelWkt actionInteractionModelWkt) {
-        _Assert.assertNull(this.actionInteractionModelWkt, "cannot attach, already attached to container model");
-        this.actionInteractionModelWkt = actionInteractionModelWkt;
+    public void attachToContainerModel(final @NonNull T containerModel) {
+        _Assert.assertNull(this.containerModel, "cannot attach, already attached to container model");
+        this.containerModel = containerModel;
     }
 
     public void detachFromContainerModel() {
-        this.actionInteractionModelWkt = null;
+        this.containerModel = null;
     }
 
 
