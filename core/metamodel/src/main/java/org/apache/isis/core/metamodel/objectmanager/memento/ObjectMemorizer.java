@@ -23,6 +23,7 @@ import java.util.List;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.handler.ChainOfResponsibility;
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -124,7 +125,14 @@ public interface ObjectMemorizer {
                 new ObjectMemorizer_builtinHandlers.MemorizeOther()
                 );
 
-        chainOfHandlers.forEach(serviceInjector::injectServicesInto);
+
+
+        if(metaModelContext instanceof MetaModelContext_forTesting) {
+            ((MetaModelContext_forTesting)(metaModelContext))
+            .registerPostconstruct(()->chainOfHandlers.forEach(serviceInjector::injectServicesInto));
+        } else {
+            chainOfHandlers.forEach(serviceInjector::injectServicesInto);
+        }
 
         final var chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
 

@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.objectmanager.refresh.ObjectRefresher;
 import org.apache.isis.core.metamodel.objectmanager.serialize.ObjectSerializer;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
@@ -49,18 +50,20 @@ import lombok.val;
 @Named("isis.metamodel.ObjectManagerDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("DEFAULT")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ObjectManagerDefault implements ObjectManager {
 
-    @Inject @Getter(onMethod = @__(@Override)) private MetaModelContext metaModelContext;
+    @Getter(onMethod_ = {@Override})
+    private final MetaModelContext metaModelContext;
 
-    @Getter(onMethod = @__(@Override)) private ObjectLoader objectLoader;
-    @Getter(onMethod = @__(@Override)) private ObjectBulkLoader objectBulkLoader;
-    @Getter(onMethod = @__(@Override)) private ObjectCreator objectCreator;
-    @Getter(onMethod = @__(@Override)) private ObjectBookmarker objectBookmarker;
-    @Getter(onMethod = @__(@Override)) private ObjectRefresher objectRefresher;
-    @Getter(onMethod = @__(@Override)) private ObjectDetacher objectDetacher;
-    @Getter(onMethod = @__(@Override)) private ObjectSerializer objectSerializer;
-    @Getter(onMethod = @__(@Override)) private ObjectMemorizer objectMemorizer;
+    @Getter(onMethod_ = {@Override}) private ObjectLoader objectLoader;
+    @Getter(onMethod_ = {@Override}) private ObjectBulkLoader objectBulkLoader;
+    @Getter(onMethod_ = {@Override}) private ObjectCreator objectCreator;
+    @Getter(onMethod_ = {@Override}) private ObjectBookmarker objectBookmarker;
+    @Getter(onMethod_ = {@Override}) private ObjectRefresher objectRefresher;
+    @Getter(onMethod_ = {@Override}) private ObjectDetacher objectDetacher;
+    @Getter(onMethod_ = {@Override}) private ObjectSerializer objectSerializer;
+    @Getter(onMethod_ = {@Override}) private ObjectMemorizer objectMemorizer;
 
     @PostConstruct
     public void init() {
@@ -78,8 +81,7 @@ public class ObjectManagerDefault implements ObjectManager {
     // JUnit support
     public static ObjectManager forTesting(final MetaModelContext metaModelContext) {
 
-        val objectManager = new ObjectManagerDefault();
-        objectManager.metaModelContext = metaModelContext;
+        val objectManager = new ObjectManagerDefault(metaModelContext);
         objectManager.init();
         return objectManager;
     }
