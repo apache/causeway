@@ -81,7 +81,7 @@ public class WicketImageUtil {
           return Optional.empty();
       }
 
-      final var spec = model.getTypeOfSpecification();
+      final var spec = model.getScalarTypeSpec();
 
       return spec.streamValueSemantics(ImageValueSemantics.class)
       .map(imageValueSemantics->imageValueSemantics.getImage(adapter).orElse(null))

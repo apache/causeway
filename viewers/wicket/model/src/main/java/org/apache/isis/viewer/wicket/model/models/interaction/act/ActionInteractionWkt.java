@@ -22,18 +22,21 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import org.apache.wicket.model.ChainingModel;
+
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
-import org.apache.isis.viewer.wicket.model.models.interaction.InteractionHolderAbstract;
+import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
+import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 
 /**
  * The parent (container) model of multiple <i>parameter models</i> which implement
- * {@link _ActionInteractionHolder}.
+ * {@link ChainingModel}.
  * <pre>
  * IModel[ActionInteraction] ... placeOrder(X x, Yy)
  * |
@@ -45,49 +48,49 @@ import org.apache.isis.viewer.wicket.model.models.interaction.InteractionHolderA
  * that means it does not survive a serialization/de-serialization cycle; instead
  * is recreated with parameter defaults
  *
- * @see _ActionInteractionHolder
+ * @see ChainingModel
  */
-public final class ActionInteractionModelWkt
-extends ModelAbstract<ActionInteraction> {
+public class ActionInteractionWkt
+extends HasBookmarkedOwnerAbstract<ActionInteraction> {
 
     private static final long serialVersionUID = 1L;
 
-    private final ActionInteraction.Memento memento;
-    private final Can<ParameterUiModelWkt> childModels;
+    private final String memberId;
+    private final Where where;
+    private Can<ParameterUiModelWkt> childModels;
 
-    public ActionInteractionModelWkt(
-            final IsisAppCommonContext commonContext,
-            final ActionInteraction model) {
-        super(commonContext, model);
-        this.memento = model.getMemento();
+    public ActionInteractionWkt(
+            final BookmarkedObjectWkt bookmarkedObject,
+            final String memberId,
+            final Where where) {
 
-        final int paramCount = model.getMetamodel().get().getParameterCount();
-        this.childModels = IntStream.range(0, paramCount)
-                .mapToObj(paramIndex -> new ParameterUiModelWkt(this, paramIndex))
-                .collect(Can.toCan());
+        super(bookmarkedObject);
+        this.memberId = memberId;
+        this.where = where;
     }
 
     @Override
-    protected final ActionInteraction load() {
-        childModels.forEach(childModel->childModel.attachToContainerModel(this));
-        return memento.getActionInteraction(getCommonContext().getMetaModelContext());
-    }
-
-    @Override
-    public void detach() {
-        childModels.forEach(InteractionHolderAbstract::detachFromContainerModel);
-        super.detach();
+    protected ActionInteraction load() {
+        return ActionInteraction.wrap(
+                ManagedAction.lookupAction(getBookmarkedOwner(), memberId, where)
+                .get() //FIXME or else fail
+                );
     }
 
     public final ActionInteraction actionInteraction() {
         return getObject();
     }
 
-    public ParameterUiModelWkt getParameterUiModel(final int paramIndex) {
-        return childModels.getElseFail(paramIndex);
-    }
+    // -- LAZY BINDING
 
     public Stream<ParameterUiModelWkt> streamParameterUiModels() {
+        if(childModels==null) {
+            final int paramCount = actionInteraction().getMetamodel().get().getParameterCount();
+            final int tupleIndex = 0;
+            this.childModels = IntStream.range(0, paramCount)
+                    .mapToObj(paramIndex -> new ParameterUiModelWkt(this, paramIndex, tupleIndex))
+                    .collect(Can.toCan());
+        }
         return childModels.stream();
     }
 
@@ -97,15 +100,12 @@ extends ModelAbstract<ActionInteraction> {
             _Lazy.threadSafe(()->actionInteraction().startParameterNegotiation());
 
     public final Optional<ParameterNegotiationModel> parameterNegotiationModel() {
-        _Assert.assertTrue(this.isAttached(), "container model is not attached");
+        _Assert.assertTrue(this.isAttached(), "model is not attached");
         return parameterNegotiationModel.get();
     }
 
     public void resetParametersToDefault() {
         parameterNegotiationModel.clear();
     }
-
-
-
 
 }

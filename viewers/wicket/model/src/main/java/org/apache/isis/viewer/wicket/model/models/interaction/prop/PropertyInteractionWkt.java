@@ -21,18 +21,21 @@ package org.apache.isis.viewer.wicket.model.models.interaction.prop;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.apache.wicket.model.ChainingModel;
+
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
-import org.apache.isis.viewer.wicket.model.models.interaction.InteractionHolderAbstract;
+import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
+import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 
 /**
  * The parent (container) model of multiple <i>property models</i> which implement
- * {@link _PropertyInteractionHolder}.
+ * {@link ChainingModel}.
  * <pre>
  * IModel[PropertyInteraction] ... setNumber(ComplexNumber complexNumber)
  * |
@@ -43,41 +46,52 @@ import org.apache.isis.viewer.wicket.model.models.interaction.InteractionHolderA
  * that means it does not survive a serialization/de-serialization cycle; instead
  * is recreated with property defaults
  *
- * @see _ActionInteractionHolder
+ * @see ChainingModel
  */
-public class PropertyInteractionModelWkt
-extends ModelAbstract<PropertyInteraction> {
+public class PropertyInteractionWkt
+extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
 
     private static final long serialVersionUID = 1L;
 
-    private final PropertyInteraction.Memento memento;
-    private final Can<PropertyUiModelWkt> childModels;
+    private final String memberId;
+    private final Where where;
+    private Can<PropertyUiModelWkt> childModels;
 
-    public PropertyInteractionModelWkt(
-            final IsisAppCommonContext commonContext,
-            final PropertyInteraction model) {
-        super(commonContext, model);
-        this.memento = model.getMemento();
-        this.childModels = Can.ofSingleton(new PropertyUiModelWkt(this));
+    public PropertyInteractionWkt(
+            final BookmarkedObjectWkt bookmarkedObject,
+            final String memberId,
+            final Where where) {
+
+        super(bookmarkedObject);
+        this.memberId = memberId;
+        this.where = where;
     }
 
     @Override
-    protected final PropertyInteraction load() {
-        childModels.forEach(childModel->childModel.attachToContainerModel(this));
-        return memento.getPropertyInteraction(getCommonContext().getMetaModelContext());
+    protected PropertyInteraction load() {
+        return PropertyInteraction.wrap(
+                ManagedProperty.lookupProperty(getBookmarkedOwner(), memberId, where)
+                .get() //FIXME or else fail
+                );
     }
 
     @Override
     public void detach() {
-        childModels.forEach(InteractionHolderAbstract::detachFromContainerModel);
         super.detach();
+        propertyNegotiationModel.clear();
     }
 
     public final PropertyInteraction propertyInteraction() {
         return getObject();
     }
 
+    // -- LAZY BINDING
+
     public Stream<PropertyUiModelWkt> streamPropertyUiModels() {
+        if(childModels==null) {
+            final int tupleIndex = 0;
+            childModels = Can.ofSingleton(new PropertyUiModelWkt(this, tupleIndex));
+        }
         return childModels.stream();
     }
 
@@ -86,12 +100,14 @@ extends ModelAbstract<PropertyInteraction> {
     private final transient _Lazy<Optional<PropertyNegotiationModel>> propertyNegotiationModel =
             _Lazy.threadSafe(()->propertyInteraction().startPropertyNegotiation());
 
-    public final Optional<PropertyNegotiationModel> propertyNegotiationModel() {
-        _Assert.assertTrue(this.isAttached(), "container model is not attached");
-        return propertyNegotiationModel.get();
+    public final PropertyNegotiationModel propertyNegotiationModel() {
+        _Assert.assertTrue(this.isAttached(), "model is not attached");
+        return propertyNegotiationModel.get().get(); // FIXME or else fail
     }
 
     public void resetPropertyToDefault() {
         propertyNegotiationModel.clear();
     }
+
+
 }

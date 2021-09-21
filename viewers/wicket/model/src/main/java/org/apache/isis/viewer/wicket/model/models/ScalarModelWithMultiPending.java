@@ -40,7 +40,7 @@ public interface ScalarModelWithMultiPending extends Serializable {
 
     public ScalarModel getScalarModel();
 
-    public static Model<ArrayList<ObjectMemento>> create(ScalarModel scalarModel) {
+    public static Model<ArrayList<ObjectMemento>> create(final ScalarModel scalarModel) {
         return Factory.createModel(Factory.asScalarModelWithMultiPending(scalarModel));
     }
 
@@ -48,7 +48,8 @@ public interface ScalarModelWithMultiPending extends Serializable {
     @Log4j2
     static class Factory {
 
-        private static ScalarModelWithMultiPending asScalarModelWithMultiPending(final ScalarModel scalarModel) {
+        private static ScalarModelWithMultiPending asScalarModelWithMultiPending(
+                final ScalarModel scalarModel) {
             return new ScalarModelWithMultiPending(){
 
                 private static final long serialVersionUID = 1L;
@@ -62,7 +63,7 @@ public interface ScalarModelWithMultiPending extends Serializable {
 
                 @Override
                 public void setMultiPending(final ArrayList<ObjectMemento> pending) {
-                    val logicalType = getScalarModel().getTypeOfSpecification().getLogicalType();
+                    val logicalType = getScalarModel().getScalarTypeSpec().getLogicalType();
                     ObjectMemento adapterMemento = ObjectMemento.wrapMementoList(pending, logicalType);
                     scalarModel.getPendingModel().setObject(adapterMemento);
                 }
@@ -74,7 +75,8 @@ public interface ScalarModelWithMultiPending extends Serializable {
             };
         }
 
-        private static Model<ArrayList<ObjectMemento>> createModel(final ScalarModelWithMultiPending owner) {
+        private static Model<ArrayList<ObjectMemento>> createModel(
+                final ScalarModelWithMultiPending owner) {
             return new Model<ArrayList<ObjectMemento>>() {
 
                 private static final long serialVersionUID = 1L;
@@ -89,7 +91,9 @@ public interface ScalarModelWithMultiPending extends Serializable {
                     log.debug("pending is null");
 
                     val ownerScalarModel = owner.getScalarModel();
-                    val objectAdapterMemento = ownerScalarModel.memento();
+                    val commonContext = ownerScalarModel.getCommonContext();
+                    val objectAdapterMemento =
+                            commonContext.mementoFor(ownerScalarModel.getObject());
                     return ObjectMemento.unwrapList(objectAdapterMemento)
                             .orElse(null);
                 }
@@ -99,7 +103,8 @@ public interface ScalarModelWithMultiPending extends Serializable {
                     log.debug("setting to: {}", (adapterMemento != null ? adapterMemento.toString() : null));
                     owner.setMultiPending(adapterMemento);
 
-                    final ScalarModel ownerScalarModel = owner.getScalarModel();
+                    val ownerScalarModel = owner.getScalarModel();
+                    val commonContext = ownerScalarModel.getCommonContext();
 
                     if(adapterMemento == null) {
                         ownerScalarModel.setObject(null);
@@ -107,9 +112,10 @@ public interface ScalarModelWithMultiPending extends Serializable {
                         final ArrayList<ObjectMemento> ownerPending = owner.getMultiPending();
                         if (ownerPending != null) {
                             log.debug("setting to pending: {}", ownerPending.toString());
-                            val logicalType = ownerScalarModel.getTypeOfSpecification().getLogicalType();
-                            ownerScalarModel.memento(
-                                    ObjectMemento.wrapMementoList(adapterMemento, logicalType));
+                            val logicalType = ownerScalarModel.getScalarTypeSpec().getLogicalType();
+                            val multiPending = ObjectMemento.wrapMementoList(adapterMemento, logicalType);
+                            ownerScalarModel.setObject(
+                                    commonContext.reconstructObject(multiPending));
                         }
                     }
                 }

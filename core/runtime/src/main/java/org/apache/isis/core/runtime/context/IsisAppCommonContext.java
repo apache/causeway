@@ -22,6 +22,8 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -96,6 +98,12 @@ public class IsisAppCommonContext implements HasMetaModelContext {
                 .orElseGet(fallback);
     }
 
+    public <T> T loadServiceIfAbsent(final Class<T> type, final @Nullable T instanceIfAny) {
+        return instanceIfAny==null
+                ? lookupServiceElseFail(type)
+                : instanceIfAny;
+    }
+
     public <T> T injectServicesInto(final T pojo) {
         return getMetaModelContext().getServiceInjector().injectServicesInto(pojo);
     }
@@ -153,6 +161,8 @@ public class IsisAppCommonContext implements HasMetaModelContext {
         }
 
     }
+
+
 
 
 }

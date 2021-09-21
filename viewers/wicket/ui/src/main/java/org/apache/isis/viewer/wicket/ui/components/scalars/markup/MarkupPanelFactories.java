@@ -64,7 +64,7 @@ public class MarkupPanelFactories {
             }
 
             final var scalarModel = (ScalarModel) model;
-            final var scalarSpec = scalarModel.getTypeOfSpecification();
+            final var scalarSpec = scalarModel.getScalarTypeSpec();
             final var scalarType = scalarSpec.getCorrespondingClass();
 
             return appliesIf(scalarType.equals(valueType));

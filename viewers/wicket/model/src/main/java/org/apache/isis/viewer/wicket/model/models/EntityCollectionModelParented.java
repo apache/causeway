@@ -175,12 +175,12 @@ implements
     }
 
     public Bookmark asHintingBookmark() {
-        return entityModel.asHintingBookmarkIfSupported();
+        return entityModel.getOwnerBookmark();
     }
 
-    public ObjectMemento getParentObjectAdapterMemento() {
-        return entityModel.memento();
-    }
+//    public ObjectMemento getParentObjectAdapterMemento() {
+//        return entityModel.memento();
+//    }
 
     @Override
     public ManagedObject getParentObject() {

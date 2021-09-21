@@ -18,48 +18,53 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.model.ChainingModel;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.EitherViewOrEdit;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
 
-import lombok.val;
-
 /**
- *
  * Wraps a {@link ScalarModel} to act as an {@link ObjectAdapterModel}.
- *
  */
-public class AdapterForObjectReference implements ObjectAdapterModel {
+public final class AdapterForObjectReference
+extends ChainingModel<ManagedObject>
+implements ObjectAdapterModel {
 
     private static final long serialVersionUID = 1L;
 
-    private final ScalarModel scalarModel;
+    public static AdapterForObjectReference chain(final ScalarModel scalarModel) {
+        return new AdapterForObjectReference(scalarModel);
+    }
 
-    public AdapterForObjectReference(final ScalarModel scalarModel) {
-        this.scalarModel = scalarModel;
+    private AdapterForObjectReference(final ScalarModel scalarModel) {
+        super(scalarModel);
+    }
+
+    public ScalarModel scalarModel() {
+        return (ScalarModel) super.getTarget();
     }
 
     @Override
     public ManagedObject getObject() {
-        return scalarModel.getPendingElseCurrentAdapter();
+        return scalarModel().getPendingElseCurrentAdapter();
     }
 
     @Override
     public RenderingHint getRenderingHint() {
-        return scalarModel.getRenderingHint();
+        return scalarModel().getRenderingHint();
     }
 
     @Override
-    public void setRenderingHint(RenderingHint renderingHint) {
-        scalarModel.setRenderingHint(renderingHint);
+    public void setRenderingHint(final RenderingHint renderingHint) {
+        scalarModel().setRenderingHint(renderingHint);
     }
 
     @Override
     public ObjectSpecification getTypeOfSpecification() {
-        return scalarModel.getTypeOfSpecification();
+        return scalarModel().getScalarTypeSpec();
     }
 
     @Override
@@ -68,41 +73,19 @@ public class AdapterForObjectReference implements ObjectAdapterModel {
     }
 
     @Override
-    public void setMode(EitherViewOrEdit mode) {
-        // no-op
-    }
-
-    @Override
-    public void setObject(final ManagedObject adapter) {
-        // no-op
-    }
-
-    @Override
-    public void detach() {
-        // no-op
-    }
-
-    @Override
-    public PageParameters getPageParameters() {
-        val pageParameters = getPageParametersWithoutUiHints();
-        HintPageParameterSerializer.hintStoreToPageParameters(pageParameters, scalarModel);
-        return pageParameters;
-    }
-
-    @Override
-    public PageParameters getPageParametersWithoutUiHints() {
-        return PageParameterUtil.createPageParametersForObject(getObject());
-    }
-
-    @Override
     public boolean isInlinePrompt() {
-        return scalarModel.getPromptStyle().isInlineOrInlineAsIfEdit()
-                && scalarModel.isEnabled();
+        return scalarModel().getPromptStyle().isInlineOrInlineAsIfEdit()
+                && scalarModel().isEnabled();
     }
 
     @Override
-    public boolean isContextAdapter(ManagedObject other) {
+    public boolean isContextAdapter(final ManagedObject other) {
         return false;
+    }
+
+    @Override
+    public void setMode(final EitherViewOrEdit mode) {
+        throw _Exceptions.unexpectedCodeReach();
     }
 
 }

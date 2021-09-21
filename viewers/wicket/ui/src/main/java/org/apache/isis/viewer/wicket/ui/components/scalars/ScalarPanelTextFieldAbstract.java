@@ -411,19 +411,18 @@ implements TextFieldValueModel.ScalarModelProvider {
     // //////////////////////////////////////
 
     private static Integer getMaxLengthOf(final @NonNull ScalarModel model) {
-        return model
+        return model.getScalarTypeSpec()
                 .lookupFacet(MaxLengthFacet.class)
                 .map(MaxLengthFacet::value)
                 .orElse(null);
     }
 
     private static Integer getTypicalLenghtOf(final @NonNull ScalarModel model) {
-        return model
+        return model.getScalarTypeSpec()
                 .lookupFacet(TypicalLengthFacet.class)
                 .map(TypicalLengthFacet::value)
                 .orElse(null);
     }
-
 
 
 }

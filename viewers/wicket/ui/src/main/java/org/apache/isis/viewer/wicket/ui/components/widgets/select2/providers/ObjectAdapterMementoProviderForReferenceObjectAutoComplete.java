@@ -31,13 +31,13 @@ extends ObjectAdapterMementoProviderAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public ObjectAdapterMementoProviderForReferenceObjectAutoComplete(ScalarModel model) {
+    public ObjectAdapterMementoProviderForReferenceObjectAutoComplete(final ScalarModel model) {
         super(model);
     }
 
     @Override
-    protected Can<ObjectMemento> obtainMementos(String term) {
-        val typeOfSpecification = getScalarModel().getTypeOfSpecification();
+    protected Can<ObjectMemento> obtainMementos(final String term) {
+        val typeOfSpecification = getScalarModel().getScalarTypeSpec();
         val autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
         val autoCompleteAdapters = autoCompleteFacet.execute(term, InteractionInitiatedBy.USER);
         val commonContext = super.getCommonContext();

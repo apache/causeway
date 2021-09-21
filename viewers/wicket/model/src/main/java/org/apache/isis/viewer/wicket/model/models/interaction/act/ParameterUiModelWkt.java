@@ -18,40 +18,52 @@
  */
 package org.apache.isis.viewer.wicket.model.models.interaction.act;
 
+import org.apache.wicket.model.ChainingModel;
+
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.common.model.HasParentUiModel;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
-import org.apache.isis.viewer.wicket.model.models.interaction.InteractionHolderAbstract;
 import org.apache.isis.viewer.wicket.model.models.interaction.ObjectUiModelWkt;
 
 import lombok.NonNull;
 
 /**
- * <i>Action Parameter</i> model bound to its container {@link ActionInteractionModelWkt}.
- * @see ActionInteractionModelWkt
+ * <i>Action Parameter Interaction</i> model bound to its owner {@link ActionInteractionWkt}.
+ *
+ * @see ActionInteractionWkt
  */
 public final class ParameterUiModelWkt
-extends InteractionHolderAbstract<ActionInteraction, ActionInteractionModelWkt>
+extends ChainingModel<ActionInteraction>
 implements
+    HasCommonContext,
     HasParentUiModel<ObjectUiModelWkt>,
     ParameterUiModel {
 
     private static final long serialVersionUID = 1L;
 
     final int paramIndex;
+    final int tupleIndex; //future extension
 
     ParameterUiModelWkt(
-            final ActionInteractionModelWkt model,
-            final int paramIndex) {
+            final ActionInteractionWkt model,
+            final int paramIndex,
+            final int tupleIndex) {
         super(model);
         this.paramIndex = paramIndex;
+        this.tupleIndex = tupleIndex;
     }
 
-    public ActionInteraction actionInteraction() {
+    public final ActionInteraction actionInteraction() {
         return getObject();
+    }
+
+    public final ActionInteractionWkt actionInteractionModel() {
+        return (ActionInteractionWkt) getChainedModel();
     }
 
     @Override
@@ -86,7 +98,12 @@ implements
 
     @Override
     public ParameterNegotiationModel getPendingParameterModel() {
-        return containerModel().parameterNegotiationModel().get();
+        return actionInteractionModel().parameterNegotiationModel().get();
+    }
+
+    @Override
+    public IsisAppCommonContext getCommonContext() {
+        return actionInteractionModel().getCommonContext();
     }
 
 }

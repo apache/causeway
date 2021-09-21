@@ -36,9 +36,17 @@ extends HasRenderingHints, IModel<ManagedObject> {
      */
     boolean isContextAdapter(ManagedObject other);
 
-    PageParameters getPageParameters();
-    PageParameters getPageParametersWithoutUiHints();
-
     ObjectSpecification getTypeOfSpecification();
+
+    public default PageParameters getPageParameters() {
+        //FIXME
+//        return _HintPageParameterSerializer
+//                .hintStoreToPageParameters(getPageParametersWithoutUiHints(), scalarModel);
+        return getPageParametersWithoutUiHints();
+    }
+
+    public default PageParameters getPageParametersWithoutUiHints() {
+        return PageParameterUtil.createPageParametersForObject(getObject());
+    }
 
 }

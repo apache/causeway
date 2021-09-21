@@ -136,7 +136,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
             settings.setPlaceholder(getModel().getFriendlyName());
 
         } else if(hasObjectAutoComplete()) {
-            final ObjectSpecification typeOfSpecification = getModel().getTypeOfSpecification();
+            final ObjectSpecification typeOfSpecification = getModel().getScalarTypeSpec();
             final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
             final int minLength = autoCompleteFacet.getMinLength();
             settings.setMinimumInputLength(minLength);
@@ -429,7 +429,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
     // called by isEditableWithEitherAutoCompleteOrChoices
     private boolean hasObjectAutoComplete() {
-        final ObjectSpecification typeOfSpecification = getModel().getTypeOfSpecification();
+        final ObjectSpecification typeOfSpecification = getModel().getScalarTypeSpec();
         final AutoCompleteFacet autoCompleteFacet =
                 (typeOfSpecification != null)? typeOfSpecification.getFacet(AutoCompleteFacet.class):null;
                 return autoCompleteFacet != null;

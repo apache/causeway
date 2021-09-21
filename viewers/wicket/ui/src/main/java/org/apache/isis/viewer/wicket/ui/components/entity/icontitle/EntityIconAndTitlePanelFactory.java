@@ -47,16 +47,16 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public EntityIconAndTitlePanelFactory(
-            ComponentType componentType,
-            Class<?> componentClass) {
+            final ComponentType componentType,
+            final Class<?> componentClass) {
 
         super(componentType, componentClass);
     }
 
     public EntityIconAndTitlePanelFactory(
-            ComponentType componentType,
-            String name,
-            Class<?> componentClass) {
+            final ComponentType componentType,
+            final String name,
+            final Class<?> componentClass) {
 
         super(componentType, name, componentClass);
     }
@@ -73,7 +73,7 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
         if (model instanceof ObjectAdapterModel) {
             spec = ((ObjectAdapterModel) model).getTypeOfSpecification();
         } else if (model instanceof ScalarModel) {
-            spec = ((ScalarModel) model).getTypeOfSpecification();
+            spec = ((ScalarModel) model).getScalarTypeSpec();
         } else {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
@@ -94,7 +94,7 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
             val scalarModel = (ScalarModel) model;
 
             // effectively acts as an adapter from ScalarModel to ObjectAdapterModel
-            objectAdapterModel = new AdapterForObjectReference(scalarModel);
+            objectAdapterModel = AdapterForObjectReference.chain(scalarModel);
             objectAdapterModel.setRenderingHint(scalarModel.getRenderingHint());
         } else {
             throw _Exceptions.unexpectedCodeReach();
@@ -105,7 +105,7 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
 
     // -- HELPER
 
-    private boolean isScalarAndNotAValue(ObjectSpecification spec) {
+    private boolean isScalarAndNotAValue(final ObjectSpecification spec) {
         val isObject = spec.isNotCollection();
         val isValue = spec.containsFacet(ValueFacet.class);
         return isObject && !isValue;

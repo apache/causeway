@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel.Variant;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterPropertyColumn;
@@ -84,7 +85,7 @@ implements CollectionCountProvider {
         val collectionModel = getModel();
         addTitleColumn(
                 columns,
-                collectionModel.parentedObjectAdapterMemento().orElse(null),
+                collectionModel.getVariant(),
                 getWicketViewerSettings().getMaxTitleLengthInParentedTables(),
                 getWicketViewerSettings().getMaxTitleLengthInStandaloneTables());
 
@@ -111,13 +112,13 @@ implements CollectionCountProvider {
 
     private void addTitleColumn(
             final List<IColumn<ManagedObject, String>> columns,
-            final ObjectMemento parentAdapterMementoIfAny,
+            final Variant variant,
             final int maxTitleParented,
             final int maxTitleStandalone) {
 
         final int maxTitleLength = getModel().isParented()? maxTitleParented: maxTitleStandalone;
         columns.add(new ObjectAdapterTitleColumn(
-                super.getCommonContext(), parentAdapterMementoIfAny, maxTitleLength));
+                super.getCommonContext(), variant, maxTitleLength));
     }
 
     private void addPropertyColumnsIfRequired(final List<IColumn<ManagedObject, String>> columns) {

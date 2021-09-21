@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.act.ParameterUiModelWkt;
 
@@ -41,7 +42,7 @@ implements ParameterUiModel {
         return new ScalarParameterModel(delegate);
     }
 
-    private final ParameterUiModel delegate;
+    private final ParameterUiModelWkt delegate;
 
     /**
      * Creates a model representing an action parameter of an action of a parent
@@ -90,11 +91,6 @@ implements ParameterUiModel {
     }
 
     @Override
-    public ManagedObject load() {
-        return toNonNull(loadFromSuper());
-    }
-
-    @Override
     public String toStringOf() {
         return getFriendlyName() + ": " + getNumber();
     }
@@ -133,7 +129,10 @@ implements ParameterUiModel {
         return ManagedObjects.emptyToDefault(!getMetaModel().isOptional(), adapter);
     }
 
-
+    @Override
+    public IsisAppCommonContext getCommonContext() {
+        return delegate.getCommonContext();
+    }
 
 
 }

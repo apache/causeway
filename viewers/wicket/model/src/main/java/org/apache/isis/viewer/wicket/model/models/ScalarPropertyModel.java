@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.feature.PropertyUiModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.prop.PropertyUiModelWkt;
 
@@ -121,12 +122,6 @@ implements PropertyUiModel {
     }
 
     @Override
-    public ManagedObject load() {
-        // when getting attached, get the UI value (prop or param) from the underlying interaction model
-        return getManagedProperty().getPropertyValue();
-    }
-
-    @Override
     public boolean isCollection() {
         return false;
     }
@@ -171,6 +166,9 @@ implements PropertyUiModel {
         return getManagedProperty().getAssociatedActions();
     }
 
-
+    @Override
+    public IsisAppCommonContext getCommonContext() {
+        return delegate.getCommonContext();
+    }
 
 }

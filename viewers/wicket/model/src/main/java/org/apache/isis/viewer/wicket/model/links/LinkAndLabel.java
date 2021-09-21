@@ -61,16 +61,16 @@ public final class LinkAndLabel extends LinkAndLabelAbstract {
         super(uiComponentFactory, named, actionHolderModel, objectAction);
     }
 
-    public static Can<LinkAndLabel> positioned(Position pos, Stream<LinkAndLabel> stream) {
+    public static Can<LinkAndLabel> positioned(final Position pos, final Stream<LinkAndLabel> stream) {
         return stream.filter(LinkAndLabel.positioned(pos))
         .collect(Can.toCan());
     }
 
-    public static Predicate<LinkAndLabel> positioned(Position pos) {
+    public static Predicate<LinkAndLabel> positioned(final Position pos) {
         return ActionUiMetaModel.positioned(pos, LinkAndLabel::getActionUiMetaModel);
     }
 
-    public static List<LinkAndLabel> recoverFromIncompleteDeserialization(List<SerializationProxy> proxies) {
+    public static List<LinkAndLabel> recoverFromIncompleteDeserialization(final List<SerializationProxy> proxies) {
         return proxies.stream()
                 .map(SerializationProxy::restore)
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -82,7 +82,7 @@ public final class LinkAndLabel extends LinkAndLabelAbstract {
         return new SerializationProxy(this);
     }
 
-    private void readObject(ObjectInputStream stream) throws InvalidObjectException {
+    private void readObject(final ObjectInputStream stream) throws InvalidObjectException {
         throw new InvalidObjectException("Proxy required");
     }
 
@@ -94,13 +94,12 @@ public final class LinkAndLabel extends LinkAndLabelAbstract {
         private final @NonNull LogicalType actionHolderLogicalType;
         private final @NonNull String objectActionId;
 
-        private SerializationProxy(LinkAndLabel target) {
+        private SerializationProxy(final LinkAndLabel target) {
             this.uiComponentFactory = target.uiComponentFactory;
             this.named = target.getNamed();
             this.actionHolder = (EntityModel) target.getActionHolder();
             // make sure we do this without side-effects
-            this.actionHolderLogicalType = actionHolder.getLogicalElementType()
-                    .orElseThrow(_Exceptions::unexpectedCodeReach);
+            this.actionHolderLogicalType = actionHolder.getTypeOfSpecification().getLogicalType();
             this.objectActionId = target.getObjectAction().getId();
         }
 

@@ -28,35 +28,24 @@ import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 
 import lombok.val;
 
-class HintPageParameterSerializer implements Serializable {
+class _HintPageParameterSerializer implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private static final String PREFIX = "hint-";
 
-    private HintPageParameterSerializer() {}
+    private _HintPageParameterSerializer() {}
 
-    public static void hintStoreToPageParameters(
+    public static PageParameters hintStoreToPageParameters(
+            final HintStore hintStore,
             final PageParameters pageParameters,
-            final ManagedObjectModel objectModel) {
+            final Bookmark bookmark) {
 
-        val bookmark = objectModel.asHintingBookmarkIfSupported();
-        val hintStore = objectModel.getCommonContext().lookupServiceElseFail(HintStore.class);
-        hintStoreToPageParameters(pageParameters, bookmark, hintStore);
-    }
-
-    // -- HELPER
-
-    private static void hintStoreToPageParameters(
-            final PageParameters pageParameters,
-            final Bookmark bookmark,
-            final HintStore hintStore) {
-
-        if(bookmark==null) {
-            return;
+        if(bookmark!=null) {
+            for (val hintKey : hintStore.findHintKeys(bookmark)) {
+                ComponentHintKey.create(hintStore, hintKey).hintTo(bookmark, pageParameters, PREFIX);
+            }
         }
-        for (val hintKey : hintStore.findHintKeys(bookmark)) {
-            ComponentHintKey.create(hintStore, hintKey).hintTo(bookmark, pageParameters, PREFIX);
-        }
+        return pageParameters;
     }
 
 }

@@ -157,10 +157,10 @@ extends
                 .map(EntityCollectionModelParented::asHintingBookmark);
     }
 
-    default Optional<ObjectMemento> parentedObjectAdapterMemento() {
-        return parented()
-                .map(EntityCollectionModelParented::getParentObjectAdapterMemento);
-    }
+//    default Optional<ObjectMemento> parentedObjectAdapterMemento() {
+//        return parented()
+//                .map(EntityCollectionModelParented::getParentObjectAdapterMemento);
+//    }
 
     /**
      * Optionally returns a {@link ManagedCollection}, based on whether

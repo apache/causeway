@@ -19,10 +19,10 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.List;
-import java.util.Optional;
+
+import org.apache.wicket.model.ChainingModel;
 
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.feature.ScalarUiModel;
@@ -56,7 +57,7 @@ import lombok.Setter;
  */
 //@Log4j2
 public abstract class ScalarModel
-extends ManagedObjectModel
+extends ChainingModel<ManagedObject>
 implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext {
 
     private static final long serialVersionUID = 1L;
@@ -110,17 +111,14 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
             final @NonNull ObjectUiModel.EitherViewOrEdit viewOrEdit,
             final @NonNull ObjectUiModel.RenderingHint renderingHint) {
 
-        super(parentEntityModel.getCommonContext());
+        super(parentEntityModel);
         this.paramOrProp = paramOrProp;
         this.parentEntityModel = parentEntityModel;
-        this.pendingModel = new PendingModel(this);
         this.mode = viewOrEdit;
         this.renderingHint = renderingHint;
-    }
-
-
-    protected ManagedObject loadFromSuper() {
-        return super.load();
+        final var paramValueModel =
+                ManagedObjectModel.of(()->proposedValue().getValue().getValue());
+        this.pendingModel = null;//new PendingModel(null); //FIXME
     }
 
     @Override
@@ -133,33 +131,19 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         return getParentUiModel().getObject();
     }
 
-    /**
-     * Overrides superclass' implementation, because a {@link ScalarModel} can
-     * know the {@link ObjectSpecification of} the {@link ManagedObject adapter}
-     * without there necessarily having any adapter
-     * {@link #setObject(ManagedObject) set}.
-     */
-    @Override
-    public ObjectSpecification getTypeOfSpecification() {
-        return getScalarTypeSpec();
+    public boolean isEmpty() {
+        return ManagedObjects.isNullOrUnspecifiedOrEmpty(getObject());
     }
-
-    @Override
-    public Optional<LogicalType> getLogicalElementType() {
-        return Optional.ofNullable(getScalarTypeSpec())
-                .map(ObjectSpecification::getLogicalType);
-    }
-
 
     public boolean isScalarTypeAnyOf(final Class<?>... requiredClass) {
-        final String fullName = getTypeOfSpecification().getFullIdentifier();
+        final String fullName = getScalarTypeSpec().getFullIdentifier();
         return _NullSafe.stream(requiredClass)
                 .map(Class::getName)
                 .anyMatch(fullName::equals);
     }
 
     public boolean isScalarTypeSubtypeOf(final Class<?> requiredClass) {
-        final Class<?> scalarType = getTypeOfSpecification().getCorrespondingClass();
+        final Class<?> scalarType = getScalarTypeSpec().getCorrespondingClass();
         return _NullSafe.streamNullable(requiredClass)
                 .anyMatch(x -> x.isAssignableFrom(scalarType));
     }
@@ -233,13 +217,6 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     public boolean isEnabled() {
         return whetherDisabled() == null;
-    }
-
-
-    @Override
-    protected void onDetach() {
-        clearPending();
-        super.onDetach();
     }
 
     // //////////////////////////////////////
@@ -329,7 +306,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     protected abstract String toStringOf();
 
-    protected abstract ObjectSpecification getScalarTypeSpec();
+    public abstract ObjectSpecification getScalarTypeSpec();
 
     public abstract String getIdentifier();
 
@@ -359,7 +336,5 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         pendingModel.clearPending();
     }
 
-
-    // --
 
 }

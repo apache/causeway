@@ -794,7 +794,7 @@ implements ScalarModelSubscriber {
                 @Override
                 protected void onEvent(final AjaxRequestTarget target) {
 
-                    final ObjectSpecification specification = scalarModel.getTypeOfSpecification();
+                    final ObjectSpecification specification = scalarModel.getScalarTypeSpec();
                     final MetaModelService metaModelService = getServiceRegistry()
                             .lookupServiceElseFail(MetaModelService.class);
                     final BeanSort sort = metaModelService.sortOf(specification.getCorrespondingClass(), MetaModelService.Mode.RELAXED);

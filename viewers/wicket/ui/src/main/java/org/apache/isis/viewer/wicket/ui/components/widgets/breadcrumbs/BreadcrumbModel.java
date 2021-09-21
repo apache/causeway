@@ -32,8 +32,6 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
-import lombok.val;
-
 public class BreadcrumbModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,7 +44,7 @@ public class BreadcrumbModel implements Serializable {
 
     private final transient IsisAppCommonContext commonContext;
 
-    public BreadcrumbModel(IsisAppCommonContext commonContext) {
+    public BreadcrumbModel(final IsisAppCommonContext commonContext) {
         super();
         this.commonContext = commonContext;
     }
@@ -110,7 +108,7 @@ public class BreadcrumbModel implements Serializable {
     }
 
     private void addToStart(final String oidStr, final EntityModel entityModel) {
-        Bookmark bookmark = toBookmark(entityModel);
+        Bookmark bookmark = entityModel.getOwnerBookmark();
         bookmarkByOidStr.put(oidStr, bookmark);
         oidStrByBookmark.put(bookmark, oidStr);
         list.add(0, bookmark);
@@ -147,7 +145,6 @@ public class BreadcrumbModel implements Serializable {
         // }
     }
 
-
     void remove(final String oid) {
         Bookmark existingBookmark = bookmarkByOidStr.get(oid);
         if(existingBookmark != null) {
@@ -156,20 +153,15 @@ public class BreadcrumbModel implements Serializable {
     }
 
     public void remove(final EntityModel entityModel) {
-        Bookmark bookmark = toBookmark(entityModel);
+        Bookmark bookmark = entityModel.getOwnerBookmark();
         final String oidStr = oidStrByBookmark.get(bookmark);
         if(oidStr != null) {
             remove(oidStr, bookmark);
         }
     }
 
-    protected Bookmark toBookmark(final EntityModel entityModel) {
-        return entityModel.asBookmarkIfSupported();
-    }
-
     protected EntityModel toEntityModel(final Bookmark bookmark) {
-        val objectAdapterMemento = commonContext.mementoForBookmark(bookmark);
-        return EntityModel.ofMemento(commonContext, objectAdapterMemento);
+        return EntityModel.ofBookmark(commonContext, bookmark);
     }
 
     private void remove(final String oid, final Bookmark bookmark) {

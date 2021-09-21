@@ -45,17 +45,12 @@ implements HasCommonContext {
 
     protected ModelAbstract(final IsisAppCommonContext commonContext, final T t) {
         this.commonContextModel = CommonContextModel.wrap(commonContext);
-        setObject(t);
+        super.setObject(t);
     }
 
     @Override
     public IsisAppCommonContext getCommonContext() {
         return commonContextModel.getObject();
     }
-
-//    @Override
-//    public final void setObject(final T object) {
-//        super.setObject(object);
-//    }
 
 }

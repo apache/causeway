@@ -48,7 +48,7 @@ implements ChoiceExt {
             final IModel<ObjectMemento> model,
             final ScalarModel scalarModel) {
         super(id, model, EmptyChoiceProvider.INSTANCE);
-        logicalType = scalarModel.getTypeOfSpecification().getLogicalType();
+        logicalType = scalarModel.getScalarTypeSpec().getLogicalType();
 
         getSettings().setCloseOnSelect(true);
         getSettings().setWidth("auto");

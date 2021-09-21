@@ -24,6 +24,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -38,7 +39,7 @@ public interface ScalarModelWithPending extends Serializable {
 
     public ScalarModel getScalarModel();
 
-    public static Model<ObjectMemento> create(ScalarModel scalarModel) {
+    public static Model<ObjectMemento> create(final ScalarModel scalarModel) {
         return Factory.createModel(Factory.asScalarModelWithPending(scalarModel));
     }
 
@@ -56,7 +57,7 @@ public interface ScalarModelWithPending extends Serializable {
                 }
 
                 @Override
-                public void setPendingMemento(ObjectMemento pending) {
+                public void setPendingMemento(final ObjectMemento pending) {
                     scalarModel.getPendingModel().setObject(pending);
                 }
 
@@ -80,9 +81,11 @@ public interface ScalarModelWithPending extends Serializable {
                     }
                     log.debug("pending is null");
 
-                    final ObjectMemento objectAdapterMemento = owner.getScalarModel().memento();
+                    val ownerScalarModel = owner.getScalarModel();
+                    val commonContext = ownerScalarModel.getCommonContext();
+                    val objectAdapterMemento =
+                            commonContext.mementoFor(ownerScalarModel.getObject());
                     owner.setPendingMemento(objectAdapterMemento);
-
                     return objectAdapterMemento;
                 }
 

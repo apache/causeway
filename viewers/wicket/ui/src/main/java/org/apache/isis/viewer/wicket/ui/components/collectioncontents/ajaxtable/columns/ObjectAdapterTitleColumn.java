@@ -18,19 +18,18 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
+import org.springframework.lang.Nullable;
 
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel.Variant;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -40,15 +39,15 @@ import lombok.val;
 public class ObjectAdapterTitleColumn extends ColumnAbstract<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
-    private final ObjectMemento parentAdapterMementoIfAny;
+    private final Variant variant;
 
     public ObjectAdapterTitleColumn(
-            IsisAppCommonContext commonContext,
-            ObjectMemento parentAdapterMementoIfAny,
-            int maxTitleLength) {
+            final IsisAppCommonContext commonContext,
+            final Variant variant,
+            final int maxTitleLength) {
 
-        super(commonContext, columnName(parentAdapterMementoIfAny, maxTitleLength)); // i18n
-        this.parentAdapterMementoIfAny = parentAdapterMementoIfAny;
+        super(commonContext, columnName(variant, maxTitleLength)); // i18n
+        this.variant = variant;
     }
 
     @Override
@@ -65,12 +64,12 @@ public class ObjectAdapterTitleColumn extends ColumnAbstract<ManagedObject> {
     // -- HELPER
 
     private static String columnName(
-            final @Nullable ObjectMemento parentAdapterMementoIfAny,
+            final @Nullable Variant variant,
             final int maxTitleLength) {
         if(maxTitleLength == 0) {
             return "";
         }
-        return (parentAdapterMementoIfAny != null? "Related ":"") + "Object";
+        return (variant.isParented() ? "Related ":"") + "Object";
     }
 
     private Component createComponent(final String id, final IModel<ManagedObject> rowModel) {
@@ -84,10 +83,10 @@ public class ObjectAdapterTitleColumn extends ColumnAbstract<ManagedObject> {
         }
 
         val entityModel = EntityModel.ofAdapter(super.getCommonContext(), adapter);
-        entityModel.setRenderingHint(parentAdapterMementoIfAny != null
+        entityModel.setRenderingHint(variant.isParented()
                 ? RenderingHint.PARENTED_TITLE_COLUMN
                 : RenderingHint.STANDALONE_TITLE_COLUMN);
-        entityModel.setContextAdapterIfAny(parentAdapterMementoIfAny);
+        //entityModel.setContextAdapterIfAny(parentAdapterMementoIfAny); //FIXME
 
         // will use EntityLinkSimplePanelFactory as model is an EntityModel
         val componentFactory = findComponentFactory(ComponentType.ENTITY_LINK, entityModel);

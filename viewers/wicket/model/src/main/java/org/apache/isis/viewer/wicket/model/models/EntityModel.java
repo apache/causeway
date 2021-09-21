@@ -28,10 +28,9 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
-import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -41,7 +40,9 @@ import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
-import org.apache.isis.viewer.wicket.model.models.interaction.prop.PropertyInteractionModelWkt;
+import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
+import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
+import org.apache.isis.viewer.wicket.model.models.interaction.prop.PropertyInteractionWkt;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 
 import lombok.Getter;
@@ -56,8 +57,13 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 public class EntityModel
-extends ManagedObjectModel
-implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel, BookmarkableModel {
+extends HasBookmarkedOwnerAbstract<ManagedObject>
+implements
+    HasRenderingHints,
+    ObjectAdapterModel,
+    UiHintContainer,
+    ObjectUiModel,
+    BookmarkableModel {
 
     private static final long serialVersionUID = 1L;
 
@@ -66,27 +72,30 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     public static EntityModel ofPageParameters(
             final IsisAppCommonContext commonContext,
             final PageParameters pageParameters) {
-
-        val memento = bookmarkFrom(pageParameters)
-                .map(commonContext::mementoForBookmark)
-                .orElse(null);
-
-        return ofMemento(commonContext, memento);
+        val bookmark = Bookmark.parse(oidStr(pageParameters))
+                .orElseThrow();
+        return ofBookmark(commonContext, bookmark);
     }
 
     public static EntityModel ofAdapter(
             final @NonNull IsisAppCommonContext commonContext,
             final @Nullable ManagedObject adapter) {
-        val adapterMemento = commonContext.mementoFor(adapter);
-        return ofMemento(commonContext, adapterMemento);
+        return new EntityModel(BookmarkedObjectWkt.ofAdapter(commonContext, adapter),
+                EitherViewOrEdit.VIEW, RenderingHint.REGULAR);
     }
 
+    public static EntityModel ofBookmark(
+            final @NonNull IsisAppCommonContext commonContext,
+            final @Nullable Bookmark bookmark) {
+        return new EntityModel(BookmarkedObjectWkt.ofBookmark(commonContext, bookmark),
+                EitherViewOrEdit.VIEW, RenderingHint.REGULAR);
+    }
+
+    @Deprecated // use bookmark instead
     public static EntityModel ofMemento(
             final @NonNull IsisAppCommonContext commonContext,
             final @Nullable ObjectMemento adapterMemento) {
-
-        return new EntityModel(commonContext, adapterMemento,
-                EitherViewOrEdit.VIEW, RenderingHint.REGULAR);
+        return ofBookmark(commonContext, adapterMemento.asBookmarkIfSupported());
     }
 
     // -- CONSTRUCTORS
@@ -97,21 +106,22 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     protected EntityModel(
             final IsisAppCommonContext commonContext,
             final ManagedObject adapter) {
-
-        this(commonContext,
-                commonContext.mementoFor(adapter),
+        this(BookmarkedObjectWkt.ofAdapter(commonContext, adapter),
                 EitherViewOrEdit.VIEW, RenderingHint.REGULAR);
     }
 
     private EntityModel(
-            final @NonNull IsisAppCommonContext commonContext,
-            final @Nullable ObjectMemento adapterMemento,
+            final @NonNull BookmarkedObjectWkt bookmarkedObject,
             final EitherViewOrEdit mode,
             final RenderingHint renderingHint) {
-
-        super(commonContext, adapterMemento);
+        super(bookmarkedObject);
         this.mode = mode;
         this.renderingHint = renderingHint;
+    }
+
+    @Override
+    protected ManagedObject load() {
+        return super.getBookmarkedOwner();
     }
 
     // -- BOOKMARKABLE MODEL
@@ -120,20 +130,18 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
         return PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
     }
 
-    private static Optional<Bookmark> bookmarkFrom(final PageParameters pageParameters) {
-        return Bookmark.parse(oidStr(pageParameters));
-    }
-
     @Override
     public PageParameters getPageParameters() {
-        val pageParameters = getPageParametersWithoutUiHints();
-        HintPageParameterSerializer.hintStoreToPageParameters(pageParameters, this);
-        return pageParameters;
+        return _HintPageParameterSerializer
+                .hintStoreToPageParameters(
+                        hintStore(),
+                        getPageParametersWithoutUiHints(),
+                        getOwnerBookmark());
     }
 
     @Override
     public PageParameters getPageParametersWithoutUiHints() {
-        return PageParameterUtil.createPageParametersForObject(getObject());
+        return PageParameterUtil.createPageParametersForObject(getBookmarkedOwner());
     }
 
     @Override
@@ -155,7 +163,7 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     public String getHint(final Component component, final String keyName) {
         final ComponentHintKey componentHintKey = ComponentHintKey.create(super.getCommonContext(), component, keyName);
         if(componentHintKey != null) {
-            return componentHintKey.get(super.asHintingBookmarkIfSupported());
+            return componentHintKey.get(getOwnerBookmark());
         }
         return null;
     }
@@ -163,7 +171,7 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     @Override
     public void setHint(final Component component, final String keyName, final String hintValue) {
         ComponentHintKey componentHintKey = ComponentHintKey.create(super.getCommonContext(), component, keyName);
-        componentHintKey.set(super.asHintingBookmarkIfSupported(), hintValue);
+        componentHintKey.set(getOwnerBookmark(), hintValue);
     }
 
     @Override
@@ -206,9 +214,10 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
         final ScalarModel existingScalarModel = propertyScalarModels.get(pm);
         if (existingScalarModel == null) {
 
-            final var propertyInteraction =
-                    PropertyInteraction.wrap(ManagedProperty.of(this.getManagedObject(), property, renderingHint.asWhere()));
-            final var propertyInteractionModel = new PropertyInteractionModelWkt(getCommonContext(), propertyInteraction);
+            final var propertyInteractionModel = new PropertyInteractionWkt(
+                    bookmarkedObjectModel(),
+                    pm.getIdentifier().getMemberLogicalName(),
+                    renderingHint.asWhere());
 
             final long modelsAdded = propertyInteractionModel.streamPropertyUiModels()
             .map(uiModel->ScalarPropertyModel.wrap(uiModel, viewOrEdit, renderingHint))
@@ -281,5 +290,11 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
         return Objects.equals(contextObject.orElse(null), other);
     }
 
+    // -- HELPER
+
+    private transient HintStore hintStore;
+    private HintStore hintStore() {
+        return hintStore = getCommonContext().loadServiceIfAbsent(HintStore.class, hintStore);
+    }
 
 }

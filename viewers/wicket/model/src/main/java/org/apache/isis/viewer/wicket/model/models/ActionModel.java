@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.stream.Stream;
 
+import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -46,7 +47,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
-import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -56,42 +56,38 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.memento.ActionMemento;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.action.form.FormUiModel;
-import org.apache.isis.viewer.wicket.model.models.interaction.act.ActionInteractionModelWkt;
+import org.apache.isis.viewer.wicket.model.models.interaction.act.ActionInteractionWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.act.ParameterUiModelWkt;
 
 import lombok.NonNull;
 import lombok.val;
 
 public final class ActionModel
-extends ManagedObjectModel
+extends ChainingModel<ManagedObject>
 implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     private static final long serialVersionUID = 1L;
 
     // -- FACTORY METHODS
 
-    public static ActionModel wrap(final ActionInteractionModelWkt delegate, final EntityModel actionOwner) {
-        return new ActionModel(delegate, actionOwner);
+    public static ActionModel wrap(final EntityModel actionOwner, final ActionInteractionWkt delegate) {
+        return new ActionModel(actionOwner, delegate);
     }
 
     public static ActionModel of(final EntityModel actionOwner, final ObjectAction action) {
-        final var delegate = new ActionInteractionModelWkt(
-                actionOwner.getCommonContext(),
-                ActionInteraction.start(
-                        actionOwner.getManagedObject(),
-                        action.getFeatureIdentifier().getMemberLogicalName(),
-                        Where.ANYWHERE));
-        return wrap(delegate, actionOwner);
+        final var delegate = new ActionInteractionWkt(
+                actionOwner.bookmarkedObjectModel(),
+                action.getFeatureIdentifier().getMemberLogicalName(),
+                Where.ANYWHERE);
+        return wrap(actionOwner, delegate);
     }
 
     public static ActionModel of(final EntityModel actionOwner, final ActionMemento actionMemento) {
-        final var delegate = new ActionInteractionModelWkt(
-                actionOwner.getCommonContext(),
-                ActionInteraction.start(
-                        actionOwner.getManagedObject(),
-                        actionMemento.getIdentifier().getMemberLogicalName(),
-                        Where.ANYWHERE));
-        return wrap(delegate, actionOwner);
+        final var delegate = new ActionInteractionWkt(
+                actionOwner.bookmarkedObjectModel(),
+                actionMemento.getIdentifier().getMemberLogicalName(),
+                Where.ANYWHERE);
+        return wrap(actionOwner, delegate);
     }
 
     public static ActionModel ofPageParameters(
@@ -103,19 +99,22 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     // -- CONSTRUCTION
 
-    private final ActionInteractionModelWkt delegate;
-    private final EntityModel parentEntityModel;
+    private final ActionInteractionWkt delegate;
 
-    private ActionModel(final ActionInteractionModelWkt delegate, final EntityModel parentEntityModel) {
-        super(delegate.getCommonContext());
+    private ActionModel(final EntityModel parentEntityModel, final ActionInteractionWkt delegate) {
+        super(parentEntityModel);
         this.delegate = delegate;
-        this.parentEntityModel = parentEntityModel;
     }
 
     // --
 
     public void actionInteraction() {
         delegate.actionInteraction();
+    }
+
+    @Override
+    public IsisAppCommonContext getCommonContext() {
+        return delegate.getCommonContext();
     }
 
     // -- BOOKMARKABLE
@@ -144,11 +143,11 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     @Override
     public EntityModel getParentUiModel() {
-        return parentEntityModel;
+        return (EntityModel) super.getTarget();
     }
 
     public ActionModel copy() {
-        return wrap(delegate, parentEntityModel);
+        return wrap(getParentUiModel(), delegate);
     }
 
     // -- HELPERS
@@ -169,11 +168,6 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         return result;
     }
 
-    @Override
-    protected ManagedObject load() {
-        // -- no-op
-        return null;
-    }
 
     @Override
     public void setObject(final ManagedObject object) {

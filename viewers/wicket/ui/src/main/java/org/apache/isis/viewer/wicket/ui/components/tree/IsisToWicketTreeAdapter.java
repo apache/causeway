@@ -52,7 +52,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
@@ -66,16 +65,21 @@ class IsisToWicketTreeAdapter {
         if(valueModel==null || valueModel.getObject()==null) {
             return emptyTreeComponent(id);
         }
-        return new EntityTree(id, toITreeProvider(valueModel),
-                toIModelRepresentingCollapseExpandState(valueModel));
+        val commonContext = valueModel.getCommonContext();
+        val treeNode = valueModel.getObject();
+        return new EntityTree(id, toITreeProvider(commonContext, treeNode),
+                toIModelRepresentingCollapseExpandState(commonContext, treeNode));
     }
 
     public static Component adapt(final String id, final ScalarModel scalarModel) {
         if(scalarModel==null || scalarModel.getObject()==null) {
             return emptyTreeComponent(id);
         }
-        return new EntityTree(id, toITreeProvider(scalarModel),
-                toIModelRepresentingCollapseExpandState(scalarModel));
+        val commonContext = scalarModel.getCommonContext();
+        val treeNode = scalarModel.getObject();
+        return new EntityTree(id,
+                toITreeProvider(commonContext, treeNode),
+                toIModelRepresentingCollapseExpandState(commonContext, treeNode));
     }
 
     // -- FALLBACK
@@ -366,14 +370,14 @@ class IsisToWicketTreeAdapter {
     }
 
     /**
-     * @param model
      * @return Wicket's ITreeProvider
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private static ITreeProvider<TreeModel> toITreeProvider(final ModelAbstract<ManagedObject> model) {
+    private static ITreeProvider<TreeModel> toITreeProvider(
+            final IsisAppCommonContext commonContext,
+            final ManagedObject treeNodeObject) {
 
-        val commonContext = model.getCommonContext();
-        val treeNode = (TreeNode) model.getObject().getPojo();
+        val treeNode = (TreeNode) treeNodeObject.getPojo();
         val treeAdapterClass = treeNode.getTreeAdapterClass();
 
         val wrappingTreeAdapter = new TreeModelTreeAdapter(commonContext, treeAdapterClass);
@@ -458,11 +462,11 @@ class IsisToWicketTreeAdapter {
      */
     @SuppressWarnings({ "rawtypes" })
     private static TreeExpansionModel toIModelRepresentingCollapseExpandState(
-            final ModelAbstract<ManagedObject> model) {
+            final IsisAppCommonContext commonContext,
+            final ManagedObject treeNodeObject) {
 
-        val treeNode = (TreeNode) model.getObject().getPojo();
+        val treeNode = (TreeNode) treeNodeObject.getPojo();
         val treeState = treeNode.getTreeState();
-        val commonContext = model.getCommonContext();
         return TreeExpansionModel.of(commonContext, treeState.getExpandedNodePaths());
     }
 

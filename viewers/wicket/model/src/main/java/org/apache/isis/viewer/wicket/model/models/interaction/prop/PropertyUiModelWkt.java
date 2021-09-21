@@ -18,34 +18,51 @@
  */
 package org.apache.isis.viewer.wicket.model.models.interaction.prop;
 
+import org.apache.wicket.model.ChainingModel;
+
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.common.model.HasParentUiModel;
 import org.apache.isis.viewer.common.model.feature.PropertyUiModel;
-import org.apache.isis.viewer.wicket.model.models.interaction.InteractionHolderAbstract;
 import org.apache.isis.viewer.wicket.model.models.interaction.ObjectUiModelWkt;
 
 /**
- * <i>Object Property</i> model bound to its container {@link PropertyInteractionModelWkt}.
- * @see PropertyInteractionModelWkt
+ * <i>Property Interaction</i> model bound to its owner {@link PropertyInteractionWkt}.
+ *
+ * @apiNote a single <i>Property Interaction</i> could in theory provide a compound of multiple
+ * {@link PropertyUiModel}(s).
+ *
+ * @see PropertyInteractionWkt
+ * @see ChainingModel
  */
 public final class PropertyUiModelWkt
-extends InteractionHolderAbstract<PropertyInteraction, PropertyInteractionModelWkt>
+extends ChainingModel<PropertyInteraction>
 implements
+    HasCommonContext,
     HasParentUiModel<ObjectUiModelWkt>,
     PropertyUiModel {
 
     private static final long serialVersionUID = 1L;
 
+    final int tupleIndex; //future extension
+
     PropertyUiModelWkt(
-            final PropertyInteractionModelWkt model) {
+            final PropertyInteractionWkt model,
+            final int tupleIndex) {
         super(model);
+        this.tupleIndex = tupleIndex;
     }
 
     public final PropertyInteraction propertyInteraction() {
         return getObject();
+    }
+
+    public final PropertyInteractionWkt propertyInteractionModel() {
+        return (PropertyInteractionWkt) getChainedModel();
     }
 
     @Override
@@ -59,13 +76,18 @@ implements
     }
 
     @Override
-    public OneToOneAssociation getMetaModel() {
+    public final OneToOneAssociation getMetaModel() {
         return propertyInteraction().getManagedProperty().get().getMetaModel();
     }
 
     @Override
-    public PropertyNegotiationModel getPendingPropertyModel() {
-        return containerModel().propertyNegotiationModel().get();
+    public final PropertyNegotiationModel getPendingPropertyModel() {
+        return propertyInteractionModel().propertyNegotiationModel();
+    }
+
+    @Override
+    public IsisAppCommonContext getCommonContext() {
+        return propertyInteractionModel().getCommonContext();
     }
 
 }
