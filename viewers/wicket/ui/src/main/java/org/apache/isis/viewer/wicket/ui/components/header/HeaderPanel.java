@@ -29,8 +29,8 @@ import org.apache.isis.viewer.common.model.branding.BrandingUiModel;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.common.model.header.HeaderUiModel;
 import org.apache.isis.viewer.common.model.menu.MenuUiModel;
-import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
+import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.AvatarImage;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandName;
@@ -81,7 +81,7 @@ extends PanelAbstract<String, Model<String>> {
         super.onConfigure();
 
         PageParameters parameters = getPage().getPageParameters();
-        setVisible(parameters.get(PageParametersUtils.ISIS_NO_HEADER_PARAMETER_NAME).isNull());
+        setVisible(parameters.get(PageParameterUtils.ISIS_NO_HEADER_PARAMETER_NAME).isNull());
     }
 
     protected void addApplicationName(BrandingUiModel branding) {

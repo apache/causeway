@@ -73,6 +73,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -133,7 +134,7 @@ implements
     ComponentFactoryRegistryAccessor,
     PageClassRegistryAccessor,
     WicketViewerSettingsAccessor,
-    IsisAppCommonContext.Provider {
+    HasCommonContext {
 
     private static final long serialVersionUID = 1L;
 

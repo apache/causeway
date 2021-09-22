@@ -58,6 +58,7 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.action.form.FormUiModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.act.ActionInteractionWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.act.ParameterUiModelWkt;
+import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 
 import lombok.NonNull;
 import lombok.val;
@@ -94,7 +95,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
             final IsisAppCommonContext commonContext,
             final PageParameters pageParameters) {
 
-        return PageParameterUtil.actionModelFor(commonContext, pageParameters);
+        return PageParameterUtils.actionModelFor(commonContext, pageParameters);
     }
 
     // -- CONSTRUCTION
@@ -121,7 +122,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     @Override
     public PageParameters getPageParametersWithoutUiHints() {
-        return PageParameterUtil.createPageParametersForAction(getOwner(), getMetaModel(), snapshotArgs());
+        return PageParameterUtils.createPageParametersForAction(getOwner(), getMetaModel(), snapshotArgs());
     }
 
     @Override

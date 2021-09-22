@@ -289,6 +289,7 @@
 <!-- 		<module>stable-publishing-jdo</module> code is still incubating -->
 		<module>stable-publishing-jpa</module>
 		<module>stable-rest</module>
+		<module>stable-viewers</module>
 <!-- 		<module>incubating</module> -->
 	</modules>
 

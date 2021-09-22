@@ -44,6 +44,7 @@ import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWk
 import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 import org.apache.isis.viewer.wicket.model.models.interaction.prop.PropertyInteractionWkt;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
+import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -91,13 +92,6 @@ implements
                 EitherViewOrEdit.VIEW, RenderingHint.REGULAR);
     }
 
-    @Deprecated // use bookmark instead
-    public static EntityModel ofMemento(
-            final @NonNull IsisAppCommonContext commonContext,
-            final @Nullable ObjectMemento adapterMemento) {
-        return ofBookmark(commonContext, adapterMemento.asBookmarkIfSupported());
-    }
-
     // -- CONSTRUCTORS
 
     /**
@@ -141,7 +135,7 @@ implements
 
     @Override
     public PageParameters getPageParametersWithoutUiHints() {
-        return PageParameterUtil.createPageParametersForObject(getBookmarkedOwner());
+        return PageParameterUtils.createPageParametersForObject(getBookmarkedOwner());
     }
 
     @Override

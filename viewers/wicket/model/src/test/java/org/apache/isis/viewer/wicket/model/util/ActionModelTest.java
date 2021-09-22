@@ -16,25 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.model.models;
+package org.apache.isis.viewer.wicket.model.util;
 
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.viewer.wicket.model.models.PageParameterUtil.ParamNumAndOidString;
+import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
+import org.apache.isis.viewer.wicket.model.util.PageParameterUtils.ParamNumAndOidString;
 
 public class ActionModelTest {
 
     @Test
     public void whenParseThenParses() throws Exception {
-        final ParamNumAndOidString parsed = PageParameterUtil.parseParamContext("3=OBJECT_OID:123")
+        final ParamNumAndOidString parsed = PageParameterUtils.parseParamContext("3=OBJECT_OID:123")
                 .orElseThrow(()->_Exceptions.unrecoverable("parsing failed"));
-        
+
         assertThat(parsed, is(not(nullValue())));
         assertThat(parsed.getParamNum(), is(3));
         assertThat(parsed.getOidString(), is("OBJECT_OID:123"));

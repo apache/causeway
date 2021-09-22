@@ -23,9 +23,9 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.markup.html.basic.Label;
 
 import org.apache.isis.viewer.common.model.components.ComponentType;
-import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
+import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 
 /**
@@ -48,7 +48,7 @@ public class ValuePage extends PageAbstract {
 
 
     private ValuePage(final ValueModel valueModel, final String actionName) {
-        super(PageParametersUtils.newPageParameters(), actionName, ComponentType.VALUE);
+        super(PageParameterUtils.newPageParameters(), actionName, ComponentType.VALUE);
 
         themeDiv.addOrReplace(new Label(ID_ACTION_NAME, actionName));
 

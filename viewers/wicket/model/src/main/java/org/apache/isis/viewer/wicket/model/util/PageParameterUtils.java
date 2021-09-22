@@ -16,15 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.model.models;
+package org.apache.isis.viewer.wicket.model.util;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-import org.springframework.lang.Nullable;
-
+import org.apache.wicket.core.request.handler.IPageRequestHandler;
+import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -39,16 +42,61 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
 import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
+/**
+ * A helper class for dealing with PageParameters
+ */
 @UtilityClass
-public class PageParameterUtil {
+public class PageParameterUtils {
+
+    /**
+     * The name of the special request parameter that controls whether the page header/navigation bar
+     * should be shown or not
+     */
+    public static final String ISIS_NO_HEADER_PARAMETER_NAME = "isis.no.header";
+
+    /**
+     * The name of the special request parameter that controls whether the page footer
+     * should be shown or not
+     */
+    public static final String ISIS_NO_FOOTER_PARAMETER_NAME = "isis.no.footer";
+
+    /**
+     * Creates a new instance of PageParameters that preserves some special request parameters
+     * which should propagate in all links created by Isis
+     *
+     * @return a new PageParameters instance
+     */
+    public static PageParameters newPageParameters() {
+        val newPageParameters = new PageParameters();
+        val requestCycle = RequestCycle.get();
+
+        if (requestCycle != null) {
+            Optional.ofNullable(PageRequestHandlerTracker.getFirstHandler(requestCycle))
+            .map(IPageRequestHandler::getPageParameters)
+            .ifPresent(currentPageParameters->{
+                final StringValue noHeader = currentPageParameters.get(ISIS_NO_HEADER_PARAMETER_NAME);
+                if (!noHeader.isNull()) {
+                    newPageParameters.set(ISIS_NO_HEADER_PARAMETER_NAME, noHeader.toString());
+                }
+                final StringValue noFooter = currentPageParameters.get(ISIS_NO_FOOTER_PARAMETER_NAME);
+                if (!noFooter.isNull()) {
+                    newPageParameters.set(ISIS_NO_FOOTER_PARAMETER_NAME, noFooter.toString());
+                }
+
+            });
+
+        }
+        return newPageParameters;
+    }
 
     public static ActionModel actionModelFor(
             final IsisAppCommonContext commonContext,
@@ -69,9 +117,9 @@ public class PageParameterUtil {
      * Factory method for creating {@link PageParameters} to represent an
      * object.
      */
-    public static PageParameters createPageParametersForObject(ManagedObject adapter) {
+    public static PageParameters createPageParametersForObject(final ManagedObject adapter) {
 
-        val pageParameters = PageParametersUtils.newPageParameters();
+        val pageParameters = PageParameterUtils.newPageParameters();
         val isEntity = ManagedObjects.isIdentifiable(adapter);
 
         if (isEntity) {
@@ -86,9 +134,9 @@ public class PageParameterUtil {
     }
 
     public static PageParameters createPageParametersForAction(
-            ManagedObject adapter,
-            ObjectAction objectAction,
-            Can<ManagedObject> paramValues) {
+            final ManagedObject adapter,
+            final ObjectAction objectAction,
+            final Can<ManagedObject> paramValues) {
 
         val pageParameters = createPageParameters(adapter, objectAction);
 
@@ -103,9 +151,9 @@ public class PageParameterUtil {
 
     // -- HELPERS
 
-    private static PageParameters createPageParameters(ManagedObject adapter, ObjectAction objectAction) {
+    private static PageParameters createPageParameters(final ManagedObject adapter, final ObjectAction objectAction) {
 
-        val pageParameters = PageParametersUtils.newPageParameters();
+        val pageParameters = PageParameterUtils.newPageParameters();
 
         ManagedObjects.stringify(adapter)
         .ifPresent(oidStr->
@@ -131,7 +179,7 @@ public class PageParameterUtil {
         String oidString;
     }
 
-    private static Optional<ParamNumAndOidString> parseParamContext(PageParameters pageParameters) {
+    private static Optional<ParamNumAndOidString> parseParamContext(final PageParameters pageParameters) {
         final String paramContext = PageParameterNames.ACTION_PARAM_CONTEXT.getStringFrom(pageParameters);
         if (paramContext == null) {
             return Optional.empty();
@@ -140,8 +188,8 @@ public class PageParameterUtil {
     }
 
     private static ObjectAction actionFromPageParams(
-            IsisAppCommonContext commonContext,
-            PageParameters pageParameters) {
+            final IsisAppCommonContext commonContext,
+            final PageParameters pageParameters) {
 
         val specLoader = commonContext.getSpecificationLoader();
         val owningLogicalTypeName = PageParameterNames.ACTION_OWNING_SPEC.getStringFrom(pageParameters);
@@ -194,14 +242,13 @@ public class PageParameterUtil {
     }
 
     private static EntityModel entityModelFromPageParams(
-            IsisAppCommonContext commonContext,
-            PageParameters pageParameters) {
+            final IsisAppCommonContext commonContext,
+            final PageParameters pageParameters) {
 
-        val memento = bookmarkFor(pageParameters)
-        .map(commonContext::mementoForBookmark)
+        val bookmark = bookmarkFor(pageParameters)
         .orElse(null);
 
-        return EntityModel.ofMemento(commonContext, memento);
+        return EntityModel.ofBookmark(commonContext, bookmark);
     }
 
     private static Optional<Bookmark> bookmarkFor(final PageParameters pageParameters) {
@@ -210,7 +257,7 @@ public class PageParameterUtil {
     }
 
     private static final String NULL_ARG = "$nullArg$";
-    private String encodeArg(ManagedObject adapter) {
+    private String encodeArg(final ManagedObject adapter) {
         if(adapter == null) {
             return NULL_ARG;
         }
@@ -294,5 +341,6 @@ public class PageParameterUtil {
         val paramValue = decodeArg(mmc, actionParam.getSpecification(), oidStrEncoded);
         actionModel.setParameterValue(actionParam, paramValue);
     }
+
 
 }

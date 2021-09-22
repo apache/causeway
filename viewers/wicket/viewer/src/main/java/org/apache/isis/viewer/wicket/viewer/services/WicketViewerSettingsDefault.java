@@ -28,8 +28,8 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 
 @Service
 @Named("isis.viewer.wicket..WicketViewerSettingsDefault")

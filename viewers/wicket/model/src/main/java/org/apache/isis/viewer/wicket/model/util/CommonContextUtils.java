@@ -16,13 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.model.common;
+package org.apache.isis.viewer.wicket.model.util;
 
-import org.apache.wicket.Session;
+import org.apache.wicket.Application;
 
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-
-import lombok.val;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 
 /**
  * @since 2.0
@@ -30,11 +29,10 @@ import lombok.val;
 public class CommonContextUtils {
 
     public static IsisAppCommonContext getCommonContext() {
-        val application = Session.get().getApplication();
-        return ((IsisAppCommonContext.Provider) application).getCommonContext();
+        return ((HasCommonContext) Application.get()).getCommonContext();
     }
 
-    public static IsisAppCommonContext computeIfAbsent(IsisAppCommonContext commonContext) {
+    public static IsisAppCommonContext computeIfAbsent(final IsisAppCommonContext commonContext) {
         return commonContext!=null
                 ? commonContext
                 : getCommonContext();

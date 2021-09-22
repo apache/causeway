@@ -25,6 +25,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
+import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 
 public interface ObjectAdapterModel
 extends HasRenderingHints, IModel<ManagedObject> {
@@ -46,7 +47,7 @@ extends HasRenderingHints, IModel<ManagedObject> {
     }
 
     public default PageParameters getPageParametersWithoutUiHints() {
-        return PageParameterUtil.createPageParametersForObject(getObject());
+        return PageParameterUtils.createPageParametersForObject(getObject());
     }
 
 }

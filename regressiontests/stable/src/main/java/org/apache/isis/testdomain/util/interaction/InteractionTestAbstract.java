@@ -25,8 +25,9 @@ import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import org.springframework.lang.Nullable;
 import javax.inject.Inject;
+
+import org.springframework.lang.Nullable;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -42,6 +43,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.testdomain.publishing.subscriber.EntityPropertyChangeSubscriberForTesting;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
@@ -55,6 +57,15 @@ public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstrac
     @Inject protected InteractionService interactionService;
     @Inject protected WrapperFactory wrapper;
     @Inject protected KVStoreForTesting kvStoreForTesting;
+
+    protected ManagedObject newValue(final Object value) {
+        return objectManager.adapt(value);
+    }
+
+    protected ManagedObject newViewmodel(final Class<?> type) {
+        val viewModel = factoryService.viewModel(type);
+        return objectManager.adapt(viewModel);
+    }
 
     // -- INTERACTION STARTERS
 

@@ -54,24 +54,24 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObj
     private static final long serialVersionUID = 1L;
 
     private final EntityCollectionModel.Variant collectionVariant;
-    private final String propertyExpression;
+    private final String propertyId;
     private final boolean escaped;
     private final String parentTypeName;
     private final String describedAs;
 
     public ObjectAdapterPropertyColumn(
-            IsisAppCommonContext commonContext,
-            EntityCollectionModel.Variant collectionVariant,
-            IModel<String> columnNameModel,
-            String sortProperty,
-            String propertyName,
-            boolean escaped,
-            String parentTypeName,
-            String describedAs) {
+            final IsisAppCommonContext commonContext,
+            final EntityCollectionModel.Variant collectionVariant,
+            final IModel<String> columnNameModel,
+            final String sortProperty,
+            final String propertyId,
+            final boolean escaped,
+            final String parentTypeName,
+            final String describedAs) {
 
         super(commonContext, columnNameModel, sortProperty);
         this.collectionVariant = collectionVariant;
-        this.propertyExpression = propertyName;
+        this.propertyId = propertyId;
         this.escaped = escaped;
         this.parentTypeName = parentTypeName;
         this.describedAs = describedAs;
@@ -92,7 +92,7 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObj
     public String getCssClass() {
         final String cssClass = super.getCssClass();
         return (!_Strings.isNullOrEmpty(cssClass) ? (cssClass + " ") : "") +
-                CssClassAppender.asCssStyle("isis-" + parentTypeName.replace(".","-") + "-" + propertyExpression);
+                CssClassAppender.asCssStyle("isis-" + parentTypeName.replace(".","-") + "-" + propertyId);
     }
 
     @Override
@@ -107,9 +107,9 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObj
 
     private Component createComponent(final String id, final IModel<ManagedObject> rowModel) {
 
-        val adapter = rowModel.getObject();
-        final EntityModel entityModel = EntityModel.ofAdapter(super.getCommonContext(), adapter);
-        final OneToOneAssociation property = adapter.getSpecification().getPropertyElseFail(propertyExpression);
+        final var domainObject = rowModel.getObject();
+        final var property = domainObject.getSpecification().getPropertyElseFail(propertyId);
+        final var entityModel = EntityModel.ofAdapter(super.getCommonContext(), domainObject);
 
         final ScalarModel scalarModel = entityModel
                 .getPropertyModel(

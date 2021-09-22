@@ -34,7 +34,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket.Credit;
-import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
+import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.ThemeChooser;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
@@ -153,7 +153,7 @@ extends PanelAbstract<String, Model<String>> {
         }
 
         PageParameters parameters = getPage().getPageParameters();
-        setVisible(parameters.get(PageParametersUtils.ISIS_NO_FOOTER_PARAMETER_NAME).isNull());
+        setVisible(parameters.get(PageParameterUtils.ISIS_NO_FOOTER_PARAMETER_NAME).isNull());
     }
 
     private void addAboutLink() {

@@ -124,12 +124,6 @@ public class IsisAppCommonContext implements HasMetaModelContext {
         return getMementoService().reconstructObject(memento);
     }
 
-    // -- COMMON CONTEXT PROVIDER INTERFACE
-
-    public static interface Provider {
-        IsisAppCommonContext getCommonContext();
-    }
-
     // -- FOR THOSE THAT IMPLEMENT BY DELEGATION
 
     public static interface HasCommonContext {
@@ -161,8 +155,6 @@ public class IsisAppCommonContext implements HasMetaModelContext {
         }
 
     }
-
-
 
 
 }
