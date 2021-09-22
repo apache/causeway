@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.util.List;
 
 import org.apache.wicket.model.ChainingModel;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.commons.collections.Can;
@@ -54,6 +55,11 @@ import lombok.Setter;
  * Is the backing model to each of the fields that appear in forms (for entities
  * or action dialogs).
  *
+ * @implSpec
+ * <pre>
+ * ScalarModel --chained-to--> EntityModel
+ * ScalarModel --provides--> ManagedObject <--provides-- ManagedValue
+ * </pre>
  */
 //@Log4j2
 public abstract class ScalarModel
@@ -111,7 +117,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
             final @NonNull ObjectUiModel.EitherViewOrEdit viewOrEdit,
             final @NonNull ObjectUiModel.RenderingHint renderingHint) {
 
-        super(parentEntityModel);
+        super(parentEntityModel); // the so called target model, we are chaining us to
         this.paramOrProp = paramOrProp;
         this.parentEntityModel = parentEntityModel;
         this.mode = viewOrEdit;
@@ -121,28 +127,46 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         this.pendingModel = null;//new PendingModel(null); //FIXME
     }
 
+    /**
+     * Gets the proposed value as ManagedObject.
+     */
     @Override
-    public EntityModel getParentUiModel() {
+    public final ManagedObject getObject() {
+        // override, so we don't return the target model, we are chained to
+        return nullToEmpty(proposedValue().getValue().getValue());
+    }
+
+    /**
+     * Sets given ManagedObject as new proposed value.
+     */
+    @Override
+    public final void setObject(final ManagedObject newValue) {
+        // override, so we don't set the target model, we are chained to
+        proposedValue().getValue().setValue(newValue);
+    }
+
+    @Override
+    public final EntityModel getParentUiModel() {
         return parentEntityModel;
     }
 
     @Override
-    public ManagedObject getOwner() {
+    public final ManagedObject getOwner() {
         return getParentUiModel().getObject();
     }
 
-    public boolean isEmpty() {
-        return ManagedObjects.isNullOrUnspecifiedOrEmpty(getObject());
+    public final boolean isEmpty() {
+        return ManagedObjects.isNullOrUnspecifiedOrEmpty(proposedValue().getValue().getValue());
     }
 
-    public boolean isScalarTypeAnyOf(final Class<?>... requiredClass) {
+    public final boolean isScalarTypeAnyOf(final Class<?>... requiredClass) {
         final String fullName = getScalarTypeSpec().getFullIdentifier();
         return _NullSafe.stream(requiredClass)
                 .map(Class::getName)
                 .anyMatch(fullName::equals);
     }
 
-    public boolean isScalarTypeSubtypeOf(final Class<?> requiredClass) {
+    public final boolean isScalarTypeSubtypeOf(final Class<?> requiredClass) {
         final Class<?> scalarType = getScalarTypeSpec().getCorrespondingClass();
         return _NullSafe.streamNullable(requiredClass)
                 .anyMatch(x -> x.isAssignableFrom(scalarType));
@@ -151,7 +175,6 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     /** get the proposed value, subject to negotiation */
     public String getObjectAsString() {
         final var proposedValue = proposedValue();
-        setObject(proposedValue.getValue().getValue()); // keep the wicket model in sync
         return proposedValue.getValueAsParsableText().getValue();
     }
 
@@ -162,7 +185,6 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     public void setObjectAsString(final String enteredText) {
         final var proposedValue = proposedValue();
         proposedValue.getValueAsParsableText().setValue(enteredText);
-        setObject(proposedValue.getValue().getValue()); // keep the wicket model in sync
     }
 
     public abstract ManagedValue proposedValue();
@@ -334,6 +356,16 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     public void clearPending() {
         pendingModel.clearPending();
+    }
+
+    // -- HELPER
+
+    @Deprecated // must be the responsibility of the underlying Interaction API, not ours
+    private ManagedObject nullToEmpty(@Nullable ManagedObject adapter) {
+        if(adapter == null) {
+            adapter = ManagedObject.empty(getMetaModel().getSpecification());
+        }
+        return ManagedObjects.emptyToDefault(!getMetaModel().isOptional(), adapter);
     }
 
 

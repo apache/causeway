@@ -20,26 +20,17 @@ package org.apache.isis.testdomain.viewers;
 
 import javax.inject.Inject;
 
-import org.apache.wicket.Application;
-import org.apache.wicket.ThreadContext;
-import org.apache.wicket.protocol.http.mock.MockHttpServletRequest;
-import org.apache.wicket.protocol.http.mock.MockHttpServletResponse;
-import org.apache.wicket.protocol.http.mock.MockHttpSession;
-import org.apache.wicket.protocol.http.mock.MockServletContext;
-import org.apache.wicket.request.Request;
-import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.cycle.RequestCycleContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.server.MockWebSession;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.config.presets.IsisPresets;
@@ -56,6 +47,7 @@ import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
+import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
 @SpringBootTest(
         classes = {
@@ -75,7 +67,7 @@ import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel
 })
-class ActionInteractionTest extends InteractionTestAbstract {
+class InteractionTestWkt extends InteractionTestAbstract {
 
     @Inject IsisAppCommonContext commonContext;
     @Inject RequestCycleFactory requestCycleFactory;
@@ -85,7 +77,9 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @BeforeEach
     void setUp() {
         domainObject = newViewmodel(InteractionDemo.class);
-        requestCycleFactory.newRequestCycle(PageParameterUtils.createPageParametersForObject(domainObject));
+        requestCycleFactory.newRequestCycle(
+                EntityPage.class,
+                PageParameterUtils.createPageParametersForObject(domainObject));
     }
 
     @AfterEach
@@ -96,10 +90,13 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void shouldHaveARequestCycle() {
         assertNotNull(RequestCycle.get());
+        assertEquals(
+                PageParameterUtils.createPageParametersForObject(domainObject),
+                PageParameterUtils.currentPageParameters());
     }
 
     @Test
-    void whenEnabled_shouldHaveNoVeto() {
+    void propertyModels_shouldBeInSyncWithInteractionAPI() {
 
         final var objectSpec = domainObject.getSpecification();
         final var entityModel = EntityModel.ofAdapter(commonContext, domainObject);
@@ -107,8 +104,12 @@ class ActionInteractionTest extends InteractionTestAbstract {
         assertEquals(domainObject.getBookmark().get(), entityModel.getOwnerBookmark());
         assertEquals(domainObject.getTitle(), entityModel.getTitle());
 
+        // owner sharing (should be the same object)
+        assertTrue(domainObject == entityModel.getBookmarkedOwner());
+
+        final long propertyCount =
         objectSpec.streamProperties(MixedIn.INCLUDED)
-        .forEach(prop->{
+        .filter(prop->{
 
             final ScalarPropertyModel scalarModel = (ScalarPropertyModel) entityModel
                     .getPropertyModel(
@@ -117,17 +118,42 @@ class ActionInteractionTest extends InteractionTestAbstract {
                             RenderingHint.PARENTED_PROPERTY_COLUMN);
 
 
-            final var propValue = scalarModel.getObject();
-            propValue.getPojo();
-
             // owner sharing (should be the same object)
-            assertEquals(domainObject, scalarModel.getOwner());
+            assertTrue(domainObject == scalarModel.getOwner());
 
-        });
+            if(!prop.getId().equals("stringMultiline")) {
+                return true; // continue
+            }
+
+            // the scalar model should be in sync with the underlying interaction API
+            final var pendingPropModel = scalarModel.getPendingPropertyModel();
+            final var propBackendValue = pendingPropModel.getValue().getValue();
+            final var propUIValue = scalarModel.getObject();
+
+            assertEquals(
+                    "initial",
+                    pendingPropModel.getValueAsParsableText().getValue());
+
+            assertEquals(
+                    "initial",
+                    propBackendValue.getPojo());
+
+            assertEquals(
+                    "initial",
+                    propUIValue.getPojo());
+
+            // property value sharing (should be the same object)
+            assertEquals(
+                    propBackendValue,
+                    propUIValue);
 
 
+            return true; // continue
 
+        })
+        .count();
 
+        assertEquals(5L, propertyCount);
 
         final var managedAction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
                 .getManagedAction().get(); // should not throw

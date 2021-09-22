@@ -22,13 +22,17 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.wicket.Application;
+import org.apache.wicket.SystemMapper;
 import org.apache.wicket.ThreadContext;
+import org.apache.wicket.core.request.handler.BookmarkablePageRequestHandler;
+import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.mock.MockApplication;
 import org.apache.wicket.mock.MockWebResponse;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.IExceptionMapper;
 import org.apache.wicket.request.IRequestMapper;
-import org.apache.wicket.request.Url;
+import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.cycle.RequestCycleContext;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -40,6 +44,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
+import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
 import lombok.AccessLevel;
@@ -78,6 +83,10 @@ public class Configuration_usingWicket {
 
         private IsisAppCommonContext commonContext;
 
+        public WicketApplication_forTesting() {
+            setRootRequestMapper(new SystemMapper(this));
+        }
+
         @Override
         public IsisAppCommonContext getCommonContext() {
             if(commonContext==null) {
@@ -93,11 +102,16 @@ public class Configuration_usingWicket {
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class RequestCycleFactory {
 
-        public void newRequestCycle(final PageParameters pageParameters) {
+        public void newRequestCycle(
+                final Class<? extends IRequestablePage> pageClass,
+                final PageParameters pageParameters) {
+
+            final var url = Application.get().getRootRequestMapper().mapHandler(
+                    new BookmarkablePageRequestHandler(new PageProvider(pageClass, pageParameters)));
 
             final HttpServletRequest mockHttpServletRequest = Mockito.mock(HttpServletRequest.class);
             final ServletWebRequest servletWebRequest =
-                    new ServletWebRequest(mockHttpServletRequest, "", Url.parse("/wicket"));
+                    new ServletWebRequest(mockHttpServletRequest, "", url);//Url.parse("/wicket"));
             final MockWebResponse mockWebResponse = new MockWebResponse();
 
             ThreadContext.setRequestCycle(new RequestCycle(new RequestCycleContext(
@@ -105,6 +119,9 @@ public class Configuration_usingWicket {
                     mockWebResponse,
                     Mockito.mock(IRequestMapper.class),
                     Mockito.mock(IExceptionMapper.class))));
+
+
+
         }
 
         public void clearRequestCycle() {

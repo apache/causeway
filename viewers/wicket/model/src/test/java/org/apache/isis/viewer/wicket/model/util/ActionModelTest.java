@@ -26,7 +26,6 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils.ParamNumAndOidString;
 
 public class ActionModelTest {

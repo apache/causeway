@@ -31,8 +31,6 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.feature.PropertyUiModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.prop.PropertyUiModelWkt;
 
-import lombok.val;
-
 public class ScalarPropertyModel
 extends ScalarModel
 implements PropertyUiModel {
@@ -144,16 +142,16 @@ implements PropertyUiModel {
      * @return adapter, which may be different from the original
      */
     public ManagedObject applyValueThenReturnOwner() {
-        val proposedNewValue = getObject();
+        final var proposedNewValue = getObject();
         System.err.printf("proposedNewValue %s%n", proposedNewValue);
         getManagedProperty().modifyProperty(proposedNewValue);
         syncUiWithModel(); // honor actual UI model value after modification attempt
         return getOwner();
     }
 
+    @Deprecated
     public void syncUiWithModel() {
-        // same as load()
-        setObject(getManagedProperty().getPropertyValue());
+        // not required
     }
 
     @Override
@@ -170,5 +168,6 @@ implements PropertyUiModel {
     public IsisAppCommonContext getCommonContext() {
         return delegate.getCommonContext();
     }
+
 
 }

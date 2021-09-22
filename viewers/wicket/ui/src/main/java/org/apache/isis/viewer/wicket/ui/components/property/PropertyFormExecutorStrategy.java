@@ -45,7 +45,7 @@ implements FormExecutorStrategy<ScalarPropertyModel> {
 
     @Override
     public String getReasonInvalidIfAny() {
-        return this.model.getReasonInvalidIfAny();
+        return model.getReasonInvalidIfAny();
     }
 
 
@@ -56,7 +56,7 @@ implements FormExecutorStrategy<ScalarPropertyModel> {
 
     @Override
     public ManagedObject obtainResultAdapter() {
-        return this.model.applyValueThenReturnOwner();
+        return model.applyValueThenReturnOwner();
     }
 
 

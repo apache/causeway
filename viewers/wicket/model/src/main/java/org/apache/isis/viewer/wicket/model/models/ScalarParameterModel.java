@@ -18,19 +18,18 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.act.ParameterUiModelWkt;
+
+import lombok.NonNull;
 
 public class ScalarParameterModel
 extends ScalarModel
@@ -101,13 +100,13 @@ implements ParameterUiModel {
     }
 
     @Override
-    public ManagedObject getValue() {
-        return toNonNull(getObject());
+    public @NonNull ManagedObject getValue() {
+        return getObject();
     }
 
     @Override
     public void setValue(final ManagedObject paramValue) {
-        super.setObject(paramValue);
+        setObject(paramValue);
     }
 
     @Override
@@ -121,13 +120,6 @@ implements ParameterUiModel {
     }
 
     // -- HELPER
-
-    private ManagedObject toNonNull(@Nullable ManagedObject adapter) {
-        if(adapter == null) {
-            adapter = ManagedObject.empty(getMetaModel().getSpecification());
-        }
-        return ManagedObjects.emptyToDefault(!getMetaModel().isOptional(), adapter);
-    }
 
     @Override
     public IsisAppCommonContext getCommonContext() {

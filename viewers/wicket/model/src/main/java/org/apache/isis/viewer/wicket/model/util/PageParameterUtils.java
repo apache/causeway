@@ -21,10 +21,14 @@ package org.apache.isis.viewer.wicket.model.util;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.apache.wicket.core.request.handler.IPageRequestHandler;
+import org.apache.wicket.request.IRequestParameters;
+import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.INamedParameters.NamedPair;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.springframework.lang.Nullable;
@@ -98,6 +102,16 @@ public class PageParameterUtils {
         return newPageParameters;
     }
 
+    public static Stream<NamedPair> streamCurrentRequestParameters() {
+        return Optional.ofNullable(RequestCycle.get()).stream()
+        .map(RequestCycle::getRequest)
+        .map(Request::getRequestParameters)
+        .flatMap(params->
+            params.getParameterNames().stream()
+            .map(key->new NamedPair(key, params.getParameterValue(key).toString()))
+        );
+    }
+
     public static ActionModel actionModelFor(
             final IsisAppCommonContext commonContext,
             final PageParameters pageParameters) {
@@ -146,6 +160,13 @@ public class PageParameterUtils {
             PageParameterNames.ACTION_ARGS.addStringTo(pageParameters, encodedArg);
         }
 
+        return pageParameters;
+    }
+
+    public static PageParameters currentPageParameters() {
+        final var pageParameters = new PageParameters();
+        streamCurrentRequestParameters()
+        .forEach(kv->pageParameters.add(kv.getKey(), kv.getValue()));
         return pageParameters;
     }
 
