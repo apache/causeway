@@ -26,6 +26,7 @@
 	<name>Apache Isis - Regression Tests (stable)</name>
 
 	<dependencies>
+		
 		<dependency>
 			<groupId>org.glassfish.jersey.ext</groupId>
 			<artifactId>jersey-spring5</artifactId>
@@ -36,9 +37,25 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		
         <dependency>
             <groupId>org.apache.isis.extensions</groupId>
             <artifactId>isis-extensions-cors-impl</artifactId>
         </dependency>
+        
+        <!-- ISIS DSL -->
+        
+        <dependency>
+			<groupId>com.graphql-java</groupId>
+			<artifactId>graphql-java</artifactId>
+			<version>17.3</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.squareup</groupId>
+			<artifactId>javapoet</artifactId>
+			<version>1.13.0</version>
+		</dependency>
+        
 	</dependencies>
 </project>
