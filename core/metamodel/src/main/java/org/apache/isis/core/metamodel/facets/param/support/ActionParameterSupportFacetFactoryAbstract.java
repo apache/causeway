@@ -81,7 +81,7 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
             processMethodContext.removeMethod(searchResult.getSupportingMethod());
             val paramIndex = searchResult.getParamIndex();
             // add facets directly to parameters, not to actions
-            val paramAsHolder = parameters.get(paramIndex);
+            val paramAsHolder = parameters.getElseFail(paramIndex);
             onSearchResult(paramAsHolder, searchResult);
         });
 

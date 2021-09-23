@@ -193,7 +193,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetHolderWithParms));
 
-        final Facet facet0 = facetHolderWithParms.getParameters().get(0).getFacet(ActionParameterDefaultsFacet.class);
+        final Facet facet0 = facetHolderWithParms.getParameters().getElseFail(0).getFacet(ActionParameterDefaultsFacet.class);
         assertNotNull(facet0);
         assertTrue(facet0 instanceof ActionParameterDefaultsFacetViaMethod);
         final ActionParameterDefaultsFacetViaMethod actionDefaultFacetViaMethod0 = (ActionParameterDefaultsFacetViaMethod) facet0;
@@ -201,7 +201,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(default0Method));
 
-        final Facet facet1 = facetHolderWithParms.getParameters().get(1).getFacet(ActionParameterDefaultsFacet.class);
+        final Facet facet1 = facetHolderWithParms.getParameters().getElseFail(1).getFacet(ActionParameterDefaultsFacet.class);
         assertNotNull(facet1);
         assertTrue(facet1 instanceof ActionParameterDefaultsFacetViaMethod);
         final ActionParameterDefaultsFacetViaMethod actionDefaultFacetViaMethod1 = (ActionParameterDefaultsFacetViaMethod) facet1;
@@ -249,7 +249,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetHolderWithParms));
 
-        final Facet facet0 = facetHolderWithParms.getParameters().get(0).getFacet(ActionParameterChoicesFacet.class);
+        final Facet facet0 = facetHolderWithParms.getParameters().getElseFail(0).getFacet(ActionParameterChoicesFacet.class);
         assertNotNull(facet0);
         assertTrue(facet0 instanceof ActionParameterChoicesFacetViaMethod);
         final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod0 = (ActionParameterChoicesFacetViaMethod) facet0;
@@ -257,7 +257,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(choices0Method));
 
-        final Facet facet1 = facetHolderWithParms.getParameters().get(1).getFacet(ActionParameterChoicesFacet.class);
+        final Facet facet1 = facetHolderWithParms.getParameters().getElseFail(1).getFacet(ActionParameterChoicesFacet.class);
         assertNotNull(facet1);
         assertTrue(facet1 instanceof ActionParameterChoicesFacetViaMethod);
         final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod1 = (ActionParameterChoicesFacetViaMethod) facet1;
@@ -265,7 +265,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(choices1Method));
 
-        final Facet facet2 = facetHolderWithParms.getParameters().get(2).getFacet(ActionParameterChoicesFacet.class);
+        final Facet facet2 = facetHolderWithParms.getParameters().getElseFail(2).getFacet(ActionParameterChoicesFacet.class);
         assertNotNull(facet2);
         assertTrue(facet2 instanceof ActionParameterChoicesFacetViaMethod);
         final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod2 = (ActionParameterChoicesFacetViaMethod) facet2;
@@ -302,7 +302,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetHolderWithParms));
 
-        final Facet facet0 = facetHolderWithParms.getParameters().get(0).getFacet(ActionParameterAutoCompleteFacet.class);
+        final Facet facet0 = facetHolderWithParms.getParameters().getElseFail(0).getFacet(ActionParameterAutoCompleteFacet.class);
         assertNotNull(facet0);
         assertTrue(facet0 instanceof ActionParameterAutoCompleteFacetViaMethod);
         final ActionParameterAutoCompleteFacetViaMethod actionAutoCompleteFacetViaMethod0 = (ActionParameterAutoCompleteFacetViaMethod) facet0;

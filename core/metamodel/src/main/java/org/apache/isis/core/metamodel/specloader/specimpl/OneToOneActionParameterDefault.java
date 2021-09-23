@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.TypedHolder;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 
 public class OneToOneActionParameterDefault
@@ -27,10 +27,10 @@ extends ObjectActionParameterAbstract
 implements OneToOneActionParameter {
 
     public OneToOneActionParameterDefault(
+            final ObjectSpecification paramElementType,
             final int index,
-            final ObjectActionDefault actionImpl,
-            final TypedHolder peer) {
-        super(FeatureType.ACTION_PARAMETER_SCALAR, index, actionImpl, peer);
+            final ObjectActionDefault actionImpl) {
+        super(FeatureType.ACTION_PARAMETER_SCALAR, index, paramElementType, actionImpl);
     }
 
 

@@ -109,7 +109,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         facetedMethod = FacetedMethod.createForProperty(metaModelContext, Customer.class, "firstName");
         facetedMethodParameter = new FacetedMethodParameter(
                 metaModelContext,
-                FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class
+                FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class, 0
                 );
     }
 
@@ -153,7 +153,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
     // -- FACTORIES
 
-    protected static PropertyLayoutFacetFactory createPropertyLayoutFacetFactory(MetaModelContext mmc) {
+    protected static PropertyLayoutFacetFactory createPropertyLayoutFacetFactory(final MetaModelContext mmc) {
         return new PropertyLayoutFacetFactory(mmc) {
             @Override
             public IsisConfiguration getConfiguration() {
@@ -162,7 +162,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         };
     }
 
-    protected static CollectionLayoutFacetFactory createCollectionLayoutFacetFactory(MetaModelContext mmc) {
+    protected static CollectionLayoutFacetFactory createCollectionLayoutFacetFactory(final MetaModelContext mmc) {
         return new CollectionLayoutFacetFactory(mmc) {
             @Override
             public IsisConfiguration getConfiguration() {
@@ -171,7 +171,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         };
     }
 
-    protected static ActionLayoutFacetFactory createActionLayoutFacetFactory(MetaModelContext mmc) {
+    protected static ActionLayoutFacetFactory createActionLayoutFacetFactory(final MetaModelContext mmc) {
         return new ActionLayoutFacetFactory(mmc) {
             @Override
             public IsisConfiguration getConfiguration() {

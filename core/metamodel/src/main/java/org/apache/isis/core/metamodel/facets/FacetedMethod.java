@@ -19,10 +19,10 @@
 package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -49,7 +49,7 @@ extends TypedHolderAbstract {
             final Class<?> declaringType,
             final Method method) {
         return new FacetedMethod(mmc, FeatureType.PROPERTY,
-                declaringType, method, method.getReturnType(), emptyParameterList());
+                declaringType, method, method.getReturnType(), Can.empty());
     }
 
     public static FacetedMethod createForCollection(
@@ -57,7 +57,7 @@ extends TypedHolderAbstract {
             final Class<?> declaringType,
             final Method method) {
         return new FacetedMethod(mmc, FeatureType.COLLECTION,
-                declaringType, method, null, emptyParameterList());
+                declaringType, method, null, Can.empty());
     }
 
     public static FacetedMethod createForAction(
@@ -69,7 +69,7 @@ extends TypedHolderAbstract {
                 getParameters(mmc, declaringType, method));
     }
 
-    private static List<FacetedMethodParameter> getParameters(
+    private static Can<FacetedMethodParameter> getParameters(
             final MetaModelContext mmc,
             final Class<?> declaringType,
             final Method actionMethod) {
@@ -77,7 +77,11 @@ extends TypedHolderAbstract {
         final List<FacetedMethodParameter> actionParams =
                 _Lists.newArrayList(actionMethod.getParameterCount());
 
+        int paramIndex = -1;
+
         for(val param : actionMethod.getParameters()) {
+
+            paramIndex++;
 
             final Class<?> parameterType = param.getType();
 
@@ -88,7 +92,7 @@ extends TypedHolderAbstract {
                     : FeatureType.ACTION_PARAMETER_SCALAR;
 
             val facetedMethodParam =
-                    new FacetedMethodParameter(mmc, featureType, declaringType, actionMethod, parameterType);
+                    new FacetedMethodParameter(mmc, featureType, declaringType, actionMethod, parameterType, paramIndex);
 
             if(featureType != FeatureType.ACTION_PARAMETER_COLLECTION) {
                 actionParams.add(facetedMethodParam);
@@ -114,7 +118,7 @@ extends TypedHolderAbstract {
             actionParams.add(facetedMethodParamToUse);
 
         }
-        return Collections.unmodifiableList(actionParams);
+        return Can.ofCollection(actionParams);
     }
 
     // -- FACTORIES (JUNIT)
@@ -187,12 +191,7 @@ extends TypedHolderAbstract {
      */
     @Getter private final Method method;
 
-    @Getter private final List<FacetedMethodParameter> parameters;
-
-    public static List<FacetedMethodParameter> emptyParameterList() {
-        final List<FacetedMethodParameter> emptyList = Collections.emptyList();
-        return Collections.unmodifiableList(emptyList);
-    }
+    @Getter private final Can<FacetedMethodParameter> parameters;
 
     // -- CONSTRUCTOR
 
@@ -202,7 +201,7 @@ extends TypedHolderAbstract {
             final Class<?> declaringType,
             final Method method,
             final Class<?> type,
-            final List<FacetedMethodParameter> parameters) {
+            final Can<FacetedMethodParameter> parameters) {
 
         super(mmc,
                 featureType,

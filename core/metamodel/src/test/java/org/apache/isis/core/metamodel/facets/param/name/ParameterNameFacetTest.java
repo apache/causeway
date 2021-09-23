@@ -100,7 +100,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
         // when
         val processParameterContext =
                 new FacetFactory.ProcessParameterContext(
-                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, 0, null, facetedMethodParameter);
+                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
 
         programmingModel.streamFactories()
         .forEach(facetFactory->facetFactory.processParams(processParameterContext));
@@ -132,7 +132,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
         // when
         val processParameterContext =
                 new FacetFactory.ProcessParameterContext(
-                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, 0, null, facetedMethodParameter);
+                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
         programmingModel.streamFactories().forEach(facetFactory->facetFactory.processParams(processParameterContext));
 
         // then

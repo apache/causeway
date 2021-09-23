@@ -50,7 +50,7 @@ public class LabelAtFacetForParameterLayoutAnnotationFactoryTest extends Abstrac
         facetFactory.processParams(new FacetFactory.ProcessParameterContext(
                 Customer.class,
                 IntrospectionPolicy.ANNOTATION_OPTIONAL,
-                method, 0, null, facetedMethodParameter));
+                method, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(LabelAtFacet.class);
         assertThat(facet, is(notNullValue()));

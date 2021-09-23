@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 
@@ -34,7 +33,6 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.CanVector;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -44,7 +42,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
@@ -85,10 +82,6 @@ implements ObjectAction {
     public static ObjectActionDefault forMethod(final FacetedMethod facetedMethod) {
         return new ObjectActionDefault(facetedMethod.getFeatureIdentifier(), facetedMethod);
     }
-
-    // -- FIELDS
-
-    private final _Lazy<Can<ObjectActionParameter>> parameters = _Lazy.threadSafe(this::determineParameters);
 
     // -- CONSTRUCTOR
 
@@ -157,6 +150,8 @@ implements ObjectAction {
 
     // -- Parameters
 
+    private final _Lazy<Can<ObjectActionParameter>> parameters = _Lazy.threadSafe(this::determineParameters);
+
     @Override
     public int getParameterCount() {
         return getFacetedMethod().getParameters().size();
@@ -169,32 +164,25 @@ implements ObjectAction {
 
     protected Can<ObjectActionParameter> determineParameters() {
 
-        val parameterCount = getParameterCount();
-        val paramPeers = getFacetedMethod().getParameters();
+        val specLoader = getSpecificationLoader();
 
-        val parameters = _Lists.<ObjectActionParameter>newArrayList();
-        for (int paramNum = 0; paramNum < parameterCount; paramNum++) {
-            final FacetedMethodParameter paramPeer = paramPeers.get(paramNum);
+        return getFacetedMethod().getParameters()
+        .map(facetedParam->{
 
-            Optional.ofNullable(paramPeer.getType())
-            .ifPresent(getSpecificationLoader()::loadSpecification); // preload
+            final int paramIndex = facetedParam.getParamIndex();
+            final var paramElementType = specLoader.loadSpecification(facetedParam.getType()); // preload
 
-            // previously we threw an exception here if the specification represented a collection.  No longer!
-            final ObjectActionParameter parameter =
-                    paramPeer.getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
-                    ? new OneToOneActionParameterDefault(paramNum, this, paramPeer)
-                            : new OneToManyActionParameterDefault(paramNum, this, paramPeer);
+            return
+                    facetedParam.getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
+                        ? new OneToOneActionParameterDefault(paramElementType, paramIndex, this)
+                        : new OneToManyActionParameterDefault(paramElementType, paramIndex, this);
 
-                    parameters.add(parameter);
-        }
-        return Can.ofCollection(parameters);
+        });
     }
 
     @Override
     public Can<ObjectSpecification> getParameterTypes() {
-        val parameters = getParameters();
-        val parameterTypes = parameters.map(ObjectActionParameter::getElementType);
-        return parameterTypes;
+        return getParameters().map(ObjectActionParameter::getElementType);
     }
 
     @Override

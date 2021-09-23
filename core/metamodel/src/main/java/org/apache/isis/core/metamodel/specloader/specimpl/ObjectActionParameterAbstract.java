@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.HasFacetHolder;
-import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.all.described.ParamDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
@@ -66,19 +65,19 @@ implements
     private final FeatureType featureType;
     private final int number;
     private final ObjectActionDefault parentAction;
-    private final TypedHolder peer;
     private final String javaSourceParamName;
+    private final ObjectSpecification paramElementType;
 
     protected ObjectActionParameterAbstract(
             final FeatureType featureType,
             final int number,
-            final ObjectActionDefault objectAction,
-            final @NonNull TypedHolder peer) {
+            final ObjectSpecification paramElementType,
+            final ObjectActionDefault objectAction) {
 
         this.featureType = featureType;
         this.number = number;
         this.parentAction = objectAction;
-        this.peer = peer;
+        this.paramElementType = paramElementType;
 
         this.javaSourceParamName =
                 objectAction.getFacetedMethod().getMethod().getParameters()[number].getName();
@@ -112,22 +111,14 @@ implements
         return parentAction;
     }
 
-    /**
-     * NOT API, but exposed for the benefit of {@link ObjectActionParameterContributee}
-     * and {@link ObjectActionParameterMixedIn}.
-     */
-    public TypedHolder getPeer() {
-        return peer;
-    }
-
     @Override
     public ObjectSpecification getElementType() {
-        return getSpecificationLoader().loadSpecification(peer.getType());
+        return paramElementType;
     }
 
     @Override
     public Identifier getFeatureIdentifier() {
-        return parentAction.getFeatureIdentifier();
+        return getAction().getFeatureIdentifier();
     }
 
     @Override
@@ -190,7 +181,8 @@ implements
 
     @Override
     public FacetHolder getFacetHolder() {
-        return peer;
+        // that is the faceted method parameter
+        return parentAction.getFacetedMethod().getParameters().getElseFail(number);
     }
 
     // -- AutoComplete

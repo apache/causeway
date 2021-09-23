@@ -20,8 +20,9 @@ package org.apache.isis.core.metamodel.postprocessors;
 
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -89,10 +90,10 @@ implements ObjectSpecificationPostProcessor {
         return objectMemberImpl.getFacetedMethod();
     }
 
-    protected static TypedHolder peerFor(final ObjectActionParameter param) {
+    protected static FacetHolder peerFor(final ObjectActionParameter param) {
         // TODO: hacky, need to copy facet onto underlying peer, not to the param itself.
-        val paramImpl = (ObjectActionParameterAbstract) param;
-        return paramImpl.getPeer();
+        var paramImpl = (HasFacetHolder) param;
+        return paramImpl.getFacetHolder();
     }
 
 }
