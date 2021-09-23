@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.util.dsl;
+package org.apache.isis.tooling.dsl;
 
 import java.util.Collection;
 import java.util.List;
@@ -33,11 +33,14 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
+import org.springframework.util.ReflectionUtils;
+
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 
 import graphql.language.ListType;
 import graphql.language.NonNullType;
@@ -53,10 +56,10 @@ import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.SchemaGenerator;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class IsisDsl {
+public class GraphQLToJavaSourceConverter {
 
-    public static IsisDsl parseGraphQL(final String rawSchema) {
-        return new IsisDsl(
+    public static GraphQLToJavaSourceConverter parseGraphQL(final String rawSchema) {
+        return new GraphQLToJavaSourceConverter(
                 SchemaGenerator
                 .createdMockedSchema(
                         graphQLPreprocessing(rawSchema)));
@@ -68,10 +71,25 @@ public class IsisDsl {
         return graphQLSchema;
     }
 
-    public Stream<JavaFile> streamAsJavaFiles(final String packageName) {
+    @Value(staticConstructor = "of")
+    public static class JavaModel {
+        public static JavaModel of(final String packageName, final TypeSpec typeSpec) {
+            final var classSimpleName = (String) ReflectionUtils.getField(
+                    ReflectionUtils.findField(typeSpec.getClass(), "name"),
+                    typeSpec);
+            return of(ClassName.get(packageName, classSimpleName), typeSpec);
+        }
+        final ClassName name;
+        final TypeSpec typeSpec;
+        JavaFile buildJavaFile() {
+            return JavaFile.builder(name.packageName(), typeSpec)
+                    .build();
+        }
+    }
+
+    public Stream<JavaModel> streamAsJavaModels(final String packageName) {
         return streamAsTypeSpecs()
-                .map(typeSpec->JavaFile.builder(packageName, typeSpec)
-                .build());
+                .map(typeSpec->JavaModel.of(packageName, typeSpec));
     }
 
     public Stream<TypeSpec> streamAsTypeSpecs() {

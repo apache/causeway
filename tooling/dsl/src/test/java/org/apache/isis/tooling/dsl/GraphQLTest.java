@@ -16,63 +16,76 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.viewers;
+package org.apache.isis.tooling.dsl;
 
+import java.beans.IntrospectionException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 
-import com.squareup.javapoet.JavaFile;
-
 import org.junit.jupiter.api.Test;
-import org.springframework.util.ReflectionUtils;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.testdomain.util.dsl.IsisDsl;
-import org.apache.isis.testdomain.util.dsl.JavaSourceCompilingClassLoader;
+import org.apache.isis.commons.internal.reflection._Reflect;
 
 class GraphQLTest {
 
     @Test
-    void gen() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    void dynamicClassGeneration_usingGraphQLInput()
+            throws ClassNotFoundException, InstantiationException, IllegalAccessException,
+            IllegalArgumentException, InvocationTargetException, NoSuchMethodException,
+            SecurityException, IntrospectionException {
 
         var classLoader = JavaSourceCompilingClassLoader.newInstance();
 
         String schema = _Strings.readFromResource(
                 getClass(), getClass().getSimpleName() + ".graphqls", StandardCharsets.UTF_8);
 
-        final var isisSchema = IsisDsl.parseGraphQL(schema);
+        final var isisSchema = GraphQLToJavaSourceConverter.parseGraphQL(schema);
 
         final var dslClassNames = _Lists.<String>newArrayList();
 
         isisSchema.asGraphQLSchema();
-        isisSchema.streamAsTypeSpecs()
-        .forEach(typeSpec->{
+        isisSchema.streamAsJavaModels("testdummies")
+        .forEach(javaModel->{
 
-                String packageName = "testdummies";
-                String className = packageName + "." +
-                        (String) ReflectionUtils.getField(
-                                ReflectionUtils.findField(typeSpec.getClass(), "name"), typeSpec);
+                String className = javaModel.getName().canonicalName();
                 dslClassNames.add(className);
 
 //                System.err.println("=================================");
 //                System.err.println("writing: " + className);
 //                System.err.println("=================================");
 
-                var javaFile = JavaFile.builder(packageName, typeSpec)
-                        .build();
+                var javaFile = javaModel.buildJavaFile();
                 classLoader.writeJavaSource(className, javaFile::writeTo);
         });
 
+        assertEquals(4, dslClassNames.size());
+
         for(String className : dslClassNames) {
 
-            System.err.println("=================================");
-            System.err.println("compiling: " + className);
-            System.err.println("=================================");
+            Class<?> cls = Class.forName(className, true, classLoader);
 
-            Class<?> cls = Class.forName(className, false, classLoader);
-            //Object instance = cls.newInstance();
-            System.out.println(cls);
+            assertEquals(className, cls.getName());
 
+            if(cls.isEnum()
+                    || cls.isInterface()) {
+                continue;
+            }
+
+            var getter = _Reflect.getGetter(cls, "id");
+            var setter = _Reflect.getSetter(cls, "id");
+
+            Object instance = cls.getConstructor().newInstance();
+
+            // when
+            _Reflect.writeToSetterOn(setter, instance, 66L);
+
+            // then
+            assertEquals(66L,
+                    _Reflect.readFromGetterOn(getter, instance));
         }
 
     }

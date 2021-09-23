@@ -16,11 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.util.dsl;
+package org.apache.isis.tooling.dsl;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -60,9 +59,9 @@ public class JavaSourceCompilingClassLoader extends ClassLoader  {
         Thread printingHook = new Thread(() -> {
             try {
                 _Files.deleteDirectory(root.toFile());
-                System.out.println("JavaSourceCompilingClassLoader: Cleaning up temp files done.");
+                log.info("Done, cleaning up temp files.");
             } catch (Exception e) {
-                System.err.println("JavaSourceCompilingClassLoader: Cleaning up temp files FAILED.");
+                System.err.printf("%s: Cleaning up temp files FAILED.%n", getClass().getSimpleName());
                 e.printStackTrace();
             }
         });
@@ -79,7 +78,6 @@ public class JavaSourceCompilingClassLoader extends ClassLoader  {
         var sb = new StringBuilder();
         writer.accept(sb);
         Files.writeString(sourceFile.toPath(), sb, StandardCharsets.UTF_8);
-        compiler.run(null, null, null, sourceFile.getPath());
     }
 
     @Override
@@ -102,14 +100,12 @@ public class JavaSourceCompilingClassLoader extends ClassLoader  {
     private class ClassHandle {
         final String name;
         final String releativeFilePath;
-        final ClassLoader parentLoader;
         final AtomicBoolean isCompiled = new AtomicBoolean();
 
         public ClassHandle(final String className) {
             super();
             this.name = className;
             this.releativeFilePath = className.replace('.', File.separatorChar);
-            this.parentLoader = JavaSourceCompilingClassLoader.class.getClassLoader();
         }
 
         File classFile() {
@@ -136,8 +132,10 @@ public class JavaSourceCompilingClassLoader extends ClassLoader  {
     private void compile(final Can<ClassHandle> requireCompile) {
 
         var fileNames =
-        requireCompile
+        requireCompile.stream()
+        .peek(classHandle->log.info("compiling unit {}", classHandle.name))
         .map(classHandle->classHandle.sourceFile().getPath())
+        .collect(Can.toCan())
         .toArray(new String[0]);
 
         compiler.run(null, null, null, fileNames);

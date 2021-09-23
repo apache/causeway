@@ -15,33 +15,55 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.regressiontests</groupId>
-		<artifactId>isis-regressiontests</artifactId>
+		<groupId>org.apache.isis.tooling</groupId>
+		<artifactId>isis-tooling</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-regressiontests-stable</artifactId>
+	<artifactId>isis-tooling-dsl</artifactId>
 
-	<name>Apache Isis - Regression Tests (stable)</name>
+	<name>Apache Isis - Tooling - Java DSL (Code Gen)</name>
+	<description>
+        Tools for Java meta-programming and runtime class generaton.
+    </description>
+
+	<properties>
+		<graphql-java.version>17.3</graphql-java.version>
+		<javapoet.version>1.13.0</javapoet.version>
+		<skipTests>true</skipTests>
+	</properties>
 
 	<dependencies>
-		
+
 		<dependency>
-			<groupId>org.glassfish.jersey.ext</groupId>
-			<artifactId>jersey-spring5</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.glassfish.jersey.core</groupId>
-					<artifactId>jersey-server</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>org.apache.isis.commons</groupId>
+			<artifactId>isis-commons</artifactId>
+		</dependency>
+
+        <!-- GRAPHQL -->
+        
+        <dependency>
+			<groupId>com.graphql-java</groupId>
+			<artifactId>graphql-java</artifactId>
+			<version>${graphql-java.version}</version>
 		</dependency>
 		
-        <dependency>
-            <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-cors-impl</artifactId>
+		<!-- JAVA META PROGRAMMING -->
+		
+		<dependency>
+			<groupId>com.squareup</groupId>
+			<artifactId>javapoet</artifactId>
+			<version>${javapoet.version}</version>
+		</dependency>
+		
+		<dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <scope>test</scope>
         </dependency>
-        
+
 	</dependencies>
+
 </project>
+
+
