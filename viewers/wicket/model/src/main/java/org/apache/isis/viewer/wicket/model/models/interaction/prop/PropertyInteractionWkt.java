@@ -27,6 +27,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
@@ -71,8 +72,8 @@ extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
     protected PropertyInteraction load() {
         return PropertyInteraction.wrap(
                 ManagedProperty.lookupProperty(getBookmarkedOwner(), memberId, where)
-                .get() //FIXME or else fail
-                );
+                .orElseThrow(()->_Exceptions.noSuchElement(memberId)));
+
     }
 
     @Override
@@ -102,7 +103,8 @@ extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
 
     public final PropertyNegotiationModel propertyNegotiationModel() {
         _Assert.assertTrue(this.isAttached(), "model is not attached");
-        return propertyNegotiationModel.get().get(); // FIXME or else fail
+        return propertyNegotiationModel.get()
+                .orElseThrow(()->_Exceptions.noSuchElement(memberId));
     }
 
     public void resetPropertyToDefault() {

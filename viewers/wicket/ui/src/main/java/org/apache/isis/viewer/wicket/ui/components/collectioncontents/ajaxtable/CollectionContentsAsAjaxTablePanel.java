@@ -27,7 +27,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -65,6 +64,10 @@ implements CollectionCountProvider {
         buildGui();
     }
 
+    private EntityCollectionModel entityCollectionModel() {
+        return getModel();
+    }
+
     private void buildGui() {
 
         final List<IColumn<ManagedObject, String>> columns = _Lists.newArrayList();
@@ -82,7 +85,7 @@ implements CollectionCountProvider {
 
         }
 
-        val collectionModel = getModel();
+        val collectionModel = entityCollectionModel();
         addTitleColumn(
                 columns,
                 collectionModel.getVariant(),
@@ -116,9 +119,12 @@ implements CollectionCountProvider {
             final int maxTitleParented,
             final int maxTitleStandalone) {
 
+        val contextBookmark = entityCollectionModel().getParentObject().getBookmark()
+                .orElse(null);
+
         final int maxTitleLength = getModel().isParented()? maxTitleParented: maxTitleStandalone;
         columns.add(new ObjectAdapterTitleColumn(
-                super.getCommonContext(), variant, maxTitleLength));
+                super.getCommonContext(), variant, contextBookmark, maxTitleLength));
     }
 
     private void addPropertyColumnsIfRequired(final List<IColumn<ManagedObject, String>> columns) {

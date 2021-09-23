@@ -41,7 +41,8 @@ import lombok.val;
  * <p>
  * Part of the implementation of {@link CollectionContentsAsAjaxTablePanel}.
  */
-public abstract class ColumnAbstract<T> extends AbstractColumn<T,String> {
+public abstract class ColumnAbstract<T>
+extends AbstractColumn<T,String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -49,11 +50,11 @@ public abstract class ColumnAbstract<T> extends AbstractColumn<T,String> {
     private transient ComponentFactoryRegistry componentRegistry;
 
 
-    public ColumnAbstract(IsisAppCommonContext commonContext, String columnName) {
+    public ColumnAbstract(final IsisAppCommonContext commonContext, final String columnName) {
         this(commonContext, Model.of(columnName), null);
     }
 
-    public ColumnAbstract(IsisAppCommonContext commonContext, IModel<String> columnNameModel, String sortColumn) {
+    public ColumnAbstract(final IsisAppCommonContext commonContext, final IModel<String> columnNameModel, final String sortColumn) {
         super(columnNameModel, sortColumn);
         this.commonContext = commonContext;
     }
@@ -62,7 +63,7 @@ public abstract class ColumnAbstract<T> extends AbstractColumn<T,String> {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
 
-    protected ComponentFactory findComponentFactory(ComponentType componentType, IModel<?> model) {
+    protected ComponentFactory findComponentFactory(final ComponentType componentType, final IModel<?> model) {
         return getComponentRegistry().findComponentFactory(componentType, model);
     }
 

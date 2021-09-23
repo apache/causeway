@@ -63,6 +63,15 @@ import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import lombok.NonNull;
 import lombok.val;
 
+/**
+ * Represents an action of an entity.
+ *
+ * @implSpec
+ * <pre>
+ * ActionModel --chained-to--> EntityModel
+ * ActionModel --bound-to--> ActionInteractionWkt
+ * </pre>
+ */
 public final class ActionModel
 extends ChainingModel<ManagedObject>
 implements FormUiModel, FormExecutorContext, BookmarkableModel {

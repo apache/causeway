@@ -24,6 +24,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -36,18 +37,22 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import lombok.val;
 
-public class ObjectAdapterTitleColumn extends ColumnAbstract<ManagedObject> {
+public class ObjectAdapterTitleColumn
+extends ColumnAbstract<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
     private final Variant variant;
+    private Bookmark contextBookmark;
 
     public ObjectAdapterTitleColumn(
             final IsisAppCommonContext commonContext,
             final Variant variant,
+            final Bookmark contextBookmark,
             final int maxTitleLength) {
 
         super(commonContext, columnName(variant, maxTitleLength)); // i18n
         this.variant = variant;
+        this.contextBookmark = contextBookmark;
     }
 
     @Override
@@ -82,11 +87,11 @@ public class ObjectAdapterTitleColumn extends ColumnAbstract<ManagedObject> {
             return componentFactory.createComponent(id, valueModel);
         }
 
-        val entityModel = EntityModel.ofAdapter(super.getCommonContext(), adapter);
+        final var entityModel = EntityModel.ofAdapter(super.getCommonContext(), adapter);
         entityModel.setRenderingHint(variant.isParented()
                 ? RenderingHint.PARENTED_TITLE_COLUMN
                 : RenderingHint.STANDALONE_TITLE_COLUMN);
-        //entityModel.setContextAdapterIfAny(parentAdapterMementoIfAny); //FIXME
+        entityModel.setContextBookmarkIfAny(contextBookmark);
 
         // will use EntityLinkSimplePanelFactory as model is an EntityModel
         val componentFactory = findComponentFactory(ComponentType.ENTITY_LINK, entityModel);

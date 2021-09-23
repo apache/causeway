@@ -20,7 +20,6 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -31,7 +30,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.spec.feature.memento.PropertyMemento;
@@ -271,17 +269,14 @@ implements
     @Getter @Setter
     private CollectionLayoutData collectionLayoutData;
 
-    private transient Optional<ManagedObject> contextObject;
-
     @Setter
-    private @Nullable ObjectMemento contextAdapterIfAny;
+    private @Nullable Bookmark contextBookmarkIfAny;
 
     @Override @Synchronized
     public boolean isContextAdapter(final ManagedObject other) {
-        if(contextObject==null) {
-            contextObject = Optional.ofNullable(getMementoService().reconstructObject(contextAdapterIfAny));
-        }
-        return Objects.equals(contextObject.orElse(null), other);
+        return contextBookmarkIfAny!=null
+                ? Objects.equals(contextBookmarkIfAny, other.getBookmark().orElse(null))
+                : null;
     }
 
     // -- HELPER

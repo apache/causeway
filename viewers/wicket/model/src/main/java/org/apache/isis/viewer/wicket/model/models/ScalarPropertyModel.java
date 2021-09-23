@@ -142,10 +142,7 @@ implements PropertyUiModel {
      * @return adapter, which may be different from the original
      */
     public ManagedObject applyValueThenReturnOwner() {
-        final var proposedNewValue = getObject();
-        System.err.printf("proposedNewValue %s%n", proposedNewValue);
-        getManagedProperty().modifyProperty(proposedNewValue);
-        syncUiWithModel(); // honor actual UI model value after modification attempt
+        getPendingPropertyModel().submit();
         return getOwner();
     }
 

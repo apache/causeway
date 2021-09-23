@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
@@ -73,8 +74,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     protected ActionInteraction load() {
         return ActionInteraction.wrap(
                 ManagedAction.lookupAction(getBookmarkedOwner(), memberId, where)
-                .get() //FIXME or else fail
-                );
+                .orElseThrow(()->_Exceptions.noSuchElement(memberId)));
     }
 
     public final ActionInteraction actionInteraction() {

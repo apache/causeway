@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.model.models.interaction.act;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
@@ -44,7 +45,7 @@ extends HasBookmarkedOwnerAbstract<ManagedAction> {
     @Override
     protected ManagedAction load() {
         return ManagedAction.lookupAction(getBookmarkedOwner(), memberId, where)
-                .get(); //FIXME or else fail
+                .orElseThrow(()->_Exceptions.noSuchElement(memberId));
     }
 
 }
