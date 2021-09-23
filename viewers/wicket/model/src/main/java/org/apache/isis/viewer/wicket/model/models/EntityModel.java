@@ -274,9 +274,9 @@ implements
 
     @Override @Synchronized
     public boolean isContextAdapter(final ManagedObject other) {
-        return contextBookmarkIfAny!=null
+        return (contextBookmarkIfAny!=null)
                 ? Objects.equals(contextBookmarkIfAny, other.getBookmark().orElse(null))
-                : null;
+                : false;
     }
 
     // -- HELPER

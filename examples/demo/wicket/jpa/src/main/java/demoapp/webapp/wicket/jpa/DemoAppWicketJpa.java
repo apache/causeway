@@ -23,7 +23,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.ui.IsisModuleExtPdfjsUi;
 import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
 import org.apache.isis.valuetypes.asciidoc.persistence.jpa.IsisModuleValAsciidocPersistenceJpa;
@@ -75,7 +74,7 @@ public class DemoAppWicketJpa extends SpringBootServletInitializer {
      * entry point by searching for classes having a {@code main(...)}
      */
     public static void main(final String[] args) {
-    	IsisPresets.prototyping();
+    	//IsisPresets.prototyping();
         //IsisPresets.logging(WebRequestCycleForIsis.class, "debug");
 
         System.setProperty("spring.profiles.active", "demo-jpa");

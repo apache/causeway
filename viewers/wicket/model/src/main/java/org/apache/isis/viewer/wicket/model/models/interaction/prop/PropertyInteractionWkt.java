@@ -70,6 +70,10 @@ extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
 
     @Override
     protected PropertyInteraction load() {
+
+        propertyNegotiationModel =
+                _Lazy.threadSafe(()->propertyInteraction().startPropertyNegotiation());
+
         return PropertyInteraction.wrap(
                 ManagedProperty.lookupProperty(getBookmarkedOwner(), memberId, where)
                 .orElseThrow(()->_Exceptions.noSuchElement(memberId)));
@@ -98,8 +102,7 @@ extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
 
     // -- PROPERTY NEGOTIATION WITH MEMOIZATION (TRANSIENT)
 
-    private final transient _Lazy<Optional<PropertyNegotiationModel>> propertyNegotiationModel =
-            _Lazy.threadSafe(()->propertyInteraction().startPropertyNegotiation());
+    private transient _Lazy<Optional<PropertyNegotiationModel>> propertyNegotiationModel;
 
     public final PropertyNegotiationModel propertyNegotiationModel() {
         _Assert.assertTrue(this.isAttached(), "model is not attached");

@@ -72,6 +72,10 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
 
     @Override
     protected ActionInteraction load() {
+
+        parameterNegotiationModel =
+                _Lazy.threadSafe(()->actionInteraction().startParameterNegotiation());
+
         return ActionInteraction.wrap(
                 ManagedAction.lookupAction(getBookmarkedOwner(), memberId, where)
                 .orElseThrow(()->_Exceptions.noSuchElement(memberId)));
@@ -96,8 +100,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
 
     // -- PARAMETER NEGOTIATION WITH MEMOIZATION (TRANSIENT)
 
-    private final transient _Lazy<Optional<ParameterNegotiationModel>> parameterNegotiationModel =
-            _Lazy.threadSafe(()->actionInteraction().startParameterNegotiation());
+    private transient _Lazy<Optional<ParameterNegotiationModel>> parameterNegotiationModel;
 
     public final Optional<ParameterNegotiationModel> parameterNegotiationModel() {
         _Assert.assertTrue(this.isAttached(), "model is not attached");

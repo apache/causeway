@@ -23,8 +23,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -32,6 +30,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.exceprecog.Category;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
@@ -152,8 +151,9 @@ implements FormExecutor {
                     // then we don't re-fetch / re-create the targetAdapter
                     targetAdapter = ManagedObject.empty(targetAdapter.getSpecification());
                 } else {
-                    // update target, since version updated
-                    targetAdapter = targetEntityModel.getManagedObject();
+                    //View-models, when edited with AJAX requests, will change their state and will need
+                    //to recreate their bookmark.
+                    targetAdapter = ManagedObject.of(targetAdapter.getSpecification(), targetAdapter.getPojo());
                     targetEntityModel.resetPropertyModels();
                 }
             }
