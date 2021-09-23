@@ -39,10 +39,10 @@ import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_headless.class,
                 Configuration_usingInteractionDomain.class
-        }, 
+        },
         properties = {
                 "isis.core.meta-model.introspector.mode=FULL",
                 "isis.applib.annotation.domain-object.editing=TRUE",
@@ -57,41 +57,38 @@ import lombok.val;
 })
 class PropertyInteractionTest extends InteractionTestAbstract {
 
-    @Test 
+    @Test
     void propertyInteraction_whenEnabled_shouldHaveNoVeto() {
 
-        val managedProperty = startPropertyInteractionOn(InteractionDemo.class, "stringMultiline", Where.OBJECT_FORMS)
-                .getManagedProperty().get(); // should not throw  
+        final var tester =
+                testerFactory.propertyTester(InteractionDemo.class, "stringMultiline", Where.OBJECT_FORMS);
 
-        assertFalse(managedProperty.checkVisibility().isPresent()); // is visible
-        assertFalse(managedProperty.checkUsability().isPresent()); // can edit
-        
+        tester.assertVisibilityIsNotVetoed();
+        tester.assertUsabilityIsNotVetoed();
+
         // verify, that the meta-model is valid
         assertMetamodelValid();
-        
+
         // verify, that we have the LabelAtFacet
-        
-        val labelAtFacet = managedProperty.getMetaModel().getFacet(LabelAtFacet.class);
-        assertNotNull(labelAtFacet);
-        
+        val labelAtFacet = tester.getFacetOnMemberElseFail(LabelAtFacet.class);
         val labelPos = labelAtFacet.label();
         assertEquals(LabelPosition.TOP, labelPos);
-        
+
         // verify, that we have the MultiLineFacet
-        
-        val multiLineFacet = managedProperty.getMetaModel().getFacet(MultiLineFacet.class);
-        assertNotNull(multiLineFacet);
-        
+        val multiLineFacet = tester.getFacetOnMemberElseFail(MultiLineFacet.class);
         val numberOfLines = multiLineFacet.numberOfLines();
         assertEquals(3, numberOfLines);
-        
+
+        tester.assertValue("initial");
+        tester.assertValueUpdateUsingNegotiation("new Value");
+        tester.assertValueUpdateUsingNegotiationTextual("parsable Text");
     }
-    
-    @Test 
+
+    @Test
     void propertyInteraction_whenDisabled_shouldHaveVeto() {
 
         val managedProperty = startPropertyInteractionOn(InteractionDemo.class, "stringDisabled", Where.OBJECT_FORMS)
-                .getManagedProperty().get(); // should not throw  
+                .getManagedProperty().get(); // should not throw
 
 
         assertFalse(managedProperty.checkVisibility().isPresent()); // is visible

@@ -47,7 +47,6 @@ class GraphQLTest {
 
         final var dslClassNames = _Lists.<String>newArrayList();
 
-        isisSchema.asGraphQLSchema();
         isisSchema.streamAsJavaModels("testdummies")
         .forEach(javaModel->{
 

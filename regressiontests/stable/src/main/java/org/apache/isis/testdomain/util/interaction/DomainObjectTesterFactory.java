@@ -44,10 +44,12 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
@@ -86,29 +88,52 @@ public class DomainObjectTesterFactory {
 
     public <T> ActionTester<T> actionTester(
             final Class<T> domainObjectType,
-            final String actionName) {
+            final String actionName,
+            final Where where) {
         val tester = serviceInjector.injectServicesInto(
-                new ActionTester<T>(domainObjectType, actionName));
+                new ActionTester<T>(domainObjectType, actionName, where));
         tester.init();
         return tester;
     }
 
     public <T> PropertyTester<T> propertyTester(
             final Class<T> domainObjectType,
-            final String propertyName) {
+            final String propertyName,
+            final Where where) {
         val tester = serviceInjector.injectServicesInto(
-                new PropertyTester<T>(domainObjectType, propertyName));
+                new PropertyTester<T>(domainObjectType, propertyName, where));
         tester.init();
         return tester;
     }
 
     public <T> CollectionTester<T> collectionTester(
             final Class<T> domainObjectType,
-            final String collectionName) {
+            final String collectionName,
+            final Where where) {
         val tester = serviceInjector.injectServicesInto(
-                new CollectionTester<T>(domainObjectType, collectionName));
+                new CollectionTester<T>(domainObjectType, collectionName, where));
         tester.init();
         return tester;
+    }
+
+    // -- SHORTCUTS
+
+    public <T> ActionTester<T> actionTester(
+            final Class<T> domainObjectType,
+            final String actionName) {
+        return actionTester(domainObjectType, actionName, Where.ANYWHERE);
+    }
+
+    public <T> PropertyTester<T> propertyTester(
+            final Class<T> domainObjectType,
+            final String propertyName) {
+        return propertyTester(domainObjectType, propertyName, Where.ANYWHERE);
+    }
+
+    public <T> CollectionTester<T> collectionTester(
+            final Class<T> domainObjectType,
+            final String collectionName) {
+        return collectionTester(domainObjectType, collectionName, Where.ANYWHERE);
     }
 
     // -- OBJECT TESTER
@@ -180,8 +205,9 @@ public class DomainObjectTesterFactory {
 
         private ActionTester(
                 final @NonNull Class<T> domainObjectType,
-                final @NonNull String actionName) {
-            super(domainObjectType, actionName, "actionName");
+                final @NonNull String actionName,
+                final @NonNull Where where) {
+            super(domainObjectType, actionName, "actionName", where);
         }
 
         @Override
@@ -189,6 +215,12 @@ public class DomainObjectTesterFactory {
             return managedActionIfAny
             .map(ManagedAction::getMetaModel)
             .map(ObjectAction.class::cast);
+        }
+
+        @Override
+        protected Optional<ObjectSpecification> getElementType() {
+            return getMetaModel()
+                    .map(ObjectAction::getReturnType);
         }
 
         @Override
@@ -240,8 +272,9 @@ public class DomainObjectTesterFactory {
 
         private PropertyTester(
                 final @NonNull Class<T> domainObjectType,
-                final @NonNull String propertyName) {
-            super(domainObjectType, propertyName, "property");
+                final @NonNull String propertyName,
+                final @NonNull Where where) {
+            super(domainObjectType, propertyName, "property", where);
         }
 
         @Override
@@ -252,9 +285,16 @@ public class DomainObjectTesterFactory {
         }
 
         @Override
+        protected Optional<ObjectSpecification> getElementType() {
+            return getMetaModel()
+                    .map(OneToOneAssociation::getOnType);
+                        //getElementType);
+        }
+
+        @Override
         protected Optional<? extends ManagedMember> startInteractionOn(final ManagedObject viewModel) {
             return this.managedPropertyIfAny = PropertyInteraction
-                    .start(viewModel, getMemberName(), Where.NOT_SPECIFIED)
+                    .start(viewModel, getMemberName(), where)
                     .getManagedProperty();
         }
 
@@ -294,7 +334,88 @@ public class DomainObjectTesterFactory {
 
         }
 
+        public void assertValueUpdateUsingNegotiation(final Object proposedNewPropertyValue) {
+
+            assertExists(true);
+
+            managedPropertyIfAny
+            .ifPresent(managedProperty->{
+                interactionService.runAnonymous(()->{
+
+                    val propNeg = managedProperty.startNegotiation();
+                    val initialValue = managedProperty.getPropertyValue();
+
+                    assertEquals(initialValue, propNeg.getValue().getValue());
+
+                    val newPropertyValue = managedProperty.getMetaModel().getMetaModelContext()
+                            .getObjectManager().adapt(proposedNewPropertyValue);
+                    propNeg.getValue().setValue(newPropertyValue);
+
+                    // yet just pending
+                    assertEquals(initialValue, managedProperty.getPropertyValue());
+                    assertEquals(newPropertyValue, propNeg.getValue().getValue());
+
+                    propNeg.submit();
+
+                    // after submission
+                    assertEquals(newPropertyValue, managedProperty.getPropertyValue());
+                    assertEquals(newPropertyValue, propNeg.getValue().getValue());
+
+                });
+            });
+
+        }
+
+        /**
+         * Supported by all properties that reflect a value type.
+         * Uses value-semantics under the hood to do the conversion.
+         */
+        public void assertValueUpdateUsingNegotiationTextual(
+                final String parsableProposedValue) {
+
+            assertExists(true);
+
+            managedPropertyIfAny
+            .ifPresent(managedProperty->{
+                interactionService.runAnonymous(()->{
+
+                    final var propNeg = managedProperty.startNegotiation();
+                    final var initialValue = managedProperty.getPropertyValue();
+
+                    assertEquals(initialValue, propNeg.getValue().getValue());
+
+                    propNeg.getValueAsParsableText().setValue(parsableProposedValue);
+
+                    // yet just pending
+                    assertEquals(initialValue, managedProperty.getPropertyValue());
+                    assertEquals(parsableProposedValue, propNeg.getValueAsParsableText().getValue());
+
+                    propNeg.submit();
+
+                    // after submission
+                    assertEquals(parsableProposedValue, asParsebleText());
+                    assertEquals(parsableProposedValue, propNeg.getValueAsParsableText().getValue());
+
+                });
+            });
+
+        }
+
+        @SuppressWarnings("unchecked")
+        public String asParsebleText() {
+            assertExists(true);
+            final var valueFacet = getFacetOnElementTypeElseFail(ValueFacet.class);
+            final var prop = this.getMetaModel().get();
+
+            final var context = valueFacet
+                    .createValueSemanticsContext(prop.getFeatureIdentifier());
+
+            return valueFacet.selectParserForPropertyElseFallback(prop)
+                    .parseableTextRepresentation(context, managedPropertyIfAny.get().getPropertyValue().getPojo());
+        }
+
     }
+
 
     // -- COLLECTION TESTER
 
@@ -306,8 +427,9 @@ public class DomainObjectTesterFactory {
 
         private CollectionTester(
                 final @NonNull Class<T> domainObjectType,
-                final @NonNull String collectionName) {
-            super(domainObjectType, collectionName, "collection");
+                final @NonNull String collectionName,
+                final @NonNull Where where) {
+            super(domainObjectType, collectionName, "collection", where);
         }
 
         @Override
@@ -315,6 +437,12 @@ public class DomainObjectTesterFactory {
             return managedCollectionIfAny
             .map(ManagedCollection::getMetaModel)
             .map(OneToManyAssociation.class::cast);
+        }
+
+        @Override
+        protected Optional<ObjectSpecification> getElementType() {
+            return getMetaModel()
+                    .map(OneToManyAssociation::getElementType);
         }
 
         @Override
@@ -349,16 +477,19 @@ public class DomainObjectTesterFactory {
 
         @Getter private final String memberName;
         private final String memberSort;
+        protected final Where where;
 
         private Optional<? extends ManagedMember> managedMemberIfAny;
 
         protected MemberTester(
                 final @NonNull Class<T> domainObjectType,
                 final @NonNull String memberName,
-                final @NonNull String memberSort) {
+                final @NonNull String memberSort,
+                final @NonNull Where where) {
             super(domainObjectType);
             this.memberName = memberName;
             this.memberSort = memberSort;
+            this.where = where;
         }
 
         @Override
@@ -369,8 +500,27 @@ public class DomainObjectTesterFactory {
         }
 
         protected abstract Optional<? extends ObjectMember> getMetaModel();
-
+        protected abstract Optional<ObjectSpecification> getElementType();
         protected abstract Optional<? extends ManagedMember> startInteractionOn(ManagedObject viewModel);
+
+        public <F extends Facet> F getFacetOnMemberElseFail(final Class<F> facetType) {
+            return getMetaModel()
+            .map(m->m.getFacet(facetType))
+            .orElseThrow(()->_Exceptions.noSuchElement(
+                    String.format("%s has no %s", memberName, facetType.getSimpleName())
+                    ));
+        }
+
+        public <F extends Facet> F getFacetOnElementTypeElseFail(final Class<F> facetType) {
+            return getElementType()
+            .map(m->m.getFacet(facetType))
+            .orElseThrow(()->_Exceptions.noSuchElement(
+                    String.format("'%s: %s' has no %s on its element type",
+                            memberName,
+                            getObjectSpecification().getCorrespondingClass().getSimpleName(),
+                            facetType.getSimpleName())
+                    ));
+        }
 
         public final void assertExists(final boolean isExpectedToExist) {
 

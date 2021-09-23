@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.spec.feature;
 
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -122,9 +123,21 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
     /**
      * Returns the specification for the owning {@link ManagedObject}.
+     * @deprecated
      */
+    @Deprecated
     ObjectSpecification getOnType();
 
+    /**
+     * Returns the specification for the owning {@link ManagedObject}.
+     *
+     * Returns the {@link ObjectSpecification} representing the class or interface
+     * that declares the member represented by this object.
+     * FIXME this should be common to ALL members
+     */
+    default ObjectSpecification getDeclaringType() {
+        return getOnType();
+    }
 
     // //////////////////////////////////////////////////////
     // Predicates
@@ -140,7 +153,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
         public static final Predicate<ObjectAssociation> REFERENCE_PROPERTIES =
                 assoc ->  assoc.isOneToOneAssociation() &&
-                         !assoc.getSpecification().containsNonFallbackFacet(ValueFacet.class);
+                         !assoc.getElementType().containsNonFallbackFacet(ValueFacet.class);
 
         public static final Predicate<ObjectAssociation> COLLECTIONS =
                 assoc -> assoc.isOneToManyAssociation();

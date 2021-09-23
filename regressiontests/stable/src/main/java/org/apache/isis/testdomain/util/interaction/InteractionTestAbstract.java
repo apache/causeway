@@ -57,6 +57,7 @@ public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstrac
     @Inject protected InteractionService interactionService;
     @Inject protected WrapperFactory wrapper;
     @Inject protected KVStoreForTesting kvStoreForTesting;
+    @Inject protected DomainObjectTesterFactory testerFactory;
 
     protected ManagedObject newValue(final Object value) {
         return objectManager.adapt(value);
