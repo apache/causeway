@@ -49,7 +49,7 @@ implements CollectionContentsAsFactory {
     private static final String NAME = "summary";
 
     static final Predicate<ObjectAssociation> OF_TYPE_BIGDECIMAL = (final ObjectAssociation objectAssoc) -> {
-        final var objectSpec = objectAssoc.getSpecification();
+        final var objectSpec = objectAssoc.getElementType();
         return objectSpec.isValue()
                 && objectSpec.getCorrespondingClass().equals(BigDecimal.class);
     };

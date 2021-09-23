@@ -51,7 +51,7 @@ public class FallbackFieldFactory implements UiComponentHandlerVaa {
     @Override
     public Component handle(final ComponentRequest request) {
 
-        val spec = request.getManagedFeature().getSpecification();
+        val spec = request.getManagedFeature().getElementType();
 
         val debugUiModel = DebugUiModel.of("type not handled")
         .withProperty("ObjectFeature.specification.fullIdentifier",  spec.getFullIdentifier())

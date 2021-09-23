@@ -98,13 +98,9 @@ implements ObjectAction {
         super(identifier, facetedMethod, FeatureType.ACTION);
     }
 
-    // -- ReturnType, OnType, Actions (set)
-    /**
-     * Always returns <tt>null</tt>.
-     */
     @Override
-    public ObjectSpecification getSpecification() {
-        return null;
+    public ObjectSpecification getElementType() {
+        return getReturnType();
     }
 
     @Override
@@ -197,7 +193,7 @@ implements ObjectAction {
     @Override
     public Can<ObjectSpecification> getParameterTypes() {
         val parameters = getParameters();
-        val parameterTypes = parameters.map(ObjectActionParameter::getSpecification);
+        val parameterTypes = parameters.map(ObjectActionParameter::getElementType);
         return parameterTypes;
     }
 
@@ -448,7 +444,7 @@ implements ObjectAction {
         paramChoicesVector = new CanVector<>(parameterCount);
         for (int i = 0; i < parameterCount; i++) {
             val param = parameters.getElseFail(i);
-            val paramSpec = param.getSpecification();
+            val paramSpec = param.getElementType();
             val paramFacet = param.getFacet(ActionParameterChoicesFacet.class);
 
             if (paramFacet != null && !paramFacet.getPrecedence().isFallback()) {
@@ -508,7 +504,7 @@ implements ObjectAction {
             if (i > 0) {
                 sb.append(",");
             }
-            sb.append(getParameters().getElseFail(i).getSpecification().getShortIdentifier());
+            sb.append(getParameters().getElseFail(i).getElementType().getShortIdentifier());
         }
         sb.append("}]");
         return sb.toString();

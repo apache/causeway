@@ -67,7 +67,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
             super(FeatureType.ACTION_PARAMETER_SCALAR, number, objectAction, peer);
         }
 
-        private ObjectSpecification objectSpec;
+        private ObjectSpecification elementSpec;
 
         @Override
         public ManagedObject get(final ManagedObject owner, final InteractionInitiatedBy interactionInitiatedBy) {
@@ -94,12 +94,12 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
         }
 
         @Override
-        public ObjectSpecification getSpecification() {
-            return objectSpec;
+        public ObjectSpecification getElementType() {
+            return elementSpec;
         }
 
-        public void setSpecification(final ObjectSpecification objectSpec) {
-            this.objectSpec = objectSpec;
+        public void setSpecification(final ObjectSpecification elementSpec) {
+            this.elementSpec = elementSpec;
         }
 
     }
@@ -118,10 +118,10 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
                 allowing(stubSpecForString).getSingularName();
                 will(returnValue("string"));
 
-                allowing(stubObjectActionParameterString).getSpecification();
+                allowing(stubObjectActionParameterString).getElementType();
                 will(returnValue(stubSpecForString));
 
-                allowing(stubObjectActionParameterString2).getSpecification();
+                allowing(stubObjectActionParameterString2).getElementType();
                 will(returnValue(stubSpecForString));
 
                 allowing(parentAction).getFacetedMethod();

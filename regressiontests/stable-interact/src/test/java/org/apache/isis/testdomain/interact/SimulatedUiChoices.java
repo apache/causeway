@@ -42,7 +42,7 @@ public class SimulatedUiChoices extends HasValueValidation {
     private ObjectSpecification valueSpecification;
 
     @Override
-    public void bind(ManagedValue managedValue) {
+    public void bind(final ManagedValue managedValue) {
         choiceBox.bind(managedValue.getChoices());
         choiceBox.addListener((e,o,n)->{
             choiceBoxUpdateEventCount.increment();
@@ -54,10 +54,10 @@ public class SimulatedUiChoices extends HasValueValidation {
             selectedItemUpdateEventCount.increment();
         });
 
-        valueSpecification = managedValue.getSpecification();
+        valueSpecification = managedValue.getElementType();
     }
 
-    public void bind(ParameterNegotiationModel pendingArgs, int paramNr) {
+    public void bind(final ParameterNegotiationModel pendingArgs, final int paramNr) {
         bind(pendingArgs.getParamModels().getElseFail(paramNr));
     }
 
@@ -65,7 +65,7 @@ public class SimulatedUiChoices extends HasValueValidation {
      * assuming the parameter is a scalar type
      * @param choiceIndex
      */
-    public void simulateChoiceSelect(int choiceIndex) {
+    public void simulateChoiceSelect(final int choiceIndex) {
         selectedItem.setValue(choiceBox.getValue().getElseFail(choiceIndex));
     }
 
@@ -73,7 +73,7 @@ public class SimulatedUiChoices extends HasValueValidation {
      * assuming the parameter is a non-scalar type
      * @param choiceIndices
      */
-    public void simulateMultiChoiceSelect(int ... choiceIndices) {
+    public void simulateMultiChoiceSelect(final int ... choiceIndices) {
         val newValuePojos = choiceBox.getValue()
                 .pickByIndex(choiceIndices)
                 .map(ManagedObject::getPojo);

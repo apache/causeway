@@ -124,7 +124,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
                     .orElse(null);
 
             // in case of non-scalar params returns the element type
-            val paramTypeOrElementType = actionParameter.getSpecification().getCorrespondingClass();
+            val paramTypeOrElementType = actionParameter.getElementType().getCorrespondingClass();
 
             val paramDto = actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION
                     ? CommonDtoUtils.newParamDtoNonScalar(
@@ -155,7 +155,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
         propertyDto.setLogicalMemberIdentifier(CommandUtil.logicalMemberIdentifierFor(property));
         propertyDto.setMemberIdentifier(CommandUtil.memberIdentifierFor(property));
 
-        val valueSpec = property.getSpecification();
+        val valueSpec = property.getElementType();
         val valueType = valueSpec.getCorrespondingClass();
 
         val newValue = CommonDtoUtils.newValueWithTypeDto(

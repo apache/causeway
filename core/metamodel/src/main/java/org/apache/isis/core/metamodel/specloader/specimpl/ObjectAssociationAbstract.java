@@ -34,19 +34,19 @@ public abstract class ObjectAssociationAbstract
 extends ObjectMemberAbstract
 implements ObjectAssociation {
 
-    private final ObjectSpecification specification;
+    private final ObjectSpecification elementType;
 
     public ObjectAssociationAbstract(
             final Identifier featureIdentifier,
             final FacetedMethod facetedMethod,
             final FeatureType featureType,
-            final ObjectSpecification specification) {
+            final ObjectSpecification elementType) {
 
         super(featureIdentifier, facetedMethod, featureType);
-        if (specification == null) {
+        if (elementType == null) {
             throw new IllegalArgumentException("field type for '" + getId() + "' must exist");
         }
-        this.specification = specification;
+        this.elementType = elementType;
     }
 
     @Override
@@ -67,8 +67,8 @@ implements ObjectAssociation {
      * the type of collection.
      */
     @Override
-    public ObjectSpecification getSpecification() {
-        return specification;
+    public ObjectSpecification getElementType() {
+        return elementType;
     }
 
 

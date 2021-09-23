@@ -72,7 +72,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         //
         // eg Order#getItems() and Order#removeItems(List<OrderItem>)
         //
-        final ObjectSpecification specification = collection.getSpecification();
+        final ObjectSpecification specification = collection.getElementType();
 
         final ObjectActionParameter.Predicates.CollectionParameter whetherCollectionParamOfType =
                 new ObjectActionParameter.Predicates.CollectionParameter(specification);

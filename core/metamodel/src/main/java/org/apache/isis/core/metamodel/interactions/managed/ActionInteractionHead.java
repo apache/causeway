@@ -44,16 +44,16 @@ implements HasMetaModel<ObjectAction> {
     @NonNull private final ObjectAction metaModel;
 
     public static ActionInteractionHead of(
-            @NonNull ObjectAction objectAction,
-            @NonNull ManagedObject owner,
-            @NonNull ManagedObject target) {
+            @NonNull final ObjectAction objectAction,
+            @NonNull final ManagedObject owner,
+            @NonNull final ManagedObject target) {
         return new ActionInteractionHead(objectAction, owner, target);
     }
 
     protected ActionInteractionHead(
-            @NonNull ObjectAction objectAction,
-            @NonNull ManagedObject owner,
-            @NonNull ManagedObject target) {
+            @NonNull final ObjectAction objectAction,
+            @NonNull final ManagedObject owner,
+            @NonNull final ManagedObject target) {
         super(owner, target);
         this.metaModel = objectAction;
     }
@@ -67,7 +67,7 @@ implements HasMetaModel<ObjectAction> {
     public Can<ManagedObject> getEmptyParameterValues() {
         return getMetaModel().getParameters().stream()
         .map(objectActionParameter->
-            ManagedObject.empty(objectActionParameter.getSpecification()))
+            ManagedObject.empty(objectActionParameter.getElementType()))
         .collect(Can.toCan());
     }
 
@@ -78,7 +78,7 @@ implements HasMetaModel<ObjectAction> {
      * The size of the tuple corresponds to the number of parameters.
      * @param pojoArgList - argument pojos
      */
-    public Can<ManagedObject> getPopulatedParameterValues(@Nullable List<Object> pojoArgList) {
+    public Can<ManagedObject> getPopulatedParameterValues(@Nullable final List<Object> pojoArgList) {
 
         val params = getMetaModel().getParameters();
 
@@ -89,11 +89,11 @@ implements HasMetaModel<ObjectAction> {
         }
 
         return params.zipMap(pojoArgList, (objectActionParameter, argPojo)->
-            ManagedObject.of(objectActionParameter.getSpecification(), argPojo));
+            ManagedObject.of(objectActionParameter.getElementType(), argPojo));
     }
 
     public ParameterNegotiationModel model(
-            @NonNull Can<ManagedObject> paramValues) {
+            @NonNull final Can<ManagedObject> paramValues) {
         return ParameterNegotiationModel.of(this, paramValues);
     }
 
@@ -145,7 +145,7 @@ implements HasMetaModel<ObjectAction> {
 
     // -- HELPER
 
-    private boolean equals(Can<ManagedObject> left, Can<ManagedObject> right) {
+    private boolean equals(final Can<ManagedObject> left, final Can<ManagedObject> right) {
         // equal length is guaranteed as used only local to this class
         val leftIt = left.iterator();
         for(val r : right) {

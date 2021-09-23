@@ -196,7 +196,7 @@ class _PropertiesAsColumns implements HasMetaModelContext {
                 if (hiddenFacet.where() != Where.REFERENCES_PARENT) {
                     return true;
                 }
-                val propertySpec = property.getSpecification();
+                val propertySpec = property.getElementType();
                 final boolean propertySpecIsOfParentSpec = parentSpec.isOfType(propertySpec);
                 final boolean isVisible = !propertySpecIsOfParentSpec;
                 return isVisible;

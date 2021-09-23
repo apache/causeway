@@ -41,14 +41,15 @@ public interface ManagedFeature {
      * @return The specification of the feature's underlying type.
      * For actions this is the specification of the action's return type.
      */
-    ObjectSpecification getSpecification();
+    ObjectSpecification getElementType();
+
 
     /**
      * @return The feature's underlying type.
      * For actions this is the action's return type.
      */
-    default Class<?> getCorrespondingClass() {
-        return getSpecification().getCorrespondingClass();
+    default Class<?> getElementClass() {
+        return getElementType().getCorrespondingClass();
     }
 
     FacetHolder getMetaModel();

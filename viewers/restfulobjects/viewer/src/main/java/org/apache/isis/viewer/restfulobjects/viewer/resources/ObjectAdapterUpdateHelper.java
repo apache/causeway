@@ -85,7 +85,7 @@ public class ObjectAdapterUpdateHelper {
         boolean allOk = true;
 
         final OneToOneAssociation property = (OneToOneAssociation) association;
-        final ObjectSpecification propertySpec = property.getSpecification();
+        final ObjectSpecification propertySpec = property.getElementType();
         final String id = property.getId();
         final JsonRepresentation propertyRepr = propertiesMap.getRepresentation(id);
         final Consent visibility = property.isVisible(

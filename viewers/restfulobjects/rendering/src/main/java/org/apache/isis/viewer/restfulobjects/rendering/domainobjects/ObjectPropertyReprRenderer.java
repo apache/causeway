@@ -90,7 +90,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
         // use the runtime type if we have a value, otherwise the compile time type of the member
         val spec = valueAdapterIfAny != null
                 ? valueAdapterIfAny.getSpecification()
-                : objectMember.getSpecification();
+                : objectMember.getElementType();
 
         val valueFacet = spec.getFacet(ValueFacet.class);
         if (valueFacet != null) {

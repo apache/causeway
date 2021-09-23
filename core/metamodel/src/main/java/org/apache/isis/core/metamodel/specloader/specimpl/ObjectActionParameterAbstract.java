@@ -121,7 +121,7 @@ implements
     }
 
     @Override
-    public ObjectSpecification getSpecification() {
+    public ObjectSpecification getElementType() {
         return getSpecificationLoader().loadSpecification(peer.getType());
     }
 
@@ -214,7 +214,7 @@ implements
 
         val visibleChoices = autoCompleteFacet
                 .autoComplete(pendingArgs.getActionTarget(), pendingArgs.getParamValues(), searchArg, interactionInitiatedBy);
-        checkChoicesOrAutoCompleteType(getSpecificationLoader(), visibleChoices, getSpecification());
+        checkChoicesOrAutoCompleteType(getSpecificationLoader(), visibleChoices, getElementType());
 
         return visibleChoices;
     }
@@ -239,7 +239,7 @@ implements
             final ParameterNegotiationModel pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val paramSpec = getSpecification();
+        val paramSpec = getElementType();
         val choicesFacet = getFacet(ActionParameterChoicesFacet.class);
         if (choicesFacet == null) {
             return Can.empty();
@@ -249,7 +249,7 @@ implements
                 pendingArgs.getHead(),
                 pendingArgs.getParamValues(),
                 interactionInitiatedBy);
-        checkChoicesOrAutoCompleteType(getSpecificationLoader(), visibleChoices, getSpecification());
+        checkChoicesOrAutoCompleteType(getSpecificationLoader(), visibleChoices, paramSpec);
 
         return visibleChoices;
     }
@@ -261,7 +261,7 @@ implements
     public ManagedObject getDefault(
             final @NonNull ParameterNegotiationModel pendingArgs) {
 
-        val paramSpec = getSpecification();
+        val paramSpec = getElementType();
         val defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
         if (defaultsFacet != null && !defaultsFacet.getPrecedence().isFallback()) {
             final Object paramValuePojo = defaultsFacet.getDefault(pendingArgs);

@@ -179,7 +179,9 @@ implements OneToManyAssociation {
         final ToString str = new ToString(this);
         str.append(super.toString());
         str.append(",");
-        str.append("type", getSpecification() == null ? "unknown" : getSpecification().getShortIdentifier());
+        str.append("type", getElementType() == null
+                ? "unknown"
+                : getElementType().getShortIdentifier());
         return str.toString();
     }
 

@@ -58,12 +58,12 @@ public class DeriveNavigationFacetFromHiddenTypePostProcessor extends ObjectSpec
 
     @Override
     protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
-        addFacetIfRequired(prop, prop.getSpecification());
+        addFacetIfRequired(prop, prop.getElementType());
     }
 
     @Override
     protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
-        addFacetIfRequired(coll, coll.getSpecification());
+        addFacetIfRequired(coll, coll.getElementType());
     }
 
     private static void addFacetIfRequired(final FacetHolder facetHolder, final ObjectSpecification navigatedType) {

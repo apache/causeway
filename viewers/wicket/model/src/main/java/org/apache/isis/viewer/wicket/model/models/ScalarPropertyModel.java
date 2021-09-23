@@ -83,7 +83,7 @@ implements PropertyUiModel {
 
     @Override
     public ObjectSpecification getScalarTypeSpec() {
-        return getMetaModel().getSpecification();
+        return getMetaModel().getElementType();
     }
 
     @Override

@@ -81,11 +81,11 @@ public interface UiComponentFactory<B, C> {
         }
 
         public ObjectSpecification getFeatureTypeSpec() {
-            return managedFeature.getSpecification();
+            return managedFeature.getElementType();
         }
 
         public Class<?> getFeatureType() {
-            return managedFeature.getCorrespondingClass();
+            return managedFeature.getElementClass();
         }
 
         public boolean isFeatureTypeEqualTo(final @Nullable Class<?> type) {

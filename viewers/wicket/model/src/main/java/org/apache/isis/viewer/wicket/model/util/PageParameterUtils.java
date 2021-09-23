@@ -359,7 +359,7 @@ public class PageParameterUtils {
             final ActionModel actionModel,
             final ObjectActionParameter actionParam,
             final String oidStrEncoded) {
-        val paramValue = decodeArg(mmc, actionParam.getSpecification(), oidStrEncoded);
+        val paramValue = decodeArg(mmc, actionParam.getElementType(), oidStrEncoded);
         actionModel.setParameterValue(actionParam, paramValue);
     }
 

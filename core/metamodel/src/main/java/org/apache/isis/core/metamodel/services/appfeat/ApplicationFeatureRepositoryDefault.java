@@ -72,8 +72,8 @@ implements ApplicationFeatureRepository {
 
     @Inject
     public ApplicationFeatureRepositoryDefault(
-            IsisConfiguration configuration,
-            SpecificationLoader specificationLoader) {
+            final IsisConfiguration configuration,
+            final SpecificationLoader specificationLoader) {
         this.configuration = configuration;
         this.specificationLoader = specificationLoader;
     }
@@ -81,7 +81,7 @@ implements ApplicationFeatureRepository {
     // -- init
     @Order(PriorityPrecedence.MIDPOINT)
     @EventListener(MetamodelEvent.class)
-    public void onMetamodelEvent(MetamodelEvent event) {
+    public void onMetamodelEvent(final MetamodelEvent event) {
         if (event.isPostMetamodel()
                 && isEagerInitialize()) {
             initializeIfRequired();
@@ -156,7 +156,7 @@ implements ApplicationFeatureRepository {
         // add members
         boolean addedMembers = false;
         for (final ObjectAssociation property : properties) {
-            final Class<?> returnType = correspondingClassFor(property.getSpecification());
+            final Class<?> returnType = correspondingClassFor(property.getElementType());
             final Integer maxLength = returnType == String.class ? valueOf(property, MaxLengthFacet.class) : null;
             final Integer typicalLength = returnType == String.class ? valueOf(property, TypicalLengthFacet.class) : null;
             final boolean derived = !property.containsNonFallbackFacet(PropertySetterFacet.class);
@@ -164,7 +164,7 @@ implements ApplicationFeatureRepository {
         }
         for (final ObjectAssociation collection : collections) {
             final boolean derived = false;
-            final Class<?> elementType = correspondingClassFor(collection.getSpecification());
+            final Class<?> elementType = correspondingClassFor(collection.getElementType());
             addedMembers = newCollection(typeFeatureId, collection, elementType, derived) || addedMembers;
         }
         for (final ObjectAction action : actions) {
@@ -351,7 +351,7 @@ implements ApplicationFeatureRepository {
     // -- FACTORY
 
     @Override
-    public ApplicationFeature newApplicationFeature(ApplicationFeatureId featId) {
+    public ApplicationFeature newApplicationFeature(final ApplicationFeatureId featId) {
         return new ApplicationFeatureDefault(featId); // value type
     }
 

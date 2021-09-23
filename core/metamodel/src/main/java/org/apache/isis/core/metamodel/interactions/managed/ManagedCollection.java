@@ -76,7 +76,7 @@ public final class ManagedCollection extends ManagedMember {
     }
 
     public ObjectSpecification getElementSpecification() {
-        return getCollection().getSpecification();
+        return getCollection().getElementType();
     }
 
     public ManagedObject getCollectionValue() {
@@ -91,7 +91,7 @@ public final class ManagedCollection extends ManagedMember {
      * @param interactionInitiatedBy
      * @return Stream of this collection's element values as to be used by the UI for representation
      */
-    public Stream<ManagedObject> streamElements(InteractionInitiatedBy interactionInitiatedBy) {
+    public Stream<ManagedObject> streamElements(final InteractionInitiatedBy interactionInitiatedBy) {
         val valueAdapter = getCollection().get(getOwner(), interactionInitiatedBy);
         return CollectionFacet.streamAdapters(valueAdapter);
     }

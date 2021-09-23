@@ -201,7 +201,7 @@ public class ParameterNegotiationModel {
 
     @NonNull public ManagedObject adaptParamValuePojo(final int paramNr, final @Nullable Object newParamValuePojo) {
         val paramMeta = getParamMetamodel(paramNr);
-        val paramSpec = paramMeta.getSpecification();
+        val paramSpec = paramMeta.getElementType();
         val paramValue = newParamValuePojo!=null
                 ? ManagedObject.of(paramSpec, newParamValuePojo)
                 : ManagedObject.empty(paramSpec);
@@ -310,8 +310,8 @@ public class ParameterNegotiationModel {
         }
 
         @Override
-        public ObjectSpecification getSpecification() {
-            return getMetaModel().getSpecification();
+        public ObjectSpecification getElementType() {
+            return getMetaModel().getElementType();
         }
 
         @Override

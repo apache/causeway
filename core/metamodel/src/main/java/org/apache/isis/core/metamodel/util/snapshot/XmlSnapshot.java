@@ -481,7 +481,7 @@ public class XmlSnapshot implements Snapshot {
 
         if (field instanceof OneToOneAssociation) {
 
-            if (field.getSpecification().streamAssociations(MixedIn.INCLUDED).limit(1).count() == 0L) {
+            if (field.getElementType().streamAssociations(MixedIn.INCLUDED).limit(1).count() == 0L) {
                 if (log.isDebugEnabled()) {
                     log.debug("includeField(Pl, Vec, Str): field is value; done");
                 }
@@ -677,12 +677,12 @@ public class XmlSnapshot implements Snapshot {
 
             Element xsdFieldElement = null;
 
-            if (field.getSpecification().containsFacet(ValueFacet.class)) {
+            if (field.getElementType().containsFacet(ValueFacet.class)) {
                 if (log.isDebugEnabled()) {
                     log.debug("objectToElement(NO): {} is value", log("field", fieldName));
                 }
 
-                final ObjectSpecification fieldNos = field.getSpecification();
+                final ObjectSpecification fieldNos = field.getElementType();
                 // skip fields of type XmlValue
                 if (fieldNos == null) {
                     continue eachField;
@@ -763,7 +763,7 @@ public class XmlSnapshot implements Snapshot {
 
                 // XSD
                 xsdFieldElement = schema.createXsElementForNofReference(xsElement, xmlReferenceElement,
-                        oneToOneAssociation.getSpecification().getFullIdentifier(),
+                        oneToOneAssociation.getElementType().getFullIdentifier(),
                         FacetUtil.getFacetsByType(oneToOneAssociation));
 
             } else if (field instanceof OneToManyAssociation) {
@@ -778,7 +778,7 @@ public class XmlSnapshot implements Snapshot {
                 ManagedObject collection;
                 try {
                     collection = oneToManyAssociation.get(adapter, InteractionInitiatedBy.FRAMEWORK);
-                    final ObjectSpecification referencedTypeNos = oneToManyAssociation.getSpecification();
+                    final ObjectSpecification referencedTypeNos = oneToManyAssociation.getElementType();
                     final String fullyQualifiedClassName = referencedTypeNos.getFullIdentifier();
 
                     // XML
@@ -791,7 +791,7 @@ public class XmlSnapshot implements Snapshot {
 
                 // XSD
                 xsdFieldElement = schema.createXsElementForNofCollection(xsElement, xmlCollectionElement,
-                        oneToManyAssociation.getSpecification().getFullIdentifier(),
+                        oneToManyAssociation.getElementType().getFullIdentifier(),
                         FacetUtil.getFacetsByType(oneToManyAssociation));
 
             } else {

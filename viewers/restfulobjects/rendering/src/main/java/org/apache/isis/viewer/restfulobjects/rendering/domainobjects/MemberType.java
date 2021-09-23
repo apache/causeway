@@ -43,23 +43,13 @@ public enum MemberType {
     PROPERTY("properties/", RepresentationType.OBJECT_PROPERTY,
             _Maps.unmodifiable(
                     "modify", MutatorSpec.of(Rel.MODIFY, PropertyValidateFacet.class, PropertySetterFacet.class, RestfulHttpMethod.PUT, BodyArgs.ONE),
-                    "clear", MutatorSpec.of(Rel.CLEAR, PropertyValidateFacet.class, PropertyClearFacet.class, RestfulHttpMethod.DELETE, BodyArgs.NONE))) {
-        @Override
-        public ObjectSpecification specFor(final ObjectMember objectMember) {
-            return objectMember.getSpecification();
-        }
-    },
+                    "clear", MutatorSpec.of(Rel.CLEAR, PropertyValidateFacet.class, PropertyClearFacet.class, RestfulHttpMethod.DELETE, BodyArgs.NONE))),
     /**
      * {@link #getMutators()} are empty}
      */
     COLLECTION("collections/", RepresentationType.OBJECT_COLLECTION,
             Collections.emptyMap()
-            ) {
-        @Override
-        public ObjectSpecification specFor(final ObjectMember objectMember) {
-            return objectMember.getSpecification();
-        }
-    },
+            ),
     /**
      * {@link #getMutators()} are keyed by
      */
@@ -67,13 +57,7 @@ public enum MemberType {
             _Maps.unmodifiable(
                     "invokeQueryOnly", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, RestfulHttpMethod.GET, BodyArgs.MANY, "invoke"),
                     "invokeIdempotent", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, RestfulHttpMethod.PUT, BodyArgs.MANY, "invoke"),
-                    "invoke", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, RestfulHttpMethod.POST, BodyArgs.MANY, "invoke"))) {
-        @Override
-        public ObjectSpecification specFor(final ObjectMember objectMember) {
-            final ObjectAction objectAction = (ObjectAction) objectMember;
-            return objectAction.getReturnType();
-        }
-    };
+                    "invoke", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, RestfulHttpMethod.POST, BodyArgs.MANY, "invoke")));
 
     private final String urlPart;
     private final String name;
@@ -96,7 +80,10 @@ public enum MemberType {
         return mutators;
     }
 
-    public abstract ObjectSpecification specFor(ObjectMember objectMember);
+    @Deprecated //inline
+    public final ObjectSpecification specFor(final ObjectMember objectMember) {
+        return objectMember.getElementType();
+    }
 
     public boolean isProperty() {
         return this == MemberType.PROPERTY;

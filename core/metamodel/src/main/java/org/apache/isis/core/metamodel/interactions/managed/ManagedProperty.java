@@ -148,7 +148,7 @@ extends ManagedMember {
         return property.isVisible(owner, InteractionInitiatedBy.FRAMEWORK, getWhere()).isAllowed()
                 && property.isVisible(owner, InteractionInitiatedBy.USER, getWhere()).isAllowed()
             ? property.get(owner, InteractionInitiatedBy.USER)
-            : ManagedObject.empty(property.getSpecification());
+            : ManagedObject.empty(property.getElementType());
     }
 
 

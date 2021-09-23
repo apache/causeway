@@ -61,7 +61,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         if(parameter.containsNonFallbackFacet(ActionParameterChoicesFacet.class)) {
             return;
         }
-        parameter.getSpecification()
+        parameter.getElementType()
         .lookupNonFallbackFacet(ChoicesFacet.class)
         .ifPresent(choicesFacet -> FacetUtil
                 .addFacet(new ActionParameterChoicesFacetInferredFromChoicesFacet(peerFor(parameter))));
@@ -72,7 +72,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         if(property.containsNonFallbackFacet(PropertyChoicesFacet.class)) {
             return;
         }
-        property.getSpecification()
+        property.getElementType()
         .lookupNonFallbackFacet(ChoicesFacet.class)
         .ifPresent(specFacet -> FacetUtil
                 .addFacet(new PropertyChoicesFacetDerivedFromChoicesFacet(facetedMethodFor(property))));

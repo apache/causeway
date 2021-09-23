@@ -363,7 +363,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     @Deprecated // must be the responsibility of the underlying Interaction API, not ours
     private ManagedObject nullToEmpty(@Nullable ManagedObject adapter) {
         if(adapter == null) {
-            adapter = ManagedObject.empty(getMetaModel().getSpecification());
+            adapter = ManagedObject.empty(getMetaModel().getElementType());
         }
         return ManagedObjects.emptyToDefault(!getMetaModel().isOptional(), adapter);
     }

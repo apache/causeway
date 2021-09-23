@@ -87,8 +87,8 @@ public class PropertyNegotiationModel implements ManagedValue {
     }
 
     @Override
-    public ObjectSpecification getSpecification() {
-        return managedProperty.getSpecification();
+    public ObjectSpecification getElementType() {
+        return managedProperty.getElementType();
     }
 
     @Override

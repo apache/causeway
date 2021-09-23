@@ -146,27 +146,6 @@ public interface ObjectFeature extends Specification {
     }
 
     /**
-     * The specification of the underlying type.
-     *
-     * <p>
-     * For example:
-     * <ul>
-     * <li>for a {@link OneToOneAssociation property}, will return the
-     * {@link ObjectSpecification} of the type that the accessor returns.
-     * <li>for a {@link OneToManyAssociation collection} it will be the type of
-     * element the collection holds (not the type of collection).
-     * <li>for an {@link ObjectAction action}, will always return <tt>null</tt>.
-     * See instead {@link ObjectAction#getReturnType()} and
-     * {@link ObjectAction#getParameterTypes()}.
-     * <li>for an {@link ObjectActionParameter action parameter}, will return the type of
-     * the parameter}.
-     * </ul>
-     * @deprecated use the generic {@link #getElementType()} instead that also handles actions
-     */
-    @Deprecated // just too ambiguous
-    ObjectSpecification getSpecification();
-
-    /**
      * The specification of the associated type.
      * <ul>
      * <li>for a {@link OneToOneAssociation property}, will return the
@@ -178,12 +157,7 @@ public interface ObjectFeature extends Specification {
      * the parameter}.
      * </ul>
      */
-    default ObjectSpecification getElementType() {
-        if(this instanceof ObjectAction) {
-            return ((ObjectAction)this).getReturnType();
-        }
-        return getSpecification();
-    }
+    ObjectSpecification getElementType();
 
 
     /**

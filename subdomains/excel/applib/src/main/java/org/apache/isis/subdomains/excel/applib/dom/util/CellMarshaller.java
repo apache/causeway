@@ -75,7 +75,7 @@ final class CellMarshaller {
             return;
         }
 
-        final ObjectSpecification propertySpec = otoa.getSpecification();
+        final ObjectSpecification propertySpec = otoa.getElementType();
         final Object propertyAsObj = propertyAdapter.getPojo();
         final String propertyAsTitle = propertyAdapter.titleString();
 
@@ -121,7 +121,7 @@ final class CellMarshaller {
             CreationHelper createHelper = cell.getSheet().getWorkbook().getCreationHelper();
             XSSFHyperlink link = (XSSFHyperlink)createHelper.createHyperlink(HyperlinkType.URL);
             link.setAddress(stringValue);
-            cell.setHyperlink((XSSFHyperlink) link);
+            cell.setHyperlink(link);
 
             cell.setCellStyle(defaultCellStyle);
 
@@ -194,12 +194,12 @@ final class CellMarshaller {
         // number
         if(valueAsObj instanceof Double) {
             Double value = (Double) valueAsObj;
-            setCellValueForDouble(cell, (double)value, defaultCellStyle);
+            setCellValueForDouble(cell, value, defaultCellStyle);
             return true;
         }
         if(valueAsObj instanceof Float) {
             Float value = (Float) valueAsObj;
-            setCellValueForDouble(cell, (double)value, defaultCellStyle);
+            setCellValueForDouble(cell, value, defaultCellStyle);
             return true;
         }
         if(valueAsObj instanceof BigDecimal) {
@@ -214,22 +214,22 @@ final class CellMarshaller {
         }
         if(valueAsObj instanceof Long) {
             Long value = (Long) valueAsObj;
-            setCellValueForDouble(cell, (double)value, defaultCellStyle);
+            setCellValueForDouble(cell, value, defaultCellStyle);
             return true;
         }
         if(valueAsObj instanceof Integer) {
             Integer value = (Integer) valueAsObj;
-            setCellValueForDouble(cell, (double)value, defaultCellStyle);
+            setCellValueForDouble(cell, value, defaultCellStyle);
             return true;
         }
         if(valueAsObj instanceof Short) {
             Short value = (Short) valueAsObj;
-            setCellValueForDouble(cell, (double)value, defaultCellStyle);
+            setCellValueForDouble(cell, value, defaultCellStyle);
             return true;
         }
         if(valueAsObj instanceof Byte) {
             Byte value = (Byte) valueAsObj;
-            setCellValueForDouble(cell, (double)value, defaultCellStyle);
+            setCellValueForDouble(cell, value, defaultCellStyle);
             return true;
         }
         if(valueAsObj instanceof Enum) {
@@ -240,7 +240,7 @@ final class CellMarshaller {
         return false;
     }
 
-    private static void setCellValueForString(final Cell cell, final String objectAsStr, CellStyle cellStyle) {
+    private static void setCellValueForString(final Cell cell, final String objectAsStr, final CellStyle cellStyle) {
         // char 10 is for linebreak within a cell; to display correctly wrap text needs to be set to true
         if (objectAsStr.contains(Character.toString((char)10))) {
             CellStyle wrappedCellStyle = cell.getSheet().getWorkbook().createCellStyle();
@@ -287,17 +287,17 @@ final class CellMarshaller {
         cell.setCellStyle(cellStyle);
     }
 
-    private static void setCellValueForDouble(final Cell cell, double value, final CellStyle cellStyle) {
+    private static void setCellValueForDouble(final Cell cell, final double value, final CellStyle cellStyle) {
         cell.setCellValue(value);
         cell.setCellStyle(cellStyle);
     }
 
-    private static void setCellValueForDate(final Cell cell, Date date, CellStyle dateCellStyle) {
+    private static void setCellValueForDate(final Cell cell, final Date date, final CellStyle dateCellStyle) {
         cell.setCellValue(date);
         cell.setCellStyle(dateCellStyle);
     }
 
-    String getStringCellValue(Cell cell) {
+    String getStringCellValue(final Cell cell) {
         return getCellValue(cell, String.class);
     }
 
@@ -309,7 +309,7 @@ final class CellMarshaller {
             return null;
         }
 
-        final ObjectSpecification propertySpec = otoa.getSpecification();
+        final ObjectSpecification propertySpec = otoa.getElementType();
         Class<?> requiredType = propertySpec.getCorrespondingClass();
 
         // value types

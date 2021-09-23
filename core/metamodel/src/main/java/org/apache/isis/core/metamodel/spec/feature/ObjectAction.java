@@ -435,11 +435,11 @@ public interface ObjectAction extends ObjectMember {
         public static Predicate<ObjectAction> choicesFromAndHavingCollectionParameterFor(
                 final @NonNull OneToManyAssociation collection) {
 
-            final ObjectSpecification collectionTypeOfSpec = collection.getSpecification();
+            final var elementType = collection.getElementType();
 
             return new ChoicesFrom(collection)
                     .and(new HasParameterMatching(
-                            new ObjectActionParameter.Predicates.CollectionParameter(collectionTypeOfSpec)
+                            new ObjectActionParameter.Predicates.CollectionParameter(elementType)
                             ));
         }
 

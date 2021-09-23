@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface ManagedValue {
 
-    ObjectSpecification getSpecification();
+    ObjectSpecification getElementType();
 
     Bindable<ManagedObject> getValue();
     Bindable<String> getValueAsParsableText();

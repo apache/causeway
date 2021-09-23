@@ -127,7 +127,7 @@ extends ObjectFeature, CurrentHolder {
     @NonNull ManagedObject getDefault(ParameterNegotiationModel pendingArgs);
 
     @NonNull default ManagedObject getEmpty() {
-        return ManagedObject.of(getSpecification(), null);
+        return ManagedObject.of(getElementType(), null);
     }
 
     /** default value as result of a initial param value fixed point search */
@@ -225,7 +225,7 @@ extends ObjectFeature, CurrentHolder {
 
                 final OneToManyActionParameter otmap =
                         (OneToManyActionParameter) objectActionParameter;
-                final ObjectSpecification paramElementSpecification = otmap.getSpecification();
+                final ObjectSpecification paramElementSpecification = otmap.getElementType();
                 return this.elementSpecification.isOfType(paramElementSpecification);
             }
         }
@@ -256,7 +256,7 @@ extends ObjectFeature, CurrentHolder {
 
                 final OneToOneActionParameter otoap =
                         (OneToOneActionParameter) objectActionParameter;
-                final ObjectSpecification paramSecification = otoap.getSpecification();
+                final ObjectSpecification paramSecification = otoap.getElementType();
                 return paramSecification == this.specification;
             }
         }

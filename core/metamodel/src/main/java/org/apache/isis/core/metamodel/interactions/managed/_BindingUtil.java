@@ -41,7 +41,7 @@ class _BindingUtil {
             final @NonNull ObjectActionParameter param,
             final @NonNull _BindableAbstract<ManagedObject> bindableParamValue) {
 
-        final var spec = param.getSpecification();
+        final var spec = param.getElementType();
 
         if(param.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION) {
             _Bindables.forValue(String.format("Non-scalar action parameters are not parseable: %s",
@@ -65,7 +65,7 @@ class _BindingUtil {
             final @NonNull OneToOneAssociation prop,
             final @NonNull _BindableAbstract<ManagedObject> bindablePropertyValue) {
 
-        final var spec = prop.getSpecification();
+        final var spec = prop.getElementType();
 
         // value types should have associated parsers/formatters via value semantics
         return spec.lookupFacet(ValueFacet.class)
