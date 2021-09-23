@@ -140,7 +140,7 @@ extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
         final ActionInvocationFacetForDomainEventAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEventAbstract) facet;
-        assertEquals(customerSpec, actionInvocationFacetViaMethod.getOnType());
+        assertEquals(customerSpec, actionInvocationFacetViaMethod.getDeclaringType());
     }
 
     public void testActionsPickedUpFromSuperclass() {

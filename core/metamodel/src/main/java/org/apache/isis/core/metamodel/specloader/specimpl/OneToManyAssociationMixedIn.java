@@ -160,7 +160,7 @@ implements MixedInMember {
     }
 
     @Override
-    public ObjectSpecification getOnType() {
+    public ObjectSpecification getDeclaringType() {
         return mixeeSpec;
     }
 

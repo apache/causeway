@@ -67,19 +67,11 @@ public interface ObjectAction extends ObjectMember {
      */
     SemanticsOf getSemantics();
 
-    /**
-     * Returns the specification for the type of object that this action can be
-     * invoked upon.
-     */
-    ObjectSpecification getOnType();
-
-
     // -- getType, isPrototype
 
     ActionType getType();
 
     boolean isPrototype();
-
 
 
     // -- ReturnType
@@ -93,7 +85,6 @@ public interface ObjectAction extends ObjectMember {
      * else returns false.
      */
     boolean hasReturn();
-
 
 
     // -- execute, executeWithRuleChecking
@@ -256,7 +247,7 @@ public interface ObjectAction extends ObjectMember {
             final InteractionInitiatedBy interactionInitiatedBy);
 
     default String getCssClass(final String prefix) {
-        final String ownerId = getOnType().getLogicalTypeName().replace(".", "-");
+        final String ownerId = getDeclaringType().getLogicalTypeName().replace(".", "-");
         return prefix + ownerId + "-" + getId();
     }
 
@@ -303,7 +294,7 @@ public interface ObjectAction extends ObjectMember {
             @SuppressWarnings("unused")
             final Identifier identifier = action.getFeatureIdentifier();
 
-            final String className = action.getOnType().getLogicalTypeName().replace(".","-");
+            final String className = action.getDeclaringType().getLogicalTypeName().replace(".","-");
             final String actionId = action.getId();
             return className + "-" + actionId;
         }
@@ -382,7 +373,7 @@ public interface ObjectAction extends ObjectMember {
             val mixeeAdapter = head.getMixedIn().orElse(null);
 
             if(mixeeAdapter != null) {
-                val mixinSpec = action.getOnType();
+                val mixinSpec = action.getDeclaringType();
                 val ownerSpec = mixeeAdapter.getSpecification();
                 return ownerSpec.lookupMixedInMember(mixinSpec)
                         .map(mixedInMember->mixedInMember.getFriendlyName(mixeeAdapter.asProvider()))

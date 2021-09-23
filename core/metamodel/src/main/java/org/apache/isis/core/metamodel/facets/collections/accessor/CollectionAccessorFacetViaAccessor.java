@@ -41,10 +41,10 @@ implements ImperativeFacet {
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
 
     public CollectionAccessorFacetViaAccessor(
-            final ObjectSpecification typeSpec,
+            final ObjectSpecification declaringType,
             final Method method,
             final FacetHolder holder) {
-        super(typeSpec, holder);
+        super(declaringType, holder);
         this.methods = ImperativeFacet.singleMethod(method);
     }
 

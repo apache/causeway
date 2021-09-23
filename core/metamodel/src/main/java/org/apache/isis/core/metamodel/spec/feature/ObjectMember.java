@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
@@ -42,6 +43,12 @@ import lombok.val;
  * Provides reflective access to an action or a field on a domain object.
  */
 public interface ObjectMember extends ObjectFeature {
+
+    /**
+     * Returns the {@link ObjectSpecification} representing the class or interface
+     * that declares the member represented by this object.
+     */
+    ObjectSpecification getDeclaringType();
 
     // /////////////////////////////////////////////////////////////
     // Name, Description, Help (convenience for facets)

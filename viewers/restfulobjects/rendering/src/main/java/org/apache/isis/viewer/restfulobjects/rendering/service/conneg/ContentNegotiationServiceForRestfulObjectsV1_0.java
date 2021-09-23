@@ -254,7 +254,7 @@ implements ContentNegotiationService {
     // -- HELPER
 
     private static ObjectSpecification actionOwnerSpecFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
-        return objectAndActionInvocation.getAction().getOnType();
+        return objectAndActionInvocation.getAction().getDeclaringType();
     }
 
     private static String actionIdFrom(final ObjectAndActionInvocation objectAndActionInvocation) {

@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.spec.feature;
 
-import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +37,6 @@ import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFac
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
@@ -120,24 +118,6 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      * state
      */
     boolean isMandatory();
-
-    /**
-     * Returns the specification for the owning {@link ManagedObject}.
-     * @deprecated
-     */
-    @Deprecated
-    ObjectSpecification getOnType();
-
-    /**
-     * Returns the specification for the owning {@link ManagedObject}.
-     *
-     * Returns the {@link ObjectSpecification} representing the class or interface
-     * that declares the member represented by this object.
-     * FIXME this should be common to ALL members
-     */
-    default ObjectSpecification getDeclaringType() {
-        return getOnType();
-    }
 
     // //////////////////////////////////////////////////////
     // Predicates

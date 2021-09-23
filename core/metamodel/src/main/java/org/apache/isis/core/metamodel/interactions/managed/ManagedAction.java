@@ -210,7 +210,7 @@ public final class ManagedAction extends ManagedMember {
         public ManagedAction getManagedAction(final MetaModelContext mmc) {
 
             final var action = actionMemento.getAction(mmc::getSpecificationLoader);
-            final var spec = action.getOnType();
+            final var spec = action.getDeclaringType();
             final var owner = mmc.getObjectManager().getObjectMemorizer().deserialize(spec, objectMemento);
 
             return ManagedAction.of(owner, action, where);

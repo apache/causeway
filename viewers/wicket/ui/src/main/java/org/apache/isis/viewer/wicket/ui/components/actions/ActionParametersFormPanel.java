@@ -53,7 +53,7 @@ extends PromptFormPanelAbstract<ManagedObject, ActionModel> {
                 new ActionParametersForm("inputForm", this, this.getWicketViewerSettings(), model);
 
         final ObjectAction action = model.getMetaModel();
-        CssClassAppender.appendCssClassTo(inputForm, "isis-" + CssClassAppender.asCssStyle(action.getOnType().getLogicalTypeName().replace(".","-") + "-" + action.getId()));
+        CssClassAppender.appendCssClassTo(inputForm, "isis-" + CssClassAppender.asCssStyle(action.getDeclaringType().getLogicalTypeName().replace(".","-") + "-" + action.getId()));
         add(inputForm);
     }
 

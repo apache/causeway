@@ -183,7 +183,7 @@ public class PageParameterUtils {
         val actionType = objectAction.getType();
         PageParameterNames.ACTION_TYPE.addEnumTo(pageParameters, actionType);
 
-        val actionOnTypeSpec = objectAction.getOnType();
+        val actionOnTypeSpec = objectAction.getDeclaringType();
         if (actionOnTypeSpec != null) {
             PageParameterNames.ACTION_OWNING_SPEC.addStringTo(pageParameters, actionOnTypeSpec.getFullIdentifier());
         }

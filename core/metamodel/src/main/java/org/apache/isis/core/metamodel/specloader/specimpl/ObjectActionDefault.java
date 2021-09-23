@@ -127,9 +127,9 @@ implements ObjectAction {
 
 
     @Override
-    public ObjectSpecification getOnType() {
+    public ObjectSpecification getDeclaringType() {
         final ActionInvocationFacet facet = getActionInvocationFacet();
-        return facet.getOnType();
+        return facet.getDeclaringType();
     }
 
     @Override

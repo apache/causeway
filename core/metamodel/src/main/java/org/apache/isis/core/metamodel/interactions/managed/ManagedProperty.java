@@ -197,7 +197,7 @@ extends ManagedMember {
         public ManagedProperty getManagedProperty(final MetaModelContext mmc) {
 
             final var prop = propertyMemento.getProperty(mmc::getSpecificationLoader);
-            final var spec = prop.getOnType();
+            final var spec = prop.getDeclaringType();
             final var owner = mmc.getObjectManager().getObjectMemorizer().deserialize(spec, objectMemento);
 
             return ManagedProperty.of(owner, prop, where);

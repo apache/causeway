@@ -145,7 +145,7 @@ implements CollectionCountProvider {
 
         final boolean escaped = true;
 
-        final String parentTypeName = property.getOnType().getLogicalTypeName();
+        final String parentTypeName = property.getDeclaringType().getLogicalTypeName();
 
         val commonContext = super.getCommonContext();
 

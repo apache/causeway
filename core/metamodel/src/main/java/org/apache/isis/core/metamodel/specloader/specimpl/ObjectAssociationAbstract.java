@@ -55,9 +55,9 @@ implements ObjectAssociation {
     }
 
     @Override
-    public ObjectSpecification getOnType() {
+    public ObjectSpecification getDeclaringType() {
         final PropertyOrCollectionAccessorFacet facet = getFacet(PropertyOrCollectionAccessorFacet.class);
-        return facet.getOnType();
+        return facet.getDeclaringType();
     }
 
     /**

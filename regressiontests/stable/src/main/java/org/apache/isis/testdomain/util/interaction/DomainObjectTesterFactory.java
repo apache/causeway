@@ -287,8 +287,7 @@ public class DomainObjectTesterFactory {
         @Override
         protected Optional<ObjectSpecification> getElementType() {
             return getMetaModel()
-                    .map(OneToOneAssociation::getOnType);
-                        //getElementType);
+                    .map(OneToOneAssociation::getElementType);
         }
 
         @Override

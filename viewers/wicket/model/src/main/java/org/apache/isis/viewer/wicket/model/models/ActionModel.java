@@ -269,7 +269,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     @Override
     public PromptStyle getPromptStyle() {
         final ObjectAction objectAction = getMetaModel();
-        final ObjectSpecification objectActionOwner = objectAction.getOnType();
+        final ObjectSpecification objectActionOwner = objectAction.getDeclaringType();
         if(objectActionOwner.isManagedBean()) {
             // tried to move this test into PromptStyleFacetFallback,
             // however it's not that easy to lookup the owning type
