@@ -47,16 +47,15 @@ public final class _Either<L, R> {
 
     private final L left;
     private final R right;
-    private final boolean isLeft;
 
     // -- FACTORIES
 
     public static <L, R> _Either<L, R> left(final @NonNull L left) {
-        return of(left, null, true);
+        return of(left, null);
     }
 
     public static <L, R> _Either<L, R> right(final @NonNull R right) {
-        return of(null, right, false);
+        return of(null, right);
     }
 
     // -- ACCESSORS
@@ -80,18 +79,10 @@ public final class _Either<L, R> {
     // -- PREDICATES
 
     public boolean isLeft() {
-        return isLeft;
-    }
-
-    public boolean isRight() {
-        return !isLeft;
-    }
-
-    public boolean isPresentLeft() {
         return left!=null;
     }
 
-    public boolean isPresentRight() {
+    public boolean isRight() {
         return right!=null;
     }
 
