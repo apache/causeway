@@ -31,14 +31,14 @@ import org.apache.isis.incubator.viewer.javafx.viewer.IsisModuleIncViewerJavaFxV
 import org.apache.isis.incubator.viewer.javafx.viewer.JavafxViewer;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 
-import demoapp.dom.DemoModuleJdo;
+import demoapp.dom.DemoModuleJpa;
 
 /**
  * Bootstrap the application.
  */
 @SpringBootApplication
 @Import({
-    DemoModuleJdo.class,
+    DemoModuleJpa.class,
 
     // INCUBATING
     IsisModuleSecurityBypass.class,
@@ -57,12 +57,13 @@ public class DemoAppJavaFx {
                 .build();
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
 
         IsisPresets.logging(InteractionServiceDefault.class, "debug");
         IsisPresets.logging(_Probe.class, "debug"); // enable debug entry logging
 
         IsisPresets.prototyping(); // use prototyping mode as default, unless explicitly overridden (INCUBATING)
+        System.setProperty("spring.profiles.active", "demo-jpa");
 
         JavafxViewer.launch(DemoAppJavaFx.class, args);
     }
