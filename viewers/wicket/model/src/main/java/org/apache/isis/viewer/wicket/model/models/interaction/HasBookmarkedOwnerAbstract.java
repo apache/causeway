@@ -38,13 +38,13 @@ implements
     final BookmarkedObjectWkt bookmarkedObject;
 
     @Override
-    public Bookmark getOwnerBookmark() {
+    public final Bookmark getOwnerBookmark() {
         return bookmarkedObject.getBookmark();
     }
 
     @Override
-    public ManagedObject getBookmarkedOwner() {
-        return bookmarkedObject.getObject();
+    public final ManagedObject getBookmarkedOwner() {
+        return bookmarkedObject.getObjectAndAttachWhenEntity();
     }
 
     public final BookmarkedObjectWkt bookmarkedObjectModel() {
@@ -62,7 +62,8 @@ implements
     }
 
     public final ObjectSpecification getTypeOfSpecification() {
-        return getBookmarkedOwner().getSpecification();
+        //return getBookmarkedOwner().getSpecification();
+        return bookmarkedObject.getObject().getSpecification(); // serving this from an unattached entity seems safe
     }
 
     // -- HELPER

@@ -31,6 +31,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 
@@ -87,6 +88,10 @@ extends ModelAbstract<ManagedObject> {
             }
             return objectsByBookmark.put(bookmark, newObject);
         }
+
+        public void invalidate(final Bookmark bookmark) {
+            objectsByBookmark.remove(bookmark);
+        }
     }
 
     /** overwrites any current cache entry, only safe when no other views/models reference the same ManagedObject */
@@ -123,22 +128,39 @@ extends ModelAbstract<ManagedObject> {
     }
 
     @Override
+    public final void setObject(final ManagedObject object) {
+        throw _Exceptions.unsupportedOperation("MangedObjectWkt is immuatable");
+    }
+
+    public final ManagedObject getObjectAndAttachWhenEntity() {
+        //EntityUtil.assertAttachedWhenEntity()//guard
+
+        // even though initial loading seems attached, we need to check again
+        return EntityUtil.computeIfDetached(super.getObject(), this::reload);
+    }
+
+    @Override
     protected final ManagedObject load() {
         return ManagedObjectCache
                 .map(cache->cache.computeIfAbsent(bookmark, this::loadDirect))
                 .orElseGet(()->loadDirect(bookmark));
     }
 
-    @Override
-    public final void setObject(final ManagedObject object) {
-        throw _Exceptions.unsupportedOperation("MangedObjectWkt is immuatable");
-    }
 
     // -- HELPER
 
     private final ManagedObject loadDirect(final Bookmark bookmark) {
         return getCommonContext().getMetaModelContext().loadObject(bookmark)
                 .orElse(null);
+    }
+
+    /**
+     * invalidate cache entry, then reload, then memoize the result
+     */
+    private final ManagedObject reload(final ManagedObject object) {
+        ManagedObjectCache.ifPresent(cache->cache.invalidate(bookmark));
+        super.setObject(load());
+        return getObject();
     }
 
 

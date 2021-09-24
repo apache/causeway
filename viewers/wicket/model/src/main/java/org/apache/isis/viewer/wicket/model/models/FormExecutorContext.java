@@ -36,17 +36,6 @@ extends HasParentUiModel<EntityModel>, HasCommonContext {
     }
 
     /**
-     * Immediately after execution (property update or action invocation) the dirtied flag is
-     * set such that consumers of the execution result can tell whether
-     * the execution actually happened or was vetoed or canceled.
-     * <p>
-     * Motivated by the need to decide whether to stay on the same page or redirect.
-     * <p>
-     * Calling this method clears the flag.
-     */
-    boolean getDirtiedAndClear();
-
-    /**
      * The owning entity/viewmodel/service that is declaring this action or property.
      */
     default ManagedObject getOwner()  {

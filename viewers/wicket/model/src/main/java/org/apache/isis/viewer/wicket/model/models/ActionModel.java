@@ -160,18 +160,6 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         return wrap(getParentUiModel(), delegate);
     }
 
-    // -- DIRTIED STATE
-
-    // transient: don't keep the dirtied state persistent across request boundaries
-    private transient boolean isDirtied;
-
-    @Override
-    public boolean getDirtiedAndClear() {
-        final var dirtied = isDirtied;
-        isDirtied = false;
-        return dirtied;
-    }
-
     // -- HELPERS
 
     private Can<ManagedObject> snapshotArgs() {
@@ -186,7 +174,6 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     public ManagedObject executeActionAndReturnResult() {
         val pendingArgs = delegate.parameterNegotiationModel().get();
         val result = delegate.actionInteraction().invokeWithRuleChecking(pendingArgs);
-        isDirtied = true;
         return result;
     }
 

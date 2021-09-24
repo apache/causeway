@@ -33,6 +33,7 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -97,9 +98,13 @@ implements FormExecutor {
                     act->act.executeActionAndReturnResult(),
                     prop->prop.applyValueThenReturnOwner());
 
-            log.debug("about to redirect on execution result {}", resultAdapter);
+            if(log.isDebugEnabled()) {
+                log.debug("about to redirect with {} after execution result {}",
+                        EntityUtil.getEntityState(resultAdapter),
+                        resultAdapter);
+            }
 
-            final ActionResultResponse resultResponse =
+            val resultResponse =
             actionOrPropertyModel.fold(
                     act->ActionResultResponseType
                             .determineAndInterpretResult(act, ajaxTarget, resultAdapter),

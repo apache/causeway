@@ -29,6 +29,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
@@ -654,6 +655,27 @@ public final class ManagedObjects {
         public static boolean isRemoved(final @Nullable ManagedObject adapter) {
             return EntityUtil.getEntityState(adapter).isRemoved();
         }
+
+        public static ManagedObject assertAttachedWhenEntity(final @Nullable ManagedObject adapter) {
+            final var state = EntityUtil.getEntityState(adapter);
+            if(state.isPersistable()) {
+                _Assert.assertEquals(EntityState.PERSISTABLE_ATTACHED, state,
+                        ()->String.format("detached entity %s", adapter));
+            }
+            return adapter;
+        }
+
+        public static ManagedObject computeIfDetached(
+                final @Nullable ManagedObject adapter,
+                final UnaryOperator<ManagedObject> onDetachedEntity) {
+            final var state = EntityUtil.getEntityState(adapter);
+            if(state.isPersistable()
+                    &&!state.isAttached()) {
+                return onDetachedEntity.apply(adapter);
+            }
+            return adapter;
+        }
+
 
     }
 
