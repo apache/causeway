@@ -84,7 +84,7 @@ public final class _Text {
         return Can.ofStream(streamLines(text));
     }
 
-    public static Can<String> breakLines(Can<String> lines, int maxChars) {
+    public static Can<String> breakLines(final Can<String> lines, final int maxChars) {
         if(lines.isEmpty()) {
             return lines;
         }
@@ -275,6 +275,32 @@ public final class _Text {
 
     }
 
+    // -- LOGGING SUPPORT
+
+    public static String abbreviate(final @Nullable String input) {
+        if(input==null) {
+            return input;
+        }
+        var s = input;
+        s = s.replace("org.apache.isis.", "..isis.");
+        s = s.replace(".viewer.wicket.", "..wkt.");
+        return s;
+    }
+
+    public static String abbreviate(final @Nullable Class<?> cls) {
+        if(cls==null) {
+            return "[none]";
+        }
+        return abbreviate(cls.getCanonicalName());
+    }
+
+    public static String abbreviateClassOf(final @Nullable Object obj) {
+        if(obj==null) {
+            return "[none]";
+        }
+        return abbreviate(obj.getClass());
+    }
+
     // -- TESTING SUPPORT
 
     public static void assertTextEquals(final @Nullable String a, final @Nullable String b) {
@@ -313,7 +339,7 @@ public final class _Text {
 
     // -- HELPER
 
-    private static boolean hasNonWhiteSpaceChars(String s) {
+    private static boolean hasNonWhiteSpaceChars(final String s) {
         if(s==null) {
             return false;
         }
@@ -327,7 +353,7 @@ public final class _Text {
         private final boolean empty; // whether has no non-whitespace characters
         @Setter private boolean markedForRemoval;
 
-        public Line(int index, String string) {
+        public Line(final int index, final String string) {
             this.index = index;
             this.string = string;
             this.empty = !hasNonWhiteSpaceChars(string);
@@ -344,7 +370,7 @@ public final class _Text {
         public int apply(int lineIndex, String line);
     }
 
-    private static ToIntFunction<String> indexAndlineToIntFunction(IndexAwareLineToIntFunction mapper) {
+    private static ToIntFunction<String> indexAndlineToIntFunction(final IndexAwareLineToIntFunction mapper) {
         final int[] indexRef = {0};
         return line->mapper.apply(indexRef[0]++, line);
     }

@@ -30,10 +30,12 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -46,6 +48,7 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar.C
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Implementation of {@link ComponentFactoryRegistry} that delegates to a
@@ -55,6 +58,7 @@ import lombok.val;
 @Named("isis.viewer.wicket.ComponentFactoryRegistryDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
+@Log4j2
 public class ComponentFactoryRegistryDefault
 implements ComponentFactoryRegistry {
 
@@ -139,11 +143,27 @@ implements ComponentFactoryRegistry {
     }
 
     @Override
-    public Stream<ComponentFactory> streamComponentFactories(final ComponentType componentType, final IModel<?> model) {
+    public Stream<ComponentFactory> streamComponentFactories(
+            final ComponentType componentType,
+            final @Nullable IModel<?> model) {
         return Stream.concat(
                 componentFactoriesByType.streamElements(componentType)
                 .filter(componentFactory->componentFactory.appliesTo(componentType, model).applies()),
-                componentFactoriesByType.streamElements(ComponentType.UNKNOWN));
+                componentFactoriesByType.streamElements(ComponentType.UNKNOWN))
+                .peek(componentFactory->logComponentResolving(model, componentType, componentFactory));
+    }
+
+    // -- DEBUG LOGGING
+
+    private static void logComponentResolving(
+            final IModel<?> model,
+            final ComponentType componentType,
+            final ComponentFactory componentFactory) {
+        if(!log.isDebugEnabled()) return;
+        log.debug("component type for model {} -> {} provided by {}",
+                _Text.abbreviateClassOf(model),
+                componentType.name(),
+                _Text.abbreviateClassOf(componentFactory));
     }
 
     // -- JUNIT SUPPORT

@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 final class PendingModel extends Model<ObjectMemento> {
     private static final long serialVersionUID = 1L;
 
-    @NonNull private final ManagedObjectModel ownerModel;
+    @NonNull private final ScalarModel scalarModel;
 
     /**
      * Whether pending has been set (could have been set to null)
@@ -62,14 +62,14 @@ final class PendingModel extends Model<ObjectMemento> {
     public ManagedObject getPendingElseCurrentAdapter() {
         return hasPending
                 ? getCommonContext().reconstructObject(pendingMemento)
-                : ownerModel.getObject();
+                : scalarModel.getObject();
     }
 
 
     // -- HELPER
 
     private IsisAppCommonContext getCommonContext() {
-        return ownerModel.getCommonContext();
+        return scalarModel.getCommonContext();
     }
 
 

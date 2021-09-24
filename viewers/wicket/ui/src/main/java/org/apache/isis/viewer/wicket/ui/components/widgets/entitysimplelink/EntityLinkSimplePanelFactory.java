@@ -21,12 +21,9 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.viewer.common.model.components.ComponentType;
-import org.apache.isis.viewer.wicket.model.models.ManagedObjectModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
-
-import lombok.val;
 
 public class EntityLinkSimplePanelFactory extends ComponentFactoryAbstract {
 
@@ -38,16 +35,17 @@ public class EntityLinkSimplePanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
-        if (!(model instanceof ManagedObjectModel)) {
+        if (!(model instanceof EntityModel)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        val objectModel = (ManagedObjectModel) model;
-        return appliesIf(!objectModel.lookupFacet(ValueFacet.class).isPresent());
+//        val objectModel = (EntityModel) model;
+//        return appliesIf(!objectModel.lookupFacet(ValueFacet.class).isPresent());
+        return ApplicationAdvice.APPLIES;
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final ManagedObjectModel objectModel = (ManagedObjectModel) model;
+        final EntityModel objectModel = (EntityModel) model;
         return new EntityLinkSimplePanel(id, objectModel);
     }
 }

@@ -24,12 +24,10 @@ import org.apache.wicket.markup.html.form.FormComponentPanel;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.common.model.components.ComponentType;
-import org.apache.isis.viewer.wicket.model.models.ManagedObjectModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
-
-import lombok.val;
 
 /**
  * {@link FormComponentPanel} representing a reference to an entity: a link and
@@ -44,14 +42,14 @@ implements CancelHintRequired  {
     private static final String ID_ENTITY_ICON_AND_TITLE = "entityIconAndTitle";
     private static final String ID_ENTITY_TITLE_NULL = "entityTitleNull";
 
-    public EntityLinkSimplePanel(final String id, final ManagedObjectModel entityModel) {
+    public EntityLinkSimplePanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
         setType(ManagedObject.class);
         buildGui();
     }
 
-    public ManagedObjectModel getEntityModel() {
-        return (ManagedObjectModel) getModel();
+    public EntityModel getEntityModel() {
+        return (EntityModel) getModel();
     }
 
     private void buildGui() {
@@ -65,10 +63,10 @@ implements CancelHintRequired  {
     }
 
     private void syncWithInput() {
-        val adapter = getEntityModel().getObject(); // getPendingElseCurrentAdapter();
+        final var adapter = getEntityModel().getObject(); // getPendingElseCurrentAdapter();
 
         if (adapter != null) {
-            final ManagedObjectModel entityModelForLink = getEntityModel();
+            final var entityModelForLink = getEntityModel();
 
             final ComponentFactory componentFactory = getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
 

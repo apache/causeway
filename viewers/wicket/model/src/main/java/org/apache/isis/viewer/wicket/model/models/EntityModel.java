@@ -213,7 +213,7 @@ implements
 
             final long modelsAdded = propertyInteractionModel.streamPropertyUiModels()
             .map(uiModel->ScalarPropertyModel.wrap(uiModel, viewOrEdit, renderingHint))
-            .peek(scalarModel->log.info("adding: {}", scalarModel))
+            .peek(scalarModel->log.debug("adding: {}", scalarModel))
             .filter(scalarModel->propertyScalarModels.put(pm, scalarModel)==null)
             .count();
 
@@ -273,6 +273,9 @@ implements
     private @Nullable Bookmark contextBookmarkIfAny;
 
     @Override @Synchronized
+    @Deprecated // for viewmodels might not handle change of state very well
+    //I believe this works by accident not by design
+    //TODO this check should be made available with 'core' models - and not modeled here
     public boolean isContextAdapter(final ManagedObject other) {
         return (contextBookmarkIfAny!=null)
                 ? Objects.equals(contextBookmarkIfAny, other.getBookmark().orElse(null))

@@ -77,7 +77,8 @@ public class CollectionSelectorHelper implements Serializable {
                 : ComponentHintKey.noop();
     }
 
-    private List<ComponentFactory> locateComponentFactories(final ComponentFactoryRegistry componentFactoryRegistry) {
+    private List<ComponentFactory> locateComponentFactories(
+            final ComponentFactoryRegistry componentFactoryRegistry) {
 
         final List<ComponentFactory> ajaxFactoriesToEnd = _Lists.newArrayList();
 

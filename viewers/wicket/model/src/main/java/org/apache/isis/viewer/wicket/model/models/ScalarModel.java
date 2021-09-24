@@ -122,9 +122,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         this.parentEntityModel = parentEntityModel;
         this.mode = viewOrEdit;
         this.renderingHint = renderingHint;
-        final var paramValueModel =
-                ManagedObjectModel.of(()->proposedValue().getValue().getValue());
-        this.pendingModel = null;//new PendingModel(null); //FIXME
+        this.pendingModel = new PendingModel(this);
     }
 
     /**
