@@ -38,49 +38,54 @@ import org.apache.isis.client.kroviz.utils.Point
 import io.kvision.html.Link as KvisionHtmlLink
 
 class RoDialog(
-        caption: String,
-        val items: List<FormItem>,
-        val command: Command,
-        defaultAction: String = "OK",
-        widthPerc: Int = 30,
-        heightPerc: Int = 100,
-        menu: List<KvisionHtmlLink>? = null,
-        customButtons: List<FormItem> = emptyList() ) :
-        Displayable, RoWindow(caption = caption, closeButton = true, menu = menu) {
+    caption: String,
+    val items: List<FormItem>,
+    val command: Command,
+    defaultAction: String = "OK",
+    widthPerc: Int = 30,
+    heightPerc: Int = 100,
+    menu: List<KvisionHtmlLink>? = null,
+    customButtons: List<FormItem> = emptyList()
+) :
+    Displayable, RoWindow(caption = caption, closeButton = true, menu = menu) {
 
     private val okButton = Button(
-            text = defaultAction,
-            icon = IconManager.find(defaultAction),
-            style = ButtonStyle.SUCCESS)
-            .onClick {
-                execute()
-            }
+        text = defaultAction,
+        icon = IconManager.find(defaultAction),
+        style = ButtonStyle.SUCCESS
+    )
+        .onClick {
+            execute()
+        }
 
     private val cancelButton = Button(
-            "Cancel",
-            "fas fa-times",
-            ButtonStyle.OUTLINEINFO)
-            .onClick {
-                close()
-            }
+        "Cancel",
+        "fas fa-times",
+        ButtonStyle.OUTLINEINFO
+    )
+        .onClick {
+            close()
+        }
 
     @Deprecated("remove once leaflet/svg is fully operational")
     private val scaleUpButton = Button(
-            "",
-            "fas fa-plus",
-            ButtonStyle.OUTLINEINFO)
-            .onClick {
-                (command as DiagramDialog).scale(Direction.UP)
-            }
+        "",
+        "fas fa-plus",
+        ButtonStyle.OUTLINEINFO
+    )
+        .onClick {
+            (command as DiagramDialog).scale(Direction.UP)
+        }
 
     @Deprecated("remove once leaflet/svg is fully operational")
     private val scaleDownButton = Button(
-            "",
-            "fas fa-minus",
-            ButtonStyle.OUTLINEINFO)
-            .onClick {
-                (command as DiagramDialog).scale(Direction.DOWN)
-            }
+        "",
+        "fas fa-minus",
+        ButtonStyle.OUTLINEINFO
+    )
+        .onClick {
+            (command as DiagramDialog).scale(Direction.DOWN)
+        }
 
     var formPanel: FormPanel<String>? = null
 
@@ -98,9 +103,8 @@ class RoDialog(
 
             add(formPanel!!, grow = 2)
 
-            val buttonBar = HPanel(
-                    spacing = 10,
-                    classes = setOf("button-bar"))
+            val buttonBar = HPanel(spacing = 10)
+            buttonBar.addCssClass("button-bar")
             buttonBar.add(okButton)
             customButtons.forEach {
                 val b = createButton(it)

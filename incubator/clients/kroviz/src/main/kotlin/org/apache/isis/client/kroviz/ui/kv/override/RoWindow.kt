@@ -71,7 +71,7 @@ open class RoWindow(
         menu: List<KvisionHtmlLink>? = null,
         init: (RoWindow.() -> Unit)? = null
 ) :
-        SimplePanel(classes + setOf("modal-content", "kv-window")) {
+    SimplePanel(classes.toString() +" modal-content kv-window") {
 
     /**
      * Window caption text.
@@ -160,7 +160,7 @@ open class RoWindow(
             windowIcon.visible = (value != null && value != "")
         }
 
-    private val header = SimplePanel(setOf("modal-header"))
+    private val header = SimplePanel("modal-header")
 
     /**
      * @suppress
@@ -173,10 +173,11 @@ open class RoWindow(
     private val closeIcon = CloseIcon()
     private val maximizeIcon = MaximizeIcon()
     private val minimizeIcon = MinimizeIcon()
-    private val captionTag = Tag(TAG.H5, caption, classes = setOf("modal-title")).apply {
+    private val captionTag = Tag(TAG.H5, caption).apply {
+        addCssClass("modal-title")
         alignSelf = AlignItems.START
     }
-    private val iconsContainer = SimplePanel(setOf("kv-window-icons-container"))
+    private val iconsContainer = SimplePanel("kv-window-icons-container")
 
     private val windowIcon = Icon(icon ?: "").apply {
         addCssClass("window-icon")

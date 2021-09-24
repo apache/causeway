@@ -59,80 +59,90 @@ object RoMenuBar : SimplePanel() {
 
     private fun buildMainMenu(): DropDown {
         return dropDown(
-                "",
-                icon = IconManager.find("Burger"),
-                forNavbar = false,
-                style = ButtonStyle.LIGHT)
+            "",
+            icon = IconManager.find("Burger"),
+            forNavbar = false,
+            style = ButtonStyle.LIGHT
+        )
         {
             ddLink(
-                    "Connect ...",
-                    icon = IconManager.find("Connect")
+                "Connect ...",
+                icon = IconManager.find("Connect")
             ).onClick { e ->
                 val at = Point(e.pageX.toInt(), e.pageY.toInt())
                 LoginPrompt().open(at)
             }
 
             val toolTitle = "Toolbar"
-            ddLink(toolTitle,
-                    icon = IconManager.find(toolTitle)
+            ddLink(
+                toolTitle,
+                icon = IconManager.find(toolTitle)
             ).onClick {
                 RoIconBar.toggle()
             }
 
             val sampleTitle = "History"
-            ddLink(sampleTitle,
-                    icon = IconManager.find(sampleTitle)
+            ddLink(
+                sampleTitle,
+                icon = IconManager.find(sampleTitle)
             ).onClick {
                 val model = EventStore.log
                 UiManager.add("Log Entries", EventLogTable(model))
             }
 
             val chartTitle = "Sample Chart"
-            ddLink(chartTitle,
-                    icon = IconManager.find("Chart")
+            ddLink(
+                chartTitle,
+                icon = IconManager.find("Chart")
             ).onClick {
                 UiManager.add(chartTitle, EventChart(SampleChartModel()))
             }
 
             val geoMapTitle = "Sample Geo Map"
-            ddLink(geoMapTitle,
-                    icon = IconManager.find("Map")
+            ddLink(
+                geoMapTitle,
+                icon = IconManager.find("Map")
             ).onClick {
                 UiManager.add(geoMapTitle, GeoMap())
             }
 
             val svgMapTitle = "Sample SVG Map"
-            ddLink(svgMapTitle,
-                    icon = IconManager.find("Diagram")
+            ddLink(
+                svgMapTitle,
+                icon = IconManager.find("Diagram")
             ).onClick {
                 UiManager.add(svgMapTitle, SvgMap())
             }
 
             val svgInlineTitle = "Sample SVG Inline (interactive)"
-            ddLink(svgInlineTitle,
-                    icon = IconManager.find("Diagram")
+            ddLink(
+                svgInlineTitle,
+                icon = IconManager.find("Diagram")
             ).onClick {
                 SvgInline().open()
             }
 
             val imageTitle = "Sample Image"
-            ddLink(imageTitle,
-                    icon = IconManager.find("Image")
+            ddLink(
+                imageTitle,
+                icon = IconManager.find("Image")
             ).onClick {
                 val panel = ImageSample()
                 RoView.addTab(imageTitle, panel)
             }
 
             val searchTitle = "Dropdown search example"
-            ddLink(searchTitle,
-                    icon = IconManager.find("Find")
+            ddLink(
+                searchTitle,
+                icon = IconManager.find("Find")
             ).onClick {
                 UiManager.add(searchTitle, DropdownSearch())
             }
 
             val aboutTitle = "About"
-            ddLink(aboutTitle,
-                    icon = IconManager.find(aboutTitle)
+            ddLink(
+                aboutTitle,
+                icon = IconManager.find(aboutTitle)
             ).onClick {
                 About().open()
             }
@@ -151,10 +161,11 @@ object RoMenuBar : SimplePanel() {
 
     private fun logoButton() {
         val classes = setOf("isis-logo-button-image", "logo-button")
-        val logo = Button("", style = ButtonStyle.LINK, classes = classes)
-                .onClick {
-                    window.open("https://isis.apache.org")
-                }
+        val logo = Button("", style = ButtonStyle.LINK)
+        logo.addCssClass(classes.toString())
+        logo.onClick {
+            window.open("https://isis.apache.org")
+        }
         nav.add(logo)
     }
 

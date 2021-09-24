@@ -22,7 +22,7 @@ import io.kvision.core.Container
 import io.kvision.core.CssSize
 import io.kvision.core.UNIT
 import io.kvision.panel.SimplePanel
-import io.kvision.table.TableType
+import io.kvision.tabulator.TableType
 import io.kvision.tabulator.Layout
 import io.kvision.tabulator.Tabulator
 import io.kvision.tabulator.TabulatorOptions
@@ -59,7 +59,7 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
 
         tabulator(model, options = options, types = tableTypes) {
             setEventListener<Tabulator<Exposer>> {
-                tabulatorCellClick = {
+                cellClickTabulator = {
                     // can't check cast to external interface
                     val cc = it.detail as CellComponent
                     val column = cc.getColumn().getField()
@@ -96,7 +96,8 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
             classes: Set<String> = setOf(),
             init: (Tabulator<T>.() -> Unit)? = null
     ): Tabulator<T> {
-        val tabulator = Tabulator(data, dataUpdateOnEdit, options, types, classes)
+        val tabulator = Tabulator(data, dataUpdateOnEdit, options, types)
+        tabulator.addCssClass(classes.toString())
         init?.invoke(tabulator)
         return tabulator
     }

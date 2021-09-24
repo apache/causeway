@@ -26,13 +26,11 @@ package org.apache.isis.client.kroviz.ui.kv.override
 import com.github.snabbdom.VNode
 import io.kvision.core.*
 import io.kvision.panel.SimplePanel
+import io.kvision.panel.Tab
 import io.kvision.panel.VPanel
 import io.kvision.routing.RoutingManager
-import io.kvision.state.ObservableState
-import io.kvision.state.bind
 import io.kvision.utils.auto
 import io.kvision.utils.obj
-import io.kvision.utils.set
 import org.apache.isis.client.kroviz.ui.core.RoView
 
 /**
@@ -66,29 +64,29 @@ enum class SideTabSize {
  * @param sideTabSize side tab size
  * @param scrollableTabs determines if tabs are scrollable (default: false)
  * @param draggableTabs determines if tabs are draggable (default: false)
- * @param classes a set of CSS class names
+ * @param className CSS class names
  * @param init an initializer extension function
  */
 @Suppress("LeakingThis")
 open class RoTabPanel(
-        private val tabPosition: TabPosition = TabPosition.TOP,
-        private val sideTabSize: SideTabSize = SideTabSize.SIZE_3,
-        val scrollableTabs: Boolean = false,
-        val draggableTabs: Boolean = false,
-        classes: Set<String> = setOf(),
-        init: (RoTabPanel.() -> Unit)? = null
-) : SimplePanel(classes) {
+    protected val tabPosition: TabPosition = TabPosition.TOP,
+    protected val sideTabSize: SideTabSize = SideTabSize.SIZE_3,
+    val scrollableTabs: Boolean = false,
+    val draggableTabs: Boolean = false,
+    className: String? = null,
+    init: (RoTabPanel.() -> Unit)? = null
+) : SimplePanel((className?.let { "$it " } ?: "") + "kv-tab-panel") {
 
-    private val navClasses = when (tabPosition) {
-        TabPosition.TOP -> if (scrollableTabs) setOf("nav", "nav-tabs", "tabs-top") else setOf("nav", "nav-tabs")
-        TabPosition.LEFT -> setOf("nav", "nav-tabs", "tabs-left", "flex-column")
-        TabPosition.RIGHT -> setOf("nav", "nav-tabs", "tabs-right", "flex-column")
+    protected val navClasses = when (tabPosition) {
+        TabPosition.TOP -> if (scrollableTabs) "nav nav-tabs tabs-top" else "nav nav-tabs"
+        TabPosition.LEFT -> "nav nav-tabs tabs-left flex-column"
+        TabPosition.RIGHT -> "nav nav-tabs tabs-right flex-column"
     }
 
     internal val tabs = mutableListOf<RoTab>()
 
-    private val nav = RoTabPanelNav(this, navClasses)
-    private val content = RoTabPanelContent(this)
+    private val nav = TabPanelNav(this, navClasses)
+    private val content = TabPanelContent(this)
 
     /**
      * The index of the active tab.
@@ -102,7 +100,7 @@ open class RoTabPanel(
                 }
                 tabs.getOrNull(value)?.link?.addCssClass("active")
                 @Suppress("UnsafeCastFromDynamic")
-                this.dispatchEvent("tabChange", obj { detail = obj { data = value } })
+                this.dispatchEvent("changeTab", obj { detail = obj { data = value } })
             }
         }
 
@@ -116,6 +114,7 @@ open class RoTabPanel(
         }
 
     init {
+        //TODO to be set by caller
         width = auto
         marginTop = CssSize(40, UNIT.px)
         when (tabPosition) {
@@ -127,25 +126,21 @@ open class RoTabPanel(
                 this.addSurroundingCssClass("container-fluid")
                 this.addCssClass("row")
                 val sizes = calculateSideClasses()
-                this.addPrivate(WidgetWrapper(nav, setOf(sizes.first, "pl-0", "pr-0")))
-                this.addPrivate(WidgetWrapper(content, setOf(sizes.second, "pl-0", "pr-0")))
+                this.addPrivate(WidgetWrapper(nav, "${sizes.first} ps-0 pe-0"))
+                this.addPrivate(WidgetWrapper(content, "${sizes.second} ps-0 pe-0"))
             }
             TabPosition.RIGHT -> {
                 this.addSurroundingCssClass("container-fluid")
                 this.addCssClass("row")
                 val sizes = calculateSideClasses()
-                this.addPrivate(WidgetWrapper(content, setOf(sizes.second, "pl-0", "pr-0")))
-                this.addPrivate(WidgetWrapper(nav, setOf(sizes.first, "pl-0", "pr-0")))
+                this.addPrivate(WidgetWrapper(content, "${sizes.second} ps-0 pe-0"))
+                this.addPrivate(WidgetWrapper(nav, "${sizes.first} ps-0 pe-0"))
             }
         }
         init?.invoke(this)
     }
 
-    override fun render(): VNode {
-        return render("div", childrenVNodes())
-    }
-
-    private fun calculateSideClasses(): Pair<String, String> {
+    protected fun calculateSideClasses(): Pair<String, String> {
         return when (sideTabSize) {
             SideTabSize.SIZE_1 -> Pair("col-sm-1", "col-sm-11")
             SideTabSize.SIZE_2 -> Pair("col-sm-2", "col-sm-10")
@@ -379,6 +374,33 @@ open class RoTabPanel(
         return null
     }
 
+    /**
+     * A helper component for rendering tabs.
+     */
+    class TabPanelNav(internal val tabPanel: RoTabPanel, className: String) : SimplePanel(className) {
+
+        override fun render(): VNode {
+            return render("ul", childrenVNodes())
+        }
+
+        override fun childrenVNodes(): Array<VNode> {
+            return tabPanel.tabs.filter { it.visible }.map { it.renderVNode() }.toTypedArray()
+        }
+
+    }
+
+    /**
+     * A helper component for rendering tab content.
+     */
+    class TabPanelContent(private val tabPanel: RoTabPanel) : SimplePanel() {
+
+        override fun childrenVNodes(): Array<VNode> {
+            return tabPanel.tabs.getOrNull(tabPanel.activeIndex)?.getChildren()?.map { it.renderVNode() }
+                ?.toTypedArray()
+                ?: emptyArray()
+        }
+
+    }
 }
 
 /**
@@ -387,54 +409,14 @@ open class RoTabPanel(
  * It takes the same parameters as the constructor of the built component.
  */
 fun Container.tabPanel(
-        tabPosition: TabPosition = TabPosition.TOP,
-        sideTabSize: SideTabSize = SideTabSize.SIZE_3,
-        scrollableTabs: Boolean = false,
-        draggableTabs: Boolean = false,
-        classes: Set<String>? = null,
-        className: String? = null,
-        init: (RoTabPanel.() -> Unit)? = null
+    tabPosition: TabPosition = TabPosition.TOP,
+    sideTabSize: SideTabSize = SideTabSize.SIZE_3,
+    scrollableTabs: Boolean = false,
+    draggableTabs: Boolean = false,
+    className: String? = null,
+    init: (RoTabPanel.() -> Unit)? = null
 ): RoTabPanel {
-    val tabPanel = RoTabPanel(tabPosition, sideTabSize, scrollableTabs, draggableTabs, classes ?: className.set, init)
+    val tabPanel = RoTabPanel(tabPosition, sideTabSize, scrollableTabs, draggableTabs, className, init)
     this.add(tabPanel)
     return tabPanel
 }
-
-/**
- * DSL builder extension function for observable state.
- *
- * It takes the same parameters as the constructor of the built component.
- */
-fun <S> Container.tabPanel(
-        state: ObservableState<S>,
-        tabPosition: TabPosition = TabPosition.TOP,
-        sideTabSize: SideTabSize = SideTabSize.SIZE_3,
-        scrollableTabs: Boolean = false,
-        draggableTabs: Boolean = false,
-        classes: Set<String>? = null,
-        className: String? = null,
-        init: (RoTabPanel.(S) -> Unit)
-) = tabPanel(tabPosition, sideTabSize, scrollableTabs, draggableTabs, classes, className).bind(state, true, init)
-
-
-internal class RoTabPanelNav(internal val tabPanel: RoTabPanel, classes: Set<String>) : SimplePanel(classes) {
-
-    override fun render(): VNode {
-        return render("ul", childrenVNodes())
-    }
-
-    override fun childrenVNodes(): Array<VNode> {
-        return tabPanel.tabs.filter { it.visible }.map { it.renderVNode() }.toTypedArray()
-    }
-
-}
-
-internal class RoTabPanelContent(private val tabPanel: RoTabPanel) : SimplePanel() {
-
-    override fun childrenVNodes(): Array<VNode> {
-        return tabPanel.tabs.getOrNull(tabPanel.activeIndex)?.getChildren()?.map { it.renderVNode() }?.toTypedArray()
-                ?: emptyArray()
-    }
-
-}
-

@@ -154,8 +154,6 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
 
         tabulator = tabulator(model, options = options) {
             setEventListener<Tabulator<LogEntry>> {
-                tabulatorRowClick = {
-                }
             }
         }
     }

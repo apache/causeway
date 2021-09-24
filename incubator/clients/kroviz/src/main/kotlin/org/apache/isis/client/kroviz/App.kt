@@ -18,24 +18,28 @@
  */
 package org.apache.isis.client.kroviz
 
+import io.kvision.*
 import org.apache.isis.client.kroviz.ui.core.RoApp
-import io.kvision.Application
 import io.kvision.pace.Pace
+import io.kvision.panel.ContainerType
 import io.kvision.panel.root
 import io.kvision.panel.vPanel
-import io.kvision.startApplication
 import io.kvision.utils.px
-import io.kvision.require
+import kotlinx.browser.window
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.asCoroutineDispatcher
+
+val AppScope = CoroutineScope(window.asCoroutineDispatcher())
 
 class App : Application() {
 
     init {
+        Pace.init()
         require("css/kroviz.css")
     }
 
     override fun start() {
-        Pace.init()
-        root("kroviz") {
+        root("kroviz", containerType = ContainerType.FLUID, addRow = true) {
             vPanel(spacing = 0) {
                 padding = 0.px
                 add(RoApp)
@@ -49,5 +53,19 @@ class App : Application() {
 }
 
 fun main() {
-    startApplication(::App)
+    startApplication(
+        ::App,
+        module.hot,
+        BootstrapModule,
+        BootstrapCssModule,
+        FontAwesomeModule,
+        BootstrapSelectModule,
+        BootstrapDatetimeModule,
+        BootstrapSpinnerModule,
+//        BootstrapTypeaheadModule,
+        BootstrapUploadModule,
+        RichTextModule,
+        ChartModule,
+        TabulatorModule,
+        CoreModule)
 }
