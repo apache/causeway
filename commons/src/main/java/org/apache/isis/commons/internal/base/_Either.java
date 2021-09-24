@@ -23,8 +23,6 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import org.springframework.lang.Nullable;
-
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -58,14 +56,6 @@ public final class _Either<L, R> {
     }
 
     public static <L, R> _Either<L, R> right(final @NonNull R right) {
-        return of(null, right, false);
-    }
-
-    public static <L, R> _Either<L, R> leftNullable(final @Nullable L left) {
-        return of(left, null, true);
-    }
-
-    public static <L, R> _Either<L, R> rightNullable(final @Nullable R right) {
         return of(null, right, false);
     }
 
@@ -127,30 +117,21 @@ public final class _Either<L, R> {
                 : right(rightMapper.apply(right));
     }
 
-    public <X, Y> _Either<X, Y> bimapNullable(
-            final @NonNull Function<L, X> leftMapper,
-            final @NonNull Function<R, Y> rightMapper){
-        return isLeft()
-                ? leftNullable(leftMapper.apply(left))
-                : rightNullable(rightMapper.apply(right));
-    }
-
-    public _Either<L, R> mapIfLeft(final Function<L, _Either<L, R>> leftRemapper){
+    public _Either<L, R> mapIfLeft(final @NonNull Function<L, _Either<L, R>> leftRemapper){
         return isLeft()
                 ? leftRemapper.apply(left)
                 : this;
     }
 
-    public _Either<L, R> mapIfRight(final Function<R, _Either<L, R>> rightRemapper){
+    public _Either<L, R> mapIfRight(final @NonNull Function<R, _Either<L, R>> rightRemapper){
         return isLeft()
                 ? this
                 : rightRemapper.apply(right);
     }
 
-
     // -- FOLDING
 
-    public <T> T fold(final BiFunction<L, R, T> biMapper){
+    public <T> T fold(final @NonNull BiFunction<L, R, T> biMapper){
         return biMapper.apply(left, right);
     }
 
