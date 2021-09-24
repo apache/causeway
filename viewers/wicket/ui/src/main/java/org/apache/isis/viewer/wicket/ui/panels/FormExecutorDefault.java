@@ -68,23 +68,17 @@ implements FormExecutor {
 
     private static final long serialVersionUID = 1L;
 
-    protected final M model;
+    protected final M actionOrPropertyModel;
     protected final WicketViewerSettings settings;
     private final FormExecutorStrategy<M> formExecutorStrategy;
 
     public FormExecutorDefault(final FormExecutorStrategy<M> formExecutorStrategy) {
-        this.model = formExecutorStrategy.getModel();
+        this.actionOrPropertyModel = formExecutorStrategy.getMemberModel();
         this.settings = getSettings();
         this.formExecutorStrategy = formExecutorStrategy;
     }
 
     /**
-     *
-     * @param page
-     * @param targetIfAny
-     * @param feedbackFormIfAny
-     * @param withinPrompt
-     *
      * @return <tt>false</tt> - if invalid args;
      * <tt>true</tt> if redirecting to new page, or repainting all components
      */
@@ -95,16 +89,13 @@ implements FormExecutor {
             final Form<?> feedbackFormIfAny,
             final boolean withinPrompt) {
 
-        ManagedObject targetAdapter = null;
-
-        final EntityModel targetEntityModel = model.getParentUiModel();
-        val commonContext = targetEntityModel.getCommonContext();
+        final ManagedObject owner = formExecutorStrategy.getOwner();
+        final EntityModel parentUiModel = actionOrPropertyModel.getParentUiModel();
+        val commonContext = parentUiModel.getCommonContext();
 
         try {
 
-            // may immediately throw a concurrency exception if
-            // the Isis Oid held in the underlying EntityModel is stale w.r.t. the DB.
-            targetAdapter = obtainTargetAdapter();
+            var targetAdapter = owner;
 
             // no concurrency exception, so continue...
 
@@ -130,8 +121,8 @@ implements FormExecutor {
             //
             val resultAdapter = obtainResultAdapter();
 
-            val redirectFacet =  model instanceof ActionModel
-                ? ((ActionModel) model).getMetaModel().getFacet(RedirectFacet.class)
+            val redirectFacet = actionOrPropertyModel instanceof ActionModel
+                ? ((ActionModel) actionOrPropertyModel).getMetaModel().getFacet(RedirectFacet.class)
                 : null;
 
             if(commonContext.getInteractionLayerTracker().isInInteraction()) {
@@ -154,16 +145,17 @@ implements FormExecutor {
                     //View-models, when edited with AJAX requests, will change their state and will need
                     //to recreate their bookmark.
                     targetAdapter = ManagedObject.of(targetAdapter.getSpecification(), targetAdapter.getPojo());
-                    targetEntityModel.resetPropertyModels();
+                    parentUiModel.resetPropertyModels();
                 }
             }
 
             // hook to close prompt etc.
             onExecuteAndProcessResults(targetIfAny);
 
-            if (shouldRedirect(targetAdapter, resultAdapter, redirectFacet)
-                    || hasBlobsOrClobs(page)
-                    || targetIfAny == null) {
+            if (targetIfAny == null
+                    || actionOrPropertyModel.getDirtiedAndClear()
+                    || shouldRedirect(targetAdapter, resultAdapter, redirectFacet)
+                    || hasBlobsOrClobs(page)) {
 
                 redirectTo(resultAdapter, targetIfAny);
 
@@ -172,14 +164,14 @@ implements FormExecutor {
                 // in this branch the result must be same "logical" object as target, but
                 // the OID might have changed if a view model.
                 if (resultAdapter != null && targetAdapter != resultAdapter) {
-                    targetEntityModel.setObject(resultAdapter);
-                    targetAdapter = targetEntityModel.getManagedObject();
+                    parentUiModel.setObject(resultAdapter);
+                    targetAdapter = parentUiModel.getManagedObject();
                 }
                 if(!EntityUtil.isDetachedOrRemoved(targetAdapter)) {
                     if(targetAdapter != null) {
                         getCommonContext().injectServicesInto(targetAdapter.getPojo());
                     }
-                    targetEntityModel.resetPropertyModels();
+                    parentUiModel.resetPropertyModels();
                 }
 
                 // also in this branch we also know that there *is* an ajax target to use
@@ -409,7 +401,7 @@ implements FormExecutor {
     // -- DEPENDENCIES
 
     private IsisAppCommonContext getCommonContext() {
-        return model.getCommonContext();
+        return actionOrPropertyModel.getCommonContext();
     }
 
     protected ExceptionRecognizerService getExceptionRecognizerService() {
@@ -442,12 +434,6 @@ implements FormExecutor {
 
     protected WicketViewerSettings getSettings() {
         return getCommonContext().lookupServiceElseFail(WicketViewerSettings.class);
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-
-    private ManagedObject obtainTargetAdapter() {
-        return formExecutorStrategy.obtainTargetAdapter();
     }
 
     private Optional<Recognition> getReasonInvalidIfAny() {

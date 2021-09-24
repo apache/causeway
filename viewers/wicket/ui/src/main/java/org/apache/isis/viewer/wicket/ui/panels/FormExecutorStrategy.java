@@ -25,9 +25,15 @@ import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
 
 public interface FormExecutorStrategy<M extends FormExecutorContext> {
 
-    M getModel();
+    /**
+     * The model for this action or property.
+     */
+    M getMemberModel();
 
-    ManagedObject obtainTargetAdapter();
+    /**
+     * The owning entity/viewmodel/service that is declaring this action or property.
+     */
+    ManagedObject getOwner();
 
     String getReasonInvalidIfAny();
 

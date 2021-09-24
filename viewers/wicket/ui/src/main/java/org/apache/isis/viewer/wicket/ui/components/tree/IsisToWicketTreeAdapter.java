@@ -457,7 +457,7 @@ class IsisToWicketTreeAdapter {
 
     /**
      *
-     * @param model
+     * @param actionOrPropertyModel
      * @return Wicket's model for collapse/expand state
      */
     @SuppressWarnings({ "rawtypes" })

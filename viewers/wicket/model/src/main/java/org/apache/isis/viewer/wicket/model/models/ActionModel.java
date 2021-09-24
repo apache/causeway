@@ -69,7 +69,7 @@ import lombok.val;
  * @implSpec
  * <pre>
  * ActionModel --chained-to--> EntityModel
- * ActionModel --bound-to--> ActionInteractionWkt
+ * ActionModel --bound-to--> ActionInteractionWkt (delegate)
  * </pre>
  */
 public final class ActionModel
@@ -127,6 +127,13 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         return delegate.getCommonContext();
     }
 
+    public boolean isDirtied() {
+        return Boolean.TRUE.equals(getObject());
+    }
+    public void clearDirtied() {
+        super.setObject(null);
+    }
+
     // -- BOOKMARKABLE
 
     @Override
@@ -160,6 +167,18 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         return wrap(getParentUiModel(), delegate);
     }
 
+    // -- DIRTIED STATE
+
+    // transient: don't keep the dirtied state persistent across request boundaries
+    private transient boolean isDirtied;
+
+    @Override
+    public boolean getDirtiedAndClear() {
+        final var dirtied = isDirtied;
+        isDirtied = false;
+        return dirtied;
+    }
+
     // -- HELPERS
 
     private Can<ManagedObject> snapshotArgs() {
@@ -174,14 +193,14 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     public ManagedObject executeActionAndReturnResult() {
         val pendingArgs = delegate.parameterNegotiationModel().get();
         val result = delegate.actionInteraction().invokeWithRuleChecking(pendingArgs);
-        super.setObject(result); // memoize result
+        isDirtied = true;
         return result;
     }
 
 
     @Override
     public void setObject(final ManagedObject object) {
-        throw new UnsupportedOperationException("target adapter for ActionModel cannot be changed");
+        throw new UnsupportedOperationException("ActionModel is a chained model - don't mess with the chain");
     }
 
     /** Resets arguments to their fixed point default values

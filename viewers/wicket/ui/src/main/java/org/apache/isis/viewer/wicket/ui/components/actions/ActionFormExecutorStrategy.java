@@ -27,33 +27,33 @@ import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
 
-public class ActionFormExecutorStrategy implements FormExecutorStrategy<ActionModel> {
+import lombok.RequiredArgsConstructor;
 
-    private final ActionModel model;
+@RequiredArgsConstructor
+public class ActionFormExecutorStrategy
+implements FormExecutorStrategy<ActionModel> {
 
-    public ActionFormExecutorStrategy(final ActionModel actionModel) {
-        model = actionModel;
+    private final ActionModel actionModel;
+
+    @Override
+    public ActionModel getMemberModel() {
+        return actionModel;
     }
 
     @Override
-    public ActionModel getModel() {
-        return model;
-    }
-
-    @Override
-    public ManagedObject obtainTargetAdapter() {
-        return model.getOwner();
+    public ManagedObject getOwner() {
+        return actionModel.getOwner();
     }
 
     @Override
     public String getReasonInvalidIfAny() {
-        return model.getValidityConsent().getReason();
+        return actionModel.getValidityConsent().getReason();
     }
 
     @Override
     public void onExecuteAndProcessResults(final AjaxRequestTarget target) {
 
-        if (model.isBookmarkable()) {
+        if (actionModel.isBookmarkable()) {
             /*
             BookmarkedPagesModelProvider application = (BookmarkedPagesModelProvider) Session.get();
             BookmarkedPagesModel bookmarkedPagesModel = application.getBookmarkedPagesModel();
@@ -64,22 +64,22 @@ public class ActionFormExecutorStrategy implements FormExecutorStrategy<ActionMo
         if (actionPrompt != null) {
             actionPrompt.closePrompt(target);
             // cos will be reused next time, so mustn't cache em.
-            model.clearArguments();
+            actionModel.clearArguments();
         }
     }
 
     @Override
     public ManagedObject obtainResultAdapter() {
-        return model.executeActionAndReturnResult();
+        return actionModel.executeActionAndReturnResult();
     }
 
     @Override
     public void redirectTo(final ManagedObject resultAdapter, final AjaxRequestTarget targetIfany) {
 
         ActionResultResponse resultResponse = ActionResultResponseType
-                .determineAndInterpretResult(model, targetIfany, resultAdapter);
+                .determineAndInterpretResult(actionModel, targetIfany, resultAdapter);
 
-        resultResponse.getHandlingStrategy().handleResults(model.getCommonContext(), resultResponse);
+        resultResponse.getHandlingStrategy().handleResults(actionModel.getCommonContext(), resultResponse);
     }
 
 

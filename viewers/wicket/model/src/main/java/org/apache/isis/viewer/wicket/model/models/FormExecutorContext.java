@@ -34,4 +34,6 @@ extends HasParentUiModel<EntityModel>, HasCommonContext {
                 getInlinePromptContext() != null;
     }
 
+    boolean getDirtiedAndClear();
+
 }

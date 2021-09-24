@@ -143,7 +143,18 @@ implements PropertyUiModel {
      */
     public ManagedObject applyValueThenReturnOwner() {
         getPendingPropertyModel().submit();
+        isDirtied = true;
         return getOwner();
+    }
+
+    // transient: don't keep the dirtied state persistent across request boundaries
+    private transient boolean isDirtied;
+
+    @Override
+    public boolean getDirtiedAndClear() {
+        final var dirtied = isDirtied;
+        isDirtied = false;
+        return dirtied;
     }
 
     @Deprecated

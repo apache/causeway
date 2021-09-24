@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -117,6 +118,11 @@ implements ParameterUiModel {
     @Override
     public ParameterNegotiationModel getPendingParameterModel() {
         return delegate.getPendingParameterModel();
+    }
+
+    @Override
+    public boolean getDirtiedAndClear() {
+        throw _Exceptions.unexpectedCodeReach();
     }
 
     // -- HELPER

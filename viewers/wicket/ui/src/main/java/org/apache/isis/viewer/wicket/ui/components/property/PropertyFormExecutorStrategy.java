@@ -26,26 +26,27 @@ import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
 
-import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class PropertyFormExecutorStrategy
 implements FormExecutorStrategy<ScalarPropertyModel> {
 
-    @Getter(onMethod_ = {@Override})
-    private final ScalarPropertyModel model;
+    private final ScalarPropertyModel propertyModel;
 
-    public PropertyFormExecutorStrategy(final ScalarPropertyModel scalarModel) {
-        model = scalarModel;
+    @Override
+    public ScalarPropertyModel getMemberModel() {
+        return propertyModel;
     }
 
     @Override
-    public ManagedObject obtainTargetAdapter() {
-        return model.getManagedProperty().getOwner();
+    public ManagedObject getOwner() {
+        return propertyModel.getManagedProperty().getOwner();
     }
 
     @Override
     public String getReasonInvalidIfAny() {
-        return model.getReasonInvalidIfAny();
+        return propertyModel.getReasonInvalidIfAny();
     }
 
 
@@ -56,7 +57,7 @@ implements FormExecutorStrategy<ScalarPropertyModel> {
 
     @Override
     public ManagedObject obtainResultAdapter() {
-        return model.applyValueThenReturnOwner();
+        return propertyModel.applyValueThenReturnOwner();
     }
 
 
@@ -67,7 +68,7 @@ implements FormExecutorStrategy<ScalarPropertyModel> {
 
         RequestCycle
             .get()
-            .setResponsePage(new EntityPage(model.getCommonContext(), resultAdapter));
+            .setResponsePage(new EntityPage(propertyModel.getCommonContext(), resultAdapter));
     }
 
 
