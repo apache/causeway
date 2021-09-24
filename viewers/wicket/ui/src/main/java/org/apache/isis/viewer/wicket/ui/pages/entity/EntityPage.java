@@ -62,87 +62,53 @@ public class EntityPage extends PageAbstract {
             new CssResourceReference(EntityPage.class, "EntityPage.css");
 
     private final EntityModel model;
-    private final String titleString;
+
+    // -- FACTORIES
 
     /**
      * Called reflectively, in support of {@link BookmarkablePageLink} links.
      * Specifically handled by <code>IsisWicketApplication#newPageFactory()</code>
-     */
-    public static EntityPage bookmarked(
-            final IsisAppCommonContext commonContext,
-            final PageParameters pageParameters) {
-
-        val entityModel = createEntityModel(commonContext, pageParameters);
-        return new EntityPage(pageParameters, entityModel);
-    }
-
-    /**
+     *
      * Creates an EntityModel from the given page parameters.
      * Redirects to the application home page if there is no OID in the parameters.
      *
-     * @param parameters The page parameters with the OID
+     * @param pageParameters The page parameters with the OID
      * @return An EntityModel for the requested OID
      */
-    private static EntityModel createEntityModel(
+    public static EntityPage ofPageParameters(
             final IsisAppCommonContext commonContext,
-            final PageParameters parameters) {
+            final PageParameters pageParameters) {
 
-        String oid = EntityModel.oidStr(parameters);
+        final String oid = EntityModel.oidStr(pageParameters);
         if (Strings.isEmpty(oid)) {
             throw new RestartResponseException(Application.get().getHomePage());
         }
-        return EntityModel.ofPageParameters(commonContext, parameters);
-    }
 
-    private EntityPage(final PageParameters pageParameters, final EntityModel entityModel) {
-        this(pageParameters, entityModel, null);
+        return new EntityPage(
+                pageParameters,
+                EntityModel.ofPageParameters(commonContext, pageParameters));
     }
 
     /**
      * Ensures that any exception that might have occurred already (eg from an action invocation) is shown.
      */
-    public EntityPage(
+    public static EntityPage ofAdapter(
             final IsisAppCommonContext commonContext,
             final ManagedObject adapter) {
-
-        this(PageParameterUtils.newPageParameters(), newEntityModel(commonContext, adapter));
+        return new EntityPage(
+                PageParameterUtils.newPageParameters(),
+                EntityModel.ofAdapter(commonContext, adapter));
     }
 
-    private static EntityModel newEntityModel(
-            final IsisAppCommonContext commonContext,
-            final ManagedObject adapter) {
-
-        val entityModel = EntityModel.ofAdapter(commonContext, adapter);
-        return entityModel;
-    }
+    // -- CONSTRUCTOR
 
     private EntityPage(
             final PageParameters pageParameters,
-            final EntityModel entityModel,
-            final String titleString) {
+            final EntityModel entityModel) {
 
-        super(pageParameters, titleString, ComponentType.ENTITY);
-
+        super(pageParameters, null/*titleString*/, ComponentType.ENTITY);
         this.model = entityModel;
-        this.titleString = titleString;
-
         buildPage();
-    }
-
-    private void addBreadcrumbIfShown(final EntityModel entityModel) {
-        if(!isShowBreadcrumbs()) {
-            return;
-        }
-
-        final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
-        final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
-        breadcrumbModel.visited(entityModel);
-    }
-
-    private void removeAnyBreadcrumb(final EntityModel entityModel) {
-        final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
-        final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
-        breadcrumbModel.remove(entityModel);
     }
 
     @Override
@@ -184,10 +150,8 @@ public class EntityPage extends PageAbstract {
             gridFacet.getGrid(objectAdapter);
         }
 
-        if(titleString == null) {
-            final String titleStr = objectAdapter.titleString();
-            setTitle(titleStr);
-        }
+        final String titleStr = objectAdapter.titleString();
+        setTitle(titleStr);
 
         WebMarkupContainer entityPageContainer = new WebMarkupContainer("entityPageContainer");
         CssClassAppender.appendCssClassTo(entityPageContainer,
@@ -210,8 +174,6 @@ public class EntityPage extends PageAbstract {
         addBreadcrumbIfShown(model);
 
         addBookmarkedPages(entityPageContainer);
-
-
     }
 
     protected void addWhereAmIIfShown(
@@ -236,4 +198,23 @@ public class EntityPage extends PageAbstract {
         whereAmIContainer.addOrReplace(listItems);
 
     }
+
+    // -- HELPER
+
+    private void addBreadcrumbIfShown(final EntityModel entityModel) {
+        if(!isShowBreadcrumbs()) {
+            return;
+        }
+
+        final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
+        final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
+        breadcrumbModel.visited(entityModel);
+    }
+
+    private void removeAnyBreadcrumb(final EntityModel entityModel) {
+        final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
+        final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
+        breadcrumbModel.remove(entityModel);
+    }
+
 }

@@ -264,7 +264,7 @@ implements Serializable {
                     // an error page, but is probably 'good enough').
                     val targetAdapter = actionModel.getOwner();
 
-                    final EntityPage entityPage = new EntityPage(getCommonContext(), targetAdapter);
+                    final EntityPage entityPage = EntityPage.ofAdapter(getCommonContext(), targetAdapter);
 
                     getCommonContext().getTransactionService().flushTransaction();
 

@@ -99,20 +99,17 @@ implements FormExecutor {
 
             log.debug("about to redirect on execution result {}", resultAdapter);
 
+            final ActionResultResponse resultResponse =
+            actionOrPropertyModel.fold(
+                    act->ActionResultResponseType
+                            .determineAndInterpretResult(act, ajaxTarget, resultAdapter),
+                    prop->ActionResultResponse
+                            .toPage(EntityPage.ofAdapter(prop.getCommonContext(), resultAdapter)));
+
             // redirect unconditionally
-            actionOrPropertyModel.accept(
-                    act->{
-                        ActionResultResponse resultResponse = ActionResultResponseType
-                            .determineAndInterpretResult(act, ajaxTarget, resultAdapter);
-                        resultResponse
-                            .getHandlingStrategy()
-                            .handleResults(act.getCommonContext(), resultResponse);
-                    },
-                    prop->{
-                        RequestCycle
-                            .get()
-                            .setResponsePage(new EntityPage(prop.getCommonContext(), resultAdapter));
-                    });
+            resultResponse
+                .getHandlingStrategy()
+                .handleResults(getCommonContext(), resultResponse);
 
             return true; // valid args, allow redirect
 

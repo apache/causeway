@@ -61,7 +61,7 @@ public class HomePage extends PageAbstract {
         if(ManagedObjects.isSpecified(homePageAdapter)) {
             val requestCycle = RequestCycle.get();
             try {
-                val page = new EntityPage(getCommonContext(), homePageAdapter);
+                val page = EntityPage.ofAdapter(getCommonContext(), homePageAdapter);
                 requestCycle.setResponsePage(page);
             } catch (Exception ignore) {
                 // fallback (eg if permissions problem)

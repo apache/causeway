@@ -172,7 +172,7 @@ public enum ActionResultResponseType {
 
         // this will not preserve the URL (because pageParameters are not copied over)
         // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
-        final EntityPage entityPage = new EntityPage(model.getCommonContext(), actualAdapter);
+        final EntityPage entityPage = EntityPage.ofAdapter(model.getCommonContext(), actualAdapter);
 
         return ActionResultResponse.toPage(entityPage);
     }
