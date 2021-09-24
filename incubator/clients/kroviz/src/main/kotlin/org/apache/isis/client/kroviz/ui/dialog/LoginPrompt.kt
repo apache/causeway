@@ -20,6 +20,8 @@ package org.apache.isis.client.kroviz.ui.dialog
 
 import io.kvision.form.text.Password
 import io.kvision.form.text.Text
+import kotlinx.browser.document
+import kotlinx.browser.window
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.core.Constants
@@ -37,12 +39,13 @@ class LoginPrompt : Command() {
     private var username = Constants.demoUser
     private var password = Constants.demoPass
 
-    fun open(at: Point) {
+    fun open() {
         val formItems = mutableListOf<FormItem>()
         formItems.add(FormItem("Url", ValueType.TEXT, url))
         formItems.add(FormItem("User", ValueType.TEXT, username))
         formItems.add(FormItem("Password", ValueType.PASSWORD, password))
         form = RoDialog(caption = "Connect", items = formItems, command = this)
+        val at = UiManager.position!!
         form.open(at)
     }
 

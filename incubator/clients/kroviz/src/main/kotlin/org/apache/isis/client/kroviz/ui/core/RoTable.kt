@@ -22,12 +22,11 @@ import io.kvision.core.Container
 import io.kvision.core.CssSize
 import io.kvision.core.UNIT
 import io.kvision.panel.SimplePanel
-import io.kvision.tabulator.TableType
 import io.kvision.tabulator.Layout
+import io.kvision.tabulator.TableType
 import io.kvision.tabulator.Tabulator
 import io.kvision.tabulator.TabulatorOptions
 import io.kvision.tabulator.js.Tabulator.CellComponent
-import io.kvision.utils.set
 import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.core.model.Exposer
@@ -46,13 +45,14 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
         width = CssSize(100, UNIT.perc)
         val model = displayCollection.data
         val columns = ColumnFactory().buildColumns(
-                displayCollection)
+            displayCollection
+        )
         val options = TabulatorOptions(
-                movableColumns = true,
-                height = Constants.calcHeight,
-                layout = Layout.FITDATA,
-                columns = columns,
-                persistenceMode = false,
+            movableColumns = true,
+            height = Constants.calcHeight,
+            layout = Layout.FITDATA,
+            columns = columns,
+            persistenceMode = false,
         )
 
         val tableTypes = setOf(TableType.STRIPED, TableType.HOVER)
@@ -74,30 +74,30 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
     }
 
     fun <T : Any> Container.tabulator(
-            data: List<T>? = null,
-            dataUpdateOnEdit: Boolean = true,
-            options: TabulatorOptions<T> = TabulatorOptions(),
-            types: Set<TableType> = setOf(),
-            classes: Set<String>? = null,
-            className: String? = null,
-            init: (Tabulator<T>.() -> Unit)? = null
+        data: List<T>? = null,
+        dataUpdateOnEdit: Boolean = true,
+        options: TabulatorOptions<T> = TabulatorOptions(),
+        types: Set<TableType> = setOf(),
+        className: String = "",
+        init: (Tabulator<T>.() -> Unit)? = null
     ): Tabulator<T> {
-        val tabulator = create(data, dataUpdateOnEdit, options, types, classes ?: className.set)
+        val tabulator = create(data, dataUpdateOnEdit, options, types)
+        tabulator.addCssClass(className)
         init?.invoke(tabulator)
         this.add(tabulator)
         return tabulator
     }
 
     fun <T : Any> create(
-            data: List<T>? = null,
-            dataUpdateOnEdit: Boolean = true,
-            options: TabulatorOptions<T> = TabulatorOptions(),
-            types: Set<TableType> = setOf(),
-            classes: Set<String> = setOf(),
-            init: (Tabulator<T>.() -> Unit)? = null
+        data: List<T>? = null,
+        dataUpdateOnEdit: Boolean = true,
+        options: TabulatorOptions<T> = TabulatorOptions(),
+        types: Set<TableType> = setOf(),
+        className: String = "",
+        init: (Tabulator<T>.() -> Unit)? = null
     ): Tabulator<T> {
         val tabulator = Tabulator(data, dataUpdateOnEdit, options, types)
-        tabulator.addCssClass(classes.toString())
+        tabulator.addCssClass(className)
         init?.invoke(tabulator)
         return tabulator
     }

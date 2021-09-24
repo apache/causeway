@@ -66,7 +66,7 @@ object MenuFactory {
         menu: Menu,
         style: ButtonStyle = ButtonStyle.LIGHT,
         withText: Boolean = true,
-        classes: Set<String> = setOf()
+        className: String = ""
     )
             : DropDown {
         val menuTitle = menu.named
@@ -74,10 +74,9 @@ object MenuFactory {
             text = if (withText) menuTitle else "",
             icon = IconManager.find(menuTitle),
             style = style,
-//                classes = classes,
+            className = className,
             forNavbar = false
         )
-        dd.addCssClass(classes.toString())
         //dd.setDragDropData(Constants.stdMimeType, menuTitle)
         // action.setDragDropData gets always overridden by dd.setDragDropData
         menu.section.forEachIndexed { index, section ->

@@ -57,8 +57,8 @@ object RoStatusBar {
 
     init {
         navbar.add(nav)
-        nav.add(isisButton())
-        nav.add(kvisionButton())
+//        nav.add(isisButton())
+//        nav.add(kvisionButton())
         nav.add(lastError)
         nav.add(classDiagram)
         nav.add(userBtn)
@@ -117,18 +117,18 @@ object RoStatusBar {
     }
 
     private fun isisButton(): Button {
-        val classes = setOf("isis-logo-button-image", "logo-button")
+        val classes = "isis-logo-button-image logo-button"
         val b = Button("", style = ButtonStyle.LINK)
-        b.addCssClass(classes.toString())
+        b.addCssClass(classes)
         return b.onClick {
             window.open("https://isis.apache.org")
         }
     }
 
     private fun kvisionButton(): Button {
-        val classes = setOf("kvision-logo-button-image", "logo-button")
+        val classes = "kvision-logo-button-image logo-button"
         val b = Button("", style = ButtonStyle.LINK)
-        b.addCssClass(classes.toString())
+        b.addCssClass(classes)
         return b.onClick {
             window.open("https://kvision.io")
         }

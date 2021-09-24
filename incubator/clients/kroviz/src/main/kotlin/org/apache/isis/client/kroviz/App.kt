@@ -22,6 +22,7 @@ import io.kvision.*
 import org.apache.isis.client.kroviz.ui.core.RoApp
 import io.kvision.pace.Pace
 import io.kvision.panel.ContainerType
+import io.kvision.panel.VPanel
 import io.kvision.panel.root
 import io.kvision.panel.vPanel
 import io.kvision.utils.px
@@ -39,12 +40,10 @@ class App : Application() {
     }
 
     override fun start() {
-        root("kroviz", containerType = ContainerType.FLUID, addRow = true) {
-            vPanel(spacing = 0) {
-                padding = 0.px
-                add(RoApp)
-            }
-        }
+        val r = root("kroviz")
+        val v = VPanel()
+        v.add(RoApp)
+        r.add(v)
     }
 
     override fun dispose(): Map<String, Any> {

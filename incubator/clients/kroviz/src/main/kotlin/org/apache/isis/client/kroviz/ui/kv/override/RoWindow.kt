@@ -71,8 +71,8 @@ open class RoWindow(
         menu: List<KvisionHtmlLink>? = null,
         init: (RoWindow.() -> Unit)? = null
 ) :
-    SimplePanel(classes.toString() +" modal-content kv-window") {
-
+    SimplePanel() {
+//FIXME class +" modal-content kv-window"
     /**
      * Window caption text.
      */

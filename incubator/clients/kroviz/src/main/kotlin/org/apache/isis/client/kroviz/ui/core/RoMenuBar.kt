@@ -21,10 +21,9 @@ package org.apache.isis.client.kroviz.ui.core
 import io.kvision.core.CssSize
 import io.kvision.core.UNIT
 import io.kvision.dropdown.DropDown
-import io.kvision.dropdown.ddLink
-import io.kvision.dropdown.dropDown
 import io.kvision.html.Button
 import io.kvision.html.ButtonStyle
+import io.kvision.html.Link
 import io.kvision.navbar.*
 import io.kvision.panel.SimplePanel
 import io.kvision.panel.vPanel
@@ -57,100 +56,71 @@ object RoMenuBar : SimplePanel() {
         }
     }
 
+    private fun buildMenuEntry(label: String, iconName: String, action: dynamic): Link {
+        val icon = IconManager.find(iconName)
+        return Link(label, icon).onClick { e ->
+            val at = Point(e.pageX.toInt(), e.pageY.toInt())
+            UiManager.position = at
+            action
+        }
+    }
+
     private fun buildMainMenu(): DropDown {
-        return dropDown(
+        val mainMenu = DropDown(
             "",
             icon = IconManager.find("Burger"),
             forNavbar = false,
             style = ButtonStyle.LIGHT
         )
-        {
-            ddLink(
-                "Connect ...",
-                icon = IconManager.find("Connect")
-            ).onClick { e ->
-                val at = Point(e.pageX.toInt(), e.pageY.toInt())
-                LoginPrompt().open(at)
-            }
+        mainMenu.add(
+            buildMenuEntry("Connect ...", "Connect", { LoginPrompt().open() })
+        )
 
-            val toolTitle = "Toolbar"
-            ddLink(
-                toolTitle,
-                icon = IconManager.find(toolTitle)
-            ).onClick {
-                RoIconBar.toggle()
-            }
+        mainMenu.add(
+            buildMenuEntry("Toolbar", "Toolbar", { RoIconBar.toggle() })
+        )
 
-            val sampleTitle = "History"
-            ddLink(
-                sampleTitle,
-                icon = IconManager.find(sampleTitle)
-            ).onClick {
-                val model = EventStore.log
-                UiManager.add("Log Entries", EventLogTable(model))
-            }
+        mainMenu.add(
+            buildMenuEntry("History", "History", { UiManager.add("Log Entries", EventLogTable(EventStore.log)) })
+        )
 
-            val chartTitle = "Sample Chart"
-            ddLink(
-                chartTitle,
-                icon = IconManager.find("Chart")
-            ).onClick {
-                UiManager.add(chartTitle, EventChart(SampleChartModel()))
-            }
+        val chartTitle = "Sample Chart"
+        mainMenu.add(
+            buildMenuEntry(chartTitle, "Chart", { UiManager.add(chartTitle, EventChart(SampleChartModel())) })
+        )
 
-            val geoMapTitle = "Sample Geo Map"
-            ddLink(
-                geoMapTitle,
-                icon = IconManager.find("Map")
-            ).onClick {
-                UiManager.add(geoMapTitle, GeoMap())
-            }
+        val geoMapTitle = "Sample Geo Map"
+        mainMenu.add(
+            buildMenuEntry(geoMapTitle, "Map", { UiManager.add(geoMapTitle, GeoMap()) })
+        )
 
-            val svgMapTitle = "Sample SVG Map"
-            ddLink(
-                svgMapTitle,
-                icon = IconManager.find("Diagram")
-            ).onClick {
-                UiManager.add(svgMapTitle, SvgMap())
-            }
+        val svgMapTitle = "Sample SVG Map"
+        mainMenu.add(
+            buildMenuEntry(svgMapTitle, "Diagram", { UiManager.add(svgMapTitle, SvgMap()) })
+        )
 
-            val svgInlineTitle = "Sample SVG Inline (interactive)"
-            ddLink(
-                svgInlineTitle,
-                icon = IconManager.find("Diagram")
-            ).onClick {
-                SvgInline().open()
-            }
+        val svgInlineTitle = "Sample SVG Inline (interactive)"
+        mainMenu.add(
+            buildMenuEntry(svgInlineTitle, "Diagram", { SvgInline().open() })
+        )
 
-            val imageTitle = "Sample Image"
-            ddLink(
-                imageTitle,
-                icon = IconManager.find("Image")
-            ).onClick {
-                val panel = ImageSample()
-                RoView.addTab(imageTitle, panel)
-            }
+        val imageTitle = "Sample Image"
+        mainMenu.add(
+            buildMenuEntry(imageTitle, "Image", { RoView.addTab(imageTitle, ImageSample()) })
+        )
 
-            val searchTitle = "Dropdown search example"
-            ddLink(
-                searchTitle,
-                icon = IconManager.find("Find")
-            ).onClick {
-                UiManager.add(searchTitle, DropdownSearch())
-            }
+        val aboutTitle = "About"
+        mainMenu.add(
+            buildMenuEntry(aboutTitle, "Info", { RoView.addTab(aboutTitle, About().open()) })
+        )
 
-            val aboutTitle = "About"
-            ddLink(
-                aboutTitle,
-                icon = IconManager.find(aboutTitle)
-            ).onClick {
-                About().open()
-            }
-        }
+        console.log("[RMB.buildMainMenu]")
+        console.log(mainMenu)
+        return mainMenu
     }
 
     fun amendMenu(menuBars: Menubars) {
-        logoButton()
+        //       logoButton()
         menuBars.primary.menu.forEach { m ->
             val dd = MenuFactory.buildForMenu(m)
             if (dd.getChildren().isNotEmpty()) nav.add(dd)
@@ -160,9 +130,9 @@ object RoMenuBar : SimplePanel() {
     }
 
     private fun logoButton() {
-        val classes = setOf("isis-logo-button-image", "logo-button")
+        val classNames = "isis-logo-button-image logo-button"
         val logo = Button("", style = ButtonStyle.LINK)
-        logo.addCssClass(classes.toString())
+        logo.addCssClass(classNames)
         logo.onClick {
             window.open("https://isis.apache.org")
         }

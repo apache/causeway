@@ -28,7 +28,6 @@ import org.w3c.files.FileReader
 @Deprecated("Useful as Sample")
 object ImageSample : VPanel() {
 
-
     init {
         vPanel(spacing = 10) {
             val button = button("Button")
@@ -53,6 +52,5 @@ object ImageSample : VPanel() {
             }
         }
     }
-
 
 }
