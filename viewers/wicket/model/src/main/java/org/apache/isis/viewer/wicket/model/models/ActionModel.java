@@ -127,13 +127,6 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         return delegate.getCommonContext();
     }
 
-    public boolean isDirtied() {
-        return Boolean.TRUE.equals(getObject());
-    }
-    public void clearDirtied() {
-        super.setObject(null);
-    }
-
     // -- BOOKMARKABLE
 
     @Override
