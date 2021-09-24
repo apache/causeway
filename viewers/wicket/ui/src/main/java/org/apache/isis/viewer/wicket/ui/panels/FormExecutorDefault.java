@@ -102,9 +102,7 @@ implements FormExecutor {
 
         try {
 
-            var targetAdapter = owner;
-
-            // no concurrency exception, so continue...
+            var targetAdapter = owner; // initially the target (page) is set to the current page
 
             // validate the proposed property value/action arguments
             final Optional<Recognition> invalidReasonIfAny = getReasonInvalidIfAny();
@@ -411,8 +409,7 @@ implements FormExecutor {
                 .fold(
                         act->act.getValidityConsent().getReason(),
                         prop->prop.getReasonInvalidIfAny());
-        val category = Category.CONSTRAINT_VIOLATION;
-        return Recognition.of(category, reason);
+        return Recognition.of(Category.CONSTRAINT_VIOLATION, reason);
     }
 
     private void redirectTo(

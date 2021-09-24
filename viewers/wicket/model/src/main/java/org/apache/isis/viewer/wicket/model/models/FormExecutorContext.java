@@ -35,6 +35,15 @@ extends HasParentUiModel<EntityModel>, HasCommonContext {
                 getInlinePromptContext() != null;
     }
 
+    /**
+     * Immediately after execution (property update or action invocation) the dirtied flag is
+     * set such that consumers of the execution result can tell whether
+     * the execution actually happened or was vetoed or canceled.
+     * <p>
+     * Motivated by the need to decide whether to stay on the same page or redirect.
+     * <p>
+     * Calling this method clears the flag.
+     */
     boolean getDirtiedAndClear();
 
     /**
