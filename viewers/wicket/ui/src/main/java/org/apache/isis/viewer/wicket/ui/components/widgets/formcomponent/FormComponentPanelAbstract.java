@@ -35,7 +35,8 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
  * Wicket {@link FormComponentPanel}, providing the ability to build up the
  * panel using other {@link ComponentType}s.
  */
-public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T>  {
+public abstract class FormComponentPanelAbstract<T>
+extends FormComponentPanel<T> {
 
     private static final long serialVersionUID = 1L;
 
@@ -94,7 +95,7 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
         return hintContainerOf(this);
     }
 
-    private UiHintContainer hintContainerOf(Component component) {
+    private UiHintContainer hintContainerOf(final Component component) {
         if(component == null) {
             return null;
         }

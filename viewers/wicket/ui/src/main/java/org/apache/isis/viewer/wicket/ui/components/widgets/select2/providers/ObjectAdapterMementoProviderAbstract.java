@@ -34,6 +34,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoForEmpty;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -62,7 +63,8 @@ extends ChoiceProvider<ObjectMemento> {
 
     @Override
     public String getDisplayValue(final ObjectMemento choiceMemento) {
-        if (choiceMemento == null) {
+        if (choiceMemento == null
+                || choiceMemento instanceof ObjectMementoForEmpty) {
             return NULL_DISPLAY_TEXT;
         }
         val choice = getCommonContext().reconstructObject(choiceMemento);
