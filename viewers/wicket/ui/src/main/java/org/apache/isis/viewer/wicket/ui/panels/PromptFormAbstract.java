@@ -38,12 +38,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.string.AppendingStringBuffer;
 
+import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
@@ -243,7 +245,7 @@ implements ScalarModelSubscriber {
 
         setLastFocusHint();
 
-        final FormExecutor formExecutor = new FormExecutorDefault<>(getFormExecutorStrategy());
+        final FormExecutor formExecutor = new FormExecutorDefault(getMemberModel());
 
         final boolean withinPrompt = formExecutorContext.isWithinPrompt();
         boolean succeeded = formExecutor.executeAndProcessResults(target.getPage(), target, form, withinPrompt);
@@ -257,7 +259,7 @@ implements ScalarModelSubscriber {
 
     }
 
-    protected abstract FormExecutorStrategy<T> getFormExecutorStrategy();
+    protected abstract _Either<ActionModel, ScalarPropertyModel> getMemberModel();
 
 
     private void setLastFocusHint() {

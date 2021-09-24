@@ -28,6 +28,7 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.springframework.lang.Nullable;
@@ -39,6 +40,7 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacet;
@@ -52,10 +54,13 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
-import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
+import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
+import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisBlobOrClobPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
+import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
 import lombok.NonNull;
@@ -63,19 +68,18 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public final class FormExecutorDefault<M extends FormExecutorContext>
+public final class FormExecutorDefault
 implements FormExecutor {
 
     private static final long serialVersionUID = 1L;
 
-    protected final M actionOrPropertyModel;
     protected final WicketViewerSettings settings;
-    private final FormExecutorStrategy<M> formExecutorStrategy;
+    private final _Either<ActionModel, ScalarPropertyModel> actionOrPropertyModel;
 
-    public FormExecutorDefault(final FormExecutorStrategy<M> formExecutorStrategy) {
-        this.actionOrPropertyModel = formExecutorStrategy.getMemberModel();
+    public FormExecutorDefault(
+            final _Either<ActionModel, ScalarPropertyModel> actionOrPropertyModel) {
+        this.actionOrPropertyModel = actionOrPropertyModel;
         this.settings = getSettings();
-        this.formExecutorStrategy = formExecutorStrategy;
     }
 
     /**
@@ -85,13 +89,16 @@ implements FormExecutor {
     @Override
     public boolean executeAndProcessResults(
             final Page page,
-            final AjaxRequestTarget targetIfAny,
+            final AjaxRequestTarget ajaxTarget,
             final Form<?> feedbackFormIfAny,
             final boolean withinPrompt) {
 
-        final ManagedObject owner = formExecutorStrategy.getOwner();
-        final EntityModel parentUiModel = actionOrPropertyModel.getParentUiModel();
-        val commonContext = parentUiModel.getCommonContext();
+        final EntityModel parentUiModel = actionOrPropertyModel.fold(
+                act->act.getParentUiModel(),
+                prop->prop.getParentUiModel());
+
+        final ManagedObject owner = parentUiModel.getObject();
+        final var commonContext = parentUiModel.getCommonContext();
 
         try {
 
@@ -102,7 +109,7 @@ implements FormExecutor {
             // validate the proposed property value/action arguments
             final Optional<Recognition> invalidReasonIfAny = getReasonInvalidIfAny();
             if (invalidReasonIfAny.isPresent()) {
-                raiseWarning(targetIfAny, feedbackFormIfAny, invalidReasonIfAny.get());
+                raiseWarning(ajaxTarget, feedbackFormIfAny, invalidReasonIfAny.get());
                 return false; // invalid args, stay on page
             }
 
@@ -119,11 +126,13 @@ implements FormExecutor {
             //
             // (The DB exception might actually be thrown by the flush() that follows.
             //
-            val resultAdapter = obtainResultAdapter();
+            val resultAdapter = actionOrPropertyModel.fold(
+                    act->act.executeActionAndReturnResult(),
+                    prop->prop.applyValueThenReturnOwner());
 
-            val redirectFacet = actionOrPropertyModel instanceof ActionModel
-                ? ((ActionModel) actionOrPropertyModel).getMetaModel().getFacet(RedirectFacet.class)
-                : null;
+            val redirectFacet = actionOrPropertyModel.fold(
+                    act->act.getMetaModel().getFacet(RedirectFacet.class),
+                    prop->null);
 
             if(commonContext.getInteractionLayerTracker().isInInteraction()) {
 
@@ -149,15 +158,14 @@ implements FormExecutor {
                 }
             }
 
-            // hook to close prompt etc.
-            onExecuteAndProcessResults(targetIfAny);
-
-            if (targetIfAny == null
-                    || actionOrPropertyModel.getDirtiedAndClear()
+            if (ajaxTarget == null
+                    || actionOrPropertyModel.fold(
+                            act->act.getDirtiedAndClear(),
+                            prop->prop.getDirtiedAndClear())
                     || shouldRedirect(targetAdapter, resultAdapter, redirectFacet)
                     || hasBlobsOrClobs(page)) {
 
-                redirectTo(resultAdapter, targetIfAny);
+                redirectTo(resultAdapter, ajaxTarget);
 
             } else {
 
@@ -175,12 +183,12 @@ implements FormExecutor {
                 }
 
                 // also in this branch we also know that there *is* an ajax target to use
-                addComponentsToRedraw(targetIfAny);
+                addComponentsToRedraw(ajaxTarget);
 
                 val configuration = getCommonContext().getConfiguration();
                 currentMessageBroker().ifPresent(messageBorker->{
                     final String jGrowlCalls = JGrowlUtil.asJGrowlCalls(messageBorker, configuration);
-                    targetIfAny.appendJavaScript(jGrowlCalls);
+                    ajaxTarget.appendJavaScript(jGrowlCalls);
                 });
 
             }
@@ -199,7 +207,7 @@ implements FormExecutor {
             }
 
             // attempt to recognize this exception using the ExceptionRecognizers
-            if(recognizeExceptionThenRaise(ex, targetIfAny, feedbackFormIfAny).isPresent()) {
+            if(recognizeExceptionThenRaise(ex, ajaxTarget, feedbackFormIfAny).isPresent()) {
                 return false; // invalid args, stay on page
             }
 
@@ -398,10 +406,42 @@ implements FormExecutor {
         }
     }
 
+    private Optional<Recognition> getReasonInvalidIfAny() {
+        val reason = actionOrPropertyModel
+                .fold(
+                        act->act.getValidityConsent().getReason(),
+                        prop->prop.getReasonInvalidIfAny());
+        val category = Category.CONSTRAINT_VIOLATION;
+        return Recognition.of(category, reason);
+    }
+
+    private void redirectTo(
+            final ManagedObject resultAdapter,
+            final AjaxRequestTarget ajaxTarget) {
+
+        actionOrPropertyModel
+        .accept(
+                act->{
+                    ActionResultResponse resultResponse = ActionResultResponseType
+                        .determineAndInterpretResult(act, ajaxTarget, resultAdapter);
+                    resultResponse
+                        .getHandlingStrategy()
+                        .handleResults(act.getCommonContext(), resultResponse);
+                },
+                prop->{
+                    RequestCycle
+                        .get()
+                        .setResponsePage(new EntityPage(prop.getCommonContext(), resultAdapter));
+                });
+    }
+
     // -- DEPENDENCIES
 
     private IsisAppCommonContext getCommonContext() {
-        return actionOrPropertyModel.getCommonContext();
+        return actionOrPropertyModel
+                .fold(
+                        act->act.getCommonContext(),
+                        prop->prop.getCommonContext());
     }
 
     protected ExceptionRecognizerService getExceptionRecognizerService() {
@@ -434,26 +474,6 @@ implements FormExecutor {
 
     protected WicketViewerSettings getSettings() {
         return getCommonContext().lookupServiceElseFail(WicketViewerSettings.class);
-    }
-
-    private Optional<Recognition> getReasonInvalidIfAny() {
-        val reason = formExecutorStrategy.getReasonInvalidIfAny();
-        val category = Category.CONSTRAINT_VIOLATION;
-        return Recognition.of(category, reason);
-    }
-
-    private void onExecuteAndProcessResults(final AjaxRequestTarget target) {
-        formExecutorStrategy.onExecuteAndProcessResults(target);
-    }
-
-    private ManagedObject obtainResultAdapter() {
-        return formExecutorStrategy.obtainResultAdapter();
-    }
-
-    private void redirectTo(
-            final ManagedObject resultAdapter,
-            final AjaxRequestTarget target) {
-        formExecutorStrategy.redirectTo(resultAdapter, target);
     }
 
 }

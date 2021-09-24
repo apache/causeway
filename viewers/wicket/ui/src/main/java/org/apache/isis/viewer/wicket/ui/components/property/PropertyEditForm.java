@@ -25,16 +25,15 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.hints.IsisPropertyEditCompletedEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
-
-import lombok.val;
 
 class PropertyEditForm extends PromptFormAbstract<ScalarPropertyModel> {
 
@@ -106,8 +105,8 @@ class PropertyEditForm extends PromptFormAbstract<ScalarPropertyModel> {
     }
 
     @Override
-    protected FormExecutorStrategy<ScalarPropertyModel> getFormExecutorStrategy() {
-        val scalarModel = getScalarModel();
-        return new PropertyFormExecutorStrategy(scalarModel);
+    protected _Either<ActionModel, ScalarPropertyModel> getMemberModel() {
+        return _Either.right(getScalarModel());
     }
+
 }

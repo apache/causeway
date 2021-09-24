@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.common.model.HasParentUiModel;
 
@@ -35,5 +36,12 @@ extends HasParentUiModel<EntityModel>, HasCommonContext {
     }
 
     boolean getDirtiedAndClear();
+
+    /**
+     * The owning entity/viewmodel/service that is declaring this action or property.
+     */
+    default ManagedObject getOwner()  {
+        return getParentUiModel().getManagedObject();
+    }
 
 }

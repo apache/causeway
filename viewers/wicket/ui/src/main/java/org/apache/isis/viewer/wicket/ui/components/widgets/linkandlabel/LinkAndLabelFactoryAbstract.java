@@ -30,6 +30,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.postprocessors.collparam.ActionParameterDefaultsFacetFromAssociatedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -55,7 +56,6 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
-import org.apache.isis.viewer.wicket.ui.components.actions.ActionFormExecutorStrategy;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.BS3GridPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
@@ -188,7 +188,6 @@ implements Serializable {
                 });
                 prompt.setTitle(label, target);
                 prompt.setPanel(actionParametersPanel, target);
-                actionParametersPanel.setActionPrompt(prompt);
                 prompt.showPrompt(target);
 
                 if(prompt instanceof ActionPromptWithExtraContent) {
@@ -232,7 +231,7 @@ implements Serializable {
                 // returns false - if invalid args; if concurrency exception;
 
                 final FormExecutor formExecutor =
-                        new FormExecutorDefault<>(new ActionFormExecutorStrategy(actionModel));
+                        new FormExecutorDefault(_Either.left(actionModel));
                 boolean succeeded = formExecutor.executeAndProcessResults(page, null, null, actionModel.isWithinPrompt());
 
                 if(succeeded) {
