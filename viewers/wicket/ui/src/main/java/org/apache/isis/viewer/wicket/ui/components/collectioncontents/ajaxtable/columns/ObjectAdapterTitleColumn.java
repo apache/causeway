@@ -81,7 +81,7 @@ extends ColumnAbstract<ManagedObject> {
         val adapter = rowModel.getObject();
 
         if(ManagedObjects.isValue(adapter)) {
-            val valueModel = new ValueModel(super.getCommonContext(), adapter);
+            val valueModel = ValueModel.of(super.getCommonContext(), adapter);
 
             val componentFactory = findComponentFactory(ComponentType.VALUE, valueModel);
             return componentFactory.createComponent(id, valueModel);

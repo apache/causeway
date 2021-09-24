@@ -70,7 +70,7 @@ public enum ActionResultResponseType {
         @Override
         public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ManagedObject resultAdapter) {
             final var commonContext = model.getCommonContext();
-            ValueModel valueModel = new ValueModel(commonContext, resultAdapter);
+            ValueModel valueModel = ValueModel.of(commonContext, resultAdapter);
             valueModel.setActionHint(model);
             final ValuePage valuePage = new ValuePage(valueModel);
             return ActionResultResponse.toPage(valuePage);

@@ -41,13 +41,15 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.ValueModel;
 
 import lombok.val;
 
 /**
  * Part of the {@link AjaxFallbackDefaultDataTable} API.
  */
-public class CollectionContentsSortableDataProvider extends SortableDataProvider<ManagedObject, String> {
+public class CollectionContentsSortableDataProvider
+extends SortableDataProvider<ManagedObject, String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -59,6 +61,10 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
 
     @Override
     public IModel<ManagedObject> model(final ManagedObject adapter) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
+                || ManagedObjects.isValue(adapter)) {
+            return ValueModel.of(model.getCommonContext(), adapter);
+        }
         return EntityModel.ofAdapter(model.getCommonContext(), adapter);
     }
 
