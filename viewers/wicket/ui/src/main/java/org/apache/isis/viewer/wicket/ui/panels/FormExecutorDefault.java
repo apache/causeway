@@ -156,6 +156,12 @@ implements FormExecutor {
                 }
             }
 
+            //FIXME maybe redirecting ALWAYS is the safe thing to do!
+            // just get rid of that complicated optimization stuff below
+            // we only care about validation failures to stay on the same page,
+            // which I believe we already do above
+            // as a follow up can remove all the getDirtiedAndClear() methods
+
             if (ajaxTarget == null
                     || actionOrPropertyModel.fold(
                             act->act.getDirtiedAndClear(),
