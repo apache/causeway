@@ -288,19 +288,35 @@ public class DomainObjectTesterFactory {
          */
         public void assertInvocationResultNoRules(
                 final @Nullable Object expectedResult,
-                final @Nullable List<Object> pojoArgList) {
+                @SuppressWarnings("rawtypes") final @Nullable UnaryOperator ...pojoDefaultArgReplacers) {
 
             assertExists(true);
+
+            final var pojoReplacers = Can.ofArray(pojoDefaultArgReplacers);
 
             managedAction
             .ifPresent(managedAction->{
                 interactionService.runAnonymous(()->{
 
-                    val args = managedAction.getInteractionHead()
-                            .getPopulatedParameterValues(pojoArgList);
+                    final var actionInteraction = ActionInteraction.wrap(managedAction)
+                            //.checkVisibility() - no rule checking
+                            //.checkUsability() - no rule checking
+                            ;
+
+                    final var pendingArgs = actionInteraction
+                            .startParameterNegotiation().orElseThrow(()->_Exceptions
+                                    .illegalAccess("action not visible or usable: %s",
+                                            managedAction.getAction().getFeatureIdentifier()));
+
+                    pendingArgs.getParamModels()
+                    .forEach(param->{
+                        pojoReplacers
+                            .get(param.getParamNr())
+                            .ifPresent(param::updatePojo);
+                    });
 
                     // spawns its own transactional boundary, or reuses an existing one if available
-                    val either = managedAction.invoke(args);
+                    val either = managedAction.invoke(pendingArgs.getParamValues());
 
                     assertTrue(either.isLeft()); // assert action did not throw
 

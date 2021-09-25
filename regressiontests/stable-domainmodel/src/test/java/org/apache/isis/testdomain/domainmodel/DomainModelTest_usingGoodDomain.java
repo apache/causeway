@@ -477,7 +477,7 @@ class DomainModelTest_usingGoodDomain {
         act.assertIsExplicitlyAnnotated(true);
         act.assertVisibilityIsNotVetoed();
         act.assertUsabilityIsVetoedWith("action disabled for testing purposes");
-        act.assertInvocationResult("Hallo World!");
+        act.assertInvocationResultNoRules("Hallo World!");
 
         // -- PROPERTY WITH PRIVATE GETTER AND SETTER
 
@@ -521,14 +521,14 @@ class DomainModelTest_usingGoodDomain {
 
         // PRIVATE ACTION
 
-        val act = testerFactory
+        final var act = testerFactory
                 .actionTester(ViewModelWithAnnotationOptionalUsingPrivateSupport.class, "myAction");
         act.assertExists(true);
         act.assertIsExplicitlyAnnotated(true);
         act.assertVisibilityIsNotVetoed();
         act.assertUsabilityIsVetoedWithAll(
                 Can.of("object disabled for testing purposes", "action disabled for testing purposes"));
-        act.assertInvocationResult("Hallo World!");
+        act.assertInvocationResultNoRules("Hallo World!");
 
         // -- PROPERTY WITH PRIVATE GETTER AND SETTER
 
