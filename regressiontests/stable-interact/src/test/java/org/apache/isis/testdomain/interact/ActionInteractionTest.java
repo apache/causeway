@@ -19,10 +19,16 @@
 package org.apache.isis.testdomain.interact;
 
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
@@ -38,11 +44,6 @@ import org.apache.isis.testdomain.model.interaction.InteractionDemo_multiEnum;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_multiInt;
 import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 
@@ -68,27 +69,21 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void whenEnabled_shouldHaveNoVeto() {
 
-        val managedAction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
-                .getManagedAction().get(); // should not throw
+        final var tester =
+                testerFactory.actionTester(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS);
 
-        assertFalse(managedAction.checkVisibility().isPresent()); // is visible
-        assertFalse(managedAction.checkUsability().isPresent()); // can invoke
+        tester.assertVisibilityIsNotVetoed();
+        tester.assertUsabilityIsNotVetoed();
     }
 
     @Test
     void whenDisabled_shouldHaveVeto() {
 
-        val managedAction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS)
-                .getManagedAction().get(); // should not throw
+        final var tester =
+                testerFactory.actionTester(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS);
 
-
-        assertFalse(managedAction.checkVisibility().isPresent()); // is visible
-
-        // cannot invoke
-        val veto = managedAction.checkUsability().get(); // should not throw
-        assertNotNull(veto);
-
-        assertEquals("Disabled for demonstration.", veto.getReason());
+        tester.assertVisibilityIsNotVetoed();
+        tester.assertUsabilityIsVetoedWith("Disabled for demonstration.");
     }
 
     @Test
@@ -143,14 +138,12 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void whenEnabled_shouldAllowInvocation() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
-        .checkVisibility()
-        .checkUsability();
+        final var tester =
+                testerFactory.actionTester(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS);
 
-        val pendingArgs = actionInteraction.startParameterNegotiation().get();
-        val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
-        assertTrue(resultOrVeto.isLeft());
-        assertEquals(99, (int)resultOrVeto.leftIfAny().getPojo());
+        tester.assertVisibilityIsNotVetoed();
+        tester.assertUsabilityIsNotVetoed();
+        tester.assertInvocationResult(99, UnaryOperator.identity());
     }
 
     @Test
@@ -170,24 +163,23 @@ class ActionInteractionTest extends InteractionTestAbstract {
         val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
         assertTrue(resultOrVeto.isRight());
 
+        final var tester =
+                testerFactory.actionTester(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS);
+
+        tester.assertVisibilityIsNotVetoed();
+        tester.assertUsabilityIsVetoedWith("Disabled for demonstration.");
+        assertThrows(IllegalAccessException.class, ()->tester.assertInvocationResult(99));
     }
 
     @Test
     void withParams_shouldProduceCorrectResult() throws Throwable {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
-        .checkVisibility()
-        .checkUsability();
+        final var tester =
+                testerFactory.actionTester(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS);
 
-        val params = Can.of(objectManager.adapt(12), objectManager.adapt(34));
-
-        val pendingArgs = actionInteraction.startParameterNegotiation().get();
-        pendingArgs.setParamValues(params);
-
-        val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
-        assertTrue(resultOrVeto.isLeft());
-
-        assertEquals(46, (int)resultOrVeto.leftIfAny().getPojo());
+        tester.assertVisibilityIsNotVetoed();
+        tester.assertUsabilityIsNotVetoed();
+        tester.assertInvocationResult(46, arg0->12, arg1->34);
     }
 
     @Test

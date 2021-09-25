@@ -21,6 +21,8 @@ package org.apache.isis.testdomain.util.interaction;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 import javax.inject.Inject;
 
@@ -64,6 +66,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.testdomain.model.interaction.InteractionDemo;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
 
@@ -201,7 +204,7 @@ public class DomainObjectTesterFactory {
     extends MemberTester<T> {
 
         @Getter
-        private Optional<ManagedAction> managedActionIfAny;
+        private Optional<ManagedAction> managedAction;
 
         private ActionTester(
                 final @NonNull Class<T> domainObjectType,
@@ -210,36 +213,86 @@ public class DomainObjectTesterFactory {
             super(domainObjectType, actionName, "actionName", where);
         }
 
+        public ManagedAction getManagedActionElseFail() {
+            return getManagedAction().orElseThrow();
+        }
+
         @Override
         public Optional<ObjectAction> getMetaModel() {
-            return managedActionIfAny
+            return managedAction
             .map(ManagedAction::getMetaModel)
             .map(ObjectAction.class::cast);
         }
 
+        public ObjectAction getActionMetaModelElseFail() {
+            return getMetaModel().orElseThrow();
+        }
+
         @Override
-        protected Optional<ObjectSpecification> getElementType() {
+        public Optional<ObjectSpecification> getElementType() {
             return getMetaModel()
                     .map(ObjectAction::getReturnType);
         }
 
         @Override
         protected Optional<? extends ManagedMember> startInteractionOn(final ManagedObject viewModel) {
-            return this.managedActionIfAny = ActionInteraction
+            return this.managedAction = ActionInteraction
                     .start(viewModel, getMemberName(), Where.NOT_SPECIFIED)
                     .getManagedAction();
+        }
+
+
+        public void assertInvocationResult(
+                final @Nullable Object expectedResult,
+                @SuppressWarnings("rawtypes") final @Nullable UnaryOperator ...pojoDefaultArgReplacers) {
+
+            assertExists(true);
+
+            final var pojoReplacers = Can.ofArray(pojoDefaultArgReplacers);
+
+            managedAction
+            .ifPresent(managedAction->{
+                interactionService.runAnonymous(()->{
+
+                    final var actionInteraction = ActionInteraction.wrap(managedAction)
+                            .checkVisibility()
+                            .checkUsability();
+
+                    final var pendingArgs = actionInteraction
+                            .startParameterNegotiation().orElseThrow(()->_Exceptions
+                                    .illegalAccess("action not visible or usable: %s",
+                                            managedAction.getAction().getFeatureIdentifier()));
+
+                    pendingArgs.getParamModels()
+                            .forEach(param->{
+                                pojoReplacers
+                                    .get(param.getParamNr())
+                                    .ifPresent(param::updatePojo);
+                            });
+
+                    //pendingArgs.validateParameterSetForParameters();
+
+                    val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+                    assertTrue(resultOrVeto.isLeft()); // assert action did not throw
+
+                    val actionResultAsPojo = resultOrVeto.leftIfAny().getPojo();
+                    assertEquals(expectedResult, actionResultAsPojo);
+
+                });
+            });
+
         }
 
         /**
          * circumvents rule checking
          */
-        public void assertInvocationResult(
+        public void assertInvocationResultNoRules(
                 final @Nullable Object expectedResult,
                 final @Nullable List<Object> pojoArgList) {
 
             assertExists(true);
 
-            managedActionIfAny
+            managedAction
             .ifPresent(managedAction->{
                 interactionService.runAnonymous(()->{
 
@@ -282,6 +335,10 @@ public class DomainObjectTesterFactory {
             return managedPropertyIfAny
             .map(ManagedProperty::getMetaModel)
             .map(OneToOneAssociation.class::cast);
+        }
+
+        public OneToOneAssociation getPropertyMetaModelElseFail() {
+            return getMetaModel().orElseThrow();
         }
 
         @Override
@@ -438,6 +495,10 @@ public class DomainObjectTesterFactory {
             .map(OneToManyAssociation.class::cast);
         }
 
+        public OneToManyAssociation getCollectionMetaModelElseFail() {
+            return getMetaModel().orElseThrow();
+        }
+
         @Override
         protected Optional<ObjectSpecification> getElementType() {
             return getMetaModel()
@@ -499,7 +560,13 @@ public class DomainObjectTesterFactory {
         }
 
         protected abstract Optional<? extends ObjectMember> getMetaModel();
+
         protected abstract Optional<ObjectSpecification> getElementType();
+
+        public ObjectSpecification getElementTypeElseFaile() {
+            return getElementType().orElseThrow();
+        }
+
         protected abstract Optional<? extends ManagedMember> startInteractionOn(ManagedObject viewModel);
 
         public <F extends Facet> F getFacetOnMemberElseFail(final Class<F> facetType) {
@@ -575,9 +642,9 @@ public class DomainObjectTesterFactory {
             assertExists(true);
 
             managedMemberIfAny
-            .ifPresent(managedCollection->{
+            .ifPresent(managedMember->{
                 interactionService.runAnonymous(()->{
-                    final String actualVetoReason = managedCollection
+                    final String actualVetoReason = managedMember
                             .checkUsability()
                             .map(veto->veto.getReason())
                             .orElse(null);
@@ -606,9 +673,9 @@ public class DomainObjectTesterFactory {
             }
 
             managedMemberIfAny
-            .ifPresent(managedCollection->{
+            .ifPresent(managedMember->{
                 interactionService.runAnonymous(()->{
-                    final String actualVetoReason = managedCollection
+                    final String actualVetoReason = managedMember
                             .checkUsability()
                             .map(veto->veto.getReason())
                             .orElse(null);

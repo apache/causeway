@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed;
 
+import java.util.function.UnaryOperator;
+
 import org.apache.isis.commons.binding.Bindable;
 import org.apache.isis.commons.binding.Observable;
 import org.apache.isis.commons.collections.Can;
@@ -34,5 +36,17 @@ public interface ManagedValue {
     Observable<String> getValidationMessage();
     Bindable<String> getSearchArgument();
     Observable<Can<ManagedObject>> getChoices();
+
+    default void update(final UnaryOperator<ManagedObject> updater) {
+        final var value = getValue();
+        value.setValue(updater.apply(value.getValue()));
+    }
+
+    /**
+     * Requires specified objects, that is ManagedObjects require an ObjectSpecification.
+     */
+    default void updatePojo(final UnaryOperator<Object> updater) {
+        update(v->ManagedObject.of(v.getSpecification(), updater.apply(v.getPojo())));
+    }
 
 }

@@ -287,17 +287,12 @@ implements ScalarModelSubscriber {
     }
 
     public void onCancelSubmitted(final AjaxRequestTarget target) {
-
         setLastFocusHint();
         completePrompt(target);
     }
 
     private void completePrompt(final AjaxRequestTarget target) {
-
         if (isWithinPrompt()) {
-            if(formExecutorContext instanceof ScalarPropertyModel) {
-                ((ScalarPropertyModel)formExecutorContext).syncUiWithModel();
-            }
             rebuildGuiAfterInlinePromptDone(target);
         } else {
             closePromptIfAny(target);

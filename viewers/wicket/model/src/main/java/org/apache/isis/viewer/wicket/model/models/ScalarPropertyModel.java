@@ -146,11 +146,6 @@ implements PropertyUiModel {
         return getOwner();
     }
 
-    @Deprecated
-    public void syncUiWithModel() {
-        // not required
-    }
-
     @Override
     public ManagedValue proposedValue() {
         return getPendingPropertyModel();

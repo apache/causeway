@@ -22,19 +22,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
-import org.apache.isis.testdomain.model.interaction.InteractionDemo;
 import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
-
-import lombok.val;
 
 @SpringBootTest(
         classes = {
@@ -53,43 +44,12 @@ import lombok.val;
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel
 })
-class PropertyInteractionTest extends InteractionTestAbstract {
+class CollectionInteractionTest extends InteractionTestAbstract {
 
     @Test
-    void propertyInteraction_whenEnabled_shouldHaveNoVeto() {
+    void multiSelect() {
 
-        final var tester =
-                testerFactory.propertyTester(InteractionDemo.class, "stringMultiline", Where.OBJECT_FORMS);
-
-        tester.assertVisibilityIsNotVetoed();
-        tester.assertUsabilityIsNotVetoed();
-
-        // verify, that the meta-model is valid
-        assertMetamodelValid();
-
-        // verify, that we have the LabelAtFacet
-        val labelAtFacet = tester.getFacetOnMemberElseFail(LabelAtFacet.class);
-        val labelPos = labelAtFacet.label();
-        assertEquals(LabelPosition.TOP, labelPos);
-
-        // verify, that we have the MultiLineFacet
-        val multiLineFacet = tester.getFacetOnMemberElseFail(MultiLineFacet.class);
-        val numberOfLines = multiLineFacet.numberOfLines();
-        assertEquals(3, numberOfLines);
-
-        tester.assertValue("initial");
-        tester.assertValueUpdateUsingNegotiation("new Value");
-        tester.assertValueUpdateUsingNegotiationTextual("parsable Text");
-    }
-
-    @Test
-    void propertyInteraction_whenDisabled_shouldHaveVeto() {
-
-        final var tester =
-                testerFactory.propertyTester(InteractionDemo.class, "stringDisabled", Where.OBJECT_FORMS);
-
-        tester.assertVisibilityIsNotVetoed();
-        tester.assertUsabilityIsVetoedWith("Disabled for demonstration.");
+        //TODO add and test model for multi-select toggle
     }
 
 

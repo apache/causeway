@@ -477,7 +477,7 @@ class DomainModelTest_usingGoodDomain {
         act.assertIsExplicitlyAnnotated(true);
         act.assertVisibilityIsNotVetoed();
         act.assertUsabilityIsVetoedWith("action disabled for testing purposes");
-        act.assertInvocationResult("Hallo World!", List.of());
+        act.assertInvocationResult("Hallo World!");
 
         // -- PROPERTY WITH PRIVATE GETTER AND SETTER
 
@@ -528,7 +528,7 @@ class DomainModelTest_usingGoodDomain {
         act.assertVisibilityIsNotVetoed();
         act.assertUsabilityIsVetoedWithAll(
                 Can.of("object disabled for testing purposes", "action disabled for testing purposes"));
-        act.assertInvocationResult("Hallo World!", List.of());
+        act.assertInvocationResult("Hallo World!");
 
         // -- PROPERTY WITH PRIVATE GETTER AND SETTER
 

@@ -226,16 +226,6 @@ implements
 
     }
 
-    /**
-     * Resets the {@link #propertyScalarModels map} of {@link ScalarModel}s for
-     * each {@link PropertyMemento property} to the value held in the underlying
-     * {@link #getObject() entity}.
-     */
-    public void resetPropertyModels() {
-        propertyScalarModels().values()
-            .forEach(ScalarPropertyModel::syncUiWithModel);
-    }
-
     // -- VIEW OR EDIT
 
     @Override
