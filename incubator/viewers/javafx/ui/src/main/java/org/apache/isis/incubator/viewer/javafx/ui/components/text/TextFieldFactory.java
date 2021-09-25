@@ -18,25 +18,20 @@
  */
 package org.apache.isis.incubator.viewer.javafx.ui.components.text;
 
-import java.util.Optional;
-
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.incubator.viewer.javafx.model.binding.BindingsFx;
+import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
-import org.apache.isis.viewer.common.model.binding.BindingConverter;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 
 @org.springframework.stereotype.Component
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
@@ -51,62 +46,22 @@ public class TextFieldFactory implements UiComponentHandlerFx {
     @Override
     public Node handle(final ComponentRequest request) {
 
-        val uiComponent = new TextField();
-        val valueSpec = request.getFeatureTypeSpec();
-        val converter = StringConverter.of(valueSpec);
+        val uiComponent = new VBox();
+        val uiField = _fx.add(uiComponent, new TextField());
+        val uiValidationFeedback = _fx.newValidationFeedback(uiComponent);
 
-        if(request.getManagedFeature() instanceof ManagedParameter) {
+        final var managedValue = request.getManagedValue();
+        BindingsFx.bindParsableBidirectional(
+                uiField.textProperty(),
+                managedValue.getValueAsParsableText());
+        uiField.editableProperty().set(true);
 
-            val managedParameter = (ManagedParameter)request.getManagedFeature();
-
-            BindingsFx.bindBidirectional(
-                    uiComponent.textProperty(),
-                    managedParameter.getValue(),
-                    converter);
-
-            //TODO bind parameter validation feedback
-
-        } else if(request.getManagedFeature() instanceof ManagedProperty) {
-
-            val managedProperty = (ManagedProperty)request.getManagedFeature();
-
-            // readonly binding
-            BindingsFx.bind(
-                    uiComponent.textProperty(),
-                    managedProperty.getValue(),
-                    converter);
-
-            //TODO allow property editing
-            //TODO bind property validation feedback
-        }
+        BindingsFx.bindValidationFeeback(
+                uiValidationFeedback.textProperty(),
+                uiValidationFeedback.visibleProperty(),
+                managedValue.getValidationMessage());
 
         return uiComponent;
     }
-
-    // -- HELPER
-
-    @RequiredArgsConstructor(staticName = "of")
-    private static final class StringConverter implements BindingConverter<String> {
-
-        @Getter(onMethod_ = {@Override})
-        private final ObjectSpecification valueSpecification;
-
-        @Override
-        public String toString(final String value) {
-            return value; // identity
-        }
-
-        @Override
-        public String fromString(final String stringifiedValue) {
-            return stringifiedValue; // identity
-        }
-
-        @Override
-        public Optional<String> tryParse(final String stringifiedValue) {
-            return Optional.empty(); // always ok
-        }
-
-    }
-
 
 }

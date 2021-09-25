@@ -96,6 +96,16 @@ implements ValueFacet<T> {
     // -- PARSER
 
     @Override
+    public Optional<Parser<T>> selectDefaultParser() {
+        return getValueSemantics()
+                .stream()
+                .filter(isMatchingAnyOf(Can.empty()))
+                .map(ValueSemanticsProvider::getParser)
+                .filter(_NullSafe::isPresent)
+                .findFirst();
+    }
+
+    @Override
     public Optional<Parser<T>> selectParserForParameter(final ObjectActionParameter param) {
         return streamValueSemanticsHonoringQualifiers(param)
                 .map(ValueSemanticsProvider::getParser)
@@ -113,11 +123,7 @@ implements ValueFacet<T> {
 
     @Override
     public Parser<T> fallbackParser(final Identifier featureIdentifier) {
-        return new PseudoParserWithMessage<T>(String
-                .format("Could not find a parser for type %s "
-                        + "in the context of %s",
-                        getValueType(),
-                        featureIdentifier));
+        return fallbackParser(getValueType(), featureIdentifier);
     }
 
     // -- RENDERER
@@ -150,10 +156,28 @@ implements ValueFacet<T> {
 
     @Override
     public Renderer<T> fallbackRenderer(final Identifier featureIdentifier) {
-        return new PseudoRendererWithMessage<T>(String
+        return fallbackRenderer(getValueType(), featureIdentifier);
+    }
+
+    // -- UTILITY
+
+    public static <X> Parser<X> fallbackParser(
+            final LogicalType valueType,
+            final Identifier featureIdentifier) {
+        return new PseudoParserWithMessage<X>(String
+                .format("Could not find a parser for type %s "
+                        + "in the context of %s",
+                        valueType,
+                        featureIdentifier));
+    }
+
+    public static <X> Renderer<X> fallbackRenderer(
+            final LogicalType valueType,
+            final Identifier featureIdentifier) {
+        return new PseudoRendererWithMessage<X>(String
                 .format("Could not find a renderer for type %s "
                         + "in the context of %s",
-                        getValueType(),
+                        valueType,
                         featureIdentifier));
     }
 

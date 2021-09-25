@@ -36,6 +36,8 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedFeature;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
+import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -67,11 +69,13 @@ public interface UiComponentFactory<B, C> {
 
     @Value(staticConstructor = "of")
     public static class ComponentRequest {
+
+        @NonNull private final ManagedValue managedValue;
         @NonNull private final ManagedFeature managedFeature;
         @NonNull private final Optional<DisablingUiModel> disablingUiModelIfAny;
 
         public static ComponentRequest of(final ManagedParameter managedParameter) {
-            return of(managedParameter, Optional.empty());
+            return of(managedParameter, managedParameter, Optional.empty());
         }
 
         // -- SHORTCUTS
@@ -154,7 +158,6 @@ public interface UiComponentFactory<B, C> {
             val proposedNewValue = ManagedObject.of(getFeatureTypeSpec(), proposedNewValuePojo);
             return ((ManagedProperty)managedFeature).modifyProperty(proposedNewValue);
         }
-
 
     }
 

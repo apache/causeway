@@ -18,28 +18,28 @@
  */
 package org.apache.isis.viewer.common.model.binding;
 
-public interface BindingConverter<L, R> {
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-    L toLeft(R right);
-    R toRight(L left);
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-    public static <T> BindingConverter<T, T> identity(final Class<T> type){
-        return new BindingConverter<T, T>() {
-            @Override public T toLeft(final T right) {
-                return right;}
-            @Override public T toRight(final T left) {
-                return left;}
-        };
+@RequiredArgsConstructor(staticName = "of")
+public final class BindingConverterForManagedObject<T>
+implements BindingConverter<ManagedObject, T> {
+
+    @Getter private final ObjectSpecification valueSpecification;
+
+    @Override
+    public ManagedObject toLeft(final T pojo) {
+        return ManagedObject.of(getValueSpecification(), pojo);
     }
 
-    public default BindingConverter<R, L> reverse() {
-        final var self = this;
-        return new BindingConverter<R, L>() {
-            @Override public R toLeft(final L right) {
-                return self.toRight(right);}
-            @Override public L toRight(final R left) {
-                return self.toLeft(left);}
-        };
+    @Override
+    public T toRight(final ManagedObject adapter) {
+        return _Casts.uncheckedCast(ManagedObjects.UnwrapUtil.single(adapter));
     }
 
 }
