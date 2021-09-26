@@ -18,13 +18,21 @@
  */
 package org.apache.isis.testdomain.interact;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
+import org.apache.isis.testdomain.model.interaction.InteractionDemo;
 import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
 
 @SpringBootTest(
@@ -49,8 +57,39 @@ class CollectionInteractionTest extends InteractionTestAbstract {
     @Test
     void multiSelect() {
 
-        //TODO add and test model for multi-select toggle
-    }
+        final var tester =
+                testerFactory.collectionTester(InteractionDemo.class, "items", Where.ANYWHERE);
+        tester.assertVisibilityIsNotVetoed();
+        tester.assertUsabilityIsNotVetoed();
 
+        final var expectedElements = tester.streamCollectionElements()
+                .map(ManagedObjects.UnwrapUtil::single)
+                .collect(Collectors.toList());
+        assertEquals(4, expectedElements.size());
+
+        tester.assertCollectionElements(expectedElements);
+
+        final var tableTester = tester.tableTester();
+
+        tableTester.assertUnfilteredDataElements(expectedElements);
+
+        // toggle on 'second' and 'last' item for selection
+        tableTester.assertDataRowSelectionWhenToggledOn(List.of(1, 3), List.of(
+                expectedElements.get(1),
+                expectedElements.get(3)));
+
+        // toggle off 'second' for selection, 'last' item should remain
+        tableTester.assertDataRowSelectionWhenToggledOff(List.of(1), List.of(
+                expectedElements.get(3)));
+
+        // toggle all on
+        tableTester.getDataTable().getSelectAllToggle().setValue(true);
+        tableTester.assertDataRowSelectionIsAll();
+
+        // toggle all off
+        tableTester.getDataTable().getSelectAllToggle().setValue(false);
+        tableTester.assertDataRowSelectionIsEmpty();
+
+    }
 
 }

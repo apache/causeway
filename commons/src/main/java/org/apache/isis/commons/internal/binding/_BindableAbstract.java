@@ -142,6 +142,16 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
     // -- COMPOSITION
 
     @Override
+    public <R> Observable<R> map(
+            final Function<T, R> forwardMapper) {
+        final var newBindable = _Observables.<R>forFactory(()->forwardMapper.apply(getValue()));
+        addListener((e,o,n)->{
+            newBindable.setValue(forwardMapper.apply(n));
+        });
+        return newBindable;
+    }
+
+    @Override
     public <R> Bindable<R> mapToBindable(
             final Function<T, R> forwardMapper,
             final Function<R, T> reverseMapper) {

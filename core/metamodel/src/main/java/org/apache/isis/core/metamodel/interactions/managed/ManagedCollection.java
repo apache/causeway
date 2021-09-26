@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -104,6 +105,8 @@ public final class ManagedCollection extends ManagedMember {
         return streamElements(InteractionInitiatedBy.USER);
     }
 
-
+    public DataTableModel createDataTableModel() {
+        return new DataTableModel(this);
+    }
 
 }

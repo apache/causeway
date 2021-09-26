@@ -22,8 +22,6 @@ import java.util.function.Supplier;
 
 import org.apache.isis.commons.internal.base._Lazy;
 
-import lombok.val;
-
 /**
  * <h1>- internal use only -</h1>
  *
@@ -40,7 +38,7 @@ public class _Observables {
 
         private final _Lazy<T> lazyValue;
 
-        public LazyObservable(Supplier<T> factory) {
+        public LazyObservable(final Supplier<T> factory) {
             this.lazyValue = _Lazy.threadSafe(factory);
         }
 
@@ -56,9 +54,8 @@ public class _Observables {
 
     }
 
-    public static <T> LazyObservable<T> forFactory(Supplier<T> factory) {
-        val bindable = new LazyObservable<T>(factory);
-        return bindable;
+    public static <T> LazyObservable<T> forFactory(final Supplier<T> factory) {
+        return new LazyObservable<T>(factory);
     }
 
 }

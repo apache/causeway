@@ -18,6 +18,8 @@
  */
 package org.apache.isis.commons.binding;
 
+import java.util.function.Function;
+
 /**
  * @param <T>
  */
@@ -30,5 +32,7 @@ public interface Observable<T> {
 
     void addListener(InvalidationListener listener);
     void removeListener(InvalidationListener listener);
+
+    <R> Observable<R> map(Function<T, R> forwardMapper);
 
 }

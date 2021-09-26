@@ -18,11 +18,10 @@
  */
 package org.apache.isis.testdomain.util.interaction;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -66,7 +65,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.testdomain.model.interaction.InteractionDemo;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
 
@@ -235,7 +233,7 @@ public class DomainObjectTesterFactory {
         }
 
         @Override
-        protected Optional<? extends ManagedMember> startInteractionOn(final ManagedObject viewModel) {
+        protected Optional<ManagedAction> startInteractionOn(final ManagedObject viewModel) {
             return this.managedAction = ActionInteraction
                     .start(viewModel, getMemberName(), Where.NOT_SPECIFIED)
                     .getManagedAction();
@@ -364,7 +362,7 @@ public class DomainObjectTesterFactory {
         }
 
         @Override
-        protected Optional<? extends ManagedMember> startInteractionOn(final ManagedObject viewModel) {
+        protected Optional<ManagedProperty> startInteractionOn(final ManagedObject viewModel) {
             return this.managedPropertyIfAny = PropertyInteraction
                     .start(viewModel, getMemberName(), where)
                     .getManagedProperty();
@@ -522,10 +520,23 @@ public class DomainObjectTesterFactory {
         }
 
         @Override
-        protected Optional<? extends ManagedMember> startInteractionOn(final ManagedObject viewModel) {
+        protected Optional<ManagedCollection> startInteractionOn(final ManagedObject viewModel) {
             return this.managedCollectionIfAny = CollectionInteraction
                     .start(viewModel, getMemberName(), Where.NOT_SPECIFIED)
                     .getManagedCollection();
+        }
+
+        /**
+         * circumvents rule checking
+         */
+        public Stream<ManagedObject> streamCollectionElements() {
+
+            assertExists(true);
+
+            return managedCollectionIfAny
+            .map(managedCollection->
+                interactionService.callAnonymous(managedCollection::streamElements))
+            .orElseGet(Stream::empty);
         }
 
         /**
@@ -542,6 +553,11 @@ public class DomainObjectTesterFactory {
                     .assertComponentWiseEquals(expectedCollectionElements, managedCollection.getCollectionValue().getPojo());
                 });
             });
+        }
+
+        public DataTableTester tableTester() {
+            return DataTableTester.of(getManagedCollectionIfAny().orElseThrow(
+                    ).createDataTableModel());
         }
 
     }
