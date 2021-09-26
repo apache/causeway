@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed.nonscalar;
 
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.isis.commons.collections.Can;
@@ -42,6 +43,8 @@ public class DataTableModel {
     @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsSelected;
     @Getter private final _BindableAbstract<Boolean> selectAllToggle;
 
+    @Getter private final @NonNull LazyObservable<Can<DataColumn>> dataColumns;
+
 
     public DataTableModel(final ManagedCollection managedCollection) {
         this.managedCollection = managedCollection;
@@ -61,9 +64,9 @@ public class DataTableModel {
                 .collect(Can.toCan()));
 
         dataRowsSelected = _Observables.forFactory(()->
-        dataRowsFiltered.getValue().stream()
-        .filter(dataRow->dataRow.getSelectToggle().getValue().booleanValue())
-        .collect(Can.toCan()));
+            dataRowsFiltered.getValue().stream()
+            .filter(dataRow->dataRow.getSelectToggle().getValue().booleanValue())
+            .collect(Can.toCan()));
 
         selectAllToggle = _Bindables.forValue(Boolean.FALSE);
         selectAllToggle.addListener((e,o,isAllOn)->{
@@ -81,6 +84,12 @@ public class DataTableModel {
             dataRowsFiltered.invalidate();
             dataRowsSelected.invalidate();
         });
+
+        dataColumns = _Observables.forFactory(()->
+            managedCollection.getElementType()
+            .streamPropertiesForColumnRendering(managedCollection.getIdentifier(), Optional.of(managedCollection.getOwner()))
+            .map(property->new DataColumn(this, property))
+            .collect(Can.toCan()));
 
     }
 

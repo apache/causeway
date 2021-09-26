@@ -92,4 +92,15 @@ class CollectionInteractionTest extends InteractionTestAbstract {
 
     }
 
+    @Test
+    void columns() {
+
+        final var tableTester =
+                testerFactory.collectionTester(InteractionDemo.class, "items", Where.ANYWHERE)
+                .tableTester();
+
+        tableTester.assertColumnNames(List.of("Name", "Calendar Entry"));
+
+    }
+
 }

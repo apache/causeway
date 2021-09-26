@@ -19,9 +19,12 @@
 package org.apache.isis.testdomain.util.interaction;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.isis.commons.binding.Observable;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataColumn;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -83,6 +86,14 @@ public class DataTableTester {
 
     public void assertDataRowSelectionIsEmpty() {
         assertEquals(0, dataTable.getDataRowsSelected().getValue().size());
+    }
+
+    public void assertColumnNames(final List<String> expectedColumnNames) {
+        assertEquals(expectedColumnNames,
+                dataTable.getDataColumns().getValue().stream()
+                .map(DataColumn::getColumnFriendlyName)
+                .map(Observable::getValue)
+                .collect(Collectors.toList()));
     }
 
 }

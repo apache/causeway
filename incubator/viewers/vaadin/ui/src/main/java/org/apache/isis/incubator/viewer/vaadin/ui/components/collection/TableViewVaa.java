@@ -87,7 +87,7 @@ public class TableViewVaa extends VerticalLayout {
             final @NonNull ManagedCollection managedCollection,
             final @NonNull Where where) {
 
-        val elementSpec = managedCollection.getElementSpecification();
+        val elementSpec = managedCollection.getElementType();
         val elements = managedCollection.streamElements()
                 .collect(Can.toCan());
         return elements.isEmpty()
