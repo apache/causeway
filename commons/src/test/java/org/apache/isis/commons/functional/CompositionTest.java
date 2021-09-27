@@ -18,62 +18,65 @@
  */
 package org.apache.isis.commons.functional;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.convert.converter.Converter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.isis.commons.internal.base._Strings;
+
 class CompositionTest {
 
-    @BeforeEach
-    void setUp() throws Exception {
-    }
-
     @Test
-    void pseudoComposition() {
-        final var comp = Composition.ofElement("a");
+    void pseudoStruct() {
+        final var comp = Struct.of("a");
 
         assertEquals(List.of("a"), comp.flatten());
         assertEquals(1, comp.size());
     }
 
     @Test
-    void composingElements() {
-        final var comp = Composition.ofElements("a", "b");
+    void constructingElements() {
+        final var comp = Struct.of("a", "b");
 
         assertEquals(List.of("a", "b"), comp.flatten());
         assertEquals(2, comp.size());
     }
 
     @Test
-    void composingCompositions() {
+    void constructingStructs() {
 
-        final var comp = Composition.of(
-                Composition.ofElements("a", "b"),
-                Composition.ofElements("c", "d"));
+        final var comp = Struct.<String>of(
+                Struct.of("a", "b"),
+                Struct.of("c", "d"));
 
         assertEquals(List.of("a", "b", "c", "d"), comp.flatten());
         assertEquals(4, comp.size());
     }
 
     @Test
-    void composingElementAndComposition() {
+    void constructingElementAndStruct() {
 
-        final var comp = Composition.ofLeftElement(
+        final var comp = Struct.<String>of(
                 "a",
-                Composition.ofElements("c", "d"));
+                Struct.of("c", "d"));
 
         assertEquals(List.of("a", "c", "d"), comp.flatten());
         assertEquals(3, comp.size());
     }
 
     @Test
-    void composingCompositionAndElement() {
+    void constructingStructAndElement() {
 
-        final var comp = Composition.ofRightElement(
-                Composition.ofElements("a", "b"),
+        final var comp = Struct.<String>of(
+                Struct.of("a", "b"),
                 "d");
 
         assertEquals(List.of("a", "b", "d"), comp.flatten());
@@ -81,20 +84,84 @@ class CompositionTest {
     }
 
     @Test
-    void compositionNesting() {
+    void constructionNesting() {
 
-        final var comp = Composition.of(
-                Composition.of(
-                        Composition.ofElements("a", "b"),
-                        Composition.ofElements("c", "d")),
-                Composition.of(
-                        Composition.ofElements("e", "f"),
-                        Composition.ofElements("g", "h")));
+        final var comp = Struct.of(
+                Struct.<String>of(
+                        Struct.of("a", "b"),
+                        Struct.of("c", "d")),
+                Struct.<String>of(
+                        Struct.of("e", "f"),
+                        Struct.of("g", "h")));
 
         assertEquals(List.of("a", "b", "c", "d", "e", "f", "g", "h"), comp.flatten());
         assertEquals(8, comp.size());
     }
 
+    // -- CONVERTER COMPOSITION
 
+    @lombok.Value
+    static class CalEntry {
+        String name;
+        LocalDateTime at;
+        Duration duration;
+
+        static CalEntry sample() {
+            return new CalEntry(
+                    "entry",
+                    LocalDateTime.of(LocalDate.of(2021, 9, 27), LocalTime.of(6, 45)),
+                    Duration.of(30, ChronoUnit.MINUTES));
+        }
+    }
+
+    final Converter<String, String> strIdentity = str->str;
+    final Converter<Duration, Long> durCon1 = dur->dur.toMinutes();
+    final Converter<Duration, Enum<?>> durCon2 = dur->ChronoUnit.MINUTES;
+    final Converter<Long, String> longCon = lon->lon.toString();
+    final Converter<Enum<?>, String> enumCon = enu->_Strings.capitalize(enu.name().toLowerCase());
+    final Converter<LocalDateTime, LocalDate> ldtCon1 = ldt->ldt.toLocalDate();
+    final Converter<LocalDateTime, LocalTime> ldtCon2 = ldt->ldt.toLocalTime();
+    final Converter<LocalDate, String> ldCon = ld->ld.toString();
+    final Converter<LocalTime, String> ltCon = lt->lt.toString();
+    final Converter<CalEntry, String> ceCon1 = ce->ce.getName();
+    final Converter<CalEntry, LocalDateTime> ceCon2 = ce->ce.getAt();
+    final Converter<CalEntry, Duration> ceCon3 = ce->ce.getDuration();
+
+    final Struct<Converter<LocalDateTime, String>> localDateTimeCC = Struct.of(
+            ldtCon1.andThen(ldCon),
+            ldtCon2.andThen(ltCon));
+
+    final Struct<Converter<Duration, String>> durationCC = Struct.of(
+            durCon1.andThen(longCon),
+            durCon2.andThen(enumCon));
+
+    final FunStruct<LocalDateTime, String> localDateTimeFC = FunStruct.of(
+            FunStruct.of(ldtCon1::convert).map(ldCon::convert),
+            FunStruct.of(ldtCon2::convert).map(ltCon::convert));
+
+    final FunStruct<Duration, String> durationFC = FunStruct.of(
+            FunStruct.of(durCon1::convert).map(longCon::convert),
+            FunStruct.of(durCon2::convert).map(enumCon::convert));
+
+
+    final FunStruct<CalEntry, String> calEntryFC = FunStruct.of(
+            ceCon1::convert,
+            FunStruct.<CalEntry, String>of(
+                    FunStruct.of(ceCon2::convert).compose(localDateTimeFC),
+                    FunStruct.of(ceCon3::convert).compose(durationFC)
+                    ));
+
+    @Test
+    void converterComposition() {
+
+        assertEquals(List.of("30", "Minutes"),
+                durationCC
+                .mapThenFlatten(conv->conv.convert(Duration.of(30, ChronoUnit.MINUTES))));
+
+        assertEquals(List.of("entry", "2021-09-27", "06:45", "30", "Minutes"),
+                calEntryFC
+                .applyThenFlatten(CalEntry.sample()));
+
+    }
 
 }

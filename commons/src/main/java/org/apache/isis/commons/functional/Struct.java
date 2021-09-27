@@ -20,6 +20,7 @@ package org.apache.isis.commons.functional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -33,50 +34,50 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 /**
- * The {@link Composition} type represents a binary tree data structure.
+ * Represents a binary tree data structure.
  *
  * @since 2.0 {@index}
  */
-@RequiredArgsConstructor(access=AccessLevel.PRIVATE, staticName="ofBranches")
+@RequiredArgsConstructor(access=AccessLevel.PROTECTED)
 @ToString @EqualsAndHashCode
-public final class Composition<T> {
+public class Struct<T> {
 
-    private final _Either<T, Composition<T>> left;
-    private final _Either<T, Composition<T>> right;
+    private final _Either<T, Struct<T>> left;
+    private final _Either<T, Struct<T>> right;
     private final int elementCount;
 
     // -- FACTORIES
 
-    public static <T> Composition<T> ofElement(final @NonNull T left) {
-        return Composition.ofBranches(_Either.left(left), _Either.right(nil()), 1);
+    public static <T> Struct<T> of(final @NonNull T left) {
+        return new Struct<>(_Either.left(left), _Either.right(nil()), 1);
     }
 
-    public static <T> Composition<T> ofElements(final @NonNull T left, final @NonNull T right) {
-        return Composition.ofBranches(_Either.left(left), _Either.left(right), 2);
+    public static <T> Struct<T> of(final @NonNull T left, final @NonNull T right) {
+        return new Struct<>(_Either.left(left), _Either.left(right), 2);
     }
 
-    public static <T> Composition<T> ofLeftElement(
+    public static <T> Struct<T> of(
             final @NonNull T left,
-            final @NonNull Composition<T> right) {
-        return Composition.ofBranches(
+            final @NonNull Struct<T> right) {
+        return new Struct<>(
                 _Either.left(left),
                 _Either.right(right),
                 1 + right.elementCount);
     }
 
-    public static <T> Composition<T> ofRightElement(
-            final @NonNull Composition<T> left,
+    public static <T> Struct<T> of(
+            final @NonNull Struct<T> left,
             final @NonNull T right) {
-        return Composition.ofBranches(
+        return new Struct<>(
                 _Either.right(left),
                 _Either.left(right),
                 left.elementCount + 1);
     }
 
-    public static <T> Composition<T> of(
-            final @NonNull Composition<T> left,
-            final @NonNull Composition<T> right) {
-        return Composition.ofBranches(
+    public static <T> Struct<T> of(
+            final @NonNull Struct<T> left,
+            final @NonNull Struct<T> right) {
+        return new Struct<>(
                 _Either.right(left),
                 _Either.right(right),
                 left.elementCount + right.elementCount);
@@ -96,8 +97,8 @@ public final class Composition<T> {
     public Stream<T> streamDepthFirstPostorder() {
         return elementCount!=0 // intercept NIL
                 ? Stream.concat(
-                        left.fold(Stream::of, Composition::streamDepthFirstPostorder),
-                        right.fold(Stream::of, Composition::streamDepthFirstPostorder))
+                        left.fold(Stream::of, Struct::streamDepthFirstPostorder),
+                        right.fold(Stream::of, Struct::streamDepthFirstPostorder))
                 : Stream.empty();
     }
 
@@ -108,13 +109,32 @@ public final class Composition<T> {
                 .collect(Collectors.toCollection(()->new ArrayList<>(elementCount)));
     }
 
+    public <R> List<R> mapThenFlatten(final Function<T, R> mapper) {
+        return streamDepthFirstPostorder()
+                .map(mapper)
+                .collect(Collectors.toCollection(()->new ArrayList<>(elementCount)));
+    }
+
     // -- MAPPING
+
+//    // Converter<A, B>,  Composition<Converter<B, C>> -> Composition<Converter<A, C>>
+//    // T: Converter<A, C>
+//    // R: Converter<B, C>
+//    public <R> Composition<T> adopt(Composition<R> foreign, Function<T, R> mapper) {
+//
+//    }
+
+
+//    public <R> Composition<R> map(final Function<T, R> mapper) {
+//        return null;
+//    }
 
     // -- NIL / THE EMPTY COMPOSITION
 
-    private final static Composition<?> NIL = Composition.ofBranches(null, null, 0);
-    public static <T> Composition<T> nil() {
+    private final static Struct<?> NIL = new Struct<>(null, null, 0);
+    public static <T> Struct<T> nil() {
         return _Casts.uncheckedCast(NIL);
     }
+
 
 }
