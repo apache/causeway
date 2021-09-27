@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.functional;
+package org.apache.isis.commons.struct;
 
 import java.util.ArrayList;
 import java.util.List;

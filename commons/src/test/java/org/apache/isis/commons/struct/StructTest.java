@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.functional;
+package org.apache.isis.commons.struct;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.commons.internal.base._Strings;
 
-class CompositionTest {
+class StructTest {
 
     @Test
     void pseudoStruct() {
