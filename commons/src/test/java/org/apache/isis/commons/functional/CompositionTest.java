@@ -156,11 +156,13 @@ class CompositionTest {
 
         assertEquals(List.of("30", "Minutes"),
                 durationCC
-                .mapThenFlatten(conv->conv.convert(Duration.of(30, ChronoUnit.MINUTES))));
+                .map(conv->conv.convert(CalEntry.sample().getDuration()))
+                .flatten());
 
         assertEquals(List.of("entry", "2021-09-27", "06:45", "30", "Minutes"),
                 calEntryFC
-                .applyThenFlatten(CalEntry.sample()));
+                .apply(CalEntry.sample())
+                .flatten());
 
     }
 

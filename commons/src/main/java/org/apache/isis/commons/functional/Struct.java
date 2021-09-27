@@ -109,27 +109,34 @@ public class Struct<T> {
                 .collect(Collectors.toCollection(()->new ArrayList<>(elementCount)));
     }
 
-    public <R> List<R> mapThenFlatten(final Function<T, R> mapper) {
-        return streamDepthFirstPostorder()
-                .map(mapper)
-                .collect(Collectors.toCollection(()->new ArrayList<>(elementCount)));
-    }
-
     // -- MAPPING
 
-//    // Converter<A, B>,  Composition<Converter<B, C>> -> Composition<Converter<A, C>>
-//    // T: Converter<A, C>
-//    // R: Converter<B, C>
-//    public <R> Composition<T> adopt(Composition<R> foreign, Function<T, R> mapper) {
-//
-//    }
+    public <X> Struct<X> map(final Function<T, X> mapper) {
+        return new MappedStruct<>(this, mapper);
+    }
 
+    final static class MappedStruct<A, B> extends Struct<B> {
 
-//    public <R> Composition<R> map(final Function<T, R> mapper) {
-//        return null;
-//    }
+        final Struct<A> origin;
+        final Function<A, B> mapper;
 
-    // -- NIL / THE EMPTY COMPOSITION
+        protected MappedStruct(
+                final Struct<A> origin,
+                final Function<A, B> mapper) {
+            super(null, null, origin.elementCount);
+            this.origin = origin;
+            this.mapper = mapper;
+        }
+
+        @Override
+        public Stream<B> streamDepthFirstPostorder() {
+            return origin.streamDepthFirstPostorder()
+                    .map(mapper);
+        }
+
+    }
+
+    // -- NIL / THE EMPTY STRUCT
 
     private final static Struct<?> NIL = new Struct<>(null, null, 0);
     public static <T> Struct<T> nil() {

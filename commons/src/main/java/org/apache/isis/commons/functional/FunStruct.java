@@ -109,16 +109,31 @@ public class FunStruct<T, R> {
                 .collect(Collectors.toCollection(()->new ArrayList<>(elementCount)));
     }
 
-    public <X> List<Function<T, X>> mapThenFlatten(final Function<R, X> mapper) {
-        return streamDepthFirstPostorder()
-                .map(fun->fun.andThen(mapper))
-                .collect(Collectors.toCollection(()->new ArrayList<>(elementCount)));
+    // -- APPLY VALUE
+
+    public Struct<R> apply(final T value) {
+        return new AppliedStruct<>(this, value);
     }
 
-    public List<R> applyThenFlatten(final T value) {
-        return streamDepthFirstPostorder()
-                .map(fun->fun.apply(value))
-                .collect(Collectors.toCollection(()->new ArrayList<>(elementCount)));
+    final static class AppliedStruct<A, B> extends Struct<B> {
+
+        final FunStruct<A, B> origin;
+        final A value;
+
+        protected AppliedStruct(
+                final FunStruct<A, B> origin,
+                final A value) {
+            super(null, null, origin.elementCount);
+            this.origin = origin;
+            this.value = value;
+        }
+
+        @Override
+        public Stream<B> streamDepthFirstPostorder() {
+            return origin.streamDepthFirstPostorder()
+                    .map(fun->fun.apply(value));
+        }
+
     }
 
     // -- MAPPING
@@ -148,7 +163,7 @@ public class FunStruct<T, R> {
 
     }
 
-    // -- COMPOSE
+    // -- COMPOSITION
 
     public <X> FunStruct<T, X> compose(final FunStruct<R, X> other) {
         return new ComposedFunStruct<>(this, other);
@@ -178,13 +193,11 @@ public class FunStruct<T, R> {
 
     }
 
-
-    // -- NIL / THE EMPTY COMPOSITION
+    // -- NIL / THE EMPTY STRUCT
 
     private final static FunStruct<?, ?> NIL = new FunStruct<>(null, null, 0);
     public static <T, R> FunStruct<T, R> nil() {
         return _Casts.uncheckedCast(NIL);
     }
-
 
 }
