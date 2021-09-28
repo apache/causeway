@@ -43,10 +43,16 @@ implements ObjectAdapterModel {
         super(scalarModel);
     }
 
+    /**
+     * chaining idiom: the {@link ScalarModel} we are chained to
+     */
     public ScalarModel scalarModel() {
         return (ScalarModel) super.getTarget();
     }
 
+    /**
+     * chaining idiom: the 'local' model derived from the chain
+     */
     @Override
     public ManagedObject getObject() {
         return scalarModel().getPendingElseCurrentAdapter();

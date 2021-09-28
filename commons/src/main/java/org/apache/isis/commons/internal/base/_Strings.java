@@ -18,7 +18,9 @@
  */
 package org.apache.isis.commons.internal.base;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -615,6 +617,35 @@ public final class _Strings {
         }
     }
 
+    // -- PRINTING
+
+    /**
+     * Returns the {@link String} as printed into by the given {@code printer}
+     * @param printer - consumes the generated PrintStream to print to
+     * @param charset
+     * @see PrintStream
+     * @see Charset
+     */
+    @SneakyThrows
+    public static String print(
+            final @NonNull Consumer<PrintStream> printer,
+            final @NonNull Charset charset) {
+        final var baos = new ByteArrayOutputStream();
+        try (PrintStream ps = new PrintStream(baos, true, charset)) {
+            printer.accept(ps);
+        }
+        return baos.toString(charset);
+    }
+
+    /**
+     * Shortcut to {@link #print(Consumer, Charset)} using {@code UTF8}.
+     */
+    public static String printUtf8(
+            final @NonNull Consumer<PrintStream> printer) {
+        return print(printer, StandardCharsets.UTF_8);
+    }
+
+
     // -- BYTE ARRAY CONVERSION
 
     /**
@@ -769,7 +800,5 @@ public final class _Strings {
                 StringBuilder::append,
                 StringBuilder::toString);
     }
-
-
 
 }
