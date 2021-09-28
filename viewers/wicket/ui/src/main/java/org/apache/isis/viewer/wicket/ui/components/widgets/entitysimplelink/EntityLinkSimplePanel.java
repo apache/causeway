@@ -55,7 +55,7 @@ implements CancelHintRequired  {
     }
 
     public EntityModel entityModelForLink() {
-        val model = (HasCommonContext & IModel<ManagedObject>)getModel();
+        final var model = (HasCommonContext & IModel<ManagedObject>)getModel();
         return EntityModel.ofAdapter(model.getCommonContext(), model.getObject());
     }
 

@@ -86,7 +86,7 @@ extends ValueFacetUsingSemanticsProviderFactory {
                 LogicalTypeFacetForValueAnnotation
                 .create(valueIfAny, cls, facetHolder));
 
-        val valueSemantics = lookupValueSemantics(cls);
+        final var valueSemantics = lookupValueSemantics(cls);
         //FIXME install them all, then enable qualifiers
         if(!valueSemantics.isEmpty()) {
             super.addAllFacetsForValueSemantics(valueSemantics, facetHolder);

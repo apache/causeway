@@ -119,7 +119,7 @@ implements Facet, HasMetaModelContext {
     // -- HELPER
 
     protected final Stream<_Strings.KeyValuePair> streamAttributes() {
-        val keyValuePairs = _Lists.<_Strings.KeyValuePair>newArrayList();
+        final var keyValuePairs = _Lists.<_Strings.KeyValuePair>newArrayList();
         visitAttributes((k, v)->keyValuePairs.add(_Strings.pair(k, ""+v)));
         return keyValuePairs.stream();
     }
