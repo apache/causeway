@@ -19,7 +19,6 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.wicket.model.ChainingModel;
@@ -38,7 +37,6 @@ import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -184,33 +182,6 @@ implements EntityCollectionModel {
     @Override
     public int getCount() {
         return getDataTableModel().getDataElements().getValue().size();
-    }
-
-    // -- TOGGLE SUPPORT
-
-    @Deprecated
-    @Getter private LinkedHashMap<String, ObjectMemento> toggledMementos;
-
-    @Deprecated
-    @Override
-    public final Can<ObjectMemento> getToggleMementosList() {
-        return Can.ofCollection(this.toggledMementos.values());
-    }
-
-    @Deprecated
-    @Override
-    public final void clearToggleMementosList() {
-        this.toggledMementos.clear();
-    }
-
-    @Deprecated
-    @Override
-    public final boolean toggleSelectionOn(final ManagedObject selectedAdapter) {
-//        final ObjectMemento selectedAsMemento = super.getMementoService().mementoForObject(selectedAdapter);
-//        final String selectedKey = selectedAsMemento.asString();
-//        final boolean isSelected = _Maps.toggleElement(toggledMementos, selectedKey, selectedAsMemento);
-//        return isSelected;
-        return false;
     }
 
 }

@@ -30,7 +30,7 @@ class MenuActionLinkFactory extends LinkAndLabelFactoryAbstract {
     MenuActionLinkFactory(
             final String linkId,
             final EntityModel serviceModel) {
-        super(linkId, serviceModel, null, null);
+        super(linkId, serviceModel, null);
     }
 
     @Override
@@ -40,8 +40,7 @@ class MenuActionLinkFactory extends LinkAndLabelFactoryAbstract {
 
         return LinkAndLabel.of(
                 model->super.newLinkComponent(
-                        model.getObjectAction(getCommonContext()::getSpecificationLoader),
-                        toggledMementosProviderIfAny),
+                        model.getObjectAction(getCommonContext()::getSpecificationLoader)),
                 named,
                 this.targetEntityModel,
                 objectAction);

@@ -30,7 +30,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
 import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
@@ -41,29 +40,10 @@ extends GenericColumnAbstract {
 
     private static final long serialVersionUID = 1L;
 
-
-    public GenericToggleboxColumn(final IsisAppCommonContext commonContext) {
-        this(commonContext, null);
-    }
-
     public GenericToggleboxColumn(
-            final IsisAppCommonContext commonContext,
-            final OnSelectionHandler onSelectionHandler) {
-
+            final IsisAppCommonContext commonContext) {
         super(commonContext, "");
-        this.onSelectionHandler = onSelectionHandler;
     }
-
-    // -- OnSelectionHandler
-    private OnSelectionHandler onSelectionHandler;
-    public OnSelectionHandler getOnSelectionHandler() {
-        return onSelectionHandler;
-    }
-
-    public void setOnSelectionHandler(final OnSelectionHandler onSelectionHandler) {
-        this.onSelectionHandler = onSelectionHandler;
-    }
-
 
     @Override
     public Component getHeader(final String componentId) {
@@ -107,15 +87,7 @@ extends GenericColumnAbstract {
             private static final long serialVersionUID = 1L;
             @Override
             public void onSubmit(final AjaxRequestTarget target) {
-
                 rowModel.getObject().getSelectToggle().toggleThenGet();
-
-//                val entityModel = (EntityModel) rowModel;
-//                val selectedAdapter = entityModel.getManagedObject();
-
-//                if(onSelectionHandler != null) {
-//                    onSelectionHandler.onSelected(this, selectedAdapter, target);
-//                }
             }
         };
         rowToggles.add(rowToggle);

@@ -23,22 +23,21 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.LinkAndLabelFactoryAbstract;
 
 import lombok.val;
 
-public final class EntityActionLinkFactory extends LinkAndLabelFactoryAbstract {
+public final class EntityActionLinkFactory
+extends LinkAndLabelFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
     public EntityActionLinkFactory(
             final String linkId,
             final EntityModel entityModel,
-            final ScalarModel scalarModelForAssociationIfAny,
-            final ToggledMementosProvider toggledMementosProviderIfAny) {
-        super(linkId, entityModel, scalarModelForAssociationIfAny, toggledMementosProviderIfAny);
+            final ScalarModel scalarModelForAssociationIfAny) {
+        super(linkId, entityModel, scalarModelForAssociationIfAny);
     }
 
     @Override
@@ -60,8 +59,7 @@ public final class EntityActionLinkFactory extends LinkAndLabelFactoryAbstract {
 
         return LinkAndLabel.of(
                 model->super.newLinkComponent(
-                        model.getObjectAction(CommonContextUtils.getCommonContext()::getSpecificationLoader),
-                        toggledMementosProviderIfAny),
+                        model.getObjectAction(CommonContextUtils.getCommonContext()::getSpecificationLoader)),
                 named,
                 this.targetEntityModel,
                 objectAction);

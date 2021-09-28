@@ -24,7 +24,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -62,20 +61,10 @@ public final class LinkAndLabelUtil {
             final Stream<ObjectAction> objectActions,
             final ScalarModel scalarModelIfAny) {
 
-        return asActionLinksForAdditionalLinksPanel(parentEntityModel, objectActions, scalarModelIfAny, null);
-    }
-
-    public static Stream<LinkAndLabel> asActionLinksForAdditionalLinksPanel(
-            final EntityModel parentEntityModel,
-            final Stream<ObjectAction> objectActions,
-            final ScalarModel scalarModelIfAny,
-            final ToggledMementosProvider toggledMementosProviderIfAny) {
-
         val actionLinkFactory = new EntityActionLinkFactory(
                 AdditionalLinksPanel.ID_ADDITIONAL_LINK,
                 parentEntityModel,
-                scalarModelIfAny,
-                toggledMementosProviderIfAny);
+                scalarModelIfAny);
 
         return objectActions
                 .map(objectAction->actionLinkFactory.newActionLink(objectAction, /*named*/null));

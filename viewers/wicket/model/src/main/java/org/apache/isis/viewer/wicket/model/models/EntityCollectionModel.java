@@ -27,7 +27,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -138,15 +137,6 @@ extends
     default Can<ObjectAction> getActionsWithChoicesFrom() {
         return Can.empty();
     }
-
-    // -- TOGGLE SUPPORT / MULTI-SELECT FEATURE
-
-    @Deprecated
-    Can<ObjectMemento> getToggleMementosList();
-    @Deprecated
-    void clearToggleMementosList();
-    @Deprecated
-    boolean toggleSelectionOn(ManagedObject selectedAdapter);
 
     // -- BASIC PROPERTIES
 

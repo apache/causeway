@@ -19,25 +19,19 @@
 package org.apache.isis.viewer.wicket.ui.components.collection;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.basic.Label;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.common.model.components.ComponentType;
-import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelParented;
-import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import lombok.val;
@@ -52,7 +46,6 @@ public class CollectionPanel
 extends PanelAbstract<DataTableModel, EntityCollectionModelParented>
 implements
     CollectionSelectorProvider,
-    ToggledMementosProvider,
     BulkActionsProvider {
 
     private static final long serialVersionUID = 1L;
@@ -70,14 +63,11 @@ implements
 
         val associatedActions = collectionModel.getAssociatedActions();
 
-        val toggledMementosProvider = this;
-
         val entityActionLinks = LinkAndLabelUtil
                 .asActionLinksForAdditionalLinksPanel(
                         collectionModel.getEntityModel(),
                         associatedActions.stream(),
-                        null,
-                        toggledMementosProvider)
+                        null)
                 .collect(Can.toCan());
 
         collectionModel.setLinkAndLabels(entityActionLinks);
@@ -126,53 +116,16 @@ implements
         if(toggleboxColumn == null) {
             val entityCollectionModel = getModel();
 
+            //FIXME this logic belongs to the DataTableModel
             val associatedActions = entityCollectionModel.getActionsWithChoicesFrom();
             if(associatedActions.isEmpty()) {
                 return null;
             }
 
             toggleboxColumn = new GenericToggleboxColumn(super.getCommonContext());
-
-            val handler = new OnSelectionHandler() {
-
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public void onSelected(
-                        final Component context,
-                        final ManagedObject selectedAdapter,
-                        final AjaxRequestTarget ajaxRequestTarget) {
-
-                    val togglePanel = (ContainedToggleboxPanel) context;
-
-                    val isSelected = getModel().toggleSelectionOn(selectedAdapter);
-                    togglePanel.setModel(isSelected); // sync the checkbox's model
-                }
-
-            };
-            toggleboxColumn.setOnSelectionHandler(handler);
         }
 
         return toggleboxColumn;
     }
-
-    // -- TOGGLED MEMENTOS PROVIDER
-
-    @Override
-    public Can<ObjectMemento> getToggles() {
-        return getModel().getToggleMementosList();
-    }
-
-    @Override
-    public void clearToggles(final AjaxRequestTarget target) {
-        getModel().clearToggleMementosList();
-
-        final GenericToggleboxColumn toggleboxColumn = getToggleboxColumn();
-        if(toggleboxColumn != null) {
-            toggleboxColumn.clearToggles();
-            target.add(this);
-        }
-    }
-
 
 }

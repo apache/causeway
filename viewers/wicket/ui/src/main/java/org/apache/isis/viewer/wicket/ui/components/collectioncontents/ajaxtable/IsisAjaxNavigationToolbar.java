@@ -50,7 +50,7 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
     }
 
     @Override
-    protected PagingNavigator newPagingNavigator(String navigatorId, DataTable<?, ?> table) {
+    protected PagingNavigator newPagingNavigator(final String navigatorId, final DataTable<?, ?> table) {
         return new IsisAjaxPagingNavigator(navigatorId, table);
     }
 
@@ -66,7 +66,7 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(final AjaxRequestTarget target) {
                 showAllItemsOn(table);
 
                 final DataTable<?, ?> dataTable = getTable();
@@ -74,7 +74,8 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
                 final EntityCollectionModel collectionModel = dataProvider.getEntityCollectionModel();
 
                 if(toggleboxColumn != null) {
-                    collectionModel.clearToggleMementosList();
+                    //FIXME[ISIS-2871] one of these is potentially superfluous
+                    collectionModel.getDataTableModel().getSelectAllToggle().setValue(false);
                     toggleboxColumn.clearToggles();
                 }
 
