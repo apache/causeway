@@ -33,6 +33,12 @@ import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwner
 import org.apache.isis.viewer.wicket.model.models.interaction.ObjectUiModelWkt;
 
 /**
+ * <pre>
+ * IModel[CollectionInteraction] ... List&lt;Order&gt; getOrders();
+ * |
+ * +-- DataTableModel ... bound to 'getOrders()'
+ * </pre>
+ *
  * @implSpec the state of the DataTableModel is held transient,
  * that means it does not survive a serialization/de-serialization cycle;
  * it is recreated on load
