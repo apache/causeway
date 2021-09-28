@@ -131,13 +131,13 @@ implements ScalarModelSubscriber {
             final @NonNull Optional<AjaxRequestTarget> target) {
 
         // visibility
-        val visibilityConsent = paramModel.getPendingParameterModel().getVisibilityConsent(paramModel.getNumber());
+        val visibilityConsent = paramModel.getParameterNegotiationModel().getVisibilityConsent(paramModel.getNumber());
         val visibilityBefore = isVisible();
         val visibilityAfter = visibilityConsent.isAllowed();
         setVisible(visibilityAfter);
 
         // usability
-        val usabilityConsent = paramModel.getPendingParameterModel().getUsabilityConsent(paramModel.getNumber());
+        val usabilityConsent = paramModel.getParameterNegotiationModel().getUsabilityConsent(paramModel.getNumber());
         val usabilityBefore = isEnabled();
         val usabilityAfter = usabilityConsent.isAllowed();
         if(usabilityAfter) {

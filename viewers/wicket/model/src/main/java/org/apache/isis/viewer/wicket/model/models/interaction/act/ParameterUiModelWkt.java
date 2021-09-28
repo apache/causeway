@@ -88,17 +88,17 @@ implements
 
     @Override
     public @NonNull ManagedObject getValue() {
-        return getPendingParameterModel().getParamValue(paramIndex);
+        return getParameterNegotiationModel().getParamValue(paramIndex);
     }
 
     @Override
     public void setValue(final ManagedObject paramValue) {
-        getPendingParameterModel().setParamValue(paramIndex, paramValue);
+        getParameterNegotiationModel().setParamValue(paramIndex, paramValue);
     }
 
     @Override
-    public ParameterNegotiationModel getPendingParameterModel() {
-        return actionInteractionModel().parameterNegotiationModel().get();
+    public ParameterNegotiationModel getParameterNegotiationModel() {
+        return actionInteractionModel().parameterNegotiationModel();
     }
 
     @Override

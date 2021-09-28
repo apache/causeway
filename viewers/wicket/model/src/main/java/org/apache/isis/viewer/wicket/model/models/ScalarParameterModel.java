@@ -76,17 +76,17 @@ implements ParameterUiModel {
 
     @Override
     public String whetherDisabled() {
-        return getPendingParameterModel().getUsabilityConsent(getNumber()).getReason();
+        return getParameterNegotiationModel().getUsabilityConsent(getNumber()).getReason();
     }
 
     @Override
     public boolean whetherHidden() {
-        return getPendingParameterModel().getVisibilityConsent(getNumber()).isVetoed();
+        return getParameterNegotiationModel().getVisibilityConsent(getNumber()).isVetoed();
     }
 
     @Override
     public String validate(final ManagedObject proposedValue) {
-        return getPendingParameterModel().getObservableParamValidation(getNumber()).getValue();
+        return getParameterNegotiationModel().getObservableParamValidation(getNumber()).getValue();
     }
 
     @Override
@@ -111,12 +111,12 @@ implements ParameterUiModel {
 
     @Override
     public ManagedValue proposedValue() {
-        return getPendingParameterModel().getParamModels().getElseFail(getNumber());
+        return getParameterNegotiationModel().getParamModels().getElseFail(getNumber());
     }
 
     @Override
-    public ParameterNegotiationModel getPendingParameterModel() {
-        return delegate.getPendingParameterModel();
+    public ParameterNegotiationModel getParameterNegotiationModel() {
+        return delegate.getParameterNegotiationModel();
     }
 
     // -- HELPER

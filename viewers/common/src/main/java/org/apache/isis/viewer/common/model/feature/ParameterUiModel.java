@@ -44,7 +44,7 @@ public interface ParameterUiModel extends ScalarUiModel {
 
     // -- PENDING PARAMETER MODEL
 
-    ParameterNegotiationModel getPendingParameterModel();
+    ParameterNegotiationModel getParameterNegotiationModel();
 
     // -- SHORTCUTS
 
@@ -70,17 +70,17 @@ public interface ParameterUiModel extends ScalarUiModel {
 
     @Override
     default ManagedObject getDefault() {
-        return getMetaModel().getDefault(getPendingParameterModel());
+        return getMetaModel().getDefault(getParameterNegotiationModel());
     }
 
     @Override
     default Can<ManagedObject> getChoices() {
-        return getMetaModel().getChoices(getPendingParameterModel(), InteractionInitiatedBy.USER);
+        return getMetaModel().getChoices(getParameterNegotiationModel(), InteractionInitiatedBy.USER);
     }
 
     @Override
     default Can<ManagedObject> getAutoComplete(final String searchArg) {
-        return getMetaModel().getAutoComplete(getPendingParameterModel(), searchArg, InteractionInitiatedBy.USER);
+        return getMetaModel().getAutoComplete(getParameterNegotiationModel(), searchArg, InteractionInitiatedBy.USER);
     }
 
     default ActionInteractionHead getPendingParamHead() {

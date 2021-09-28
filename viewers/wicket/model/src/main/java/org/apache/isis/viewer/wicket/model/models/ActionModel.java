@@ -163,7 +163,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     // -- HELPERS
 
     private Can<ManagedObject> snapshotArgs() {
-        return delegate.parameterNegotiationModel().get().getParamValues();
+        return delegate.parameterNegotiationModel().getParamValues();
     }
 
     @Override
@@ -172,7 +172,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     }
 
     public ManagedObject executeActionAndReturnResult() {
-        val pendingArgs = delegate.parameterNegotiationModel().get();
+        val pendingArgs = delegate.parameterNegotiationModel();
         val result = delegate.actionInteraction().invokeWithRuleChecking(pendingArgs);
         return result;
     }
@@ -334,11 +334,11 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     }
 
     public void setParameterValue(final ObjectActionParameter actionParameter, final ManagedObject newParamValue) {
-        delegate.parameterNegotiationModel().get().setParamValue(actionParameter.getNumber(), newParamValue);
+        delegate.parameterNegotiationModel().setParamValue(actionParameter.getNumber(), newParamValue);
     }
 
     public void clearParameterValue(final ObjectActionParameter actionParameter) {
-        delegate.parameterNegotiationModel().get().clearParamValue(actionParameter.getNumber());
+        delegate.parameterNegotiationModel().clearParamValue(actionParameter.getNumber());
     }
 
     @Override
@@ -352,7 +352,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         .skip(skipCount)
         .forEach(paramUiModel->{
 
-            val pendingArgs = paramUiModel.getPendingParameterModel();
+            val pendingArgs = paramUiModel.getParameterNegotiationModel();
             val actionParameter = paramUiModel.getMetaModel();
             val paramDefaultValue = actionParameter.getDefault(pendingArgs);
 

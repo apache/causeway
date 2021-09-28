@@ -30,7 +30,6 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
@@ -76,9 +75,8 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
         parameterNegotiationModel =
                 _Lazy.threadSafe(()->actionInteraction().startParameterNegotiation());
 
-        return ActionInteraction.wrap(
-                ManagedAction.lookupAction(getBookmarkedOwner(), memberId, where)
-                .orElseThrow(()->_Exceptions.noSuchElement(memberId)));
+        return ActionInteraction.start(getBookmarkedOwner(), memberId, where);
+
     }
 
     public final ActionInteraction actionInteraction() {
@@ -102,9 +100,10 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
 
     private transient _Lazy<Optional<ParameterNegotiationModel>> parameterNegotiationModel;
 
-    public final Optional<ParameterNegotiationModel> parameterNegotiationModel() {
+    public final ParameterNegotiationModel parameterNegotiationModel() {
         _Assert.assertTrue(this.isAttached(), "model is not attached");
-        return parameterNegotiationModel.get();
+        return parameterNegotiationModel.get()
+                .orElseThrow(()->_Exceptions.noSuchElement(memberId));
     }
 
     public void resetParametersToDefault() {

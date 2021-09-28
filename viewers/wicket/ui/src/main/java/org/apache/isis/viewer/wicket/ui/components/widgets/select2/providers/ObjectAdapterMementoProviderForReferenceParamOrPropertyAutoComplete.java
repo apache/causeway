@@ -38,7 +38,7 @@ extends ObjectAdapterMementoProviderAbstract {
         super(scalarModel);
         val commonContext = scalarModel.getCommonContext();
         val pendingArgs = scalarModel.isParameter()
-                ? ((ParameterUiModel)scalarModel).getPendingParameterModel().getParamValues()
+                ? ((ParameterUiModel)scalarModel).getParameterNegotiationModel().getParamValues()
                 : Can.<ManagedObject>empty();
         val pendingArgMementos = pendingArgs
                 .map(commonContext::mementoForParameter);
@@ -58,7 +58,7 @@ extends ObjectAdapterMementoProviderAbstract {
                 val paramModel = (ParameterUiModel)scalarModel;
 
                 paramModel
-                    .getPendingParameterModel()
+                    .getParameterNegotiationModel()
                     .setParamValues(
                             reconstructPendingArgs(paramModel, pendingArgMementos));
 
