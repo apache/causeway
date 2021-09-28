@@ -85,7 +85,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     }
 
     public static ActionModel of(final EntityModel actionOwner, final ObjectAction action) {
-        final var delegate = new ActionInteractionWkt(
+        val delegate = new ActionInteractionWkt(
                 actionOwner.bookmarkedObjectModel(),
                 action.getFeatureIdentifier().getMemberLogicalName(),
                 Where.ANYWHERE);
@@ -93,7 +93,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     }
 
     public static ActionModel of(final EntityModel actionOwner, final ActionMemento actionMemento) {
-        final var delegate = new ActionInteractionWkt(
+        val delegate = new ActionInteractionWkt(
                 actionOwner.bookmarkedObjectModel(),
                 actionMemento.getIdentifier().getMemberLogicalName(),
                 Where.ANYWHERE);

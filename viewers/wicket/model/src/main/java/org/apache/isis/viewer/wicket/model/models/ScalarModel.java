@@ -46,6 +46,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.val;
 
 /**
  * Represents a scalar of an entity, either a {@link EitherParamOrProp#PROPERTY property} or
@@ -172,7 +173,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     /** get the proposed value, subject to negotiation */
     public String getObjectAsString() {
-        final var proposedValue = proposedValue();
+        val proposedValue = proposedValue();
         return proposedValue.getValueAsParsableText().getValue();
     }
 
@@ -181,7 +182,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
      * actual application of the proposed value is only applied after passing verification (not done here)
      */
     public void setObjectAsString(final String enteredText) {
-        final var proposedValue = proposedValue();
+        val proposedValue = proposedValue();
         proposedValue.getValueAsParsableText().setValue(enteredText);
     }
 

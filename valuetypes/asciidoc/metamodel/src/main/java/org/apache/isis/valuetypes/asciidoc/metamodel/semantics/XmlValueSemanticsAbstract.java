@@ -24,6 +24,7 @@ import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.NonNull;
+import lombok.val;
 
 /**
  *  Provides a {@link Renderer} that generates syntax highlighted XML.
@@ -49,7 +50,7 @@ implements
     protected abstract String asXml(Context context, @NonNull T value);
 
     private AsciiDoc asAdoc(final String xml) {
-        final var adoc = "[source,xml]\n----\n" + xml + "\n----";
+        val adoc = "[source,xml]\n----\n" + xml + "\n----";
         return AsciiDoc.valueOf(adoc);
     }
 

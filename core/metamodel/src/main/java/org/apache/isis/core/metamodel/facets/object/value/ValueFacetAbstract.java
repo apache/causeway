@@ -45,6 +45,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 public abstract class ValueFacetAbstract<T>
 extends FacetAbstract
@@ -84,7 +85,7 @@ implements ValueFacet<T> {
 
     @Override
     public ValueSemanticsProvider.Context createValueSemanticsContext(final Identifier featureIdentifier) {
-        final var iaProvider = super.getInteractionProvider();
+        val iaProvider = super.getInteractionProvider();
         if(iaProvider==null) {
             return null; // JUnit context
         }
@@ -207,7 +208,7 @@ implements ValueFacet<T> {
             // 3. not-empty vs. empty      ->  reject
             // 4. not-empty vs. not-empty  ->  accept when any match
 
-            final var qualifiersOnBean =
+            val qualifiersOnBean =
             _Annotations
             .synthesizeInherited(valueSemantics.getClass(), Qualifier.class) //TODO memoize somewhere
             .map(Qualifier::value)

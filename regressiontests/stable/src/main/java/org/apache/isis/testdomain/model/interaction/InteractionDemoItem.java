@@ -42,6 +42,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.val;
 
 @DomainObject(nature=Nature.VIEW_MODEL)
 @Named("testdomain.InteractionDemoItem")
@@ -86,8 +87,8 @@ public class InteractionDemoItem {
         }
 
         public static CalendarEntry randomSample() {
-            final var rand = ThreadLocalRandom.current();
-            final var dto = Dto.builder()
+            val rand = ThreadLocalRandom.current();
+            val dto = Dto.builder()
             .instant(rand.nextLong())
             .duration(rand.nextLong(600))
             .durationUnit(ChronoUnit.MINUTES)

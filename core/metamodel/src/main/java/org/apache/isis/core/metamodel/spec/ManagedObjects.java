@@ -657,7 +657,7 @@ public final class ManagedObjects {
         }
 
         public static ManagedObject assertAttachedWhenEntity(final @Nullable ManagedObject adapter) {
-            final var state = EntityUtil.getEntityState(adapter);
+            val state = EntityUtil.getEntityState(adapter);
             if(state.isPersistable()) {
                 _Assert.assertEquals(EntityState.PERSISTABLE_ATTACHED, state,
                         ()->String.format("detached entity %s", adapter));
@@ -668,7 +668,7 @@ public final class ManagedObjects {
         public static ManagedObject computeIfDetached(
                 final @Nullable ManagedObject adapter,
                 final UnaryOperator<ManagedObject> onDetachedEntity) {
-            final var state = EntityUtil.getEntityState(adapter);
+            val state = EntityUtil.getEntityState(adapter);
             if(state.isPersistable()
                     &&!state.isAttached()) {
                 return onDetachedEntity.apply(adapter);

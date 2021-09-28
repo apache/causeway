@@ -37,6 +37,8 @@ import org.apache.isis.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 
+import lombok.val;
+
 /**
  * {@link ComponentFactory} for {@link CollectionContentsAsSummary}.
  */
@@ -49,7 +51,7 @@ implements CollectionContentsAsFactory {
     private static final String NAME = "summary";
 
     static final Predicate<ObjectAssociation> OF_TYPE_BIGDECIMAL = (final ObjectAssociation objectAssoc) -> {
-        final var objectSpec = objectAssoc.getElementType();
+        val objectSpec = objectAssoc.getElementType();
         return objectSpec.isValue()
                 && objectSpec.getCorrespondingClass().equals(BigDecimal.class);
     };

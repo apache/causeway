@@ -32,11 +32,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.commons.internal.base._Strings;
 
+import lombok.val;
+
 class StructTest {
 
     @Test
     void pseudoStruct() {
-        final var comp = Struct.of("a");
+        val comp = Struct.of("a");
 
         assertEquals(List.of("a"), comp.flatten());
         assertEquals(1, comp.size());
@@ -44,7 +46,7 @@ class StructTest {
 
     @Test
     void constructingElements() {
-        final var comp = Struct.of("a", "b");
+        val comp = Struct.of("a", "b");
 
         assertEquals(List.of("a", "b"), comp.flatten());
         assertEquals(2, comp.size());
@@ -53,7 +55,7 @@ class StructTest {
     @Test
     void constructingStructs() {
 
-        final var comp = Struct.<String>of(
+        val comp = Struct.<String>of(
                 Struct.of("a", "b"),
                 Struct.of("c", "d"));
 
@@ -64,7 +66,7 @@ class StructTest {
     @Test
     void constructingElementAndStruct() {
 
-        final var comp = Struct.<String>of(
+        val comp = Struct.<String>of(
                 "a",
                 Struct.of("c", "d"));
 
@@ -75,7 +77,7 @@ class StructTest {
     @Test
     void constructingStructAndElement() {
 
-        final var comp = Struct.<String>of(
+        val comp = Struct.<String>of(
                 Struct.of("a", "b"),
                 "d");
 
@@ -86,7 +88,7 @@ class StructTest {
     @Test
     void constructionNesting() {
 
-        final var comp = Struct.of(
+        val comp = Struct.of(
                 Struct.<String>of(
                         Struct.of("a", "b"),
                         Struct.of("c", "d")),

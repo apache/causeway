@@ -31,6 +31,8 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.feature.PropertyUiModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.prop.PropertyUiModelWkt;
 
+import lombok.val;
+
 public class ScalarPropertyModel
 extends ScalarModel
 implements PropertyUiModel {
@@ -126,7 +128,7 @@ implements PropertyUiModel {
 
     @Override
     public String toStringOf() {
-        final var featureId = delegate.getMetaModel().getFeatureIdentifier();
+        val featureId = delegate.getMetaModel().getFeatureIdentifier();
         return getFriendlyName() + ": " +
                 featureId.getLogicalTypeName() + "#" + featureId.getMemberLogicalName();
 

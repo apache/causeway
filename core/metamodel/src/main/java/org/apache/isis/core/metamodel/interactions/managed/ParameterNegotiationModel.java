@@ -247,7 +247,7 @@ public class ParameterNegotiationModel {
                 final @NonNull ParameterNegotiationModel negotiationModel,
                 final @NonNull ManagedObject initialValue) {
 
-            final var action = negotiationModel.getHead().getMetaModel();
+            val action = negotiationModel.getHead().getMetaModel();
 
             this.paramNr = paramNr;
             this.metaModel = action.getParameters().getElseFail(paramNr);

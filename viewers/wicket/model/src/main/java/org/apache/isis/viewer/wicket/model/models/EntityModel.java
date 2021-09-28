@@ -201,12 +201,12 @@ implements
             final EitherViewOrEdit viewOrEdit,
             final RenderingHint renderingHint) {
 
-        final var pm = property.getMemento();
-        final var propertyScalarModels = propertyScalarModels();
+        val pm = property.getMemento();
+        val propertyScalarModels = propertyScalarModels();
         final ScalarModel existingScalarModel = propertyScalarModels.get(pm);
         if (existingScalarModel == null) {
 
-            final var propertyInteractionModel = new PropertyInteractionWkt(
+            val propertyInteractionModel = new PropertyInteractionWkt(
                     bookmarkedObjectModel(),
                     pm.getIdentifier().getMemberLogicalName(),
                     renderingHint.asWhere());

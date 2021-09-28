@@ -31,6 +31,8 @@ import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Strings;
 
+import lombok.val;
+
 @Component
 @Named("isis.val.URLValueSemantics")
 public class URLValueSemantics
@@ -75,7 +77,7 @@ implements
 
     @Override
     public java.net.URL parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        final var input = _Strings.blankToNullOrTrim(text);
+        val input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
             return null;
         }

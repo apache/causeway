@@ -34,6 +34,8 @@ import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.internal.base._Strings;
 
+import lombok.val;
+
 /**
  * @since 2.x {@index}
  */
@@ -97,7 +99,7 @@ implements ValueSemanticsProvider<T> {
     protected @Nullable BigInteger parseInteger(
             final @Nullable ValueSemanticsProvider.Context context,
             final @Nullable String text) {
-        final var input = _Strings.blankToNullOrTrim(text);
+        val input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
             return null;
         }
@@ -111,16 +113,16 @@ implements ValueSemanticsProvider<T> {
     protected @Nullable BigDecimal parseDecimal(
             final @Nullable ValueSemanticsProvider.Context context,
             final @Nullable String text) {
-        final var input = _Strings.blankToNullOrTrim(text);
+        val input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
             return null;
         }
-        final var format = getNumberFormat(context);
+        val format = getNumberFormat(context);
         format.setParseBigDecimal(true);
-        final var position = new ParsePosition(0);
+        val position = new ParsePosition(0);
 
         try {
-            final var number = (BigDecimal)format.parse(input, position);
+            val number = (BigDecimal)format.parse(input, position);
             if (position.getErrorIndex() != -1) {
                 throw new ParseException("could not parse input='" + input + "'", position.getErrorIndex());
             } else if (position.getIndex() < input.length()) {

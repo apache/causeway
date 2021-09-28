@@ -44,11 +44,11 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
-import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.val;
 
 @Configuration
 @Import({
@@ -58,7 +58,7 @@ public class Configuration_usingWicket {
 
     @Bean @Singleton @Inject
     public IsisAppCommonContext commonContext(final MetaModelContext mmc) {
-        final var wicketApplication = wicketApplication(mmc);
+        val wicketApplication = wicketApplication(mmc);
         ThreadContext.setApplication(wicketApplication);
         return wicketApplication.getCommonContext();
     }
@@ -106,7 +106,7 @@ public class Configuration_usingWicket {
                 final Class<? extends IRequestablePage> pageClass,
                 final PageParameters pageParameters) {
 
-            final var url = Application.get().getRootRequestMapper().mapHandler(
+            val url = Application.get().getRootRequestMapper().mapHandler(
                     new BookmarkablePageRequestHandler(new PageProvider(pageClass, pageParameters)));
 
             final HttpServletRequest mockHttpServletRequest = Mockito.mock(HttpServletRequest.class);

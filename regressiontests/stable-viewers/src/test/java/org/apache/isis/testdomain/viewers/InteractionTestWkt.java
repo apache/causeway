@@ -49,6 +49,8 @@ import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
+import lombok.val;
+
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,
@@ -98,8 +100,8 @@ class InteractionTestWkt extends InteractionTestAbstract {
     @Test
     void propertyModels_shouldBeInSyncWithInteractionAPI() {
 
-        final var objectSpec = domainObject.getSpecification();
-        final var entityModel = EntityModel.ofAdapter(commonContext, domainObject);
+        val objectSpec = domainObject.getSpecification();
+        val entityModel = EntityModel.ofAdapter(commonContext, domainObject);
 
         assertEquals(domainObject.getBookmark().get(), entityModel.getOwnerBookmark());
         assertEquals(domainObject.getTitle(), entityModel.getTitle());
@@ -126,9 +128,9 @@ class InteractionTestWkt extends InteractionTestAbstract {
             }
 
             // the scalar model should be in sync with the underlying interaction API
-            final var pendingPropModel = scalarModel.getPendingPropertyModel();
-            final var propBackendValue = pendingPropModel.getValue().getValue();
-            final var propUIValue = scalarModel.getObject();
+            val pendingPropModel = scalarModel.getPendingPropertyModel();
+            val propBackendValue = pendingPropModel.getValue().getValue();
+            val propUIValue = scalarModel.getObject();
 
             assertEquals(
                     "initial",
@@ -155,7 +157,7 @@ class InteractionTestWkt extends InteractionTestAbstract {
 
         assertEquals(5L, propertyCount);
 
-        final var managedAction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
+        val managedAction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
                 .getManagedAction().get(); // should not throw
 
         assertFalse(managedAction.checkVisibility().isPresent()); // is visible

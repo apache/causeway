@@ -30,6 +30,8 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.reflection._Reflect;
 
+import lombok.val;
+
 class GraphQLTest {
 
     @Test
@@ -43,9 +45,9 @@ class GraphQLTest {
         String schema = _Strings.readFromResource(
                 getClass(), getClass().getSimpleName() + ".graphqls", StandardCharsets.UTF_8);
 
-        final var isisSchema = GraphQLToJavaSourceConverter.parseGraphQL(schema);
+        val isisSchema = GraphQLToJavaSourceConverter.parseGraphQL(schema);
 
-        final var dslClassNames = _Lists.<String>newArrayList();
+        val dslClassNames = _Lists.<String>newArrayList();
 
         isisSchema.streamAsJavaModels("testdummies")
         .forEach(javaModel->{

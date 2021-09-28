@@ -68,9 +68,9 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
 
     @Override
     protected void addParameters() {
-        final var actionModel = getActionModel();
+        val actionModel = getActionModel();
 
-        final var repeatingView = new RepeatingView(ActionParametersFormPanel.ID_ACTION_PARAMETERS);
+        val repeatingView = new RepeatingView(ActionParametersFormPanel.ID_ACTION_PARAMETERS);
         add(repeatingView);
 
         paramPanels.clear();
@@ -152,8 +152,8 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
     @Override
     public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanelUpdated) {
 
-        final var actionModel = getActionModel();
-        final var updatedParamModel = (ParameterUiModel)scalarPanelUpdated.getModel();
+        val actionModel = getActionModel();
+        val updatedParamModel = (ParameterUiModel)scalarPanelUpdated.getModel();
         final int paramNumberUpdated = updatedParamModel.getNumber();
         // only updates subsequent parameter panels starting from (paramNumberUpdated + 1)
         final int skipCount = paramNumberUpdated + 1;
@@ -164,9 +164,9 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
         .skip(skipCount)
         .forEach(paramModel->{
 
-            final var paramNumToUpdate = paramModel.getNumber();
-            final var paramPanel = paramPanels.get(paramNumToUpdate);
-            final var repaint = paramPanel.updateIfNecessary(paramModel, Optional.of(target));
+            val paramNumToUpdate = paramModel.getNumber();
+            val paramPanel = paramPanels.get(paramNumToUpdate);
+            val repaint = paramPanel.updateIfNecessary(paramModel, Optional.of(target));
 
             switch (repaint) {
             case ENTIRE_FORM:

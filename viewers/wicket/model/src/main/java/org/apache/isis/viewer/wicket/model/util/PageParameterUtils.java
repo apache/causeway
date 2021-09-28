@@ -164,7 +164,7 @@ public class PageParameterUtils {
     }
 
     public static PageParameters currentPageParameters() {
-        final var pageParameters = new PageParameters();
+        val pageParameters = new PageParameters();
         streamCurrentRequestParameters()
         .forEach(kv->pageParameters.add(kv.getKey(), kv.getValue()));
         return pageParameters;

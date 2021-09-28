@@ -139,8 +139,8 @@ extends ChoiceProvider<ObjectMemento> {
         val commonContext = getCommonContext();
 
         return choicesMementos.filter((final ObjectMemento candidate)->{
-            final var objectAdapter = commonContext.reconstructObject(candidate);
-            final var title = objectAdapter.titleString();
+            val objectAdapter = commonContext.reconstructObject(candidate);
+            val title = objectAdapter.titleString();
             return title.toLowerCase().contains(term.toLowerCase());
         });
 

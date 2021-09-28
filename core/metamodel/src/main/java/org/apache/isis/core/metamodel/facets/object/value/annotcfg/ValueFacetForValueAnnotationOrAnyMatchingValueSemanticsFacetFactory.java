@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSem
 import org.apache.isis.core.metamodel.facets.value.annotation.LogicalTypeFacetForValueAnnotation;
 
 import lombok.Getter;
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -77,15 +78,15 @@ extends ValueFacetUsingSemanticsProviderFactory {
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        final var cls = processClassContext.getCls();
-        final var facetHolder = processClassContext.getFacetHolder();
-        final var valueIfAny = processClassContext.synthesizeOnType(Value.class);
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
+        val valueIfAny = processClassContext.synthesizeOnType(Value.class);
 
         addFacetIfPresent(
                 LogicalTypeFacetForValueAnnotation
                 .create(valueIfAny, cls, facetHolder));
 
-        final var valueSemantics = lookupValueSemantics(cls);
+        val valueSemantics = lookupValueSemantics(cls);
         //FIXME install them all, then enable qualifiers
         if(!valueSemantics.isEmpty()) {
             super.addAllFacetsForValueSemantics(valueSemantics, facetHolder);

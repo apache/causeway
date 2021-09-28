@@ -99,7 +99,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
             if(valueType == java.math.BigDecimal.class) {
                 // look for facet on member, else on the value's spec
 
-                final var facetHolders = Can.<FacetHolder>of(
+                val facetHolders = Can.<FacetHolder>of(
                         objectMember,
                         valueAdapterIfAny != null ? valueAdapterIfAny.getSpecification() : null);
 

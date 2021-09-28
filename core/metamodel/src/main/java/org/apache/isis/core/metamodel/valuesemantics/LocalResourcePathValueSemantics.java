@@ -31,6 +31,8 @@ import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.base._Strings;
 
+import lombok.val;
+
 @Component
 @Named("isis.val.LocalResourcePathValueSemantics")
 public class LocalResourcePathValueSemantics
@@ -77,7 +79,7 @@ implements
 
     @Override
     public LocalResourcePath parseTextRepresentation(final Context context, final String text) {
-        final var input = _Strings.blankToNullOrTrim(text);
+        val input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
             return null;
         }

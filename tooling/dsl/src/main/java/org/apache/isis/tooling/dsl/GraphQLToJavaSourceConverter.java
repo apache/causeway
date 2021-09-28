@@ -41,6 +41,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import lombok.val;
 
 import graphql.language.ListType;
 import graphql.language.NonNullType;
@@ -74,7 +75,7 @@ public class GraphQLToJavaSourceConverter {
     @Value(staticConstructor = "of")
     public static class JavaModel {
         public static JavaModel of(final String packageName, final TypeSpec typeSpec) {
-            final var classSimpleName = (String) ReflectionUtils.getField(
+            val classSimpleName = (String) ReflectionUtils.getField(
                     ReflectionUtils.findField(typeSpec.getClass(), "name"),
                     typeSpec);
             return of(ClassName.get(packageName, classSimpleName), typeSpec);
@@ -119,7 +120,7 @@ public class GraphQLToJavaSourceConverter {
 
     private TypeSpec enumModel(final GraphQLEnumType t) {
 
-        final var typeModelBuilder = TypeSpec.enumBuilder(t.getName())
+        val typeModelBuilder = TypeSpec.enumBuilder(t.getName())
                 .addModifiers(Modifier.PUBLIC);
 
         t.getValues().forEach(valueDef->{
@@ -131,7 +132,7 @@ public class GraphQLToJavaSourceConverter {
 
     private TypeSpec interfaceModel(final GraphQLInterfaceType t) {
 
-        final var typeModelBuilder = TypeSpec.interfaceBuilder(t.getName())
+        val typeModelBuilder = TypeSpec.interfaceBuilder(t.getName())
                 .addModifiers(Modifier.PUBLIC)
                 .addMethods(asMethods(t.getFields(), Modifier.PUBLIC, Modifier.ABSTRACT));
 
@@ -140,7 +141,7 @@ public class GraphQLToJavaSourceConverter {
 
     private TypeSpec classModel(final GraphQLObjectType t) {
 
-        final var typeModelBuilder = TypeSpec.classBuilder(t.getName())
+        val typeModelBuilder = TypeSpec.classBuilder(t.getName())
                 .addModifiers(Modifier.PUBLIC)
                 .addSuperinterfaces(asClassNames(t.getInterfaces()))
                 .addFields(asFields(t.getFields(), Modifier.PRIVATE))

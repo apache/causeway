@@ -91,7 +91,7 @@ public class UiGridLayout {
     //TODO[refactor] this should not be necessary here, the GridFacet should already have done that for us
     private BS3Grid attachAssociatedActions(final BS3Grid bS3Grid) {
 
-        final var primedActions = bS3Grid.getAllActionsById();
+        val primedActions = bS3Grid.getAllActionsById();
         final Set<String> actionIdsAlreadyAdded = _Sets.newHashSet(primedActions.keySet());
 
         managedObject.getSpecification().streamProperties(MixedIn.INCLUDED)

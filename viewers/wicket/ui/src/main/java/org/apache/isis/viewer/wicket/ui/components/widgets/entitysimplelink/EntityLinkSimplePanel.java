@@ -32,6 +32,8 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
 
+import lombok.val;
+
 /**
  * {@link FormComponentPanel} representing a reference to an entity: a link and
  * (optionally) an autocomplete field.
@@ -53,7 +55,7 @@ implements CancelHintRequired  {
     }
 
     public EntityModel entityModelForLink() {
-        final var model = (HasCommonContext & IModel<ManagedObject>)getModel();
+        val model = (HasCommonContext & IModel<ManagedObject>)getModel();
         return EntityModel.ofAdapter(model.getCommonContext(), model.getObject());
     }
 
@@ -68,12 +70,12 @@ implements CancelHintRequired  {
     }
 
     private void syncWithInput() {
-        final var entityModelForLink = entityModelForLink();
-        final var entity = entityModelForLink.getObject();
+        val entityModelForLink = entityModelForLink();
+        val entity = entityModelForLink.getObject();
 
         if(!ManagedObjects.isNullOrUnspecifiedOrEmpty(entity)) {
 
-            final var componentFactory = getComponentFactoryRegistry()
+            val componentFactory = getComponentFactoryRegistry()
                     .findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
 
             final Component component = componentFactory

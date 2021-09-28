@@ -435,7 +435,7 @@ public interface ObjectAction extends ObjectMember {
         public static Predicate<ObjectAction> choicesFromAndHavingCollectionParameterFor(
                 final @NonNull OneToManyAssociation collection) {
 
-            final var elementType = collection.getElementType();
+            val elementType = collection.getElementType();
 
             return new ChoicesFrom(collection)
                     .and(new HasParameterMatching(

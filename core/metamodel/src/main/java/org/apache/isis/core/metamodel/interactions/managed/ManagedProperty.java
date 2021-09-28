@@ -181,7 +181,7 @@ extends ManagedMember {
         private static final long serialVersionUID = 1L;
 
         static Memento create(final ManagedProperty managedProperty) {
-            final var prop = managedProperty.getMetaModel();
+            val prop = managedProperty.getMetaModel();
             return new Memento(
                     prop.getMemento(),
                     prop.getObjectManager()
@@ -196,9 +196,9 @@ extends ManagedMember {
 
         public ManagedProperty getManagedProperty(final MetaModelContext mmc) {
 
-            final var prop = propertyMemento.getProperty(mmc::getSpecificationLoader);
-            final var spec = prop.getDeclaringType();
-            final var owner = mmc.getObjectManager().getObjectMemorizer().deserialize(spec, objectMemento);
+            val prop = propertyMemento.getProperty(mmc::getSpecificationLoader);
+            val spec = prop.getDeclaringType();
+            val owner = mmc.getObjectManager().getObjectMemorizer().deserialize(spec, objectMemento);
 
             return ManagedProperty.of(owner, prop, where);
         }

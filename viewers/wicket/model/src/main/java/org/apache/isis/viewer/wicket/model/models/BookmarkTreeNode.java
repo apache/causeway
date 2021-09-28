@@ -188,7 +188,7 @@ public class BookmarkTreeNode implements Serializable {
             .streamAssociations(MixedIn.EXCLUDED)
             .filter(ObjectAssociation.Predicates.REFERENCE_PROPERTIES) // properties only
             .map(objectAssoc->{
-                final var parentAdapter =
+                val parentAdapter =
                         objectAssoc.get(candidateAdapter, InteractionInitiatedBy.USER);
                 return parentAdapter;
             })

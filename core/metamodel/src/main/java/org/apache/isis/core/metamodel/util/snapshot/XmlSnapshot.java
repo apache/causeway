@@ -56,6 +56,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -448,7 +449,7 @@ public class XmlSnapshot implements Snapshot {
         final ObjectSpecification nos = object.getSpecification();
         // HACK: really want a ObjectSpecification.hasField method to
         // check first.
-        final var field = nos.getAssociation(fieldName).orElse(null);
+        val field = nos.getAssociation(fieldName).orElse(null);
         if (field == null) {
             if (log.isInfoEnabled()) {
                 log.info("includeField(Pl, Vec, Str): could not locate field, skipping");
@@ -462,7 +463,7 @@ public class XmlSnapshot implements Snapshot {
         if (log.isDebugEnabled()) {
             log.debug("includeField(Pl, Vec, Str): locating corresponding XML element");
         }
-        final var xmlFieldElements = elementsUnder(xmlElement, field.getId());
+        val xmlFieldElements = elementsUnder(xmlElement, field.getId());
         if (xmlFieldElements.size() != 1) {
             if (log.isInfoEnabled()) {
                 log.info("includeField(Pl, Vec, Str): could not locate {}",

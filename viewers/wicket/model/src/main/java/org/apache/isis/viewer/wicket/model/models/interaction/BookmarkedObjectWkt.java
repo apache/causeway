@@ -37,6 +37,7 @@ import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.val;
 
 public final class BookmarkedObjectWkt
 extends ModelAbstract<ManagedObject> {
@@ -98,7 +99,7 @@ extends ModelAbstract<ManagedObject> {
     public static BookmarkedObjectWkt ofAdapter(
             final @NonNull IsisAppCommonContext commonContext,
             final @Nullable ManagedObject domainObject) {
-        final var bookmark = commonContext
+        val bookmark = commonContext
                 .getObjectManager()
                 .getObjectBookmarker()
                 .bookmarkObject(domainObject);

@@ -103,7 +103,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
         final RepeatingView propertyRv = new RepeatingView(ID_PROPERTIES);
         div.addOrReplace(propertyRv);
 
-        final var properties = getPropertiesNotStaticallyHidden();
+        val properties = getPropertiesNotStaticallyHidden();
 
         for (OneToOneAssociation property : properties) {
             final WebMarkupContainer propertyRvContainer = new WebMarkupContainer(propertyRv.newChildId());
@@ -144,8 +144,8 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
 
     private Can<OneToOneAssociation> getPropertiesNotStaticallyHidden() {
 
-        final var entity = getModel().getManagedObject();
-        final var propertyLayouts = this.fieldSet.getProperties();
+        val entity = getModel().getManagedObject();
+        val propertyLayouts = this.fieldSet.getProperties();
         //
         // previously we filtered out any invisible properties.
         // However, the inline prompt/don't redirect logic introduced in 1.15.0 means that we keep the same page,

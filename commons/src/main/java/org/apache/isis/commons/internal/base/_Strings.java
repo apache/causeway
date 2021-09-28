@@ -55,6 +55,7 @@ import static org.apache.isis.commons.internal.functions._Predicates.not;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -630,7 +631,7 @@ public final class _Strings {
     public static String print(
             final @NonNull Consumer<PrintStream> printer,
             final @NonNull Charset charset) {
-        final var baos = new ByteArrayOutputStream();
+        val baos = new ByteArrayOutputStream();
         try (PrintStream ps = new PrintStream(baos, true, charset)) {
             printer.accept(ps);
         }

@@ -44,6 +44,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 public final class ManagedAction extends ManagedMember {
 
@@ -106,9 +107,9 @@ public final class ManagedAction extends ManagedMember {
     @Deprecated
     public _Either<ManagedObject, InteractionVeto> invoke(@NonNull final Can<ManagedObject> actionParameters) {
 
-        final var action = getAction();
+        val action = getAction();
 
-        final var head = action.interactionHead(getOwner());
+        val head = action.interactionHead(getOwner());
 
         final ManagedObject actionResult = action
                 .execute(head , actionParameters, InteractionInitiatedBy.USER);
@@ -120,8 +121,8 @@ public final class ManagedAction extends ManagedMember {
     public ManagedObject invokeWithRuleChecking(
             final @NonNull Can<ManagedObject> actionParameters) throws AuthorizationException {
 
-        final var action = getAction();
-        final var head = action.interactionHead(getOwner());
+        val action = getAction();
+        val head = action.interactionHead(getOwner());
 
         final ManagedObject actionResult = action
                 .executeWithRuleChecking(head , actionParameters, InteractionInitiatedBy.USER, getWhere());
@@ -135,9 +136,9 @@ public final class ManagedAction extends ManagedMember {
             return ManagedObject.empty(action.getReturnType());
         }
 
-        final var resultPojo = actionResult.getPojo();
+        val resultPojo = actionResult.getPojo();
 
-        final var resultAdapter = getRoutingServices().stream()
+        val resultAdapter = getRoutingServices().stream()
                 .filter(routingService->routingService.canRoute(resultPojo))
                 .map(routingService->routingService.route(resultPojo))
                 .filter(_NullSafe::isPresent)
@@ -195,7 +196,7 @@ public final class ManagedAction extends ManagedMember {
         private static final long serialVersionUID = 1L;
 
         static Memento create(final ManagedAction managedAction) {
-            final var action = managedAction.getMetaModel();
+            val action = managedAction.getMetaModel();
             return new Memento(
                     action.getMemento(),
                     action.getObjectManager()
@@ -209,9 +210,9 @@ public final class ManagedAction extends ManagedMember {
         private final Where where;
         public ManagedAction getManagedAction(final MetaModelContext mmc) {
 
-            final var action = actionMemento.getAction(mmc::getSpecificationLoader);
-            final var spec = action.getDeclaringType();
-            final var owner = mmc.getObjectManager().getObjectMemorizer().deserialize(spec, objectMemento);
+            val action = actionMemento.getAction(mmc::getSpecificationLoader);
+            val spec = action.getDeclaringType();
+            val owner = mmc.getObjectManager().getObjectMemorizer().deserialize(spec, objectMemento);
 
             return ManagedAction.of(owner, action, where);
         }

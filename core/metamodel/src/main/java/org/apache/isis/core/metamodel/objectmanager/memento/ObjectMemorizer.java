@@ -119,8 +119,8 @@ public interface ObjectMemorizer {
 
     public static ObjectMemorizer createDefault(final MetaModelContext metaModelContext) {
 
-        final var serviceInjector = metaModelContext.getServiceInjector();
-        final var chainOfHandlers = List.<ObjectMemorizer.Handler>of(
+        val serviceInjector = metaModelContext.getServiceInjector();
+        val chainOfHandlers = List.<ObjectMemorizer.Handler>of(
                 new ObjectMemorizer_builtinHandlers.MemorizeViaObjectMementoService(),
                 new ObjectMemorizer_builtinHandlers.MemorizeOther()
                 );
@@ -134,7 +134,7 @@ public interface ObjectMemorizer {
             chainOfHandlers.forEach(serviceInjector::injectServicesInto);
         }
 
-        final var chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
+        val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
 
         return request -> chainOfRespo.handle(request).orElse(null);
 

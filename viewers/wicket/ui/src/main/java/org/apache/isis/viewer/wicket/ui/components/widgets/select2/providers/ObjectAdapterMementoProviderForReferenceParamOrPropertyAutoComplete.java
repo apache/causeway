@@ -55,7 +55,7 @@ extends ObjectAdapterMementoProviderAbstract {
 
             if(scalarModel.isParameter()) {
                 // recover any pendingArgs
-                final var paramModel = (ParameterUiModel)scalarModel;
+                val paramModel = (ParameterUiModel)scalarModel;
 
                 paramModel
                     .getPendingParameterModel()

@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
+import lombok.val;
 
 public class PropertyNegotiationModel implements ManagedValue {
 
@@ -43,12 +44,12 @@ public class PropertyNegotiationModel implements ManagedValue {
 
     PropertyNegotiationModel(final ManagedProperty managedProperty) {
         this.managedProperty = managedProperty;
-        final var propMeta = managedProperty.getMetaModel();
+        val propMeta = managedProperty.getMetaModel();
 
         validationFeedbackActive = _Bindables.forValue(false);
 
-        final var currentValue = managedProperty.getPropertyValue();
-        final var defaultValue = ManagedObjects.isNullOrUnspecifiedOrEmpty(currentValue)
+        val currentValue = managedProperty.getPropertyValue();
+        val defaultValue = ManagedObjects.isNullOrUnspecifiedOrEmpty(currentValue)
             ? propMeta.getDefault(managedProperty.getOwner())
             : currentValue;
 

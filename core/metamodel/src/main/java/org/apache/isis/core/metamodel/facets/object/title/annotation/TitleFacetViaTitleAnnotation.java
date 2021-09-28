@@ -62,9 +62,9 @@ implements ImperativeFacet {
             final @NonNull Class<?> cls,
             final @NonNull FacetHolder holder){
 
-        final var titles = new ArrayDeque<Title>();
+        val titles = new ArrayDeque<Title>();
 
-        final var titleComponents = Evaluators
+        val titleComponents = Evaluators
                 .streamEvaluators(cls,
                     annotatedElement->isTitleComponent(annotatedElement, titles::addLast),
                     TypeHierarchyPolicy.EXCLUDE,

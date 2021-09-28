@@ -63,9 +63,9 @@ public class MarkupPanelFactories {
                 return ApplicationAdvice.DOES_NOT_APPLY;
             }
 
-            final var scalarModel = (ScalarModel) model;
-            final var scalarSpec = scalarModel.getScalarTypeSpec();
-            final var scalarType = scalarSpec.getCorrespondingClass();
+            val scalarModel = (ScalarModel) model;
+            val scalarSpec = scalarModel.getScalarTypeSpec();
+            val scalarType = scalarSpec.getCorrespondingClass();
 
             return appliesIf(scalarType.equals(valueType));
 

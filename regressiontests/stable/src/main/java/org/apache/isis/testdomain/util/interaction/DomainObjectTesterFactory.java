@@ -246,17 +246,17 @@ public class DomainObjectTesterFactory {
 
             assertExists(true);
 
-            final var pojoReplacers = Can.ofArray(pojoDefaultArgReplacers);
+            val pojoReplacers = Can.ofArray(pojoDefaultArgReplacers);
 
             managedAction
             .ifPresent(managedAction->{
                 interactionService.runAnonymous(()->{
 
-                    final var actionInteraction = ActionInteraction.wrap(managedAction)
+                    val actionInteraction = ActionInteraction.wrap(managedAction)
                             .checkVisibility()
                             .checkUsability();
 
-                    final var pendingArgs = actionInteraction
+                    val pendingArgs = actionInteraction
                             .startParameterNegotiation().orElseThrow(()->_Exceptions
                                     .illegalAccess("action not visible or usable: %s",
                                             managedAction.getAction().getFeatureIdentifier()));
@@ -290,18 +290,18 @@ public class DomainObjectTesterFactory {
 
             assertExists(true);
 
-            final var pojoReplacers = Can.ofArray(pojoDefaultArgReplacers);
+            val pojoReplacers = Can.ofArray(pojoDefaultArgReplacers);
 
             managedAction
             .ifPresent(managedAction->{
                 interactionService.runAnonymous(()->{
 
-                    final var actionInteraction = ActionInteraction.wrap(managedAction)
+                    val actionInteraction = ActionInteraction.wrap(managedAction)
                             //.checkVisibility() - no rule checking
                             //.checkUsability() - no rule checking
                             ;
 
-                    final var pendingArgs = actionInteraction
+                    val pendingArgs = actionInteraction
                             .startParameterNegotiation().orElseThrow(()->_Exceptions
                                     .illegalAccess("action not visible or usable: %s",
                                             managedAction.getAction().getFeatureIdentifier()));
@@ -449,8 +449,8 @@ public class DomainObjectTesterFactory {
             .ifPresent(managedProperty->{
                 interactionService.runAnonymous(()->{
 
-                    final var propNeg = managedProperty.startNegotiation();
-                    final var initialValue = managedProperty.getPropertyValue();
+                    val propNeg = managedProperty.startNegotiation();
+                    val initialValue = managedProperty.getPropertyValue();
 
                     assertEquals(initialValue, propNeg.getValue().getValue());
 
@@ -474,10 +474,10 @@ public class DomainObjectTesterFactory {
         @SuppressWarnings("unchecked")
         public String asParsebleText() {
             assertExists(true);
-            final var valueFacet = getFacetOnElementTypeElseFail(ValueFacet.class);
-            final var prop = this.getMetaModel().get();
+            val valueFacet = getFacetOnElementTypeElseFail(ValueFacet.class);
+            val prop = this.getMetaModel().get();
 
-            final var context = valueFacet
+            val context = valueFacet
                     .createValueSemanticsContext(prop.getFeatureIdentifier());
 
             return valueFacet.selectParserForPropertyElseFallback(prop)

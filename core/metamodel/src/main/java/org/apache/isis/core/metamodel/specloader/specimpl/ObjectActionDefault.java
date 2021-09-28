@@ -170,7 +170,7 @@ implements ObjectAction {
         .map(facetedParam->{
 
             final int paramIndex = facetedParam.getParamIndex();
-            final var paramElementType = specLoader.loadSpecification(facetedParam.getType()); // preload
+            val paramElementType = specLoader.loadSpecification(facetedParam.getType()); // preload
 
             return
                     facetedParam.getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
@@ -393,7 +393,7 @@ implements ObjectAction {
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final var actionInvocationFacet = getFacet(ActionInvocationFacet.class);
+        val actionInvocationFacet = getFacet(ActionInvocationFacet.class);
         return actionInvocationFacet
                 .invoke(this, head, argumentAdapters, interactionInitiatedBy);
     }

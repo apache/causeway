@@ -75,10 +75,10 @@ public class AuthenticatorSecman implements Authenticator {
         return applicationUserRepository.findByUsername(username)
                 .filter(appUser -> appUser.getEncryptedPassword().equals(encryptedPassword))
                 .map(appUser -> {
-                    final var roleNames = Stream.concat(
+                    val roleNames = Stream.concat(
                             appUser.getRoles().stream().map(ApplicationRole::getName),
                             request.streamRoles());
-                    final var user = UserMemento.ofNameAndRoleNames(username, roleNames)
+                    val user = UserMemento.ofNameAndRoleNames(username, roleNames)
                             .withAuthenticationCode(code);
                     return InteractionContext.ofUserWithSystemDefaults(user);
                 })

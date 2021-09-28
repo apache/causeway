@@ -32,6 +32,8 @@ import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 
+import lombok.val;
+
 public class MarkupComponent extends WebComponent {
 
     private static final long serialVersionUID = 1L;
@@ -42,7 +44,7 @@ public class MarkupComponent extends WebComponent {
 
     @Override
     public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag){
-        final var htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
+        val htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
         replaceComponentTagBody(markupStream, openTag, htmlContent);
     }
 
@@ -62,13 +64,13 @@ public class MarkupComponent extends WebComponent {
 
         if(modelObject instanceof ManagedObject) {
 
-            final var adapter = (ManagedObject) modelObject;
+            val adapter = (ManagedObject) modelObject;
 
             if(adapter.getPojo()==null) {
                 return fallback;
             }
 
-            final var asHtml = lookupObjectFeatureIn(getDefaultModel())
+            val asHtml = lookupObjectFeatureIn(getDefaultModel())
             .map(feature->adapter.titleString(conf->conf.feature(feature)))
             .orElseGet(adapter::titleString);
 

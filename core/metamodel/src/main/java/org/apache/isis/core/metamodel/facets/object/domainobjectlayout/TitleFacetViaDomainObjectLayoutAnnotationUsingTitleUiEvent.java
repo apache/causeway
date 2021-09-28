@@ -38,6 +38,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
+import lombok.val;
+
 public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent
 extends TitleFacetAbstract {
 
@@ -47,7 +49,7 @@ extends TitleFacetAbstract {
             final IsisConfiguration configuration,
             final FacetHolder facetHolder) {
 
-        final var isPostForDefault = configuration
+        val isPostForDefault = configuration
                 .getApplib()
                 .getAnnotation()
                 .getDomainObjectLayout()
@@ -131,7 +133,7 @@ extends TitleFacetAbstract {
 
     private static TranslationContext translationContextFor(final FacetHolder facetHolder) {
         if(facetHolder instanceof ObjectSpecification) {
-            final var facetHolderAsSpec = (ObjectSpecification) facetHolder;
+            val facetHolderAsSpec = (ObjectSpecification) facetHolder;
             return TranslationContext.forTranslationContextHolder(facetHolderAsSpec.getFeatureIdentifier());
         }
         return null;

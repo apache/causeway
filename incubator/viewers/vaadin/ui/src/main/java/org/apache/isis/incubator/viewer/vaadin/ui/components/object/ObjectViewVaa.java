@@ -209,9 +209,9 @@ public class ObjectViewVaa extends VerticalLayout {
             @Override
             protected void onProperty(final HasComponents container, final PropertyLayoutData propertyData) {
 
-                final var owner = managedObject;
+                val owner = managedObject;
 
-                final var interaction = PropertyInteraction.start(owner, propertyData.getId(), Where.OBJECT_FORMS);
+                val interaction = PropertyInteraction.start(owner, propertyData.getId(), Where.OBJECT_FORMS);
                 interaction.checkVisibility()
                 .getManagedProperty()
                 .ifPresent(managedProperty -> {

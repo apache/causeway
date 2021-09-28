@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.valuesemantics.ImageValueSemantics;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.NonNull;
+import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -48,12 +49,12 @@ public class WicketImageUtil {
             return Optional.empty();
         }
 
-        final var imageResource = new BufferedDynamicImageResource();
+        val imageResource = new BufferedDynamicImageResource();
         imageResource.setImage(buffImg);
 
-        final var thumbnailImageResource = new ThumbnailImageResource(imageResource, 300);
+        val thumbnailImageResource = new ThumbnailImageResource(imageResource, 300);
 
-        final var wicketImage = new NonCachingImage(id, thumbnailImageResource);
+        val wicketImage = new NonCachingImage(id, thumbnailImageResource);
         wicketImage.setOutputMarkupId(true);
 
         return Optional.of(wicketImage);
@@ -65,7 +66,7 @@ public class WicketImageUtil {
             final @NonNull String id,
             final @Nullable Blob blob) {
 
-        final var buffImg = Optional.ofNullable(blob)
+        val buffImg = Optional.ofNullable(blob)
         .flatMap(Blob::asImage)
         .orElse(null);
 
@@ -81,7 +82,7 @@ public class WicketImageUtil {
           return Optional.empty();
       }
 
-      final var spec = model.getScalarTypeSpec();
+      val spec = model.getScalarTypeSpec();
 
       return spec.streamValueSemantics(ImageValueSemantics.class)
       .map(imageValueSemantics->imageValueSemantics.getImage(adapter).orElse(null))

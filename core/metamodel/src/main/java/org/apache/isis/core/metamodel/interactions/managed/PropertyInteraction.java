@@ -111,7 +111,7 @@ extends MemberInteraction<ManagedProperty, PropertyInteraction> {
         private final ManagedProperty.Memento managedPropertyMemento;
 
         public PropertyInteraction getPropertyInteraction(final MetaModelContext mmc) {
-            final var managedProperty = managedPropertyMemento.getManagedProperty(mmc);
+            val managedProperty = managedPropertyMemento.getManagedProperty(mmc);
             return PropertyInteraction.wrap(managedProperty);
         }
     }

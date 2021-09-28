@@ -37,6 +37,8 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
+import lombok.val;
+
 /**
  * A {@link ColumnAbstract column} within a
  * {@link CollectionContentsAsAjaxTablePanel} representing a single property of the
@@ -104,9 +106,9 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObj
 
     private Component createComponent(final String id, final IModel<ManagedObject> rowModel) {
 
-        final var domainObject = rowModel.getObject();
-        final var property = domainObject.getSpecification().getPropertyElseFail(propertyId);
-        final var entityModel = EntityModel.ofAdapter(super.getCommonContext(), domainObject);
+        val domainObject = rowModel.getObject();
+        val property = domainObject.getSpecification().getPropertyElseFail(propertyId);
+        val entityModel = EntityModel.ofAdapter(super.getCommonContext(), domainObject);
 
         final ScalarModel scalarModel = entityModel
                 .getPropertyModel(

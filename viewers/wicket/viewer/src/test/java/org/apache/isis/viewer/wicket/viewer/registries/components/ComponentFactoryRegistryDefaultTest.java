@@ -26,6 +26,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory.ApplicationAdvice;
@@ -33,7 +35,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorHelper;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import lombok.val;
 
 class ComponentFactoryRegistryDefaultTest {
 
@@ -63,12 +65,12 @@ class ComponentFactoryRegistryDefaultTest {
     @Test
     void testOrderAjaxTableToEnd() {
 
-        final var compRegistry = ComponentFactoryRegistryDefault.forTesting(List.of(
+        val compRegistry = ComponentFactoryRegistryDefault.forTesting(List.of(
                 one,
                 ajaxTableComponentFactory,
                 two));
 
-        final var orderAjaxTableToEnd = new CollectionSelectorHelper(null, compRegistry)
+        val orderAjaxTableToEnd = new CollectionSelectorHelper(null, compRegistry)
                 .getComponentFactories();
 
         assertThat(orderAjaxTableToEnd, Matchers.contains(

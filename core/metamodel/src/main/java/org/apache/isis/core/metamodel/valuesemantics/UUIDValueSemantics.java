@@ -31,6 +31,8 @@ import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Strings;
 
+import lombok.val;
+
 @Component
 @Named("isis.val.UUIDValueSemantics")
 public class UUIDValueSemantics
@@ -68,7 +70,7 @@ implements
 
     @Override
     public UUID parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        final var input = _Strings.blankToNullOrTrim(text);
+        val input = _Strings.blankToNullOrTrim(text);
         return input!=null
                 ? UUID.fromString(input)
                 : null;

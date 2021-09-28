@@ -69,7 +69,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void whenEnabled_shouldHaveNoVeto() {
 
-        final var tester =
+        val tester =
                 testerFactory.actionTester(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS);
 
         tester.assertVisibilityIsNotVetoed();
@@ -79,7 +79,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void whenDisabled_shouldHaveVeto() {
 
-        final var tester =
+        val tester =
                 testerFactory.actionTester(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS);
 
         tester.assertVisibilityIsNotVetoed();
@@ -138,7 +138,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void whenEnabled_shouldAllowInvocation() {
 
-        final var tester =
+        val tester =
                 testerFactory.actionTester(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS);
 
         tester.assertVisibilityIsNotVetoed();
@@ -163,7 +163,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
         val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
         assertTrue(resultOrVeto.isRight());
 
-        final var tester =
+        val tester =
                 testerFactory.actionTester(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS);
 
         tester.assertVisibilityIsNotVetoed();
@@ -174,7 +174,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void withParams_shouldProduceCorrectResult() throws Throwable {
 
-        final var tester =
+        val tester =
                 testerFactory.actionTester(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS);
 
         tester.assertVisibilityIsNotVetoed();

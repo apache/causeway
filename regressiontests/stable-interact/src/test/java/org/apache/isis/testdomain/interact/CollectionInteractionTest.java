@@ -35,6 +35,8 @@ import org.apache.isis.testdomain.model.interaction.Configuration_usingInteracti
 import org.apache.isis.testdomain.model.interaction.InteractionDemo;
 import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
 
+import lombok.val;
+
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,
@@ -57,19 +59,19 @@ class CollectionInteractionTest extends InteractionTestAbstract {
     @Test
     void multiSelect() {
 
-        final var tester =
+        val tester =
                 testerFactory.collectionTester(InteractionDemo.class, "items", Where.ANYWHERE);
         tester.assertVisibilityIsNotVetoed();
         tester.assertUsabilityIsNotVetoed();
 
-        final var expectedElements = tester.streamCollectionElements()
+        val expectedElements = tester.streamCollectionElements()
                 .map(ManagedObjects.UnwrapUtil::single)
                 .collect(Collectors.toList());
         assertEquals(4, expectedElements.size());
 
         tester.assertCollectionElements(expectedElements);
 
-        final var tableTester = tester.tableTester();
+        val tableTester = tester.tableTester();
 
         tableTester.assertUnfilteredDataElements(expectedElements);
 
@@ -95,7 +97,7 @@ class CollectionInteractionTest extends InteractionTestAbstract {
     @Test
     void columns() {
 
-        final var tableTester =
+        val tableTester =
                 testerFactory.collectionTester(InteractionDemo.class, "items", Where.ANYWHERE)
                 .tableTester();
 

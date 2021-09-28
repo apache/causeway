@@ -95,10 +95,10 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         try(final Workbook wb = new XSSFWorkbook()) {
             String sheetName = model.getName();
             if(sheetName==null||sheetName.length()==0) sheetName = "Collection";
-            final var tempFile = File.createTempFile(ExcelFileModel.class.getCanonicalName(), sheetName + ".xlsx");
+            val tempFile = File.createTempFile(ExcelFileModel.class.getCanonicalName(), sheetName + ".xlsx");
 
-            try(final var fos = new FileOutputStream(tempFile)) {
-                final var sheet = wb.createSheet(sheetName);
+            try(val fos = new FileOutputStream(tempFile)) {
+                val sheet = wb.createSheet(sheetName);
 
                 val columnProperties = columnProperties();
 

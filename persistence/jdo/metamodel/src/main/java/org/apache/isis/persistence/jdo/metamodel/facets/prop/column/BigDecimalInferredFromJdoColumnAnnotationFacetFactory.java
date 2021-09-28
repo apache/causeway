@@ -38,6 +38,8 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 
+import lombok.val;
+
 public class BigDecimalInferredFromJdoColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
@@ -56,7 +58,7 @@ implements MetaModelRefiner {
 
         final FacetedMethod holder = processMethodContext.getFacetHolder();
 
-        final var jdoColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
+        val jdoColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
 
         addFacetIfPresent(
                 MaxTotalDigitsFacetInferredFromJdoColumn

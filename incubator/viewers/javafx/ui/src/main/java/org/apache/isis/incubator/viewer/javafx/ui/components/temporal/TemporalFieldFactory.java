@@ -58,10 +58,10 @@ public class TemporalFieldFactory implements UiComponentHandlerFx {
     public Node handle(final ComponentRequest request) {
 
         val uiComponent = new VBox();
-        final var uiField = _fx.add(uiComponent, new DatePicker());
+        val uiField = _fx.add(uiComponent, new DatePicker());
         val uiValidationFeedback = _fx.newValidationFeedback(uiComponent);
 
-        final var managedValue = request.getManagedValue();
+        val managedValue = request.getManagedValue();
         BindingsFx.bindBidirectional(
                 uiField.valueProperty(),
                 managedValue.getValue(),

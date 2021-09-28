@@ -55,7 +55,7 @@ public class NumberFieldFactory implements UiComponentHandlerFx {
         val uiField = _fx.add(uiComponent, new TextField());
         val uiValidationFeedback = _fx.newValidationFeedback(uiComponent);
 
-        final var managedValue = request.getManagedValue();
+        val managedValue = request.getManagedValue();
         BindingsFx.bindParsableBidirectional(
                 uiField.textProperty(),
                 managedValue.getValueAsParsableText());

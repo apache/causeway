@@ -87,7 +87,7 @@ extends ColumnAbstract<ManagedObject> {
             return componentFactory.createComponent(id, valueModel);
         }
 
-        final var entityModel = EntityModel.ofAdapter(super.getCommonContext(), adapter);
+        val entityModel = EntityModel.ofAdapter(super.getCommonContext(), adapter);
         entityModel.setRenderingHint(variant.isParented()
                 ? RenderingHint.PARENTED_TITLE_COLUMN
                 : RenderingHint.STANDALONE_TITLE_COLUMN);

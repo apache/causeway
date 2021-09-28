@@ -169,7 +169,7 @@ implements ComponentFactoryRegistry {
     // -- JUNIT SUPPORT
 
     static ComponentFactoryRegistryDefault forTesting(final List<ComponentFactory> componentFactories) {
-        final var factory = new ComponentFactoryRegistryDefault();
+        val factory = new ComponentFactoryRegistryDefault();
         _NullSafe.stream(componentFactories)
         .forEach(componentFactory->
             factory.componentFactoriesByType.putElement(

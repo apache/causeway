@@ -26,6 +26,8 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import lombok.val;
+
 public interface ManagedValue {
 
     ObjectSpecification getElementType();
@@ -38,7 +40,7 @@ public interface ManagedValue {
     Observable<Can<ManagedObject>> getChoices();
 
     default void update(final UnaryOperator<ManagedObject> updater) {
-        final var value = getValue();
+        val value = getValue();
         value.setValue(updater.apply(value.getValue()));
     }
 

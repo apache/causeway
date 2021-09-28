@@ -58,7 +58,7 @@ class PropertyInteractionTest extends InteractionTestAbstract {
     @Test
     void propertyInteraction_whenEnabled_shouldHaveNoVeto() {
 
-        final var tester =
+        val tester =
                 testerFactory.propertyTester(InteractionDemo.class, "stringMultiline", Where.OBJECT_FORMS);
 
         tester.assertVisibilityIsNotVetoed();
@@ -85,7 +85,7 @@ class PropertyInteractionTest extends InteractionTestAbstract {
     @Test
     void propertyInteraction_whenDisabled_shouldHaveVeto() {
 
-        final var tester =
+        val tester =
                 testerFactory.propertyTester(InteractionDemo.class, "stringDisabled", Where.OBJECT_FORMS);
 
         tester.assertVisibilityIsNotVetoed();

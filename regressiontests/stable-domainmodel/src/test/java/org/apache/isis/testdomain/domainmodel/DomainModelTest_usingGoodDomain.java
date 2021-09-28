@@ -521,7 +521,7 @@ class DomainModelTest_usingGoodDomain {
 
         // PRIVATE ACTION
 
-        final var act = testerFactory
+        val act = testerFactory
                 .actionTester(ViewModelWithAnnotationOptionalUsingPrivateSupport.class, "myAction");
         act.assertExists(true);
         act.assertIsExplicitlyAnnotated(true);

@@ -30,6 +30,8 @@ import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.internal.base._Strings;
 
+import lombok.val;
+
 /**
  * due to auto-boxing also handles the primitive variant
  */
@@ -79,7 +81,7 @@ implements
 
     @Override
     public Integer parseTextRepresentation(final Context context, final String text) {
-        final var input = _Strings.blankToNullOrTrim(text);
+        val input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
             return null;
         }

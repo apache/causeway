@@ -127,18 +127,18 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
 
     public _Either<ManagedObject, InteractionVeto> invokeWith(final ParameterNegotiationModel pendingArgs) {
         pendingArgs.activateValidationFeedback();
-        final var veto = validate(pendingArgs);
+        val veto = validate(pendingArgs);
         if(veto.isPresent()) {
             return _Either.right(veto.get());
         }
-        final var action = chain.leftIfAny();
-        final var actionResultOrVeto = action.invoke(pendingArgs.getParamValues());
+        val action = chain.leftIfAny();
+        val actionResultOrVeto = action.invoke(pendingArgs.getParamValues());
         return actionResultOrVeto;
     }
 
     public ManagedObject invokeWithRuleChecking(
             final ParameterNegotiationModel pendingArgs) throws AuthorizationException {
-        final var action = chain.leftIfAny();
+        val action = chain.leftIfAny();
         return action.invokeWithRuleChecking(pendingArgs.getParamValues());
     }
 
@@ -196,7 +196,7 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
         private final ManagedAction.Memento managedActionMemento;
 
         public ActionInteraction getActionInteraction(final MetaModelContext mmc) {
-            final var managedAction = managedActionMemento.getManagedAction(mmc);
+            val managedAction = managedActionMemento.getManagedAction(mmc);
             return ActionInteraction.wrap(managedAction);
         }
     }

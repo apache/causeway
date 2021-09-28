@@ -63,7 +63,7 @@ public class BindingsFx {
             final @NonNull Property<L> leftProperty,
             final @NonNull Bindable<R> rightProperty,
             final @NonNull BindingConverter<L, R> converter) {
-        final var binding = new InternalBidirBinding<L, R>(leftProperty, rightProperty, converter);
+        val binding = new InternalBidirBinding<L, R>(leftProperty, rightProperty, converter);
         leftProperty.setValue(converter.toLeft(rightProperty.getValue()));
         leftProperty.addListener(binding);
         rightProperty.addListener(binding);
