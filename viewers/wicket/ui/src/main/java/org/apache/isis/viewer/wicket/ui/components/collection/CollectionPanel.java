@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collection;
 
+import java.util.Optional;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.basic.Label;
@@ -34,6 +36,8 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
@@ -53,20 +57,20 @@ implements
     private static final String ID_FEEDBACK = "feedback";
 
     private Component collectionContents;
-
     private Label label;
+    @Getter @Setter private CollectionSelectorPanel selectorDropdownPanel;
 
     public CollectionPanel(
             final String id,
             final EntityCollectionModelParented collectionModel) {
         super(id, collectionModel);
 
-        val associatedActions = collectionModel.getAssociatedActions();
+        val collMetaModel = getModel().getMetaModel();
 
         val entityActionLinks = LinkAndLabelUtil
                 .asActionLinksForAdditionalLinksPanel(
                         collectionModel.getEntityModel(),
-                        associatedActions.stream(),
+                        collMetaModel.streamAssociatedActions(),
                         null)
                 .collect(Can.toCan());
 
@@ -94,38 +98,19 @@ implements
         return this.label;
     }
 
-    // -- SelectorDropdownPanel (impl)
+    // -- BULK SELECTION SUPPORT
 
-    private CollectionSelectorPanel selectorDropdownPanel;
-
-    @Override
-    public CollectionSelectorPanel getSelectorDropdownPanel() {
-        return selectorDropdownPanel;
-    }
-    public void setSelectorDropdownPanel(final CollectionSelectorPanel selectorDropdownPanel) {
-        this.selectorDropdownPanel = selectorDropdownPanel;
-    }
-
-
-    // -- BulkActionsProvider
-    GenericToggleboxColumn toggleboxColumn;
+    private transient Optional<GenericToggleboxColumn> toggleboxColumn;
 
     @Override
     public GenericToggleboxColumn getToggleboxColumn() {
-
         if(toggleboxColumn == null) {
-            val entityCollectionModel = getModel();
-
-            //FIXME this logic belongs to the DataTableModel
-            val associatedActions = entityCollectionModel.getActionsWithChoicesFrom();
-            if(associatedActions.isEmpty()) {
-                return null;
-            }
-
-            toggleboxColumn = new GenericToggleboxColumn(super.getCommonContext());
+            val collMetaModel = getModel().getMetaModel();
+            toggleboxColumn =  collMetaModel.hasAssociatedActionsWithChoicesFromThisCollection()
+                    ? Optional.of(new GenericToggleboxColumn(super.getCommonContext()))
+                    : Optional.empty();
         }
-
-        return toggleboxColumn;
+        return toggleboxColumn.orElse(null);
     }
 
 }

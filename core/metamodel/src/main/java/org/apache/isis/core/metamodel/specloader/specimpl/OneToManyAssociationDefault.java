@@ -79,7 +79,6 @@ implements OneToManyAssociation {
                 headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where);
     }
 
-
     @Override
     public UsabilityContext createUsableInteractionContext(
             final ManagedObject ownerAdapter,
@@ -88,9 +87,6 @@ implements OneToManyAssociation {
         return new CollectionUsabilityContext(
                 headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where);
     }
-
-
-
 
     // -- get, isEmpty, add, clear
 

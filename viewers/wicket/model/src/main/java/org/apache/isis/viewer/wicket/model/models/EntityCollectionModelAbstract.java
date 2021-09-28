@@ -18,26 +18,15 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.util.Comparator;
 import java.util.List;
 
 import org.apache.wicket.model.ChainingModel;
-import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.factory._InstanceUtil;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
-import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -63,7 +52,6 @@ implements EntityCollectionModel {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Identifier identifier; //TODO don't memoize
     @Getter private final int pageSize; //TODO don't memoize
-    @Getter private final @Nullable Class<? extends Comparator<?>> sortedBy;
 
     private final @NonNull Variant variant;
 
@@ -73,32 +61,13 @@ implements EntityCollectionModel {
         super(delegate);
         this.variant = variant;
 
-        val objectMember = getMetaModel();
+        val collMeta = getMetaModel();
 
         //TODO don't memoize
-        this.identifier = objectMember.getFeatureIdentifier();
+        this.identifier = collMeta.getFeatureIdentifier();
 
-        val typeOfSpecification = objectMember.lookupFacet(TypeOfFacet.class)
-                .map(TypeOfFacet::valueSpec)
-                .orElseThrow(()->_Exceptions
-                        .illegalArgument("Action or Collection MetaModel must have a TypeOfFacet"));
-
-        final Can<FacetHolder> facetHolders = Can.of(objectMember, typeOfSpecification);
-
-        //TODO remove, as should be provided by the DataTableModel
-        this.pageSize = facetHolders.stream()
-            .map(facetHolder->facetHolder.getFacet(PagedFacet.class))
-            .filter(_NullSafe::isPresent)
-            .findFirst()
-            .map(PagedFacet::value)
+        this.pageSize = collMeta.getPageSize()
             .orElse(getVariant().getPageSizeDefault());
-        //TODO remove, as should be provided by the DataTableModel
-        this.sortedBy = facetHolders.stream()
-            .map(facetHolder->facetHolder.getFacet(SortedByFacet.class))
-            .filter(_NullSafe::isPresent)
-            .findFirst()
-            .map(SortedByFacet::value)
-            .orElse(null);
     }
 
     public final CollectionInteractionWkt delegate() {
@@ -134,25 +103,6 @@ implements EntityCollectionModel {
     @Override
     public final Variant getVariant() {
         return variant;
-    }
-
-    // -- SORTING
-
-    /**
-     * An element comparator corresponding to associated {@link SortedByFacet}.
-     * The comparator operates on elements of type {@link ManagedObject}.
-     * @return non-null
-     */
-    protected Comparator<ManagedObject> getElementComparator(){
-
-        if(sortedBy == null) {
-            return (a, b) -> 0; // no-op comparator, works with Stream#sort
-        }
-
-        val pojoComparator = _Casts.<Comparator<Object>>uncheckedCast(_InstanceUtil.createInstance(sortedBy));
-        getCommonContext().injectServicesInto(pojoComparator);
-
-        return (a, b) -> pojoComparator.compare(a.getPojo(), b.getPojo());
     }
 
     // -- LINKS PROVIDER

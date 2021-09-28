@@ -24,12 +24,10 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
@@ -113,29 +111,6 @@ extends
 
     default ObjectSpecification getElementType() {
         return getMetaModel().getElementType();
-    }
-
-    /**
-     * Returns all actions that are associated with this collection,
-     * and hence should be rendered close to this collection's UI representation.
-     * Typically at the top bar of the UI collection panel.
-     * <p>
-     * Order matters, that is the order of returned actions corresponds to the order of
-     * rendered (action) buttons.
-     */
-    default Can<ObjectAction> getAssociatedActions() {
-        return Can.empty();
-    }
-
-    /**
-     * Returns all actions that are targets for the multi-select UI feature.
-     * That typically means, their first parameter is a non-scalar type with an
-     * element type that corresponds to the element type of this collection.
-     * <p>
-     * Order does not matter.
-     */
-    default Can<ObjectAction> getActionsWithChoicesFrom() {
-        return Can.empty();
     }
 
     // -- BASIC PROPERTIES

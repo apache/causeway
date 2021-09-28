@@ -68,6 +68,7 @@ public class DataTableModel {
             dataElements.getValue().stream()
                 //TODO filter by searchArgument
                 .filter(this::ignoreHidden)
+                .sorted(managedCollection.getMetaModel().getElementComparator())
                 //TODO apply projection conversion (if any)
                 .map(domainObject->new DataRow(this, domainObject))
                 .collect(Can.toCan()));
@@ -102,7 +103,7 @@ public class DataTableModel {
 
         title = _Observables.forFactory(()->"Collection");
 
-
+        //FIXME[ISIS-2871] actual title
 //      return getTypeOfSpecification()
 //              .lookupFacet(MemberNamedFacet.class)
 //              .map(MemberNamedFacet::getSpecialization)

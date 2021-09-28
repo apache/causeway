@@ -25,14 +25,9 @@ import org.apache.wicket.Component;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.compare._Comparators;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.MixedIn;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.interaction.coll.CollectionInteractionWkt;
@@ -81,30 +76,6 @@ implements
         this.entityModel = parentObjectModel;
     }
 
-    // -- METAMODEL
-
-    @Override @Deprecated // should be made available in the DataTableModel
-    public Can<ObjectAction> getAssociatedActions() {
-        val managedCollection = getManagedCollection();
-        final OneToManyAssociation collection = managedCollection.getCollection();
-        val associatedActions = managedCollection.getOwner().getSpecification()
-                .streamRuntimeActions(MixedIn.INCLUDED)
-                .filter(ObjectAction.Predicates.isSameLayoutGroupAs(collection))
-                .sorted(this::deweyOrderCompare)
-                .collect(Can.toCan());
-        return associatedActions;
-    }
-
-    @Override @Deprecated // should be made available in the DataTableModel
-    public Can<ObjectAction> getActionsWithChoicesFrom() {
-        val managedCollection = getManagedCollection();
-        final OneToManyAssociation collection = managedCollection.getCollection();
-        return managedCollection.getOwner().getSpecification()
-                .streamRuntimeActions(MixedIn.INCLUDED)
-                .filter(ObjectAction.Predicates.choicesFromAndHavingCollectionParameterFor(collection))
-                .collect(Can.toCan());
-    }
-
     // -- UI HINT CONTAINER
 
     public static final String HINT_KEY_SELECTED_ITEM = "selectedItem";
@@ -129,7 +100,7 @@ implements
 //
 //        final ManagedObject collectionAsAdapter = getManagedCollection().getCollectionValue();
 //
-//FIXME DataTableModel has no sorting yet
+//FIXME[ISIS-2871] DataTableModel has no sorting
 //        val elements = _NullSafe.streamAutodetect(collectionAsAdapter.getPojo())
 //        .filter(_NullSafe::isPresent) // pojos
 //        .map(getObjectManager()::adapt)
@@ -158,19 +129,6 @@ implements
     @Override
     public ManagedObject getParentObject() {
         return getManagedCollection().getOwner();
-    }
-
-    // -- ACTION ORDER
-
-    @Deprecated // should be obsolete as already done in the DataTableModel
-    private int deweyOrderCompare(final ObjectAction a, final ObjectAction b) {
-        val seqA = a.lookupFacet(LayoutOrderFacet.class)
-            .map(LayoutOrderFacet::getSequence)
-            .orElse("1");
-        val seqB = b.lookupFacet(LayoutOrderFacet.class)
-            .map(LayoutOrderFacet::getSequence)
-            .orElse("1");
-        return _Comparators.deweyOrderCompare(seqA, seqB);
     }
 
 
