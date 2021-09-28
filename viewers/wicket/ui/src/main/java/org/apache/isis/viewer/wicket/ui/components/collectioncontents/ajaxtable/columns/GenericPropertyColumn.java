@@ -25,6 +25,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.components.ComponentType;
@@ -40,7 +41,7 @@ import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import lombok.val;
 
 /**
- * A {@link ColumnAbstract column} within a
+ * A {@link GenericColumnAbstract column} within a
  * {@link CollectionContentsAsAjaxTablePanel} representing a single property of the
  * provided {@link ManagedObject}.
  *
@@ -48,7 +49,8 @@ import lombok.val;
  * Looks up the {@link ComponentFactory} to render the property from the
  * {@link ComponentFactoryRegistry}.
  */
-public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObject> {
+public final class GenericPropertyColumn
+extends GenericColumnAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -58,7 +60,7 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObj
     private final String parentTypeName;
     private final String describedAs;
 
-    public ObjectAdapterPropertyColumn(
+    public GenericPropertyColumn(
             final IsisAppCommonContext commonContext,
             final EntityCollectionModel.Variant collectionVariant,
             final IModel<String> columnNameModel,
@@ -96,17 +98,16 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObj
 
     @Override
     public void populateItem(
-            final Item<ICellPopulator<ManagedObject>> cellItem,
+            final Item<ICellPopulator<DataRow>> cellItem,
             final String componentId,
-            final IModel<ManagedObject> rowModel) {
+            final IModel<DataRow> rowModel) {
 
-        final Component component = createComponent(componentId, rowModel);
-        cellItem.add(component);
+        cellItem.add(createComponent(componentId, rowModel));
     }
 
-    private Component createComponent(final String id, final IModel<ManagedObject> rowModel) {
+    private Component createComponent(final String id, final IModel<DataRow> rowModel) {
 
-        val domainObject = rowModel.getObject();
+        val domainObject = rowModel.getObject().getRowElement();
         val property = domainObject.getSpecification().getPropertyElseFail(propertyId);
         val entityModel = EntityModel.ofAdapter(super.getCommonContext(), domainObject);
 

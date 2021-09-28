@@ -16,22 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.model.common;
+package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
-import java.io.Serializable;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-
-/**
- * Decouples the selecting of items (by a toggle box column) from the invocation
- * of bulk actions on those items (by the standalone collection panel).
- */
-public interface OnSelectionHandler extends Serializable {
-
-    void onSelected(Component context, ManagedObject selectedAdapter, AjaxRequestTarget ajaxRequestTarget);
-
+public interface GenericColumn
+extends IColumn<DataRow, String> {
 
 }

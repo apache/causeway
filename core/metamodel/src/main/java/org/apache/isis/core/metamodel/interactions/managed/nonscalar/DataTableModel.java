@@ -21,11 +21,18 @@ package org.apache.isis.core.metamodel.interactions.managed.nonscalar;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.binding._BindableAbstract;
 import org.apache.isis.commons.internal.binding._Bindables;
 import org.apache.isis.commons.internal.binding._Observables;
 import org.apache.isis.commons.internal.binding._Observables.LazyObservable;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
+import org.apache.isis.core.metamodel.interactions.InteractionUtils;
+import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
@@ -60,6 +67,7 @@ public class DataTableModel {
         dataRowsFiltered = _Observables.forFactory(()->
             dataElements.getValue().stream()
                 //TODO filter by searchArgument
+                .filter(this::ignoreHidden)
                 //TODO apply projection conversion (if any)
                 .map(domainObject->new DataRow(this, domainObject))
                 .collect(Can.toCan()));
@@ -116,6 +124,22 @@ public class DataTableModel {
         }
     }
 
+    // -- DATA ROW VISIBILITY
 
+    private boolean ignoreHidden(final ManagedObject adapter) {
+        final InteractionResult visibleResult =
+                InteractionUtils.isVisibleResult(
+                        adapter.getSpecification(),
+                        createVisibleInteractionContext(adapter));
+        return visibleResult.isNotVetoing();
+    }
+
+    private VisibilityContext createVisibleInteractionContext(final ManagedObject objectAdapter) {
+        return new ObjectVisibilityContext(
+                InteractionHead.regular(objectAdapter),
+                objectAdapter.getSpecification().getFeatureIdentifier(),
+                InteractionInitiatedBy.USER,
+                Where.ALL_TABLES);
+    }
 
 }

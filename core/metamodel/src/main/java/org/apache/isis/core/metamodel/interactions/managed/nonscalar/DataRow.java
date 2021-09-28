@@ -18,21 +18,24 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed.nonscalar;
 
-import org.apache.isis.commons.internal.binding._BindableAbstract;
+import java.util.UUID;
+
 import org.apache.isis.commons.internal.binding._Bindables;
+import org.apache.isis.commons.internal.binding._Bindables.BooleanBindable;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.Getter;
 
 public class DataRow {
 
+    @Getter private final UUID uuid = UUID.randomUUID(); // in support of client side sorting
     @Getter private final ManagedObject rowElement;
-    @Getter private final _BindableAbstract<Boolean> selectToggle;
+    @Getter private final BooleanBindable selectToggle;
 
     public DataRow(final DataTableModel parentTable, final ManagedObject rowElement) {
         this.rowElement = rowElement;
 
-        selectToggle = _Bindables.forValue(Boolean.FALSE);
+        selectToggle = _Bindables.forBoolean(false);
         selectToggle.addListener((e,o,n)->{
             if(parentTable.isToggleAllEvent.get()) return;
             parentTable.getDataRowsSelected().invalidate();

@@ -28,27 +28,27 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import lombok.val;
 
-public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ManagedObject> {
+public final class GenericToggleboxColumn
+extends GenericColumnAbstract {
 
     private static final long serialVersionUID = 1L;
 
 
-    public ObjectAdapterToggleboxColumn(IsisAppCommonContext commonContext) {
+    public GenericToggleboxColumn(final IsisAppCommonContext commonContext) {
         this(commonContext, null);
     }
 
-    public ObjectAdapterToggleboxColumn(
-            IsisAppCommonContext commonContext,
-            OnSelectionHandler onSelectionHandler) {
+    public GenericToggleboxColumn(
+            final IsisAppCommonContext commonContext,
+            final OnSelectionHandler onSelectionHandler) {
 
         super(commonContext, "");
         this.onSelectionHandler = onSelectionHandler;
@@ -60,18 +60,18 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ManagedOb
         return onSelectionHandler;
     }
 
-    public void setOnSelectionHandler(OnSelectionHandler onSelectionHandler) {
+    public void setOnSelectionHandler(final OnSelectionHandler onSelectionHandler) {
         this.onSelectionHandler = onSelectionHandler;
     }
 
 
     @Override
-    public Component getHeader(String componentId) {
+    public Component getHeader(final String componentId) {
 
         val bulkToggle = new ContainedToggleboxPanel(componentId) {
             private static final long serialVersionUID = 1L;
             @Override
-            public void onSubmit(AjaxRequestTarget target) {
+            public void onSubmit(final AjaxRequestTarget target) {
                 val setToChecked = !this.isChecked();
 
                 for (ContainedToggleboxPanel rowToggle : rowToggles) {
@@ -94,9 +94,9 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ManagedOb
 
     @Override
     public void populateItem(
-            final Item<ICellPopulator<ManagedObject>> cellItem,
+            final Item<ICellPopulator<DataRow>> cellItem,
             final String componentId,
-            final IModel<ManagedObject> rowModel) {
+            final IModel<DataRow> rowModel) {
 
         cellItem.add(new CssClassAppender("togglebox-column"));
 
@@ -106,14 +106,16 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ManagedOb
         val rowToggle = new ContainedToggleboxPanel(componentId) {
             private static final long serialVersionUID = 1L;
             @Override
-            public void onSubmit(AjaxRequestTarget target) {
+            public void onSubmit(final AjaxRequestTarget target) {
 
-                val entityModel = (EntityModel) rowModel;
-                val selectedAdapter = entityModel.getManagedObject();
+                rowModel.getObject().getSelectToggle().toggleThenGet();
 
-                if(onSelectionHandler != null) {
-                    onSelectionHandler.onSelected(this, selectedAdapter, target);
-                }
+//                val entityModel = (EntityModel) rowModel;
+//                val selectedAdapter = entityModel.getManagedObject();
+
+//                if(onSelectionHandler != null) {
+//                    onSelectionHandler.onSelected(this, selectedAdapter, target);
+//                }
             }
         };
         rowToggles.add(rowToggle);

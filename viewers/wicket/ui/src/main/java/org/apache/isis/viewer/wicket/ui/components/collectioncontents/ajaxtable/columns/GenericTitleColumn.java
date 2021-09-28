@@ -25,7 +25,7 @@ import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.components.ComponentType;
@@ -37,14 +37,14 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import lombok.val;
 
-public class ObjectAdapterTitleColumn
-extends ColumnAbstract<ManagedObject> {
+public final class GenericTitleColumn
+extends GenericColumnAbstract {
 
     private static final long serialVersionUID = 1L;
     private final Variant variant;
     private Bookmark contextBookmark;
 
-    public ObjectAdapterTitleColumn(
+    public GenericTitleColumn(
             final IsisAppCommonContext commonContext,
             final Variant variant,
             final Bookmark contextBookmark,
@@ -57,12 +57,11 @@ extends ColumnAbstract<ManagedObject> {
 
     @Override
     public void populateItem(
-            final Item<ICellPopulator<ManagedObject>> cellItem,
+            final Item<ICellPopulator<DataRow>> cellItem,
             final String componentId,
-            final IModel<ManagedObject> rowModel) {
+            final IModel<DataRow> rowModel) {
 
-        final Component component = createComponent(componentId, rowModel);
-        cellItem.add(component);
+        cellItem.add(createComponent(componentId, rowModel));
         cellItem.add(new CssClassAppender("title-column"));
     }
 
@@ -77,8 +76,8 @@ extends ColumnAbstract<ManagedObject> {
         return (variant.isParented() ? "Related ":"") + "Object";
     }
 
-    private Component createComponent(final String id, final IModel<ManagedObject> rowModel) {
-        val adapter = rowModel.getObject();
+    private Component createComponent(final String id, final IModel<DataRow> rowModel) {
+        val adapter = rowModel.getObject().getRowElement();
 
         if(ManagedObjects.isValue(adapter)) {
             val valueModel = ValueModel.of(super.getCommonContext(), adapter);
@@ -97,7 +96,6 @@ extends ColumnAbstract<ManagedObject> {
         val componentFactory = findComponentFactory(ComponentType.ENTITY_LINK, entityModel);
         return componentFactory.createComponent(id, entityModel);
     }
-
 
 
 }

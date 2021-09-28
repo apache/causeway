@@ -18,31 +18,19 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Optional;
 
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.consent.InteractionResult;
-import org.apache.isis.core.metamodel.interactions.InteractionHead;
-import org.apache.isis.core.metamodel.interactions.InteractionUtils;
-import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
-import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.ValueModel;
+import org.apache.isis.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 
 import lombok.val;
 
@@ -50,7 +38,7 @@ import lombok.val;
  * Part of the {@link AjaxFallbackDefaultDataTable} API.
  */
 public class CollectionContentsSortableDataProvider
-extends SortableDataProvider<ManagedObject, String> {
+extends SortableDataProvider<DataRow, String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -61,12 +49,15 @@ extends SortableDataProvider<ManagedObject, String> {
     }
 
     @Override
-    public IModel<ManagedObject> model(final ManagedObject adapter) {
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
-                || ManagedObjects.isValue(adapter)) {
-            return ValueModel.of(model.getCommonContext(), adapter);
-        }
-        return EntityModel.ofAdapter(model.getCommonContext(), adapter);
+    public IModel<DataRow> model(final DataRow dataRow) {
+        return DataRowWkt.chain(model, dataRow);
+
+//
+//        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
+//                || ManagedObjects.isValue(adapter)) {
+//            return ValueModel.of(model.getCommonContext(), adapter);
+//        }
+//        return EntityModel.ofAdapter(model.getCommonContext(), adapter);
     }
 
     @Override
@@ -85,79 +76,49 @@ extends SortableDataProvider<ManagedObject, String> {
     }
 
     @Override
-    public Iterator<ManagedObject> iterator(final long first, final long count) {
+    public Iterator<DataRow> iterator(final long first, final long count) {
 
-        val visibleAdapters = model.getDataTableModel().getDataRowsFiltered()
+        val visibleRows = model.getDataTableModel().getDataRowsFiltered()
                 .getValue()
-                .map(DataRow::getRowElement)
-                .filter(ignoreHidden())
                 .toList();
 
-        // need to create a list from the iterable, then back to an iterable
-        // because guava's Ordering class doesn't support sorting of iterable -> iterable
-        final List<ManagedObject> sortedVisibleAdapters = sortedCopy(visibleAdapters, getSort());
-        final List<ManagedObject> pagedAdapters = subList(first, count, sortedVisibleAdapters);
-        return pagedAdapters.iterator();
+        final List<DataRow> sortedVisibleRows = sortedCopy(visibleRows, getSort());
+        final List<DataRow> pagedRows = subList(first, count, sortedVisibleRows);
+        return pagedRows.iterator();
     }
 
-    private static List<ManagedObject> subList(
+    private static List<DataRow> subList(
             final long first,
             final long count,
-            final List<ManagedObject> objectAdapters) {
+            final List<DataRow> dataRows) {
 
         final int fromIndex = (int) first;
         // if adapters where filter out (as invisible), then make sure don't run off the end
-        final int toIndex = Math.min((int) (first + count), objectAdapters.size());
+        final int toIndex = Math.min((int) (first + count), dataRows.size());
 
-        return objectAdapters.subList(fromIndex, toIndex);
+        return dataRows.subList(fromIndex, toIndex);
     }
 
-    private List<ManagedObject> sortedCopy(
-            final List<ManagedObject> adapters,
+    private List<DataRow> sortedCopy(
+            final List<DataRow> dataRows,
             final SortParam<String> sort) {
+        return dataRows;
 
-        val copy = _Lists.newArrayList(adapters);
-
-        final ObjectAssociation sortProperty = lookupAssociationFor(sort);
-        if(sortProperty != null) {
-            Collections.sort(copy, ManagedObjects.orderingBy(sortProperty, sort.isAscending()));
-        }
-
-        return copy;
+//FIXME no sorting yet, this is client-side
+//        val copy = _Lists.newArrayList(adapters);
+//
+//        var sortProperty = lookupPropertyFor(sort);
+//        if(sortProperty != null) {
+//            Collections.sort(copy, ManagedObjects.orderingBy(sortProperty, sort.isAscending()));
+//        }
+//
+//        return copy;
     }
 
-    private ObjectAssociation lookupAssociationFor(final SortParam<String> sort) {
-
-        if(sort == null) {
-            return null;
-        }
-
-        val elementSpec = model.getElementType();
-        val sortPropertyId = sort.getProperty();
-
-        return elementSpec.getAssociation(sortPropertyId).orElse(null); // eg invalid propertyId
+    private Optional<OneToOneAssociation> lookupPropertyFor(final SortParam<String> sort) {
+        return Optional.ofNullable(sort)
+        .map(SortParam::getProperty)
+        .flatMap(model.getElementType()::getProperty);
     }
-
-    private Predicate<ManagedObject> ignoreHidden() {
-        return new Predicate<ManagedObject>() {
-            @Override
-            public boolean test(final ManagedObject objectAdapter) {
-                final InteractionResult visibleResult =
-                        InteractionUtils.isVisibleResult(
-                                objectAdapter.getSpecification(),
-                                createVisibleInteractionContext(objectAdapter));
-                return visibleResult.isNotVetoing();
-            }
-        };
-    }
-
-    private VisibilityContext createVisibleInteractionContext(final ManagedObject objectAdapter) {
-        return new ObjectVisibilityContext(
-                InteractionHead.regular(objectAdapter),
-                objectAdapter.getSpecification().getFeatureIdentifier(),
-                InteractionInitiatedBy.USER,
-                Where.ALL_TABLES);
-    }
-
 
 }

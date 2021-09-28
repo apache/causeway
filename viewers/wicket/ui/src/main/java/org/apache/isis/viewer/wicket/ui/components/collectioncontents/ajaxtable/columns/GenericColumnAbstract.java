@@ -24,6 +24,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColu
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
@@ -41,20 +42,25 @@ import lombok.val;
  * <p>
  * Part of the implementation of {@link CollectionContentsAsAjaxTablePanel}.
  */
-public abstract class ColumnAbstract<T>
-extends AbstractColumn<T,String> {
+public abstract class GenericColumnAbstract
+extends AbstractColumn<DataRow, String>
+implements GenericColumn {
 
     private static final long serialVersionUID = 1L;
 
     private transient IsisAppCommonContext commonContext;
     private transient ComponentFactoryRegistry componentRegistry;
 
-
-    public ColumnAbstract(final IsisAppCommonContext commonContext, final String columnName) {
+    protected GenericColumnAbstract(
+            final IsisAppCommonContext commonContext,
+            final String columnName) {
         this(commonContext, Model.of(columnName), null);
     }
 
-    public ColumnAbstract(final IsisAppCommonContext commonContext, final IModel<String> columnNameModel, final String sortColumn) {
+    protected GenericColumnAbstract(
+            final IsisAppCommonContext commonContext,
+            final IModel<String> columnNameModel,
+            final String sortColumn) {
         super(columnNameModel, sortColumn);
         this.commonContext = commonContext;
     }

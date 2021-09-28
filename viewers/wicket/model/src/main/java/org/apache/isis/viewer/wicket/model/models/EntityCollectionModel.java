@@ -141,8 +141,11 @@ extends
 
     // -- TOGGLE SUPPORT / MULTI-SELECT FEATURE
 
+    @Deprecated
     Can<ObjectMemento> getToggleMementosList();
+    @Deprecated
     void clearToggleMementosList();
+    @Deprecated
     boolean toggleSelectionOn(ManagedObject selectedAdapter);
 
     // -- BASIC PROPERTIES
@@ -156,36 +159,36 @@ extends
 
     // -- PARENTED SPECIFICS
 
+    @Deprecated
     default Optional<EntityCollectionModelParented> parented() {
         return this instanceof EntityCollectionModelParented
             ? Optional.of((EntityCollectionModelParented)this)
             : Optional.empty();
     }
 
+    @Deprecated
     default Optional<Bookmark> parentedHintingBookmark() {
         return parented()
                 .map(EntityCollectionModelParented::asHintingBookmark);
     }
 
-//    default Optional<ObjectMemento> parentedObjectAdapterMemento() {
-//        return parented()
-//                .map(EntityCollectionModelParented::getParentObjectAdapterMemento);
-//    }
-
     /**
      * Optionally returns a {@link ManagedCollection}, based on whether
      * this is a parented collection.
      */
+    @Deprecated
     default Optional<ManagedCollection> parentedManagedCollection() {
         return parented()
                 .map(EntityCollectionModelParented::getManagedCollection);
     }
 
+    @Deprecated
     default Optional<ManagedObject> parentedParentObject() {
         return parentedManagedCollection()
                 .map(ManagedCollection::getOwner);
     }
 
+    @Deprecated
     default Optional<ObjectSpecification> parentedParentObjectSpecification() {
         return parentedParentObject()
                 .map(ManagedObject::getSpecification);

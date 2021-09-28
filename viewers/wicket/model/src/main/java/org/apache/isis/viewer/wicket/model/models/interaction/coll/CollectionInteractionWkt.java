@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.model.models.interaction.coll;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
@@ -132,7 +132,9 @@ implements
     @Override
     public void detach() {
         super.detach();
-        dataTableModelLazy.clear();
+        if(dataTableModelLazy!=null) {
+            dataTableModelLazy.clear();
+        }
     }
 
     // -- DATA TABLE WITH MEMOIZATION (TRANSIENT)
@@ -140,7 +142,9 @@ implements
     private transient _Lazy<Optional<DataTableModel>> dataTableModelLazy;
 
     public final DataTableModel dataTableModel() {
-        _Assert.assertTrue(this.isAttached(), "model is not attached");
+        if(!this.isAttached()) {
+            _Blackhole.consume(getObject());
+        }
         return dataTableModelLazy.get()
                 .orElseThrow(()->_Exceptions.noSuchElement(memberId));
     }

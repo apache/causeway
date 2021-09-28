@@ -35,7 +35,7 @@ import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.Link
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -118,10 +118,10 @@ implements
 
 
     // -- BulkActionsProvider
-    ObjectAdapterToggleboxColumn toggleboxColumn;
+    GenericToggleboxColumn toggleboxColumn;
 
     @Override
-    public ObjectAdapterToggleboxColumn getToggleboxColumn() {
+    public GenericToggleboxColumn getToggleboxColumn() {
 
         if(toggleboxColumn == null) {
             val entityCollectionModel = getModel();
@@ -131,7 +131,7 @@ implements
                 return null;
             }
 
-            toggleboxColumn = new ObjectAdapterToggleboxColumn(super.getCommonContext());
+            toggleboxColumn = new GenericToggleboxColumn(super.getCommonContext());
 
             val handler = new OnSelectionHandler() {
 
@@ -167,7 +167,7 @@ implements
     public void clearToggles(final AjaxRequestTarget target) {
         getModel().clearToggleMementosList();
 
-        final ObjectAdapterToggleboxColumn toggleboxColumn = getToggleboxColumn();
+        final GenericToggleboxColumn toggleboxColumn = getToggleboxColumn();
         if(toggleboxColumn != null) {
             toggleboxColumn.clearToggles();
             target.add(this);
