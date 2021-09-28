@@ -18,12 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 import lombok.NonNull;
 
@@ -33,39 +29,18 @@ extends EntityCollectionModelAbstract {
     private static final long serialVersionUID = 1L;
 
     public static EntityCollectionModelDummy forCollectionModel(
-            final @NonNull EntityCollectionModel collectionModel) {
+            final @NonNull EntityCollectionModelAbstract collectionModel) {
         return new EntityCollectionModelDummy(collectionModel);
     }
 
     protected EntityCollectionModelDummy(
-            final @NonNull EntityCollectionModel collectionModel) {
-        super(collectionModel.getCommonContext(),
-                collectionModel.getMetaModel());
-    }
-
-    @Override
-    public Variant getVariant() {
-        return Variant.STANDALONE;
+            final @NonNull EntityCollectionModelAbstract collectionModel) {
+        super(collectionModel.delegate(), Variant.STANDALONE);
     }
 
     @Override
     public int getCount() {
         return 0;
-    }
-
-    @Override
-    public String getName() {
-        return "dummy";
-    }
-
-    @Override
-    protected List<ManagedObject> load() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public OneToManyAssociation getMetaModel() {
-        throw _Exceptions.unsupportedOperation();
     }
 
     @Override

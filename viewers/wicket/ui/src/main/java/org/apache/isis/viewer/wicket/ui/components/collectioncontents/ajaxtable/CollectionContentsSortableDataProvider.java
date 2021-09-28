@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -70,7 +71,7 @@ extends SortableDataProvider<ManagedObject, String> {
 
     @Override
     public long size() {
-        return model.getObject().size();
+        return model.getCount();
     }
 
     @Override
@@ -86,10 +87,11 @@ extends SortableDataProvider<ManagedObject, String> {
     @Override
     public Iterator<ManagedObject> iterator(final long first, final long count) {
 
-        final List<ManagedObject> adapters = model.getObject();
-
-        final List<ManagedObject> visibleAdapters =
-                _Lists.filter(adapters, ignoreHidden());
+        val visibleAdapters = model.getDataTableModel().getDataRowsFiltered()
+                .getValue()
+                .map(DataRow::getRowElement)
+                .filter(ignoreHidden())
+                .toList();
 
         // need to create a list from the iterable, then back to an iterable
         // because guava's Ordering class doesn't support sorting of iterable -> iterable
@@ -130,7 +132,7 @@ extends SortableDataProvider<ManagedObject, String> {
             return null;
         }
 
-        val elementSpec = model.getTypeOfSpecification();
+        val elementSpec = model.getElementType();
         val sortPropertyId = sort.getProperty();
 
         return elementSpec.getAssociation(sortPropertyId).orElse(null); // eg invalid propertyId

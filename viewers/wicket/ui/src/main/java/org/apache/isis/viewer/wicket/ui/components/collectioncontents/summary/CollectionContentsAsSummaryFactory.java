@@ -68,7 +68,7 @@ implements CollectionContentsAsFactory {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
-        final ObjectSpecification elementSpec = entityCollectionModel.getTypeOfSpecification();
+        final ObjectSpecification elementSpec = entityCollectionModel.getElementType();
         final Stream<ObjectAssociation> associations = elementSpec.streamAssociations(MixedIn.EXCLUDED);
 
         return appliesIf(associations.anyMatch(OF_TYPE_BIGDECIMAL));

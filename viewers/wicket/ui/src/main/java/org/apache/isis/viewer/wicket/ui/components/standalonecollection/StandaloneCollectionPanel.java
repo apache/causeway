@@ -25,7 +25,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -42,7 +42,7 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public class StandaloneCollectionPanel
-extends PanelAbstract<List<ManagedObject>, EntityCollectionModel>
+extends PanelAbstract<DataTableModel, EntityCollectionModel>
 implements CollectionCountProvider, CollectionSelectorProvider {
 
     private static final long serialVersionUID = 1L;
@@ -57,7 +57,9 @@ implements CollectionCountProvider, CollectionSelectorProvider {
 
     private MarkupContainer outerDiv = this;
 
-    public StandaloneCollectionPanel(final String id, final EntityCollectionModelStandalone collectionModel) {
+    public StandaloneCollectionPanel(
+            final String id,
+            final EntityCollectionModelStandalone collectionModel) {
         super(id, collectionModel);
 
         outerDiv = new WebMarkupContainer(ID_STANDALONE_COLLECTION);
@@ -71,7 +73,7 @@ implements CollectionCountProvider, CollectionSelectorProvider {
         CssClassAppender.appendCssClassTo(outerDiv,
                 CssClassAppender.asCssStyle("isis-" + action.getDeclaringType().getLogicalTypeName().replace('.', '-') + "-" + action.getId()));
         CssClassAppender.appendCssClassTo(outerDiv,
-                CssClassAppender.asCssStyle("isis-" + collectionModel.getTypeOfSpecification().getLogicalTypeName().replace('.','-')));
+                CssClassAppender.asCssStyle("isis-" + collectionModel.getElementType().getLogicalTypeName().replace('.','-')));
 
         // selector
         final CollectionSelectorHelper selectorHelper = new CollectionSelectorHelper(collectionModel, getComponentFactoryRegistry());
@@ -109,8 +111,6 @@ implements CollectionCountProvider, CollectionSelectorProvider {
         return selectorDropdownPanel;
     }
 
-
-
     // -- CollectionCountProvider
 
     @Override
@@ -118,7 +118,5 @@ implements CollectionCountProvider, CollectionSelectorProvider {
         final EntityCollectionModel model = getModel();
         return model.getCount();
     }
-
-
 
 }

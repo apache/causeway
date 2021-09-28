@@ -18,11 +18,10 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.icons;
 
-import java.util.List;
-
 import org.apache.wicket.markup.repeater.RepeatingView;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.entity.header.EntityHeaderPanel;
@@ -35,7 +34,7 @@ import lombok.val;
  * collection of entity}s rendered using a simple list of icons.
  */
 public class CollectionContentsAsIconsPanel
-extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
+extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -48,11 +47,16 @@ extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
 
     private void buildGui() {
         final EntityCollectionModel model = getModel();
-        final List<ManagedObject> adapterList = model.getObject();
+
+        val visibleAdapters = model.getDataTableModel().getDataRowsFiltered()
+                .getValue()
+                .map(DataRow::getRowElement)
+                .toList();
+
         final RepeatingView entityInstances = new RepeatingView(ID_ENTITY_INSTANCE);
 
         add(entityInstances);
-        for (val adapter : adapterList) {
+        for (val adapter : visibleAdapters) {
             final String childId = entityInstances.newChildId();
             final EntityModel entityModel = EntityModel.ofAdapter(super.getCommonContext(), adapter);
             final EntityHeaderPanel entitySummaryPanel = new EntityHeaderPanel(childId, entityModel);

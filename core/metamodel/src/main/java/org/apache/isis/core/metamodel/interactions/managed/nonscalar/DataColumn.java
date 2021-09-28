@@ -27,12 +27,12 @@ import lombok.NonNull;
 
 public class DataColumn {
 
-    //private final OneToOneAssociation propertyMetaModel;
+    @Getter private final @NonNull OneToOneAssociation propertyMetaModel;
     @Getter private final @NonNull LazyObservable<String> columnFriendlyName;
     @Getter private final @NonNull LazyObservable<String> columnDescription;
 
     public DataColumn(final DataTableModel parentTable, final OneToOneAssociation propertyMetaModel) {
-        //this.propertyMetaModel = propertyMetaModel;
+        this.propertyMetaModel = propertyMetaModel;
 
         columnFriendlyName = _Observables.forFactory(()->
             propertyMetaModel.getCanonicalFriendlyName());

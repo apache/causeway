@@ -18,14 +18,13 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collection;
 
-import java.util.List;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.basic.Label;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.common.model.components.ComponentType;
@@ -41,15 +40,16 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import lombok.val;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
  * Panel for rendering entity collection; analogous to (any concrete subclass
  * of) {@link ScalarPanelAbstract}.
  */
 public class CollectionPanel
-extends PanelAbstract<List<ManagedObject>, EntityCollectionModelParented>
+extends PanelAbstract<DataTableModel, EntityCollectionModelParented>
 implements
     CollectionSelectorProvider,
     ToggledMementosProvider,
@@ -112,7 +112,7 @@ implements
     public CollectionSelectorPanel getSelectorDropdownPanel() {
         return selectorDropdownPanel;
     }
-    public void setSelectorDropdownPanel(CollectionSelectorPanel selectorDropdownPanel) {
+    public void setSelectorDropdownPanel(final CollectionSelectorPanel selectorDropdownPanel) {
         this.selectorDropdownPanel = selectorDropdownPanel;
     }
 

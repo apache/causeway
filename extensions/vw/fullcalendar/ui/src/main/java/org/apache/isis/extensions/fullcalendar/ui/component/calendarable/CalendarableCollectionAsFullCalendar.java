@@ -18,7 +18,6 @@
  */
 package org.apache.isis.extensions.fullcalendar.ui.component.calendarable;
 
-import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -47,7 +46,7 @@ extends CalendaredCollectionAbstract {
     }
 
     @Override
-    protected Set<String> getCalendarNames(final Collection<ManagedObject> entityList) {
+    protected Set<String> getCalendarNames(final Iterable<ManagedObject> entityList) {
         return _NullSafe.stream(entityList)
                 .map(CalendarableEventProvider.GET_CALENDAR_NAMES)
                 .flatMap(_NullSafe::stream)

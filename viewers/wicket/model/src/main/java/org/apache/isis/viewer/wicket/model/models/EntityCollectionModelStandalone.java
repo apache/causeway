@@ -18,14 +18,9 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.util.List;
-
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.viewer.wicket.model.models.interaction.coll.CollectionInteractionWkt;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -49,66 +44,43 @@ extends EntityCollectionModelAbstract {
         // take a copy of the actionModel,
         // because the original can get mutated (specifically: its arguments cleared)
         return new EntityCollectionModelStandalone(
-                actionModel.copy(), collectionAsAdapter);
+                actionModel.copy(), //TODO deprecate the copy()
+                collectionAsAdapter);
     }
 
     // -- CONSTRUCTOR
 
-    protected EntityCollectionModelStandalone(
+    private EntityCollectionModelStandalone(
             final @NonNull ActionModel actionModel,
             final @NonNull ManagedObject collectionAsAdapter) {
-        super(
-                actionModel.getCommonContext(),
-                actionModel.getMetaModel());
+        super(CollectionInteractionWkt
+                .bind(actionModel, Where.NOT_SPECIFIED),
+                Variant.PARENTED);
         this.actionModel = actionModel;
-        this.mementoList = _NullSafe.streamAutodetect(collectionAsAdapter.getPojo()) // pojos
-                .filter(_NullSafe::isPresent)
-                .map(actionModel.getMementoService()::mementoForPojo)
-                .collect(Can.toCan());
+//        this.mementoList = _NullSafe.streamAutodetect(collectionAsAdapter.getPojo()) // pojos
+//                .filter(_NullSafe::isPresent)
+//                .map(actionModel.getMementoService()::mementoForPojo)
+//                .collect(Can.toCan());
 
-    }
-
-    // -- VARIANT SUPPORT
-
-    @Override
-    public Variant getVariant() {
-        return Variant.STANDALONE;
     }
 
     // --
 
-    private Can<ObjectMemento> mementoList;
+//    private Can<ObjectMemento> mementoList;
+//
+//    @Override
+//    protected List<ManagedObject> load() {
+//        return mementoList.stream()
+//        .map(getCommonContext()::reconstructObject)
+//        .sorted(super.getElementComparator())
+//        .collect(Can.toCan())
+//        .toList();
+//    }
 
-    @Override
-    protected List<ManagedObject> load() {
-        return mementoList.stream()
-        .map(getCommonContext()::reconstructObject)
-        .sorted(super.getElementComparator())
-        .collect(Can.toCan())
-        .toList();
-    }
-
-    @Override
-    public int getCount() {
-        return mementoList.size();
-    }
-
-    @Override
-    public String getName() {
-
-        return getTypeOfSpecification()
-            .lookupFacet(MemberNamedFacet.class)
-            .map(MemberNamedFacet::getSpecialization)
-            .map(specialization->specialization
-                    .fold(namedFacet->namedFacet.translated(),
-                          namedFacet->namedFacet.textElseNull(actionModel.getOwner())))
-            .orElse(getIdentifier().getMemberLogicalName());
-    }
-
-    @Override
-    public ObjectMember getMetaModel() {
-        return actionModel.getMetaModel();
-    }
+//    @Override
+//    public int getCount() {
+//        return mementoList.size();
+//    }
 
     @Override
     public ManagedObject getParentObject() {

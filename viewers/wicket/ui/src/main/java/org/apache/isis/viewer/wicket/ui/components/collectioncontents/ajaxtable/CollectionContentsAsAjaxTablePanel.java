@@ -27,6 +27,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -45,7 +46,7 @@ import lombok.val;
  * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
  */
 public class CollectionContentsAsAjaxTablePanel
-extends PanelAbstract<List<ManagedObject>, EntityCollectionModel>
+extends PanelAbstract<DataTableModel, EntityCollectionModel>
 implements CollectionCountProvider {
 
     private static final long serialVersionUID = 1L;
@@ -130,7 +131,7 @@ implements CollectionCountProvider {
     private void addPropertyColumnsIfRequired(final List<IColumn<ManagedObject, String>> columns) {
 
         val collectionModel = getModel();
-        val elementTypeSpec = collectionModel.getTypeOfSpecification();
+        val elementTypeSpec = collectionModel.getElementType();
         if(elementTypeSpec == null) {
             return;
         }

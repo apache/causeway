@@ -26,8 +26,10 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.common.model.HasParentUiModel;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 import org.apache.isis.viewer.wicket.model.models.interaction.ObjectUiModelWkt;
@@ -53,6 +55,8 @@ implements
 
     private static final long serialVersionUID = 1L;
 
+    // -- FACTORIES
+
     /**
      * Returns a new <i>Collection Interaction</i> binding to the parent {@link BookmarkedObjectWkt}.
      */
@@ -62,6 +66,31 @@ implements
             final Where where) {
         return new CollectionInteractionWkt(bookmarkedObject, memberId, where);
     }
+
+    /**
+     * Returns a new <i>Collection Interaction</i> binding to the parent {@link BookmarkedObjectWkt}.
+     */
+    public static CollectionInteractionWkt bind(
+            final BookmarkedObjectWkt bookmarkedObject,
+            final OneToManyAssociation coll,
+            final Where where) {
+        return new CollectionInteractionWkt(bookmarkedObject, coll.getId(), where);
+    }
+
+    /**
+     * Returns a new <i>Collection Interaction</i> binding to the parent {@link BookmarkedObjectWkt}
+     * of given {@link ActionModel}.
+     */
+    public static CollectionInteractionWkt bind(
+            final ActionModel actionModel,
+            final Where where) {
+        return new CollectionInteractionWkt(
+                actionModel.getParentUiModel().bookmarkedObjectModel(),
+                actionModel.getMetaModel().getId(),
+                where);
+    }
+
+    // -- CONSTRUCTION
 
     private final String memberId;
     private final Where where;
@@ -78,6 +107,10 @@ implements
 
     public final CollectionInteraction collectionInteraction() {
         return getObject();
+    }
+
+    public OneToManyAssociation getMetaModel() {
+        return collectionInteraction().getManagedCollection().get().getCollection();
     }
 
     @Override
@@ -106,11 +139,10 @@ implements
 
     private transient _Lazy<Optional<DataTableModel>> dataTableModelLazy;
 
-    public final DataTableModel dataTableModelModel() {
+    public final DataTableModel dataTableModel() {
         _Assert.assertTrue(this.isAttached(), "model is not attached");
         return dataTableModelLazy.get()
                 .orElseThrow(()->_Exceptions.noSuchElement(memberId));
     }
-
 
 }

@@ -44,6 +44,7 @@ public class DataTableModel {
     @Getter private final _BindableAbstract<Boolean> selectAllToggle;
 
     @Getter private final @NonNull LazyObservable<Can<DataColumn>> dataColumns;
+    @Getter private final @NonNull LazyObservable<String> title;
 
 
     public DataTableModel(final ManagedCollection managedCollection) {
@@ -91,6 +92,17 @@ public class DataTableModel {
             .map(property->new DataColumn(this, property))
             .collect(Can.toCan()));
 
+        title = _Observables.forFactory(()->"Collection");
+
+
+//      return getTypeOfSpecification()
+//              .lookupFacet(MemberNamedFacet.class)
+//              .map(MemberNamedFacet::getSpecialization)
+//              .map(specialization->specialization
+//                      .fold(namedFacet->namedFacet.translated(),
+//                            namedFacet->namedFacet.textElseNull(actionModel.getOwner())))
+//              .orElse(getIdentifier().getMemberLogicalName());
+
     }
 
     final AtomicBoolean isToggleAllEvent = new AtomicBoolean();
@@ -103,6 +115,7 @@ public class DataTableModel {
             isClearToggleAllEvent.set(false);
         }
     }
+
 
 
 }

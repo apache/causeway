@@ -48,7 +48,7 @@ public abstract class CalendaredCollectionFactoryAbstract extends ComponentFacto
         }
         final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
 
-        final ObjectSpecification elementSpec = entityCollectionModel.getTypeOfSpecification();
+        final ObjectSpecification elementSpec = entityCollectionModel.getElementType();
         final Class<?> correspondingClass = elementSpec.getCorrespondingClass();
 
         return appliesIf(cls.isAssignableFrom(correspondingClass));

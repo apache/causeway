@@ -42,4 +42,8 @@ public class DataRow {
 
     }
 
+    public ManagedObject getCellElement(final DataColumn column) {
+        return column.getPropertyMetaModel().get(rowElement);
+    }
+
 }

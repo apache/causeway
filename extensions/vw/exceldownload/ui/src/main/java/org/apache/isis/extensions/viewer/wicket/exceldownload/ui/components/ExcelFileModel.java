@@ -28,8 +28,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -40,10 +38,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.wicket.model.LoadableDetachableModel;
 
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 
 import lombok.val;
@@ -54,7 +50,11 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
 
     private final EntityCollectionModel model;
 
-    public ExcelFileModel(final EntityCollectionModel model) {
+    public static ExcelFileModel of(final EntityCollectionModel model) {
+        return new ExcelFileModel(model);
+    }
+
+    private ExcelFileModel(final EntityCollectionModel model) {
         this.model = model;
     }
 
@@ -71,6 +71,10 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         }
     }
 
+    private DataTableModel table() {
+        return model.getDataTableModel();
+    }
+
     @Override
     protected File load() {
 
@@ -82,47 +86,38 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         }
     }
 
-    private Can<OneToOneAssociation> columnProperties() {
-        val typeOfSpec = model.getTypeOfSpecification();
-        final Optional<ManagedObject> parentObject = model.parentedParentObject();
-        val memberIdentifier = model.getIdentifier();
-        return typeOfSpec
-                .streamPropertiesForColumnRendering(memberIdentifier, parentObject)
-                .collect(Can.toCan());
-    }
-
     private File createFile() throws IOException, FileNotFoundException {
         try(final Workbook wb = new XSSFWorkbook()) {
-            String sheetName = model.getName();
+            String sheetName = table().getTitle().getValue();
             if(sheetName==null||sheetName.length()==0) sheetName = "Collection";
             val tempFile = File.createTempFile(ExcelFileModel.class.getCanonicalName(), sheetName + ".xlsx");
 
             try(val fos = new FileOutputStream(tempFile)) {
                 val sheet = wb.createSheet(sheetName);
 
-                val columnProperties = columnProperties();
-
                 final ExcelFileModel.RowFactory rowFactory = new RowFactory(sheet);
                 Row row = rowFactory.newRow();
 
-                // header row
+                val dataColumns = table().getDataColumns().getValue();
 
+                // header row
                 int i=0;
-                for (ObjectAssociation property : columnProperties) {
+                for(val column : dataColumns) {
                     final Cell cell = row.createCell((short) i++);
-                    cell.setCellValue(property.getCanonicalFriendlyName());
+                    cell.setCellValue(column.getColumnFriendlyName().getValue());
                 }
 
                 final CellStyle dateCellStyle = createDateFormatCellStyle(wb);
 
+                val dataRows = table().getDataRowsFiltered().getValue();
+
                 // detail rows
-                final List<ManagedObject> adapters = model.getObject();
-                for (val objectAdapter : adapters) {
+                for (val dataRow : dataRows) {
                     row = rowFactory.newRow();
                     i=0;
-                    for (final ObjectAssociation property : columnProperties) {
+                    for(val column : dataColumns) {
                         final Cell cell = row.createCell((short) i++);
-                        setCellValue(objectAdapter, property, cell, dateCellStyle);
+                        setCellValue(dataRow.getCellElement(column), cell, dateCellStyle);
                     }
                 }
 
@@ -151,13 +146,11 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
     }
 
     private void setCellValue(
-            final ManagedObject objectAdapter,
-            final ObjectAssociation property,
+            final ManagedObject cellValue,
             final Cell cell,
             final CellStyle dateCellStyle) {
 
-        val valueAdapter = property.get(objectAdapter);
-        val valueAsObj = valueAdapter!=null ? valueAdapter.getPojo() : null;
+        val valueAsObj = cellValue!=null ? cellValue.getPojo() : null;
 
         // null
         if(valueAsObj == null) {
@@ -239,7 +232,7 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
             return;
         }
 
-        final String objectAsStr = valueAdapter.titleString();
+        final String objectAsStr = cellValue.titleString();
         cell.setCellValue(objectAsStr);
         return;
     }

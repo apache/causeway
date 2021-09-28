@@ -30,7 +30,6 @@ import org.joda.time.DateTime;
 import org.joda.time.Interval;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -60,11 +59,13 @@ public abstract class EventProviderAbstract implements EventProvider {
 
     private void createEvents(final EntityCollectionModel model, final String calendarName) {
         val commonContext = model.getCommonContext();
-
-        _NullSafe.stream(model.getObject()) // entityList
-        .map(newEvent(commonContext, calendarName))
-        .filter(NOT_NULL)
-        .forEach(event->eventById.put(event.getId(), event));
+        model.parentedManagedCollection()
+        .ifPresent(managedColl->{
+            managedColl.streamElements() // entityList
+            .map(newEvent(commonContext, calendarName))
+            .filter(NOT_NULL)
+            .forEach(event->eventById.put(event.getId(), event));
+        });
     }
 
     private Object dereference(final IsisAppCommonContext commonContext, final Object domainObject) {

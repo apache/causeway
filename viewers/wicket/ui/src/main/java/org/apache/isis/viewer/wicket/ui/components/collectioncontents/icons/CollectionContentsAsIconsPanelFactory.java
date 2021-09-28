@@ -49,7 +49,7 @@ public class CollectionContentsAsIconsPanelFactory extends ComponentFactoryAbstr
         }
 
         final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
-        final ObjectSpecification typeOfSpec = entityCollectionModel.getTypeOfSpecification();
+        final ObjectSpecification typeOfSpec = entityCollectionModel.getElementType();
         if (typeOfSpec.getFacet(IconFacet.class) == null) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }

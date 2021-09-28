@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.apache.wicket.Component;
@@ -27,18 +26,16 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.compare._Comparators;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.memento.CollectionMemento;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.isis.viewer.wicket.model.models.interaction.coll.CollectionInteractionWkt;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -54,10 +51,6 @@ implements
     // TODO parent object model, maybe should not be exposed
     // maybe could be resolved in the process of decoupling the ActionModel from Wicket
     @Getter private final @NonNull EntityModel entityModel;
-
-    @Getter(onMethod_ = {@Override}) private int count;
-
-    private final @NonNull CollectionMemento collectionMetaModelMemento;
 
     // -- FACTORIES
 
@@ -80,25 +73,17 @@ implements
     // -- CONSTRUCTOR
 
     protected EntityCollectionModelParented(
-            final @NonNull OneToManyAssociation collectionMetaModel,
-            final @NonNull EntityModel parentObjectModel) {
-        super(
-                parentObjectModel.getCommonContext(),
-                collectionMetaModel);
-        this.collectionMetaModelMemento = collectionMetaModel.getMemento();
+            final @NonNull OneToManyAssociation coll,
+            final @NonNull EntityModel parentObjectModel) { //TODO replace with BookmarkedObjectWkt
+        super(CollectionInteractionWkt
+                .bind(parentObjectModel.bookmarkedObjectModel(), coll, Where.NOT_SPECIFIED),
+                Variant.PARENTED);
         this.entityModel = parentObjectModel;
-    }
-
-    // -- VARIANT SUPPORT
-
-    @Override
-    public Variant getVariant() {
-        return Variant.PARENTED;
     }
 
     // -- METAMODEL
 
-    @Override
+    @Override @Deprecated // should be made available in the DataTableModel
     public Can<ObjectAction> getAssociatedActions() {
         val managedCollection = getManagedCollection();
         final OneToManyAssociation collection = managedCollection.getCollection();
@@ -110,7 +95,7 @@ implements
         return associatedActions;
     }
 
-    @Override
+    @Override @Deprecated // should be made available in the DataTableModel
     public Can<ObjectAction> getActionsWithChoicesFrom() {
         val managedCollection = getManagedCollection();
         final OneToManyAssociation collection = managedCollection.getCollection();
@@ -139,31 +124,23 @@ implements
         getEntityModel().clearHint(component, attributeName);
     }
 
-    @Override
-    protected List<ManagedObject> load() {
+//    @Override
+//    protected List<ManagedObject> load() {
+//
+//        final ManagedObject collectionAsAdapter = getManagedCollection().getCollectionValue();
+//
+//FIXME DataTableModel has no sorting yet
+//        val elements = _NullSafe.streamAutodetect(collectionAsAdapter.getPojo())
+//        .filter(_NullSafe::isPresent) // pojos
+//        .map(getObjectManager()::adapt)
+//        .sorted(super.getElementComparator())
+//        .collect(Can.toCan());
+//
+//        this.count = elements.size();
+//
+//        return elements.toList();
+//    }
 
-        final ManagedObject collectionAsAdapter = getManagedCollection().getCollectionValue();
-
-        val elements = _NullSafe.streamAutodetect(collectionAsAdapter.getPojo())
-        .filter(_NullSafe::isPresent) // pojos
-        .map(getObjectManager()::adapt)
-        .sorted(super.getElementComparator())
-        .collect(Can.toCan());
-
-        this.count = elements.size();
-
-        return elements.toList();
-    }
-
-    @Override
-    public String getName() {
-        return getIdentifier().getMemberLogicalName();
-    }
-
-    @Override
-    public OneToManyAssociation getMetaModel() {
-        return collectionMetaModelMemento.getCollection(this::getSpecificationLoader);
-    }
 
     public ManagedCollection getManagedCollection() {
         return ManagedCollection
@@ -178,10 +155,6 @@ implements
         return entityModel.getOwnerBookmark();
     }
 
-//    public ObjectMemento getParentObjectAdapterMemento() {
-//        return entityModel.memento();
-//    }
-
     @Override
     public ManagedObject getParentObject() {
         return getManagedCollection().getOwner();
@@ -189,6 +162,7 @@ implements
 
     // -- ACTION ORDER
 
+    @Deprecated // should be obsolete as already done in the DataTableModel
     private int deweyOrderCompare(final ObjectAction a, final ObjectAction b) {
         val seqA = a.lookupFacet(LayoutOrderFacet.class)
             .map(LayoutOrderFacet::getSequence)

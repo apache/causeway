@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.apache.wicket.model.IModel;
@@ -27,11 +26,12 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 
@@ -41,7 +41,7 @@ import lombok.RequiredArgsConstructor;
 
 public interface EntityCollectionModel
 extends
-    IModel<List<ManagedObject>>,
+    IModel<DataTableModel>,
     HasCommonContext,
     LinksProvider {
 
@@ -103,11 +103,18 @@ extends
     default boolean isStandalone() { return getVariant().isStandalone(); }
     default boolean isParented() { return getVariant().isParented(); }
 
+    // -- DATA TABLE
+
+    DataTableModel getDataTableModel();
+
     // -- METAMODEL SUPPORT
 
-    ObjectSpecification getTypeOfSpecification();
-    ObjectMember getMetaModel();
     ManagedObject getParentObject();
+    OneToManyAssociation getMetaModel();
+
+    default ObjectSpecification getElementType() {
+        return getMetaModel().getElementType();
+    }
 
     /**
      * Returns all actions that are associated with this collection,
@@ -140,8 +147,11 @@ extends
 
     // -- BASIC PROPERTIES
 
+    @Deprecated // move to DataTableModel
     int getCount();
+    @Deprecated // move to DataTableModel
     String getName();
+    @Deprecated // move to DataTableModel
     int getPageSize();
 
     // -- PARENTED SPECIFICS
@@ -180,5 +190,7 @@ extends
         return parentedParentObject()
                 .map(ManagedObject::getSpecification);
     }
+
+
 
 }

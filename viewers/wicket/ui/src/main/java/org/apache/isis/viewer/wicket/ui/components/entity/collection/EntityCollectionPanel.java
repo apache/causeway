@@ -112,7 +112,7 @@ implements HasDynamicallyVisibleContent {
         val collectionMetaModel = collectionModel.getMetaModel();
 
         CssClassAppender.appendCssClassTo(div, collectionModel.getIdentifier().getMemberLogicalName());
-        CssClassAppender.appendCssClassTo(div, collectionModel.getTypeOfSpecification().getFullIdentifier().replace('.','-'));
+        CssClassAppender.appendCssClassTo(div, collectionModel.getElementType().getFullIdentifier().replace('.','-'));
 
         val objectAdapter = getModel().getObject();
         final Consent visibility = collectionMetaModel

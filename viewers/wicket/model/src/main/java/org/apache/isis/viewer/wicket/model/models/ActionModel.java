@@ -64,7 +64,7 @@ import lombok.NonNull;
 import lombok.val;
 
 /**
- * Represents an action of an entity.
+ * Represents an action (a member) of an entity.
  *
  * @implSpec
  * <pre>
@@ -156,6 +156,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         return (EntityModel) super.getTarget();
     }
 
+    @Deprecated //no longer needed
     public ActionModel copy() {
         return wrap(getParentUiModel(), delegate);
     }

@@ -35,7 +35,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
@@ -52,7 +52,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
  * {@link org.apache.isis.viewer.wicket.model.models.EntityCollectionModel}.
  */
 public class CollectionSelectorPanel
-extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
+extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -132,13 +132,13 @@ extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
                 private static final long serialVersionUID = 1L;
 
                 @Override
-                protected void populateItem(ListItem<ComponentFactory> item) {
+                protected void populateItem(final ListItem<ComponentFactory> item) {
 
                     final ComponentFactory componentFactory = item.getModelObject();
                     final AbstractLink link = new AjaxLink<Void>(ID_VIEW_LINK) {
                         private static final long serialVersionUID = 1L;
                         @Override
-                        public void onClick(AjaxRequestTarget target) {
+                        public void onClick(final AjaxRequestTarget target) {
                             CollectionSelectorPanel linksSelectorPanel = CollectionSelectorPanel.this;
                             linksSelectorPanel.setViewHintAndBroadcast(componentFactory.getName(), target);
 
@@ -153,7 +153,7 @@ extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
                         }
 
                         @Override
-                        protected void onComponentTag(ComponentTag tag) {
+                        protected void onComponentTag(final ComponentTag tag) {
                             super.onComponentTag(tag);
                             Buttons.fixDisabledState(this, tag);
                         }
@@ -180,7 +180,7 @@ extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
                     item.add(link);
                 }
 
-                private IModel<String> cssClassFor(final ComponentFactory componentFactory, Label viewIcon) {
+                private IModel<String> cssClassFor(final ComponentFactory componentFactory, final Label viewIcon) {
                     IModel<String> cssClass = null;
                     if (componentFactory instanceof CollectionContentsAsFactory) {
                         CollectionContentsAsFactory collectionContentsAsFactory = (CollectionContentsAsFactory) componentFactory;
@@ -218,7 +218,7 @@ extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
     }
 
 
-    protected void setViewHintAndBroadcast(String viewName, AjaxRequestTarget target) {
+    protected void setViewHintAndBroadcast(final String viewName, final AjaxRequestTarget target) {
         final CollectionSelectorPanel component = CollectionSelectorPanel.this;
         final IsisSelectorEvent selectorEvent =
                 new IsisSelectorEvent(component, CollectionSelectorHelper.UIHINT_EVENT_VIEW_KEY, viewName, target);
