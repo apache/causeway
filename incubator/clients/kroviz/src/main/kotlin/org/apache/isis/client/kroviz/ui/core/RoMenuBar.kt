@@ -20,6 +20,7 @@ package org.apache.isis.client.kroviz.ui.core
 
 import io.kvision.core.CssSize
 import io.kvision.core.UNIT
+import io.kvision.core.style
 import io.kvision.dropdown.DropDown
 import io.kvision.html.Button
 import io.kvision.html.ButtonStyle
@@ -58,11 +59,12 @@ object RoMenuBar : SimplePanel() {
 
     private fun buildMenuEntry(label: String, iconName: String, action: dynamic): Link {
         val icon = IconManager.find(iconName)
-        return Link(label, icon).onClick { e ->
+        val link = Link(label, icon = icon, className = "dropdown-item").onClick { e ->
             val at = Point(e.pageX.toInt(), e.pageY.toInt())
             UiManager.position = at
-            action
+            action()
         }
+        return link
     }
 
     private fun buildMainMenu(): DropDown {
@@ -116,6 +118,7 @@ object RoMenuBar : SimplePanel() {
 
         console.log("[RMB.buildMainMenu]")
         console.log(mainMenu)
+        console.log(mainMenu.getChildren())
         return mainMenu
     }
 

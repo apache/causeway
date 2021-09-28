@@ -19,18 +19,10 @@
 package org.apache.isis.client.kroviz
 
 import io.kvision.*
-import org.apache.isis.client.kroviz.ui.core.RoApp
 import io.kvision.pace.Pace
-import io.kvision.panel.ContainerType
 import io.kvision.panel.VPanel
 import io.kvision.panel.root
-import io.kvision.panel.vPanel
-import io.kvision.utils.px
-import kotlinx.browser.window
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.asCoroutineDispatcher
-
-val AppScope = CoroutineScope(window.asCoroutineDispatcher())
+import org.apache.isis.client.kroviz.ui.core.RoApp
 
 class App : Application() {
 
@@ -40,7 +32,7 @@ class App : Application() {
     }
 
     override fun start() {
-        val r = root("kroviz")
+        val r = root("kroviz", addRow = true)
         val v = VPanel()
         v.add(RoApp)
         r.add(v)
@@ -61,10 +53,12 @@ fun main() {
         BootstrapSelectModule,
         BootstrapDatetimeModule,
         BootstrapSpinnerModule,
-//        BootstrapTypeaheadModule,
+        BootstrapTypeaheadModule,
         BootstrapUploadModule,
         RichTextModule,
         ChartModule,
         TabulatorModule,
-        CoreModule)
+        CoreModule,
+        panelsCompatibilityMode = true,
+    )
 }

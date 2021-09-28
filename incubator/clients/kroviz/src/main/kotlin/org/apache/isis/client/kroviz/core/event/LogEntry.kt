@@ -226,7 +226,7 @@ data class LogEntry(
     }
 
     fun getAggregator(): BaseAggregator {
-        //FIXME the last aggt is not always the right one
+        //TODO the last aggt is not always the right one
         // callers need to filter  !!!
         return aggregators.last()
     }

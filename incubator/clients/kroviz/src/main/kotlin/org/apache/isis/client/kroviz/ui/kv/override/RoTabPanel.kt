@@ -68,6 +68,7 @@ enum class SideTabSize {
  * @param init an initializer extension function
  */
 @Suppress("LeakingThis")
+@Deprecated("remove when icon menu works with TabPanel")
 open class RoTabPanel(
     protected val tabPosition: TabPosition = TabPosition.TOP,
     protected val sideTabSize: SideTabSize = SideTabSize.SIZE_3,

@@ -37,7 +37,6 @@ import org.apache.isis.client.kroviz.utils.IconManager
 object RoStatusBar {
     val navbar = Navbar(type = NavbarType.FIXEDBOTTOM)
 
-    //FIXME    navbar.addCssClasses("status-bar")
     private val nav = Nav(rightAlign = true)
     private val userBtn: Button = buildButton("", "Me", ButtonStyle.OUTLINEWARNING)
     private val classDiagram = buildButton("", "Diagram", ButtonStyle.OUTLINEWARNING)
@@ -56,6 +55,7 @@ object RoStatusBar {
     }
 
     init {
+        navbar.addCssClass("status-bar")
         navbar.add(nav)
 //        nav.add(isisButton())
 //        nav.add(kvisionButton())

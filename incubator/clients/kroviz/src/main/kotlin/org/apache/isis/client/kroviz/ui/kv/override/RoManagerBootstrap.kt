@@ -28,10 +28,11 @@ internal val roManagerBootstrapInit = RoManagerBootstrap.init()
 /**
  * Internal singleton object which initializes and configures KVision Bootstrap module.
  */
+@Deprecated("remove when transparency works with Window")
 internal object RoManagerBootstrap {
     init {
-        io.kvision.require("bootstrap/dist/js/bootstrap.bundle.min.js")
-        io.kvision.require("awesome-bootstrap-checkbox")
+//        io.kvision.require("bootstrap/dist/js/bootstrap.bundle.min.js")
+//        io.kvision.require("awesome-bootstrap-checkbox")
     }
 
     private val elementResizeEvent = io.kvision.require("element-resize-event")

@@ -25,7 +25,6 @@ import io.kvision.panel.VPanel
 import io.kvision.panel.vPanel
 import org.w3c.files.FileReader
 
-@Deprecated("Useful as Sample")
 object ImageSample : VPanel() {
 
     init {

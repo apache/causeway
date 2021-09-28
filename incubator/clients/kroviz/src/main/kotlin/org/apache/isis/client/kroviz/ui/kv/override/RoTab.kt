@@ -49,6 +49,7 @@ import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
  * @param route JavaScript route to activate given tab
  * @param init an initializer extension function
  */
+@Deprecated("remove when icon menu works with Tab and SVG can be recreated")
 open class RoTab(
     label: String? = null, icon: String? = null,
     image: ResString? = null, closable: Boolean = false, val route: String? = null,

@@ -57,6 +57,7 @@ internal const val WINDOW_CONTENT_MARGIN_BOTTOM = 11
  * @param init an initializer extension function
  */
 @Suppress("TooManyFunctions")
+@Deprecated("use Window, when transparency and icon menu work")
 open class RoWindow(
         caption: String? = null,
         contentWidth: CssSize? = CssSize(0, UNIT.auto),
@@ -67,12 +68,14 @@ open class RoWindow(
         maximizeButton: Boolean = true,
         minimizeButton: Boolean = true,
         icon: String? = null,
-        classes: Set<String> = setOf(),
         menu: List<KvisionHtmlLink>? = null,
         init: (RoWindow.() -> Unit)? = null
 ) :
     SimplePanel() {
-//FIXME class +" modal-content kv-window"
+
+    init {
+        this.addCssClass("modal-content kv-window")
+    }
     /**
      * Window caption text.
      */

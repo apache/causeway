@@ -22,7 +22,6 @@ import io.kvision.core.Component
 import io.kvision.dropdown.DropDown
 import io.kvision.dropdown.separator
 import io.kvision.html.ButtonStyle
-import io.kvision.utils.set
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.to.Link
@@ -66,7 +65,7 @@ object MenuFactory {
         menu: Menu,
         style: ButtonStyle = ButtonStyle.LIGHT,
         withText: Boolean = true,
-        className: String = ""
+        className: String? = null
     )
             : DropDown {
         val menuTitle = menu.named
@@ -145,7 +144,7 @@ object MenuFactory {
         val actionLink: KvisionHtmlLink = ddLink(
             label = actionTitle,
             icon = IconManager.find(label),
-            classes = IconManager.findStyleFor(label)
+            className = IconManager.findStyleFor(label)
         )
         val id = "$menuTitle${Constants.actionSeparator}$actionTitle"
         actionLink.setDragDropData(Constants.stdMimeType, id)
@@ -156,7 +155,7 @@ object MenuFactory {
     private fun ddLink(
         label: String,
         icon: String? = null,
-        classes: Set<String>? = null,
+        className: String? = null,
         init: (KvisionHtmlLink.() -> Unit)? = null
     ): KvisionHtmlLink {
         val link = KvisionHtmlLink(
@@ -165,7 +164,8 @@ object MenuFactory {
             icon = icon,
             image = null,
             separator = null,
-            labelFirst = true
+            labelFirst = true,
+            className = className
         )
         link.addCssClass("dropdown-item")
         return link.apply {

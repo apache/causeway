@@ -113,12 +113,12 @@ object IconManager {
         return DEFAULT_ICON
     }
 
-    fun findStyleFor(actionName: String): Set<String> {
+    fun findStyleFor(actionName: String): String {
         return when (actionName) {
-            "delete" -> setOf(DANGER)
-            "undo" -> setOf(WARN)
-            "save" -> setOf(OK)
-            else -> setOf(NORMAL)
+            "delete" -> DANGER
+            "undo" -> WARN
+            "save" -> OK
+            else -> NORMAL
         }
     }
 

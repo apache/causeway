@@ -78,11 +78,12 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
         dataUpdateOnEdit: Boolean = true,
         options: TabulatorOptions<T> = TabulatorOptions(),
         types: Set<TableType> = setOf(),
-        className: String = "",
+        className: String? = null,
         init: (Tabulator<T>.() -> Unit)? = null
     ): Tabulator<T> {
         val tabulator = create(data, dataUpdateOnEdit, options, types)
-        tabulator.addCssClass(className)
+        if (className != null)
+            tabulator.addCssClass(className)
         init?.invoke(tabulator)
         this.add(tabulator)
         return tabulator
@@ -93,11 +94,12 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
         dataUpdateOnEdit: Boolean = true,
         options: TabulatorOptions<T> = TabulatorOptions(),
         types: Set<TableType> = setOf(),
-        className: String = "",
+        className: String? = null,
         init: (Tabulator<T>.() -> Unit)? = null
     ): Tabulator<T> {
         val tabulator = Tabulator(data, dataUpdateOnEdit, options, types)
-        tabulator.addCssClass(className)
+        if (className != null)
+            tabulator.addCssClass(className)
         init?.invoke(tabulator)
         return tabulator
     }
