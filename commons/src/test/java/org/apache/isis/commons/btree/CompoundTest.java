@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.struct;
+package org.apache.isis.commons.btree;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -34,11 +34,11 @@ import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.val;
 
-class StructTest {
+class CompoundTest {
 
     @Test
-    void pseudoStruct() {
-        val comp = Struct.of("a");
+    void pseudoCompound() {
+        val comp = Compound.of("a");
 
         assertEquals(List.of("a"), comp.flatten());
         assertEquals(1, comp.size());
@@ -46,39 +46,39 @@ class StructTest {
 
     @Test
     void constructingElements() {
-        val comp = Struct.of("a", "b");
+        val comp = Compound.of("a", "b");
 
         assertEquals(List.of("a", "b"), comp.flatten());
         assertEquals(2, comp.size());
     }
 
     @Test
-    void constructingStructs() {
+    void constructingCompounds() {
 
-        val comp = Struct.<String>of(
-                Struct.of("a", "b"),
-                Struct.of("c", "d"));
+        val comp = Compound.<String>of(
+                Compound.of("a", "b"),
+                Compound.of("c", "d"));
 
         assertEquals(List.of("a", "b", "c", "d"), comp.flatten());
         assertEquals(4, comp.size());
     }
 
     @Test
-    void constructingElementAndStruct() {
+    void constructingElementAndCompound() {
 
-        val comp = Struct.<String>of(
+        val comp = Compound.<String>of(
                 "a",
-                Struct.of("c", "d"));
+                Compound.of("c", "d"));
 
         assertEquals(List.of("a", "c", "d"), comp.flatten());
         assertEquals(3, comp.size());
     }
 
     @Test
-    void constructingStructAndElement() {
+    void constructingCompoundAndElement() {
 
-        val comp = Struct.<String>of(
-                Struct.of("a", "b"),
+        val comp = Compound.<String>of(
+                Compound.of("a", "b"),
                 "d");
 
         assertEquals(List.of("a", "b", "d"), comp.flatten());
@@ -88,13 +88,13 @@ class StructTest {
     @Test
     void constructionNesting() {
 
-        val comp = Struct.of(
-                Struct.<String>of(
-                        Struct.of("a", "b"),
-                        Struct.of("c", "d")),
-                Struct.<String>of(
-                        Struct.of("e", "f"),
-                        Struct.of("g", "h")));
+        val comp = Compound.of(
+                Compound.<String>of(
+                        Compound.of("a", "b"),
+                        Compound.of("c", "d")),
+                Compound.<String>of(
+                        Compound.of("e", "f"),
+                        Compound.of("g", "h")));
 
         assertEquals(List.of("a", "b", "c", "d", "e", "f", "g", "h"), comp.flatten());
         assertEquals(8, comp.size());
@@ -129,28 +129,28 @@ class StructTest {
     final Converter<CalEntry, LocalDateTime> ceCon2 = ce->ce.getAt();
     final Converter<CalEntry, Duration> ceCon3 = ce->ce.getDuration();
 
-    final Struct<Converter<LocalDateTime, String>> localDateTimeCC = Struct.of(
+    final Compound<Converter<LocalDateTime, String>> localDateTimeCC = Compound.of(
             ldtCon1.andThen(ldCon),
             ldtCon2.andThen(ltCon));
 
-    final Struct<Converter<Duration, String>> durationCC = Struct.of(
+    final Compound<Converter<Duration, String>> durationCC = Compound.of(
             durCon1.andThen(longCon),
             durCon2.andThen(enumCon));
 
-    final FunStruct<LocalDateTime, String> localDateTimeFC = FunStruct.of(
-            FunStruct.of(ldtCon1::convert).map(ldCon::convert),
-            FunStruct.of(ldtCon2::convert).map(ltCon::convert));
+    final FunCompound<LocalDateTime, String> localDateTimeFC = FunCompound.of(
+            FunCompound.of(ldtCon1::convert).map(ldCon::convert),
+            FunCompound.of(ldtCon2::convert).map(ltCon::convert));
 
-    final FunStruct<Duration, String> durationFC = FunStruct.of(
-            FunStruct.of(durCon1::convert).map(longCon::convert),
-            FunStruct.of(durCon2::convert).map(enumCon::convert));
+    final FunCompound<Duration, String> durationFC = FunCompound.of(
+            FunCompound.of(durCon1::convert).map(longCon::convert),
+            FunCompound.of(durCon2::convert).map(enumCon::convert));
 
 
-    final FunStruct<CalEntry, String> calEntryFC = FunStruct.of(
+    final FunCompound<CalEntry, String> calEntryFC = FunCompound.of(
             ceCon1::convert,
-            FunStruct.<CalEntry, String>of(
-                    FunStruct.of(ceCon2::convert).compose(localDateTimeFC),
-                    FunStruct.of(ceCon3::convert).compose(durationFC)
+            FunCompound.<CalEntry, String>of(
+                    FunCompound.of(ceCon2::convert).compose(localDateTimeFC),
+                    FunCompound.of(ceCon3::convert).compose(durationFC)
                     ));
 
     @Test

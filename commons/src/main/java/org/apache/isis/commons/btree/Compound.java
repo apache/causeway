@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.struct;
+package org.apache.isis.commons.btree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,44 +40,44 @@ import lombok.ToString;
  */
 @RequiredArgsConstructor(access=AccessLevel.PROTECTED)
 @ToString @EqualsAndHashCode
-public class Struct<T> {
+public class Compound<T> {
 
-    private final _Either<T, Struct<T>> left;
-    private final _Either<T, Struct<T>> right;
+    private final _Either<T, Compound<T>> left;
+    private final _Either<T, Compound<T>> right;
     private final int elementCount;
 
     // -- FACTORIES
 
-    public static <T> Struct<T> of(final @NonNull T left) {
-        return new Struct<>(_Either.left(left), _Either.right(nil()), 1);
+    public static <T> Compound<T> of(final @NonNull T left) {
+        return new Compound<>(_Either.left(left), _Either.right(nil()), 1);
     }
 
-    public static <T> Struct<T> of(final @NonNull T left, final @NonNull T right) {
-        return new Struct<>(_Either.left(left), _Either.left(right), 2);
+    public static <T> Compound<T> of(final @NonNull T left, final @NonNull T right) {
+        return new Compound<>(_Either.left(left), _Either.left(right), 2);
     }
 
-    public static <T> Struct<T> of(
+    public static <T> Compound<T> of(
             final @NonNull T left,
-            final @NonNull Struct<T> right) {
-        return new Struct<>(
+            final @NonNull Compound<T> right) {
+        return new Compound<>(
                 _Either.left(left),
                 _Either.right(right),
                 1 + right.elementCount);
     }
 
-    public static <T> Struct<T> of(
-            final @NonNull Struct<T> left,
+    public static <T> Compound<T> of(
+            final @NonNull Compound<T> left,
             final @NonNull T right) {
-        return new Struct<>(
+        return new Compound<>(
                 _Either.right(left),
                 _Either.left(right),
                 left.elementCount + 1);
     }
 
-    public static <T> Struct<T> of(
-            final @NonNull Struct<T> left,
-            final @NonNull Struct<T> right) {
-        return new Struct<>(
+    public static <T> Compound<T> of(
+            final @NonNull Compound<T> left,
+            final @NonNull Compound<T> right) {
+        return new Compound<>(
                 _Either.right(left),
                 _Either.right(right),
                 left.elementCount + right.elementCount);
@@ -97,8 +97,8 @@ public class Struct<T> {
     public Stream<T> streamDepthFirstPostorder() {
         return elementCount!=0 // intercept NIL
                 ? Stream.concat(
-                        left.fold(Stream::of, Struct::streamDepthFirstPostorder),
-                        right.fold(Stream::of, Struct::streamDepthFirstPostorder))
+                        left.fold(Stream::of, Compound::streamDepthFirstPostorder),
+                        right.fold(Stream::of, Compound::streamDepthFirstPostorder))
                 : Stream.empty();
     }
 
@@ -111,17 +111,17 @@ public class Struct<T> {
 
     // -- MAPPING
 
-    public <X> Struct<X> map(final Function<T, X> mapper) {
+    public <X> Compound<X> map(final Function<T, X> mapper) {
         return new MappedStruct<>(this, mapper);
     }
 
-    final static class MappedStruct<A, B> extends Struct<B> {
+    final static class MappedStruct<A, B> extends Compound<B> {
 
-        final Struct<A> origin;
+        final Compound<A> origin;
         final Function<A, B> mapper;
 
         protected MappedStruct(
-                final Struct<A> origin,
+                final Compound<A> origin,
                 final Function<A, B> mapper) {
             super(null, null, origin.elementCount);
             this.origin = origin;
@@ -138,8 +138,8 @@ public class Struct<T> {
 
     // -- NIL / THE EMPTY STRUCT
 
-    private final static Struct<?> NIL = new Struct<>(null, null, 0);
-    public static <T> Struct<T> nil() {
+    private final static Compound<?> NIL = new Compound<>(null, null, 0);
+    public static <T> Compound<T> nil() {
         return _Casts.uncheckedCast(NIL);
     }
 

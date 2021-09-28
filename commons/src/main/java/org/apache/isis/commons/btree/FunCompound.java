@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.struct;
+package org.apache.isis.commons.btree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,44 +40,44 @@ import lombok.ToString;
  */
 @RequiredArgsConstructor(access=AccessLevel.PROTECTED)
 @ToString @EqualsAndHashCode
-public class FunStruct<T, R> {
+public class FunCompound<T, R> {
 
-    private final _Either<Function<T, R>, FunStruct<T, R>> left;
-    private final _Either<Function<T, R>, FunStruct<T, R>> right;
+    private final _Either<Function<T, R>, FunCompound<T, R>> left;
+    private final _Either<Function<T, R>, FunCompound<T, R>> right;
     private final int elementCount;
 
     // -- FACTORIES
 
-    public static <T, R> FunStruct<T, R> of(final @NonNull Function<T, R> left) {
-        return new FunStruct<>(_Either.left(left), _Either.right(nil()), 1);
+    public static <T, R> FunCompound<T, R> of(final @NonNull Function<T, R> left) {
+        return new FunCompound<>(_Either.left(left), _Either.right(nil()), 1);
     }
 
-    public static <T, R> FunStruct<T, R> of(final @NonNull Function<T, R> left, final @NonNull Function<T, R> right) {
-        return new FunStruct<>(_Either.left(left), _Either.left(right), 2);
+    public static <T, R> FunCompound<T, R> of(final @NonNull Function<T, R> left, final @NonNull Function<T, R> right) {
+        return new FunCompound<>(_Either.left(left), _Either.left(right), 2);
     }
 
-    public static <T, R> FunStruct<T, R> of(
+    public static <T, R> FunCompound<T, R> of(
             final @NonNull Function<T, R> left,
-            final @NonNull FunStruct<T, R> right) {
-        return new FunStruct<>(
+            final @NonNull FunCompound<T, R> right) {
+        return new FunCompound<>(
                 _Either.left(left),
                 _Either.right(right),
                 1 + right.elementCount);
     }
 
-    public static <T, R> FunStruct<T, R> of(
-            final @NonNull FunStruct<T, R> left,
+    public static <T, R> FunCompound<T, R> of(
+            final @NonNull FunCompound<T, R> left,
             final @NonNull Function<T, R> right) {
-        return new FunStruct<>(
+        return new FunCompound<>(
                 _Either.right(left),
                 _Either.left(right),
                 left.elementCount + 1);
     }
 
-    public static <T, R> FunStruct<T, R> of(
-            final @NonNull FunStruct<T, R> left,
-            final @NonNull FunStruct<T, R> right) {
-        return new FunStruct<>(
+    public static <T, R> FunCompound<T, R> of(
+            final @NonNull FunCompound<T, R> left,
+            final @NonNull FunCompound<T, R> right) {
+        return new FunCompound<>(
                 _Either.right(left),
                 _Either.right(right),
                 left.elementCount + right.elementCount);
@@ -97,8 +97,8 @@ public class FunStruct<T, R> {
     public Stream<Function<T, R>> streamDepthFirstPostorder() {
         return elementCount!=0 // intercept NIL
                 ? Stream.concat(
-                        left.fold(Stream::of, FunStruct::streamDepthFirstPostorder),
-                        right.fold(Stream::of, FunStruct::streamDepthFirstPostorder))
+                        left.fold(Stream::of, FunCompound::streamDepthFirstPostorder),
+                        right.fold(Stream::of, FunCompound::streamDepthFirstPostorder))
                 : Stream.empty();
     }
 
@@ -111,17 +111,17 @@ public class FunStruct<T, R> {
 
     // -- APPLY VALUE
 
-    public Struct<R> apply(final T value) {
+    public Compound<R> apply(final T value) {
         return new AppliedStruct<>(this, value);
     }
 
-    final static class AppliedStruct<A, B> extends Struct<B> {
+    final static class AppliedStruct<A, B> extends Compound<B> {
 
-        final FunStruct<A, B> origin;
+        final FunCompound<A, B> origin;
         final A value;
 
         protected AppliedStruct(
-                final FunStruct<A, B> origin,
+                final FunCompound<A, B> origin,
                 final A value) {
             super(null, null, origin.elementCount);
             this.origin = origin;
@@ -138,17 +138,17 @@ public class FunStruct<T, R> {
 
     // -- MAPPING
 
-    public <X> FunStruct<T, X> map(final Function<R, X> mapper) {
+    public <X> FunCompound<T, X> map(final Function<R, X> mapper) {
         return new MappedFunStruct<>(this, mapper);
     }
 
-    final static class MappedFunStruct<A, B, C> extends FunStruct<A, C> {
+    final static class MappedFunStruct<A, B, C> extends FunCompound<A, C> {
 
-        final FunStruct<A, B> origin;
+        final FunCompound<A, B> origin;
         final Function<B, C> mapper;
 
         protected MappedFunStruct(
-                final FunStruct<A, B> origin,
+                final FunCompound<A, B> origin,
                 final Function<B, C> mapper) {
             super(null, null, origin.elementCount);
             this.origin = origin;
@@ -165,18 +165,18 @@ public class FunStruct<T, R> {
 
     // -- COMPOSITION
 
-    public <X> FunStruct<T, X> compose(final FunStruct<R, X> other) {
+    public <X> FunCompound<T, X> compose(final FunCompound<R, X> other) {
         return new ComposedFunStruct<>(this, other);
     }
 
-    final static class ComposedFunStruct<A, B, C> extends FunStruct<A, C> {
+    final static class ComposedFunStruct<A, B, C> extends FunCompound<A, C> {
 
-        final FunStruct<A, B> origin;
-        final FunStruct<B, C> other;
+        final FunCompound<A, B> origin;
+        final FunCompound<B, C> other;
 
         protected ComposedFunStruct(
-                final FunStruct<A, B> origin,
-                final FunStruct<B, C> other) {
+                final FunCompound<A, B> origin,
+                final FunCompound<B, C> other) {
             super(null, null, origin.elementCount);
             this.origin = origin;
             this.other = other;
@@ -195,8 +195,8 @@ public class FunStruct<T, R> {
 
     // -- NIL / THE EMPTY STRUCT
 
-    private final static FunStruct<?, ?> NIL = new FunStruct<>(null, null, 0);
-    public static <T, R> FunStruct<T, R> nil() {
+    private final static FunCompound<?, ?> NIL = new FunCompound<>(null, null, 0);
+    public static <T, R> FunCompound<T, R> nil() {
         return _Casts.uncheckedCast(NIL);
     }
 
