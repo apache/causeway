@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +28,9 @@ import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.coll.DataRowWkt;
@@ -51,13 +54,6 @@ extends SortableDataProvider<DataRow, String> {
     @Override
     public IModel<DataRow> model(final DataRow dataRow) {
         return DataRowWkt.chain(model, dataRow);
-
-//
-//        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
-//                || ManagedObjects.isValue(adapter)) {
-//            return ValueModel.of(model.getCommonContext(), adapter);
-//        }
-//        return EntityModel.ofAdapter(model.getCommonContext(), adapter);
     }
 
     @Override
@@ -87,6 +83,21 @@ extends SortableDataProvider<DataRow, String> {
         return pagedRows.iterator();
     }
 
+    private List<DataRow> sortedCopy(
+            final List<DataRow> dataRows,
+            final SortParam<String> sort) {
+
+        var sortProperty = lookupPropertyFor(sort).orElse(null);
+        if(sortProperty != null) {
+            val copy = _Lists.newArrayList(dataRows);
+            val objComparator = ManagedObjects.orderingBy(sortProperty, sort.isAscending());
+            Collections.sort(copy, (a, b)->objComparator.compare(a.getRowElement(), b.getRowElement()) );
+            return copy;
+        }
+
+        return dataRows;
+    }
+
     private static List<DataRow> subList(
             final long first,
             final long count,
@@ -97,22 +108,6 @@ extends SortableDataProvider<DataRow, String> {
         final int toIndex = Math.min((int) (first + count), dataRows.size());
 
         return dataRows.subList(fromIndex, toIndex);
-    }
-
-    private List<DataRow> sortedCopy(
-            final List<DataRow> dataRows,
-            final SortParam<String> sort) {
-        return dataRows;
-
-//FIXME no sorting yet, this is client-side
-//        val copy = _Lists.newArrayList(adapters);
-//
-//        var sortProperty = lookupPropertyFor(sort);
-//        if(sortProperty != null) {
-//            Collections.sort(copy, ManagedObjects.orderingBy(sortProperty, sort.isAscending()));
-//        }
-//
-//        return copy;
     }
 
     private Optional<OneToOneAssociation> lookupPropertyFor(final SortParam<String> sort) {

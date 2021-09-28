@@ -29,6 +29,7 @@ import org.apache.isis.commons.internal.binding._Observables;
 import org.apache.isis.commons.internal.binding._Observables.LazyObservable;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
@@ -101,16 +102,16 @@ public class DataTableModel {
             .map(property->new DataColumn(this, property))
             .collect(Can.toCan()));
 
-        title = _Observables.forFactory(()->"Collection");
-
-        //FIXME[ISIS-2871] actual title
-//      return getTypeOfSpecification()
-//              .lookupFacet(MemberNamedFacet.class)
-//              .map(MemberNamedFacet::getSpecialization)
-//              .map(specialization->specialization
-//                      .fold(namedFacet->namedFacet.translated(),
-//                            namedFacet->namedFacet.textElseNull(actionModel.getOwner())))
-//              .orElse(getIdentifier().getMemberLogicalName());
+        //TODO the tile could dynamically reflect the number of elements selected
+        //eg... 5 Orders selected
+        title = _Observables.forFactory(()->
+            managedCollection.getElementType()
+            .lookupFacet(MemberNamedFacet.class)
+            .map(MemberNamedFacet::getSpecialization)
+            .map(specialization->specialization
+                    .fold(namedFacet->namedFacet.translated(),
+                            namedFacet->namedFacet.textElseNull(managedCollection.getOwner())))
+            .orElse(managedCollection.getIdentifier().getMemberLogicalName()));
 
     }
 
