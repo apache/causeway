@@ -106,7 +106,7 @@ implements FormExecutor {
             val resultResponse =
             actionOrPropertyModel.fold(
                     act->ActionResultResponseType
-                            .determineAndInterpretResult(act, ajaxTarget, resultAdapter),
+                            .determineAndInterpretResult(act, ajaxTarget, resultAdapter, act.snapshotArgs()),
                     prop->ActionResultResponse
                             .toPage(EntityPage.ofAdapter(prop.getCommonContext(), resultAdapter)));
 

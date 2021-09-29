@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed;
 
-import java.io.Serializable;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -26,17 +25,13 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
-import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
 
@@ -176,34 +171,6 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
     public <X extends Throwable>
     ManagedAction getManagedActionElseFail() {
         return getManagedActionElseThrow(veto->_Exceptions.unrecoverable("action vetoed: " + veto.getReason()));
-    }
-
-    // -- MEMENTO
-
-    public Memento getMemento() {
-        return Memento.create(this);
-    }
-
-    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Memento implements Serializable {
-        private static final long serialVersionUID = 1L;
-
-        static Memento create(final ActionInteraction actionInteraction) {
-            return new Memento(actionInteraction.getManagedAction()
-                    .map(ManagedAction::getMemento)
-                    .orElseThrow());
-        }
-
-        private final ManagedAction.Memento managedActionMemento;
-
-        public ActionInteraction getActionInteraction(final MetaModelContext mmc) {
-            val managedAction = managedActionMemento.getManagedAction(mmc);
-            return ActionInteraction.wrap(managedAction);
-        }
-    }
-
-    public DataTableModel createDataTableModelForResult(final ManagedObject result) {
-        return DataTableModel.forActionResult(this.getManagedActionElseFail(), result);
     }
 
 }

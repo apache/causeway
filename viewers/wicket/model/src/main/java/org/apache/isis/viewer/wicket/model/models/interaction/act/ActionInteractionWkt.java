@@ -31,6 +31,8 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 
@@ -59,6 +61,19 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     private final Where where;
     private Can<ParameterUiModelWkt> childModels;
 
+    /**
+     * Returns a new <i>Action Interaction</i> binding to the parent {@link BookmarkedObjectWkt}
+     * of given {@link ActionModel}.
+     */
+    public static ActionInteractionWkt bind(
+            final ActionModel actionModel,
+            final Where where) {
+        return new ActionInteractionWkt(
+                actionModel.getParentUiModel().bookmarkedObjectModel(),
+                actionModel.getMetaModel().getId(),
+                where);
+    }
+
     public ActionInteractionWkt(
             final BookmarkedObjectWkt bookmarkedObject,
             final String memberId,
@@ -81,6 +96,10 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
 
     public final ActionInteraction actionInteraction() {
         return getObject();
+    }
+
+    public final ObjectAction getMetaModel() {
+        return actionInteraction().getMetamodel().orElseThrow();
     }
 
     // -- LAZY BINDING
@@ -109,5 +128,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     public void resetParametersToDefault() {
         parameterNegotiationModel.clear();
     }
+
+
 
 }

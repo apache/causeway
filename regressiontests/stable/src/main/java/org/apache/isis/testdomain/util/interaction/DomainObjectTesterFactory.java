@@ -58,6 +58,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -359,8 +360,11 @@ public class DomainObjectTesterFactory {
 
                 val actionResult = resultOrVeto.leftIfAny();
 
-                return DataTableTester.of(actionInteraction
-                        .createDataTableModelForResult(actionResult));
+                val table = DataTableModel
+                        .forAction(managedAction, pendingArgs.getParamValues(), actionResult);
+
+                return DataTableTester.of(table);
+
             });
 
         }

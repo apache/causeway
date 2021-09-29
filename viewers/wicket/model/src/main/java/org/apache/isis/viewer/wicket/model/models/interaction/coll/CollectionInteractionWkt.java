@@ -29,7 +29,6 @@ import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableMo
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.common.model.HasParentUiModel;
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 import org.apache.isis.viewer.wicket.model.models.interaction.ObjectUiModelWkt;
@@ -47,6 +46,7 @@ import org.apache.isis.viewer.wicket.model.models.interaction.ObjectUiModelWkt;
  *
  * @see HasBookmarkedOwnerAbstract
  */
+@Deprecated //TODO[ISIS-2871]  superseded by DataTableModelWkt
 public class CollectionInteractionWkt
 extends HasBookmarkedOwnerAbstract<CollectionInteraction>
 implements
@@ -60,24 +60,11 @@ implements
     /**
      * Returns a new <i>Collection Interaction</i> binding to the parent {@link BookmarkedObjectWkt}.
      */
-    public static CollectionInteractionWkt bind(
+    private static CollectionInteractionWkt bind(
             final BookmarkedObjectWkt bookmarkedObject,
             final OneToManyAssociation coll,
             final Where where) {
         return new CollectionInteractionWkt(bookmarkedObject, coll.getId(), where);
-    }
-
-    /**
-     * Returns a new <i>Collection Interaction</i> binding to the parent {@link BookmarkedObjectWkt}
-     * of given {@link ActionModel}.
-     */
-    public static CollectionInteractionWkt bind(
-            final ActionModel actionModel,
-            final Where where) {
-        return new CollectionInteractionWkt(
-                actionModel.getParentUiModel().bookmarkedObjectModel(),
-                actionModel.getMetaModel().getId(), //FIXME[ISIS-2871] wired up incorrectly
-                where);
     }
 
     // -- CONSTRUCTION

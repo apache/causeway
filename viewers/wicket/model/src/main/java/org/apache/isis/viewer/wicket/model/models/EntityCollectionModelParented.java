@@ -22,14 +22,12 @@ import java.util.Optional;
 
 import org.apache.wicket.Component;
 
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.models.interaction.coll.CollectionInteractionWkt;
+import org.apache.isis.viewer.wicket.model.models.interaction.coll.DataTableModelWkt;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -61,18 +59,17 @@ implements
                         .illegalArgument("EntityModel must have CollectionLayoutMetadata"));
 
         return new EntityCollectionModelParented(
-                CollectionInteractionWkt
-                .bind(entityModel.bookmarkedObjectModel(), collMetaModel, Where.NOT_SPECIFIED),
+                DataTableModelWkt
+                .forCollection(entityModel.bookmarkedObjectModel(), collMetaModel),
                 entityModel);
     }
 
     // -- CONSTRUCTOR
 
     protected EntityCollectionModelParented(
-            final @NonNull CollectionInteractionWkt collIactn,
-            final @NonNull EntityModel parentObjectModel) { //TODO replace with BookmarkedObjectWkt
-        super(collIactn,
-                Variant.PARENTED);
+            final @NonNull DataTableModelWkt delegate,
+            final @NonNull EntityModel parentObjectModel) { //TODO maybe instead use the delegate (?)
+        super(delegate, Variant.PARENTED);
         this.entityModel = parentObjectModel;
     }
 
@@ -95,9 +92,9 @@ implements
         getEntityModel().clearHint(component, attributeName);
     }
 
-    public ManagedCollection getManagedCollection() {
-        return ManagedCollection
-                .of(entityModel.getManagedObject(), getMetaModel(), Where.NOT_SPECIFIED);
+    @Override
+    public OneToManyAssociation getMetaModel() {
+        return (OneToManyAssociation) super.getMetaModel();
     }
 
     public CollectionLayoutData getLayoutData() {
@@ -107,11 +104,5 @@ implements
     public Bookmark asHintingBookmark() {
         return entityModel.getOwnerBookmark();
     }
-
-    @Override
-    public ManagedObject getParentObject() {
-        return getManagedCollection().getOwner();
-    }
-
 
 }

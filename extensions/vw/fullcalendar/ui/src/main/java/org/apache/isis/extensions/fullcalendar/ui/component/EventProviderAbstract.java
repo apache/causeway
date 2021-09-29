@@ -59,13 +59,13 @@ public abstract class EventProviderAbstract implements EventProvider {
 
     private void createEvents(final EntityCollectionModel model, final String calendarName) {
         val commonContext = model.getCommonContext();
-        model.parentedManagedCollection()
-        .ifPresent(managedColl->{
-            managedColl.streamElements() // entityList
-            .map(newEvent(commonContext, calendarName))
-            .filter(NOT_NULL)
-            .forEach(event->eventById.put(event.getId(), event));
-        });
+
+        model.getDataTableModel()
+        .getDataElements().getValue()
+        .stream()
+        .map(newEvent(commonContext, calendarName))
+        .filter(NOT_NULL)
+        .forEach(event->eventById.put(event.getId(), event));
     }
 
     private Object dereference(final IsisAppCommonContext commonContext, final Object domainObject) {

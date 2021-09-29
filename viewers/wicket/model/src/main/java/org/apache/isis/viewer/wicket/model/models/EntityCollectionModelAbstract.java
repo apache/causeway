@@ -25,12 +25,12 @@ import org.apache.wicket.model.ChainingModel;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.models.interaction.coll.CollectionInteractionWkt;
+import org.apache.isis.viewer.wicket.model.models.interaction.coll.DataTableModelWkt;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -56,31 +56,25 @@ implements EntityCollectionModel {
     private final @NonNull Variant variant;
 
     protected EntityCollectionModelAbstract(
-            final @NonNull CollectionInteractionWkt delegate,
+            final DataTableModelWkt dataTableModelWkt,
             final @NonNull Variant variant) {
-        super(delegate);
+        super(dataTableModelWkt);
         this.variant = variant;
 
-        val collMeta = getMetaModel();
+        val memberMeta = getMetaModel();
 
-        //TODO don't memoize
-        this.identifier = collMeta.getFeatureIdentifier();
-
-        this.pageSize = collMeta.getPageSize()
+        this.identifier = memberMeta.getFeatureIdentifier();
+        this.pageSize = memberMeta.getPageSize()
             .orElse(getVariant().getPageSizeDefault());
     }
 
-    public final CollectionInteractionWkt delegate() {
-        return (CollectionInteractionWkt) super.getTarget();
-    }
-
-    public final CollectionInteraction collectionInteraction() {
-        return delegate().collectionInteraction();
+    public final DataTableModelWkt delegate() {
+        return (DataTableModelWkt) super.getTarget();
     }
 
     @Override
     public final DataTableModel getObject() {
-        return delegate().dataTableModel();
+        return delegate().getObject();
     }
 
     @Override
@@ -89,8 +83,14 @@ implements EntityCollectionModel {
     }
 
     @Override
-    public OneToManyAssociation getMetaModel() {
-        return delegate().getMetaModel();
+    public ObjectMember getMetaModel() {
+        return getDataTableModel()
+                .getMetaModel();
+    }
+
+    @Override
+    public final ManagedObject getParentObject() {
+        return delegate().getBookmarkedOwner();
     }
 
     @Override

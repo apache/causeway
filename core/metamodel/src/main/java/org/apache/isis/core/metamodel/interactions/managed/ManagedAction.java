@@ -33,12 +33,12 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
-import org.apache.isis.core.metamodel.spec.feature.memento.ActionMemento;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -102,9 +102,6 @@ public final class ManagedAction extends ManagedMember {
 
     // -- INTERACTION
 
-    //XXX potential misuse: param validation is not our responsibility here
-    // hence at least should not be public
-    @Deprecated
     public _Either<ManagedObject, InteractionVeto> invoke(@NonNull final Can<ManagedObject> actionParameters) {
 
         val action = getAction();
@@ -185,36 +182,31 @@ public final class ManagedAction extends ManagedMember {
         return mmc().getServiceRegistry();
     }
 
-    // -- MEMENTO
+    // -- MEMENTO FOR ARGUMENT LIST
 
-    public Memento getMemento() {
-        return Memento.create(this);
+    public MementoForArgs getMementoForArgs(final Can<ManagedObject> args) {
+        return MementoForArgs.create(
+                getMetaModel().getMetaModelContext().getObjectManager(),
+                args);
     }
 
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Memento implements Serializable {
+    public static class MementoForArgs implements Serializable {
         private static final long serialVersionUID = 1L;
 
-        static Memento create(final ManagedAction managedAction) {
-            val action = managedAction.getMetaModel();
-            return new Memento(
-                    action.getMemento(),
-                    action.getObjectManager()
-                        .getObjectMemorizer()
-                        .serialize(managedAction.getOwner()),
-                        managedAction.getWhere());
+        static MementoForArgs create(
+                final ObjectManager objectManager,
+                final Can<ManagedObject> args) {
+            return new MementoForArgs(args.map(objectManager.getObjectMemorizer()::serialize));
         }
 
-        private final ActionMemento actionMemento;
-        private final ObjectMemento objectMemento;
-        private final Where where;
-        public ManagedAction getManagedAction(final MetaModelContext mmc) {
+        private final Can<ObjectMemento> argsMementos;
 
-            val action = actionMemento.getAction(mmc::getSpecificationLoader);
-            val spec = action.getDeclaringType();
-            val owner = mmc.getObjectManager().getObjectMemorizer().deserialize(spec, objectMemento);
-
-            return ManagedAction.of(owner, action, where);
+        public Can<ManagedObject> getArgumentList(final ObjectAction actionMeta) {
+            val argTypes = actionMeta.getParameterTypes();
+            val objectMemorizer = actionMeta.getMetaModelContext().getObjectManager().getObjectMemorizer();
+            return argsMementos.zipMap(argTypes, (argSpec, argMemento)->
+                objectMemorizer.deserialize(argMemento, argSpec));
         }
     }
 

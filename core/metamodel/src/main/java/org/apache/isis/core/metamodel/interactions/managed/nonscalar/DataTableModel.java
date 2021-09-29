@@ -18,10 +18,13 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed.nonscalar;
 
-import java.util.Optional;
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -36,14 +39,19 @@ import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction.MementoForArgs;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 public class DataTableModel {
@@ -52,19 +60,19 @@ public class DataTableModel {
 
     public static DataTableModel forCollection(
             final ManagedCollection managedCollection) {
-        return new DataTableModel(managedCollection, ()->
+        return new DataTableModel(managedCollection, managedCollection.getWhere(), ()->
             managedCollection
             .streamElements()
             .collect(Can.toCan()));
     }
 
-    public static DataTableModel forActionResult(
+    public static DataTableModel forAction(
             final ManagedAction managedAction,
+            final Can<ManagedObject> args,
             final ManagedObject actionResult) {
 
         val objectManager = managedAction.getMetaModel().getMetaModelContext().getObjectManager();
-
-        return new DataTableModel(managedAction, ()->
+        return new DataTableModel(managedAction, managedAction.getWhere(), ()->
             ManagedObjects.isNullOrUnspecifiedOrEmpty(actionResult)
                 ? Can.empty()
                 : _NullSafe.streamAutodetect(actionResult.getPojo())
@@ -76,6 +84,7 @@ public class DataTableModel {
 
     // as this is a layer of abstraction, don't expose via getter
     final @NonNull ManagedMember managedMember;
+    final @NonNull Where where;
 
     @Getter private final @NonNull LazyObservable<Can<ManagedObject>> dataElements;
     @Getter private final @NonNull _BindableAbstract<String> searchArgument; // filter the data rows
@@ -89,9 +98,11 @@ public class DataTableModel {
     private DataTableModel(
             // we need access to the owner in support of imperative title and referenced column detection
             final ManagedMember managedMember,
+            final Where where,
             final Supplier<Can<ManagedObject>> elementSupplier) {
 
         this.managedMember = managedMember;
+        this.where = where;
 
         dataElements = _Observables.forFactory(elementSupplier);
 
@@ -130,7 +141,7 @@ public class DataTableModel {
 
         dataColumns = _Observables.forFactory(()->
             managedMember.getElementType()
-            .streamPropertiesForColumnRendering(managedMember.getIdentifier(), Optional.of(managedMember.getOwner()))
+            .streamPropertiesForColumnRendering(managedMember.getIdentifier(), managedMember.getOwner())
             .map(property->new DataColumn(this, property))
             .collect(Can.toCan()));
 
@@ -144,6 +155,10 @@ public class DataTableModel {
                     .fold(namedFacet->namedFacet.translated(),
                             namedFacet->namedFacet.textElseNull(managedMember.getOwner())))
             .orElse(managedMember.getIdentifier().getMemberLogicalName()));
+    }
+
+    public ObjectMember getMetaModel() {
+        return managedMember.getMetaModel();
     }
 
     // -- TOGGLE ALL
@@ -176,5 +191,60 @@ public class DataTableModel {
                 InteractionInitiatedBy.USER,
                 Where.ALL_TABLES);
     }
+
+    // -- MEMENTO
+
+    public Memento getMemento(final @Nullable ManagedAction.MementoForArgs argsMemento) {
+        return Memento.create(this, argsMemento);
+    }
+
+    /**
+     * Recreation from given 'bookmarkable' {@link ManagedObject} (owner),
+     * without triggering domain events.
+     * Either originates from a <i>Collection</i> or an <i>Action</i>'s
+     * non-scalar result.
+     * <p>
+     * In the <i>Action</i> case, requires the <i>Action</i>'s arguments
+     * for reconstruction.
+     * <p>
+     * Responsibility for recreation of the owner is with the caller
+     * to allow for simpler object graph reconstruction (shared owner).
+     * <p>
+     * However, we keep track of the argument list here.
+     */
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class Memento implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        static Memento create(
+                final @Nullable DataTableModel table,
+                final @Nullable MementoForArgs argsMemento) {
+            val managedMember = table.managedMember;
+            return new Memento(
+                    managedMember.getIdentifier(),
+                    table.where,
+                    argsMemento);
+        }
+
+        private final Identifier featureId;
+        private final Where where;
+        private final MementoForArgs argsMemento;
+
+        public DataTableModel getDataTableModel(final ManagedObject owner) {
+
+            val ownerSpec = owner.getSpecification();
+            val memberId = featureId.getMemberLogicalName();
+
+            if(featureId.getType().isPropertyOrCollection()) {
+                return forCollection(ManagedCollection.of(owner, ownerSpec.getCollectionElseFail(memberId), where));
+            }
+            val actionInteraction = ActionInteraction.start(owner, memberId, where);
+            val managedAction = actionInteraction.getManagedActionElseFail();
+            val args = argsMemento.getArgumentList(managedAction.getMetaModel());
+            val actionResult = managedAction.invoke(args).left().orElseThrow();
+            return forAction(managedAction, args, actionResult);
+        }
+    }
+
 
 }

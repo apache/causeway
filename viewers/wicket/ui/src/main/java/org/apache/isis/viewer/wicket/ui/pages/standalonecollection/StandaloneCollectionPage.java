@@ -39,7 +39,7 @@ public class StandaloneCollectionPage extends PageAbstract {
      */
     public StandaloneCollectionPage(final EntityCollectionModelStandalone collectionModel) {
         super(PageParameterUtils.newPageParameters(),
-                collectionModel.getActionModel().getFriendlyName(),
+                collectionModel.getIdentifier().getMemberLogicalName(),
                 ComponentType.STANDALONE_COLLECTION);
 
         addChildComponents(themeDiv, collectionModel);

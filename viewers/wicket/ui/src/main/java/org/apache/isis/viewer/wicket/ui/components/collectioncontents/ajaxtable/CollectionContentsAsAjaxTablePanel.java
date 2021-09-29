@@ -19,7 +19,6 @@
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
@@ -135,7 +134,7 @@ implements CollectionCountProvider {
             return;
         }
 
-        final Optional<ManagedObject> parentObject = collectionModel.parentedParentObject();
+        final ManagedObject parentObject = collectionModel.getParentObject();
         val memberIdentifier = collectionModel.getIdentifier();
 
         // add all ordered columns to the table

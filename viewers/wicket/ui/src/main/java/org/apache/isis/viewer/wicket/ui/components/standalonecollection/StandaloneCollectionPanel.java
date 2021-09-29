@@ -26,13 +26,10 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.components.ComponentType;
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelStandalone;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorHelper;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
@@ -40,6 +37,8 @@ import org.apache.isis.viewer.wicket.ui.components.collection.selector.Collectio
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+
+import lombok.val;
 
 public class StandaloneCollectionPanel
 extends PanelAbstract<DataTableModel, EntityCollectionModel>
@@ -66,12 +65,14 @@ implements CollectionCountProvider, CollectionSelectorProvider {
 
         addOrReplace(outerDiv);
 
-        ActionModel actionModel = collectionModel.getActionModel();
-        ObjectAction action = actionModel.getMetaModel();
-        outerDiv.addOrReplace(new Label(StandaloneCollectionPanel.ID_ACTION_NAME, Model.of(actionModel.getFriendlyName())));
+        val table = collectionModel.getDataTableModel();
+        val featureId = collectionModel.getIdentifier();
+
+        outerDiv.addOrReplace(new Label(StandaloneCollectionPanel.ID_ACTION_NAME,
+                Model.of(table.getTitle().getValue())));
 
         CssClassAppender.appendCssClassTo(outerDiv,
-                CssClassAppender.asCssStyle("isis-" + action.getDeclaringType().getLogicalTypeName().replace('.', '-') + "-" + action.getId()));
+                CssClassAppender.asCssStyle("isis-" + featureId.getLogicalTypeName().replace('.', '-') + "-" + featureId.getMemberLogicalName()));
         CssClassAppender.appendCssClassTo(outerDiv,
                 CssClassAppender.asCssStyle("isis-" + collectionModel.getElementType().getLogicalTypeName().replace('.','-')));
 
@@ -99,8 +100,8 @@ implements CollectionCountProvider, CollectionSelectorProvider {
             this.selectorDropdownPanel = selectorDropdownPanel;
         }
 
-        final ComponentFactoryRegistry componentFactoryRegistry = getComponentFactoryRegistry();
-        componentFactoryRegistry.addOrReplaceComponent(outerDiv, ComponentType.COLLECTION_CONTENTS, collectionModel);
+        getComponentFactoryRegistry()
+            .addOrReplaceComponent(outerDiv, ComponentType.COLLECTION_CONTENTS, collectionModel);
     }
 
 

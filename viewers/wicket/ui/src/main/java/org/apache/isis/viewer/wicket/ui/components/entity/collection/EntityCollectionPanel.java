@@ -36,7 +36,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
@@ -106,7 +105,7 @@ implements HasDynamicallyVisibleContent {
     private WebMarkupContainer buildGui() {
         final WebMarkupContainer div = new WebMarkupContainer(ID_COLLECTION_GROUP);
 
-        val collectionModel = EntityCollectionModel.createParented(getModel());
+        val collectionModel = EntityCollectionModelParented.forParentObjectModel(getModel());
         div.setMarkupId("collection-" + collectionModel.getLayoutData().getId());
 
         val collectionMetaModel = collectionModel.getMetaModel();

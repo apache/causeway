@@ -100,7 +100,7 @@ public final class _Either<L, R> {
                 : _Either.right(rightMapper.apply(right));
     }
 
-    public <X, Y> _Either<X, Y> bimap(
+    public <X, Y> _Either<X, Y> map(
             final @NonNull Function<L, X> leftMapper,
             final @NonNull Function<R, Y> rightMapper){
         return isLeft()

@@ -18,52 +18,42 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.viewer.wicket.model.models.interaction.coll.CollectionInteractionWkt;
+import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
+import org.apache.isis.viewer.wicket.model.models.interaction.coll.DataTableModelWkt;
 
-import lombok.Getter;
 import lombok.NonNull;
+import lombok.val;
 
 public class EntityCollectionModelStandalone
 extends EntityCollectionModelAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * model of the action this collection is the returned result of
-     */
-    @Getter private final @NonNull ActionModel actionModel;
-
     // -- FACTORIES
 
     public static EntityCollectionModelStandalone forActionModel(
             final @NonNull ManagedObject collectionAsAdapter,
-            final @NonNull ActionModel actionModel) {
+            final @NonNull ActionModel actionModel,
+            final @NonNull Can<ManagedObject> args) {
 
-        // take a copy of the actionModel,
-        // because the original can get mutated (specifically: its arguments cleared)
+        val actMetaModel = actionModel.getMetaModel();
+
         return new EntityCollectionModelStandalone(
-                CollectionInteractionWkt
-                .bind(actionModel.copy(), Where.NOT_SPECIFIED), //TODO deprecate the copy(), instead we need to memorize the argument list
-                actionModel);
+                DataTableModelWkt.forActionModel(
+                        BookmarkedObjectWkt
+                            .ofAdapter(actionModel.getCommonContext(), actionModel.getOwner()),
+                        actMetaModel,
+                        args,
+                        collectionAsAdapter));
     }
 
     // -- CONSTRUCTOR
 
     private EntityCollectionModelStandalone(
-            final @NonNull CollectionInteractionWkt collIactn,
-            final @NonNull ActionModel actionModel) {
-        super(collIactn,
-                Variant.PARENTED);
-        this.actionModel = actionModel;
-    }
-
-    // --
-
-    @Override
-    public ManagedObject getParentObject() {
-        return actionModel.getOwner();
+            final @NonNull DataTableModelWkt delegate) {
+        super(delegate, Variant.PARENTED);
     }
 
 }

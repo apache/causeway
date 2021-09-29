@@ -161,11 +161,11 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         return wrap(getParentUiModel(), delegate);
     }
 
-    // -- HELPERS
-
-    private Can<ManagedObject> snapshotArgs() {
+    public Can<ManagedObject> snapshotArgs() {
         return delegate.parameterNegotiationModel().getParamValues();
     }
+
+    // -- HELPERS
 
     @Override
     public ManagedObject getOwner() {

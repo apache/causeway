@@ -115,7 +115,7 @@ public interface ObjectAssociationContainer {
      */
     Stream<OneToOneAssociation> streamPropertiesForColumnRendering(
             Identifier memberIdentifier,
-            Optional<ManagedObject> parentObject);
+            ManagedObject parentObject);
 
     // -- ASSOCIATION STREAMS (INHERITANCE NOT CONSIDERED)
 

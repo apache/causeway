@@ -18,9 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-
 import lombok.NonNull;
 
 public class EntityCollectionModelDummy
@@ -41,11 +38,6 @@ extends EntityCollectionModelAbstract {
     @Override
     public int getCount() {
         return 0;
-    }
-
-    @Override
-    public ManagedObject getParentObject() {
-        throw _Exceptions.unsupportedOperation();
     }
 
 }

@@ -18,19 +18,15 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed;
 
-import java.io.Serializable;
 import java.util.Optional;
 import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Either;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-import lombok.AccessLevel;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 public final class PropertyInteraction
@@ -90,30 +86,6 @@ extends MemberInteraction<ManagedProperty, PropertyInteraction> {
     public <X extends Throwable>
     ManagedProperty getManagedPropertyElseThrow(final Function<InteractionVeto, ? extends X> onFailure) throws X {
         return super.getManagedMemberElseThrow(onFailure);
-    }
-
-    // -- MEMENTO
-
-    public Memento getMemento() {
-        return Memento.create(this);
-    }
-
-    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Memento implements Serializable {
-        private static final long serialVersionUID = 1L;
-
-        static Memento create(final PropertyInteraction propertyInteraction) {
-            return new Memento(propertyInteraction.getManagedProperty()
-                    .map(ManagedProperty::getMemento)
-                    .orElseThrow());
-        }
-
-        private final ManagedProperty.Memento managedPropertyMemento;
-
-        public PropertyInteraction getPropertyInteraction(final MetaModelContext mmc) {
-            val managedProperty = managedPropertyMemento.getManagedProperty(mmc);
-            return PropertyInteraction.wrap(managedProperty);
-        }
     }
 
 }

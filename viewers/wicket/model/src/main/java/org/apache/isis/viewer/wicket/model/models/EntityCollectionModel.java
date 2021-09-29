@@ -24,16 +24,14 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 public interface EntityCollectionModel
@@ -73,18 +71,6 @@ extends
         }
     }
 
-    // -- FACTORIES
-
-    static EntityCollectionModelParented createParented(final @NonNull EntityModel entityModel) {
-        return EntityCollectionModelParented.forParentObjectModel(entityModel);
-    }
-
-    static EntityCollectionModelStandalone createStandalone(
-            final ManagedObject collectionAsAdapter,
-            final ActionModel actionModel) {
-        return EntityCollectionModelStandalone.forActionModel(collectionAsAdapter, actionModel);
-    }
-
     // -- IDENTITY
 
     /**
@@ -106,7 +92,7 @@ extends
 
     // -- METAMODEL SUPPORT
 
-    OneToManyAssociation getMetaModel();
+    ObjectMember getMetaModel();
 
     default ObjectSpecification getElementType() {
         return getMetaModel().getElementType();
@@ -139,29 +125,6 @@ extends
         return parented()
                 .map(EntityCollectionModelParented::asHintingBookmark);
     }
-
-    /**
-     * Optionally returns a {@link ManagedCollection}, based on whether
-     * this is a parented collection.
-     */
-    @Deprecated
-    default Optional<ManagedCollection> parentedManagedCollection() {
-        return parented()
-                .map(EntityCollectionModelParented::getManagedCollection);
-    }
-
-    @Deprecated
-    default Optional<ManagedObject> parentedParentObject() {
-        return parentedManagedCollection()
-                .map(ManagedCollection::getOwner);
-    }
-
-    @Deprecated
-    default Optional<ObjectSpecification> parentedParentObjectSpecification() {
-        return parentedParentObject()
-                .map(ManagedObject::getSpecification);
-    }
-
 
 
 }
