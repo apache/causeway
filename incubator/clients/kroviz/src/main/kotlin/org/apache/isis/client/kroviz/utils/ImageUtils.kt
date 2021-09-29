@@ -16,28 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.handler
+package org.apache.isis.client.kroviz.utils
 
-import kotlinx.serialization.json.Json
-import org.apache.isis.client.kroviz.layout.Layout
-import org.apache.isis.client.kroviz.to.TransferObject
-import org.apache.isis.client.kroviz.utils.UrlUtils
-import org.apache.isis.client.kroviz.utils.XmlHelper
+import org.apache.isis.client.kroviz.core.event.LogEntry
+import org.apache.isis.client.kroviz.to.Icon
+import org.w3c.dom.Image
+import org.w3c.dom.url.URL
+import org.w3c.files.Blob
 
-class LayoutHandler : BaseHandler() {
+object ImageUtils {
 
-    override fun canHandle(response: String): Boolean {
-        val isJsonLayout = !XmlHelper.isXml(response)
-                && UrlUtils.isLayout(logEntry.url)
-        if (isJsonLayout) {
-            return super.canHandle(response)
-        }
-        return false
+    fun extractIcon(logEntry: LogEntry): Icon {
+        val blob = logEntry.blob!!
+        val image = blob.toImage()
+        return Icon(image)
     }
 
-
-    override fun parse(response: String): TransferObject {
-        return Json.decodeFromString(Layout.serializer(), response)
+    fun Blob.toImage(): Image {
+        val url = URL.createObjectURL(this)
+        val image = Image()
+        image.src = url
+        return image
     }
 
 }

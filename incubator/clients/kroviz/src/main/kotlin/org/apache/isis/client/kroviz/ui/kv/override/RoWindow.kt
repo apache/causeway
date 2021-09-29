@@ -57,6 +57,7 @@ internal const val WINDOW_CONTENT_MARGIN_BOTTOM = 11
  * @param init an initializer extension function
  */
 @Suppress("TooManyFunctions")
+@Deprecated("use Window, when transparency and icon menu work")
 open class RoWindow(
         caption: String? = null,
         contentWidth: CssSize? = CssSize(0, UNIT.auto),
@@ -67,12 +68,15 @@ open class RoWindow(
         maximizeButton: Boolean = true,
         minimizeButton: Boolean = true,
         icon: String? = null,
-        classes: Set<String> = setOf(),
         menu: List<KvisionHtmlLink>? = null,
         init: (RoWindow.() -> Unit)? = null
 ) :
-        SimplePanel(classes + setOf("modal-content", "kv-window")) {
+    SimplePanel() {
 
+    init {
+        this.addCssClass("modal-content")
+        this.addCssClass("kv-window")
+    }
     /**
      * Window caption text.
      */
@@ -160,7 +164,7 @@ open class RoWindow(
             windowIcon.visible = (value != null && value != "")
         }
 
-    private val header = SimplePanel(setOf("modal-header"))
+    private val header = SimplePanel("modal-header")
 
     /**
      * @suppress
@@ -173,10 +177,11 @@ open class RoWindow(
     private val closeIcon = CloseIcon()
     private val maximizeIcon = MaximizeIcon()
     private val minimizeIcon = MinimizeIcon()
-    private val captionTag = Tag(TAG.H5, caption, classes = setOf("modal-title")).apply {
+    private val captionTag = Tag(TAG.H5, caption).apply {
+        addCssClass("modal-title")
         alignSelf = AlignItems.START
     }
-    private val iconsContainer = SimplePanel(setOf("kv-window-icons-container"))
+    private val iconsContainer = SimplePanel("kv-window-icons-container")
 
     private val windowIcon = Icon(icon ?: "").apply {
         addCssClass("window-icon")

@@ -18,53 +18,51 @@
  */
 package org.apache.isis.client.kroviz.ui.chart
 
-import org.apache.isis.client.kroviz.ui.chart.ChartModel
 import io.kvision.chart.DataSets
 import io.kvision.core.Color
 import io.kvision.i18n.I18n
 
-@Deprecated("simple sample")
 class SampleChartModel() : ChartModel {
 
     override var bgColorList = mutableListOf(
-            Color.hex(0xC0504D),
-            Color.hex(0xF79646),
-            Color.hex(0x9BBB59),
-            Color.hex(0x4BACC6),
-            Color.hex(0x4F81BD),
-            Color.hex(0x8064A2)
+        Color.hex(0xC0504D),
+        Color.hex(0xF79646),
+        Color.hex(0x9BBB59),
+        Color.hex(0x4BACC6),
+        Color.hex(0x4F81BD),
+        Color.hex(0x8064A2)
     )
 
     override var bgColorList2 = mutableListOf(
-            Color.hex(0xC0504D.or(0x303030)),
-            Color.hex(0xF79646.or(0x303030)),
-            Color.hex(0x9BBB59.or(0x203030)),
-            Color.hex(0x4BACC6.or(0x301010)),
-            Color.hex(0x4F81BD.or(0x101010)),
-            Color.hex(0x8064A2.or(0x303030))
+        Color.hex(0xC0504D.or(0x303030)),
+        Color.hex(0xF79646.or(0x303030)),
+        Color.hex(0x9BBB59.or(0x203030)),
+        Color.hex(0x4BACC6.or(0x301010)),
+        Color.hex(0x4F81BD.or(0x101010)),
+        Color.hex(0x8064A2.or(0x303030))
     )
 
     override var labelList = mutableListOf<String>(
-            I18n.tr("BU 6"),
-            I18n.tr("BU 5"),
-            I18n.tr("BU 4"),
-            I18n.tr("BU 3"),
-            I18n.tr("BU 2"),
-            I18n.tr("BU 1")
+        I18n.tr("BU 6"),
+        I18n.tr("BU 5"),
+        I18n.tr("BU 4"),
+        I18n.tr("BU 3"),
+        I18n.tr("BU 2"),
+        I18n.tr("BU 1")
     )
 
     override var datasetList = mutableListOf<DataSets>()
 
     override var ds1 = DataSets(
-            data = listOf(300, 727, 589, 537, 543, 574),
-            backgroundColor = bgColorList,
-            label = "initial"
+        data = listOf(300, 727, 589, 537, 543, 574),
+        backgroundColor = bgColorList,
+        label = "initial"
     )
 
     override var ds2 = DataSets(
-            data = listOf(400, 238, 553, 746, 884, 903),
-            backgroundColor = bgColorList2,
-            label = "duplicates"
+        data = listOf(400, 238, 553, 746, 884, 903),
+        backgroundColor = bgColorList2,
+        label = "duplicates"
     )
 
     init {

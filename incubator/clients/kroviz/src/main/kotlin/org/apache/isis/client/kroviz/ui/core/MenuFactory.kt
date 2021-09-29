@@ -22,7 +22,6 @@ import io.kvision.core.Component
 import io.kvision.dropdown.DropDown
 import io.kvision.dropdown.separator
 import io.kvision.html.ButtonStyle
-import io.kvision.utils.set
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.to.Link
@@ -36,17 +35,20 @@ import io.kvision.html.Link as KvisionHtmlLink
 
 object MenuFactory {
 
-    fun buildForObject(tObject: TObject,
-                       withText: Boolean = true,
-                       iconName: String = "Actions")
+    fun buildForObject(
+        tObject: TObject,
+        withText: Boolean = true,
+        iconName: String = "Actions"
+    )
             : DropDown {
         val type = tObject.domainType
         val text = if (withText) "Actions for $type" else ""
         val icon = IconManager.find(iconName)
         val dd = DropDown(
-                text = text,
-                icon = icon,
-                style = ButtonStyle.LINK)
+            text = text,
+            icon = icon,
+            style = ButtonStyle.LINK
+        )
         val actions = tObject.getActions()
         actions.forEach {
             val link = buildActionLink(it.id, text)
@@ -59,18 +61,21 @@ object MenuFactory {
         return dd
     }
 
-    fun buildForMenu(menu: Menu,
-                     style: ButtonStyle = ButtonStyle.LIGHT,
-                     withText: Boolean = true,
-                     classes: Set<String> = setOf())
+    fun buildForMenu(
+        menu: Menu,
+        style: ButtonStyle = ButtonStyle.LIGHT,
+        withText: Boolean = true,
+        className: String? = null
+    )
             : DropDown {
         val menuTitle = menu.named
         val dd = DropDown(
-                text = if (withText) menuTitle else "",
-                icon = IconManager.find(menuTitle),
-                style = style,
-                classes = classes,
-                forNavbar = false)
+            text = if (withText) menuTitle else "",
+            icon = IconManager.find(menuTitle),
+            style = style,
+            className = className,
+            forNavbar = false
+        )
         //dd.setDragDropData(Constants.stdMimeType, menuTitle)
         // action.setDragDropData gets always overridden by dd.setDragDropData
         menu.section.forEachIndexed { index, section ->
@@ -93,8 +98,9 @@ object MenuFactory {
         val menu = findMenuByTitle(title)
         return if (menu == null) null else
             buildForMenu(
-                    menu = menu,
-                    withText = false)
+                menu = menu,
+                withText = false
+            )
     }
 
     private fun findMenuByTitle(menuTitle: String): Menu? {
@@ -110,8 +116,9 @@ object MenuFactory {
     }
 
     fun buildForAction(
-            menuTitle: String,
-            actionTitle: String): KvisionHtmlLink? {
+        menuTitle: String,
+        actionTitle: String
+    ): KvisionHtmlLink? {
         val menu = findMenuByTitle(menuTitle)!!
         menu.section.forEachIndexed { _, section ->
             section.serviceAction.forEach { sa ->
@@ -129,14 +136,16 @@ object MenuFactory {
         return null
     }
 
-     fun buildActionLink(
-            label: String,
-            menuTitle: String): KvisionHtmlLink {
+    fun buildActionLink(
+        label: String,
+        menuTitle: String
+    ): KvisionHtmlLink {
         val actionTitle = StringUtils.deCamel(label)
         val actionLink: KvisionHtmlLink = ddLink(
-                label = actionTitle,
-                icon = IconManager.find(label),
-                classes = IconManager.findStyleFor(label))
+            label = actionTitle,
+            icon = IconManager.find(label),
+            className = IconManager.findStyleFor(label)
+        )
         val id = "$menuTitle${Constants.actionSeparator}$actionTitle"
         actionLink.setDragDropData(Constants.stdMimeType, id)
         actionLink.id = id
@@ -144,33 +153,38 @@ object MenuFactory {
     }
 
     private fun ddLink(
-            label: String,
-            icon: String? = null,
-            classes: Set<String>? = null,
-            init: (KvisionHtmlLink.() -> Unit)? = null
+        label: String,
+        icon: String? = null,
+        className: String? = null,
+        init: (KvisionHtmlLink.() -> Unit)? = null
     ): KvisionHtmlLink {
-        return KvisionHtmlLink(
-                label = label,
-                url = null,
-                icon = icon,
-                image = null,
-                separator = null,
-                labelFirst = true,
-                classes = (classes ?: null.set) + "dropdown-item").apply {
+        val link = KvisionHtmlLink(
+            label = label,
+            url = null,
+            icon = icon,
+            image = null,
+            separator = null,
+            labelFirst = true,
+            className = className
+        )
+        link.addCssClass("dropdown-item")
+        return link.apply {
             init?.invoke(this)
         }
     }
 
     // initially added items will be enabled
     fun amendWithSaveUndo(
-            dd: DropDown,
-            tObject: TObject) {
+        dd: DropDown,
+        tObject: TObject
+    ) {
         dd.separator()
 
         val saveLink = tObject.links.first()
         val saveAction = buildActionLink(
-                label = "save",
-                menuTitle = tObject.domainType)
+            label = "save",
+            menuTitle = tObject.domainType
+        )
         saveAction.onClick {
             ResourceProxy().fetch(saveLink)
         }
@@ -178,8 +192,9 @@ object MenuFactory {
 
         val undoLink = Link(href = "")
         val undoAction = buildActionLink(
-                label = "undo",
-                menuTitle = tObject.domainType)
+            label = "undo",
+            menuTitle = tObject.domainType
+        )
         undoAction.onClick {
             ResourceProxy().fetch(undoLink)
         }

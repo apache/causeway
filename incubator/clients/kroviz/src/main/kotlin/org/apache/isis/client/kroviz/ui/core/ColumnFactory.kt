@@ -58,7 +58,7 @@ class ColumnFactory {
                 hozAlign = Align.CENTER,
                 width = "40",
                 headerSort = false,
-                clickMenu = { component: dynamic, e: dynamic ->
+                clickMenu = { component: dynamic, _: dynamic ->
                     buildObjectMenu(component)
                 }
         )

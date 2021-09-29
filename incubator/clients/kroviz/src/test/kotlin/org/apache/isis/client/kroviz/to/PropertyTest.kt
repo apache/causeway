@@ -24,6 +24,7 @@ import org.apache.isis.client.kroviz.snapshots.demo2_0_0.PROPERTY
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.PROPERTY_DESCRIPTION
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.FR_OBJECT_PROPERTY_
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.SO_PROPERTY
+import org.apache.isis.client.kroviz.to.mb.Extensions
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -35,7 +36,7 @@ class PropertyTest {
         val jsonStr = PROPERTY_DESCRIPTION.str
         val p = PropertyHandler().parse(jsonStr) as Property
         assertEquals("parity", p.id)
-        assertEquals("The parity of this 'DemoItem'.", p.extensions!!.description)
+        assertEquals("The parity of this 'DemoItem'.", p.extensions!!.getDescription())
     }
 
     @Test
@@ -84,7 +85,7 @@ class PropertyTest {
         val jsonStr = DOMAIN_TYPES_PROPERTY.str
         val p = PropertyHandler().parse(jsonStr) as Property
         val e: Extensions = p.extensions!!
-        val actual = e.friendlyName
+        val actual = e.getFriendlyName()
         val expected = "Read Only Property Derived Render Day Not Specified"
         assertEquals(expected, actual)
     }

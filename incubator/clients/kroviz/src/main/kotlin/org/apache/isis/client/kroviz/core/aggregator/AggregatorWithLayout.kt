@@ -19,12 +19,14 @@ abstract class AggregatorWithLayout : BaseAggregator() {
     }
 
     protected fun handleLayout(layout: Layout, dm: DisplayModelWithLayout, referrer: String) {
+        console.log("[CA.handleLayout] ISIS-2846")
+        console.log(layout)
         if (dm.layout == null) {
             dm.addLayout(layout)
             dm.properties.propertyLayoutList.forEach { p ->
                 val l = p.link
                 if (l == null) {
-                    //                   console.log(p.id + " link empty")  // ISIS-2846
+                    console.log(p.id + " link empty")  // ISIS-2846
                 } else {
                     val isDn = l.href.contains("datanucleus")
                     if (!isDn) {
@@ -36,7 +38,7 @@ abstract class AggregatorWithLayout : BaseAggregator() {
         }
     }
 
-    protected fun invokeLayoutLink(obj: TObject, aggregator: AggregatorWithLayout, referrer :String) {
+    protected fun invokeLayoutLink(obj: TObject, aggregator: AggregatorWithLayout, referrer: String) {
         val l = obj.getLayoutLink()
         if (l.representation() == Represention.OBJECT_LAYOUT_BS3) {
             invoke(l, aggregator, Constants.subTypeXml, referrer)

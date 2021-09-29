@@ -44,7 +44,8 @@ object COLLECTION_DESCRIPTION: Response(){
     "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
   } ],
   "extensions" : {
-    "friendlyName" : "Entities"
+    "friendlyName" : "Entities",
+    "friendlyNameForm" : "static"
   }
 }
     """

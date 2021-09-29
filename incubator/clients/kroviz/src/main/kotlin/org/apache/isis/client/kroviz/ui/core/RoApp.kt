@@ -27,9 +27,10 @@ object RoApp : SimplePanel() {
     init {
         this.add(RoMenuBar.navbar)
 
-        val view = HPanel(classes = setOf("main")) {
+        val view = HPanel() {
             width = CssSize(100, UNIT.perc)
         }
+        view.addCssClass("main")
         view.add(RoIconBar.panel)
         view.add(RoView.tabPanel)
         this.add(view)

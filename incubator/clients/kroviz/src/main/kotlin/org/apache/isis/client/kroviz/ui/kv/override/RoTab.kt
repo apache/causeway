@@ -32,9 +32,8 @@ import io.kvision.html.Icon
 import io.kvision.html.Link
 import io.kvision.html.TAG
 import io.kvision.html.Tag
+import io.kvision.panel.TabPanel
 import io.kvision.routing.RoutingManager
-import io.kvision.state.ObservableState
-import io.kvision.state.bind
 import io.kvision.utils.obj
 import org.apache.isis.client.kroviz.utils.DomUtil
 import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
@@ -50,23 +49,21 @@ import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
  * @param route JavaScript route to activate given tab
  * @param init an initializer extension function
  */
+@Deprecated("remove when icon menu works with Tab and SVG can be recreated")
 open class RoTab(
+    label: String? = null, icon: String? = null,
+    image: ResString? = null, closable: Boolean = false, val route: String? = null,
+    init: (RoTab.() -> Unit)? = null
+) : Tag(TAG.LI, className = "nav-item") {
+
+    constructor(
         label: String? = null,
+        child: Component,
         icon: String? = null,
         image: ResString? = null,
         closable: Boolean = false,
-        val route: String? = null,
+        route: String? = null,
         init: (RoTab.() -> Unit)? = null
-) : Tag(TAG.LI, classes = setOf("nav-item")) {
-
-    constructor(
-            label: String? = null,
-            child: Component,
-            icon: String? = null,
-            image: ResString? = null,
-            closable: Boolean = false,
-            route: String? = null,
-            init: (RoTab.() -> Unit)? = null
     ) : this(label, icon, image, closable, route, init) {
         @Suppress("LeakingThis")
         add(child)
@@ -115,20 +112,20 @@ open class RoTab(
             closeIcon.visible = value
         }
 
-    internal val closeIcon = Icon("fas fa-times").apply {
+    protected val closeIcon = Icon("fas fa-times").apply {
         addCssClass("kv-tab-close")
         visible = closable
         setEventListener<Icon> {
             click = { e ->
-                val tabPanel = (this@RoTab.parent as? RoTabPanelNav)?.tabPanel
+                val tabPanel = (this@RoTab.parent as? RoTabPanel.TabPanelNav)?.tabPanel
                 val actIndex = tabPanel?.getTabIndex(this@RoTab) ?: -1
                 e.asDynamic().data = actIndex
                 @Suppress("UnsafeCastFromDynamic")
-                val event = org.w3c.dom.CustomEvent("tabClosing", obj { detail = e; cancelable = true })
+                val event = org.w3c.dom.CustomEvent("closingTab", obj { detail = e; cancelable = true })
                 if (tabPanel?.getElement()?.dispatchEvent(event) != false) {
                     tabPanel?.removeTab(actIndex)
                     @Suppress("UnsafeCastFromDynamic")
-                    val closed = org.w3c.dom.CustomEvent("tabClosed", obj { detail = e })
+                    val closed = org.w3c.dom.CustomEvent("closedTab", obj { detail = e })
                     tabPanel?.getElement()?.dispatchEvent(closed)
                 }
                 e.stopPropagation()
@@ -139,20 +136,20 @@ open class RoTab(
     /**
      * A link component within the tab.
      */
-    val link = Link(label ?: "", "#", icon, image, classes = setOf("nav-link")).apply {
+    val link = Link(label ?: "", "#", icon, image, className = "nav-link").apply {
         add(this@RoTab.closeIcon)
     }
 
     internal val tabId = counter++
 
     protected val routingHandler = { _: Any ->
-        (this@RoTab.parent as? RoTabPanelNav)?.tabPanel?.activeTab = this
+        (this@RoTab.parent as? RoTabPanel.TabPanelNav)?.tabPanel?.activeTab = this
     }
 
     init {
         addPrivate(link)
         onClick { e ->
-            (this@RoTab.parent as? RoTabPanelNav)?.tabPanel?.activeTab = this
+            (this@RoTab.parent as? RoTabPanel.TabPanelNav)?.tabPanel?.activeTab = this
             e.preventDefault()
             if (route != null) {
                 RoutingManager.getRouter().kvNavigate(route)
@@ -168,7 +165,7 @@ open class RoTab(
     }
 
     override fun childrenVNodes(): Array<VNode> {
-        return (privateChildren).filter { it.visible }.map { it.renderVNode() }.toTypedArray()
+        return (privateChildren!!).filter { it.visible }.map { it.renderVNode() }.toTypedArray()
     }
 
     override fun dispose() {
@@ -186,25 +183,12 @@ open class RoTab(
  *
  * It takes the same parameters as the constructor of the built component.
  */
-fun RoTabPanel.tab(
-        label: String? = null, icon: String? = null,
-        image: ResString? = null, closable: Boolean = false, route: String? = null,
-        init: (RoTab.() -> Unit)? = null
+fun TabPanel.tab(
+    label: String? = null, icon: String? = null,
+    image: ResString? = null, closable: Boolean = false, route: String? = null,
+    init: (RoTab.() -> Unit)? = null
 ): RoTab {
     val tab = RoTab(label, icon, image, closable, route, init)
     this.add(tab)
     return tab
 }
-
-/**
- * DSL builder extension function for observable state.
- *
- * It takes the same parameters as the constructor of the built component.
- */
-fun <S> RoTabPanel.tab(
-        state: ObservableState<S>,
-        label: String? = null, icon: String? = null,
-        image: ResString? = null, closable: Boolean = false, route: String? = null,
-        init: (RoTab.(S) -> Unit)
-) = tab(label, icon, image, closable, route).bind(state, true, init)
-

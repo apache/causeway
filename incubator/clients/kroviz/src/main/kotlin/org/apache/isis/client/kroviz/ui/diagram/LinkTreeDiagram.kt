@@ -94,9 +94,9 @@ object LinkTreeDiagram {
         val obj = logEntry.obj
         if (obj != null) {
             val ets = (obj as Property).extensions!!
-            pc.addLine("friendlyName: " + ets.friendlyName)
+            pc.addLine("friendlyName: " + ets.getFriendlyName())
             pc.addHorizontalLine()
-            pc.add("descriptions: " + ets.description)
+            pc.add("descriptions: " + ets.getDescription())
             pc.toMindmapNode(level)
         }
         return pc.code

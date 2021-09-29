@@ -20,6 +20,7 @@ package org.apache.isis.client.kroviz.core.event
 
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.utils.StringUtils
+import org.apache.isis.client.kroviz.utils.UrlUtils
 
 class ResourceSpecification(
         val url: String,
@@ -28,8 +29,8 @@ class ResourceSpecification(
 
     fun isRedundant(): Boolean {
         return when {
-            url.contains("object-layout") -> true
-            url.contains("/properties/") -> true
+            UrlUtils.isObjectLayout(url) -> true
+            UrlUtils.isProperties(url) -> true
             else -> false
         }
     }

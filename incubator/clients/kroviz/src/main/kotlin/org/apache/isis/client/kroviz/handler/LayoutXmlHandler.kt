@@ -20,14 +20,15 @@ package org.apache.isis.client.kroviz.handler
 
 import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.to.bs3.Grid
+import org.apache.isis.client.kroviz.utils.UrlUtils
 import org.apache.isis.client.kroviz.utils.XmlHelper
 
 class LayoutXmlHandler : BaseHandler() {
 
     override fun canHandle(response: String): Boolean {
-        val isLayoutXml = XmlHelper.isXml(response)
-                && logEntry.url.endsWith("layout")
-        if (isLayoutXml) {
+        val isXmlLayout = XmlHelper.isXml(response)
+                && UrlUtils.isLayout(logEntry.url)
+        if (isXmlLayout) {
             return super.canHandle(response)
         }
         return false

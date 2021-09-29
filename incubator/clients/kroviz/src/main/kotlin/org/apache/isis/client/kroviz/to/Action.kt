@@ -19,6 +19,7 @@
 package org.apache.isis.client.kroviz.to
 
 import kotlinx.serialization.Serializable
+import org.apache.isis.client.kroviz.to.mb.Extensions
 
 @Serializable
 data class Action(val id: String,

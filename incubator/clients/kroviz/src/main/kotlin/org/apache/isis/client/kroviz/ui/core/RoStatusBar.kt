@@ -35,9 +35,8 @@ import org.apache.isis.client.kroviz.ui.dialog.NotificationDialog
 import org.apache.isis.client.kroviz.utils.IconManager
 
 object RoStatusBar {
-    val navbar = Navbar(
-            type = NavbarType.FIXEDBOTTOM,
-            classes = setOf("status-bar"))
+    val navbar = Navbar(type = NavbarType.FIXEDBOTTOM)
+
     private val nav = Nav(rightAlign = true)
     private val userBtn: Button = buildButton("", "Me", ButtonStyle.OUTLINEWARNING)
     private val classDiagram = buildButton("", "Diagram", ButtonStyle.OUTLINEWARNING)
@@ -46,18 +45,20 @@ object RoStatusBar {
 
     private fun buildButton(text: String, iconName: String, style: ButtonStyle): Button {
         return Button(
-                text = text,
-                icon = IconManager.find(iconName),
-                style = style).apply {
+            text = text,
+            icon = IconManager.find(iconName),
+            style = style
+        ).apply {
             padding = CssSize(-16, UNIT.px)
             margin = CssSize(0, UNIT.px)
         }
     }
 
     init {
+        navbar.addCssClass("status-bar")
         navbar.add(nav)
-        nav.add(isisButton())
-        nav.add(kvisionButton())
+//        nav.add(isisButton())
+//        nav.add(kvisionButton())
         nav.add(lastError)
         nav.add(classDiagram)
         nav.add(userBtn)
@@ -116,19 +117,21 @@ object RoStatusBar {
     }
 
     private fun isisButton(): Button {
-        val classes = setOf("isis-logo-button-image", "logo-button")
-        return Button("", style = ButtonStyle.LINK, classes = classes)
-                .onClick {
-                    window.open("https://isis.apache.org")
-                }
+        val classes = "isis-logo-button-image logo-button"
+        val b = Button("", style = ButtonStyle.LINK)
+        b.addCssClass(classes)
+        return b.onClick {
+            window.open("https://isis.apache.org")
+        }
     }
 
     private fun kvisionButton(): Button {
-        val classes = setOf("kvision-logo-button-image", "logo-button")
-        return Button("", style = ButtonStyle.LINK, classes = classes)
-                .onClick {
-                    window.open("https://kvision.io")
-                }
+        val classes = "kvision-logo-button-image logo-button"
+        val b = Button("", style = ButtonStyle.LINK)
+        b.addCssClass(classes)
+        return b.onClick {
+            window.open("https://kvision.io")
+        }
     }
 
 }

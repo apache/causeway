@@ -18,29 +18,24 @@
  */
 package org.apache.isis.client.kroviz
 
-import org.apache.isis.client.kroviz.ui.core.RoApp
-import io.kvision.Application
+import io.kvision.*
 import io.kvision.pace.Pace
+import io.kvision.panel.VPanel
 import io.kvision.panel.root
-import io.kvision.panel.vPanel
-import io.kvision.startApplication
-import io.kvision.utils.px
-import io.kvision.require
+import org.apache.isis.client.kroviz.ui.core.RoApp
 
 class App : Application() {
 
     init {
+        Pace.init()
         require("css/kroviz.css")
     }
 
     override fun start() {
-        Pace.init()
-        root("kroviz") {
-            vPanel(spacing = 0) {
-                padding = 0.px
-                add(RoApp)
-            }
-        }
+        val r = root("kroviz", addRow = true)
+        val v = VPanel()
+        v.add(RoApp)
+        r.add(v)
     }
 
     override fun dispose(): Map<String, Any> {
@@ -49,5 +44,21 @@ class App : Application() {
 }
 
 fun main() {
-    startApplication(::App)
+    startApplication(
+        ::App,
+        module.hot,
+        BootstrapModule,
+        BootstrapCssModule,
+        FontAwesomeModule,
+        BootstrapSelectModule,
+        BootstrapDatetimeModule,
+        BootstrapSpinnerModule,
+        BootstrapTypeaheadModule,
+        BootstrapUploadModule,
+        RichTextModule,
+        ChartModule,
+        TabulatorModule,
+        CoreModule,
+        panelsCompatibilityMode = true,
+    )
 }

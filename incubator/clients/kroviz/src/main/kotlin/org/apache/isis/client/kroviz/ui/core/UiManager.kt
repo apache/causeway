@@ -34,10 +34,7 @@ import org.apache.isis.client.kroviz.core.model.ObjectDM
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.kv.override.RoTab
-import org.apache.isis.client.kroviz.utils.DomUtil
-import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
-import org.apache.isis.client.kroviz.utils.StringUtils
-import org.apache.isis.client.kroviz.utils.UUID
+import org.apache.isis.client.kroviz.utils.*
 import org.w3c.dom.events.KeyboardEvent
 
 /**
@@ -52,6 +49,7 @@ object UiManager {
     private var session: Session? = null
     private val popups = mutableListOf<Widget>()
     private val settings = mutableMapOf<String, Any>()
+    var position: Point? = null
 
     init {
         window.addEventListener("keydown", fun(event) {

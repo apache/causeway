@@ -34,7 +34,7 @@ class DomainTypeTest {
         //when
         val to = DomainTypeHandler().parse(jsonStr) as DomainType
         //then
-        assertEquals("Java Lang String Jdo", to.extensions.friendlyName)
+        assertEquals("Java Lang String Jdo", to.extensions.getFriendlyName())
     }
 
     @Test
