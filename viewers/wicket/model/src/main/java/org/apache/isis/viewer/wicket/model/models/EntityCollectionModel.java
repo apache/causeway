@@ -106,12 +106,15 @@ extends
 
     // -- METAMODEL SUPPORT
 
-    ManagedObject getParentObject();
     OneToManyAssociation getMetaModel();
 
     default ObjectSpecification getElementType() {
         return getMetaModel().getElementType();
     }
+
+    // -- OWNER SUPPORT
+
+    ManagedObject getParentObject();
 
     // -- BASIC PROPERTIES
 

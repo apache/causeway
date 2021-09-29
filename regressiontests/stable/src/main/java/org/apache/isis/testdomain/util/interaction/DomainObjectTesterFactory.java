@@ -247,36 +247,34 @@ public class DomainObjectTesterFactory {
             assertExists(true);
 
             val pojoReplacers = Can.ofArray(pojoDefaultArgReplacers);
+            val managedAction = this.managedAction.orElseThrow();
 
-            managedAction
-            .ifPresent(managedAction->{
-                interactionService.runAnonymous(()->{
+            interactionService.runAnonymous(()->{
 
-                    val actionInteraction = ActionInteraction.wrap(managedAction)
-                            .checkVisibility()
-                            .checkUsability();
+                val actionInteraction = ActionInteraction.wrap(managedAction)
+                        .checkVisibility()
+                        .checkUsability();
 
-                    val pendingArgs = actionInteraction
-                            .startParameterNegotiation().orElseThrow(()->_Exceptions
-                                    .illegalAccess("action not visible or usable: %s",
-                                            managedAction.getAction().getFeatureIdentifier()));
+                val pendingArgs = actionInteraction
+                        .startParameterNegotiation().orElseThrow(()->_Exceptions
+                                .illegalAccess("action not visible or usable: %s",
+                                        managedAction.getAction().getFeatureIdentifier()));
 
-                    pendingArgs.getParamModels()
-                            .forEach(param->{
-                                pojoReplacers
-                                    .get(param.getParamNr())
-                                    .ifPresent(param::updatePojo);
-                            });
+                pendingArgs.getParamModels()
+                        .forEach(param->{
+                            pojoReplacers
+                                .get(param.getParamNr())
+                                .ifPresent(param::updatePojo);
+                        });
 
-                    //pendingArgs.validateParameterSetForParameters();
+                //pendingArgs.validateParameterSetForParameters();
 
-                    val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
-                    assertTrue(resultOrVeto.isLeft()); // assert action did not throw
+                val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+                assertTrue(resultOrVeto.isLeft()); // assert action did not throw
 
-                    val actionResultAsPojo = resultOrVeto.leftIfAny().getPojo();
-                    assertEquals(expectedResult, actionResultAsPojo);
+                val actionResultAsPojo = resultOrVeto.leftIfAny().getPojo();
+                assertEquals(expectedResult, actionResultAsPojo);
 
-                });
             });
 
         }
@@ -291,38 +289,78 @@ public class DomainObjectTesterFactory {
             assertExists(true);
 
             val pojoReplacers = Can.ofArray(pojoDefaultArgReplacers);
+            val managedAction = this.managedAction.orElseThrow();
 
-            managedAction
-            .ifPresent(managedAction->{
-                interactionService.runAnonymous(()->{
+            interactionService.runAnonymous(()->{
 
-                    val actionInteraction = ActionInteraction.wrap(managedAction)
-                            //.checkVisibility() - no rule checking
-                            //.checkUsability() - no rule checking
-                            ;
+                val actionInteraction = ActionInteraction.wrap(managedAction)
+                        //.checkVisibility() - no rule checking
+                        //.checkUsability() - no rule checking
+                        ;
 
-                    val pendingArgs = actionInteraction
-                            .startParameterNegotiation().orElseThrow(()->_Exceptions
-                                    .illegalAccess("action not visible or usable: %s",
-                                            managedAction.getAction().getFeatureIdentifier()));
+                val pendingArgs = actionInteraction
+                        .startParameterNegotiation().orElseThrow(()->_Exceptions
+                                .illegalAccess("action not visible or usable: %s",
+                                        managedAction.getAction().getFeatureIdentifier()));
 
-                    pendingArgs.getParamModels()
-                    .forEach(param->{
-                        pojoReplacers
-                            .get(param.getParamNr())
-                            .ifPresent(param::updatePojo);
-                    });
-
-                    // spawns its own transactional boundary, or reuses an existing one if available
-                    val either = managedAction.invoke(pendingArgs.getParamValues());
-
-                    assertTrue(either.isLeft()); // assert action did not throw
-
-                    val actionResultAsPojo = either.leftIfAny().getPojo();
-
-                    assertEquals(expectedResult, actionResultAsPojo);
-
+                pendingArgs.getParamModels()
+                .forEach(param->{
+                    pojoReplacers
+                        .get(param.getParamNr())
+                        .ifPresent(param::updatePojo);
                 });
+
+                // spawns its own transactional boundary, or reuses an existing one if available
+                val either = managedAction.invoke(pendingArgs.getParamValues());
+
+                assertTrue(either.isLeft()); // assert action did not throw
+
+                val actionResultAsPojo = either.leftIfAny().getPojo();
+
+                assertEquals(expectedResult, actionResultAsPojo);
+
+            });
+
+        }
+
+        /**
+         * Use on non scalar results.
+         */
+        public DataTableTester tableTester(
+                @SuppressWarnings("rawtypes") final @Nullable UnaryOperator ...pojoDefaultArgReplacers) {
+
+            assertExists(true);
+
+            val pojoReplacers = Can.ofArray(pojoDefaultArgReplacers);
+            val managedAction = this.managedAction.orElseThrow();
+
+            return interactionService.callAnonymous(()->{
+
+                val actionInteraction = ActionInteraction.wrap(managedAction)
+                        .checkVisibility()
+                        .checkUsability();
+
+                val pendingArgs = actionInteraction
+                        .startParameterNegotiation().orElseThrow(()->_Exceptions
+                                .illegalAccess("action not visible or usable: %s",
+                                        managedAction.getAction().getFeatureIdentifier()));
+
+                pendingArgs.getParamModels()
+                        .forEach(param->{
+                            pojoReplacers
+                                .get(param.getParamNr())
+                                .ifPresent(param::updatePojo);
+                        });
+
+                //pendingArgs.validateParameterSetForParameters();
+
+                val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+                assertTrue(resultOrVeto.isLeft()); // assert action did not throw
+
+                val actionResult = resultOrVeto.leftIfAny();
+
+                return DataTableTester.of(actionInteraction
+                        .createDataTableModelForResult(actionResult));
             });
 
         }
@@ -556,8 +594,9 @@ public class DomainObjectTesterFactory {
         }
 
         public DataTableTester tableTester() {
-            return DataTableTester.of(getManagedCollectionIfAny().orElseThrow(
-                    ).createDataTableModel());
+            return DataTableTester.of(getManagedCollectionIfAny()
+                    .orElseThrow()
+                    .createDataTableModel());
         }
 
     }

@@ -44,43 +44,22 @@ extends EntityCollectionModelAbstract {
         // take a copy of the actionModel,
         // because the original can get mutated (specifically: its arguments cleared)
         return new EntityCollectionModelStandalone(
-                actionModel.copy(), //TODO deprecate the copy()
-                collectionAsAdapter);
+                CollectionInteractionWkt
+                .bind(actionModel.copy(), Where.NOT_SPECIFIED), //TODO deprecate the copy(), instead we need to memorize the argument list
+                actionModel);
     }
 
     // -- CONSTRUCTOR
 
     private EntityCollectionModelStandalone(
-            final @NonNull ActionModel actionModel,
-            final @NonNull ManagedObject collectionAsAdapter) {
-        super(CollectionInteractionWkt
-                .bind(actionModel, Where.NOT_SPECIFIED),
+            final @NonNull CollectionInteractionWkt collIactn,
+            final @NonNull ActionModel actionModel) {
+        super(collIactn,
                 Variant.PARENTED);
         this.actionModel = actionModel;
-//        this.mementoList = _NullSafe.streamAutodetect(collectionAsAdapter.getPojo()) // pojos
-//                .filter(_NullSafe::isPresent)
-//                .map(actionModel.getMementoService()::mementoForPojo)
-//                .collect(Can.toCan());
-
     }
 
     // --
-
-//    private Can<ObjectMemento> mementoList;
-//
-//    @Override
-//    protected List<ManagedObject> load() {
-//        return mementoList.stream()
-//        .map(getCommonContext()::reconstructObject)
-//        .sorted(super.getElementComparator())
-//        .collect(Can.toCan())
-//        .toList();
-//    }
-
-//    @Override
-//    public int getCount() {
-//        return mementoList.size();
-//    }
 
     @Override
     public ManagedObject getParentObject() {

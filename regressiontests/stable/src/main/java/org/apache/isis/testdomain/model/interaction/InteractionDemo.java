@@ -102,6 +102,8 @@ public class InteractionDemo {
         return lazyItems.get();
     }
 
+    // -- ASSOCIATED ACTION
+
     @Action(choicesFrom = "items")
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
     public InteractionDemo doSomethingWithItems(
@@ -115,5 +117,11 @@ public class InteractionDemo {
         return this;
     }
 
+    // -- NON-SCALAR ACTION
+
+    @Action
+    public List<InteractionDemoItem> limitedItems(final int limit) {
+        return lazyItems.get().stream().limit(limit).collect(Collectors.toList());
+    }
 
 }

@@ -28,7 +28,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.interaction.coll.CollectionInteractionWkt;
 
@@ -52,7 +51,7 @@ implements
     public static EntityCollectionModelParented forParentObjectModel(
             final @NonNull EntityModel entityModel) {
 
-        val collectionMetaModel =
+        val collMetaModel =
                 Optional.ofNullable(entityModel.getCollectionLayoutData())
                 .map(collectionLayoutData->
                     entityModel
@@ -62,16 +61,17 @@ implements
                         .illegalArgument("EntityModel must have CollectionLayoutMetadata"));
 
         return new EntityCollectionModelParented(
-                collectionMetaModel, entityModel);
+                CollectionInteractionWkt
+                .bind(entityModel.bookmarkedObjectModel(), collMetaModel, Where.NOT_SPECIFIED),
+                entityModel);
     }
 
     // -- CONSTRUCTOR
 
     protected EntityCollectionModelParented(
-            final @NonNull OneToManyAssociation coll,
+            final @NonNull CollectionInteractionWkt collIactn,
             final @NonNull EntityModel parentObjectModel) { //TODO replace with BookmarkedObjectWkt
-        super(CollectionInteractionWkt
-                .bind(parentObjectModel.bookmarkedObjectModel(), coll, Where.NOT_SPECIFIED),
+        super(collIactn,
                 Variant.PARENTED);
         this.entityModel = parentObjectModel;
     }
@@ -94,24 +94,6 @@ implements
     public void clearHint(final Component component, final String attributeName) {
         getEntityModel().clearHint(component, attributeName);
     }
-
-//    @Override
-//    protected List<ManagedObject> load() {
-//
-//        final ManagedObject collectionAsAdapter = getManagedCollection().getCollectionValue();
-//
-//FIXME[ISIS-2871] DataTableModel has no sorting
-//        val elements = _NullSafe.streamAutodetect(collectionAsAdapter.getPojo())
-//        .filter(_NullSafe::isPresent) // pojos
-//        .map(getObjectManager()::adapt)
-//        .sorted(super.getElementComparator())
-//        .collect(Can.toCan());
-//
-//        this.count = elements.size();
-//
-//        return elements.toList();
-//    }
-
 
     public ManagedCollection getManagedCollection() {
         return ManagedCollection

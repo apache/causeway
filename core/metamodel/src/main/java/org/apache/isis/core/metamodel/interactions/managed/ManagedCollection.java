@@ -101,7 +101,7 @@ public final class ManagedCollection extends ManagedMember {
     }
 
     public DataTableModel createDataTableModel() {
-        return new DataTableModel(this);
+        return DataTableModel.forCollection(this);
     }
 
 }

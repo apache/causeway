@@ -427,6 +427,28 @@ class ActionInteractionTest extends InteractionTestAbstract {
 
     }
 
+    @Test
+    void whenNonScalarResult_shouldHaveDataTable() {
+
+        val tester =
+                testerFactory.actionTester(InteractionDemo.class, "limitedItems", Where.OBJECT_FORMS);
+
+        tester.assertVisibilityIsNotVetoed();
+        tester.assertUsabilityIsNotVetoed();
+
+        val expectedElements = ((InteractionDemo)(tester.getManagedActionElseFail()
+                .getOwner()
+                .getPojo()))
+                .getItems();
+        assertEquals(4, expectedElements.size());
+
+        val tableTester = tester.tableTester(arg0->2); // 2 expected rows in the resulting table
+
+        tableTester.assertUnfilteredDataElements(List.of(
+                expectedElements.get(0),
+                expectedElements.get(1)));
+    }
+
   //TODO also deal with non-scalar parameter values
   //TODO test whether actions do emit their domain events
   //TODO test whether actions can be vetoed via domain event interception

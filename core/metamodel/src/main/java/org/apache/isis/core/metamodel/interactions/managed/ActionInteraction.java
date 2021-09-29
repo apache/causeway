@@ -28,6 +28,7 @@ import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
@@ -201,5 +202,8 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
         }
     }
 
+    public DataTableModel createDataTableModelForResult(final ManagedObject result) {
+        return DataTableModel.forActionResult(this.getManagedActionElseFail(), result);
+    }
 
 }

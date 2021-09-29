@@ -18,19 +18,11 @@
  */
 package org.apache.isis.core.metamodel.spec.feature;
 
-import java.util.Comparator;
-import java.util.OptionalInt;
 import java.util.stream.Stream;
 
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.compare._Comparators;
-import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.commons.internal.functions._Predicates;
-import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacet;
-import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.memento.CollectionMemento;
 
 import lombok.val;
@@ -43,43 +35,6 @@ extends ObjectAssociation, OneToManyFeature {
      */
     default CollectionMemento getMemento() {
         return CollectionMemento.forCollection(this);
-    }
-
-    // -- PAGE SIZE
-
-    default OptionalInt getPageSize() {
-        return Stream.of(this, getElementType())
-            .map(facetHolder->facetHolder.getFacet(PagedFacet.class))
-            .filter(_NullSafe::isPresent)
-            .mapToInt(PagedFacet::value)
-            .findFirst();
-    }
-
-    // -- SORTING
-
-    /**
-     * An element comparator corresponding to associated {@link SortedByFacet}.
-     * The comparator operates on elements of type {@link ManagedObject}.
-     * @return non-null
-     */
-    default Comparator<ManagedObject> getElementComparator(){
-
-        var sortedBy = Stream.of(this, getElementType())
-            .map(facetHolder->facetHolder.getFacet(SortedByFacet.class))
-            .filter(_NullSafe::isPresent)
-            .findFirst()
-            .map(SortedByFacet::value)
-            .orElse(null);
-
-        if(sortedBy == null) {
-            return (a, b) -> 0; // no-op comparator, works with Stream#sort
-        }
-
-        val pojoComparator = _Casts.<Comparator<Object>>uncheckedCast(
-                _InstanceUtil.createInstance(sortedBy));
-        getMetaModelContext().getServiceInjector().injectServicesInto(pojoComparator);
-
-        return (a, b) -> pojoComparator.compare(a.getPojo(), b.getPojo());
     }
 
     // -- ASSOCIATED ACTIONS

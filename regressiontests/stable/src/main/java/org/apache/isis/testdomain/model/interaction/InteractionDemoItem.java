@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.model.interaction;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -49,7 +50,9 @@ import lombok.val;
 @NoArgsConstructor
 @AllArgsConstructor(staticName="of")
 @EqualsAndHashCode @ToString
-public class InteractionDemoItem {
+public class InteractionDemoItem implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @ObjectSupport public String title() {
         return String.format("DemoItem '%s'", getName());
@@ -67,8 +70,9 @@ public class InteractionDemoItem {
     @Value
     @Named("testdomain.InteractionDemoItem.CalendarEntry")
     @lombok.Value @Builder
+    public static class CalendarEntry implements Serializable {
 
-    public static class CalendarEntry {
+        private static final long serialVersionUID = 1L;
 
         // presentation
         LocalDateTime instant;

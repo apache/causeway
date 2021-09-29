@@ -62,16 +62,6 @@ implements
      */
     public static CollectionInteractionWkt bind(
             final BookmarkedObjectWkt bookmarkedObject,
-            final String memberId,
-            final Where where) {
-        return new CollectionInteractionWkt(bookmarkedObject, memberId, where);
-    }
-
-    /**
-     * Returns a new <i>Collection Interaction</i> binding to the parent {@link BookmarkedObjectWkt}.
-     */
-    public static CollectionInteractionWkt bind(
-            final BookmarkedObjectWkt bookmarkedObject,
             final OneToManyAssociation coll,
             final Where where) {
         return new CollectionInteractionWkt(bookmarkedObject, coll.getId(), where);
@@ -86,7 +76,7 @@ implements
             final Where where) {
         return new CollectionInteractionWkt(
                 actionModel.getParentUiModel().bookmarkedObjectModel(),
-                actionModel.getMetaModel().getId(),
+                actionModel.getMetaModel().getId(), //FIXME[ISIS-2871] wired up incorrectly
                 where);
     }
 
@@ -124,7 +114,7 @@ implements
         dataTableModelLazy =
                 _Lazy.threadSafe(()->
                     collectionInteraction().getManagedCollection()
-                    .map(DataTableModel::new));
+                    .map(DataTableModel::forCollection));
 
         return CollectionInteraction.start(getBookmarkedOwner(), memberId, where);
     }
