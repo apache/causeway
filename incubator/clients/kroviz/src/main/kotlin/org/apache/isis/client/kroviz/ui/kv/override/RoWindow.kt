@@ -74,7 +74,8 @@ open class RoWindow(
     SimplePanel() {
 
     init {
-        this.addCssClass("modal-content kv-window")
+        this.addCssClass("modal-content")
+        this.addCssClass("kv-window")
     }
     /**
      * Window caption text.
