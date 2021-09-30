@@ -111,14 +111,16 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
 
-    private static void addCollectionParamDefaultsFacetIfNoneAlready(final ObjectActionParameter collectionParam) {
+    private static void addCollectionParamDefaultsFacetIfNoneAlready(
+            final ObjectActionParameter collectionParam) {
         if(collectionParam.getNumber()!=0) {
             return; // with current programming model this can only be the first parameter of an action dialog
         }
         if(collectionParam.containsNonFallbackFacet(ActionParameterDefaultsFacet.class)) {
             return;
         }
-        FacetUtil.addFacet(new ActionParameterDefaultsFacetFromAssociatedCollection(collectionParam));
+        FacetUtil.addFacet(ActionParameterDefaultsFacetFromAssociatedCollection
+                .create(collectionParam));
     }
 
     private static void addCollectionParamChoicesFacetIfNoneAlready(

@@ -241,7 +241,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     // called from onInitialize*
     // (was previous called by EntityLinkSelect2Panel in onBeforeRender, this responsibility now moved)
     private void syncWithInput() {
-        val adapter = getModel().getPendingElseCurrentAdapter();
+        val adapter = getModel().getObject();
 
         // syncLinkWithInput
         final MarkupContainer componentForRegular = (MarkupContainer) getComponentForRegular();
@@ -372,7 +372,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
     // called by EntityLinkSelect2Panel
     String getInput() {
-        val pendingElseCurrentAdapter = getModel().getPendingElseCurrentAdapter();
+        val pendingElseCurrentAdapter = getModel().getObject();
         return pendingElseCurrentAdapter != null? pendingElseCurrentAdapter.titleString(): "(no object)";
     }
 
@@ -391,7 +391,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
             getModel().clearPending();
         }
 
-        val pendingAdapter = getModel().getPendingElseCurrentAdapter();
+        val pendingAdapter = getModel().getObject();
         entityLink.setConvertedInput(pendingAdapter);
     }
 

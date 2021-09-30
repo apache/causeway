@@ -18,13 +18,20 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
+import org.apache.wicket.model.ChainingModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -33,94 +40,75 @@ import lombok.extern.log4j.Log4j2;
  * synchronizes the {@link Model} of the <tt>Select2MultiChoice</tt>
  * with the parent {@link ScalarModel}, allowing also for pending values.
  */
-public interface ScalarModelWithMultiPending extends Serializable {
+public interface ScalarModelWithMultiPending
+extends
+    IModel<ArrayList<ObjectMemento>>,
+    HasCommonContext {
 
-    public ArrayList<ObjectMemento> getMultiPending();
-    public void setMultiPending(ArrayList<ObjectMemento> pending);
+    ScalarModel scalarModel();
 
-    public ScalarModel getScalarModel();
+    default ManagedValue pendingValue() { return scalarModel().proposedValue(); }
 
-    public static Model<ArrayList<ObjectMemento>> create(final ScalarModel scalarModel) {
-        return Factory.createModel(Factory.asScalarModelWithMultiPending(scalarModel));
+    default ArrayList<ObjectMemento> getMultiPending() { return getObject(); }
+    default void setMultiPending(final ArrayList<ObjectMemento> pending) { setObject(pending); }
+
+    @Override
+    default IsisAppCommonContext getCommonContext() {
+        return scalarModel().getCommonContext();
     }
 
+    // -- FACTORY
+
+    public static IModel<ArrayList<ObjectMemento>> create(final @NonNull ScalarModel scalarModel) {
+        return new ScalarModelWithMultiPendingImpl(scalarModel);
+    }
+
+    // -- IMPLEMENTATION
 
     @Log4j2
-    static class Factory {
+    static class ScalarModelWithMultiPendingImpl
+    extends ChainingModel<ArrayList<ObjectMemento>>
+    implements ScalarModelWithMultiPending {
 
-        private static ScalarModelWithMultiPending asScalarModelWithMultiPending(
-                final ScalarModel scalarModel) {
-            return new ScalarModelWithMultiPending(){
+        private static final long serialVersionUID = 1L;
 
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public ArrayList<ObjectMemento> getMultiPending() {
-                    ObjectMemento pendingMemento = scalarModel.getPendingModel().getObject();
-                    return ObjectMemento.unwrapList(pendingMemento)
-                            .orElse(null);
-                }
-
-                @Override
-                public void setMultiPending(final ArrayList<ObjectMemento> pending) {
-                    val logicalType = getScalarModel().getScalarTypeSpec().getLogicalType();
-                    ObjectMemento adapterMemento = ObjectMemento.wrapMementoList(pending, logicalType);
-                    scalarModel.getPendingModel().setObject(adapterMemento);
-                }
-
-                @Override
-                public ScalarModel getScalarModel() {
-                    return scalarModel;
-                }
-            };
+        ScalarModelWithMultiPendingImpl(final ScalarModel scalarModel) {
+            super(scalarModel); // chaining to scalarModel
         }
 
-        private static Model<ArrayList<ObjectMemento>> createModel(
-                final ScalarModelWithMultiPending owner) {
-            return new Model<ArrayList<ObjectMemento>>() {
+        /**
+         * chaining idiom: the {@link ScalarModel} we are chained to
+         */
+        @Override
+        public ScalarModel scalarModel() {
+            return (ScalarModel) super.getTarget();
+        }
 
-                private static final long serialVersionUID = 1L;
+        @Override
+        public ArrayList<ObjectMemento> getObject() {
 
-                @Override
-                public ArrayList<ObjectMemento> getObject() {
-                    final ArrayList<ObjectMemento> pending = owner.getMultiPending();
-                    if (pending != null) {
-                        log.debug("pending not null: {}", pending.toString());
-                        return pending;
-                    }
-                    log.debug("pending is null");
+            val packedValue = pendingValue().getValue().getValue();
+            val unpackedValue = ManagedObjects.unpack(scalarModel().getScalarTypeSpec(), packedValue);
 
-                    val ownerScalarModel = owner.getScalarModel();
-                    val commonContext = ownerScalarModel.getCommonContext();
-                    val objectAdapterMemento =
-                            commonContext.mementoFor(ownerScalarModel.getObject());
-                    return ObjectMemento.unwrapList(objectAdapterMemento)
-                            .orElse(null);
-                }
+            log.debug("getObject() as unpackedValue {}", unpackedValue);
 
-                @Override
-                public void setObject(final ArrayList<ObjectMemento> adapterMemento) {
-                    log.debug("setting to: {}", (adapterMemento != null ? adapterMemento.toString() : null));
-                    owner.setMultiPending(adapterMemento);
+            val unpackedMemento = unpackedValue.stream()
+            .map(getCommonContext()::mementoFor)
+            .collect(Collectors.toCollection(()->new ArrayList<>(unpackedValue.size())));
 
-                    val ownerScalarModel = owner.getScalarModel();
-                    val commonContext = ownerScalarModel.getCommonContext();
+            log.debug("getObject() as unpackedMemento {}", unpackedMemento);
+            return unpackedMemento;
+        }
 
-                    if(adapterMemento == null) {
-                        ownerScalarModel.setObject(null);
-                    } else {
-                        final ArrayList<ObjectMemento> ownerPending = owner.getMultiPending();
-                        if (ownerPending != null) {
-                            log.debug("setting to pending: {}", ownerPending.toString());
-                            val logicalType = ownerScalarModel.getScalarTypeSpec().getLogicalType();
-                            val multiPending = ObjectMemento.wrapMementoList(adapterMemento, logicalType);
-                            ownerScalarModel.setObject(
-                                    commonContext.reconstructObject(multiPending));
-                        }
-                    }
-                }
-            };
+        @Override
+        public void setObject(final ArrayList<ObjectMemento> unpackedMemento) {
+            log.debug("setObject() as unpackedMemento {}", unpackedMemento);
+            val logicalType = scalarModel().getScalarTypeSpec().getLogicalType();
+            val packedMemento = ObjectMemento.wrapMementoList(unpackedMemento, logicalType);
+            pendingValue().getValue().setValue(
+                    getCommonContext().reconstructObject(packedMemento));
         }
 
     }
+
 }

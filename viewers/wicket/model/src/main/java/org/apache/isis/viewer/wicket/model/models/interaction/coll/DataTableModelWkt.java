@@ -78,8 +78,8 @@ implements
     }
 
     public static @NonNull DataTableModelWkt forCollection(
-            final BookmarkedObjectWkt bookmarkedObjectModel,
-            final OneToManyAssociation collMetaModel) {
+            final @NonNull BookmarkedObjectWkt bookmarkedObjectModel,
+            final @NonNull OneToManyAssociation collMetaModel) {
 
         val table = DataTableModel.forCollection(
                 ManagedCollection

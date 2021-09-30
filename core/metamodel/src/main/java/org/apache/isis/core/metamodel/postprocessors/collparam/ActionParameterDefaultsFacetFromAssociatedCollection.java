@@ -18,44 +18,33 @@
  */
 package org.apache.isis.core.metamodel.postprocessors.collparam;
 
-import java.util.function.Function;
-
-import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 import lombok.NonNull;
 
 public class ActionParameterDefaultsFacetFromAssociatedCollection
 extends ActionParameterDefaultsFacetAbstract {
 
-    private static ThreadLocal<Can<Object>> _selectedPojos = ThreadLocal.withInitial(Can::empty);
+    public static ActionParameterDefaultsFacetFromAssociatedCollection create(
+            final ObjectActionParameter param) {
+        return new ActionParameterDefaultsFacetFromAssociatedCollection(param);
+    }
 
-    public ActionParameterDefaultsFacetFromAssociatedCollection(final FacetHolder holder) {
-        super(holder);
+    private int paramIndex;
+
+    private ActionParameterDefaultsFacetFromAssociatedCollection(final ObjectActionParameter param) {
+        super(param);
+        this.paramIndex = param.getNumber();
     }
 
     @Override
-    public Object getDefault(@NonNull ParameterNegotiationModel pendingArgs) {
-
-        return _selectedPojos.get();
-    }
-
-    public static <T, R> R applyWithSelected(
-            final Can<Object> selectedPojos,
-            final Function<T, R> function,
-            final T argument) {
-
-        try {
-            _selectedPojos.set(selectedPojos);
-            return function.apply(argument);
-        } catch (Exception e) {
-            throw new RecoverableException(e);
-        } finally {
-            _selectedPojos.remove();
-        }
+    public Can<ManagedObject> getDefault(@NonNull final ParameterNegotiationModel pendingArgs) {
+        //FIXME[ISIS-2871] rather then filling in all (as proof of concept), fill in only those selected
+        return pendingArgs.getObservableParamChoices(paramIndex).getValue();
     }
 
 

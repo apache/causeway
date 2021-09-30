@@ -254,16 +254,14 @@ implements
             final @NonNull ParameterNegotiationModel pendingArgs) {
 
         val paramSpec = getElementType();
-        val defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
-        if (defaultsFacet != null && !defaultsFacet.getPrecedence().isFallback()) {
-            final Object paramValuePojo = defaultsFacet.getDefault(pendingArgs);
-            return ManagedObjects.emptyToDefault(
-                    !isOptional(),
-                    ManagedObject.of(paramSpec, paramValuePojo));
-        }
-        return ManagedObjects.emptyToDefault(
-                !isOptional(),
-                pendingArgs.getParamValue(getNumber()));
+        var defaults = lookupNonFallbackFacet(ActionParameterDefaultsFacet.class)
+        .map(defaultsFacet->defaultsFacet.getDefault(pendingArgs))
+        .orElseGet(()->ManagedObjects.unpack(paramSpec, pendingArgs.getParamValue(getNumber())))
+        // post processing
+        .map(obj->ManagedObjects.emptyToDefault(!isOptional(), obj));
+
+        // pack up
+        return ManagedObjects.pack(paramSpec, defaults);
     }
 
     // helpers

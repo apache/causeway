@@ -163,5 +163,4 @@ implements PropertyUiModel {
         return delegate.getCommonContext();
     }
 
-
 }

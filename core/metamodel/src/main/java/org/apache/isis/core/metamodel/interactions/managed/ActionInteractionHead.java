@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.interactions.managed;
 
 import java.util.List;
-import java.util.Objects;
 
 import org.springframework.lang.Nullable;
 
@@ -129,7 +128,7 @@ implements HasMetaModel<ObjectAction> {
             pl = params
                     .map(param->param.getDefault(ppm));
 
-            if(equals(old_pl, pl)) {
+            if(old_pl.equals(pl)) {
                 // fixed point found, return the latest iteration
                 return model(pl);
             }
@@ -141,21 +140,6 @@ implements HasMetaModel<ObjectAction> {
 
         return model(pl);
 
-    }
-
-    // -- HELPER
-
-    private boolean equals(final Can<ManagedObject> left, final Can<ManagedObject> right) {
-        // equal length is guaranteed as used only local to this class
-        val leftIt = left.iterator();
-        for(val r : right) {
-            val leftPojo = leftIt.next().getPojo();
-            val rightPojo = r.getPojo();
-            if(!Objects.equals(leftPojo, rightPojo)){
-                return false;
-            }
-        }
-        return true;
     }
 
 

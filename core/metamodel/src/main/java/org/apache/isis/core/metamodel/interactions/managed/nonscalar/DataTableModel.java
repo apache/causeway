@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
+import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction.MementoForArgs;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
@@ -232,15 +233,20 @@ public class DataTableModel {
 
         public DataTableModel getDataTableModel(final ManagedObject owner) {
 
-            val ownerSpec = owner.getSpecification();
             val memberId = featureId.getMemberLogicalName();
 
             if(featureId.getType().isPropertyOrCollection()) {
-                return forCollection(ManagedCollection.of(owner, ownerSpec.getCollectionElseFail(memberId), where));
+                // bypass domain events
+                val collInteraction = CollectionInteraction.start(owner, memberId, where);
+                val managedColl = collInteraction.getManagedCollection().orElseThrow();
+                //FIXME[ISIS-2871] bypass domain events
+                return new DataTableModel(managedColl, where, ()->
+                    managedColl.streamElements().collect(Can.toCan()));
             }
             val actionInteraction = ActionInteraction.start(owner, memberId, where);
             val managedAction = actionInteraction.getManagedActionElseFail();
             val args = argsMemento.getArgumentList(managedAction.getMetaModel());
+            //FIXME[ISIS-2871] bypass domain events
             val actionResult = managedAction.invoke(args).left().orElseThrow();
             return forAction(managedAction, args, actionResult);
         }

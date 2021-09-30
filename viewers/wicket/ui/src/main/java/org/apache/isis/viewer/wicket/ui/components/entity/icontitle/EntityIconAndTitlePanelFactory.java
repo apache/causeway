@@ -25,7 +25,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.common.model.components.ComponentType;
-import org.apache.isis.viewer.wicket.model.models.AdapterForObjectReference;
+import org.apache.isis.viewer.wicket.model.models.ChainingObjectModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -37,7 +37,7 @@ import lombok.val;
  * {@link ComponentFactory} for {@link EntityIconAndTitlePanel}.
  *
  * @implNote Knows how to deal with {@link ObjectAdapterModel}. And for
- * {@link ScalarModel} we have an adapter {@link AdapterForObjectReference}
+ * {@link ScalarModel} we have an adapter {@link ChainingObjectModel}
  * that implements {@link ObjectAdapterModel}, such that it can also deal
  * with {@link ScalarModel}.
  *
@@ -94,7 +94,7 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
             val scalarModel = (ScalarModel) model;
 
             // effectively acts as an adapter from ScalarModel to ObjectAdapterModel
-            objectAdapterModel = AdapterForObjectReference.chain(scalarModel);
+            objectAdapterModel = ChainingObjectModel.chain(scalarModel);
             objectAdapterModel.setRenderingHint(scalarModel.getRenderingHint());
         } else {
             throw _Exceptions.unexpectedCodeReach();

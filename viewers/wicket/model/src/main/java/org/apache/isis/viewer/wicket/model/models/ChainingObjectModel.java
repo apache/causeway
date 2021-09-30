@@ -29,17 +29,17 @@ import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
 /**
  * Wraps a {@link ScalarModel} to act as an {@link ObjectAdapterModel}.
  */
-public final class AdapterForObjectReference
+public final class ChainingObjectModel
 extends ChainingModel<ManagedObject>
 implements ObjectAdapterModel {
 
     private static final long serialVersionUID = 1L;
 
-    public static AdapterForObjectReference chain(final ScalarModel scalarModel) {
-        return new AdapterForObjectReference(scalarModel);
+    public static ChainingObjectModel chain(final ScalarModel scalarModel) {
+        return new ChainingObjectModel(scalarModel);
     }
 
-    private AdapterForObjectReference(final ScalarModel scalarModel) {
+    private ChainingObjectModel(final ScalarModel scalarModel) {
         super(scalarModel);
     }
 
@@ -55,7 +55,7 @@ implements ObjectAdapterModel {
      */
     @Override
     public ManagedObject getObject() {
-        return scalarModel().getPendingElseCurrentAdapter();
+        return scalarModel().proposedValue().getValue().getValue();
     }
 
     @Override

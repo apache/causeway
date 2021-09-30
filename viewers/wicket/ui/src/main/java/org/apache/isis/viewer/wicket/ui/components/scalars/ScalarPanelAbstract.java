@@ -76,9 +76,10 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import lombok.NonNull;
 import lombok.val;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 
 public abstract class ScalarPanelAbstract
@@ -121,7 +122,7 @@ implements ScalarModelSubscriber {
 
     /**
      *
-     * @param argsAndConsents - the action being invoked
+     * @param paramModel - the action being invoked
      * @param target - in case there's more to be repainted...
      *
      * @return - true if changed as a result of these pending arguments.

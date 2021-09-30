@@ -28,7 +28,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.common.model.components.ComponentType;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
 
@@ -54,9 +53,13 @@ implements CancelHintRequired  {
         buildGui();
     }
 
-    public EntityModel entityModelForLink() {
-        final var model = (HasCommonContext & IModel<ManagedObject>)getModel();
-        return EntityModel.ofAdapter(model.getCommonContext(), model.getObject());
+//    private ManagedObjectModel objectModelForLink() {
+//        final var model = (HasCommonContext & IModel<ManagedObject>)getModel();
+//        return ManagedObjectModel.of(model::getObject);
+//    }
+
+    private boolean isEmpty() {
+        return ManagedObjects.isNullOrUnspecifiedOrEmpty(getModel().getObject());
     }
 
     private void buildGui() {
@@ -70,16 +73,15 @@ implements CancelHintRequired  {
     }
 
     private void syncWithInput() {
-        val entityModelForLink = entityModelForLink();
-        val entity = entityModelForLink.getObject();
 
-        if(!ManagedObjects.isNullOrUnspecifiedOrEmpty(entity)) {
+        if(!isEmpty()) {
 
+            val objectModelForLink = getModel();
             val componentFactory = getComponentFactoryRegistry()
-                    .findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
+                    .findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, objectModelForLink);
 
             final Component component = componentFactory
-                    .createComponent(ID_ENTITY_ICON_AND_TITLE, entityModelForLink);
+                    .createComponent(ID_ENTITY_ICON_AND_TITLE, objectModelForLink);
             addOrReplace(component);
             permanentlyHide(ID_ENTITY_TITLE_NULL);
 

@@ -18,99 +18,78 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.io.Serializable;
-
+import org.apache.wicket.model.ChainingModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.NonNull;
 
 /**
  * For widgets that use a <tt>org.wicketstuff.select2.Select2Choice</tt>;
  * synchronizes the {@link Model} of the <tt>Select2Choice</tt>
- * with the parent {@link ScalarModel}, allowing also for pending values.
+ * with the parent {@link ScalarModel}.
  */
-public interface ScalarModelWithPending extends Serializable {
+public interface ScalarModelWithPending
+extends
+    IModel<ObjectMemento>,
+    HasCommonContext {
 
-    public ObjectMemento getPendingMemento();
-    public void setPendingMemento(ObjectMemento pending);
+    ScalarModel scalarModel();
 
-    public ScalarModel getScalarModel();
+    default ManagedValue pendingValue() { return scalarModel().proposedValue(); }
 
-    public static Model<ObjectMemento> create(final ScalarModel scalarModel) {
-        return Factory.createModel(Factory.asScalarModelWithPending(scalarModel));
+    default ObjectMemento getPendingMemento() { return getObject(); }
+    default void setPendingMemento(final ObjectMemento pending) { setObject(pending); }
+
+    @Override
+    default IsisAppCommonContext getCommonContext() {
+        return scalarModel().getCommonContext();
     }
 
-    @Log4j2
-    static class Factory {
+    // -- FACTORY
 
-        private static ScalarModelWithPending asScalarModelWithPending(final ScalarModel scalarModel) {
-            return new ScalarModelWithPending(){
+    public static IModel<ObjectMemento> create(final @NonNull ScalarModel scalarModel) {
+        return new ScalarModelWithPendingImpl(scalarModel);
+    }
 
-                private static final long serialVersionUID = 1L;
+    // -- IMPLEMENTATION
 
-                @Override
-                public ObjectMemento getPendingMemento() {
-                    return scalarModel.getPendingModel().getObject();
-                }
+    //@Log4j2
+    static class ScalarModelWithPendingImpl
+    extends ChainingModel<ObjectMemento>
+    implements ScalarModelWithPending {
 
-                @Override
-                public void setPendingMemento(final ObjectMemento pending) {
-                    scalarModel.getPendingModel().setObject(pending);
-                }
+        private static final long serialVersionUID = 1L;
 
-                @Override
-                public ScalarModel getScalarModel() {
-                    return scalarModel;
-                }
-            };
+        ScalarModelWithPendingImpl(final ScalarModel scalarModel) {
+            super(scalarModel); // chaining to scalarModel
         }
 
-        private static Model<ObjectMemento> createModel(final ScalarModelWithPending owner) {
-            return new Model<ObjectMemento>() {
+        /**
+         * chaining idiom: the {@link ScalarModel} we are chained to
+         */
+        @Override
+        public ScalarModel scalarModel() {
+            return (ScalarModel) super.getTarget();
+        }
 
-                private static final long serialVersionUID = 1L;
+        @Override
+        public ObjectMemento getObject() {
+            return getCommonContext().mementoFor(
+                    pendingValue().getValue().getValue());
+        }
 
-                @Override
-                public ObjectMemento getObject() {
-                    if (owner.getPendingMemento() != null) {
-                        log.debug("pending not null: {}", owner.getPendingMemento().toString());
-                        return owner.getPendingMemento();
-                    }
-                    log.debug("pending is null");
-
-                    val ownerScalarModel = owner.getScalarModel();
-                    val commonContext = ownerScalarModel.getCommonContext();
-                    val objectAdapterMemento =
-                            commonContext.mementoFor(ownerScalarModel.getObject());
-                    owner.setPendingMemento(objectAdapterMemento);
-                    return objectAdapterMemento;
-                }
-
-                @Override
-                public void setObject(final ObjectMemento adapterMemento) {
-                    log.debug("setting to: {}", (adapterMemento!=null?adapterMemento.toString():null) );
-                    owner.setPendingMemento(adapterMemento);
-                    final ScalarModel ownerScalarModel = owner.getScalarModel();
-                    if (ownerScalarModel != null) {
-                        if(adapterMemento == null) {
-                            ownerScalarModel.setObject(null);
-                        } else {
-                            final ObjectMemento ownerPending = owner.getPendingMemento();
-                            if (ownerPending != null) {
-                                log.debug("setting to pending: {}", ownerPending.toString());
-                                ownerScalarModel.setObject(
-                                        ownerScalarModel.getCommonContext().reconstructObject(ownerPending));
-                            }
-                        }
-                    }
-                }
-            };
+        @Override
+        public void setObject(final ObjectMemento memento) {
+            pendingValue().getValue().setValue(
+                    getCommonContext().reconstructObject(memento));
         }
 
     }
-
 
 }

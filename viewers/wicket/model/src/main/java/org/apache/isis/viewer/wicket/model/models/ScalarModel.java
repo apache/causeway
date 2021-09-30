@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.util.List;
 
 import org.apache.wicket.model.ChainingModel;
-import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.commons.collections.Can;
@@ -42,7 +41,6 @@ import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -123,7 +121,6 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         this.parentEntityModel = parentEntityModel;
         this.mode = viewOrEdit;
         this.renderingHint = renderingHint;
-        this.pendingModel = new PendingModel(this);
     }
 
     /**
@@ -132,7 +129,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     @Override
     public final ManagedObject getObject() {
         // override, so we don't return the target model, we are chained to
-        return nullToEmpty(proposedValue().getValue().getValue());
+        return proposedValue().getValue().getValue();
     }
 
     /**
@@ -344,28 +341,9 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         return getAssociatedActions().hasAssociatedActionWithInlineAsIfEdit();
     }
 
-    // -- PENDING STUFF
-
-    @Getter(value = AccessLevel.PACKAGE)
-    private final PendingModel pendingModel;
-
-    public ManagedObject getPendingElseCurrentAdapter() {
-        return pendingModel.getPendingElseCurrentAdapter();
-    }
-
     public void clearPending() {
-        pendingModel.clearPending();
+        //FIXME[ISIS-2871] is this really needed? // was used to state pending is in sync with current value
+        //getPendingPropertyModel().getValue().setValue(null);
     }
-
-    // -- HELPER
-
-    @Deprecated // must be the responsibility of the underlying Interaction API, not ours
-    private ManagedObject nullToEmpty(@Nullable ManagedObject adapter) {
-        if(adapter == null) {
-            adapter = ManagedObject.empty(getMetaModel().getElementType());
-        }
-        return ManagedObjects.emptyToDefault(!getMetaModel().isOptional(), adapter);
-    }
-
 
 }

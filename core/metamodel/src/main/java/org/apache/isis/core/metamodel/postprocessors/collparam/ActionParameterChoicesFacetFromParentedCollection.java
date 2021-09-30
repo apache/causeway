@@ -35,13 +35,13 @@ import lombok.val;
 public class ActionParameterChoicesFacetFromParentedCollection
 extends ActionParameterChoicesFacetAbstract {
 
-    private final OneToManyAssociation otma;
+    private final OneToManyAssociation coll;
 
     public ActionParameterChoicesFacetFromParentedCollection(
             final FacetHolder holder,
-            final OneToManyAssociation otma) {
+            final OneToManyAssociation coll) {
         super(holder);
-        this.otma = otma;
+        this.coll = coll;
     }
 
     @Override
@@ -51,13 +51,13 @@ extends ActionParameterChoicesFacetAbstract {
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val collectionAdapter = otma.get(head.getOwner(), interactionInitiatedBy);
-        return CollectionFacet.streamAdapters(collectionAdapter).collect(Can.toCan());
+        val collectionAsObject = coll.get(head.getOwner(), interactionInitiatedBy);
+        return CollectionFacet.streamAdapters(collectionAsObject).collect(Can.toCan());
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("oneToManyAssociation", otma);
+        visitor.accept("oneToManyAssociation", coll);
     }
 }

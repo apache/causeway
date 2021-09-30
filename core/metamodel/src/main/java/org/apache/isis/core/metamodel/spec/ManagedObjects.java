@@ -30,6 +30,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
@@ -171,6 +172,26 @@ public final class ManagedObjects {
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot stringify %s", managedObject));
     }
 
+    // -- PACKING
+
+    public static ManagedObject pack(
+            final ObjectSpecification elementSpec,
+            final Can<ManagedObject> nonScalar) {
+        return ManagedObject.of(elementSpec,
+                nonScalar.stream()
+                .map(UnwrapUtil::single)
+                .collect(Collectors.toList()));
+    }
+
+    public static Can<ManagedObject> unpack(
+            final ObjectSpecification elementSpec,
+            final ManagedObject nonScalar) {
+        return isNullOrUnspecifiedOrEmpty(nonScalar)
+                ? Can.empty()
+                : _NullSafe.streamAutodetect(nonScalar.getPojo())
+                    .map(pojo->ManagedObject.of(elementSpec, pojo))
+                    .collect(Can.toCan());
+    }
 
     // -- COMPARE UTILITIES
 

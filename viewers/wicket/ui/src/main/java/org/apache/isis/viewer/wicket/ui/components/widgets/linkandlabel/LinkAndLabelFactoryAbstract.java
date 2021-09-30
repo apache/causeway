@@ -90,45 +90,14 @@ implements Serializable {
             final ObjectAction objectAction) {
 
         val actionModel = ActionModel.of(this.targetEntityModel, objectAction);
-        val commonContext = actionModel.getCommonContext();
 
-        final ActionLink link = new ActionLink(commonContext, linkId, actionModel) {
+        final ActionLink link = new ActionLink(linkId, actionModel) {
 
             private static final long serialVersionUID = 1L;
 
             @Override
             protected void doOnClick(final AjaxRequestTarget target) {
-
-//FIXME[ISIS-2871] - rewire core mechanics, so the viewer does not need to be smart here...
-//                if(toggledMementosProviderIfAny != null) {
-//
-//                    val commonContext = super.getCommonContext();
-//
-//                    val selectedMementos = toggledMementosProviderIfAny.getToggles();
-//                    val selectedPojosFromAssocCollection = selectedMementos
-//                            .map(commonContext::reconstructObject)
-//                            .map(ManagedObject::getPojo);
-//
-//                    val actionPrompt = ActionParameterDefaultsFacetFromAssociatedCollection
-//                            .applyWithSelected(
-//                                    selectedPojosFromAssocCollection,
-//                                    this::performOnClick,
-//                                    target);
-//
-//                    if(actionPrompt != null) {
-//                        actionPrompt.setOnClose(new ActionPrompt.CloseHandler() {
-//                            private static final long serialVersionUID = 1L;
-//
-//                            @Override
-//                            public void close(final AjaxRequestTarget target) {
-//                                toggledMementosProviderIfAny.clearToggles(target);
-//                            }
-//                        });
-//                    }
-//
-//                } else
                 performOnClick(target);
-
             }
 
             private ActionPrompt performOnClick(final AjaxRequestTarget target) {

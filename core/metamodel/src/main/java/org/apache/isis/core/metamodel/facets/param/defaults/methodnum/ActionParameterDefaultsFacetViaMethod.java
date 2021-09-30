@@ -24,10 +24,12 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.Getter;
@@ -68,7 +70,7 @@ implements ImperativeFacet {
     }
 
     @Override
-    public Object getDefault(@NonNull final ParameterNegotiationModel pendingArgs) {
+    public Can<ManagedObject> getDefault(@NonNull final ParameterNegotiationModel pendingArgs) {
 
         val method = methods.getFirstOrFail();
 
@@ -84,7 +86,9 @@ implements ImperativeFacet {
                     .invokeAutofit(method,
                         pendingArgs.getActionTarget(), pendingArgs.getParamValues());
 
-        return defaultValue;
+        return _NullSafe.streamAutodetect(defaultValue)
+                .map(getObjectManager()::adapt)
+                .collect(Can.toCan());
     }
 
     @Override
