@@ -260,8 +260,16 @@ implements
         // post processing
         .map(obj->ManagedObjects.emptyToDefault(!isOptional(), obj));
 
-        // pack up
-        return ManagedObjects.pack(paramSpec, defaults);
+        if(pendingArgs.getParamMetamodel(getNumber()).isNonScalar()) {
+            // pack up
+            return ManagedObjects.pack(paramSpec, defaults);
+        }
+
+        return defaults.getFirst()
+                .orElseGet(()->ManagedObjects
+                        .emptyToDefault(!isOptional(), ManagedObject.empty(paramSpec)));
+
+
     }
 
     // helpers

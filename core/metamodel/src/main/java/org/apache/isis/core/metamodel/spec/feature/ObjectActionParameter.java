@@ -28,6 +28,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -53,6 +54,14 @@ extends ObjectFeature, CurrentHolder {
      * Returns the 0-based index to this parameter.
      */
     int getNumber();
+
+    default boolean isScalar() {
+        return getFeatureType()==FeatureType.ACTION_PARAMETER_SCALAR;
+    }
+
+    default boolean isNonScalar() {
+        return getFeatureType()==FeatureType.ACTION_PARAMETER_COLLECTION;
+    }
 
     /**
      * Returns the name of this parameter.
@@ -273,5 +282,7 @@ extends ObjectFeature, CurrentHolder {
     default ActionParameterMemento getMemento() {
         return ActionParameterMemento.forActionParameter(this);
     }
+
+
 
 }

@@ -19,11 +19,13 @@
 package org.apache.isis.core.metamodel.interactions.managed;
 
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -108,39 +110,54 @@ implements HasMetaModel<ObjectAction> {
      */
     public ParameterNegotiationModel defaults() {
 
-        // first pass to calculate proposed fixed point
-        // second pass to verify we have found a fixed point
-        final int maxIterations = 2;
+        // first pass ... empty values
+        // second pass ... proposed default values
+        // third pass ... verify we have found a fixed point
+        final int maxIterations = 3;
 
         val params = getMetaModel().getParameters();
 
-        // init defaults with empty pending-parameter values
-        val emptyModel = emptyModel();
-        val initialDefaults = params
-                .map(param->param.getDefault(emptyModel));
+        val fixedPoint = fixedPointSearch(
+                getEmptyParameterValues(),
+                // vector of packed values - where each is either scalar or non-scalar
+                paramVector->{
+                    val paramNegotiationModel = model(paramVector);
+                    return params
+                            .map(param->param.getDefault(paramNegotiationModel));
+                },
+                maxIterations);
 
-        // could be a fixed point search here, but we assume, params can only depend on params with lower index
-
-        Can<ManagedObject> old_pl, pl = initialDefaults;
-        for(int i=0; i<maxIterations; ++i) {
-            val ppm = model(pl);
-            old_pl = pl;
-            pl = params
-                    .map(param->param.getDefault(ppm));
-
-            if(old_pl.equals(pl)) {
-                // fixed point found, return the latest iteration
-                return model(pl);
-            }
-
+        if(fixedPoint.isRight()) {
+            log.warn("Cannot find an initial fixed point for action "
+                    + "parameter defaults on action %s.", getMetaModel());
         }
 
-        log.warn("Cannot find an initial fixed point for action "
-                + "parameter defaults on action %s.", getMetaModel());
-
-        return model(pl);
-
+        return model(fixedPoint.fold(
+                left->left,
+                right->right));
     }
+
+
+    /**
+     * Returns either a fixed point or the last iteration.
+     */
+    private static <T> _Either<T, T> fixedPointSearch(
+            final T start,
+            final UnaryOperator<T> f,
+            final int maxIterations) {
+
+        T t1, t0 = start;
+        for(int i=0; i<maxIterations; ++i) {
+            t1 = f.apply(t0);
+            if(t1.equals(t0)) {
+                return _Either.left(t1);
+            }
+            t0 = t1;
+        }
+
+        return _Either.right(t0);
+    }
+
 
 
 }
