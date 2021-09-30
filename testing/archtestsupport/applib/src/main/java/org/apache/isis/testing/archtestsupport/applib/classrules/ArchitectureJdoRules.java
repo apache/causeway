@@ -170,10 +170,16 @@ public class ArchitectureJdoRules {
      * This is so that entities will have an alternative business key in addition to the system-defined surrogate
      * key.
      * </p>
+     *
+     * <p>
+     *     The rule does <i>not</i> apply to any entities that are subtype entities where there
+     *     is a supertype entity.
+     * </p>
      */
     public static ArchRule every_jdo_PersistenceCapable_with_DATASTORE_identityType_must_be_annotated_as_DataStoreIdentity() {
         return classes()
                 .that().areAnnotatedWith(PersistenceCapable_with_DATASTORE_identityType())
+                .and(not(areSubtypeEntities()))
                 .should().beAnnotatedWith(javax.jdo.annotations.DatastoreIdentity.class);
     }
 
