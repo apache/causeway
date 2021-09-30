@@ -121,7 +121,8 @@ implements HasMetaModel<ObjectAction> {
                 getEmptyParameterValues(),
                 // vector of packed values - where each is either scalar or non-scalar
                 paramVector->{
-                    val paramNegotiationModel = model(paramVector);
+                    //lombok 1.18.20 issue with val - should be fixed in 1.18.22
+                    final var paramNegotiationModel = model(paramVector);
                     return params
                             .map(param->param.getDefault(paramNegotiationModel));
                 },
