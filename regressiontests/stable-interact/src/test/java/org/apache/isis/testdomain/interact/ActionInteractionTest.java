@@ -43,7 +43,6 @@ import org.apache.isis.testdomain.model.interaction.InteractionDemo_biListOfStri
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_multiEnum;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_multiInt;
 import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
-import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 
 import lombok.val;
 
@@ -86,27 +85,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
         tester.assertUsabilityIsVetoedWith("Disabled for demonstration.");
     }
 
-    @Test
-    void whenEnabled_shouldProvideProperDecoratorModels() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
-                .checkVisibility()
-                .checkUsability();
-
-        val disablingUiModel = DisablingUiModel.of(actionInteraction);
-        assertFalse(disablingUiModel.isPresent());
-    }
-
-    @Test
-    void whenDisabled_shouldProvideProperDecoratorModels() {
-
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS)
-                .checkVisibility()
-                .checkUsability();
-
-        val disablingUiModel = DisablingUiModel.of(actionInteraction).get();
-        assertEquals("Disabled for demonstration.", disablingUiModel.getReason());
-    }
 
     @Test
     void whenEnabled_shouldProvideActionMetadata() {
@@ -436,17 +415,17 @@ class ActionInteractionTest extends InteractionTestAbstract {
         tester.assertVisibilityIsNotVetoed();
         tester.assertUsabilityIsNotVetoed();
 
-        val expectedElements = ((InteractionDemo)(tester.getManagedActionElseFail()
+        val choiceElements = ((InteractionDemo)(tester.getManagedActionElseFail()
                 .getOwner()
                 .getPojo()))
                 .getItems();
-        assertEquals(4, expectedElements.size());
+        assertEquals(4, choiceElements.size());
 
         val tableTester = tester.tableTester(arg0->2); // 2 expected rows in the resulting table
 
         tableTester.assertUnfilteredDataElements(List.of(
-                expectedElements.get(0),
-                expectedElements.get(1)));
+                choiceElements.get(0),
+                choiceElements.get(1)));
     }
 
   //TODO also deal with non-scalar parameter values

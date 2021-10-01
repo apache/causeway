@@ -102,7 +102,7 @@ public class InteractionDemo {
         return lazyItems.get();
     }
 
-    // -- ASSOCIATED ACTION
+    // -- ASSOCIATED ACTION WITH CHOICES FROM BULK SELECT
 
     @Action(choicesFrom = "items")
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)

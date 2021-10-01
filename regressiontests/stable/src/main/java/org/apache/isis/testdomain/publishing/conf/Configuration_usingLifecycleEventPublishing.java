@@ -21,11 +21,11 @@ package org.apache.isis.testdomain.publishing.conf;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.testdomain.util.event.LifecycleEventSubscriberForTesting;
+import org.apache.isis.testdomain.util.event.LifecycleEventSubscriberJpaForTesting;
 
 @Configuration
 @Import({
-    LifecycleEventSubscriberForTesting.class
+    LifecycleEventSubscriberJpaForTesting.class
 })
 public class Configuration_usingLifecycleEventPublishing {
 

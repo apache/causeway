@@ -21,6 +21,7 @@ package org.apache.isis.testdomain.interact;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -102,6 +103,42 @@ class CollectionInteractionTest extends InteractionTestAbstract {
                 .tableTester();
 
         tableTester.assertColumnNames(List.of("Name", "Calendar Entry"));
+
+    }
+
+    @Test @Disabled("FIXME[ISIS-2871]")
+    void choicesFromMultiselect() {
+
+        val collTester =
+                testerFactory.collectionTester(InteractionDemo.class, "items", Where.ANYWHERE);
+        collTester.assertVisibilityIsNotVetoed();
+        collTester.assertUsabilityIsNotVetoed();
+
+        val choiceElements = ((InteractionDemo)(collTester.getManagedCollectionIfAny().orElseThrow()
+                .getOwner()
+                .getPojo()))
+                .getItems();
+        assertEquals(4, choiceElements.size());
+
+        val tableTester = collTester.tableTester();
+        // toggle on 'second' and 'last' item for selection
+        tableTester.assertDataRowSelectionWhenToggledOn(List.of(1, 3), List.of(
+                choiceElements.get(1),
+                choiceElements.get(3)));
+
+        //FIXME[ISIS-2871] bind action param defaults to table's selection model
+
+        val actTester =
+                testerFactory.actionTester(InteractionDemo.class, "doSomethingWithItems", Where.OBJECT_FORMS);
+        actTester.assertVisibilityIsNotVetoed();
+        actTester.assertUsabilityIsNotVetoed();
+
+        // verify param defaults are seeded with choices from selection
+        actTester.assertParameterValues(arg0->assertEquals(
+                List.of(
+                    choiceElements.get(1),
+                    choiceElements.get(3)),
+                arg0));
 
     }
 

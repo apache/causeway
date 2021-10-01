@@ -26,7 +26,6 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
-import org.apache.isis.testdomain.jpa.entities.JpaBook;
 import org.apache.isis.testdomain.util.dto.BookDto;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
@@ -37,7 +36,7 @@ import lombok.extern.log4j.Log4j2;
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
-public class LifecycleEventSubscriberForTesting {
+public class LifecycleEventSubscriberJdoForTesting {
 
     private final KVStoreForTesting kvStore;
 
@@ -78,60 +77,16 @@ public class LifecycleEventSubscriberForTesting {
         storeJdoEvent(ev);
     }
 
-    // -- JPA LIFECYCLE EVENTS
-
-    @EventListener(JpaBook.CreatedLifecycleEvent.class)
-    public void on(final JpaBook.CreatedLifecycleEvent ev) {
-        storeJpaEvent(ev);
-    }
-
-    @EventListener(JpaBook.PersistingLifecycleEvent.class)
-    public void on(final JpaBook.PersistingLifecycleEvent ev) {
-        storeJpaEvent(ev);
-    }
-
-    @EventListener(JpaBook.PersistedLifecycleEvent.class)
-    public void on(final JpaBook.PersistedLifecycleEvent ev) {
-        storeJpaEvent(ev);
-    }
-
-    @EventListener(JpaBook.LoadedLifecycleEvent.class)
-    public void on(final JpaBook.LoadedLifecycleEvent ev) {
-        storeJpaEvent(ev);
-    }
-
-    @EventListener(JpaBook.UpdatingLifecycleEvent.class)
-    public void on(final JpaBook.UpdatingLifecycleEvent ev) {
-        storeJpaEvent(ev);
-    }
-
-    @EventListener(JpaBook.UpdatedLifecycleEvent.class)
-    public void on(final JpaBook.UpdatedLifecycleEvent ev) {
-        storeJpaEvent(ev);
-    }
-
-    @EventListener(JpaBook.RemovingLifecycleEvent.class)
-    public void on(final JpaBook.RemovingLifecycleEvent ev) {
-        storeJpaEvent(ev);
-    }
-
     // -- UTILITY
 
     public static void clearPublishedEvents(final KVStoreForTesting kvStore) {
-        kvStore.clear(LifecycleEventSubscriberForTesting.class);
+        kvStore.clear(LifecycleEventSubscriberJdoForTesting.class);
     }
 
     public static Can<BookDto> getPublishedEventsJdo(
             final KVStoreForTesting kvStore,
             final Class<? extends AbstractLifecycleEvent<JdoBook>> eventClass) {
-        return kvStore.getAll(LifecycleEventSubscriberForTesting.class, eventClass.getName())
-                .map(BookDto.class::cast);
-    }
-
-    public static Can<BookDto> getPublishedEventsJpa(
-            final KVStoreForTesting kvStore,
-            final Class<? extends AbstractLifecycleEvent<JpaBook>> eventClass) {
-        return kvStore.getAll(LifecycleEventSubscriberForTesting.class, eventClass.getName())
+        return kvStore.getAll(LifecycleEventSubscriberJdoForTesting.class, eventClass.getName())
                 .map(BookDto.class::cast);
     }
 
@@ -145,15 +100,5 @@ public class LifecycleEventSubscriberForTesting {
         val bookDto = BookDto.from(ev.getSource());
         kvStore.append(this, eventType, bookDto);
     }
-
-    private void storeJpaEvent(final AbstractLifecycleEvent<JpaBook> ev) {
-        val eventType = ev.getClass().getName();
-
-        log.debug("on {}", eventType);
-
-        val bookDto = BookDto.from(ev.getSource());
-        kvStore.append(this, eventType, bookDto);
-    }
-
 
 }

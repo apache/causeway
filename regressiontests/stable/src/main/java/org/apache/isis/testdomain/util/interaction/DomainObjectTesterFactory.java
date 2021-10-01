@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.util.interaction;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
@@ -60,6 +61,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -324,6 +326,40 @@ public class DomainObjectTesterFactory {
 
         }
 
+        public void assertParameterValues(
+                @SuppressWarnings("rawtypes") final Consumer ...pojoDefaultArgTests) {
+
+            assertExists(true);
+
+            val pojoTests = Can.ofArray(pojoDefaultArgTests);
+            val managedAction = this.managedAction.orElseThrow();
+
+            interactionService.runAnonymous(()->{
+
+                val actionInteraction = ActionInteraction.wrap(managedAction)
+                        //.checkVisibility() - no rule checking
+                        //.checkUsability() - no rule checking
+                        ;
+
+                val pendingArgs = actionInteraction
+                        .startParameterNegotiation().orElseThrow(()->_Exceptions
+                                .illegalAccess("action not visible or usable: %s",
+                                        managedAction.getAction().getFeatureIdentifier()));
+
+                pendingArgs.getParamModels()
+                .forEach(param->{
+                    pojoTests
+                        .get(param.getParamNr())
+                        .ifPresent(pojoTest->
+                            pojoTest.accept(
+                                    ManagedObjects.UnwrapUtil.single(param.getValue().getValue())
+                                    ));
+                });
+
+            });
+
+        }
+
         /**
          * Use on non scalar results.
          */
@@ -368,6 +404,8 @@ public class DomainObjectTesterFactory {
             });
 
         }
+
+
 
     }
 

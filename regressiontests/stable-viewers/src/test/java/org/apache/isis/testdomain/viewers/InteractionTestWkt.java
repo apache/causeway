@@ -43,6 +43,7 @@ import org.apache.isis.testdomain.conf.Configuration_usingWicket.RequestCycleFac
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo;
 import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
+import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
@@ -162,5 +163,27 @@ class InteractionTestWkt extends InteractionTestAbstract {
 
         assertFalse(managedAction.checkVisibility().isPresent()); // is visible
         assertFalse(managedAction.checkUsability().isPresent()); // can invoke
+    }
+
+    @Test
+    void whenEnabled_shouldProvideProperDecoratorModels() {
+
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
+                .checkVisibility()
+                .checkUsability();
+
+        val disablingUiModel = DisablingUiModel.of(actionInteraction);
+        assertFalse(disablingUiModel.isPresent());
+    }
+
+    @Test
+    void whenDisabled_shouldProvideProperDecoratorModels() {
+
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS)
+                .checkVisibility()
+                .checkUsability();
+
+        val disablingUiModel = DisablingUiModel.of(actionInteraction).get();
+        assertEquals("Disabled for demonstration.", disablingUiModel.getReason());
     }
 }

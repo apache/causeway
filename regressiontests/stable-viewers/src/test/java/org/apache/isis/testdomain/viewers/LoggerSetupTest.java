@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.logging;
+package org.apache.isis.testdomain.viewers;
 
 import org.apache.wicket.page.PartialPageUpdate;
 import org.junit.jupiter.api.Test;
