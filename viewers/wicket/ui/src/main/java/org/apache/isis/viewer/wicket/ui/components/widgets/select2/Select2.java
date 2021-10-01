@@ -34,8 +34,8 @@ import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.models.ScalarModelWithMultiPending;
-import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending;
+import org.apache.isis.viewer.wicket.model.models.ScalarModelWithMultiChoice;
+import org.apache.isis.viewer.wicket.model.models.ScalarModelWithSingleChoice;
 
 /**
  * Wrapper around either a {@link Select2Choice} or a {@link Select2MultiChoice}.
@@ -52,10 +52,10 @@ public class Select2 implements Serializable {
                 ? new Select2(
                         null,
                         Select2MultiChoiceExt.create(id,
-                                ScalarModelWithMultiPending.create(scalarModel), scalarModel))
+                                ScalarModelWithMultiChoice.chain(scalarModel), scalarModel))
                 : new Select2(
                         Select2ChoiceExt.create(id,
-                                ScalarModelWithPending.create(scalarModel), scalarModel),
+                                ScalarModelWithSingleChoice.chain(scalarModel), scalarModel),
                         null);
     }
 
@@ -164,7 +164,7 @@ public class Select2 implements Serializable {
         return this;
     }
 
-    public <M extends Behavior> List<M> getBehaviors(Class<M> behaviorClass) {
+    public <M extends Behavior> List<M> getBehaviors(final Class<M> behaviorClass) {
         return component().getBehaviors(behaviorClass);
     }
 
