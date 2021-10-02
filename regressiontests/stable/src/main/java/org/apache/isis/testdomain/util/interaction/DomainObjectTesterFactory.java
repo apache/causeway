@@ -297,7 +297,7 @@ public class DomainObjectTesterFactory {
 
             interactionService.runAnonymous(()->{
 
-                val pendingArgs = startParameterNegotiation();
+                val pendingArgs = startParameterNegotiation(true);
 
                 pendingArgs.getParamModels()
                         .forEach(param->{
@@ -332,11 +332,7 @@ public class DomainObjectTesterFactory {
 
             interactionService.runAnonymous(()->{
 
-                //val actionInteraction = ActionInteraction.wrap(managedAction)
-                        //.checkVisibility() - no rule checking
-                        //.checkUsability() - no rule checking
-                        //;
-                val pendingArgs = startParameterNegotiation();
+                val pendingArgs = startParameterNegotiation(false); // no rule checking
 
                 pendingArgs.getParamModels()
                 .forEach(param->{
@@ -367,11 +363,7 @@ public class DomainObjectTesterFactory {
 
             interactionService.runAnonymous(()->{
 
-                //val actionInteraction = ActionInteraction.wrap(managedAction)
-                        //.checkVisibility() - no rule checking
-                        //.checkUsability() - no rule checking
-                  //      ;
-                val pendingArgs = startParameterNegotiation();
+                val pendingArgs = startParameterNegotiation(true);
 
                 pendingArgs.getParamModels()
                 .forEach(param->{
@@ -400,7 +392,7 @@ public class DomainObjectTesterFactory {
 
             return interactionService.callAnonymous(()->{
 
-                val pendingArgs = startParameterNegotiation();
+                val pendingArgs = startParameterNegotiation(true);
 
                 pendingArgs.getParamModels()
                         .forEach(param->{
@@ -428,7 +420,7 @@ public class DomainObjectTesterFactory {
         // -- HELPER
 
         @SneakyThrows
-        private ParameterNegotiationModel startParameterNegotiation() {
+        private ParameterNegotiationModel startParameterNegotiation(final boolean checkRules) {
 
             if(parameterNegotiationStarter!=null) {
                 return parameterNegotiationStarter.get();
@@ -438,9 +430,13 @@ public class DomainObjectTesterFactory {
                 fail("action-interaction not initialized on action-tester");
             }
 
-            return actionInteraction
+            if(checkRules) {
+                actionInteraction
                     .checkVisibility()
-                    .checkUsability()
+                    .checkUsability();
+            }
+
+            return actionInteraction
                     .startParameterNegotiation().orElseThrow(()->_Exceptions
                             .illegalAccess("action not visible or usable: %s",
                                     getManagedAction()
