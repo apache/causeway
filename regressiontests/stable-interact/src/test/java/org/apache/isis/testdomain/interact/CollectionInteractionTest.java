@@ -126,10 +126,12 @@ class CollectionInteractionTest extends InteractionTestAbstract {
                 choiceElements.get(1),
                 choiceElements.get(3)));
 
-        //FIXME[ISIS-2871] bind action param defaults to table's selection model
+        val table = tableTester.getDataTable();
 
-        val actTester =
-                testerFactory.actionTester(InteractionDemo.class, "doSomethingWithItems", Where.OBJECT_FORMS);
+        val actionInteraction = table
+                .startAssociatedActionInteraction("doSomethingWithItems", Where.OBJECT_FORMS);
+
+        val actTester = testerFactory.actionTesterForSpecificInteraction(InteractionDemo.class, actionInteraction);
         actTester.assertVisibilityIsNotVetoed();
         actTester.assertUsabilityIsNotVetoed();
 

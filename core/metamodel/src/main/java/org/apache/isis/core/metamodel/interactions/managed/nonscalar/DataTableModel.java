@@ -193,6 +193,22 @@ public class DataTableModel {
                 Where.ALL_TABLES);
     }
 
+    // -- ASSOCIATED ACTION WITH MULTI SELECT
+
+    public ActionInteraction startAssociatedActionInteraction(final String actionId, final Where where) {
+
+        val featureId = managedMember.getIdentifier();
+        if(featureId.getType().isAction()) {
+            return ActionInteraction.empty(String.format("[no such associated action %s for collection %s "
+                    + "(which is not a collection)]",
+                    actionId,
+                    featureId));
+        }
+
+        //FIXME[ISIS-2871] get initial defaults from this table
+        return ActionInteraction.start(managedMember.getOwner(), actionId, where);
+    }
+
     // -- MEMENTO
 
     public Memento getMemento(final @Nullable ManagedAction.MementoForArgs argsMemento) {

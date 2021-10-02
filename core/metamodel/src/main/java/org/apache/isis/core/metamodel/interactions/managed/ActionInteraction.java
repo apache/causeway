@@ -72,6 +72,12 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
                 _Either.left(managedAction));
     }
 
+    public static ActionInteraction empty(final String actionId) {
+        return new ActionInteraction(
+                Optional.empty(),
+                _Either.right(InteractionVeto.notFound(MemberType.ACTION, actionId)));
+    }
+
     ActionInteraction(
             final @NonNull Optional<ObjectAction> metamodel,
             final @NonNull _Either<ManagedAction, InteractionVeto> chain) {
@@ -172,5 +178,7 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
     ManagedAction getManagedActionElseFail() {
         return getManagedActionElseThrow(veto->_Exceptions.unrecoverable("action vetoed: " + veto.getReason()));
     }
+
+
 
 }

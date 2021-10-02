@@ -26,10 +26,12 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.function.ThrowingSupplier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -58,6 +60,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
+import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -74,6 +77,7 @@ import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValid
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 
 @Service
@@ -98,6 +102,18 @@ public class DomainObjectTesterFactory {
                 new ActionTester<T>(domainObjectType, actionName, where));
         tester.init();
         return tester;
+    }
+
+    public <T> ActionTester<T> actionTesterForSpecificInteraction(
+            final @NonNull Class<T> domainObjectType,
+            final @NonNull ActionInteraction actionInteraction) {
+        val managedAction = actionInteraction.getManagedActionElseFail();
+        assertEquals(domainObjectType,
+                managedAction.getOwner().getSpecification().getCorrespondingClass());
+        val actionTester = serviceInjector.injectServicesInto(
+                new ActionTester<>(domainObjectType, actionInteraction, managedAction));
+        actionTester.init();
+        return actionTester;
     }
 
     public <T> PropertyTester<T> propertyTester(
@@ -204,14 +220,40 @@ public class DomainObjectTesterFactory {
     public static class ActionTester<T>
     extends MemberTester<T> {
 
-        @Getter
-        private Optional<ManagedAction> managedAction;
+        private ActionInteraction actionInteraction;
+        private Optional<ActionInteraction> actionInteraction() {
+            return Optional.ofNullable(actionInteraction);
+        }
+
+        private final @NonNull ThrowingSupplier<ParameterNegotiationModel> parameterNegotiationStarter;
+
+        private ActionTester(
+                final @NonNull Class<T> domainObjectType,
+                final @NonNull ActionInteraction actionInteraction,
+                final @NonNull ManagedAction managedAction) {
+            super(domainObjectType,
+                    managedAction.getId(),
+                    "actionName",
+                    managedAction.getWhere());
+            this.actionInteraction = actionInteraction;
+            this.parameterNegotiationStarter = ()->
+                actionInteraction
+                .startParameterNegotiation()
+                .orElseThrow(()->_Exceptions
+                        .illegalAccess("action not visible or usable: %s",
+                                managedAction.getAction().getFeatureIdentifier()));
+        }
 
         private ActionTester(
                 final @NonNull Class<T> domainObjectType,
                 final @NonNull String actionName,
                 final @NonNull Where where) {
             super(domainObjectType, actionName, "actionName", where);
+            this.parameterNegotiationStarter = null;
+        }
+
+        public Optional<ManagedAction> getManagedAction() {
+            return actionInteraction().flatMap(ActionInteraction::getManagedAction);
         }
 
         public ManagedAction getManagedActionElseFail() {
@@ -220,7 +262,7 @@ public class DomainObjectTesterFactory {
 
         @Override
         public Optional<ObjectAction> getMetaModel() {
-            return managedAction
+            return getManagedAction()
             .map(ManagedAction::getMetaModel)
             .map(ObjectAction.class::cast);
         }
@@ -237,11 +279,13 @@ public class DomainObjectTesterFactory {
 
         @Override
         protected Optional<ManagedAction> startInteractionOn(final ManagedObject viewModel) {
-            return this.managedAction = ActionInteraction
-                    .start(viewModel, getMemberName(), Where.NOT_SPECIFIED)
-                    .getManagedAction();
+            if(parameterNegotiationStarter==null) {
+                this.actionInteraction = ActionInteraction
+                        .start(viewModel, getMemberName(), Where.NOT_SPECIFIED);
+            }
+            assertNotNull(actionInteraction);
+            return getManagedAction();
         }
-
 
         public void assertInvocationResult(
                 final @Nullable Object expectedResult,
@@ -250,18 +294,10 @@ public class DomainObjectTesterFactory {
             assertExists(true);
 
             val pojoReplacers = Can.ofArray(pojoDefaultArgReplacers);
-            val managedAction = this.managedAction.orElseThrow();
 
             interactionService.runAnonymous(()->{
 
-                val actionInteraction = ActionInteraction.wrap(managedAction)
-                        .checkVisibility()
-                        .checkUsability();
-
-                val pendingArgs = actionInteraction
-                        .startParameterNegotiation().orElseThrow(()->_Exceptions
-                                .illegalAccess("action not visible or usable: %s",
-                                        managedAction.getAction().getFeatureIdentifier()));
+                val pendingArgs = startParameterNegotiation();
 
                 pendingArgs.getParamModels()
                         .forEach(param->{
@@ -292,19 +328,15 @@ public class DomainObjectTesterFactory {
             assertExists(true);
 
             val pojoReplacers = Can.ofArray(pojoDefaultArgReplacers);
-            val managedAction = this.managedAction.orElseThrow();
+            val managedAction = this.getManagedActionElseFail();
 
             interactionService.runAnonymous(()->{
 
-                val actionInteraction = ActionInteraction.wrap(managedAction)
+                //val actionInteraction = ActionInteraction.wrap(managedAction)
                         //.checkVisibility() - no rule checking
                         //.checkUsability() - no rule checking
-                        ;
-
-                val pendingArgs = actionInteraction
-                        .startParameterNegotiation().orElseThrow(()->_Exceptions
-                                .illegalAccess("action not visible or usable: %s",
-                                        managedAction.getAction().getFeatureIdentifier()));
+                        //;
+                val pendingArgs = startParameterNegotiation();
 
                 pendingArgs.getParamModels()
                 .forEach(param->{
@@ -332,19 +364,14 @@ public class DomainObjectTesterFactory {
             assertExists(true);
 
             val pojoTests = Can.ofArray(pojoDefaultArgTests);
-            val managedAction = this.managedAction.orElseThrow();
 
             interactionService.runAnonymous(()->{
 
-                val actionInteraction = ActionInteraction.wrap(managedAction)
+                //val actionInteraction = ActionInteraction.wrap(managedAction)
                         //.checkVisibility() - no rule checking
                         //.checkUsability() - no rule checking
-                        ;
-
-                val pendingArgs = actionInteraction
-                        .startParameterNegotiation().orElseThrow(()->_Exceptions
-                                .illegalAccess("action not visible or usable: %s",
-                                        managedAction.getAction().getFeatureIdentifier()));
+                  //      ;
+                val pendingArgs = startParameterNegotiation();
 
                 pendingArgs.getParamModels()
                 .forEach(param->{
@@ -369,18 +396,11 @@ public class DomainObjectTesterFactory {
             assertExists(true);
 
             val pojoReplacers = Can.ofArray(pojoDefaultArgReplacers);
-            val managedAction = this.managedAction.orElseThrow();
+            val managedAction = this.getManagedActionElseFail();
 
             return interactionService.callAnonymous(()->{
 
-                val actionInteraction = ActionInteraction.wrap(managedAction)
-                        .checkVisibility()
-                        .checkUsability();
-
-                val pendingArgs = actionInteraction
-                        .startParameterNegotiation().orElseThrow(()->_Exceptions
-                                .illegalAccess("action not visible or usable: %s",
-                                        managedAction.getAction().getFeatureIdentifier()));
+                val pendingArgs = startParameterNegotiation();
 
                 pendingArgs.getParamModels()
                         .forEach(param->{
@@ -405,7 +425,30 @@ public class DomainObjectTesterFactory {
 
         }
 
+        // -- HELPER
 
+        @SneakyThrows
+        private ParameterNegotiationModel startParameterNegotiation() {
+
+            if(parameterNegotiationStarter!=null) {
+                return parameterNegotiationStarter.get();
+            }
+
+            if(actionInteraction==null) {
+                fail("action-interaction not initialized on action-tester");
+            }
+
+            return actionInteraction
+                    .checkVisibility()
+                    .checkUsability()
+                    .startParameterNegotiation().orElseThrow(()->_Exceptions
+                            .illegalAccess("action not visible or usable: %s",
+                                    getManagedAction()
+                                    .map(ManagedAction::getAction)
+                                    .map(ObjectAction::getFeatureIdentifier)
+                                    .map(Identifier::toString)
+                                    .orElse("no such action")));
+        }
 
     }
 
@@ -838,5 +881,7 @@ public class DomainObjectTesterFactory {
         }
 
     }
+
+
 
 }
