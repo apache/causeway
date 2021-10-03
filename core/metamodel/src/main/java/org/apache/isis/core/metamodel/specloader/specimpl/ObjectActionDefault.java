@@ -144,7 +144,8 @@ implements ObjectAction {
     }
 
     @Override
-    public ActionInteractionHead interactionHead(final @NonNull ManagedObject actionOwner) {
+    public ActionInteractionHead interactionHead(
+            final @NonNull ManagedObject actionOwner) {
         return ActionInteractionHead.of(this, actionOwner, actionOwner);
     }
 
@@ -400,17 +401,6 @@ implements ObjectAction {
 
     protected ActionInvocationFacet getActionInvocationFacet() {
         return getFacetedMethod().getFacet(ActionInvocationFacet.class);
-    }
-
-    // -- defaults
-
-    @Override
-    public Can<ManagedObject> getDefaults(final ManagedObject target) {
-        // use the new defaultNXxx approach for each param in turn
-        // (the reflector will have made sure both aren't installed).
-        return interactionHead(target)
-                .defaults()
-                .getParamValues();
     }
 
     // -- choices

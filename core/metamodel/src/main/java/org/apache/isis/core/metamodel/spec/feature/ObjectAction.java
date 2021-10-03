@@ -171,10 +171,10 @@ public interface ObjectAction extends ObjectMember {
             InteractionInitiatedBy interactionInitiatedBy);
 
 
-    // -- Model for Parameter Negotiation
+    // -- INTERACTION HEAD
 
-    ActionInteractionHead interactionHead(
-            @NonNull ManagedObject actionOwner);
+    @Deprecated// use ManagedAction instead
+    ActionInteractionHead interactionHead(@NonNull ManagedObject actionOwner);
 
     // -- Parameters (declarative)
 
@@ -232,11 +232,6 @@ public interface ObjectAction extends ObjectMember {
 
 
     // -- Parameters (per instance)
-
-    /**
-     * Returns the defaults references/values to be used for the action.
-     */
-    Can<ManagedObject> getDefaults(ManagedObject target);
 
     /**
      * Returns a list of possible references/values for each parameter, which

@@ -25,11 +25,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -43,6 +38,11 @@ import org.apache.isis.testdomain.model.interaction.InteractionDemo_biListOfStri
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_multiEnum;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_multiInt;
 import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 
@@ -206,7 +206,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
                 .checkUsability();
 
         val managedAction = actionInteraction.getManagedAction().get(); // should not throw
-        val pendingArgs = managedAction.getInteractionHead().defaults();
+        val pendingArgs = managedAction.startParameterNegotiation();
 
         val expectedDefaults = Can.of(
                 new InteractionDemo_biArgEnabled(null).defaultA(null),
@@ -225,7 +225,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
                 .checkUsability();
 
         val managedAction = actionInteraction.getManagedAction().get(); // should not throw
-        val pendingArgs = managedAction.getInteractionHead().defaults();
+        val pendingArgs = managedAction.startParameterNegotiation();
 
         val mixin = new InteractionDemo_multiInt(null);
         val expectedDefaults = Can.<Integer>of(
@@ -261,7 +261,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
                 .checkUsability();
 
         val managedAction = actionInteraction.getManagedAction().get(); // should not throw
-        val pendingArgs = managedAction.getInteractionHead().defaults();
+        val pendingArgs = managedAction.startParameterNegotiation();
 
         val mixin = new InteractionDemo_multiEnum(null);
         val expectedDefaults = Can.<DemoEnum>of(
@@ -296,7 +296,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
                 .checkUsability();
 
         val managedAction = actionInteraction.getManagedAction().get(); // should not throw
-        val pendingArgs = managedAction.getInteractionHead().defaults();
+        val pendingArgs = managedAction.startParameterNegotiation();
 
         val mixin = new InteractionDemo_biListOfString(null);
         val expectedDefaults = Can.<List<String>>of(

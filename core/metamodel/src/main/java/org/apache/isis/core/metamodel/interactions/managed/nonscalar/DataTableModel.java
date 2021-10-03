@@ -45,6 +45,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction.MementoForArgs;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
+import org.apache.isis.core.metamodel.interactions.managed.MultiselectChoices;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -55,7 +56,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-public class DataTableModel {
+public class DataTableModel
+implements MultiselectChoices {
 
     // -- FACTORIES
 
@@ -195,8 +197,14 @@ public class DataTableModel {
 
     // -- ASSOCIATED ACTION WITH MULTI SELECT
 
-    public ActionInteraction startAssociatedActionInteraction(final String actionId, final Where where) {
+    @Override
+    public Can<ManagedObject> getSelected() {
+        return getDataRowsSelected()
+                .getValue()
+                .map(DataRow::getRowElement);
+    }
 
+    public ActionInteraction startAssociatedActionInteraction(final String actionId, final Where where) {
         val featureId = managedMember.getIdentifier();
         if(featureId.getType().isAction()) {
             return ActionInteraction.empty(String.format("[no such associated action %s for collection %s "
@@ -204,9 +212,7 @@ public class DataTableModel {
                     actionId,
                     featureId));
         }
-
-        //FIXME[ISIS-2871] get initial defaults from this table
-        return ActionInteraction.start(managedMember.getOwner(), actionId, where);
+        return ActionInteraction.startWithMultiselect(managedMember.getOwner(), actionId, where, this);
     }
 
     // -- MEMENTO

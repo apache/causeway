@@ -34,17 +34,13 @@ extends ActionParameterDefaultsFacetAbstract {
         return new ActionParameterDefaultsFacetFromAssociatedCollection(param);
     }
 
-    private int paramIndex;
-
     private ActionParameterDefaultsFacetFromAssociatedCollection(final ObjectActionParameter param) {
         super(param);
-        this.paramIndex = param.getNumber();
     }
 
     @Override
     public Can<ManagedObject> getDefault(@NonNull final ParameterNegotiationModel pendingArgs) {
-        //FIXME[ISIS-2871] rather then filling in all (as proof of concept), fill in only those selected
-        return pendingArgs.getObservableParamChoices(paramIndex).getValue();
+        return pendingArgs.getMultiselectChoices().getSelected();
     }
 
 

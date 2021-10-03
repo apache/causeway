@@ -29,10 +29,6 @@ import javax.inject.Inject;
 
 import org.springframework.lang.Nullable;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
@@ -48,6 +44,9 @@ import org.apache.isis.testdomain.publishing.subscriber.EntityPropertyChangeSubs
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 
@@ -90,24 +89,14 @@ public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstrac
 
     // -- SHORTCUTS
 
-    protected Object invokeAction(final Class<?> type, final String actionId, final @Nullable List<Object> pojoArgList) {
-        val managedAction = startActionInteractionOn(type, actionId, Where.OBJECT_FORMS)
-                .getManagedAction().get(); // should not throw
+    protected Object invokeAction(
+            final Class<?> type, final String actionId, final @Nullable List<Object> pojoArgList) {
 
-        assertFalse(managedAction.checkVisibility().isPresent()); // is visible
-        assertFalse(managedAction.checkUsability().isPresent()); // can invoke
-
-        val args = managedAction.getInteractionHead()
-                .getPopulatedParameterValues(pojoArgList);
-
-        // spawns its own transactional boundary, or reuses an existing one if available
-        val either = managedAction.invoke(args);
-
-        assertTrue(either.isLeft()); // assert action did not throw
-
-        val actionResultAsPojo = either.leftIfAny().getPojo();
-
-        return actionResultAsPojo;
+        val actTester = testerFactory.actionTester(type, actionId);
+        actTester.assertExists(true);
+        actTester.assertVisibilityIsNotVetoed();
+        actTester.assertUsabilityIsNotVetoed();
+        return actTester.invokeWithPojos(pojoArgList);
     }
 
     // -- ASSERTIONS

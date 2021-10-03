@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.util.interaction;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -29,12 +30,6 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.function.ThrowingSupplier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
@@ -73,6 +68,12 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -318,6 +319,32 @@ public class DomainObjectTesterFactory {
 
         }
 
+        public Object invokeWithPojos(final List<Object> pojoArgList) {
+
+            assertExists(true);
+
+            val pojoVector = Can.ofCollection(pojoArgList);
+
+            return interactionService.callAnonymous(()->{
+
+                val pendingArgs = startParameterNegotiation(true);
+
+                pendingArgs.getParamModels()
+                        .forEach(param->{
+                            pojoVector
+                                .get(param.getParamNr())
+                                .ifPresent(pojo->param.updatePojo(__->pojo));
+                        });
+
+                //pendingArgs.validateParameterSetForParameters();
+
+                val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+                assertTrue(resultOrVeto.isLeft()); // assert action did not throw
+
+                return resultOrVeto.leftIfAny().getPojo();
+            });
+        }
+
         /**
          * circumvents rule checking
          */
@@ -445,6 +472,7 @@ public class DomainObjectTesterFactory {
                                     .map(Identifier::toString)
                                     .orElse("no such action")));
         }
+
 
     }
 

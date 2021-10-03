@@ -55,7 +55,16 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
             final @NonNull String memberId,
             final @NonNull Where where) {
 
-        val managedAction = ManagedAction.lookupAction(owner, memberId, where);
+        return startWithMultiselect(owner, memberId, where, Can::empty);
+    }
+
+    public static final ActionInteraction startWithMultiselect(
+            final @NonNull ManagedObject owner,
+            final @NonNull String memberId,
+            final @NonNull Where where,
+            final @NonNull MultiselectChoices multiselectChoices) {
+
+        val managedAction = ManagedAction.lookupActionWithMultiselect(owner, memberId, where, multiselectChoices);
 
         final _Either<ManagedAction, InteractionVeto> chain = managedAction.isPresent()
                 ? _Either.left(managedAction.get())

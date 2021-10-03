@@ -54,7 +54,7 @@ public final class ManagedAction extends ManagedMember {
             final @NonNull ManagedObject owner,
             final @NonNull ObjectAction action,
             final @NonNull Where where) {
-        return new ManagedAction(owner, action, where);
+        return new ManagedAction(owner, action, where, Can::empty);
     }
 
     public static final Optional<ManagedAction> lookupAction(
@@ -66,20 +66,32 @@ public final class ManagedAction extends ManagedMember {
         .map(objectAction -> of(owner, objectAction, where));
     }
 
+    public static final Optional<ManagedAction> lookupActionWithMultiselect(
+            final @NonNull ManagedObject owner,
+            final @NonNull String memberId,
+            final @NonNull Where where,
+            final @NonNull MultiselectChoices multiselectChoices) {
+
+        return ManagedMember.<ObjectAction>lookup(owner, MemberType.ACTION, memberId)
+                .map(objectAction -> new ManagedAction(owner, objectAction, where, multiselectChoices));
+    }
+
     // -- IMPLEMENTATION
 
     @Getter private final ObjectAction action;
-
     @Getter private final ActionInteractionHead interactionHead;
+    @Getter private final MultiselectChoices multiselectChoices;
 
     private ManagedAction(
             final @NonNull ManagedObject owner,
             final @NonNull ObjectAction action,
-            final @NonNull Where where) {
+            final @NonNull Where where,
+            final @NonNull MultiselectChoices multiselectChoices) {
 
         super(owner, where);
         this.action = action;
         this.interactionHead = action.interactionHead(owner);
+        this.multiselectChoices = multiselectChoices;
     }
 
     /**
@@ -87,7 +99,7 @@ public final class ManagedAction extends ManagedMember {
      * parameters if any are initialized with their defaults (taking into account any supporting methods)
      */
     public ParameterNegotiationModel startParameterNegotiation() {
-        return getInteractionHead().defaults();
+        return interactionHead.defaults(this);
     }
 
     @Override

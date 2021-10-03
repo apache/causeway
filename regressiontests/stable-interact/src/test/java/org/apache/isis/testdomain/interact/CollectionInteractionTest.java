@@ -21,12 +21,9 @@ package org.apache.isis.testdomain.interact;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.config.presets.IsisPresets;
@@ -35,6 +32,8 @@ import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo;
 import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.val;
 
@@ -106,7 +105,7 @@ class CollectionInteractionTest extends InteractionTestAbstract {
 
     }
 
-    @Test @Disabled("FIXME[ISIS-2871]")
+    @Test
     void choicesFromMultiselect() {
 
         val collTester =

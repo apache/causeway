@@ -140,15 +140,6 @@ extends ObjectFeature, CurrentHolder {
         return ManagedObject.of(getElementType(), null);
     }
 
-    /** default value as result of a initial param value fixed point search */
-    default ManagedObject getDefault(final ManagedObject actionOnwer) {
-        return getAction()
-                .interactionHead(actionOnwer).defaults()
-                .getParamValues()
-                .getElseFail(getNumber());
-    }
-
-
     /**
      * Whether this parameter is visible given the entered previous arguments
      * @param head

@@ -43,20 +43,31 @@ implements HasMetaModel<ObjectAction> {
 
     @Getter(onMethod = @__(@Override))
     @NonNull private final ObjectAction metaModel;
+    @Getter private final MultiselectChoices multiselectChoices;
 
     public static ActionInteractionHead of(
-            @NonNull final ObjectAction objectAction,
-            @NonNull final ManagedObject owner,
-            @NonNull final ManagedObject target) {
-        return new ActionInteractionHead(objectAction, owner, target);
+            final @NonNull ObjectAction objectAction,
+            final @NonNull ManagedObject owner,
+            final @NonNull ManagedObject target) {
+        return new ActionInteractionHead(objectAction, owner, target, Can::empty);
+    }
+
+    public static ActionInteractionHead of(
+            final @NonNull ObjectAction objectAction,
+            final @NonNull ManagedObject owner,
+            final @NonNull ManagedObject target,
+            final @NonNull MultiselectChoices multiselectChoices) {
+        return new ActionInteractionHead(objectAction, owner, target, multiselectChoices);
     }
 
     protected ActionInteractionHead(
-            @NonNull final ObjectAction objectAction,
-            @NonNull final ManagedObject owner,
-            @NonNull final ManagedObject target) {
+            final @NonNull ObjectAction objectAction,
+            final @NonNull ManagedObject owner,
+            final @NonNull ManagedObject target,
+            final @NonNull MultiselectChoices multiselectChoices) {
         super(owner, target);
         this.metaModel = objectAction;
+        this.multiselectChoices = multiselectChoices;
     }
 
     /**
@@ -93,13 +104,8 @@ implements HasMetaModel<ObjectAction> {
             ManagedObject.of(objectActionParameter.getElementType(), argPojo));
     }
 
-    public ParameterNegotiationModel model(
-            @NonNull final Can<ManagedObject> paramValues) {
-        return ParameterNegotiationModel.of(this, paramValues);
-    }
-
-    public ParameterNegotiationModel emptyModel() {
-        return ParameterNegotiationModel.of(this, getEmptyParameterValues());
+    public ParameterNegotiationModel emptyModel(final ManagedAction managedAction) {
+        return ParameterNegotiationModel.of(managedAction, getEmptyParameterValues());
     }
 
     /**
@@ -108,7 +114,7 @@ implements HasMetaModel<ObjectAction> {
      * ActionParameterNegotiation (wiki)
      * </a>
      */
-    public ParameterNegotiationModel defaults() {
+    public ParameterNegotiationModel defaults(final ManagedAction managedAction) {
 
         // first pass ... empty values
         // second pass ... proposed default values
@@ -122,7 +128,7 @@ implements HasMetaModel<ObjectAction> {
                 // vector of packed values - where each is either scalar or non-scalar
                 paramVector->{
                     //lombok 1.18.20 issue with val - should be fixed in 1.18.22
-                    final var paramNegotiationModel = model(paramVector);
+                    final var paramNegotiationModel = modelForParamValues(managedAction, paramVector);
                     return params
                             .map(param->param.getDefault(paramNegotiationModel));
                 },
@@ -133,11 +139,19 @@ implements HasMetaModel<ObjectAction> {
                     + "parameter defaults on action %s.", getMetaModel());
         }
 
-        return model(fixedPoint.fold(
+        return modelForParamValues(managedAction,
+                fixedPoint.fold(
                 left->left,
                 right->right));
     }
 
+    // -- HELPER
+
+    private ParameterNegotiationModel modelForParamValues(
+            final ManagedAction managedAction,
+            @NonNull final Can<ManagedObject> paramValues) {
+        return ParameterNegotiationModel.of(managedAction, paramValues);
+    }
 
     /**
      * Returns either a fixed point or the last iteration.
@@ -158,7 +172,5 @@ implements HasMetaModel<ObjectAction> {
 
         return _Either.right(t0);
     }
-
-
 
 }

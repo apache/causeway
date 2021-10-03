@@ -54,21 +54,23 @@ import lombok.val;
 public class ParameterNegotiationModel {
 
     public static ParameterNegotiationModel of(
-            final @NonNull ActionInteractionHead head,
+            final @NonNull ManagedAction managedAction,
             final @NonNull Can<ManagedObject> initialParamValues) {
-        return new ParameterNegotiationModel(head, initialParamValues);
+        return new ParameterNegotiationModel(managedAction, initialParamValues);
 
     }
 
     @Getter private final ActionInteractionHead head;
+    private final @NonNull ManagedAction managedAction;
     private final Can<ParameterModel> paramModels;
     private final _BindableAbstract<Boolean> validationFeedbackActive;
     private final LazyObservable<String> observableActionValidation;
 
     private ParameterNegotiationModel(
-            final @NonNull ActionInteractionHead head,
+            final @NonNull ManagedAction managedAction,
             final @NonNull Can<ManagedObject> initialParamValues) {
-        this.head = head;
+        this.managedAction = managedAction;
+        this.head = managedAction.getInteractionHead(); //TODO  don't memoize
         this.validationFeedbackActive = _Bindables.forValue(false);
 
         val paramNrIterator = IntStream.range(0, initialParamValues.size()).iterator();
@@ -162,6 +164,12 @@ public class ParameterNegotiationModel {
         val head = this.getHead();
         return paramMeta
                 .isUsable(head, pendingArgValues, InteractionInitiatedBy.USER);
+    }
+
+    // -- MULTI SELECT
+
+    public MultiselectChoices getMultiselectChoices() {
+        return managedAction.getMultiselectChoices();
     }
 
     // -- RATHER INTERNAL ...
@@ -344,5 +352,7 @@ public class ParameterNegotiationModel {
         }
 
     }
+
+
 
 }

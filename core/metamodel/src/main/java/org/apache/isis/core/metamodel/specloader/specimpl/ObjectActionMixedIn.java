@@ -136,12 +136,6 @@ implements MixedInMember {
     }
 
     @Override
-    public Can<ManagedObject> getDefaults(final ManagedObject mixedInAdapter) {
-        final ManagedObject mixinAdapter = mixinAdapterFor(mixedInAdapter);
-        return mixinAction.getDefaults(mixinAdapter);
-    }
-
-    @Override
     public CanVector<ManagedObject> getChoices(
             final ManagedObject mixedInAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
