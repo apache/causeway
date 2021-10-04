@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
@@ -36,7 +37,7 @@ public final class LinkAndLabelUtil {
             final Stream<ObjectAction> associatedActions) {
 
         final EntityModel parentEntityModel = scalarModel.getParentUiModel();
-        return asActionLinksForAdditionalLinksPanel(parentEntityModel, associatedActions, scalarModel);
+        return asActionLinksForAdditionalLinksPanel(parentEntityModel, associatedActions, scalarModel, null);
     }
 
     public static Stream<LinkAndLabel> asActionLink(
@@ -59,12 +60,14 @@ public final class LinkAndLabelUtil {
     public static Stream<LinkAndLabel> asActionLinksForAdditionalLinksPanel(
             final EntityModel parentEntityModel,
             final Stream<ObjectAction> objectActions,
-            final ScalarModel scalarModelIfAny) {
+            final ScalarModel scalarModelIfAny,
+            final EntityCollectionModel collectionModelForAssociationIfAny) {
 
         val actionLinkFactory = new EntityActionLinkFactory(
                 AdditionalLinksPanel.ID_ADDITIONAL_LINK,
                 parentEntityModel,
-                scalarModelIfAny);
+                scalarModelIfAny,
+                collectionModelForAssociationIfAny);
 
         return objectActions
                 .map(objectAction->actionLinkFactory.newActionLink(objectAction, /*named*/null));

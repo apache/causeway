@@ -71,7 +71,8 @@ implements
                 .asActionLinksForAdditionalLinksPanel(
                         collectionModel.getEntityModel(),
                         collMetaModel.streamAssociatedActions(),
-                        null)
+                        null,
+                        collectionModel)
                 .collect(Can.toCan());
 
         collectionModel.setLinkAndLabels(entityActionLinks);

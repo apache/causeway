@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.LinkAndLabelFactoryAbstract;
@@ -35,8 +36,9 @@ extends LinkAndLabelFactoryAbstract {
     public EntityActionLinkFactory(
             final String linkId,
             final EntityModel entityModel,
-            final ScalarModel scalarModelForAssociationIfAny) {
-        super(linkId, entityModel, scalarModelForAssociationIfAny);
+            final ScalarModel scalarModelForAssociationIfAny,
+            final EntityCollectionModel collectionModelForAssociationIfAny) {
+        super(linkId, entityModel, scalarModelForAssociationIfAny, collectionModelForAssociationIfAny);
     }
 
     @Override

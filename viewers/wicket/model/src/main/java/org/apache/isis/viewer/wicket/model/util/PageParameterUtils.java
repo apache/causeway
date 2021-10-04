@@ -117,7 +117,7 @@ public class PageParameterUtils {
 
         val entityModel = entityModelFromPageParams(commonContext, pageParameters);
         val action = actionFromPageParams(commonContext, pageParameters);
-        val actionModel = ActionModel.of(entityModel, action.getFeatureIdentifier());
+        val actionModel = ActionModel.of(entityModel, action.getFeatureIdentifier(), null);
         val mmc = commonContext.getMetaModelContext();
         setArgumentsIfPossible(mmc, actionModel, pageParameters);
         setContextArgumentIfPossible(mmc, actionModel, pageParameters);

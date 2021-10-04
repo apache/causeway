@@ -30,7 +30,7 @@ class MenuActionLinkFactory extends LinkAndLabelFactoryAbstract {
     MenuActionLinkFactory(
             final String linkId,
             final EntityModel serviceModel) {
-        super(linkId, serviceModel, null);
+        super(linkId, serviceModel, null, null);
     }
 
     @Override

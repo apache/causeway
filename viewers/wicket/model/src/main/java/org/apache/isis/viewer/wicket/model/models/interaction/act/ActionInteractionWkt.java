@@ -23,6 +23,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.apache.wicket.model.ChainingModel;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
@@ -32,7 +33,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 
@@ -45,6 +46,8 @@ import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwner
  * +-- ParameterUiModel ... bound to X x (ParameterNegotiationModel)
  * +-- ParameterUiModel ... bound to Y y (ParameterNegotiationModel)
  * </pre>
+ * This action might be associated with a <i>Collection</i> that acts as its multi-select
+ * defaults provider. This is modeled with {@link #associatedWithCollectionModelIfAny}.
  *
  * @implSpec the state of pending parameters ParameterNegotiationModel is held transient,
  * that means it does not survive a serialization/de-serialization cycle; instead
@@ -60,37 +63,42 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     private final String memberId;
     private final Where where;
     private Can<ParameterUiModelWkt> childModels;
+    private @Nullable EntityCollectionModel associatedWithCollectionModelIfAny;
 
-    /**
-     * Returns a new <i>Action Interaction</i> binding to the parent {@link BookmarkedObjectWkt}
-     * of given {@link ActionModel}.
-     */
-    public static ActionInteractionWkt bind(
-            final ActionModel actionModel,
-            final Where where) {
-        return new ActionInteractionWkt(
-                actionModel.getParentUiModel().bookmarkedObjectModel(),
-                actionModel.getMetaModel().getId(),
-                where);
-    }
+//    /**
+//     * Returns a new <i>Action Interaction</i> binding to the parent {@link BookmarkedObjectWkt}
+//     * of given {@link ActionModel}.
+//     */
+//    public static ActionInteractionWkt bind(
+//            final ActionModel actionModel,
+//            final Where where) {
+//        return new ActionInteractionWkt(
+//                actionModel.getParentUiModel().bookmarkedObjectModel(),
+//                actionModel.getMetaModel().getId(),
+//                where,
+//                null);
+//    }
 
     public ActionInteractionWkt(
             final BookmarkedObjectWkt bookmarkedObject,
             final String memberId,
-            final Where where) {
-
+            final Where where,
+            final EntityCollectionModel associatedWithCollectionModelIfAny) {
         super(bookmarkedObject);
         this.memberId = memberId;
         this.where = where;
+        this.associatedWithCollectionModelIfAny = associatedWithCollectionModelIfAny;
     }
 
     @Override
     protected ActionInteraction load() {
-
         parameterNegotiationModel =
                 _Lazy.threadSafe(()->actionInteraction().startParameterNegotiation());
 
-        return ActionInteraction.start(getBookmarkedOwner(), memberId, where);
+        return associatedWithCollectionModelIfAny!=null
+                ? associatedWithCollectionModelIfAny.getDataTableModel()
+                        .startAssociatedActionInteraction(memberId, where)
+                : ActionInteraction.start(getBookmarkedOwner(), memberId, where);
 
     }
 

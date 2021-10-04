@@ -27,15 +27,14 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class LinkAndLabelAbstract implements Serializable {
@@ -82,20 +81,15 @@ public abstract class LinkAndLabelAbstract implements Serializable {
     // -- VISIBILITY
 
     public boolean isVisible() {
-        return isVisible(actionHolder.getManagedObject(), objectAction);
-    }
-
-    private static boolean isVisible(
-            final @NonNull ManagedObject actionHolder,
-            final @NonNull ObjectAction objectAction) {
+        val owner = actionHolder.getManagedObject();
 
         // check hidden
-        if (actionHolder.getSpecification().isHidden()) {
+        if (owner.getSpecification().isHidden()) {
             return false;
         }
         // check visibility
         final Consent visibility = objectAction.isVisible(
-                actionHolder,
+                owner,
                 InteractionInitiatedBy.USER,
                 Where.ANYWHERE);
         if (visibility.isVetoed()) {

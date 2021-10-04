@@ -26,7 +26,6 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -40,7 +39,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.common.model.components.ComponentType;
-import org.apache.isis.viewer.common.model.feature.ScalarUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -194,7 +192,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
         val entity = entityModel.getManagedObject();
         val associatedActions = ObjectAction.Util.findForAssociation(entity, property);
 
-        LinkAndLabelUtil.asActionLinksForAdditionalLinksPanel(entityModel, associatedActions, null)
+        LinkAndLabelUtil.asActionLinksForAdditionalLinksPanel(entityModel, associatedActions, null, null)
         .forEach(onEntityAction);
 
         return scalarNameAndValueComponent;

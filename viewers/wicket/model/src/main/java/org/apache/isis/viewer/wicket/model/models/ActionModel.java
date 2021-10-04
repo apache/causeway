@@ -84,11 +84,15 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         return new ActionModel(actionOwner, delegate);
     }
 
-    public static ActionModel of(final EntityModel actionOwner, final Identifier actionIdentifier) {
+    public static ActionModel of(
+            final EntityModel actionOwner,
+            final Identifier actionIdentifier,
+            final EntityCollectionModel associatedWithCollectionModelIfAny) {
         val delegate = new ActionInteractionWkt(
                 actionOwner.bookmarkedObjectModel(),
                 actionIdentifier.getMemberLogicalName(),
-                Where.ANYWHERE);
+                Where.ANYWHERE,
+                associatedWithCollectionModelIfAny);
         return wrap(actionOwner, delegate);
     }
 

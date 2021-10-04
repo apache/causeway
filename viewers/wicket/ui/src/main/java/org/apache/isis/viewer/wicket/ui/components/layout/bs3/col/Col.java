@@ -143,7 +143,7 @@ implements HasDynamicallyVisibleContent {
         //})
 
         final Can<LinkAndLabel> entityActionLinks = LinkAndLabelUtil
-        .asActionLinksForAdditionalLinksPanel(getModel(), visibleActions, null)
+        .asActionLinksForAdditionalLinksPanel(getModel(), visibleActions, null, null)
         .collect(Can.toCan());
 
         if (!entityActionLinks.isEmpty()) {

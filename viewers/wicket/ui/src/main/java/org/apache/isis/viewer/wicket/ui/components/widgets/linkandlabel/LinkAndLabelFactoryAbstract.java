@@ -48,6 +48,7 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptWithExtraContent;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
@@ -74,15 +75,18 @@ implements Serializable {
     protected final String linkId;
     protected final EntityModel targetEntityModel;
     protected final ScalarModel scalarModelForAssociationIfAny;
+    protected final EntityCollectionModel collectionModelForAssociationIfAny;
 
     protected LinkAndLabelFactoryAbstract(
             final String linkId,
             final EntityModel targetEntityModel,
-            final ScalarModel scalarModelForAssociationIfAny) {
+            final ScalarModel scalarModelForAssociationIfAny,
+            final EntityCollectionModel collectionModelForAssociationIfAny) {
 
         this.linkId = linkId;
         this.targetEntityModel = targetEntityModel;
         this.scalarModelForAssociationIfAny = scalarModelForAssociationIfAny;
+        this.collectionModelForAssociationIfAny = collectionModelForAssociationIfAny;
     }
 
     public abstract LinkAndLabel newActionLink(ObjectAction action, String named);
@@ -90,7 +94,7 @@ implements Serializable {
     protected ActionLink newLinkComponent(
             final Identifier actionIdentifier) {
 
-        val actionModel = ActionModel.of(this.targetEntityModel, actionIdentifier);
+        val actionModel = ActionModel.of(this.targetEntityModel, actionIdentifier, collectionModelForAssociationIfAny);
 
         final ActionLink link = new ActionLink(linkId, actionModel) {
 
