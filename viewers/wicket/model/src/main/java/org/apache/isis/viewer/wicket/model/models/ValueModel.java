@@ -18,10 +18,9 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.io.Serializable;
-
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -40,31 +39,23 @@ public class ValueModel extends ModelAbstract<ManagedObject> {
     public static ValueModel of(
             final @NonNull  IsisAppCommonContext commonContext,
             final @Nullable ManagedObject valueAdapter) {
-
-        if(valueAdapter==null) {
-            return of(commonContext, (Serializable) null);
-        }
-        return of(commonContext, (Serializable) valueAdapter.getPojo());
-    }
-
-    public static ValueModel of(
-            final @NonNull  IsisAppCommonContext commonContext,
-            final @Nullable Serializable valuePojo) {
-        return new ValueModel(commonContext, valuePojo);
+        return new ValueModel(commonContext, valueAdapter);
     }
 
     // --
 
-    private final Serializable valuePojo;
+    private final ObjectMemento adapterMemento;
 
-    private ValueModel(final IsisAppCommonContext commonContext, final Serializable valuePojo) {
+    private ValueModel(
+            final IsisAppCommonContext commonContext,
+            final @Nullable ManagedObject valueAdapter) {
         super(commonContext);
-        this.valuePojo = valuePojo;
+        adapterMemento = super.getMementoService().mementoForObject(valueAdapter);
     }
 
     @Override
     protected ManagedObject load() {
-        return getCommonContext().getObjectManager().adapt(valuePojo);
+        return getCommonContext().reconstructObject(adapterMemento);
     }
 
     // -- HINTING SUPPORT
@@ -87,5 +78,8 @@ public class ValueModel extends ModelAbstract<ManagedObject> {
     public void setActionHint(final ActionModel actionModelHint) {
         this.actionModelHint = actionModelHint;
     }
+
+
+
 
 }
