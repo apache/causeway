@@ -33,6 +33,7 @@ import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.apache.wicket.util.resource.StringResourceStream;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
@@ -53,7 +54,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.memento.ActionMemento;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.action.form.FormUiModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.act.ActionInteractionWkt;
@@ -84,18 +84,10 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         return new ActionModel(actionOwner, delegate);
     }
 
-    public static ActionModel of(final EntityModel actionOwner, final ObjectAction action) {
+    public static ActionModel of(final EntityModel actionOwner, final Identifier actionIdentifier) {
         val delegate = new ActionInteractionWkt(
                 actionOwner.bookmarkedObjectModel(),
-                action.getFeatureIdentifier().getMemberLogicalName(),
-                Where.ANYWHERE);
-        return wrap(actionOwner, delegate);
-    }
-
-    public static ActionModel of(final EntityModel actionOwner, final ActionMemento actionMemento) {
-        val delegate = new ActionInteractionWkt(
-                actionOwner.bookmarkedObjectModel(),
-                actionMemento.getIdentifier().getMemberLogicalName(),
+                actionIdentifier.getMemberLogicalName(),
                 Where.ANYWHERE);
         return wrap(actionOwner, delegate);
     }

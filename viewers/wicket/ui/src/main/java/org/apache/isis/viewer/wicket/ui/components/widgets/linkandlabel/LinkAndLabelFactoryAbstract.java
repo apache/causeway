@@ -27,6 +27,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -87,9 +88,9 @@ implements Serializable {
     public abstract LinkAndLabel newActionLink(ObjectAction action, String named);
 
     protected ActionLink newLinkComponent(
-            final ObjectAction objectAction) {
+            final Identifier actionIdentifier) {
 
-        val actionModel = ActionModel.of(this.targetEntityModel, objectAction);
+        val actionModel = ActionModel.of(this.targetEntityModel, actionIdentifier);
 
         final ActionLink link = new ActionLink(linkId, actionModel) {
 

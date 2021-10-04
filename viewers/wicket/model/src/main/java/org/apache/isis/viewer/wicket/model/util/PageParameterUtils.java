@@ -24,7 +24,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.apache.wicket.core.request.handler.IPageRequestHandler;
-import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -118,7 +117,7 @@ public class PageParameterUtils {
 
         val entityModel = entityModelFromPageParams(commonContext, pageParameters);
         val action = actionFromPageParams(commonContext, pageParameters);
-        val actionModel = ActionModel.of(entityModel, action.getMemento());
+        val actionModel = ActionModel.of(entityModel, action.getFeatureIdentifier());
         val mmc = commonContext.getMetaModelContext();
         setArgumentsIfPossible(mmc, actionModel, pageParameters);
         setContextArgumentIfPossible(mmc, actionModel, pageParameters);
