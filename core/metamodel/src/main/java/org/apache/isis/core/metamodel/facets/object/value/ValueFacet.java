@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.value;
 import java.util.Optional;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
@@ -46,6 +47,11 @@ public interface ValueFacet<T> extends Facet {
     LogicalType getValueType();
     Can<ValueSemanticsProvider<T>> getValueSemantics();
     Context createValueSemanticsContext(Identifier featureIdentifier);
+
+    // -- ENCODER DECODER
+
+    /** no qualifiers allowed on the default semantics provider*/
+    Optional<EncoderDecoder<T>> selectDefaultEncoderDecoder();
 
     // -- PARSER
 

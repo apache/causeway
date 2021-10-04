@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
@@ -92,6 +93,18 @@ implements ValueFacet<T> {
         return ValueSemanticsProvider.Context.of(
                 featureIdentifier,
                 iaProvider.currentInteractionContext().orElse(null));
+    }
+
+    // -- ENCODER DECODER
+
+    @Override
+    public Optional<EncoderDecoder<T>> selectDefaultEncoderDecoder() {
+        return getValueSemantics()
+                .stream()
+                .filter(isMatchingAnyOf(Can.empty()))
+                .map(ValueSemanticsProvider::getEncoderDecoder)
+                .filter(_NullSafe::isPresent)
+                .findFirst();
     }
 
     // -- PARSER
