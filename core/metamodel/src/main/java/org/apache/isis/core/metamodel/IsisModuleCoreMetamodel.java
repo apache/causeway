@@ -56,7 +56,9 @@ import org.apache.isis.core.metamodel.valuesemantics.BlobValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.BooleanValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.BufferedImageValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.ByteValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.ChangesDtoValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.ClobValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.CommandDtoValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.DoubleValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.FloatValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.IntValueSemantics;
@@ -117,6 +119,8 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         LocalResourcePathValueSemantics.class,
         UUIDValueSemantics.class,
         TreeNodeValueSemantics.class,
+        ChangesDtoValueSemantics.class,
+        CommandDtoValueSemantics.class,
 
         // @Service's
         ObjectManagerDefault.class,

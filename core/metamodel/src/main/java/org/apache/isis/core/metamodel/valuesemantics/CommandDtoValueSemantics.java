@@ -25,34 +25,34 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Renderer;
-import org.apache.isis.applib.util.schema.ChangesDtoUtils;
-import org.apache.isis.schema.chg.v2.ChangesDto;
+import org.apache.isis.applib.util.schema.CommandDtoUtils;
+import org.apache.isis.schema.cmd.v2.CommandDto;
 
 @Component
-@Named("isis.val.ChangesDtoValueSemantics")
-public class ChangesDtoValueSemantics
-extends AbstractValueSemanticsProvider<ChangesDto>
+@Named("isis.val.CommandDtoValueSemantics")
+public class CommandDtoValueSemantics
+extends AbstractValueSemanticsProvider<CommandDto>
 implements
-    EncoderDecoder<ChangesDto>,
-    Renderer<ChangesDto> {
+    EncoderDecoder<CommandDto>,
+    Renderer<CommandDto> {
 
     // -- ENCODER DECODER
 
     @Override
-    public String toEncodedString(final ChangesDto changesDto) {
-        return ChangesDtoUtils.toXml(changesDto);
+    public String toEncodedString(final CommandDto changesDto) {
+        return CommandDtoUtils.toXml(changesDto);
     }
 
     @Override
-    public ChangesDto fromEncodedString(final String xml) {
-        return ChangesDtoUtils.fromXml(xml);
+    public CommandDto fromEncodedString(final String xml) {
+        return CommandDtoUtils.fromXml(xml);
     }
 
     // -- RENDERER
 
     @Override
-    public String simpleTextRepresentation(final Context context, final ChangesDto value) {
-        return render(value, ChangesDtoUtils::toXml);
+    public String simpleTextRepresentation(final Context context, final CommandDto value) {
+        return render(value, CommandDtoUtils::toXml);
     }
 
 }

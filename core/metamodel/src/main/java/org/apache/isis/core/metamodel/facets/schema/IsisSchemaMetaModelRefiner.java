@@ -23,7 +23,6 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.facets.schema.cmd.v2.CommandDtoValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.schema.ixn.v2.InteractionDtoValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 
@@ -42,9 +41,6 @@ implements MetaModelRefiner {
         programmingModel.addFactory(
                 ProgrammingModel.FacetProcessingOrder.G1_VALUE_TYPES,
                 new InteractionDtoValueFacetUsingSemanticsProviderFactory(mmc));
-        programmingModel.addFactory(
-                ProgrammingModel.FacetProcessingOrder.G1_VALUE_TYPES,
-                new CommandDtoValueFacetUsingSemanticsProviderFactory(mmc));
     }
 
 }
