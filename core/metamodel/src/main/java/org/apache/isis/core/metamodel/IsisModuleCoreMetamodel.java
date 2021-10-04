@@ -25,7 +25,6 @@ import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.core.config.IsisModuleCoreConfig;
 import org.apache.isis.core.metamodel.context.MetaModelContexts;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeMalformedValidator;
-import org.apache.isis.core.metamodel.facets.schema.IsisSchemaMetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.schema.IsisSchemaValueTypeProvider;
 import org.apache.isis.core.metamodel.inspect.IsisModuleCoreMetamodelInspection;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
@@ -62,6 +61,7 @@ import org.apache.isis.core.metamodel.valuesemantics.CommandDtoValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.DoubleValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.FloatValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.IntValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.InteractionDtoValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.LocalResourcePathValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.LongValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.MarkupValueSemantics;
@@ -121,6 +121,7 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         TreeNodeValueSemantics.class,
         ChangesDtoValueSemantics.class,
         CommandDtoValueSemantics.class,
+        InteractionDtoValueSemantics.class,
 
         // @Service's
         ObjectManagerDefault.class,
@@ -143,7 +144,6 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         // @Repository's
         ApplicationFeatureRepositoryDefault.class,
 
-        IsisSchemaMetaModelRefiner.class,
         IsisSchemaValueTypeProvider.class,
         LogicalTypeMalformedValidator.class,
 
