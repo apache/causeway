@@ -83,8 +83,6 @@ import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyL
 import org.apache.isis.core.metamodel.facets.properties.update.PropertySetterFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefaultFactory;
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.value.chars.CharPrimitiveValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.facets.value.chars.CharWrapperValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.datejodalocal.JodaLocalDateValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.datesql.JavaSqlDateValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.datetimejoda.JodaDateTimeValueFacetUsingSemanticsProviderFactory;
@@ -249,8 +247,6 @@ extends ProgrammingModelAbstract {
         addFactory(FacetProcessingOrder.F1_LAYOUT, new CollectionLayoutFacetFactory(mmc));
 
         // built-in value types for Java language
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new CharPrimitiveValueFacetUsingSemanticsProviderFactory(mmc));
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new CharWrapperValueFacetUsingSemanticsProviderFactory(mmc));
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JavaSqlDateValueFacetUsingSemanticsProviderFactory(mmc));
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JavaSqlTimeValueFacetUsingSemanticsProviderFactory(mmc));
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory(mmc));
