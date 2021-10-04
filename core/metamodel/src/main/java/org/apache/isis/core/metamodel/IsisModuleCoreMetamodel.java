@@ -58,6 +58,7 @@ import org.apache.isis.core.metamodel.valuesemantics.BufferedImageValueSemantics
 import org.apache.isis.core.metamodel.valuesemantics.ByteValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.ClobValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.DoubleValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.FloatValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.IntValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.LocalResourcePathValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.LongValueSemantics;
@@ -103,6 +104,7 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         IntValueSemantics.class,
         LongValueSemantics.class,
         DoubleValueSemantics.class,
+        FloatValueSemantics.class,
         BigDecimalValueSemantics.class,
         BigIntegerValueSemantics.class,
         StringValueSemantics.class,

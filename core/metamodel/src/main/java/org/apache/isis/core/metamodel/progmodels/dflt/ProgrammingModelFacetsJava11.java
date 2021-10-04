@@ -90,8 +90,6 @@ import org.apache.isis.core.metamodel.facets.value.datesql.JavaSqlDateValueFacet
 import org.apache.isis.core.metamodel.facets.value.datetimejoda.JodaDateTimeValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.datetimejodalocal.JodaLocalDateTimeValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.dateutil.JavaUtilDateValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.facets.value.floats.FloatPrimitiveValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.facets.value.floats.FloatWrapperValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.temporal.localdate.LocalDateValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.temporal.localdatetime.LocalDateTimeValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.temporal.localtime.LocalTimeValueFacetUsingSemanticsProviderFactory;
@@ -251,8 +249,6 @@ extends ProgrammingModelAbstract {
         addFactory(FacetProcessingOrder.F1_LAYOUT, new CollectionLayoutFacetFactory(mmc));
 
         // built-in value types for Java language
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new FloatPrimitiveValueFacetUsingSemanticsProviderFactory(mmc));
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new FloatWrapperValueFacetUsingSemanticsProviderFactory(mmc));
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new CharPrimitiveValueFacetUsingSemanticsProviderFactory(mmc));
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new CharWrapperValueFacetUsingSemanticsProviderFactory(mmc));
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JavaSqlDateValueFacetUsingSemanticsProviderFactory(mmc));
