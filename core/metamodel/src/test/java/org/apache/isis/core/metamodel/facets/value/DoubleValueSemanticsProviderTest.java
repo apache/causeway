@@ -25,23 +25,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.facets.value.doubles.DoubleWrapperValueSemanticsProvider;
+import org.apache.isis.core.metamodel.valuesemantics.DoubleValueSemantics;
 
 public class DoubleValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {
 
+    private DoubleValueSemantics value;
     private Double doubleObj;
-
-    private FacetHolder holder;
 
     @Before
     public void setUpObjects() throws Exception {
 
-        holder = FacetHolderAbstract.forTesting(metaModelContext);
-        setValue(new DoubleWrapperValueSemanticsProvider(holder));
+        setSemanitcs(value = new DoubleValueSemantics());
 
         doubleObj = Double.valueOf(32.5d);
         allowMockAdapterToReturn(doubleObj);
@@ -49,13 +44,13 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testValue() {
-        assertEquals("32.5", getValue().simpleTextRepresentation(null, doubleObj));
+        assertEquals("32.5", value.simpleTextRepresentation(null, doubleObj));
     }
 
     @Test
     public void testInvalidParse() throws Exception {
         try {
-            getValue().parseTextRepresentation(null, "one");
+            value.parseTextRepresentation(null, "one");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -63,24 +58,19 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testTitleOf() {
-        assertEquals("35,000,000", getValue().simpleTextRepresentation(null, Double.valueOf(35000000.0)));
+        assertEquals("35,000,000", value.simpleTextRepresentation(null, Double.valueOf(35000000.0)));
     }
 
     @Test
     public void testParse() throws Exception {
-        final Object newValue = getValue().parseTextRepresentation(null, "120.56");
+        final Object newValue = value.parseTextRepresentation(null, "120.56");
         assertEquals(120.56, ((Double) newValue).doubleValue(), 0.0);
     }
 
     @Test
     public void testParse2() throws Exception {
-        final Object newValue = getValue().parseTextRepresentation(null, "1,20.0");
+        final Object newValue = value.parseTextRepresentation(null, "1,20.0");
         assertEquals(120, ((Double) newValue).doubleValue(), 0.0);
     }
 
-    // -- HELPER
-
-    private ValueSemanticsProviderAndFacetAbstract<Double> getValue() {
-        return super.getValue(Double.class);
-    }
 }
