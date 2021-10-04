@@ -33,6 +33,7 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.facets.value.temporal.ValueSemanticsProviderAbstractTemporal;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -44,6 +45,16 @@ extends ValueSemanticsProviderAbstractTemporal<Timestamp> {
     protected static void initFormats(final Map<String, DateFormat> formats) {
         formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("yyyyMMdd'T'HHmmssSSS"));
         formats.put("short", DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG));
+    }
+
+    @Override
+    public Class<Timestamp> getCorrespondingClass() {
+        return Timestamp.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.JAVA_SQL_TIMESTAMP;
     }
 
     @Getter @Setter

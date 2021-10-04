@@ -27,6 +27,7 @@ import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.schema.cmd.v2.CommandDto;
+import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.val.CommandDtoValueSemantics")
@@ -36,11 +37,21 @@ implements
     EncoderDecoder<CommandDto>,
     Renderer<CommandDto> {
 
+    @Override
+    public Class<CommandDto> getCorrespondingClass() {
+        return CommandDto.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return UNREPRESENTED;
+    }
+
     // -- ENCODER DECODER
 
     @Override
-    public String toEncodedString(final CommandDto changesDto) {
-        return CommandDtoUtils.toXml(changesDto);
+    public String toEncodedString(final CommandDto commandDto) {
+        return CommandDtoUtils.toXml(commandDto);
     }
 
     @Override

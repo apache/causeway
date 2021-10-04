@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalAdjust;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueSemanticsProviderAbstract;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
 
@@ -36,6 +37,16 @@ extends TemporalValueSemanticsProviderAbstract<ZonedDateTime> {
 
     public static final int MAX_LENGTH = 36;
     public static final int TYPICAL_LENGTH = 22;
+
+    @Override
+    public Class<ZonedDateTime> getCorrespondingClass() {
+        return ZonedDateTime.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.ZONED_DATE_TIME;
+    }
 
     public ZonedDateTimeValueSemanticsProvider(final FacetHolder holder) {
         super(TemporalValueFacet.class,

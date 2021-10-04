@@ -31,6 +31,7 @@ import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
 
@@ -41,6 +42,17 @@ public class ComplexNumberJpaValueSemantics
         extends AbstractValueSemanticsProvider<ComplexNumberJpa>{
 
 // end::class[]
+
+    @Override
+    public Class<ComplexNumberJpa> getCorrespondingClass() {
+        return ComplexNumberJpa.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.STRING;
+    }
+
 // tag::getRenderer[]
     @Override
     public Renderer<ComplexNumberJpa> getRenderer() {

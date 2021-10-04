@@ -26,6 +26,7 @@ import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
+import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 @Component
@@ -35,6 +36,16 @@ extends AbstractValueSemanticsProvider<AsciiDoc>
 implements
     Renderer<AsciiDoc>,
     Parser<AsciiDoc> {
+
+    @Override
+    public Class<AsciiDoc> getCorrespondingClass() {
+        return AsciiDoc.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.STRING;
+    }
 
     // -- RENDERER
 

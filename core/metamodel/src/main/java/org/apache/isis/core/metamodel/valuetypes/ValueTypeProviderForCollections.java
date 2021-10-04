@@ -25,11 +25,12 @@ import java.util.SortedSet;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.commons.internal.collections._Lists;
 
+@Deprecated // Superseded by ValueSemanticsProvider
 @Component
 @Named("isis.metamodel.ValueTypeProviderCollections")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)

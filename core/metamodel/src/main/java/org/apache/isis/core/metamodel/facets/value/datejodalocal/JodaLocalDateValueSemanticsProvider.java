@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.schema.common.v2.ValueType;
 
 public class JodaLocalDateValueSemanticsProvider
 extends ValueSemanticsProviderAndFacetAbstract<LocalDate>
@@ -41,6 +42,16 @@ implements JodaLocalDateValueFacet {
 
     public static final int MAX_LENGTH = 12;
     public static final int TYPICAL_LENGTH = MAX_LENGTH;
+
+    @Override
+    public Class<LocalDate> getCorrespondingClass() {
+        return LocalDate.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.JODA_LOCAL_DATE;
+    }
 
     /**
      * Introduced to allow BDD tests to provide a different format string "mid-flight".

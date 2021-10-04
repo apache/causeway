@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.datesql.JavaSqlDateValueSemanticsProvider;
 import org.apache.isis.core.metamodel.facets.value.temporal.ValueSemanticsProviderAbstractTemporal;
 import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueSemanticsProvider;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -57,8 +58,17 @@ extends ValueSemanticsProviderAbstractTemporal<java.util.Date> {
         formats.put("medium", DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT));
     }
 
-    @Getter
-    @Setter
+    @Override
+    public Class<Date> getCorrespondingClass() {
+        return Date.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.LOCAL_DATE;
+    }
+
+    @Getter @Setter
     private String configuredFormat;
 
     public JavaUtilDateValueSemanticsProvider(final FacetHolder holder) {

@@ -29,6 +29,7 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
 
@@ -44,6 +45,16 @@ implements
     EncoderDecoder<Short>,
     Parser<Short>,
     Renderer<Short> {
+
+    @Override
+    public Class<Short> getCorrespondingClass() {
+        return Short.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.SHORT;
+    }
 
     @Override
     public Short getDefaultValue() {

@@ -30,6 +30,7 @@ import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
 
@@ -39,6 +40,17 @@ public class ComplexNumberJdoValueSemantics
         extends AbstractValueSemanticsProvider<ComplexNumberJdo>{
 
  // end::class[]
+
+    @Override
+    public Class<ComplexNumberJdo> getCorrespondingClass() {
+        return ComplexNumberJdo.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.STRING;
+    }
+
  // tag::getRenderer[]
      @Override
      public Renderer<ComplexNumberJdo> getRenderer() {

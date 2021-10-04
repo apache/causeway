@@ -26,6 +26,7 @@ import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
+import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 
 @Component
@@ -36,11 +37,21 @@ implements
     EncoderDecoder<InteractionDto>,
     Renderer<InteractionDto> {
 
+    @Override
+    public Class<InteractionDto> getCorrespondingClass() {
+        return InteractionDto.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return UNREPRESENTED;
+    }
+
     // -- ENCODER DECODER
 
     @Override
-    public String toEncodedString(final InteractionDto dto) {
-        return InteractionDtoUtils.toXml(dto);
+    public String toEncodedString(final InteractionDto interactionDto) {
+        return InteractionDtoUtils.toXml(interactionDto);
     }
 
     @Override

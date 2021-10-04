@@ -30,6 +30,7 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
 
@@ -41,6 +42,16 @@ implements
     EncoderDecoder<LocalResourcePath>,
     Parser<LocalResourcePath>,
     Renderer<LocalResourcePath> {
+
+    @Override
+    public Class<LocalResourcePath> getCorrespondingClass() {
+        return LocalResourcePath.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return UNREPRESENTED;
+    }
 
     // -- ENCODER DECODER
 

@@ -26,6 +26,7 @@ import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
+import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.val.StringValueSemantics")
@@ -35,6 +36,16 @@ implements
     EncoderDecoder<String>,
     Parser<String>,
     Renderer<String> {
+
+    @Override
+    public Class<String> getCorrespondingClass() {
+        return String.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.STRING;
+    }
 
     // -- ENCODER DECODER
 

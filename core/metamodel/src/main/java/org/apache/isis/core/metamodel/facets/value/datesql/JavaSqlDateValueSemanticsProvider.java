@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.dateutil.JavaUtilDateValueSemanticsProvider;
 import org.apache.isis.core.metamodel.facets.value.temporal.ValueSemanticsProviderAbstractTemporal;
 import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueSemanticsProvider;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -47,13 +48,22 @@ import lombok.Setter;
 public class JavaSqlDateValueSemanticsProvider
 extends ValueSemanticsProviderAbstractTemporal<Date> {
 
-
     private static Map<String, DateFormat> formats = _Maps.newHashMap();
 
     static {
         formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("yyyyMMdd"));
         formats.put("iso", createDateFormat("yyyy-MM-dd"));
         formats.put("medium", DateFormat.getDateInstance(DateFormat.MEDIUM));
+    }
+
+    @Override
+    public Class<Date> getCorrespondingClass() {
+        return Date.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.LOCAL_DATE;
     }
 
     @Getter @Setter

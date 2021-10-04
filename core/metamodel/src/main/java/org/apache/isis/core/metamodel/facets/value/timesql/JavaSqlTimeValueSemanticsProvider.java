@@ -33,6 +33,7 @@ import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.temporal.ValueSemanticsProviderAbstractTemporal;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -47,6 +48,16 @@ extends ValueSemanticsProviderAbstractTemporal<Time> {
     protected static void initFormats(final Map<String, DateFormat> formats) {
         formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("HHmmssSSS"));
         formats.put("short", DateFormat.getTimeInstance(DateFormat.SHORT));
+    }
+
+    @Override
+    public Class<Time> getCorrespondingClass() {
+        return Time.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.LOCAL_TIME;
     }
 
     @Getter @Setter

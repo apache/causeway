@@ -22,9 +22,9 @@ import java.util.Collection;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.graph.SimpleEdge;
 import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -32,6 +32,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureDefault;
 import org.apache.isis.schema.common.v2.ValueType;
 
+@Deprecated // Superseded by ValueSemanticsProvider
 @Component
 @Named("isis.metamodel.ValueTypeProviderForBuiltin")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)

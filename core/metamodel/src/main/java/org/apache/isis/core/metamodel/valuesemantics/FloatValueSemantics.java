@@ -27,6 +27,7 @@ import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
 
@@ -42,6 +43,16 @@ implements
     EncoderDecoder<Float>,
     Parser<Float>,
     Renderer<Float> {
+
+    @Override
+    public Class<Float> getCorrespondingClass() {
+        return Float.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.FLOAT;
+    }
 
     @Override
     public Float getDefaultValue() {

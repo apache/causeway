@@ -26,6 +26,7 @@ import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
+import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
 @Component
@@ -36,6 +37,16 @@ implements
     EncoderDecoder<Markdown>,
     Parser<Markdown>,
     Renderer<Markdown> {
+
+    @Override
+    public Class<Markdown> getCorrespondingClass() {
+        return Markdown.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.STRING;
+    }
 
     // -- ENCODER DECODER
 

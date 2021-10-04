@@ -27,6 +27,7 @@ import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.schema.chg.v2.ChangesDto;
+import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.val.ChangesDtoValueSemantics")
@@ -35,6 +36,16 @@ extends AbstractValueSemanticsProvider<ChangesDto>
 implements
     EncoderDecoder<ChangesDto>,
     Renderer<ChangesDto> {
+
+    @Override
+    public Class<ChangesDto> getCorrespondingClass() {
+        return ChangesDto.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return UNREPRESENTED;
+    }
 
     // -- ENCODER DECODER
 

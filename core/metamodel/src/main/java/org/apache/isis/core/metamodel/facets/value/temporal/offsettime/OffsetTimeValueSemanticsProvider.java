@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalAdjust;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueSemanticsProviderAbstract;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
 
@@ -36,6 +37,16 @@ extends TemporalValueSemanticsProviderAbstract<OffsetTime> {
 
     public static final int MAX_LENGTH = 12;
     public static final int TYPICAL_LENGTH = MAX_LENGTH;
+
+    @Override
+    public Class<OffsetTime> getCorrespondingClass() {
+        return OffsetTime.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.OFFSET_TIME;
+    }
 
     public OffsetTimeValueSemanticsProvider(final FacetHolder holder) {
         super(TemporalValueFacet.class,

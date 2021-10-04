@@ -20,17 +20,25 @@ package org.apache.isis.valuetypes.asciidoc.metamodel.semantics;
 
 import javax.inject.Named;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.NonNull;
 
 @Component
-@Named("isis.val.CommandDtoValueSemantics")
-public class CommandDtoValueSemantics
+@Named("isis.val.CommandDtoValueSemanticsPrettyRender")
+@Order(PriorityPrecedence.EARLY)
+public class CommandDtoValueSemanticsPrettyRender
 extends XmlValueSemanticsAbstract<CommandDto> {
+
+    @Override
+    public Class<CommandDto> getCorrespondingClass() {
+        return CommandDto.class;
+    }
 
     @Override
     protected String asXml(final Context context, @NonNull final CommandDto value) {

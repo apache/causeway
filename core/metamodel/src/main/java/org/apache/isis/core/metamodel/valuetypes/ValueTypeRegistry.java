@@ -30,13 +30,14 @@ import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
 
+@Deprecated // maybe superseded by ValueSemanticsProvider - we'll see
 @Component
 @Named("isis.metamodel.ValueTypeRegistry")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)

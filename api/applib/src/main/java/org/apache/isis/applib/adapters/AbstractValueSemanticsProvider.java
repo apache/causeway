@@ -33,6 +33,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
 
@@ -43,6 +44,7 @@ public abstract class AbstractValueSemanticsProvider<T>
 implements ValueSemanticsProvider<T> {
 
     public static final String NULL_REPRESENTATION = "[none]";
+    protected static final ValueType UNREPRESENTED = ValueType.STRING;
 
     @SuppressWarnings("unchecked")
     @Override

@@ -31,6 +31,7 @@ import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
 
@@ -46,6 +47,16 @@ implements
     EncoderDecoder<Boolean>,
     Parser<Boolean>,
     Renderer<Boolean> {
+
+    @Override
+    public Class<Boolean> getCorrespondingClass() {
+        return Boolean.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.BOOLEAN;
+    }
 
     @Override
     public Boolean getDefaultValue() {

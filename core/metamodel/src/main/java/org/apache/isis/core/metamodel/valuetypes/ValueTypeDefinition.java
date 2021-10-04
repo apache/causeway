@@ -24,13 +24,14 @@ import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.Value;
 
+@Deprecated // Superseded by ValueSemanticsProvider
 @Value
 public class ValueTypeDefinition {
 
-    public static ValueTypeDefinition collection(Class<?> clazz) {
+    public static ValueTypeDefinition collection(final Class<?> clazz) {
         return new ValueTypeDefinition(clazz, ValueType.COLLECTION);
     }
-    public static ValueTypeDefinition of(Class<?> clazz, ValueType valueType) {
+    public static ValueTypeDefinition of(final Class<?> clazz, final ValueType valueType) {
         return new ValueTypeDefinition(clazz, valueType);
     }
     public static ValueTypeDefinition from(final Map.Entry<Class<?>, ValueType> entry) {
@@ -40,7 +41,7 @@ public class ValueTypeDefinition {
     Class<?> clazz;
     ValueType valueType;
 
-    private ValueTypeDefinition(Class<?> clazz, ValueType valueType) {
+    private ValueTypeDefinition(final Class<?> clazz, final ValueType valueType) {
         this.clazz = clazz;
         this.valueType = valueType;
     }

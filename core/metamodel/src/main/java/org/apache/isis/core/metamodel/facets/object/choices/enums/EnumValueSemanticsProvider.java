@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
 
@@ -86,6 +87,17 @@ implements EnumFacet {
         .orElse(null);
 
     }
+
+    @Override
+    public Class<T> getCorrespondingClass() {
+        return getAdaptedClass();
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.STRING;
+    }
+
 
     @Override
     protected T doParse(final ValueSemanticsProvider.Context context, final String entry) {

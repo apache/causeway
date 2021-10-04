@@ -28,6 +28,7 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.value.Markup;
+import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.val.MarkupValueSemantics")
@@ -36,7 +37,17 @@ extends AbstractValueSemanticsProvider<Markup>
 implements
     EncoderDecoder<Markup>,
     Parser<Markup>,
-    Renderer<Markup>{
+    Renderer<Markup> {
+
+    @Override
+    public Class<Markup> getCorrespondingClass() {
+        return Markup.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return UNREPRESENTED;
+    }
 
     // -- ENCODER DECODER
 

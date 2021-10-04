@@ -34,9 +34,9 @@ import org.apache.isis.core.metamodel.valuetypes.ValueTypeProvider;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.isis.valuetypes.asciidoc.metamodel.semantics.AsciiDocValueSemantics;
-import org.apache.isis.valuetypes.asciidoc.metamodel.semantics.ChangesDtoValueSemantics;
-import org.apache.isis.valuetypes.asciidoc.metamodel.semantics.CommandDtoValueSemantics;
-import org.apache.isis.valuetypes.asciidoc.metamodel.semantics.InteractionDtoValueSemantics;
+import org.apache.isis.valuetypes.asciidoc.metamodel.semantics.ChangesDtoValueSemanticsPrettyRender;
+import org.apache.isis.valuetypes.asciidoc.metamodel.semantics.CommandDtoValueSemanticsPrettyRender;
+import org.apache.isis.valuetypes.asciidoc.metamodel.semantics.InteractionDtoValueSemanticsPrettyRender;
 
 /**
  * @since 2.0 {@index}
@@ -47,9 +47,9 @@ import org.apache.isis.valuetypes.asciidoc.metamodel.semantics.InteractionDtoVal
         IsisModuleValAsciidocMetaModel.AsciiDocValueTypeProvider.class,
 
         AsciiDocValueSemantics.class,
-        ChangesDtoValueSemantics.class,
-        CommandDtoValueSemantics.class,
-        InteractionDtoValueSemantics.class,
+        ChangesDtoValueSemanticsPrettyRender.class,
+        CommandDtoValueSemanticsPrettyRender.class,
+        InteractionDtoValueSemanticsPrettyRender.class,
 })
 public class IsisModuleValAsciidocMetaModel {
 

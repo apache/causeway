@@ -31,6 +31,7 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
+import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.val.BigDecimalValueSemantics")
@@ -41,6 +42,16 @@ implements
     EncoderDecoder<BigDecimal>,
     Parser<BigDecimal>,
     Renderer<BigDecimal> {
+
+    @Override
+    public Class<BigDecimal> getCorrespondingClass() {
+        return BigDecimal.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.BIG_DECIMAL;
+    }
 
     @Override
     public BigDecimal getDefaultValue() {

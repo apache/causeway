@@ -28,6 +28,7 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.val.PasswordValueSemantics")
@@ -37,6 +38,16 @@ implements
     EncoderDecoder<Password>,
     Parser<Password>,
     Renderer<Password> {
+
+    @Override
+    public Class<Password> getCorrespondingClass() {
+        return Password.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.STRING;
+    }
 
     // -- ENCODER DECODER
 

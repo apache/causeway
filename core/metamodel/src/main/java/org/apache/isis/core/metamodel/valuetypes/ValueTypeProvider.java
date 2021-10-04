@@ -20,10 +20,9 @@ package org.apache.isis.core.metamodel.valuetypes;
 
 import java.util.Collection;
 
+@Deprecated // Superseded by ValueSemanticsProvider
 public interface ValueTypeProvider {
 
     Collection<ValueTypeDefinition> definitions();
-
-
 
 }

@@ -30,6 +30,7 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
 
@@ -41,6 +42,16 @@ implements
     EncoderDecoder<UUID>,
     Parser<UUID>,
     Renderer<UUID> {
+
+    @Override
+    public Class<UUID> getCorrespondingClass() {
+        return UUID.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return UNREPRESENTED;
+    }
 
     // -- ENCODER DECODER
 

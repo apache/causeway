@@ -29,9 +29,11 @@ import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.graph.tree.TreeState;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.memento._Mementos;
 import org.apache.isis.commons.internal.memento._Mementos.Memento;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
+import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.val.TreeNodeValueSemantics")
@@ -43,6 +45,16 @@ implements
 
     @Inject UrlEncodingService urlEncodingService;
     @Inject SerializingAdapter serializingAdapter;
+
+    @Override
+    public Class<TreeNode<?>> getCorrespondingClass() {
+        return _Casts.uncheckedCast(TreeNode.class);
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return UNREPRESENTED;
+    }
 
     // -- RENDERER
 

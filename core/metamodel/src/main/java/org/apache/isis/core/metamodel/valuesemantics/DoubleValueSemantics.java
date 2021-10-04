@@ -27,6 +27,7 @@ import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
 
@@ -43,6 +44,15 @@ implements
     Parser<Double>,
     Renderer<Double> {
 
+    @Override
+    public Class<Double> getCorrespondingClass() {
+        return Double.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.DOUBLE;
+    }
 
     @Override
     public Double getDefaultValue() {

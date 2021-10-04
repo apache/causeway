@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionF
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.annotation.LogicalTypeFacetForValueAnnotation;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.Getter;
 import lombok.val;
@@ -133,6 +134,16 @@ extends ValueFacetUsingSemanticsProviderFactory {
 
         @Override
         public DefaultsProvider<Object> getDefaultsProvider() {
+            return null;
+        }
+
+        @Override
+        public Class<Object> getCorrespondingClass() {
+            return null;
+        }
+
+        @Override
+        public ValueType getSchemaValueType() {
             return null;
         }
 

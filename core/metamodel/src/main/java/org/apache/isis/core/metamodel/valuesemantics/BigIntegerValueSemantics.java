@@ -29,6 +29,7 @@ import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
+import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.val.BigIntegerValueSemantics")
@@ -39,6 +40,16 @@ implements
     EncoderDecoder<BigInteger>,
     Parser<BigInteger>,
     Renderer<BigInteger> {
+
+    @Override
+    public Class<BigInteger> getCorrespondingClass() {
+        return BigInteger.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.BIG_INTEGER;
+    }
 
     @Override
     public BigInteger getDefaultValue() {

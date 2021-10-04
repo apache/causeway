@@ -24,12 +24,13 @@ import java.util.Map;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.schema.common.v2.ValueType;
 
+@Deprecated // Superseded by ValueSemanticsProvider
 @Component
 @Named("isis.metamodel.ValueTypeProviderBuiltIn")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)

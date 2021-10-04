@@ -34,6 +34,7 @@ import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.val.BlobValueSemantics")
@@ -42,6 +43,16 @@ extends AbstractValueSemanticsProvider<Blob>
 implements
     EncoderDecoder<Blob>,
     Renderer<Blob> {
+
+    @Override
+    public Class<Blob> getCorrespondingClass() {
+        return Blob.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.BLOB;
+    }
 
     // RENDERER
 

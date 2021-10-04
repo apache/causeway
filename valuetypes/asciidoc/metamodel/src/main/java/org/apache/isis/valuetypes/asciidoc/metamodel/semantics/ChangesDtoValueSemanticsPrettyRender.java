@@ -20,21 +20,29 @@ package org.apache.isis.valuetypes.asciidoc.metamodel.semantics;
 
 import javax.inject.Named;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.util.schema.InteractionDtoUtils;
-import org.apache.isis.schema.ixn.v2.InteractionDto;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.util.schema.ChangesDtoUtils;
+import org.apache.isis.schema.chg.v2.ChangesDto;
 
 import lombok.NonNull;
 
 @Component
-@Named("isis.val.InteractionDtoValueSemantics")
-public class InteractionDtoValueSemantics
-extends XmlValueSemanticsAbstract<InteractionDto> {
+@Named("isis.val.ChangesDtoValueSemanticsPrettyRender")
+@Order(PriorityPrecedence.EARLY)
+public class ChangesDtoValueSemanticsPrettyRender
+extends XmlValueSemanticsAbstract<ChangesDto> {
 
     @Override
-    protected String asXml(final Context context, @NonNull final InteractionDto value) {
-        return InteractionDtoUtils.toXml(value);
+    public Class<ChangesDto> getCorrespondingClass() {
+        return ChangesDto.class;
+    }
+
+    @Override
+    protected String asXml(final Context context, @NonNull final ChangesDto value) {
+        return ChangesDtoUtils.toXml(value);
     }
 
 }

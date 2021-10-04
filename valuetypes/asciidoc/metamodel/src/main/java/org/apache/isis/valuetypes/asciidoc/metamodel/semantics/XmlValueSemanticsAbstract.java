@@ -21,6 +21,7 @@ package org.apache.isis.valuetypes.asciidoc.metamodel.semantics;
 import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
+import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.NonNull;
@@ -34,6 +35,11 @@ abstract class XmlValueSemanticsAbstract<T>
 extends AbstractValueSemanticsProvider<T>
 implements
     Renderer<T> {
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return UNREPRESENTED;
+    }
 
     // -- RENDERER
 
