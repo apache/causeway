@@ -16,67 +16,65 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.temporal.offsettime;
+package org.apache.isis.core.metamodel.valuesemantics.temporal;
 
-import java.time.OffsetTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
+import javax.inject.Named;
+
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.value.temporal.TemporalAdjust;
-import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
-import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueSemanticsProviderAbstract;
 import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
 
+@Component
+@Named("isis.val.LocalDateValueSemantics")
 //@Log4j2
-public class OffsetTimeValueSemanticsProvider
-extends TemporalValueSemanticsProviderAbstract<OffsetTime> {
+public class LocalDateValueSemantics
+extends TemporalValueSemanticsProvider<LocalDate> {
 
     public static final int MAX_LENGTH = 12;
     public static final int TYPICAL_LENGTH = MAX_LENGTH;
 
     @Override
-    public Class<OffsetTime> getCorrespondingClass() {
-        return OffsetTime.class;
+    public Class<LocalDate> getCorrespondingClass() {
+        return LocalDate.class;
     }
 
     @Override
     public ValueType getSchemaValueType() {
-        return ValueType.OFFSET_TIME;
+        return ValueType.LOCAL_DATE;
     }
 
-    public OffsetTimeValueSemanticsProvider(final FacetHolder holder) {
-        super(TemporalValueFacet.class,
-                TemporalCharacteristic.TIME_ONLY, OffsetCharacteristic.OFFSET,
-                holder, OffsetTime.class, TYPICAL_LENGTH, MAX_LENGTH,
-                OffsetTime::from,
-                TemporalAdjust::adjustOffsetTime);
+    public LocalDateValueSemantics(final FacetHolder holder) {
+        super(TemporalCharacteristic.DATE_ONLY, OffsetCharacteristic.LOCAL,
+                TYPICAL_LENGTH, MAX_LENGTH,
+                LocalDate::from,
+                TemporalAdjust::adjustLocalDate);
 
-        val basicTimeNoMillis = "HHmmssZ";
-        val basicTime = "HHmmss.SSSZ";
-
-        super.addNamedFormat("iso", basicTimeNoMillis);
-        super.addNamedFormat("iso_encoding", basicTime);
+        super.addNamedFormat("iso", "yyyy-MM-dd");
+        super.addNamedFormat("iso_encoding", "yyyy-MM-dd");
         super.updateParsers();
 
         setEncodingFormatter(lookupNamedFormatterElseFail("iso_encoding"));
 
-        val configuredNameOrPattern = getConfiguration().getValueTypes().getJavaTime().getOffsetTime().getFormat();
+        val configuredNameOrPattern = config.getValueTypes().getJavaTime().getLocalDate().getFormat();
 
         // walk through 3 methods of generating a formatter, first one to return non empty wins
         val formatter = formatterFirstOf(Can.of(
-                ()->lookupFormatStyle(configuredNameOrPattern).map(DateTimeFormatter::ofLocalizedTime),
+                ()->lookupFormatStyle(configuredNameOrPattern).map(DateTimeFormatter::ofLocalizedDate),
                 ()->lookupNamedFormatter(configuredNameOrPattern),
                 ()->formatterFromPattern(configuredNameOrPattern)
                 ))
-        .orElseGet(()->DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM));  // fallback
+        .orElseGet(()->DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM));  // fallback
 
-        //TODO those FormatStyle based formatters potentially need additional zone information
         setTitleFormatter(formatter);
-    }
 
+    }
 
 }

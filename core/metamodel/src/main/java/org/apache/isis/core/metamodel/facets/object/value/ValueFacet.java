@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.value;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.adapters.EncoderDecoder;
@@ -47,6 +48,7 @@ public interface ValueFacet<T> extends Facet {
     LogicalType getValueType();
     Can<ValueSemanticsProvider<T>> getValueSemantics();
     Context createValueSemanticsContext(Identifier featureIdentifier);
+    <X> Stream<X> streamValueSemantics(Class<X> requiredType);
 
     // -- ENCODER DECODER
 

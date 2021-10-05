@@ -16,24 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.temporal.zoneddatetime;
+package org.apache.isis.core.metamodel.valuesemantics.temporal;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
+import javax.inject.Named;
+
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.value.temporal.TemporalAdjust;
-import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
-import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueSemanticsProviderAbstract;
 import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
 
+@Component
+@Named("isis.val.ZonedDateTimeValueSemantics")
 //@Log4j2
-public class ZonedDateTimeValueSemanticsProvider
-extends TemporalValueSemanticsProviderAbstract<ZonedDateTime> {
+public class ZonedDateTimeValueSemantics
+extends TemporalValueSemanticsProvider<ZonedDateTime> {
 
     public static final int MAX_LENGTH = 36;
     public static final int TYPICAL_LENGTH = 22;
@@ -48,10 +51,9 @@ extends TemporalValueSemanticsProviderAbstract<ZonedDateTime> {
         return ValueType.ZONED_DATE_TIME;
     }
 
-    public ZonedDateTimeValueSemanticsProvider(final FacetHolder holder) {
-        super(TemporalValueFacet.class,
-                TemporalCharacteristic.DATE_TIME, OffsetCharacteristic.OFFSET,
-                holder, ZonedDateTime.class, TYPICAL_LENGTH, MAX_LENGTH,
+    public ZonedDateTimeValueSemantics(final FacetHolder holder) {
+        super(TemporalCharacteristic.DATE_TIME, OffsetCharacteristic.OFFSET,
+                TYPICAL_LENGTH, MAX_LENGTH,
                 ZonedDateTime::from,
                 TemporalAdjust::adjustZonedDateTime);
 
@@ -65,7 +67,7 @@ extends TemporalValueSemanticsProviderAbstract<ZonedDateTime> {
 
         setEncodingFormatter(lookupNamedFormatterElseFail("iso_encoding"));
 
-        val configuredNameOrPattern = getConfiguration().getValueTypes().getJavaTime().getZonedDateTime().getFormat();
+        val configuredNameOrPattern = config.getValueTypes().getJavaTime().getZonedDateTime().getFormat();
 
         // walk through 3 methods of generating a formatter, first one to return non empty wins
         val formatter = formatterFirstOf(Can.of(

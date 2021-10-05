@@ -16,21 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.temporal;
+package org.apache.isis.core.metamodel.valuesemantics.temporal;
 
 import java.time.temporal.Temporal;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.applib.adapters.EncoderDecoder;
+import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
- * Common base for {@link java.time.temporal.Temporal} types.
+ * Common base for {@link java.time.temporal.Temporal} value types.
  *
  * @since 2.0
  *
  * @param <T> implementing {@link java.time.temporal.Temporal} type
  */
-public interface TemporalValueFacet<T extends Temporal> extends Facet {
+public interface TemporalValueSemantics<T extends Temporal>
+extends
+    EncoderDecoder<T>,
+    Parser<T>,
+    Renderer<T> {
 
     static enum TemporalCharacteristic {
 
@@ -63,8 +69,8 @@ public interface TemporalValueFacet<T extends Temporal> extends Facet {
         OFFSET,
     }
 
-    T temporalValue(ManagedObject object);
-    ManagedObject createValue(T temporal);
+    @Deprecated T temporalValue(ManagedObject object);
+    @Deprecated ManagedObject createValue(T temporal);
 
     TemporalCharacteristic getTemporalCharacteristic();
     OffsetCharacteristic getOffsetCharacteristic();

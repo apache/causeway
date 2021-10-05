@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.temporal;
+package org.apache.isis.core.metamodel.valuesemantics.temporal;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -25,14 +25,14 @@ import java.time.temporal.TemporalQuery;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
+import javax.inject.Inject;
 
+import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
@@ -40,9 +40,8 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
@@ -50,6 +49,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.val;
+import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -60,12 +60,17 @@ import lombok.extern.log4j.Log4j2;
  * @param <T> implementing {@link java.time.temporal.Temporal} type
  */
 @Log4j2
-public abstract class TemporalValueSemanticsProviderAbstract<T extends Temporal>
-extends ValueSemanticsProviderAndFacetAbstract<T>
-implements TemporalValueFacet<T> {
+public abstract class TemporalValueSemanticsProvider<T extends Temporal>
+extends AbstractValueSemanticsProvider<T>
+implements TemporalValueSemantics<T> {
 
-    @Getter(onMethod = @__(@Override)) protected final TemporalCharacteristic temporalCharacteristic;
-    @Getter(onMethod = @__(@Override)) protected final OffsetCharacteristic offsetCharacteristic;
+    @Inject protected ObjectManager objectManager;
+    @Inject protected IsisConfiguration config;
+
+    @Getter(onMethod_ = {@Override}) protected final TemporalCharacteristic temporalCharacteristic;
+    @Getter(onMethod_ = {@Override}) protected final OffsetCharacteristic offsetCharacteristic;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true) protected final int typicalLength;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true) protected final int maxLength;
 
     @Getter private DateTimeFormatter encodingFormatter;
     @Getter @Setter private DateTimeFormatter titleFormatter;
@@ -80,22 +85,20 @@ implements TemporalValueFacet<T> {
     protected final TemporalQuery<T> query;
     protected final BiFunction<TemporalAdjust, T, T> adjuster;
 
-    public TemporalValueSemanticsProviderAbstract(
-            final Class<? extends Facet> adapterFacetType,
+    protected TemporalValueSemanticsProvider(
             final TemporalCharacteristic temporalCharacteristic,
             final OffsetCharacteristic offsetCharacteristic,
-            final FacetHolder holder,
-            final Class<T> valueType,
             final int typicalLength,
             final int maxLength,
             final TemporalQuery<T> query,
             final BiFunction<TemporalAdjust, T, T> adjuster) {
 
-        super(adapterFacetType, holder, valueType, typicalLength, maxLength,
-                Immutability.IMMUTABLE, EqualByContent.HONOURED, /*DEFAULT_VALUE*/ null);
+        super();
 
         this.temporalCharacteristic = temporalCharacteristic;
         this.offsetCharacteristic = offsetCharacteristic;
+        this.typicalLength = typicalLength;
+        this.maxLength = maxLength;
 
         this.query = query;
         this.adjuster = adjuster;
@@ -105,12 +108,6 @@ implements TemporalValueFacet<T> {
         updateParsers();
     }
 
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        visitor.accept("temporalCharacteristic", getTemporalCharacteristic());
-        visitor.accept("offsetCharacteristic", getOffsetCharacteristic());
-    }
 
     protected void setEncodingFormatter(final DateTimeFormatter encodingFormatter) {
         this.encodingFormatter = encodingFormatter;
@@ -163,7 +160,7 @@ implements TemporalValueFacet<T> {
         .findFirst();
     }
 
-    // -- TEMPORAL VALUE FACET
+    // -- TEMPORAL VALUE FROM/TO ADAPTER
 
     @Override
     public final T temporalValue(final ManagedObject adapter) {
@@ -172,18 +169,24 @@ implements TemporalValueFacet<T> {
 
     @Override
     public final ManagedObject createValue(final T temporal) {
-        return getObjectManager().adapt(temporal);
+        return objectManager.adapt(temporal);
     }
 
     // -- ENCODER/DECODER
 
     @Override
     public String toEncodedString(final T temporal) {
+        if(temporal==null) {
+            return null;
+        }
         return encodingFormatter.format(temporal);
     }
 
     @Override
     public T fromEncodedString(final String data) {
+        if(data==null) {
+            return null;
+        }
         try {
             return encodingFormatter.parse(data, query);
         } catch (final IllegalArgumentException e) {
@@ -191,53 +194,46 @@ implements TemporalValueFacet<T> {
         }
     }
 
-    // -- PARSING
+    // -- RENDERER
 
     @Override
-    protected T doParse(
+    public String simpleTextRepresentation(
             final ValueSemanticsProvider.Context context,
-            final String entry) {
+            final T value) {
+        val temporal = _Casts.<T>uncheckedCast(value);
+        return render(temporal, titleFormatter::format);
+    }
 
+    // -- PARSER
+
+    @Override
+    public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final T value) {
+        return toEncodedString(value);
+    }
+
+    @Override
+    public T parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
         T contextTemporal = _Casts.uncheckedCast(context);
-
-        val temporalString = entry.trim().toUpperCase();
+        val temporalString = text.trim().toUpperCase();
         if(contextTemporal != null) {
-            val adjusted = TemporalAdjustUtil
+            val adjusted = TemporalAdjust
                     .parseAdjustment(adjuster, contextTemporal, temporalString);
             if(adjusted!=null) {
                 return adjusted;
             }
         }
-        return parse(temporalString, parsers);
-    }
-
-    private T parse(final String dateStr, final Iterable<Function<String, T>> parsers) {
         for(val parser: parsers) {
             try {
-                return parser.apply(dateStr);
+                return parser.apply(temporalString);
             } catch (final IllegalArgumentException e) {
                 // continue to next
             }
         }
         val msg = String.format("Not recognised as a %s: %s",
-                super.getAdaptedClass().getName(),
-                dateStr);
+                getCorrespondingClass().getName(),
+                temporalString);
         throw new TextEntryParseException(msg);
     }
 
-    // -- TITLE
-
-    @Override
-    public String asTitleString(final T value) {
-        if (value == null) {
-            return null;
-        }
-        val temporal = _Casts.<T>uncheckedCast(value);
-        return titleString(titleFormatter, temporal);
-    }
-
-    private String titleString(@NonNull final DateTimeFormatter formatter, @Nullable final T temporal) {
-        return temporal != null ? formatter.format(temporal) : "";
-    }
 
 }

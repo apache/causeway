@@ -88,12 +88,6 @@ import org.apache.isis.core.metamodel.facets.value.datesql.JavaSqlDateValueFacet
 import org.apache.isis.core.metamodel.facets.value.datetimejoda.JodaDateTimeValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.datetimejodalocal.JodaLocalDateTimeValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.dateutil.JavaUtilDateValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.facets.value.temporal.localdate.LocalDateValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.facets.value.temporal.localdatetime.LocalDateTimeValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.facets.value.temporal.localtime.LocalTimeValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.facets.value.temporal.offsetdatetime.OffsetDateTimeValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.facets.value.temporal.offsettime.OffsetTimeValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.facets.value.temporal.zoneddatetime.ZonedDateTimeValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.timejodalocal.JodaLocalTimeValueFacetSimpleFactory;
 import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.timestampsql.JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory;
@@ -257,14 +251,6 @@ extends ProgrammingModelAbstract {
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JodaLocalDateTimeValueFacetUsingSemanticsProviderFactory(mmc));
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JodaDateTimeValueFacetUsingSemanticsProviderFactory(mmc));
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JodaLocalTimeValueFacetSimpleFactory(mmc));
-
-        // java 8 time values
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new LocalTimeValueFacetUsingSemanticsProviderFactory(mmc));
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new OffsetTimeValueFacetUsingSemanticsProviderFactory(mmc));
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new LocalDateValueFacetUsingSemanticsProviderFactory(mmc));
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new LocalDateTimeValueFacetUsingSemanticsProviderFactory(mmc));
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new OffsetDateTimeValueFacetUsingSemanticsProviderFactory(mmc));
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new ZonedDateTimeValueFacetUsingSemanticsProviderFactory(mmc));
 
         // written to not trample over TypeOf if already installed
         addFactory(FacetProcessingOrder.Z1_FINALLY, new CollectionFacetFactory(mmc));

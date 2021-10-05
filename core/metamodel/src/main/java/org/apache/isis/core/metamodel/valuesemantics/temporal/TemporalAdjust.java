@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.temporal;
+package org.apache.isis.core.metamodel.valuesemantics.temporal;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,10 +26,13 @@ import java.time.OffsetTime;
 import java.time.ZonedDateTime;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAdjuster;
+import java.util.StringTokenizer;
+import java.util.function.BiFunction;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Value;
+import lombok.val;
 
 /**
  *
@@ -77,7 +80,7 @@ public class TemporalAdjust {
         return TemporalAdjust.of(years, months, days, hours, minutes);
     }
 
-    public TemporalAdjust sign(int sign) {
+    public TemporalAdjust sign(final int sign) {
         if(sign==1) {
             return this;
         }
@@ -124,17 +127,65 @@ public class TemporalAdjust {
                 .plusHours(hours).plusMinutes(minutes);
     }
 
+    // -- UTILITY
+
+    public static <T extends Temporal> T parseAdjustment(
+            final BiFunction<TemporalAdjust, T, T> adjuster,
+            final T contextTemporal,
+            final String temporalString) {
+
+        if (temporalString.startsWith("+")) {
+            return relativeTemporal(adjuster, contextTemporal, temporalString, 1);
+        }
+        if (temporalString.startsWith("-")) {
+            return relativeTemporal(adjuster, contextTemporal, temporalString, -1);
+        }
+        return null;
+    }
+
     // -- HELPER
 
-    private IllegalArgumentException noTime(Temporal temporal) {
+    private IllegalArgumentException noTime(final Temporal temporal) {
         return _Exceptions.illegalArgument("cannot add non-zero hours or minutes to a %s",
                 temporal.getClass().getName());
     }
 
-    private IllegalArgumentException noDate(Temporal temporal) {
+    private IllegalArgumentException noDate(final Temporal temporal) {
         throw _Exceptions.illegalArgument("cannot add non-zero years, months or days to a %s",
                 temporal.getClass().getName());
     }
 
+    private static <T extends Temporal> T relativeTemporal(
+            final BiFunction<TemporalAdjust, T, T> adjuster,
+            final T contextTemporal,
+            final String str,
+            final int sign) {
+
+        T relativeDate = contextTemporal;
+        if (str.equals("")) {
+            return contextTemporal;
+        }
+
+        try {
+            final StringTokenizer st = new StringTokenizer(str.substring(1), " ");
+            while (st.hasMoreTokens()) {
+                final String token = st.nextToken();
+                relativeDate = adjustTemporal(adjuster, relativeDate, token, sign);
+            }
+            return relativeDate;
+        } catch (final Exception e) {
+            return contextTemporal;
+        }
+    }
+
+    private static <T extends Temporal> T adjustTemporal(
+            final BiFunction<TemporalAdjust, T, T> adjuster,
+            final T contextDate,
+            final String str,
+            final int sign) {
+
+        val temporalAdjust = TemporalAdjust.parse(str).sign(sign);
+        return adjuster.apply(temporalAdjust, contextDate);
+    }
 
 }

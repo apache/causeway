@@ -19,6 +19,7 @@
 package org.apache.isis.incubator.viewer.vaadin.ui.components.temporal;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.data.converter.DateToSqlDateConverter;
@@ -26,9 +27,10 @@ import com.vaadin.flow.data.converter.LocalDateToDateConverter;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
-import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet.OffsetCharacteristic;
-import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet.TemporalCharacteristic;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.TemporalValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.TemporalValueSemantics.OffsetCharacteristic;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.TemporalValueSemantics.TemporalCharacteristic;
 import org.apache.isis.incubator.viewer.vaadin.ui.binding.BindingsVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
@@ -42,7 +44,7 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
     @Override
     public boolean isHandling(final ComponentRequest request) {
         return request.isFeatureTypeEqualTo(java.sql.Date.class)
-            ||(request.hasFeatureTypeFacet(TemporalValueFacet.class)
+            ||(getTemporalValueSemantics(request).isPresent()
                 // TODO lift this restrictions, as we support more types
                 && (
                         request.isFeatureTypeEqualTo(LocalDate.class)
@@ -93,10 +95,9 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
     // -- HELPER
 
     private TemporalCharacteristic getTemporalCharacteristic(final ComponentRequest request) {
-        @SuppressWarnings("rawtypes")
-        val temporalFacet = request.getFeatureTypeSpec().getFacet(TemporalValueFacet.class);
-        if(temporalFacet!=null) {
-            return temporalFacet.getTemporalCharacteristic();
+        val temporalSemantics = getTemporalValueSemantics(request).orElse(null);
+        if(temporalSemantics!=null) {
+            return temporalSemantics.getTemporalCharacteristic();
         }
         if(request.isFeatureTypeEqualTo(java.sql.Date.class)) {
             return TemporalCharacteristic.DATE_ONLY;
@@ -108,10 +109,9 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
     }
 
     private OffsetCharacteristic getOffsetCharacteristic(final ComponentRequest request) {
-        @SuppressWarnings("rawtypes")
-        val temporalFacet = request.getFeatureTypeSpec().getFacet(TemporalValueFacet.class);
-        if(temporalFacet!=null) {
-            return temporalFacet.getOffsetCharacteristic();
+        val temporalSemantics = getTemporalValueSemantics(request).orElse(null);
+        if(temporalSemantics!=null) {
+            return temporalSemantics.getOffsetCharacteristic();
         }
         if(request.isFeatureTypeEqualTo(java.sql.Date.class)) {
             return OffsetCharacteristic.LOCAL;
@@ -120,6 +120,18 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
             return OffsetCharacteristic.LOCAL;
         }
         throw _Exceptions.unrecoverableFormatted("type %s not handled", request.getFeatureType());
+    }
+
+    private Optional<TemporalValueSemantics<?>> getTemporalValueSemantics(final ComponentRequest request) {
+        ValueFacet<?> valueFacet = request
+                .getFeatureTypeSpec()
+                .getFacet(ValueFacet.class);
+        if(valueFacet==null) {
+            return Optional.empty();
+        }
+        return valueFacet.streamValueSemantics(TemporalValueSemantics.class)
+                .findFirst()
+                .map(v->(TemporalValueSemantics<?>)v);
     }
 
 }

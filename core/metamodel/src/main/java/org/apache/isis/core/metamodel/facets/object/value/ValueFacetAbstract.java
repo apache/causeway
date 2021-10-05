@@ -73,6 +73,13 @@ implements ValueFacet<T> {
     }
 
     @Override
+    public <X> Stream<X> streamValueSemantics(final Class<X> requiredType) {
+        return valueSemantics.stream()
+        .filter(requiredType::isInstance)
+        .map(requiredType::cast);
+    }
+
+    @Override
     public boolean semanticEquals(@NonNull final Facet other) {
         return (other instanceof ValueFacetAbstract)
                 ? this.getValueSemantics().equals(((ValueFacetAbstract<?>)other).getValueSemantics())

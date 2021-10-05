@@ -71,6 +71,12 @@ import org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.TreeNodeValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.URLValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalDateValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalTimeValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.OffsetDateTimeValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.OffsetTimeValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.ZonedDateTimeValueSemantics;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderDefault;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderForBuiltin;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderForCollections;
@@ -122,6 +128,13 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         ChangesDtoValueSemantics.class,
         CommandDtoValueSemantics.class,
         InteractionDtoValueSemantics.class,
+        LocalDateTimeValueSemantics.class,
+        LocalDateValueSemantics.class,
+        LocalTimeValueSemantics.class,
+        OffsetDateTimeValueSemantics.class,
+        OffsetTimeValueSemantics.class,
+        ZonedDateTimeValueSemantics.class,
+
 
         // @Service's
         ObjectManagerDefault.class,

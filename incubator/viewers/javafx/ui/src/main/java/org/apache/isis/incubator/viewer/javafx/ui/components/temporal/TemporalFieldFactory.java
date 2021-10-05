@@ -23,9 +23,10 @@ import java.time.LocalDate;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
-import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet.OffsetCharacteristic;
-import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet.TemporalCharacteristic;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.TemporalValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.TemporalValueSemantics.OffsetCharacteristic;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.TemporalValueSemantics.TemporalCharacteristic;
 import org.apache.isis.incubator.viewer.javafx.model.binding.BindingsFx;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
@@ -46,12 +47,16 @@ public class TemporalFieldFactory implements UiComponentHandlerFx {
 
     @Override
     public boolean isHandling(final ComponentRequest request) {
-        val temporalValueFacet = request
+        ValueFacet<?> valueFacet = request
                 .getFeatureTypeSpec()
-                .getFacet(TemporalValueFacet.class);
-        return temporalValueFacet!=null
-                && temporalValueFacet.getTemporalCharacteristic()==TemporalCharacteristic.DATE_ONLY
-                && temporalValueFacet.getOffsetCharacteristic()==OffsetCharacteristic.LOCAL;
+                .getFacet(ValueFacet.class);
+        if(valueFacet==null) {
+            return false;
+        }
+        return valueFacet.streamValueSemantics(TemporalValueSemantics.class)
+                .anyMatch(valueSemantics->
+                        valueSemantics.getTemporalCharacteristic()==TemporalCharacteristic.DATE_ONLY
+                        && valueSemantics.getOffsetCharacteristic()==OffsetCharacteristic.LOCAL);
     }
 
     @Override
