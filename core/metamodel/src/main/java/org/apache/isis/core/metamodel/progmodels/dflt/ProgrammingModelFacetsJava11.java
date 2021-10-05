@@ -84,7 +84,6 @@ import org.apache.isis.core.metamodel.facets.properties.update.PropertySetterFac
 import org.apache.isis.core.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefaultFactory;
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.value.datejodalocal.JodaLocalDateValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.facets.value.datetimejodalocal.JodaLocalDateTimeValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.timejodalocal.JodaLocalTimeValueFacetSimpleFactory;
 import org.apache.isis.core.metamodel.methods.DomainIncludeAnnotationEnforcesMetamodelContributionValidator;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
@@ -237,7 +236,6 @@ extends ProgrammingModelAbstract {
 
         // jodatime values
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JodaLocalDateValueFacetUsingSemanticsProviderFactory(mmc));
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JodaLocalDateTimeValueFacetUsingSemanticsProviderFactory(mmc));
         addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JodaLocalTimeValueFacetSimpleFactory(mmc));
 
         // written to not trample over TypeOf if already installed

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.datetimejodalocal;
+package org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.joda;
 
 import java.util.List;
 import java.util.Locale;
@@ -29,33 +29,20 @@ import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facets.value.temporal.JodaFunctions;
 
-public final class JodaLocalDateTimeUtil  {
+final class _JodaLocalDateTimeUtil  {
 
-    private JodaLocalDateTimeUtil(){}
+    static String titleString(final DateTimeFormatter formatter, final LocalDateTime date) {
+        return date == null ? "" : formatter.print(date);
+    }
 
     static LocalDateTime parseDate(
             final String dateStr,
-            List<DateTimeFormatter> parseFormatters) {
+            final List<DateTimeFormatter> parseFormatters) {
         final Locale locale = Locale.getDefault();
 
         Iterable<DateTimeFormatter> elements = _Lists.map(parseFormatters, JodaFunctions.withLocale(locale));
         return parseDateTime(dateStr, elements);
     }
-
-
-    private static LocalDateTime parseDateTime(String dateStr, Iterable<DateTimeFormatter> formatters) {
-        for(DateTimeFormatter formatter: formatters) {
-            try {
-                return formatter.parseLocalDateTime(dateStr);
-            } catch (final IllegalArgumentException e) {
-                // continue to next
-            }
-        }
-        throw new TextEntryParseException("Not recognised as a date: " + dateStr);
-    }
-
-    // //////////////////////////////////////
-
 
     static LocalDateTime relativeDateTime(final LocalDateTime contextDate, final String str, final boolean add) {
         LocalDateTime relativeDate = contextDate;
@@ -73,6 +60,19 @@ public final class JodaLocalDateTimeUtil  {
         } catch (final Exception e) {
             return contextDate;
         }
+    }
+
+    // -- HELPER
+
+    private static LocalDateTime parseDateTime(final String dateStr, final Iterable<DateTimeFormatter> formatters) {
+        for(DateTimeFormatter formatter: formatters) {
+            try {
+                return formatter.parseLocalDateTime(dateStr);
+            } catch (final IllegalArgumentException e) {
+                // continue to next
+            }
+        }
+        throw new TextEntryParseException("Not recognised as a date: " + dateStr);
     }
 
     private static LocalDateTime adjustDateTime(final LocalDateTime contextDateTime, String str, final boolean add) {
@@ -115,12 +115,6 @@ public final class JodaLocalDateTimeUtil  {
         return original.plusYears(years).plusMonths(months).plusDays(days).plusHours(hours).plusMinutes(minutes);
     }
 
-
-    // //////////////////////////////////////
-
-    public static String titleString(final DateTimeFormatter formatter, final LocalDateTime date) {
-        return date == null ? "" : formatter.print(date);
-    }
 
 
 }

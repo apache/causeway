@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.valuesemantics.temporal.legacy;
+package org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.joda;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -36,6 +36,7 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.LegacyTemporalValueSemanticsAbstract;
 import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.Getter;
