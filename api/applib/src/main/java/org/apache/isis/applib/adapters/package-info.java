@@ -30,7 +30,7 @@
  * <p>
  * The {@link org.apache.isis.applib.adapters.ValueSemanticsProvider} interface
  * allows the framework to recognize its corresponding type as being a value
- * type (that is, having value semantics).  The {@link org.apache.isis.applib.adapters.ValueSemanticsAbstact}
+ * type (that is, having value semantics).  The {@link org.apache.isis.applib.adapters.ValueSemanticsAbstract}
  * class is an base adapter for this interface.
  *
  * <p>

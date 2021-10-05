@@ -18,7 +18,7 @@
  */
 package org.apache.isis.valuetypes.asciidoc.metamodel.semantics;
 
-import org.apache.isis.applib.adapters.ValueSemanticsAbstact;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.schema.common.v2.ValueType;
@@ -32,7 +32,7 @@ import lombok.val;
  *  @implNote using ascii-doctor under the hoods
  */
 abstract class XmlValueSemanticsAbstract<T>
-extends ValueSemanticsAbstact<T>
+extends ValueSemanticsAbstract<T>
 implements
     Renderer<T> {
 

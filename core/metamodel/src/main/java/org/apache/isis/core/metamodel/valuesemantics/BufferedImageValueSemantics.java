@@ -26,7 +26,7 @@ import javax.inject.Named;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.ValueSemanticsAbstact;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.image._Images;
@@ -37,7 +37,7 @@ import org.apache.isis.schema.common.v2.ValueType;
 @Component
 @Named("isis.val.BufferedImageValueSemantics")
 public class BufferedImageValueSemantics
-extends ValueSemanticsAbstact<BufferedImage>
+extends ValueSemanticsAbstract<BufferedImage>
 implements
     ImageValueSemantics,
     EncoderDecoder<BufferedImage> {

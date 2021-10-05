@@ -35,7 +35,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
-import org.apache.isis.applib.adapters.ValueSemanticsAbstact;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.commons.internal.base._Casts;
@@ -107,7 +107,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
                 mockFacetHolder);
     }
 
-    protected void setSemantics(final ValueSemanticsAbstact<?> valueSemantics) {
+    protected void setSemantics(final ValueSemanticsAbstract<?> valueSemantics) {
         this.valueSemanticsProvider = valueSemantics;
         this.encodeableFacet = new EncodableFacetUsingEncoderDecoder(
                 valueSemantics.getEncoderDecoder(),
@@ -185,7 +185,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
             assertEquals("",
                     valueSemanticsProvider.getRenderer().simpleTextRepresentation(null, null));
         } else {
-            assertEquals(ValueSemanticsAbstact.NULL_REPRESENTATION,
+            assertEquals(ValueSemanticsAbstract.NULL_REPRESENTATION,
                     valueSemanticsProvider.getRenderer().simpleTextRepresentation(null, null));
         }
 

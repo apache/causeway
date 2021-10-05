@@ -24,7 +24,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.ValueSemanticsAbstact;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -36,7 +36,7 @@ import org.apache.isis.schema.common.v2.ValueType;
 @Component
 @Named("isis.val.BigDecimalValueSemantics")
 public class BigDecimalValueSemantics
-extends ValueSemanticsAbstact<BigDecimal>
+extends ValueSemanticsAbstract<BigDecimal>
 implements
     DefaultsProvider<BigDecimal>,
     EncoderDecoder<BigDecimal>,

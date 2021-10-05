@@ -24,7 +24,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.ValueSemanticsAbstact;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
@@ -37,7 +37,7 @@ import lombok.val;
 @Component
 @Named("isis.val.URLValueSemantics")
 public class URLValueSemantics
-extends ValueSemanticsAbstact<java.net.URL>
+extends ValueSemanticsAbstract<java.net.URL>
 implements
     EncoderDecoder<java.net.URL>,
     Parser<java.net.URL>,

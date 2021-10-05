@@ -33,7 +33,7 @@ import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
-import org.apache.isis.applib.adapters.ValueSemanticsAbstact;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.internal.base._Casts;
@@ -44,7 +44,7 @@ import lombok.val;
 import lombok.experimental.Accessors;
 
 public abstract class LegacyTemporalValueSemanticsAbstract<T>
-extends ValueSemanticsAbstact<T>
+extends ValueSemanticsAbstract<T>
 implements
     EncoderDecoder<T>,
     Parser<T>,

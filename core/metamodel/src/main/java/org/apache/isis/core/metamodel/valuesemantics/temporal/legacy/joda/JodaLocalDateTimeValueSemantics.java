@@ -34,7 +34,7 @@ import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
-import org.apache.isis.applib.adapters.ValueSemanticsAbstact;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -44,7 +44,7 @@ import org.apache.isis.schema.common.v2.ValueType;
 @Component
 @Named("isis.val.JodaLocalDateTimeValueSemantics")
 public class JodaLocalDateTimeValueSemantics
-extends ValueSemanticsAbstact<LocalDateTime>
+extends ValueSemanticsAbstract<LocalDateTime>
 implements
     EncoderDecoder<LocalDateTime>,
     Parser<LocalDateTime>,

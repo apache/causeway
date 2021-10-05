@@ -16,54 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.valuesemantics;
+package org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.joda;
 
 import javax.inject.Named;
 
+import org.joda.time.LocalTime;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
-import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Renderer;
-import org.apache.isis.applib.util.schema.ChangesDtoUtils;
-import org.apache.isis.schema.chg.v2.ChangesDto;
 import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
-@Named("isis.val.ChangesDtoValueSemantics")
-public class ChangesDtoValueSemantics
-extends ValueSemanticsAbstract<ChangesDto>
-implements
-    EncoderDecoder<ChangesDto>,
-    Renderer<ChangesDto> {
+@Named("isis.val.JodaLocalTimeValueSemantics")
+public class JodaLocalTimeValueSemantics
+extends ValueSemanticsAbstract<org.joda.time.LocalTime> {
 
     @Override
-    public Class<ChangesDto> getCorrespondingClass() {
-        return ChangesDto.class;
+    public Class<LocalTime> getCorrespondingClass() {
+        return org.joda.time.LocalTime.class;
     }
 
     @Override
     public ValueType getSchemaValueType() {
         return UNREPRESENTED;
-    }
-
-    // -- ENCODER DECODER
-
-    @Override
-    public String toEncodedString(final ChangesDto changesDto) {
-        return ChangesDtoUtils.toXml(changesDto);
-    }
-
-    @Override
-    public ChangesDto fromEncodedString(final String xml) {
-        return ChangesDtoUtils.fromXml(xml);
-    }
-
-    // -- RENDERER
-
-    @Override
-    public String simpleTextRepresentation(final Context context, final ChangesDto value) {
-        return render(value, ChangesDtoUtils::toXml);
     }
 
 }

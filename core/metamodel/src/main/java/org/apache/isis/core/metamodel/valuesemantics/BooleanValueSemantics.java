@@ -22,7 +22,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.ValueSemanticsAbstact;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -41,7 +41,7 @@ import lombok.val;
 @Component
 @Named("isis.val.BooleanValueSemantics")
 public class BooleanValueSemantics
-extends ValueSemanticsAbstact<Boolean>
+extends ValueSemanticsAbstract<Boolean>
 implements
     DefaultsProvider<Boolean>,
     EncoderDecoder<Boolean>,

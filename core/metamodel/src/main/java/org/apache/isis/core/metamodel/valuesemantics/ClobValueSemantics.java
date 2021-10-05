@@ -24,7 +24,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.ValueSemanticsAbstact;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
@@ -34,7 +34,7 @@ import org.apache.isis.schema.common.v2.ValueType;
 @Component
 @Named("isis.val.ClobValueSemantics")
 public class ClobValueSemantics
-extends ValueSemanticsAbstact<Clob>
+extends ValueSemanticsAbstract<Clob>
 implements
     EncoderDecoder<Clob>,
     Renderer<Clob> {

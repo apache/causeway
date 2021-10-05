@@ -24,7 +24,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.ValueSemanticsAbstact;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
@@ -37,7 +37,7 @@ import lombok.val;
 @Component
 @Named("isis.val.LocalResourcePathValueSemantics")
 public class LocalResourcePathValueSemantics
-extends ValueSemanticsAbstact<LocalResourcePath>
+extends ValueSemanticsAbstract<LocalResourcePath>
 implements
     EncoderDecoder<LocalResourcePath>,
     Parser<LocalResourcePath>,

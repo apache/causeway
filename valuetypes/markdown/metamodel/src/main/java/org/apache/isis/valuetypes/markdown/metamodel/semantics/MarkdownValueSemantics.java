@@ -22,7 +22,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.ValueSemanticsAbstact;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
@@ -32,7 +32,7 @@ import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 @Component
 @Named("isis.val.MarkdownValueSemantics")
 public class MarkdownValueSemantics
-extends ValueSemanticsAbstact<Markdown>
+extends ValueSemanticsAbstract<Markdown>
 implements
     EncoderDecoder<Markdown>,
     Parser<Markdown>,

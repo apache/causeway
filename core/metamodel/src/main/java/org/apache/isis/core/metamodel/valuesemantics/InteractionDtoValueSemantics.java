@@ -22,7 +22,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.ValueSemanticsAbstact;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
@@ -32,7 +32,7 @@ import org.apache.isis.schema.ixn.v2.InteractionDto;
 @Component
 @Named("isis.val.InteractionDtoValueSemantics")
 public class InteractionDtoValueSemantics
-extends ValueSemanticsAbstact<InteractionDto>
+extends ValueSemanticsAbstract<InteractionDto>
 implements
     EncoderDecoder<InteractionDto>,
     Renderer<InteractionDto> {
