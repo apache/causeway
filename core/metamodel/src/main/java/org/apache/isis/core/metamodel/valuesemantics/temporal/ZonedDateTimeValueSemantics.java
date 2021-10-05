@@ -27,7 +27,7 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
@@ -51,7 +51,7 @@ extends TemporalValueSemanticsProvider<ZonedDateTime> {
         return ValueType.ZONED_DATE_TIME;
     }
 
-    public ZonedDateTimeValueSemantics(final FacetHolder holder) {
+    public ZonedDateTimeValueSemantics(final IsisConfiguration config) {
         super(TemporalCharacteristic.DATE_TIME, OffsetCharacteristic.OFFSET,
                 TYPICAL_LENGTH, MAX_LENGTH,
                 ZonedDateTime::from,

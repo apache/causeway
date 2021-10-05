@@ -23,7 +23,6 @@ import java.time.temporal.Temporal;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * Common base for {@link java.time.temporal.Temporal} value types.
@@ -68,9 +67,6 @@ extends
          */
         OFFSET,
     }
-
-    @Deprecated T temporalValue(ManagedObject object);
-    @Deprecated ManagedObject createValue(T temporal);
 
     TemporalCharacteristic getTemporalCharacteristic();
     OffsetCharacteristic getOffsetCharacteristic();

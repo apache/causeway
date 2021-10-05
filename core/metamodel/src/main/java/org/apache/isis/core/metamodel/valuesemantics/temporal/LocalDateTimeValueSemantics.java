@@ -28,7 +28,7 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
@@ -52,7 +52,7 @@ extends TemporalValueSemanticsProvider<LocalDateTime> {
         return ValueType.LOCAL_DATE_TIME;
     }
 
-    public LocalDateTimeValueSemantics(final FacetHolder holder) {
+    public LocalDateTimeValueSemantics(final IsisConfiguration config) {
         super(TemporalCharacteristic.DATE_TIME, OffsetCharacteristic.LOCAL,
                 TYPICAL_LENGTH, MAX_LENGTH,
                 LocalDateTime::from,

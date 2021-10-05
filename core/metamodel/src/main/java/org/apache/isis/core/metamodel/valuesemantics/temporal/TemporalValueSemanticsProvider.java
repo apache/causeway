@@ -30,8 +30,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
@@ -40,10 +38,6 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -63,9 +57,6 @@ import lombok.extern.log4j.Log4j2;
 public abstract class TemporalValueSemanticsProvider<T extends Temporal>
 extends AbstractValueSemanticsProvider<T>
 implements TemporalValueSemantics<T> {
-
-    @Inject protected ObjectManager objectManager;
-    @Inject protected IsisConfiguration config;
 
     @Getter(onMethod_ = {@Override}) protected final TemporalCharacteristic temporalCharacteristic;
     @Getter(onMethod_ = {@Override}) protected final OffsetCharacteristic offsetCharacteristic;
@@ -158,18 +149,6 @@ implements TemporalValueSemantics<T> {
         .filter(Optional::isPresent)
         .map(Optional::get)
         .findFirst();
-    }
-
-    // -- TEMPORAL VALUE FROM/TO ADAPTER
-
-    @Override
-    public final T temporalValue(final ManagedObject adapter) {
-        return _Casts.uncheckedCast(UnwrapUtil.single(adapter));
-    }
-
-    @Override
-    public final ManagedObject createValue(final T temporal) {
-        return objectManager.adapt(temporal);
     }
 
     // -- ENCODER/DECODER
