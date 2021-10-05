@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel.facets.members.named.method.NamedFacetForM
 import org.apache.isis.core.metamodel.facets.object.ViewModelSemanticCheckingFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetFallbackFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.choices.enums.EnumFacetUsingValueFacetUsingSemanticsProviderFactory;
+import org.apache.isis.core.metamodel.facets.object.choices.enums.ChoicesFacetFromEnumFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.DomainObjectLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainservice.annotation.DomainServiceFacetAnnotationFactory;
@@ -146,7 +146,7 @@ extends ProgrammingModelAbstract {
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new PropertyValidateFacetDefaultFactory(mmc));
 
         // enum support
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new EnumFacetUsingValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ChoicesFacetFromEnumFactory(mmc));
 
         // properties
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new PropertyAccessorFacetViaAccessorFactory(mmc));

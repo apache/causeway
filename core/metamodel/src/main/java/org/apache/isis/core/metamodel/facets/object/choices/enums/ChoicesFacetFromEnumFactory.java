@@ -18,8 +18,30 @@
  */
 package org.apache.isis.core.metamodel.facets.object.choices.enums;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import javax.inject.Inject;
 
-public interface EnumFacet extends Facet {
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+
+import lombok.val;
+
+public class ChoicesFacetFromEnumFactory
+extends FacetFactoryAbstract {
+
+    @Inject
+    public ChoicesFacetFromEnumFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
+    }
+
+    @Override
+    public void process(final ProcessClassContext processClassContext) {
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
+        if (!cls.isEnum()) {
+            return;
+        }
+        addFacet(new ChoicesFacetFromEnum(facetHolder, cls));
+    }
 
 }

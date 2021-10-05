@@ -30,12 +30,12 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import lombok.NonNull;
 import lombok.val;
 
-public class ChoicesFacetEnum
+public class ChoicesFacetFromEnum
 extends ChoicesFacetAbstract {
 
     private final @NonNull Can<ManagedObject> choices;
 
-    public ChoicesFacetEnum(final FacetHolder holder, final Class<?> enumClass) {
+    public ChoicesFacetFromEnum(final FacetHolder holder, final Class<?> enumClass) {
         super(holder);
 
         final Object[] choices = enumClass.getEnumConstants();

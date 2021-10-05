@@ -21,9 +21,9 @@ package org.apache.isis.core.metamodel.services.title;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 
 import lombok.val;
 
@@ -41,7 +41,7 @@ class TitleServiceDefaultTest {
 
     // -- FEATURED
 
-    public static enum FeaturedEnum {
+    static enum FeaturedEnum {
         FIRST,
         SECOND;
 
@@ -67,7 +67,7 @@ class TitleServiceDefaultTest {
 
     // -- PLAIN
 
-    public static enum PlainEnum {
+    static enum PlainEnum {
         FIRST,
         SECOND
     }
