@@ -27,7 +27,6 @@ import org.joda.time.format.DateTimeFormatter;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.facets.value.temporal.JodaFunctions;
 
 final class _JodaLocalDateTimeUtil  {
 
@@ -40,7 +39,7 @@ final class _JodaLocalDateTimeUtil  {
             final List<DateTimeFormatter> parseFormatters) {
         final Locale locale = Locale.getDefault();
 
-        Iterable<DateTimeFormatter> elements = _Lists.map(parseFormatters, JodaFunctions.withLocale(locale));
+        Iterable<DateTimeFormatter> elements = _Lists.map(parseFormatters, _JodaFunctions.withLocale(locale));
         return parseDateTime(dateStr, elements);
     }
 

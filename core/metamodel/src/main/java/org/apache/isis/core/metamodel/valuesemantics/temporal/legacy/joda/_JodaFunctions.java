@@ -16,21 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.temporal;
+package org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.joda;
 
 import java.util.Locale;
 import java.util.function.Function;
 
 import org.joda.time.format.DateTimeFormatter;
 
-public final class JodaFunctions  {
+final class _JodaFunctions  {
 
-    private JodaFunctions(){}
+    private _JodaFunctions(){}
 
     public static Function<DateTimeFormatter, DateTimeFormatter> withLocale(final Locale locale) {
         return new Function<DateTimeFormatter, DateTimeFormatter>() {
             @Override
-            public DateTimeFormatter apply(DateTimeFormatter input) {
+            public DateTimeFormatter apply(final DateTimeFormatter input) {
                 if (locale == null) {
                     return input;
                 }

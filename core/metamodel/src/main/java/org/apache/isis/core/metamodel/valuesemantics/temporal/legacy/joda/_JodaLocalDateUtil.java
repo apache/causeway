@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.datejodalocal;
+package org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.joda;
 
 import java.util.List;
 import java.util.Locale;
@@ -27,24 +27,23 @@ import org.joda.time.format.DateTimeFormatter;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.facets.value.temporal.JodaFunctions;
 
-public final class JodaLocalDateUtil  {
+final class _JodaLocalDateUtil  {
 
-    private JodaLocalDateUtil(){}
+    private _JodaLocalDateUtil(){}
 
     static LocalDate parseDate(
             final String dateStr,
-            List<DateTimeFormatter> parseFormatters) {
+            final List<DateTimeFormatter> parseFormatters) {
         final Locale locale = Locale.getDefault();
 
-        Iterable<DateTimeFormatter> elements = _Lists.map(parseFormatters, JodaFunctions.withLocale(locale));
+        Iterable<DateTimeFormatter> elements = _Lists.map(parseFormatters, _JodaFunctions.withLocale(locale));
         LocalDate parsedDate = parseDate(dateStr, elements);
         return parsedDate;
     }
 
 
-    private static LocalDate parseDate(String dateStr, Iterable<DateTimeFormatter> formatters) {
+    private static LocalDate parseDate(final String dateStr, final Iterable<DateTimeFormatter> formatters) {
         for(DateTimeFormatter formatter: formatters) {
             try {
                 return formatter.parseLocalDate(dateStr);

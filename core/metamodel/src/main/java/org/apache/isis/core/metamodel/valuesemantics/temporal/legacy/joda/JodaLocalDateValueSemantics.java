@@ -16,29 +16,38 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.datejodalocal;
+package org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.joda;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.inject.Named;
+
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.EncodingException;
+import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.Renderer;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstact;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.schema.common.v2.ValueType;
 
-public class JodaLocalDateValueSemanticsProvider
-extends ValueSemanticsProviderAndFacetAbstract<LocalDate>
-implements JodaLocalDateValueFacet {
+@Component
+@Named("isis.val.JodaLocalDateValueSemantics")
+public class JodaLocalDateValueSemantics
+extends ValueSemanticsAbstact<LocalDate>
+implements
+    EncoderDecoder<LocalDate>,
+    Parser<LocalDate>,
+    Renderer<LocalDate> {
 
     public static final int MAX_LENGTH = 12;
     public static final int TYPICAL_LENGTH = MAX_LENGTH;
@@ -102,15 +111,6 @@ implements JodaLocalDateValueFacet {
         PARSE_FORMATTERS.add(DateTimeFormat.forPattern("yyyyMMdd"));
     }
 
-    private static final Class<? extends Facet> type() {
-        return JodaLocalDateValueFacet.class;
-    }
-
-
-    // no default
-    private static final LocalDate DEFAULT_VALUE = null;
-
-
     private final DateTimeFormatter encodingFormatter = DateTimeFormat.forPattern("yyyyMMdd");
 
     private DateTimeFormatter titleStringFormatter;
@@ -121,15 +121,21 @@ implements JodaLocalDateValueFacet {
     // constructor
     // //////////////////////////////////////
 
-    /**
-     * Uses {@link #type()} as the facet type.
-     */
-    public JodaLocalDateValueSemanticsProvider(final FacetHolder holder) {
-        super(type(), holder, LocalDate.class, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
-
-        String configuredNameOrPattern = getConfiguration().getValueTypes().getJoda().getLocalDate().getFormat();
+    public JodaLocalDateValueSemantics(final IsisConfiguration config) {
+        String configuredNameOrPattern = config
+                .getValueTypes().getJoda().getLocalDate().getFormat();
 
         updateTitleStringFormatter(configuredNameOrPattern);
+    }
+
+    @Override
+    public int typicalLength() {
+        return TYPICAL_LENGTH;
+    }
+
+    @Override
+    public int maxLength() {
+        return MAX_LENGTH;
     }
 
 
@@ -141,13 +147,15 @@ implements JodaLocalDateValueFacet {
         this.titleStringFormatNameOrPattern = titleStringFormatNameOrPattern;
     }
 
-
-    // //////////////////////////////////////////////////////////////////
-    // Parsing
-    // //////////////////////////////////////////////////////////////////
+    // -- PARSER
 
     @Override
-    protected LocalDate doParse(
+    public String parseableTextRepresentation(final Context context, final LocalDate value) {
+        return toEncodedString(value);
+    }
+
+    @Override
+    public LocalDate parseTextRepresentation(
             final ValueSemanticsProvider.Context context,
             final String entry) {
 
@@ -177,7 +185,7 @@ implements JodaLocalDateValueFacet {
     }
 
     private LocalDate parseDate(final String dateStr) {
-        return JodaLocalDateUtil.parseDate(dateStr, PARSE_FORMATTERS);
+        return _JodaLocalDateUtil.parseDate(dateStr, PARSE_FORMATTERS);
     }
 
 
@@ -186,13 +194,13 @@ implements JodaLocalDateValueFacet {
     // ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    public String asTitleString(final LocalDate value) {
+    public String simpleTextRepresentation(final Context context, final LocalDate value) {
         if (value == null) {
             return null;
         }
         final LocalDate date = value;
         DateTimeFormatter f = titleStringFormatter.withLocale(Locale.getDefault());
-        return JodaLocalDateUtil.titleString(f, date);
+        return _JodaLocalDateUtil.titleString(f, date);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -219,20 +227,6 @@ implements JodaLocalDateValueFacet {
 
     private synchronized LocalDate parse(final String data) {
         return encodingFormatter.parseLocalDate(data);
-    }
-
-    // //////////////////////////////////////////////////////////////////
-    // JodaLocalDateValueFacet
-    // //////////////////////////////////////////////////////////////////
-
-    @Override
-    public final LocalDate dateValue(final ManagedObject object) {
-        return (LocalDate) (object == null ? null : object.getPojo());
-    }
-
-    @Override
-    public final ManagedObject createValue(final LocalDate date) {
-        return getObjectManager().adapt(date);
     }
 
 }

@@ -144,7 +144,6 @@ implements
         this.titleStringFormatNameOrPattern = titleStringFormatNameOrPattern;
     }
 
-
     // -- PARSER
 
     @Override
