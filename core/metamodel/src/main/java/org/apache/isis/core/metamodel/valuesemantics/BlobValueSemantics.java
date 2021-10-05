@@ -27,7 +27,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstact;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
@@ -39,7 +39,7 @@ import org.apache.isis.schema.common.v2.ValueType;
 @Component
 @Named("isis.val.BlobValueSemantics")
 public class BlobValueSemantics
-extends AbstractValueSemanticsProvider<Blob>
+extends ValueSemanticsAbstact<Blob>
 implements
     EncoderDecoder<Blob>,
     Renderer<Blob> {

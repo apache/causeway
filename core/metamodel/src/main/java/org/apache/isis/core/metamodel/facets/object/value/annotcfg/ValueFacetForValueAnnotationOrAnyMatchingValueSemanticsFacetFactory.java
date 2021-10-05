@@ -23,10 +23,7 @@ import javax.inject.Inject;
 import org.springframework.core.ResolvableType;
 import org.springframework.util.ClassUtils;
 
-import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.collections.Can;
@@ -39,7 +36,6 @@ import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionF
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.annotation.LogicalTypeFacetForValueAnnotation;
-import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.Getter;
 import lombok.val;
@@ -106,51 +102,14 @@ extends ValueFacetUsingSemanticsProviderFactory {
             if(valueSemantics.isCardinalityMultiple()) {
                 log.warn("found multiple ValueSemanticsProvider for value type {}; using the first", cls);
             } else if(valueSemantics.isEmpty()) {
-                log.warn("could not find a ValueSemanticsProvider for value type {}; using a no-op fallback",cls);
-                super.addAllFacetsForValueSemantics(getFallbackValueSemantics(), facetHolder);
+                log.warn("could not find a ValueSemanticsProvider for value type {}; ",cls);
+                super.addAllFacetsForValueSemantics(Can.empty(), facetHolder);
             }
 
         });
     }
 
     // -- HELPER
-
-    private static class NoopValueSemantics implements ValueSemanticsProvider<Object> {
-
-        @Override
-        public Renderer<Object> getRenderer() {
-            return null;
-        }
-
-        @Override
-        public Parser<Object> getParser() {
-            return null;
-        }
-
-        @Override
-        public EncoderDecoder<Object> getEncoderDecoder() {
-            return null;
-        }
-
-        @Override
-        public DefaultsProvider<Object> getDefaultsProvider() {
-            return null;
-        }
-
-        @Override
-        public Class<Object> getCorrespondingClass() {
-            return null;
-        }
-
-        @Override
-        public ValueType getSchemaValueType() {
-            return null;
-        }
-
-    }
-
-    @Getter(lazy = true)
-    private final Can<ValueSemanticsProvider<?>> fallbackValueSemantics = Can.of(new NoopValueSemantics());
 
     @Getter(lazy = true)
     private final Can<ValueSemanticsProvider<?>> allValueSemanticsProviders = getServiceRegistry()

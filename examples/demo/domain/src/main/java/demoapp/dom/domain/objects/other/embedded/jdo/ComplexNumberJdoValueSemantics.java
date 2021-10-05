@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstact;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -37,7 +37,7 @@ import lombok.val;
 // tag::class[]
 @Component
 public class ComplexNumberJdoValueSemantics
-        extends AbstractValueSemanticsProvider<ComplexNumberJdo>{
+        extends ValueSemanticsAbstact<ComplexNumberJdo>{
 
  // end::class[]
 

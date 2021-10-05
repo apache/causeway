@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.temporal;
+package org.apache.isis.core.metamodel.valuesemantics.temporal.legacy;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -28,21 +28,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
-import java.util.function.BiConsumer;
 
+import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.EncodingException;
+import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.Renderer;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstact;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.facets.value.date.DateValueFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.commons.internal.base._Strings;
 
-public abstract class ValueSemanticsProviderAbstractTemporal<T>
-extends ValueSemanticsProviderAndFacetAbstract<T>
-implements DateValueFacet {
+import lombok.Getter;
+import lombok.val;
+import lombok.experimental.Accessors;
+
+public abstract class LegacyTemporalValueSemanticsAbstract<T>
+extends ValueSemanticsAbstact<T>
+implements
+    EncoderDecoder<T>,
+    Parser<T>,
+    Renderer<T> {
 
     protected static final String ISO_ENCODING_FORMAT = "iso_encoding";
     protected static final TimeZone UTC_TIME_ZONE;
@@ -53,13 +59,6 @@ implements DateValueFacet {
             timeZone = TimeZone.getTimeZone("UTC");
         }
         UTC_TIME_ZONE = timeZone;
-    }
-
-    /**
-     * The facet type, used if not specified explicitly in the constructor.
-     */
-    protected static final Class<? extends Facet> type() {
-        return DateValueFacet.class;
     }
 
     protected static DateFormat createDateFormat(final String mask) {
@@ -75,22 +74,77 @@ implements DateValueFacet {
         return encodingFormat;
     }
 
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true) protected final int typicalLength;
+    //@Getter(onMethod_ = {@Override}) @Accessors(fluent = true) protected final int maxLength;
+
     private final DateFormat encodingFormat;
     protected DateFormat format;
-    private String propertyType;
 
-    /**
-     * Allows the specific facet subclass to be specified (rather than use
-     * {@link #type()}.
-     */
-    public ValueSemanticsProviderAbstractTemporal(final String propertyType, final Class<? extends Facet> facetType, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
-        super(facetType, holder, adaptedClass, typicalLength, -1, immutability, equalByContent, defaultValue);
+    protected LegacyTemporalValueSemanticsAbstract(
+            final Class<T> adaptedClass,
+            final int typicalLength) {
+        super();
         configureFormats();
 
-        this.propertyType = propertyType;
+        this.typicalLength = typicalLength;
 
         encodingFormat = formats().get(ISO_ENCODING_FORMAT);
     }
+
+    // -- ENCODER/DECODER
+
+    @Override
+    public String toEncodedString(final T temporal) {
+        final Date date = dateValue(temporal);
+        return encodingFormat.format(date);
+    }
+
+    @Override
+    public T fromEncodedString(final String data) {
+        final Calendar cal = Calendar.getInstance();
+        cal.setTimeZone(UTC_TIME_ZONE);
+
+        // TODO allow restoring of dates where datetime expected, and datetimes where date expected - to allow for changing of field types.
+        try {
+            cal.setTime(parse(data));
+            clearFields(cal);
+            return setDate(cal.getTime());
+        } catch (final ParseException e) {
+            if (data.charAt(0) == 'T') {
+                final long millis = Long.parseLong(data.substring(1));
+                cal.setTimeInMillis(millis);
+                clearFields(cal);
+                return setDate(cal.getTime());
+            } else {
+                throw new EncodingException(e);
+            }
+        }
+    }
+
+    // -- RENDERER
+
+    @Override
+    public String simpleTextRepresentation(final Context context, final T value) {
+        return render(value, v->asTitleString(v));
+    }
+
+    // -- PARSER
+
+    @Override
+    public String parseableTextRepresentation(final Context context, final T value) {
+        return toEncodedString(value);
+    }
+
+    @Override
+    public T parseTextRepresentation(final Context context, final String text) {
+        val input = _Strings.blankToNullOrTrim(text);
+        if(input==null) {
+            return null;
+        }
+        return doParse(context, input);
+    }
+
+    // --
 
     protected void configureFormats() {
         final Map<String, DateFormat> formats = formats();
@@ -123,7 +177,7 @@ implements DateValueFacet {
     // Parsing
     // //////////////////////////////////////////////////////////////////
 
-    @Override
+    //@Override
     protected T doParse(
             final ValueSemanticsProvider.Context context,
             final String entry) {
@@ -220,8 +274,8 @@ implements DateValueFacet {
     // TitleProvider
     // ///////////////////////////////////////////////////////////////////////////
 
-    @Override
-    public String asTitleString(final T value) {
+    //@Override
+    protected String asTitleString(final T value) {
         if (value == null) {
             return null;
         }
@@ -238,58 +292,8 @@ implements DateValueFacet {
         return date == null ? "" : formatter.format(date);
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // EncoderDecoder
-    // //////////////////////////////////////////////////////////////////
-
-    @Override
-    public String toEncodedString(final T object) {
-        final Date date = dateValue(object);
-        return encode(date);
-    }
-
-    private synchronized String encode(final Date date) {
-        return encodingFormat.format(date);
-    }
-
-    @Override
-    public T fromEncodedString(final String data) {
-        final Calendar cal = Calendar.getInstance();
-        cal.setTimeZone(UTC_TIME_ZONE);
-
-        // TODO allow restoring of dates where datetime expected, and datetimes where date expected - to allow for changing of field types.
-        try {
-            cal.setTime(parse(data));
-            clearFields(cal);
-            return setDate(cal.getTime());
-        } catch (final ParseException e) {
-            if (data.charAt(0) == 'T') {
-                final long millis = Long.parseLong(data.substring(1));
-                cal.setTimeInMillis(millis);
-                clearFields(cal);
-                return setDate(cal.getTime());
-            } else {
-                throw new EncodingException(e);
-            }
-        }
-    }
-
     private synchronized Date parse(final String data) throws ParseException {
         return encodingFormat.parse(data);
-    }
-
-    // //////////////////////////////////////////////////////////////////
-    // DateValueFacet
-    // //////////////////////////////////////////////////////////////////
-
-    @Override
-    public final Date dateValue(final ManagedObject object) {
-        return object == null ? null : dateValue(object.getPojo());
-    }
-
-    @Override
-    public final ManagedObject createValue(final Date date) {
-        return getObjectManager().adapt(setDate(date));
     }
 
     protected abstract T add(T original, int years, int months, int days, int hours, int minutes);
@@ -315,9 +319,4 @@ implements DateValueFacet {
         format.setLenient(false);
     }
 
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        visitor.accept("propertyType", propertyType);
-    }
 }

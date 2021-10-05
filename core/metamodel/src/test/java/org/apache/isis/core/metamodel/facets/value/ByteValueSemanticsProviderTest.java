@@ -38,7 +38,7 @@ extends ValueSemanticsProviderAbstractTestCase {
     public void setUpObjects() throws Exception {
         byteObj = Byte.valueOf((byte) 102);
         allowMockAdapterToReturn(byteObj);
-        setSemanitcs(value = new ByteValueSemantics());
+        setSemantics(value = new ByteValueSemantics());
     }
 
     @Test

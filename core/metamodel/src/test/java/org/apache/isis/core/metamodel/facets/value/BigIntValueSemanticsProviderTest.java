@@ -41,7 +41,7 @@ extends ValueSemanticsProviderAbstractTestCase {
         super.setUp();
         bigInt = new BigInteger("132199");
         allowMockAdapterToReturn(bigInt);
-        setSemanitcs(value = new BigIntegerValueSemantics());
+        setSemantics(value = new BigIntegerValueSemantics());
     }
 
     @Test

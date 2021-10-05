@@ -38,7 +38,7 @@ extends ValueSemanticsProviderAbstractTestCase {
         integer = Integer.valueOf(32);
         allowMockAdapterToReturn(integer);
 
-        setSemanitcs(value = new IntValueSemantics());
+        setSemantics(value = new IntValueSemantics());
     }
 
     @Test

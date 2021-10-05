@@ -36,7 +36,7 @@ extends ValueSemanticsProviderAbstractTestCase {
     @Before
     public void setUpObjects() throws Exception {
 
-        setSemanitcs(value = new DoubleValueSemantics());
+        setSemantics(value = new DoubleValueSemantics());
 
         doubleObj = Double.valueOf(32.5d);
         allowMockAdapterToReturn(doubleObj);

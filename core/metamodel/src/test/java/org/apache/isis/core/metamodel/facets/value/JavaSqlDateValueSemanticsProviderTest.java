@@ -31,30 +31,26 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
-import org.apache.isis.core.metamodel.facets.value.datesql.JavaSqlDateValueSemanticsProvider;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaSqlDateValueSemantics;
 
 public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
-    private JavaSqlDateValueSemanticsProvider adapter;
+    private JavaSqlDateValueSemantics value;
     private Date date;
-    private FacetHolder holder;
 
     @Before
     public void setUpObjects() throws Exception {
 
         date = new Date(0);
-        holder = FacetHolderAbstract.forTesting(metaModelContext);
 
-        setValue(adapter = new JavaSqlDateValueSemanticsProvider(holder) {
+        setSemantics(value = new JavaSqlDateValueSemantics(metaModelContext.getConfiguration()) {
         });
     }
 
     @Test
     public void testInvalidParse() throws Exception {
         try {
-            adapter.parseTextRepresentation(null, "date");
+            value.parseTextRepresentation(null, "date");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -62,12 +58,12 @@ public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProvide
 
     @Test
     public void testTitleOf() {
-        assertEquals(DateFormat.getDateInstance(SimpleDateFormat.MEDIUM).format(new Date(0)), adapter.simpleTextRepresentation(null, date));
+        assertEquals(DateFormat.getDateInstance(SimpleDateFormat.MEDIUM).format(new Date(0)), value.simpleTextRepresentation(null, date));
     }
 
     @Test
     public void testParse() throws Exception {
-        final Object newValue = adapter.parseTextRepresentation(null, "1/1/1980");
+        final Object newValue = value.parseTextRepresentation(null, "1/1/1980");
 
         final Calendar calendar = Calendar.getInstance();
         calendar.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));

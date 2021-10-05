@@ -39,7 +39,7 @@ extends ValueSemanticsProviderAbstractTestCase {
         float1 = Float.valueOf(32.5f);
         allowMockAdapterToReturn(float1);
 
-        setSemanitcs(value = new FloatValueSemantics());
+        setSemantics(value = new FloatValueSemantics());
     }
 
     @Test

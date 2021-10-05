@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.timesql;
+package org.apache.isis.core.metamodel.valuesemantics.temporal.legacy;
 
 import java.sql.Time;
 import java.text.DateFormat;
@@ -26,13 +26,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.function.BiConsumer;
+import java.util.Optional;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.value.temporal.ValueSemanticsProviderAbstractTemporal;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.Getter;
@@ -42,13 +46,17 @@ import lombok.Setter;
  * Treats {@link java.sql.Time} as a time-only value type.
  *
  */
-public class JavaSqlTimeValueSemanticsProvider
-extends ValueSemanticsProviderAbstractTemporal<Time> {
+@Component
+@Named("isis.val.JavaSqlTimeValueSemantics")
+public class JavaSqlTimeValueSemantics
+extends LegacyTemporalValueSemanticsAbstract<Time> {
 
     protected static void initFormats(final Map<String, DateFormat> formats) {
         formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("HHmmssSSS"));
         formats.put("short", DateFormat.getTimeInstance(DateFormat.SHORT));
     }
+
+    @Inject ClockService clockService;
 
     @Override
     public Class<Time> getCorrespondingClass() {
@@ -63,11 +71,11 @@ extends ValueSemanticsProviderAbstractTemporal<Time> {
     @Getter @Setter
     private String configuredFormat;
 
-    public JavaSqlTimeValueSemanticsProvider(final FacetHolder holder) {
-        super("time", type(), holder, java.sql.Time.class, 8, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, null);
+    public JavaSqlTimeValueSemantics(final IsisConfiguration config) {
+        super(java.sql.Time.class, 8);
 
         final Map<String, DateFormat> formats = formats();
-        configuredFormat = getConfiguration().getValueTypes().getJavaSql().getTime().getFormat();
+        configuredFormat = config.getValueTypes().getJavaSql().getTime().getFormat();
         format = formats.get(configuredFormat);
         if (format == null) {
             setMask(configuredFormat);
@@ -111,13 +119,6 @@ extends ValueSemanticsProviderAbstractTemporal<Time> {
         return formats;
     }
 
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        visitor.accept("configuredFormat", configuredFormat);
-    }
-
-
     private static Map<String, DateFormat> formats = _Maps.newHashMap();
 
     static {
@@ -154,7 +155,7 @@ extends ValueSemanticsProviderAbstractTemporal<Time> {
 
     @Override
     protected Time now() {
-        return getServiceRegistry().lookupService(ClockService.class)
+        return Optional.ofNullable(clockService)
                 .map(ClockService::getClock)
                 .map(VirtualClock::nowAsEpochMilli)
                 .map(Time::new)

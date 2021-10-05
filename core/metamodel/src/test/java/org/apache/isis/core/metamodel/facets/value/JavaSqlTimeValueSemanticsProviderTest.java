@@ -28,16 +28,13 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
-import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueSemanticsProvider;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaSqlTimeValueSemantics;
 
 public class JavaSqlTimeValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {
 
     private Time twoOClock;
-    private JavaSqlTimeValueSemanticsProvider value;
-    private FacetHolder holder;
+    private JavaSqlTimeValueSemantics value;
 
     @Before
     public void setUpObjects() throws Exception {
@@ -57,9 +54,7 @@ extends ValueSemanticsProviderAbstractTestCase {
 
         twoOClock = new Time(c.getTimeInMillis());
 
-        holder = FacetHolderAbstract.forTesting(metaModelContext);
-
-        setValue(value = new JavaSqlTimeValueSemanticsProvider(holder));
+        setSemantics(value = new JavaSqlTimeValueSemantics(metaModelContext.getConfiguration()));
     }
 
     @Ignore // flaky

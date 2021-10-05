@@ -22,7 +22,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstact;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
@@ -32,7 +32,7 @@ import org.apache.isis.schema.common.v2.ValueType;
 @Component
 @Named("isis.val.CommandDtoValueSemantics")
 public class CommandDtoValueSemantics
-extends AbstractValueSemanticsProvider<CommandDto>
+extends ValueSemanticsAbstact<CommandDto>
 implements
     EncoderDecoder<CommandDto>,
     Renderer<CommandDto> {

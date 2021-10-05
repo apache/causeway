@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.datesql;
+package org.apache.isis.core.metamodel.valuesemantics.temporal.legacy;
 
 import java.sql.Date;
 import java.text.DateFormat;
@@ -25,15 +25,17 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.function.BiConsumer;
+import java.util.Optional;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.value.dateutil.JavaUtilDateValueSemanticsProvider;
-import org.apache.isis.core.metamodel.facets.value.temporal.ValueSemanticsProviderAbstractTemporal;
-import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueSemanticsProvider;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.Getter;
@@ -42,13 +44,17 @@ import lombok.Setter;
 /**
  * An adapter that handles {@link java.sql.Date} with only date component.
  *
- * @see JavaUtilDateValueSemanticsProvider
- * @see JavaSqlTimeValueSemanticsProvider
+ * @see JavaUtilDateValueSemantics
+ * @see JavaSqlTimeValueSemantics
  */
-public class JavaSqlDateValueSemanticsProvider
-extends ValueSemanticsProviderAbstractTemporal<Date> {
+@Component
+@Named("isis.val.JavaSqlDateValueSemantics")
+public class JavaSqlDateValueSemantics
+extends LegacyTemporalValueSemanticsAbstract<Date> {
 
     private static Map<String, DateFormat> formats = _Maps.newHashMap();
+
+    @Inject ClockService clockService;
 
     static {
         formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("yyyyMMdd"));
@@ -69,11 +75,11 @@ extends ValueSemanticsProviderAbstractTemporal<Date> {
     @Getter @Setter
     private String configuredFormat;
 
-    public JavaSqlDateValueSemanticsProvider(final FacetHolder holder) {
-        super("date", type(), holder, Date.class, 12, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, null);
+    public JavaSqlDateValueSemantics(final IsisConfiguration config) {
+        super(Date.class, 12);
 
         final Map<String, DateFormat> formats = formats();
-        configuredFormat = getConfiguration().getValueTypes().getJavaSql().getDate().getFormat();
+        configuredFormat = config.getValueTypes().getJavaSql().getDate().getFormat();
         format = formats.get(configuredFormat);
         if (format == null) {
             setMask(configuredFormat);
@@ -129,13 +135,6 @@ extends ValueSemanticsProviderAbstractTemporal<Date> {
     }
 
     @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        visitor.accept("configuredFormat", configuredFormat);
-    }
-
-
-    @Override
     protected Date add(final Date original, final int years, final int months, final int days, final int hours, final int minutes) {
         final Date date = original;
         final Calendar cal = Calendar.getInstance();
@@ -165,21 +164,11 @@ extends ValueSemanticsProviderAbstractTemporal<Date> {
 
     @Override
     protected Date now() {
-        return getServiceRegistry().lookupService(ClockService.class)
+        return Optional.ofNullable(clockService)
                 .map(ClockService::getClock)
                 .map(VirtualClock::nowAsEpochMilli)
                 .map(Date::new)
                 .orElseGet(()->new Date(System.currentTimeMillis())); // fallback to system time
-    }
-
-    @Override //[ISIS-2005] java.sql.Date requires special treatment, so overriding the default
-    public String toEncodedString(final Date date) {
-        return date.toString();
-    }
-
-    @Override //[ISIS-2005] java.sql.Date requires special treatment, so overriding the default
-    public Date fromEncodedString(final String enString) {
-        return Date.valueOf(enString);
     }
 
 }

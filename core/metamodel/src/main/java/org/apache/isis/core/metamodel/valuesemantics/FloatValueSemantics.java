@@ -22,7 +22,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstact;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -37,7 +37,7 @@ import lombok.val;
 @Component
 @Named("isis.val.FloatValueSemantics")
 public class FloatValueSemantics
-extends AbstractValueSemanticsProvider<Float>
+extends ValueSemanticsAbstact<Float>
 implements
     DefaultsProvider<Float>,
     EncoderDecoder<Float>,

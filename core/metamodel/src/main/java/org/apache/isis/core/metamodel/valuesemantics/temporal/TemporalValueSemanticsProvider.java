@@ -30,7 +30,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstact;
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
@@ -55,7 +55,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 public abstract class TemporalValueSemanticsProvider<T extends Temporal>
-extends AbstractValueSemanticsProvider<T>
+extends ValueSemanticsAbstact<T>
 implements TemporalValueSemantics<T> {
 
     @Getter(onMethod_ = {@Override}) protected final TemporalCharacteristic temporalCharacteristic;

@@ -37,7 +37,7 @@ extends ValueSemanticsProviderAbstractTestCase {
     @Before
     public void setUpObjects() throws Exception {
         character = Character.valueOf('r');
-        setSemanitcs(value = new CharacterValueSemantics());
+        setSemantics(value = new CharacterValueSemantics());
     }
 
     @Test

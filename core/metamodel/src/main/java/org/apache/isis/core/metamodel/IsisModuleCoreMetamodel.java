@@ -77,6 +77,11 @@ import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalTimeValueSema
 import org.apache.isis.core.metamodel.valuesemantics.temporal.OffsetDateTimeValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.OffsetTimeValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.ZonedDateTimeValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaSqlDateValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaSqlTimeStampValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaSqlTimeValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaUtilDateValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JodaDateTimeValueSemantics;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderDefault;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderForBuiltin;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderForCollections;
@@ -128,13 +133,20 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         ChangesDtoValueSemantics.class,
         CommandDtoValueSemantics.class,
         InteractionDtoValueSemantics.class,
+        // Value Semantics (temporal)
         LocalDateTimeValueSemantics.class,
         LocalDateValueSemantics.class,
         LocalTimeValueSemantics.class,
         OffsetDateTimeValueSemantics.class,
         OffsetTimeValueSemantics.class,
         ZonedDateTimeValueSemantics.class,
-
+        // Value Semantics (temporal legacy)
+        JavaSqlDateValueSemantics.class,
+        JavaSqlTimeValueSemantics.class,
+        JavaSqlTimeStampValueSemantics.class,
+        JavaUtilDateValueSemantics.class,
+        // Value Semantics (temporal joda)
+        JodaDateTimeValueSemantics.class,
 
         // @Service's
         ObjectManagerDefault.class,

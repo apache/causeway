@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.dateutil;
+package org.apache.isis.core.metamodel.valuesemantics.temporal.legacy;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -25,16 +25,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TimeZone;
-import java.util.function.BiConsumer;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.value.datesql.JavaSqlDateValueSemanticsProvider;
-import org.apache.isis.core.metamodel.facets.value.temporal.ValueSemanticsProviderAbstractTemporal;
-import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueSemanticsProvider;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.Getter;
@@ -44,13 +46,17 @@ import lombok.Setter;
  * An adapter that handles {@link java.util.Date} as both a date AND time
  * component.
  *
- * @see JavaSqlDateValueSemanticsProvider
- * @see JavaSqlTimeValueSemanticsProvider
+ * @see JavaSqlDateValueSemantics
+ * @see JavaSqlTimeValueSemantics
  */
-public class JavaUtilDateValueSemanticsProvider
-extends ValueSemanticsProviderAbstractTemporal<java.util.Date> {
+@Component
+@Named("isis.val.JavaUtilDateValueSemantics")
+public class JavaUtilDateValueSemantics
+extends LegacyTemporalValueSemanticsAbstract<java.util.Date> {
 
     private static Map<String, DateFormat> formats = _Maps.newHashMap();
+
+    @Inject ClockService clockService;
 
     static {
         formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("yyyyMMdd'T'HHmmssSSS"));
@@ -71,11 +77,11 @@ extends ValueSemanticsProviderAbstractTemporal<java.util.Date> {
     @Getter @Setter
     private String configuredFormat;
 
-    public JavaUtilDateValueSemanticsProvider(final FacetHolder holder) {
-        super("datetime", type(), holder, Date.class, 18, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, null);
+    public JavaUtilDateValueSemantics(final IsisConfiguration config) {
+        super(Date.class, 18);
 
         final Map<String, DateFormat> formats = formats();
-        configuredFormat = getConfiguration().getValueTypes().getJavaUtil().getDate().getFormat();
+        configuredFormat = config.getValueTypes().getJavaUtil().getDate().getFormat();
         format = formats.get(configuredFormat);
         if (format == null) {
             setMask(configuredFormat);
@@ -126,15 +132,6 @@ extends ValueSemanticsProviderAbstractTemporal<java.util.Date> {
         return formats;
     }
 
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        visitor.accept("configuredFormat", configuredFormat);
-    }
-
-
-
-
 
     @Override
     protected Date dateValue(final Object value) {
@@ -160,7 +157,7 @@ extends ValueSemanticsProviderAbstractTemporal<java.util.Date> {
 
     @Override
     protected Date now() {
-        return getServiceRegistry().lookupService(ClockService.class)
+        return Optional.ofNullable(clockService)
                 .map(ClockService::getClock)
                 .map(VirtualClock::nowAsEpochMilli)
                 .map(Date::new)

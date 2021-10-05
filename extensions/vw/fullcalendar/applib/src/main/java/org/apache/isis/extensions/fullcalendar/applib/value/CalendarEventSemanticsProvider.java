@@ -22,13 +22,13 @@ import java.time.Instant;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstact;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 public class CalendarEventSemanticsProvider
-extends AbstractValueSemanticsProvider<CalendarEvent>
+extends ValueSemanticsAbstact<CalendarEvent>
 implements DefaultsProvider<CalendarEvent>{
 
     @Override

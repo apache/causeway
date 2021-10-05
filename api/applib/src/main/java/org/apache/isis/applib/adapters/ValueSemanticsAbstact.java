@@ -40,7 +40,7 @@ import lombok.val;
 /**
  * @since 2.x {@index}
  */
-public abstract class AbstractValueSemanticsProvider<T>
+public abstract class ValueSemanticsAbstact<T>
 implements ValueSemanticsProvider<T> {
 
     public static final String NULL_REPRESENTATION = "[none]";

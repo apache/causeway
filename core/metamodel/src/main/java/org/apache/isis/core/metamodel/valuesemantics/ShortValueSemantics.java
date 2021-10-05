@@ -22,7 +22,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstact;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -39,7 +39,7 @@ import lombok.val;
 @Component
 @Named("isis.val.ShortValueSemantics")
 public class ShortValueSemantics
-extends AbstractValueSemanticsProvider<Short>
+extends ValueSemanticsAbstact<Short>
 implements
     DefaultsProvider<Short>,
     EncoderDecoder<Short>,

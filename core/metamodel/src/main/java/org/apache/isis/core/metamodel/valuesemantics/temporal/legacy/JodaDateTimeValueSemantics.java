@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.datetimejoda;
+package org.apache.isis.core.metamodel.valuesemantics.temporal.legacy;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -25,23 +25,26 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.function.BiConsumer;
+
+import javax.inject.Named;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
+import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.value.temporal.ValueSemanticsProviderAbstractTemporal;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public class JodaDateTimeValueSemanticsProvider
-extends ValueSemanticsProviderAbstractTemporal<DateTime> {
+@Component
+@Named("isis.val.JodaDateTimeValueSemantics")
+public class JodaDateTimeValueSemantics
+extends LegacyTemporalValueSemanticsAbstract<DateTime> {
 
     private static final Map<String, DateFormat> FORMATS = _Maps.newHashMap();
 
@@ -64,12 +67,12 @@ extends ValueSemanticsProviderAbstractTemporal<DateTime> {
     @Getter @Setter
     private String configuredFormat;
 
-    public JodaDateTimeValueSemanticsProvider(
-            final FacetHolder holder) {
-        super("date", type(), holder, DateTime.class, 12, Immutability.IMMUTABLE, EqualByContent.HONOURED, null);
+    public JodaDateTimeValueSemantics(
+            final IsisConfiguration config) {
+        super(DateTime.class, 12);
 
         final Map<String, DateFormat> formats = formats();
-        configuredFormat = getConfiguration().getValueTypes().getJoda().getDateTime().getFormat();
+        configuredFormat = config.getValueTypes().getJoda().getDateTime().getFormat();
         format = formats.get(configuredFormat);
         if (format == null) {
             setMask(configuredFormat);
@@ -127,12 +130,6 @@ extends ValueSemanticsProviderAbstractTemporal<DateTime> {
         }
 
         return formats;
-    }
-
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        visitor.accept("configuredFormat", configuredFormat);
     }
 
     @Override

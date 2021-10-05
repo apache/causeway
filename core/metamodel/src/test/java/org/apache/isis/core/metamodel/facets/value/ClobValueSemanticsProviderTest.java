@@ -39,7 +39,7 @@ extends ValueSemanticsProviderAbstractTestCase {
         clob = new Clob("myfile1.xml", "application", "xml", "abcdef");
         allowMockAdapterToReturn(clob);
 
-        setSemanitcs(value = new ClobValueSemantics());
+        setSemantics(value = new ClobValueSemantics());
     }
 
     @Test

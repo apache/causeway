@@ -22,7 +22,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstact;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
@@ -32,7 +32,7 @@ import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 @Component
 @Named("isis.val.AsciiDocValueSemantics")
 public class AsciiDocValueSemantics
-extends AbstractValueSemanticsProvider<AsciiDoc>
+extends ValueSemanticsAbstact<AsciiDoc>
 implements
     Renderer<AsciiDoc>,
     Parser<AsciiDoc> {

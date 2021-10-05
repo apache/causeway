@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.value.timestampsql;
+package org.apache.isis.core.metamodel.valuesemantics.temporal.legacy;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -26,21 +26,24 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.function.BiConsumer;
+
+import javax.inject.Named;
+
+import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.exceptions.recoverable.InvalidEntryException;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.facets.value.temporal.ValueSemanticsProviderAbstractTemporal;
 import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public class JavaSqlTimeStampValueSemanticsProvider
-extends ValueSemanticsProviderAbstractTemporal<Timestamp> {
-
+@Component
+@Named("isis.val.JavaSqlTimeStampValueSemantics")
+public class JavaSqlTimeStampValueSemantics
+extends LegacyTemporalValueSemanticsAbstract<Timestamp> {
 
     protected static void initFormats(final Map<String, DateFormat> formats) {
         formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("yyyyMMdd'T'HHmmssSSS"));
@@ -60,10 +63,10 @@ extends ValueSemanticsProviderAbstractTemporal<Timestamp> {
     @Getter @Setter
     private String configuredFormat;
 
-    public JavaSqlTimeStampValueSemanticsProvider(final FacetHolder holder) {
-        super("timestamp", type(), holder, java.sql.Timestamp.class, 25, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, null);
+    public JavaSqlTimeStampValueSemantics(final IsisConfiguration config) {
+        super(java.sql.Timestamp.class, 25);
 
-        configuredFormat = getConfiguration().getValueTypes().getJavaSql().getTimestamp().getFormat();
+        configuredFormat = config.getValueTypes().getJavaSql().getTimestamp().getFormat();
 
         final Map<String, DateFormat> formats1 = formats();
         format = formats1.get(configuredFormat);
@@ -107,16 +110,8 @@ extends ValueSemanticsProviderAbstractTemporal<Timestamp> {
         return formats;
     }
 
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        visitor.accept("configuredFormat", configuredFormat);
-    }
-
-
-
     public static final boolean isAPropertyDefaultFacet() {
-        return PropertyDefaultFacet.class.isAssignableFrom(JavaSqlTimeStampValueSemanticsProvider.class);
+        return PropertyDefaultFacet.class.isAssignableFrom(JavaSqlTimeStampValueSemantics.class);
     }
 
     private static Map<String, DateFormat> formats = _Maps.newHashMap();
