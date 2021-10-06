@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.valuetypes;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -26,7 +25,6 @@ import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.core.ResolvableType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
@@ -37,11 +35,12 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
 import org.apache.isis.core.metamodel.valuesemantics.EnumValueSemanticsAbstract;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Synchronized;
+import lombok.val;
 
 @Service
 @Named("isis.metamodel.ValueSemanticsRegistryDefault")
@@ -60,19 +59,21 @@ implements ValueSemanticsRegistry {
     }
 
     @Override
-    public <T> Stream<ValueSemanticsProvider<T>> streamValueSemantics(final Class<T> valueType) {
-        var resolvableType = ResolvableType
-                .forClassWithGenerics(ValueSemanticsProvider.class, ClassUtils.resolvePrimitiveIfNecessary(valueType));
+    public <T> Stream<ValueSemanticsProvider<T>> streamValueSemantics(final Class<T> _valueType) {
+        val valueType = ClassUtils.resolvePrimitiveIfNecessary(_valueType);
+//        val resolvableType = ResolvableType
+//                .forClassWithGenerics(ValueSemanticsProvider.class, valueType);
         return Stream.<ValueSemanticsProvider<T>>concat(
 
                 _NullSafe.stream(valueSemanticsProviders)
-                .filter(resolvableType::isInstance)
+                //.filter(resolvableType::isInstance) //does not work for eg. TreeNode<?> ... Spring believes there is a wildcard mismatch
+                .filter(vs->vs.getCorrespondingClass().isAssignableFrom(valueType))
                 .map(provider->_Casts.<ValueSemanticsProvider<T>>uncheckedCast(provider)),
 
                 // if we have an Enum, append default Enum semantics to the stream,
                 // as these are not yet managed by Spring
                 valueType.isEnum()
-                    ? Stream.of(getDefaultEnumSemantics(valueType))
+                    ? Stream.of(getDefaultEnumSemantics(_valueType))
                     : Stream.empty());
     }
 
@@ -92,15 +93,15 @@ implements ValueSemanticsRegistry {
 
     // managed by Isis
     @SuppressWarnings("rawtypes")
-    private Map<Class<?>, ValueSemanticsProvider> enumSemantics = new LinkedHashMap<>();
+    private Map<Class<?>, ValueSemanticsProvider> enumSemantics = _Maps.newConcurrentHashMap();
 
     @SuppressWarnings("unchecked")
-    @Synchronized
     public <T> ValueSemanticsProvider<T> getDefaultEnumSemantics(final Class<T> enumType) {
         return enumSemantics.computeIfAbsent(enumType, t->
                 EnumValueSemanticsAbstract
                   .create(
                           translationService,
+                          // in order to simplify matters, we just assume this for enums
                           IntrospectionPolicy.ENCAPSULATION_ENABLED,
                   enumType));
     }

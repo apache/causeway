@@ -206,15 +206,18 @@ class IsisToWicketTreeAdapter {
         private static final long serialVersionUID = 8916044984628849300L;
 
         private final TreePath treePath;
+        private final boolean isTreePathModelOnly;
 
         public TreeModel(final IsisAppCommonContext commonContext, final TreePath treePath) {
-            super(commonContext, (ManagedObject)null);
+            super(commonContext, commonContext.getObjectManager().adapt(new Object()));
             this.treePath = treePath;
+            this.isTreePathModelOnly = true;
         }
 
         public TreeModel(final IsisAppCommonContext commonContext, final ManagedObject adapter, final TreePath treePath) {
             super(commonContext, Objects.requireNonNull(adapter));
             this.treePath = treePath;
+            this.isTreePathModelOnly = false;
         }
 
         public TreePath getTreePath() {
@@ -222,7 +225,7 @@ class IsisToWicketTreeAdapter {
         }
 
         public boolean isTreePathModelOnly() {
-            return getObject()==null;
+            return isTreePathModelOnly;
         }
 
     }
