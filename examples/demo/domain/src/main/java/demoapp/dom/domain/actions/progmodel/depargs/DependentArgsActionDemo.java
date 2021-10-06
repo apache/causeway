@@ -49,7 +49,7 @@ public class DependentArgsActionDemo implements HasAsciiDocDescription {
     @Property
     @PropertyLayout(describedAs = "Default for first dialog paramater in 'Choices', 'Auto Complete' and 'Default'")
     @Getter @Setter
-    private Parity dialogParityDefault = null;
+    private Parity dialogParityDefault = Parity.EVEN;
 
     @Property
     @PropertyLayout(describedAs = "Default for first dialog paramater in 'Hide' and 'Disable'")

@@ -57,7 +57,7 @@ extends ScalarPanelSelectAbstract {
 
     @Override
     protected Component createComponentForCompact() {
-        return new Label(ID_SCALAR_IF_COMPACT, getModel().getObjectAsString());
+        return new Label(ID_SCALAR_IF_COMPACT, "placeholder");
     }
 
     @Override

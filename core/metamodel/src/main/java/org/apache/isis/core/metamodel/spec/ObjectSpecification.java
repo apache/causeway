@@ -529,6 +529,10 @@ extends
 
     default public boolean isPojoCompatible(final Object pojo) {
 
+        if(pojo==null) {
+            return true;
+        }
+
         val expectedType = getCorrespondingClass();
         val actualType = pojo.getClass();
 
@@ -537,8 +541,6 @@ extends
             return true;
         }
 
-        // XXX rather hard to understand ...
-        // for non-scalar param types, param-spec is always the element-type spec (not the spec of any container)
         val elementSpec = getElementSpecification()
                 .orElse(this);
         return _NullSafe.streamAutodetect(pojo)

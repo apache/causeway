@@ -126,12 +126,13 @@ implements HasMetaModel<ObjectAction> {
         val fixedPoint = fixedPointSearch(
                 getEmptyParameterValues(),
                 // vector of packed values - where each is either scalar or non-scalar
-                paramVector->{
-                    //lombok 1.18.20 issue with val - should be fixed in 1.18.22
-                    final var paramNegotiationModel = modelForParamValues(managedAction, paramVector);
-                    return params
-                            .map(param->param.getDefault(paramNegotiationModel));
-                },
+                paramVector->
+                    params
+                    .map(param->param
+                            .getDefault(
+                                    ParameterNegotiationModel
+                                    .of(managedAction, paramVector)))
+                ,
                 maxIterations);
 
         if(fixedPoint.isRight()) {
