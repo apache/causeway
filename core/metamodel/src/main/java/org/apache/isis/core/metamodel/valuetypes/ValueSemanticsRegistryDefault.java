@@ -40,7 +40,6 @@ import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
 import org.apache.isis.core.metamodel.valuesemantics.EnumValueSemanticsAbstract;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Service
 @Named("isis.metamodel.ValueSemanticsRegistryDefault")
@@ -60,7 +59,7 @@ implements ValueSemanticsRegistry {
 
     @Override
     public <T> Stream<ValueSemanticsProvider<T>> streamValueSemantics(final Class<T> _valueType) {
-        val valueType = ClassUtils.resolvePrimitiveIfNecessary(_valueType);
+        final var valueType = ClassUtils.resolvePrimitiveIfNecessary(_valueType);
 //        val resolvableType = ResolvableType
 //                .forClassWithGenerics(ValueSemanticsProvider.class, valueType);
         return Stream.<ValueSemanticsProvider<T>>concat(
