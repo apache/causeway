@@ -213,7 +213,7 @@ implements MetaModelContext {
                 repositoryService,
                 transactionService,
                 transactionState,
-                new ValueSemanticsRegistryDefault(List.of()),
+                new ValueSemanticsRegistryDefault(List.of(), getTranslationService()),
                 new ObjectMementoService_forTesting(),
                 new BigDecimalValueSemantics(),
                 new URLValueSemantics(),

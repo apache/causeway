@@ -45,7 +45,7 @@ import lombok.val;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 //@Log4j2
-final class IsisBeanTypeClassifierImpl
+final class IsisBeanTypeClassifierDefault
 implements IsisBeanTypeClassifier {
 
     private final Can<String> activeProfiles;
@@ -57,7 +57,8 @@ implements IsisBeanTypeClassifier {
 
         // handle arbitrary types ...
 
-        if(type.isPrimitive()) {
+        if(type.isPrimitive()
+                || type.isEnum()) {
             return BeanClassification.delegated(BeanSort.VALUE);
         }
 

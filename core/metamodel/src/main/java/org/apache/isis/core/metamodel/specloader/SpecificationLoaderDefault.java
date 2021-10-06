@@ -187,7 +187,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         val instance = new SpecificationLoaderDefault(
                 programmingModel, isisConfiguration, isisSystemEnvironment,
                 serviceRegistry, isisBeanTypeClassifier, isisBeanTypeRegistry,
-                ()->new ValueSemanticsRegistryDefault(List.of()),
+                ()->new ValueSemanticsRegistryDefault(List.of(), null),
                 new ClassSubstitutorRegistry(List.of(
                         //new ClassSubstitutorForDomainObjects(),
                         new ClassSubstitutorForCollections(),

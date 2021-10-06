@@ -51,11 +51,11 @@ public interface IsisBeanTypeClassifier {
      * in support of JUnit testing
      */
     static IsisBeanTypeClassifier createInstance() {
-        return new IsisBeanTypeClassifierImpl(Can.empty());
+        return new IsisBeanTypeClassifierDefault(Can.empty());
     }
 
     static IsisBeanTypeClassifier createInstance(final @NonNull ApplicationContext applicationContext) {
-        return new IsisBeanTypeClassifierImpl(
+        return new IsisBeanTypeClassifierDefault(
                 Can.ofArray(applicationContext.getEnvironment().getActiveProfiles()));
     }
 

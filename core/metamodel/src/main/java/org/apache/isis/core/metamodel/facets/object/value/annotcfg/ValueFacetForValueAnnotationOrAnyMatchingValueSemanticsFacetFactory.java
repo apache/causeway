@@ -18,18 +18,16 @@
  */
 package org.apache.isis.core.metamodel.facets.object.value.annotcfg;
 
-import java.util.stream.Stream;
-
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider;
@@ -45,7 +43,6 @@ import org.apache.isis.core.metamodel.facets.object.value.MaxLengthFacetUsingPar
 import org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetUsingParser;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProvider;
 import org.apache.isis.core.metamodel.facets.value.annotation.LogicalTypeFacetForValueAnnotation;
-import org.apache.isis.core.metamodel.valuesemantics.EnumValueSemanticsAbstract;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -95,17 +92,8 @@ extends FacetFactoryAbstract {
                 LogicalTypeFacetForValueAnnotation
                 .create(valueIfAny, cls, facetHolder));
 
-        final Can<ValueSemanticsProvider> valueSemantics =
-        Stream.<ValueSemanticsProvider>concat(
-                (Stream<? extends ValueSemanticsProvider>) getValueSemanticsRegistry().streamValueSemantics(cls),
-                cls.isEnum()
-                //FIXME[ISIS-2871] handling enums should be the responsibility of ValueSemanticsRegistry
-                ? Stream.of(EnumValueSemanticsAbstract
-                                .create(getTranslationService(),
-                                        processClassContext.getIntrospectionPolicy(),
-                                        cls))
-                : Stream.empty())
-        .collect(Can.toCan());
+        final Can<ValueSemanticsProvider> valueSemantics = _Casts.uncheckedCast(
+                getValueSemanticsRegistry().selectValueSemantics(cls));
 
         if(!valueSemantics.isEmpty()) {
             addAllFacetsForValueSemantics(valueSemantics, facetHolder);
@@ -133,10 +121,9 @@ extends FacetFactoryAbstract {
 
         val valueFacet = new ValueFacetUsingSemanticsProvider(semanticsProviders, holder);
 
-        FacetUtil.addFacet(valueFacet);
-
-        holder.addFacet(new ImmutableFacetViaValueSemantics(holder));
-        holder.addFacet(TitleFacetUsingValueFacet.create(valueFacet, holder));
+        addFacet(valueFacet);
+        addFacet(new ImmutableFacetViaValueSemantics(holder));
+        addFacet(TitleFacetUsingValueFacet.create(valueFacet, holder));
 
         semanticsProviders
         .forEach(semanticsProvider->{
@@ -146,7 +133,7 @@ extends FacetFactoryAbstract {
             if (encoderDecoder != null) {
                 //getServiceInjector().injectServicesInto(encoderDecoder);
                 //FIXME convert to using value-facet
-                holder.addFacet(new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder));
+                addFacet(new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder));
             }
 
             // install the ParseableFacet and other facets if we've been given a
@@ -160,7 +147,7 @@ extends FacetFactoryAbstract {
                 final int maxLength = parser.maxLength();
                 if(maxLength >=0) {
                    //FIXME convert to using value-facet
-                    holder.addFacet(new MaxLengthFacetUsingParser(parser, holder));
+                    addFacet(new MaxLengthFacetUsingParser(parser, holder));
                 }
             }
 
@@ -169,7 +156,7 @@ extends FacetFactoryAbstract {
             if (defaultsProvider != null) {
                 //holder.getServiceInjector().injectServicesInto(defaultsProvider);
                 //FIXME convert to using value-facet
-                holder.addFacet(new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder));
+                addFacet(new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder));
             }
 
         });
