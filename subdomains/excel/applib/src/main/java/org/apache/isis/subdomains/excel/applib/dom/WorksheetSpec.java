@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.subdomains.excel.applib.dom.util.Mode;
 
@@ -41,8 +42,10 @@ public class WorksheetSpec {
     private static final String ROW_HANDLER_SUFFIX = "RowHandler";
 
     public interface RowFactory<Q> {
+        @Programmatic
         Q create();
 
+        @Programmatic
         Class<?> getCls();
 
         static class Default<T> implements RowFactory<T> {
@@ -112,12 +115,15 @@ public class WorksheetSpec {
         return sheetName.substring(0, sheetName.lastIndexOf(ROW_HANDLER_SUFFIX));
     }
 
+    @Programmatic
     public <T> RowFactory<T> getFactory() { return (RowFactory<T>) factory; }
 
+    @Programmatic
     public String getSheetName() {
         return sheetName;
     }
 
+    @Programmatic
     public Mode getMode() {
         return mode;
     }
@@ -138,10 +144,12 @@ public class WorksheetSpec {
         /**
          * @return non-null to indicate how the sheet should be handled, otherwise <code>null</code> to ignore
          */
+        @Programmatic
         WorksheetSpec fromSheet(String sheetName);
     }
 
     public interface Sequencer {
+        @Programmatic
         List<WorksheetSpec> sequence(List<WorksheetSpec> specs);
     }
 

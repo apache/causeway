@@ -18,6 +18,8 @@
  */
 package org.apache.isis.subdomains.excel.applib.dom;
 
+import org.apache.isis.applib.annotation.Programmatic;
+
 import java.util.List;
 
 /**
@@ -35,10 +37,12 @@ public class WorksheetContent {
         this.spec = spec;
     }
 
+    @Programmatic
     public List<?> getDomainObjects() {
         return domainObjects;
     }
 
+    @Programmatic
     public WorksheetSpec getSpec() {
         return spec;
     }
