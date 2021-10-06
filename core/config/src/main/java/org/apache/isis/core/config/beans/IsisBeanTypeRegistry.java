@@ -23,6 +23,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
+
 /**
  * Holds the set of domain services, persistent entities and fixture scripts etc., but not values.
  * @since 2.0
@@ -36,7 +38,7 @@ public interface IsisBeanTypeRegistry {
     Set<Class<?>> getEntityTypes();
     Set<Class<?>> getMixinTypes();
     Set<Class<?>> getViewModelTypes();
-    /** discovered per {@code @Value} annotation (vs. registered using ValueTypeRegistry)*/
+    /** discovered per {@code @Value} annotation (vs. registered using a {@link ValueSemanticsProvider})*/
     Set<Class<?>> getDiscoveredValueTypes();
 
     // -- LOOKUPS
@@ -48,7 +50,7 @@ public interface IsisBeanTypeRegistry {
      *
      * @param type
      */
-    default Optional<String> lookupManagedBeanNameForType(Class<?> type) {
+    default Optional<String> lookupManagedBeanNameForType(final Class<?> type) {
         return Optional.ofNullable(getManagedBeansContributing().get(type))
                 .map(IsisBeanMetaData::getBeanName);
     }

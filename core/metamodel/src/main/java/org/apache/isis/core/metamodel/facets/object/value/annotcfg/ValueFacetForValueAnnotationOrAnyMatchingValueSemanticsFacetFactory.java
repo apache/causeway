@@ -18,10 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.object.value.annotcfg;
 
-import javax.inject.Inject;
-
-import org.springframework.core.ResolvableType;
-import org.springframework.util.ClassUtils;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
@@ -29,7 +26,7 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -50,6 +47,7 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSem
 import org.apache.isis.core.metamodel.facets.value.annotation.LogicalTypeFacetForValueAnnotation;
 import org.apache.isis.core.metamodel.valuesemantics.EnumValueSemanticsAbstract;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -81,9 +79,9 @@ import lombok.extern.log4j.Log4j2;
 public class ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory
 extends FacetFactoryAbstract {
 
-    @Inject
     public ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.OBJECTS_ONLY);
+        getServiceInjector().injectServicesInto(this);
     }
 
     @Override
@@ -97,13 +95,17 @@ extends FacetFactoryAbstract {
                 LogicalTypeFacetForValueAnnotation
                 .create(valueIfAny, cls, facetHolder));
 
-        final Can<ValueSemanticsProvider> valueSemantics = cls.isEnum()
-                ? lookupValueSemantics(cls)
-                        .add(EnumValueSemanticsAbstract
+        final Can<ValueSemanticsProvider> valueSemantics =
+        Stream.<ValueSemanticsProvider>concat(
+                (Stream<? extends ValueSemanticsProvider>) getValueSemanticsRegistry().streamValueSemantics(cls),
+                cls.isEnum()
+                //FIXME[ISIS-2871] handling enums should be the responsibility of ValueSemanticsRegistry
+                ? Stream.of(EnumValueSemanticsAbstract
                                 .create(getTranslationService(),
                                         processClassContext.getIntrospectionPolicy(),
                                         cls))
-                : lookupValueSemantics(cls);
+                : Stream.empty())
+        .collect(Can.toCan());
 
         if(!valueSemantics.isEmpty()) {
             addAllFacetsForValueSemantics(valueSemantics, facetHolder);
@@ -174,20 +176,10 @@ extends FacetFactoryAbstract {
 
     }
 
-    @Getter(lazy = true)
-    private final Can<ValueSemanticsProvider<?>> allValueSemanticsProviders = getServiceRegistry()
-            .select(ValueSemanticsProvider.class)
-            .map(_Casts::uncheckedCast);
+    // -- DEPENDENCIES
 
-    private Can<ValueSemanticsProvider> lookupValueSemantics(final Class<?> valueType) {
-        var resolvableType = ResolvableType
-                .forClassWithGenerics(ValueSemanticsProvider.class, ClassUtils.resolvePrimitiveIfNecessary(valueType));
-        return getAllValueSemanticsProviders()
-                .stream()
-                .filter(resolvableType::isInstance)
-                //.map(provider->_Casts.<ValueSemanticsProvider<T>>uncheckedCast(provider))
-                .collect(Can.toCan());
-    }
-
+    @Getter(lazy = true, value = AccessLevel.PRIVATE)
+    private final ValueSemanticsRegistry valueSemanticsRegistry =
+        getServiceRegistry().lookupServiceElseFail(ValueSemanticsRegistry.class);
 
 }

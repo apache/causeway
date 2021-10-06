@@ -87,6 +87,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.URLValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics;
+import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsRegistryDefault;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
@@ -212,6 +213,7 @@ implements MetaModelContext {
                 repositoryService,
                 transactionService,
                 transactionState,
+                new ValueSemanticsRegistryDefault(List.of()),
                 new ObjectMementoService_forTesting(),
                 new BigDecimalValueSemantics(),
                 new URLValueSemantics(),

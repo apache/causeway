@@ -25,7 +25,6 @@ import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.core.config.IsisModuleCoreConfig;
 import org.apache.isis.core.metamodel.context.MetaModelContexts;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeMalformedValidator;
-import org.apache.isis.core.metamodel.facets.schema.IsisSchemaValueTypeProvider;
 import org.apache.isis.core.metamodel.inspect.IsisModuleCoreMetamodelInspection;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
@@ -85,10 +84,7 @@ import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.joda.JodaDa
 import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.joda.JodaLocalDateTimeValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.joda.JodaLocalDateValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.joda.JodaLocalTimeValueSemantics;
-import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderDefault;
-import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderForBuiltin;
-import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderForCollections;
-import org.apache.isis.core.metamodel.valuetypes.ValueTypeRegistry;
+import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsRegistryDefault;
 import org.apache.isis.core.security.IsisModuleCoreSecurity;
 
 @Configuration
@@ -108,10 +104,7 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         ClassSubstitutorForCollections.class,
         ClassSubstitutorForDomainObjects.class,
         ClassSubstitutorRegistry.class,
-        ValueTypeProviderDefault.class,
-        ValueTypeProviderForCollections.class,
-        ValueTypeProviderForBuiltin.class,
-        ValueTypeRegistry.class,
+        ValueSemanticsRegistryDefault.class,
 
         // Value Semantics (built-in defaults)
         BooleanValueSemantics.class,
@@ -175,7 +168,6 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         // @Repository's
         ApplicationFeatureRepositoryDefault.class,
 
-        IsisSchemaValueTypeProvider.class,
         LogicalTypeMalformedValidator.class,
 
 })

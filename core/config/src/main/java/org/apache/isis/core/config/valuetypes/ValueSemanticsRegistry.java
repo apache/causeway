@@ -16,13 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.valuetypes;
+package org.apache.isis.core.config.valuetypes;
 
-import java.util.Collection;
+import java.util.stream.Stream;
 
-@Deprecated // Superseded by ValueSemanticsProvider
-public interface ValueTypeProvider {
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
+import org.apache.isis.commons.collections.Can;
 
-    Collection<ValueTypeDefinition> definitions();
+public interface ValueSemanticsRegistry {
+
+    boolean hasValueSemantics(Class<?> valueType);
+
+    <T> Stream<ValueSemanticsProvider<T>> streamValueSemantics(Class<T> valueType);
+
+    <T> Can<ValueSemanticsProvider<T>> selectValueSemantics(Class<T> valueType);
+
+    Stream<Class<?>> streamClassesWithValueSemantics();
 
 }

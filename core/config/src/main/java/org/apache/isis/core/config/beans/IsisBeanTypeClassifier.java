@@ -18,11 +18,6 @@
  */
 package org.apache.isis.core.config.beans;
 
-import java.util.Set;
-import java.util.function.Predicate;
-
-import org.springframework.lang.Nullable;
-
 import org.springframework.context.ApplicationContext;
 
 import org.apache.isis.applib.services.metamodel.BeanSort;
@@ -48,7 +43,7 @@ public interface IsisBeanTypeClassifier {
      * but later used by the {@code SpecificationLoader} to also
      * classify non-concrete types (interfaces and abstract classes).
      */
-    BeanClassification classify(Class<?> type, @Nullable BeanClassificationContext context);
+    BeanClassification classify(Class<?> type);
 
     // -- FACTORY
 
@@ -70,17 +65,6 @@ public interface IsisBeanTypeClassifier {
         return Can.ofCollection(_Plugin.loadAll(IsisBeanTypeClassifier.class));
     }
 
-    // -- BEAN CLASSIFICATION CONTEXT
-
-    @Value
-    public static class BeanClassificationContext {
-        private final @NonNull Predicate<Class<?>> isRegisteredValueType;
-    }
-
-    static BeanClassificationContext newContext(final Set<Class<?>> registeredValueTypes) {
-        return new BeanClassificationContext(registeredValueTypes::contains);
-    }
-
     // -- BEAN CLASSIFICATION RESULT
 
     @Value(staticConstructor = "of")
@@ -92,19 +76,19 @@ public interface IsisBeanTypeClassifier {
 
         // -- FACTORIES
 
-        public static BeanClassification delegated(BeanSort beanSort, String explicitLogicalTypeName) {
+        public static BeanClassification delegated(final BeanSort beanSort, final String explicitLogicalTypeName) {
             return of(beanSort, explicitLogicalTypeName, true);
         }
 
-        public static BeanClassification delegated(BeanSort beanSort) {
+        public static BeanClassification delegated(final BeanSort beanSort) {
             return delegated(beanSort, null);
         }
 
-        public static BeanClassification selfManaged(BeanSort beanSort, String explicitLogicalTypeName) {
+        public static BeanClassification selfManaged(final BeanSort beanSort, final String explicitLogicalTypeName) {
             return of(beanSort, explicitLogicalTypeName, false);
         }
 
-        public static BeanClassification selfManaged(BeanSort beanSort) {
+        public static BeanClassification selfManaged(final BeanSort beanSort) {
             return selfManaged(beanSort, null);
         }
 

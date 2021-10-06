@@ -27,7 +27,6 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import org.springframework.context.annotation.Profile;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.DomainObject;
@@ -54,8 +53,7 @@ implements IsisBeanTypeClassifier {
 
     @Override
     public BeanClassification classify(
-            final @NonNull Class<?> type,
-            final @Nullable BeanClassificationContext beanClassificationContext) {
+            final @NonNull Class<?> type) {
 
         // handle arbitrary types ...
 
@@ -99,11 +97,6 @@ implements IsisBeanTypeClassifier {
 
         // handle value types ...
 
-        if(beanClassificationContext!=null
-                && beanClassificationContext.getIsRegisteredValueType().test(type)) {
-            return BeanClassification.delegated(BeanSort.VALUE);
-        }
-
         val aValue = findNearestAnnotation(type, org.apache.isis.applib.annotation.Value.class)
                 .orElse(null);
         if(aValue!=null) {
@@ -121,7 +114,7 @@ implements IsisBeanTypeClassifier {
 
         // allow ServiceLoader plugins to have a say, eg. when classifying entity types
         for(val classifier : classifierPlugins) {
-            val classification = classifier.classify(type, beanClassificationContext);
+            val classification = classifier.classify(type);
             if(classification!=null) {
                 return classification;
             }
