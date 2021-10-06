@@ -146,10 +146,8 @@ implements ComponentFactoryRegistry {
     public Stream<ComponentFactory> streamComponentFactories(
             final ComponentType componentType,
             final @Nullable IModel<?> model) {
-        return Stream.concat(
-                componentFactoriesByType.streamElements(componentType)
-                .filter(componentFactory->componentFactory.appliesTo(componentType, model).applies()),
-                componentFactoriesByType.streamElements(ComponentType.UNKNOWN))
+        return componentFactoriesByType.streamElements(componentType)
+                .filter(componentFactory->componentFactory.appliesTo(componentType, model).applies())
                 .peek(componentFactory->logComponentResolving(model, componentType, componentFactory));
     }
 

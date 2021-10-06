@@ -41,13 +41,17 @@ public interface ComponentFactoryRegistry {
             ComponentType componentType, @Nullable IModel<?> model);
 
     /**
-     * Finds the "best" {@link ComponentFactory} for the viewId.
+     * Finds the "best" {@link ComponentFactory} for given componentType.
+     * <p>
+     * Falls back to a {@link ComponentType#UNKNOWN} lookup.
      */
     default ComponentFactory findComponentFactory(
             final ComponentType componentType, final @Nullable IModel<?> model) {
         return streamComponentFactories(componentType, model)
             .findFirst()
-            .orElse(null);
+            .orElseGet(()->streamComponentFactories(ComponentType.UNKNOWN, model)
+                    .findFirst()
+                    .orElse(null));
     }
 
     default ComponentFactory findComponentFactoryElseFail(

@@ -20,17 +20,17 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import lombok.NonNull;
 
-public class EntityCollectionModelDummy
+public class EntityCollectionModelHidden
 extends EntityCollectionModelAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public static EntityCollectionModelDummy forCollectionModel(
+    public static EntityCollectionModelHidden forCollectionModel(
             final @NonNull EntityCollectionModelAbstract collectionModel) {
-        return new EntityCollectionModelDummy(collectionModel);
+        return new EntityCollectionModelHidden(collectionModel);
     }
 
-    protected EntityCollectionModelDummy(
+    protected EntityCollectionModelHidden(
             final @NonNull EntityCollectionModelAbstract collectionModel) {
         super(collectionModel.delegate(), Variant.STANDALONE);
     }

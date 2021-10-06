@@ -24,10 +24,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -84,7 +83,8 @@ public class CollectionSelectorHelper implements Serializable {
 
         final List<ComponentFactory> componentFactories = componentFactoryRegistry
         .streamComponentFactories(ComponentType.COLLECTION_CONTENTS, collectionModel)
-        .filter(componentFactory -> componentFactory.getClass() != CollectionContentsMultipleViewsPanelFactory.class)
+        .filter(componentFactory ->
+            componentFactory.getClass() != CollectionContentsMultipleViewsPanelFactory.class)
         .filter(componentFactory -> {
             if(componentFactory instanceof CollectionContentsAsAjaxTablePanelFactory) {
                 ajaxFactoriesToEnd.add(componentFactory);
