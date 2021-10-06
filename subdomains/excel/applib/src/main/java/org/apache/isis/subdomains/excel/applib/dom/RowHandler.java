@@ -18,9 +18,12 @@
  */
 package org.apache.isis.subdomains.excel.applib.dom;
 
+import org.apache.isis.applib.annotation.Programmatic;
+
 /**
  * @since 2.0 {@index}
  */
 public interface RowHandler<T extends RowHandler<T>> {
+    @Programmatic
     void handleRow(T previousRow);
 }
