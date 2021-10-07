@@ -6,5 +6,6 @@
 
 include::docs:demo:partial$module-nav.adoc[]
 
-include::tutorials:petclinic:partial$module-nav.adoc[Petclinic (tutorial)]
+include::tutorials:ROOT:partial$module-nav.adoc[]
+
 
