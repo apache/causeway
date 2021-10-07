@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="SimpleApp (JPA)" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="domainapp.webapp.SimpleApp" />
+    <option name="MAIN_CLASS_NAME" value="domainapp.webapp.PetClinicApp" />
     <module name="simpleapp-jpa-webapp" />
     <shortenClasspath name="ARGS_FILE" />
     <extension name="coverage">

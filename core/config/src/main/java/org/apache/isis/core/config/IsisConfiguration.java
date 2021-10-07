@@ -2046,7 +2046,7 @@ public class IsisConfiguration {
              *
              * <p>
              * This behaviour is disabled by default; the viewer will use an inline prompt in these cases, making for a smoother
-             * user experience. If enabled then this reinstates the pre-1.15.0 behaviour of using a dialog prompt in all cases.
+             * user experience.
              * </p>
              */
             private PromptStyle promptStyle = PromptStyle.INLINE;

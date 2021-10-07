@@ -1,0 +1,707 @@
+= Adding further business logic - Worked Examples
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+Let's remind ourselves of the original use cases we identified; some of these have been implemented already (admittedly, not all with tests around them):
+
+* create an `PetOwner` : yes, implemented
+
+* add and remove ``Pet``s for said `PetOwner` : yes, implemented.
+
+* book a `Pet` in for a `Visit`: yes, implemented.
+
+* enter an `outcome` and `cost` of a `Visit`: not yet
+
+* allow an `PetOwner` to pay for a `Visit`: not yet
+
+* find ``Visit``s not yet paid and overdue (more than 28 days old): not yet
+
+* delete an `PetOwner` and its ``Pet``s and ``Visit``s, so long as there are no unpaid ``Visit``s: partly.
+We currently just delete everything.
+
+In this section we'll implement the missing functionality, along with unit or integration tests as necessary.
+
+
+== Enter an outcome
+
+An outcome for a `Visit` consists of a diagnosis, and also the cost to be paid by the ``Pet``'s `PetOwner`.
+
+image::Visit-enterOutcome.png[width="800px",link="_images/Visit-enterOutcome.png"]
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/330-enter-an-outcome
+mvn clean package jetty:run
+----
+
+
+=== Exercise
+
+* add a new integration test, `Visit_enterOutcome_IntegTest`,
++
+[source,java]
+----
+public class Visit_enterOutcome_IntegTest extends PetClinicModuleIntegTestAbstract {
+
+    Visit visit;
+
+    @Before
+    public void setup() {
+        // given
+        Owner owner = runBuilderScript(Owner_enum.JOHN_SMITH);
+        Pet pet = owner.getPets().first();
+        visit = wrap(mixin(Pet_visits.class, pet)).coll().iterator().next();
+    }
+
+    @Test
+    public void happy_case() {
+
+        // when
+        String diagnosis = someRandomDiagnosis();
+        BigDecimal cost = someRandomCost();
+
+        wrap(visit).enterOutcome(diagnosis, cost);
+
+        // then
+        assertThat(visit.getDiagnosis()).isEqualTo(diagnosis);
+        assertThat(visit.getCost()).isEqualTo(cost);
+    }
+
+    private BigDecimal someRandomCost() {
+        return new BigDecimal(20.00 + fakeDataService.doubles().upTo(30.00d));
+    }
+
+    private String someRandomDiagnosis() {
+        return fakeDataService.lorem().paragraph(3);
+    }
+
+    @Inject
+    FakeDataService fakeDataService;
+}
+----
+
+* in `Visit`, add in the two new properties and action.
++
+[source,java]
+----
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+public Visit enterOutcome(
+        @Parameter(maxLength = 4000)
+        @ParameterLayout(multiLine = 5)
+        final String diagnosis,
+        final BigDecimal cost) {
+    this.diagnosis = diagnosis;
+    this.cost = cost;
+    return this;
+}
+
+@javax.jdo.annotations.Column(allowsNull = "true", length = 4000)
+@Property(editing = Editing.DISABLED, editingDisabledReason = "Use 'enter outcome' action")
+@PropertyLayout(multiLine = 5)
+@Getter @Setter
+private String diagnosis;
+
+@javax.jdo.annotations.Column(allowsNull = "true", length = 6, scale = 2)
+@Property(editing = Editing.DISABLED, editingDisabledReason = "Use 'enter outcome' action")
+@Getter @Setter
+private BigDecimal cost;
+
+----
+
+* update `Visit.layout.xml` for the two new properties and action.
+
+* add in some further integration tests to ensure that the properties cannot be edited directly:
++
+[source,java]
+----
+@Test
+public void cannot_edit_outcome_directly() {
+
+    // expecting
+    expectedExceptions.expect(DisabledException.class);
+    expectedExceptions.expectMessage("Use 'enter outcome' action");
+
+    // when
+    String diagnosis = someRandomDiagnosis();
+    wrap(visit).setDiagnosis(diagnosis);
+}
+
+@Test
+public void cannot_edit_cost_directly() {
+
+    // expecting
+    expectedExceptions.expect(DisabledException.class);
+    expectedExceptions.expectMessage("Use 'enter outcome' action");
+
+    // when
+    BigDecimal cost = someRandomCost();
+
+    wrap(visit).setCost(cost);
+}
+----
+
+
+== Pay for a visit
+
+We'll support this use case through a new action "paid", on the `Visit` domain entity.
+
+To support the testing (and with half an eye to a future use case) we'll also implement a "findNotPaid" query on the `Visits` repository domain service.
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/340-pay-for-a-visit
+mvn clean package jetty:run
+----
+
+
+=== Exercise
+
+Let's first work on the happy case:
+
+* Update `Visit` with a new `paid()` action and `paidOn` property.
+Also inject `ClockService`:
++
+[source,java]
+----
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+public Visit paid() {
+    paidOn = clockService.now();
+    return this;
+}
+
+@javax.jdo.annotations.Column(allowsNull = "true")
+@Property(editing = Editing.DISABLED, editingDisabledReason = "Use 'paid' action")
+@Getter @Setter
+private LocalDate paidOn;
+
+...
+
+@Inject
+ClockService clockService;
+----
+
+* Update the `Visits` domain service repository to find ``Visit``s that haven't been paid:
++
+[source,java]
+----
+@Programmatic
+public java.util.List<Visit> findNotPaid() {
+    TypesafeQuery<Visit> q = isisJdoSupport.newTypesafeQuery(Visit.class);
+    final QVisit cand = QVisit.candidate();
+    q = q.filter(
+            cand.paidOn.eq(q.parameter("paidOn", LocalDateTime.class)
+        )
+    );
+    return q.setParameter("paidOn", null)
+            .executeList();
+}
+----
+
+* Extend `PetOwnerBuilderScript` so that all but the last `Visit` for each ``PetOwner``'s ``Pet``s has been paid.
++
+Add some further supporting methods:
++
+[source,java]
+----
+private String someDiagnosis() {
+    return fakeDataService.lorem().paragraph(fakeDataService.ints().between(1, 3));
+}
+
+private BigDecimal someCost() {
+    return new BigDecimal(20.00 + fakeDataService.doubles().upTo(30.00d));
+}
+----
++
+In the `execute(...)`, update the `for` loop so that all ``Visit``s have an outcome and all but the last (for each ``PetOwner``) has been paid:
++
+[source,java]
+----
+for (int i = 0; i < petDatum.numberOfVisits; i++) {
+    ...
+    LocalDateTime someTimeInPast = ...
+    Visit visit = ...
+    wrap(visit).enterOutcome(someDiagnosis(), someCost());
+    if(i != petDatum.numberOfVisits - 1) {
+        setTimeTo(ec, someTimeInPast.plusDays(fakeDataService.ints().between(10,30)));
+        wrap(visit).paid();
+    }
+}
+----
+
+
+== Prevent payment for a visit twice
+
+We've already seen that it's possible to validate arguments to actions; for example that a `Visit` can only be booked in the future.
+But if a `Visit` has already been paid for, then we don't want the user to be able to even attempt to invoke the action.
+
+The framework provides three different types of pre-condition checks:
+
+* "See it?" - should the action/property be visible at all, or has it been hidden?
+
+* "Use it" - if visible, then can the action/property be used or has it been disabled (greyed out)
+
+* "Do it" - if the action/property is ok to be used (action invoked/property edited) then are the proposed action arguments or new property value valid, or are they invalid?
+
+Or in other words, "see it, use it, do it".
+
+As with validation, disablement can be defined either declaratively (annotations) or imperatively (supporting methods).
+Let's see how an imperative supporting method can be used to implement this particular requirement (that a visit can't be paid for twice).
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/350-prevent-payment-for-a-visit-twice
+mvn clean package jetty:run
+----
+
+
+=== Exercise
+
+* update `Visit_pay_IntegTest` to ensure cannot enter into the `paidOn` property directly:
++
+[source,java]
+----
+@Test
+public void cannot_edit_paidOn_directly() {
+
+    // expecting
+    expectedExceptions.expect(DisabledException.class);
+    expectedExceptions.expectMessage("Use 'paid on' action");
+
+    // when
+    wrap(visit).setPaidOn(clockService.now());
+}
+----
+
+* now, add in the test that asserts that a `Visit` cannot be paid more than once:
++
+[source,java]
+----
+@Test
+public void cannot_pay_more_than_once() {
+
+    // given
+    wrap(visit).paid();
+    assertThat(visits.findNotPaid()).asList().doesNotContain(visit);
+
+    // expecting
+    expectedExceptions.expect(DisabledException.class);
+    expectedExceptions.expectMessage("Already paid");
+
+    // when
+    wrap(visit).paid();
+}
+----
+
+* and finally update `Visit`.
+This is done using a supporting method.
++
+[source,java]
+----
+public String disablePaid() {
+    return getPaidOn() != null ? "Already paid": null;
+}
+----
+
+
+== Find ``Visit``s not yet paid and overdue
+
+In the previous scenario we implemented `Visits#findNotPaid()`.
+Since this is pretty important information, let's surface that to the end-user by adding it to the home page dashboard.
+
+We could also go a little further by allowing the user to use the dashboard to update visits that have been paid.
+This is a good example of how a view model can support specific business processes, in this case saving the end-user from having to navigate down to each and every one of the ``Visit``s.
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/360-find-visits-not-yet-paid-and-overdue
+mvn clean package jetty:run
+----
+
+image::Dashboard-overdue.png[width="800px",link="_images/Dashboard-overdue.png"]
+
+=== Exercise
+
+
+* update `Dashboard`:
++
+[source,java]
+----
+@CollectionLayout(defaultView = "table")
+public List<Visit> getOverdue() {
+    List<Visit> notPaid = visits.findNotPaid();
+    LocalDateTime thirtyDaysAgo = clockService.nowAsLocalDateTime().minusDays(30);
+    return notPaid.stream()
+            .filter(x -> x.getVisitAt().isBefore(thirtyDaysAgo))        // <1>
+            .collect(Collectors.toList());
+}
+
+@Action(semantics = SemanticsOf.IDEMPOTENT, associateWith = "overdue")  // <2>
+public Dashboard paid(List<Visit> visits) {
+    for (Visit visit : visits) {
+        if(visit.getPaidOn() == null) {
+            visit.paid();
+        }
+    }
+    return this;
+}
+
+@javax.inject.Inject
+Visits visits;
+
+@javax.inject.Inject
+ClockService clockService;
+----
+<1> An alternative (better?) design would have been to add a new query method in `Visits` to find those overdue, avoiding the client-side filtering that we see above.
+<2> The "associateWith" annotation results in checkboxes alongside the "overdue" collection, with the collection providing the set of values for the parameter.
+
+
+* update `Dashboard.layout.xml` also
+
+* write a new `Dashboard_paid_IntegTest` integration test:
++
+[source,java]
+----
+public class Dashboard_paid_IntegTest extends PetClinicModuleIntegTestAbstract {
+
+    Dashboard dashboard;
+
+    @Before
+    public void setup() {
+        // given
+        runFixtureScript(new PersonaEnumPersistAll<>(Owner_enum.class));
+        dashboard = homePageProvider.dashboard();
+    }
+
+    @Test
+    public void happy_case() {
+
+        // given
+        List<Visit> overdue = dashboard.getOverdue();
+        assertThat(overdue).isNotEmpty();
+
+        // when
+        wrap(dashboard).paid(overdue);
+
+        // then
+        List<Visit> overdueAfter = dashboard.getOverdue();
+        assertThat(overdueAfter).isEmpty();
+
+        for (Visit visit : overdue) {
+            assertThat(visit.getDiagnosis()).isNotNull();
+            assertThat(visit.getPaidOn()).isNotNull();
+        }
+    }
+
+    @Inject
+    HomePageProvider homePageProvider;
+}
+----
+
+* Running the integration test at this point will produce a null pointer exception.
+That's because the framework has had no opportunity to inject any domain services into the `Dashboard`.
++
+Under normal runtime cases this doesn't matter because the only caller of the method is the framework itself, and when the domain object is rendered the framework will automatically ensure that any domain sevices are injected.
++
+In an integration test this doesn't occur, and so we need to manually inject the services.
+It makes most sense to do this in `HomePageProvider`; we use the framework-provided `ServiceRegistry2` domain service:
++
+[source,java]
+----
+@HomePage
+public Dashboard dashboard() {
+    return serviceRegistry2.injectServicesInto(new Dashboard());
+}
+@Inject
+ServiceRegistry2 serviceRegistry2;
+----
+
+
+
+== Digression: Hiding Columns in Tables
+
+We could improve the dashboard a little.
+After all, in the "overdue" collection there's no point in showing the "paidOn"; the value will always be null.
+Also, the "reason" column is also somewhat superfluous (as, arguably, is the "diagnosis" column):
+
+image::Dashboard-overdue-ui-hints.png[width="800px",link="_images/Dashboard-overdue-ui-hints.png"]
+
+The framework offers two different ways to address this, so we'll show both.
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/370-digression-hiding-columns-in-tables
+mvn clean package jetty:run
+----
+
+
+=== Exercise
+
+* The first technique is within the Java code; one could think of this as an implication within the "application layer".
++
+We use a domain service that implements `TableColumnOrderService` as an SPI to "advise" the framework on how to render the collection.
+Traditionally such classes are implemented as a nested static class, in this case of `Dashboard`:
++
+[source,java]
+----
+@DomainService(nature = NatureOfService.DOMAIN)
+public static class RemovePaidOnFromOverdue extends TableColumnOrderService.Default {
+    @Override
+    public List<String> orderParented(
+            final Object parent,
+            final String collectionId,
+            final Class<?> collectionType,
+            final List<String> propertyIds) {
+        if (parent instanceof Dashboard && "overdue".equalsIgnoreCase(collectionId)) {
+            propertyIds.remove("paidOn");
+        }
+        return propertyIds;
+    }
+}
+----
++
+The above code removes the "paidOn" column.
+
+* The second technique is to exploit the fact that the HTML generated by the framework is liberally annotated with domain class identifiers.
+The column can therefore be removed by supplying the appropriate CSS.
+We could think of this as an implementation within the presentation layer.
++
+In the `src/main/webapp/css/application.css` file, add:
++
+[source,css]
+----
+.domainapp-modules-impl-dashboard-Dashboard .entityCollection .overdue .Visit-reason {
+    display: none;
+}
+----
+
+
+
+== Another Digression: Icons and CSS
+
+In the same way that titles can be specified imperatively, so too can icons, using the `iconName()` method.
+One use case is for a domain object that has several states: the `iconName()` defines a suffix which is used to lookup different icons (eg "ToDoItem-notDone.png" and "ToDoItem-done.png").
+
+Similarly, it's possible to specify CSS hints imperatively using the `cssClass()`.
+This returns a simple string that is added as a CSS class wherever the object is rendered in the UI.
+
+In this exercise we'll use a different icon for the various species of `Pet`:
+
+image::Pet-icons.png[width="800px",link="_images/Pet-icons.png"]
+
+Let's also use a strike-through text for all ``Visit``s that are paid when rendered within a collection:
+
+image::Visits-paid-strikethrough.png[width="800px",link="_images/Visits-paid-strikethrough.png"]
+
+
+
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/380-another-digression-icons-and-css
+mvn clean package jetty:run
+----
+
+
+
+=== Exercise
+
+For the icons:
+
+* add new icons for each of the pet species: `Pet-dog.png`, `Pet-cat.png`, `Pet-hamster.dog` and `Pet-budgerigar.png`
+
+* add an `iconName()` method to `Pet`:
++
+[source,java]
+----
+public String iconName() {
+    return getPetSpecies().name().toLowerCase();
+}
+----
+
+
+For the CSS class:
+
+* add a `cssClass()` method to `Visit`:
++
+[source,java]
+----
+public String cssClass() {
+    boolean isPaid = getPaidOn() != null;
+    return isPaid ? "paid": null;
+}
+----
+
+
+* update `application.css`:
+
+[source,css]
+----
+.entityCollection .domainapp-modules-impl-visits-dom-Visit .paid {
+    text-decoration: line-through;
+    color: lightgrey;
+}
+----
+
+
+== Delete an `PetOwner` provided no unpaid ``Visit``s
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/390-delete-an-owner-provided-no-unpaid-visits
+mvn clean package jetty:run
+----
+
+
+=== Exercise
+
+We don't want `PetOwner` (in the `pets` module) to check for unpaid ``Visit``s, because that would create a cyclic dependency between modules.
+Instead, we'll use a subscriber in the `visits` module which can veto any attempt to delete an owner if there are unpaid visits.
+
+For this, we arrange for the `PetOwner` to emit an action domain event when its `delete()` action is invoked.
+In fact, the event will be emitted by the framework up to five times: to check if the action is visible, if it is disabled, if it's valid, pre-execute and post-execute.
+The subscriber in the ``visits`` module will therefore potentially veto on the disable phase.
+
+* in the `Visits` repository, add `findNotPaidBy` method to find any unpaid ``Visit``s for an `PetOwner`:
++
+[source,java]
+----
+@Programmatic
+public java.util.List<Visit> findNotPaidBy(Owner owner) {
+    TypesafeQuery<Visit> q = isisJdoSupport.newTypesafeQuery(Visit.class);
+    final QVisit cand = QVisit.candidate();
+    q = q.filter(
+            cand.paidOn.eq(q.parameter("paidOn", LocalDateTime.class)
+        ).and(
+                cand.pet.owner.eq(q.parameter("owner", Owner.class))
+            )
+    );
+    return q.setParameter("paidOn", null)
+            .setParameter("owner", owner)
+            .executeList();
+}
+----
+
+* update `PetOwner`'s `delete()` action so that it emits an action domain event.
++
+[source,java]
+----
+import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+...
+public static class Delete extends ActionDomainEvent<Owner> {}  // <1>
+@Action(
+        domainEvent = Delete.class                              // <2>
+        semantics = SemanticsOf.NON_IDEMPOTENT                  // <3>
+)
+public void delete() {
+    final String title = titleService.titleOf(this);
+    messageService.informUser(String.format("'%s' deleted", title));
+    repositoryService.removeAndFlush(this);
+}
+----
+<1> declare the event, and
+<2> emit it
+<3> change from `NON_IDEMPOTENT_ARE_YOU_SURE` (due to a bug in the framework).
+
+* add a new integration test:
++
+[source,java]
+----
+public class Owner_delete_IntegTest extends PetClinicModuleIntegTestAbstract {
+
+    @Test
+    public void can_delete_if_there_are_no_unpaid_visits() {
+
+        // given
+        runFixtureScript(Owner_enum.FRED_HUGHES.builder());
+
+        Owner owner = Owner_enum.FRED_HUGHES.findUsing(serviceRegistry);
+        List<Visit> any = visits.findNotPaidBy(owner);
+        assertThat(any).isEmpty();
+
+        // when
+        wrap(owner).delete();
+
+        // then
+        Owner ownerAfter = Owner_enum.FRED_HUGHES.findUsing(serviceRegistry);
+        assertThat(ownerAfter).isNull();
+    }
+
+    @Test
+    public void cannot_delete_with_unpaid_visits() {
+
+        // given
+        runFixtureScript(Owner_enum.MARY_JONES.builder());
+
+        Owner owner = Owner_enum.MARY_JONES.findUsing(serviceRegistry);
+        List<Visit> any = visits.findNotPaidBy(owner);
+        assertThat(any).isNotEmpty();
+
+        // expect
+        expectedExceptions.expect(DisabledException.class);
+        expectedExceptions.expectMessage("This owner still has unpaid visit(s)");
+
+        // when
+        wrap(owner).delete();
+    }
+
+    @Inject
+    Visits visits;
+}
+----
+
+* add the subscriber to veto the action if required:
++
+[source,java]
+----
+@DomainService(nature = NatureOfService.DOMAIN)
+public class VetoDeleteOfOwnerWithUnpaidVisits
+        extends org.apache.isis.applib.AbstractSubscriber {
+
+    @org.axonframework.eventhandling.annotation.EventHandler
+    public void on(Owner.Delete ev) {
+
+        switch (ev.getEventPhase()) {
+        case DISABLE:
+            Collection<Visit> visitsForPet = visits.findNotPaidBy(ev.getSource());
+            if (!visitsForPet.isEmpty()) {
+                ev.veto("This owner still has unpaid visit(s)");
+            }
+            break;
+        }
+    }
+
+    @javax.inject.Inject
+    Visits visits;
+}
+----
+
+* finally, in `PetClinicModuleIntegTestAbstract`, we need to make a small adjustment to use the same event bus implementation as the production app:
++
+[source,java]
+----
+super(new PetClinicModule()
+    .withAdditionalServices(DeploymentCategoryProviderForTesting.class)
+    .withConfigurationProperty("isis.services.eventbus.implementation","axon")      // <1>
+    .withConfigurationProperty(TranslationServicePo.KEY_PO_MODE, "write")
+);
+----
+<1> specify Axon as the event bus implementation
+
+
+
+

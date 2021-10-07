@@ -54,7 +54,7 @@ To build the app from the latest stable release:
 +
 include::simpleapp-script-jdo.adoc[]
 
-if using JPA as the ORM:
+* if using JPA as the ORM:
 +
 include::simpleapp-script-jpa.adoc[]
 
@@ -64,6 +64,7 @@ This should only take a few seconds to download, compile and run.
 Then browse to link:http://localhost:8080[], and read on.
 
 
+[#using-the-app]
 == Using the App
 
 When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the generic UI provided by xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] or use Swagger to access the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)]:
@@ -652,7 +653,7 @@ Used for prototyping and also integration testing.
 
 <.> The `DomainAppDemo` is the fixture that was run xref:#fixtures[earlier on].
 
-<.> An implementation of the xref:refguide:applib:index/services/health/HealthCheckService.adoc[HealtCheckService].
+<.> An implementation of the xref:refguide:applib:index/services/health/HealthCheckService.adoc[HealthCheckService].
 This integrates with Spring Boot's link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/actuate/health/HealthIndicator.html[HealthIndicator] SPI, surfaced through the link:https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html[Spring Boot Actuator].
 
 <.> Annotated with xref:refguide:applib:index/annotation/HomePage.adoc[@HomePage] and so is shown automatically as the home page.
@@ -933,13 +934,13 @@ This means:
 
 Most of the time you'll probably want to run the app from within your IDE.
 The mechanics of doing this will vary by IDE; see the xref:setupguide:ROOT:about.adoc[Setup Guide] for details.
-Basically, though, it amounts to running the `main()` method in the `SimpleApp`, but also (and this bit is important) ensuring that the xref:setupguide:hints-and-tips:about.adoc#datanucleus-enhancer[DataNucleus enhancer] has properly processed all domain entities.
+Basically, though, it amounts to running the `main()` method in the `SimpleApp` class.
 
 Here's what the setup looks like in IntelliJ IDEA:
 
 image::simpleapp/simpleapp-webapp.png[width="600px"]
 
-If using JDO as the ORM, then the DataNucleus enhancer must be run beforehand.
+If using JDO as the ORM (rather than JPA), then the DataNucleus enhancer must be run beforehand.
 With IntelliJ this can be done by setting up a different _Run Configuration_ to be executed beforehand:
 
 image::simpleapp/simpleapp-webapp-before-launch.png[width="600px"]

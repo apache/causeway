@@ -1,0 +1,112 @@
+= Unit Testing
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Domain driven design is intended for complex business domains, and so testing is obviously important.
+In this part of the tutorial we'll cover unit testing, later on we'll look at integration testing.
+
+
+
+[#exercise-6-1-unit-test-the-default-time-when-booking-visits]
+== Exercise 6.1: Unit test the default time when booking visits
+
+The xref:050-visit-entity.adoc#exercise-5-3-book-visit-action["Book Visit"] action has a default time of 9am the next morning.
+In this section we'll write a unit test to verify this logic, using Mockito to "mock the clock".
+
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/06-01-unit-test-bookVisit-default-time
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+
+=== Tasks
+
+* add test dependencies to the `petclinic-module-visits` maven module:
++
+[source,xml]
+.module-visits/pom.xml
+----
+<dependencies>
+    <!-- ... -->
+
+    <dependency>
+        <groupId>org.apache.isis.mavendeps</groupId>
+        <artifactId>isis-mavendeps-unittests</artifactId>
+        <type>pom</type>
+        <scope>test</scope>
+        <exclusions>
+            <exclusion>
+                <groupId>org.jmock</groupId>
+                <artifactId>jmock-junit4</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+
+</dependencies>
+----
+
+* add the test:
+
+[source,java]
+----
+@ExtendWith(MockitoExtension.class)                                             // <.>
+class Pet_bookVisit_Test {
+
+    @Mock ClockService mockClockService;                                        // <.>
+    @Mock VirtualClock mockVirtualClock;                                        // <2>
+
+    @BeforeEach
+    void setup() {
+        Mockito.when(mockClockService.getClock()).thenReturn(mockVirtualClock); // <.>
+    }
+
+    @Nested
+    class default0 {
+
+        @Test
+        void defaults_to_9am_tomorrow_morning() {
+
+            // given
+            Pet_bookVisit mixin = new Pet_bookVisit(null);
+            mixin.clockService = mockClockService;                              // <.>
+
+            LocalDateTime now = LocalDateTime.of(2021, 10, 21, 16, 37, 45);
+
+            // expecting
+            Mockito.when(mockVirtualClock.nowAsLocalDateTime()).thenReturn(now);// <.>
+
+            // when
+            LocalDateTime localDateTime = mixin.default0Act();
+
+            // then
+            Assertions.assertThat(localDateTime)                                // <.>
+                    .isEqualTo(LocalDateTime.of(2021,10,22,9,0,0));
+        }
+    }
+}
+----
+
+<.> Instructs JUnit to use Mockito for mocking.
+<.> mocks the `ClockService`, and mocks the `VirtualClock` returned by the `ClockService`.
+Automatically provisioned by Mockito.
+<.> makes the mock `ClockService` return the mock `VirtualClock`.
+<.> inject the mock clock into the domain object
+<.> sets up expectations for this scenario on the mock `VirtualClock`
+<.> use link:http://joel-costigliola.github.io/assertj/[AssertJ] to assert the expected value
+
+IMPORTANT: Unit tests should have a suffix "_Test", to distinguish them from integration tests.
+The top-level pom configures Maven surefire to run the unit tests first and then integration tests as a separate execution.
+
+=== Optional Exercises
+
+NOTE: If you decide to do these optional exercises, make the changes on a git branch so that you can resume with the main flow of exercises later.
+
+. Write a similar unit test to verify the validation logic that visits cannot be in the past.
+
+. Introduce a meta-annotation `@VisitedAt`, and move the validation logic into a xref:refguide:applib-classes:spec.adoc#specification[Specification].
+Verify that the app still works, and write a unit test to check your specification.

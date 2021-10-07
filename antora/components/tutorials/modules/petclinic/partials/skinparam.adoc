@@ -1,0 +1,11 @@
+
+hide empty members
+hide methods
+
+skinparam class {
+	BackgroundColor<<desc>> Cyan
+	BackgroundColor<<ppt>> LightGreen
+	BackgroundColor<<mi>> LightPink
+	BackgroundColor<<role>> LightYellow
+}
+

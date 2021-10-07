@@ -48,6 +48,9 @@ content:
     - url: .
       start_path: antora/components/userguide # userguide
       branches: HEAD
+    - url: .
+      start_path: antora/components/tutorials # tutorials
+      branches: HEAD
 
 # api
     - url: .

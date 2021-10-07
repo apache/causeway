@@ -1,0 +1,231 @@
+= Getting Started
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+[#prereqs]
+== Prereqs
+
+You'll need:
+
+* Java 11
++
+Apache Isis should work up to at least Java 15, but stick with Java 11 for now.
+
+* Maven 3.6.x
++
+Maven 3.6.x or later is recommended.
+
+* git
++
+The tutorial includes worked example/solution, provided in a github-hosted repo.
+This has multiple tags for the various checkpoints so you can pick up the tutorial at any point.
+
+* a Java IDE with support for Maven.
++
+The Apache Isis website has detailed documentation for setting up to use xref:setupguide:intellij:about.adoc[IntelliJ] or xref:setupguide:eclipse:about.adoc[Eclipse].
++
+For this tutorial, make sure that your IDE is configured to support Lombok.
+
+
+
+[#exercise-1-1-starter-apps-clone-the-repo]
+== Exercise 1.1: Starter apps / clone the repo
+
+Apache Isis provides a two starter apps, xref:docs:starters:helloworld.adoc[HelloWorld] and xref:docs:starters:simpleapp.adoc[SimpleApp].
+These are identical in terms of functionality, but the simpleapp provides more structure and includes example tests.
+
+NOTE: there are JPA and JDO variants of the starter apps.
+This tutorial uses JPA as it is the more commonly used persistence mechanism.
+
+We start the tutorial simply with a copy of xref:docs:starters:simpleapp.adoc[SimpleApp]; in subsequent exercises we'll refactor and build upon it to morph it into the petclinic domain.
+
+
+* Clone the repo:
++
+[source,bash]
+----
+git clone https://github.com/apache/isis-app-demo
+----
+
+* (optional) Load the git repo into a GUI tool such as SourceTree or GitKraken
++
+This will make it easier to inspect differences between different tags.
+
+* Checkout the first tag, and build:
++
+[source,bash]
+----
+git checkout tags/01-01-starter-app
+mvn clean install
+----
+
+* run the app:
++
+[source,bash]
+----
+mvn -pl webapp spring-boot:run
+----
+
+
+
+
+[#exercise-1-2-explore-the-simple-app]
+== Exercise 1.2: Explore the Simple App
+
+Although we'll be refactoring the codebase in the next exercise, take a few minutes to familiarize yourself with the functionality of the simpleapp.
+
+Check your understanding by using the app to:
+
+* create new objects
+* search by name
+* list all objects
+
+* Use the menu:Prototyping[Fixture Scripts] menu to run in the "DomainAppDemo" fixture script.
++
+This will create some sample data.
+
+
+[#exercise-1-3-running-from-the-ide]
+== Exercise 1.3: Running from the IDE
+
+Running from the command line isn't ideal, so
+
+* load the project into your IDE as a Maven project, build and run.
+
+* The app is a Spring boot application, so locate the class with a main, and run.
+
+* alternatively, your IDE might also have specialised support for Spring Boot apps, so run the app that way if you wish.
+
+* with the IDE load
+
+If you want to go deeper, open up the xref:docs:starters:simpleapp.adoc[page describing the SimpleApp] and start to explore the xref:docs:starters:simpleapp.adoc#structure-of-the-app[structure of the app] files.
+
+
+
+[#exercise-1-4-naked-objects-pattern]
+== Exercise 1.4: Naked Objects pattern
+
+Apache Isis is an implementation of the _naked objects pattern_, which means that entities (and later, as we'll see view models) are automatically exposed in the UI.
+
+[TIP]
+====
+An ORM such as JPA (EclipseLink or Hibernate) maps domain objects into an RDBMS or other datastore.
+You can think of Apache Isis (and naked objects) similarly, but it's an OIM - an object _interface_ mapper.
+It maps to the UI layer rather than the persistence layer.
+
+Common to both ORMs and OIMs is an internal metamodel; this is where much of the power comes from.
+====
+
+We can explore this by looking at the classes provided by the starter app:
+
+* locate the `SimpleObjects` domain service, and notice the methods annotated with `@Action`.
++
+Map these to the "Simple Objects" menu.
+
+
+* locate the `SimpleObject` entity, and notice the methods annotated with `@Property` and `@Action`.
++
+Map these onto the fields of the "simple object" entity, and the action buttons (eg to "change name").
+
+
+It's common for each entity (or more precisely, aggregate root) to have a corresponding domain service, acting as its repository.
+This abstraction hides the details of interacting with the persistence data store.
+Domain services are automatically injected wherever they are required, using `@javax.inject.Inject`.
+
+Apache Isis applications therefore generally follow the _hexagonal architecture_ (aka the _ports and adapters_ architecture).
+
+As well as writing our own domain services, there are also many framework-provided domain services, for example `RepositoryService` (to persist objects).
+See the xref:refguide:applib-svc:about.adoc[Reference Guide: Domain Services] docs for the full list.
+
+
+[#exercise-1-5-ui-hints]
+== Exercise 1.5: UI Hints
+
+The framework derives as much of the UI as possible from the domain objects' intrinsic structure and behaviour, but there are some supporting structures and conventions that are there primarily to improve the UI.
+
+
+=== Titles
+
+A title is the identifier of a domain object for the end-user.
+
+For `SimpleObject`, this is defined declaratively:
+
+[source,java]
+.SimpleObject.java
+----
+@Title
+// ... other annotations omitted ...
+private String name;
+----
+
+It can also be specified imperatively using either the `title()` or `toString()` method.
+
+Each domain object is also associated with an icon.
+Typically this is static and in the same package as the class; see `SimpleObject.png`.
+
+
+*Mini-Exercise*:
+
+(No solution is provided for this exercise).
+
+* replace the `@Title` annotation with a `title()` method:
++
+[source,java]
+.SimpleObject.java
+----
+public String title() {
+    return getName();
+}
+----
+
+You can learn more about UI Hint Methods in the reference guide, xref:refguide:applib-methods:ui-hints.adoc[here].
+
+
+
+=== Object layout
+
+Frameworks that implement the _naked objects pattern_ automatically provide a default representation of domain objects.
+In many cases the details of that representation can be inferred directly from the domain members.
+For example the label of a field for an object's property (eg `SimpleObject#name`) can be derived directly from the name of the object property itself (`getName()`).
+
+In the absence of other metadata, Apache Isis will render a domain object with its properties to the left-hand side and its collections (if any) to the right.
+The order of these properties and collections can be specified using the `@PropertyLayout` annotation and the `@CollectionLayout` annotation.
+There are other annotations to group properties together and to associate action buttons with either properties or collections.
+
+The downside of using annotations is that changing the layout requires that the application be restarted, and certain more complex UIs, such as multi-columns or tab groups are difficult or impossible to express.
+
+Therefore Apache Isis also allows the layout of domain objects to be specified using a complementary layout file, eg `SimpleObject.layout.xml`.
+This is modelled upon bootstrap and so supports arbitrary rows and columns as well as tab groups and tabs.
+
+*Mini-Exercise*:
+
+* locate the `SimpleObject.layout.xml` file
+* compare the structure of the layout file to that of the rendered object
+* change the file, eg the relative widths of the columns
+* use the IDE to copy over the file to the classpath; the new version will be picked up automatically
+** for example, with IntelliJ use menu:Run[Debugging Actions > Reload Changed Classes].
+
+
+You can learn more about file-based layouts in the fundamentals guide describing at xref:userguide:fun:ui.adoc#object-layout[Object Layout]s.
+
+It's also possible to change the order of columns at runtime, using the `SimpleObject.columnOrder.txt` file.
+For more on this topic, see the section of the fundamentals guide describing xref:userguide:fun:ui.adoc#table-columns[Table Columns].
+
+
+
+=== menubars.layout.xml
+
+In a similar fashion, the actions of the various domain services are grouped into menus using the `menubars.layout.xml` file.
+
+*Mini-Exercise*:
+
+* locate the `menubars.layout.xml` file
+* compare the structure of the layout file to that of the rendered menu bar
+* change the file, eg reorder menu items or create new menus
+* again, use the IDE to copy over the file to the classpath
+** for example, with IntelliJ use menu:Run[Debugging Actions > Reload Changed Classes]/
+
+
+To learn more, see the section of the fundamentals guide describing xref:userguide:fun:ui.adoc#file-based-menus[file-based] menu bar layout.
+

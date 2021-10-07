@@ -1,0 +1,954 @@
+= PetOwner entity
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+In this set of exercises we'll just focus on the `PetOwner` entity.
+
+[#exercise-3-1-rename-petowners-name-property]
+== Exercise 3.1: Rename PetOwner's name property
+
+In the domain we are working on, `PetOwner` has a `firstName` and a `lastName` property, not a single `name` property.
+
+In this exercise, we'll rename ``PetOwner``'s `name` property to be `lastName`, and change the fixture script that sets up data to something more realistic.
+
+
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/03-01-renames-PetOwner-name-property
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+Remember you can use the menu:Prototyping[Fixture Scripts] menu to setup some example data.
+
+
+=== Tasks
+
+Checkout the solution above and review the git history to see the changes that have already been made.
+These include:
+
+* property `PetOwner#name` -> `PetOwner#lastName` renamed
+* JPA mappings updated:
+** the corresponding JPQL named queries
+** the method names of `PetOwnerRepository`
++
+This is a Spring Data repository, which uses a link:https://www.baeldung.com/spring-data-derived-queries[naming convention] to infer the queries
+
+** uniqueness constraint for `PetOwner`
+
+* the action method names of `PetOwners` domain service renamed
++
+This also requires updating the `menubars.layout.xml`, which references these action names.
+
+* updating the xref:refguide:applib:index/annotation/ActionLayout.adoc#associateWith[@ActionLayout] of the `updateName` and `delete` action methods in `PetOwner`
++
+In the UI, the buttons for these actions are located close to the renamed "lastName" property
+
+* renames `@Name` meta-annotation to `@LastName`.
++
+Meta-annotations are a useful way of eliminating duplication where the same value type appears in multiple locations, for example as both an entity property and in action parameters.
+
+Build and run the application to make sure it still runs fine.
+
+
+
+[#exercise-3-2-add-petowners-firstname-property]
+== Exercise 3.2: Add PetOwner's firstName property
+
+Now that `PetOwner` has a `lastName` property, let's also add a `firstName` property.
+We'll also update our fixture script (which sets up ``PetOwner``s) so that it is more descriptive.
+
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/03-02-adds-PetOwner-firstName-property
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+=== Tasks
+
+* copy `@LastName` meta-annotation to create `@FirstName`:
++
+[source,java]
+.FirstName.java
+----
+@Property(maxLength = FirstName.MAX_LEN, optionality = Optionality.OPTIONAL)
+@Parameter(maxLength = FirstName.MAX_LEN, optionality = Optionality.OPTIONAL)
+@ParameterLayout(named = "First Name")
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface FirstName {
+
+    int MAX_LEN = 40;
+}
+----
++
+Note that this property/parameter is optional.
+Its parameter name has also been updated.
+
+
+* add a new (JPA nullable) property `firstName` to `PetOwner`:
++
+[source,java]
+----
+@FirstName
+@Column(length = FirstName.MAX_LEN, nullable = true)
+@Getter @Setter @ToString.Include
+@PropertyLayout(fieldSetId = "name", sequence = "2")
+private String firstName;
+----
+
+* add a new factory method to accept a `firstName`, and refactor the existing one:
++
+[source,java]
+.PetOwner.java
+----
+public static PetOwner withName(String name) {
+    return withName(name, null);
+}
+
+public static PetOwner withName(String lastName, String firstName) {
+    val simpleObject = new PetOwner();
+    simpleObject.setLastName(lastName);
+    simpleObject.setFirstName(firstName);
+    return simpleObject;
+}
+----
+
+
+* remove `@Title` annotation from `lastName` property, and add a `title()` method to derive from both properties:
++
+[source,java]
+.PetOwner.java
+----
+public String title() {
+    return getLastName() + (getFirstName() != null ? ", " + getFirstName() : "");
+}
+----
+
+
+* Update the `PetOwner_persona` enum with more realistically last names (family names).
++
+Learn more about fixture scripts xref:testing:fixtures:about.adoc[here].
+
+
+
+[#exercise-3-3-modify-petowners-updatename-action]
+== Exercise 3.3: Modify PetOwner's updateName action
+
+Although we've added a `firstName` property, currently it can't be edited.
+In this exercise we'll modify the `updateName` action to also allow the `firstName` to be changed.
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/03-03-modifies-PetOwner-updateName-action
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+=== Tasks
+
+* update `PetOwner#updateName` to also accept a new `firstName` parameter:
++
+image::03-03/refactor-updateName.png[width=800px]
++
+[source,java]
+.PetOwner.java
+----
+@Action(semantics = IDEMPOTENT, commandPublishing = Publishing.ENABLED, executionPublishing = Publishing.ENABLED)
+@ActionLayout(associateWith = "lastName", promptStyle = PromptStyle.INLINE)
+public PetOwner updateName(
+        @LastName final String lastName,
+        @FirstName String firstName) {
+    setLastName(lastName);
+    setFirstName(firstName);
+    return this;
+}
+public String default0UpdateName() {
+    return getLastName();
+}
+public String default1UpdateName() {
+    return getFirstName();
+}
+----
+
+* add in a "default" supporting method for the new parameter.
++
+[source,java]
+.PetOwner.java
+----
+public String default1UpdateName() {
+    return getFirstName();
+}
+----
++
+The "default" supporting methods are called when the action prompt is rendered, providing the default for the "Nth" parameter of the corresponding action.
+
+
+
+
+[#exercise-3-4-modify-the-menu-action-to-create-petowners]
+== Exercise 3.4: Modify the menu action to create PetOwners
+
+If we want to create a new `PetOwner` and provide their `firstName`, at the moment it's a two stage process: create the `PetOwner` (using `PetOwners#create` action from the menu), then update their name (using the `updateName` action that we just looked at).
+
+In this exercise we'll simplify that workflow by allowing the `firstName` to optionally be specified during the initial create.
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/03-04-modifies-PetOwners-create-action
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+=== Tasks
+
+* update `Orders#create` action, so that the end user can specify a `firstName` when creating a new `PetOwner`:
++
+[source,java]
+.PetOwners.java
+----
+@Action(semantics = SemanticsOf.NON_IDEMPOTENT)
+@ActionLayout(promptStyle = PromptStyle.DIALOG_SIDEBAR)
+public PetOwner create(
+        @LastName final String lastName,
+        @FirstName final String firstName) {
+    return repositoryService.persist(PetOwner.withName(lastName, firstName));
+}
+----
+
+
+=== Optional exercise
+
+NOTE: If you decide to do this optional exercise, make the changes on a git branch so that you can resume with the main flow of exercises later.
+
+It would be nice if the `PetOwner` were identified by both their `firstName` and their `lastName`; at the moment every `PetOwner` must have a unique `lastName`.
+Or, even better would be to introduce some sort of "customerNumber" and use this as the unique identifier.
+
+
+
+
+[#exercise-3-5-initial-fixture-script]
+== Exercise 3.5: Initial Fixture Script
+
+As we prototype with an in-memory database, it means that we need to setup the database each time we restart the application.
+Using the menu:Prototyping[Fixture Scripts] menu to setup data saves some time, but it would nicer still if that script could be run automatically.
+We can do that by specifying a configuration property.
+
+We can also leverage link:https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.profiles[Spring Boot profiles] to keep this configuration separate.
+
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/03-05-initial-fixture-script
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+
+=== Tasks
+
+* create the following file in `src/main/resources` of the webapp (alongside the existing `application.yml` file):
++
+[source,yaml]
+.application-dev.yaml
+----
+isis:
+  testing:
+    fixtures:
+      initial-script: petclinic.webapp.application.fixture.scenarios.PetClinicDemo
+----
+
+* modify the startup of your application to enable this profile, using this system prpoerty:
++
+[source]
+----
+-Dspring.profiles.active=dev
+----
+
+When you run the application you should now find that there are 10 `PetOwner` objects already created.
+
+
+
+
+[#exercise-3-6-prompt-styles]
+== Exercise 3.6: Prompt styles
+
+The framework provides many ways to customise the UI, either through the layout files or using the `@XxxLayout` annotations.
+Default UI conventions can also be specified using the `application.yml` configuration file.
+
+In this exercise we'll change the prompt style for both a service (menu) action, ie `PetOwners#create`, and an object action, ie `PetOwner#updateName`.
+
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/03-06-prompt-styles
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+
+=== Tasks
+
+* Service (menu) actions are always shown in a dialog, of which there are two styles: modal prompt, or sidebar.
+If not specified explicitly, they will default to dialog modal.
++
+Therefore remove the `@ActionLayout(promptStyle)` for `PetOwners#create` and confirm that the dialog is now shown as a modal prompt.
+
+* Object actions can be shown either inline or in a dialog, but default to inline.
+If forced to use a dialog, then they default to a sidebar prompt rather than a modal prompt.
++
+Therefore remove the `@ActionLayout(promptStyle)` for `PetOwner#updateName` and confirm that prompt is still inline.
+
+* Using a configuration property we can change the default for object actions to use a dialog rather than inline.
++
+using the Spring boot profile trick from before:
++
+[source,yaml]
+.application-custom.yaml
+----
+isis:
+  viewer:
+    wicket:
+      prompt-style: dialog
+----
++
+Remember to activate this new profile (`-Dspring.profiles.active=dev,custom`) and confirm that the `updateName` prompt now uses a sidebar dialog.
+
+* We can overide the default dialog style for both service and object actions using further configuration properties.
++
+Switch the defaults so that service actions prefer to use a sidebar dialog, while object actions would use a modal dialog:
++
+[source,yaml]
+.application-custom.yaml
+----
+isis:
+  viewer:
+    wicket:
+      prompt-style: dialog
+      dialog-mode: modal
+      dialog-mode-for-menu: sidebar
+----
+
+* Optional: now use `@ActionLayout(promptStyle=...)` to override these defaults.
++
+Be aware that "inline" makes no sense/is not supported for service actions.
+
+* Finish off the exercises by setting up these defaults to retain the original behaviour:
++
+[source,yaml]
+.application-custom.yaml
+----
+isis:
+  viewer:
+    wicket:
+      prompt-style: inline
+      #dialog-mode: modal   # unused if prompt-style is inline
+      dialog-mode-for-menu: sidebar
+----
+
+
+
+
+
+[#exercise-3-7-derived-name-property]
+== Exercise 3.7: Derived name property
+
+The ``PetOwner``'s `firstName` and `lastName` properties are updated using the `updateName` action, but when the action's button is invoked, it only "replaces" the `lastName` property:
+
+image::Owner-updateName-prompt.png[width="400px",link="_images/Owner-updateName-prompt.png"]
+
+In this exercise we'll improve the UI by introducing a derived `name` property and then hiding the `firstName` and `lastName`:
+
+image::Owner-name.png[width="400px",link="_images/Owner-name.png"]
+
+When `PetOwner#updateName` is invoked, the prompt we'll want see is:
+
+image::Owner-name-updated.png[width="400px",link="_images/Owner-name-updated.png"]
+
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/03-07-derived-PetOwner-name
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+
+=== Tasks
+
+
+* Add `getName()` as the derived `name` property:
++
+[source,java]
+.PetOwner.java
+----
+@Transient
+@PropertyLayout(fieldSetId = "name", sequence = "1")
+public String getName() {
+    return getFirstName() + " " + getLastName();
+}
+----
+
+* Hide the `lastName` and `firstName` properties, using `@Property(hidden=...)`.
+We can also remove the `@PropertyLayout` annotation.
++
+[source,java]
+.PetOwner.java
+----
+@LastName
+@Column(length = LastName.MAX_LEN, nullable = false)
+@Getter @Setter @ToString.Include
+@Property(hidden = Where.EVERYWHERE)
+private String lastName;
+
+@FirstName
+@Column(length = FirstName.MAX_LEN, nullable = true)
+@Getter @Setter @ToString.Include
+@Property(hidden = Where.EVERYWHERE)
+private String firstName;
+----
+
+
+* Update the `PetOwner#updateName` to associate with the new `name` property:
++
+[source,xml]
+----
+@ActionLayout(associateWith = "name",)
+public PetOwner updateName( ... ) {}
+----
+
+
+Run the application and check that it behaves as you expect.
+
+However, if you now try to build the app (`mvn clean install`) then you'll hit test errors, because we have changed the visibility of the `lastName` and `firstName` properties.
+
+We will be looking at tests later on, so if you want to just comment out the failing tests, then do that.
+Alternatively, here are the changes that need to be made:
+
+* update the `PetOwner_IntegTest#name` nested static test class:
++
+[source,java]
+.PetOwner_IntegTest.java
+----
+@Nested
+public static class name extends PetOwner_IntegTest {
+
+    @Test
+    public void accessible() {
+        // when
+        final String name = wrap(petOwner).getName();   // <.>
+
+        // then
+        assertThat(name).isEqualTo(petOwner.getLastName());
+    }
+
+    // <.>
+}
+----
+<.> change this line from `getLastName()` to `getName()`
+<.> delete the 'editable' test
+
+* add a new `PetOwner_IntegTest#lastName` nested static test class to check that the `lastName` property can no longer be viewed:
++
+[source,java]
+.PetOwner_IntegTest.java
+----
+@Nested
+public static class lastName extends PetOwner_IntegTest {
+
+    @Test
+    public void not_accessible() {
+        // expect
+        assertThrows(HiddenException.class, ()->{
+
+            // when
+            wrap(petOwner).getLastName();
+        });
+    }
+}
+----
++
+This asserts that the `lastName` property cannot be viewed.
+
+* add a new `PetOwner_IntegTest#firstName` nested static test class to check that the `firstName` property can no longer be viewed.
++
+[source,java]
+.PetOwner_IntegTest.java
+----
+@Nested
+public static class firstName extends PetOwner_IntegTest {
+
+    @Test
+    public void not_accessible() {
+        // expect
+        assertThrows(HiddenException.class, ()->{
+
+            // when
+            wrap(petOwner).getFirstName();
+        });
+    }
+}
+----
+
+* update the `PetOwner_IntegTest#updateName` nested static test class, specifically the assertion:
++
+[source,java]
+.PetOwner_IntegTest.java
+----
+@Nested
+public static class updateName extends PetOwner_IntegTest {
+
+
+    @Test
+    public void can_be_updated_directly() {
+
+        // when
+        wrap(petOwner).updateName("McAdam", "Adam");                // <.>
+        transactionService.flushTransaction();
+
+        // then
+        assertThat(petOwner.getLastName()).isEqualTo("McAdam");     // <.>
+        assertThat(petOwner.getFirstName()).isEqualTo("Adam");      // <2>
+    }
+    //...
+}
+----
+<.> provide both `lastName` and `firstName` parameters
+<.> assert on both properties.
+Note that the `petOwner` object cannot be "wrapped".
+
+In case you are wondering, the wrap method is a call to xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory], which provides a proxy to the object.
+This proxy emulates the UI, in this case enforcing the "hidden" rule by throwing an exception if it would not be visible.
+For this test, we _want_ to peek under the covers to check the direct state of the entity, therefore we don't wrap the object.
+
+* also update the `Smoke_IntegTest`:
++
+[source,java]
+.Smoke_IntegTest.java
+----
+...
+assertThat(wrap(fred).getName()).isEqualTo("Freddy"); // <.>
+...
+----
+<.> previously was "wrap(fred).getLastName().
+
+
+
+[#exercise-3-8-add-other-properties-for-petowner]
+== Exercise 3.8: Add other properties for PetOwner
+
+Let's add the two remaining properties for `PetOwner`:
+
+[plantuml]
+----
+hide empty members
+hide methods
+
+class Owner {
+    +id
+    ..
+    #lastName
+    #firstName
+    ..
+    -phoneNumber
+    -emailAddress
+}
+----
+
+They are `phoneNumber` and `emailAddress`.
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/03-08-add-remaining-PetOwner-properties
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+=== Task
+
+* Create a `@PhoneNumber` meta-annotation, defined to be an editable property:
++
+[source,java]
+.PhoneNumber.java
+----
+@Property(
+        editing = Editing.ENABLED,  // <.>
+        maxLength = PhoneNumber.MAX_LEN,
+        optionality = Optionality.OPTIONAL
+)
+@Parameter(maxLength = PhoneNumber.MAX_LEN, optionality = Optionality.OPTIONAL)
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface PhoneNumber {
+
+    int MAX_LEN = 30;
+}
+----
+<.> any properties annotated with this meta-annotation will be editable by default
+
+* Similarly, create an `@EmailAddress` meta-annotation, defined to be an editable property:
++
+[source,java]
+.EmailAddress.java
+----
+@Property(
+        editing = Editing.ENABLED,
+        maxLength = EmailAddress.MAX_LEN,
+        optionality = Optionality.OPTIONAL
+)
+@PropertyLayout(named = "E-mail")   // <.>
+@Parameter(maxLength = EmailAddress.MAX_LEN, optionality = Optionality.OPTIONAL)
+@ParameterLayout(named = "E-mail")  // <.>
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface EmailAddress {
+
+    int MAX_LEN = 100;
+}
+----
+<.> xref:refguide:applib:index/annotation/PropertyLayout.adoc#named[@PropertyLayout#named] allows characters to be used that are not valid Java identifiers.
+<.> xref:refguide:applib:index/annotation/ParameterLayout.adoc#named[@ParameterLayout#named] - ditto.
+
+* add properties to `PetOwner`:
++
+[source,java]
+.PetOwner.java
+----
+@PhoneNumber
+@Column(length = PhoneNumber.MAX_LEN, nullable = true)
+@PropertyLayout(fieldSetId = "name", sequence = "1.5")
+@Getter @Setter
+private String phoneNumber;
+
+@EmailAddress
+@Column(length = EmailAddress.MAX_LEN, nullable = true)
+@PropertyLayout(fieldSetId = "name", sequence = "1.6")
+@Getter @Setter
+private String emailAddress;
+----
+
+
+
+
+[#exercise-3-9-validation]
+== Exercise 3.9: Validation
+
+At the moment there are no constraints for the format of `phoneNumber` or `emailAddress` properties.
+We can fix this by adding rules to their respective meta-annotations.
+
+[source,bash]
+----
+git checkout tags/03-09-validation-rules-using-metaannotations
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+=== Task
+
+
+* Update the `@Property` annotation of the `@PhoneNumber` meta-annotation:
++
+[source,java]
+.PhoneNumber.java
+----
+@Property(
+        editing = Editing.ENABLED,
+        maxLength = PhoneNumber.MAX_LEN,
+        optionality = Optionality.OPTIONAL,
+        regexPattern = "[+]?[0-9 ]+",       // <.>
+        regexPatternReplacement =           // <.>
+            "Specify only numbers and spaces, optionally prefixed with '+'.  " +
+            "For example, '+353 1 555 1234', or '07123 456789'"
+)
+@Parameter(maxLength = PhoneNumber.MAX_LEN, optionality = Optionality.OPTIONAL)
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface PhoneNumber {
+
+    int MAX_LEN = 30;
+}
+----
+<.> regex constraint
+<.> validation message if the constraint is not met
+
+* Similarly, update `@EmailAddress`:
++
+[source,java]
+.EmailAddress.java
+----
+@Property(
+        editing = Editing.ENABLED,
+        maxLength = EmailAddress.MAX_LEN,
+        optionality = Optionality.OPTIONAL,
+        regexPattern = "[^@]+@[^@]+[.][^@]+",                   // <.>
+        regexPatternReplacement = "Invalid email address"       // <.>
+)
+@PropertyLayout(named = "E-mail")
+@Parameter(maxLength = EmailAddress.MAX_LEN, optionality = Optionality.OPTIONAL)
+@ParameterLayout(named = "E-mail")
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface EmailAddress {
+
+    int MAX_LEN = 100;
+}
+----
+<.> regex constraint.
+(Should really use a more comprehensive regex, eg see https://emailregex.com).
+<.> validation message if the constraint is not met
+
+Try out the application and check that these rules are applied.
+
+The `updateName` action also has a validation rule, applied directly to the method:
+
+[source,java]
+.PetOwner.java
+----
+public String validate0UpdateName(String newName) {             // <.>
+    for (char prohibitedCharacter : "&%$!".toCharArray()) {
+        if( newName.contains(""+prohibitedCharacter)) {
+            return "Character '" + prohibitedCharacter + "' is not allowed.";
+        }
+    }
+    return null;
+}
+----
+<.> validates the "0^th^" parameter of `updateName`.
+More details on the validate supporting method can be found xref:refguide:applib-methods:prefixes.adoc#validate[here].
+
+We can Move this constraint onto the `@LastName` meta-annotation instead:
+
+*  Update the `@LastName` meta-annotation using a xref:refguide:applib-classes:spec.adoc#specification[Specification]:
++
+[source,java]
+.LastName.java
+----
+@Property(maxLength = LastName.MAX_LEN, mustSatisfy = LastName.Spec.class)  // <.>
+@Parameter(maxLength = LastName.MAX_LEN, mustSatisfy = LastName.Spec.class) // <1>
+@ParameterLayout(named = "Last Name")
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface LastName {
+
+    int MAX_LEN = 40;
+
+    class Spec extends AbstractSpecification<String> {                      // <.>
+        @Override public String satisfiesSafely(String candidate) {
+            for (char prohibitedCharacter : "&%$!".toCharArray()) {
+                if( candidate.contains(""+prohibitedCharacter)) {
+                    return "Character '" + prohibitedCharacter + "' is not allowed.";
+                }
+            }
+            return null;
+        }
+    }
+}
+----
+<.> indicates that the property or parameter value must satisfy the specification below
+<.> defines the specification definition, where a non-null value is the reason why the specification is not satisfied.
+
+* Remove the `validate0UpdateName` from `PetOwner`.
+
+Test the app once more.
+
+=== Optional exercise
+
+NOTE: If you decide to do this optional exercise, make the changes on a git branch so that you can resume with the main flow of exercises later.
+
+As well as validating the `lastName`, it would be nice to also validate `firstName` with the same rule.
+As the logic is shared, create a new meta-(meta-)annotation called `@Name`, move the specification (and anything else that is common between lastName and firstName) to that new meta annotation, and then meta-annotate `@LastName` and `@FirstName` with `@Name`.
+
+
+
+
+
+[#exercise-3-10-field-layout]
+== Exercise 3.10: Field layout
+
+At the moment all the properties of `PetOwner` are grouped into a single fieldset.
+The UI would be improved by grouping properties according to their nature, for example the "phoneNumber" and "emailAddress" in a "Contact Details" fieldset.
+
+We do this using the associated `PetOwner.layout.xml` file (which defines the positioning of the fieldsets), and also using the annotations within `PetOwner` (which associate the properties to those fieldsets).
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/03-10-PetOwner-fieldsets
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+=== Task
+
+* modify the `PetOwner.layout.xml`, adding two new `fieldSet` definitions after the first `tabGroup`:
++
+[source,xml]
+.PetOwner.layout.xml
+----
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bs3:grid>
+    <bs3:row>
+        <!-- ... -->
+    </bs3:row>
+    <bs3:row>
+        <bs3:col span="6">
+            <bs3:tabGroup>
+                <!-- ... -->
+            </bs3:tabGroup>
+            <c:fieldSet id="contactDetails" name="Contact Details"/> <!--.-->
+            <c:fieldSet id="notes" name="Notes"/>                    <!--.-->
+        </bs3:col>
+        <bs3:col span="6">
+            <!-- ... -->
+        </bs3:col>
+    </bs3:row>
+</bs3:grid>
+----
+<.> fieldSet for contact details
+<.> fieldset for the notes
+
+* modify the `@PropertyLayout` annotation for the properties to associate with these fieldsets:
++
+[source,java]
+.PetOwner.java
+----
+// ...
+@PropertyLayout(fieldSetId = "contactDetails", sequence = "1")    // <.>
+private String phoneNumber;
+
+// ...
+@PropertyLayout(fieldSetId = "contactDetails", sequence = "2")    // <.>
+private String emailAddress;
+
+// ...
+@PropertyLayout(fieldSetId = "notes", sequence = "1")               // <.>
+private String notes;
+----
+<.> associates as the 1^st^ property in the "contact details" fieldset
+<.> associates as the 2^nd^ property in the "contact details" fieldset
+<.> associates with the "notes" fieldset
+
+Run the application; the layout should look like:
+
+image::03-10/fieldsets.png[width=800]
+
+
+The layout file can be reloaded dynamically (on IntelliJ, menu:Run[Debugging Actions > Reload Changed Classes]), so you can inspect any updates without having to restart the app.
+Experiment with this by moving a fieldset into a tab group, or change the width of a column).
+
+
+
+=== Optional Exercise
+
+NOTE: If you decide to do this optional exercise, make the changes on a git branch so that you can resume with the main flow of exercises later.
+
+It is also possible to associate the properties to fieldsets using only the `.layout.xml` file.
+In fact, pretty much all of the metadata in the `@XxxLayout` annotations can be specified in the layout file.
+
+[source,xml]
+.PetOwner.layout.xml
+----
+<c:fieldSet id="contactDetails" name="Contact Details">
+    <c:property id="phoneNumber"/>
+    <c:property id="emailAddress"/>
+</c:fieldSet>
+<c:fieldSet id="notes" name="Notes">
+    <c:property id="notes"/>
+</c:fieldSet>
+----
+
+The `@PropertyLayout` annotations could then be removed.
+
+Using the layout file to specify individual properties provides even more fine-grained control when dynamically reloading, so you could for example switch the order of properties in a fieldset and inspect the changes immediately without having to restart the app.
+You might find though that the main benefit of the layout file is to declare how the different "regions" of the UI fit together in terms of rows, columns, tabs and fieldsets, and then use annotations to slot the properties/actions into those regions.
+It really is a matter of personal preference which approach you use.
+
+
+
+[#exercise-3-11-column-orders]
+== Exercise 3.11: Column Orders
+
+The home page of the webapp shows a list of all `PetOwner`s (inherited from the original simple app).
+We also see a list of `PetOwner`s if we invoke menu:Pet Owners[List All].
+
+The first is a "parented" collection (it is parented by the home page view model), the second is a standalone collection (it is returned from an action).
+
+The properties that are shown as columns that are shown is based on two different mechanisms.
+The first is whether the property is visible at all in any tables, which can be specified using `@PropertyLayout(hidden=...)` (see xref:refguide:applib:index/annotation/PropertyLayout.adoc#hidden[@PropertyLayout#hidden]).
+The second is to use a "columnOrder" file.
+
+In this exercise, we'll use the latter approach.
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/03-11-PetOwner-columnOrder
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+=== Task
+
+* Declare the `id` field of `PetOwner` as a property by adding a getter and other annotations:
++
+[source,java]
+.PetOwner.java
+----
+@Id
+@GeneratedValue(strategy = GenerationType.AUTO)
+@Column(name = "id", nullable = false)
+@Getter @Setter                                             // <.>
+@PropertyLayout(fieldSetId = "metadata", sequence = "1")    // <.>
+private Long id;
+----
+<.> makes field available as a property
+<.> positions property in the metadata fieldset (before `version`).
+
+* update the columnOrder for standalone collections of `PetOrder`:
++
+[source,java]
+.PetOwner.columnOrder.txt
+----
+name
+id
+#version
+----
++
+This will show only `name` and `id`; none of the other properties will be visible as columns.
+
+* create a new file `HomePageViewModel#objects.columnOrder.txt` (in the same package as `HomePageViewModel`) to define the columns visible in the `objects` collection of that view model:
++
+[source,java]
+.HomePageViewModel#objects.columnOrder.txt
+----
+name
+id
+#version
+----
+
+* delete the (unused) `PetOwner#others.columnOrder.txt` file.
+
+Run the application and confirm the columns are as expected.
+You should also be able to update the files and reload changes (on IntelliJ, menu:Run[Debugging Actions > Reload Changed Classes]) and inspect the updates without having to restart the app.

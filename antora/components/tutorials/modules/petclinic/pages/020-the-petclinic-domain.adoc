@@ -1,0 +1,64 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+= An Example Domain
+
+By now you should understand the basics of what Apache Isis does, but there's only so much we can learn from a single domain class.
+Let's therefore evolve the app into a slightly more interesting domain and explore other features of the framework.
+
+The domain we're going to work on is a version of the venerable "Pet Clinic" app.
+Here's a sketch of (our version of) its domain:
+
+include::partial$domain.adoc[]
+
+[TIP]
+====
+The colours used are from "Java: Modeling in Color" book by Coad et al.
+====
+
+
+Some of the use cases we might want to support include:
+
+* create a `PetOwner`
+* add and remove ``Pet``s for said `PetOwner`
+* book a `Pet` in for a `Visit`
+* enter an `outcome` and `cost` of a `Visit`
+* allow a `PetOwner` to pay for a `Visit`
+* find ``Visit``s not yet paid and overdue
+* delete a `PetOwner` and its ``Pet``s and ``Visit``s, so long as there are no unpaid ``Visit``s.
+
+This tutorial has worked solutions for all of these.
+
+[#exercise-2-1-refactor-simpleobject-to-petowner]
+== Exercise 2.1: Refactor `SimpleObject` to `PetOwner`
+
+To start with, let's rename the `SimpleObject` entity to `PetOwner`
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/02-01-renames-SimpleObject-to-PetOwner
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+=== Tasks
+
+Just checkout the solution above and review the git history to see the changes that have already been made.
+These include:
+
+* Domain classes renamed (along with corresponding tests)
+
+** `SimpleObject` entity -> `PetOwner`
+** `SimpleObjects` domain service -> `PetOwners`
+** `SimpleObjectRepository` repository service -> `PetOwnerRepository`
+
+** Infrastructure classes renamed
+
+** `SimpleModule` -> `PetsModule`
+** `SimpleApp` -> `PetClinicApp`
+
+
+Build and run the application (note that the main class has changed) to make sure it still runs fine.
+
+

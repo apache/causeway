@@ -1,0 +1,206 @@
+= Integration Testing
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+In an earlier section of this tutorial we looked at unit testing, but integration tests are at least as important, probably more so, as they exercise the entire application from an end-users perspective, rather than an individual part.
+
+Integration tests are _not_ written using Selenium or similar, so avoid the fragility and maintenance effort that such tests often entail.
+Instead, the framework provides the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] domain service which simulates the user interface in a type-safe way.
+
+
+== Exercuse 9.1: Testing bookVisit using an integtest
+
+In this exercise we'll test the `bookVisit` mixin action (on `Pet` entity).
+
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/09-01-bookVisit-integ-test
+mvn clean package jetty:run
+----
+
+=== Tasks
+
+* in the `pom.xml` of the visits module, add the following dependency:
++
+[source,xml]
+.module-visits/pom.xml
+----
+<dependency>
+    <groupId>org.apache.isis.mavendeps</groupId>
+    <artifactId>isis-mavendeps-integtests</artifactId>
+    <type>pom</type>
+    <scope>test</scope>
+</dependency>
+----
+
+* add an abstract class `VisitsModuleIntegTestAbstract` for the `visits` module, for other integ tests to subclass:
++
+[source,java]
+.VisitsModuleIntegTestAbstract.java
+----
+@SpringBootTest(
+        classes = VisitsModuleIntegTestAbstract.TestApp.class
+)
+@ActiveProfiles("test")
+public abstract class VisitsModuleIntegTestAbstract
+        extends IsisIntegrationTestAbstractWithFixtures {
+
+    @SpringBootConfiguration
+    @EnableAutoConfiguration
+    @Import({
+
+            IsisModuleCoreRuntimeServices.class,
+            IsisModuleSecurityBypass.class,
+            IsisModulePersistenceJpaEclipselink.class,
+            IsisModuleTestingFixturesApplib.class,
+
+            VisitsModule.class
+    })
+    @PropertySources({
+            @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
+            @PropertySource(IsisPresets.UseLog4j2Test),
+    })
+    public static class TestApp {
+    }
+}
+----
+
+* also update the `application-test.yml` file for the `visits` module, to ensure that the database schemas for both modules are created:
++
+[source,yaml]
+.module-visits/src/test/resources/application-test.yml
+----
+isis:
+  persistence:
+    schema:
+      auto-create-schemas: pets,visits
+----
+
+* add a class `Bootstrap_IntegTest` integration test, inheriting from the `VisitsModuleIntegTestAbstract:
++
+[source,java]
+.Bootstrap_IntegTest.java
+----
+public class Bootstrap_IntegTest extends VisitsModuleIntegTestAbstract {
+
+    @Test
+    public void checks_can_bootstrap() {}
+}
+----
++
+Make sure this test runs and passes in both the IDE and using "mvn clean install".
+
+
+Now we can write our actual test:
+
+* Now add a class `Pet_bookVisit_IntegTest` integration test, also inheriting from the `VisitsModuleIntegTestAbstract:
++
+[source,java]
+.Pet_bookVisit_IntegTest.java
+----
+public class Pet_bookVisit_IntegTest extends VisitsModuleIntegTestAbstract {
+
+    @BeforeEach
+    void setup() {
+        fixtureScripts.run(new Pet_persona.PersistAll());                       // <.>
+    }
+
+    @Test
+    public void happy_case() {
+
+        // given
+        Pet somePet = fakeDataService.enums().anyOf(Pet_persona.class)          // <.>
+                        .findUsing(serviceRegistry);
+        List<Visit> before = visitRepository.findByPetOrderByVisitAtDesc(somePet);
+
+        // when
+        LocalDateTime visitAt = clockService.getClock().nowAsLocalDateTime()    // <.>
+                                    .plusDays(fakeDataService.ints().between(1, 3));
+        String reason = fakeDataService.strings().upper(40);                    // <3>
+
+        wrapMixin(Pet_bookVisit.class, somePet).act(visitAt, reason);           // <.>
+
+        // then
+        List<Visit> after = visitRepository.findByPetOrderByVisitAtDesc(somePet);
+        after.removeAll(before);
+        assertThat(after).hasSize(1);                                           // <.>
+        Visit visit = after.get(0);
+
+        assertThat(visit.getPet()).isSameAs(somePet);                           // <.>
+        assertThat(visit.getVisitAt()).isEqualTo(visitAt);                      // <6>
+        assertThat(visit.getReason()).isEqualTo(reason);                        // <6>
+    }
+
+    @Inject FakeDataService fakeDataService;
+    @Inject VisitRepository visitRepository;
+    @Inject ClockService clockService;
+
+}
+----
+<.> uses same fixture script used for prototyping to set up ``Pet``s and their ``PetOwner``s.
+<.> uses the xref:refguide:testing:index/fakedata/applib/services/FakeDataService.adoc[FakeDataService] to select a `Pet` persona at random and uses that person to look up the corresponding domain object.
+<.> sets up some randomised but valid argument values
+<.> invokes the action, using the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] to simulate the UI
+<.> asserts that one new `Visit` has been created for the `Pet`.
+<.> asserts that the state of this new `Visit` is correct
++
+Run the test and check that it passes.
+
+* write an error scenario which checks that a reason has been provided:
++
+[source,java]
+.Pet_bookVisit_IntegTest.java
+----
+@Test
+public void reason_is_required() {
+
+    // given
+    Pet somePet = fakeDataService.enums().anyOf(Pet_persona.class)
+                    .findUsing(serviceRegistry);
+    List<Visit> before = visitRepository.findByPetOrderByVisitAtDesc(somePet);
+
+    // when, then
+    LocalDateTime visitAt = clockService.getClock().nowAsLocalDateTime()
+                                .plusDays(fakeDataService.ints().between(1, 3));
+
+    assertThatThrownBy(() ->
+        wrapMixin(Pet_bookVisit.class, somePet).act(visitAt, null)
+    )
+    .isInstanceOf(InvalidException.class)
+    .hasMessage("'Reason' is mandatory");
+}
+----
+
+* write an error scenario which checks that the `visitAt` date cannot be in the past:
++
+[source,java]
+.Pet_bookVisit_IntegTest.java
+----
+@Test
+public void cannot_book_in_the_past() {
+
+    // given
+    Pet somePet = fakeDataService.enums().anyOf(Pet_persona.class)
+            .findUsing(serviceRegistry);
+    List<Visit> before = visitRepository.findByPetOrderByVisitAtDesc(somePet);
+
+    // when, then
+    LocalDateTime visitAt = clockService.getClock().nowAsLocalDateTime();
+    String reason = fakeDataService.strings().upper(40);
+
+    assertThatThrownBy(() ->
+            wrapMixin(Pet_bookVisit.class, somePet).act(visitAt, reason)
+    )
+            .isInstanceOf(InvalidException.class)
+            .hasMessage("Must be in the future");
+}
+----
+
+*
+
+
+
+

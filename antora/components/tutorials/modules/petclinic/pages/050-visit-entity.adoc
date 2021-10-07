@@ -1,0 +1,317 @@
+= Visit module and entity
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+Our domain model now consists of the `PetOwner` and `Pet` entities (along with the `PetSpecies`  enum).
+In this section we'll add in the `Visit` entity:
+
+include::partial$domain.adoc[]
+
+Also, note that the `Visit` entity is in its own module.
+We'll look at the important topic of modularity in later exercises.
+
+
+[#exercise-5-1-the-visits-module]
+== Exercise 5.1: The visits module
+
+In this exercise we'll just create an empty visits module.
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/05-01-visit-module
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+
+
+
+=== Tasks
+
+Just check out the tag above and inspect the changes:
+
+* A new `petclinic-module-visits` maven module has been created
+
+* its `pom.xml` declares a dependency on the ``petclinic-module-visits` maven module
+
+* the top-level pom.xml declares the new Maven module and references it
+
+* the `VisitsModule` class is a Spring `@Configuration` bean that resides in the root of the visits module, and declares an app dependency on the pets module that mirrors the maven dependency:
++
+[source,java]
+.VisitsModule.java
+----
+@Configuration
+@ComponentScan
+@Import(PetsModule.class)
+@EnableJpaRepositories
+@EntityScan(basePackageClasses = {VisitsModule.class})
+public class VisitsModule implements ModuleWithFixtures {
+
+    @Override
+    public FixtureScript getTeardownFixture() {
+        return new FixtureScript() {
+            @Override
+            protected void execute(ExecutionContext executionContext) {
+                // nothing to do
+            }
+        };
+    }
+}
+----
+
+* the webapp Maven module now depends on the new visits maven module, and the top-level `ApplicationModule` Spring `@Configuration` bean now depends upon `VisitsModule` rather than `PetsModule`
++
+It still depends upon `PetsModule`, but now as a transitive dependency.
+
+
+
+
+
+[#exercise-5-2-visit-entitys-key-properties]
+== Exercise 5.2: Visit entity's key properties
+
+Now we have a visits module, we can now add in the `Visit` entity.
+We'll start just with the key properties.
+
+
+
+[source,bash]
+----
+git checkout tags/05-02-visit-entity-key-properties
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+
+
+=== Tasks
+
+* add a `Visit` entity, declaring the `pet` and `visitedAt` key properties:
++
+[source,java]
+.Visit.java
+----
+@Entity
+@Table(
+    schema="visits",        // <.>
+    name = "Visit",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "Visit__pet_visitAt__UNQ", columnNames = {"owner_id", "name"})
+    }
+)
+@EntityListeners(IsisEntityListener.class)
+@DomainObject(logicalTypeName = "visits.Visit", entityChangePublishing = Publishing.ENABLED)
+@DomainObjectLayout()
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
+@ToString(onlyExplicitlyIncluded = true)
+public class Visit implements Comparable<Visit> {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    @Getter @Setter
+    @PropertyLayout(fieldSetId = "metadata", sequence = "1")
+    private Long id;
+
+    @Version
+    @Column(name = "version", nullable = false)
+    @PropertyLayout(fieldSetId = "metadata", sequence = "999")
+    @Getter @Setter
+    private long version;
+
+
+    Visit(Pet pet, LocalDateTime visitAt) {
+        this.pet = pet;
+        this.visitAt = visitAt;
+    }
+
+
+    public String title() {
+        return titleService.titleOf(getPet()) + " @ " + getVisitAt().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
+    }
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "pet_id")
+    @PropertyLayout(fieldSetId = "name", sequence = "1")
+    @Getter @Setter
+    private Pet pet;
+
+    @Column(name = "visitAt", nullable = false)
+    @Getter @Setter
+    @PropertyLayout(fieldSetId = "name", sequence = "2")
+    private LocalDateTime visitAt;
+
+
+    private final static Comparator<Visit> comparator =
+            Comparator.comparing(Visit::getPet).thenComparing(Visit::getVisitAt);
+
+    @Override
+    public int compareTo(final Visit other) {
+        return comparator.compare(this, other);
+    }
+
+    @Inject @Transient TitleService titleService;
+}
+----
+<.> in the "visits" schema.
+Modules are vertical, cutting through the layers.
+Therefore the database schemas echo the Spring ``@Configuration``s and maven modules.
++
+Run the application, and confirm that the table is created correctly using menu:Prototyping[H2 Console].
+
+
+
+
+[#exercise-5-3-book-visit-action]
+== Exercise 5.3: "Book Visit" action
+
+In addition to the key properties, the `Visit` has one further mandatory property, `reason`.
+This is required to be specified when a `Visit` is created ("what is the purpose of this visit?")
+
+In this exercise we'll add that additional property and use a mixin to allow ``Visit``s to be created.
+
+
+[source,bash]
+----
+git checkout tags/05-03-schedule-visit-action
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+
+=== Tasks
+
+* add the `@Reason` meta-annotation
++
+[source,java]
+.Reason.java
+----
+@Property(maxLength = Reason.MAX_LEN)
+@PropertyLayout(named = "Reason")
+@Parameter(maxLength = Reason.MAX_LEN)
+@ParameterLayout(named = "Reason")
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Reason {
+
+    int MAX_LEN = 255;
+}
+----
+
+* add the `reason` mandatory property:
++
+[source,java]
+.Visit.java
+----
+@Reason
+@Column(name = "reason", length = FirstName.MAX_LEN, nullable = false)
+@Getter @Setter
+@PropertyLayout(fieldSetId = "details", sequence = "1")
+private String reason;
+----
+
+
+* update constructor (as this is a mandatory property)
++
+[source,java]
+.Visit.java
+----
+Visit(Pet pet, LocalDateTime visitAt, String reason) {
+    this.pet = pet;
+    this.visitAt = visitAt;
+    this.reason = reason;
+}
+----
+
+* create a "visits" mixin collection as a mixin of `Pet`, so we can see the ``Visit``s that have been booked:
++
+[source,java]
+.Pet_visits.java
+----
+@Collection
+@CollectionLayout(defaultView = "table")
+@RequiredArgsConstructor
+public class Pet_visits {
+
+    private final Pet pet;
+
+    public List<Visit> coll() {
+        return visitRepository.findByPetOrderByVisitAtDesc(pet);
+    }
+
+    @Inject VisitRepository visitRepository;
+}
+----
+
+* create a "bookVisit" mixin action (in the visits module), as a mixin of `Pet`.
++
+We can use xref:refguide:applib:index/services/clock/ClockService.adoc[ClockService] to ensure that the date/time specified is in the future, and to set a default date/time for "tomorrow"
++
+[source,java]
+.Pet_bookVisit.java
+----
+@Action(
+        semantics = SemanticsOf.IDEMPOTENT,
+        commandPublishing = Publishing.ENABLED,
+        executionPublishing = Publishing.ENABLED
+)
+@ActionLayout(associateWith = "visits", sequence = "1")
+@RequiredArgsConstructor
+public class Pet_bookVisit {
+
+    private final Pet pet;
+
+    public Visit act(
+            LocalDateTime visitAt,
+            @Reason final String reason
+            ) {
+        return repositoryService.persist(new Visit(pet, visitAt, reason));
+    }
+    public String validate0Act(LocalDateTime visitAt) {
+        return clockService.getClock().nowAsLocalDateTime().isBefore(visitAt)   // <.>
+                ? null
+                : "Must be in the future";
+    }
+    public LocalDateTime default0Act() {
+        return clockService.getClock().nowAsLocalDateTime()                     // <.>
+                .toLocalDate()
+                .plusDays(1)
+                .atTime(LocalTime.of(9, 0));
+    }
+
+    @Inject ClockService clockService;
+    @Inject RepositoryService repositoryService;
+}
+----
+<.> ensures that the date/time specified is in the future.
+<.> defaults to 9am tomorrow morning.
+
+Also add in the UI files:
+
+* create a `Visit.layout.xml` layout file.
+
+* add a `Visit.png` file
+
+* add a `Pet#visits.columnOrder.txt` file
++
+to define which properties of Visit are visible as columns in ``Pet``'s `visits` collection.
+
+
+
+=== Optional exercises
+
+NOTE: If you decide to do this optional exercise, make the changes on a git branch so that you can resume with the main flow of exercises later.
+
+. Download a separate `Visit-NN.png` for each of the days of the month (1 to 31), and then use `iconName()` to show a more useful icon based on the `visitAt` date.
+
+. Use choices to provide a set of available date/times, in 15 minutes slots, say.
+
+. Refine the list of slots to filter out any visits that already exist
++
+Assume that visits take 15 minutes, and that only on visit can happen at a time.
+

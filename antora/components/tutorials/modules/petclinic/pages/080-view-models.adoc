@@ -1,0 +1,297 @@
+= View models
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+So far the application consists only of domain entities and domain services.
+However, the framework also supports view models.
+
+A classic use case is to provide a home page or dashboard, but they are also used to represent certain specific business processes when there isn't necessarily a domain entity required to track the state of the process itself.
+Some real-world examples include importing/exporting spreadsheets periodically (eg changes to indexation rates), or generating extracts such as a payment file or summary PDF for an quarterly invoice run.
+
+
+
+[#exercise-8-1-extend-the-home-page]
+== Exercise 8.1: Extend the Home Page.
+
+In this exercise we'll extend the home page by displaying additional data in new collections.
+
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/08-01-home-page-additional-collections
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+
+=== Tasks
+
+* update `PetRepository` and `VisitRepository` to extend `JpaRepository` (rather than simply `Repository`)
++
+This will provide additional finders "for free".
+
+* modify `HomePageViewModel` to show the current ``PetOwner``s, ``Pet``s and ``Visit``s in three separate columns:
++
+[source,java]
+----
+@DomainObject(
+        nature = Nature.VIEW_MODEL,                             // <.>
+        logicalTypeName = "petclinic.HomePageViewModel"
+        )
+@HomePage                                                       // <.>
+@DomainObjectLayout()
+public class HomePageViewModel {
+
+    public String title() {
+        return getPetOwners().size() + " owners";
+    }
+
+    public List<PetOwner> getPetOwners() {                      // <.>
+        return petOwnerRepository.findAll();
+    }
+    public List<Pet> getPets() {                                // <.>
+        return petRepository.findAll();
+    }
+    public List<Visit> getVisits() {                            // <.>
+        return visitRepository.findAll();
+    }
+
+    @Inject PetOwnerRepository petOwnerRepository;
+    @Inject PetRepository petRepository;
+    @Inject VisitRepository visitRepository;
+}
+----
+<.> indicates that this is a view model.
+<.> exactly one view model can be annotated as the xref:refguide:applib:index/annotation/HomePage.adoc[@HomePage]
+<.> renamed derived collection, returns ``PetOwner``s.
+<.> new derived collection returning all ``Pet``s.
+<.> new derived collection returning all ``Visits``s.
+
+* update the `HomePageViewModel.layout.xml`:
++
+[source,xml]
+.HomePageViewModel.layout.xml
+----
+<!-- ... -->
+    <bs3:row>
+        <bs3:col span="12" unreferencedCollections="true">
+            <bs3:row>
+                <bs3:col span="4">
+                    <collection id="petOwners" defaultView="table"/>
+                </bs3:col>
+                <bs3:col span="4">
+                    <collection id="pets" defaultView="table"/>
+                </bs3:col>
+                <bs3:col span="4">
+                    <collection id="visits" defaultView="table"/>
+                </bs3:col>
+            </bs3:row>
+        </bs3:col>
+    </bs3:row>
+<!-- ... -->
+----
+
+* update or add columnOrder.txt files for the 3 collections.
+
+
+
+[#exercise-8-2-add-a-convenience-action]
+== Exercise 8.2: Add a convenience action
+
+View models can have behaviour (actions), the same as entities.
+In this exercise we'll extend the home page by providing a convenience action to book a `Visit` for any `Pet` of any `PetOwner`.
+
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/08-02-home-page-bookVisit-convenience-action
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+
+=== Tasks
+
+* create a bookVisit action for HomePageViewModel, as a mixin:
++
+[source,java]
+.HomePageViewModel_bookVisit.java
+----
+@Action                                                                                 // <.>
+@RequiredArgsConstructor
+public class HomePageViewModel_bookVisit {                                              // <.>
+
+    final HomePageViewModel homePageViewModel;
+
+    public Object act(
+            PetOwner petOwner, Pet pet, LocalDateTime visitAt, String reason,
+            boolean showVisit) {                                                               // <.>
+        Visit visit = wrapperFactory.wrapMixin(Pet_bookVisit.class, pet).act(visitAt, reason); // <.>
+        return showVisit ? visit : homePageViewModel;
+    }
+    public List<PetOwner> autoComplete0Act(final String lastName) {                     // <.>
+        return petOwnerRepository.findByLastNameContaining(lastName);
+    }
+    public List<Pet> choices1Act(PetOwner petOwner) {                                   // <.>
+        if(petOwner == null) return Collections.emptyList();
+        return petRepository.findByPetOwner(petOwner);
+    }
+    public LocalDateTime default2Act(PetOwner petOwner, Pet pet) {                      // <.>
+        if(pet == null) return null;
+        return factoryService.mixin(Pet_bookVisit.class, pet).default0Act();
+    }
+    public String validate2Act(PetOwner petOwner, Pet pet, LocalDateTime visitAt) {     // <.>
+         return factoryService.mixin(Pet_bookVisit.class, pet).validate0Act(visitAt);
+    }
+
+    @Inject PetRepository petRepository;
+    @Inject PetOwnerRepository petOwnerRepository;
+    @Inject WrapperFactory wrapperFactory;
+    @Inject FactoryService factoryService;
+}
+----
+<.> declares this class as a mixin action.
+<.> The action name is derived from the mixin's class ("bookVisit").
+<.> cosmetic flag to control the UI; either remain at the home page or navigate to the newly created `Visit
+<.> use the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] to delegate to the original behaviour "as if" through the UI.
+If additional business rules were added to that delegate, then the mistake would be detected.
+<.> Uses an xref:refguide:applib-methods:prefixes.adoc#autoComplete[autoComplete] supporting method to look up matching ``PetOwner``s based upon their name.
+<.> Finds the ``Pet``s owned by the `PetOwner`, once selected.
+<.> Computes a default for the 2^nd^ parameter, once the first two are selected.
+<.> surfaces (some of) the business rules of the delegate mixin.
+
+* update the layout file to position:
++
+[source,xml]
+.HomePageViewModel.layout.xml
+----
+<!-- ... -->
+    <bs3:row>
+        <bs3:col span="12" unreferencedActions="true">
+            <domainObject/>
+            <action id="bookVisit"/>
+            <!-- ... -->
+        </bs3:col>
+    </bs3:row>
+<!-- ... -->
+----
+
+
+
+[#exercise-8-3-using-a-view-model-as-a-projection-of-an-entity]
+== Exercise 8.3: Using a view model as a projection of an entity
+
+In the home page, the ``Visit`` instances show the `Pet` but they do not show the `PetOwner`.
+One option (probably the correct one in this case) would be to extend `Visit` itself and show this derived information:
+
+[source,java]
+.Visit.java
+----
+public PetOwner getPetOwner() {
+    return getPet().getOwner();
+}
+----
+
+Alternatively, if we didn't want to "pollute" the entity with this derived property, we could use a mixin:
+
+[source,java]
+.Visit_petOwner.java
+----
+@Property
+@RequiredArgsConstructor
+public class Visit_petOwner {
+
+    final Visit visit;
+
+    public PetOwner prop() {
+        return visit.getPet().getOwner();
+    }
+}
+----
+
+Even so, this would still make the "petOwner" property visible everywhere that a `Visit` is displayed.
+
+If we instead want to be more targetted and _only_ show this "petOwner" property when displayed on the HomePage, yet another option is to implement the xref:refguide:applib:index/services/tablecol/TableColumnVisibilityService.adoc[TableColumnVisibilityService] SPI.
+This provides the context for where an object is being rendered, so this could be used to suppress the collection everywhere except the home page.
+
+A final option though, which we'll use in this exercise, is to display not the entity itself but instead a view model that "wraps" the entity and supplements with the additional data required.
+
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/08-03-view-model-projecting-an-entity
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+
+=== Tasks
+
+* create a JAXB style view model `VisitPlusPetOwner`, wrapping the `Visit` entity:
++
+[source,java]
+.VisitPlusPetOwner.java
+----
+@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "petclinic.VisitPlusPetOwner")
+@DomainObjectLayout(named = "Visit")
+@XmlRootElement                                                     // <.>
+@XmlType                                                            // <1>
+@XmlAccessorType(XmlAccessType.FIELD)                               // <1>
+@NoArgsConstructor
+public class VisitPlusPetOwner {
+
+    @Property(
+            projecting = Projecting.PROJECTED,                      // <.>
+            hidden = Where.EVERYWHERE                               // <.>
+    )
+    @Getter
+    private Visit visit;
+
+    VisitPlusPetOwner(Visit visit) {this.visit = visit;}
+
+    public Pet getPet() {return visit.getPet();}                    // <.>
+    public String getReason() {return visit.getReason();}           // <4>
+    public LocalDateTime getVisitAt() {return visit.getVisitAt();}  // <4>
+
+    public PetOwner getPetOwner() {                                 // <.>
+        return getPet().getPetOwner();
+    }
+}
+----
+<.> Boilerplate for JAXB view models
+<.> if the icon/title is clicked, then traverse to this object rather than the view model.
+(The view model is a "projection" of the underlying `Visit`).
+<.> Nevertheless, hide this property from the UI.
+<.> expose properties from the underlying `Visit` entity
+<.> add in additional derived properties, in this case the ``Pet``'s owner.
+
+* Refactor the `getVisits` collection of `HomePageViewModel` to use the new view model:
++
+[source,java]
+.VisitPlusPetOwner.java
+----
+public List<VisitPlusPetOwner> getVisits() {
+    return visitRepository.findAll()
+            .stream()
+            .map(VisitPlusPetOwner::new)
+            .collect(Collectors.toList());
+}
+----
+
+* update the columnOrder file for this collection to display the new property:
++
+[source,java]
+.HomePageViewModel#visits.columnOrder.txt
+----
+petOwner
+pet
+visitAt
+----
+
+Run the application; the `visits` collection on the home page should now show the `PetOwner` as an additional column, but otherwise behaves the same as previously.

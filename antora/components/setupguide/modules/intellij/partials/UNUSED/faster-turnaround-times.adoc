@@ -74,7 +74,7 @@ Similarly, gradle can be run to reduce the turn-around time when tweaking the UI
 xref:userguide:fun:ui.adoc#object-layout[*.layout.xml] file for each domain class), when the app is running.
 
 The framework will automatically notice any changes to `.layout.xml` files, but these are read from the classpath (the `target/classes` directory), not the source path.
-With IntelliJ these can be copied over manually by invoking `Run > Reload Changed Classes`.
+With IntelliJ these can be copied over manually by invoking menu:Run[Debugging Actions > Reload Changed Classes].
 Once the browser is refreshed, the new layout will be rendered.
 
 [NOTE]
