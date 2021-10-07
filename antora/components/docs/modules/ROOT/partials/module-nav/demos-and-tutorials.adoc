@@ -6,7 +6,7 @@
 
 include::docs:demo:partial$module-nav.adoc[]
 
-** xref:tutorials:ROOT:about.adoc[Tutorials]
+** xref:tutorials:petclinic:about.adoc[Petclinic (Tutorial)]
 
 
 
