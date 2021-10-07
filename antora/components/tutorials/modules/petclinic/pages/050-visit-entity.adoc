@@ -13,7 +13,7 @@ We'll look at the important topic of modularity in later exercises.
 
 
 [#exercise-5-1-the-visits-module]
-== Exercise 5.1: The visits module
+== Ex 5.1: The visits module
 
 In this exercise we'll just create an empty visits module.
 
@@ -72,7 +72,7 @@ It still depends upon `PetsModule`, but now as a transitive dependency.
 
 
 [#exercise-5-2-visit-entitys-key-properties]
-== Exercise 5.2: Visit entity's key properties
+== Ex 5.2: Visit entity's key properties
 
 Now we have a visits module, we can now add in the `Visit` entity.
 We'll start just with the key properties.
@@ -168,7 +168,7 @@ Run the application, and confirm that the table is created correctly using menu:
 
 
 [#exercise-5-3-book-visit-action]
-== Exercise 5.3: "Book Visit" action
+== Ex 5.3: "Book Visit" action
 
 In addition to the key properties, the `Visit` has one further mandatory property, `reason`.
 This is required to be specified when a `Visit` is created ("what is the purpose of this visit?")

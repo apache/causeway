@@ -22,7 +22,7 @@ In this part of the tutorial we'll look at domain events.
 
 
 [#exercise-7-1-refactor-petowners-delete-action]
-== Exercise 7.1: refactor PetOwner's delete action
+== Ex 7.1: refactor PetOwner's delete action
 
 Currently the `delete` action for `PetOwner` is implemented as a mixin within the `Pet` package.
 That's a nice place for that functionality, because it can delete any `Pet`s for the `PetOwner` if any exist.

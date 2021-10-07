@@ -30,7 +30,7 @@ For this tutorial, make sure that your IDE is configured to support Lombok.
 
 
 [#exercise-1-1-starter-apps-clone-the-repo]
-== Exercise 1.1: Starter apps / clone the repo
+== Ex 1.1: Starter apps / clone the repo
 
 Apache Isis provides a two starter apps, xref:docs:starters:helloworld.adoc[HelloWorld] and xref:docs:starters:simpleapp.adoc[SimpleApp].
 These are identical in terms of functionality, but the simpleapp provides more structure and includes example tests.
@@ -71,7 +71,7 @@ mvn -pl webapp spring-boot:run
 
 
 [#exercise-1-2-explore-the-simple-app]
-== Exercise 1.2: Explore the Simple App
+== Ex 1.2: Explore the Simple App
 
 Although we'll be refactoring the codebase in the next exercise, take a few minutes to familiarize yourself with the functionality of the simpleapp.
 
@@ -87,7 +87,7 @@ This will create some sample data.
 
 
 [#exercise-1-3-running-from-the-ide]
-== Exercise 1.3: Running from the IDE
+== Ex 1.3: Running from the IDE
 
 Running from the command line isn't ideal, so
 
@@ -104,7 +104,7 @@ If you want to go deeper, open up the xref:docs:starters:simpleapp.adoc[page des
 
 
 [#exercise-1-4-naked-objects-pattern]
-== Exercise 1.4: Naked Objects pattern
+== Ex 1.4: Naked Objects pattern
 
 Apache Isis is an implementation of the _naked objects pattern_, which means that entities (and later, as we'll see view models) are automatically exposed in the UI.
 
@@ -140,7 +140,7 @@ See the xref:refguide:applib-svc:about.adoc[Reference Guide: Domain Services] do
 
 
 [#exercise-1-5-ui-hints]
-== Exercise 1.5: UI Hints
+== Ex 1.5: UI Hints
 
 The framework derives as much of the UI as possible from the domain objects' intrinsic structure and behaviour, but there are some supporting structures and conventions that are there primarily to improve the UI.
 

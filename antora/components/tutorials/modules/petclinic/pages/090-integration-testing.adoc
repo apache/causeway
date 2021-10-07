@@ -8,7 +8,8 @@ Integration tests are _not_ written using Selenium or similar, so avoid the frag
 Instead, the framework provides the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] domain service which simulates the user interface in a type-safe way.
 
 
-== Exercuse 9.1: Testing bookVisit using an integtest
+[#exercise-9-1-testing-bookvisit-using-an-integtest]
+== Ex 9.1: Testing bookVisit using an integtest
 
 In this exercise we'll test the `bookVisit` mixin action (on `Pet` entity).
 

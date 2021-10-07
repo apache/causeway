@@ -11,7 +11,7 @@ Some real-world examples include importing/exporting spreadsheets periodically (
 
 
 [#exercise-8-1-extend-the-home-page]
-== Exercise 8.1: Extend the Home Page.
+== Ex 8.1: Extend the Home Page.
 
 In this exercise we'll extend the home page by displaying additional data in new collections.
 
@@ -98,7 +98,7 @@ public class HomePageViewModel {
 
 
 [#exercise-8-2-add-a-convenience-action]
-== Exercise 8.2: Add a convenience action
+== Ex 8.2: Add a convenience action
 
 View models can have behaviour (actions), the same as entities.
 In this exercise we'll extend the home page by providing a convenience action to book a `Visit` for any `Pet` of any `PetOwner`.
@@ -183,7 +183,7 @@ If additional business rules were added to that delegate, then the mistake would
 
 
 [#exercise-8-3-using-a-view-model-as-a-projection-of-an-entity]
-== Exercise 8.3: Using a view model as a projection of an entity
+== Ex 8.3: Using a view model as a projection of an entity
 
 In the home page, the ``Visit`` instances show the `Pet` but they do not show the `PetOwner`.
 One option (probably the correct one in this case) would be to extend `Visit` itself and show this derived information:

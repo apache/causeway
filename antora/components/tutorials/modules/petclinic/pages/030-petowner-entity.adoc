@@ -6,7 +6,7 @@
 In this set of exercises we'll just focus on the `PetOwner` entity.
 
 [#exercise-3-1-rename-petowners-name-property]
-== Exercise 3.1: Rename PetOwner's name property
+== Ex 3.1: Rename PetOwner's name property
 
 In the domain we are working on, `PetOwner` has a `firstName` and a `lastName` property, not a single `name` property.
 
@@ -57,7 +57,7 @@ Build and run the application to make sure it still runs fine.
 
 
 [#exercise-3-2-add-petowners-firstname-property]
-== Exercise 3.2: Add PetOwner's firstName property
+== Ex 3.2: Add PetOwner's firstName property
 
 Now that `PetOwner` has a `lastName` property, let's also add a `firstName` property.
 We'll also update our fixture script (which sets up ``PetOwner``s) so that it is more descriptive.
@@ -141,7 +141,7 @@ Learn more about fixture scripts xref:testing:fixtures:about.adoc[here].
 
 
 [#exercise-3-3-modify-petowners-updatename-action]
-== Exercise 3.3: Modify PetOwner's updateName action
+== Ex 3.3: Modify PetOwner's updateName action
 
 Although we've added a `firstName` property, currently it can't be edited.
 In this exercise we'll modify the `updateName` action to also allow the `firstName` to be changed.
@@ -197,7 +197,7 @@ The "default" supporting methods are called when the action prompt is rendered, 
 
 
 [#exercise-3-4-modify-the-menu-action-to-create-petowners]
-== Exercise 3.4: Modify the menu action to create PetOwners
+== Ex 3.4: Modify the menu action to create PetOwners
 
 If we want to create a new `PetOwner` and provide their `firstName`, at the moment it's a two stage process: create the `PetOwner` (using `PetOwners#create` action from the menu), then update their name (using the `updateName` action that we just looked at).
 
@@ -240,7 +240,7 @@ Or, even better would be to introduce some sort of "customerNumber" and use this
 
 
 [#exercise-3-5-initial-fixture-script]
-== Exercise 3.5: Initial Fixture Script
+== Ex 3.5: Initial Fixture Script
 
 As we prototype with an in-memory database, it means that we need to setup the database each time we restart the application.
 Using the menu:Prototyping[Fixture Scripts] menu to setup data saves some time, but it would nicer still if that script could be run automatically.
@@ -285,7 +285,7 @@ When you run the application you should now find that there are 10 `PetOwner` ob
 
 
 [#exercise-3-6-prompt-styles]
-== Exercise 3.6: Prompt styles
+== Ex 3.6: Prompt styles
 
 The framework provides many ways to customise the UI, either through the layout files or using the `@XxxLayout` annotations.
 Default UI conventions can also be specified using the `application.yml` configuration file.
@@ -367,7 +367,7 @@ isis:
 
 
 [#exercise-3-7-derived-name-property]
-== Exercise 3.7: Derived name property
+== Ex 3.7: Derived name property
 
 The ``PetOwner``'s `firstName` and `lastName` properties are updated using the `updateName` action, but when the action's button is invoked, it only "replaces" the `lastName` property:
 
@@ -553,7 +553,7 @@ assertThat(wrap(fred).getName()).isEqualTo("Freddy"); // <.>
 
 
 [#exercise-3-8-add-other-properties-for-petowner]
-== Exercise 3.8: Add other properties for PetOwner
+== Ex 3.8: Add other properties for PetOwner
 
 Let's add the two remaining properties for `PetOwner`:
 
@@ -651,7 +651,7 @@ private String emailAddress;
 
 
 [#exercise-3-9-validation]
-== Exercise 3.9: Validation
+== Ex 3.9: Validation
 
 At the moment there are no constraints for the format of `phoneNumber` or `emailAddress` properties.
 We can fix this by adding rules to their respective meta-annotations.
@@ -783,7 +783,7 @@ As the logic is shared, create a new meta-(meta-)annotation called `@Name`, move
 
 
 [#exercise-3-10-field-layout]
-== Exercise 3.10: Field layout
+== Ex 3.10: Field layout
 
 At the moment all the properties of `PetOwner` are grouped into a single fieldset.
 The UI would be improved by grouping properties according to their nature, for example the "phoneNumber" and "emailAddress" in a "Contact Details" fieldset.
@@ -887,7 +887,7 @@ It really is a matter of personal preference which approach you use.
 
 
 [#exercise-3-11-column-orders]
-== Exercise 3.11: Column Orders
+== Ex 3.11: Column Orders
 
 The home page of the webapp shows a list of all `PetOwner`s (inherited from the original simple app).
 We also see a list of `PetOwner`s if we invoke menu:Pet Owners[List All].

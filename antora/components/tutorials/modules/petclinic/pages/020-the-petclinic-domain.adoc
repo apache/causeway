@@ -29,7 +29,7 @@ Some of the use cases we might want to support include:
 This tutorial has worked solutions for all of these.
 
 [#exercise-2-1-refactor-simpleobject-to-petowner]
-== Exercise 2.1: Refactor `SimpleObject` to `PetOwner`
+== Ex 2.1: Refactor `SimpleObject` to `PetOwner`
 
 To start with, let's rename the `SimpleObject` entity to `PetOwner`
 

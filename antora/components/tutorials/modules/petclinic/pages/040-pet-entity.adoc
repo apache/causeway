@@ -12,7 +12,7 @@ In this set of exercises we'll focus on the `Pet` entity and its relationship wi
 Each `PetOwner` will hold a collection of their ``Pet``s, with actions to add or remove `Pet` instances for that collection.
 
 [#exercise-4-1-pet-entitys-key-properties]
-== Exercise 4.1: Pet entity's key properties
+== Ex 4.1: Pet entity's key properties
 
 In this exercise we'll just create the outline of the `Pet` entity, and ensure it is mapped to the database correctly.
 
@@ -114,7 +114,7 @@ Run the application, and confirm that the table is created correctly using menu:
 
 
 [#exercise-4-2-add-petrepository]
-== Exercise 4.2: Add PetRepository
+== Ex 4.2: Add PetRepository
 
 We will need to find the ``Pet``s belonging to a `PetOwner`.
 We do this by introducing a `PetRepository`, implemented as a link:https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.definition[Spring Data repository].
@@ -150,7 +150,7 @@ Confirm the application still runs
 
 
 [#exercise-4-3-add-petowners-collection-of-pets]
-== Exercise 4.3: Add PetOwner's collection of Pets
+== Ex 4.3: Add PetOwner's collection of Pets
 
 In this next exercise we'll add the ``PetOwner``'s collection of ``Pet``s, using a xref:userguide:fun:mixins.adoc[mixin].
 
@@ -275,7 +275,7 @@ Run the application (or just reload the changed classes) and confirm the columns
 
 
 [#exercise-4-4-add-pets-remaining-properties]
-== Exercise 4.4: Add Pet's remaining properties
+== Ex 4.4: Add Pet's remaining properties
 
 In this exercise we'll add the remaining properties for `Pet`.
 
@@ -377,7 +377,7 @@ Run the application and use menu:Prototyping[H2 Console] to confirm the database
 
 
 [#exercise-4-5-digression-clean-up-casing-of-database-schema]
-== Exercise 4.5: Digression: clean-up casing of database schema
+== Ex 4.5: Digression: clean-up casing of database schema
 
 Reviewing the tables in the database we can see that we have a mix between lower- and upper-case table and column names.
 In this exercise we'll take a timeout to make everything consistent.
@@ -404,7 +404,7 @@ mvn -pl spring-boot:run
 
 
 [#exercise-4-6-add-petowner-action-to-add-pets]
-== Exercise 4.6: Add PetOwner action to add Pets
+== Ex 4.6: Add PetOwner action to add Pets
 
 In this exercise we'll bring in the capability to add ``Pet``s, as a responsibility of `PetOwner`.
 We'll use an mixin action to implement this.
@@ -500,7 +500,7 @@ Run the application once more to test.
 
 
 [#exercise-4-7-add-pets-ui-customisation]
-== Exercise 4.7: Add Pet's UI customisation
+== Ex 4.7: Add Pet's UI customisation
 
 If we run the application and create a `Pet`, then the framework will render a page but the layout could be improved.
 So in this exercise we'll add a layout file for `Pet` and other UI files.
@@ -650,7 +650,7 @@ image::04-07/download-layout-xml.png[width=400]
 
 
 [#exercise-4-8-update-fixture-script-using-pet-personas]
-== Exercise 4.8: Update fixture script using Pet personas
+== Ex 4.8: Update fixture script using Pet personas
 
 By now you are probably tiring of continually creating a Pet in order to perform your tests.
 So let's take some time out to extend our fixture so that each `PetOwner` also has some ``Pet``s.
@@ -807,7 +807,7 @@ public class PetClinicDemo extends FixtureScript {
 
 
 [#exercise-4-9-add-petowner-action-to-delete-a-pet]
-== Exercise 4.9: Add PetOwner action to delete a Pet
+== Ex 4.9: Add PetOwner action to delete a Pet
 
 We will probably also need to delete an action to delete a `Pet` (though once there are associated ``Visit``s for a `Pet`, we'll need to disable this action).
 
@@ -947,7 +947,7 @@ public class PetOwner_removePets {                      // <.>
 
 
 [#exercise-4-10-cleanup]
-== Exercise 4.10: Cleanup
+== Ex 4.10: Cleanup
 
 Reviewing the contents of the `pets` module, we can see (in the solutions provided at least) that there are a few thing that still need some attention:
 

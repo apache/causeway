@@ -55,21 +55,9 @@
 ** xref:080-view-models.adoc#exercise-8-3-using-a-view-model-as-a-projection-of-an-entity[image:hand.png[] *8.3*: Using a view model as a projection of an entity]
 
 
-* xref:090-integration-testing.adoc[(Integration) Testing]
-** xref:090-integration-testing.adoc#_an_improved_fixture_script[image:hand.png[] *270*: An improved Fixture Script]
-** xref:090-integration-testing.adoc#_writing_integration_tests[image:hand.png[] *280*: Writing Integration Tests]
-** xref:090-integration-testing.adoc#_factor_out_abstract_integration_test[image:hand.png[] *290*: Factor out abstract integration test]
-** xref:090-integration-testing.adoc#_move_teardowns_to_modules[image:hand.png[] *300*: Move teardowns to modules]
-** xref:090-integration-testing.adoc#_fake_data_service[image:hand.png[] *310*: Fake Data Service]
-** xref:090-integration-testing.adoc#_extend_the_fixture_script_to_set_up_visits[image:hand.png[] *320*: Extend the Fixture script to set up visits]
+* xref:090-integration-testing.adoc[Integration Testing]
+** xref:090-integration-testing.adoc#exercise-9-1-testing-bookvisit-using-an-integtest[image:hand.png[] *9.1*: Testing bookVisit using an integtest]
 
-* xref:110-adding-further-business-logic-worked-examples.adoc[Further business logic]
-** xref:110-adding-further-business-logic-worked-examples.adoc#_enter_an_outcome[image:hand.png[] *330*: Enter an outcome]
-** xref:110-adding-further-business-logic-worked-examples.adoc#_pay_for_a_visit[image:hand.png[] *340*: Pay for a visit]
-** xref:110-adding-further-business-logic-worked-examples.adoc#_prevent_payment_for_a_visit_twice[image:hand.png[] *350*: Prevent payment for a visit twice ("see it? use it? do it?")]
-** xref:110-adding-further-business-logic-worked-examples.adoc#_find_code_visit_code_s_not_yet_paid_and_overdue[image:hand.png[] *360*: Find Visits not yet paid and overdue]
-** xref:110-adding-further-business-logic-worked-examples.adoc#_digression_hiding_columns_in_tables[image:hand.png[] *370*: Digression: Hiding Columns in Tables]
-** xref:110-adding-further-business-logic-worked-examples.adoc#_another_digression_icons_and_css[image:hand.png[] *380*: Another Digression: Icons and CSS]
-** xref:110-adding-further-business-logic-worked-examples.adoc#_delete_an_code_owner_code_provided_no_unpaid_code_visit_code_s[image:hand.png[] *390*: Delete an Owner provided no unpaid Visits]
+
 
 //* xref:i18n.adoc[i18n]

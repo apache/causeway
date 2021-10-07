@@ -8,7 +8,7 @@ In this part of the tutorial we'll cover unit testing, later on we'll look at in
 
 
 [#exercise-6-1-unit-test-the-default-time-when-booking-visits]
-== Exercise 6.1: Unit test the default time when booking visits
+== Ex 6.1: Unit test the default time when booking visits
 
 The xref:050-visit-entity.adoc#exercise-5-3-book-visit-action["Book Visit"] action has a default time of 9am the next morning.
 In this section we'll write a unit test to verify this logic, using Mockito to "mock the clock".
