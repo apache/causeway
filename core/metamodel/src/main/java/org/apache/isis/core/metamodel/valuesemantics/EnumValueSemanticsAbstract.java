@@ -33,6 +33,7 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.util.Enums;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
@@ -130,13 +131,10 @@ implements
 
     @Override
     public String simpleTextRepresentation(final Context context, final T value) {
-        return render(value, v->parseableTextRepresentation(context, v));
+        return render(value, v->friendlyName(context, v));
     }
 
-    // -- PARSER
-
-    @Override
-    public String parseableTextRepresentation(final Context context, final T object) {
+    private String friendlyName(final Context context, final T object) {
         if (titleMethod != null) {
             // sadness: same as in TranslationFactory
             val translationContext = TranslationContext.forMethod(titleMethod);
@@ -163,23 +161,26 @@ implements
         return translationService.translate(translationContext, friendlyNameOfEnum);
     }
 
+    // -- PARSER
+
+    @Override
+    public String parseableTextRepresentation(final Context context, final T enumValue) {
+        if(enumValue==null) {
+            return null;
+        }
+        return Enums.getFriendlyNameOf(enumValue);
+    }
+
     @Override
     public T parseTextRepresentation(
             final ValueSemanticsProvider.Context context,
-            final String entry) {
-        final T[] enumConstants = correspondingClass.getEnumConstants();
-        for (final T enumConstant : enumConstants) {
-            if (toEncodedString(enumConstant).equals(entry)) {
-                return enumConstant;
-            }
+            final String text) {
+        val input = _Strings.blankToNullOrTrim(text);
+        if(input==null) {
+            return null;
         }
-        // fallback
-        for (final T enumConstant : enumConstants) {
-            if (enumConstant.toString().equals(entry)) {
-                return enumConstant;
-            }
-        }
-        throw new TextEntryParseException("Unknown enum constant '" + entry + "'");
+        return Enums.parseFriendlyName(correspondingClass, input)
+                .orElseThrow(()->new TextEntryParseException("Unknown enum constant '" + input + "'"));
     }
 
     @Override

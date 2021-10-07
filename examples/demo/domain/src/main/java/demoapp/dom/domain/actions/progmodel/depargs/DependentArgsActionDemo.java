@@ -31,6 +31,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.value.Markup;
@@ -46,10 +47,10 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.DependentArgs", editing=Editing.ENABLED)
 public class DependentArgsActionDemo implements HasAsciiDocDescription {
 
-    @Property
+    @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(describedAs = "Default for first dialog paramater in 'Choices', 'Auto Complete' and 'Default'")
     @Getter @Setter
-    private Parity dialogParityDefault = Parity.EVEN;
+    private Parity dialogParityDefault = null;
 
     @Property
     @PropertyLayout(describedAs = "Default for first dialog paramater in 'Hide' and 'Disable'")

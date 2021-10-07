@@ -145,7 +145,7 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
     @Override
     public <R> Observable<R> map(
             final Function<T, R> forwardMapper) {
-        final var newBindable = _Observables.<R>forFactory(()->forwardMapper.apply(getValue()));
+        final var newBindable = _Observables.<R>lazy(()->forwardMapper.apply(getValue()));
         addListener((e,o,n)->{
             newBindable.setValue(forwardMapper.apply(n));
         });

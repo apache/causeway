@@ -125,19 +125,22 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     /**
      * Gets the proposed value as ManagedObject.
+     * (override, so we don't return the target model, we are chained to)
      */
     @Override
     public final ManagedObject getObject() {
-        // override, so we don't return the target model, we are chained to
+        if(isCurrentValueAbsent()) {
+            return ManagedObject.empty(proposedValue().getElementType());
+        }
         return proposedValue().getValue().getValue();
     }
 
     /**
      * Sets given ManagedObject as new proposed value.
+     * (override, so we don't return the target model, we are chained to)
      */
     @Override
     public final void setObject(final ManagedObject newValue) {
-        // override, so we don't set the target model, we are chained to
         proposedValue().getValue().setValue(newValue);
     }
 
@@ -168,10 +171,25 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
                 .anyMatch(x -> x.isAssignableFrom(scalarType));
     }
 
+    /**
+     * Has no meaning for <i>Parameters</i>, only has meaning for <i>Properties</i>.
+     * For a <i>Property</i>
+     * the current value and the initial pending (negotiated) value might differ,
+     * if the current value is absent (null).
+     * For <i>Parameters</i> we always evaluate {@code isCurrentValueAbsent()}
+     * to false.
+     */
+    public boolean isCurrentValueAbsent() {
+        val proposedValue = proposedValue();
+        return proposedValue.isCurrentValueAbsent().booleanValue();
+    }
+
     /** get the proposed value, subject to negotiation */
     public String getObjectAsString() {
         val proposedValue = proposedValue();
-        return proposedValue.getValueAsParsableText().getValue();
+        return proposedValue.isCurrentValueAbsent().booleanValue()
+                ? ""
+                : proposedValue.getValueAsParsableText().getValue();
     }
 
     /**

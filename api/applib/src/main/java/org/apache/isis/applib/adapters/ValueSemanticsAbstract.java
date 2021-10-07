@@ -43,7 +43,7 @@ import lombok.val;
 public abstract class ValueSemanticsAbstract<T>
 implements ValueSemanticsProvider<T> {
 
-    public static final String NULL_REPRESENTATION = "[none]";
+    public static final String NULL_REPRESENTATION = "(none)";
     protected static final ValueType UNREPRESENTED = ValueType.STRING;
 
     @SuppressWarnings("unchecked")

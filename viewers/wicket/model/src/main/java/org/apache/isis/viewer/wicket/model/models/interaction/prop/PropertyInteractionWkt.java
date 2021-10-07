@@ -71,6 +71,7 @@ extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
     @Override
     protected PropertyInteraction load() {
 
+        // restore the lazy field - don't evaluate yet
         propertyNegotiationModel =
                 _Lazy.threadSafe(()->propertyInteraction().startPropertyNegotiation());
 

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.commons.internal.binding;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import org.apache.isis.commons.internal.base._Lazy;
@@ -52,10 +53,30 @@ public class _Observables {
             super.fireValueChanged();
         }
 
+        @Override
+        public void setValue(final T newValue) {
+            // just ignore
+        }
+
     }
 
-    public static <T> LazyObservable<T> forFactory(final Supplier<T> factory) {
+    public static <T> LazyObservable<T> lazy(final Supplier<T> factory) {
         return new LazyObservable<T>(factory);
+    }
+
+    public static class BooleanObservable extends LazyObservable<Boolean> {
+
+        public BooleanObservable(final BooleanSupplier factory) {
+            super(()->factory.getAsBoolean());
+        }
+
+        public boolean booleanValue() {
+            return super.getValue().booleanValue();
+        }
+    }
+
+    public static BooleanObservable lazyBoolean(final BooleanSupplier factory) {
+        return new BooleanObservable(factory);
     }
 
 }

@@ -107,11 +107,11 @@ implements MultiselectChoices {
         this.managedMember = managedMember;
         this.where = where;
 
-        dataElements = _Observables.forFactory(elementSupplier);
+        dataElements = _Observables.lazy(elementSupplier);
 
         searchArgument = _Bindables.forValue(null);
 
-        dataRowsFiltered = _Observables.forFactory(()->
+        dataRowsFiltered = _Observables.lazy(()->
             dataElements.getValue().stream()
                 //TODO filter by searchArgument
                 .filter(this::ignoreHidden)
@@ -120,7 +120,7 @@ implements MultiselectChoices {
                 .map(domainObject->new DataRow(this, domainObject))
                 .collect(Can.toCan()));
 
-        dataRowsSelected = _Observables.forFactory(()->
+        dataRowsSelected = _Observables.lazy(()->
             dataRowsFiltered.getValue().stream()
             .filter(dataRow->dataRow.getSelectToggle().getValue().booleanValue())
             .collect(Can.toCan()));
@@ -142,7 +142,7 @@ implements MultiselectChoices {
             dataRowsSelected.invalidate();
         });
 
-        dataColumns = _Observables.forFactory(()->
+        dataColumns = _Observables.lazy(()->
             managedMember.getElementType()
             .streamPropertiesForColumnRendering(managedMember.getIdentifier(), managedMember.getOwner())
             .map(property->new DataColumn(this, property))
@@ -150,7 +150,7 @@ implements MultiselectChoices {
 
         //TODO the tile could dynamically reflect the number of elements selected
         //eg... 5 Orders selected
-        title = _Observables.forFactory(()->
+        title = _Observables.lazy(()->
             managedMember.getElementType()
             .lookupFacet(MemberNamedFacet.class)
             .map(MemberNamedFacet::getSpecialization)

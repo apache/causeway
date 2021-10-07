@@ -33,6 +33,7 @@ import lombok.val;
 public class _Bindables {
 
     private static class SimpleBindable<T> extends _BindableAbstract<T> {}
+
     public static class BooleanBindable extends _BindableAbstract<Boolean> {
         public boolean toggleThenGet() {
             setValue(!getValue());

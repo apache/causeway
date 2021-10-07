@@ -75,7 +75,7 @@ extends ManagedMember {
             final @NonNull Where where) {
         super(owner, where);
         this.property = property;
-        observablePropValue = _Observables.forFactory(this::reassessPropertyValue);
+        observablePropValue = _Observables.lazy(this::reassessPropertyValue);
     }
 
     @Override

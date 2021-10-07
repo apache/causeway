@@ -34,10 +34,10 @@ public class DataColumn {
     public DataColumn(final DataTableModel parentTable, final OneToOneAssociation propertyMetaModel) {
         this.propertyMetaModel = propertyMetaModel;
 
-        columnFriendlyName = _Observables.forFactory(()->
+        columnFriendlyName = _Observables.lazy(()->
             propertyMetaModel.getCanonicalFriendlyName());
 
-        columnDescription = _Observables.forFactory(()->
+        columnDescription = _Observables.lazy(()->
             propertyMetaModel.getCanonicalDescription());
 
     }
