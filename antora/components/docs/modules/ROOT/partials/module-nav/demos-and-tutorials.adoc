@@ -6,4 +6,5 @@
 
 include::docs:demo:partial$module-nav.adoc[]
 
-** link:https://danhaywood.gitlab.io/isis-petclinic-tutorial-docs/petclinic/1.16.2/intro.html[Petclinic (tutorial)]
+include::tutorials:petclinic:partial$module-nav.adoc[Petclinic (tutorial)]
+
