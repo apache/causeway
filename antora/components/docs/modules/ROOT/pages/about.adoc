@@ -37,11 +37,11 @@ _POMs_
 
 |
 [discrete]
-== Demos
+== Demos & Tutorials
 
 * xref:docs:demo:about.adoc[Demo App]
 (link:https://demo-wicket.jdo.isis.incode.work[jdo], link:https://demo-wicket.jpa.isis.incode.work[jpa])
-* link:https://danhaywood.gitlab.io/isis-petclinic-tutorial-docs/petclinic/1.16.2/intro.html[Petclinic (v1.16.2)]
+* xref:tutorials:petclinic:about.adoc[Petclinic]
 
 [discrete]
 == Resources
