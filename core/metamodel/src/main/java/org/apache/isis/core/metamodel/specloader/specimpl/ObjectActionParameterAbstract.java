@@ -254,22 +254,23 @@ implements
             final @NonNull ParameterNegotiationModel pendingArgs) {
 
         val paramSpec = getElementType();
-        var defaults = lookupNonFallbackFacet(ActionParameterDefaultsFacet.class)
-        .map(defaultsFacet->defaultsFacet.getDefault(pendingArgs))
-        .orElseGet(()->ManagedObjects.unpack(paramSpec, pendingArgs.getParamValue(getNumber())))
-        // post processing
-        .map(obj->ManagedObjects.emptyToDefault(!isOptional(), obj));
+        val defaults = lookupNonFallbackFacet(ActionParameterDefaultsFacet.class)
+                .map(defaultsFacet->defaultsFacet.getDefault(pendingArgs))
+                .orElseGet(Can::empty);
 
         if(pendingArgs.getParamMetamodel(getNumber()).isNonScalar()) {
+            val nonScalarDefaults = defaults
+            // post processing each entry
+            .map(obj->ManagedObjects.emptyToDefault(paramSpec, !isOptional(), obj));
             // pack up
-            return ManagedObjects.pack(paramSpec, defaults);
+            return ManagedObjects.pack(paramSpec, nonScalarDefaults);
         }
 
-        return defaults.getFirst()
-                .orElseGet(()->ManagedObjects
-                        .emptyToDefault(!isOptional(), ManagedObject.empty(paramSpec)));
+        val scalarDefault = defaults.getFirst()
+              .orElseGet(()->ManagedObject.empty(paramSpec));
 
-
+        return ManagedObjects
+                      .emptyToDefault(paramSpec, !isOptional(), scalarDefault);
     }
 
     // helpers

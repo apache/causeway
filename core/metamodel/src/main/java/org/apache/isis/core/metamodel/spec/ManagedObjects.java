@@ -240,7 +240,10 @@ public final class ManagedObjects {
 
     // -- DEFAULTS UTILITIES
 
-    public static ManagedObject emptyToDefault(final boolean mandatory, final @NonNull ManagedObject input) {
+    public static ManagedObject emptyToDefault(
+            final ObjectSpecification elementSpec,
+            final boolean mandatory,
+            final @NonNull ManagedObject input) {
         if(!isSpecified(input)) {
             return input;
         }
@@ -252,13 +255,12 @@ public final class ManagedObjects {
         // 1) if primitive, then don't return null
         // 2) if boxed boolean, that is MANDATORY, then don't return null
 
-        val spec = input.getSpecification();
-        val expectedType = spec.getCorrespondingClass();
+        val expectedType = elementSpec.getCorrespondingClass();
         if(expectedType.isPrimitive()) {
-            return ManagedObject.of(spec, ClassExtensions.toDefault(expectedType));
+            return ManagedObject.of(elementSpec, ClassExtensions.toDefault(expectedType));
         }
         if(Boolean.class.equals(expectedType) && mandatory) {
-            return ManagedObject.of(spec, Boolean.FALSE);
+            return ManagedObject.of(elementSpec, Boolean.FALSE);
         }
 
         return input;

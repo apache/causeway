@@ -41,7 +41,6 @@ extends ActionParameterDefaultsFacetAbstract
 implements ImperativeFacet {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
-    @SuppressWarnings("unused")
     private final int paramNum;
     private final Optional<Constructor<?>> patConstructor;
 
@@ -73,6 +72,7 @@ implements ImperativeFacet {
     public Can<ManagedObject> getDefault(@NonNull final ParameterNegotiationModel pendingArgs) {
 
         val method = methods.getFirstOrFail();
+        val managedParam = pendingArgs.getParamModels().getElseFail(paramNum);
 
         // call with args: defaultNAct(X x, Y y, ...)
 
@@ -87,7 +87,11 @@ implements ImperativeFacet {
                         pendingArgs.getActionTarget(), pendingArgs.getParamValues());
 
         return _NullSafe.streamAutodetect(defaultValue)
-                .map(getObjectManager()::adapt)
+                .map(pojo->pojo!=null
+                    ? getObjectManager().adapt(pojo)
+                    : managedParam.getMetaModel().isNonScalar()
+                        ? null // assuming for non-scalar parameters, including null makes no sense
+                        : ManagedObject.empty(managedParam.getElementType()))
                 .collect(Can.toCan());
     }
 
