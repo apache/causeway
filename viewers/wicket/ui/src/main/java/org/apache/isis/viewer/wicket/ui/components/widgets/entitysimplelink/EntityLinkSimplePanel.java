@@ -23,6 +23,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -35,7 +36,7 @@ import lombok.val;
 
 /**
  * {@link FormComponentPanel} representing a reference to an entity: a link and
- * (optionally) an autocomplete field.
+ * (optionally) an auto-complete field.
  */
 public class EntityLinkSimplePanel
 extends FormComponentPanelAbstract<ManagedObject>
@@ -74,7 +75,13 @@ implements CancelHintRequired  {
 
     private void syncWithInput() {
 
-        if(!isEmpty()) {
+        if(isEmpty()) {
+            // represent no object by a simple label displaying '(none)'
+            addOrReplace(new Label(ID_ENTITY_TITLE_NULL, ValueSemanticsAbstract.NULL_REPRESENTATION));
+            permanentlyHide(ID_ENTITY_TITLE_NULL);
+            permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
+
+        } else {
 
             val objectModelForLink = getModel();
             val componentFactory = getComponentFactoryRegistry()
@@ -84,12 +91,6 @@ implements CancelHintRequired  {
                     .createComponent(ID_ENTITY_ICON_AND_TITLE, objectModelForLink);
             addOrReplace(component);
             permanentlyHide(ID_ENTITY_TITLE_NULL);
-
-        } else {
-            // represent no object by a simple label displaying '(none)'
-            addOrReplace(new Label(ID_ENTITY_TITLE_NULL, "(none)"));
-            permanentlyHide(ID_ENTITY_TITLE_NULL);
-            permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
         }
     }
 

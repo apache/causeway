@@ -22,7 +22,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ChainingObjectModel;
@@ -78,9 +77,10 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
 
-        return isScalarAndNotAValue(spec)
-                ? ApplicationAdvice.APPLIES
-                : ApplicationAdvice.DOES_NOT_APPLY;
+        return spec.isNotCollection()
+                && !spec.isValue()
+                        ? ApplicationAdvice.APPLIES
+                        : ApplicationAdvice.DOES_NOT_APPLY;
     }
 
     @Override
@@ -102,15 +102,5 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
 
         return new EntityIconAndTitlePanel(id, objectAdapterModel);
     }
-
-    // -- HELPER
-
-    private boolean isScalarAndNotAValue(final ObjectSpecification spec) {
-        val isObject = spec.isNotCollection();
-        val isValue = spec.containsFacet(ValueFacet.class);
-        return isObject && !isValue;
-    }
-
-
 
 }

@@ -34,7 +34,6 @@ import org.apache.isis.commons.internal.binding._Observables;
 import org.apache.isis.commons.internal.binding._Observables.LazyObservable;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
-import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
@@ -151,16 +150,11 @@ implements MultiselectChoices {
             .map(property->new DataColumn(this, property))
             .collect(Can.toCan()));
 
-        //TODO the tile could dynamically reflect the number of elements selected
+        //XXX the tile could dynamically reflect the number of elements selected
         //eg... 5 Orders selected
         title = _Observables.lazy(()->
-            managedMember.getElementType()
-            .lookupFacet(MemberNamedFacet.class)
-            .map(MemberNamedFacet::getSpecialization)
-            .map(specialization->specialization
-                    .fold(namedFacet->namedFacet.translated(),
-                            namedFacet->namedFacet.textElseNull(managedMember.getOwner())))
-            .orElse(managedMember.getIdentifier().getMemberLogicalName()));
+            managedMember
+            .getFriendlyName());
     }
 
     public ObjectMember getMetaModel() {
