@@ -267,9 +267,10 @@ implements
     //I believe this works by accident not by design
     //TODO this check should be made available with 'core' models - and not modeled here
     public boolean isContextAdapter(final ManagedObject other) {
-        return (contextBookmarkIfAny!=null)
-                ? Objects.equals(contextBookmarkIfAny, other.getBookmark().orElse(null))
-                : false;
+        return contextBookmarkIfAny==null
+                ? false
+                : Objects.equals(contextBookmarkIfAny, other.getBookmark().orElse(null))
+                ;
     }
 
     // -- HELPER

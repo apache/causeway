@@ -500,8 +500,12 @@ public final class ManagedObjects {
 
         Optional<Bookmark> bookmark(final @Nullable ManagedObject adapter) {
 
-            if(!ManagedObjects.isIdentifiable(adapter)
-                    && ManagedObjects.isSpecified(adapter)) {
+            if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
+                    || adapter.getSpecification().isValue()) {
+                return Optional.empty();
+            }
+
+            if(!ManagedObjects.isIdentifiable(adapter)) {
                 log.warn("about to create a random UUID bookmark for {}; this is probably an invalid code-path taken (TODO)",
                         adapter.getSpecification());
             }
