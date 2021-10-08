@@ -87,15 +87,15 @@ extends PanelAbstract<Boolean, Model<Boolean>> {
         checkbox.setModelObject(isChecked);
     }
 
-    public boolean smartSet(
+    public void smartSet(
             final BulkToggle bulkToggle,
             final AjaxRequestTarget target) {
         if(isChecked()==bulkToggle.isSetAll()) {
             //smart update idiom: skip if no change of state
-            return false;
+            return;
         }
         toggle(target);
-        return true;
+        target.add(this);
     }
 
 }

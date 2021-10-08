@@ -64,9 +64,7 @@ extends GenericColumnAbstract {
                 val bulkToggle = BulkToggle.valueOf(!this.isChecked());
                 //System.err.printf("bulkToggle: %s%n", bulkToggle);
                 for (ContainedToggleboxPanel rowToggle : rowToggles) {
-                    if(rowToggle.smartSet(bulkToggle, target)) {
-                        target.add(rowToggle);
-                    }
+                    rowToggle.smartSet(bulkToggle, target);
                 }
             }
         };
@@ -92,7 +90,7 @@ extends GenericColumnAbstract {
             @Override
             public void onSubmit(final AjaxRequestTarget target) {
                 val isChecked = rowModel.getObject().getSelectToggle().toggleThenGet();
-                // no matter what, the underlying backend model must by reflect by the UI
+                // no matter what, the underlying backend model must be reflected by the UI
                 setModel(isChecked);
             }
         };

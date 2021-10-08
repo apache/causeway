@@ -74,8 +74,9 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
                 final EntityCollectionModel collectionModel = dataProvider.getEntityCollectionModel();
 
                 if(toggleboxColumn != null) {
-                    //FIXME[ISIS-2871] one of these is potentially superfluous
+                    // clear the underlying backend selection model
                     collectionModel.getDataTableModel().getSelectAllToggle().setValue(false);
+                    // remove toggle UI components
                     toggleboxColumn.removeToggles();
                 }
 
