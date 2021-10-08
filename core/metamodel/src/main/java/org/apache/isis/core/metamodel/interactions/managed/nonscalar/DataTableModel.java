@@ -127,7 +127,10 @@ implements MultiselectChoices {
 
         selectAllToggle = _Bindables.forValue(Boolean.FALSE);
         selectAllToggle.addListener((e,o,isAllOn)->{
-            if(isClearToggleAllEvent.get()) return;
+            //_Debug.onClearToggleAll(o, isAllOn, isClearToggleAllEvent.get());
+            if(isClearToggleAllEvent.get()) {
+                return;
+            }
             dataRowsSelected.invalidate();
             try {
                 isToggleAllEvent.set(true);

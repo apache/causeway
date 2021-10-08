@@ -24,6 +24,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn.BulkToggle;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
@@ -53,7 +54,7 @@ extends PanelAbstract<Boolean, Model<Boolean>> {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void onUpdate(AjaxRequestTarget target) {
+            protected void onUpdate(final AjaxRequestTarget target) {
 
                 ContainedToggleboxPanel.this.toggle(target);
             }
@@ -66,14 +67,14 @@ extends PanelAbstract<Boolean, Model<Boolean>> {
     /**
      * Hook method for (typically anonymous) subclasses to override.
      */
-    public void onSubmit(AjaxRequestTarget target) {
+    public void onSubmit(final AjaxRequestTarget target) {
     }
 
     /**
      * Programmatic toggling.
      * @param target
      */
-    public void toggle(AjaxRequestTarget target) {
+    public void toggle(final AjaxRequestTarget target) {
         setModel(!isChecked());
         onSubmit(target);
     }
@@ -82,8 +83,19 @@ extends PanelAbstract<Boolean, Model<Boolean>> {
         return checkbox.getModelObject();
     }
 
-    public void setModel(boolean isChecked) {
+    public void setModel(final boolean isChecked) {
         checkbox.setModelObject(isChecked);
+    }
+
+    public boolean smartSet(
+            final BulkToggle bulkToggle,
+            final AjaxRequestTarget target) {
+        if(isChecked()==bulkToggle.isSetAll()) {
+            //smart update idiom: skip if no change of state
+            return false;
+        }
+        toggle(target);
+        return true;
     }
 
 }

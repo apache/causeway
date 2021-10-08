@@ -40,6 +40,15 @@ extends GenericColumnAbstract {
 
     private static final long serialVersionUID = 1L;
 
+    public static enum BulkToggle {
+        CLEAR_ALL, SET_ALL;
+        static BulkToggle valueOf(final boolean b) {
+            return b ? SET_ALL : CLEAR_ALL;
+        }
+        public boolean isSetAll() { return this == SET_ALL; }
+    }
+
+
     public GenericToggleboxColumn(
             final IsisAppCommonContext commonContext) {
         super(commonContext, "");
@@ -52,17 +61,12 @@ extends GenericColumnAbstract {
             private static final long serialVersionUID = 1L;
             @Override
             public void onSubmit(final AjaxRequestTarget target) {
-                val setToChecked = !this.isChecked();
-
+                val bulkToggle = BulkToggle.valueOf(!this.isChecked());
+                //System.err.printf("bulkToggle: %s%n", bulkToggle);
                 for (ContainedToggleboxPanel rowToggle : rowToggles) {
-
-                    // smart update idiom: only toggle when needed
-                    if(setToChecked == rowToggle.isChecked()) {
-                        continue;
+                    if(rowToggle.smartSet(bulkToggle, target)) {
+                        target.add(rowToggle);
                     }
-
-                    rowToggle.toggle(target);
-                    target.add(rowToggle);
                 }
             }
         };
@@ -87,7 +91,9 @@ extends GenericColumnAbstract {
             private static final long serialVersionUID = 1L;
             @Override
             public void onSubmit(final AjaxRequestTarget target) {
-                rowModel.getObject().getSelectToggle().toggleThenGet();
+                val isChecked = rowModel.getObject().getSelectToggle().toggleThenGet();
+                // no matter what, the underlying backend model must by reflect by the UI
+                setModel(isChecked);
             }
         };
         rowToggles.add(rowToggle);
@@ -95,7 +101,7 @@ extends GenericColumnAbstract {
         cellItem.add(rowToggle);
     }
 
-    public void clearToggles() {
+    public void removeToggles() {
         rowToggles.clear();
     }
 

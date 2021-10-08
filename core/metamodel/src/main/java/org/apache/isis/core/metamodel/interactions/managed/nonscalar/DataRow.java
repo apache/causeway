@@ -37,7 +37,12 @@ public class DataRow {
 
         selectToggle = _Bindables.forBoolean(false);
         selectToggle.addListener((e,o,n)->{
-            if(parentTable.isToggleAllEvent.get()) return;
+
+            //_Debug.onSelectRowToggle(rowElement, o, n, parentTable.isToggleAllEvent.get());
+
+            if(parentTable.isToggleAllEvent.get()) {
+                return;
+            }
             parentTable.getDataRowsSelected().invalidate();
             // in any case, if we have a toggle state change, clear the toggle all bindable
             parentTable.clearToggleAll();

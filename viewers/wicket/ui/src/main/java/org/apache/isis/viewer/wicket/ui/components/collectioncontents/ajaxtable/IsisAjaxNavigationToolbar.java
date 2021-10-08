@@ -76,7 +76,7 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
                 if(toggleboxColumn != null) {
                     //FIXME[ISIS-2871] one of these is potentially superfluous
                     collectionModel.getDataTableModel().getSelectAllToggle().setValue(false);
-                    toggleboxColumn.clearToggles();
+                    toggleboxColumn.removeToggles();
                 }
 
                 final UiHintContainer hintContainer = getUiHintContainer();
