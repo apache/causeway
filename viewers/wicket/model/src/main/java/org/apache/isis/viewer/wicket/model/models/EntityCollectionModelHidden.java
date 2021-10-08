@@ -32,7 +32,7 @@ extends EntityCollectionModelAbstract {
 
     protected EntityCollectionModelHidden(
             final @NonNull EntityCollectionModelAbstract collectionModel) {
-        super(collectionModel.delegate(), Variant.STANDALONE);
+        super(collectionModel.delegate(), collectionModel.getVariant());
     }
 
     @Override

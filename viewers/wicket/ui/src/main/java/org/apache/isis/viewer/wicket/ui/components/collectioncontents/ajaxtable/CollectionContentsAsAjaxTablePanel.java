@@ -121,7 +121,7 @@ implements CollectionCountProvider {
         val contextBookmark = entityCollectionModel().getParentObject().getBookmark()
                 .orElse(null);
 
-        final int maxTitleLength = getModel().isParented()? maxTitleParented: maxTitleStandalone;
+        final int maxTitleLength = getModel().getVariant().isParented()? maxTitleParented: maxTitleStandalone;
         columns.add(new GenericTitleColumn(
                 super.getCommonContext(), variant, contextBookmark, maxTitleLength));
     }

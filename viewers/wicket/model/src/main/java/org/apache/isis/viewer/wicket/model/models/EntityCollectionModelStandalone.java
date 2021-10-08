@@ -53,7 +53,7 @@ extends EntityCollectionModelAbstract {
 
     private EntityCollectionModelStandalone(
             final @NonNull DataTableModelWkt delegate) {
-        super(delegate, Variant.PARENTED);
+        super(delegate, Variant.STANDALONE);
     }
 
 }

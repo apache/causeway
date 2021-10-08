@@ -159,9 +159,10 @@ public class CollectionSelectorHelper implements Serializable {
         }
 
         // else honour @CollectionLayout#renderEagerly
-        return hasRenderEagerlyFacet(collectionModel) || collectionModel.isStandalone()
-                ? CollectionContentsAsAjaxTablePanelFactory.NAME
-                : CollectionContentsHiddenPanelFactory.NAME;
+        return hasRenderEagerlyFacet(collectionModel)
+                || collectionModel.getVariant().isStandalone()
+                    ? CollectionContentsAsAjaxTablePanelFactory.NAME
+                    : CollectionContentsHiddenPanelFactory.NAME;
 
     }
 
@@ -198,7 +199,7 @@ public class CollectionSelectorHelper implements Serializable {
             return componentFactory;
         }
 
-        final String fallback = collectionModel.isParented()
+        final String fallback = collectionModel.getVariant().isParented()
                 ? CollectionContentsHiddenPanelFactory.NAME
                 : CollectionContentsAsAjaxTablePanelFactory.NAME;
         componentFactory = doFind(fallback);

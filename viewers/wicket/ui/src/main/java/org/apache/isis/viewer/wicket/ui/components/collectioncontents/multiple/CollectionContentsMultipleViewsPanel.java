@@ -71,7 +71,7 @@ implements CollectionCountProvider {
         this.underlyingIdPrefix = ComponentType.COLLECTION_CONTENTS.toString();
 
         final ComponentHintKey selectedItemSessionAttribute =
-                model.isParented()
+                model.getVariant().isParented()
                     ? ComponentHintKey.create(super.getCommonContext(), this, UIHINT_VIEW)
                     : null;
 

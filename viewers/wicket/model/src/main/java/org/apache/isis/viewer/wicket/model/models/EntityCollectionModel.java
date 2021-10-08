@@ -83,9 +83,6 @@ extends
 
     Variant getVariant();
 
-    default boolean isStandalone() { return getVariant().isStandalone(); }
-    default boolean isParented() { return getVariant().isParented(); }
-
     // -- DATA TABLE
 
     DataTableModel getDataTableModel();
