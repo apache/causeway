@@ -40,7 +40,7 @@ Here Apache Isis delegates most of the heavy lifting to an ORM (DataNucleus or s
 
 Although not a book about object modelling, Evans' "Domain Driven Design" does use object orientation as its primary modelling tool; while xref:userguide:fun:concepts-patterns.adoc#naked-objects-pattern[naked objects pattern] very much comes from an OO background (it even has 'object' in its name).
 
-It's certainly true that to develop an Apache Isis application you will reasonably good object oriented modelling skills.
+It's certainly true that to develop an Apache Isis application you will need reasonably good object oriented modelling skills.
 But given that all the mainstream languages for developing business systems are object oriented (Java, C#, Ruby), that's not such a stretch.
 
 However, what you'll also discover is that in some ways an Apache Isis application is more aspect-oriented than it is object oriented.
