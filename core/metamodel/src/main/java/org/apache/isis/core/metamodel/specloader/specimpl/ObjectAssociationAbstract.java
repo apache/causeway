@@ -36,7 +36,7 @@ implements ObjectAssociation {
 
     private final ObjectSpecification elementType;
 
-    public ObjectAssociationAbstract(
+    protected ObjectAssociationAbstract(
             final Identifier featureIdentifier,
             final FacetedMethod facetedMethod,
             final FeatureType featureType,

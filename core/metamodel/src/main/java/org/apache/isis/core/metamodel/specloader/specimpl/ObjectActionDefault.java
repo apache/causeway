@@ -38,10 +38,10 @@ import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
@@ -64,7 +64,9 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class ObjectActionDefault
 extends ObjectMemberAbstract
 implements ObjectAction {
@@ -83,17 +85,25 @@ implements ObjectAction {
         return new ObjectActionDefault(facetedMethod.getFeatureIdentifier(), facetedMethod);
     }
 
-    // -- CONSTRUCTOR
+    // -- CONSTRUCTION
+
+    @Getter(onMethod_ = @Override)
+    private final ObjectSpecification elementType;
 
     protected ObjectActionDefault(
             final Identifier identifier,
             final FacetedMethod facetedMethod) {
         super(identifier, facetedMethod, FeatureType.ACTION);
-    }
-
-    @Override
-    public ObjectSpecification getElementType() {
-        return getReturnType();
+        elementType = getFacetedMethod()
+                .lookupFacet(TypeOfFacet.class)
+                .map(TypeOfFacet::valueSpec)
+                .orElseGet(()->{
+                    val returnType = getReturnType();
+                    if(!returnType.isNotCollection()) {
+                        log.warn("non-scalar action return type requires a TypeOfFacet: %s", identifier);
+                    }
+                    return returnType;
+                });
     }
 
     @Override
@@ -117,30 +127,27 @@ implements ObjectAction {
 
     @Override
     public ObjectSpecification getDeclaringType() {
-        final ActionInvocationFacet facet = getActionInvocationFacet();
-        return facet.getDeclaringType();
+        return getActionInvocationFacet().getDeclaringType();
     }
 
     @Override
     public SemanticsOf getSemantics() {
-        final ActionSemanticsFacet facet = getFacet(ActionSemanticsFacet.class);
-        return facet != null? facet.value(): SemanticsOf.NON_IDEMPOTENT;
+        return lookupFacet(ActionSemanticsFacet.class)
+        .map(ActionSemanticsFacet::value)
+        .orElse(SemanticsOf.NON_IDEMPOTENT);
     }
 
+    // -- TYPE
 
-
-    // -- Type
     @Override
     public ActionType getType() {
         return getType(this);
     }
 
     private static ActionType getType(final FacetHolder facetHolder) {
-        Facet facet = facetHolder.getFacet(PrototypeFacet.class);
-        if (facet != null) {
-            return ActionType.PROTOTYPE;
-        }
-        return ActionType.USER;
+        return facetHolder.containsFacet(PrototypeFacet.class)
+            ? ActionType.PROTOTYPE
+            : ActionType.USER;
     }
 
     @Override
@@ -217,7 +224,7 @@ implements ObjectAction {
         return parameters.getElseFail(position);
     }
 
-    // -- visable, usable
+    // -- VISIBLE
 
     @Override
     public VisibilityContext createVisibleInteractionContext(
@@ -232,6 +239,8 @@ implements ObjectAction {
                 where);
     }
 
+    // -- USABLE
+
     @Override
     public UsabilityContext createUsableInteractionContext(
             final ManagedObject target,
@@ -245,9 +254,7 @@ implements ObjectAction {
                 where);
     }
 
-
-    // -- validate
-
+    // -- VALIDATE
 
     @Override
     public Consent isArgumentSetValid(
@@ -334,9 +341,7 @@ implements ObjectAction {
                 interactionInitiatedBy);
     }
 
-
-
-    // -- executeWithRuleChecking, execute
+    // -- EXECUTE
 
     @Override
     public ManagedObject executeWithRuleChecking(
