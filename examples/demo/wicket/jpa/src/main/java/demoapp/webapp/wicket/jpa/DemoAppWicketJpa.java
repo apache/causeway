@@ -32,10 +32,7 @@ import org.apache.isis.valuetypes.markdown.metamodel.IsisModuleValMarkdownMetaMo
 import org.apache.isis.valuetypes.markdown.persistence.jpa.IsisModuleValMarkdownPersistenceJpa;
 import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
 import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
-import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault;
 
 import demoapp.web.DemoAppManifestJpa;
 import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
@@ -78,11 +75,11 @@ public class DemoAppWicketJpa extends SpringBootServletInitializer {
      * entry point by searching for classes having a {@code main(...)}
      */
     public static void main(final String[] args) {
-    	//IsisPresets.prototyping();
+    	IsisPresets.prototyping();
         //IsisPresets.logging(WebRequestCycleForIsis.class, "debug");
-        IsisPresets.logging(ComponentFactoryRegistryDefault.class, "debug");
-        IsisPresets.logging(EntityModel.class, "debug");
-        IsisPresets.logging(FormExecutorDefault.class, "debug");
+        //IsisPresets.logging(ComponentFactoryRegistryDefault.class, "debug");
+        //IsisPresets.logging(EntityModel.class, "debug");
+        //IsisPresets.logging(FormExecutorDefault.class, "debug");
 
         System.setProperty("spring.profiles.active", "demo-jpa");
 
