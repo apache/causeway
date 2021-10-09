@@ -94,6 +94,13 @@ implements ObjectAction {
             final Identifier identifier,
             final FacetedMethod facetedMethod) {
         super(identifier, facetedMethod, FeatureType.ACTION);
+
+        // In support of some JUnit tests, skip
+        if(getActionInvocationFacet()==null) {
+            elementType = null;
+            return;
+        }
+
         elementType = getFacetedMethod()
                 .lookupFacet(TypeOfFacet.class)
                 .map(TypeOfFacet::valueSpec)
