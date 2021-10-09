@@ -24,10 +24,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -77,13 +76,15 @@ public class CollectionSelectorHelper implements Serializable {
                 : ComponentHintKey.noop();
     }
 
-    private List<ComponentFactory> locateComponentFactories(final ComponentFactoryRegistry componentFactoryRegistry) {
+    private List<ComponentFactory> locateComponentFactories(
+            final ComponentFactoryRegistry componentFactoryRegistry) {
 
         final List<ComponentFactory> ajaxFactoriesToEnd = _Lists.newArrayList();
 
         final List<ComponentFactory> componentFactories = componentFactoryRegistry
         .streamComponentFactories(ComponentType.COLLECTION_CONTENTS, collectionModel)
-        .filter(componentFactory -> componentFactory.getClass() != CollectionContentsMultipleViewsPanelFactory.class)
+        .filter(componentFactory ->
+            componentFactory.getClass() != CollectionContentsMultipleViewsPanelFactory.class)
         .filter(componentFactory -> {
             if(componentFactory instanceof CollectionContentsAsAjaxTablePanelFactory) {
                 ajaxFactoriesToEnd.add(componentFactory);
@@ -158,9 +159,10 @@ public class CollectionSelectorHelper implements Serializable {
         }
 
         // else honour @CollectionLayout#renderEagerly
-        return hasRenderEagerlyFacet(collectionModel) || collectionModel.isStandalone()
-                ? CollectionContentsAsAjaxTablePanelFactory.NAME
-                : CollectionContentsHiddenPanelFactory.NAME;
+        return hasRenderEagerlyFacet(collectionModel)
+                || collectionModel.getVariant().isStandalone()
+                    ? CollectionContentsAsAjaxTablePanelFactory.NAME
+                    : CollectionContentsHiddenPanelFactory.NAME;
 
     }
 
@@ -197,7 +199,7 @@ public class CollectionSelectorHelper implements Serializable {
             return componentFactory;
         }
 
-        final String fallback = collectionModel.isParented()
+        final String fallback = collectionModel.getVariant().isParented()
                 ? CollectionContentsHiddenPanelFactory.NAME
                 : CollectionContentsAsAjaxTablePanelFactory.NAME;
         componentFactory = doFind(fallback);

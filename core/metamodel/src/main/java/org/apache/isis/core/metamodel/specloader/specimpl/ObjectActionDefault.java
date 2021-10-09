@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 
@@ -34,17 +33,15 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.CanVector;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
@@ -67,7 +64,9 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class ObjectActionDefault
 extends ObjectMemberAbstract
 implements ObjectAction {
@@ -86,25 +85,32 @@ implements ObjectAction {
         return new ObjectActionDefault(facetedMethod.getFeatureIdentifier(), facetedMethod);
     }
 
-    // -- FIELDS
+    // -- CONSTRUCTION
 
-    private final _Lazy<Can<ObjectActionParameter>> parameters = _Lazy.threadSafe(this::determineParameters);
-
-    // -- CONSTRUCTOR
+    @Getter(onMethod_ = @Override)
+    private final ObjectSpecification elementType;
 
     protected ObjectActionDefault(
             final Identifier identifier,
             final FacetedMethod facetedMethod) {
         super(identifier, facetedMethod, FeatureType.ACTION);
-    }
 
-    // -- ReturnType, OnType, Actions (set)
-    /**
-     * Always returns <tt>null</tt>.
-     */
-    @Override
-    public ObjectSpecification getSpecification() {
-        return null;
+        // In support of some JUnit tests, skip
+        if(getActionInvocationFacet()==null) {
+            elementType = null;
+            return;
+        }
+
+        elementType = getFacetedMethod()
+                .lookupFacet(TypeOfFacet.class)
+                .map(TypeOfFacet::valueSpec)
+                .orElseGet(()->{
+                    val returnType = getReturnType();
+                    if(!returnType.isNotCollection()) {
+                        log.warn("non-scalar action return type requires a TypeOfFacet: %s", identifier);
+                    }
+                    return returnType;
+                });
     }
 
     @Override
@@ -127,39 +133,39 @@ implements ObjectAction {
 
 
     @Override
-    public ObjectSpecification getOnType() {
-        final ActionInvocationFacet facet = getActionInvocationFacet();
-        return facet.getOnType();
+    public ObjectSpecification getDeclaringType() {
+        return getActionInvocationFacet().getDeclaringType();
     }
 
     @Override
     public SemanticsOf getSemantics() {
-        final ActionSemanticsFacet facet = getFacet(ActionSemanticsFacet.class);
-        return facet != null? facet.value(): SemanticsOf.NON_IDEMPOTENT;
+        return lookupFacet(ActionSemanticsFacet.class)
+        .map(ActionSemanticsFacet::value)
+        .orElse(SemanticsOf.NON_IDEMPOTENT);
     }
 
+    // -- TYPE
 
-
-    // -- Type
     @Override
     public ActionType getType() {
         return getType(this);
     }
 
     private static ActionType getType(final FacetHolder facetHolder) {
-        Facet facet = facetHolder.getFacet(PrototypeFacet.class);
-        if (facet != null) {
-            return ActionType.PROTOTYPE;
-        }
-        return ActionType.USER;
+        return facetHolder.containsFacet(PrototypeFacet.class)
+            ? ActionType.PROTOTYPE
+            : ActionType.USER;
     }
 
     @Override
-    public ActionInteractionHead interactionHead(final @NonNull ManagedObject actionOwner) {
+    public ActionInteractionHead interactionHead(
+            final @NonNull ManagedObject actionOwner) {
         return ActionInteractionHead.of(this, actionOwner, actionOwner);
     }
 
     // -- Parameters
+
+    private final _Lazy<Can<ObjectActionParameter>> parameters = _Lazy.threadSafe(this::determineParameters);
 
     @Override
     public int getParameterCount() {
@@ -173,32 +179,25 @@ implements ObjectAction {
 
     protected Can<ObjectActionParameter> determineParameters() {
 
-        val parameterCount = getParameterCount();
-        val paramPeers = getFacetedMethod().getParameters();
+        val specLoader = getSpecificationLoader();
 
-        val parameters = _Lists.<ObjectActionParameter>newArrayList();
-        for (int paramNum = 0; paramNum < parameterCount; paramNum++) {
-            final FacetedMethodParameter paramPeer = paramPeers.get(paramNum);
+        return getFacetedMethod().getParameters()
+        .map(facetedParam->{
 
-            Optional.ofNullable(paramPeer.getType())
-            .ifPresent(getSpecificationLoader()::loadSpecification); // preload
+            final int paramIndex = facetedParam.getParamIndex();
+            val paramElementType = specLoader.loadSpecification(facetedParam.getType()); // preload
 
-            // previously we threw an exception here if the specification represented a collection.  No longer!
-            final ObjectActionParameter parameter =
-                    paramPeer.getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
-                    ? new OneToOneActionParameterDefault(paramNum, this, paramPeer)
-                            : new OneToManyActionParameterDefault(paramNum, this, paramPeer);
+            return
+                    facetedParam.getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
+                        ? new OneToOneActionParameterDefault(paramElementType, paramIndex, this)
+                        : new OneToManyActionParameterDefault(paramElementType, paramIndex, this);
 
-                    parameters.add(parameter);
-        }
-        return Can.ofCollection(parameters);
+        });
     }
 
     @Override
     public Can<ObjectSpecification> getParameterTypes() {
-        val parameters = getParameters();
-        val parameterTypes = parameters.map(ObjectActionParameter::getSpecification);
-        return parameterTypes;
+        return getParameters().map(ObjectActionParameter::getElementType);
     }
 
     @Override
@@ -232,7 +231,7 @@ implements ObjectAction {
         return parameters.getElseFail(position);
     }
 
-    // -- visable, usable
+    // -- VISIBLE
 
     @Override
     public VisibilityContext createVisibleInteractionContext(
@@ -247,6 +246,8 @@ implements ObjectAction {
                 where);
     }
 
+    // -- USABLE
+
     @Override
     public UsabilityContext createUsableInteractionContext(
             final ManagedObject target,
@@ -260,9 +261,7 @@ implements ObjectAction {
                 where);
     }
 
-
-    // -- validate
-
+    // -- VALIDATE
 
     @Override
     public Consent isArgumentSetValid(
@@ -349,9 +348,7 @@ implements ObjectAction {
                 interactionInitiatedBy);
     }
 
-
-
-    // -- executeWithRuleChecking, execute
+    // -- EXECUTE
 
     @Override
     public ManagedObject executeWithRuleChecking(
@@ -418,17 +415,6 @@ implements ObjectAction {
         return getFacetedMethod().getFacet(ActionInvocationFacet.class);
     }
 
-    // -- defaults
-
-    @Override
-    public Can<ManagedObject> getDefaults(final ManagedObject target) {
-        // use the new defaultNXxx approach for each param in turn
-        // (the reflector will have made sure both aren't installed).
-        return interactionHead(target)
-                .defaults()
-                .getParamValues();
-    }
-
     // -- choices
 
     @Override
@@ -448,7 +434,7 @@ implements ObjectAction {
         paramChoicesVector = new CanVector<>(parameterCount);
         for (int i = 0; i < parameterCount; i++) {
             val param = parameters.getElseFail(i);
-            val paramSpec = param.getSpecification();
+            val paramSpec = param.getElementType();
             val paramFacet = param.getFacet(ActionParameterChoicesFacet.class);
 
             if (paramFacet != null && !paramFacet.getPrecedence().isFallback()) {
@@ -508,7 +494,7 @@ implements ObjectAction {
             if (i > 0) {
                 sb.append(",");
             }
-            sb.append(getParameters().getElseFail(i).getSpecification().getShortIdentifier());
+            sb.append(getParameters().getElseFail(i).getElementType().getShortIdentifier());
         }
         sb.append("}]");
         return sb.toString();

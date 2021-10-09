@@ -53,7 +53,7 @@ public class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest
 
         facetFactory.processParamsOptional(
                 new ProcessParameterContext(
-                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, 0, null, facetedMethodParameter));
+                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
@@ -71,7 +71,7 @@ public class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest
 
         facetFactory.processParamsOptional(
                 new ProcessParameterContext(
-                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, 0, null, facetedMethodParameter));
+                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, null, facetedMethodParameter));
 
         assertNull(facetedMethod.getFacet(MandatoryFacet.class));
     }
@@ -87,7 +87,7 @@ public class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest
 
         facetFactory.processParamsOptional(
                 new ProcessParameterContext(
-                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, 0, null, facetedMethodParameter));
+                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
@@ -105,7 +105,7 @@ public class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest
 
         facetFactory.processParamsOptional(
                 new ProcessParameterContext(
-                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, 0, null, facetedMethodParameter));
+                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, null, facetedMethodParameter));
 
         assertNull(facetedMethod.getFacet(MandatoryFacet.class));
     }

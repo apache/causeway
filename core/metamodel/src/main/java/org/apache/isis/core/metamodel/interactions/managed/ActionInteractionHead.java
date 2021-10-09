@@ -19,12 +19,13 @@
 package org.apache.isis.core.metamodel.interactions.managed;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.function.UnaryOperator;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -42,20 +43,31 @@ implements HasMetaModel<ObjectAction> {
 
     @Getter(onMethod = @__(@Override))
     @NonNull private final ObjectAction metaModel;
+    @Getter private final MultiselectChoices multiselectChoices;
 
     public static ActionInteractionHead of(
-            @NonNull ObjectAction objectAction,
-            @NonNull ManagedObject owner,
-            @NonNull ManagedObject target) {
-        return new ActionInteractionHead(objectAction, owner, target);
+            final @NonNull ObjectAction objectAction,
+            final @NonNull ManagedObject owner,
+            final @NonNull ManagedObject target) {
+        return new ActionInteractionHead(objectAction, owner, target, Can::empty);
+    }
+
+    public static ActionInteractionHead of(
+            final @NonNull ObjectAction objectAction,
+            final @NonNull ManagedObject owner,
+            final @NonNull ManagedObject target,
+            final @NonNull MultiselectChoices multiselectChoices) {
+        return new ActionInteractionHead(objectAction, owner, target, multiselectChoices);
     }
 
     protected ActionInteractionHead(
-            @NonNull ObjectAction objectAction,
-            @NonNull ManagedObject owner,
-            @NonNull ManagedObject target) {
+            final @NonNull ObjectAction objectAction,
+            final @NonNull ManagedObject owner,
+            final @NonNull ManagedObject target,
+            final @NonNull MultiselectChoices multiselectChoices) {
         super(owner, target);
         this.metaModel = objectAction;
+        this.multiselectChoices = multiselectChoices;
     }
 
     /**
@@ -67,7 +79,7 @@ implements HasMetaModel<ObjectAction> {
     public Can<ManagedObject> getEmptyParameterValues() {
         return getMetaModel().getParameters().stream()
         .map(objectActionParameter->
-            ManagedObject.empty(objectActionParameter.getSpecification()))
+            ManagedObject.empty(objectActionParameter.getElementType()))
         .collect(Can.toCan());
     }
 
@@ -78,7 +90,7 @@ implements HasMetaModel<ObjectAction> {
      * The size of the tuple corresponds to the number of parameters.
      * @param pojoArgList - argument pojos
      */
-    public Can<ManagedObject> getPopulatedParameterValues(@Nullable List<Object> pojoArgList) {
+    public Can<ManagedObject> getPopulatedParameterValues(@Nullable final List<Object> pojoArgList) {
 
         val params = getMetaModel().getParameters();
 
@@ -89,16 +101,11 @@ implements HasMetaModel<ObjectAction> {
         }
 
         return params.zipMap(pojoArgList, (objectActionParameter, argPojo)->
-            ManagedObject.of(objectActionParameter.getSpecification(), argPojo));
+            ManagedObject.of(objectActionParameter.getElementType(), argPojo));
     }
 
-    public ParameterNegotiationModel model(
-            @NonNull Can<ManagedObject> paramValues) {
-        return ParameterNegotiationModel.of(this, paramValues);
-    }
-
-    public ParameterNegotiationModel emptyModel() {
-        return ParameterNegotiationModel.of(this, getEmptyParameterValues());
+    public ParameterNegotiationModel emptyModel(final ManagedAction managedAction) {
+        return ParameterNegotiationModel.of(managedAction, getEmptyParameterValues());
     }
 
     /**
@@ -107,56 +114,64 @@ implements HasMetaModel<ObjectAction> {
      * ActionParameterNegotiation (wiki)
      * </a>
      */
-    public ParameterNegotiationModel defaults() {
+    public ParameterNegotiationModel defaults(final ManagedAction managedAction) {
 
-        // first pass to calculate proposed fixed point
-        // second pass to verify we have found a fixed point
-        final int maxIterations = 2;
+        // first pass ... empty values
+        // second pass ... proposed default values
+        // third pass ... verify we have found a fixed point
+        final int maxIterations = 3;
 
         val params = getMetaModel().getParameters();
 
-        // init defaults with empty pending-parameter values
-        val emptyModel = emptyModel();
-        val initialDefaults = params
-                .map(param->param.getDefault(emptyModel));
+        val fixedPoint = fixedPointSearch(
+                getEmptyParameterValues(),
+                // vector of packed values - where each is either scalar or non-scalar
+                paramVector->
+                    params
+                    .map(param->param
+                            .getDefault(
+                                    ParameterNegotiationModel
+                                    .of(managedAction, paramVector)))
+                ,
+                maxIterations);
 
-        // could be a fixed point search here, but we assume, params can only depend on params with lower index
-
-        Can<ManagedObject> old_pl, pl = initialDefaults;
-        for(int i=0; i<maxIterations; ++i) {
-            val ppm = model(pl);
-            old_pl = pl;
-            pl = params
-                    .map(param->param.getDefault(ppm));
-
-            if(equals(old_pl, pl)) {
-                // fixed point found, return the latest iteration
-                return model(pl);
-            }
-
+        if(fixedPoint.isRight()) {
+            log.warn("Cannot find an initial fixed point for action "
+                    + "parameter defaults on action %s.", getMetaModel());
         }
 
-        log.warn("Cannot find an initial fixed point for action "
-                + "parameter defaults on action %s.", getMetaModel());
-
-        return model(pl);
-
+        return modelForParamValues(managedAction,
+                fixedPoint.fold(
+                left->left,
+                right->right));
     }
 
     // -- HELPER
 
-    private boolean equals(Can<ManagedObject> left, Can<ManagedObject> right) {
-        // equal length is guaranteed as used only local to this class
-        val leftIt = left.iterator();
-        for(val r : right) {
-            val leftPojo = leftIt.next().getPojo();
-            val rightPojo = r.getPojo();
-            if(!Objects.equals(leftPojo, rightPojo)){
-                return false;
-            }
-        }
-        return true;
+    private ParameterNegotiationModel modelForParamValues(
+            final ManagedAction managedAction,
+            @NonNull final Can<ManagedObject> paramValues) {
+        return ParameterNegotiationModel.of(managedAction, paramValues);
     }
 
+    /**
+     * Returns either a fixed point or the last iteration.
+     */
+    private static <T> _Either<T, T> fixedPointSearch(
+            final T start,
+            final UnaryOperator<T> f,
+            final int maxIterations) {
+
+        T t1, t0 = start;
+        for(int i=0; i<maxIterations; ++i) {
+            t1 = f.apply(t0);
+            if(t1.equals(t0)) {
+                return _Either.left(t1);
+            }
+            t0 = t1;
+        }
+
+        return _Either.right(t0);
+    }
 
 }

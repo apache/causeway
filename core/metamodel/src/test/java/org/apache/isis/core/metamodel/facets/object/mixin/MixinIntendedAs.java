@@ -87,14 +87,14 @@ abstract class MixinIntendedAs {
                 FeatureType.ACTION_PARAMETER_SCALAR,
                 owningType,
                 actionMethod,
-                parameterType);
+                parameterType,
+                0);
 
         val processParameterContext =
                 new ProcessParameterContext(
                         owningType,
                         IntrospectionPolicy.ANNOTATION_OPTIONAL,
                         actionMethod,
-                        paramIndex,
                         MethodRemover.NOOP,
                         facetedMethodParameter);
 

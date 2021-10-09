@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.NonNull;
+import lombok.val;
 
 public final class TitleFacetUsingValueFacet
 extends FacetAbstract
@@ -62,15 +63,15 @@ implements TitleFacet {
         // what property, collection, action return or action param this is to be rendered for ...
 
         if(renderRequest.getFeature() instanceof OneToOneAssociation) {
-            final var prop = (OneToOneAssociation)renderRequest.getFeature();
-            final var featureId = prop.getFeatureIdentifier();
+            val prop = (OneToOneAssociation)renderRequest.getFeature();
+            val featureId = prop.getFeatureIdentifier();
             final Renderer renderer = valueFacet
                     .selectRendererForPropertyElseFallback(prop);
             return renderer.simpleTextRepresentation(valueFacet.createValueSemanticsContext(featureId), pojo);
         }
         if(renderRequest.getFeature() instanceof ObjectActionParameter) {
-            final var param = (ObjectActionParameter)renderRequest.getFeature();
-            final var featureId = param.getFeatureIdentifier();
+            val param = (ObjectActionParameter)renderRequest.getFeature();
+            val featureId = param.getFeatureIdentifier();
             final Renderer renderer = valueFacet
                     .selectRendererForParameterElseFallback(param);
             return renderer.simpleTextRepresentation(valueFacet.createValueSemanticsContext(featureId), pojo);
@@ -78,7 +79,7 @@ implements TitleFacet {
 
         // fall back to default value semantics ...
 
-        final var featureId = getFacetHolder().getFeatureIdentifier();
+        val featureId = getFacetHolder().getFeatureIdentifier();
 
         return valueFacet.selectDefaultRenderer()
         .map(renderer->(Renderer) renderer)

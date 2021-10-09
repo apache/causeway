@@ -105,7 +105,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             // when
             final FacetFactory.ProcessParameterContext processParameterContext =
                     new FacetFactory.ProcessParameterContext(
-                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, 0, null, facetedMethodParameter);
+                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
             // then
@@ -152,7 +152,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             // when
             final FacetFactory.ProcessParameterContext processParameterContext =
                     new FacetFactory.ProcessParameterContext(
-                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, 0, null, facetedMethodParameter);
+                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
             // then
@@ -190,7 +190,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             // when
             final FacetFactory.ProcessParameterContext processParameterContext =
                     new FacetFactory.ProcessParameterContext(
-                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, 0, null, facetedMethodParameter);
+                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
             // then
@@ -218,7 +218,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             // when
             final FacetFactory.ProcessParameterContext processParameterContext =
                     new FacetFactory.ProcessParameterContext(
-                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, 0, null, facetedMethodParameter);
+                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
             // then
@@ -246,7 +246,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             // when
             final FacetFactory.ProcessParameterContext processParameterContext =
                     new FacetFactory.ProcessParameterContext(
-                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, 0, null, facetedMethodParameter);
+                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
             // then
@@ -270,7 +270,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             // when
             final FacetFactory.ProcessParameterContext processParameterContext =
                     new FacetFactory.ProcessParameterContext(
-                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, 0, null, facetedMethodParameter);
+                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
 
@@ -303,7 +303,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             // when
             final FacetFactory.ProcessParameterContext processParameterContext =
                     new FacetFactory.ProcessParameterContext(
-                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, 0, null, facetedMethodParameter);
+                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
 
@@ -333,7 +333,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             // when
             final FacetFactory.ProcessParameterContext processParameterContext =
                     new FacetFactory.ProcessParameterContext(
-                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, 0, null, facetedMethodParameter);
+                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
             // then
@@ -360,7 +360,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             // when
             final FacetFactory.ProcessParameterContext processParameterContext =
                     new FacetFactory.ProcessParameterContext(
-                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, 0, null, facetedMethodParameter);
+                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
 
@@ -388,7 +388,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             // when
             final FacetFactory.ProcessParameterContext processParameterContext =
                     new FacetFactory.ProcessParameterContext(
-                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, 0, null, facetedMethodParameter);
+                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
 

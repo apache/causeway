@@ -22,21 +22,32 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.value.Markup;
+import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.val.MarkupValueSemantics")
 public class MarkupValueSemantics
-extends AbstractValueSemanticsProvider<Markup>
+extends ValueSemanticsAbstract<Markup>
 implements
     EncoderDecoder<Markup>,
     Parser<Markup>,
-    Renderer<Markup>{
+    Renderer<Markup> {
+
+    @Override
+    public Class<Markup> getCorrespondingClass() {
+        return Markup.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return UNREPRESENTED;
+    }
 
     // -- ENCODER DECODER
 

@@ -58,7 +58,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         if(property.containsNonFallbackFacet(PropertyDefaultFacet.class)) {
             return;
         }
-        property.getSpecification()
+        property.getElementType()
         .lookupNonFallbackFacet(DefaultedFacet.class)
         .ifPresent(specFacet -> FacetUtil.addFacet(new PropertyDefaultFacetDerivedFromDefaultedFacet(
                                     specFacet, facetedMethodFor(property))));

@@ -29,6 +29,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.binding._BindableAbstract;
 import org.apache.isis.commons.internal.binding._Bindables;
 import org.apache.isis.commons.internal.binding._Observables;
+import org.apache.isis.commons.internal.binding._Observables.BooleanObservable;
 import org.apache.isis.commons.internal.binding._Observables.LazyObservable;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -54,28 +55,30 @@ import lombok.val;
 public class ParameterNegotiationModel {
 
     public static ParameterNegotiationModel of(
-            final @NonNull ActionInteractionHead head,
+            final @NonNull ManagedAction managedAction,
             final @NonNull Can<ManagedObject> initialParamValues) {
-        return new ParameterNegotiationModel(head, initialParamValues);
+        return new ParameterNegotiationModel(managedAction, initialParamValues);
 
     }
 
     @Getter private final ActionInteractionHead head;
+    private final @NonNull ManagedAction managedAction;
     private final Can<ParameterModel> paramModels;
     private final _BindableAbstract<Boolean> validationFeedbackActive;
     private final LazyObservable<String> observableActionValidation;
 
     private ParameterNegotiationModel(
-            final @NonNull ActionInteractionHead head,
+            final @NonNull ManagedAction managedAction,
             final @NonNull Can<ManagedObject> initialParamValues) {
-        this.head = head;
+        this.managedAction = managedAction;
+        this.head = managedAction.getInteractionHead(); //TODO maybe don't memoize
         this.validationFeedbackActive = _Bindables.forValue(false);
 
         val paramNrIterator = IntStream.range(0, initialParamValues.size()).iterator();
         this.paramModels = initialParamValues
                 .map(initialValue->new ParameterModel(paramNrIterator.nextInt(), this, initialValue));
 
-        this.observableActionValidation = _Observables.forFactory(()->
+        this.observableActionValidation = _Observables.lazy(()->
             validationFeedbackActive.getValue()
                 ? actionValidationMessage()
                 : (String)null);
@@ -85,6 +88,7 @@ public class ParameterNegotiationModel {
             paramModels.forEach(ParameterModel::invalidateChoicesAndValidation);
             observableActionValidation.invalidate();
         });
+
     }
 
     // -- ACTION SPECIFIC
@@ -149,6 +153,27 @@ public class ParameterNegotiationModel {
         return paramModels.getElseFail(paramNr).getBindableParamSearchArgument();
     }
 
+    @NonNull public Consent getVisibilityConsent(final int paramNr) {
+        val pendingArgValues = getParamValues();
+        val paramMeta = getParamMetamodel(paramNr);
+        val head = this.getHead();
+        return paramMeta
+                .isVisible(head, pendingArgValues, InteractionInitiatedBy.USER);
+    }
+    @NonNull public Consent getUsabilityConsent(final int paramNr) {
+        val pendingArgValues = getParamValues();
+        val paramMeta = getParamMetamodel(paramNr);
+        val head = this.getHead();
+        return paramMeta
+                .isUsable(head, pendingArgValues, InteractionInitiatedBy.USER);
+    }
+
+    // -- MULTI SELECT
+
+    public MultiselectChoices getMultiselectChoices() {
+        return managedAction.getMultiselectChoices();
+    }
+
     // -- RATHER INTERNAL ...
 
     /** validates all, the action and each individual parameter */
@@ -180,9 +205,13 @@ public class ParameterNegotiationModel {
         paramModels.getElseFail(paramNr).getBindableParamValue().setValue(newParamValue);
     }
 
+    public void clearParamValue(final int paramNr) {
+        setParamValue(paramNr, adaptParamValuePojo(paramNr, null));
+    }
+
     @NonNull public ManagedObject adaptParamValuePojo(final int paramNr, final @Nullable Object newParamValuePojo) {
         val paramMeta = getParamMetamodel(paramNr);
-        val paramSpec = paramMeta.getSpecification();
+        val paramSpec = paramMeta.getElementType();
         val paramValue = newParamValuePojo!=null
                 ? ManagedObject.of(paramSpec, newParamValuePojo)
                 : ManagedObject.empty(paramSpec);
@@ -220,6 +249,7 @@ public class ParameterNegotiationModel {
         @Getter @NonNull private final LazyObservable<String> observableParamValidation;
         @Getter @NonNull private final _BindableAbstract<String> bindableParamSearchArgument;
         @Getter @NonNull private final LazyObservable<Can<ManagedObject>> observableParamChoices;
+        private final BooleanObservable isCurrentValueAbsent;
 
         private Bindable<String> bindableParamAsText;
 
@@ -228,7 +258,7 @@ public class ParameterNegotiationModel {
                 final @NonNull ParameterNegotiationModel negotiationModel,
                 final @NonNull ManagedObject initialValue) {
 
-            final var action = negotiationModel.getHead().getMetaModel();
+            val action = negotiationModel.getHead().getMetaModel();
 
             this.paramNr = paramNr;
             this.metaModel = action.getParameters().getElseFail(paramNr);
@@ -241,15 +271,15 @@ public class ParameterNegotiationModel {
 
             // has either autoComplete, choices, or none
             observableParamChoices = metaModel.hasAutoComplete()
-            ? _Observables.forFactory(()->
+            ? _Observables.lazy(()->
                 getMetaModel().getAutoComplete(
                         getNegotiationModel(),
                         getBindableParamSearchArgument().getValue(),
                         InteractionInitiatedBy.USER))
             : metaModel.hasChoices()
-                ? _Observables.forFactory(()->
+                ? _Observables.lazy(()->
                     getMetaModel().getChoices(getNegotiationModel(), InteractionInitiatedBy.USER))
-                : _Observables.forFactory(Can::empty);
+                : _Observables.lazy(Can::empty);
 
             // if has autoComplete, then activate the search argument
             bindableParamSearchArgument = _Bindables.forValue(null);
@@ -260,12 +290,19 @@ public class ParameterNegotiationModel {
             }
 
             // validate this parameter, but only when validationFeedback has been activated
-            observableParamValidation = _Observables.forFactory(()->
+            observableParamValidation = _Observables.lazy(()->
                 isValidationFeedbackActive()
                 ? getMetaModel()
                         .isValid(getNegotiationModel().head, getNegotiationModel().getParamValues(), InteractionInitiatedBy.USER)
                         .getReason()
                 : (String)null);
+
+            // has no meaning for params, only has meaning for properties
+            // however, there are behavioral subtleties, that is, for a property
+            // the current value and the initial pending (negotiated) value might differ
+            // if the current value is absent (null)
+            // hence for params we always evaluate isCurrentValueAbsent() to false
+            this.isCurrentValueAbsent = _Observables.lazyBoolean(()->false);
         }
 
         public void invalidateChoicesAndValidation() {
@@ -291,8 +328,8 @@ public class ParameterNegotiationModel {
         }
 
         @Override
-        public ObjectSpecification getSpecification() {
-            return getMetaModel().getSpecification();
+        public ObjectSpecification getElementType() {
+            return getMetaModel().getElementType();
         }
 
         @Override
@@ -324,7 +361,12 @@ public class ParameterNegotiationModel {
             return observableParamChoices;
         }
 
+        @Override
+        public BooleanObservable isCurrentValueAbsent() {
+            return isCurrentValueAbsent;
+        }
     }
+
 
 
 }

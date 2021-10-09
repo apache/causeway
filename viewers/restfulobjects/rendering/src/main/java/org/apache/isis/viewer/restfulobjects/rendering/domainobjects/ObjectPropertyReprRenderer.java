@@ -90,7 +90,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
         // use the runtime type if we have a value, otherwise the compile time type of the member
         val spec = valueAdapterIfAny != null
                 ? valueAdapterIfAny.getSpecification()
-                : objectMember.getSpecification();
+                : objectMember.getElementType();
 
         val valueFacet = spec.getFacet(ValueFacet.class);
         if (valueFacet != null) {
@@ -99,7 +99,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
             if(valueType == java.math.BigDecimal.class) {
                 // look for facet on member, else on the value's spec
 
-                final var facetHolders = Can.<FacetHolder>of(
+                val facetHolders = Can.<FacetHolder>of(
                         objectMember,
                         valueAdapterIfAny != null ? valueAdapterIfAny.getSpecification() : null);
 

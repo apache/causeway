@@ -32,10 +32,10 @@ import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 import lombok.val;
@@ -50,10 +50,10 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
 
     protected transient IsisAppCommonContext commonContext;
 
-    ActionLink(IsisAppCommonContext commonContext, String id, ActionModel model) {
+    ActionLink(final String id, final ActionModel model) {
         super(id, model);
 
-        this.commonContext = commonContext;
+        this.commonContext = model.getCommonContext();
 
         final boolean useIndicatorForNoArgAction = getSettings().isUseIndicatorForNoArgAction();
         this.indicatorAppenderIfAny =
@@ -75,7 +75,7 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
     }
 
     @Override
-    public void onClick(AjaxRequestTarget target) {
+    public void onClick(final AjaxRequestTarget target) {
 
         _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
                 + "originating from User clicking an Action Link.");
@@ -100,7 +100,7 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
 
 
     @Override
-    protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+    protected void updateAjaxAttributes(final AjaxRequestAttributes attributes) {
         super.updateAjaxAttributes(attributes);
         if(getSettings().isPreventDoubleClickForNoArgAction()) {
             PanelUtil.disableBeforeReenableOnComplete(attributes, this);
@@ -149,7 +149,7 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
     }
 
     @Override
-    protected void onComponentTag(ComponentTag tag) {
+    protected void onComponentTag(final ComponentTag tag) {
         super.onComponentTag(tag);
         Buttons.fixDisabledState(this, tag);
     }

@@ -58,7 +58,7 @@ implements ImperativeFacet {
 
     @Getter private final Class<? extends ActionDomainEvent<?>> eventType;
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
-    @Getter(onMethod = @__(@Override)) private final ObjectSpecification onType;
+    @Getter(onMethod = @__(@Override)) private final ObjectSpecification declaringType;
     @Getter(onMethod = @__(@Override)) private final ObjectSpecification returnType;
     private final ServiceRegistry serviceRegistry;
     private final DomainEventHelper domainEventHelper;
@@ -66,14 +66,14 @@ implements ImperativeFacet {
     public ActionInvocationFacetForDomainEventAbstract(
             final Class<? extends ActionDomainEvent<?>> eventType,
             final Method method,
-            final ObjectSpecification onType,
+            final ObjectSpecification declaringType,
             final ObjectSpecification returnType,
             final FacetHolder holder) {
 
         super(holder);
         this.eventType = eventType;
         this.methods = ImperativeFacet.singleMethod(method);
-        this.onType = onType;
+        this.declaringType = declaringType;
         this.returnType = returnType;
         this.serviceRegistry = getServiceRegistry();
         this.domainEventHelper = DomainEventHelper.ofServiceRegistry(serviceRegistry);
@@ -106,7 +106,7 @@ implements ImperativeFacet {
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         ImperativeFacet.visitAttributes(this, visitor);
-        visitor.accept("onType", onType);
+        visitor.accept("declaringType", declaringType);
         visitor.accept("returnType", returnType);
         visitor.accept("eventType", eventType);
     }

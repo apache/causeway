@@ -67,19 +67,11 @@ public interface ObjectAction extends ObjectMember {
      */
     SemanticsOf getSemantics();
 
-    /**
-     * Returns the specification for the type of object that this action can be
-     * invoked upon.
-     */
-    ObjectSpecification getOnType();
-
-
     // -- getType, isPrototype
 
     ActionType getType();
 
     boolean isPrototype();
-
 
 
     // -- ReturnType
@@ -93,7 +85,6 @@ public interface ObjectAction extends ObjectMember {
      * else returns false.
      */
     boolean hasReturn();
-
 
 
     // -- execute, executeWithRuleChecking
@@ -180,10 +171,10 @@ public interface ObjectAction extends ObjectMember {
             InteractionInitiatedBy interactionInitiatedBy);
 
 
-    // -- Model for Parameter Negotiation
+    // -- INTERACTION HEAD
 
-    ActionInteractionHead interactionHead(
-            @NonNull ManagedObject actionOwner);
+    @Deprecated// use ManagedAction instead
+    ActionInteractionHead interactionHead(@NonNull ManagedObject actionOwner);
 
     // -- Parameters (declarative)
 
@@ -243,11 +234,6 @@ public interface ObjectAction extends ObjectMember {
     // -- Parameters (per instance)
 
     /**
-     * Returns the defaults references/values to be used for the action.
-     */
-    Can<ManagedObject> getDefaults(ManagedObject target);
-
-    /**
      * Returns a list of possible references/values for each parameter, which
      * the user can choose from.
      */
@@ -256,7 +242,7 @@ public interface ObjectAction extends ObjectMember {
             final InteractionInitiatedBy interactionInitiatedBy);
 
     default String getCssClass(final String prefix) {
-        final String ownerId = getOnType().getLogicalTypeName().replace(".", "-");
+        final String ownerId = getDeclaringType().getLogicalTypeName().replace(".", "-");
         return prefix + ownerId + "-" + getId();
     }
 
@@ -303,7 +289,7 @@ public interface ObjectAction extends ObjectMember {
             @SuppressWarnings("unused")
             final Identifier identifier = action.getFeatureIdentifier();
 
-            final String className = action.getOnType().getLogicalTypeName().replace(".","-");
+            final String className = action.getDeclaringType().getLogicalTypeName().replace(".","-");
             final String actionId = action.getId();
             return className + "-" + actionId;
         }
@@ -382,7 +368,7 @@ public interface ObjectAction extends ObjectMember {
             val mixeeAdapter = head.getMixedIn().orElse(null);
 
             if(mixeeAdapter != null) {
-                val mixinSpec = action.getOnType();
+                val mixinSpec = action.getDeclaringType();
                 val ownerSpec = mixeeAdapter.getSpecification();
                 return ownerSpec.lookupMixedInMember(mixinSpec)
                         .map(mixedInMember->mixedInMember.getFriendlyName(mixeeAdapter.asProvider()))
@@ -444,11 +430,11 @@ public interface ObjectAction extends ObjectMember {
         public static Predicate<ObjectAction> choicesFromAndHavingCollectionParameterFor(
                 final @NonNull OneToManyAssociation collection) {
 
-            final ObjectSpecification collectionTypeOfSpec = collection.getSpecification();
+            val elementType = collection.getElementType();
 
             return new ChoicesFrom(collection)
                     .and(new HasParameterMatching(
-                            new ObjectActionParameter.Predicates.CollectionParameter(collectionTypeOfSpec)
+                            new ObjectActionParameter.Predicates.CollectionParameter(elementType)
                             ));
         }
 

@@ -58,43 +58,40 @@ class _PropertiesAsColumns implements HasMetaModelContext {
     @Getter(onMethod_ = {@Override})
     private final MetaModelContext metaModelContext;
 
-    //TODO there should be always a parent object, then we can use its spec and only require 2 args
     public final Stream<OneToOneAssociation> streamPropertiesForColumnRendering(
-            final ObjectSpecification spec,
+            final ObjectSpecification elementType,
             final Identifier memberIdentifier,
-            final Optional<ManagedObject> parentObject) {
+            final ManagedObject parentObject) {
 
         // the type that has the properties that make up this table's columns
-        val elementType = spec.getCorrespondingClass();
+        val elementClass = elementType.getCorrespondingClass();
 
-        val parentSpecIfAny = parentObject
-                .map(ManagedObject::getSpecification)
-                .orElse(null);
+        val parentSpecIfAny = parentObject.getSpecification();
 
-        val whereContext = parentObject.isPresent()
-                ? Where.PARENTED_TABLES
-                : Where.STANDALONE_TABLES;
+        val whereContext = memberIdentifier.getType().isAction()
+                ? Where.STANDALONE_TABLES
+                : Where.PARENTED_TABLES;
 
         val propertyById = _Maps.<String, OneToOneAssociation>newLinkedHashMap();
 
-        spec.streamProperties(MixedIn.INCLUDED)
+        elementType.streamProperties(MixedIn.INCLUDED)
         .filter(property->property.streamFacets()
                 .filter(facet -> facet instanceof HiddenFacet)
                 .map(WhereValueFacet.class::cast)
                 .map(WhereValueFacet::where)
                 .noneMatch(where -> where.includes(whereContext)))
         .filter(associationDoesNotReferenceParent(parentSpecIfAny))
-        .filter(property->filterColumnsUsingSpi(property, elementType)) // optional SPI to filter columns;
+        .filter(property->filterColumnsUsingSpi(property, elementClass)) // optional SPI to filter columns;
         .forEach(property->propertyById.put(property.getId(), property));
 
         val propertyIdsInOrder = _Lists.<String>newArrayList(propertyById.keySet());
 
         // sort by order of occurrence within associated layout, if any
-        propertyIdComparator(spec)
+        propertyIdComparator(elementType)
         .ifPresent(propertyIdsInOrder::sort);
 
         // optional SPI to reorder columns
-        sortColumnsUsingSpi(memberIdentifier, parentObject, propertyIdsInOrder, elementType);
+        sortColumnsUsingSpi(memberIdentifier, parentObject, propertyIdsInOrder, elementClass);
 
         // add all ordered columns to the table
         return propertyIdsInOrder.stream()
@@ -150,7 +147,7 @@ class _PropertiesAsColumns implements HasMetaModelContext {
 
     private void sortColumnsUsingSpi(
             final Identifier memberIdentifier,
-            final Optional<ManagedObject> parentObject,
+            final ManagedObject parentObject,
             final List<String> propertyIdsInOrder,
             final Class<?> elementType) {
 
@@ -161,18 +158,15 @@ class _PropertiesAsColumns implements HasMetaModelContext {
 
         tableColumnOrderServices.stream()
         .map(tableColumnOrderService->
-            parentObject.isPresent()
-                ? tableColumnOrderService.orderParented(
-                        parentObject.get().getPojo(),
+            memberIdentifier.getType().isAction()
+            ? tableColumnOrderService.orderStandalone(
+                    elementType,
+                    propertyIdsInOrder)
+            : tableColumnOrderService.orderParented(
+                        parentObject.getPojo(),
                         memberIdentifier.getMemberLogicalName(),
                         elementType,
-                        propertyIdsInOrder)
-
-                : tableColumnOrderService.orderStandalone(
-                        elementType,
-                        propertyIdsInOrder)
-
-                )
+                        propertyIdsInOrder))
         .filter(_NullSafe::isPresent)
         .findFirst()
         .filter(propertyReorderedIds->propertyReorderedIds!=propertyIdsInOrder) // skip if its the same object
@@ -196,7 +190,7 @@ class _PropertiesAsColumns implements HasMetaModelContext {
                 if (hiddenFacet.where() != Where.REFERENCES_PARENT) {
                     return true;
                 }
-                val propertySpec = property.getSpecification();
+                val propertySpec = property.getElementType();
                 final boolean propertySpecIsOfParentSpec = parentSpec.isOfType(propertySpec);
                 final boolean isVisible = !propertySpecIsOfParentSpec;
                 return isVisible;

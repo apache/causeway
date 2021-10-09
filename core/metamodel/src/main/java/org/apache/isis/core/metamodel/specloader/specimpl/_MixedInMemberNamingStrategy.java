@@ -51,7 +51,7 @@ class _MixedInMemberNamingStrategy {
     }
 
     private static String suffix(final ObjectActionDefault mixinActionAsRegular) {
-        return deriveMemberNameFrom(mixinActionAsRegular.getOnType().getFeatureIdentifier().getClassNaturalName());
+        return deriveMemberNameFrom(mixinActionAsRegular.getDeclaringType().getFeatureIdentifier().getClassNaturalName());
     }
 
     // subject of JUnit testing

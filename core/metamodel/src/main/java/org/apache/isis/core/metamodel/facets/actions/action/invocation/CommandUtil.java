@@ -67,11 +67,11 @@ public class CommandUtil {
     }
 
     public static String logicalMemberIdentifierFor(final ObjectAction objectAction) {
-        return logicalMemberIdentifierFor(objectAction.getOnType(), objectAction);
+        return logicalMemberIdentifierFor(objectAction.getDeclaringType(), objectAction);
     }
 
     public static String logicalMemberIdentifierFor(final OneToOneAssociation otoa) {
-        return logicalMemberIdentifierFor(otoa.getOnType(), otoa);
+        return logicalMemberIdentifierFor(otoa.getDeclaringType(), otoa);
     }
 
     private static String logicalMemberIdentifierFor(

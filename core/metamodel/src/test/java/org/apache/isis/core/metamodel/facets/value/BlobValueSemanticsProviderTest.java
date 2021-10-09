@@ -38,7 +38,7 @@ extends ValueSemanticsProviderAbstractTestCase {
     public void setUpObjects() throws Exception {
         blob = new Blob("myfile1.docx", "application", "vnd.ms-word", new byte[]{1,2,3,4});
         allowMockAdapterToReturn(blob);
-        setSemanitcs(value = new BlobValueSemantics());
+        setSemantics(value = new BlobValueSemantics());
     }
 
     @Test

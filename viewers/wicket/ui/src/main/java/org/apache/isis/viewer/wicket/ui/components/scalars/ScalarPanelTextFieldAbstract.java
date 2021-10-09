@@ -45,8 +45,8 @@ import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
@@ -411,19 +411,18 @@ implements TextFieldValueModel.ScalarModelProvider {
     // //////////////////////////////////////
 
     private static Integer getMaxLengthOf(final @NonNull ScalarModel model) {
-        return model
+        return model.getScalarTypeSpec()
                 .lookupFacet(MaxLengthFacet.class)
                 .map(MaxLengthFacet::value)
                 .orElse(null);
     }
 
     private static Integer getTypicalLenghtOf(final @NonNull ScalarModel model) {
-        return model
+        return model.getScalarTypeSpec()
                 .lookupFacet(TypicalLengthFacet.class)
                 .map(TypicalLengthFacet::value)
                 .orElse(null);
     }
-
 
 
 }

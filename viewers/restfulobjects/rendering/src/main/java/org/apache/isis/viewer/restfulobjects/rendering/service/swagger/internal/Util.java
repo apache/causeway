@@ -52,7 +52,7 @@ public final class Util {
                 && isVisibleForPublic(objectAction.getParameterTypes());
     }
 
-    private static boolean isTypeOfVisibleForPublic(ObjectAction objectAction) {
+    private static boolean isTypeOfVisibleForPublic(final ObjectAction objectAction) {
         final TypeOfFacet typeOfFacet = objectAction.getFacet(TypeOfFacet.class);
         if (typeOfFacet == null) {
             return false;
@@ -60,7 +60,7 @@ public final class Util {
         return isVisibleForPublic(typeOfFacet.valueSpec());
     }
 
-    private static boolean isVisibleForPublic(Can<ObjectSpecification> parameterTypes) {
+    private static boolean isVisibleForPublic(final Can<ObjectSpecification> parameterTypes) {
 
         final boolean atLeastOneParamNotVisible =
                 parameterTypes.stream()
@@ -72,7 +72,7 @@ public final class Util {
     }
 
     static boolean isVisibleForPublic(final ObjectAssociation objectAssociation) {
-        final ObjectSpecification specification = objectAssociation.getSpecification();
+        final ObjectSpecification specification = objectAssociation.getElementType();
         return isVisibleForPublic(specification);
     }
 

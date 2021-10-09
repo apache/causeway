@@ -25,15 +25,20 @@ import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 
+import lombok.Getter;
+
 public class FacetedMethodParameter
 extends TypedHolderAbstract {
+
+    @Getter private final int paramIndex;
 
     public FacetedMethodParameter(
             final MetaModelContext mmc,
             final FeatureType featureType,
             final Class<?> declaringType,
             final Method method,
-            final Class<?> type) {
+            final Class<?> type,
+            final int paramIndex) {
 
         super(mmc,
                 featureType,
@@ -43,17 +48,20 @@ extends TypedHolderAbstract {
                                 declaringType,
                                 ()->mmc.getSpecificationLoader().loadSpecification(declaringType).getLogicalTypeName()),
                         method));
+
+        this.paramIndex = paramIndex;
     }
 
     public FacetedMethodParameter(
             final MetaModelContext mmc,
             final FeatureType featureType,
             final Class<?> type,
-            final Identifier identifier) {
+            final Identifier identifier,
+            final int paramIndex) {
 
         super(mmc, featureType, type, identifier);
+        this.paramIndex = paramIndex;
     }
-
 
     /**
      * Returns an instance with {@code type} replaced by given {@code elementType}.
@@ -64,5 +72,7 @@ extends TypedHolderAbstract {
         this.type = elementType;
         return this;
     }
+
+
 
 }

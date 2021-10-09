@@ -24,6 +24,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.binding._BindableAbstract;
 import org.apache.isis.commons.internal.binding._Bindables;
 import org.apache.isis.commons.internal.binding._Observables;
+import org.apache.isis.commons.internal.binding._Observables.BooleanObservable;
 import org.apache.isis.commons.internal.binding._Observables.LazyObservable;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -31,9 +32,11 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
+import lombok.val;
 
 public class PropertyNegotiationModel implements ManagedValue {
 
+    private final @NonNull BooleanObservable isCurrentValueAbsent;
     private final @NonNull _BindableAbstract<ManagedObject> proposedValue;
     private final @NonNull LazyObservable<String> validation;
     private final @NonNull _BindableAbstract<String> searchArgument;
@@ -43,12 +46,15 @@ public class PropertyNegotiationModel implements ManagedValue {
 
     PropertyNegotiationModel(final ManagedProperty managedProperty) {
         this.managedProperty = managedProperty;
-        final var propMeta = managedProperty.getMetaModel();
+        val propMeta = managedProperty.getMetaModel();
 
         validationFeedbackActive = _Bindables.forValue(false);
 
-        final var currentValue = managedProperty.getPropertyValue();
-        final var defaultValue = ManagedObjects.isNullOrUnspecifiedOrEmpty(currentValue)
+        isCurrentValueAbsent = _Observables.lazyBoolean(()->
+            ManagedObjects.isNullOrUnspecifiedOrEmpty(managedProperty.getPropertyValue()));
+
+        val currentValue = managedProperty.getPropertyValue();
+        val defaultValue = ManagedObjects.isNullOrUnspecifiedOrEmpty(currentValue)
             ? propMeta.getDefault(managedProperty.getOwner())
             : currentValue;
 
@@ -59,15 +65,15 @@ public class PropertyNegotiationModel implements ManagedValue {
 
         // has either autoComplete, choices, or none
         choices = propMeta.hasAutoComplete()
-        ? _Observables.forFactory(()->
+        ? _Observables.lazy(()->
             propMeta.getAutoComplete(
                     managedProperty.getOwner(),
                     getSearchArgument().getValue(),
                     InteractionInitiatedBy.USER))
         : propMeta.hasChoices()
-            ? _Observables.forFactory(()->
+            ? _Observables.lazy(()->
                 propMeta.getChoices(managedProperty.getOwner(), InteractionInitiatedBy.USER))
-            : _Observables.forFactory(Can::empty);
+            : _Observables.lazy(Can::empty);
 
         // if has autoComplete, then activate the search argument
         searchArgument = _Bindables.forValue(null);
@@ -78,7 +84,7 @@ public class PropertyNegotiationModel implements ManagedValue {
         }
 
         // validate this parameter, but only when validationFeedback has been activated
-        validation = _Observables.forFactory(()->
+        validation = _Observables.lazy(()->
             isValidationFeedbackActive()
             ? managedProperty.checkValidity(getValue().getValue())
                     .map(InteractionVeto::getReason)
@@ -87,8 +93,13 @@ public class PropertyNegotiationModel implements ManagedValue {
     }
 
     @Override
-    public ObjectSpecification getSpecification() {
-        return managedProperty.getSpecification();
+    public BooleanObservable isCurrentValueAbsent() {
+        return isCurrentValueAbsent;
+    }
+
+    @Override
+    public ObjectSpecification getElementType() {
+        return managedProperty.getElementType();
     }
 
     @Override
@@ -145,6 +156,7 @@ public class PropertyNegotiationModel implements ManagedValue {
 
     public void submit() {
         managedProperty.modifyProperty(getValue().getValue());
+        isCurrentValueAbsent.invalidate();
     }
 
 

@@ -51,7 +51,7 @@ public interface EntityPropertyChangePublishingPolicyFacet extends Facet {
         val policyFacetIfAny = property
                 .lookupFacet(EntityPropertyChangePublishingPolicyFacet.class);
 
-        val typeOf = property.getSpecification().getCorrespondingClass();
+        val typeOf = property.getElementType().getCorrespondingClass();
         if(Blob.class.equals(typeOf)
                 || Clob.class.equals(typeOf)) {
 

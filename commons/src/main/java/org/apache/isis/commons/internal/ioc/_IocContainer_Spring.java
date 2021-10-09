@@ -69,15 +69,15 @@ final class _IocContainer_Spring implements _IocContainer {
         return Stream.of(context.getBeanDefinitionNames())
                 .map(name->{
 
-                    final var type = context.getType(name);
-                    final var id = name; // just reuse the bean's name
+                    val type = context.getType(name);
+                    val id = name; // just reuse the bean's name
 
                     //val scope = beanFactory.getBeanDefinition(name).getScope();
 
-                    final var resolvableType = ResolvableType.forClass(type);
-                    final var bean = context.getBeanProvider(resolvableType);
+                    val resolvableType = ResolvableType.forClass(type);
+                    val bean = context.getBeanProvider(resolvableType);
 
-                    final var beanAdapter = _ManagedBeanAdapter_Spring.of(id, type, bean);
+                    val beanAdapter = _ManagedBeanAdapter_Spring.of(id, type, bean);
 
                     return beanAdapter;
                 });
@@ -107,7 +107,7 @@ final class _IocContainer_Spring implements _IocContainer {
 
         if(_NullSafe.isEmpty(qualifiersRequired)) {
 
-            final var allMatchingBeans = springContext.getBeanProvider(requiredType)
+            val allMatchingBeans = springContext.getBeanProvider(requiredType)
                     .orderedStream()
                     .collect(Can.toCan());
 

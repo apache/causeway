@@ -461,7 +461,7 @@ implements DomainObjectResource {
         .checkVisibility()
         .checkUsability(AccessIntent.MUTATE)
         .modifyProperty(property->{
-            val proposedNewValue = new JsonParserHelper(resourceContext, property.getSpecification())
+            val proposedNewValue = new JsonParserHelper(resourceContext, property.getElementType())
                     .parseAsMapWithSingleValue(Util.asStringUtf8(body));
 
             return proposedNewValue;

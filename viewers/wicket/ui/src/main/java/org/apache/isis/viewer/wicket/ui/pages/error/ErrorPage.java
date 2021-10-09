@@ -26,7 +26,7 @@ import org.apache.isis.applib.services.error.ErrorDetails;
 import org.apache.isis.applib.services.error.ErrorReportingService;
 import org.apache.isis.applib.services.error.Ticket;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
+import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionStackTracePanel;
 import org.apache.isis.viewer.wicket.ui.errors.StackTraceDetail;
@@ -46,7 +46,7 @@ public class ErrorPage extends PageAbstract {
 
 
     public ErrorPage(ExceptionModel exceptionModel) {
-        super(PageParametersUtils.newPageParameters(), null);
+        super(PageParameterUtils.newPageParameters(), null);
 
         addBookmarkedPages(themeDiv);
 

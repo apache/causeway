@@ -18,34 +18,23 @@
  */
 package org.apache.isis.core.metamodel.facets.value.datetimejodalocal;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
 import org.joda.time.LocalDateTime;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.joda.JodaLocalDateTimeValueSemantics;
+
 public class JodaLocalDateTimeValueSemanticsProviderTest {
 
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
-
-    @Mock FacetHolder mockFacetHolder;
-    @Mock ServiceInjector mockServicesInjector;
-
-    private JodaLocalDateTimeValueSemanticsProvider provider;
+    private JodaLocalDateTimeValueSemantics provider;
     private MetaModelContext_forTesting metaModelContext;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
 
         metaModelContext = MetaModelContext_forTesting.builder()
@@ -53,15 +42,7 @@ public class JodaLocalDateTimeValueSemanticsProviderTest {
 
         metaModelContext.getConfiguration();
 
-        context.checking(new Expectations() {
-            {
-                oneOf(mockFacetHolder).getMetaModelContext();
-                will(returnValue(metaModelContext));
-            }
-        });
-
-        provider = new JodaLocalDateTimeValueSemanticsProvider(mockFacetHolder);
-
+        provider = new JodaLocalDateTimeValueSemantics(metaModelContext.getConfiguration());
 
     }
 

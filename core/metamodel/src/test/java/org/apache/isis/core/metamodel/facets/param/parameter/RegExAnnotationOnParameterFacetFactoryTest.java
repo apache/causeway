@@ -53,7 +53,7 @@ public class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFac
 
         facetFactory.processParams(
                 new ProcessParameterContext(
-                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, 0, null, facetedMethodParameter));
+                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(RegExFacet.class);
         assertNotNull(facet);
@@ -74,7 +74,7 @@ public class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFac
 
         facetFactory.processParams(
                 new ProcessParameterContext(
-                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, 0, null, facetedMethodParameter));
+                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, null, facetedMethodParameter));
 
         assertNull(facetedMethod.getFacet(RegExFacet.class));
     }

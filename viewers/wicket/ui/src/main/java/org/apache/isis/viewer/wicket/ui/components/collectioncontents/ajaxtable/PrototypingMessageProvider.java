@@ -23,7 +23,7 @@ import java.util.Locale;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
+import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 
 import lombok.val;
 

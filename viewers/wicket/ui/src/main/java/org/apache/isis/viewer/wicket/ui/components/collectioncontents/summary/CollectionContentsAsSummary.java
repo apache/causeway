@@ -32,6 +32,8 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -42,8 +44,9 @@ import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import lombok.val;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
@@ -51,7 +54,7 @@ import lombok.val;
  * chart alongside.
  */
 public class CollectionContentsAsSummary
-extends PanelAbstract<List<ManagedObject>, EntityCollectionModel>
+extends PanelAbstract<DataTableModel, EntityCollectionModel>
 implements CollectionCountProvider {
 
     private static final String ID_MAX = "max";
@@ -80,7 +83,7 @@ implements CollectionCountProvider {
 
         final EntityCollectionModel model = getModel();
 
-        final ObjectSpecification elementSpec = model.getTypeOfSpecification();
+        final ObjectSpecification elementSpec = model.getElementType();
 
         final NotificationPanel feedback = new NotificationPanel(ID_FEEDBACK);
         feedback.setOutputMarkupId(true);
@@ -101,9 +104,12 @@ implements CollectionCountProvider {
             String propertyColumnName = numberAssociation.getCanonicalFriendlyName();
             item.add(new Label(ID_PROPERTY_NAME, new Model<String>(propertyColumnName)));
 
+            val visibleAdapters = model.getDataTableModel().getDataRowsFiltered()
+                    .getValue()
+                    .map(DataRow::getRowElement)
+                    .toList();
 
-            List<ManagedObject> adapters = model.getObject();
-            Summary summary = new Summary(propertyColumnName, adapters, numberAssociation);
+            Summary summary = new Summary(propertyColumnName, visibleAdapters, numberAssociation);
             addItem(item, ID_SUM, summary.getTotal());
             addItem(item, ID_AVG, summary.getAverage());
             addItem(item, ID_MIN, summary.getMin());

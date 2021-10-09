@@ -23,6 +23,8 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
+import lombok.RequiredArgsConstructor;
+
 public interface ObjectUiModel {
 
     ManagedObject getManagedObject();
@@ -32,10 +34,11 @@ public interface ObjectUiModel {
                 .isVisible(getManagedObject(), InteractionInitiatedBy.USER);
     }
 
-    public enum Mode {
+    public enum EitherViewOrEdit {
         VIEW, EDIT
     }
 
+    @RequiredArgsConstructor
     public enum RenderingHint {
         // normal form
         REGULAR(Where.OBJECT_FORMS),
@@ -49,9 +52,8 @@ public interface ObjectUiModel {
         STANDALONE_TITLE_COLUMN(Where.STANDALONE_TABLES);
 
         private final Where where;
-
-        RenderingHint(final Where where) {
-            this.where = where;
+        public Where asWhere() {
+            return this.where;
         }
 
         public boolean isRegular() {
@@ -82,9 +84,6 @@ public interface ObjectUiModel {
             return this == STANDALONE_TITLE_COLUMN;
         }
 
-        public Where asWhere() {
-            return this.where;
-        }
     }
 
     public interface HasRenderingHints {
@@ -96,28 +95,30 @@ public interface ObjectUiModel {
         boolean isInlinePrompt();
 
         RenderingHint getRenderingHint();
+        @Deprecated// make immutable? - need to recreate any bound UI components anyway
         void setRenderingHint(RenderingHint renderingHint);
 
-        Mode getMode();
-        void setMode(Mode mode);
+        EitherViewOrEdit getMode();
+        @Deprecated// make immutable? - need to recreate any bound UI components anyway
+        void setMode(EitherViewOrEdit mode);
 
         // -- SHORTCUTS
 
         default boolean isViewMode() {
-            return getMode() == Mode.VIEW;
+            return getMode() == EitherViewOrEdit.VIEW;
         }
 
         default boolean isEditMode() {
-            return getMode() == Mode.EDIT;
+            return getMode() == EitherViewOrEdit.EDIT;
         }
 
         default HasRenderingHints toEditMode() {
-            setMode(Mode.EDIT);
+            setMode(EitherViewOrEdit.EDIT);
             return this;
         }
 
         default HasRenderingHints toViewMode() {
-            setMode(Mode.VIEW);
+            setMode(EitherViewOrEdit.VIEW);
             return this;
         }
 

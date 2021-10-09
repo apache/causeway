@@ -24,23 +24,34 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
+import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.val.BigDecimalValueSemantics")
 public class BigDecimalValueSemantics
-extends AbstractValueSemanticsProvider<BigDecimal>
+extends ValueSemanticsAbstract<BigDecimal>
 implements
     DefaultsProvider<BigDecimal>,
     EncoderDecoder<BigDecimal>,
     Parser<BigDecimal>,
     Renderer<BigDecimal> {
+
+    @Override
+    public Class<BigDecimal> getCorrespondingClass() {
+        return BigDecimal.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.BIG_DECIMAL;
+    }
 
     @Override
     public BigDecimal getDefaultValue() {

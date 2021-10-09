@@ -177,7 +177,7 @@ public class BooleanPanel extends ScalarPanelAbstract {
         // required
 
         // must prime the underlying model if this is a primitive boolean
-        final ObjectSpecification objectSpecification = getModel().getTypeOfSpecification();
+        final ObjectSpecification objectSpecification = getModel().getScalarTypeSpec();
         if(objectSpecification.getFullIdentifier().equals("boolean")) {
             if(getModel().getObject() == null) {
                 val objectAdapter = scalarModel.getCommonContext().getPojoToAdapter().apply(Boolean.FALSE);

@@ -112,6 +112,12 @@ public final class _NullSafe {
      * @return non-null stream object
      */
     public static <T> Stream<T> stream(final @Nullable Iterable<T> iterable){
+        if(iterable instanceof Collection) {
+            return ((Collection<T>) iterable).stream();
+        }
+        if(iterable instanceof Can) {
+            return ((Can<T>) iterable).stream();
+        }
         return iterable!=null
                 ? stream(iterable.iterator())
                 : Stream.empty();

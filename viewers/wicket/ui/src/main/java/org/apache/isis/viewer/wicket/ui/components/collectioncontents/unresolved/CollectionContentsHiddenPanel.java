@@ -18,9 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved;
 
-import java.util.List;
-
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -30,7 +28,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * lazily resolved.
  */
 public class CollectionContentsHiddenPanel
-extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
+extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 
     private static final long serialVersionUID = 1L;
 

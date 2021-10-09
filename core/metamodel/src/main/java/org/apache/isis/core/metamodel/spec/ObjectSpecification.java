@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.id.HasLogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
@@ -59,6 +60,7 @@ import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionF
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
@@ -68,6 +70,7 @@ import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationContainer;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
@@ -526,6 +529,10 @@ extends
 
     default public boolean isPojoCompatible(final Object pojo) {
 
+        if(pojo==null) {
+            return true;
+        }
+
         val expectedType = getCorrespondingClass();
         val actualType = pojo.getClass();
 
@@ -534,8 +541,6 @@ extends
             return true;
         }
 
-        // XXX rather hard to understand ...
-        // for non-scalar param types, param-spec is always the element-type spec (not the spec of any container)
         val elementSpec = getElementSpecification()
                 .orElse(this);
         return _NullSafe.streamAutodetect(pojo)
@@ -562,6 +567,23 @@ extends
         return superclass()!=null
                 ? Stream.concat(Stream.of(this), superclass().streamTypeHierarchy())
                 : Stream.of(this);
+    }
+
+    // -- VALUE SEMANTICS SUPPORT
+
+    @SuppressWarnings("unchecked")
+    default Optional<Parser<?>> selectParser(final ObjectFeature objFeature) {
+        return lookupFacet(ValueFacet.class)
+                .flatMap(valueFacet->valueFacet.selectParserForFeature(objFeature));
+    }
+
+    default Parser<?> selectParserElseFallback(final ObjectFeature objFeature) {
+        return lookupFacet(ValueFacet.class)
+                .map(valueFacet->
+                        valueFacet.selectParserForFeatureElseFallback(objFeature))
+                .orElseGet(()->ValueFacetAbstract.fallbackParser(
+                        getLogicalType(),
+                        objFeature.getFeatureIdentifier()));
     }
 
 

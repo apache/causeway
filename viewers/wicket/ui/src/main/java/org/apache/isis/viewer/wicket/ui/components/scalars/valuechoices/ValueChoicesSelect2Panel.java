@@ -31,7 +31,7 @@ import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.runtime.memento.ObjectMemento;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
@@ -40,8 +40,8 @@ import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 import lombok.val;
 
-public class ValueChoicesSelect2Panel extends ScalarPanelSelectAbstract {
-
+public class ValueChoicesSelect2Panel
+extends ScalarPanelSelectAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -49,12 +49,15 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelectAbstract {
         super(id, scalarModel);
     }
 
+    public ScalarModel scalarModel() {
+        return getModel();
+    }
 
-    // ///////////////////////////////////////////////////////////////////
+    // --
 
     @Override
     protected Component createComponentForCompact() {
-        return new Label(ID_SCALAR_IF_COMPACT, getModel().getObjectAsString());
+        return new Label(ID_SCALAR_IF_COMPACT, "placeholder");
     }
 
     @Override
@@ -81,10 +84,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelectAbstract {
         return choices.map(commonContext::mementoFor);
     }
 
-    // ///////////////////////////////////////////////////////////////////
-
-
-    // ///////////////////////////////////////////////////////////////////
+    // --
 
     @Override
     protected InlinePromptConfig getInlinePromptConfig() {
@@ -98,9 +98,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelectAbstract {
         return Model.of(inlinePrompt);
     }
 
-
-    // ///////////////////////////////////////////////////////////////////
-
+    // --
 
     @Override
     protected void onInitializeNotEditable() {
@@ -153,11 +151,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelectAbstract {
         select2.setEnabled(true);
     }
 
-
-
-    // //////////////////////////////////////
-
-
+    // --
 
     // in corresponding code in ReferencePanelFactory, these is a branch for different types of providers
     // (choice vs autoComplete).  Here though - because values don't currently support autoComplete - no branch is required
@@ -170,7 +164,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelectAbstract {
     @Override
     protected void syncIfNull(final Select2 select2) {
 
-        if(getModel().isEmpty()) {
+        if(scalarModel().isEmpty()) {
             select2.getModel().setObject(null);
         }
     }

@@ -63,6 +63,7 @@ public class JavaLangStringVm
     @Getter @Setter
     private String readOnlyProperty;
 
+    @Title(sequence = "2")
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @XmlElement(required = true)

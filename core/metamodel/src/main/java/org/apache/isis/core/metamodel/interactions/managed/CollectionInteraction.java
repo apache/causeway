@@ -29,7 +29,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import lombok.NonNull;
 import lombok.val;
 
-public final class CollectionInteraction extends MemberInteraction<ManagedCollection, CollectionInteraction> {
+public final class CollectionInteraction
+extends MemberInteraction<ManagedCollection, CollectionInteraction> {
 
     public static final CollectionInteraction start(
             final @NonNull ManagedObject owner,
@@ -45,7 +46,7 @@ public final class CollectionInteraction extends MemberInteraction<ManagedCollec
         return new CollectionInteraction(chain);
     }
 
-    CollectionInteraction(@NonNull _Either<ManagedCollection, InteractionVeto> chain) {
+    CollectionInteraction(@NonNull final _Either<ManagedCollection, InteractionVeto> chain) {
         super(chain);
     }
 
@@ -62,21 +63,9 @@ public final class CollectionInteraction extends MemberInteraction<ManagedCollec
      * @throws X if there was any interaction veto within the originating chain
      */
     public <X extends Throwable>
-    ManagedCollection getManagedCollectionElseThrow(Function<InteractionVeto, ? extends X> onFailure) throws X {
+    ManagedCollection getManagedCollectionElseThrow(final Function<InteractionVeto, ? extends X> onFailure) throws X {
         return super.getManagedMemberElseThrow(onFailure);
     }
-
-//    public PropertyHandle modifyProperty(
-//            final @NonNull Function<ManagedProperty, ManagedObject> newProperyValueProvider) {
-//
-//        chain = chain.leftRemap(property->{
-//            val validityVeto = property.modifyProperty(newProperyValueProvider.apply(property));
-//            return validityVeto.isPresent()
-//                ? _Either.right(validityVeto.get())
-//                : _Either.left(property);
-//        });
-//        return this;
-//    }
 
 
 }

@@ -93,13 +93,13 @@ implements HasDynamicallyVisibleContent {
 
     @Override
     public TabbedPanel<ITab> setSelectedTab(final int index) {
-        selectedTabHintKey.set(entityModel.asHintingBookmarkIfSupported(), ""+index);
+        selectedTabHintKey.set(entityModel.getOwnerBookmark(), ""+index);
         return super.setSelectedTab(index);
     }
 
     private void setSelectedTabFromSessionIfAny(
             final AjaxBootstrapTabbedPanel<ITab> ajaxBootstrapTabbedPanel) {
-        final String selectedTabStr = selectedTabHintKey.get(entityModel.asHintingBookmarkIfSupported());
+        final String selectedTabStr = selectedTabHintKey.get(entityModel.getOwnerBookmark());
         final Integer tabIndex = parse(selectedTabStr);
         if (tabIndex != null) {
             final int numTabs = ajaxBootstrapTabbedPanel.getTabs().size();

@@ -30,7 +30,7 @@ import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
+import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 
 import lombok.val;
 

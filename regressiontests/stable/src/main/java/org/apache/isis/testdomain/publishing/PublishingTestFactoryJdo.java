@@ -222,7 +222,7 @@ extends PublishingTestFactoryAbstract {
                     val propertyInteraction = PropertyInteraction.start(bookAdapter, "name", Where.OBJECT_FORMS);
                     val managedProperty = propertyInteraction.getManagedPropertyElseThrow(__->_Exceptions.noSuchElement());
                     val propertyModel = managedProperty.startNegotiation();
-                    val propertySpec = managedProperty.getSpecification();
+                    val propertySpec = managedProperty.getElementType();
                     propertyModel.getValue().setValue(ManagedObject.of(propertySpec, "Book #2"));
                     propertyModel.submit();
 

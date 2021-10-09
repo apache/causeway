@@ -19,10 +19,10 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.List;
-import java.util.Optional;
+
+import org.apache.wicket.model.ChainingModel;
 
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -30,58 +30,61 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.memento.ActionParameterMemento;
-import org.apache.isis.core.metamodel.spec.feature.memento.PropertyMemento;
 import org.apache.isis.viewer.common.model.feature.ScalarUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel.EitherViewOrEdit;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
-import org.apache.isis.viewer.common.model.object.ObjectUiModel.Mode;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.val;
 
 /**
- * Represents a scalar of an entity, either a {@link Kind#PROPERTY property} or
- * a {@link Kind#PARAMETER parameter}.
+ * Represents a scalar of an entity, either a {@link EitherParamOrProp#PROPERTY property} or
+ * a {@link EitherParamOrProp#PARAMETER parameter}.
  *
  * <p>
  * Is the backing model to each of the fields that appear in forms (for entities
  * or action dialogs).
  *
+ * @implSpec
+ * <pre>
+ * ScalarModel --chained-to--> EntityModel
+ * ScalarModel --provides--> ManagedObject <--provides-- ManagedValue
+ * </pre>
  */
 //@Log4j2
 public abstract class ScalarModel
-extends ManagedObjectModel
+extends ChainingModel<ManagedObject>
 implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext {
 
     private static final long serialVersionUID = 1L;
 
-    private enum Kind {
+    private enum EitherParamOrProp {
         PROPERTY,
         PARAMETER;
     }
-    @NonNull private final Kind kind;
-    public boolean isProperty() { return kind == Kind.PROPERTY; }
-    public boolean isParameter() { return kind == Kind.PARAMETER; }
 
+    @Getter @NonNull private final EitherParamOrProp paramOrProp;
+    public boolean isProperty() { return paramOrProp == EitherParamOrProp.PROPERTY; }
+    public boolean isParameter() { return paramOrProp == EitherParamOrProp.PARAMETER; }
 
     private final EntityModel parentEntityModel;
 
     @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
-    private Mode mode;
+    private EitherViewOrEdit mode;
 
     @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
     private RenderingHint renderingHint;
-
 
     /**
      * Creates a model representing an action parameter of an action of a parent
@@ -89,16 +92,9 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
      * value (if any) of that action parameter.
      */
     protected ScalarModel(
-            final EntityModel parentEntityModel,
-            final ActionParameterMemento apm) {
-
-        super(parentEntityModel.getCommonContext());
-
-        this.kind = Kind.PARAMETER;
-        this.parentEntityModel = parentEntityModel;
-        this.pendingModel = new PendingModel(this);
-        this.mode = ObjectUiModel.Mode.EDIT;
-        this.renderingHint = ObjectUiModel.RenderingHint.REGULAR;
+            final EntityModel parentEntityModel) {
+        this(EitherParamOrProp.PARAMETER,
+                parentEntityModel, EitherViewOrEdit.EDIT, RenderingHint.REGULAR);
     }
 
     /**
@@ -108,82 +104,92 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
      */
     protected ScalarModel(
             final EntityModel parentEntityModel,
-            final PropertyMemento pm,
-            final ObjectUiModel.Mode mode,
+            final ObjectUiModel.EitherViewOrEdit viewOrEdit,
             final ObjectUiModel.RenderingHint renderingHint) {
+        this(EitherParamOrProp.PROPERTY,
+                parentEntityModel, viewOrEdit, renderingHint);
+    }
 
-        super(parentEntityModel.getCommonContext());
-        this.kind = Kind.PROPERTY;
+    private ScalarModel(
+            final @NonNull EitherParamOrProp paramOrProp,
+            final @NonNull EntityModel parentEntityModel,
+            final @NonNull ObjectUiModel.EitherViewOrEdit viewOrEdit,
+            final @NonNull ObjectUiModel.RenderingHint renderingHint) {
+
+        super(parentEntityModel); // the so called target model, we are chaining us to
+        this.paramOrProp = paramOrProp;
         this.parentEntityModel = parentEntityModel;
-        this.pendingModel = new PendingModel(this);
-        this.mode = mode;
+        this.mode = viewOrEdit;
         this.renderingHint = renderingHint;
     }
 
-    protected ManagedObject loadFromSuper() {
-        return super.load();
+    /**
+     * Gets the proposed value as ManagedObject.
+     * (override, so we don't return the target model, we are chained to)
+     */
+    @Override
+    public final ManagedObject getObject() {
+        if(isCurrentValueAbsent()) {
+            return ManagedObject.empty(proposedValue().getElementType());
+        }
+        return proposedValue().getValue().getValue();
+    }
+
+    /**
+     * Sets given ManagedObject as new proposed value.
+     * (override, so we don't return the target model, we are chained to)
+     */
+    @Override
+    public final void setObject(final ManagedObject newValue) {
+        proposedValue().getValue().setValue(newValue);
     }
 
     @Override
-    public EntityModel getParentUiModel() {
+    public final EntityModel getParentUiModel() {
         return parentEntityModel;
     }
 
-    //XXX[ISIS-2383] don't cache always load from parent model
-    //private transient ManagedObject owner;
     @Override
-    public ManagedObject getOwner() {
-//        if(owner==null) {
-//            owner = getParentUiModel().load();
-//        }
-//        return owner;
-        return getParentUiModel().load();
+    public final ManagedObject getOwner() {
+        return getParentUiModel().getObject();
     }
 
-    /**
-     * Whether the scalar represents a {@link Kind#PROPERTY property} or a
-     * {@link Kind#PARAMETER}.
-     */
-    public Kind getKind() {
-        return kind;
+    public final boolean isEmpty() {
+        return ManagedObjects.isNullOrUnspecifiedOrEmpty(proposedValue().getValue().getValue());
     }
 
-    /**
-     * Overrides superclass' implementation, because a {@link ScalarModel} can
-     * know the {@link ObjectSpecification of} the {@link ManagedObject adapter}
-     * without there necessarily having any adapter
-     * {@link #setObject(ManagedObject) set}.
-     */
-    @Override
-    public ObjectSpecification getTypeOfSpecification() {
-        return getScalarTypeSpec();
-    }
-
-    @Override
-    public Optional<LogicalType> getLogicalElementType() {
-        return Optional.ofNullable(getScalarTypeSpec())
-                .map(ObjectSpecification::getLogicalType);
-    }
-
-
-    public boolean isScalarTypeAnyOf(final Class<?>... requiredClass) {
-        final String fullName = getTypeOfSpecification().getFullIdentifier();
+    public final boolean isScalarTypeAnyOf(final Class<?>... requiredClass) {
+        final String fullName = getScalarTypeSpec().getFullIdentifier();
         return _NullSafe.stream(requiredClass)
                 .map(Class::getName)
                 .anyMatch(fullName::equals);
     }
 
-    public boolean isScalarTypeSubtypeOf(final Class<?> requiredClass) {
-        final Class<?> scalarType = getTypeOfSpecification().getCorrespondingClass();
+    public final boolean isScalarTypeSubtypeOf(final Class<?> requiredClass) {
+        final Class<?> scalarType = getScalarTypeSpec().getCorrespondingClass();
         return _NullSafe.streamNullable(requiredClass)
                 .anyMatch(x -> x.isAssignableFrom(scalarType));
     }
 
+    /**
+     * Has no meaning for <i>Parameters</i>, only has meaning for <i>Properties</i>.
+     * For a <i>Property</i>
+     * the current value and the initial pending (negotiated) value might differ,
+     * if the current value is absent (null).
+     * For <i>Parameters</i> we always evaluate {@code isCurrentValueAbsent()}
+     * to false.
+     */
+    public boolean isCurrentValueAbsent() {
+        val proposedValue = proposedValue();
+        return proposedValue.isCurrentValueAbsent().booleanValue();
+    }
+
     /** get the proposed value, subject to negotiation */
     public String getObjectAsString() {
-        final var proposedValue = proposedValue();
-        setObject(proposedValue.getValue().getValue()); // keep the wicket model in sync
-        return proposedValue.getValueAsParsableText().getValue();
+        val proposedValue = proposedValue();
+        return proposedValue.isCurrentValueAbsent().booleanValue()
+                ? ""
+                : proposedValue.getValueAsParsableText().getValue();
     }
 
     /**
@@ -191,9 +197,8 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
      * actual application of the proposed value is only applied after passing verification (not done here)
      */
     public void setObjectAsString(final String enteredText) {
-        final var proposedValue = proposedValue();
+        val proposedValue = proposedValue();
         proposedValue.getValueAsParsableText().setValue(enteredText);
-        setObject(proposedValue.getValue().getValue()); // keep the wicket model in sync
     }
 
     public abstract ManagedValue proposedValue();
@@ -225,7 +230,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     }
 
     @Override
-    public PromptStyle getPromptStyle() {
+    public final PromptStyle getPromptStyle() {
         final PromptStyleFacet facet = getFacet(PromptStyleFacet.class);
         if(facet == null) {
             // don't think this can happen actually, see PromptStyleFacetFallback
@@ -248,13 +253,6 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     public boolean isEnabled() {
         return whetherDisabled() == null;
-    }
-
-
-    @Override
-    protected void onDetach() {
-        clearPending();
-        super.onDetach();
     }
 
     // //////////////////////////////////////
@@ -321,8 +319,8 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
      * @return <tt>true</tt> if the widget for this model must be editable.
      */
     public boolean mustBeEditable() {
-        return getMode() == Mode.EDIT
-                || getKind() == Kind.PARAMETER
+        return getMode() == EitherViewOrEdit.EDIT
+                || getParamOrProp() == EitherParamOrProp.PARAMETER
                 || hasAssociatedActionWithInlineAsIfEdit();
     }
 
@@ -344,7 +342,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     protected abstract String toStringOf();
 
-    protected abstract ObjectSpecification getScalarTypeSpec();
+    public abstract ObjectSpecification getScalarTypeSpec();
 
     public abstract String getIdentifier();
 
@@ -361,20 +359,10 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         return getAssociatedActions().hasAssociatedActionWithInlineAsIfEdit();
     }
 
-    // -- PENDING STUFF
-
-    @Getter(value = AccessLevel.PACKAGE)
-    private final PendingModel pendingModel;
-
-    public ManagedObject getPendingElseCurrentAdapter() {
-        return pendingModel.getPendingElseCurrentAdapter();
-    }
-
     public void clearPending() {
-        pendingModel.clearPending();
+        //TODO[ISIS-2871] is this really needed? - remove once we are sure
+        // was used to state that pending value is in sync with current value
+        //getPendingPropertyModel().getValue().setValue(null);
     }
-
-
-    // --
 
 }

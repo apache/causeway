@@ -78,7 +78,7 @@ implements IRequestListener {
 
     String pdfJsViewerPanelCallbacksTemplateJs;
 
-    PdfJsViewerPanel(String id, ScalarModel scalarModel) {
+    PdfJsViewerPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
 
         pdfJsViewerPanelCallbacksTemplateJs = _Strings.readFromResource(
@@ -110,7 +110,7 @@ implements IRequestListener {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void respond(AjaxRequestTarget _target)
+            protected void respond(final AjaxRequestTarget _target)
             {
                 String newPageNum = RequestCycle.get().getRequest().getRequestParameters().getParameterValue("pageNum").toString();
                 try {
@@ -134,7 +134,7 @@ implements IRequestListener {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void respond(AjaxRequestTarget _target)
+            protected void respond(final AjaxRequestTarget _target)
             {
                 String newScale = RequestCycle.get().getRequest().getRequestParameters().getParameterValue("scale").toString();
                 try {
@@ -159,7 +159,7 @@ implements IRequestListener {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void respond(AjaxRequestTarget _target)
+            protected void respond(final AjaxRequestTarget _target)
             {
                 String newHeight = RequestCycle.get().getRequest().getRequestParameters().getParameterValue("height").toString();
                 try {
@@ -196,12 +196,12 @@ implements IRequestListener {
                                     "Could not locate UserService"));
     }
 
-    private PdfJsViewerAdvisor.InstanceKey toInstanceKey(UserService userService) {
+    private PdfJsViewerAdvisor.InstanceKey toInstanceKey(final UserService userService) {
         String userName = userService.currentUserNameElseNobody();
 
-        val model = getModel();
-        val propertyId = model.getIdentifier();
-        val bookmark = model.getParentUiModel().asBookmarkIfSupported();
+        val scalarModel = getModel();
+        val propertyId = scalarModel.getIdentifier();
+        val bookmark = scalarModel.getParentUiModel().getOwnerBookmark();
         val logicalTypeName = bookmark.getLogicalTypeName();
         val identifier = bookmark.getIdentifier();
 

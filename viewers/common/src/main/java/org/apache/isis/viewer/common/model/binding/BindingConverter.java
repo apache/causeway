@@ -18,53 +18,31 @@
  */
 package org.apache.isis.viewer.common.model.binding;
 
-import java.util.Optional;
+import lombok.val;
 
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+public interface BindingConverter<L, R> {
 
-import lombok.NonNull;
+    L toLeft(R right);
+    R toRight(L left);
 
-public interface BindingConverter<T> {
-
-    ObjectSpecification getValueSpecification();
-
-    default T unwrap(final ManagedObject object) {
-        return _Casts.uncheckedCast(ManagedObjects.UnwrapUtil.single(object));
+    public static <T> BindingConverter<T, T> identity(final Class<T> type){
+        return new BindingConverter<T, T>() {
+            @Override public T toLeft(final T right) {
+                return right;}
+            @Override public T toRight(final T left) {
+                return left;}
+        };
     }
 
-    default ManagedObject wrap(final T pojo) {
-        return ManagedObject.of(getValueSpecification(), pojo);
+    public default BindingConverter<R, L> reverse() {
+        val self = this;
+        return new BindingConverter<R, L>() {
+            @Override public R toLeft(final L right) {
+                return self.toRight(right);}
+            @Override public L toRight(final R left) {
+                return self.toLeft(left);}
+        };
     }
-
-    default <X extends Facet> Optional<X> lookupFacet(final @NonNull Class<X> facetType) {
-        return Optional.ofNullable(getValueSpecification().getFacet(facetType));
-    }
-
-    default Optional<? extends Facet> lookupFacetOneOf(
-            @NonNull final Can<Class<? extends Facet>> facetTypes) {
-        return facetTypes.stream()
-        .map(getValueSpecification()::getFacet)
-        .filter(_NullSafe::isPresent)
-        .findFirst();
-    }
-
-    // -- STRING CONVERSION
-
-    String toString(T value);
-
-    T fromString(String stringifiedValue);
-
-    /**
-     * @param stringifiedValue
-     * @return optionally an error message, based on whether fails to parse {@code stringifiedValue}
-     */
-    Optional<String> tryParse(String stringifiedValue);
 
 }
 

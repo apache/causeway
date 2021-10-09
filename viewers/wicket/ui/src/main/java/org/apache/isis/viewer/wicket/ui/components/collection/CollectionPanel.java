@@ -18,41 +18,38 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collection;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.basic.Label;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.memento.ObjectMemento;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.viewer.common.model.components.ComponentType;
-import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelParented;
-import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
  * Panel for rendering entity collection; analogous to (any concrete subclass
  * of) {@link ScalarPanelAbstract}.
  */
 public class CollectionPanel
-extends PanelAbstract<List<ManagedObject>, EntityCollectionModelParented>
+extends PanelAbstract<DataTableModel, EntityCollectionModelParented>
 implements
     CollectionSelectorProvider,
-    ToggledMementosProvider,
     BulkActionsProvider {
 
     private static final long serialVersionUID = 1L;
@@ -60,24 +57,22 @@ implements
     private static final String ID_FEEDBACK = "feedback";
 
     private Component collectionContents;
-
     private Label label;
+    @Getter @Setter private CollectionSelectorPanel selectorDropdownPanel;
 
     public CollectionPanel(
             final String id,
             final EntityCollectionModelParented collectionModel) {
         super(id, collectionModel);
 
-        val associatedActions = collectionModel.getAssociatedActions();
-
-        val toggledMementosProvider = this;
+        val collMetaModel = getModel().getMetaModel();
 
         val entityActionLinks = LinkAndLabelUtil
                 .asActionLinksForAdditionalLinksPanel(
                         collectionModel.getEntityModel(),
-                        associatedActions.stream(),
+                        collMetaModel.streamAssociatedActions(),
                         null,
-                        toggledMementosProvider)
+                        collectionModel)
                 .collect(Can.toCan());
 
         collectionModel.setLinkAndLabels(entityActionLinks);
@@ -104,75 +99,19 @@ implements
         return this.label;
     }
 
-    // -- SelectorDropdownPanel (impl)
+    // -- BULK SELECTION SUPPORT
 
-    private CollectionSelectorPanel selectorDropdownPanel;
-
-    @Override
-    public CollectionSelectorPanel getSelectorDropdownPanel() {
-        return selectorDropdownPanel;
-    }
-    public void setSelectorDropdownPanel(CollectionSelectorPanel selectorDropdownPanel) {
-        this.selectorDropdownPanel = selectorDropdownPanel;
-    }
-
-
-    // -- BulkActionsProvider
-    ObjectAdapterToggleboxColumn toggleboxColumn;
+    private transient Optional<GenericToggleboxColumn> toggleboxColumn;
 
     @Override
-    public ObjectAdapterToggleboxColumn getToggleboxColumn() {
-
+    public GenericToggleboxColumn getToggleboxColumn() {
         if(toggleboxColumn == null) {
-            val entityCollectionModel = getModel();
-
-            val associatedActions = entityCollectionModel.getActionsWithChoicesFrom();
-            if(associatedActions.isEmpty()) {
-                return null;
-            }
-
-            toggleboxColumn = new ObjectAdapterToggleboxColumn(super.getCommonContext());
-
-            val handler = new OnSelectionHandler() {
-
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public void onSelected(
-                        final Component context,
-                        final ManagedObject selectedAdapter,
-                        final AjaxRequestTarget ajaxRequestTarget) {
-
-                    val togglePanel = (ContainedToggleboxPanel) context;
-
-                    val isSelected = getModel().toggleSelectionOn(selectedAdapter);
-                    togglePanel.setModel(isSelected); // sync the checkbox's model
-                }
-
-            };
-            toggleboxColumn.setOnSelectionHandler(handler);
+            val collMetaModel = getModel().getMetaModel();
+            toggleboxColumn =  collMetaModel.hasAssociatedActionsWithChoicesFromThisCollection()
+                    ? Optional.of(new GenericToggleboxColumn(super.getCommonContext()))
+                    : Optional.empty();
         }
-
-        return toggleboxColumn;
+        return toggleboxColumn.orElse(null);
     }
-
-    // -- TOGGLED MEMENTOS PROVIDER
-
-    @Override
-    public Can<ObjectMemento> getToggles() {
-        return getModel().getToggleMementosList();
-    }
-
-    @Override
-    public void clearToggles(final AjaxRequestTarget target) {
-        getModel().clearToggleMementosList();
-
-        final ObjectAdapterToggleboxColumn toggleboxColumn = getToggleboxColumn();
-        if(toggleboxColumn != null) {
-            toggleboxColumn.clearToggles();
-            target.add(this);
-        }
-    }
-
 
 }

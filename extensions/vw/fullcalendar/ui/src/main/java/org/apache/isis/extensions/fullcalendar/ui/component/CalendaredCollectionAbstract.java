@@ -18,13 +18,13 @@
  */
 package org.apache.isis.extensions.fullcalendar.ui.component;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.markup.head.IHeaderResponse;
 
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -42,7 +42,7 @@ import net.ftlines.wicket.fullcalendar.selector.EventSourceSelector;
  * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
  */
 public abstract class CalendaredCollectionAbstract
-extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
+extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -72,7 +72,8 @@ extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
         config.setSelectable(true);
         config.setSelectHelper(false);
 
-        final Collection<ManagedObject> entityList = model.getObject();
+        final Iterable<ManagedObject> entityList = model.getDataTableModel().getDataRowsFiltered().getValue()
+                .map(DataRow::getRowElement);
         final Iterable<String> calendarNames = getCalendarNames(entityList);
 
         int i=0;
@@ -106,7 +107,7 @@ extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
     protected abstract EventProvider newEventProvider(
             final EntityCollectionModel model, final String calendarName);
 
-    protected abstract Set<String> getCalendarNames(final Collection<ManagedObject> entityList);
+    protected abstract Set<String> getCalendarNames(final Iterable<ManagedObject> entityList);
 
     @Override
     protected void onModelChanged() {
@@ -114,7 +115,7 @@ extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
     }
 
     @Override
-    public void renderHead(IHeaderResponse response) {
+    public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
 
         PanelUtil.renderHead(response, getClass());

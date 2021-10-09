@@ -53,8 +53,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.action.form.FormPendingParamUiModel;
 import org.apache.isis.viewer.common.model.components.ComponentType;
+import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
@@ -76,9 +76,10 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import lombok.NonNull;
 import lombok.val;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 
 public abstract class ScalarPanelAbstract
@@ -119,46 +120,25 @@ implements ScalarModelSubscriber {
         NOTHING
     }
 
-    /** this is a hack for the ScalarParameterModel, which does not support usability constraints in the model*/
-    private transient Runnable postInit;
-    @Deprecated // properly implement ScalarParameterModel
-    public void postInit(final @NonNull FormPendingParamUiModel argAndConsents) {
-        this.postInit = () ->{
-            // visibility
-            val visibilityConsent = argAndConsents.getVisibilityConsent();
-            setVisible(visibilityConsent.isAllowed());
-
-            // usability
-            val usabilityConsent = argAndConsents.getUsabilityConsent();
-            if(usabilityConsent.isAllowed()) {
-                onInitializeEditable();
-            } else {
-                onInitializeReadonly(usabilityConsent.getReason());
-            }
-        };
-    }
-
     /**
      *
-     * @param argsAndConsents - the action being invoked
+     * @param paramModel - the action being invoked
      * @param target - in case there's more to be repainted...
      *
      * @return - true if changed as a result of these pending arguments.
      */
     public Repaint updateIfNecessary(
-            final @NonNull FormPendingParamUiModel argsAndConsents,
+            final @NonNull ParameterUiModel paramModel,
             final @NonNull Optional<AjaxRequestTarget> target) {
 
-        val argModel = argsAndConsents.getParamModel();
-
         // visibility
-        val visibilityConsent = argsAndConsents.getVisibilityConsent();
+        val visibilityConsent = paramModel.getParameterNegotiationModel().getVisibilityConsent(paramModel.getNumber());
         val visibilityBefore = isVisible();
         val visibilityAfter = visibilityConsent.isAllowed();
         setVisible(visibilityAfter);
 
         // usability
-        val usabilityConsent = argsAndConsents.getUsabilityConsent();
+        val usabilityConsent = paramModel.getParameterNegotiationModel().getUsabilityConsent(paramModel.getNumber());
         val usabilityBefore = isEnabled();
         val usabilityAfter = usabilityConsent.isAllowed();
         if(usabilityAfter) {
@@ -167,7 +147,7 @@ implements ScalarModelSubscriber {
             onNotEditable(usabilityConsent.getReason(), target);
         }
 
-        val paramValue = argModel.getValue();
+        val paramValue = paramModel.getValue();
         val valueChanged = !Objects.equals(scalarModel.getObject(), paramValue);
 
         if(valueChanged) {
@@ -268,12 +248,6 @@ implements ScalarModelSubscriber {
 
         final ScalarModel scalarModel = getModel();
 
-        if(postInit!=null) {
-            // ScalarParameterModel hack
-            postInit.run();
-            postInit=null;
-        } else {
-
         final String disableReasonIfAny = scalarModel.whetherDisabled();
         final boolean mustBeEditable = scalarModel.mustBeEditable();
         if (disableReasonIfAny != null) {
@@ -289,8 +263,6 @@ implements ScalarModelSubscriber {
                 onInitializeEditable();
             }
         }
-        }
-
 
     }
 
@@ -407,7 +379,7 @@ implements ScalarModelSubscriber {
 
         // prevent from tabbing into non-editable widgets.
         if(scalarModel.isProperty()
-                && scalarModel.getMode() == EntityModel.Mode.VIEW
+                && scalarModel.getMode() == EntityModel.EitherViewOrEdit.VIEW
                 && (scalarModel.getPromptStyle().isDialog()
                         || !scalarModel.canEnterEditMode())) {
             getScalarValueComponent().add(new AttributeAppender("tabindex", "-1"));
@@ -823,7 +795,7 @@ implements ScalarModelSubscriber {
                 @Override
                 protected void onEvent(final AjaxRequestTarget target) {
 
-                    final ObjectSpecification specification = scalarModel.getTypeOfSpecification();
+                    final ObjectSpecification specification = scalarModel.getScalarTypeSpec();
                     final MetaModelService metaModelService = getServiceRegistry()
                             .lookupServiceElseFail(MetaModelService.class);
                     final BeanSort sort = metaModelService.sortOf(specification.getCorrespondingClass(), MetaModelService.Mode.RELAXED);

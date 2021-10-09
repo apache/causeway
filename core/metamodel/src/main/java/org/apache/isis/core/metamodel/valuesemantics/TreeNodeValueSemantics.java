@@ -23,26 +23,38 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.graph.tree.TreeState;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.memento._Mementos;
 import org.apache.isis.commons.internal.memento._Mementos.Memento;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
+import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.val.TreeNodeValueSemantics")
 public class TreeNodeValueSemantics
-extends AbstractValueSemanticsProvider<TreeNode<?>>
+extends ValueSemanticsAbstract<TreeNode<?>>
 implements
     EncoderDecoder<TreeNode<?>>,
     Renderer<TreeNode<?>> {
 
     @Inject UrlEncodingService urlEncodingService;
     @Inject SerializingAdapter serializingAdapter;
+
+    @Override
+    public Class<TreeNode<?>> getCorrespondingClass() {
+        return _Casts.uncheckedCast(TreeNode.class);
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return UNREPRESENTED;
+    }
 
     // -- RENDERER
 

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel._testing;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -86,11 +87,13 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.URLValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics;
+import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsRegistryDefault;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Singular;
 import lombok.val;
 
@@ -210,6 +213,8 @@ implements MetaModelContext {
                 repositoryService,
                 transactionService,
                 transactionState,
+                new ValueSemanticsRegistryDefault(List.of(), getTranslationService()),
+                new ObjectMementoService_forTesting(),
                 new BigDecimalValueSemantics(),
                 new URLValueSemantics(),
                 new UUIDValueSemantics(),
@@ -444,6 +449,7 @@ implements MetaModelContext {
     final _Lazy<Map<String, ManagedObject>> objectAdaptersForBeansOfKnownSort =
             _Lazy.threadSafe(this::collectBeansOfKnownSort);
 
+
     private final Map<String, ManagedObject> collectBeansOfKnownSort() {
 
         return getServiceRegistry()
@@ -463,5 +469,20 @@ implements MetaModelContext {
 
         return ManagedObject.lazy(getSpecificationLoader(), servicePojo);
 
+    }
+
+    // -- RECURSIVE INITIALIZATION FIX
+
+    private final List<Runnable> postConstructRunnables = new ArrayList<>();
+    public void registerPostconstruct(@NonNull final Runnable postConstructRunnable) {
+        postConstructRunnables.add(postConstructRunnable);
+    }
+    public void runPostconstruct() {
+        try {
+            postConstructRunnables.stream()
+            .forEach(Runnable::run);
+        } finally {
+            postConstructRunnables.clear();
+        }
     }
 }

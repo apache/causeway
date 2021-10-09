@@ -18,25 +18,27 @@
  */
 package org.apache.isis.incubator.viewer.javafx.ui.components.temporal;
 
+import java.time.LocalDate;
+
 import javax.inject.Inject;
 
-import org.springframework.core.annotation.Order;
-
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
-import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet.OffsetCharacteristic;
-import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet.TemporalCharacteristic;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.TemporalValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.TemporalValueSemantics.OffsetCharacteristic;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.TemporalValueSemantics.TemporalCharacteristic;
 import org.apache.isis.incubator.viewer.javafx.model.binding.BindingsFx;
+import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
-import org.apache.isis.viewer.common.model.binding.TemporalConverterForLocalDateComponent;
+import org.apache.isis.viewer.common.model.binding.BindingConverterForManagedObject;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
+
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
+import javafx.scene.layout.VBox;
 
 @org.springframework.stereotype.Component
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
@@ -44,57 +46,40 @@ import lombok.val;
 public class TemporalFieldFactory implements UiComponentHandlerFx {
 
     @Override
-    public boolean isHandling(ComponentRequest request) {
-        val temporalValueFacet = (TemporalValueFacet<?>) request
+    public boolean isHandling(final ComponentRequest request) {
+        ValueFacet<?> valueFacet = request
                 .getFeatureTypeSpec()
-                .getFacet(TemporalValueFacet.class);
-        return temporalValueFacet!=null
-                && temporalValueFacet.getTemporalCharacteristic()==TemporalCharacteristic.DATE_ONLY
-                && temporalValueFacet.getOffsetCharacteristic()==OffsetCharacteristic.LOCAL;
+                .getFacet(ValueFacet.class);
+        if(valueFacet==null) {
+            return false;
+        }
+        return valueFacet.streamValueSemantics(TemporalValueSemantics.class)
+                .anyMatch(valueSemantics->
+                        valueSemantics.getTemporalCharacteristic()==TemporalCharacteristic.DATE_ONLY
+                        && valueSemantics.getOffsetCharacteristic()==OffsetCharacteristic.LOCAL);
     }
 
     @Override
-    public Node handle(ComponentRequest request) {
+    public Node handle(final ComponentRequest request) {
 
-        val uiComponent = new DatePicker();
-        val valueSpec = request.getFeatureTypeSpec();
-        val converter = new TemporalConverterForLocalDateComponent(valueSpec);
-        val feature = request.getManagedFeature();
+        val uiComponent = new VBox();
+        val uiField = _fx.add(uiComponent, new DatePicker());
+        val uiValidationFeedback = _fx.newValidationFeedback(uiComponent);
 
-        uiComponent.setConverter(toJavaFxStringConverter(converter));
+        val managedValue = request.getManagedValue();
+        BindingsFx.bindBidirectional(
+                uiField.valueProperty(),
+                managedValue.getValue(),
+                BindingConverterForManagedObject
+                    .<LocalDate>of(request.getFeatureTypeSpec()).reverse());
+        uiField.editableProperty().set(true);
 
-        if(feature instanceof ManagedParameter) {
-
-            val managedParameter = (ManagedParameter)feature;
-
-            BindingsFx.bindBidirectional(
-                    uiComponent.valueProperty(),
-                    managedParameter.getValue(),
-                    converter);
-
-            //TODO bind parameter validation feedback
-
-        } else if(feature instanceof ManagedProperty) {
-
-            val managedProperty = (ManagedProperty)feature;
-
-            // readonly binding
-            BindingsFx.bind(
-                    uiComponent.valueProperty(),
-                    managedProperty.getValue(),
-                    converter);
-
-            //TODO allow property editing
-            //TODO bind property validation feedback
-        }
+        BindingsFx.bindValidationFeeback(
+                uiValidationFeedback.textProperty(),
+                uiValidationFeedback.visibleProperty(),
+                managedValue.getValidationMessage());
 
         return uiComponent;
     }
-
-
-
-    // -- HELPER
-
-
 
 }

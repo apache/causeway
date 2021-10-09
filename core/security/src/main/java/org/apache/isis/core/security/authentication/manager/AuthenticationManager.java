@@ -91,7 +91,7 @@ public class AuthenticationManager {
             return null;
         }
 
-        final var compatibleAuthenticators = authenticators
+        val compatibleAuthenticators = authenticators
                 .filter(authenticator->authenticator.canAuthenticate(request.getClass()));
 
         if (compatibleAuthenticators.isEmpty()) {
@@ -103,8 +103,8 @@ public class AuthenticationManager {
         // we simply participate with the current transaction
         return interactionService.callAnonymous(()->{
 
-            for (final var authenticator : compatibleAuthenticators) {
-                final var interactionContext = authenticator.authenticate(request, getUnusedRandomCode());
+            for (val authenticator : compatibleAuthenticators) {
+                val interactionContext = authenticator.authenticate(request, getUnusedRandomCode());
                 if (interactionContext != null) {
                     val userMemento = refineUserWithin(interactionContext);
                     userByValidationCode.put(

@@ -24,14 +24,13 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.spec.feature.memento.PropertyMemento;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.feature.PropertyUiModel;
+import org.apache.isis.viewer.wicket.model.models.interaction.prop.PropertyUiModelWkt;
 
-import lombok.NonNull;
 import lombok.val;
 
 public class ScalarPropertyModel
@@ -40,71 +39,53 @@ implements PropertyUiModel {
 
     private static final long serialVersionUID = 1L;
 
-    private final PropertyMemento propertyMemento;
+    private PropertyUiModelWkt delegate;
 
-    private transient PropertyNegotiationModel pendingPropertyModel;
+    public static ScalarPropertyModel wrap(
+            final PropertyUiModelWkt delegate,
+            final EntityModel.EitherViewOrEdit viewOrEdit,
+            final EntityModel.RenderingHint renderingHint) {
+        return new ScalarPropertyModel(delegate, viewOrEdit, renderingHint);
+    }
 
     /**
      * Creates a model representing a property of a parent object, with the
      * {@link #getObject() value of this model} to be current value of the
      * property.
      */
-    public ScalarPropertyModel(
-            final EntityModel parentEntityModel,
-            final PropertyMemento propertyMemento,
-            final EntityModel.Mode editingOrViewing,
+    private ScalarPropertyModel(
+            final PropertyUiModelWkt delegate,
+            final EntityModel.EitherViewOrEdit viewOrEdit,
             final EntityModel.RenderingHint renderingHint) {
-
-        super(parentEntityModel, propertyMemento, editingOrViewing, renderingHint);
-        this.propertyMemento = propertyMemento;
-        reset();
+        super(EntityModel.ofAdapter(delegate.getCommonContext(), delegate.getOwner()),
+                viewOrEdit, renderingHint);
+        this.delegate = delegate;
     }
 
+    /** @return new instance bound to the same delegate */
     public ScalarPropertyModel copyHaving(
-            final EntityModel.Mode editingOrViewing,
+            final EntityModel.EitherViewOrEdit viewOrEdit,
             final EntityModel.RenderingHint renderingHint) {
-        return new ScalarPropertyModel(
-                getParentUiModel(),
-                propertyMemento,
-                editingOrViewing,
-                renderingHint);
+        return wrap(delegate, viewOrEdit, renderingHint);
     }
 
     @Override
     public OneToOneAssociation getMetaModel() {
-        return propertyMemento.getProperty(this::getSpecificationLoader);
+        return delegate.getMetaModel();
     }
 
-    // not strictly required, used for caching
-    private transient ManagedProperty managedProperty;
-
     public ManagedProperty getManagedProperty() {
-        val owner = getParentUiModel().getObject();
-        if(managedProperty==null) {
-            return managedProperty = createManagedProperty(owner);
-        }
-        return managedProperty.getOwner()!=owner
-            //XXX ISIS-2830 recreate if owner had changed
-            ? managedProperty = createManagedProperty(owner)
-            : managedProperty;
+        return delegate.propertyInteraction().getManagedProperty().get();
     }
 
     @Override
     public PropertyNegotiationModel getPendingPropertyModel() {
-        if(pendingPropertyModel==null) {
-            pendingPropertyModel = getManagedProperty().startNegotiation();
-        }
-        return pendingPropertyModel;
-    }
-
-    private ManagedProperty createManagedProperty(final @NonNull ManagedObject owner) {
-        val where = this.getRenderingHint().asWhere();
-        return ManagedProperty.of(owner, getMetaModel(), where);
+        return delegate.getPendingPropertyModel();
     }
 
     @Override
     public ObjectSpecification getScalarTypeSpec() {
-        return getMetaModel().getSpecification();
+        return getMetaModel().getElementType();
     }
 
     @Override
@@ -140,21 +121,6 @@ implements PropertyUiModel {
                 .orElse(null);
     }
 
-    public void reset() {
-        pendingPropertyModel = null; // invalidate
-        val propertyValue = getManagedProperty().getPropertyValue();
-        val presentedValue = ManagedObjects.isNullOrUnspecifiedOrEmpty(propertyValue)
-                ? null
-                : propertyValue;
-
-        this.setObject(presentedValue);
-    }
-
-    @Override
-    public ManagedObject load() {
-        return loadFromSuper();
-    }
-
     @Override
     public boolean isCollection() {
         return false;
@@ -162,7 +128,10 @@ implements PropertyUiModel {
 
     @Override
     public String toStringOf() {
-        return getFriendlyName() + ": " + propertyMemento.toString();
+        val featureId = delegate.getMetaModel().getFeatureIdentifier();
+        return getFriendlyName() + ": " +
+                featureId.getLogicalTypeName() + "#" + featureId.getMemberLogicalName();
+
     }
 
     public String getReasonInvalidIfAny() {
@@ -174,10 +143,9 @@ implements PropertyUiModel {
      *
      * @return adapter, which may be different from the original
      */
-    public ManagedObject applyValue() {
-        val proposedNewValue = getObject();
-        getManagedProperty().modifyProperty(proposedNewValue);
-        return getManagedProperty().getOwner();
+    public ManagedObject applyValueThenReturnOwner() {
+        getPendingPropertyModel().submit();
+        return getOwner();
     }
 
     @Override
@@ -188,6 +156,11 @@ implements PropertyUiModel {
     @Override
     protected Can<ObjectAction> calcAssociatedActions() {
         return getManagedProperty().getAssociatedActions();
+    }
+
+    @Override
+    public IsisAppCommonContext getCommonContext() {
+        return delegate.getCommonContext();
     }
 
 }

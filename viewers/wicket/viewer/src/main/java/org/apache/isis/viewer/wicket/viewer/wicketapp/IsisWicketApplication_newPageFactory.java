@@ -46,7 +46,7 @@ class IsisWicketApplication_newPageFactory {
 
     private final IsisWicketApplication holder;
 
-    public IPageFactory interceptPageFactory(IPageFactory delegate) {
+    public IPageFactory interceptPageFactory(final IPageFactory delegate) {
         return new WebPageBaseFactory(holder, delegate);
     }
 
@@ -57,17 +57,17 @@ class IsisWicketApplication_newPageFactory {
         private final IPageFactory delegate;
 
         @Override
-        public <C extends IRequestablePage> C newPage(Class<C> pageClass, PageParameters parameters) {
+        public <C extends IRequestablePage> C newPage(final Class<C> pageClass, final PageParameters parameters) {
 
             if(EntityPage.class.equals(pageClass)) {
-                return _Casts.uncheckedCast(EntityPage.bookmarked(holder.getCommonContext(), parameters));
+                return _Casts.uncheckedCast(EntityPage.ofPageParameters(holder.getCommonContext(), parameters));
             }
 
             return delegate.newPage(pageClass, parameters);
         }
 
         @Override
-        public <C extends IRequestablePage> C newPage(Class<C> pageClass) {
+        public <C extends IRequestablePage> C newPage(final Class<C> pageClass) {
 
             if(EntityPage.class.equals(pageClass)) {
                 //TODO whenever this happens we should redirect to home,
@@ -81,7 +81,7 @@ class IsisWicketApplication_newPageFactory {
         }
 
         @Override
-        public <C extends IRequestablePage> boolean isBookmarkable(Class<C> pageClass) {
+        public <C extends IRequestablePage> boolean isBookmarkable(final Class<C> pageClass) {
 
             if(EntityPage.class.equals(pageClass)) {
                 return true;

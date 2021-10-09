@@ -18,21 +18,9 @@
  */
 package org.apache.isis.valuetypes.markdown.metamodel;
 
-import java.util.Collection;
-import java.util.Collections;
-
-import javax.inject.Named;
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.stereotype.Component;
 
-import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.valuetypes.ValueTypeDefinition;
-import org.apache.isis.core.metamodel.valuetypes.ValueTypeProvider;
-import org.apache.isis.schema.common.v2.ValueType;
-import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 import org.apache.isis.valuetypes.markdown.metamodel.semantics.MarkdownValueSemantics;
 
 /**
@@ -40,34 +28,8 @@ import org.apache.isis.valuetypes.markdown.metamodel.semantics.MarkdownValueSema
  */
 @Configuration
 @Import({
-        IsisModuleValMarkdownMetaModel.MarkdownMetaModelRefiner.class,
-        IsisModuleValMarkdownMetaModel.MarkdownValueTypeProvider.class,
-
         MarkdownValueSemantics.class,
-
 })
 public class IsisModuleValMarkdownMetaModel {
-
-    @Component
-    @Named("isis.val.MarkdownMetaModelRefiner")
-    class MarkdownMetaModelRefiner implements MetaModelRefiner {
-        @Override
-        public void refineProgrammingModel(final ProgrammingModel programmingModel) {
-    //blueprint
-    //        programmingModel.addFactory(
-    //                ProgrammingModel.FacetProcessingOrder.G1_VALUE_TYPES,
-    //                MarkdownValueFacetUsingSemanticsProviderFactory.class);
-        }
-    }
-
-    @Component
-    @Named("isis.val.MarkdownValueTypeProvider")
-    class MarkdownValueTypeProvider implements ValueTypeProvider {
-        @Override
-        public Collection<ValueTypeDefinition> definitions() {
-            return Collections.singletonList(
-                    ValueTypeDefinition.of(Markdown.class, ValueType.STRING));
-        }
-    }
 
 }

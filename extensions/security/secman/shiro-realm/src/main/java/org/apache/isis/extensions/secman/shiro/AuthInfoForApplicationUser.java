@@ -40,9 +40,9 @@ class AuthInfoForApplicationUser implements AuthenticationInfo, AuthorizationInf
     private static final long serialVersionUID = 1L;
 
     static AuthenticationInfo of(
-            PrincipalForApplicationUser principal,
-            String realmName,
-            Object credentials) {
+            final PrincipalForApplicationUser principal,
+            final String realmName,
+            final Object credentials) {
 
         return new AuthInfoForApplicationUser(principal, realmName, credentials);
     }
@@ -73,7 +73,7 @@ class AuthInfoForApplicationUser implements AuthenticationInfo, AuthorizationInf
 
     // -- HELPER
 
-    private final transient _Lazy<PrincipalCollection> principalCollection =
+    private final _Lazy<PrincipalCollection> principalCollection =
             _Lazy.threadSafe(this::createPrincipalCollection);
 
     private PrincipalCollection createPrincipalCollection() {

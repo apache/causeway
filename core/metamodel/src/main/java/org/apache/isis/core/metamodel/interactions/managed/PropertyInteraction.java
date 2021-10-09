@@ -29,7 +29,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import lombok.NonNull;
 import lombok.val;
 
-public final class PropertyInteraction extends MemberInteraction<ManagedProperty, PropertyInteraction> {
+public final class PropertyInteraction
+extends MemberInteraction<ManagedProperty, PropertyInteraction> {
 
     public static final PropertyInteraction start(
             final @NonNull ManagedObject owner,
@@ -45,8 +46,17 @@ public final class PropertyInteraction extends MemberInteraction<ManagedProperty
         return new PropertyInteraction(chain);
     }
 
-    PropertyInteraction(@NonNull _Either<ManagedProperty, InteractionVeto> chain) {
+    public static PropertyInteraction wrap(final @NonNull ManagedProperty managedProperty) {
+        return new PropertyInteraction(_Either.left(managedProperty));
+    }
+
+    PropertyInteraction(@NonNull final _Either<ManagedProperty, InteractionVeto> chain) {
         super(chain);
+    }
+
+    public Optional<PropertyNegotiationModel> startPropertyNegotiation() {
+        return getManagedProperty()
+            .map(ManagedProperty::startNegotiation);
     }
 
     public PropertyInteraction modifyProperty(
@@ -74,9 +84,8 @@ public final class PropertyInteraction extends MemberInteraction<ManagedProperty
      * @throws X if there was any interaction veto within the originating chain
      */
     public <X extends Throwable>
-    ManagedProperty getManagedPropertyElseThrow(Function<InteractionVeto, ? extends X> onFailure) throws X {
+    ManagedProperty getManagedPropertyElseThrow(final Function<InteractionVeto, ? extends X> onFailure) throws X {
         return super.getManagedMemberElseThrow(onFailure);
     }
-
 
 }

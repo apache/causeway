@@ -39,7 +39,7 @@ extends ValueSemanticsProviderAbstractTestCase {
         short1 = Short.valueOf((short) 32);
         allowMockAdapterToReturn(short1);
 
-        setSemanitcs(value = new ShortValueSemantics());
+        setSemantics(value = new ShortValueSemantics());
     }
 
     @Test

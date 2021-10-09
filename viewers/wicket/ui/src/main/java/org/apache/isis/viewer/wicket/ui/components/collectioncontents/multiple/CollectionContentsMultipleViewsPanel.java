@@ -24,12 +24,13 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.IEvent;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelDummy;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelAbstract;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelHidden;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -46,7 +47,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * view for a backing {@link EntityCollectionModel}.
  */
 public class CollectionContentsMultipleViewsPanel
-extends PanelAbstract<List<ManagedObject>, EntityCollectionModel>
+extends PanelAbstract<DataTableModel, EntityCollectionModel>
 implements CollectionCountProvider {
 
     private static final long serialVersionUID = 1L;
@@ -70,7 +71,7 @@ implements CollectionCountProvider {
         this.underlyingIdPrefix = ComponentType.COLLECTION_CONTENTS.toString();
 
         final ComponentHintKey selectedItemSessionAttribute =
-                model.isParented()
+                model.getVariant().isParented()
                     ? ComponentHintKey.create(super.getCommonContext(), this, UIHINT_VIEW)
                     : null;
 
@@ -88,31 +89,30 @@ implements CollectionCountProvider {
     }
 
     private void addUnderlyingViews() {
-        final EntityCollectionModel model = getModel();
+        final EntityCollectionModel visibleCollModel = getModel();
+        final EntityCollectionModel hiddenCollModel = EntityCollectionModelHidden
+                .forCollectionModel((EntityCollectionModelAbstract) visibleCollModel);
 
         final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
 
         final CollectionSelectorPanel selectorDropdownPanelIfAny =
                 CollectionSelectorProvider.getCollectionSelectorProvider(this);
-        final String selected;
-        if (selectorDropdownPanelIfAny != null) {
-            selected = selectorHelper.honourViewHintElseDefault(selectorDropdownPanelIfAny);
-        } else {
-            selected = componentFactories.get(0).getName();
-        }
+        final String selectedCompFactoryName = selectorDropdownPanelIfAny != null
+            ? selectorHelper.honourViewHintElseDefault(selectorDropdownPanelIfAny)
+            : componentFactories.get(0).getName();
+
 
         // create all, hide the one not selected
         int i = 0;
         int selectedIdx = 0;
         underlyingViews = new Component[MAX_NUM_UNDERLYING_VIEWS];
 
-        final EntityCollectionModel emptyModel = EntityCollectionModelDummy.forCollectionModel(model);
         for (ComponentFactory componentFactory : componentFactories) {
             final String underlyingId = underlyingIdPrefix + "-" + i;
 
-            final boolean isSelected = selected.equals(componentFactory.getName());
+            final boolean isSelected = selectedCompFactoryName.equals(componentFactory.getName());
             final Component underlyingView = componentFactory
-                    .createComponent(underlyingId, isSelected ? model : emptyModel);
+                    .createComponent(underlyingId, isSelected ? visibleCollModel : hiddenCollModel);
             if(isSelected) {
                 selectedIdx = i;
             }
@@ -142,7 +142,7 @@ implements CollectionCountProvider {
     }
 
     @Override
-    public void onEvent(IEvent<?> event) {
+    public void onEvent(final IEvent<?> event) {
         super.onEvent(event);
 
         final IsisSelectorEvent selectorEvent = IsisEnvelopeEvent.openLetter(event, IsisSelectorEvent.class);
@@ -163,7 +163,8 @@ implements CollectionCountProvider {
 
         int underlyingViewNum = selectorHelper.lookup(selectedView);
 
-        final EntityCollectionModel dummyModel = EntityCollectionModelDummy.forCollectionModel(getModel());
+        final EntityCollectionModel dummyModel = EntityCollectionModelHidden
+                .forCollectionModel((EntityCollectionModelAbstract) getModel());
         for(int i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
             final Component component = underlyingViews[i];
             if(component == null) {

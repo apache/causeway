@@ -237,7 +237,7 @@ implements MetaModelRefiner {
                 final ObjectSpecification objectSpec,
                 final OneToOneAssociation property) {
 
-            final ObjectSpecification propertyTypeSpec = property.getSpecification();
+            final ObjectSpecification propertyTypeSpec = property.getElementType();
             if (!propertyTypeSpec.isEntity()) {
                 return;
             }
@@ -270,7 +270,7 @@ implements MetaModelRefiner {
                 final ObjectSpecification objectSpec,
                 final OneToOneAssociation property) {
 
-            final ObjectSpecification propertyTypeSpec = property.getSpecification();
+            final ObjectSpecification propertyTypeSpec = property.getElementType();
             final Class<?> propertyType = propertyTypeSpec.getCorrespondingClass();
 
             if (!jodaType.isAssignableFrom(propertyType)) {

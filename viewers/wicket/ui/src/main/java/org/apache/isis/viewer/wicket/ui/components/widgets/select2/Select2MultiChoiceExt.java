@@ -26,7 +26,7 @@ import org.wicketstuff.select2.Select2MultiChoice;
 
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.core.runtime.memento.ObjectMemento;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.EmptyChoiceProvider;
 
@@ -56,7 +56,7 @@ implements
             final ScalarModel scalarModel) {
 
         super(id, model, EmptyChoiceProvider.INSTANCE);
-        logicalType = scalarModel.getTypeOfSpecification().getLogicalType();
+        logicalType = scalarModel.getScalarTypeSpec().getLogicalType();
 
         getSettings().setCloseOnSelect(true);
         getSettings().setWidth("auto");

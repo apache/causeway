@@ -22,8 +22,6 @@ import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-
 import lombok.NonNull;
 
 /**
@@ -80,7 +78,7 @@ public interface BookmarkService {
     /**
      * As {@link #lookup(Bookmark)}, but down-casting to the specified type.
      */
-    default <T> Optional<T> lookup(@Nullable Bookmark bookmark, @NonNull Class<T> cls) {
+    default <T> Optional<T> lookup(@Nullable final Bookmark bookmark, @NonNull final Class<T> cls) {
         return lookup(bookmark)
                 .map(t->cls.cast(t));
     }
@@ -91,13 +89,6 @@ public interface BookmarkService {
      * @param domainObject - to be bookmarked
      * @return a (non-null) {@link Bookmark} for the provided domain object.
      */
-    default Bookmark bookmarkForElseFail(@Nullable Object domainObject) {
-        return bookmarkFor(domainObject)
-                .orElseThrow(()->_Exceptions.illegalArgument(
-                        "cannot create bookmark for type %s",
-                        domainObject!=null
-                            ? domainObject.getClass().getName()
-                            : "<null>"));
-    }
+    Bookmark bookmarkForElseFail(@Nullable Object domainObject);
 
 }

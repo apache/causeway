@@ -69,7 +69,7 @@ extends RecreatableObjectFacetAbstract {
         .forEach(property->{
 
             val propertyId = property.getId();
-            val propertyType = property.getSpecification().getCorrespondingClass();
+            val propertyType = property.getElementType().getCorrespondingClass();
             val propertyValue = memento.get(propertyId, propertyType);
 
             if(propertyValue != null) {
@@ -80,7 +80,7 @@ extends RecreatableObjectFacetAbstract {
     }
 
     @Override
-    public String memento(Object viewModelPojo) {
+    public String memento(final Object viewModelPojo) {
 
         final _Mementos.Memento memento = newMemento();
 
@@ -132,7 +132,7 @@ extends RecreatableObjectFacetAbstract {
         return _Mementos.create(codec, serializer);
     }
 
-    private _Mementos.Memento parseMemento(String input) {
+    private _Mementos.Memento parseMemento(final String input) {
         ensureDependenciesInited();
         return _Mementos.parse(codec, serializer, input);
     }

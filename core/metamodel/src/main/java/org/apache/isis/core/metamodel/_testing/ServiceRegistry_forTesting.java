@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel._testing;
 import java.lang.annotation.Annotation;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -49,7 +50,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
     private final Set<_ManagedBeanAdapter> registeredBeans = _Sets.newHashSet();
 
     @Override
-    public <T> Can<T> select(Class<T> type, Annotation[] qualifiers) {
+    public <T> Can<T> select(final Class<T> type, final Annotation[] qualifiers) {
 
         if(iocContainer!=null) {
             return iocContainer.select(type, qualifiers);
@@ -86,26 +87,34 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
     }
 
     @Override
-    public Optional<_ManagedBeanAdapter> lookupRegisteredBeanById(String id) {
+    public Optional<_ManagedBeanAdapter> lookupRegisteredBeanById(final String id) {
         throw _Exceptions.notImplemented();
     }
 
     @Override
-    public Optional<?> lookupBeanById(String id) {
+    public Optional<?> lookupBeanById(final String id) {
         throw _Exceptions.notImplemented();
     }
 
     // -- HELPER
 
     private Set<_ManagedBeanAdapter> registeredBeans() {
+
+        AtomicBoolean triggerPostInit = new AtomicBoolean(false);
+
         synchronized(registeredBeans) {
             if(registeredBeans.isEmpty()) {
-
                 streamBeans()
                 .filter(_NullSafe::isPresent)
                 .forEach(registeredBeans::add);
+                triggerPostInit.set(true);
             }
         }
+
+        if(triggerPostInit.getAndSet(false)) {
+            postinitWhenTesting();
+        }
+
         return registeredBeans;
     }
 
@@ -125,6 +134,14 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
         if(mmc instanceof MetaModelContext_forTesting) {
             val mmcb = (MetaModelContext_forTesting) mmc;
             mmcb.objectAdaptersForBeansOfKnownSort.clear();
+        }
+    }
+
+    private void postinitWhenTesting() {
+        val mmc = metaModelContext;
+        if(mmc instanceof MetaModelContext_forTesting) {
+            val mmcb = (MetaModelContext_forTesting) mmc;
+            mmcb.runPostconstruct();
         }
     }
 

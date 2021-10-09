@@ -56,7 +56,7 @@ public abstract class ScalarPanelTextFieldParseableAbstract extends ScalarPanelT
         final ScalarModel scalarModel = getModel();
         final AbstractTextComponent<String> textField = getTextField();
 
-        final ObjectSpecification facetHolder = scalarModel.getTypeOfSpecification();
+        final ObjectSpecification facetHolder = scalarModel.getScalarTypeSpec();
 
         final MaxLengthFacet maxLengthFacet = facetHolder.getFacet(MaxLengthFacet.class);
         if (maxLengthFacet != null) {

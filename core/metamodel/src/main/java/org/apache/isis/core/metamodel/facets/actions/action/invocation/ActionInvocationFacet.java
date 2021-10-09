@@ -44,6 +44,6 @@ public interface ActionInvocationFacet extends Facet {
 
     ObjectSpecification getReturnType();
 
-    ObjectSpecification getOnType();
+    ObjectSpecification getDeclaringType();
 
 }

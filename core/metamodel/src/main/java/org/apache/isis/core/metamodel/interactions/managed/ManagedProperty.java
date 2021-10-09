@@ -75,7 +75,7 @@ extends ManagedMember {
             final @NonNull Where where) {
         super(owner, where);
         this.property = property;
-        observablePropValue = _Observables.forFactory(this::reassessPropertyValue);
+        observablePropValue = _Observables.lazy(this::reassessPropertyValue);
     }
 
     @Override
@@ -142,7 +142,7 @@ extends ManagedMember {
         return property.isVisible(owner, InteractionInitiatedBy.FRAMEWORK, getWhere()).isAllowed()
                 && property.isVisible(owner, InteractionInitiatedBy.USER, getWhere()).isAllowed()
             ? property.get(owner, InteractionInitiatedBy.USER)
-            : ManagedObject.empty(property.getSpecification());
+            : ManagedObject.empty(property.getElementType());
     }
 
 

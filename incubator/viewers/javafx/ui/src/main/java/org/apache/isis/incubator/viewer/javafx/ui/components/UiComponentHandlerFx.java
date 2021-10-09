@@ -18,7 +18,7 @@
  */
 package org.apache.isis.incubator.viewer.javafx.ui.components;
 
-import org.apache.isis.viewer.common.model.binding.BindingConverter;
+import org.apache.isis.viewer.common.model.binding.BindingConverterForManagedObject;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory;
 
 import javafx.scene.Node;
@@ -28,27 +28,27 @@ import lombok.NonNull;
 public interface UiComponentHandlerFx
 extends UiComponentFactory.Handler<Node> {
 
-    /**
-     * Converts given {@code bindingConverter} to {@link StringConverter} from JavaFX Universe
-     * @param <T>
-     * @param bindingConverter
-     */
-    default <T> StringConverter<T> toJavaFxStringConverter(
-            final @NonNull BindingConverter<T> bindingConverter) {
-
-        return new StringConverter<T>() {
-
-            @Override
-            public String toString(T value) {
-                return bindingConverter.toString(value);
-            }
-
-            @Override
-            public T fromString(String stringifiedValue) {
-                return bindingConverter.fromString(stringifiedValue);
-            }
-
-        };
-    }
+//    /**
+//     * Converts given {@code bindingConverter} to {@link StringConverter} from JavaFX Universe
+//     * @param <T>
+//     * @param bindingConverter
+//     */
+//    default <T> StringConverter<T> toJavaFxStringConverter(
+//            final @NonNull BindingConverterForManagedObject<T> bindingConverter) {
+//
+//        return new StringConverter<T>() {
+//
+//            @Override
+//            public String toString(T value) {
+//                return bindingConverter.toString(value);
+//            }
+//
+//            @Override
+//            public T fromString(String stringifiedValue) {
+//                return bindingConverter.fromString(stringifiedValue);
+//            }
+//
+//        };
+//    }
 
 }

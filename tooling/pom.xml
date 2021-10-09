@@ -326,8 +326,7 @@
 		<module>javamodel</module>
 		<module>projectmodel</module>
 		<module>java2adoc</module>
-
-		<!-- depends on all the others -->
+		<module>dsl</module>
 		<module>cli</module>
 	</modules>
 

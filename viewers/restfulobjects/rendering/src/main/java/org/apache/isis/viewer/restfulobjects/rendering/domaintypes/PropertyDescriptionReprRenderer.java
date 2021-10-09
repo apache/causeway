@@ -74,7 +74,7 @@ extends AbstractTypeMemberReprRenderer<OneToOneAssociation> {
     // -- HELPER
 
     private void addLinkToReturnTypeIfAny() {
-        val returnTypeSpec = getObjectFeature().getSpecification();
+        val returnTypeSpec = getObjectFeature().getElementType();
         if (returnTypeSpec == null) {
             return;
         }

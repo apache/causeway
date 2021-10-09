@@ -33,8 +33,8 @@ import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -136,7 +136,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
             settings.setPlaceholder(getModel().getFriendlyName());
 
         } else if(hasObjectAutoComplete()) {
-            final ObjectSpecification typeOfSpecification = getModel().getTypeOfSpecification();
+            final ObjectSpecification typeOfSpecification = getModel().getScalarTypeSpec();
             final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
             final int minLength = autoCompleteFacet.getMinLength();
             settings.setMinimumInputLength(minLength);
@@ -241,7 +241,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     // called from onInitialize*
     // (was previous called by EntityLinkSelect2Panel in onBeforeRender, this responsibility now moved)
     private void syncWithInput() {
-        val adapter = getModel().getPendingElseCurrentAdapter();
+        val adapter = getModel().getObject();
 
         // syncLinkWithInput
         final MarkupContainer componentForRegular = (MarkupContainer) getComponentForRegular();
@@ -372,7 +372,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
     // called by EntityLinkSelect2Panel
     String getInput() {
-        val pendingElseCurrentAdapter = getModel().getPendingElseCurrentAdapter();
+        val pendingElseCurrentAdapter = getModel().getObject();
         return pendingElseCurrentAdapter != null? pendingElseCurrentAdapter.titleString(): "(no object)";
     }
 
@@ -391,7 +391,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
             getModel().clearPending();
         }
 
-        val pendingAdapter = getModel().getPendingElseCurrentAdapter();
+        val pendingAdapter = getModel().getObject();
         entityLink.setConvertedInput(pendingAdapter);
     }
 
@@ -429,7 +429,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
     // called by isEditableWithEitherAutoCompleteOrChoices
     private boolean hasObjectAutoComplete() {
-        final ObjectSpecification typeOfSpecification = getModel().getTypeOfSpecification();
+        final ObjectSpecification typeOfSpecification = getModel().getScalarTypeSpec();
         final AutoCompleteFacet autoCompleteFacet =
                 (typeOfSpecification != null)? typeOfSpecification.getFacet(AutoCompleteFacet.class):null;
                 return autoCompleteFacet != null;

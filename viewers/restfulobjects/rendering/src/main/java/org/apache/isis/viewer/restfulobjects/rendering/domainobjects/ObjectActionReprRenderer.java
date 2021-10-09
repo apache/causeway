@@ -27,11 +27,11 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
+import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -129,26 +129,31 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
 
     private ObjectActionReprRenderer addParameterDetails() {
         final Map<String,Object> parameters = _Maps.newLinkedHashMap();
-        for (int i = 0; i < objectMember.getParameterCount(); i++) {
-            final ObjectActionParameter param = objectMember.getParameters().getElseFail(i);
-            final Object paramDetails = paramDetails(param, getInteractionInitiatedBy());
-            parameters.put(param.getId(), paramDetails);
+        if(objectMember.getParameterCount()>0) {
+            val act = ManagedAction.of(objectAdapter, objectMember, Where.ANYWHERE);
+            val paramNeg = act.startParameterNegotiation();
+            for(val paramMod : paramNeg.getParamModels()) {
+                val paramMeta = paramMod.getMetaModel();
+                final Object paramDetails = paramDetails(paramMod, paramNeg);
+                parameters.put(paramMeta.getId(), paramDetails);
+            }
         }
         representation.mapPut("parameters", parameters);
         return this;
     }
 
-    private Object paramDetails(final ObjectActionParameter param, final InteractionInitiatedBy interactionInitiatedBy) {
+    private Object paramDetails(final ManagedParameter paramMod, final ParameterNegotiationModel paramNeg) {
+        val paramMeta = paramMod.getMetaModel();
         final JsonRepresentation paramRep = JsonRepresentation.newMap();
-        paramRep.mapPut("num", param.getNumber());
-        paramRep.mapPut("id", param.getId());
-        paramRep.mapPut("name", param.getFriendlyName(objectAdapter.asProvider()));
-        paramRep.mapPut("description", param.getDescription(objectAdapter.asProvider()));
-        final Object paramChoices = choicesFor(param, interactionInitiatedBy);
+        paramRep.mapPut("num", paramMeta.getNumber());
+        paramRep.mapPut("id", paramMeta.getId());
+        paramRep.mapPut("name", paramMeta.getFriendlyName(objectAdapter.asProvider()));
+        paramRep.mapPut("description", paramMeta.getDescription(objectAdapter.asProvider()));
+        final Object paramChoices = choicesFor(paramMod, paramNeg);
         if (paramChoices != null) {
             paramRep.mapPut("choices", paramChoices);
         }
-        final Object paramDefault = defaultFor(param);
+        final Object paramDefault = defaultFor(paramMod);
         if (paramDefault != null) {
             paramRep.mapPut("default", paramDefault);
         }
@@ -156,14 +161,10 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
     }
 
     private Object choicesFor(
-            final ObjectActionParameter param,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-
-        val pendingArgs = param.getAction()
-                .interactionHead(objectAdapter)
-                .emptyModel();
-
-        val choiceAdapters = param.getChoices(pendingArgs, interactionInitiatedBy);
+            final ManagedParameter paramMod,
+            final ParameterNegotiationModel paramNeg) {
+        val paramMeta = paramMod.getMetaModel();
+        val choiceAdapters = paramMeta.getChoices(paramNeg, getInteractionInitiatedBy());
         if (choiceAdapters == null || choiceAdapters.isEmpty()) {
             return null;
         }
@@ -176,13 +177,8 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
         return list;
     }
 
-    private Object defaultFor(final ObjectActionParameter param) {
-
-        val emptyParamTuple = param.getAction()
-                .interactionHead(objectAdapter)
-                .emptyModel();
-
-        val defaultAdapter = param.getDefault(emptyParamTuple);
+    private Object defaultFor(final ManagedParameter paramMod) {
+        val defaultAdapter = paramMod.getValue().getValue();
         if (ManagedObjects.isNullOrUnspecifiedOrEmpty(defaultAdapter)) {
             return null;
         }

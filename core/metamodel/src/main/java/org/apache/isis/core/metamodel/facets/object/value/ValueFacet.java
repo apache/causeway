@@ -19,8 +19,10 @@
 package org.apache.isis.core.metamodel.facets.object.value;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
@@ -29,6 +31,7 @@ import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 /**
@@ -45,11 +48,30 @@ public interface ValueFacet<T> extends Facet {
     LogicalType getValueType();
     Can<ValueSemanticsProvider<T>> getValueSemantics();
     Context createValueSemanticsContext(Identifier featureIdentifier);
+    <X> Stream<X> streamValueSemantics(Class<X> requiredType);
+
+    // -- ENCODER DECODER
+
+    /** no qualifiers allowed on the default semantics provider*/
+    Optional<EncoderDecoder<T>> selectDefaultEncoderDecoder();
 
     // -- PARSER
 
+    /** no qualifiers allowed on the default semantics provider*/
+    Optional<Parser<T>> selectDefaultParser();
     Optional<Parser<T>> selectParserForParameter(final ObjectActionParameter param);
     Optional<Parser<T>> selectParserForProperty(final OneToOneAssociation prop);
+
+    default Optional<Parser<T>> selectParserForFeature(final ObjectFeature feature) {
+        switch(feature.getFeatureType()) {
+        case ACTION_PARAMETER_SCALAR:
+            return selectParserForParameter((ObjectActionParameter)feature);
+        case PROPERTY:
+            return selectParserForProperty((OneToOneAssociation)feature);
+        default:
+            return selectDefaultParser();
+        }
+    }
 
     Parser<T> fallbackParser(Identifier featureIdentifier);
 
@@ -63,9 +85,14 @@ public interface ValueFacet<T> extends Facet {
                 .orElseGet(()->fallbackParser(prop.getFeatureIdentifier()));
     }
 
+    default Parser<T> selectParserForFeatureElseFallback(final ObjectFeature feature) {
+        return selectParserForFeature(feature)
+                .orElseGet(()->fallbackParser(feature.getFeatureIdentifier()));
+    }
+
     // -- RENDERER
 
-    /** no qualifiers allowed when searching the default semantics provider*/
+    /** no qualifiers allowed on the default semantics provider*/
     Optional<Renderer<T>> selectDefaultRenderer();
     Optional<Renderer<T>> selectRendererForParameter(final ObjectActionParameter param);
     Optional<Renderer<T>> selectRendererForProperty(final OneToOneAssociation prop);

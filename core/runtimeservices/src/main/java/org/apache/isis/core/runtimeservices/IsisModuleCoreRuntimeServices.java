@@ -41,6 +41,7 @@ import org.apache.isis.core.runtimeservices.i18n.po.TranslationServicePoMenu;
 import org.apache.isis.core.runtimeservices.icons.ObjectIconServiceDefault;
 import org.apache.isis.core.runtimeservices.interaction.InteractionDtoFactoryDefault;
 import org.apache.isis.core.runtimeservices.jaxb.JaxbServiceDefault;
+import org.apache.isis.core.runtimeservices.memento.ObjectMementoServiceDefault;
 import org.apache.isis.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
 import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
 import org.apache.isis.core.runtimeservices.message.MessageServiceDefault;
@@ -89,6 +90,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         InteractionDtoFactoryDefault.class,
         InteractionServiceDefault.class,
         JaxbServiceDefault.class,
+        ObjectMementoServiceDefault.class,
         TranslationServicePo.class,
         MemberExecutorServiceDefault.class,
         MenuBarsLoaderServiceDefault.class,

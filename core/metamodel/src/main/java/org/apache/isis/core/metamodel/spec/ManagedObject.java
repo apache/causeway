@@ -295,6 +295,8 @@ public interface ManagedObject {
             return specLoader.apply(pojo.getClass());
         }
 
+
+
     }
 
 

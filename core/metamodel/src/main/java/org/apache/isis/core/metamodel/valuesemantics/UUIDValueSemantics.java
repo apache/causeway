@@ -24,21 +24,34 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.schema.common.v2.ValueType;
+
+import lombok.val;
 
 @Component
 @Named("isis.val.UUIDValueSemantics")
 public class UUIDValueSemantics
-extends AbstractValueSemanticsProvider<UUID>
+extends ValueSemanticsAbstract<UUID>
 implements
     EncoderDecoder<UUID>,
     Parser<UUID>,
     Renderer<UUID> {
+
+    @Override
+    public Class<UUID> getCorrespondingClass() {
+        return UUID.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return UNREPRESENTED;
+    }
 
     // -- ENCODER DECODER
 
@@ -68,7 +81,7 @@ implements
 
     @Override
     public UUID parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        final var input = _Strings.blankToNullOrTrim(text);
+        val input = _Strings.blankToNullOrTrim(text);
         return input!=null
                 ? UUID.fromString(input)
                 : null;

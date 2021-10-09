@@ -89,4 +89,6 @@ public interface ScalarUiModel {
     Can<ManagedObject> getChoices();
     Can<ManagedObject> getAutoComplete(final String searchArg);
 
+
+
 }

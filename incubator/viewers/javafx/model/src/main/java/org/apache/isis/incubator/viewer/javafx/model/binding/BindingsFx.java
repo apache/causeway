@@ -25,15 +25,15 @@ import org.apache.isis.commons.binding.Bindable;
 import org.apache.isis.commons.binding.ChangeListener;
 import org.apache.isis.commons.binding.Observable;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.common.model.binding.BindingConverter;
+
+import lombok.NonNull;
+import lombok.val;
+import lombok.experimental.UtilityClass;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
-import lombok.NonNull;
-import lombok.val;
-import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class BindingsFx {
@@ -48,25 +48,31 @@ public class BindingsFx {
         });
     }
 
-    public static <L> void bind(
+    public static <L, R> void bind(
             final @NonNull Property<L> leftProperty,
-            final @NonNull Observable<ManagedObject> rightObservable,
-            final @NonNull BindingConverter<L> converter) {
+            final @NonNull Observable<R> rightObservable,
+            final @NonNull BindingConverter<L, R> converter) {
 
-        leftProperty.setValue(converter.unwrap(rightObservable.getValue()));
+        leftProperty.setValue(converter.toLeft(rightObservable.getValue()));
         rightObservable.addListener((e,o,n)->{
-            leftProperty.setValue(converter.unwrap(n));
+            leftProperty.setValue(converter.toLeft(n));
         });
     }
 
-    public static <L> void bindBidirectional(
+    public static <L, R> void bindBidirectional(
             final @NonNull Property<L> leftProperty,
-            final @NonNull Bindable<ManagedObject> rightProperty,
-            final @NonNull BindingConverter<L> converter) {
-        final InternalBidirBinding<L> binding = new InternalBidirBinding<L>(leftProperty, rightProperty, converter);
-        leftProperty.setValue(converter.unwrap(rightProperty.getValue()));
+            final @NonNull Bindable<R> rightProperty,
+            final @NonNull BindingConverter<L, R> converter) {
+        val binding = new InternalBidirBinding<L, R>(leftProperty, rightProperty, converter);
+        leftProperty.setValue(converter.toLeft(rightProperty.getValue()));
         leftProperty.addListener(binding);
         rightProperty.addListener(binding);
+    }
+
+    public static void bindParsableBidirectional(
+            final @NonNull Property<String> leftProperty,
+            final @NonNull Bindable<String> rightProperty) {
+        bindBidirectional(leftProperty, rightProperty, BindingConverter.identity(String.class));
     }
 
     // -- VALIDATION
@@ -82,30 +88,30 @@ public class BindingsFx {
 
     // -- INTERNAL
 
-    private static class InternalBidirBinding<T>
+    private static class InternalBidirBinding<L, R>
     implements
-        javafx.beans.value.ChangeListener<T>,
-        ChangeListener<ManagedObject>{
+        javafx.beans.value.ChangeListener<L>,
+        ChangeListener<R>{
 
-        private final WeakReference<Property<T>> leftRef;
-        private final WeakReference<Bindable<ManagedObject>> rightRef;
-        private final BindingConverter<T> converter;
+        private final WeakReference<Property<L>> leftRef;
+        private final WeakReference<Bindable<R>> rightRef;
+        private final BindingConverter<L, R> converter;
         private boolean updating = false;
         private final int cachedHash;
 
-        private Property<T> getLeft() {
+        private Property<L> getLeft() {
             return leftRef.get();
         }
 
-        private Bindable<ManagedObject> getRight() {
+        private Bindable<R> getRight() {
             return rightRef.get();
         }
 
 
         public InternalBidirBinding(
-                final @NonNull Property<T> left,
-                final @NonNull Bindable<ManagedObject> right,
-                final @NonNull BindingConverter<T> converter) {
+                final @NonNull Property<L> left,
+                final @NonNull Bindable<R> right,
+                final @NonNull BindingConverter<L, R> converter) {
 
             this.leftRef = new WeakReference<>(left);
             this.rightRef = new WeakReference<>(right);
@@ -114,20 +120,20 @@ public class BindingsFx {
         }
 
         @Override
-        public void changed(ObservableValue<? extends T> leftObservable, T oldValue, T newValue) {
+        public void changed(final ObservableValue<? extends L> leftObservable, final L oldValue, final L newValue) {
             changed(oldValue, newValue, null, null);
         }
 
         @Override
         public void changed(
-                Observable<? extends ManagedObject> rightObservable,
-                ManagedObject oldValue,
-                ManagedObject newValue) {
+                final Observable<? extends R> rightObservable,
+                final R oldValue,
+                final R newValue) {
             changed(null, null, oldValue, newValue);
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(final Object obj) {
             if (this == obj) {
                 return true;
             }
@@ -139,7 +145,7 @@ public class BindingsFx {
             }
 
             if (obj instanceof InternalBidirBinding) {
-                final InternalBidirBinding<?> otherBinding = (InternalBidirBinding<?>) obj;
+                final InternalBidirBinding<?, ?> otherBinding = (InternalBidirBinding<?, ?>) obj;
                 final Object otherLeft = otherBinding.getLeft();
                 final Object otherRight = otherBinding.getRight();
                 if ((otherLeft == null) || (otherRight == null)) {
@@ -172,7 +178,7 @@ public class BindingsFx {
          * either uses both pojos and ignores both managed objects (propagate changes left to right)
          * or vice versa.
          */
-        private void changed(T oldPojo, T newPojo, ManagedObject oldValue, ManagedObject newValue) {
+        private void changed(final L oldPojo, final L newPojo, final R oldValue, final R newValue) {
             if (updating) {
                 return;
             }
@@ -185,16 +191,16 @@ public class BindingsFx {
             try {
                 updating = true;
                 if(newValue!=null) { // direction
-                    left.setValue(converter.unwrap(newValue)); // propagate changes right to left
+                    left.setValue(converter.toLeft(newValue)); // propagate changes right to left
                 } else {
-                    right.setValue(converter.wrap(newPojo)); // propagate changes left to right
+                    right.setValue(converter.toRight(newPojo)); // propagate changes left to right
                 }
             } catch (RuntimeException e) {
                 try {
                     if(newValue!=null) { // direction
-                        left.setValue(converter.unwrap(oldValue)); // propagate changes right to left
+                        left.setValue(converter.toLeft(oldValue)); // propagate changes right to left
                     } else {
-                        right.setValue(converter.wrap(oldPojo)); // propagate changes left to right
+                        right.setValue(converter.toRight(oldPojo)); // propagate changes left to right
                     }
                 } catch (Exception e2) {
                     e2.addSuppressed(e);
@@ -216,8 +222,8 @@ public class BindingsFx {
         }
 
         private boolean isStillBound(
-                final Property<T> left,
-                final Bindable<ManagedObject> right) {
+                final Property<L> left,
+                final Bindable<R> right) {
 
             if ((left == null) || (right == null)) {
                 if (left != null) {
@@ -232,5 +238,6 @@ public class BindingsFx {
         }
 
     }
+
 
 }

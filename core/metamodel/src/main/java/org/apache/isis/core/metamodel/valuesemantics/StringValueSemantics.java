@@ -22,19 +22,30 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
+import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.val.StringValueSemantics")
 public class StringValueSemantics
-extends AbstractValueSemanticsProvider<String>
+extends ValueSemanticsAbstract<String>
 implements
     EncoderDecoder<String>,
     Parser<String>,
     Renderer<String> {
+
+    @Override
+    public Class<String> getCorrespondingClass() {
+        return String.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.STRING;
+    }
 
     // -- ENCODER DECODER
 

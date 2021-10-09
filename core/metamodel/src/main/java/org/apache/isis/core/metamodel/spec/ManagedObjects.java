@@ -29,6 +29,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
@@ -170,6 +172,26 @@ public final class ManagedObjects {
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot stringify %s", managedObject));
     }
 
+    // -- PACKING
+
+    public static ManagedObject pack(
+            final ObjectSpecification elementSpec,
+            final Can<ManagedObject> nonScalar) {
+        return ManagedObject.of(elementSpec,
+                nonScalar.stream()
+                .map(UnwrapUtil::single)
+                .collect(Collectors.toList()));
+    }
+
+    public static Can<ManagedObject> unpack(
+            final ObjectSpecification elementSpec,
+            final ManagedObject nonScalar) {
+        return isNullOrUnspecifiedOrEmpty(nonScalar)
+                ? Can.empty()
+                : _NullSafe.streamAutodetect(nonScalar.getPojo())
+                    .map(pojo->ManagedObject.of(elementSpec, pojo))
+                    .collect(Can.toCan());
+    }
 
     // -- COMPARE UTILITIES
 
@@ -218,7 +240,10 @@ public final class ManagedObjects {
 
     // -- DEFAULTS UTILITIES
 
-    public static ManagedObject emptyToDefault(final boolean mandatory, final @NonNull ManagedObject input) {
+    public static ManagedObject emptyToDefault(
+            final ObjectSpecification elementSpec,
+            final boolean mandatory,
+            final @NonNull ManagedObject input) {
         if(!isSpecified(input)) {
             return input;
         }
@@ -230,13 +255,12 @@ public final class ManagedObjects {
         // 1) if primitive, then don't return null
         // 2) if boxed boolean, that is MANDATORY, then don't return null
 
-        val spec = input.getSpecification();
-        val expectedType = spec.getCorrespondingClass();
+        val expectedType = elementSpec.getCorrespondingClass();
         if(expectedType.isPrimitive()) {
-            return ManagedObject.of(spec, ClassExtensions.toDefault(expectedType));
+            return ManagedObject.of(elementSpec, ClassExtensions.toDefault(expectedType));
         }
         if(Boolean.class.equals(expectedType) && mandatory) {
-            return ManagedObject.of(spec, Boolean.FALSE);
+            return ManagedObject.of(elementSpec, Boolean.FALSE);
         }
 
         return input;
@@ -476,8 +500,12 @@ public final class ManagedObjects {
 
         Optional<Bookmark> bookmark(final @Nullable ManagedObject adapter) {
 
-            if(!ManagedObjects.isIdentifiable(adapter)
-                    && ManagedObjects.isSpecified(adapter)) {
+            if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
+                    || adapter.getSpecification().isValue()) {
+                return Optional.empty();
+            }
+
+            if(!ManagedObjects.isIdentifiable(adapter)) {
                 log.warn("about to create a random UUID bookmark for {}; this is probably an invalid code-path taken (TODO)",
                         adapter.getSpecification());
             }
@@ -654,6 +682,27 @@ public final class ManagedObjects {
         public static boolean isRemoved(final @Nullable ManagedObject adapter) {
             return EntityUtil.getEntityState(adapter).isRemoved();
         }
+
+        public static ManagedObject assertAttachedWhenEntity(final @Nullable ManagedObject adapter) {
+            val state = EntityUtil.getEntityState(adapter);
+            if(state.isPersistable()) {
+                _Assert.assertEquals(EntityState.PERSISTABLE_ATTACHED, state,
+                        ()->String.format("detached entity %s", adapter));
+            }
+            return adapter;
+        }
+
+        public static ManagedObject computeIfDetached(
+                final @Nullable ManagedObject adapter,
+                final UnaryOperator<ManagedObject> onDetachedEntity) {
+            val state = EntityUtil.getEntityState(adapter);
+            if(state.isPersistable()
+                    &&!state.isAttached()) {
+                return onDetachedEntity.apply(adapter);
+            }
+            return adapter;
+        }
+
 
     }
 

@@ -18,7 +18,10 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed;
 
+import java.io.Serializable;
 import java.util.Optional;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -30,12 +33,17 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 public final class ManagedAction extends ManagedMember {
@@ -46,7 +54,7 @@ public final class ManagedAction extends ManagedMember {
             final @NonNull ManagedObject owner,
             final @NonNull ObjectAction action,
             final @NonNull Where where) {
-        return new ManagedAction(owner, action, where);
+        return new ManagedAction(owner, action, where, Can::empty);
     }
 
     public static final Optional<ManagedAction> lookupAction(
@@ -58,20 +66,32 @@ public final class ManagedAction extends ManagedMember {
         .map(objectAction -> of(owner, objectAction, where));
     }
 
+    public static final Optional<ManagedAction> lookupActionWithMultiselect(
+            final @NonNull ManagedObject owner,
+            final @NonNull String memberId,
+            final @NonNull Where where,
+            final @NonNull MultiselectChoices multiselectChoices) {
+
+        return ManagedMember.<ObjectAction>lookup(owner, MemberType.ACTION, memberId)
+                .map(objectAction -> new ManagedAction(owner, objectAction, where, multiselectChoices));
+    }
+
     // -- IMPLEMENTATION
 
     @Getter private final ObjectAction action;
-
     @Getter private final ActionInteractionHead interactionHead;
+    @Getter private final MultiselectChoices multiselectChoices;
 
     private ManagedAction(
             final @NonNull ManagedObject owner,
             final @NonNull ObjectAction action,
-            final @NonNull Where where) {
+            final @NonNull Where where,
+            final @NonNull MultiselectChoices multiselectChoices) {
 
         super(owner, where);
         this.action = action;
         this.interactionHead = action.interactionHead(owner);
+        this.multiselectChoices = multiselectChoices;
     }
 
     /**
@@ -79,7 +99,7 @@ public final class ManagedAction extends ManagedMember {
      * parameters if any are initialized with their defaults (taking into account any supporting methods)
      */
     public ParameterNegotiationModel startParameterNegotiation() {
-        return getInteractionHead().defaults();
+        return interactionHead.defaults(this);
     }
 
     @Override
@@ -94,24 +114,39 @@ public final class ManagedAction extends ManagedMember {
 
     // -- INTERACTION
 
-    public _Either<ManagedObject, InteractionVeto> invoke(@NonNull Can<ManagedObject> actionParameters) {
-
-        // param validation is not our responsibility here
+    public _Either<ManagedObject, InteractionVeto> invoke(@NonNull final Can<ManagedObject> actionParameters) {
 
         val action = getAction();
 
         val head = action.interactionHead(getOwner());
 
-        val actionResult = action
+        final ManagedObject actionResult = action
                 .execute(head , actionParameters, InteractionInitiatedBy.USER);
 
+        return _Either.left(route(actionResult));
+
+    }
+
+    public ManagedObject invokeWithRuleChecking(
+            final @NonNull Can<ManagedObject> actionParameters) throws AuthorizationException {
+
+        val action = getAction();
+        val head = action.interactionHead(getOwner());
+
+        final ManagedObject actionResult = action
+                .executeWithRuleChecking(head , actionParameters, InteractionInitiatedBy.USER, getWhere());
+
+        return route(actionResult);
+    }
+
+    private ManagedObject route(final @Nullable ManagedObject actionResult) {
+
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(actionResult)) {
-            return _Either.left(ManagedObject.empty(action.getReturnType()));
+            return ManagedObject.empty(action.getReturnType());
         }
 
         val resultPojo = actionResult.getPojo();
 
-        //TODO same logic is in wkt's ActionModel, ultimately we want wkt to use this (common) one
         val resultAdapter = getRoutingServices().stream()
                 .filter(routingService->routingService.canRoute(resultPojo))
                 .map(routingService->routingService.route(resultPojo))
@@ -123,16 +158,13 @@ public final class ManagedAction extends ManagedMember {
 
         // resolve injection-points for the result
         getServiceInjector().injectServicesInto(resultAdapter.getPojo());
-
-        //XXX are we sure in case of entities, that these are attached?
-
-        return _Either.left(resultAdapter);
-
+        return resultAdapter;
     }
+
 
     // -- POJO WRAPPING
 
-    private ManagedObject toManagedObject(Object pojo) {
+    private ManagedObject toManagedObject(final Object pojo) {
         return ManagedObject.lazy(mmc().getSpecificationLoader(), pojo);
     }
 
@@ -161,5 +193,34 @@ public final class ManagedAction extends ManagedMember {
     private ServiceRegistry getServiceRegistry() {
         return mmc().getServiceRegistry();
     }
+
+    // -- MEMENTO FOR ARGUMENT LIST
+
+    public MementoForArgs getMementoForArgs(final Can<ManagedObject> args) {
+        return MementoForArgs.create(
+                getMetaModel().getMetaModelContext().getObjectManager(),
+                args);
+    }
+
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class MementoForArgs implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        static MementoForArgs create(
+                final ObjectManager objectManager,
+                final Can<ManagedObject> args) {
+            return new MementoForArgs(args.map(objectManager.getObjectMemorizer()::serialize));
+        }
+
+        private final Can<ObjectMemento> argsMementos;
+
+        public Can<ManagedObject> getArgumentList(final ObjectAction actionMeta) {
+            val argTypes = actionMeta.getParameterTypes();
+            val objectMemorizer = actionMeta.getMetaModelContext().getObjectManager().getObjectMemorizer();
+            return argsMementos.zipMap(argTypes, (argSpec, argMemento)->
+                objectMemorizer.deserialize(argMemento, argSpec));
+        }
+    }
+
 
 }

@@ -55,14 +55,14 @@ public class PrototypingUiModel {
     }
 
     public static PrototypingUiModel of(final ManagedMember managedMember) {
-        Class<?> featureType = managedMember.getSpecification().getCorrespondingClass();
+        Class<?> featureType = managedMember.getElementClass();
         String featureShortLabel = managedMember.getFriendlyName();
         String featureFullLabel = String.format("%s: %s",
                 managedMember.getMemberType(),
                 managedMember.getId());
 
         return new PrototypingUiModel(featureType, featureShortLabel, featureFullLabel,
-                managedMember.getSpecification()::streamFacets);
+                managedMember.getElementType()::streamFacets);
     }
 
     public Stream<Facet> streamFeatureFacets() {

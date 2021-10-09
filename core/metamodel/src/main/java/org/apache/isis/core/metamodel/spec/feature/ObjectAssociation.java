@@ -37,7 +37,6 @@ import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFac
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
@@ -120,12 +119,6 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      */
     boolean isMandatory();
 
-    /**
-     * Returns the specification for the owning {@link ManagedObject}.
-     */
-    ObjectSpecification getOnType();
-
-
     // //////////////////////////////////////////////////////
     // Predicates
     // //////////////////////////////////////////////////////
@@ -140,7 +133,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
         public static final Predicate<ObjectAssociation> REFERENCE_PROPERTIES =
                 assoc ->  assoc.isOneToOneAssociation() &&
-                         !assoc.getSpecification().containsNonFallbackFacet(ValueFacet.class);
+                         !assoc.getElementType().containsNonFallbackFacet(ValueFacet.class);
 
         public static final Predicate<ObjectAssociation> COLLECTIONS =
                 assoc -> assoc.isOneToManyAssociation();

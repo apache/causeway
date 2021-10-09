@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.interact;
 
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,11 +38,10 @@ import org.apache.isis.testdomain.model.interaction.InteractionDemo_biListOfStri
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_multiEnum;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_multiInt;
 import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
-import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
@@ -68,50 +68,24 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void whenEnabled_shouldHaveNoVeto() {
 
-        val managedAction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
-                .getManagedAction().get(); // should not throw
+        val tester =
+                testerFactory.actionTester(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS);
 
-        assertFalse(managedAction.checkVisibility().isPresent()); // is visible
-        assertFalse(managedAction.checkUsability().isPresent()); // can invoke
+        tester.assertVisibilityIsNotVetoed();
+        tester.assertUsabilityIsNotVetoed();
     }
 
     @Test
     void whenDisabled_shouldHaveVeto() {
 
-        val managedAction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS)
-                .getManagedAction().get(); // should not throw
+        val tester =
+                testerFactory.actionTester(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS);
 
-
-        assertFalse(managedAction.checkVisibility().isPresent()); // is visible
-
-        // cannot invoke
-        val veto = managedAction.checkUsability().get(); // should not throw
-        assertNotNull(veto);
-
-        assertEquals("Disabled for demonstration.", veto.getReason());
+        tester.assertVisibilityIsNotVetoed();
+        tester.assertUsabilityIsVetoedWith("Disabled for demonstration.");
     }
 
-    @Test
-    void whenEnabled_shouldProvideProperDecoratorModels() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
-                .checkVisibility()
-                .checkUsability();
-
-        val disablingUiModel = DisablingUiModel.of(actionInteraction);
-        assertFalse(disablingUiModel.isPresent());
-    }
-
-    @Test
-    void whenDisabled_shouldProvideProperDecoratorModels() {
-
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS)
-                .checkVisibility()
-                .checkUsability();
-
-        val disablingUiModel = DisablingUiModel.of(actionInteraction).get();
-        assertEquals("Disabled for demonstration.", disablingUiModel.getReason());
-    }
 
     @Test
     void whenEnabled_shouldProvideActionMetadata() {
@@ -143,14 +117,12 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void whenEnabled_shouldAllowInvocation() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
-        .checkVisibility()
-        .checkUsability();
+        val tester =
+                testerFactory.actionTester(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS);
 
-        val pendingArgs = actionInteraction.startParameterNegotiation().get();
-        val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
-        assertTrue(resultOrVeto.isLeft());
-        assertEquals(99, (int)resultOrVeto.leftIfAny().getPojo());
+        tester.assertVisibilityIsNotVetoed();
+        tester.assertUsabilityIsNotVetoed();
+        tester.assertInvocationResult(99, UnaryOperator.identity());
     }
 
     @Test
@@ -170,24 +142,23 @@ class ActionInteractionTest extends InteractionTestAbstract {
         val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
         assertTrue(resultOrVeto.isRight());
 
+        val tester =
+                testerFactory.actionTester(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS);
+
+        tester.assertVisibilityIsNotVetoed();
+        tester.assertUsabilityIsVetoedWith("Disabled for demonstration.");
+        assertThrows(IllegalAccessException.class, ()->tester.assertInvocationResult(99));
     }
 
     @Test
     void withParams_shouldProduceCorrectResult() throws Throwable {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
-        .checkVisibility()
-        .checkUsability();
+        val tester =
+                testerFactory.actionTester(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS);
 
-        val params = Can.of(objectManager.adapt(12), objectManager.adapt(34));
-
-        val pendingArgs = actionInteraction.startParameterNegotiation().get();
-        pendingArgs.setParamValues(params);
-
-        val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
-        assertTrue(resultOrVeto.isLeft());
-
-        assertEquals(46, (int)resultOrVeto.leftIfAny().getPojo());
+        tester.assertVisibilityIsNotVetoed();
+        tester.assertUsabilityIsNotVetoed();
+        tester.assertInvocationResult(46, arg0->12, arg1->34);
     }
 
     @Test
@@ -235,7 +206,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
                 .checkUsability();
 
         val managedAction = actionInteraction.getManagedAction().get(); // should not throw
-        val pendingArgs = managedAction.getInteractionHead().defaults();
+        val pendingArgs = managedAction.startParameterNegotiation();
 
         val expectedDefaults = Can.of(
                 new InteractionDemo_biArgEnabled(null).defaultA(null),
@@ -254,7 +225,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
                 .checkUsability();
 
         val managedAction = actionInteraction.getManagedAction().get(); // should not throw
-        val pendingArgs = managedAction.getInteractionHead().defaults();
+        val pendingArgs = managedAction.startParameterNegotiation();
 
         val mixin = new InteractionDemo_multiInt(null);
         val expectedDefaults = Can.<Integer>of(
@@ -290,7 +261,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
                 .checkUsability();
 
         val managedAction = actionInteraction.getManagedAction().get(); // should not throw
-        val pendingArgs = managedAction.getInteractionHead().defaults();
+        val pendingArgs = managedAction.startParameterNegotiation();
 
         val mixin = new InteractionDemo_multiEnum(null);
         val expectedDefaults = Can.<DemoEnum>of(
@@ -325,7 +296,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
                 .checkUsability();
 
         val managedAction = actionInteraction.getManagedAction().get(); // should not throw
-        val pendingArgs = managedAction.getInteractionHead().defaults();
+        val pendingArgs = managedAction.startParameterNegotiation();
 
         val mixin = new InteractionDemo_biListOfString(null);
         val expectedDefaults = Can.<List<String>>of(
@@ -433,6 +404,28 @@ class ActionInteractionTest extends InteractionTestAbstract {
         assertEquals(expectedChoiceAfterBackendUpdated, actualChoiceAsSeenByBackend);
         assertEquals(expectedChoiceAfterBackendUpdated, actualChoiceAsSeenByUi);
 
+    }
+
+    @Test
+    void whenNonScalarResult_shouldHaveDataTable() {
+
+        val tester =
+                testerFactory.actionTester(InteractionDemo.class, "limitedItems", Where.OBJECT_FORMS);
+
+        tester.assertVisibilityIsNotVetoed();
+        tester.assertUsabilityIsNotVetoed();
+
+        val choiceElements = ((InteractionDemo)(tester.getManagedActionElseFail()
+                .getOwner()
+                .getPojo()))
+                .getItems();
+        assertEquals(4, choiceElements.size());
+
+        val tableTester = tester.tableTester(arg0->2); // 2 expected rows in the resulting table
+
+        tableTester.assertUnfilteredDataElements(List.of(
+                choiceElements.get(0),
+                choiceElements.get(1)));
     }
 
   //TODO also deal with non-scalar parameter values

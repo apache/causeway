@@ -22,7 +22,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -31,6 +31,9 @@ import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.schema.common.v2.ValueType;
+
+import lombok.val;
 
 /**
  * due to auto-boxing also handles the primitive variant
@@ -38,12 +41,22 @@ import org.apache.isis.commons.internal.base._Strings;
 @Component
 @Named("isis.val.BooleanValueSemantics")
 public class BooleanValueSemantics
-extends AbstractValueSemanticsProvider<Boolean>
+extends ValueSemanticsAbstract<Boolean>
 implements
     DefaultsProvider<Boolean>,
     EncoderDecoder<Boolean>,
     Parser<Boolean>,
     Renderer<Boolean> {
+
+    @Override
+    public Class<Boolean> getCorrespondingClass() {
+        return Boolean.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.BOOLEAN;
+    }
 
     @Override
     public Boolean getDefaultValue() {
@@ -104,7 +117,7 @@ implements
 
     @Override
     public Boolean parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        final var input = _Strings.blankToNullOrTrim(text);
+        val input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
             return null;
         }

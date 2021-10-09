@@ -35,7 +35,6 @@ import org.apache.isis.viewer.wicket.viewer.services.ImageResourceCacheClassPath
 import org.apache.isis.viewer.wicket.viewer.services.LocaleProviderWicket;
 import org.apache.isis.viewer.wicket.viewer.services.TranslationsResolverWicket;
 import org.apache.isis.viewer.wicket.viewer.services.WicketViewerSettingsDefault;
-import org.apache.isis.viewer.wicket.viewer.services.mementos.ObjectMementoServiceWicket;
 import org.apache.isis.viewer.wicket.viewer.webmodule.WebModuleWicket;
 
 /**
@@ -54,7 +53,6 @@ import org.apache.isis.viewer.wicket.viewer.webmodule.WebModuleWicket;
         ImageResourceCacheClassPath.class,
         LocaleProviderWicket.class,
         HintStoreUsingWicketSession.class,
-        ObjectMementoServiceWicket.class,
         PageClassListDefault.class,
         PageClassRegistryDefault.class,
         PageNavigationServiceDefault.class,

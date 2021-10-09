@@ -21,20 +21,27 @@ package org.apache.isis.core.metamodel.spec.feature;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.OptionalInt;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.compare._Comparators;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacet;
+import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
@@ -42,6 +49,12 @@ import lombok.val;
  * Provides reflective access to an action or a field on a domain object.
  */
 public interface ObjectMember extends ObjectFeature {
+
+    /**
+     * Returns the {@link ObjectSpecification} representing the class or interface
+     * that declares the member represented by this object.
+     */
+    ObjectSpecification getDeclaringType();
 
     // /////////////////////////////////////////////////////////////
     // Name, Description, Help (convenience for facets)
@@ -219,6 +232,43 @@ public interface ObjectMember extends ObjectFeature {
         return memberById;
     }
 
+
+    // -- COLLECTION PAGE SIZE (COLL + NON-SCALAR ACTION RESULT)
+
+    default OptionalInt getPageSize() {
+        return Stream.of(this, getElementType())
+            .map(facetHolder->facetHolder.getFacet(PagedFacet.class))
+            .filter(_NullSafe::isPresent)
+            .mapToInt(PagedFacet::value)
+            .findFirst();
+    }
+
+    // -- COLLECTION SORTING (COLL + NON-SCALAR ACTION RESULT)
+
+    /**
+     * An element comparator corresponding to associated {@link SortedByFacet}.
+     * The comparator operates on elements of type {@link ManagedObject}.
+     * @return non-null
+     */
+    default Comparator<ManagedObject> getElementComparator(){
+
+        var sortedBy = Stream.of(this, getElementType())
+            .map(facetHolder->facetHolder.getFacet(SortedByFacet.class))
+            .filter(_NullSafe::isPresent)
+            .findFirst()
+            .map(SortedByFacet::value)
+            .orElse(null);
+
+        if(sortedBy == null) {
+            return (a, b) -> 0; // no-op comparator, works with Stream#sort
+        }
+
+        val pojoComparator = _Casts.<Comparator<Object>>uncheckedCast(
+                _InstanceUtil.createInstance(sortedBy));
+        getMetaModelContext().getServiceInjector().injectServicesInto(pojoComparator);
+
+        return (a, b) -> pojoComparator.compare(a.getPojo(), b.getPojo());
+    }
 
     // -- COMPARATORS
 

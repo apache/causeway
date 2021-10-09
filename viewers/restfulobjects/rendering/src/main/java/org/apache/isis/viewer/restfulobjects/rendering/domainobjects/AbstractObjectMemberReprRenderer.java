@@ -27,7 +27,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -302,8 +301,7 @@ extends ReprRendererAbstract<ManagedMember> {
      * Convenience method.
      */
     protected <F extends Facet> F getMemberSpecFacet(final Class<F> facetType) {
-        final ObjectSpecification objetMemberSpec = objectMember.getSpecification();
-        return objetMemberSpec.getFacet(facetType);
+        return objectMember.getElementType().getFacet(facetType);
     }
 
     protected boolean hasMemberFacet(final Class<? extends Facet> facetType) {

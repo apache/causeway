@@ -22,31 +22,36 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
-import org.apache.isis.applib.value.Markup;
+import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 @Component
 @Named("isis.val.AsciiDocValueSemantics")
 public class AsciiDocValueSemantics
-extends AbstractValueSemanticsProvider<AsciiDoc>
+extends ValueSemanticsAbstract<AsciiDoc>
 implements
     Renderer<AsciiDoc>,
     Parser<AsciiDoc> {
+
+    @Override
+    public Class<AsciiDoc> getCorrespondingClass() {
+        return AsciiDoc.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.STRING;
+    }
 
     // -- RENDERER
 
     @Override
     public String simpleTextRepresentation(final ValueSemanticsProvider.Context context, final AsciiDoc adoc) {
         return render(adoc, AsciiDoc::asHtml);
-    }
-
-    @Override
-    public Markup presentationValue(final Context context, final AsciiDoc value) {
-        return Markup.valueOf(simpleTextRepresentation(context, value));
     }
 
     // -- PARSER

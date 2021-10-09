@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
@@ -45,6 +46,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 public abstract class ValueFacetAbstract<T>
 extends FacetAbstract
@@ -71,6 +73,13 @@ implements ValueFacet<T> {
     }
 
     @Override
+    public <X> Stream<X> streamValueSemantics(final Class<X> requiredType) {
+        return valueSemantics.stream()
+        .filter(requiredType::isInstance)
+        .map(requiredType::cast);
+    }
+
+    @Override
     public boolean semanticEquals(@NonNull final Facet other) {
         return (other instanceof ValueFacetAbstract)
                 ? this.getValueSemantics().equals(((ValueFacetAbstract<?>)other).getValueSemantics())
@@ -84,7 +93,7 @@ implements ValueFacet<T> {
 
     @Override
     public ValueSemanticsProvider.Context createValueSemanticsContext(final Identifier featureIdentifier) {
-        final var iaProvider = super.getInteractionProvider();
+        val iaProvider = super.getInteractionProvider();
         if(iaProvider==null) {
             return null; // JUnit context
         }
@@ -93,7 +102,29 @@ implements ValueFacet<T> {
                 iaProvider.currentInteractionContext().orElse(null));
     }
 
+    // -- ENCODER DECODER
+
+    @Override
+    public Optional<EncoderDecoder<T>> selectDefaultEncoderDecoder() {
+        return getValueSemantics()
+                .stream()
+                .filter(isMatchingAnyOf(Can.empty()))
+                .map(ValueSemanticsProvider::getEncoderDecoder)
+                .filter(_NullSafe::isPresent)
+                .findFirst();
+    }
+
     // -- PARSER
+
+    @Override
+    public Optional<Parser<T>> selectDefaultParser() {
+        return getValueSemantics()
+                .stream()
+                .filter(isMatchingAnyOf(Can.empty()))
+                .map(ValueSemanticsProvider::getParser)
+                .filter(_NullSafe::isPresent)
+                .findFirst();
+    }
 
     @Override
     public Optional<Parser<T>> selectParserForParameter(final ObjectActionParameter param) {
@@ -113,11 +144,7 @@ implements ValueFacet<T> {
 
     @Override
     public Parser<T> fallbackParser(final Identifier featureIdentifier) {
-        return new PseudoParserWithMessage<T>(String
-                .format("Could not find a parser for type %s "
-                        + "in the context of %s",
-                        getValueType(),
-                        featureIdentifier));
+        return fallbackParser(getValueType(), featureIdentifier);
     }
 
     // -- RENDERER
@@ -150,10 +177,28 @@ implements ValueFacet<T> {
 
     @Override
     public Renderer<T> fallbackRenderer(final Identifier featureIdentifier) {
-        return new PseudoRendererWithMessage<T>(String
+        return fallbackRenderer(getValueType(), featureIdentifier);
+    }
+
+    // -- UTILITY
+
+    public static <X> Parser<X> fallbackParser(
+            final LogicalType valueType,
+            final Identifier featureIdentifier) {
+        return new PseudoParserWithMessage<X>(String
+                .format("Could not find a parser for type %s "
+                        + "in the context of %s",
+                        valueType,
+                        featureIdentifier));
+    }
+
+    public static <X> Renderer<X> fallbackRenderer(
+            final LogicalType valueType,
+            final Identifier featureIdentifier) {
+        return new PseudoRendererWithMessage<X>(String
                 .format("Could not find a renderer for type %s "
                         + "in the context of %s",
-                        getValueType(),
+                        valueType,
                         featureIdentifier));
     }
 
@@ -183,7 +228,7 @@ implements ValueFacet<T> {
             // 3. not-empty vs. empty      ->  reject
             // 4. not-empty vs. not-empty  ->  accept when any match
 
-            final var qualifiersOnBean =
+            val qualifiersOnBean =
             _Annotations
             .synthesizeInherited(valueSemantics.getClass(), Qualifier.class) //TODO memoize somewhere
             .map(Qualifier::value)

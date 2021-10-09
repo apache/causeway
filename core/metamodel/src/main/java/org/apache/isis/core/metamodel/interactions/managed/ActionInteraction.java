@@ -28,6 +28,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -54,7 +55,16 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
             final @NonNull String memberId,
             final @NonNull Where where) {
 
-        val managedAction = ManagedAction.lookupAction(owner, memberId, where);
+        return startWithMultiselect(owner, memberId, where, Can::empty);
+    }
+
+    public static final ActionInteraction startWithMultiselect(
+            final @NonNull ManagedObject owner,
+            final @NonNull String memberId,
+            final @NonNull Where where,
+            final @NonNull MultiselectChoices multiselectChoices) {
+
+        val managedAction = ManagedAction.lookupActionWithMultiselect(owner, memberId, where, multiselectChoices);
 
         final _Either<ManagedAction, InteractionVeto> chain = managedAction.isPresent()
                 ? _Either.left(managedAction.get())
@@ -63,6 +73,18 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
         return new ActionInteraction(
                 managedAction.map(ManagedAction::getAction),
                 chain);
+    }
+
+    public static ActionInteraction wrap(final @NonNull ManagedAction managedAction) {
+        return new ActionInteraction(
+                Optional.of(managedAction.getAction()),
+                _Either.left(managedAction));
+    }
+
+    public static ActionInteraction empty(final String actionId) {
+        return new ActionInteraction(
+                Optional.empty(),
+                _Either.right(InteractionVeto.notFound(MemberType.ACTION, actionId)));
     }
 
     ActionInteraction(
@@ -78,7 +100,7 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
     @Getter
     private final Optional<ObjectAction> metamodel;
 
-    public ActionInteraction checkSemanticConstraint(@NonNull SemanticConstraint semanticConstraint) {
+    public ActionInteraction checkSemanticConstraint(@NonNull final SemanticConstraint semanticConstraint) {
 
         chain = chain.mapIfLeft(action->{
 
@@ -114,7 +136,7 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
         void onParameterInvalid(ManagedParameter managedParameter, InteractionVeto veto);
     }
 
-    public _Either<ManagedObject, InteractionVeto> invokeWith(ParameterNegotiationModel pendingArgs) {
+    public _Either<ManagedObject, InteractionVeto> invokeWith(final ParameterNegotiationModel pendingArgs) {
         pendingArgs.activateValidationFeedback();
         val veto = validate(pendingArgs);
         if(veto.isPresent()) {
@@ -123,6 +145,12 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
         val action = chain.leftIfAny();
         val actionResultOrVeto = action.invoke(pendingArgs.getParamValues());
         return actionResultOrVeto;
+    }
+
+    public ManagedObject invokeWithRuleChecking(
+            final ParameterNegotiationModel pendingArgs) throws AuthorizationException {
+        val action = chain.leftIfAny();
+        return action.invokeWithRuleChecking(pendingArgs.getParamValues());
     }
 
     public Optional<InteractionVeto> validate(
@@ -151,8 +179,13 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
      * @throws X if there was any interaction veto within the originating chain
      */
     public <X extends Throwable>
-    ManagedAction getManagedActionElseThrow(Function<InteractionVeto, ? extends X> onFailure) throws X {
+    ManagedAction getManagedActionElseThrow(final Function<InteractionVeto, ? extends X> onFailure) throws X {
         return super.getManagedMemberElseThrow(onFailure);
+    }
+
+    public <X extends Throwable>
+    ManagedAction getManagedActionElseFail() {
+        return getManagedActionElseThrow(veto->_Exceptions.unrecoverable("action vetoed: " + veto.getReason()));
     }
 
 

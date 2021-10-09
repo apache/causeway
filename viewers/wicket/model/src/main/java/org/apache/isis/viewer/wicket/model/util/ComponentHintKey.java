@@ -28,7 +28,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 
 import lombok.AccessLevel;

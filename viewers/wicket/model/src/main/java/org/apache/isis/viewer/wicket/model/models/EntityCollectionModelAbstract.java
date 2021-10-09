@@ -18,111 +18,91 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.apache.wicket.model.ChainingModel;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.factory._InstanceUtil;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
-import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.models.interaction.coll.DataTableModelWkt;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
+/**
+ * Represents a collection (a member) of an entity.
+ *
+ * @implSpec
+ * <pre>
+ * EntityCollectionModel --chained-to--> CollectionInteractionWkt (delegate)
+ * </pre>
+ */
 public abstract class EntityCollectionModelAbstract
-extends ModelAbstract<List<ManagedObject>>
+extends ChainingModel<DataTableModel>
 implements EntityCollectionModel {
 
     private static final long serialVersionUID = 1L;
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Identifier identifier;
-    @Getter private final int pageSize;
-    @Getter private final @Nullable Class<? extends Comparator<?>> sortedBy;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Identifier identifier; //TODO don't memoize
+    @Getter private final int pageSize; //TODO don't memoize
+
+    private final @NonNull Variant variant;
 
     protected EntityCollectionModelAbstract(
-            final @NonNull IsisAppCommonContext commonContext,
-            final @NonNull ObjectMember objectMember) {
-        super(commonContext);
-        this.identifier = objectMember.getFeatureIdentifier();
+            final DataTableModelWkt dataTableModelWkt,
+            final @NonNull Variant variant) {
+        super(dataTableModelWkt);
+        this.variant = variant;
 
-        val typeOfSpecification = objectMember.lookupFacet(TypeOfFacet.class)
-                .map(TypeOfFacet::valueSpec)
-                .orElseThrow(()->_Exceptions
-                        .illegalArgument("Action or Collection MetaModel must have a TypeOfFacet"));
+        val memberMeta = getMetaModel();
 
-        this.typeOfSpecification = Optional.of(typeOfSpecification); // as an optimization: memoize transient
-        this.elementType = typeOfSpecification.getCorrespondingClass();
-
-        final Can<FacetHolder> facetHolders = Can.of(objectMember, typeOfSpecification);
-
-        this.pageSize = facetHolders.stream()
-            .map(facetHolder->facetHolder.getFacet(PagedFacet.class))
-            .filter(_NullSafe::isPresent)
-            .findFirst()
-            .map(PagedFacet::value)
+        this.identifier = memberMeta.getFeatureIdentifier();
+        this.pageSize = memberMeta.getPageSize()
             .orElse(getVariant().getPageSizeDefault());
-        this.sortedBy = facetHolders.stream()
-            .map(facetHolder->facetHolder.getFacet(SortedByFacet.class))
-            .filter(_NullSafe::isPresent)
-            .findFirst()
-            .map(SortedByFacet::value)
-            .orElse(null);
-
-        this.toggledMementos = _Maps.<String, ObjectMemento>newLinkedHashMap();
     }
 
-    // -- SORTING
-
-    /**
-     * An element comparator corresponding to associated {@link SortedByFacet}.
-     * The comparator operates on elements of type {@link ManagedObject}.
-     * @return non-null
-     */
-    protected Comparator<ManagedObject> getElementComparator(){
-
-        if(sortedBy == null) {
-            return (a, b) -> 0; // no-op comparator, works with Stream#sort
-        }
-
-        val pojoComparator = _Casts.<Comparator<Object>>uncheckedCast(_InstanceUtil.createInstance(sortedBy));
-        getCommonContext().injectServicesInto(pojoComparator);
-
-        return (a, b) -> pojoComparator.compare(a.getPojo(), b.getPojo());
+    public final DataTableModelWkt delegate() {
+        return (DataTableModelWkt) super.getTarget();
     }
-
-
-    // -- TYPE OF (ELEMENT TYPE)
-
-    @Getter(value = AccessLevel.PROTECTED) private final @NonNull Class<?> elementType;
-
-    private transient Optional<ObjectSpecification> typeOfSpecification;
 
     @Override
-    public final ObjectSpecification getTypeOfSpecification() {
-        if(typeOfSpecification==null) {
-            typeOfSpecification = getSpecificationLoader().specForType(elementType);
-        }
-        return typeOfSpecification.orElse(null);
+    public final DataTableModel getObject() {
+        return delegate().getObject();
+    }
+
+    @Override
+    public final DataTableModel getDataTableModel() {
+        return getObject();
+    }
+
+    @Override
+    public ObjectMember getMetaModel() {
+        return getDataTableModel()
+                .getMetaModel();
+    }
+
+    @Override
+    public final ManagedObject getParentObject() {
+        return delegate().getBookmarkedOwner();
+    }
+
+    @Override
+    public final IsisAppCommonContext getCommonContext() {
+        return delegate().getCommonContext();
+    }
+
+    // -- VARIANT SUPPORT
+
+    @Override
+    public final Variant getVariant() {
+        return variant;
     }
 
     // -- LINKS PROVIDER
@@ -142,26 +122,16 @@ implements EntityCollectionModel {
         return Can.ofCollection(linkAndLabels);
     }
 
-    // -- TOGGLE SUPPORT
-
-    @Getter private LinkedHashMap<String, ObjectMemento> toggledMementos;
+    // -- DEPRECATIONS(?)
 
     @Override
-    public final Can<ObjectMemento> getToggleMementosList() {
-        return Can.ofCollection(this.toggledMementos.values());
+    public final String getName() {
+        return getDataTableModel().getTitle().getValue();
     }
 
     @Override
-    public final void clearToggleMementosList() {
-        this.toggledMementos.clear();
-    }
-
-    @Override
-    public final boolean toggleSelectionOn(final ManagedObject selectedAdapter) {
-        final ObjectMemento selectedAsMemento = super.getMementoService().mementoForObject(selectedAdapter);
-        final String selectedKey = selectedAsMemento.asString();
-        final boolean isSelected = _Maps.toggleElement(toggledMementos, selectedKey, selectedAsMemento);
-        return isSelected;
+    public int getCount() {
+        return getDataTableModel().getDataElements().getValue().size();
     }
 
 }

@@ -30,22 +30,20 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.memento.ObjectMemento;
 
 import lombok.NonNull;
 import lombok.Synchronized;
 import lombok.val;
 
 /**
- *
  * @since 2.0
- *
  */
-public abstract class ManagedObjectModel
+public final class ManagedObjectModel
 extends ModelAbstract<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
@@ -53,13 +51,13 @@ extends ModelAbstract<ManagedObject> {
     private ObjectMemento memento;
 
     protected ManagedObjectModel(
-            @NonNull IsisAppCommonContext commonContext) {
+            @NonNull final IsisAppCommonContext commonContext) {
         this(commonContext, null);
     }
 
     protected ManagedObjectModel(
-            @NonNull IsisAppCommonContext commonContext,
-            @Nullable ObjectMemento initialMemento) {
+            @NonNull final IsisAppCommonContext commonContext,
+            @Nullable final ObjectMemento initialMemento) {
 
         super(commonContext);
         this.memento = initialMemento;
@@ -167,7 +165,7 @@ extends ModelAbstract<ManagedObject> {
                 .orElse(false);
     }
 
-    public <T extends Facet> Optional<T> lookupFacet(Class<T> facetClass) {
+    public <T extends Facet> Optional<T> lookupFacet(final Class<T> facetClass) {
         return Optional.ofNullable(getTypeOfSpecification())
                 .map(objectSpec->objectSpec.getFacet(facetClass));
     }
@@ -184,7 +182,7 @@ extends ModelAbstract<ManagedObject> {
     }
 
     @Override
-    public final boolean equals(Object obj) {
+    public final boolean equals(final Object obj) {
         if(obj instanceof ManagedObjectModel) {
             val other = (ManagedObjectModel) obj;
             return Objects.equals(this.memento, other.memento);
@@ -194,18 +192,15 @@ extends ModelAbstract<ManagedObject> {
 
     // -- DEPRECATIONS
 
-    @Deprecated //XXX we'de rather not expose this implementation detail
-    ObjectMemento memento() {
-        return memento;
-    }
-
-    @Deprecated //XXX we'de rather not expose this implementation detail
-    void memento(ObjectMemento memento) {
-        val manageObject = super.getCommonContext().reconstructObject(memento);
-        super.setObject(manageObject);
-        this.memento = memento;
-        this.elementTypeSpec = null; // invalidate
-    }
-
+//    private ObjectMemento memento() {
+//        return memento;
+//    }
+//
+//    private void memento(final ObjectMemento memento) {
+//        val manageObject = super.getCommonContext().reconstructObject(memento);
+//        super.setObject(manageObject);
+//        this.memento = memento;
+//        this.elementTypeSpec = null; // invalidate
+//    }
 
 }

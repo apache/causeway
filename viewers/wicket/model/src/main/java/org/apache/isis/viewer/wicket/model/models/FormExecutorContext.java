@@ -30,8 +30,8 @@ extends HasParentUiModel<EntityModel>, HasCommonContext {
     InlinePromptContext getInlinePromptContext();
 
     default boolean isWithinPrompt() {
-        return getPromptStyle().isInlineOrInlineAsIfEdit() &&
-                getInlinePromptContext() != null;
+        return getPromptStyle().isInlineOrInlineAsIfEdit()
+                && getInlinePromptContext() != null;
     }
 
 }

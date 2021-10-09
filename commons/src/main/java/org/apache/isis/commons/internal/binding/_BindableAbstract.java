@@ -29,6 +29,7 @@ import org.apache.isis.commons.binding.Observable;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
+import lombok.val;
 
 
 /**
@@ -142,14 +143,24 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
     // -- COMPOSITION
 
     @Override
+    public <R> Observable<R> map(
+            final Function<T, R> forwardMapper) {
+        final var newBindable = _Observables.<R>lazy(()->forwardMapper.apply(getValue()));
+        addListener((e,o,n)->{
+            newBindable.setValue(forwardMapper.apply(n));
+        });
+        return newBindable;
+    }
+
+    @Override
     public <R> Bindable<R> mapToBindable(
             final Function<T, R> forwardMapper,
             final Function<R, T> reverseMapper) {
 
-        final var isForwardUpdating = new AtomicBoolean();
-        final var isReverseUpdating = new AtomicBoolean();
+        val isForwardUpdating = new AtomicBoolean();
+        val isReverseUpdating = new AtomicBoolean();
 
-        final var newBindable = _Bindables.<R>forValue(forwardMapper.apply(getValue()));
+        val newBindable = _Bindables.<R>forValue(forwardMapper.apply(getValue()));
         addListener((e,o,n)->{
             if(isReverseUpdating.get()) {
                 return;

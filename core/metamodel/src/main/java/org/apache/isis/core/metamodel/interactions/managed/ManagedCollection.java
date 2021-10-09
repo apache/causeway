@@ -24,8 +24,8 @@ import java.util.stream.Stream;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 import lombok.Getter;
@@ -75,13 +75,9 @@ public final class ManagedCollection extends ManagedMember {
         return MemberType.COLLECTION;
     }
 
-    public ObjectSpecification getElementSpecification() {
-        return getCollection().getSpecification();
-    }
-
     public ManagedObject getCollectionValue() {
         return Optional.ofNullable(getCollection().get(getOwner(), InteractionInitiatedBy.USER))
-                .orElse(ManagedObject.empty(getElementSpecification()));
+                .orElse(ManagedObject.empty(getElementType()));
     }
 
     // -- INTERACTION
@@ -91,7 +87,7 @@ public final class ManagedCollection extends ManagedMember {
      * @param interactionInitiatedBy
      * @return Stream of this collection's element values as to be used by the UI for representation
      */
-    public Stream<ManagedObject> streamElements(InteractionInitiatedBy interactionInitiatedBy) {
+    public Stream<ManagedObject> streamElements(final InteractionInitiatedBy interactionInitiatedBy) {
         val valueAdapter = getCollection().get(getOwner(), interactionInitiatedBy);
         return CollectionFacet.streamAdapters(valueAdapter);
     }
@@ -104,6 +100,8 @@ public final class ManagedCollection extends ManagedMember {
         return streamElements(InteractionInitiatedBy.USER);
     }
 
-
+    public DataTableModel createDataTableModel() {
+        return DataTableModel.forCollection(this);
+    }
 
 }

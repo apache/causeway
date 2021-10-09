@@ -111,7 +111,7 @@ implements MixedInMember {
         //
         FacetUtil.addFacet(new SnapshotExcludeFacetAbstract(this) {});
         FacetUtil.addFacet(disabledFacet());
-        FacetUtil.addFacet(new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this) {});
+        FacetUtil.addFacet(new TypeOfFacetAbstract(getElementType().getCorrespondingClass(), this) {});
 
         //
         // in addition, copy over facets from contributed to own.
@@ -160,7 +160,7 @@ implements MixedInMember {
     }
 
     @Override
-    public ObjectSpecification getOnType() {
+    public ObjectSpecification getDeclaringType() {
         return mixeeSpec;
     }
 

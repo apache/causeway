@@ -29,6 +29,8 @@ import de.agilecoders.wicket.jquery.Key;
  */
 public class PdfJsConfig extends AbstractConfig {
 
+    private static final long serialVersionUID = 1L;
+
     private static final IKey<Integer> INITIAL_PAGE = new Key<>("initialPage", 1);
     private static final IKey<String> INITIAL_SCALE = new Key<>("initialScale", Scale._1_00.getValue());
     private static final IKey<Integer> INITIAL_HEIGHT = new Key<>("initialHeight", 800);

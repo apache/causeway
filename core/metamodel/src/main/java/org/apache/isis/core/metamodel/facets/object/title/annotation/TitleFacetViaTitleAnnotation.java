@@ -25,14 +25,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.compare._Comparators;
-import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.isis.commons.internal.reflection._Reflect.TypeHierarchyPolicy;
@@ -64,9 +62,9 @@ implements ImperativeFacet {
             final @NonNull Class<?> cls,
             final @NonNull FacetHolder holder){
 
-        final var titles = new ArrayDeque<Title>();
+        val titles = new ArrayDeque<Title>();
 
-        final var titleComponents = Evaluators
+        val titleComponents = Evaluators
                 .streamEvaluators(cls,
                     annotatedElement->isTitleComponent(annotatedElement, titles::addLast),
                     TypeHierarchyPolicy.EXCLUDE,

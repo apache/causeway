@@ -60,8 +60,8 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         addSimpleClipboardModalWindow();
 
         EntityModel.RenderingHint renderingHint = model.getRenderingHint();
-        EntityModel.Mode mode = model.getMode();
-        setVisible(renderingHint == EntityModel.RenderingHint.REGULAR && mode == EntityModel.Mode.VIEW);
+        EntityModel.EitherViewOrEdit mode = model.getMode();
+        setVisible(renderingHint == EntityModel.RenderingHint.REGULAR && mode == EntityModel.EitherViewOrEdit.VIEW);
 
         // disable, since currently not honoured if used as a URL (think that session hints are taking precedence).
         // (see ISIS-1660 to resurrect)

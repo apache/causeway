@@ -38,12 +38,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.string.AppendingStringBuffer;
 
+import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
@@ -119,7 +121,7 @@ implements ScalarModelSubscriber {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onSubmit(AjaxRequestTarget target) {
+            public void onSubmit(final AjaxRequestTarget target) {
 
                 _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
                         + "originating from User clicking OK on an inline editing form or "
@@ -129,14 +131,14 @@ implements ScalarModelSubscriber {
             }
 
             @Override
-            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+            protected void updateAjaxAttributes(final AjaxRequestAttributes attributes) {
                 if (settings.isPreventDoubleClickForFormSubmit()) {
                     PanelUtil.disableBeforeReenableOnComplete(attributes, this);
                 }
             }
 
             @Override
-            protected void onError(AjaxRequestTarget target) {
+            protected void onError(final AjaxRequestTarget target) {
                 target.add(getForm());
             }
         }
@@ -144,19 +146,19 @@ implements ScalarModelSubscriber {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onSubmit(AjaxRequestTarget target) {
+            public void onSubmit(final AjaxRequestTarget target) {
                 onOkSubmittedOf(target, getForm(), this);
             }
 
             @Override
-            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+            protected void updateAjaxAttributes(final AjaxRequestAttributes attributes) {
                 if (settings.isPreventDoubleClickForFormSubmit()) {
                     PanelUtil.disableBeforeReenableOnComplete(attributes, this);
                 }
             }
 
             @Override
-            protected void onError(AjaxRequestTarget target) {
+            protected void onError(final AjaxRequestTarget target) {
                 target.add(getForm());
             }
         };
@@ -243,7 +245,7 @@ implements ScalarModelSubscriber {
 
         setLastFocusHint();
 
-        final FormExecutor formExecutor = new FormExecutorDefault<>(getFormExecutorStrategy());
+        final FormExecutor formExecutor = new FormExecutorDefault(getMemberModel());
 
         final boolean withinPrompt = formExecutorContext.isWithinPrompt();
         boolean succeeded = formExecutor.executeAndProcessResults(target.getPage(), target, form, withinPrompt);
@@ -257,7 +259,7 @@ implements ScalarModelSubscriber {
 
     }
 
-    protected abstract FormExecutorStrategy<T> getFormExecutorStrategy();
+    protected abstract _Either<ActionModel, ScalarPropertyModel> getMemberModel();
 
 
     private void setLastFocusHint() {
@@ -277,7 +279,7 @@ implements ScalarModelSubscriber {
             final Form<?> form);
 
     @Override
-    public void onError(AjaxRequestTarget target, ScalarPanelAbstract scalarPanel) {
+    public void onError(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
         if (scalarPanel != null) {
             // ensure that any feedback error associated with the providing component is shown.
             target.add(scalarPanel);
@@ -285,17 +287,12 @@ implements ScalarModelSubscriber {
     }
 
     public void onCancelSubmitted(final AjaxRequestTarget target) {
-
         setLastFocusHint();
         completePrompt(target);
     }
 
     private void completePrompt(final AjaxRequestTarget target) {
-
         if (isWithinPrompt()) {
-            if(formExecutorContext instanceof ScalarPropertyModel) {
-                ((ScalarPropertyModel)formExecutorContext).reset();
-            }
             rebuildGuiAfterInlinePromptDone(target);
         } else {
             closePromptIfAny(target);
@@ -344,7 +341,7 @@ implements ScalarModelSubscriber {
         buffer.append(
                 "<div style=\"width:0px;height:0px;position:absolute;left:-100px;top:-100px;overflow:hidden\">");
         buffer.append("<input type=\"text\" tabindex=\"-1\" autocomplete=\"off\"/>");
-        Component submittingComponent = (Component) this.defaultSubmittingComponent();
+        Component submittingComponent = this.defaultSubmittingComponent();
         buffer.append("<input type=\"submit\" tabindex=\"-1\" name=\"");
         buffer.append(this.defaultSubmittingComponent().getInputName());
         buffer.append("\" onclick=\" var b=document.getElementById(\'");

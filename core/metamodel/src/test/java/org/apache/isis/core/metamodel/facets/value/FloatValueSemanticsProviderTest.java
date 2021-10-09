@@ -25,17 +25,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
-import org.apache.isis.core.metamodel.facets.value.floats.FloatValueSemanticsProviderAbstract;
-import org.apache.isis.core.metamodel.facets.value.floats.FloatWrapperValueSemanticsProvider;
+import org.apache.isis.core.metamodel.valuesemantics.FloatValueSemantics;
 
 public class FloatValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {
 
-    private FloatValueSemanticsProviderAbstract value;
+    private FloatValueSemantics value;
     private Float float1;
-    private FacetHolder holder;
 
     @Before
     public void setUpObjects() throws Exception {
@@ -43,9 +39,7 @@ extends ValueSemanticsProviderAbstractTestCase {
         float1 = Float.valueOf(32.5f);
         allowMockAdapterToReturn(float1);
 
-        holder = FacetHolderAbstract.forTesting(metaModelContext);
-
-        setValue(value = new FloatWrapperValueSemanticsProvider(holder));
+        setSemantics(value = new FloatValueSemantics());
     }
 
     @Test

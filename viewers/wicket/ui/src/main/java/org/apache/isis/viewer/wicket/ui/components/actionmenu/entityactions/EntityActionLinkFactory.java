@@ -20,16 +20,16 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.LinkAndLabelFactoryAbstract;
 
 import lombok.val;
 
-public final class EntityActionLinkFactory extends LinkAndLabelFactoryAbstract {
+public final class EntityActionLinkFactory
+extends LinkAndLabelFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -37,8 +37,8 @@ public final class EntityActionLinkFactory extends LinkAndLabelFactoryAbstract {
             final String linkId,
             final EntityModel entityModel,
             final ScalarModel scalarModelForAssociationIfAny,
-            final ToggledMementosProvider toggledMementosProviderIfAny) {
-        super(linkId, entityModel, scalarModelForAssociationIfAny, toggledMementosProviderIfAny);
+            final EntityCollectionModel collectionModelForAssociationIfAny) {
+        super(linkId, entityModel, scalarModelForAssociationIfAny, collectionModelForAssociationIfAny);
     }
 
     @Override
@@ -60,8 +60,7 @@ public final class EntityActionLinkFactory extends LinkAndLabelFactoryAbstract {
 
         return LinkAndLabel.of(
                 model->super.newLinkComponent(
-                        model.getObjectAction(CommonContextUtils.getCommonContext()::getSpecificationLoader),
-                        toggledMementosProviderIfAny),
+                        model.getActionMemento().getIdentifier()),
                 named,
                 this.targetEntityModel,
                 objectAction);

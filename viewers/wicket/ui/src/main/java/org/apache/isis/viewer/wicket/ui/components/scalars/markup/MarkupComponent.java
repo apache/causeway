@@ -28,9 +28,11 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
+import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
+
+import lombok.val;
 
 public class MarkupComponent extends WebComponent {
 
@@ -42,7 +44,7 @@ public class MarkupComponent extends WebComponent {
 
     @Override
     public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag){
-        final var htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
+        val htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
         replaceComponentTagBody(markupStream, openTag, htmlContent);
     }
 
@@ -62,13 +64,13 @@ public class MarkupComponent extends WebComponent {
 
         if(modelObject instanceof ManagedObject) {
 
-            final var adapter = (ManagedObject) modelObject;
+            val adapter = (ManagedObject) modelObject;
 
             if(adapter.getPojo()==null) {
                 return fallback;
             }
 
-            final var asHtml = lookupObjectFeatureIn(getDefaultModel())
+            val asHtml = lookupObjectFeatureIn(getDefaultModel())
             .map(feature->adapter.titleString(conf->conf.feature(feature)))
             .orElseGet(adapter::titleString);
 
@@ -88,8 +90,8 @@ public class MarkupComponent extends WebComponent {
         if(model instanceof ScalarPropertyModel) {
             return Optional.of(((ScalarPropertyModel)model).getMetaModel());
         }
-        if(model instanceof ScalarParameterModel) {
-            return Optional.of(((ScalarParameterModel)model).getMetaModel());
+        if(model instanceof ParameterUiModel) {
+            return Optional.of(((ParameterUiModel)model).getMetaModel());
         }
         if(model instanceof ValueModel) {
             return Optional.ofNullable(((ValueModel)model).getActionModelHint())

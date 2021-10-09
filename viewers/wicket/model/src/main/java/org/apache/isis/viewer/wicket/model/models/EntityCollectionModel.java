@@ -18,30 +18,25 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
-import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 public interface EntityCollectionModel
 extends
-    IModel<List<ManagedObject>>,
+    IModel<DataTableModel>,
     HasCommonContext,
     LinksProvider {
 
@@ -76,18 +71,6 @@ extends
         }
     }
 
-    // -- FACTORIES
-
-    static EntityCollectionModelParented createParented(final @NonNull EntityModel entityModel) {
-        return EntityCollectionModelParented.forParentObjectModel(entityModel);
-    }
-
-    static EntityCollectionModelStandalone createStandalone(
-            final ManagedObject collectionAsAdapter,
-            final ActionModel actionModel) {
-        return EntityCollectionModelStandalone.forActionModel(collectionAsAdapter, actionModel);
-    }
-
     // -- IDENTITY
 
     /**
@@ -100,85 +83,45 @@ extends
 
     Variant getVariant();
 
-    default boolean isStandalone() { return getVariant().isStandalone(); }
-    default boolean isParented() { return getVariant().isParented(); }
+    // -- DATA TABLE
+
+    DataTableModel getDataTableModel();
 
     // -- METAMODEL SUPPORT
 
-    ObjectSpecification getTypeOfSpecification();
     ObjectMember getMetaModel();
+
+    default ObjectSpecification getElementType() {
+        return getMetaModel().getElementType();
+    }
+
+    // -- OWNER SUPPORT
+
     ManagedObject getParentObject();
-
-    /**
-     * Returns all actions that are associated with this collection,
-     * and hence should be rendered close to this collection's UI representation.
-     * Typically at the top bar of the UI collection panel.
-     * <p>
-     * Order matters, that is the order of returned actions corresponds to the order of
-     * rendered (action) buttons.
-     */
-    default Can<ObjectAction> getAssociatedActions() {
-        return Can.empty();
-    }
-
-    /**
-     * Returns all actions that are targets for the multi-select UI feature.
-     * That typically means, their first parameter is a non-scalar type with an
-     * element type that corresponds to the element type of this collection.
-     * <p>
-     * Order does not matter.
-     */
-    default Can<ObjectAction> getActionsWithChoicesFrom() {
-        return Can.empty();
-    }
-
-    // -- TOGGLE SUPPORT / MULTI-SELECT FEATURE
-
-    Can<ObjectMemento> getToggleMementosList();
-    void clearToggleMementosList();
-    boolean toggleSelectionOn(ManagedObject selectedAdapter);
 
     // -- BASIC PROPERTIES
 
+    @Deprecated // move to DataTableModel
     int getCount();
+    @Deprecated // move to DataTableModel
     String getName();
+    @Deprecated // move to DataTableModel
     int getPageSize();
 
     // -- PARENTED SPECIFICS
 
+    @Deprecated
     default Optional<EntityCollectionModelParented> parented() {
         return this instanceof EntityCollectionModelParented
             ? Optional.of((EntityCollectionModelParented)this)
             : Optional.empty();
     }
 
+    @Deprecated
     default Optional<Bookmark> parentedHintingBookmark() {
         return parented()
                 .map(EntityCollectionModelParented::asHintingBookmark);
     }
 
-    default Optional<ObjectMemento> parentedObjectAdapterMemento() {
-        return parented()
-                .map(EntityCollectionModelParented::getParentObjectAdapterMemento);
-    }
-
-    /**
-     * Optionally returns a {@link ManagedCollection}, based on whether
-     * this is a parented collection.
-     */
-    default Optional<ManagedCollection> parentedManagedCollection() {
-        return parented()
-                .map(EntityCollectionModelParented::getManagedCollection);
-    }
-
-    default Optional<ManagedObject> parentedParentObject() {
-        return parentedManagedCollection()
-                .map(ManagedCollection::getOwner);
-    }
-
-    default Optional<ObjectSpecification> parentedParentObjectSpecification() {
-        return parentedParentObject()
-                .map(ManagedObject::getSpecification);
-    }
 
 }

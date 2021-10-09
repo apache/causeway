@@ -25,8 +25,8 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 
 public interface ManagedFeature {
 
@@ -41,17 +41,18 @@ public interface ManagedFeature {
      * @return The specification of the feature's underlying type.
      * For actions this is the specification of the action's return type.
      */
-    ObjectSpecification getSpecification();
+    ObjectSpecification getElementType();
+
 
     /**
      * @return The feature's underlying type.
      * For actions this is the action's return type.
      */
-    default Class<?> getCorrespondingClass() {
-        return getSpecification().getCorrespondingClass();
+    default Class<?> getElementClass() {
+        return getElementType().getCorrespondingClass();
     }
 
-    FacetHolder getMetaModel();
+    ObjectFeature getMetaModel();
 
     /**
      * @param facetType

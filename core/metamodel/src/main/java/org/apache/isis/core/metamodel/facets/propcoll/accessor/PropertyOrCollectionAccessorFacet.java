@@ -48,5 +48,5 @@ public interface PropertyOrCollectionAccessorFacet extends Facet {
             final ManagedObject inObject,
             final InteractionInitiatedBy interactionInitiatedBy);
 
-    ObjectSpecification getOnType();
+    ObjectSpecification getDeclaringType();
 }

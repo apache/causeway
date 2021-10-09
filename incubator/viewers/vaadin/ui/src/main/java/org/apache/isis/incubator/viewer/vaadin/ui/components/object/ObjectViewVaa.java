@@ -218,9 +218,12 @@ public class ObjectViewVaa extends VerticalLayout {
 
                     interaction.checkUsability();
 
+                    val propNeg = managedProperty.startNegotiation();
+
                     val uiProperty = _vaa.add(container,
                             uiComponentFactory.componentFor(
                                     UiComponentFactory.ComponentRequest.of(
+                                            propNeg,
                                             managedProperty,
                                             DisablingUiModel.of(interaction))));
 

@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.stream.Stream;
 
+import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -32,74 +33,101 @@ import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.apache.wicket.util.resource.StringResourceStream;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.services.routing.RoutingService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.NamedWithMimeType;
 import org.apache.isis.applib.value.OpenUrlStrategy;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.viewer.web.WebAppContextPath;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
-import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
-import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.memento.ActionMemento;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.common.model.action.form.FormPendingParamUiModel;
 import org.apache.isis.viewer.common.model.action.form.FormUiModel;
+import org.apache.isis.viewer.wicket.model.models.interaction.act.ActionInteractionWkt;
+import org.apache.isis.viewer.wicket.model.models.interaction.act.ParameterUiModelWkt;
+import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 
 import lombok.NonNull;
 import lombok.val;
 
+/**
+ * Represents an action (a member) of an entity.
+ *
+ * @implSpec
+ * <pre>
+ * ActionModel --chained-to--> EntityModel
+ * ActionModel --bound-to--> ActionInteractionWkt (delegate)
+ * </pre>
+ */
 public final class ActionModel
-extends ManagedObjectModel
+extends ChainingModel<ManagedObject>
 implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     private static final long serialVersionUID = 1L;
 
-    public ActionModel copy() {
-        return new ActionModel(this);
-    }
-
     // -- FACTORY METHODS
 
-    public static ActionModel of(final EntityModel actionOwner, final ObjectAction action) {
-        return of(actionOwner, action.getMemento());
+    public static ActionModel wrap(final EntityModel actionOwner, final ActionInteractionWkt delegate) {
+        return new ActionModel(actionOwner, delegate);
     }
 
-    public static ActionModel of(final EntityModel actionOwner, final ActionMemento actionMemento) {
-        return new ActionModel(actionOwner, actionMemento);
+    public static ActionModel of(
+            final EntityModel actionOwner,
+            final Identifier actionIdentifier,
+            final EntityCollectionModel associatedWithCollectionModelIfAny) {
+        val delegate = new ActionInteractionWkt(
+                actionOwner.bookmarkedObjectModel(),
+                actionIdentifier.getMemberLogicalName(),
+                Where.ANYWHERE,
+                associatedWithCollectionModelIfAny);
+        return wrap(actionOwner, delegate);
     }
 
     public static ActionModel ofPageParameters(
             final IsisAppCommonContext commonContext,
             final PageParameters pageParameters) {
 
-        return PageParameterUtil.actionModelFor(commonContext, pageParameters);
+        return PageParameterUtils.actionModelFor(commonContext, pageParameters);
     }
 
+    // -- CONSTRUCTION
+
+    private final ActionInteractionWkt delegate;
+
+    private ActionModel(final EntityModel parentEntityModel, final ActionInteractionWkt delegate) {
+        super(parentEntityModel);
+        this.delegate = delegate;
+    }
+
+    // --
+
+    public void actionInteraction() {
+        delegate.actionInteraction();
+    }
+
+    @Override
+    public IsisAppCommonContext getCommonContext() {
+        return delegate.getCommonContext();
+    }
 
     // -- BOOKMARKABLE
 
     @Override
     public PageParameters getPageParametersWithoutUiHints() {
-        val adapter = getOwner();
-        val objectAction = getMetaModel();
-        return PageParameterUtil.createPageParametersForAction(adapter, objectAction, argCache().snapshot());
+        return PageParameterUtils.createPageParametersForAction(getOwner(), getMetaModel(), snapshotArgs());
     }
 
     @Override
@@ -111,7 +139,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     @Override
     public ObjectAction getMetaModel() {
-        return actionMemento.getAction(this::getSpecificationLoader);
+        return delegate.actionInteraction().getMetamodel().get();
     }
 
     @Override
@@ -121,119 +149,42 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     @Override
     public EntityModel getParentUiModel() {
-        return ownerModel;
+        return (EntityModel) super.getTarget();
+    }
+
+    @Deprecated //no longer needed
+    public ActionModel copy() {
+        return wrap(getParentUiModel(), delegate);
+    }
+
+    public Can<ManagedObject> snapshotArgs() {
+        return delegate.parameterNegotiationModel().getParamValues();
     }
 
     // -- HELPERS
 
-    private final EntityModel ownerModel;
-    private final ActionMemento actionMemento;
-
-    // lazy in support of serialization of this class
-    private transient ActionArgumentCache argCache;
-    private ActionArgumentCache argCache() {
-        return argCache!=null
-                ? argCache
-                : (argCache = createActionArgumentCache());
-    }
-    private ActionArgumentCache createActionArgumentCache() {
-        return new ActionArgumentCache(
-                ownerModel,
-                actionMemento,
-                getMetaModel());
-    }
-
-    private ActionModel(final EntityModel entityModel, final ActionMemento actionMemento) {
-        super(entityModel.getCommonContext());
-        this.ownerModel = entityModel;
-        this.actionMemento = actionMemento;
-    }
-
-    /**
-     * Copy constructor, as called by {@link #copy()}.
-     */
-    private ActionModel(final ActionModel actionModel) {
-        super(actionModel.getCommonContext());
-        this.ownerModel = actionModel.ownerModel;
-        this.actionMemento = actionModel.actionMemento;
-        this.argCache = actionModel.argCache().copy();
-    }
-
     @Override
     public ManagedObject getOwner() {
-        return ownerModel.load();
+        return delegate.actionInteraction().getManagedActionElseFail().getOwner();
     }
 
-    @Override
-    protected ManagedObject load() {
-
-        // from getObject()/reExecute
-        detach(); // force re-execute
-
-        // TODO: think we need another field to determine if args have been populated.
-        val results = executeAction();
-
-        return results;
+    public ManagedObject executeActionAndReturnResult() {
+        val pendingArgs = delegate.parameterNegotiationModel();
+        val result = delegate.actionInteraction().invokeWithRuleChecking(pendingArgs);
+        return result;
     }
 
-    // REVIEW: should provide this rendering context, rather than hardcoding.
-    // the net effect currently is that class members annotated with
-    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
-    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly)
-    // for any other value for Where
-    public static final Where WHERE_FOR_ACTION_INVOCATION = Where.ANYWHERE;
-
-    private ManagedObject executeAction() {
-
-        val targetAdapter = getOwner();
-        final Can<ManagedObject> arguments = argCache().snapshot();
-        final ObjectAction action = getMetaModel();
-
-        val head = action.interactionHead(targetAdapter);
-
-        val resultAdapter =
-                action.executeWithRuleChecking(
-                        head, arguments,
-                        InteractionInitiatedBy.USER,
-                        WHERE_FOR_ACTION_INVOCATION);
-
-        val resultPojo = resultAdapter != null ? resultAdapter.getPojo() : null;
-
-        return getServiceRegistry()
-                .select(RoutingService.class)
-                .stream()
-                .filter(routingService->routingService.canRoute(resultPojo))
-                .map(routingService->routingService.route(resultPojo))
-                .filter(_NullSafe::isPresent)
-                .map(super.getObjectManager()::adapt)
-                .filter(_NullSafe::isPresent)
-                .findFirst()
-                .orElse(resultAdapter);
-
-    }
 
     @Override
     public void setObject(final ManagedObject object) {
-        throw new UnsupportedOperationException("target adapter for ActionModel cannot be changed");
+        throw new UnsupportedOperationException("ActionModel is a chained model - don't mess with the chain");
     }
-
-    public ParameterNegotiationModel getArgumentsAsParamModel() {
-        return getMetaModel().interactionHead(getOwner())
-                .model(argCache().snapshot());
-    }
-
 
     /** Resets arguments to their fixed point default values
      * @see ActionInteractionHead#defaults()
      */
     public void clearArguments() {
-
-        val defaultsFixedPoint = getMetaModel()
-                .interactionHead(getOwner())
-                .defaults()
-                .getParamValues();
-
-        argCache().resetTo(defaultsFixedPoint);
+        delegate.resetParametersToDefault();
     }
 
     /**
@@ -246,20 +197,6 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         final boolean safeSemantics = action.getSemantics().isSafeInNature();
         return bookmarkPolicy.value() == BookmarkPolicy.AS_ROOT && safeSemantics;
     }
-
-    // //////////////////////////////////////
-
-    /**
-     * Simply executes the action.
-     *
-     * Previously there was exception handling code here also, but this has now been centralized
-     * within FormExecutorAbstract
-     */
-    public ManagedObject execute() {
-        final ManagedObject resultAdapter = this.getObject();
-        return resultAdapter;
-    }
-
 
     // //////////////////////////////////////
 
@@ -337,7 +274,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     @Override
     public PromptStyle getPromptStyle() {
         final ObjectAction objectAction = getMetaModel();
-        final ObjectSpecification objectActionOwner = objectAction.getOnType();
+        final ObjectSpecification objectActionOwner = objectAction.getDeclaringType();
         if(objectActionOwner.isManagedBean()) {
             // tried to move this test into PromptStyleFacetFallback,
             // however it's not that easy to lookup the owning type
@@ -394,40 +331,26 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     }
 
     public void setParameterValue(final ObjectActionParameter actionParameter, final ManagedObject newParamValue) {
-        argCache().setParameterValue(actionParameter, newParamValue);
+        delegate.parameterNegotiationModel().setParamValue(actionParameter.getNumber(), newParamValue);
     }
 
     public void clearParameterValue(final ObjectActionParameter actionParameter) {
-        argCache().clearParameterValue(actionParameter);
+        delegate.parameterNegotiationModel().clearParamValue(actionParameter.getNumber());
     }
 
     @Override
-    public Stream<FormPendingParamUiModel> streamPendingParamUiModels() {
-
-        val owner = this.getOwner();
-        val target = this.getMetaModel().realTargetAdapter(owner);
-        val pendingArgs = getArgumentsAsParamModel();
-
-        val head = InteractionHead.mixin(owner, target);
-
-        return argCache()
-        .streamParamUiModels()
-        .map(paramUiModel->{
-            return FormPendingParamUiModel.of(head, paramUiModel, pendingArgs);
-        });
-
+    public Stream<ParameterUiModelWkt> streamPendingParamUiModels() {
+        return delegate.streamParameterUiModels();
     }
 
     public void reassessPendingParamUiModels(final int skipCount) {
 
-        val pendingArgs = getArgumentsAsParamModel();
-
-        argCache()
-        .streamParamUiModels()
+        delegate.streamParameterUiModels()
         .skip(skipCount)
-        .forEach(actionArgumentModel->{
+        .forEach(paramUiModel->{
 
-            val actionParameter = actionArgumentModel.getMetaModel();
+            val pendingArgs = paramUiModel.getParameterNegotiationModel();
+            val actionParameter = paramUiModel.getMetaModel();
             val paramDefaultValue = actionParameter.getDefault(pendingArgs);
 
             if (ManagedObjects.isNullOrUnspecifiedOrEmpty(paramDefaultValue)) {
@@ -435,41 +358,6 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
             } else {
                 setParameterValue(actionParameter, paramDefaultValue);
             }
-
-            // We could automatically make sure the parameter value is one of the (reassessed) choices,
-            // if not then blank it out.
-            // corner case: the parameter value might be non-scalar
-            //     we could remove from the parameter value (collection) all that no longer
-            //     conform to the available (reassessed) choices,
-
-            //XXX HOWEVER ...
-            // there are pros and cons to that depending on the situation
-            // I'd rather not risk a bad user experience by blanking out values,
-            // instead let the user control the situation, we have validation to signal what to do
-
-//            val paramIsScalar = actionParameter.getSpecification().isNotCollection();
-//
-//            boolean shouldBlankout = false;
-//
-//            if(!isEmpty && paramIsScalar) {
-//
-//                if(hasChoices) {
-//                    val choices = actionParameter
-//                            .getChoices(pendingArgs, InteractionInitiatedBy.USER);
-//
-//                    shouldBlankout =
-//                            ! isPartOfChoicesConsideringDependentArgs(paramValue, choices);
-//
-//                } else if(hasAutoComplete) {
-//
-//                    //don't blank-out, even though could fail validation later
-//                    shouldBlankout = false;
-//                }
-//            }
-//
-//            if(shouldBlankout) {
-//                clearParameterValue(actionParameter);
-//            }
 
         });
 

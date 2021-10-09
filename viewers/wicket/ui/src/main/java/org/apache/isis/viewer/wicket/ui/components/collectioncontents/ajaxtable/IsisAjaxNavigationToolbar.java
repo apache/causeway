@@ -29,7 +29,7 @@ import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
 
 public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
 
@@ -38,11 +38,11 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
     private static final String navigatorContainerId = "span";
     private static final String ID_SHOW_ALL = "showAll";
     private static final String HINT_KEY_SHOW_ALL = "showAll";
-    private final ObjectAdapterToggleboxColumn toggleboxColumn;
+    private final GenericToggleboxColumn toggleboxColumn;
 
     public IsisAjaxNavigationToolbar(
             final DataTable<?, ?> table,
-            final ObjectAdapterToggleboxColumn toggleboxColumn) {
+            final GenericToggleboxColumn toggleboxColumn) {
 
         super(table);
         this.toggleboxColumn = toggleboxColumn;
@@ -50,7 +50,7 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
     }
 
     @Override
-    protected PagingNavigator newPagingNavigator(String navigatorId, DataTable<?, ?> table) {
+    protected PagingNavigator newPagingNavigator(final String navigatorId, final DataTable<?, ?> table) {
         return new IsisAjaxPagingNavigator(navigatorId, table);
     }
 
@@ -66,7 +66,7 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(final AjaxRequestTarget target) {
                 showAllItemsOn(table);
 
                 final DataTable<?, ?> dataTable = getTable();
@@ -74,8 +74,10 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
                 final EntityCollectionModel collectionModel = dataProvider.getEntityCollectionModel();
 
                 if(toggleboxColumn != null) {
-                    collectionModel.clearToggleMementosList();
-                    toggleboxColumn.clearToggles();
+                    // clear the underlying backend selection model
+                    collectionModel.getDataTableModel().getSelectAllToggle().setValue(false);
+                    // remove toggle UI components
+                    toggleboxColumn.removeToggles();
                 }
 
                 final UiHintContainer hintContainer = getUiHintContainer();

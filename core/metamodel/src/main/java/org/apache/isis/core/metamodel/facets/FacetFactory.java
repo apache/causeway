@@ -30,7 +30,6 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -377,15 +376,11 @@ public interface FacetFactory {
                 final Class<?> cls,
                 final IntrospectionPolicy introspectionPolicy,
                 final Method method,
-                final int paramNum,
                 final MethodRemover methodRemover,
                 final FacetedMethodParameter facetedMethodParameter) {
 
             super(cls, introspectionPolicy, method, methodRemover, facetedMethodParameter);
-            if(paramNum>=method.getParameterCount()) {
-                throw _Exceptions.unrecoverable("invalid ProcessParameterContext");
-            }
-            this.paramNum = paramNum;
+            this.paramNum = facetedMethodParameter.getParamIndex();
             this.parameterType = super.method.getParameterTypes()[paramNum];
             this.parameter = super.method.getParameters()[paramNum];
         }

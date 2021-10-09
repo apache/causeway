@@ -32,7 +32,9 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 /**
  * {@link ComponentFactory} for {@link CollectionContentsHiddenPanel}.
  */
-public class CollectionContentsHiddenPanelFactory extends ComponentFactoryAbstract implements CollectionContentsAsFactory {
+public class CollectionContentsHiddenPanelFactory
+extends ComponentFactoryAbstract
+implements CollectionContentsAsFactory {
 
     private static final long serialVersionUID = 1L;
 
@@ -48,7 +50,7 @@ public class CollectionContentsHiddenPanelFactory extends ComponentFactoryAbstra
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
-        return appliesIf(entityCollectionModel.isParented());
+        return appliesIf(entityCollectionModel.getVariant().isParented());
     }
 
     @Override
