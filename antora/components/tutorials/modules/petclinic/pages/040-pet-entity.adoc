@@ -621,8 +621,8 @@ This can be done by changing some configuration properties:
 isis:
   viewer:
     wicket:
-      max-title-length-in-standalone-tables: 15
-      max-title-length-in-parented-tables: 15
+      max-title-length-in-standalone-tables: 10
+      max-title-length-in-parented-tables: 10
 ----
 +
 also update the `application.css` file, otherwise the icon and title will be centred:
