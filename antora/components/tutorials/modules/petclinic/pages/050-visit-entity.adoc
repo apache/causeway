@@ -35,7 +35,7 @@ Just check out the tag above and inspect the changes:
 
 * A new `petclinic-module-visits` maven module has been created
 
-* its `pom.xml` declares a dependency on the ``petclinic-module-visits` maven module
+* its `pom.xml` declares a dependency on the `petclinic-module-pets` maven module
 
 * the top-level pom.xml declares the new Maven module and references it
 
