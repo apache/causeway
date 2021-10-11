@@ -21,8 +21,5 @@ updates:
       interval: "daily"
     # Allow up to 10 open pull requests for maven dependencies
     open-pull-requests-limit: 20
-    ignore:
-      - dependency-name: "spring-boot-*"
-        # troubleshooting dependabot: 'Cannot read TLS response'
 
 
