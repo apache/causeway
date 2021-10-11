@@ -78,6 +78,9 @@ public enum ActionResultResponseType {
             return ActionResultResponse.toPage(new StandaloneCollectionPage(collectionModel));
         }
     },
+    /**
+     * Renders the value-type in its own <i>Standalone Value Page</i>.
+     */
     VALUE {
         @Override
         public ActionResultResponse interpretResult(

@@ -16,28 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars;
+package org.apache.isis.viewer.wicket.ui.components.scalars.value.fallback;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.common.model.components.ComponentType;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
+import org.apache.isis.viewer.wicket.ui.ComponentFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
 
-public abstract class ComponentFactoryScalarAbstract
-extends ComponentFactoryAbstract {
+/**
+ * {@link ComponentFactory} for the {@link ValueFallbackPanel}.
+ */
+public class ValueFallbackPanelFactory
+extends ComponentFactoryScalarAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private final Class<?>[] scalarTypes;
-
-    protected ComponentFactoryScalarAbstract(
-            final Class<?> componentClass,
-            final Class<?>... scalarTypes) {
-
-        super(ComponentType.SCALAR_NAME_AND_VALUE, componentClass);
-        this.scalarTypes = scalarTypes;
+    public ValueFallbackPanelFactory() {
+        super(ValueFallbackPanel.class); // not asking the supertype to validate types, so no value types need be provided.
     }
 
     @Override
@@ -46,7 +44,8 @@ extends ComponentFactoryAbstract {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         final ScalarModel scalarModel = (ScalarModel) model;
-        if(!scalarModel.isScalarTypeAnyOf(scalarTypes)) {
+        final ValueFacet<?> valueFacet = scalarModel.getScalarTypeSpec().getFacet(ValueFacet.class);
+        if(valueFacet == null) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         final boolean hasChoices = scalarModel.hasChoices();
@@ -56,11 +55,9 @@ extends ComponentFactoryAbstract {
     }
 
     @Override
-    public final Component createComponent(final String id, final IModel<?> model) {
-        final ScalarModel scalarModel = (ScalarModel) model;
-        return createComponent(id, scalarModel);
+    public Component createComponent(final String id, final ScalarModel scalarModel) {
+        return new ValueFallbackPanel(id, scalarModel);
     }
 
-    protected abstract Component createComponent(String id, ScalarModel scalarModel);
 
 }

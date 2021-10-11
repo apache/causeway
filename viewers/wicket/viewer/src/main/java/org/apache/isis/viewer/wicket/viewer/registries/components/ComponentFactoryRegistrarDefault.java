@@ -18,7 +18,14 @@
  */
 package org.apache.isis.viewer.wicket.viewer.registries.components;
 
-import lombok.extern.log4j.Log4j2;
+import java.util.List;
+
+import javax.annotation.Priority;
+import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -64,11 +71,19 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaLocalTim
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
 import org.apache.isis.viewer.wicket.ui.components.scalars.oiddto.OidDtoPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.passwd.IsisPasswordPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.*;
+import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BytePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.CharacterPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.DoublePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.FloatPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.IntegerPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.LongPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.ShortPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.StringPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.uuid.UuidPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.value.ValuePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.value.compound.ValueCompoundPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.value.fallback.ValueFallbackPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices.ValueChoicesSelect2PanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.standalonecollection.StandaloneCollectionPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.tree.TreePanelFactories;
@@ -77,12 +92,8 @@ import org.apache.isis.viewer.wicket.ui.components.value.StandaloneValuePanelFac
 import org.apache.isis.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanelFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
-import java.util.List;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Default implementation of {@link ComponentFactoryRegistrar} that registers a
@@ -156,11 +167,11 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         addComponentFactoriesForUnknown(componentFactories);
     }
 
-    protected void addComponentFactoriesForPageHeader(ComponentFactoryList componentFactories) {
+    protected void addComponentFactoriesForPageHeader(final ComponentFactoryList componentFactories) {
         componentFactories.add(new HeaderPanelFactory());
     }
 
-    protected void addComponentFactoriesForPageFooter(ComponentFactoryList componentFactories) {
+    protected void addComponentFactoriesForPageFooter(final ComponentFactoryList componentFactories) {
         componentFactories.add(new FooterPanelFactory());
     }
 
@@ -246,7 +257,8 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new Jdk8LocalDatePanelFactory());
         componentFactories.add(new Jdk8LocalDateTimePanelFactory());
 
-        componentFactories.add(new ValuePanelFactory());
+        componentFactories.add(new ValueCompoundPanelFactory());
+        componentFactories.add(new ValueFallbackPanelFactory());
 
         // or for choices
         componentFactories.add(new ValueChoicesSelect2PanelFactory());
@@ -284,7 +296,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new TertiaryMenuPanelFactory());
     }
 
-    protected void addComponentFactoriesForBreadcrumbs(ComponentFactoryList componentFactories) {
+    protected void addComponentFactoriesForBreadcrumbs(final ComponentFactoryList componentFactories) {
         componentFactories.add(new BookmarkedPagesPanelFactory());
     }
 

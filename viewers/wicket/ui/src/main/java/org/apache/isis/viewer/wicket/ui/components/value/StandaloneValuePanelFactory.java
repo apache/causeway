@@ -29,7 +29,8 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 /**
  * {@link ComponentFactory} for rendering standalone values..
  */
-public class StandaloneValuePanelFactory extends ComponentFactoryAbstract {
+public class StandaloneValuePanelFactory
+extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,7 +40,9 @@ public class StandaloneValuePanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
-        return ApplicationAdvice.appliesIf(model instanceof ValueModel && ((ValueModel)model).getObject() != null);
+        return ApplicationAdvice.appliesIf(
+                model instanceof ValueModel
+                    && ((ValueModel)model).getObject() != null);
     }
 
     @Override

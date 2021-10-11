@@ -28,7 +28,7 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import lombok.NonNull;
 
 /**
- * Represents a standalone value.
+ * Represents a standalone value (used for standalone value page).
  */
 public class ValueModel extends ModelAbstract<ManagedObject> {
 
@@ -78,8 +78,5 @@ public class ValueModel extends ModelAbstract<ManagedObject> {
     public void setActionHint(final ActionModel actionModelHint) {
         this.actionModelHint = actionModelHint;
     }
-
-
-
 
 }

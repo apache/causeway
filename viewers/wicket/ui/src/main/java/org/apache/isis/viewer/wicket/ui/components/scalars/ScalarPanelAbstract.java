@@ -655,15 +655,15 @@ implements ScalarModelSubscriber {
             throw new IllegalStateException(this.getClass().getName() + ": obtainInlinePromptModel() returning null is not compatible with supportsInlinePrompt() returning true ");
         }
 
-        final WebMarkupContainer inlinePromptLink = new WebMarkupContainer(ID_SCALAR_VALUE_INLINE_PROMPT_LINK);
+        final WebMarkupContainer inlinePromptLink =
+                new WebMarkupContainer(ID_SCALAR_VALUE_INLINE_PROMPT_LINK);
         inlinePromptLink.setOutputMarkupId(true);
         inlinePromptLink.setOutputMarkupPlaceholderTag(true);
 
         configureInlinePromptLink(inlinePromptLink);
 
-        final Component editInlineLinkLabel = createInlinePromptComponent(ID_SCALAR_VALUE_INLINE_PROMPT_LABEL,
-                inlinePromptModel
-                );
+        final Component editInlineLinkLabel =
+                createInlinePromptComponent(ID_SCALAR_VALUE_INLINE_PROMPT_LABEL, inlinePromptModel);
         inlinePromptLink.add(editInlineLinkLabel);
 
         return inlinePromptLink;

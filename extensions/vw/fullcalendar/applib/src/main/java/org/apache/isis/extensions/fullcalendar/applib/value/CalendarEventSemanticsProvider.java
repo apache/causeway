@@ -22,14 +22,17 @@ import java.time.Instant;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.DefaultsProvider;
+import org.apache.isis.applib.adapters.Renderer;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 public class CalendarEventSemanticsProvider
 extends ValueSemanticsAbstract<CalendarEvent>
-implements DefaultsProvider<CalendarEvent>{
+implements
+    DefaultsProvider<CalendarEvent>,
+    Renderer<CalendarEvent> {
 
     @Override
     public Class<CalendarEvent> getCorrespondingClass() {
@@ -41,10 +44,19 @@ implements DefaultsProvider<CalendarEvent>{
         return UNREPRESENTED;
     }
 
+    // -- DEFAULTS PROVIDER
+
     @Override
     public CalendarEvent getDefaultValue() {
         return new CalendarEvent(
                 Instant.now().toEpochMilli(), "Default Calendar", "New Event", "empty");
+    }
+
+    // -- RENDERER
+
+    @Override
+    public String simpleTextRepresentation(final Context context, final CalendarEvent value) {
+        return render(value, v->v.toString());
     }
 
 }

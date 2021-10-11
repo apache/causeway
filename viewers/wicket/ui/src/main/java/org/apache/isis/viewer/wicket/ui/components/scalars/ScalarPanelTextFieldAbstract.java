@@ -272,7 +272,7 @@ implements TextFieldValueModel.ScalarModelProvider {
 
     /**
      * Mandatory hook method to build the component to render the model when in
-     * {@link org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering#COMPACT compact}
+     * {@link org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering#COMPACT}
      * format.
      * <p>
      * This default implementation uses a {@link Label}, however it may be overridden if required.
