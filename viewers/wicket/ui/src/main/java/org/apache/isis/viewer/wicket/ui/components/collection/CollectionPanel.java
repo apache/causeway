@@ -67,15 +67,11 @@ implements
 
         val collMetaModel = getModel().getMetaModel();
 
-        val entityActionLinks = LinkAndLabelUtil
-                .asActionLinksForAdditionalLinksPanel(
-                        collectionModel.getEntityModel(),
-                        collMetaModel.streamAssociatedActions(),
-                        null,
-                        collectionModel)
-                .collect(Can.toCan());
+        val associatedActions = collMetaModel.streamAssociatedActions()
+        .map(LinkAndLabelUtil.forCollection(collectionModel))
+        .collect(Can.toCan());
 
-        collectionModel.setLinkAndLabels(entityActionLinks);
+        collectionModel.setLinkAndLabels(associatedActions);
 
     }
 

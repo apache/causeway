@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.LinkAndLabelFactoryAbstract;
 
@@ -32,19 +30,5 @@ class MenuActionLinkFactory extends LinkAndLabelFactoryAbstract {
             final EntityModel serviceModel) {
         super(linkId, serviceModel, null, null);
     }
-
-    @Override
-    public LinkAndLabel newActionLink(
-            final ObjectAction objectAction,
-            final String named) {
-
-        return LinkAndLabel.of(
-                model->super.newLinkComponent(
-                        model.getActionMemento().getIdentifier()),
-                named,
-                this.targetEntityModel,
-                objectAction);
-    }
-
 
 }

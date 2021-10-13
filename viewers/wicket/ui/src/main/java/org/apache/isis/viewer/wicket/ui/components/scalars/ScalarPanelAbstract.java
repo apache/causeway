@@ -52,7 +52,6 @@ import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -316,14 +315,14 @@ implements ScalarModelSubscriber {
         // find associated actions for this scalar property (only properties will have any.)
         final ScalarModel.AssociatedActions associatedActions =
                 scalarModel.getAssociatedActions();
-        final ObjectAction inlineActionIfAny =
+        val inlineActionIfAny =
                 associatedActions.getFirstAssociatedWithInlineAsIfEdit();
         val remainingAssociated = associatedActions.getRemainingAssociated();
 
         // convert those actions into UI layer widgets
-        final Can<LinkAndLabel> linkAndLabels  = LinkAndLabelUtil
-                .asActionLinks(this.scalarModel, remainingAssociated.stream())
-                .collect(Can.toCan());
+        final Can<LinkAndLabel> linkAndLabels = remainingAssociated.stream()
+        .map(LinkAndLabelUtil.forPropertyOrParameter(this.scalarModel))
+        .collect(Can.toCan());
 
         final InlinePromptConfig inlinePromptConfig = getInlinePromptConfig();
         if(inlinePromptConfig.isSupported()) {
@@ -354,27 +353,24 @@ implements ScalarModelSubscriber {
             } else {
 
                 // not editable property, but maybe one of the actions is.
-                if(inlineActionIfAny != null) {
+                inlineActionIfAny
+                .map(LinkAndLabelUtil.forPropertyOrParameter(scalarModel))
+                .map(LinkAndLabel::getUiComponent)
+                .map(ActionLink.class::cast)
+                .ifPresent(actionLinkInlineAsIfEdit->{
 
-                    LinkAndLabelUtil.asActionLink(this.scalarModel, inlineActionIfAny)
-                    .findFirst()
-                    .map(LinkAndLabel::getUiComponent)
-                    .map(ActionLink.class::cast)
-                    .ifPresent(actionLinkInlineAsIfEdit->{
+                    if(actionLinkInlineAsIfEdit.isVisible()
+                            && actionLinkInlineAsIfEdit.isEnabled()) {
 
-                        if(actionLinkInlineAsIfEdit.isVisible() && actionLinkInlineAsIfEdit.isEnabled()) {
-                            configureInlinePromptLinkCallback(inlinePromptLink, actionLinkInlineAsIfEdit);
-                            componentToHideRef.setValue(inlinePromptConfig.getComponentToHideIfAny());
-                        }
+                        configureInlinePromptLinkCallback(inlinePromptLink, actionLinkInlineAsIfEdit);
+                        componentToHideRef.setValue(inlinePromptConfig.getComponentToHideIfAny());
+                    }
 
-                    });
-
-                }
+                });
             }
 
             componentToHideRef.getValue()
             .ifPresent(componentToHide->componentToHide.setVisibilityAllowed(false));
-
         }
 
         // prevent from tabbing into non-editable widgets.
@@ -841,11 +837,11 @@ implements ScalarModelSubscriber {
             final Can<LinkAndLabel> linkAndLabels) {
 
         val linksBelow = linkAndLabels
-                .filter(LinkAndLabel.positioned(ActionLayout.Position.BELOW));
+                .filter(LinkAndLabel.isPositionedAt(ActionLayout.Position.BELOW));
         AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ASSOCIATED_ACTION_LINKS_BELOW, linksBelow, AdditionalLinksPanel.Style.INLINE_LIST);
 
         val linksRight = linkAndLabels
-                .filter(LinkAndLabel.positioned(ActionLayout.Position.RIGHT));
+                .filter(LinkAndLabel.isPositionedAt(ActionLayout.Position.RIGHT));
         AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ASSOCIATED_ACTION_LINKS_RIGHT, linksRight, AdditionalLinksPanel.Style.DROPDOWN);
     }
 

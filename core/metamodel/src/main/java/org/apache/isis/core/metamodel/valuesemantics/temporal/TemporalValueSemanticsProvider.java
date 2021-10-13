@@ -176,7 +176,7 @@ implements TemporalValueSemantics<T> {
     // -- RENDERER
 
     @Override
-    public String simpleTextRepresentation(
+    public String simpleTextPresentation(
             final ValueSemanticsProvider.Context context,
             final T value) {
         val temporal = _Casts.<T>uncheckedCast(value);

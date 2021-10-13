@@ -61,7 +61,7 @@ public class ComplexNumberJpaValueSemantics
 // tag::getRenderer[]
         return new Renderer<ComplexNumberJpa>() {
             @Override
-            public String simpleTextRepresentation(final ValueSemanticsProvider.Context context, final ComplexNumberJpa object) {
+            public String simpleTextPresentation(final ValueSemanticsProvider.Context context, final ComplexNumberJpa object) {
                 return object!=null ? object.title() : "NaN";
             }
         };

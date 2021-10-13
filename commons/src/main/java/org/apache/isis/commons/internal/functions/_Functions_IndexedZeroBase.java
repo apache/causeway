@@ -20,19 +20,19 @@ package org.apache.isis.commons.internal.functions;
 
 import java.util.function.Function;
 
-import org.apache.isis.commons.internal.functions._Functions.IndexAwareFunction;
+import org.apache.isis.commons.internal.functions._Functions.IndexedFunction;
 
 /**
  * Package private mixin for _Functions. <br/>
  * Extending a Function to keep track of an index, incremented with each function call.
  */
-class _Functions_IndexAwareFunctionAdapter<T, R> implements Function<T, R> {
+class _Functions_IndexedZeroBase<T, R> implements Function<T, R> {
 
 
     private int index=0;
-    private final IndexAwareFunction<T, R> indexAwareFunction;
+    private final IndexedFunction<T, R> indexAwareFunction;
 
-    _Functions_IndexAwareFunctionAdapter(IndexAwareFunction<T, R> indexAwareFunction) {
+    _Functions_IndexedZeroBase(IndexedFunction<T, R> indexAwareFunction) {
         this.indexAwareFunction = indexAwareFunction;
     }
 

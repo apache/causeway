@@ -59,37 +59,11 @@ extends ScalarPanelTextFieldParseableAbstract {
         onInitializeReadonly(null);
     }
 
-//    @Override
-//    protected InlinePromptConfig getInlinePromptConfig() {
-//        return InlinePromptConfig.notSupported();
-//    }
-
     @Override
     protected AbstractTextComponent<String> createTextFieldForRegular(final String id) {
         return new TextField<>(id, LambdaModel.of(()->
-            renderer().simpleTextRepresentation(null, scalarModel.getObject().getPojo())));
+            renderer().simpleTextPresentation(null, scalarModel.getObject().getPojo())));
     }
-
-
-//    @Override
-//    protected Component createComponentForCompact() {
-//        val objAdapter = getModel().getObject();
-//        return new Label(ID_SCALAR_IF_COMPACT, "compact");
-//                //renderer().simpleTextRepresentation(null, objAdapter.getPojo()));
-//    }
-//
-//    @Override
-//    protected MarkupContainer createComponentForRegular() {
-//        return new LabeledWebMarkupContainer(ID_SCALAR_IF_REGULAR, Model.of("regular")) {};
-//    }
-//
-//    @Override
-//    protected Component getScalarValueComponent() {
-//        return new Label(ID_SCALAR_VALUE, "regular");
-//
-////        val formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, null);
-////        return formGroup;
-//    }
 
     // -- HELPER
 

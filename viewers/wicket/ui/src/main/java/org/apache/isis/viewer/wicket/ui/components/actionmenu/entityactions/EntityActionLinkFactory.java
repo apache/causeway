@@ -18,15 +18,10 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.LinkAndLabelFactoryAbstract;
-
-import lombok.val;
 
 public final class EntityActionLinkFactory
 extends LinkAndLabelFactoryAbstract {
@@ -40,31 +35,5 @@ extends LinkAndLabelFactoryAbstract {
             final EntityCollectionModel collectionModelForAssociationIfAny) {
         super(linkId, entityModel, scalarModelForAssociationIfAny, collectionModelForAssociationIfAny);
     }
-
-    @Override
-    public LinkAndLabel newActionLink(
-            final ObjectAction objectAction,
-            final String named) {
-
-        val objectAdapter = this.targetEntityModel.getManagedObject();
-
-        val isIdentifiable = ManagedObjects.isIdentifiable(objectAdapter);
-        if (!isIdentifiable) {
-            throw new IllegalArgumentException(String.format(
-                    "Object '%s' is not identifiable (has no identifier).",
-                    objectAdapter.titleString()));
-        }
-
-        // previously we computed visibility and usability here, but
-        // this is now done at the point of rendering
-
-        return LinkAndLabel.of(
-                model->super.newLinkComponent(
-                        model.getActionMemento().getIdentifier()),
-                named,
-                this.targetEntityModel,
-                objectAction);
-    }
-
 
 }

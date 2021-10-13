@@ -67,14 +67,14 @@ implements TitleFacet {
             val featureId = prop.getFeatureIdentifier();
             final Renderer renderer = valueFacet
                     .selectRendererForPropertyElseFallback(prop);
-            return renderer.simpleTextRepresentation(valueFacet.createValueSemanticsContext(featureId), pojo);
+            return renderer.simpleTextPresentation(valueFacet.createValueSemanticsContext(featureId), pojo);
         }
         if(renderRequest.getFeature() instanceof ObjectActionParameter) {
             val param = (ObjectActionParameter)renderRequest.getFeature();
             val featureId = param.getFeatureIdentifier();
             final Renderer renderer = valueFacet
                     .selectRendererForParameterElseFallback(param);
-            return renderer.simpleTextRepresentation(valueFacet.createValueSemanticsContext(featureId), pojo);
+            return renderer.simpleTextPresentation(valueFacet.createValueSemanticsContext(featureId), pojo);
         }
 
         // fall back to default value semantics ...
@@ -83,7 +83,7 @@ implements TitleFacet {
 
         return valueFacet.selectDefaultRenderer()
         .map(renderer->(Renderer) renderer)
-        .map(renderer->renderer.simpleTextRepresentation(valueFacet.createValueSemanticsContext(featureId), pojo))
+        .map(renderer->renderer.simpleTextPresentation(valueFacet.createValueSemanticsContext(featureId), pojo))
         .orElseGet(()->String.format("Value type %s has no value semantics for title rendering.",
                 renderRequest.getObject().getSpecification().getCorrespondingClass()));
 

@@ -79,13 +79,12 @@ extends PanelAbstract<ManagedObject, EntityModel> {
         final EntityModel model = getModel();
         val adapter = model.getObject();
         if (adapter != null) {
-            val topLevelActions = ObjectAction.Util.streamTopBarActions(adapter);
-            val entityActionLinks = LinkAndLabelUtil
-                    .asActionLinksForAdditionalLinksPanel(model, topLevelActions, null, null)
-                    .collect(Can.toCan());
+            val topLevelActions = ObjectAction.Util.streamTopBarActions(adapter)
+            .map(LinkAndLabelUtil.forEntity(model))
+            .collect(Can.toCan());
 
             AdditionalLinksPanel
-                    .addAdditionalLinks(this, ID_ENTITY_ACTIONS, entityActionLinks,
+                    .addAdditionalLinks(this, ID_ENTITY_ACTIONS, topLevelActions,
                             AdditionalLinksPanel.Style.INLINE_LIST);
         } else {
             permanentlyHide(ID_ENTITY_ACTIONS);

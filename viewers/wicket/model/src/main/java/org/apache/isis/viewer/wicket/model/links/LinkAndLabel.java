@@ -35,38 +35,37 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 
 import lombok.NonNull;
 import lombok.val;
 
-public final class LinkAndLabel extends LinkAndLabelAbstract {
+public final class LinkAndLabel
+extends LinkAndLabelAbstract {
 
     private static final long serialVersionUID = 1L;
 
     public static LinkAndLabel of(
             final ActionLinkUiComponentFactoryWkt uiComponentFactory,
-            final String named,
-            final EntityModel actionHolderModel,
+            final ObjectUiModel actionHolderModel,
             final ObjectAction objectAction) {
-        return new LinkAndLabel(uiComponentFactory, named, actionHolderModel, objectAction);
+        return new LinkAndLabel(uiComponentFactory, actionHolderModel, objectAction);
     }
 
     private LinkAndLabel(
             final ActionLinkUiComponentFactoryWkt uiComponentFactory,
-            final String named,
-            final EntityModel actionHolderModel,
+            final ObjectUiModel actionHolderModel,
             final ObjectAction objectAction) {
-        super(uiComponentFactory, named, actionHolderModel, objectAction);
+        super(uiComponentFactory, actionHolderModel, objectAction);
     }
 
     public static Can<LinkAndLabel> positioned(final Position pos, final Stream<LinkAndLabel> stream) {
-        return stream.filter(LinkAndLabel.positioned(pos))
+        return stream.filter(LinkAndLabel.isPositionedAt(pos))
         .collect(Can.toCan());
     }
 
-    public static Predicate<LinkAndLabel> positioned(final Position pos) {
+    public static Predicate<LinkAndLabel> isPositionedAt(final Position pos) {
         return ActionUiMetaModel.positioned(pos, LinkAndLabel::getActionUiMetaModel);
     }
 
@@ -90,16 +89,17 @@ public final class LinkAndLabel extends LinkAndLabelAbstract {
         private static final long serialVersionUID = 1L;
         private final @NonNull ActionLinkUiComponentFactoryWkt uiComponentFactory;
         private final @Nullable String named;
-        private final @NonNull EntityModel actionHolder;
+        private final @NonNull ObjectUiModel actionHolder;
         private final @NonNull LogicalType actionHolderLogicalType;
         private final @NonNull String objectActionId;
 
         private SerializationProxy(final LinkAndLabel target) {
             this.uiComponentFactory = target.uiComponentFactory;
             this.named = target.getNamed();
-            this.actionHolder = (EntityModel) target.getActionHolder();
+            this.actionHolder = target.getActionHolder();
             // make sure we do this without side-effects
-            this.actionHolderLogicalType = actionHolder.getTypeOfSpecification().getLogicalType();
+            this.actionHolderLogicalType = actionHolder
+                    .getManagedObject().getSpecification().getLogicalType();
             this.objectActionId = target.getObjectAction().getId();
         }
 
@@ -114,7 +114,7 @@ public final class LinkAndLabel extends LinkAndLabelAbstract {
             .flatMap(actionHolderSpec->actionHolderSpec.getMember(objectActionId))
             .orElseThrow(()->
                 _Exceptions.noSuchElement("could not restore objectAction from id %s", objectActionId));
-            return new LinkAndLabel(uiComponentFactory, named, actionHolder, (ObjectAction) objectMember);
+            return new LinkAndLabel(uiComponentFactory, actionHolder, (ObjectAction) objectMember);
         }
 
     }

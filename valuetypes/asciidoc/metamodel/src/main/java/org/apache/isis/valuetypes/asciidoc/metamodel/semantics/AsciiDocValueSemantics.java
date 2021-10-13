@@ -50,7 +50,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextRepresentation(final ValueSemanticsProvider.Context context, final AsciiDoc adoc) {
+    public String simpleTextPresentation(final ValueSemanticsProvider.Context context, final AsciiDoc adoc) {
         return render(adoc, AsciiDoc::asHtml);
     }
 

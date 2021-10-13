@@ -27,6 +27,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.Model;
 
 import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.base._Strings;
@@ -48,6 +49,7 @@ import org.apache.isis.viewer.wicket.ui.util.Decorators;
 
 import lombok.val;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.DefaultBootstrapButton;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 
 class ActionParametersForm extends PromptFormAbstract<ActionModel> {
@@ -110,6 +112,9 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
                 CssClassAppender.appendCssClassTo(markupContainer, CssClassAppender.asCssStyle(css));
             }
         }
+
+        container.add(new DefaultBootstrapButton("2877b", Model.of("hi")));
+
 
         val paramPanel =
                 component instanceof ScalarPanelAbstract

@@ -61,5 +61,4 @@ public interface MixinFacet extends SingleValueFacet<String> {
      */
     boolean isCandidateForMain(Method method);
 
-
 }

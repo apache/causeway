@@ -70,7 +70,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextRepresentation(final Context context, final Password value) {
+    public String simpleTextPresentation(final Context context, final Password value) {
         return render(value, v->"*");
     }
 

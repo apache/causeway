@@ -38,7 +38,6 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.common.model.components.ComponentType;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
@@ -129,25 +128,12 @@ implements HasDynamicallyVisibleContent {
         .map(actionLayoutData ->
             getModel().getTypeOfSpecification().getAction(actionLayoutData.getId()).orElse(null)
         )
-        .filter(_NullSafe::isPresent);
-
-        //
-        // visibility needs to be determined at point of rendering, by ActionLink itself
-        //
-        //.filter(new Predicate<ObjectAction>() {
-        //    @Override public boolean apply(final @Nullable ObjectAction objectAction) {
-        //        final Consent visibility = objectAction
-        //                .isVisible(getModel().getObject(), InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
-        //        return visibility.isAllowed();
-        //    }
-        //})
-
-        final Can<LinkAndLabel> entityActionLinks = LinkAndLabelUtil
-        .asActionLinksForAdditionalLinksPanel(getModel(), visibleActions, null, null)
+        .filter(_NullSafe::isPresent)
+        .map(LinkAndLabelUtil.forEntity(getModel()))
         .collect(Can.toCan());
 
-        if (!entityActionLinks.isEmpty()) {
-            AdditionalLinksPanel.addAdditionalLinks(actionOwner, actionIdToUse, entityActionLinks, AdditionalLinksPanel.Style.INLINE_LIST);
+        if (!visibleActions.isEmpty()) {
+            AdditionalLinksPanel.addAdditionalLinks(actionOwner, actionIdToUse, visibleActions, AdditionalLinksPanel.Style.INLINE_LIST);
             visible = true;
         } else {
             Components.permanentlyHide(actionOwner, actionIdToUse);
@@ -155,7 +141,6 @@ implements HasDynamicallyVisibleContent {
         if(actionIdToHide != null) {
             Components.permanentlyHide(div, actionIdToHide);
         }
-
 
 
         // rows

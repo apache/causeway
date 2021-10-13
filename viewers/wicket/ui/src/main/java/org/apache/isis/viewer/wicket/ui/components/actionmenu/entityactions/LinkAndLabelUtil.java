@@ -18,13 +18,15 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 
-import java.util.stream.Stream;
+import java.util.function.Function;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -32,45 +34,59 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class LinkAndLabelUtil {
 
-    public static Stream<LinkAndLabel> asActionLinks(
-            final ScalarModel scalarModel,
-            final Stream<ObjectAction> associatedActions) {
-
-        final EntityModel parentEntityModel = scalarModel.getParentUiModel();
-        return asActionLinksForAdditionalLinksPanel(parentEntityModel, associatedActions, scalarModel, null);
-    }
-
-    public static Stream<LinkAndLabel> asActionLink(
-            final ScalarModel scalarModel,
-            final ObjectAction inlineAction) {
-        return asActionLinks(scalarModel, Stream.of(inlineAction));
-    }
-
-    /**
-     * Converts an {@link org.apache.isis.viewer.wicket.model.models.EntityModel} and a (subset of its)
-     * {@link ObjectAction}s into a
-     * list of {@link org.apache.isis.viewer.wicket.model.links.LinkAndLabel}s intended to be passed
-     * to the {@link AdditionalLinksPanel}.
-     *
-     * <p>
-     *     The length of the list returned may smaller than the inbound actions; any null links
-     *     (for invisible actions) will be discarded.
-     * </p>
-     */
-    public static Stream<LinkAndLabel> asActionLinksForAdditionalLinksPanel(
-            final EntityModel parentEntityModel,
-            final Stream<ObjectAction> objectActions,
-            final ScalarModel scalarModelIfAny,
-            final EntityCollectionModel collectionModelForAssociationIfAny) {
+    public Function<ObjectAction, LinkAndLabel> forEntity(
+            final EntityModel parentEntityModel) {
 
         val actionLinkFactory = new EntityActionLinkFactory(
                 AdditionalLinksPanel.ID_ADDITIONAL_LINK,
                 parentEntityModel,
-                scalarModelIfAny,
-                collectionModelForAssociationIfAny);
+                null/*scalarModelIfAny*/,
+                null/*collectionModelForAssociationIfAny*/);
 
-        return objectActions
-                .map(objectAction->actionLinkFactory.newActionLink(objectAction, /*named*/null));
+        return objectAction->actionLinkFactory.newActionLink(objectAction);
+    }
+
+    public Function<ObjectAction, LinkAndLabel> forCollection(
+            final EntityCollectionModelParented collectionModel) {
+
+        val actionLinkFactory = new EntityActionLinkFactory(
+                AdditionalLinksPanel.ID_ADDITIONAL_LINK,
+                collectionModel.getEntityModel(),
+                null/*scalarModelIfAny*/,
+                collectionModel);
+
+        return objectAction->actionLinkFactory.newActionLink(objectAction);
+    }
+
+    public Function<ObjectAction, LinkAndLabel> forPropertyOrParameter(
+            final ScalarModel scalarModel) {
+        return scalarModel instanceof ScalarPropertyModel
+                ? forProperty((ScalarPropertyModel)scalarModel)
+                : forParameter((ScalarParameterModel)scalarModel);
+
+    }
+
+    public Function<ObjectAction, LinkAndLabel> forProperty(
+            final ScalarPropertyModel scalarModel) {
+
+        val actionLinkFactory = new EntityActionLinkFactory(
+                AdditionalLinksPanel.ID_ADDITIONAL_LINK,
+                scalarModel.getParentUiModel(),
+                scalarModel,
+                null/*collectionModelForAssociationIfAny*/);
+
+        return objectAction->actionLinkFactory.newActionLink(objectAction);
+    }
+
+    public Function<ObjectAction, LinkAndLabel> forParameter(
+            final ScalarParameterModel scalarModel) {
+
+        val actionLinkFactory = new ParameterAssociatedActionLinkFactory(
+                AdditionalLinksPanel.ID_ADDITIONAL_LINK,
+                scalarModel.getParentUiModel(),
+                scalarModel);
+
+        return objectAction->actionLinkFactory.newActionLink(objectAction);
     }
 
 }

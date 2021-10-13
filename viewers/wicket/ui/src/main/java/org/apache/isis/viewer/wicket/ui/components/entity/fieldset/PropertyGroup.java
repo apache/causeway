@@ -190,9 +190,9 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
         }
 
         val entity = entityModel.getManagedObject();
-        val associatedActions = ObjectAction.Util.findForAssociation(entity, property);
 
-        LinkAndLabelUtil.asActionLinksForAdditionalLinksPanel(entityModel, associatedActions, null, null)
+        ObjectAction.Util.findForAssociation(entity, property)
+        .map(LinkAndLabelUtil.forEntity(entityModel))
         .forEach(onEntityAction);
 
         return scalarNameAndValueComponent;

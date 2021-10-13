@@ -127,7 +127,7 @@ implements ScalarModelProvider {
 
         public abstract Where getWhere();
 
-        private static Rendering renderingFor(RenderingHint renderingHint) {
+        private static Rendering renderingFor(final RenderingHint renderingHint) {
             return renderingHint.isInTable()? Rendering.COMPACT: Rendering.REGULAR;
         }
     }
@@ -142,7 +142,7 @@ implements ScalarModelProvider {
         this.scalarModel = scalarModel;
     }
 
-    protected Fragment getCompactFragment(CompactType type) {
+    protected Fragment getCompactFragment(final CompactType type) {
         Fragment compactFragment;
         switch (type) {
         case INPUT_CHECKBOX:
@@ -237,7 +237,7 @@ implements ScalarModelProvider {
         }
 
         @Override
-        protected void onUpdate(AjaxRequestTarget target) {
+        protected void onUpdate(final AjaxRequestTarget target) {
             for (ScalarModelSubscriberLegacy subscriber : subscribers) {
                 subscriber.onUpdate(target, ScalarPanelAbstractLegacy.this);
             }
@@ -248,7 +248,7 @@ implements ScalarModelProvider {
         }
 
         @Override
-        protected void onError(AjaxRequestTarget target, RuntimeException e) {
+        protected void onError(final AjaxRequestTarget target, final RuntimeException e) {
             super.onError(target, e);
             for (ScalarModelSubscriberLegacy subscriber : subscribers) {
                 subscriber.onError(target, ScalarPanelAbstractLegacy.this);
@@ -323,15 +323,15 @@ implements ScalarModelProvider {
             final Can<LinkAndLabel> entityActions) {
 
         final Can<LinkAndLabel> entityActionsBelow = entityActions
-                .filter(LinkAndLabel.positioned(ActionLayout.Position.BELOW));
+                .filter(LinkAndLabel.isPositionedAt(ActionLayout.Position.BELOW));
         AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ASSOCIATED_ACTION_LINKS_BELOW, entityActionsBelow, AdditionalLinksPanel.Style.INLINE_LIST);
 
         final Can<LinkAndLabel> entityActionsRight = entityActions
-                .filter(LinkAndLabel.positioned(ActionLayout.Position.RIGHT));
+                .filter(LinkAndLabel.isPositionedAt(ActionLayout.Position.RIGHT));
         AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ASSOCIATED_ACTION_LINKS_RIGHT, entityActionsRight, AdditionalLinksPanel.Style.DROPDOWN);
     }
 
-    private static String determinePropParamLayoutCss(ScalarModel model) {
+    private static String determinePropParamLayoutCss(final ScalarModel model) {
         final LabelAtFacet facet = model.getFacet(LabelAtFacet.class);
         if (facet != null) {
             switch (facet.label()) {
@@ -350,7 +350,7 @@ implements ScalarModelProvider {
         return "label-left";
     }
 
-    private static String determineActionLayoutPositioningCss(Can<LinkAndLabel> entityActionLinks) {
+    private static String determineActionLayoutPositioningCss(final Can<LinkAndLabel> entityActionLinks) {
         boolean actionsPositionedOnRight = hasActionsPositionedOn(entityActionLinks, ActionLayout.Position.RIGHT);
         return actionsPositionedOnRight ? "actions-right" : null;
     }
@@ -379,7 +379,7 @@ implements ScalarModelProvider {
      *
      * @return true - indicates has been updated, so update dynamically via ajax
      */
-    public boolean updateChoices(ManagedObject[] pendingArguments) {
+    public boolean updateChoices(final ManagedObject[] pendingArguments) {
         return false;
     }
 
@@ -388,7 +388,7 @@ implements ScalarModelProvider {
      *
      * @param target The Ajax request handler
      */
-    public void repaint(AjaxRequestTarget target) {
+    public void repaint(final AjaxRequestTarget target) {
         target.add(this);
     }
 

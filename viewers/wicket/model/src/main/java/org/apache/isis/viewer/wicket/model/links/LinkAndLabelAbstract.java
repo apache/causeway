@@ -46,7 +46,7 @@ public abstract class LinkAndLabelAbstract implements Serializable {
     /**
      * used when explicitly named (eg. menu bar layout file), otherwise {@code null}
      */
-    @Getter private final String named;
+    @Getter private String named;
 
     /**
      * domain object that is the <em>Action's</em> holder or owner

@@ -48,10 +48,10 @@ import lombok.experimental.UtilityClass;
 public final class ServiceActionUtil {
 
     static void addLeafItem(
-            IsisAppCommonContext commonContext,
-            CssMenuItem menuItem,
-            ListItem<CssMenuItem> listItem,
-            MarkupContainer parent) {
+            final IsisAppCommonContext commonContext,
+            final CssMenuItem menuItem,
+            final ListItem<CssMenuItem> listItem,
+            final MarkupContainer parent) {
 
         val actionUiModel = menuItem.getLinkAndLabel();
         val menuItemActionLink = actionUiModel.getUiComponent();
@@ -76,10 +76,10 @@ public final class ServiceActionUtil {
     }
 
     static void addFolderItem(
-            IsisAppCommonContext commonContext,
-            CssMenuItem subMenuItem,
-            ListItem<CssMenuItem> listItem,
-            MarkupContainer parent) {
+            final IsisAppCommonContext commonContext,
+            final CssMenuItem subMenuItem,
+            final ListItem<CssMenuItem> listItem,
+            final MarkupContainer parent) {
 
         listItem.add(new CssClassAppender("dropdown-submenu"));
 
@@ -93,7 +93,7 @@ public final class ServiceActionUtil {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void populateItem(ListItem<CssMenuItem> listItem) {
+            protected void populateItem(final ListItem<CssMenuItem> listItem) {
                 CssMenuItem subMenuItem = listItem.getModelObject();
 
                 if (subMenuItem.hasSubMenuItems()) {
@@ -112,7 +112,6 @@ public final class ServiceActionUtil {
         private final IsisAppCommonContext commonContext;
 
         public LinkAndLabel newActionLink(
-                final String named,
                 final ManagedAction managedAction) {
 
             val serviceModel = EntityModel.ofAdapter(commonContext, managedAction.getOwner());
@@ -123,10 +122,8 @@ public final class ServiceActionUtil {
 
             return LinkAndLabel.of(
                     model->actionLinkFactory.newActionLink(
-                            model.getObjectAction(CommonContextUtils.getCommonContext()::getSpecificationLoader),
-                            named)
+                            model.getObjectAction(CommonContextUtils.getCommonContext()::getSpecificationLoader))
                             .getUiComponent(),
-                    named,
                     serviceModel,
                     managedAction.getAction());
         }
@@ -142,7 +139,7 @@ public final class ServiceActionUtil {
         private CssMenuItem currentTopLevelMenu = null;
 
         @Override
-        public void addTopLevel(MenuItemDto menuDto) {
+        public void addTopLevel(final MenuItemDto menuDto) {
             currentTopLevelMenu = CssMenuItem.newMenuItem(menuDto.getName());
             onNewMenuItem.accept(currentTopLevelMenu);
         }
@@ -154,17 +151,17 @@ public final class ServiceActionUtil {
         }
 
         @Override
-        public void addSubMenu(MenuItemDto menuDto) {
+        public void addSubMenu(final MenuItemDto menuDto) {
             val managedAction = menuDto.getManagedAction();
 
             val menuItem = CssMenuItem.newMenuItem(menuDto.getName());
             currentTopLevelMenu.addSubMenuItem(menuItem);
 
-            menuItem.setLinkAndLabel(linkAndLabelFactory.newActionLink(menuDto.getName(), managedAction));
+            menuItem.setLinkAndLabel(linkAndLabelFactory.newActionLink(managedAction));
         }
 
         @Override
-        public void addSectionLabel(String named) {
+        public void addSectionLabel(final String named) {
             val menuSectionLabel = CssMenuItem.newSectionLabel(named);
             currentTopLevelMenu.addSubMenuItem(menuSectionLabel);
         }
