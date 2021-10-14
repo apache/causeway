@@ -129,7 +129,7 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
 
                 Tooltips.addTooltip(link, tooltipModel.getObject());
 
-                val viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, actionMeta.getLabel());
+                val viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, linkAndLabel.getFriendlyName());
                 if(actionMeta.isBlobOrClob()) {
                     link.add(new CssClassAppender("noVeil"));
                 }

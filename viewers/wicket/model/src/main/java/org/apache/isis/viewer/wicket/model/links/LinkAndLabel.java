@@ -67,10 +67,15 @@ implements
         return new LinkAndLabel(uiComponentFactory, actionHolderModel, objectAction);
     }
 
+    //FIXME[ISIS-2877] we have serializable action models - use one of these instead
+    private transient ManagedAction managedAction;
+
     @Override
     public ManagedAction getManagedAction() {
-        // TODO Auto-generated method stub
-        return null;
+        if(managedAction==null) {
+            managedAction = ManagedAction.of(actionHolder.getManagedObject(), objectAction, Where.ANYWHERE);
+        }
+        return managedAction;
     }
 
     protected final ActionLinkUiComponentFactoryWkt uiComponentFactory;
@@ -105,14 +110,9 @@ implements
                 " ~ " + objectAction.getFeatureIdentifier().getFullIdentityString();
     }
 
-    // -- SHORTCUTS
-
-    public String getLabel() {
-        return getActionUiMetaModel().getLabel();
-    }
-
     // -- VISIBILITY
 
+    //FIXME[ISIS-2877] de-duplicate
     public boolean isVisible() {
         val owner = actionHolder.getManagedObject();
 
@@ -134,15 +134,18 @@ implements
 
     // -- UTILITY
 
+    //FIXME[ISIS-2877] this logic can probably be moved to ActionUiModel
     public static Can<LinkAndLabel> positioned(final Position pos, final Stream<LinkAndLabel> stream) {
         return stream.filter(LinkAndLabel.isPositionedAt(pos))
         .collect(Can.toCan());
     }
 
+    //FIXME[ISIS-2877] this logic can probably be moved to ActionUiModel
     public static Predicate<LinkAndLabel> isPositionedAt(final Position pos) {
         return ActionUiMetaModel.positioned(pos, LinkAndLabel::getActionUiMetaModel);
     }
 
+    //FIXME[ISIS-2877] this logic can probably be moved to ActionUiModel
     public static List<LinkAndLabel> recoverFromIncompleteDeserialization(final List<SerializationProxy> proxies) {
         return proxies.stream()
                 .map(SerializationProxy::restore)

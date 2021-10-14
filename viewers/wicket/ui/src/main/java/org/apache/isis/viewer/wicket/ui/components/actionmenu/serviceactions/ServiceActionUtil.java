@@ -85,7 +85,7 @@ public final class ServiceActionUtil {
         Fragment folderItem = new Fragment("content", "folderItem", parent);
         listItem.add(folderItem);
 
-        folderItem.add(new Label("folderName", subMenuItem.getLinkAndLabel().getLabel()));
+        folderItem.add(new Label("folderName", subMenuItem.getLinkAndLabel().getFriendlyName()));
         final List<CssMenuItem> menuItems = subMenuItem.getSubMenuItems();
         ListView<CssMenuItem> subMenuItemsView = new ListView<CssMenuItem>("subMenuItems",
                 menuItems) {
