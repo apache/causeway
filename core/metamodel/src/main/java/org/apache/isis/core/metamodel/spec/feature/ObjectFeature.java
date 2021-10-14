@@ -131,17 +131,19 @@ public interface ObjectFeature extends Specification {
     Optional<String> getCanonicalDescription();
 
     /**
-     * Either the descriptions's static or canonical form, based on whether the description is resolved
-     * statically or imperatively.
+     * Optionally either the descriptions's static or canonical form,
+     * based on whether a description is present (at all), and if so,
+     * resolved either statically or imperatively.
      * @see #getStaticDescription()
      * @see #getCanonicalDescription()
      * @since 2.0
      */
-    default _Either<String, String> getStaticOrCanonicalDescription() {
+    default Optional<_Either<String, String>> getStaticOrCanonicalDescription() {
         val staticDescription = getStaticDescription();
         return staticDescription.isPresent()
-                ? _Either.left(staticDescription.get())
-                : _Either.right(getCanonicalDescription().orElse(""));
+                ? Optional.of(_Either.left(staticDescription.get()))
+                : getCanonicalDescription()
+                    .map(_Either::right);
     }
 
     /**
