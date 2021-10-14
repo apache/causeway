@@ -186,7 +186,7 @@ public class Decorators {
                     .decorate(uiComponent, TooltipUiModel.ofBody(describedAs)));
 
                 //XXX ISIS-1626, confirmation dialog for no-parameter menu actions
-                if (actionMetaLegacy.isRequiresImmediateConfirmation()) {
+                if (actionMeta.isImmediateConfirmationRequired()) {
 
                     val confirmUiModel = ConfirmUiModel.ofAreYouSure(translationService, ConfirmUiModel.Placement.BOTTOM);
                     getConfirmDecorator().decorate(actionLinkUiComponent, confirmUiModel);

@@ -26,7 +26,6 @@ import java.util.function.Supplier;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -55,15 +54,10 @@ implements Serializable {
     @Getter private final String actionIdentifier;
     @Getter private final String cssClass;
     @Getter private final ActionLayout.Position position;
-    @Getter private final SemanticsOf semantics;
     @Getter private final PromptStyle promptStyle;
     @Getter private final Parameters parameters;
     @Getter private final Optional<DisablingUiModel> disableUiModel;
-    /**
-     * An action with no parameters AND an are-you-sure semantics
-     * does require an immediate confirmation dialog.
-     */
-    @Getter private final boolean requiresImmediateConfirmation;
+
 
     public static <T> ActionUiMetaModel of(
             final ManagedAction managedAction) {
@@ -85,13 +79,9 @@ implements Serializable {
                 ObjectAction.Util.actionIdentifierFor(objectAction),
                 ObjectAction.Util.cssClassFor(objectAction, owner),
                 ObjectAction.Util.actionLayoutPositionOf(objectAction),
-                objectAction.getSemantics(),
                 ObjectAction.Util.promptStyleFor(objectAction),
                 Parameters.fromParameterCount(objectAction.getParameterCount()),
-                disabledUiModelFor(owner, objectAction),
-                ObjectAction.Util.isAreYouSureSemantics(objectAction)
-                && ObjectAction.Util.isNoParameters(objectAction)
-                );
+                disabledUiModelFor(owner, objectAction));
     }
 
     public static <R> Predicate<R> positioned(

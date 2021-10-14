@@ -61,20 +61,24 @@ import lombok.val;
 
 public interface ObjectAction extends ObjectMember {
 
-    // -- getSemantics, getOnType
     /**
      * The semantics of this action.
      */
     SemanticsOf getSemantics();
 
-    // -- getType, isPrototype
+    /**
+     * An action with no parameters AND <i>are-you-sure</i> semantics
+     * does require an immediate confirmation dialog.
+     */
+    default boolean isImmediateConfirmationRequired() {
+        return ObjectAction.Util.isAreYouSureSemantics(this)
+        && ObjectAction.Util.isNoParameters(this);
+    }
 
     ActionType getType();
 
     boolean isPrototype();
 
-
-    // -- ReturnType
     /**
      * Returns the specifications for the return type.
      */
@@ -85,9 +89,6 @@ public interface ObjectAction extends ObjectMember {
      * else returns false.
      */
     boolean hasReturn();
-
-
-    // -- execute, executeWithRuleChecking
 
     /**
      * Invokes the action's method on the target object given the specified set
@@ -228,8 +229,6 @@ public interface ObjectAction extends ObjectMember {
      * </p>
      */
     ManagedObject realTargetAdapter(ManagedObject targetAdapter);
-
-
 
     // -- Parameters (per instance)
 

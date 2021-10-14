@@ -139,7 +139,7 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
                 }
                 link.add(new CssClassAppender(actionMetaLegacy.getActionIdentifier()));
 
-                if (actionMetaLegacy.getSemantics().isAreYouSure()) {
+                if (actionMeta.getSemantics().isAreYouSure()) {
                     if(actionMetaLegacy.getParameters().isNoParameters()) {
                         val hasDisabledReason = link instanceof ActionLink
                                 ? _Strings.isNotEmpty(((ActionLink)link).getReasonDisabledIfAny())
