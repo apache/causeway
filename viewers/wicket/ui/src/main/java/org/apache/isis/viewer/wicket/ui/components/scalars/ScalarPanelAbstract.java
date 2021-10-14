@@ -62,7 +62,7 @@ import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactories;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.components.propertyheader.PropertyEditPromptHeaderPanel;
@@ -131,13 +131,13 @@ implements ScalarModelSubscriber {
             final @NonNull Optional<AjaxRequestTarget> target) {
 
         // visibility
-        val visibilityConsent = paramModel.getParameterNegotiationModel().getVisibilityConsent(paramModel.getNumber());
+        val visibilityConsent = paramModel.getParameterNegotiationModel().getVisibilityConsent(paramModel.getParameterIndex());
         val visibilityBefore = isVisible();
         val visibilityAfter = visibilityConsent.isAllowed();
         setVisible(visibilityAfter);
 
         // usability
-        val usabilityConsent = paramModel.getParameterNegotiationModel().getUsabilityConsent(paramModel.getNumber());
+        val usabilityConsent = paramModel.getParameterNegotiationModel().getUsabilityConsent(paramModel.getParameterIndex());
         val usabilityBefore = isEnabled();
         val usabilityAfter = usabilityConsent.isAllowed();
         if(usabilityAfter) {
@@ -321,7 +321,7 @@ implements ScalarModelSubscriber {
 
         // convert those actions into UI layer widgets
         final Can<LinkAndLabel> linkAndLabels = remainingAssociated.stream()
-        .map(LinkAndLabelUtil.forPropertyOrParameter(this.scalarModel))
+        .map(LinkAndLabelFactories.forPropertyOrParameter(this.scalarModel))
         .collect(Can.toCan());
 
         final InlinePromptConfig inlinePromptConfig = getInlinePromptConfig();
@@ -354,7 +354,7 @@ implements ScalarModelSubscriber {
 
                 // not editable property, but maybe one of the actions is.
                 inlineActionIfAny
-                .map(LinkAndLabelUtil.forPropertyOrParameter(scalarModel))
+                .map(LinkAndLabelFactories.forPropertyOrParameter(scalarModel))
                 .map(LinkAndLabel::getUiComponent)
                 .map(ActionLink.class::cast)
                 .ifPresent(actionLinkInlineAsIfEdit->{

@@ -64,7 +64,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @RequiredArgsConstructor
-public class ActionLinkFactory
+public final class ActionLinkFactory
 implements Serializable {
 
     private static final long serialVersionUID = 1L;

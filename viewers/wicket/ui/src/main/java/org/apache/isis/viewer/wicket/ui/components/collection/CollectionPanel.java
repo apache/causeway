@@ -28,7 +28,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelParented;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactories;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
@@ -68,7 +68,7 @@ implements
         val collMetaModel = getModel().getMetaModel();
 
         val associatedActions = collMetaModel.streamAssociatedActions()
-        .map(LinkAndLabelUtil.forCollection(collectionModel))
+        .map(LinkAndLabelFactories.forCollection(collectionModel))
         .collect(Can.toCan());
 
         collectionModel.setLinkAndLabels(associatedActions);

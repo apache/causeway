@@ -35,25 +35,20 @@ implements ObjectUiModel {
     private static final long serialVersionUID = 1L;
 
     public ParameterAssociatedActionLinkFactory(
-            final String linkId,
-            final EntityModel entityModel,
             final ScalarParameterModel paramModel) {
-        super(linkId, entityModel, paramModel, null);
+        super(AdditionalLinksPanel.ID_ADDITIONAL_LINK,
+                paramModel, null);
     }
 
     @Override
     public ManagedObject getManagedObject() {
-        final int paramIndex = scalarParameterModel().getNumber();
+        final int paramIndex = scalarParameterModel().getParameterIndex();
         return scalarParameterModel().getParameterNegotiationModel().getParamValue(paramIndex);
     }
 
     @Override
     protected ActionModel actionModel(final ManagedAction managedAction) {
-        return ActionModel.of(
-                //FIXME[ISIS-2877] needs a ValueModel instead
-                EntityModel.ofAdapter(scalarParameterModel().getCommonContext(), getManagedObject()),
-                managedAction.getAction().getFeatureIdentifier(),
-                null);
+        return ActionModel.supportingParameter(scalarParameterModel());
     }
 
     @Override

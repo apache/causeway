@@ -76,10 +76,7 @@ public interface HasManagedAction {
     }
 
     default Optional<DisablingUiModel> getDisableUiModel() {
-        final Optional<String> usabiltiyVeto = getManagedAction()
-                .checkUsability()
-                .map(veto->veto.getReason());
-        return DisablingUiModel.of(usabiltiyVeto.isPresent(), usabiltiyVeto.orElse(null)) ;
+        return DisablingUiModel.of(getManagedAction().checkUsability()) ;
     }
 
 }

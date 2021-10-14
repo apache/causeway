@@ -68,7 +68,7 @@ implements ParameterUiModel {
 
     @Override
     public String getIdentifier() {
-        return "" + getNumber();
+        return "" + getParameterIndex();
     }
 
     @Override
@@ -78,22 +78,22 @@ implements ParameterUiModel {
 
     @Override
     public String whetherDisabled() {
-        return getParameterNegotiationModel().getUsabilityConsent(getNumber()).getReason();
+        return getParameterNegotiationModel().getUsabilityConsent(getParameterIndex()).getReason();
     }
 
     @Override
     public boolean whetherHidden() {
-        return getParameterNegotiationModel().getVisibilityConsent(getNumber()).isVetoed();
+        return getParameterNegotiationModel().getVisibilityConsent(getParameterIndex()).isVetoed();
     }
 
     @Override
     public String validate(final ManagedObject proposedValue) {
-        return getParameterNegotiationModel().getObservableParamValidation(getNumber()).getValue();
+        return getParameterNegotiationModel().getObservableParamValidation(getParameterIndex()).getValue();
     }
 
     @Override
     public String toStringOf() {
-        return getFriendlyName() + ": " + getNumber();
+        return getFriendlyName() + ": " + getParameterIndex();
     }
 
     @Override
@@ -114,7 +114,7 @@ implements ParameterUiModel {
 
     @Override
     public ManagedValue proposedValue() {
-        return getParameterNegotiationModel().getParamModels().getElseFail(getNumber());
+        return getParameterNegotiationModel().getParamModels().getElseFail(getParameterIndex());
     }
 
     @Override

@@ -159,7 +159,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
 
         val actionModel = getActionModel();
         val updatedParamModel = (ParameterUiModel)scalarPanelUpdated.getModel();
-        final int paramNumberUpdated = updatedParamModel.getNumber();
+        final int paramNumberUpdated = updatedParamModel.getParameterIndex();
         // only updates subsequent parameter panels starting from (paramNumberUpdated + 1)
         final int skipCount = paramNumberUpdated + 1;
 
@@ -169,7 +169,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
         .skip(skipCount)
         .forEach(paramModel->{
 
-            val paramNumToUpdate = paramModel.getNumber();
+            val paramNumToUpdate = paramModel.getParameterIndex();
             val paramPanel = paramPanels.get(paramNumToUpdate);
             val repaint = paramPanel.updateIfNecessary(paramModel, Optional.of(target));
 

@@ -28,7 +28,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionLinkFactory;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactories;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import lombok.val;
@@ -80,7 +80,7 @@ extends PanelAbstract<ManagedObject, EntityModel> {
         val adapter = model.getObject();
         if (adapter != null) {
             val topLevelActions = ObjectAction.Util.streamTopBarActions(adapter)
-            .map(LinkAndLabelUtil.forEntity(model))
+            .map(LinkAndLabelFactories.forEntity(model))
             .collect(Can.toCan());
 
             AdditionalLinksPanel

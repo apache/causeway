@@ -18,22 +18,81 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.LinkAndLabelFactoryAbstract;
+import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
+
+import lombok.val;
 
 public final class EntityActionLinkFactory
 extends LinkAndLabelFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public EntityActionLinkFactory(
-            final String linkId,
-            final EntityModel entityModel,
+    private final EntityModel ownerEntityModel;
+
+    // -- FACTORIES
+
+    public static EntityActionLinkFactory entity(
+            final EntityModel ownerEntityModel,
             final ScalarModel scalarModelForAssociationIfAny,
             final EntityCollectionModel collectionModelForAssociationIfAny) {
-        super(linkId, entityModel, scalarModelForAssociationIfAny, collectionModelForAssociationIfAny);
+        return new EntityActionLinkFactory(
+                AdditionalLinksPanel.ID_ADDITIONAL_LINK,
+                ownerEntityModel, scalarModelForAssociationIfAny, collectionModelForAssociationIfAny);
+    }
+
+    public static EntityActionLinkFactory menu(
+            final EntityModel serviceModel) {
+        return new EntityActionLinkFactory(PageAbstract.ID_MENU_LINK, serviceModel, null, null);
+    }
+
+    // -- CONSTRUCTION
+
+    private EntityActionLinkFactory(
+            final String linkId,
+            final EntityModel ownerEntityModel,
+            final ScalarModel scalarModelForAssociationIfAny,
+            final EntityCollectionModel collectionModelForAssociationIfAny) {
+        super(linkId,
+                scalarModelForAssociationIfAny, collectionModelForAssociationIfAny);
+        this.ownerEntityModel = ownerEntityModel;
+        guardAgainstNotBookmarkable();
+    }
+
+    @Override
+    public LinkAndLabel newActionLink(final ObjectAction action) {
+        return LinkAndLabel.of(
+                this::newLinkComponent,
+                this.ownerEntityModel,
+                action);
+    }
+
+    @Override
+    protected ActionModel actionModel(final ManagedAction managedAction) {
+        return ActionModel.ofEntity(
+                this.ownerEntityModel,
+                managedAction.getAction().getFeatureIdentifier(),
+                collectionModelForAssociationIfAny);
+    }
+
+    // -- HELPER
+
+    private void guardAgainstNotBookmarkable() {
+        val objectAdapter = this.ownerEntityModel.getManagedObject();
+        val isIdentifiable = ManagedObjects.isIdentifiable(objectAdapter);
+        if (!isIdentifiable) {
+            throw new IllegalArgumentException(String.format(
+                    "Object '%s' is not identifiable (has no identifier).",
+                    objectAdapter.titleString()));
+        }
     }
 
 }

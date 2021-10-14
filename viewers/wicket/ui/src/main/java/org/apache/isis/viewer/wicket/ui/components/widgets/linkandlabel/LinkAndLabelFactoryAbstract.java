@@ -19,64 +19,34 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel;
 import java.io.Serializable;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
-import lombok.val;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class LinkAndLabelFactoryAbstract
 implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     protected final String linkId;
-    protected final EntityModel targetEntityModel;
     protected final ScalarModel scalarModelForAssociationIfAny;
     protected final EntityCollectionModel collectionModelForAssociationIfAny;
 
-    protected LinkAndLabelFactoryAbstract(
-            final String linkId,
-            final EntityModel targetEntityModel,
-            final ScalarModel scalarModelForAssociationIfAny,
-            final EntityCollectionModel collectionModelForAssociationIfAny) {
+    /**
+     * The actual factory method clients care about.
+     */
+    public abstract LinkAndLabel newActionLink(final ObjectAction action);
 
-        this.linkId = linkId;
-        this.targetEntityModel = targetEntityModel;
-        this.scalarModelForAssociationIfAny = scalarModelForAssociationIfAny;
-        this.collectionModelForAssociationIfAny = collectionModelForAssociationIfAny;
-    }
+    protected abstract ActionModel actionModel(final ManagedAction managedAction);
 
-    public LinkAndLabel newActionLink(final ObjectAction action) {
-
-        val objectAdapter = this.targetEntityModel.getManagedObject();
-        val isIdentifiable = ManagedObjects.isIdentifiable(objectAdapter);
-        if (!isIdentifiable) {
-            throw new IllegalArgumentException(String.format(
-                    "Object '%s' is not identifiable (has no identifier).",
-                    objectAdapter.titleString()));
-        }
-
-        return LinkAndLabel.of(
-                this::newLinkComponent,
-                this.targetEntityModel,
-                action);
-    }
-
-    protected ActionModel actionModel(final ManagedAction managedAction) {
-        return ActionModel.of(
-                this.targetEntityModel, //FIXME[ISIS-2877] use the managedAction's owner instead (which is different for param support)
-                managedAction.getAction().getFeatureIdentifier(),
-                collectionModelForAssociationIfAny);
-    }
-
-    protected ActionLink newLinkComponent(final ManagedAction managedAction) {
-        val actionModel = actionModel(managedAction);
-        return new ActionLinkFactory(linkId, actionModel, scalarModelForAssociationIfAny)
+    protected final ActionLink newLinkComponent(final ManagedAction managedAction) {
+        return new ActionLinkFactory(linkId, actionModel(managedAction), scalarModelForAssociationIfAny)
                 .newLinkComponent();
     }
 

@@ -28,34 +28,34 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public final class LinkAndLabelUtil {
+public final class LinkAndLabelFactories {
+
+    public Function<ObjectAction, LinkAndLabel> forMenu(
+            final EntityModel serviceModel) {
+        return EntityActionLinkFactory.menu(
+                serviceModel)
+                ::newActionLink;
+    }
 
     public Function<ObjectAction, LinkAndLabel> forEntity(
             final EntityModel parentEntityModel) {
-
-        val actionLinkFactory = new EntityActionLinkFactory(
-                AdditionalLinksPanel.ID_ADDITIONAL_LINK,
+        return EntityActionLinkFactory.entity(
                 parentEntityModel,
                 null/*scalarModelIfAny*/,
-                null/*collectionModelForAssociationIfAny*/);
-
-        return objectAction->actionLinkFactory.newActionLink(objectAction);
+                null/*collectionModelForAssociationIfAny*/)
+                ::newActionLink;
     }
 
     public Function<ObjectAction, LinkAndLabel> forCollection(
             final EntityCollectionModelParented collectionModel) {
-
-        val actionLinkFactory = new EntityActionLinkFactory(
-                AdditionalLinksPanel.ID_ADDITIONAL_LINK,
+        return EntityActionLinkFactory.entity(
                 collectionModel.getEntityModel(),
                 null/*scalarModelIfAny*/,
-                collectionModel);
-
-        return objectAction->actionLinkFactory.newActionLink(objectAction);
+                collectionModel)
+                ::newActionLink;
     }
 
     public Function<ObjectAction, LinkAndLabel> forPropertyOrParameter(
@@ -63,30 +63,21 @@ public final class LinkAndLabelUtil {
         return scalarModel instanceof ScalarPropertyModel
                 ? forProperty((ScalarPropertyModel)scalarModel)
                 : forParameter((ScalarParameterModel)scalarModel);
-
     }
 
     public Function<ObjectAction, LinkAndLabel> forProperty(
             final ScalarPropertyModel scalarModel) {
-
-        val actionLinkFactory = new EntityActionLinkFactory(
-                AdditionalLinksPanel.ID_ADDITIONAL_LINK,
+        return EntityActionLinkFactory.entity(
                 scalarModel.getParentUiModel(),
                 scalarModel,
-                null/*collectionModelForAssociationIfAny*/);
-
-        return objectAction->actionLinkFactory.newActionLink(objectAction);
+                null/*collectionModelForAssociationIfAny*/)
+                ::newActionLink;
     }
 
     public Function<ObjectAction, LinkAndLabel> forParameter(
-            final ScalarParameterModel scalarModel) {
-
-        val actionLinkFactory = new ParameterAssociatedActionLinkFactory(
-                AdditionalLinksPanel.ID_ADDITIONAL_LINK,
-                scalarModel.getParentUiModel(),
-                scalarModel);
-
-        return objectAction->actionLinkFactory.newActionLink(objectAction);
+            final ScalarParameterModel scalarParameterModel) {
+        return new ParameterAssociatedActionLinkFactory(scalarParameterModel)
+                ::newActionLink;
     }
 
 }

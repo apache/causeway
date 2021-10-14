@@ -38,11 +38,11 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
-import lombok.val;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
-public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAjaxIndicatorAware {
+public abstract class ActionLink
+extends AjaxLink<ManagedObject>
+implements IAjaxIndicatorAware {
 
     private static final long serialVersionUID = 1L;
 
@@ -86,8 +86,7 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
     protected abstract void doOnClick(AjaxRequestTarget target);
 
     ActionModel getActionModel() {
-        val actionModel = (ActionModel) getModel();
-        return actionModel;
+        return (ActionModel) getModel();
     }
 
     private transient ObjectAction objectAction;

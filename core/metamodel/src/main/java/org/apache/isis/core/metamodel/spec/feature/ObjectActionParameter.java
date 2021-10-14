@@ -53,7 +53,7 @@ extends ObjectFeature, CurrentHolder {
     /**
      * Returns the 0-based index to this parameter.
      */
-    int getNumber();
+    int getParameterIndex();
 
     default boolean isScalar() {
         return getFeatureType()==FeatureType.ACTION_PARAMETER_SCALAR;

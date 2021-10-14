@@ -49,8 +49,8 @@ public interface ParameterUiModel extends ScalarUiModel {
     // -- SHORTCUTS
 
     /** param index */
-    default int getNumber() {
-        return getMetaModel().getNumber();
+    default int getParameterIndex() {
+        return getMetaModel().getParameterIndex();
     }
 
     @Override

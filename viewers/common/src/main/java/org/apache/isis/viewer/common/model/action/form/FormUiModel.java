@@ -104,7 +104,7 @@ public interface FormUiModel extends HasTitle {
         val buf = new StringBuilder();
 
         streamPendingParamUiModels()
-        .filter(paramModel->paramModel.getParameterNegotiationModel().getVisibilityConsent(paramModel.getNumber()).isAllowed())
+        .filter(paramModel->paramModel.getParameterNegotiationModel().getVisibilityConsent(paramModel.getParameterIndex()).isAllowed())
         .map(ParameterUiModel::getValue)
         .forEach(paramValue->{
             if(buf.length() > 0) {

@@ -80,11 +80,20 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     // -- FACTORY METHODS
 
-    public static ActionModel wrap(final EntityModel actionOwner, final ActionInteractionWkt delegate) {
+    public static ActionModel wrap(
+            final EntityModel actionOwner,
+            final ActionInteractionWkt delegate) {
         return new ActionModel(actionOwner, delegate);
     }
 
-    public static ActionModel of(
+    public static ActionModel supportingParameter(
+            final ScalarParameterModel scalarParameterModel) {
+        //FIXME[ISIS-2877] impl.
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public static ActionModel ofEntity(
             final EntityModel actionOwner,
             final Identifier actionIdentifier,
             final EntityCollectionModel associatedWithCollectionModelIfAny) {
@@ -181,7 +190,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     }
 
     /** Resets arguments to their fixed point default values
-     * @see ActionInteractionHead#defaults()
+     * @see ActionInteractionHead#defaults(org.apache.isis.core.metamodel.interactions.managed.ManagedAction)
      */
     public void clearArguments() {
         delegate.resetParametersToDefault();
@@ -192,10 +201,12 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
      * of {@link BookmarkPolicy#AS_ROOT root}, and has safe {@link ObjectAction#getSemantics() semantics}.
      */
     public boolean isBookmarkable() {
-        final ObjectAction action = getMetaModel();
-        final BookmarkPolicyFacet bookmarkPolicy = action.getFacet(BookmarkPolicyFacet.class);
-        final boolean safeSemantics = action.getSemantics().isSafeInNature();
-        return bookmarkPolicy.value() == BookmarkPolicy.AS_ROOT && safeSemantics;
+        val action = getMetaModel();
+        return action.getSemantics().isSafeInNature()
+                && action.lookupFacet(BookmarkPolicyFacet.class)
+                    .map(BookmarkPolicyFacet::value)
+                    .map(bookmarkPolicy -> bookmarkPolicy == BookmarkPolicy.AS_ROOT)
+                    .orElse(false);
     }
 
     // //////////////////////////////////////
@@ -331,11 +342,11 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     }
 
     public void setParameterValue(final ObjectActionParameter actionParameter, final ManagedObject newParamValue) {
-        delegate.parameterNegotiationModel().setParamValue(actionParameter.getNumber(), newParamValue);
+        delegate.parameterNegotiationModel().setParamValue(actionParameter.getParameterIndex(), newParamValue);
     }
 
     public void clearParameterValue(final ObjectActionParameter actionParameter) {
-        delegate.parameterNegotiationModel().clearParamValue(actionParameter.getNumber());
+        delegate.parameterNegotiationModel().clearParamValue(actionParameter.getParameterIndex());
     }
 
     @Override
@@ -387,5 +398,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
         return downloadHandler;
     }
+
+
 
 }
