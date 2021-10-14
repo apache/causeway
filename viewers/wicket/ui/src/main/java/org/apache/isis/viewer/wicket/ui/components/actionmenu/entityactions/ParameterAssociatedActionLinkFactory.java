@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
@@ -47,11 +48,11 @@ implements ObjectUiModel {
     }
 
     @Override
-    protected ActionModel actionModel(final ObjectAction action) {
+    protected ActionModel actionModel(final ManagedAction managedAction) {
         return ActionModel.of(
                 //FIXME[ISIS-2877] needs a ValueModel instead
                 EntityModel.ofAdapter(scalarParameterModel().getCommonContext(), getManagedObject()),
-                action.getFeatureIdentifier(),
+                managedAction.getAction().getFeatureIdentifier(),
                 null);
     }
 

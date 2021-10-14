@@ -114,7 +114,6 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
             @Override
             protected void populateItem(final ListItem<LinkAndLabel> item) {
                 val linkAndLabel = item.getModelObject();
-                val actionMetaLegacy = linkAndLabel.getActionUiMetaModel();
                 val actionMeta = linkAndLabel.getManagedAction().getAction();
                 val link = linkAndLabel.getUiComponent();
                 final Model<String> tooltipModel = link instanceof ActionLink

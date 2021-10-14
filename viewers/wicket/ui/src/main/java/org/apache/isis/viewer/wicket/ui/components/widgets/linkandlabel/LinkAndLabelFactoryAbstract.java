@@ -18,9 +18,9 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel;
 
 import java.io.Serializable;
 
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -67,17 +67,15 @@ implements Serializable {
                 action);
     }
 
-    protected ActionModel actionModel(final ObjectAction action) {
+    protected ActionModel actionModel(final ManagedAction managedAction) {
         return ActionModel.of(
-                this.targetEntityModel,
-                action.getFeatureIdentifier(),
+                this.targetEntityModel, //FIXME[ISIS-2877] use the managedAction's owner instead (which is different for param support)
+                managedAction.getAction().getFeatureIdentifier(),
                 collectionModelForAssociationIfAny);
     }
 
-    protected ActionLink newLinkComponent(final ActionUiMetaModel model) {
-        val action = model.getActionMemento()
-                .getAction(()->this.targetEntityModel.getCommonContext().getSpecificationLoader());
-        val actionModel = actionModel(action);
+    protected ActionLink newLinkComponent(final ManagedAction managedAction) {
+        val actionModel = actionModel(managedAction);
         return new ActionLinkFactory(linkId, actionModel, scalarModelForAssociationIfAny)
                 .newLinkComponent();
     }

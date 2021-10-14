@@ -100,7 +100,6 @@ implements Serializable {
 
         val linkAndLabel = getLinkAndLabel();
         val actionMeta = getLinkAndLabel().getManagedAction().getAction();
-        val actionMetaLegacy = getLinkAndLabel().getActionUiMetaModel();
         val actionLink = getLinkAndLabel().getUiComponent();
 
         val label = new Label(CssMenuItem.ID_MENU_LABEL, Model.of(this.getName()));
@@ -131,7 +130,7 @@ implements Serializable {
             val fontAwesome = getLinkAndLabel().getFontAwesomeUiModel();
             Decorators.getIcon().decorate(label, fontAwesome);
 
-            actionMetaLegacy.getDisableUiModel().ifPresent(disableUiModel->{
+            linkAndLabel.getDisableUiModel().ifPresent(disableUiModel->{
                 Decorators.getDisable().decorate(actionLink, disableUiModel);
             });
 
@@ -144,7 +143,7 @@ implements Serializable {
             Components.permanentlyHide(markupContainer, ID_MENU_LINK);
             // ... and show label, along with disabled reason
 
-            actionMetaLegacy.getDisableUiModel().ifPresent(disableUiModel->{
+            linkAndLabel.getDisableUiModel().ifPresent(disableUiModel->{
                 Tooltips.addTooltip(label, disableUiModel.getReason());
             });
 

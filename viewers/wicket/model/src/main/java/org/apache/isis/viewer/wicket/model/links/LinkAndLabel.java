@@ -33,13 +33,12 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.annotation.ActionLayout.Position;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
+import org.apache.isis.viewer.common.model.HasUiComponent;
 import org.apache.isis.viewer.common.model.action.HasManagedAction;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
@@ -53,6 +52,7 @@ import lombok.val;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class LinkAndLabel
 implements
+    HasUiComponent<AbstractLink>,
     HasManagedAction,
     Serializable {
 
@@ -94,13 +94,9 @@ implements
     @Getter private final ObjectAction objectAction;
 
     // implements HasUiComponent<T>
-    @Getter(lazy = true)
+    @Getter(lazy = true, onMethod_ = {@Override})
     private final AbstractLink uiComponent = uiComponentFactory
-        .newActionLinkUiComponent(getActionUiMetaModel());
-
-    public ActionUiMetaModel getActionUiMetaModel() {
-        return actionUiMetaModel.get();
-    }
+        .newActionLinkUiComponent(getManagedAction());
 
     @Override
     public String toString() {
@@ -141,15 +137,6 @@ implements
                 .map(SerializationProxy::restore)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
-
-    // -- HELPER
-
-    private final _Lazy<ActionUiMetaModel> actionUiMetaModel = _Lazy.threadSafe(this::createActionUiMetaModel);
-
-    private ActionUiMetaModel createActionUiMetaModel() {
-        return ActionUiMetaModel.of(actionHolder.getManagedObject(), objectAction);
-    }
-
 
     // -- SERIALIZATION PROXY
 

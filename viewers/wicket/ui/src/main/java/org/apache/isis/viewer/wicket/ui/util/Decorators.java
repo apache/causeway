@@ -169,14 +169,13 @@ public class Decorators {
 
             val actionLinkUiComponent = linkAndLabel.getUiComponent(); // UI component #2
             val actionMeta = linkAndLabel.getManagedAction().getAction();
-            val actionMetaLegacy = linkAndLabel.getActionUiMetaModel();
 
-            actionMetaLegacy.getDisableUiModel().ifPresent(disableUiModel->{
+            linkAndLabel.getDisableUiModel().ifPresent(disableUiModel->{
                 getDisableDecorator().decorate(uiComponent, disableUiModel);
                 getTooltipDecorator().decorate(uiComponent, TooltipUiModel.ofBody(disableUiModel.getReason()));
             });
 
-            if (!actionMetaLegacy.getDisableUiModel().isPresent()) {
+            if (!linkAndLabel.getDisableUiModel().isPresent()) {
 
                 linkAndLabel
                 .getDescription()
@@ -195,7 +194,8 @@ public class Decorators {
             }
 
             if (actionMeta.isPrototype()) {
-                getPrototypingDecorator().decorate(actionLinkUiComponent, PrototypingUiModel.of(actionMetaLegacy));
+                getPrototypingDecorator()
+                .decorate(actionLinkUiComponent, PrototypingUiModel.of(linkAndLabel.getManagedAction()));
             }
 
         }

@@ -34,7 +34,6 @@ import org.apache.isis.viewer.common.model.menu.MenuUiModel;
 import org.apache.isis.viewer.common.model.menu.MenuVisitor;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Decorators;
@@ -120,8 +119,8 @@ public final class ServiceActionUtil {
                     serviceModel);
 
             return LinkAndLabel.of(
-                    model->actionLinkFactory.newActionLink(
-                            model.getObjectAction(CommonContextUtils.getCommonContext()::getSpecificationLoader))
+                    act->actionLinkFactory
+                            .newActionLink(act.getAction())
                             .getUiComponent(),
                     serviceModel,
                     managedAction.getAction());
