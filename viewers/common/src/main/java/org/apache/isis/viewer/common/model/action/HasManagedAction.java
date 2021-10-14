@@ -16,10 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model.decorator.tooltip;
+package org.apache.isis.viewer.common.model.action;
 
-public interface TooltipDecorator<T> {
+import java.util.Optional;
 
-    void decorate(T uiComponent, TooltipUiModel tooltipUiModel);
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
 
+import lombok.val;
+
+public interface HasManagedAction {
+
+    ManagedAction getManagedAction();
+
+    default Optional<FontAwesomeUiModel> getFontAwesomeUiModel() {
+        val managedAction = getManagedAction();
+        return FontAwesomeUiModel.of(ObjectAction.Util.cssClassFaFactoryFor(
+                managedAction.getAction(),
+                managedAction.getOwner()));
+    }
 }

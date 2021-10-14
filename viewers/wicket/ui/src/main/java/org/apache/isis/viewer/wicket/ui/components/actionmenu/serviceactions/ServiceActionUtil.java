@@ -64,8 +64,7 @@ public final class ServiceActionUtil {
                 actionUiModel,
                 commonContext.getTranslationService());
 
-        val actionMeta = actionUiModel.getActionUiMetaModel();
-        val fontAwesome = actionMeta.getFontAwesomeUiModel();
+        val fontAwesome = actionUiModel.getFontAwesomeUiModel();
         Decorators.getIcon().decorate(menuItemLabel, fontAwesome);
         Decorators.getMissingIcon().decorate(menuItemActionLink, fontAwesome);
 

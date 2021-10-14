@@ -36,7 +36,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.memento.ActionMemento;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
-import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -45,7 +44,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public final class ActionUiMetaModel implements Serializable {
+@Deprecated
+public final class ActionUiMetaModel
+implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -56,7 +57,6 @@ public final class ActionUiMetaModel implements Serializable {
     @Getter private final boolean prototyping;
     @Getter private final String actionIdentifier;
     @Getter private final String cssClass;
-    @Getter private final Optional<FontAwesomeUiModel> fontAwesomeUiModel;
     @Getter private final ActionLayout.Position position;
     @Getter private final SemanticsOf semantics;
     @Getter private final PromptStyle promptStyle;
@@ -90,7 +90,6 @@ public final class ActionUiMetaModel implements Serializable {
                 objectAction.isPrototype(),
                 ObjectAction.Util.actionIdentifierFor(objectAction),
                 ObjectAction.Util.cssClassFor(objectAction, owner),
-                FontAwesomeUiModel.of(ObjectAction.Util.cssClassFaFactoryFor(objectAction, owner)),
                 ObjectAction.Util.actionLayoutPositionOf(objectAction),
                 objectAction.getSemantics(),
                 ObjectAction.Util.promptStyleFor(objectAction),

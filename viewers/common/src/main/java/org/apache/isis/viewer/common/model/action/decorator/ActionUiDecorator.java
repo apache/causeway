@@ -43,6 +43,4 @@ public class ActionUiDecorator<T> {
     private final PrototypingDecorator<T, T> prototypingDecorator;
     private final IconDecorator<T, T> iconDecorator;
 
-
-
 }

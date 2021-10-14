@@ -56,13 +56,13 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
     public enum Style {
         INLINE_LIST {
             @Override
-            AdditionalLinksPanel newPanel(String id, Can<LinkAndLabel> links) {
+            AdditionalLinksPanel newPanel(final String id, final Can<LinkAndLabel> links) {
                 return new AdditionalLinksAsListInlinePanel(id, links);
             }
         },
         DROPDOWN {
             @Override
-            AdditionalLinksPanel newPanel(String id, Can<LinkAndLabel> links) {
+            AdditionalLinksPanel newPanel(final String id, final Can<LinkAndLabel> links) {
                 return new AdditionalLinksAsDropDownPanel(id, links);
             }
         };
@@ -85,8 +85,8 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
     }
 
     protected AdditionalLinksPanel(
-            String id,
-            Can<LinkAndLabel> linksDoNotUseDirectlyInsteadUseOfListOfLinksModel) {
+            final String id,
+            final Can<LinkAndLabel> linksDoNotUseDirectlyInsteadUseOfListOfLinksModel) {
 
         super(id, new ListOfLinksModel(linksDoNotUseDirectlyInsteadUseOfListOfLinksModel));
 
@@ -111,7 +111,7 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void populateItem(ListItem<LinkAndLabel> item) {
+            protected void populateItem(final ListItem<LinkAndLabel> item) {
                 val linkAndLabel = item.getModelObject();
                 val actionMeta = linkAndLabel.getActionUiMetaModel();
                 val link = linkAndLabel.getUiComponent();
@@ -158,7 +158,7 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
 
                 link.addOrReplace(viewTitleLabel);
 
-                val fontAwesome = actionMeta.getFontAwesomeUiModel();
+                val fontAwesome = linkAndLabel.getFontAwesomeUiModel();
                 Decorators.getIcon().decorate(viewTitleLabel, fontAwesome);
                 Decorators.getMissingIcon().decorate(viewTitleLabel, fontAwesome);
 
@@ -170,7 +170,7 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
         container.addOrReplace(listView);
     }
 
-    private static String firstNonNull(String... str) {
+    private static String firstNonNull(final String... str) {
         for (String s : str) {
             if(s != null) return s;
         }

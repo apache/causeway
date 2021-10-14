@@ -75,7 +75,7 @@ implements Serializable {
     /**
      * @param menuItems we assume these have the correct parent already set
      */
-    public void replaceSubMenuItems(List<CssMenuItem> menuItems) {
+    public void replaceSubMenuItems(final List<CssMenuItem> menuItems) {
         subMenuItems.clear();
         subMenuItems.addAll(menuItems);
     }
@@ -123,7 +123,7 @@ implements Serializable {
             }
             actionLink.add(new CssClassAppender(actionMeta.getActionIdentifier()));
 
-            val fontAwesome = actionMeta.getFontAwesomeUiModel();
+            val fontAwesome = getLinkAndLabel().getFontAwesomeUiModel();
             Decorators.getIcon().decorate(label, fontAwesome);
 
             actionMeta.getDisableUiModel().ifPresent(disableUiModel->{
@@ -174,7 +174,7 @@ implements Serializable {
     }
 
     @Getter private CssMenuItem parent;
-    protected void setParent(CssMenuItem parent) {
+    protected void setParent(final CssMenuItem parent) {
         this.parent = parent;
         parent.addSubMenuItem(_Casts.uncheckedCast(this));
     }
@@ -201,7 +201,7 @@ implements Serializable {
         return new CssMenuItem("---", MenuItemType.SPACER);
     }
 
-    public static CssMenuItem newSectionLabel(String named) {
+    public static CssMenuItem newSectionLabel(final String named) {
         return new CssMenuItem(named, MenuItemType.SECTION_LABEL);
     }
 

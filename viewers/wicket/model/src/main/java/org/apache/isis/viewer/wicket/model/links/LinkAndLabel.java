@@ -23,26 +23,40 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.wicket.markup.html.link.AbstractLink;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.ActionLayout.Position;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
+import org.apache.isis.viewer.common.model.action.HasManagedAction;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class LinkAndLabel
-extends LinkAndLabelAbstract {
+implements
+    HasManagedAction,
+    Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -53,12 +67,72 @@ extends LinkAndLabelAbstract {
         return new LinkAndLabel(uiComponentFactory, actionHolderModel, objectAction);
     }
 
-    private LinkAndLabel(
-            final ActionLinkUiComponentFactoryWkt uiComponentFactory,
-            final ObjectUiModel actionHolderModel,
-            final ObjectAction objectAction) {
-        super(uiComponentFactory, actionHolderModel, objectAction);
+    @Override
+    public ManagedAction getManagedAction() {
+        // TODO Auto-generated method stub
+        return null;
     }
+
+    protected final ActionLinkUiComponentFactoryWkt uiComponentFactory;
+
+    /**
+     * used when explicitly named (eg. menu bar layout file), otherwise {@code null}
+     */
+    @Getter private String named;
+
+    /**
+     * domain object that is the <em>Action's</em> holder or owner
+     */
+    @Getter private final ObjectUiModel actionHolder;
+
+    /**
+     * framework internal <em>Action</em> model
+     */
+    @Getter private final ObjectAction objectAction;
+
+    // implements HasUiComponent<T>
+    @Getter(lazy = true)
+    private final AbstractLink uiComponent = uiComponentFactory
+        .newActionLinkUiComponent(getActionUiMetaModel());
+
+    public ActionUiMetaModel getActionUiMetaModel() {
+        return actionUiMetaModel.get();
+    }
+
+    @Override
+    public String toString() {
+        return Optional.ofNullable(named).orElse("") +
+                " ~ " + objectAction.getFeatureIdentifier().getFullIdentityString();
+    }
+
+    // -- SHORTCUTS
+
+    public String getLabel() {
+        return getActionUiMetaModel().getLabel();
+    }
+
+    // -- VISIBILITY
+
+    public boolean isVisible() {
+        val owner = actionHolder.getManagedObject();
+
+        // check hidden
+        if (owner.getSpecification().isHidden()) {
+            return false;
+        }
+        // check visibility
+        final Consent visibility = objectAction.isVisible(
+                owner,
+                InteractionInitiatedBy.USER,
+                Where.ANYWHERE);
+        if (visibility.isVetoed()) {
+            return false;
+        }
+        return true;
+    }
+
+
+    // -- UTILITY
 
     public static Can<LinkAndLabel> positioned(final Position pos, final Stream<LinkAndLabel> stream) {
         return stream.filter(LinkAndLabel.isPositionedAt(pos))
@@ -74,6 +148,15 @@ extends LinkAndLabelAbstract {
                 .map(SerializationProxy::restore)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
+
+    // -- HELPER
+
+    private final _Lazy<ActionUiMetaModel> actionUiMetaModel = _Lazy.threadSafe(this::createActionUiMetaModel);
+
+    private ActionUiMetaModel createActionUiMetaModel() {
+        return ActionUiMetaModel.of(actionHolder.getManagedObject(), objectAction);
+    }
+
 
     // -- SERIALIZATION PROXY
 

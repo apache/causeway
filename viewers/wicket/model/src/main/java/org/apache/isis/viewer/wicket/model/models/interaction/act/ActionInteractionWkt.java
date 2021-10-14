@@ -114,9 +114,6 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
 
     public Stream<ParameterUiModelWkt> streamParameterUiModels() {
         if(childModels==null) {
-            this.childModels = _2877.createChildModels(this);
-        }
-        if(childModels==null) {
             final int paramCount = actionInteraction().getMetamodel().get().getParameterCount();
             final int tupleIndex = 0;
             this.childModels = IntStream.range(0, paramCount)
