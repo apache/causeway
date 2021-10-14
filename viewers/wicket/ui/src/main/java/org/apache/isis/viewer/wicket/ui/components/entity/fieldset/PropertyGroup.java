@@ -90,7 +90,6 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
     private List<Component> buildGui() {
 
         final List<Component> childComponents = _Lists.newArrayList();
-        final List<LinkAndLabel> memberGroupActions = _Lists.newArrayList();
 
         setOutputMarkupPlaceholderTag(true);
         setOutputMarkupId(true);
@@ -103,30 +102,25 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
 
         val properties = getPropertiesNotStaticallyHidden();
 
-        for (OneToOneAssociation property : properties) {
-            final WebMarkupContainer propertyRvContainer = new WebMarkupContainer(propertyRv.newChildId());
-            propertyRv.addOrReplace(propertyRvContainer);
-            childComponents.add(
-                    addPropertyToForm(getModel(), property, propertyRvContainer, memberGroupActions::add));
-        }
+        val memberGroupActions = collectMemberGroupActions(propertyRv, childComponents::add);
 
-        WebMarkupContainer panelHeading = new WebMarkupContainer("panelHeading");
+        final WebMarkupContainer panelHeading = new WebMarkupContainer("panelHeading");
         div.addOrReplace(panelHeading);
         if(_Strings.isNullOrEmpty(fieldSet.getName())) {
             panelHeading.setVisibilityAllowed(false);
         } else {
             panelHeading.addOrReplace(new Label(ID_MEMBER_GROUP_NAME, fieldSet.getName()));
-            final Can<LinkAndLabel> actionsPanel = LinkAndLabel
-                    .positioned(ActionLayout.Position.PANEL, memberGroupActions.stream());
-            final Can<LinkAndLabel> actionsPanelDropDown = LinkAndLabel
-                    .positioned(ActionLayout.Position.PANEL_DROPDOWN, memberGroupActions.stream());
+
             AdditionalLinksPanel.addAdditionalLinks(
                     panelHeading, ID_ASSOCIATED_ACTION_LINKS_PANEL,
-                    actionsPanel,
+                    memberGroupActions
+                        .filter(LinkAndLabel.isPositionedAt(ActionLayout.Position.PANEL)),
                     AdditionalLinksPanel.Style.INLINE_LIST);
+
             AdditionalLinksPanel.addAdditionalLinks(
                     panelHeading, ID_ASSOCIATED_ACTION_LINKS_PANEL_DROPDOWN,
-                    actionsPanelDropDown,
+                    memberGroupActions
+                        .filter(LinkAndLabel.isPositionedAt(ActionLayout.Position.PANEL_DROPDOWN)),
                     AdditionalLinksPanel.Style.DROPDOWN);
         }
 
@@ -138,6 +132,22 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
         }
 
         return childComponents;
+    }
+
+    private Can<LinkAndLabel> collectMemberGroupActions(
+            final RepeatingView container,
+            final Consumer<Component> onNewChildComponent) {
+
+        val memberGroupActionList = _Lists.<LinkAndLabel>newArrayList();
+
+        for (val property : getPropertiesNotStaticallyHidden()) {
+            val propertyRvContainer = new WebMarkupContainer(container.newChildId());
+            container.addOrReplace(propertyRvContainer);
+            onNewChildComponent.accept(
+                    addPropertyToForm(getModel(), property, propertyRvContainer, memberGroupActionList::add));
+        }
+
+        return Can.ofCollection(memberGroupActionList);
     }
 
     private Can<OneToOneAssociation> getPropertiesNotStaticallyHidden() {

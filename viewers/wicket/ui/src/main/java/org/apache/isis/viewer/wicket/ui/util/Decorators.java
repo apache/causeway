@@ -217,7 +217,7 @@ public class Decorators {
 
         private void addCssClassForAction(final Component uiComponent, final LinkAndLabel linkAndLabel) {
             uiComponent.add(new CssClassAppender("isis-"
-                    + CssClassAppender.asCssStyle(linkAndLabel.getCssClassForAction())));
+                    + CssClassAppender.asCssStyle(linkAndLabel.getFeatureIdentifierForCss())));
         }
 
 

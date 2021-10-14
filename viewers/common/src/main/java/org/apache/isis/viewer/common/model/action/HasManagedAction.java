@@ -19,7 +19,9 @@
 package org.apache.isis.viewer.common.model.action;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -51,14 +53,32 @@ public interface HasManagedAction {
                 managedAction.getOwner()));
     }
 
-    //TODO rename?
-    default String getCssClassForAction() {
-        return ObjectAction.Util.actionIdentifierFor(getAction());
+    default String getFeatureIdentifierForCss() {
+        val identifier = getAction().getFeatureIdentifier();
+        return identifier.getLogicalType().getLogicalTypeName().replace(".","-")
+                + "-"
+                + identifier.getMemberLogicalName();
     }
 
     default Optional<String> getAdditionalCssClass() {
         return getAction().lookupFacet(CssClassFacet.class)
                 .map(cssClassFacet->cssClassFacet.cssClass(getManagedAction().getOwner()));
     }
+
+    default ActionLayout.Position getPosition() {
+        return ObjectAction.Util.actionLayoutPositionOf(getAction());
+    }
+
+    public static <T extends HasManagedAction> Predicate<T> isPositionedAt(
+            final ActionLayout.Position position) {
+        return a -> a.getPosition() == position;
+    }
+
+
+//  public static <R> Predicate<R> positioned(
+//  final ActionLayout.Position position,
+//  final Function<R, ActionUiMetaModel> posAccessor) {
+//return x -> posAccessor.apply(x).getPosition() == position;
+//}
 
 }

@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.springframework.lang.Nullable;
@@ -34,7 +33,6 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.annotation.ActionLayout.Position;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -134,18 +132,10 @@ implements
 
     // -- UTILITY
 
-    //FIXME[ISIS-2877] this logic can probably be moved to ActionUiModel
-    public static Can<LinkAndLabel> positioned(final Position pos, final Stream<LinkAndLabel> stream) {
-        return stream.filter(LinkAndLabel.isPositionedAt(pos))
-        .collect(Can.toCan());
+    public static Predicate<LinkAndLabel> isPositionedAt(final Position panel) {
+        return HasManagedAction.isPositionedAt(panel);
     }
 
-    //FIXME[ISIS-2877] this logic can probably be moved to ActionUiModel
-    public static Predicate<LinkAndLabel> isPositionedAt(final Position pos) {
-        return ActionUiMetaModel.positioned(pos, LinkAndLabel::getActionUiMetaModel);
-    }
-
-    //FIXME[ISIS-2877] this logic can probably be moved to ActionUiModel
     public static List<LinkAndLabel> recoverFromIncompleteDeserialization(final List<SerializationProxy> proxies) {
         return proxies.stream()
                 .map(SerializationProxy::restore)
@@ -204,6 +194,7 @@ implements
         }
 
     }
+
 
 
 }

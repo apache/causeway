@@ -126,7 +126,7 @@ implements Serializable {
             .getAdditionalCssClass()
             .ifPresent(cssClass->actionLink.add(new CssClassAppender(cssClass)));
 
-            actionLink.add(new CssClassAppender(linkAndLabel.getCssClassForAction()));
+            actionLink.add(new CssClassAppender(linkAndLabel.getFeatureIdentifierForCss()));
 
             val fontAwesome = getLinkAndLabel().getFontAwesomeUiModel();
             Decorators.getIcon().decorate(label, fontAwesome);

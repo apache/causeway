@@ -20,11 +20,8 @@ package org.apache.isis.viewer.common.model.action;
 
 import java.io.Serializable;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -49,7 +46,6 @@ implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Getter private final ActionMemento actionMemento;
-    @Getter private final ActionLayout.Position position;
     @Getter private final Optional<DisablingUiModel> disableUiModel;
 
 
@@ -69,15 +65,10 @@ implements Serializable {
             final ObjectAction objectAction) {
 
         this(   objectAction.getMemento(),
-                ObjectAction.Util.actionLayoutPositionOf(objectAction),
                 disabledUiModelFor(owner, objectAction));
     }
 
-    public static <R> Predicate<R> positioned(
-            final ActionLayout.Position position,
-            final Function<R, ActionUiMetaModel> posAccessor) {
-        return x -> posAccessor.apply(x).getPosition() == position;
-    }
+
 
     public ObjectAction getObjectAction(final Supplier<SpecificationLoader> specLoader) {
         return actionMemento.getAction(specLoader);

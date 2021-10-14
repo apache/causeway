@@ -137,5 +137,9 @@ public enum SemanticsOf {
         return this == IDEMPOTENT_ARE_YOU_SURE || this == NON_IDEMPOTENT_ARE_YOU_SURE;
     }
 
+    public boolean isIdempotentOrCachable() {
+        return this.isIdempotentInNature()
+                || this.isSafeAndRequestCacheable();
+    }
 
 }

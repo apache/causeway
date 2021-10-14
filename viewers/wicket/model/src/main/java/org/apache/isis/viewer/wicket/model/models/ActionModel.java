@@ -264,7 +264,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         handler.setContentDisposition(ContentDisposition.ATTACHMENT);
 
         //ISIS-1619, prevent clients from caching the response content
-        return isIdempotentOrCachable()
+        return getMetaModel().getSemantics().isIdempotentOrCachable()
                 ? handler
                 : enforceNoCacheOnClientSide(handler);
     }
@@ -364,10 +364,6 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     }
 
     // -- HELPER
-
-    private boolean isIdempotentOrCachable() {
-        return ObjectAction.Util.isIdempotentOrCachable(getMetaModel());
-    }
 
 //    private boolean isPartOfChoicesConsideringDependentArgs(
 //            ManagedObject paramValue,

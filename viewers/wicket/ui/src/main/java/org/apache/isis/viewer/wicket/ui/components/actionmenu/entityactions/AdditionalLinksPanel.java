@@ -138,7 +138,7 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
                 if(actionMeta.isPrototype()) {
                     link.add(new CssClassAppender("prototype"));
                 }
-                link.add(new CssClassAppender(linkAndLabel.getCssClassForAction()));
+                link.add(new CssClassAppender(linkAndLabel.getFeatureIdentifierForCss()));
 
                 if (actionMeta.getSemantics().isAreYouSure()) {
                     if(actionMeta.getParameterCount()==0) {

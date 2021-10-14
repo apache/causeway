@@ -94,7 +94,7 @@ public class ServiceActionsPanel extends MenuActionPanel {
         return _NullSafe.stream(menuItem.getSubMenuItems())
         .filter(cssMenuItem->cssMenuItem.getItemType().isActionOrSubMenuContainer())
         .map(cssMenuItem -> {
-            val actionIdentifier = cssMenuItem.getLinkAndLabel().getCssClassForAction();
+            val actionIdentifier = cssMenuItem.getLinkAndLabel().getFeatureIdentifierForCss();
             if (actionIdentifier != null) {
                 // busrules-busrulesobjects-findbyname
                 final String actionId = CssClassAppender.asCssStyle(actionIdentifier);

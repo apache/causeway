@@ -24,7 +24,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -70,7 +69,7 @@ public interface ObjectAction extends ObjectMember {
      * does require an immediate confirmation dialog.
      */
     default boolean isImmediateConfirmationRequired() {
-        return ObjectAction.Util.isAreYouSureSemantics(this)
+        return getSemantics().isAreYouSure()
         && ObjectAction.Util.isNoParameters(this);
     }
 
@@ -255,19 +254,6 @@ public interface ObjectAction extends ObjectMember {
 
     public static final class Util {
 
-        private static SemanticsOf semanticsOf(final ObjectAction objectAction) {
-            return objectAction.getSemantics();
-        }
-
-        public static boolean isAreYouSureSemantics(final ObjectAction objectAction) {
-            return semanticsOf(objectAction).isAreYouSure();
-        }
-
-        public static boolean isIdempotentOrCachable(final ObjectAction objectAction) {
-            final SemanticsOf semantics = semanticsOf(objectAction);
-            return semantics.isIdempotentInNature() || semantics.isSafeAndRequestCacheable();
-        }
-
         public static boolean isNoParameters(final ObjectAction objectAction) {
             return objectAction.getParameterCount()==0;
         }
@@ -276,25 +262,18 @@ public interface ObjectAction extends ObjectMember {
             final ObjectSpecification returnType = objectAction.getReturnType();
             if (returnType != null) {
                 Class<?> cls = returnType.getCorrespondingClass();
-                if (Blob.class.isAssignableFrom(cls) || Clob.class.isAssignableFrom(cls)) {
+                if (Blob.class.isAssignableFrom(cls)
+                        || Clob.class.isAssignableFrom(cls)) {
                     return true;
                 }
             }
             return false;
         }
 
-        public static String actionIdentifierFor(final ObjectAction action) {
-            @SuppressWarnings("unused")
-            final Identifier identifier = action.getFeatureIdentifier();
-
-            final String className = action.getDeclaringType().getLogicalTypeName().replace(".","-");
-            final String actionId = action.getId();
-            return className + "-" + actionId;
-        }
-
         public static ActionLayout.Position actionLayoutPositionOf(final ObjectAction action) {
-            final ActionPositionFacet layoutFacet = action.getFacet(ActionPositionFacet.class);
-            return layoutFacet != null ? layoutFacet.position() : ActionLayout.Position.BELOW;
+            return action.lookupFacet(ActionPositionFacet.class)
+            .map(ActionPositionFacet::position)
+            .orElse(ActionLayout.Position.BELOW);
         }
 
         public static Optional<CssClassFaFactory> cssClassFaFactoryFor(
@@ -378,6 +357,11 @@ public interface ObjectAction extends ObjectMember {
 
         public static Predicate<ObjectAction> ofActionType(final ActionType type) {
             return (final ObjectAction oa) -> oa.getType() == type;
+        }
+
+        public static Predicate<ObjectAction> isPositioned(
+                final ActionLayout.Position position) {
+            return (final ObjectAction oa) -> ObjectAction.Util.actionLayoutPositionOf(oa) == position;
         }
 
         public static Predicate<ObjectAction> isSameLayoutGroupAs(

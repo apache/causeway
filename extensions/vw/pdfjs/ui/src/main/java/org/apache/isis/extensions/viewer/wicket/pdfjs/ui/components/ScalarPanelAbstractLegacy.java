@@ -351,17 +351,10 @@ implements ScalarModelProvider {
     }
 
     private static String determineActionLayoutPositioningCss(final Can<LinkAndLabel> entityActionLinks) {
-        boolean actionsPositionedOnRight = hasActionsPositionedOn(entityActionLinks, ActionLayout.Position.RIGHT);
-        return actionsPositionedOnRight ? "actions-right" : null;
-    }
-
-    private static boolean hasActionsPositionedOn(final Can<LinkAndLabel> entityActionLinks, final ActionLayout.Position position) {
-        for (LinkAndLabel entityActionLink : entityActionLinks) {
-            if(entityActionLink.getActionUiMetaModel().getPosition() == position) {
-                return true;
-            }
-        }
-        return false;
+        return entityActionLinks.stream()
+                .anyMatch(LinkAndLabel.isPositionedAt(ActionLayout.Position.RIGHT))
+                    ? "actions-right"
+                    : null;
     }
 
     // //////////////////////////////////////
