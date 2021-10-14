@@ -24,7 +24,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.Button;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.viewer.common.model.action.decorator.ActionUiDecorator;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmDecorator;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
@@ -204,27 +203,21 @@ public class Decorators {
 
         public void decorateMenuItem(
                 final Component uiComponent,
-                final LinkAndLabel actionUiModel,
+                final LinkAndLabel linkAndLabel,
                 final TranslationService translationService) {
 
-            addCssClassForAction(uiComponent, actionUiModel);
+            addCssClassForAction(uiComponent, linkAndLabel);
 
-            commonDecorateMenuItem(uiComponent, actionUiModel, translationService);
+            commonDecorateMenuItem(uiComponent, linkAndLabel, translationService);
 
-            val actionMeta = actionUiModel.getActionUiMetaModel();
-            val actionLinkUiComponent = actionUiModel.getUiComponent();
-
-            String cssClass = actionMeta.getCssClass();
-            if (!_Strings.isNullOrEmpty(cssClass)) {
-                actionLinkUiComponent.add(new CssClassAppender(cssClass));
-            }
-
+            linkAndLabel
+            .getAdditionalCssClass()
+            .ifPresent(cssClass->linkAndLabel.getUiComponent().add(new CssClassAppender(cssClass)));
         }
 
-        private void addCssClassForAction(final Component uiComponent, final LinkAndLabel actionUiModel) {
-            val actionMeta = actionUiModel.getActionUiMetaModel();
+        private void addCssClassForAction(final Component uiComponent, final LinkAndLabel linkAndLabel) {
             uiComponent.add(new CssClassAppender("isis-"
-                    + CssClassAppender.asCssStyle(actionMeta.getActionIdentifier())));
+                    + CssClassAppender.asCssStyle(linkAndLabel.getCssClassForAction())));
         }
 
 

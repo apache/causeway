@@ -20,6 +20,7 @@ package org.apache.isis.viewer.common.model.action;
 
 import java.util.Optional;
 
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
@@ -30,6 +31,10 @@ import lombok.val;
 public interface HasManagedAction {
 
     ManagedAction getManagedAction();
+
+    default ObjectAction getAction() {
+        return getManagedAction().getAction();
+    }
 
     default String getFriendlyName() {
         return getManagedAction().getFriendlyName();
@@ -45,4 +50,15 @@ public interface HasManagedAction {
                 managedAction.getAction(),
                 managedAction.getOwner()));
     }
+
+    //TODO rename?
+    default String getCssClassForAction() {
+        return ObjectAction.Util.actionIdentifierFor(getAction());
+    }
+
+    default Optional<String> getAdditionalCssClass() {
+        return getAction().lookupFacet(CssClassFacet.class)
+                .map(cssClassFacet->cssClassFacet.cssClass(getManagedAction().getOwner()));
+    }
+
 }

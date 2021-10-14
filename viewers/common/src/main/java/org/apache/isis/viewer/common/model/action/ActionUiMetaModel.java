@@ -25,7 +25,6 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -50,12 +49,7 @@ implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Getter private final ActionMemento actionMemento;
-    @Getter private final boolean blobOrClob;
-    @Getter private final String actionIdentifier;
-    @Getter private final String cssClass;
     @Getter private final ActionLayout.Position position;
-    @Getter private final PromptStyle promptStyle;
-    @Getter private final Parameters parameters;
     @Getter private final Optional<DisablingUiModel> disableUiModel;
 
 
@@ -75,12 +69,7 @@ implements Serializable {
             final ObjectAction objectAction) {
 
         this(   objectAction.getMemento(),
-                ObjectAction.Util.returnsBlobOrClob(objectAction),
-                ObjectAction.Util.actionIdentifierFor(objectAction),
-                ObjectAction.Util.cssClassFor(objectAction, owner),
                 ObjectAction.Util.actionLayoutPositionOf(objectAction),
-                ObjectAction.Util.promptStyleFor(objectAction),
-                Parameters.fromParameterCount(objectAction.getParameterCount()),
                 disabledUiModelFor(owner, objectAction));
     }
 
@@ -92,21 +81,6 @@ implements Serializable {
 
     public ObjectAction getObjectAction(final Supplier<SpecificationLoader> specLoader) {
         return actionMemento.getAction(specLoader);
-    }
-
-    // -- PARAMETERS
-
-    public enum Parameters {
-        NO_PARAMETERS,
-        TAKES_PARAMETERS;
-
-        public static Parameters fromParameterCount(final int parameterCount) {
-            return parameterCount > 0? TAKES_PARAMETERS: NO_PARAMETERS;
-        }
-
-        public boolean isNoParameters() {
-            return this == NO_PARAMETERS;
-        }
     }
 
     // -- USABILITY

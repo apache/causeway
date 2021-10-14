@@ -41,7 +41,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.facets.actions.action.associateWith.ChoicesFromFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
@@ -312,11 +311,6 @@ public interface ObjectAction extends ObjectMember {
                                     ? null
                                     : hasImperativeFaIcon.getCssClassFaFactory(domainObject.asProvider())))
             .filter(_NullSafe::isPresent);
-        }
-
-        public static String cssClassFor(final ObjectAction action, final ManagedObject domainObject) {
-            final CssClassFacet cssClassFacet = action.getFacet(CssClassFacet.class);
-            return cssClassFacet != null ? cssClassFacet.cssClass(domainObject) : null;
         }
 
         /**

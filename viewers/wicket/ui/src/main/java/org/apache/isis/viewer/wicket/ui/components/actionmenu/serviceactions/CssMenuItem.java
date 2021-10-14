@@ -28,6 +28,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -114,17 +115,18 @@ implements Serializable {
             .getDescription()
             .ifPresent(describedAs->Tooltips.addTooltip(actionLink, describedAs));
 
-            if (actionMetaLegacy.isBlobOrClob()) {
+            if (ObjectAction.Util.returnsBlobOrClob(actionMeta)) {
                 actionLink.add(new CssClassAppender("noVeil"));
             }
             if (actionMeta.isPrototype()) {
                 actionLink.add(new CssClassAppender("prototype"));
             }
 
-            if (actionMetaLegacy.getCssClass() != null) {
-                actionLink.add(new CssClassAppender(actionMetaLegacy.getCssClass()));
-            }
-            actionLink.add(new CssClassAppender(actionMetaLegacy.getActionIdentifier()));
+            linkAndLabel
+            .getAdditionalCssClass()
+            .ifPresent(cssClass->actionLink.add(new CssClassAppender(cssClass)));
+
+            actionLink.add(new CssClassAppender(linkAndLabel.getCssClassForAction()));
 
             val fontAwesome = getLinkAndLabel().getFontAwesomeUiModel();
             Decorators.getIcon().decorate(label, fontAwesome);

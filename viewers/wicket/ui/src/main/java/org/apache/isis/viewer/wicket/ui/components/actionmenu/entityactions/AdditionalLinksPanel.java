@@ -29,6 +29,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel.Placement;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -131,16 +132,16 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
                 Tooltips.addTooltip(link, tooltipModel.getObject());
 
                 val viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, linkAndLabel.getFriendlyName());
-                if(actionMetaLegacy.isBlobOrClob()) {
+                if(ObjectAction.Util.returnsBlobOrClob(actionMeta)) {
                     link.add(new CssClassAppender("noVeil"));
                 }
                 if(actionMeta.isPrototype()) {
                     link.add(new CssClassAppender("prototype"));
                 }
-                link.add(new CssClassAppender(actionMetaLegacy.getActionIdentifier()));
+                link.add(new CssClassAppender(linkAndLabel.getCssClassForAction()));
 
                 if (actionMeta.getSemantics().isAreYouSure()) {
-                    if(actionMetaLegacy.getParameters().isNoParameters()) {
+                    if(actionMeta.getParameterCount()==0) {
                         val hasDisabledReason = link instanceof ActionLink
                                 ? _Strings.isNotEmpty(((ActionLink)link).getReasonDisabledIfAny())
                                 : false;
@@ -154,8 +155,9 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
                     Decorators.getDanger().decorate(link);
                 }
 
-                val cssClass = actionMetaLegacy.getCssClass();
-                CssClassAppender.appendCssClassTo(link, cssClass);
+                linkAndLabel
+                .getAdditionalCssClass()
+                .ifPresent(cssClass->CssClassAppender.appendCssClassTo(link, cssClass));
 
                 link.addOrReplace(viewTitleLabel);
 

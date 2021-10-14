@@ -50,13 +50,13 @@ public class ServiceActionsPanel extends MenuActionPanel {
 
     private static final long serialVersionUID = 1L;
 
-    public ServiceActionsPanel(String id, List<CssMenuItem> menuItems) {
+    public ServiceActionsPanel(final String id, final List<CssMenuItem> menuItems) {
         super(id);
         val menuItemsView = new ListView<CssMenuItem>("menuItems", menuItems) {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void populateItem(ListItem<CssMenuItem> listItem) {
+            protected void populateItem(final ListItem<CssMenuItem> listItem) {
                 val menuItem = listItem.getModelObject();
 
                 val topMenu = new WebMarkupContainer("topMenu");
@@ -75,7 +75,7 @@ public class ServiceActionsPanel extends MenuActionPanel {
     }
 
     @Override
-    public void renderHead(IHeaderResponse response) {
+    public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
 
         response.render(CssHeaderItem.forReference(new CssResourceReference(ServiceActionsPanel.class, "ServiceActionsPanel.css")));
@@ -86,15 +86,15 @@ public class ServiceActionsPanel extends MenuActionPanel {
 
     // -- HELPER
 
-    private static String cssForTopMenu(CssMenuItem menuItem) {
+    private static String cssForTopMenu(final CssMenuItem menuItem) {
         return "top-menu-" + CssClassAppender.asCssStyle(menuItem.getName());
     }
 
-    private static String cssForServices(CssMenuItem menuItem) {
+    private static String cssForServices(final CssMenuItem menuItem) {
         return _NullSafe.stream(menuItem.getSubMenuItems())
         .filter(cssMenuItem->cssMenuItem.getItemType().isActionOrSubMenuContainer())
         .map(cssMenuItem -> {
-            val actionIdentifier = cssMenuItem.getLinkAndLabel().getActionUiMetaModel().getActionIdentifier();
+            val actionIdentifier = cssMenuItem.getLinkAndLabel().getCssClassForAction();
             if (actionIdentifier != null) {
                 // busrules-busrulesobjects-findbyname
                 final String actionId = CssClassAppender.asCssStyle(actionIdentifier);
