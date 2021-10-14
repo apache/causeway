@@ -76,11 +76,9 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
         scalarIfRegularFormGroup.add(scalarName);
 
-        final String describedAs = getModel().getDescribedAs();
-        if(describedAs != null) {
-            Tooltips.addTooltip(scalarIfRegularFormGroup, describedAs);
-        }
-
+        getModel()
+        .getDescribedAs()
+        .ifPresent(describedAs->Tooltips.addTooltip(scalarIfRegularFormGroup, describedAs));
 
         return scalarIfRegularFormGroup;
     }

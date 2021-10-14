@@ -97,6 +97,7 @@ implements Serializable {
 
     private Component addMenuItemComponentTo(final MarkupContainer markupContainer) {
 
+        val linkAndLabel = getLinkAndLabel();
         val actionMeta = getLinkAndLabel().getActionUiMetaModel();
         val actionLink = getLinkAndLabel().getUiComponent();
 
@@ -108,9 +109,10 @@ implements Serializable {
             markupContainer.add(actionLink);
             actionLink.add(label);
 
-            if (actionMeta.getDescription() != null) {
-                Tooltips.addTooltip(actionLink, actionMeta.getDescription());
-            }
+            linkAndLabel
+            .getDescription()
+            .ifPresent(describedAs->Tooltips.addTooltip(actionLink, describedAs));
+
             if (actionMeta.isBlobOrClob()) {
                 actionLink.add(new CssClassAppender("noVeil"));
             }

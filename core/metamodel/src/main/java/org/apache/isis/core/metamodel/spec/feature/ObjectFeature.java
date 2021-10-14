@@ -23,7 +23,6 @@ import java.util.function.Supplier;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.base._Either;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -109,7 +108,7 @@ public interface ObjectFeature extends Specification {
      * retrieval might be expensive
      *
      */
-    String getDescription(final Supplier<ManagedObject> domainObjectProvider);
+    Optional<String> getDescription(final Supplier<ManagedObject> domainObjectProvider);
 
     /**
      * Optionally returns the (translated) description of how the member is used,
@@ -120,7 +119,7 @@ public interface ObjectFeature extends Specification {
 
     /**
      * If statically (non-imperatively) specified,
-     * the (translated friendly) description, otherwise {@code null}.
+     * the (translated friendly) description, otherwise {@code Optional#empty()}.
      * <p>
      * Eg used when rendering a domain-object collection as table,
      * the table's (translated friendly) column descriptions are inferred
@@ -129,7 +128,7 @@ public interface ObjectFeature extends Specification {
      * consequently eg. viewers should not provide any tooltip
      * @since 2.0
      */
-    String getCanonicalDescription();
+    Optional<String> getCanonicalDescription();
 
     /**
      * Either the descriptions's static or canonical form, based on whether the description is resolved
@@ -142,7 +141,7 @@ public interface ObjectFeature extends Specification {
         val staticDescription = getStaticDescription();
         return staticDescription.isPresent()
                 ? _Either.left(staticDescription.get())
-                : _Either.right(_Strings.nullToEmpty(getCanonicalDescription()));
+                : _Either.right(getCanonicalDescription().orElse(""));
     }
 
     /**

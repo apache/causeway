@@ -73,14 +73,14 @@ public class Decorators {
 
     public final static class Tooltip implements TooltipDecorator<Component> {
         @Override
-        public void decorate(Component uiComponent, TooltipUiModel tooltipUiModel) {
+        public void decorate(final Component uiComponent, final TooltipUiModel tooltipUiModel) {
             Tooltips.addTooltip(uiComponent, tooltipUiModel);
         }
     }
 
     public final static class Disable implements DisablingDecorator<Component> {
         @Override
-        public void decorate(Component uiComponent, DisablingUiModel disableUiModel) {
+        public void decorate(final Component uiComponent, final DisablingUiModel disableUiModel) {
 
             val tooltipUiModel = TooltipUiModel.ofBody(disableUiModel.getReason());
             getTooltip().decorate(uiComponent, tooltipUiModel);
@@ -93,7 +93,7 @@ public class Decorators {
 
     public final static class Prototyping implements PrototypingDecorator<Component, Component> {
         @Override
-        public Component decorate(Component uiComponent, PrototypingUiModel prototypingUiModel) {
+        public Component decorate(final Component uiComponent, final PrototypingUiModel prototypingUiModel) {
             uiComponent.add(new CssClassAppender("prototype"));
             return uiComponent;
         }
@@ -101,7 +101,7 @@ public class Decorators {
 
     public final static class Confirm implements ConfirmDecorator<Component> {
         @Override
-        public void decorate(Component uiComponent, ConfirmUiModel confirmUiModel) {
+        public void decorate(final Component uiComponent, final ConfirmUiModel confirmUiModel) {
 
             val confirmationConfig = new ConfirmationConfig()
                     .withTitle(confirmUiModel.getTitle())
@@ -124,7 +124,7 @@ public class Decorators {
 
     public final static class Danger implements DangerDecorator<Component> {
         @Override
-        public void decorate(Component uiComponent) {
+        public void decorate(final Component uiComponent) {
             //if(uiComponent instanceof Button) {
                 uiComponent.add(new CssClassAppender("btn-danger"));
             //}
@@ -133,7 +133,7 @@ public class Decorators {
 
     public final static class IconDecoratorWkt implements IconDecorator<Component, Component> {
         @Override
-        public Component decorate(Component uiComponent, Optional<FontAwesomeUiModel> fontAwesome) {
+        public Component decorate(final Component uiComponent, final Optional<FontAwesomeUiModel> fontAwesome) {
             if(fontAwesome.isPresent()) {
                 uiComponent.add(new CssClassFaBehavior(fontAwesome.get()));
             }
@@ -143,7 +143,7 @@ public class Decorators {
 
     public final static class MissingIconDecorator implements IconDecorator<Component, Component> {
         @Override
-        public Component decorate(Component uiComponent, Optional<FontAwesomeUiModel> fontAwesome) {
+        public Component decorate(final Component uiComponent, final Optional<FontAwesomeUiModel> fontAwesome) {
             if(!fontAwesome.isPresent()) {
                 uiComponent.add(new CssClassAppender("menuLinkSpacer"));
             }
@@ -165,11 +165,11 @@ public class Decorators {
         //even another UI component
         private <T extends Component> void commonDecorateMenuItem(
                 final T uiComponent, // UI component #1
-                final LinkAndLabel actionUiModel,
+                final LinkAndLabel linkAndLabel,
                 final TranslationService translationService) {
 
-            val actionLinkUiComponent = actionUiModel.getUiComponent(); // UI component #2
-            val actionMeta = actionUiModel.getActionUiMetaModel();
+            val actionLinkUiComponent = linkAndLabel.getUiComponent(); // UI component #2
+            val actionMeta = linkAndLabel.getActionUiMetaModel();
 
             actionMeta.getDisableUiModel().ifPresent(disableUiModel->{
                 getDisableDecorator().decorate(uiComponent, disableUiModel);
@@ -178,9 +178,11 @@ public class Decorators {
 
             if (!actionMeta.getDisableUiModel().isPresent()) {
 
-                if(!_Strings.isNullOrEmpty(actionMeta.getDescription())) {
-                    getTooltipDecorator().decorate(uiComponent, TooltipUiModel.ofBody(actionMeta.getDescription()));
-                }
+                linkAndLabel
+                .getDescription()
+                .ifPresent(describedAs->
+                    getTooltipDecorator()
+                    .decorate(uiComponent, TooltipUiModel.ofBody(describedAs)));
 
                 //XXX ISIS-1626, confirmation dialog for no-parameter menu actions
                 if (actionMeta.isRequiresImmediateConfirmation()) {
@@ -218,7 +220,7 @@ public class Decorators {
 
         }
 
-        private void addCssClassForAction(Component uiComponent, LinkAndLabel actionUiModel) {
+        private void addCssClassForAction(final Component uiComponent, final LinkAndLabel actionUiModel) {
             val actionMeta = actionUiModel.getActionUiMetaModel();
             uiComponent.add(new CssClassAppender("isis-"
                     + CssClassAppender.asCssStyle(actionMeta.getActionIdentifier())));

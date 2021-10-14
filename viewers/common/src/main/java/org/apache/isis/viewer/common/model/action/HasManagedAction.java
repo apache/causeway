@@ -26,9 +26,18 @@ import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
 
 import lombok.val;
 
+@FunctionalInterface
 public interface HasManagedAction {
 
     ManagedAction getManagedAction();
+
+    default String getFriendlyName() {
+        return getManagedAction().getFriendlyName();
+    }
+
+    default Optional<String> getDescription() {
+        return getManagedAction().getDescription();
+    }
 
     default Optional<FontAwesomeUiModel> getFontAwesomeUiModel() {
         val managedAction = getManagedAction();

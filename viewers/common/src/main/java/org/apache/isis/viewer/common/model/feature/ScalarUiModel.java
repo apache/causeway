@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.common.model.feature;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -46,7 +47,7 @@ public interface ScalarUiModel {
                 || getMetaModel().getFeatureType() == FeatureType.COLLECTION;
     }
 
-    default String getDescribedAs() {
+    default Optional<String> getDescribedAs() {
         return getMetaModel().getDescription(this::getOwner);
     }
 

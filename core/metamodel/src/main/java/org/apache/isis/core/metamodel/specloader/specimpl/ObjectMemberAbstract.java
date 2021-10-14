@@ -132,14 +132,12 @@ implements
 
 
     @Override
-    public final String getDescription(final Supplier<ManagedObject> domainObjectProvider) {
-
+    public final Optional<String> getDescription(final Supplier<ManagedObject> domainObjectProvider) {
         return lookupFacet(MemberDescribedFacet.class)
         .map(MemberDescribedFacet::getSpecialization)
         .map(specialization->specialization
                 .fold(textFacet->textFacet.translated(),
-                      textFacet->textFacet.textElseNull(headFor(domainObjectProvider.get()).getTarget())))
-        .orElse(null);
+                      textFacet->textFacet.textElseNull(headFor(domainObjectProvider.get()).getTarget())));
     }
 
     @Override
@@ -175,14 +173,13 @@ implements
     }
 
     @Override
-    public final String getCanonicalDescription() {
+    public final Optional<String> getCanonicalDescription() {
         return lookupFacet(MemberDescribedFacet.class)
         .flatMap(MemberDescribedFacet::getSharedFacetRanking)
         .flatMap(facetRanking->facetRanking.getWinnerNonEventLowerOrEqualTo(MemberDescribedFacet.class, Precedence.HIGH))
         .map(MemberDescribedFacet::getSpecialization)
         .flatMap(specialization->specialization.left())
-        .map(HasStaticText::translated)
-        .orElse(null);
+        .map(HasStaticText::translated);
     }
 
 

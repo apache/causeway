@@ -151,26 +151,25 @@ implements
     }
 
     @Override
-    public final String getDescription(final Supplier<ManagedObject> domainObjectProvider) {
+    public final Optional<String> getDescription(final Supplier<ManagedObject> domainObjectProvider) {
         //as we don't support imperative naming for parameters yet ..
         return staticDescription();
     }
 
     @Override
     public final Optional<String> getStaticDescription() {
-        return Optional.of(staticDescription());
+        return staticDescription();
     }
 
     @Override
-    public final String getCanonicalDescription() {
+    public final Optional<String> getCanonicalDescription() {
         //as we don't support imperative naming for parameters yet ..
         return staticDescription();
     }
 
-    private String staticDescription() {
+    private Optional<String> staticDescription() {
         return lookupFacet(ParamDescribedFacet.class)
-        .map(ParamDescribedFacet::translated)
-        .orElse("");
+        .map(ParamDescribedFacet::translated);
     }
 
     public Consent isUsable() {

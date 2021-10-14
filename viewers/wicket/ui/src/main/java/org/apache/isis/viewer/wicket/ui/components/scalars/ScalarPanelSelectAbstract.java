@@ -66,15 +66,14 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
             final FormComponent<?> component,
             final String formGroupId, final String nameId) {
         final FormGroup formGroup = new FormGroup(formGroupId, component);
-        final String describedAs = getModel().getDescribedAs();
         formGroup.add(component);
 
         final String labelCaption = getRendering().getLabelCaption(select2.component());
         final Label scalarName = createScalarName(nameId, labelCaption);
 
-        if(describedAs != null) {
-            Tooltips.addTooltip(scalarName, describedAs);
-        }
+        getModel()
+        .getDescribedAs()
+        .ifPresent(describedAs->Tooltips.addTooltip(scalarName, describedAs));
 
         formGroup.addOrReplace(scalarName);
         return formGroup;

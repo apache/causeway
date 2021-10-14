@@ -122,10 +122,10 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
                             public String getObject() {
                                 return firstNonNull(
                                         ((ActionLink) link).getReasonDisabledIfAny(),
-                                        actionMeta.getDescription());
+                                        linkAndLabel.getDescription().orElse(null));
                             }
                         }
-                        : Model.of(actionMeta.getDescription());
+                        : Model.of(linkAndLabel.getDescription().orElse(null));
 
                 Tooltips.addTooltip(link, tooltipModel.getObject());
 

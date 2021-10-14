@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
+import java.util.Optional;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.markup.html.basic.Label;
@@ -68,14 +70,14 @@ extends GenericColumnAbstract {
             final String propertyId,
             final boolean escaped,
             final String parentTypeName,
-            final String describedAs) {
+            final Optional<String> describedAs) {
 
         super(commonContext, columnNameModel, sortProperty);
         this.collectionVariant = collectionVariant;
         this.propertyId = propertyId;
         this.escaped = escaped;
         this.parentTypeName = parentTypeName;
-        this.describedAs = describedAs;
+        this.describedAs = describedAs.orElse(null);
 
     }
 

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed;
 
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 import org.springframework.lang.Nullable;
@@ -325,6 +326,11 @@ public class ParameterNegotiationModel {
         public String getFriendlyName() {
             return getMetaModel().getStaticFriendlyName()
                     .orElseThrow(_Exceptions::unexpectedCodeReach);
+        }
+
+        @Override
+        public Optional<String> getDescription() {
+            return getMetaModel().getStaticDescription();
         }
 
         @Override

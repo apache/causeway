@@ -52,7 +52,6 @@ implements Serializable {
 
     @Getter private final ActionMemento actionMemento;
     @Getter private final String label;
-    @Getter private final String description;
     @Getter private final boolean blobOrClob;
     @Getter private final boolean prototyping;
     @Getter private final String actionIdentifier;
@@ -85,7 +84,6 @@ implements Serializable {
 
         this(   objectAction.getMemento(),
                 objectAction.getFriendlyName(owner.asProvider()),
-                objectAction.getDescription(owner.asProvider()),
                 ObjectAction.Util.returnsBlobOrClob(objectAction),
                 objectAction.isPrototype(),
                 ObjectAction.Util.actionIdentifierFor(objectAction),

@@ -30,7 +30,6 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
@@ -138,7 +137,7 @@ implements HasDynamicallyVisibleContent {
             labelComponent.setEscapeModelStrings(true);
             div.add(labelComponent);
 
-            _Strings.nonEmpty(collectionMetaModel.getDescription(collectionModel::getParentObject))
+            collectionMetaModel.getDescription(collectionModel::getParentObject)
             .ifPresent(description->Tooltips.addTooltip(labelComponent, description));
 
             final Can<LinkAndLabel> links = collectionModel.getLinks();
