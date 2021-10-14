@@ -113,7 +113,8 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
             @Override
             protected void populateItem(final ListItem<LinkAndLabel> item) {
                 val linkAndLabel = item.getModelObject();
-                val actionMeta = linkAndLabel.getActionUiMetaModel();
+                val actionMetaLegacy = linkAndLabel.getActionUiMetaModel();
+                val actionMeta = linkAndLabel.getManagedAction().getAction();
                 val link = linkAndLabel.getUiComponent();
                 final Model<String> tooltipModel = link instanceof ActionLink
                         ? new Model<String>() {
@@ -130,16 +131,16 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
                 Tooltips.addTooltip(link, tooltipModel.getObject());
 
                 val viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, linkAndLabel.getFriendlyName());
-                if(actionMeta.isBlobOrClob()) {
+                if(actionMetaLegacy.isBlobOrClob()) {
                     link.add(new CssClassAppender("noVeil"));
                 }
-                if(actionMeta.isPrototyping()) {
+                if(actionMeta.isPrototype()) {
                     link.add(new CssClassAppender("prototype"));
                 }
-                link.add(new CssClassAppender(actionMeta.getActionIdentifier()));
+                link.add(new CssClassAppender(actionMetaLegacy.getActionIdentifier()));
 
-                if (actionMeta.getSemantics().isAreYouSure()) {
-                    if(actionMeta.getParameters().isNoParameters()) {
+                if (actionMetaLegacy.getSemantics().isAreYouSure()) {
+                    if(actionMetaLegacy.getParameters().isNoParameters()) {
                         val hasDisabledReason = link instanceof ActionLink
                                 ? _Strings.isNotEmpty(((ActionLink)link).getReasonDisabledIfAny())
                                 : false;
@@ -153,7 +154,7 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
                     Decorators.getDanger().decorate(link);
                 }
 
-                val cssClass = actionMeta.getCssClass();
+                val cssClass = actionMetaLegacy.getCssClass();
                 CssClassAppender.appendCssClassTo(link, cssClass);
 
                 link.addOrReplace(viewTitleLabel);

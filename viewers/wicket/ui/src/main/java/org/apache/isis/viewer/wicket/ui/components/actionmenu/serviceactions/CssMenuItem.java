@@ -98,7 +98,8 @@ implements Serializable {
     private Component addMenuItemComponentTo(final MarkupContainer markupContainer) {
 
         val linkAndLabel = getLinkAndLabel();
-        val actionMeta = getLinkAndLabel().getActionUiMetaModel();
+        val actionMeta = getLinkAndLabel().getManagedAction().getAction();
+        val actionMetaLegacy = getLinkAndLabel().getActionUiMetaModel();
         val actionLink = getLinkAndLabel().getUiComponent();
 
         val label = new Label(CssMenuItem.ID_MENU_LABEL, Model.of(this.getName()));
@@ -113,22 +114,22 @@ implements Serializable {
             .getDescription()
             .ifPresent(describedAs->Tooltips.addTooltip(actionLink, describedAs));
 
-            if (actionMeta.isBlobOrClob()) {
+            if (actionMetaLegacy.isBlobOrClob()) {
                 actionLink.add(new CssClassAppender("noVeil"));
             }
-            if (actionMeta.isPrototyping()) {
+            if (actionMeta.isPrototype()) {
                 actionLink.add(new CssClassAppender("prototype"));
             }
 
-            if (actionMeta.getCssClass() != null) {
-                actionLink.add(new CssClassAppender(actionMeta.getCssClass()));
+            if (actionMetaLegacy.getCssClass() != null) {
+                actionLink.add(new CssClassAppender(actionMetaLegacy.getCssClass()));
             }
-            actionLink.add(new CssClassAppender(actionMeta.getActionIdentifier()));
+            actionLink.add(new CssClassAppender(actionMetaLegacy.getActionIdentifier()));
 
             val fontAwesome = getLinkAndLabel().getFontAwesomeUiModel();
             Decorators.getIcon().decorate(label, fontAwesome);
 
-            actionMeta.getDisableUiModel().ifPresent(disableUiModel->{
+            actionMetaLegacy.getDisableUiModel().ifPresent(disableUiModel->{
                 Decorators.getDisable().decorate(actionLink, disableUiModel);
             });
 
@@ -141,7 +142,7 @@ implements Serializable {
             Components.permanentlyHide(markupContainer, ID_MENU_LINK);
             // ... and show label, along with disabled reason
 
-            actionMeta.getDisableUiModel().ifPresent(disableUiModel->{
+            actionMetaLegacy.getDisableUiModel().ifPresent(disableUiModel->{
                 Tooltips.addTooltip(label, disableUiModel.getReason());
             });
 

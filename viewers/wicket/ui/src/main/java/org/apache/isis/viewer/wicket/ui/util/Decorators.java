@@ -169,14 +169,15 @@ public class Decorators {
                 final TranslationService translationService) {
 
             val actionLinkUiComponent = linkAndLabel.getUiComponent(); // UI component #2
-            val actionMeta = linkAndLabel.getActionUiMetaModel();
+            val actionMeta = linkAndLabel.getManagedAction().getAction();
+            val actionMetaLegacy = linkAndLabel.getActionUiMetaModel();
 
-            actionMeta.getDisableUiModel().ifPresent(disableUiModel->{
+            actionMetaLegacy.getDisableUiModel().ifPresent(disableUiModel->{
                 getDisableDecorator().decorate(uiComponent, disableUiModel);
                 getTooltipDecorator().decorate(uiComponent, TooltipUiModel.ofBody(disableUiModel.getReason()));
             });
 
-            if (!actionMeta.getDisableUiModel().isPresent()) {
+            if (!actionMetaLegacy.getDisableUiModel().isPresent()) {
 
                 linkAndLabel
                 .getDescription()
@@ -185,7 +186,7 @@ public class Decorators {
                     .decorate(uiComponent, TooltipUiModel.ofBody(describedAs)));
 
                 //XXX ISIS-1626, confirmation dialog for no-parameter menu actions
-                if (actionMeta.isRequiresImmediateConfirmation()) {
+                if (actionMetaLegacy.isRequiresImmediateConfirmation()) {
 
                     val confirmUiModel = ConfirmUiModel.ofAreYouSure(translationService, ConfirmUiModel.Placement.BOTTOM);
                     getConfirmDecorator().decorate(actionLinkUiComponent, confirmUiModel);
@@ -194,8 +195,8 @@ public class Decorators {
 
             }
 
-            if (actionMeta.isPrototyping()) {
-                getPrototypingDecorator().decorate(actionLinkUiComponent, PrototypingUiModel.of(actionMeta));
+            if (actionMeta.isPrototype()) {
+                getPrototypingDecorator().decorate(actionLinkUiComponent, PrototypingUiModel.of(actionMetaLegacy));
             }
 
         }

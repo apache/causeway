@@ -52,7 +52,6 @@ implements Serializable {
 
     @Getter private final ActionMemento actionMemento;
     @Getter private final boolean blobOrClob;
-    @Getter private final boolean prototyping;
     @Getter private final String actionIdentifier;
     @Getter private final String cssClass;
     @Getter private final ActionLayout.Position position;
@@ -83,7 +82,6 @@ implements Serializable {
 
         this(   objectAction.getMemento(),
                 ObjectAction.Util.returnsBlobOrClob(objectAction),
-                objectAction.isPrototype(),
                 ObjectAction.Util.actionIdentifierFor(objectAction),
                 ObjectAction.Util.cssClassFor(objectAction, owner),
                 ObjectAction.Util.actionLayoutPositionOf(objectAction),
