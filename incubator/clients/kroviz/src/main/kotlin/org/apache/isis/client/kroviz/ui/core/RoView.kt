@@ -30,7 +30,7 @@ import org.apache.isis.client.kroviz.utils.IconManager
  * Contains:
  * @Item TabPanel with Tabs
  */
-object RoView {
+class RoView() {
     val tabPanel = RoTabPanel()
     private var tabCount = 0
 
@@ -59,6 +59,7 @@ object RoView {
     }
 
     fun removeTab(tab: SimplePanel) {
+        console.log("[RoView.removeTab]")
         tabCount--
         UiManager.closeView(tab)
     }

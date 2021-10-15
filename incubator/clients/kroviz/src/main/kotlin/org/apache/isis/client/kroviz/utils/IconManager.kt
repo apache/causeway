@@ -79,6 +79,7 @@ object IconManager {
             "Primitives" to "hashtag",
             "Prototyping" to "object-group",
             "Queen" to "chess-queen",
+            "Replay" to "share",
             "Run" to "rocket",
             "Save" to "file",
             "Security" to "lock",

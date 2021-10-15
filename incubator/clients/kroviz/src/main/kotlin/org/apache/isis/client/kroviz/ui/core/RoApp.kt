@@ -24,17 +24,36 @@ import io.kvision.panel.HPanel
 import io.kvision.panel.SimplePanel
 
 object RoApp : SimplePanel() {
+
+    private var roView: RoView? = null
+
     init {
+        setup()
+    }
+
+    private fun setup() {
         this.add(RoMenuBar.navbar)
+        roView = RoView()
 
         val view = HPanel() {
             width = CssSize(100, UNIT.perc)
         }
         view.addCssClass("main")
         view.add(RoIconBar.panel)
-        view.add(RoView.tabPanel)
+        view.add(roView!!.tabPanel)
         this.add(view)
 
         this.add(RoStatusBar.navbar)
     }
+
+    fun reset() {
+        val kids = this.children
+        kids?.clear()
+        setup()
+    }
+
+    fun getRoView(): RoView {
+        return roView!!
+    }
+
 }

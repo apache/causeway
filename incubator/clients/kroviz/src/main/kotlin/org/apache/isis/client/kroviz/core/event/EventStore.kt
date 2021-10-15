@@ -190,13 +190,4 @@ object EventStore {
         log.removeAll(log)
     }
 
-    fun getLinked(): List<LogEntry> {
-        // we use all LE's - eventually to be refined to a single LE (chain up and down)
-        val linked = mutableListOf<LogEntry>()
-        log.forEach {
-            if (it.obj is HasLinks) linked.add(it)
-        }
-        return linked
-    }
-
 }

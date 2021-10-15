@@ -30,6 +30,7 @@ import io.kvision.panel.SimplePanel
 import io.kvision.panel.vPanel
 import kotlinx.browser.window
 import org.apache.isis.client.kroviz.core.event.EventStore
+import org.apache.isis.client.kroviz.core.event.ReplayCommand
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.chart.SampleChartModel
 import org.apache.isis.client.kroviz.ui.dialog.About
@@ -83,6 +84,10 @@ object RoMenuBar : SimplePanel() {
         )
 
         mainMenu.add(
+            buildMenuEntry("Replay", "Replay", { ReplayCommand().execute() })
+        )
+
+        mainMenu.add(
             buildMenuEntry("History", "History", { UiManager.add("Log Entries", EventLogTable(EventStore.log)) })
         )
 
@@ -108,12 +113,12 @@ object RoMenuBar : SimplePanel() {
 
         val imageTitle = "Sample Image"
         mainMenu.add(
-            buildMenuEntry(imageTitle, "Image", { RoView.addTab(imageTitle, ImageSample()) })
+            buildMenuEntry(imageTitle, "Image", { UiManager.add(imageTitle, ImageSample) })
         )
 
         val aboutTitle = "About"
         mainMenu.add(
-            buildMenuEntry(aboutTitle, "Info", { RoView.addTab(aboutTitle, About().open()) })
+            buildMenuEntry(aboutTitle, "Info", { UiManager.add(aboutTitle, About().open()) })
         )
 
         console.log("[RMB.buildMainMenu]")

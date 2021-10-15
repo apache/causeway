@@ -69,7 +69,7 @@ object UiManager {
     }
 
     private fun activeObject(): ObjectDM? {
-        val activeTab = RoView.findActive()
+        val activeTab = RoApp.getRoView().findActive()
         if (activeTab != null) {
             return (activeTab as RoDisplay).displayModel
         }
@@ -77,8 +77,14 @@ object UiManager {
     }
 
     fun add(title: String, panel: SimplePanel, aggregator: BaseAggregator = UndefinedDispatcher()) {
-        RoView.addTab(title, panel)
+        RoApp.getRoView().addTab(title, panel)
         EventStore.addView(title, aggregator, panel)
+    }
+
+    fun remove(panel: SimplePanel) {
+        console.log("[UiManager.remove]")
+ //       EventStore.closeView(title)
+        RoApp.getRoView().removeTab(panel)
     }
 
     /**
@@ -97,8 +103,8 @@ object UiManager {
         DomUtil.appendTo(uuid, svgCode)
 
         val panel = buildSvgPanel(uuid)
-        RoView.addTab(title, panel)
-        val tab = RoView.findActive()!! as RoTab
+        RoApp.getRoView().addTab(title, panel)
+        val tab = RoApp.getRoView().findActive()!! as RoTab
 
         val svg = ScalableVectorGraphic(svgCode, uuid)
         tab.svg = svg
@@ -108,6 +114,7 @@ object UiManager {
     }
 
     fun closeView(tab: SimplePanel) {
+        console.log("[UiManager.closeView]")
         val tt = tab.title
         if (tt != null) {
             EventStore.closeView(tt)

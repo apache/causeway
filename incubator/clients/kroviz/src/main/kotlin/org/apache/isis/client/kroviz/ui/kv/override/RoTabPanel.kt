@@ -26,12 +26,11 @@ package org.apache.isis.client.kroviz.ui.kv.override
 import com.github.snabbdom.VNode
 import io.kvision.core.*
 import io.kvision.panel.SimplePanel
-import io.kvision.panel.Tab
 import io.kvision.panel.VPanel
 import io.kvision.routing.RoutingManager
 import io.kvision.utils.auto
 import io.kvision.utils.obj
-import org.apache.isis.client.kroviz.ui.core.RoView
+import org.apache.isis.client.kroviz.ui.core.UiManager
 
 /**
  * Tab position.
@@ -188,7 +187,7 @@ open class RoTabPanel(
      */
     open fun removeTab(index: Int): RoTabPanel {
         val tab = getTabs().get(index)
-        RoView.removeTab(tab as SimplePanel)
+        UiManager.remove(tab as SimplePanel)
 
         getTab(index)?.let {
             removeTab(it)
@@ -313,8 +312,8 @@ open class RoTabPanel(
      * @return current container
      */
     open fun addTab(
-            title: String, panel: Component, icon: String? = null,
-            image: ResString? = null, closable: Boolean = false, route: String? = null
+        title: String, panel: Component, icon: String? = null,
+        image: ResString? = null, closable: Boolean = false, route: String? = null
     ): RoTabPanel {
         addTab(RoTab(title, panel, icon, image, closable, route))
         refresh()
