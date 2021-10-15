@@ -51,6 +51,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Links;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -82,7 +83,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
     }
 
     @Override
-    public void renderHead(IHeaderResponse response) {
+    public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
     }
 
@@ -96,7 +97,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
         final WebMarkupContainer container = new WebMarkupContainer(ID_BOOKMARK_LIST) {
             private static final long serialVersionUID = 1L;
             @Override
-            public void renderHead(IHeaderResponse response) {
+            public void renderHead(final IHeaderResponse response) {
                 response.render(CssHeaderItem.forReference(new CssResourceReference(BookmarkedPagesPanel.class, "BookmarkedPagesPanel.css")));
                 response.render(JavaScriptReferenceHeaderItem.forReference(SLIDE_PANEL_JS));
             }
@@ -110,7 +111,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(final AjaxRequestTarget target) {
                 BookmarkedPagesPanel.this.getModel().clear();
                 setEnabled(false);
                 target.add(container, this);
@@ -130,7 +131,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void populateItem(ListItem<BookmarkTreeNode> item) {
+            protected void populateItem(final ListItem<BookmarkTreeNode> item) {
                 final BookmarkTreeNode node = item.getModelObject();
                 try {
                     final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(PageType.ENTITY);
@@ -140,7 +141,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
                         private static final long serialVersionUID = 1L;
 
                         @Override
-                        public void onClick(AjaxRequestTarget target) {
+                        public void onClick(final AjaxRequestTarget target) {
                             bookmarkedPagesModel.remove(node);
                             if(bookmarkedPagesModel.isEmpty()) {
                                 permanentlyHide(CLEAR_BOOKMARKS);
@@ -175,9 +176,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
                     };
                     link.addOrReplace(image);
 
-                    String title = node.getTitle();
-                    final Label label = new Label(ID_BOOKMARKED_PAGE_TITLE, title);
-                    link.add(label);
+                    Wkt.labelAdd(link, ID_BOOKMARKED_PAGE_TITLE, node.getTitle());
                     item.add(link);
 //XXX seems broken when there is only one bookmark entry;
 // an alternative idea would be to render the item differently eg. bold, but don't disable it

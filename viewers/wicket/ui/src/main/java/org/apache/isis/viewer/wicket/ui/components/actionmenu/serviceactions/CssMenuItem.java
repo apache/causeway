@@ -23,7 +23,6 @@ import java.util.List;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.commons.internal.base._Casts;
@@ -34,6 +33,7 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Decorators;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -102,7 +102,7 @@ implements Serializable {
         val actionMeta = getLinkAndLabel().getManagedAction().getAction();
         val actionLink = getLinkAndLabel().getUiComponent();
 
-        val label = new Label(CssMenuItem.ID_MENU_LABEL, Model.of(this.getName()));
+        val label = Wkt.labelAdd(markupContainer, CssMenuItem.ID_MENU_LABEL, this::getName);
 
         if (actionLink != null) {
 

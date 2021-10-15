@@ -74,6 +74,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLi
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.NonNull;
 import lombok.val;
@@ -617,9 +618,9 @@ implements ScalarModelSubscriber {
     protected abstract Component createComponentForCompact();
 
     protected Label createScalarName(final String id, final String labelCaption) {
-        final Label scalarName = new Label(id, labelCaption);
-        final ScalarModel model = getModel();
-        if(model.isRequired() && model.isEnabled()) {
+        final Label scalarName = Wkt.label(id, labelCaption);
+        final ScalarModel scalarModel = getModel();
+        if(scalarModel.isRequired() && scalarModel.isEnabled()) {
             final String label = scalarName.getDefaultModelObjectAsString();
             if(!_Strings.isNullOrEmpty(label)) {
                 scalarName.add(new CssClassAppender("mandatory"));

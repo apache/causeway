@@ -38,8 +38,8 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.HasUiComponent;
 import org.apache.isis.viewer.common.model.action.HasManagedAction;
+import org.apache.isis.viewer.common.model.mixin.HasUiComponent;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 

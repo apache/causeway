@@ -23,9 +23,11 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractTool
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.NoRecordsToolbar;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LambdaModel;
 import org.apache.wicket.model.Model;
+
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 /**
  * Responsibility: Display 'Showing all of 123' at the bottom of data tables.
@@ -67,18 +69,11 @@ public class IsisTotalRecordsToolbar extends AbstractToolbar {
         WebMarkupContainer container = new WebMarkupContainer(navigatorContainerId);
         add(container);
 
-        container.add(AttributeModifier.replace("colspan", new IModel<String>()
-        {
-            private static final long serialVersionUID = 1L;
+        container.add(AttributeModifier.replace("colspan", LambdaModel.of(()->
+            String.valueOf(table.getColumns().size()).intern())));
 
-            @Override
-            public String getObject()
-            {
-                return String.valueOf(table.getColumns().size()).intern();
-            }
-        }));
-        container.add(new Label("navigatorLabel", messageModel));
-        container.add(new Label("prototypingLabel", PrototypingMessageProvider.getTookTimingMessageModel()));
+        Wkt.labelAdd(container, "navigatorLabel", messageModel);
+        Wkt.labelAdd(container, "prototypingLabel", PrototypingMessageProvider.getTookTimingMessageModel());
     }
 
     /**

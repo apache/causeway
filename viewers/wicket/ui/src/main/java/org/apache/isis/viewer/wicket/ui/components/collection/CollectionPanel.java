@@ -35,6 +35,7 @@ import org.apache.isis.viewer.wicket.ui.components.collection.selector.Collectio
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -90,7 +91,7 @@ implements
     }
 
     public Label createLabel(final String id, final String collectionName) {
-        this.label = new Label(id, collectionName);
+        this.label = Wkt.label(id, collectionName);
         label.setOutputMarkupId(true);
         return this.label;
     }

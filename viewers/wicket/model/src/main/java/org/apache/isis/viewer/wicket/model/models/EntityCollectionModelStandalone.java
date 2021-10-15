@@ -38,13 +38,13 @@ extends EntityCollectionModelAbstract {
             final @NonNull ActionModel actionModel,
             final @NonNull Can<ManagedObject> args) {
 
-        val actMetaModel = actionModel.getMetaModel();
+        val action = actionModel.getAction();
 
         return new EntityCollectionModelStandalone(
                 DataTableModelWkt.forActionModel(
                         BookmarkedObjectWkt
-                            .ofAdapter(actionModel.getCommonContext(), actionModel.getOwner()),
-                        actMetaModel,
+                            .ofAdapter(actionModel.getCommonContext(), actionModel.getParentObject()),
+                        action,
                         args,
                         collectionAsAdapter));
     }

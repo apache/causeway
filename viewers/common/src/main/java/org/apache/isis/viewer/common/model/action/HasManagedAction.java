@@ -22,14 +22,21 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
 
 import lombok.val;
 
+/**
+ * Functional UI mixin for {@link ManagedAction}.
+ */
 @FunctionalInterface
 public interface HasManagedAction {
 
@@ -39,6 +46,20 @@ public interface HasManagedAction {
         return getManagedAction().getAction();
     }
 
+    /**
+     * Action's owner.
+     *
+     * @apiNote for mixins this is not the target to use on mixin actions
+     * instead the logic of resolving the target for action invocation is
+     * encapsulated within the {@link ActionInteractionHead}
+     */
+    default ManagedObject getActionOwner() {
+        return getManagedAction().getOwner();
+    }
+
+    /**
+     * Action's friendly (translated) name.
+     */
     default String getFriendlyName() {
         return getManagedAction().getFriendlyName();
     }
@@ -46,6 +67,25 @@ public interface HasManagedAction {
     default Optional<String> getDescription() {
         return getManagedAction().getDescription();
     }
+
+    default boolean hasParameters() {
+        return getAction().getParameterCount() > 0;
+    }
+
+    /**
+     * Bookmarkable if the {@link ObjectAction action} has a {@link BookmarkPolicyFacet bookmark} policy
+     * of {@link BookmarkPolicy#AS_ROOT root}, and has safe {@link ObjectAction#getSemantics() semantics}.
+     */
+    default boolean isBookmarkable() {
+        val action = getAction();
+        return action.getSemantics().isSafeInNature()
+                && action.lookupFacet(BookmarkPolicyFacet.class)
+                    .map(BookmarkPolicyFacet::value)
+                    .map(bookmarkPolicy -> bookmarkPolicy == BookmarkPolicy.AS_ROOT)
+                    .orElse(false);
+    }
+
+    // -- UI SPECIFICS
 
     default Optional<FontAwesomeUiModel> getFontAwesomeUiModel() {
         val managedAction = getManagedAction();

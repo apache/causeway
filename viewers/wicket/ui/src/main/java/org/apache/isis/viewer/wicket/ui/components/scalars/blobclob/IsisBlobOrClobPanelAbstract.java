@@ -32,16 +32,19 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LambdaModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.IResource;
 
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.image.WicketImageUtil;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -78,14 +81,16 @@ extends ScalarPanelAbstract {
 
     @Override
     protected FormGroup createComponentForRegular() {
+
+        val friendlyNameModel = LambdaModel.of(()->getModel().getFriendlyName());
+
         fileUploadField = createFileUploadField(ID_SCALAR_VALUE);
-        fileUploadField.setLabel(Model.of(getModel().getFriendlyName()));
+        fileUploadField.setLabel(friendlyNameModel);
 
         final FormGroup scalarIfRegularFormGroup = new FormGroup(ID_SCALAR_IF_REGULAR, fileUploadField);
         scalarIfRegularFormGroup.add(fileUploadField);
 
-        final Label scalarName = new Label(ID_SCALAR_NAME, getModel().getFriendlyName());
-        scalarIfRegularFormGroup.add(scalarName);
+        Wkt.labelAdd(scalarIfRegularFormGroup, ID_SCALAR_NAME, friendlyNameModel);
 
         wicketImage = asWicketImage(ID_IMAGE);
         if(wicketImage != null) {
@@ -216,9 +221,10 @@ extends ScalarPanelAbstract {
     protected abstract T getBlobOrClobFrom(final List<FileUpload> fileUploads);
 
     @SuppressWarnings("unchecked")
-    private T getBlobOrClob(final ScalarModel model) {
+    private Optional<T> getBlobOrClob(final ScalarModel model) {
         val adapter = model.getObject();
-        return adapter != null? (T) adapter.getPojo(): null;
+        val pojo = ManagedObjects.UnwrapUtil.single(adapter);
+        return (Optional<T>) Optional.ofNullable(pojo);
     }
 
     public IsisBlobOrClobPanelAbstract(final String id, final ScalarModel scalarModel) {
@@ -315,17 +321,12 @@ extends ScalarPanelAbstract {
     }
 
     private Label updateFileNameLabel(final String idFileName, final MarkupContainer formComponent) {
-        class FileNameModel extends Model<String> {
-            private static final long serialVersionUID = 1L;
-            @Override
-            public String getObject() {
-                T blobOrClob = getBlobOrClobFromModel();
-                String fileName = blobOrClob != null? blobOrClob.getName(): "";
-                return fileName;
-            }
-        }
-        Label fileNameLabel = new Label(idFileName, new FileNameModel());
-        formComponent.addOrReplace(fileNameLabel);
+
+        val fileNameLabel = Wkt.labelAdd(formComponent, idFileName, ()->
+            getBlobOrClobFromModel()
+            .map(NamedWithMimeType::getName)
+            .orElse(""));
+
         fileNameLabel.setOutputMarkupId(true);
         return fileNameLabel;
     }
@@ -353,10 +354,10 @@ extends ScalarPanelAbstract {
         ajaxLink.setOutputMarkupId(true);
         formComponent.addOrReplace(ajaxLink);
 
-        final T blobOrClob = getBlobOrClobFromModel();
+        final Optional<T> blobOrClob = getBlobOrClobFromModel();
         final Component clearButton = formComponent.get(ID_SCALAR_IF_REGULAR_CLEAR);
-        clearButton.setVisible(blobOrClob != null && visibility == InputFieldVisibility.VISIBLE);
-        clearButton.setEnabled(blobOrClob != null);
+        clearButton.setVisible(blobOrClob.isPresent() && visibility == InputFieldVisibility.VISIBLE);
+        clearButton.setEnabled(blobOrClob.isPresent());
 
         target.ifPresent(ajax->{
             ajax.add(formComponent);
@@ -377,15 +378,13 @@ extends ScalarPanelAbstract {
     }
 
     private ResourceLinkVolatile createResourceLink(final String id) {
-        final T blob = getBlobOrClobFromModel();
-        if(blob == null) {
-            return null;
-        }
-        val resource = newResource(blob);
-        return new ResourceLinkVolatile(id, resource);
+        return getBlobOrClobFromModel()
+        .map(this::newResource)
+        .map(resource->new ResourceLinkVolatile(id, resource))
+        .orElse(null);
     }
 
-    private T getBlobOrClobFromModel() {
+    private Optional<T> getBlobOrClobFromModel() {
         return getBlobOrClob(getModel());
     }
 

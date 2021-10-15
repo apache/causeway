@@ -44,7 +44,6 @@ import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -77,6 +76,7 @@ import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.FontAwesomeCssReferenceWkt;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -233,9 +233,9 @@ implements ActionPromptProvider {
 
 
     protected void setTitle(final String title) {
-        addOrReplace(new Label(ID_PAGE_TITLE, title != null
+        Wkt.labelAdd(this, ID_PAGE_TITLE, title != null
                 ? title
-                : getConfiguration().getViewer().getWicket().getApplication().getName()));
+                : getConfiguration().getViewer().getWicket().getApplication().getName());
     }
 
     private Class<? extends Page> getSignInPage() {
@@ -384,7 +384,7 @@ implements ActionPromptProvider {
                     private static final long serialVersionUID = 1L;
 
                     @Override
-                    public void onConfigure(Component component) {
+                    public void onConfigure(final Component component) {
                         super.onConfigure(component);
 
                         PageParameters parameters = getPageParameters();

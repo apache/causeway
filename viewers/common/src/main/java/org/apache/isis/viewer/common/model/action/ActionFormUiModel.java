@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model.action.form;
+package org.apache.isis.viewer.common.model.action;
 
 import java.util.stream.Stream;
 
@@ -25,35 +25,22 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.HasTitle;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
+import org.apache.isis.viewer.common.model.mixin.HasTitle;
 
 import lombok.val;
 
-public interface FormUiModel extends HasTitle {
-
-    ObjectAction getMetaModel();
-
-    /**
-     * Action's owner.
-     *
-     * @apiNote for mixins this is not the target to use on mixin actions
-     * instead the logic of resolving the target for action invocation is
-     * encapsulated within the {@link ActionInteractionHead}
-     */
-    ManagedObject getOwner();
+public interface ActionFormUiModel
+extends HasTitle, HasActionInteraction {
 
     Stream<? extends ParameterUiModel> streamPendingParamUiModels();
 
     // -- USABILITY
 
     default Consent getUsabilityConsent() {
-        return getMetaModel().isUsable(
-                getOwner(),
+        return getAction().isUsable(
+                getActionOwner(),
                 InteractionInitiatedBy.USER,
                 Where.OBJECT_FORMS);
     }
@@ -61,8 +48,8 @@ public interface FormUiModel extends HasTitle {
     // -- VISABILITY
 
     default Consent getVisibilityConsent() {
-        return getMetaModel().isVisible(
-                getOwner(),
+        return getAction().isVisible(
+                getActionOwner(),
                 InteractionInitiatedBy.USER,
                 Where.OBJECT_FORMS);
     }
@@ -75,31 +62,22 @@ public interface FormUiModel extends HasTitle {
                 .map(ParameterUiModel::getValue)
                 .collect(Can.toCan());
 
-        _Assert.assertEquals(getMetaModel().getParameterCount(), proposedArguments.size());
+        _Assert.assertEquals(getAction().getParameterCount(), proposedArguments.size());
 
-        val head = getMetaModel().interactionHead(getOwner());
+        val head = getAction().interactionHead(getActionOwner());
 
-        return getMetaModel().isArgumentSetValid(
+        return getAction().isArgumentSetValid(
                 head,
                 proposedArguments,
                 InteractionInitiatedBy.USER);
 
     }
 
-    // -- NAME
-
-    /**
-     * Action's friendly (translated) name.
-     */
-    default String getFriendlyName() {
-        return getMetaModel().getFriendlyName(this::getOwner);
-    }
-
     // -- HAS TITLE
 
     @Override
     default String getTitle() {
-        val target = getOwner();
+        val owner = getActionOwner();
 
         val buf = new StringBuilder();
 
@@ -112,16 +90,11 @@ public interface FormUiModel extends HasTitle {
             }
             buf.append(ManagedObjects.abbreviatedTitleOf(paramValue, 8, "..."));
         });
-        return target.titleString() + "." + getFriendlyName()
+        return owner.titleString() + "." + getFriendlyName()
             + (buf.length()>0
                     ?"(" + buf.toString() + ")"
                     :"");
     }
 
-    // -- SHORTCUTS
-
-    default boolean hasParameters() {
-        return getMetaModel().getParameterCount() > 0;
-    }
 
 }

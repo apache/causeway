@@ -52,7 +52,8 @@ import lombok.val;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.DefaultBootstrapButton;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 
-class ActionParametersForm extends PromptFormAbstract<ActionModel> {
+class ActionParametersForm
+extends PromptFormAbstract<ActionModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -146,7 +147,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
      */
     private void applyAreYouSure(final AjaxButton button) {
         val actionModel = getActionModel();
-        val action = actionModel.getMetaModel();
+        val action = actionModel.getAction();
 
         if (action.getSemantics().isAreYouSure()) {
             val confirmUiModel = ConfirmUiModel.ofAreYouSure(getTranslationService(), Placement.BOTTOM);

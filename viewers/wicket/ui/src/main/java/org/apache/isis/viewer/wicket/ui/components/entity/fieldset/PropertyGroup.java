@@ -24,7 +24,6 @@ import java.util.function.Consumer;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -49,6 +48,7 @@ import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -109,7 +109,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
         if(_Strings.isNullOrEmpty(fieldSet.getName())) {
             panelHeading.setVisibilityAllowed(false);
         } else {
-            panelHeading.addOrReplace(new Label(ID_MEMBER_GROUP_NAME, fieldSet.getName()));
+            Wkt.labelAdd(panelHeading, ID_MEMBER_GROUP_NAME, fieldSet.getName());
 
             AdditionalLinksPanel.addAdditionalLinks(
                     panelHeading, ID_ASSOCIATED_ACTION_LINKS_PANEL,

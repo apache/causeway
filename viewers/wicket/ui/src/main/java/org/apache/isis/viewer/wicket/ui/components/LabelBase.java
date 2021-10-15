@@ -65,10 +65,10 @@ implements HasCommonContext {
 
     // -- HELPER
 
-    private <X> X computeIfAbsent(Class<X> type, X existingIfAny) {
+    private <X> X computeIfAbsent(final Class<X> type, final X existingIfAny) {
         return existingIfAny!=null
                 ? existingIfAny
-                        : getCommonContext().lookupServiceElseFail(type);
+                : getCommonContext().lookupServiceElseFail(type);
     }
 
 }

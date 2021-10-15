@@ -19,11 +19,11 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.image;
 
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
-import org.apache.wicket.markup.html.basic.Label;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -44,9 +44,8 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
     }
 
     private void buildGui() {
-        val scalarName = getModel().getFriendlyName();
-        val scalarNameLabel = new Label(ID_SCALAR_NAME, scalarName);
-        addOrReplace(scalarNameLabel);
+
+        Wkt.labelAdd(this, ID_SCALAR_NAME, ()->getModel().getFriendlyName());
 
         val wicketImage = WicketImageUtil.asWicketImage(ID_SCALAR_VALUE, getModel())
                 .orElse(null);
@@ -61,8 +60,6 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
         } else {
             permanentlyHide(ID_SCALAR_VALUE, ID_FEEDBACK);
         }
-
-
 
     }
 

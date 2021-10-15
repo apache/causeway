@@ -24,7 +24,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.LinkAndLabelFactoryAbstract;
 
@@ -55,8 +54,7 @@ implements ObjectUiModel {
     public LinkAndLabel newActionLink(final ObjectAction action) {
         return LinkAndLabel.of(
                 this::newLinkComponent,
-                //FIXME[ISIS-2877] needs a ValueModel instead
-                EntityModel.ofAdapter(scalarParameterModel().getCommonContext(), getManagedObject()),
+                this, // ObjectUiModel: the action's owner provider
                 action);
     }
 

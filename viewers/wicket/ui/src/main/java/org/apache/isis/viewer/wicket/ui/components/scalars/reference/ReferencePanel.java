@@ -25,7 +25,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -49,6 +48,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.Obj
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -272,7 +272,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
                 if(inlinePrompt) {
                     Components.permanentlyHide(componentForRegular, "entityTitleIfNull");
                 } else {
-                    componentForRegular.addOrReplace(new Label("entityTitleIfNull", "(none)"));
+                    Wkt.labelAdd(componentForRegular, "entityTitleIfNull", "(none)");
                 }
             }
 

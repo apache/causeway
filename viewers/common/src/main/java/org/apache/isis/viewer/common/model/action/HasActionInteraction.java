@@ -16,22 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.model.models;
+package org.apache.isis.viewer.common.model.action;
 
-import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 
-import org.apache.isis.viewer.common.model.mixin.HasTitle;
+/**
+ * Functional UI mixin for {@link ActionInteraction}.
+ */
+@FunctionalInterface
+public interface HasActionInteraction
+extends HasManagedAction {
 
-public interface BookmarkableModel
-extends HasTitle {
+    ActionInteraction getActionInteraction();
 
-    /**
-     * So can be bookmarked / added to <tt>BookmarkedPagesModel</tt>.
-     */
-    public abstract PageParameters getPageParameters();
+    @Override
+    default ManagedAction getManagedAction() {
+        return getActionInteraction().getManagedActionElseFail();
+    }
 
-    public abstract PageParameters getPageParametersWithoutUiHints();
-
-    public abstract boolean hasAsRootPolicy();
 
 }

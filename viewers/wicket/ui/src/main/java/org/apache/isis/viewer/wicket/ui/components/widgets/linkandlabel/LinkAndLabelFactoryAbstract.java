@@ -45,9 +45,10 @@ implements Serializable {
 
     protected abstract ActionModel actionModel(final ManagedAction managedAction);
 
+    // called exclusively by LinkAndLabel, which implements HasManagedAction
     protected final ActionLink newLinkComponent(final ManagedAction managedAction) {
-        return new ActionLinkFactory(linkId, actionModel(managedAction), scalarModelForAssociationIfAny)
-                .newLinkComponent();
+        return ActionLink
+                .create(linkId, actionModel(managedAction), scalarModelForAssociationIfAny);
     }
 
 }

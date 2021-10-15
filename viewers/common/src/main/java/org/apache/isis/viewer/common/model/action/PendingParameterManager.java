@@ -16,10 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model;
+package org.apache.isis.viewer.common.model.action;
 
-public interface HasUiComponent<T> {
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
-    T getUiComponent();
+@Deprecated
+public interface PendingParameterManager {
+
+    void setParameterValue(ObjectActionParameter actionParameter, ManagedObject newParamValue);
+
+    void clearParameterValue(ObjectActionParameter actionParameter);
 
 }

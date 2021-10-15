@@ -320,7 +320,7 @@ public class PageParameterUtils {
 
         final List<String> argsAsEncodedOidStrings = PageParameterNames.ACTION_ARGS.getListFrom(pageParameters);
 
-        val action = actionModel.getMetaModel();
+        val action = actionModel.getAction();
         val parameters = action.getParameters();
 
         for (int paramNum = 0; paramNum < argsAsEncodedOidStrings.size(); paramNum++) {
@@ -341,7 +341,7 @@ public class PageParameterUtils {
             return false;
         }
 
-        val action = actionModel.getMetaModel();
+        val action = actionModel.getAction();
         val actionParamIfAny = action.getParameters().get(paramNumAndOidString.getParamNum());
         if(!actionParamIfAny.isPresent()) {
             return false;

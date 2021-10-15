@@ -18,14 +18,14 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.actionprompt;
 
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.IModel;
-
 import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
+
+import lombok.val;
 
 /**
  * A panel used as a title for the action prompts
@@ -39,18 +39,12 @@ extends PanelAbstract<ManagedObject, ActionModel> {
     public ActionPromptHeaderPanel(final String id, final ActionModel model) {
         super(id, model);
 
-        _Blackhole.consume(model.getOwner()); // side-effect: loads the model
+        _Blackhole.consume(model.getObject()); // side-effect: loads the model
 
-        getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, model.getParentUiModel());
+        getComponentFactoryRegistry()
+        .addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, model.getParentUiModel());
 
-
-        final Label label = new Label(ID_ACTION_NAME, new IModel<String>() {
-            private static final long serialVersionUID = 1L;
-            @Override
-            public String getObject() {
-                return model.getFriendlyName();
-            }
-        });
+        val label = Wkt.labelAdd(this, ID_ACTION_NAME, model::getFriendlyName);
 
         label.setEscapeModelStrings(true);
         add(label);

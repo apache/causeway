@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -37,6 +36,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Decorators;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -54,9 +54,7 @@ public final class ServiceActionUtil {
 
         val actionUiModel = menuItem.getLinkAndLabel();
         val menuItemActionLink = actionUiModel.getUiComponent();
-
-        val menuItemLabel = new Label("menuLinkLabel", menuItem.getName());
-        menuItemActionLink.addOrReplace(menuItemLabel);
+        val menuItemLabel = Wkt.labelAdd(menuItemActionLink, "menuLinkLabel", menuItem.getName());
 
         Decorators.getActionLink().decorateMenuItem(
                 listItem,
@@ -84,7 +82,7 @@ public final class ServiceActionUtil {
         Fragment folderItem = new Fragment("content", "folderItem", parent);
         listItem.add(folderItem);
 
-        folderItem.add(new Label("folderName", subMenuItem.getLinkAndLabel().getFriendlyName()));
+        Wkt.labelAdd(folderItem, "folderName", ()->subMenuItem.getLinkAndLabel().getFriendlyName());
         final List<CssMenuItem> menuItems = subMenuItem.getSubMenuItems();
         ListView<CssMenuItem> subMenuItemsView = new ListView<CssMenuItem>("subMenuItems",
                 menuItems) {

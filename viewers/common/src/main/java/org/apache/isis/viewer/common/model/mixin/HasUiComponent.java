@@ -16,10 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model;
+package org.apache.isis.viewer.common.model.mixin;
 
-public interface HasTitle {
+@FunctionalInterface
+public interface HasUiComponent<T> {
 
-    String getTitle();
+    T getUiComponent();
 
 }

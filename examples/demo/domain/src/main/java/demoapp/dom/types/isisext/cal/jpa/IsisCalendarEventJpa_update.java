@@ -25,7 +25,6 @@ import org.springframework.context.annotation.Profile;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEventSemanticsProvider.Parameters;
@@ -38,8 +37,9 @@ import lombok.val;
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
-        associateWith = "readWriteProperty",
-        promptStyle = PromptStyle.INLINE_AS_IF_EDIT)
+        associateWith = "readWriteProperty"
+        //promptStyle = PromptStyle.INLINE_AS_IF_EDIT
+        )
 @RequiredArgsConstructor
 //FIXME[ISIS-2877] intermediate, remove when resolved
 public class IsisCalendarEventJpa_update {

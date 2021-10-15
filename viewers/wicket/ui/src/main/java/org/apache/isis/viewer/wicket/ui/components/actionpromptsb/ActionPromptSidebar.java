@@ -21,10 +21,10 @@ package org.apache.isis.viewer.wicket.ui.components.actionpromptsb;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 
 import org.apache.isis.viewer.wicket.model.models.ActionPromptWithExtraContent;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 public class ActionPromptSidebar
 extends GenericPanel<Void>
@@ -44,13 +44,13 @@ implements ActionPromptWithExtraContent {
         setOutputMarkupId(true);
         setOutputMarkupPlaceholderTag(true);
 
-        add(new Label(getTitleId(), "(no action)"));
+        Wkt.labelAdd(this, getTitleId(), "(no action)");
 
         add(new WebMarkupContainer(getContentId()));
         add(new WebMarkupContainer(getExtraContentId()));
     }
 
-    public static ActionPromptSidebar newSidebar(String id) {
+    public static ActionPromptSidebar newSidebar(final String id) {
         return new ActionPromptSidebar(id);
     }
 

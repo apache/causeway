@@ -34,7 +34,6 @@ import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.apache.wicket.util.resource.StringResourceStream;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.value.Blob;
@@ -46,8 +45,8 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.viewer.web.WebAppContextPath;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -55,7 +54,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.common.model.action.form.FormUiModel;
+import org.apache.isis.viewer.common.model.action.ActionFormUiModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.act.ActionInteractionWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.act.ParameterUiModelWkt;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
@@ -74,7 +73,7 @@ import lombok.val;
  */
 public final class ActionModel
 extends ChainingModel<ManagedObject>
-implements FormUiModel, FormExecutorContext, BookmarkableModel {
+implements ActionFormUiModel, FormExecutorContext, BookmarkableModel {
 
     private static final long serialVersionUID = 1L;
 
@@ -123,8 +122,9 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     // --
 
-    public void actionInteraction() {
-        delegate.actionInteraction();
+    @Override
+    public ActionInteraction getActionInteraction() {
+        return delegate.actionInteraction();
     }
 
     @Override
@@ -136,7 +136,8 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     @Override
     public PageParameters getPageParametersWithoutUiHints() {
-        return PageParameterUtils.createPageParametersForAction(getOwner(), getMetaModel(), snapshotArgs());
+        return PageParameterUtils
+                .createPageParametersForAction(getParentObject(), getAction(), snapshotArgs());
     }
 
     @Override
@@ -145,11 +146,6 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     }
 
     // --
-
-    @Override
-    public ObjectAction getMetaModel() {
-        return delegate.actionInteraction().getMetamodel().get();
-    }
 
     @Override
     public boolean hasAsRootPolicy() {
@@ -170,13 +166,6 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         return delegate.parameterNegotiationModel().getParamValues();
     }
 
-    // -- HELPERS
-
-    @Override
-    public ManagedObject getOwner() {
-        return delegate.actionInteraction().getManagedActionElseFail().getOwner();
-    }
-
     public ManagedObject executeActionAndReturnResult() {
         val pendingArgs = delegate.parameterNegotiationModel();
         val result = delegate.actionInteraction().invokeWithRuleChecking(pendingArgs);
@@ -194,19 +183,6 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
      */
     public void clearArguments() {
         delegate.resetParametersToDefault();
-    }
-
-    /**
-     * Bookmarkable if the {@link ObjectAction action} has a {@link BookmarkPolicyFacet bookmark} policy
-     * of {@link BookmarkPolicy#AS_ROOT root}, and has safe {@link ObjectAction#getSemantics() semantics}.
-     */
-    public boolean isBookmarkable() {
-        val action = getMetaModel();
-        return action.getSemantics().isSafeInNature()
-                && action.lookupFacet(BookmarkPolicyFacet.class)
-                    .map(BookmarkPolicyFacet::value)
-                    .map(bookmarkPolicy -> bookmarkPolicy == BookmarkPolicy.AS_ROOT)
-                    .orElse(false);
     }
 
     // //////////////////////////////////////
@@ -275,7 +251,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         handler.setContentDisposition(ContentDisposition.ATTACHMENT);
 
         //ISIS-1619, prevent clients from caching the response content
-        return getMetaModel().getSemantics().isIdempotentOrCachable()
+        return getAction().getSemantics().isIdempotentOrCachable()
                 ? handler
                 : enforceNoCacheOnClientSide(handler);
     }
@@ -284,7 +260,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     @Override
     public PromptStyle getPromptStyle() {
-        final ObjectAction objectAction = getMetaModel();
+        final ObjectAction objectAction = getAction();
         final ObjectSpecification objectActionOwner = objectAction.getDeclaringType();
         if(objectActionOwner.isManagedBean()) {
             // tried to move this test into PromptStyleFacetFallback,
@@ -320,7 +296,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     }
 
     public <T extends Facet> T getFacet(final Class<T> facetType) {
-        final FacetHolder facetHolder = getMetaModel();
+        final FacetHolder facetHolder = getAction();
         return facetHolder.getFacet(facetType);
     }
 

@@ -23,7 +23,6 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
@@ -33,6 +32,7 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket.Credit;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
@@ -40,6 +40,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.ThemeChoo
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -61,7 +62,7 @@ extends PanelAbstract<String, Model<String>> {
      *
      * @param id The component id
      */
-    public FooterPanel(String id) {
+    public FooterPanel(final String id) {
         super(id);
     }
 
@@ -105,12 +106,11 @@ extends PanelAbstract<String, Model<String>> {
             });
         }
 
-        val creditsLabel = new Label("creditsLabel", "Credits: ");
-        add(creditsLabel);
+        val creditsLabel = Wkt.labelAdd(this, "creditsLabel", "Credits: ");
         creditsLabel.setVisibilityAllowed(hasAnyCredits);
     }
 
-    private WebMarkupContainer newCreditLinkComponent(Credit credit) {
+    private WebMarkupContainer newCreditLinkComponent(final Credit credit) {
 
         val creditLinkId = "creditLink";
 
@@ -120,7 +120,7 @@ extends PanelAbstract<String, Model<String>> {
                         private static final long serialVersionUID = 1L;
 
                         @Override
-                        protected void onComponentTag(ComponentTag tag) {
+                        protected void onComponentTag(final ComponentTag tag) {
                             super.onComponentTag(tag);
                             tag.put("target", "_blank");
                         }
@@ -157,18 +157,19 @@ extends PanelAbstract<String, Model<String>> {
     }
 
     private void addAboutLink() {
-        final BookmarkablePageLink<Void> aboutLink = new BookmarkablePageLink<>(ID_ABOUT_LINK, AboutPage.class);
+        final BookmarkablePageLink<Void> aboutLink =
+                new BookmarkablePageLink<>(ID_ABOUT_LINK, AboutPage.class);
         add(aboutLink);
 
-        String applicationVersion = getIsisConfiguration().getViewer().getWicket().getApplication().getVersion();
+        final String applicationVersion =
+                getIsisConfiguration().getViewer().getWicket().getApplication().getVersion();
 
-        final Label aboutLabel =
-                applicationVersion != null && !applicationVersion.isEmpty()?
-                        new Label(ID_ABOUT_MESSAGE,  applicationVersion) :
-                            new Label(ID_ABOUT_MESSAGE,  new ResourceModel("aboutLabel"))
-                            ;
-                        aboutLink.add(aboutLabel);
-                        addDevModeWarning(aboutLink);
+        Wkt.labelAdd(aboutLink, ID_ABOUT_MESSAGE,
+                _Strings.isNotEmpty(applicationVersion)
+                    ? Model.of(applicationVersion)
+                    : new ResourceModel("aboutLabel"));
+
+        addDevModeWarning(aboutLink);
     }
 
     /**

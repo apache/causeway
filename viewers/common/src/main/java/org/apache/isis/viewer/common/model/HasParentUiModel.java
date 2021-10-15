@@ -23,12 +23,12 @@ import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 
 public interface HasParentUiModel<T extends ObjectUiModel> {
 
-    T getParentUiModel();
-
     /**
      * The owning entity/viewmodel/service that is declaring this action or property.
      */
-    default ManagedObject getOwner()  {
+    T getParentUiModel();
+
+    default ManagedObject getParentObject()  {
         return getParentUiModel().getManagedObject();
     }
 }

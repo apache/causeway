@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
@@ -40,6 +39,7 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Decorators;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -130,7 +130,6 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
 
                 Tooltips.addTooltip(link, tooltipModel.getObject());
 
-                val viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, linkAndLabel.getFriendlyName());
                 if(ObjectAction.Util.returnsBlobOrClob(actionMeta)) {
                     link.add(new CssClassAppender("noVeil"));
                 }
@@ -158,7 +157,8 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
                 .getAdditionalCssClass()
                 .ifPresent(cssClass->CssClassAppender.appendCssClassTo(link, cssClass));
 
-                link.addOrReplace(viewTitleLabel);
+                val viewTitleLabel = Wkt.labelAdd(link, ID_ADDITIONAL_LINK_TITLE,
+                        linkAndLabel::getFriendlyName);
 
                 val fontAwesome = linkAndLabel.getFontAwesomeUiModel();
                 Decorators.getIcon().decorate(viewTitleLabel, fontAwesome);

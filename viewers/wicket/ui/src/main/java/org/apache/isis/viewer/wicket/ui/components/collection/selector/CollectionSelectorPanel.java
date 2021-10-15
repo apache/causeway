@@ -43,6 +43,7 @@ import org.apache.isis.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
@@ -114,11 +115,8 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 
             final WebMarkupContainer views = new WebMarkupContainer(ID_VIEWS);
 
-            final Label viewButtonTitle = new Label(ID_VIEW_BUTTON_TITLE, "Hidden");
-            views.addOrReplace(viewButtonTitle);
-
-            final Label viewButtonIcon = new Label(ID_VIEW_BUTTON_ICON, "");
-            views.addOrReplace(viewButtonIcon);
+            final Label viewButtonTitle = Wkt.labelAdd(views, ID_VIEW_BUTTON_TITLE, "Hidden");
+            final Label viewButtonIcon = Wkt.labelAdd(views, ID_VIEW_BUTTON_ICON, "");
 
             final WebMarkupContainer container = new WebMarkupContainer(ID_VIEW_LIST);
 
@@ -159,12 +157,9 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
                         }
                     };
 
-                    IModel<String> title = nameFor(componentFactory);
-                    Label viewItemTitleLabel = new Label(ID_VIEW_ITEM_TITLE, title);
-                    link.add(viewItemTitleLabel);
-
-                    Label viewItemIcon = new Label(ID_VIEW_ITEM_ICON, "");
-                    link.add(viewItemIcon);
+                    final IModel<String> title = nameFor(componentFactory);
+                    Wkt.labelAdd(link, ID_VIEW_ITEM_TITLE, title::getObject);
+                    final Label viewItemIcon = Wkt.labelAdd(link, ID_VIEW_ITEM_ICON, "");
 
                     final boolean selected = componentFactory == CollectionSelectorPanel.this.selectedComponentFactory;
                     if (selected) {

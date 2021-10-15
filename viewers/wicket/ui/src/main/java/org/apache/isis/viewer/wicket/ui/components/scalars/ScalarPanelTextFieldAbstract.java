@@ -50,6 +50,7 @@ import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.NonNull;
 import lombok.val;
@@ -207,8 +208,7 @@ implements TextFieldValueModel.ScalarModelProvider {
                 tag.put("tabindex","-1");
             }
         };
-        final Label label = new Label("scalarValue", inlinePromptModel);
-        fragment.add(label);
+        Wkt.labelAdd(fragment, "scalarValue", inlinePromptModel);
         return fragment;
     }
 
@@ -280,10 +280,9 @@ implements TextFieldValueModel.ScalarModelProvider {
      */
     @Override
     protected Component createComponentForCompact() {
-        Fragment compactFragment = getCompactFragment(CompactType.SPAN);
-        final Label labelIfCompact = new Label(ID_SCALAR_IF_COMPACT, getModel().getObjectAsString());
-        compactFragment.add(labelIfCompact);
-        return labelIfCompact;
+        return Wkt.labelAdd(
+                getCompactFragment(CompactType.SPAN), ID_SCALAR_IF_COMPACT,
+                ()->getModel().getObjectAsString());
     }
 
     public enum CompactType {
