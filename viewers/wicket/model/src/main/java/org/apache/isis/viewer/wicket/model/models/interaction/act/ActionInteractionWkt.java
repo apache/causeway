@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 import org.apache.wicket.model.ChainingModel;
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
@@ -34,11 +35,14 @@ import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
+
+import lombok.val;
 
 /**
  * The parent (container) model of multiple <i>parameter models</i> which implement
@@ -70,19 +74,21 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     private @Nullable ScalarParameterModel associatedWithParameterIfAny;
     private @Nullable EntityCollectionModel associatedWithCollectionIfAny;
 
-//    /**
-//     * Returns a new <i>Action Interaction</i> binding to the parent {@link BookmarkedObjectWkt}
-//     * of given {@link ActionModel}.
-//     */
-//    public static ActionInteractionWkt bind(
-//            final ActionModel actionModel,
-//            final Where where) {
-//        return new ActionInteractionWkt(
-//                actionModel.getParentUiModel().bookmarkedObjectModel(),
-//                actionModel.getMetaModel().getId(),
-//                where,
-//                null);
-//    }
+    public static ActionInteractionWkt forEntity(
+            final EntityModel parentEntityModel,
+            final Identifier actionIdentifier,
+            final Where where,
+            final ScalarPropertyModel associatedWithPropertyIfAny,
+            final ScalarParameterModel associatedWithParameterIfAny,
+            final EntityCollectionModel associatedWithCollectionIfAny) {
+        return new ActionInteractionWkt(
+                parentEntityModel.bookmarkedObjectModel(),
+                actionIdentifier.getMemberLogicalName(),
+                where,
+                associatedWithPropertyIfAny,
+                associatedWithParameterIfAny,
+                associatedWithCollectionIfAny);
+    }
 
     public ActionInteractionWkt(
             final BookmarkedObjectWkt bookmarkedObject,
@@ -101,8 +107,16 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
 
     @Override
     protected ActionInteraction load() {
+
+        // setup the lazy, don't yet evaluate
         parameterNegotiationModel =
                 _Lazy.threadSafe(()->actionInteraction().startParameterNegotiation());
+
+        if(associatedWithParameterIfAny!=null) {
+            final int paramIndex = associatedWithParameterIfAny.getParameterIndex();
+            val paramValue = associatedWithParameterIfAny.getParameterNegotiationModel().getParamValue(paramIndex);
+            return ActionInteraction.start(paramValue, memberId, where);
+        }
 
         return associatedWithCollectionIfAny!=null
                 ? associatedWithCollectionIfAny.getDataTableModel()

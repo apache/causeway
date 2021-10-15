@@ -56,20 +56,20 @@ implements ActionModel {
     // -- FACTORY METHODS
 
     public static ActionModelImpl forEntity(
-            final EntityModel actionOwner,
+            final EntityModel parentEntityModel,
             final Identifier actionIdentifier,
             final Where where,
             final ScalarPropertyModel associatedWithPropertyIfAny,
             final ScalarParameterModel associatedWithParameterIfAny,
             final EntityCollectionModel associatedWithCollectionIfAny) {
-        val delegate = new ActionInteractionWkt(
-                actionOwner.bookmarkedObjectModel(),
-                actionIdentifier.getMemberLogicalName(),
+        val delegate = ActionInteractionWkt.forEntity(
+                parentEntityModel,
+                actionIdentifier,
                 where,
                 associatedWithPropertyIfAny,
                 associatedWithParameterIfAny,
                 associatedWithCollectionIfAny);
-        return new ActionModelImpl(actionOwner, delegate);
+        return new ActionModelImpl(parentEntityModel, delegate);
     }
 
     public static ActionModel ofPageParameters(
