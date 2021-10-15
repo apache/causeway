@@ -54,11 +54,6 @@ implements CancelHintRequired  {
         buildGui();
     }
 
-//    private ManagedObjectModel objectModelForLink() {
-//        final var model = (HasCommonContext & IModel<ManagedObject>)getModel();
-//        return ManagedObjectModel.of(model::getObject);
-//    }
-
     private boolean isEmpty() {
         return ManagedObjects.isNullOrUnspecifiedOrEmpty(getModel().getObject());
     }

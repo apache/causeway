@@ -22,15 +22,14 @@ import java.util.function.Function;
 
 import org.apache.wicket.markup.html.link.AbstractLink;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.ActionLinkUiComponentFactoryWkt;
-import org.apache.isis.viewer.wicket.model.links.ActionModelProvider;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.ActionModelForEntity;
-import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.models.ActionModelImpl;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -39,38 +38,12 @@ import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 
-import lombok.AccessLevel;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @FunctionalInterface
 public interface LinkAndLabelFactory
 extends Function<ObjectAction, LinkAndLabel> {
-
-    @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-    static abstract class ActionModelProviderAbstract implements ActionModelProvider {
-        private static final long serialVersionUID = 1L;
-        protected final EntityModel ownerEntityModel;
-        protected final ScalarModel scalarModelForAssociationIfAny;
-        protected final EntityCollectionModel collectionModelForAssociationIfAny;
-    }
-
-    static class MenuLinkFactory implements ActionLinkUiComponentFactoryWkt {
-        private static final long serialVersionUID = 1L;
-        @Override
-        public AbstractLink newActionLinkUiComponent(@NonNull final ActionModel actionModel) {
-            return ActionLink.create(PageAbstract.ID_MENU_LINK, actionModel);
-        }
-    }
-
-    static class AdditionalLinkFactory implements ActionLinkUiComponentFactoryWkt {
-        private static final long serialVersionUID = 1L;
-        @Override
-        public AbstractLink newActionLinkUiComponent(@NonNull final ActionModel actionModel) {
-            return ActionLink.create(AdditionalLinksPanel.ID_ADDITIONAL_LINK, actionModel);
-        }
-    }
 
     public static LinkAndLabelFactory forMenu(
             final EntityModel serviceModel) {
@@ -78,9 +51,10 @@ extends Function<ObjectAction, LinkAndLabel> {
         val linkFactory = new MenuLinkFactory();
 
         return action -> LinkAndLabel.of(
-                ActionModelForEntity.forEntity(
+                ActionModelImpl.forEntity(
                         serviceModel,
                         action.getFeatureIdentifier(),
+                        Where.ANYWHERE,
                         null, null, null),
                 linkFactory);
     }
@@ -92,9 +66,10 @@ extends Function<ObjectAction, LinkAndLabel> {
         val linkFactory = new AdditionalLinkFactory();
 
         return action -> LinkAndLabel.of(
-                ActionModelForEntity.forEntity(
+                ActionModelImpl.forEntity(
                         parentEntityModel,
                         action.getFeatureIdentifier(),
+                        Where.OBJECT_FORMS,
                         null, null, null),
                 linkFactory);
     }
@@ -105,9 +80,10 @@ extends Function<ObjectAction, LinkAndLabel> {
         val linkFactory = new AdditionalLinkFactory();
 
         return action -> LinkAndLabel.of(
-                ActionModelForEntity.forEntity(
+                ActionModelImpl.forEntity(
                         collectionModel.getEntityModel(),
                         action.getFeatureIdentifier(),
+                        Where.OBJECT_FORMS,
                         null, null, collectionModel),
                 linkFactory);
     }
@@ -125,9 +101,10 @@ extends Function<ObjectAction, LinkAndLabel> {
         val linkFactory = new AdditionalLinkFactory();
 
         return action -> LinkAndLabel.of(
-                ActionModelForEntity.forEntity(
+                ActionModelImpl.forEntity(
                         scalarModel.getParentUiModel(),
                         action.getFeatureIdentifier(),
+                        Where.OBJECT_FORMS,
                         scalarModel, null, null),
                 linkFactory);
     }
@@ -138,9 +115,10 @@ extends Function<ObjectAction, LinkAndLabel> {
         val linkFactory = new AdditionalLinkFactory();
 
         return action -> LinkAndLabel.of(
-                ActionModelForEntity.forEntity(
+                ActionModelImpl.forEntity(
                         scalarParameterModel.getParentUiModel(),
                         action.getFeatureIdentifier(),
+                        Where.OBJECT_FORMS,
                         null, scalarParameterModel, null),
                 linkFactory);
     }
@@ -153,6 +131,22 @@ extends Function<ObjectAction, LinkAndLabel> {
             throw new IllegalArgumentException(String.format(
                     "Object '%s' is not identifiable (has no identifier).",
                     objectAdapter.titleString()));
+        }
+    }
+
+    static class MenuLinkFactory implements ActionLinkUiComponentFactoryWkt {
+        private static final long serialVersionUID = 1L;
+        @Override
+        public AbstractLink newActionLinkUiComponent(@NonNull final ActionModel actionModel) {
+            return ActionLink.create(PageAbstract.ID_MENU_LINK, actionModel);
+        }
+    }
+
+    static class AdditionalLinkFactory implements ActionLinkUiComponentFactoryWkt {
+        private static final long serialVersionUID = 1L;
+        @Override
+        public AbstractLink newActionLinkUiComponent(@NonNull final ActionModel actionModel) {
+            return ActionLink.create(AdditionalLinksPanel.ID_ADDITIONAL_LINK, actionModel);
         }
     }
 

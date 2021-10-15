@@ -47,7 +47,7 @@ import lombok.val;
  * ActionModel --bound-to--> ActionInteractionWkt (delegate)
  * </pre>
  */
-public final class ActionModelForEntity
+public final class ActionModelImpl
 extends ChainingModel<ManagedObject>
 implements ActionModel {
 
@@ -55,36 +55,21 @@ implements ActionModel {
 
     // -- FACTORY METHODS
 
-//    public static ActionModelForEntity forParameter(
-//            final ScalarParameterModel scalarParameterModel) {
-//        //FIXME[ISIS-2877] impl.
-//        val delegate = new ActionInteractionWkt(
-//                scalarParameterModel.getParameterNegotiationModel()
-//
-//
-//                actionOwner.bookmarkedObjectModel(),
-//                actionIdentifier.getMemberLogicalName(),
-//                Where.OBJECT_FORMS,
-//                null,
-//                scalarParameterModel,
-//                null);
-//        return new ActionModelForEntity(actionOwner, delegate);
-//    }
-
-    public static ActionModelForEntity forEntity(
+    public static ActionModelImpl forEntity(
             final EntityModel actionOwner,
             final Identifier actionIdentifier,
+            final Where where,
             final ScalarPropertyModel associatedWithPropertyIfAny,
             final ScalarParameterModel associatedWithParameterIfAny,
             final EntityCollectionModel associatedWithCollectionIfAny) {
         val delegate = new ActionInteractionWkt(
                 actionOwner.bookmarkedObjectModel(),
                 actionIdentifier.getMemberLogicalName(),
-                Where.OBJECT_FORMS,
+                where,
                 associatedWithPropertyIfAny,
                 associatedWithParameterIfAny,
                 associatedWithCollectionIfAny);
-        return new ActionModelForEntity(actionOwner, delegate);
+        return new ActionModelImpl(actionOwner, delegate);
     }
 
     public static ActionModel ofPageParameters(
@@ -98,7 +83,7 @@ implements ActionModel {
 
     private final ActionInteractionWkt delegate;
 
-    private ActionModelForEntity(final EntityModel parentEntityModel, final ActionInteractionWkt delegate) {
+    private ActionModelImpl(final EntityModel parentEntityModel, final ActionInteractionWkt delegate) {
         super(parentEntityModel);
         this.delegate = delegate;
     }

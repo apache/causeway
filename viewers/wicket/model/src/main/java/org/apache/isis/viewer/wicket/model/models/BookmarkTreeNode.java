@@ -146,16 +146,16 @@ public class BookmarkTreeNode implements Serializable {
     }
 
     /**
-     * Whether or not the provided {@link ActionModelForEntity} matches that contained
+     * Whether or not the provided {@link ActionModelImpl} matches that contained
      * within this node (taking into account the action's arguments).
      *
      * If it does match, then the matched node's title is updated to that of the provided
-     * {@link ActionModelForEntity}.
+     * {@link ActionModelImpl}.
      * <p>
      *
      * @return - whether the provided candidate is found or was added to this node's tree.
      */
-    private boolean matchFor(final ActionModelForEntity candidateActionModel) {
+    private boolean matchFor(final ActionModelImpl candidateActionModel) {
 
         // check if target object of the action is the same (the oid str)
         final String candidateOidStr = oidStrFrom(candidateActionModel);

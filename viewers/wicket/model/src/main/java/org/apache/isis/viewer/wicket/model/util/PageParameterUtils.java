@@ -33,6 +33,7 @@ import org.apache.wicket.util.string.StringValue;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.primitives._Ints;
@@ -47,7 +48,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.ActionModelForEntity;
+import org.apache.isis.viewer.wicket.model.models.ActionModelImpl;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
 import lombok.NonNull;
@@ -118,7 +119,11 @@ public class PageParameterUtils {
 
         val entityModel = entityModelFromPageParams(commonContext, pageParameters);
         val action = actionFromPageParams(commonContext, pageParameters);
-        val actionModel = ActionModelForEntity.forEntity(entityModel, action.getFeatureIdentifier(), null, null, null);
+        val actionModel = ActionModelImpl.forEntity(
+                entityModel,
+                action.getFeatureIdentifier(),
+                Where.OBJECT_FORMS,
+                null, null, null);
         val mmc = commonContext.getMetaModelContext();
         setArgumentsIfPossible(mmc, actionModel, pageParameters);
         setContextArgumentIfPossible(mmc, actionModel, pageParameters);
@@ -316,7 +321,7 @@ public class PageParameterUtils {
 
     private static void setArgumentsIfPossible(
             final @NonNull MetaModelContext mmc,
-            final ActionModelForEntity actionModel,
+            final ActionModelImpl actionModel,
             final PageParameters pageParameters) {
 
         final List<String> argsAsEncodedOidStrings = PageParameterNames.ACTION_ARGS.getListFrom(pageParameters);
@@ -333,7 +338,7 @@ public class PageParameterUtils {
 
     private static boolean setContextArgumentIfPossible(
             final @NonNull MetaModelContext mmc,
-            final ActionModelForEntity actionModel,
+            final ActionModelImpl actionModel,
             final PageParameters pageParameters) {
 
         val paramNumAndOidString = parseParamContext(pageParameters)
@@ -356,7 +361,7 @@ public class PageParameterUtils {
 
     private static void decodeAndSetArgument(
             final @NonNull MetaModelContext mmc,
-            final ActionModelForEntity actionModel,
+            final ActionModelImpl actionModel,
             final ObjectActionParameter actionParam,
             final String oidStrEncoded) {
         val paramValue = decodeArg(mmc, actionParam.getElementType(), oidStrEncoded);

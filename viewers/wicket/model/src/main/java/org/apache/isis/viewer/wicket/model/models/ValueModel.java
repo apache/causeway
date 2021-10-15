@@ -62,7 +62,7 @@ public class ValueModel extends ModelAbstract<ManagedObject> {
 
     private ActionModel actionModelHint;
     /**
-     * The {@link ActionModelForEntity model} of the {@link ObjectAction action}
+     * The {@link ActionModelImpl model} of the {@link ObjectAction action}
      * that generated this {@link ValueModel}.
      *
      * @see #setActionHint(ActionModel)
