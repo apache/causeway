@@ -224,7 +224,7 @@ extends ScalarPanelAbstract {
     private Optional<T> getBlobOrClob(final ScalarModel model) {
         val adapter = model.getObject();
         val pojo = ManagedObjects.UnwrapUtil.single(adapter);
-        return (Optional<T>) Optional.ofNullable(pojo);
+        return Optional.ofNullable((T)pojo);
     }
 
     public IsisBlobOrClobPanelAbstract(final String id, final ScalarModel scalarModel) {
