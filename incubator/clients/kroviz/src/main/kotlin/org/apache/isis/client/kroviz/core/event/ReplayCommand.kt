@@ -19,32 +19,82 @@
 package org.apache.isis.client.kroviz.core.event
 
 import io.kvision.utils.createInstance
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.apache.isis.client.kroviz.core.aggregator.AggregatorWithLayout
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
+import org.apache.isis.client.kroviz.main
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Represention
-import org.apache.isis.client.kroviz.ui.core.RoApp
 
 class ReplayCommand {
 
     fun execute() {
-        val events = EventStore.log
+        val events = copyEvents(EventStore.log)
         EventStore.reset()
-        RoApp.reset()
+        main()
 
         console.log("[ReplayCommand.execute]")
         console.log(events)
+        console.log(events.size)
         val userActions = events.filter {
-            it.type == Represention.HOMEPAGE.name ||
-                    it.type == Represention.OBJECT_ACTION.name
+            (it.type == Represention.HOMEPAGE.type) ||
+                    it.type == Represention.OBJECT_ACTION.type ||
+                    it.type == Represention.OBJECT.type ||
+                    it.hasDisplayModel()
         }
+        console.log(userActions)
+        console.log(userActions.size)
 
         userActions.forEach {
             val link = Link(href = it.url)
-            val clazz = it.getAggregator()::class
-            val aggregator = clazz.createInstance<BaseAggregator>()
+            var aggregator: BaseAggregator? = null
+            if (it.nOfAggregators > 0) {
+                val clazz = it.getAggregator()::class
+                aggregator = clazz.createInstance<BaseAggregator>()
+            }
             //eventually put a thinkTime here
-            ResourceProxy().fetch(link,aggregator, it.subType)
+            wait(1000)
+            console.log(link)
+            console.log(aggregator)
+            ResourceProxy().fetch(link, aggregator, it.subType)
         }
 
     }
+
+    private fun copyEvents(inputList: List<LogEntry>): List<LogEntry> {
+        val outputList = mutableListOf<LogEntry>()
+        inputList.forEach {
+            outputList.add(copyEvent(it))
+        }
+        return outputList
+    }
+
+    private fun copyEvent(input: LogEntry): LogEntry {
+        val resourceSpecification = ResourceSpecification(input.url, input.subType)
+        val output = LogEntry(
+            resourceSpecification,
+            input.title,
+            input.request,
+            input.createdAt
+        )
+        output.type = input.type
+        return output
+    }
+
+    fun wait(milliseconds: Long) {
+        GlobalScope.launch {
+            delay(milliseconds)
+        }
+    }
+
+    private fun LogEntry.hasDisplayModel(): Boolean {
+        if (this.nOfAggregators > 0) {
+            val aggregator = this.getAggregator()
+            return (aggregator is AggregatorWithLayout)
+        }
+        return false
+    }
+
 }

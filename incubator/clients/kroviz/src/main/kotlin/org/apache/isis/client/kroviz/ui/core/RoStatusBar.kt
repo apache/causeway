@@ -34,7 +34,7 @@ import org.apache.isis.client.kroviz.ui.dialog.DiagramDialog
 import org.apache.isis.client.kroviz.ui.dialog.NotificationDialog
 import org.apache.isis.client.kroviz.utils.IconManager
 
-object RoStatusBar {
+class RoStatusBar {
     val navbar = Navbar(type = NavbarType.FIXEDBOTTOM)
 
     private val nav = Nav(rightAlign = true)

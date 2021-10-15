@@ -23,6 +23,7 @@ import io.kvision.dropdown.ContextMenu
 import io.kvision.panel.SimplePanel
 import io.kvision.utils.ESC_KEY
 import kotlinx.browser.window
+import org.apache.isis.client.kroviz.App
 import org.apache.isis.client.kroviz.core.Session
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.core.aggregator.ObjectAggregator
@@ -46,6 +47,7 @@ import org.w3c.dom.events.KeyboardEvent
  */
 object UiManager {
 
+    var app: App? = null
     private var session: Session? = null
     private val popups = mutableListOf<Widget>()
     private val settings = mutableMapOf<String, Any>()
@@ -68,8 +70,24 @@ object UiManager {
         })
     }
 
+    private fun getRoApp(): RoApp {
+        return app!!.roApp!!
+    }
+
+    private fun getRoView(): RoView {
+        return getRoApp().roView
+    }
+
+    fun getRoIconBar(): RoIconBar {
+        return getRoApp().roIconBar
+    }
+
+    fun getRoStatusBar(): RoStatusBar {
+        return getRoApp().roStatusBar
+    }
+
     private fun activeObject(): ObjectDM? {
-        val activeTab = RoApp.getRoView().findActive()
+        val activeTab = getRoView().findActive()
         if (activeTab != null) {
             return (activeTab as RoDisplay).displayModel
         }
@@ -77,14 +95,12 @@ object UiManager {
     }
 
     fun add(title: String, panel: SimplePanel, aggregator: BaseAggregator = UndefinedDispatcher()) {
-        RoApp.getRoView().addTab(title, panel)
+        getRoView().addTab(title, panel)
         EventStore.addView(title, aggregator, panel)
     }
 
     fun remove(panel: SimplePanel) {
-        console.log("[UiManager.remove]")
- //       EventStore.closeView(title)
-        RoApp.getRoView().removeTab(panel)
+        getRoView().removeTab(panel)
     }
 
     /**
@@ -103,8 +119,8 @@ object UiManager {
         DomUtil.appendTo(uuid, svgCode)
 
         val panel = buildSvgPanel(uuid)
-        RoApp.getRoView().addTab(title, panel)
-        val tab = RoApp.getRoView().findActive()!! as RoTab
+        getRoView().addTab(title, panel)
+        val tab = getRoView().findActive()!! as RoTab
 
         val svg = ScalableVectorGraphic(svgCode, uuid)
         tab.svg = svg
@@ -114,7 +130,6 @@ object UiManager {
     }
 
     fun closeView(tab: SimplePanel) {
-        console.log("[UiManager.closeView]")
         val tt = tab.title
         if (tt != null) {
             EventStore.closeView(tt)
@@ -122,15 +137,15 @@ object UiManager {
     }
 
     fun amendMenu(menuBars: Menubars) {
-        RoMenuBar.amendMenu(menuBars)
+        getRoApp().roMenuBar.amendMenu(menuBars)
     }
 
     fun updateStatus(entry: LogEntry) {
-        RoStatusBar.update(entry)
+        getRoStatusBar().update(entry)
     }
 
     fun updateUser(user: String) {
-        RoStatusBar.updateUser(user)
+        getRoStatusBar().updateUser(user)
     }
 
     fun openCollectionView(aggregator: BaseAggregator) {
@@ -153,12 +168,12 @@ object UiManager {
     }
 
     fun openDialog(panel: RoDialog) {
-        RoApp.add(panel)
+        getRoApp().add(panel)
         push(panel)
     }
 
     fun closeDialog(panel: RoDialog) {
-        RoApp.remove(panel)
+        getRoApp().remove(panel)
         pop()
     }
 

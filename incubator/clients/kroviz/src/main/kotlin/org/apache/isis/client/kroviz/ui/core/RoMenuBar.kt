@@ -20,7 +20,6 @@ package org.apache.isis.client.kroviz.ui.core
 
 import io.kvision.core.CssSize
 import io.kvision.core.UNIT
-import io.kvision.core.style
 import io.kvision.dropdown.DropDown
 import io.kvision.html.Button
 import io.kvision.html.ButtonStyle
@@ -40,7 +39,7 @@ import org.apache.isis.client.kroviz.ui.panel.*
 import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.utils.Point
 
-object RoMenuBar : SimplePanel() {
+class RoMenuBar : SimplePanel() {
     lateinit var navbar: Navbar
     private lateinit var nav: Nav
 
@@ -80,7 +79,7 @@ object RoMenuBar : SimplePanel() {
         )
 
         mainMenu.add(
-            buildMenuEntry("Toolbar", "Toolbar", { RoIconBar.toggle() })
+            buildMenuEntry("Toolbar", "Toolbar", { UiManager.getRoIconBar().toggle() })
         )
 
         mainMenu.add(

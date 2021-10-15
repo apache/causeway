@@ -36,7 +36,7 @@ import io.kvision.html.ButtonStyle
 import io.kvision.panel.SimplePanel
 import io.kvision.panel.VPanel
 
-object RoIconBar : SimplePanel() {
+class RoIconBar : SimplePanel() {
 
     val panel = VPanel()
     private val icons = mutableListOf<SimplePanel>()

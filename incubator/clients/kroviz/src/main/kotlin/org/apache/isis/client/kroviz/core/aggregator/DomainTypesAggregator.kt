@@ -22,6 +22,7 @@ import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.model.DiagramDM
 import org.apache.isis.client.kroviz.to.*
 import org.apache.isis.client.kroviz.ui.core.RoStatusBar
+import org.apache.isis.client.kroviz.ui.core.UiManager
 
 class DomainTypesAggregator(val url: String) : BaseAggregator() {
 
@@ -39,7 +40,7 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
         }
 
         if (dpm.canBeDisplayed()) {
-            RoStatusBar.updateDiagram(dpm as DiagramDM)
+            UiManager.getRoStatusBar().updateDiagram(dpm as DiagramDM)
             dpm.isRendered = true
         }
     }

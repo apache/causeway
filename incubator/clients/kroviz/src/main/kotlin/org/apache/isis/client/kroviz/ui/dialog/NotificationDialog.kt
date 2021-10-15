@@ -22,6 +22,7 @@ import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
 import org.apache.isis.client.kroviz.ui.core.RoStatusBar
+import org.apache.isis.client.kroviz.ui.core.UiManager
 
 class NotificationDialog(val message: String) : Command() {
 
@@ -39,7 +40,7 @@ class NotificationDialog(val message: String) : Command() {
     }
 
     override fun execute(action: String?) {
-        RoStatusBar.acknowledge()
+        UiManager.getRoStatusBar().acknowledge()
     }
 
 }

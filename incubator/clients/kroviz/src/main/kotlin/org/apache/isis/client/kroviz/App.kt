@@ -23,24 +23,34 @@ import io.kvision.pace.Pace
 import io.kvision.panel.VPanel
 import io.kvision.panel.root
 import org.apache.isis.client.kroviz.ui.core.RoApp
+import org.apache.isis.client.kroviz.ui.core.UiManager
 
 class App : Application() {
+
+    var roApp : RoApp? = null
 
     init {
         Pace.init()
         require("css/kroviz.css")
+        initRoApp()
     }
 
     override fun start() {
         val r = root("kroviz", addRow = true)
         val v = VPanel()
-        v.add(RoApp)
+        v.add(roApp!!)
         r.add(v)
     }
 
     override fun dispose(): Map<String, Any> {
         return mapOf()
     }
+
+    fun initRoApp() {
+        roApp = RoApp()
+        UiManager.app = this
+    }
+
 }
 
 fun main() {

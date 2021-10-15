@@ -59,7 +59,6 @@ class RoView() {
     }
 
     fun removeTab(tab: SimplePanel) {
-        console.log("[RoView.removeTab]")
         tabCount--
         UiManager.closeView(tab)
     }

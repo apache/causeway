@@ -29,6 +29,7 @@ import io.kvision.maps.LatLng
 import io.kvision.maps.maps
 import io.kvision.panel.HPanel
 import io.kvision.utils.pc
+import org.apache.isis.client.kroviz.ui.core.UiManager
 
 /**
  * Sample to be called from RoMenuBar
@@ -50,7 +51,7 @@ class GeoMap : HPanel() {
         val reha = LatLng(53.6824359, 10.7661037)
         m.addMarker(reha)
 
-        RoIconBar.add(createLocationIcon())
+        UiManager.getRoIconBar().add(createLocationIcon())
 
         setDropTargetData(Constants.stdMimeType) { id ->
             val mrk = parseMarker(id!!)
