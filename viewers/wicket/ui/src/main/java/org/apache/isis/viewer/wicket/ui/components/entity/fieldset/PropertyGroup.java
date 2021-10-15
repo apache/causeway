@@ -188,7 +188,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
             final EntityModel entityModel,
             final OneToOneAssociation property,
             final WebMarkupContainer container,
-            final Consumer<LinkAndLabel> onEntityAction) {
+            final Consumer<LinkAndLabel> onAssociatedAction) {
 
         final ScalarModel scalarModel =
                 entityModel.getPropertyModel(property, EntityModel.EitherViewOrEdit.VIEW, EntityModel.RenderingHint.REGULAR);
@@ -203,7 +203,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
 
         ObjectAction.Util.findForAssociation(entity, property)
         .map(LinkAndLabelFactory.forEntity(entityModel))
-        .forEach(onEntityAction);
+        .forEach(onAssociatedAction);
 
         return scalarNameAndValueComponent;
     }

@@ -65,15 +65,15 @@ class PropertyEditForm extends PromptFormAbstract<ScalarPropertyModel> {
 
         final Component component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, model);
-        final ScalarPanelAbstract paramPanel =
-                component instanceof ScalarPanelAbstract
-                ? (ScalarPanelAbstract) component
-                        : null;
-                if (paramPanel != null) {
-                    paramPanel.setOutputMarkupId(true);
-                    paramPanel.notifyOnChange(this);
-                }
-                return paramPanel;
+
+        if(!(component instanceof ScalarPanelAbstract)) {
+            return null;
+        }
+
+        final ScalarPanelAbstract paramPanel = (ScalarPanelAbstract) component;
+        paramPanel.setOutputMarkupId(true);
+        paramPanel.notifyOnChange(this);
+        return paramPanel;
     }
 
     @Override
