@@ -20,13 +20,10 @@ package org.apache.isis.viewer.wicket.model.links;
 
 import java.io.Serializable;
 
-import org.apache.wicket.markup.html.link.AbstractLink;
-
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 
-import lombok.NonNull;
-
-public interface ActionLinkUiComponentFactoryWkt
+public interface ActionModelProvider
 extends Serializable {
-    AbstractLink newActionLinkUiComponent(@NonNull ActionModel actionModel);
+    ActionModel getActionModelFor(ObjectAction managedAction);
 }

@@ -46,9 +46,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionModelForEntity;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -118,7 +118,7 @@ public class PageParameterUtils {
 
         val entityModel = entityModelFromPageParams(commonContext, pageParameters);
         val action = actionFromPageParams(commonContext, pageParameters);
-        val actionModel = ActionModelForEntity.ofEntity(entityModel, action.getFeatureIdentifier(), null, null);
+        val actionModel = ActionModelForEntity.forEntity(entityModel, action.getFeatureIdentifier(), null, null, null);
         val mmc = commonContext.getMetaModelContext();
         setArgumentsIfPossible(mmc, actionModel, pageParameters);
         setContextArgumentIfPossible(mmc, actionModel, pageParameters);

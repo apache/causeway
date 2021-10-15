@@ -19,22 +19,15 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.IRequestHandler;
 
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.applib.value.OpenUrlStrategy;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.config.viewer.web.WebAppContextPath;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.action.ActionFormUiModel;
-
-import lombok.NonNull;
-import lombok.val;
 
 public interface ActionModel
 extends ActionFormUiModel, FormExecutorContext, BookmarkableModel, IModel<ManagedObject> {
@@ -83,26 +76,6 @@ extends ActionFormUiModel, FormExecutorContext, BookmarkableModel, IModel<Manage
             return PromptStyle.INLINE;
         }
         return promptStyle;
-    }
-
-    // -- UTILITY
-
-    public static IRequestHandler redirectHandler(
-            final Object value,
-            final @NonNull OpenUrlStrategy openUrlStrategy,
-            final @NonNull WebAppContextPath webAppContextPath) {
-
-        if(value instanceof java.net.URL) {
-            val url = (java.net.URL) value;
-            return new RedirectRequestHandlerWithOpenUrlStrategy(url.toString());
-        }
-        if(value instanceof LocalResourcePath) {
-            val localResourcePath = (LocalResourcePath) value;
-            return new RedirectRequestHandlerWithOpenUrlStrategy(
-                    localResourcePath.getEffectivePath(webAppContextPath::prependContextPath),
-                    localResourcePath.getOpenUrlStrategy());
-        }
-        return null;
     }
 
 }

@@ -42,7 +42,7 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactories;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -202,7 +202,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
         val entity = entityModel.getManagedObject();
 
         ObjectAction.Util.findForAssociation(entity, property)
-        .map(LinkAndLabelFactories.forEntity(entityModel))
+        .map(LinkAndLabelFactory.forEntity(entityModel))
         .forEach(onEntityAction);
 
         return scalarNameAndValueComponent;

@@ -147,7 +147,6 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 
                         Bookmark domainObjectBookmarkIfAny() {
                             return CollectionSelectorPanel.this.getModel().parentedHintingBookmark().orElse(null);
-
                         }
 
                         @Override
@@ -158,7 +157,7 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
                     };
 
                     final IModel<String> title = nameFor(componentFactory);
-                    Wkt.labelAdd(link, ID_VIEW_ITEM_TITLE, title::getObject);
+                    Wkt.labelAdd(link, ID_VIEW_ITEM_TITLE, title);
                     final Label viewItemIcon = Wkt.labelAdd(link, ID_VIEW_ITEM_ICON, "");
 
                     final boolean selected = componentFactory == CollectionSelectorPanel.this.selectedComponentFactory;

@@ -35,7 +35,8 @@ import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationM
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 
@@ -49,7 +50,7 @@ import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwner
  * +-- ParameterUiModel ... bound to Y y (ParameterNegotiationModel)
  * </pre>
  * This action might be associated with a <i>Collection</i> that acts as its multi-select
- * defaults provider. This is modeled with {@link #associatedWithCollectionModelIfAny}.
+ * defaults provider. This is modeled with {@link #associatedWithCollectionIfAny}.
  *
  * @implSpec the state of pending parameters ParameterNegotiationModel is held transient,
  * that means it does not survive a serialization/de-serialization cycle; instead
@@ -65,8 +66,9 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     private final String memberId;
     private final Where where;
     private Can<ParameterUiModelWkt> childModels;
-    private @Nullable ScalarModel associatedWithScalarModelIfAny;
-    private @Nullable EntityCollectionModel associatedWithCollectionModelIfAny;
+    private @Nullable ScalarPropertyModel associatedWithPropertyIfAny;
+    private @Nullable ScalarParameterModel associatedWithParameterIfAny;
+    private @Nullable EntityCollectionModel associatedWithCollectionIfAny;
 
 //    /**
 //     * Returns a new <i>Action Interaction</i> binding to the parent {@link BookmarkedObjectWkt}
@@ -86,13 +88,15 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
             final BookmarkedObjectWkt bookmarkedObject,
             final String memberId,
             final Where where,
-            final ScalarModel associatedWithScalarModelIfAny,
-            final EntityCollectionModel associatedWithCollectionModelIfAny) {
+            final ScalarPropertyModel associatedWithPropertyIfAny,
+            final ScalarParameterModel associatedWithParameterIfAny,
+            final EntityCollectionModel associatedWithCollectionIfAny) {
         super(bookmarkedObject);
         this.memberId = memberId;
         this.where = where;
-        this.associatedWithScalarModelIfAny = associatedWithScalarModelIfAny;
-        this.associatedWithCollectionModelIfAny = associatedWithCollectionModelIfAny;
+        this.associatedWithPropertyIfAny = associatedWithPropertyIfAny;
+        this.associatedWithParameterIfAny = associatedWithParameterIfAny;
+        this.associatedWithCollectionIfAny = associatedWithCollectionIfAny;
     }
 
     @Override
@@ -100,8 +104,8 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
         parameterNegotiationModel =
                 _Lazy.threadSafe(()->actionInteraction().startParameterNegotiation());
 
-        return associatedWithCollectionModelIfAny!=null
-                ? associatedWithCollectionModelIfAny.getDataTableModel()
+        return associatedWithCollectionIfAny!=null
+                ? associatedWithCollectionIfAny.getDataTableModel()
                         .startAssociatedActionInteraction(memberId, where)
                 : ActionInteraction.start(getBookmarkedOwner(), memberId, where);
 
@@ -143,8 +147,8 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     }
 
     public InlinePromptContext getInlinePromptContext() {
-        return associatedWithScalarModelIfAny != null
-                ? associatedWithScalarModelIfAny.getInlinePromptContext()
+        return associatedWithPropertyIfAny != null
+                ? associatedWithPropertyIfAny.getInlinePromptContext()
                 : null;
     }
 

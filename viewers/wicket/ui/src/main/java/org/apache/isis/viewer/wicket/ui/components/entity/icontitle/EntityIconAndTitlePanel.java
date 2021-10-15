@@ -37,7 +37,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -71,9 +70,6 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         super(id, objectAdapterModel);
     }
 
-    /**
-     * For the {@link EntityActionLinkFactory}.
-     */
     public ObjectAdapterModel getEntityModel() {
         return getModel();
     }

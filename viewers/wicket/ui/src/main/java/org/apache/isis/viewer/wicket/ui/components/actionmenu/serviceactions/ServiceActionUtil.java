@@ -33,7 +33,7 @@ import org.apache.isis.viewer.common.model.menu.MenuUiModel;
 import org.apache.isis.viewer.common.model.menu.MenuVisitor;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionLinkFactory;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Decorators;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -143,8 +143,8 @@ public final class ServiceActionUtil {
 
             val serviceModel = EntityModel.ofAdapter(commonContext, managedAction.getOwner());
 
-            return EntityActionLinkFactory.menu(serviceModel)
-                    .newActionLink(managedAction.getAction());
+            return LinkAndLabelFactory.forMenu(serviceModel)
+                    .apply(managedAction.getAction());
         }
 
     }

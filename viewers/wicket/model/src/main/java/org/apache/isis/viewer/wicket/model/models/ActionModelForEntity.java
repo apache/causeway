@@ -55,24 +55,35 @@ implements ActionModel {
 
     // -- FACTORY METHODS
 
-    public static ActionModelForEntity supportingParameter(
-            final ScalarParameterModel scalarParameterModel) {
-        //FIXME[ISIS-2877] impl.
-        // TODO Auto-generated method stub
-        return null;
-    }
+//    public static ActionModelForEntity forParameter(
+//            final ScalarParameterModel scalarParameterModel) {
+//        //FIXME[ISIS-2877] impl.
+//        val delegate = new ActionInteractionWkt(
+//                scalarParameterModel.getParameterNegotiationModel()
+//
+//
+//                actionOwner.bookmarkedObjectModel(),
+//                actionIdentifier.getMemberLogicalName(),
+//                Where.OBJECT_FORMS,
+//                null,
+//                scalarParameterModel,
+//                null);
+//        return new ActionModelForEntity(actionOwner, delegate);
+//    }
 
-    public static ActionModelForEntity ofEntity(
+    public static ActionModelForEntity forEntity(
             final EntityModel actionOwner,
             final Identifier actionIdentifier,
-            final ScalarModel associatedWithScalarModelIfAny,
-            final EntityCollectionModel associatedWithCollectionModelIfAny) {
+            final ScalarPropertyModel associatedWithPropertyIfAny,
+            final ScalarParameterModel associatedWithParameterIfAny,
+            final EntityCollectionModel associatedWithCollectionIfAny) {
         val delegate = new ActionInteractionWkt(
                 actionOwner.bookmarkedObjectModel(),
                 actionIdentifier.getMemberLogicalName(),
-                Where.ANYWHERE,
-                associatedWithScalarModelIfAny,
-                associatedWithCollectionModelIfAny);
+                Where.OBJECT_FORMS,
+                associatedWithPropertyIfAny,
+                associatedWithParameterIfAny,
+                associatedWithCollectionIfAny);
         return new ActionModelForEntity(actionOwner, delegate);
     }
 

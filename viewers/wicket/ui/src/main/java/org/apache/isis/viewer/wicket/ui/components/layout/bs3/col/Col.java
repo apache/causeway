@@ -41,7 +41,7 @@ import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactories;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.fieldset.PropertyGroup;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.row.Row;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.tabs.TabGroupPanel;
@@ -129,7 +129,7 @@ implements HasDynamicallyVisibleContent {
             getModel().getTypeOfSpecification().getAction(actionLayoutData.getId()).orElse(null)
         )
         .filter(_NullSafe::isPresent)
-        .map(LinkAndLabelFactories.forEntity(getModel()))
+        .map(LinkAndLabelFactory.forEntity(getModel()))
         .collect(Can.toCan());
 
         if (!visibleActions.isEmpty()) {

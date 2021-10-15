@@ -62,7 +62,7 @@ import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactories;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.components.propertyheader.PropertyEditPromptHeaderPanel;
@@ -322,7 +322,7 @@ implements ScalarModelSubscriber {
 
         // convert those actions into UI layer widgets
         final Can<LinkAndLabel> linkAndLabels = remainingAssociated.stream()
-        .map(LinkAndLabelFactories.forPropertyOrParameter(this.scalarModel))
+        .map(LinkAndLabelFactory.forPropertyOrParameter(this.scalarModel))
         .collect(Can.toCan());
 
         final InlinePromptConfig inlinePromptConfig = getInlinePromptConfig();
@@ -355,7 +355,7 @@ implements ScalarModelSubscriber {
 
                 // not editable property, but maybe one of the actions is.
                 inlineActionIfAny
-                .map(LinkAndLabelFactories.forPropertyOrParameter(scalarModel))
+                .map(LinkAndLabelFactory.forPropertyOrParameter(scalarModel))
                 .map(LinkAndLabel::getUiComponent)
                 .map(ActionLink.class::cast)
                 .ifPresent(actionLinkInlineAsIfEdit->{
