@@ -34,6 +34,8 @@ import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 
@@ -63,6 +65,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     private final String memberId;
     private final Where where;
     private Can<ParameterUiModelWkt> childModels;
+    private @Nullable ScalarModel associatedWithScalarModelIfAny;
     private @Nullable EntityCollectionModel associatedWithCollectionModelIfAny;
 
 //    /**
@@ -83,10 +86,12 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
             final BookmarkedObjectWkt bookmarkedObject,
             final String memberId,
             final Where where,
+            final ScalarModel associatedWithScalarModelIfAny,
             final EntityCollectionModel associatedWithCollectionModelIfAny) {
         super(bookmarkedObject);
         this.memberId = memberId;
         this.where = where;
+        this.associatedWithScalarModelIfAny = associatedWithScalarModelIfAny;
         this.associatedWithCollectionModelIfAny = associatedWithCollectionModelIfAny;
     }
 
@@ -137,6 +142,10 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
         parameterNegotiationModel.clear();
     }
 
-
+    public InlinePromptContext getInlinePromptContext() {
+        return associatedWithScalarModelIfAny != null
+                ? associatedWithScalarModelIfAny.getInlinePromptContext()
+                : null;
+    }
 
 }

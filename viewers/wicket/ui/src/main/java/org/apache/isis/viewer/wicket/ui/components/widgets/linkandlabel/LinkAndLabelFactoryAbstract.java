@@ -21,8 +21,8 @@ import java.io.Serializable;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.AccessLevel;
@@ -41,14 +41,16 @@ implements Serializable {
     /**
      * The actual factory method clients care about.
      */
-    public abstract LinkAndLabel newActionLink(final ObjectAction action);
+    public abstract LinkAndLabel newActionLink(ObjectAction action);
 
-    protected abstract ActionModel actionModel(final ManagedAction managedAction);
+    protected abstract ActionModel actionModel(
+            ManagedAction managedAction,
+            ScalarModel scalarModelForAssociationIfAny);
 
     // called exclusively by LinkAndLabel, which implements HasManagedAction
     protected final ActionLink newLinkComponent(final ManagedAction managedAction) {
         return ActionLink
-                .create(linkId, actionModel(managedAction), scalarModelForAssociationIfAny);
+                .create(linkId, actionModel(managedAction, scalarModelForAssociationIfAny));
     }
 
 }

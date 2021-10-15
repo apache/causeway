@@ -30,7 +30,6 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.grid.Grid;
@@ -48,15 +47,13 @@ import org.apache.isis.core.security.authentication.logout.LogoutMenu.LoginRedir
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptWithExtraContent;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
-import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
@@ -83,24 +80,20 @@ implements IAjaxIndicatorAware {
 
     public static ActionLink create(
             final @NonNull String linkId,
-            final @NonNull ActionModel actionModel,
-            final @Nullable ScalarModel scalarModelForAssociationIfAny) {
+            final @NonNull ActionModel actionModel) {
 
-        val actionLink = new ActionLink(linkId, actionModel, scalarModelForAssociationIfAny);
+        val actionLink = new ActionLink(linkId, actionModel);
         actionLink.add(new CssClassAppender("noVeil"));
         return actionLink;
     }
 
     private final AjaxIndicatorAppender indicatorAppenderIfAny;
-    private final ScalarModel scalarModelForAssociationIfAny;
     protected transient IsisAppCommonContext commonContext;
 
     private ActionLink(
             final String id,
-            final ActionModel model,
-            final ScalarModel scalarModelForAssociationIfAny) {
+            final ActionModel model) {
         super(id, model);
-        this.scalarModelForAssociationIfAny = scalarModelForAssociationIfAny;
         this.commonContext = model.getCommonContext();
 
         final boolean useIndicatorForNoArgAction = getSettings().isUseIndicatorForNoArgAction();
@@ -205,8 +198,7 @@ implements IAjaxIndicatorAware {
             final AjaxRequestTarget target) {
 
         val actionModel = actionLink.getActionModel();
-
-        val inlinePromptContext = determineInlinePromptContext();
+        val inlinePromptContext = actionModel.getInlinePromptContext();
         val promptStyle = actionModel.getPromptStyle();
 
         if(inlinePromptContext == null || promptStyle.isDialog()) {
@@ -322,7 +314,6 @@ implements IAjaxIndicatorAware {
 
             MarkupContainer scalarTypeContainer = inlinePromptContext.getScalarTypeContainer();
 
-            actionModel.setInlinePromptContext(inlinePromptContext);
             getComponentFactoryRegistry().addOrReplaceComponent(scalarTypeContainer,
                     ScalarPanelAbstract.ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM, ComponentType.PARAMETERS, actionModel);
 
@@ -333,12 +324,6 @@ implements IAjaxIndicatorAware {
         }
 
         return null;
-    }
-
-    private InlinePromptContext determineInlinePromptContext() {
-        return scalarModelForAssociationIfAny != null
-                ? scalarModelForAssociationIfAny.getInlinePromptContext()
-                : null;
     }
 
     // -- DEPENDENCIES

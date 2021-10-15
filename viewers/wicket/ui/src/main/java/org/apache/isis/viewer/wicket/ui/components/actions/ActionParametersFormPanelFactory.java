@@ -29,7 +29,8 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 /**
  * {@link ComponentFactory} for {@link ActionParametersFormPanel}.
  */
-public class ActionParametersFormPanelFactory extends ComponentFactoryAbstract {
+public class ActionParametersFormPanelFactory
+extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 

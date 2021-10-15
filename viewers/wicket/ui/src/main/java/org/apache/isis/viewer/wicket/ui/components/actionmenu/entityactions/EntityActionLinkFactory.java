@@ -23,6 +23,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.models.ActionModelForEntity;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -76,10 +77,13 @@ extends LinkAndLabelFactoryAbstract {
     }
 
     @Override
-    protected ActionModel actionModel(final ManagedAction managedAction) {
-        return ActionModel.ofEntity(
+    protected ActionModel actionModel(
+            final ManagedAction managedAction,
+            final ScalarModel scalarModelForAssociationIfAny) {
+        return ActionModelForEntity.ofEntity(
                 this.ownerEntityModel,
                 managedAction.getAction().getFeatureIdentifier(),
+                scalarModelForAssociationIfAny,
                 collectionModelForAssociationIfAny);
     }
 
