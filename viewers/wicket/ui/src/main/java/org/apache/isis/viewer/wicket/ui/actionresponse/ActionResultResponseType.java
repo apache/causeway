@@ -34,8 +34,8 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelStandalone;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelStandalone;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.model.models.VoidModel;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
@@ -103,7 +103,8 @@ public enum ActionResultResponseType {
                 final ManagedObject resultAdapter,
                 final Can<ManagedObject> args) {
             final Object value = resultAdapter.getPojo();
-            IRequestHandler handler = actionModel.downloadHandler(value);
+            IRequestHandler handler =
+                    _DownloadHandler.downloadHandler(actionModel.getAction(), value);
             return ActionResultResponse.withHandler(handler);
         }
     },
@@ -115,7 +116,8 @@ public enum ActionResultResponseType {
                 final ManagedObject resultAdapter,
                 final Can<ManagedObject> args) {
             final Object value = resultAdapter.getPojo();
-            IRequestHandler handler = actionModel.downloadHandler(value);
+            IRequestHandler handler =
+                    _DownloadHandler.downloadHandler(actionModel.getAction(), value);
             return ActionResultResponse.withHandler(handler);
         }
     },

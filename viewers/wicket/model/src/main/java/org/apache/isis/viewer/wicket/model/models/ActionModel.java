@@ -21,12 +21,16 @@ package org.apache.isis.viewer.wicket.model.models;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestHandler;
 
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.OpenUrlStrategy;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.viewer.web.WebAppContextPath;
+import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.action.ActionFormUiModel;
 
 import lombok.NonNull;
@@ -43,7 +47,43 @@ extends ActionFormUiModel, FormExecutorContext, BookmarkableModel, IModel<Manage
     void reassessPendingParamUiModels(int skipCount);
     ManagedObject executeActionAndReturnResult();
     Can<ManagedObject> snapshotArgs();
-    IRequestHandler downloadHandler(Object value);
+
+    @Override
+    default PromptStyle getPromptStyle() {
+        final ObjectAction objectAction = getAction();
+        final ObjectSpecification objectActionOwner = objectAction.getDeclaringType();
+        if(objectActionOwner.isManagedBean()) {
+            // tried to move this test into PromptStyleFacetFallback,
+            // however it's not that easy to lookup the owning type
+            final PromptStyleFacet facet = objectAction.getFacet(PromptStyleFacet.class);
+            if (facet != null) {
+                final PromptStyle promptStyle = facet.value();
+                if (promptStyle.isDialog()) {
+                    // could be specified explicitly.
+                    return promptStyle;
+                }
+            }
+            return PromptStyle.DIALOG;
+        }
+        if(objectAction.getParameterCount() == 0) {
+            // a bit of a hack, the point being that the UI for dialog correctly handles no-args,
+            // whereas for INLINE it would render a form with no fields
+            return PromptStyle.DIALOG;
+        }
+        final PromptStyleFacet facet = objectAction.getFacet(PromptStyleFacet.class);
+        if(facet == null) {
+            // don't think this can happen actually, see PromptStyleFacetFallback
+            return PromptStyle.INLINE;
+        }
+        final PromptStyle promptStyle = facet.value();
+        if (promptStyle == PromptStyle.AS_CONFIGURED) {
+            // I don't think this can happen, actually...
+            // when the metamodel is built, it should replace AS_CONFIGURED with one of the other prompts
+            // (see PromptStyleConfiguration and PromptStyleFacetFallback)
+            return PromptStyle.INLINE;
+        }
+        return promptStyle;
+    }
 
     // -- UTILITY
 
