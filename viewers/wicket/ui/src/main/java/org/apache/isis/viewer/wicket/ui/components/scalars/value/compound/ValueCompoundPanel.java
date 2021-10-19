@@ -22,22 +22,11 @@ import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.LambdaModel;
 
-import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
-import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 
-/**
- * Panel for rendering any value types that do not have their own custom
- * {@link ScalarPanelAbstract panel} to render them.
- *
- * <p>
- * This is a fallback panel; values are expected to be {@link Parser parseable}
- * (typically through the Isis' {@link Value} annotation.
- */
 //FIXME[ISIS-2877] introduced for experiments, should be removed before merge into 'master'
 public class ValueCompoundPanel
 extends ScalarPanelTextFieldParseableAbstract {
@@ -55,6 +44,8 @@ extends ScalarPanelTextFieldParseableAbstract {
 
     @Override
     protected void onInitialize() {
+        System.err.printf("%s%n", scalarModel.getMetaModel().getFeatureIdentifier());
+
         super.onInitialize();
         onInitializeReadonly(null);
     }

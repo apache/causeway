@@ -321,7 +321,7 @@ implements ScalarModelSubscriber {
         val remainingAssociated = associatedActions.getRemainingAssociated();
 
         // convert those actions into UI layer widgets
-        final Can<LinkAndLabel> linkAndLabels = remainingAssociated.stream()
+        final Can<LinkAndLabel> remainingLinkAndLabels = remainingAssociated.stream()
         .map(LinkAndLabelFactory.forPropertyOrParameter(this.scalarModel))
         .collect(Can.toCan());
 
@@ -346,7 +346,8 @@ implements ScalarModelSubscriber {
             val componentToHideRef = _Refs.<Component>objectRef(inlinePromptLink);
             //Component componentToHideIfAny = inlinePromptLink;
 
-            if (this.scalarModel.getPromptStyle().isInline() && scalarModel.canEnterEditMode()) {
+            if (this.scalarModel.getPromptStyle().isInline()
+                    && scalarModel.canEnterEditMode()) {
                 // we configure the prompt link if _this_ property is configured for inline edits...
                 configureInlinePromptLinkCallback(inlinePromptLink);
                 componentToHideRef.setValue(inlinePromptConfig.getComponentToHideIfAny());
@@ -382,8 +383,8 @@ implements ScalarModelSubscriber {
             getScalarValueComponent().add(new AttributeAppender("tabindex", "-1"));
         }
 
-        addPositioningCssTo(scalarIfRegular, linkAndLabels);
-        addActionLinksBelowAndRight(scalarIfRegular, linkAndLabels);
+        addPositioningCssTo(scalarIfRegular, remainingLinkAndLabels);
+        addActionLinksBelowAndRight(scalarIfRegular, remainingLinkAndLabels);
 
         addEditPropertyTo(scalarIfRegular);
         addFeedbackOnlyTo(scalarIfRegular, getScalarValueComponent());

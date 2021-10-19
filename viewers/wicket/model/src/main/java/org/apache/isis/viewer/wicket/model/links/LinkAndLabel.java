@@ -25,9 +25,6 @@ import java.util.function.Predicate;
 import org.apache.wicket.markup.html.link.AbstractLink;
 
 import org.apache.isis.applib.annotation.ActionLayout.Position;
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.viewer.common.model.action.HasManagedAction;
 import org.apache.isis.viewer.common.model.mixin.HasUiComponent;
@@ -79,24 +76,14 @@ implements
 
     // -- VISIBILITY
 
-    //FIXME[ISIS-2877] de-duplicate
     public boolean isVisible() {
 
-        val owner = actionModel.getActionOwner();
-
-        // check hidden
-        if (owner.getSpecification().isHidden()) {
+        // check whether action owner type is hidden
+        if (actionModel.getActionOwner().getSpecification().isHidden()) {
             return false;
         }
-        // check visibility
-        final Consent visibility = actionModel.getAction().isVisible(
-                owner,
-                InteractionInitiatedBy.USER,
-                Where.ANYWHERE);
-        if (visibility.isVetoed()) {
-            return false;
-        }
-        return true;
+        val visibilityVeto = getManagedAction().checkVisibility();
+        return visibilityVeto.isEmpty();
     }
 
 

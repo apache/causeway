@@ -47,12 +47,12 @@ import org.apache.isis.core.security.authentication.logout.LogoutMenu.LoginRedir
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptWithExtraContent;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;

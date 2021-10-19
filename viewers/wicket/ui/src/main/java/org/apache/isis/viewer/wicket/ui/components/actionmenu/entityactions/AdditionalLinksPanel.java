@@ -91,7 +91,6 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
 
         super(id, new ListOfLinksModel(linksDoNotUseDirectlyInsteadUseOfListOfLinksModel));
 
-
         final WebMarkupContainer container = new WebMarkupContainer(ID_ADDITIONAL_LINK_LIST) {
             private static final long serialVersionUID = 1L;
 
@@ -113,6 +112,7 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
 
             @Override
             protected void populateItem(final ListItem<LinkAndLabel> item) {
+
                 val linkAndLabel = item.getModelObject();
                 val actionMeta = linkAndLabel.getManagedAction().getAction();
                 val link = linkAndLabel.getUiComponent();

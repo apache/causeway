@@ -19,17 +19,22 @@
 package org.apache.isis.viewer.wicket.ui.util;
 
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LambdaModel;
 import org.danekja.java.util.function.serializable.SerializableSupplier;
+
+import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class Wkt {
+
+    // -- LABEL
 
     public Label label(final String id, final String label) {
         return new Label(id, label);
@@ -45,16 +50,41 @@ public class Wkt {
         return component;
     }
 
-    public Label labelAdd(final MarkupContainer container, final String id, final SerializableSupplier<String> labelSupplier) {
+    public Label labelAddLazy(final MarkupContainer container, final String id, final SerializableSupplier<String> labelSupplier) {
         val component = label(id, labelSupplier);
         container.addOrReplace(component);
         return component;
     }
 
-    public Label labelAdd(final WebMarkupContainer container, final String id, final IModel<String> labelModel) {
+    public Label labelAdd(final MarkupContainer container, final String id, final IModel<String> labelModel) {
         val component = new Label(id, labelModel);
         container.addOrReplace(component);
         return component;
     }
+
+    // -- LINK
+
+    public ActionLink linkAdd(final MarkupContainer container, final String id, final LinkAndLabel linkAndLabel) {
+        val component = linkAndLabel.getUiComponent();
+        container.addOrReplace(component);
+        return (ActionLink) component;
+    }
+
+    public Link<Void> linkAdd(
+            final MarkupContainer container,
+            final String linkId,
+            final String labelId,
+            final String linkName) {
+        val link = new Link<Void>(linkId) {
+            private static final long serialVersionUID = 1L;
+            @Override
+            public void onClick() {
+            }
+        };
+        container.addOrReplace(link);
+        Wkt.labelAdd(link, labelId, linkName);
+        return link;
+    }
+
 
 }
