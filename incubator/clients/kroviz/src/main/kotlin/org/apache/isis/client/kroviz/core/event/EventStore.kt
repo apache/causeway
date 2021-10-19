@@ -121,18 +121,18 @@ object EventStore {
     /**
      * Answers the first matching entry.
      */
-    fun findBy(reSpec: ResourceSpecification): LogEntry? {
-        return if (reSpec.isRedundant()) {
-            findEquivalent(reSpec)
+    fun findBy(rs: ResourceSpecification): LogEntry? {
+        return if (rs.isRedundant()) {
+            findEquivalent(rs)
         } else {
-            findExact(reSpec)
+            findExact(rs)
         }
     }
 
-    fun findBy(reSpec: ResourceSpecification, body: String): LogEntry? {
+    fun findBy(rs: ResourceSpecification, body: String): LogEntry? {
         return log.firstOrNull() {
-            it.url == reSpec.url
-                    && it.subType == reSpec.subType
+            it.url == rs.url
+                    && it.subType == rs.subType
                     && it.request == body
         }
     }

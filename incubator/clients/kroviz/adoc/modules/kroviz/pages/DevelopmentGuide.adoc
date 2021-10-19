@@ -263,18 +263,14 @@ include::partial$design/dev-mindmap.adoc[]
 * JSON structures can be visualized via kroki (cf. History -> Details)
 * Layout: for FLEX see https://css-tricks.com/snippets/css/a-guide-to-flexbox/
 
-[source,bash]
-----
-npm install -g json-to-plantuml
-----
+=== The Browser as Client Runtime Environment
+
+Google Chrome is used as browser. It has a very feature rich debugger (<CTRL>-<SHIFT>-I) which can even be connected to IntelliJ's debugger (Settings -> Preferences -> Extension -> Link handling). For a nice introduction to Chrome, see: https://www.google.com/googlebooks/chrome/.
+
+All current browsers implement some security features in order to counteract Cross-Site-Resource-Forgery (XSRF). CORS (Cross-Origin-Resource-Sharing) is beeing devised to allow access to resources from a different host-port under certain circumstances. It is said to be bypassable via https://www.npmjs.com/package/node-iframe, cf. https://stackoverflow.com/questions/33143776/ajax-request-refused-to-set-unsafe-header/66782595#66782595
 
 === Visualize JS dependencies
-
-[source,bash]
-----
-npm -g install dependo
-dependo -f amd ./build/js/kroviz.js > dependo.html
-----
+E.g. via https://npmgraph.js.org/
 
 === Measure Test Coverage
 

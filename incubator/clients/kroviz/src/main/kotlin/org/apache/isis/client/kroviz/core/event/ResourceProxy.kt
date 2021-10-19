@@ -57,7 +57,7 @@ class ResourceProxy {
               subType: String = Constants.subTypeJson,
               isRest: Boolean = true,
               referrer: String = "") {
-        val rs = ResourceSpecification(link.href, referrerUrl = referrer)
+        val rs = ResourceSpecification(link.href, subType = subType, referrerUrl = referrer)
         val isCached = when (val le = EventStore.findBy(rs)) {
             null -> false
             else -> le.isCached(rs, link.method)
@@ -92,7 +92,6 @@ class ResourceProxy {
         le.setCached()
         EventStore.updateStatus(le)
     }
-
 
     fun invokeKroki(pumlCode: String, aggregator: SvgDispatcher) {
         RoXmlHttpRequest(aggregator).invokeKroki(pumlCode)

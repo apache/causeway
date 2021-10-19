@@ -77,7 +77,6 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                     field = "response",
                     headerFilter = Editor.INPUT,
                     width = "200",
-//                    tooltip = { (data) -> data.response }
             ),
             ColumnDefinition("resp.len", field = "responseLength", width = "100", hozAlign = Align.RIGHT, download = false),
             ColumnDefinition("cacheHits", field = "cacheHits", width = "100", hozAlign = Align.RIGHT, download = false),

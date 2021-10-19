@@ -18,14 +18,10 @@
  */
 package org.apache.isis.client.kroviz.core.event
 
-import io.kvision.utils.createInstance
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.apache.isis.client.kroviz.core.aggregator.AggregatorWithLayout
-import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.main
 import org.apache.isis.client.kroviz.to.Link
+import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.to.Represention
 
 class ReplayCommand {
@@ -33,41 +29,42 @@ class ReplayCommand {
     fun execute() {
         val events = copyEvents(EventStore.log)
         EventStore.reset()
-        main()
+        main() // re-creates the UI, but keeps the UiManager(singleton/object) and the session
 
-        console.log("[ReplayCommand.execute]")
-        console.log(events)
-        console.log(events.size)
+        val userActions = filterUserActions(events)
+        replay(userActions)
+    }
+
+    private fun replay(userActions: List<LogEntry>) {
+        console.log("[ReplayCommand.replay]")
+        userActions.forEach {
+            val link = Link(href = it.url)
+            console.log(link)
+            ResourceProxy().fetch(link, null, it.subType)
+        }
+    }
+
+    private fun filterUserActions(events: List<LogEntry>): List<LogEntry> {
+        console.log("[ReplayCommand.filterUserActions]")
         val userActions = events.filter {
             (it.type == Represention.HOMEPAGE.type) ||
                     it.type == Represention.OBJECT_ACTION.type ||
-                    it.type == Represention.OBJECT.type ||
+                    it.type == Relation.OBJECT_LAYOUT.type ||
                     it.hasDisplayModel()
         }
         console.log(userActions)
         console.log(userActions.size)
-
-        userActions.forEach {
-            val link = Link(href = it.url)
-            var aggregator: BaseAggregator? = null
-            if (it.nOfAggregators > 0) {
-                val clazz = it.getAggregator()::class
-                aggregator = clazz.createInstance<BaseAggregator>()
-            }
-            //eventually put a thinkTime here
-            wait(1000)
-            console.log(link)
-            console.log(aggregator)
-            ResourceProxy().fetch(link, aggregator, it.subType)
-        }
-
+        return userActions
     }
 
     private fun copyEvents(inputList: List<LogEntry>): List<LogEntry> {
+        console.log("[ReplayCommand.copyEvents]")
         val outputList = mutableListOf<LogEntry>()
         inputList.forEach {
             outputList.add(copyEvent(it))
         }
+        console.log(outputList)
+        console.log(outputList.size)
         return outputList
     }
 
@@ -83,18 +80,9 @@ class ReplayCommand {
         return output
     }
 
-    fun wait(milliseconds: Long) {
-        GlobalScope.launch {
-            delay(milliseconds)
-        }
-    }
-
     private fun LogEntry.hasDisplayModel(): Boolean {
-        if (this.nOfAggregators > 0) {
-            val aggregator = this.getAggregator()
-            return (aggregator is AggregatorWithLayout)
-        }
-        return false
+        return (this.nOfAggregators > 0) &&
+                (this.getAggregator() is AggregatorWithLayout)
     }
 
 }

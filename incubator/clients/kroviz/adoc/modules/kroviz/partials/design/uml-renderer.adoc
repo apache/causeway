@@ -8,7 +8,7 @@
 abstract class Renderer {
     iconName:String
     title:String
-    view:RoView
+    view:RvzView
     protocol:Protocol
 }
 Renderer -right-> Protocol
@@ -18,19 +18,19 @@ abstract class Protocol {
 }
 
 Renderer <|-down- ObjectRdr
-Renderer <|-down- ListRdr
-ListRdr <|-down- GeoLocationRdr
-ListRdr <|-down- EventRdr
+Renderer <|-down- CollectionRdr
+CollectionRdr <|-down- GeoLocationRdr
+CollectionRdr <|-down- EventRdr
 
-abstract class RoView {
+abstract class RvzView {
 }
 
-RoView <|-down- ObjectVw
-RoView <|-down- ListVw
-ListVw <|-down- GeoLocationVw
-ListVw <|-down- TimeLineView
+RvzView <|-down- ObjectV
+RvzView <|-down- CollectionV
+CollectionV <|-down- GeoLocationV
+CollectionV <|-down- TimeLineV
 
-Renderer -left-> RoView
+Renderer -left-> RvzView
 
 class Exposer {
     delegate:TransferObject
