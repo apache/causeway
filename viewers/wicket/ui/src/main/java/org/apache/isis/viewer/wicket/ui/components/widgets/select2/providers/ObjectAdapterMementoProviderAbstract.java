@@ -33,10 +33,11 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoForEmpty;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.IsisConverterLocator;
@@ -62,7 +63,8 @@ extends ChoiceProvider<ObjectMemento> {
 
     @Override
     public String getDisplayValue(final ObjectMemento choiceMemento) {
-        if (choiceMemento == null) {
+        if (choiceMemento == null
+                || choiceMemento instanceof ObjectMementoForEmpty) {
             return NULL_DISPLAY_TEXT;
         }
         val choice = getCommonContext().reconstructObject(choiceMemento);
@@ -137,8 +139,8 @@ extends ChoiceProvider<ObjectMemento> {
         val commonContext = getCommonContext();
 
         return choicesMementos.filter((final ObjectMemento candidate)->{
-            final var objectAdapter = commonContext.reconstructObject(candidate);
-            final var title = objectAdapter.titleString();
+            val objectAdapter = commonContext.reconstructObject(candidate);
+            val title = objectAdapter.titleString();
             return title.toLowerCase().contains(term.toLowerCase());
         });
 

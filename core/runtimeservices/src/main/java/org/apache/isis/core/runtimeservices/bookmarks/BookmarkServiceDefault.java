@@ -18,7 +18,19 @@
  */
 package org.apache.isis.core.runtimeservices.bookmarks;
 
-import lombok.val;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.isis.applib.graph.tree.TreeState;
@@ -30,6 +42,7 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
@@ -37,17 +50,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
-import org.springframework.lang.Nullable;
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.io.Serializable;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import lombok.val;
 
 /**
  * This service enables a serializable 'bookmark' to be created for an entity.
@@ -100,7 +104,7 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
                 objectManager.bookmarkObject(adapter));
     }
 
-    private Object unwrapped(Object domainObject) {
+    private Object unwrapped(final Object domainObject) {
         return wrapperFactory != null
                 ? wrapperFactory.unwrap(domainObject)
                 : domainObject;
@@ -121,10 +125,22 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
                 .map(logicalType->Bookmark.forLogicalTypeAndIdentifier(logicalType, identifier));
     }
 
+    @Override
+    public Bookmark bookmarkForElseFail(final @Nullable Object domainObject) {
+        return bookmarkFor(domainObject)
+                .orElseThrow(()->_Exceptions.illegalArgument(
+                        "cannot create bookmark for type %s",
+                        domainObject!=null
+                            ? specificationLoader.specForType(domainObject.getClass())
+                                    .map(spec->spec.toString())
+                                    .orElseGet(()->domainObject.getClass().getName())
+                            : "<null>"));
+    }
+
     // -- SERIALIZING ADAPTER IMPLEMENTATION
 
     @Override
-    public <T> T read(Class<T> cls, Serializable value) {
+    public <T> T read(final Class<T> cls, final Serializable value) {
 
         if(Bookmark.class.equals(cls)) {
             return _Casts.uncheckedCast(value);
@@ -139,7 +155,7 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
     }
 
     @Override
-    public Serializable write(Object value) {
+    public Serializable write(final Object value) {
         if(isPredefinedSerializable(value.getClass())) {
             return (Serializable) value;
         } else {

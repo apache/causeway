@@ -32,8 +32,8 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.wicketstuff.select2.ChoiceProvider;
 
-import org.apache.isis.core.runtime.memento.ObjectMemento;
-import org.apache.isis.viewer.common.model.action.form.FormPendingParamUiModel;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
@@ -176,10 +176,10 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
      */
     @Override
     public Repaint updateIfNecessary(
-            final @NonNull FormPendingParamUiModel argAndConsents,
+            final @NonNull ParameterUiModel paramModel,
             final @NonNull Optional<AjaxRequestTarget> target) {
 
-        val repaint = super.updateIfNecessary(argAndConsents, target);
+        val repaint = super.updateIfNecessary(paramModel, target);
         final boolean choicesUpdated = updateChoices();
 
         if (repaint == Repaint.NOTHING) {

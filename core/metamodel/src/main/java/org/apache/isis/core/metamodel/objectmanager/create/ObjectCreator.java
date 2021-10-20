@@ -18,8 +18,9 @@
  */
 package org.apache.isis.core.metamodel.objectmanager.create;
 
+import java.util.List;
+
 import org.apache.isis.commons.handler.ChainOfResponsibility;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -56,7 +57,7 @@ public interface ObjectCreator {
 
     public static ObjectCreator createDefault(final MetaModelContext mmc) {
 
-        val chainOfHandlers = _Lists.of(
+        val chainOfHandlers = List.of(
                 new ObjectCreator_builtinHandlers.DefaultCreationHandler(mmc)
 
 //                new ObjectCreator_builtinHandlers.GuardAgainstNull(),

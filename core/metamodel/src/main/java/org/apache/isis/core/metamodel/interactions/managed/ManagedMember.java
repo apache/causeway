@@ -120,8 +120,8 @@ implements ManagedFeature {
     public abstract MemberType getMemberType();
 
     @Override
-    public ObjectSpecification getSpecification() {
-        return getMetaModel().getSpecification();
+    public ObjectSpecification getElementType() {
+        return getMetaModel().getElementType();
     }
 
     public String getId() {

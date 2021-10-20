@@ -39,7 +39,7 @@ extends ValueSemanticsProviderAbstractTestCase {
         longObj = Long.valueOf(367322);
         allowMockAdapterToReturn(longObj);
 
-        setSemanitcs(value = new LongValueSemantics());
+        setSemantics(value = new LongValueSemantics());
     }
 
     @Test

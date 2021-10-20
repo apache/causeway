@@ -22,8 +22,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 
 import org.apache.isis.viewer.common.model.components.ComponentType;
-import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelStandalone;
+import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 
 /**
@@ -38,8 +38,8 @@ public class StandaloneCollectionPage extends PageAbstract {
      * For use with {@link Component#setResponsePage(org.apache.wicket.request.component.IRequestablePage)}
      */
     public StandaloneCollectionPage(final EntityCollectionModelStandalone collectionModel) {
-        super(PageParametersUtils.newPageParameters(),
-                collectionModel.getActionModel().getFriendlyName(),
+        super(PageParameterUtils.newPageParameters(),
+                collectionModel.getName(),
                 ComponentType.STANDALONE_COLLECTION);
 
         addChildComponents(themeDiv, collectionModel);

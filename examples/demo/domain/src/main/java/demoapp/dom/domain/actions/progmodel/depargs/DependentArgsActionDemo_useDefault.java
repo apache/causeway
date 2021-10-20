@@ -52,12 +52,12 @@ public class DependentArgsActionDemo_useDefault {
     public DependentArgsActionDemo act(
 
             // PARAM 0
-            @Parameter(optionality = Optionality.MANDATORY)
+            @Parameter(optionality = Optionality.MANDATORY) final
             Parity parity,
 
             // PARAM 1
             @Parameter(optionality = Optionality.MANDATORY)
-            @ParameterLayout(named = "Message")
+            @ParameterLayout(named = "Message") final
             String message
 
             ) {
@@ -68,14 +68,14 @@ public class DependentArgsActionDemo_useDefault {
 
     // -- PARAM 0 (Parity)
 
-    @MemberSupport public Parity defaultParity(Parameters params) {
+    @MemberSupport public Parity defaultParity(final Parameters params) {
 
         return mixee.getDialogParityDefault();
     }
 
     // -- PARAM 1 (String message)
 
-    @MemberSupport public String defaultMessage(Parameters params) {
+    @MemberSupport public String defaultMessage(final Parameters params) {
 
         val parityFromDialog = params.parity(); // <-- the refining parameter from the dialog above
 

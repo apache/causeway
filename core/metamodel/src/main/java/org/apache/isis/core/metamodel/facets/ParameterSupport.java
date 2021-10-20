@@ -39,6 +39,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import lombok.val;
 
 /**
  *
@@ -54,7 +55,7 @@ public final class ParameterSupport {
         @NonNull Can<IntFunction<String>> paramIndexToMethodNameProviders;
         @NonNull EnumSet<SearchAlgorithm> searchAlgorithms;
         @NonNull ReturnTypePattern returnTypePattern;
-        
+
         @Builder.Default
         final @NonNull Can<Class<?>> additionalParamTypes = Can.empty();
 
@@ -109,12 +110,12 @@ public final class ParameterSupport {
             final ParamSupportingMethodSearchRequest searchRequest,
             final Consumer<ParamSupportingMethodSearchResult> onMethodFound) {
 
-        final var actionMethod = searchRequest.getProcessMethodContext().getMethod();
-        final var paramCount = actionMethod.getParameterCount();
+        val actionMethod = searchRequest.getProcessMethodContext().getMethod();
+        val paramCount = actionMethod.getParameterCount();
 
         for (int i = 0; i < paramCount; i++) {
-            for (final var searchAlgorithm : searchRequest.searchAlgorithms) {
-                final var paramNum = i;
+            for (val searchAlgorithm : searchRequest.searchAlgorithms) {
+                val paramNum = i;
                 searchAlgorithm.search(searchRequest, paramNum, onMethodFound);
             }
         }
@@ -126,12 +127,12 @@ public final class ParameterSupport {
             final int paramIndex,
             final Consumer<ParamSupportingMethodSearchResult> onMethodFound) {
 
-        final var processMethodContext = searchRequest.getProcessMethodContext();
-        final var type = processMethodContext.getCls();
-        final var paramTypes = searchRequest.getParamTypes();
-        final var methodNames = searchRequest.getSupporingMethodNameCandidates(paramIndex);
+        val processMethodContext = searchRequest.getProcessMethodContext();
+        val type = processMethodContext.getCls();
+        val paramTypes = searchRequest.getParamTypes();
+        val methodNames = searchRequest.getSupporingMethodNameCandidates(paramIndex);
 
-        final var paramType = paramTypes[paramIndex];
+        val paramType = paramTypes[paramIndex];
 
         MethodFinderPAT
         .findMethodWithPATArg(
@@ -160,12 +161,12 @@ public final class ParameterSupport {
             final int paramIndex,
             final Consumer<ParamSupportingMethodSearchResult> onMethodFound) {
 
-        final var processMethodContext = searchRequest.getProcessMethodContext();
-        final var type = processMethodContext.getCls();
-        final var paramTypes = searchRequest.getParamTypes();
-        final var methodNames = searchRequest.getSupporingMethodNameCandidates(paramIndex);
-        final var paramType = paramTypes[paramIndex];
-        final var signature = new Class<?>[]{paramType};
+        val processMethodContext = searchRequest.getProcessMethodContext();
+        val type = processMethodContext.getCls();
+        val paramTypes = searchRequest.getParamTypes();
+        val methodNames = searchRequest.getSupporingMethodNameCandidates(paramIndex);
+        val paramType = paramTypes[paramIndex];
+        val signature = new Class<?>[]{paramType};
 
         MethodFinder
         .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy())
@@ -183,20 +184,20 @@ public final class ParameterSupport {
             final int paramIndex,
             final Consumer<ParamSupportingMethodSearchResult> onMethodFound) {
 
-        final var processMethodContext = searchRequest.getProcessMethodContext();
-        final var type = processMethodContext.getCls();
-        final var paramTypes = searchRequest.getParamTypes();
-        final var methodNames = searchRequest.getSupporingMethodNameCandidates(paramIndex);
-        final var paramType = paramTypes[paramIndex];
-        final var additionalParamTypes = searchRequest.getAdditionalParamTypes();
-        final var additionalParamCount = additionalParamTypes.size();
+        val processMethodContext = searchRequest.getProcessMethodContext();
+        val type = processMethodContext.getCls();
+        val paramTypes = searchRequest.getParamTypes();
+        val methodNames = searchRequest.getSupporingMethodNameCandidates(paramIndex);
+        val paramType = paramTypes[paramIndex];
+        val additionalParamTypes = searchRequest.getAdditionalParamTypes();
+        val additionalParamCount = additionalParamTypes.size();
 
         int paramsConsideredCount = paramIndex + additionalParamCount;
         while(paramsConsideredCount>=0) {
 
-            final var signature = concat(paramTypes, paramsConsideredCount, additionalParamTypes);
+            val signature = concat(paramTypes, paramsConsideredCount, additionalParamTypes);
 
-            final var supportingMethod =
+            val supportingMethod =
             MethodFinder
             .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy())
             .withReturnTypeAnyOf(searchRequest.getReturnTypePattern().matchingTypes(paramType))
@@ -232,16 +233,16 @@ public final class ParameterSupport {
             final Can<Class<?>> additionalParamTypes) {
 
         if(paramsConsidered>paramTypes.length) {
-            final var msg = String.format("paramsConsidered %d exceeds size of paramTypes %d",
+            val msg = String.format("paramsConsidered %d exceeds size of paramTypes %d",
                     paramsConsidered, paramTypes.length);
             throw new IllegalArgumentException(msg);
         }
 
-        final var paramTypesConsidered = paramsConsidered<paramTypes.length
+        val paramTypesConsidered = paramsConsidered<paramTypes.length
                 ? Arrays.copyOf(paramTypes, paramsConsidered)
                 : paramTypes;
 
-        final var withAdditional = additionalParamTypes.isNotEmpty()
+        val withAdditional = additionalParamTypes.isNotEmpty()
                 ? _Arrays.combine(paramTypesConsidered, additionalParamTypes.toArray(_Constants.emptyClasses))
                 : paramTypesConsidered;
 

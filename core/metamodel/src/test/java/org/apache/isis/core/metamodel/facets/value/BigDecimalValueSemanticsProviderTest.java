@@ -43,7 +43,7 @@ extends ValueSemanticsProviderAbstractTestCase {
         bigDecimal = new BigDecimal("34132.199");
         allowMockAdapterToReturn(bigDecimal);
 
-        setSemanitcs(value = new BigDecimalValueSemantics());
+        setSemantics(value = new BigDecimalValueSemantics());
     }
 
     @Test

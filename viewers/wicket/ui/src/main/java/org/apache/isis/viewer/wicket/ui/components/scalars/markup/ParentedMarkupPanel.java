@@ -26,6 +26,7 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.MultiLineStringPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
+import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 /**
  * Panel for rendering scalars of type {@link org.apache.isis.applib.value.Markup}.
@@ -67,6 +68,7 @@ public class ParentedMarkupPanel extends MultiLineStringPanel {
 
         final String labelCaption = getRendering().getLabelCaption(getTextField());
         final Label scalarName = createScalarName(ID_SCALAR_NAME, labelCaption);
+        Tooltips.addTooltip(scalarName, getModel().getDescribedAs());
 
         formGroup.add(scalarName);
 

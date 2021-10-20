@@ -24,10 +24,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.presets.IsisPresets;
@@ -40,6 +36,10 @@ import org.apache.isis.testdomain.model.interaction.InteractionDemo_biArgEnabled
 import org.apache.isis.testdomain.model.interaction.InteractionNpmDemo;
 import org.apache.isis.testdomain.model.interaction.InteractionNpmDemo_biArgEnabled;
 import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 
@@ -150,7 +150,7 @@ class NewParameterModelTest extends InteractionTestAbstract {
                 .checkUsability();
 
         val managedAction = actionInteraction.getManagedAction().get(); // should not throw
-        val pendingArgs = managedAction.getInteractionHead().defaults();
+        val pendingArgs = managedAction.startParameterNegotiation();
 
         val expectedDefaults = Can.of(
                 new InteractionDemo_biArgEnabled(null).defaultA(null),

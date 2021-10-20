@@ -470,6 +470,34 @@ public final class _Reflect {
         return null;
     }
 
+    @SneakyThrows
+    public static Object readFromGetterOn(
+            final @NonNull Method getter,
+            final @NonNull Object target) {
+        return getter.invoke(target);
+    }
+
+    // -- FIND SETTER
+
+    public static Method getSetter(final Class<?> cls, final String propertyName) throws IntrospectionException {
+        final BeanInfo beanInfo = Introspector.getBeanInfo(cls);
+        for(PropertyDescriptor pd:beanInfo.getPropertyDescriptors()){
+            if(!pd.getName().equals(propertyName))
+                continue;
+            return pd.getWriteMethod();
+        }
+        return null;
+    }
+
+    @SneakyThrows
+    public static void writeToSetterOn(
+            final @NonNull Method setter,
+            final @NonNull Object target,
+            final @NonNull Object value) {
+        setter.invoke(target, value);
+    }
+
+
     // -- MODIFIERS
 
     public static Object getFieldOn(

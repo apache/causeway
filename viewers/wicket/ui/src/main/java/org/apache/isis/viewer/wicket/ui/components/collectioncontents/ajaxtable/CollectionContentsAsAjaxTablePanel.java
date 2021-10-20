@@ -19,23 +19,23 @@
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel.Variant;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterPropertyColumn;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterTitleColumn;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericColumn;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericPropertyColumn;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericTitleColumn;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import lombok.val;
@@ -45,14 +45,13 @@ import lombok.val;
  * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
  */
 public class CollectionContentsAsAjaxTablePanel
-extends PanelAbstract<List<ManagedObject>, EntityCollectionModel>
+extends PanelAbstract<DataTableModel, EntityCollectionModel>
 implements CollectionCountProvider {
 
     private static final long serialVersionUID = 1L;
-
     private static final String ID_TABLE = "table";
 
-    private IsisAjaxFallbackDataTable<ManagedObject, String> dataTable;
+    private IsisAjaxFallbackDataTable dataTable;
 
     public CollectionContentsAsAjaxTablePanel(final String id, final EntityCollectionModel model) {
         super(id, model);
@@ -64,14 +63,18 @@ implements CollectionCountProvider {
         buildGui();
     }
 
+    private EntityCollectionModel entityCollectionModel() {
+        return getModel();
+    }
+
     private void buildGui() {
 
-        final List<IColumn<ManagedObject, String>> columns = _Lists.newArrayList();
+        final List<GenericColumn> columns = _Lists.newArrayList();
 
         // bulk actions
         final BulkActionsProvider bulkActionsProvider = getBulkActionsProvider();
 
-        ObjectAdapterToggleboxColumn toggleboxColumn = null;
+        GenericToggleboxColumn toggleboxColumn = null;
         if(bulkActionsProvider != null) {
 
             toggleboxColumn = bulkActionsProvider.getToggleboxColumn();
@@ -81,10 +84,10 @@ implements CollectionCountProvider {
 
         }
 
-        val collectionModel = getModel();
+        val collectionModel = entityCollectionModel();
         addTitleColumn(
                 columns,
-                collectionModel.parentedObjectAdapterMemento().orElse(null),
+                collectionModel.getVariant(),
                 getWicketViewerSettings().getMaxTitleLengthInParentedTables(),
                 getWicketViewerSettings().getMaxTitleLengthInStandaloneTables());
 
@@ -110,25 +113,28 @@ implements CollectionCountProvider {
 
 
     private void addTitleColumn(
-            final List<IColumn<ManagedObject, String>> columns,
-            final ObjectMemento parentAdapterMementoIfAny,
+            final List<GenericColumn> columns,
+            final Variant variant,
             final int maxTitleParented,
             final int maxTitleStandalone) {
 
-        final int maxTitleLength = getModel().isParented()? maxTitleParented: maxTitleStandalone;
-        columns.add(new ObjectAdapterTitleColumn(
-                super.getCommonContext(), parentAdapterMementoIfAny, maxTitleLength));
+        val contextBookmark = entityCollectionModel().getParentObject().getBookmark()
+                .orElse(null);
+
+        final int maxTitleLength = getModel().getVariant().isParented()? maxTitleParented: maxTitleStandalone;
+        columns.add(new GenericTitleColumn(
+                super.getCommonContext(), variant, contextBookmark, maxTitleLength));
     }
 
-    private void addPropertyColumnsIfRequired(final List<IColumn<ManagedObject, String>> columns) {
+    private void addPropertyColumnsIfRequired(final List<GenericColumn> columns) {
 
         val collectionModel = getModel();
-        val elementTypeSpec = collectionModel.getTypeOfSpecification();
+        val elementTypeSpec = collectionModel.getElementType();
         if(elementTypeSpec == null) {
             return;
         }
 
-        final Optional<ManagedObject> parentObject = collectionModel.parentedParentObject();
+        final ManagedObject parentObject = collectionModel.getParentObject();
         val memberIdentifier = collectionModel.getIdentifier();
 
         // add all ordered columns to the table
@@ -138,17 +144,17 @@ implements CollectionCountProvider {
 
     }
 
-    private ObjectAdapterPropertyColumn createObjectAdapterPropertyColumn(final OneToOneAssociation property) {
+    private GenericPropertyColumn createObjectAdapterPropertyColumn(final OneToOneAssociation property) {
 
         val collectionModel = getModel();
 
         final boolean escaped = true;
 
-        final String parentTypeName = property.getOnType().getLogicalTypeName();
+        final String parentTypeName = property.getDeclaringType().getLogicalTypeName();
 
         val commonContext = super.getCommonContext();
 
-        return new ObjectAdapterPropertyColumn(
+        return new GenericPropertyColumn(
                 commonContext,
                 collectionModel.getVariant(),
                 Model.of(property.getCanonicalFriendlyName()),

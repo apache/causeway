@@ -70,7 +70,7 @@ implements IsisComponentScanInterceptor {
     // -- FILTER
 
     @Override
-    public void intercept(ScannedTypeMetaData typeMeta) {
+    public void intercept(final ScannedTypeMetaData typeMeta) {
 
         val classOrFailure = typeMeta.getUnderlyingClassOrFailure();
         if(classOrFailure.isFailure()) {
@@ -79,7 +79,7 @@ implements IsisComponentScanInterceptor {
         }
 
         val type = classOrFailure.getUnderlyingClass();
-        val classification = isisBeanTypeClassifier.classify(type, /*BeanClassificationContext*/null);
+        val classification = isisBeanTypeClassifier.classify(type);
 
         val delegated = classification.isDelegateLifecycleManagement();
         typeMeta.setInjectable(delegated);
@@ -103,7 +103,7 @@ implements IsisComponentScanInterceptor {
 
     // -- HELPER
 
-    private void addIntrospectableType(BeanSort sort, ScannedTypeMetaData typeMeta) {
+    private void addIntrospectableType(final BeanSort sort, final ScannedTypeMetaData typeMeta) {
         val correspondingClass = typeMeta.getUnderlyingClassOrFailure().getUnderlyingClass();
         val type = IsisBeanMetaData.of(correspondingClass, sort, typeMeta.getEffectiveBeanName());
         introspectableTypes.put(correspondingClass, type);

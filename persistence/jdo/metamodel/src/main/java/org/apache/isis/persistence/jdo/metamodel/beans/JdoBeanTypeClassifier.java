@@ -22,8 +22,6 @@ import java.util.Locale;
 
 import javax.jdo.annotations.EmbeddedOnly;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.internal.base._Strings;
@@ -41,8 +39,7 @@ public class JdoBeanTypeClassifier implements IsisBeanTypeClassifier {
 
     @Override
     public BeanClassification classify(
-            final Class<?> type,
-            final @Nullable BeanClassificationContext context) {
+            final Class<?> type) {
 
         val persistenceCapableAnnot = findNearestAnnotation(type, javax.jdo.annotations.PersistenceCapable.class);
         if(persistenceCapableAnnot.isPresent()) {

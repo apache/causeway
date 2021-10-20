@@ -23,28 +23,22 @@ import javax.inject.Inject;
 import org.springframework.util.ClassUtils;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.incubator.viewer.javafx.model.binding.BindingsFx;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
-import org.apache.isis.viewer.common.model.binding.NumberConverterForStringComponent;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.VBox;
 
 @org.springframework.stereotype.Component
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Log4j2
+//@Log4j2
 public class NumberFieldFactory implements UiComponentHandlerFx {
 
     @Override
@@ -60,58 +54,20 @@ public class NumberFieldFactory implements UiComponentHandlerFx {
         val uiComponent = new VBox();
         val uiField = _fx.add(uiComponent, new TextField());
         val uiValidationFeedback = _fx.newValidationFeedback(uiComponent);
-        val valueSpec = request.getFeatureTypeSpec();
-        val converter = new NumberConverterForStringComponent(valueSpec);
 
-        // ensure user can only type text that is also parse-able by the value facet (parser)
-        // however, not every phase of text entering produces parse-able text
-        uiField.setTextFormatter(new TextFormatter<String>(change->{
-            val input = change.getText();
+        val managedValue = request.getManagedValue();
+        BindingsFx.bindParsableBidirectional(
+                uiField.textProperty(),
+                managedValue.getValueAsParsableText());
+        uiField.editableProperty().set(true);
 
-            val parsingError = converter.tryParse(_Strings.suffix(input, "0"));
-            if (parsingError.isPresent()) {
-                log.warn("Failed to parse UI input '{}': {}", input, parsingError.get());
-                return null; // veto change
-            }
-            return change; // allow change
-        }));
-
-        if(request.getManagedFeature() instanceof ManagedParameter) {
-
-            val managedParameter = (ManagedParameter)request.getManagedFeature();
-
-            BindingsFx.bindBidirectional(
-                    uiField.textProperty(),
-                    managedParameter.getValue(),
-                    converter);
-
-            BindingsFx.bindValidationFeeback(
-                    uiValidationFeedback.textProperty(),
-                    uiValidationFeedback.visibleProperty(),
-                    managedParameter.getValidationMessage());
-
-        } else if(request.getManagedFeature() instanceof ManagedProperty) {
-
-            val managedProperty = (ManagedProperty)request.getManagedFeature();
-
-            // readonly binding
-            BindingsFx.bind(
-                    uiField.textProperty(),
-                    managedProperty.getValue(),
-                    converter);
-
-            //TODO allow property editing
-            uiField.editableProperty().set(false);
-
-            //TODO bind property validation feedback
-
-        }
+        BindingsFx.bindValidationFeeback(
+                uiValidationFeedback.textProperty(),
+                uiValidationFeedback.visibleProperty(),
+                managedValue.getValidationMessage());
 
         return uiComponent;
     }
-
-    // -- HELPER
-
 
 
 }

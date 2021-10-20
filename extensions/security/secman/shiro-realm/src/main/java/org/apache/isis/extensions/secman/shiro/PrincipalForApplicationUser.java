@@ -63,7 +63,7 @@ class PrincipalForApplicationUser implements AuthorizationInfo {
 
     private static final long serialVersionUID = 1L;
 
-    public static PrincipalForApplicationUser from(ApplicationUser applicationUser) {
+    public static PrincipalForApplicationUser from(final ApplicationUser applicationUser) {
         if(applicationUser == null) {
             return null;
         }
@@ -111,7 +111,7 @@ class PrincipalForApplicationUser implements AuthorizationInfo {
 
     // -- HELPER
 
-    private final transient _Lazy<Collection<Permission>> objectPermissions =
+    private final _Lazy<Collection<Permission>> objectPermissions =
             _Lazy.threadSafe(this::createObjectPermissions);
 
     private Collection<Permission> createObjectPermissions() {
@@ -125,7 +125,7 @@ class PrincipalForApplicationUser implements AuthorizationInfo {
         @NonNull private final ApplicationPermissionValueSet permissionSet;
 
         @Override
-        public boolean implies(Permission p) {
+        public boolean implies(final Permission p) {
             if (!(p instanceof PermissionForMember)) {
                 return false;
             }

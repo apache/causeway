@@ -21,11 +21,14 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
+import org.apache.wicket.model.IModel;
 
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.common.model.components.ComponentType;
-import org.apache.isis.viewer.wicket.model.models.ManagedObjectModel;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
 
@@ -33,7 +36,7 @@ import lombok.val;
 
 /**
  * {@link FormComponentPanel} representing a reference to an entity: a link and
- * (optionally) an autocomplete field.
+ * (optionally) an auto-complete field.
  */
 public class EntityLinkSimplePanel
 extends FormComponentPanelAbstract<ManagedObject>
@@ -44,14 +47,20 @@ implements CancelHintRequired  {
     private static final String ID_ENTITY_ICON_AND_TITLE = "entityIconAndTitle";
     private static final String ID_ENTITY_TITLE_NULL = "entityTitleNull";
 
-    public EntityLinkSimplePanel(final String id, final ManagedObjectModel entityModel) {
-        super(id, entityModel);
+    public EntityLinkSimplePanel(final String id, final IModel<ManagedObject> model) {
+        super(id, model);
+        _Assert.assertTrue(model instanceof HasCommonContext);
         setType(ManagedObject.class);
         buildGui();
     }
 
-    public ManagedObjectModel getEntityModel() {
-        return (ManagedObjectModel) getModel();
+//    private ManagedObjectModel objectModelForLink() {
+//        final var model = (HasCommonContext & IModel<ManagedObject>)getModel();
+//        return ManagedObjectModel.of(model::getObject);
+//    }
+
+    private boolean isEmpty() {
+        return ManagedObjects.isNullOrUnspecifiedOrEmpty(getModel().getObject());
     }
 
     private void buildGui() {
@@ -65,22 +74,23 @@ implements CancelHintRequired  {
     }
 
     private void syncWithInput() {
-        val adapter = getEntityModel().getObject(); // getPendingElseCurrentAdapter();
 
-        if (adapter != null) {
-            final ManagedObjectModel entityModelForLink = getEntityModel();
-
-            final ComponentFactory componentFactory = getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
-
-            final Component component = componentFactory.createComponent(ID_ENTITY_ICON_AND_TITLE, entityModelForLink);
-            addOrReplace(component);
-            permanentlyHide(ID_ENTITY_TITLE_NULL);
-
-        } else {
+        if(isEmpty()) {
             // represent no object by a simple label displaying '(none)'
-            addOrReplace(new Label(ID_ENTITY_TITLE_NULL, "(none)"));
+            addOrReplace(new Label(ID_ENTITY_TITLE_NULL, ValueSemanticsAbstract.NULL_REPRESENTATION));
             permanentlyHide(ID_ENTITY_TITLE_NULL);
             permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
+
+        } else {
+
+            val objectModelForLink = getModel();
+            val componentFactory = getComponentFactoryRegistry()
+                    .findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, objectModelForLink);
+
+            final Component component = componentFactory
+                    .createComponent(ID_ENTITY_ICON_AND_TITLE, objectModelForLink);
+            addOrReplace(component);
+            permanentlyHide(ID_ENTITY_TITLE_NULL);
         }
     }
 

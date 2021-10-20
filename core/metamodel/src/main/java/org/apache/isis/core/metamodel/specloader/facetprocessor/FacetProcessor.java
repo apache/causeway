@@ -365,8 +365,6 @@ implements HasMetaModelContext{
      * @param introspectedClass
      * @param method
      *            - action method to process
-     * @param paramNum
-     *            - 0-based
      * @param methodRemover
      * @param facetedMethodParameter
      */
@@ -374,12 +372,11 @@ implements HasMetaModelContext{
             final Class<?> introspectedClass,
             final IntrospectionPolicy introspectionPolicy,
             final Method method,
-            final int paramNum,
             final MethodRemover methodRemover,
             final FacetedMethodParameter facetedMethodParameter) {
 
         for (val featureType : FeatureType.PARAMETERS_ONLY) {
-            processParams(introspectedClass, introspectionPolicy, method, paramNum, methodRemover, facetedMethodParameter, featureType);
+            processParams(introspectedClass, introspectionPolicy, method, methodRemover, facetedMethodParameter, featureType);
         }
     }
 
@@ -387,13 +384,12 @@ implements HasMetaModelContext{
             final Class<?> introspectedClass,
             final IntrospectionPolicy introspectionPolicy,
             final Method method,
-            final int paramNum,
             final MethodRemover methodRemover,
             final FacetedMethodParameter facetedMethodParameter,
             final FeatureType featureType) {
 
         val processParameterContext =
-                new ProcessParameterContext(introspectedClass, introspectionPolicy, method, paramNum, methodRemover, facetedMethodParameter);
+                new ProcessParameterContext(introspectedClass, introspectionPolicy, method, methodRemover, facetedMethodParameter);
 
         factoryListByFeatureType.get().getOrElseEmpty(featureType)
         .forEach(facetFactory->facetFactory.processParams(processParameterContext));

@@ -42,7 +42,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
 
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterTitleColumn;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericTitleColumn;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import de.agilecoders.wicket.core.util.Attributes;
@@ -150,7 +150,7 @@ public class IsisAjaxHeadersToolbar<S> extends AbstractToolbar
                 Component sortIcon = newSortIcon("sortIcon", column, stateLocator);
                 header.add(label, sortIcon);
 
-                if(column instanceof ObjectAdapterTitleColumn) {
+                if(column instanceof GenericTitleColumn) {
                     header.add(new CssClassAppender("title-column"));
                 }
             }

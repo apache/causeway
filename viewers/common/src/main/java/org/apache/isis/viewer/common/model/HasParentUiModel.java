@@ -18,9 +18,17 @@
  */
 package org.apache.isis.viewer.common.model;
 
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 
 public interface HasParentUiModel<T extends ObjectUiModel> {
 
     T getParentUiModel();
+
+    /**
+     * The owning entity/viewmodel/service that is declaring this action or property.
+     */
+    default ManagedObject getOwner()  {
+        return getParentUiModel().getManagedObject();
+    }
 }

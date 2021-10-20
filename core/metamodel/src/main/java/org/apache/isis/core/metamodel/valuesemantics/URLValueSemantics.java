@@ -24,21 +24,34 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.schema.common.v2.ValueType;
+
+import lombok.val;
 
 @Component
 @Named("isis.val.URLValueSemantics")
 public class URLValueSemantics
-extends AbstractValueSemanticsProvider<java.net.URL>
+extends ValueSemanticsAbstract<java.net.URL>
 implements
     EncoderDecoder<java.net.URL>,
     Parser<java.net.URL>,
     Renderer<java.net.URL> {
+
+    @Override
+    public Class<java.net.URL> getCorrespondingClass() {
+        return java.net.URL.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return UNREPRESENTED;
+    }
 
     // -- ENCODER DECODER
 
@@ -75,7 +88,7 @@ implements
 
     @Override
     public java.net.URL parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        final var input = _Strings.blankToNullOrTrim(text);
+        val input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
             return null;
         }

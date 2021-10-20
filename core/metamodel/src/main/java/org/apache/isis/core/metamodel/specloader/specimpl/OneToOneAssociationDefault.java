@@ -231,7 +231,7 @@ implements OneToOneAssociation {
         // specification (eg an int should
         // default to 0).
         if (propertyDefaultFacet == null) {
-            propertyDefaultFacet = this.getSpecification().getFacet(PropertyDefaultFacet.class);
+            propertyDefaultFacet = this.getElementType().getFacet(PropertyDefaultFacet.class);
         }
         if (propertyDefaultFacet == null) {
             return null;
@@ -326,7 +326,7 @@ implements OneToOneAssociation {
         str.append(super.toString());
         str.setAddComma();
         str.append("persisted", !isNotPersisted());
-        str.append("type", getSpecification().getShortIdentifier());
+        str.append("type", getElementType().getShortIdentifier());
         return str.toString();
     }
 

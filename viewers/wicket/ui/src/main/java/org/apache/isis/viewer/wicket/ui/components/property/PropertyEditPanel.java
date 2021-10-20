@@ -54,7 +54,7 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
             final ScalarPropertyModel scalarModel) {
 
         super(id, scalarModel.copyHaving(
-                EntityModel.Mode.EDIT,
+                EntityModel.EitherViewOrEdit.EDIT,
                 EntityModel.RenderingHint.REGULAR));
 
         buildGui(scalarModel);

@@ -373,7 +373,7 @@ implements FacetHolder {
     @Override
     public final Stream<OneToOneAssociation> streamPropertiesForColumnRendering(
             final Identifier memberIdentifier,
-            final Optional<ManagedObject> parentObject) {
+            final ManagedObject parentObject) {
 
         return new _PropertiesAsColumns(getMetaModelContext())
             .streamPropertiesForColumnRendering(this, memberIdentifier, parentObject);

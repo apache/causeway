@@ -52,7 +52,7 @@ public class NamedFacetForParameterLayoutAnnotationFactoryTest extends AbstractF
         facetFactory.processParams(new FacetFactory.ProcessParameterContext(
                 Customer.class,
                 IntrospectionPolicy.ANNOTATION_OPTIONAL,
-                method, 0, null, facetedMethodParameter));
+                method, null, facetedMethodParameter));
 
         val facet = facetedMethodParameter.getFacet(ParamNamedFacet.class);
         assertThat(facet, is(notNullValue()));

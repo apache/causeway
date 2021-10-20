@@ -37,6 +37,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import lombok.val;
 
 public final class ActionSupport {
 
@@ -88,7 +89,7 @@ public final class ActionSupport {
             final ActionSupportingMethodSearchRequest searchRequest,
             final Consumer<ActionSupportingMethodSearchResult> onMethodFound) {
 
-        for (final var searchAlgorithm : searchRequest.searchAlgorithms) {
+        for (val searchAlgorithm : searchRequest.searchAlgorithms) {
             searchAlgorithm.search(searchRequest, onMethodFound);
         }
 
@@ -122,16 +123,16 @@ public final class ActionSupport {
             final ActionSupportingMethodSearchRequest searchRequest,
             final Consumer<ActionSupportingMethodSearchResult> onMethodFound) {
 
-        final var paramTypes = searchRequest.getParamTypes();
-        final var finderOptions = searchRequest.getMethodFinder();
+        val paramTypes = searchRequest.getParamTypes();
+        val finderOptions = searchRequest.getMethodFinder();
 
-        final var additionalParamTypes = searchRequest.getAdditionalParamTypes();
-        final var additionalParamCount = additionalParamTypes.size();
+        val additionalParamTypes = searchRequest.getAdditionalParamTypes();
+        val additionalParamCount = additionalParamTypes.size();
 
         final int paramsConsideredCount = paramTypes.length + additionalParamCount;
         if(paramsConsideredCount>=0) {
 
-            final var signature = concat(paramTypes, paramsConsideredCount, additionalParamTypes);
+            val signature = concat(paramTypes, paramsConsideredCount, additionalParamTypes);
 
             finderOptions
             .streamMethodsMatchingSignature(signature)
@@ -154,16 +155,16 @@ public final class ActionSupport {
             final Can<Class<?>> additionalParamTypes) {
 
         if(paramsConsidered>paramTypes.length) {
-            final var msg = String.format("paramsConsidered %d exceeds size of paramTypes %d",
+            val msg = String.format("paramsConsidered %d exceeds size of paramTypes %d",
                     paramsConsidered, paramTypes.length);
             throw new IllegalArgumentException(msg);
         }
 
-        final var paramTypesConsidered = paramsConsidered<paramTypes.length
+        val paramTypesConsidered = paramsConsidered<paramTypes.length
                 ? Arrays.copyOf(paramTypes, paramsConsidered)
                 : paramTypes;
 
-        final var withAdditional = additionalParamTypes.isNotEmpty()
+        val withAdditional = additionalParamTypes.isNotEmpty()
                 ? _Arrays.combine(paramTypesConsidered, additionalParamTypes.toArray(_Constants.emptyClasses))
                 : paramTypesConsidered;
 

@@ -39,7 +39,7 @@ import org.apache.wicket.util.lang.Generics;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import lombok.val;
@@ -51,7 +51,7 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
     static final String UIHINT_PAGE_NUMBER = "pageNumber";
 
     private final CollectionContentsSortableDataProvider dataProvider;
-    private final ObjectAdapterToggleboxColumn toggleboxColumn;
+    private final GenericToggleboxColumn toggleboxColumn;
 
     private IsisAjaxFallbackHeadersToolbar<S> headersToolbar;
     private IsisAjaxNavigationToolbar navigationToolbar;
@@ -61,7 +61,7 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
             final List<? extends IColumn<T, S>> columns,
             final CollectionContentsSortableDataProvider dataProvider,
             final int rowsPerPage,
-            final ObjectAdapterToggleboxColumn toggleboxColumn) {
+            final GenericToggleboxColumn toggleboxColumn) {
 
         super(id, columns, (ISortableDataProvider<T, S>)dataProvider, rowsPerPage);
         this.dataProvider = dataProvider;
@@ -102,7 +102,7 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void onComponentTag(ComponentTag tag) {
+            protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);
 
                 if (model instanceof EntityModel) {
@@ -135,7 +135,7 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
          */
         @Override
         public <T> Iterator<Item<T>> getItems(final IItemFactory<T> factory,
-                final Iterator<IModel<T>> newModels, Iterator<Item<T>> existingItems)
+                final Iterator<IModel<T>> newModels, final Iterator<Item<T>> existingItems)
         {
             final Map<IModel<T>, Item<T>> modelToItem = Generics.newHashMap();
             while (existingItems.hasNext())
@@ -202,7 +202,7 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
         // don't broadcast (no AjaxRequestTarget, still configuring initial setup)
     }
 
-    public void setPageNumberHintAndBroadcast(AjaxRequestTarget target) {
+    public void setPageNumberHintAndBroadcast(final AjaxRequestTarget target) {
         final UiHintContainer uiHintContainer = getUiHintContainer();
         if(uiHintContainer == null) {
             return;
@@ -210,7 +210,7 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
         uiHintContainer.setHint(this, IsisAjaxFallbackDataTable.UIHINT_PAGE_NUMBER, ""+getCurrentPage());
     }
 
-    public void setSortOrderHintAndBroadcast(SortOrder order, String property, AjaxRequestTarget target) {
+    public void setSortOrderHintAndBroadcast(final SortOrder order, final String property, final AjaxRequestTarget target) {
         final UiHintContainer uiHintContainer = getUiHintContainer();
         if(uiHintContainer == null) {
             return;

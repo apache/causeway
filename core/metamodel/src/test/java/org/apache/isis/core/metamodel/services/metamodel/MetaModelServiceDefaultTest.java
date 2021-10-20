@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.services.metamodel;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -50,6 +49,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.id.TypeIdentifierTestFactory;
@@ -79,6 +79,9 @@ class MetaModelServiceDefaultTest {
         Matcher<Class<? extends Facet>> facetMatcher = _Casts.uncheckedCast(Matchers.any(Class.class));
         context.checking(new Expectations() {
             {
+                allowing(mockFacetedMethod).getMetaModelContext();
+                will(returnValue(MetaModelContext_forTesting.buildDefault()));
+
                 allowing(mockFacetedMethod).getFeatureIdentifier();
                 will(returnValue(Identifier.actionIdentifier(
                         TypeIdentifierTestFactory.newCustomer(), "reduceheadcount")));
@@ -87,7 +90,7 @@ class MetaModelServiceDefaultTest {
                 will(returnValue(null));
 
                 allowing(mockFacetedMethod).getParameters();
-                will(returnValue(Collections.emptyList()));
+                will(returnValue(Can.empty()));
             }
         });
 
@@ -162,7 +165,7 @@ class MetaModelServiceDefaultTest {
 
     private OutputStream noopOutput(){
         return new OutputStream() {
-            @Override public void write(int b) throws IOException {}
+            @Override public void write(final int b) throws IOException {}
         };
     }
 
@@ -180,25 +183,25 @@ class MetaModelServiceDefaultTest {
         public Integer getId() {
             return id;
         }
-        public void setId(Integer id) {
+        public void setId(final Integer id) {
             this.id = id;
         }
         public String getFirstName() {
             return firstName;
         }
-        public void setFirstName(String firstName) {
+        public void setFirstName(final String firstName) {
             this.firstName = firstName;
         }
         public String getLastName() {
             return lastName;
         }
-        public void setLastName(String lastName) {
+        public void setLastName(final String lastName) {
             this.lastName = lastName;
         }
         public double getIncome() {
             return income;
         }
-        public void setIncome(double income) {
+        public void setIncome(final double income) {
             this.income = income;
         }
 
@@ -215,7 +218,7 @@ class MetaModelServiceDefaultTest {
             return employees;
         }
 
-        public void setEmployees(List<Employee> employees) {
+        public void setEmployees(final List<Employee> employees) {
             this.employees = employees;
         }
     }

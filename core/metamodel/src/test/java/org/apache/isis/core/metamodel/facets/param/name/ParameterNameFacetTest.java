@@ -67,7 +67,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
     @Test
     public void verifyProgrammingModelNumberOfFactories() {
-        assertEquals(83, programmingModel.streamFactories().count());
+        assertEquals(63, programmingModel.streamFactories().count());
     }
 
     @Test //verify we have the javac -parameter flag set when compiling this class
@@ -100,7 +100,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
         // when
         val processParameterContext =
                 new FacetFactory.ProcessParameterContext(
-                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, 0, null, facetedMethodParameter);
+                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
 
         programmingModel.streamFactories()
         .forEach(facetFactory->facetFactory.processParams(processParameterContext));
@@ -132,7 +132,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
         // when
         val processParameterContext =
                 new FacetFactory.ProcessParameterContext(
-                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, 0, null, facetedMethodParameter);
+                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
         programmingModel.streamFactories().forEach(facetFactory->facetFactory.processParams(processParameterContext));
 
         // then

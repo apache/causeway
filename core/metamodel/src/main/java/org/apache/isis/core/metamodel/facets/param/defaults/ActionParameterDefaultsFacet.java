@@ -18,8 +18,10 @@
  */
 package org.apache.isis.core.metamodel.facets.param.defaults;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 import lombok.NonNull;
@@ -34,10 +36,11 @@ import lombok.NonNull;
  */
 public interface ActionParameterDefaultsFacet extends Facet {
 
-    /** default parameter value, depending on other pending parameters
-     * @implNote this is pretty low level, meant to be called only by
+    /**
+     * default parameter value (scalar or non-scalar), depending on other pending parameters
+     * @implNote this is low level, meant to be called only by
      * instances of {@link ObjectActionParameter}, other callers should
      * rather use {@link ObjectActionParameter#getDefault(ParameterNegotiationModel)}
      */
-    Object getDefault(@NonNull ParameterNegotiationModel pendingArgs);
+    Can<ManagedObject> getDefault(@NonNull ParameterNegotiationModel pendingArgs);
 }

@@ -74,28 +74,28 @@ public final class ActionUiMetaModel implements Serializable {
     }
 
     public static <T> ActionUiMetaModel of(
-            final ManagedObject actionHolder,
+            final ManagedObject owner,
             final ObjectAction objectAction) {
-        return new ActionUiMetaModel(actionHolder, objectAction);
+        return new ActionUiMetaModel(owner, objectAction);
     };
 
     private ActionUiMetaModel(
-            final ManagedObject actionHolder,
+            final ManagedObject owner,
             final ObjectAction objectAction) {
 
         this(   objectAction.getMemento(),
-                objectAction.getFriendlyName(actionHolder.asProvider()),
-                objectAction.getDescription(actionHolder.asProvider()),
+                objectAction.getFriendlyName(owner.asProvider()),
+                objectAction.getDescription(owner.asProvider()),
                 ObjectAction.Util.returnsBlobOrClob(objectAction),
                 objectAction.isPrototype(),
                 ObjectAction.Util.actionIdentifierFor(objectAction),
-                ObjectAction.Util.cssClassFor(objectAction, actionHolder),
-                FontAwesomeUiModel.of(ObjectAction.Util.cssClassFaFactoryFor(objectAction, actionHolder)),
+                ObjectAction.Util.cssClassFor(objectAction, owner),
+                FontAwesomeUiModel.of(ObjectAction.Util.cssClassFaFactoryFor(objectAction, owner)),
                 ObjectAction.Util.actionLayoutPositionOf(objectAction),
                 objectAction.getSemantics(),
                 ObjectAction.Util.promptStyleFor(objectAction),
                 Parameters.fromParameterCount(objectAction.getParameterCount()),
-                disabledUiModelFor(actionHolder, objectAction),
+                disabledUiModelFor(owner, objectAction),
                 ObjectAction.Util.isAreYouSureSemantics(objectAction)
                 && ObjectAction.Util.isNoParameters(objectAction)
                 );

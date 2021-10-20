@@ -45,7 +45,7 @@ under the License.
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.5.4</version>
+		<version>2.5.5</version>
 		<relativePath/>
 	</parent>
 
@@ -332,7 +332,7 @@ under the License.
 		<!-- overriding Spring, since v3.0.0 breaks artifact retrieval of org.jruby:jruby (of any version) -->
 		<maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
 
-		<lombok.version>1.18.20</lombok.version> <!-- overriding Spring -->
+		<lombok.version>1.18.22</lombok.version> <!-- overriding Spring -->
 		<delombok.output>${project.build.directory}/delombok</delombok.output>
 		<!-- APACHE ISIS customisation 4/15: end -->
 		<surefire.version>2.22.2</surefire.version>

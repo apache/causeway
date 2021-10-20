@@ -70,7 +70,7 @@ extends ObjectSpecificationPostProcessorAbstract {
             return;
         }
 
-        val typeSpec = property.getOnType();
+        val typeSpec = property.getDeclaringType();
 
         typeSpec
         .lookupNonFallbackFacet(ImmutableFacet.class)

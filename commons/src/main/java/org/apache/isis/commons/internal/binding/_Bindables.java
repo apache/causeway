@@ -34,14 +34,29 @@ public class _Bindables {
 
     private static class SimpleBindable<T> extends _BindableAbstract<T> {}
 
+    public static class BooleanBindable extends _BindableAbstract<Boolean> {
+        public boolean toggleThenGet() {
+            setValue(!getValue());
+            return getValue();
+        }
+    }
+
     public static <T> _BindableAbstract<T> empty() {
         return new SimpleBindable<T>();
     }
 
-    public static <T> _BindableAbstract<T> forValue(T initialValue) {
+    public static <T> _BindableAbstract<T> forValue(final T initialValue) {
         val bindable = new SimpleBindable<T>();
         bindable.setValue(initialValue);
         return bindable;
     }
+
+    public static BooleanBindable forBoolean(final boolean initialValue) {
+        val bindable = new BooleanBindable();
+        bindable.setValue(initialValue);
+        return bindable;
+    }
+
+
 
 }

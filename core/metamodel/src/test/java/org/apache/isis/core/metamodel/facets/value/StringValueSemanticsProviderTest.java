@@ -35,7 +35,7 @@ extends ValueSemanticsProviderAbstractTestCase {
     @Before
     public void setUpObjects() throws Exception {
         string = "text entry";
-        setSemanitcs(value = new StringValueSemantics());
+        setSemantics(value = new StringValueSemantics());
     }
 
     @Test

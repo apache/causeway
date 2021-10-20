@@ -29,27 +29,27 @@ public abstract class PropertyOrCollectionAccessorFacetAbstract
 extends FacetAbstract
 implements PropertyOrCollectionAccessorFacet {
 
-    private final ObjectSpecification onType;
+    private final ObjectSpecification declaringType;
 
     private static final Class<? extends Facet> type() {
         return PropertyOrCollectionAccessorFacet.class;
     }
 
     public PropertyOrCollectionAccessorFacetAbstract(
-            final ObjectSpecification onType,
+            final ObjectSpecification declaringType,
             final FacetHolder holder) {
         super(type(), holder);
-        this.onType = onType;
+        this.declaringType = declaringType;
     }
 
     @Override
-    public ObjectSpecification getOnType() {
-        return onType;
+    public ObjectSpecification getDeclaringType() {
+        return declaringType;
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("onType", onType);
+        visitor.accept("declaringType", declaringType);
     }
 }

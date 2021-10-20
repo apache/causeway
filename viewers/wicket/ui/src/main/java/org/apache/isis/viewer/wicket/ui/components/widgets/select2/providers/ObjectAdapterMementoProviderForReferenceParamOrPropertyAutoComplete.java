@@ -20,9 +20,8 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
@@ -35,11 +34,11 @@ extends ObjectAdapterMementoProviderAbstract {
 
     private final Can<ObjectMemento> pendingArgMementos;
 
-    public ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(ScalarModel scalarModel) {
+    public ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(final ScalarModel scalarModel) {
         super(scalarModel);
         val commonContext = scalarModel.getCommonContext();
         val pendingArgs = scalarModel.isParameter()
-                ? ((ParameterUiModel)scalarModel).getPendingParameterModel().getParamValues()
+                ? ((ParameterUiModel)scalarModel).getParameterNegotiationModel().getParamValues()
                 : Can.<ManagedObject>empty();
         val pendingArgMementos = pendingArgs
                 .map(commonContext::mementoForParameter);
@@ -48,7 +47,7 @@ extends ObjectAdapterMementoProviderAbstract {
     }
 
     @Override
-    protected Can<ObjectMemento> obtainMementos(String term) {
+    protected Can<ObjectMemento> obtainMementos(final String term) {
 
         val scalarModel = getScalarModel();
 
@@ -57,8 +56,12 @@ extends ObjectAdapterMementoProviderAbstract {
             if(scalarModel.isParameter()) {
                 // recover any pendingArgs
                 val paramModel = (ParameterUiModel)scalarModel;
-                val pendingArgs = reconstructPendingArgs(paramModel, pendingArgMementos);
-                paramModel.setPendingParameterModel(pendingArgs);
+
+                paramModel
+                    .getParameterNegotiationModel()
+                    .setParamValues(
+                            reconstructPendingArgs(paramModel, pendingArgMementos));
+
             }
 
             val commonContext = super.getCommonContext();
@@ -71,7 +74,7 @@ extends ObjectAdapterMementoProviderAbstract {
 
     }
 
-    private ParameterNegotiationModel reconstructPendingArgs(
+    private Can<ManagedObject> reconstructPendingArgs(
             final ParameterUiModel parameterModel,
             final Can<ObjectMemento> pendingArgMementos) {
 
@@ -81,8 +84,7 @@ extends ObjectAdapterMementoProviderAbstract {
             .map(ManagedObject.class::cast)
             .collect(Can.toCan());
 
-       return parameterModel.getPendingParamHead()
-            .model(pendingArgsList);
+       return pendingArgsList;
     }
 
 }

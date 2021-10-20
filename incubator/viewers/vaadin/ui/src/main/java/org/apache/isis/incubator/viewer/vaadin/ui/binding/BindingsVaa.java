@@ -261,7 +261,7 @@ public final class BindingsVaa {
             final @Nullable Converter<P, M> converter,
             final @Nullable M nullRepresentation) { // TODO remove, yet poorly designed
 
-        val valueSpec = managedFeature.getSpecification();
+        val valueSpec = managedFeature.getElementType();
 
         if(managedFeature instanceof ManagedParameter) {
 
@@ -332,7 +332,7 @@ public final class BindingsVaa {
 
         //GETTER
         @Override
-        public V apply(@NonNull Observable<ManagedObject> source) {
+        public V apply(@NonNull final Observable<ManagedObject> source) {
             val newFieldValue = source.getValue() == null
                     ? null
                     : _Casts.<V>uncheckedCast(source.getValue().getPojo());
@@ -353,14 +353,14 @@ public final class BindingsVaa {
 
         //GETTER
         @Override
-        public V apply(@NonNull Bindable<ManagedObject> source) {
+        public V apply(@NonNull final Bindable<ManagedObject> source) {
             val newFieldValue = _Casts.<V>uncheckedCast(source.getValue().getPojo());
             return newFieldValue;
         }
 
         //SETTER
         @Override
-        public void accept(@NonNull Bindable<ManagedObject> target, V fieldValue) {
+        public void accept(@NonNull final Bindable<ManagedObject> target, final V fieldValue) {
             target.setValue(ManagedObject.of(valueSpec, fieldValue));
         }
 

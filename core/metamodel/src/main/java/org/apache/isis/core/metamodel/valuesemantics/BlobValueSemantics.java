@@ -27,21 +27,32 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.val.BlobValueSemantics")
 public class BlobValueSemantics
-extends AbstractValueSemanticsProvider<Blob>
+extends ValueSemanticsAbstract<Blob>
 implements
     EncoderDecoder<Blob>,
     Renderer<Blob> {
+
+    @Override
+    public Class<Blob> getCorrespondingClass() {
+        return Blob.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.BLOB;
+    }
 
     // RENDERER
 

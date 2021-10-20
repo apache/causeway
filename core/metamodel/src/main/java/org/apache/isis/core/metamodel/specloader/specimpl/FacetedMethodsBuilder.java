@@ -50,7 +50,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
@@ -395,11 +394,12 @@ implements HasMetaModelContext {
                 FeatureType.ACTION,
                 isMixinMain(actionMethod));
 
-        final List<FacetedMethodParameter> actionParams = action.getParameters();
-        for (int j = 0; j < actionParams.size(); j++) {
+        action.getParameters()
+        .forEach(actionParam->{
             getFacetProcessor()
-            .processParams(introspectedClass, introspectionPolicy(), actionMethod, j, methodRemover, actionParams.get(j));
-        }
+            .processParams(introspectedClass, introspectionPolicy(), actionMethod, methodRemover, actionParam);
+
+        });
 
         return action;
     }

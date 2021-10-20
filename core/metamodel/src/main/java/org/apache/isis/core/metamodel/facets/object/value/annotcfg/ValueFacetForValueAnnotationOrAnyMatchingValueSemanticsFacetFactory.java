@@ -18,29 +18,35 @@
  */
 package org.apache.isis.core.metamodel.facets.object.value.annotcfg;
 
-import javax.inject.Inject;
-
-import org.springframework.core.ResolvableType;
-import org.springframework.util.ClassUtils;
-
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.object.encodeable.encoder.EncodableFacetUsingEncoderDecoder;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
+import org.apache.isis.core.metamodel.facets.object.title.parser.TitleFacetUsingValueFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ImmutableFacetViaValueSemantics;
+import org.apache.isis.core.metamodel.facets.object.value.MaxLengthFacetUsingParser;
+import org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetUsingParser;
+import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProvider;
 import org.apache.isis.core.metamodel.facets.value.annotation.LogicalTypeFacetForValueAnnotation;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -65,38 +71,34 @@ import lombok.extern.log4j.Log4j2;
  * <p>
  * Note that {@link ParentedCollectionFacet} is <i>not</i> installed.
  */
+@SuppressWarnings("rawtypes")
 @Log4j2
 public class ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory
-extends ValueFacetUsingSemanticsProviderFactory {
+extends FacetFactoryAbstract {
 
-    @Inject
     public ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory(final MetaModelContext mmc) {
-        super(mmc);
+        super(mmc, FeatureType.OBJECTS_ONLY);
+        getServiceInjector().injectServicesInto(this);
     }
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        final var cls = processClassContext.getCls();
-        final var facetHolder = processClassContext.getFacetHolder();
-        final var valueIfAny = processClassContext.synthesizeOnType(Value.class);
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
+        val valueIfAny = processClassContext.synthesizeOnType(Value.class);
 
         addFacetIfPresent(
                 LogicalTypeFacetForValueAnnotation
                 .create(valueIfAny, cls, facetHolder));
 
-        final var valueSemantics = lookupValueSemantics(cls);
-        //FIXME install them all, then enable qualifiers
+        final Can<ValueSemanticsProvider> valueSemantics = _Casts.uncheckedCast(
+                getValueSemanticsRegistry().selectValueSemantics(cls));
+
         if(!valueSemantics.isEmpty()) {
-            super.addAllFacetsForValueSemantics(valueSemantics, facetHolder);
+            addAllFacetsForValueSemantics(valueSemantics, facetHolder);
             log.debug("found ValueSemanticsProvider for value type {}", cls);
         }
-
-//        if(valueIfAny.isPresent()
-//                || ClassUtils.isPrimitiveOrWrapper(cls)
-//                || Number.class.isAssignableFrom(cls)) {
-//
-//        }
 
         valueIfAny
         .ifPresent(value->{
@@ -104,8 +106,8 @@ extends ValueFacetUsingSemanticsProviderFactory {
             if(valueSemantics.isCardinalityMultiple()) {
                 log.warn("found multiple ValueSemanticsProvider for value type {}; using the first", cls);
             } else if(valueSemantics.isEmpty()) {
-                log.warn("could not find a ValueSemanticsProvider for value type {}; using a no-op fallback",cls);
-                super.addAllFacetsForValueSemantics(getFallbackValueSemantics(), facetHolder);
+                log.warn("could not find a ValueSemanticsProvider for value type {}; ",cls);
+                addAllFacetsForValueSemantics(Can.empty(), facetHolder);
             }
 
         });
@@ -113,46 +115,58 @@ extends ValueFacetUsingSemanticsProviderFactory {
 
     // -- HELPER
 
-    private static class NoopValueSemantics implements ValueSemanticsProvider<Object> {
+    private void addAllFacetsForValueSemantics(
+            final Can<ValueSemanticsProvider> semanticsProviders,
+            final FacetHolder holder) {
 
-        @Override
-        public Renderer<Object> getRenderer() {
-            return null;
-        }
+        val valueFacet = new ValueFacetUsingSemanticsProvider(semanticsProviders, holder);
 
-        @Override
-        public Parser<Object> getParser() {
-            return null;
-        }
+        addFacet(valueFacet);
+        addFacet(new ImmutableFacetViaValueSemantics(holder));
+        addFacet(TitleFacetUsingValueFacet.create(valueFacet, holder));
 
-        @Override
-        public EncoderDecoder<Object> getEncoderDecoder() {
-            return null;
-        }
+        semanticsProviders
+        .forEach(semanticsProvider->{
 
-        @Override
-        public DefaultsProvider<Object> getDefaultsProvider() {
-            return null;
-        }
+            // install the EncodeableFacet if we've been given an EncoderDecoder
+            final EncoderDecoder<?> encoderDecoder = semanticsProvider.getEncoderDecoder();
+            if (encoderDecoder != null) {
+                //getServiceInjector().injectServicesInto(encoderDecoder);
+                //FIXME convert to using value-facet
+                addFacet(new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder));
+            }
+
+            // install the ParseableFacet and other facets if we've been given a
+            // Parser
+            final Parser<?> parser = semanticsProvider.getParser();
+            if (parser != null) {
+
+                //holder.getServiceInjector().injectServicesInto(parser);
+               //FIXME convert to using value-facet
+                holder.addFacet(new TypicalLengthFacetUsingParser(parser, holder));
+                final int maxLength = parser.maxLength();
+                if(maxLength >=0) {
+                   //FIXME convert to using value-facet
+                    addFacet(new MaxLengthFacetUsingParser(parser, holder));
+                }
+            }
+
+            // install the DefaultedFacet if we've been given a DefaultsProvider
+            final DefaultsProvider<?> defaultsProvider = semanticsProvider.getDefaultsProvider();
+            if (defaultsProvider != null) {
+                //holder.getServiceInjector().injectServicesInto(defaultsProvider);
+                //FIXME convert to using value-facet
+                addFacet(new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder));
+            }
+
+        });
 
     }
 
-    @Getter(lazy = true)
-    private final Can<ValueSemanticsProvider<?>> fallbackValueSemantics = Can.of(new NoopValueSemantics());
+    // -- DEPENDENCIES
 
-    @Getter(lazy = true)
-    private final Can<ValueSemanticsProvider<?>> allValueSemanticsProviders = getServiceRegistry()
-            .select(ValueSemanticsProvider.class)
-            .map(_Casts::uncheckedCast);
-
-    private <T> Can<ValueSemanticsProvider<T>> lookupValueSemantics(final Class<T> valueType) {
-        var resolvableType = ResolvableType
-                .forClassWithGenerics(ValueSemanticsProvider.class, ClassUtils.resolvePrimitiveIfNecessary(valueType));
-        return getAllValueSemanticsProviders()
-                .stream()
-                .filter(resolvableType::isInstance)
-                .map(provider->_Casts.<ValueSemanticsProvider<T>>uncheckedCast(provider))
-                .collect(Can.toCan());
-    }
+    @Getter(lazy = true, value = AccessLevel.PRIVATE)
+    private final ValueSemanticsRegistry valueSemanticsRegistry =
+        getServiceRegistry().lookupServiceElseFail(ValueSemanticsRegistry.class);
 
 }

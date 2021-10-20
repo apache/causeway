@@ -67,7 +67,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         if(parameter.containsNonFallbackFacet(ParamDescribedFacet.class)) {
             return;
         }
-        final ObjectSpecification paramSpec = parameter.getSpecification();
+        final ObjectSpecification paramSpec = parameter.getElementType();
         paramSpec.lookupNonFallbackFacet(ObjectDescribedFacet.class)
         .ifPresent(describedAsFacet->{
             FacetUtil.addFacetIfPresent(
@@ -90,7 +90,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         if(objectAssociation.containsNonFallbackFacet(MemberDescribedFacet.class)) {
             return;
         }
-        objectAssociation.getSpecification()
+        objectAssociation.getElementType()
         .lookupNonFallbackFacet(ObjectDescribedFacet.class)
         .ifPresent(specFacet -> FacetUtil.addFacetIfPresent(
                 DescribedAsFacetOnMemberInferredFromType

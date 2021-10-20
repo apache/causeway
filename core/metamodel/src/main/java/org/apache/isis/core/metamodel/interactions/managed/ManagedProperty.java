@@ -25,6 +25,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.binding.Observable;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.binding._Observables;
 import org.apache.isis.commons.internal.binding._Observables.LazyObservable;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -75,7 +76,8 @@ extends ManagedMember {
             final @NonNull Where where) {
         super(owner, where);
         this.property = property;
-        observablePropValue = _Observables.forFactory(this::reassessPropertyValue);
+        _Blackhole.consume(owner.getBookmark()); // memoize bookmark
+        observablePropValue = _Observables.lazy(this::reassessPropertyValue);
     }
 
     @Override
@@ -142,7 +144,7 @@ extends ManagedMember {
         return property.isVisible(owner, InteractionInitiatedBy.FRAMEWORK, getWhere()).isAllowed()
                 && property.isVisible(owner, InteractionInitiatedBy.USER, getWhere()).isAllowed()
             ? property.get(owner, InteractionInitiatedBy.USER)
-            : ManagedObject.empty(property.getSpecification());
+            : ManagedObject.empty(property.getElementType());
     }
 
 

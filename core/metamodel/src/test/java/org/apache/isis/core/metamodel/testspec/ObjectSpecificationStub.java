@@ -22,7 +22,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
@@ -389,11 +388,11 @@ implements ObjectSpecification {
     @Override
     public Stream<OneToOneAssociation> streamPropertiesForColumnRendering(
             final Identifier memberIdentifier,
-            final Optional<ManagedObject> parentObject) {
+            final ManagedObject parentObject) {
 
-        val whereContext = parentObject.isPresent()
-                ? Where.PARENTED_TABLES
-                : Where.STANDALONE_TABLES;
+        val whereContext = memberIdentifier.getType().isAction()
+                ? Where.STANDALONE_TABLES
+                : Where.PARENTED_TABLES;
 
         return streamProperties(MixedIn.INCLUDED)
                 .filter(property->property.streamFacets()

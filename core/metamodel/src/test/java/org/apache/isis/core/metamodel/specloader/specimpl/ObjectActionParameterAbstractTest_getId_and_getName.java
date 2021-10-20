@@ -63,11 +63,13 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
     private static final class ObjectActionParameterAbstractToTest
     extends ObjectActionParameterAbstract {
         private ObjectActionParameterAbstractToTest(
-                final int number, final ObjectActionDefault objectAction, final TypedHolder peer) {
-            super(FeatureType.ACTION_PARAMETER_SCALAR, number, objectAction, peer);
+                final int number,
+                final ObjectActionDefault objectAction,
+                final TypedHolder peer) {
+            super(FeatureType.ACTION_PARAMETER_SCALAR, number, null, objectAction);
         }
 
-        private ObjectSpecification objectSpec;
+        private ObjectSpecification elementSpec;
 
         @Override
         public ManagedObject get(final ManagedObject owner, final InteractionInitiatedBy interactionInitiatedBy) {
@@ -94,12 +96,12 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
         }
 
         @Override
-        public ObjectSpecification getSpecification() {
-            return objectSpec;
+        public ObjectSpecification getElementType() {
+            return elementSpec;
         }
 
-        public void setSpecification(final ObjectSpecification objectSpec) {
-            this.objectSpec = objectSpec;
+        public void setSpecification(final ObjectSpecification elementSpec) {
+            this.elementSpec = elementSpec;
         }
 
     }
@@ -118,14 +120,17 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
                 allowing(stubSpecForString).getSingularName();
                 will(returnValue("string"));
 
-                allowing(stubObjectActionParameterString).getSpecification();
+                allowing(stubObjectActionParameterString).getElementType();
                 will(returnValue(stubSpecForString));
 
-                allowing(stubObjectActionParameterString2).getSpecification();
+                allowing(stubObjectActionParameterString2).getElementType();
                 will(returnValue(stubSpecForString));
 
                 allowing(parentAction).getFacetedMethod();
                 will(returnValue(mockFacetedMethod));
+
+                allowing(mockFacetedMethod).getParameters();
+                will(returnValue(Can.of(stubObjectActionParameterString, objectActionParameter, stubObjectActionParameterString2)));
 
                 allowing(mockFacetedMethod).getMethod();
                 will(returnValue(Customer.class.getMethod("aMethod", new Class[] {Object.class, Object.class, Object.class})));
@@ -149,7 +154,8 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
         context.checking(new Expectations() {
             {
-                oneOf(actionParamPeer).getFacet(ParamNamedFacet.class);
+
+                oneOf(stubObjectActionParameterString).getFacet(ParamNamedFacet.class);
                 will(returnValue(namedFacet));
 
                 atLeast(1).of(namedFacet).translated();

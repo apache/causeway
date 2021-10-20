@@ -19,9 +19,9 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemantics;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyActionParameter;
 
 public class OneToManyActionParameterDefault
@@ -29,10 +29,10 @@ extends ObjectActionParameterAbstract
 implements OneToManyActionParameter {
 
     public OneToManyActionParameterDefault(
+            final ObjectSpecification paramElementType,
             final int index,
-            final ObjectActionDefault actionImpl,
-            final TypedHolder peer) {
-        super(FeatureType.ACTION_PARAMETER_COLLECTION, index, actionImpl, peer);
+            final ObjectActionDefault actionImpl) {
+        super(FeatureType.ACTION_PARAMETER_COLLECTION, index, paramElementType, actionImpl);
     }
 
     @Override

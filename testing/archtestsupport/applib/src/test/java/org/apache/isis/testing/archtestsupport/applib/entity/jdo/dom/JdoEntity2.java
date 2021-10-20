@@ -20,16 +20,15 @@ package org.apache.isis.testing.archtestsupport.applib.entity.jdo.dom;
 
 import java.util.Comparator;
 
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Unique;
-import javax.jdo.annotations.Version;
+import javax.jdo.annotations.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 
-@PersistenceCapable(schema = "jdo")
+@PersistenceCapable(schema = "jdo", identityType = IdentityType.DATASTORE)
+@DatastoreIdentity
 @Unique(name = "name", members = {"name"})
 @Version
 @DomainObject(nature = Nature.ENTITY)

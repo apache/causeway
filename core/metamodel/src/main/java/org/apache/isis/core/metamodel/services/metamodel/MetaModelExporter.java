@@ -281,7 +281,7 @@ class MetaModelExporter {
         Property propertyType = new Property();
         propertyType.setId(otoa.getId());
         propertyType.setFacets(new org.apache.isis.schema.metamodel.v2.FacetHolder.Facets());
-        final ObjectSpecification specification = otoa.getSpecification();
+        final ObjectSpecification specification = otoa.getElementType();
         final DomainClassDto value = lookupDomainClass(specification, domainClassByObjectSpec, config);
         propertyType.setType(value);
 
@@ -296,7 +296,7 @@ class MetaModelExporter {
         Collection collectionType = new Collection();
         collectionType.setId(otoa.getId());
         collectionType.setFacets(new org.apache.isis.schema.metamodel.v2.FacetHolder.Facets());
-        final ObjectSpecification specification = otoa.getSpecification();
+        final ObjectSpecification specification = otoa.getElementType();
         final DomainClassDto value = lookupDomainClass(specification, domainClassByObjectSpec, config);
         collectionType.setType(value);
 
@@ -351,7 +351,7 @@ class MetaModelExporter {
                 parameterType.setId(parameter.getId());
                 parameterType.setFacets(new org.apache.isis.schema.metamodel.v2.FacetHolder.Facets());
 
-                final ObjectSpecification specification = parameter.getSpecification();
+                final ObjectSpecification specification = parameter.getElementType();
                 final DomainClassDto value = lookupDomainClass(specification, domainClassByObjectSpec, config);
                 parameterType.setType(value);
 

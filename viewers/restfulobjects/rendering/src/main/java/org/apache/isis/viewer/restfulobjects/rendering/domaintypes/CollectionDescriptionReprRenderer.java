@@ -64,7 +64,7 @@ extends AbstractTypeMemberReprRenderer<OneToManyAssociation> {
     // -- HELPER
 
     private void addLinkToElementTypeIfAny() {
-        val elementTypeSpec = getObjectFeature().getSpecification();
+        val elementTypeSpec = getObjectFeature().getElementType();
         if (elementTypeSpec == null) {
             return;
         }

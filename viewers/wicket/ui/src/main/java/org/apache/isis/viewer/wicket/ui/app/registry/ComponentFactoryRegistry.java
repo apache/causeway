@@ -23,6 +23,7 @@ import java.util.stream.Stream;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.model.IModel;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -36,18 +37,25 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
  */
 public interface ComponentFactoryRegistry {
 
-    Stream<ComponentFactory> streamComponentFactories(ComponentType componentType, IModel<?> model);
+    Stream<ComponentFactory> streamComponentFactories(
+            ComponentType componentType, @Nullable IModel<?> model);
 
     /**
-     * Finds the "best" {@link ComponentFactory} for the viewId.
+     * Finds the "best" {@link ComponentFactory} for given componentType.
+     * <p>
+     * Falls back to a {@link ComponentType#UNKNOWN} lookup.
      */
-    default ComponentFactory findComponentFactory(final ComponentType componentType, final IModel<?> model) {
+    default ComponentFactory findComponentFactory(
+            final ComponentType componentType, final @Nullable IModel<?> model) {
         return streamComponentFactories(componentType, model)
             .findFirst()
-            .orElse(null);
+            .orElseGet(()->streamComponentFactories(ComponentType.UNKNOWN, model)
+                    .findFirst()
+                    .orElse(null));
     }
 
-    default ComponentFactory findComponentFactoryElseFail(final ComponentType componentType, final IModel<?> model) {
+    default ComponentFactory findComponentFactoryElseFail(
+            final ComponentType componentType, final @Nullable IModel<?> model) {
         return streamComponentFactories(componentType, model)
                 .findFirst()
                 .orElseThrow(()->new RuntimeException(String.format(

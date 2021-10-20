@@ -316,7 +316,7 @@ class DomainModelTest_usingGoodDomain {
         val vmSpec = specificationLoader.specForTypeElseFail(ProperElementTypeVm.class);
 
         val concreteColl = vmSpec.getCollectionElseFail("concreteColl");
-        val concreteCollSpec = concreteColl.getSpecification();
+        val concreteCollSpec = concreteColl.getElementType();
 
         assertEquals(ElementTypeConcrete.class, concreteCollSpec.getCorrespondingClass());
         assertEquals(BeanSort.VIEW_MODEL, concreteCollSpec.getBeanSort());
@@ -326,7 +326,7 @@ class DomainModelTest_usingGoodDomain {
         assertHasProperty(concreteCollSpec, "interfaceProp");
 
         val interfaceColl = vmSpec.getCollectionElseFail("interfaceColl");
-        val interfaceCollSpec = interfaceColl.getSpecification();
+        val interfaceCollSpec = interfaceColl.getElementType();
 
         assertEquals(ElementTypeInterface.class, interfaceCollSpec.getCorrespondingClass());
         assertEquals(BeanSort.ABSTRACT, interfaceCollSpec.getBeanSort());
@@ -334,7 +334,7 @@ class DomainModelTest_usingGoodDomain {
         assertHasProperty(interfaceCollSpec, "interfaceProp");
 
         val abstractColl = vmSpec.getCollectionElseFail("abstractColl");
-        val abstractCollSpec = abstractColl.getSpecification();
+        val abstractCollSpec = abstractColl.getElementType();
 
         assertEquals(ElementTypeAbstract.class, abstractCollSpec.getCorrespondingClass());
         assertEquals(BeanSort.ABSTRACT, abstractCollSpec.getBeanSort());
@@ -351,7 +351,7 @@ class DomainModelTest_usingGoodDomain {
         val vmSpec = specificationLoader.specForTypeElseFail(ProperElementTypeVm.class);
 
         val concreteColl = vmSpec.getCollectionElseFail("concreteColl2");
-        val concreteCollSpec = concreteColl.getSpecification();
+        val concreteCollSpec = concreteColl.getElementType();
 
         assertEquals(ElementTypeConcrete.class, concreteCollSpec.getCorrespondingClass());
         assertEquals(BeanSort.VIEW_MODEL, concreteCollSpec.getBeanSort());
@@ -361,7 +361,7 @@ class DomainModelTest_usingGoodDomain {
         assertHasProperty(concreteCollSpec, "interfaceProp");
 
         val interfaceColl = vmSpec.getCollectionElseFail("interfaceColl2");
-        val interfaceCollSpec = interfaceColl.getSpecification();
+        val interfaceCollSpec = interfaceColl.getElementType();
 
         assertEquals(ElementTypeInterface.class, interfaceCollSpec.getCorrespondingClass());
         assertEquals(BeanSort.ABSTRACT, interfaceCollSpec.getBeanSort());
@@ -369,7 +369,7 @@ class DomainModelTest_usingGoodDomain {
         assertHasProperty(interfaceCollSpec, "interfaceProp");
 
         val abstractColl = vmSpec.getCollectionElseFail("abstractColl2");
-        val abstractCollSpec = abstractColl.getSpecification();
+        val abstractCollSpec = abstractColl.getElementType();
 
         assertEquals(ElementTypeAbstract.class, abstractCollSpec.getCorrespondingClass());
         assertEquals(BeanSort.ABSTRACT, abstractCollSpec.getBeanSort());
@@ -477,7 +477,7 @@ class DomainModelTest_usingGoodDomain {
         act.assertIsExplicitlyAnnotated(true);
         act.assertVisibilityIsNotVetoed();
         act.assertUsabilityIsVetoedWith("action disabled for testing purposes");
-        act.assertInvocationResult("Hallo World!", List.of());
+        act.assertInvocationResultNoRules("Hallo World!");
 
         // -- PROPERTY WITH PRIVATE GETTER AND SETTER
 
@@ -528,7 +528,7 @@ class DomainModelTest_usingGoodDomain {
         act.assertVisibilityIsNotVetoed();
         act.assertUsabilityIsVetoedWithAll(
                 Can.of("object disabled for testing purposes", "action disabled for testing purposes"));
-        act.assertInvocationResult("Hallo World!", List.of());
+        act.assertInvocationResultNoRules("Hallo World!");
 
         // -- PROPERTY WITH PRIVATE GETTER AND SETTER
 

@@ -70,7 +70,7 @@ implements MetaModelRefiner {
 
         programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec -> {
 
-            final var titleFacetTopRank =
+            val titleFacetTopRank =
                 objectSpec
                 .getFacetRanking(TitleFacet.class)
                 .map(facetRanking->facetRanking.getTopRank(TitleFacet.class))
@@ -80,7 +80,7 @@ implements MetaModelRefiner {
             // top-rank if present must not be ambiguous
             if(titleFacetTopRank.isCardinalityMultiple()) {
 
-                final var conflictingFeatures =
+                val conflictingFeatures =
                         titleFacetTopRank
                         .map(TitleFacet::getClass)
                         .map(Class::getSimpleName)

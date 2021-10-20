@@ -26,23 +26,24 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class SimulatedUiComponent extends HasValueValidation {
-    
+
     private Bindable<ManagedObject> value = _Bindables.empty();
 
     private ObjectSpecification valueSpec;
-    
-    public void bind(ManagedValue managedValue) {
-        valueSpec = managedValue.getSpecification();
+
+    @Override
+    public void bind(final ManagedValue managedValue) {
+        valueSpec = managedValue.getElementType();
         value.bindBidirectional(managedValue.getValue());
         super.bind(managedValue);
     }
 
     /** just listening, no validation */
-    public void bind(ManagedProperty managedProperty) {
+    public void bind(final ManagedProperty managedProperty) {
         value.bind(managedProperty.getValue());
     }
-    
-    public void simulateValueChange(Object newValue) {
+
+    public void simulateValueChange(final Object newValue) {
         value.setValue(ManagedObject.of(valueSpec, newValue));
     }
 
@@ -50,7 +51,7 @@ public class SimulatedUiComponent extends HasValueValidation {
         return value.getValue();
     }
 
-    
 
-    
+
+
 }

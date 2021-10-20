@@ -18,10 +18,14 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.memento.ObjectMemento;
+
+import lombok.NonNull;
 
 /**
  * Represents a standalone value.
@@ -30,19 +34,31 @@ public class ValueModel extends ModelAbstract<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
 
+    // -- FACTORIES
+
+    public static ValueModel of(
+            final @NonNull  IsisAppCommonContext commonContext,
+            final @Nullable ManagedObject valueAdapter) {
+        return new ValueModel(commonContext, valueAdapter);
+    }
+
+    // --
+
     private final ObjectMemento adapterMemento;
 
-    public ValueModel(IsisAppCommonContext commonContext, ManagedObject adapter) {
+    private ValueModel(
+            final IsisAppCommonContext commonContext,
+            final @Nullable ManagedObject valueAdapter) {
         super(commonContext);
-        adapterMemento = super.getMementoService().mementoForObject(adapter);
+        adapterMemento = super.getMementoService().mementoForObject(valueAdapter);
     }
 
     @Override
     protected ManagedObject load() {
-        return super.getCommonContext().reconstructObject(adapterMemento);
+        return getCommonContext().reconstructObject(adapterMemento);
     }
 
-    // //////////////////////////////////////
+    // -- HINTING SUPPORT
 
     private ActionModel actionModelHint;
     /**
@@ -59,8 +75,11 @@ public class ValueModel extends ModelAbstract<ManagedObject> {
      *
      * @see #getActionModelHint()
      */
-    public void setActionHint(ActionModel actionModelHint) {
+    public void setActionHint(final ActionModel actionModelHint) {
         this.actionModelHint = actionModelHint;
     }
+
+
+
 
 }

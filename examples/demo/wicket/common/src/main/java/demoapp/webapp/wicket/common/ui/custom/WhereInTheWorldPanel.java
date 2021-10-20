@@ -102,7 +102,7 @@ extends PanelAbstract<ManagedObject, EntityModel>  {
 
         val scalarModel =
                 getModel().getPropertyModel(                                       // <.>
-                    property, ObjectUiModel.Mode.VIEW,
+                    property, ObjectUiModel.EitherViewOrEdit.VIEW,
                     ObjectUiModel.RenderingHint.REGULAR);
         return getComponentFactoryRegistry().createComponent(                      // <.>
                 ComponentType.SCALAR_NAME_AND_VALUE, propertyId, scalarModel);

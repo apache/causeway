@@ -19,15 +19,13 @@
 package org.apache.isis.core.metamodel.specloader;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
@@ -35,6 +33,7 @@ import javax.annotation.PreDestroy;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
@@ -60,6 +59,7 @@ import org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
+import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -79,8 +79,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificati
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
-import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderDefault;
-import org.apache.isis.core.metamodel.valuetypes.ValueTypeRegistry;
+import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsRegistryDefault;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -116,8 +115,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private final IsisBeanTypeClassifier isisBeanTypeClassifier;
     private final IsisBeanTypeRegistry isisBeanTypeRegistry;
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
-    private final ValueTypeRegistry valueTypeRegistry;
-    private final IsisBeanTypeClassifier.BeanClassificationContext beanClassificationContext;
+    private final Provider<ValueSemanticsRegistry> valueSemanticsRegistry;
 
     private final ProgrammingModel programmingModel;
     private final PostProcessor postProcessor;
@@ -144,7 +142,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             final ServiceRegistry serviceRegistry,
             final IsisBeanTypeClassifier isisBeanTypeClassifier,
             final IsisBeanTypeRegistry isisBeanTypeRegistry,
-            final ValueTypeRegistry valueTypeRegistry,
+            final Provider<ValueSemanticsRegistry> valueTypeRegistry,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
         this(
                 programmingModelService.getProgrammingModel(),
@@ -164,7 +162,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             final ServiceRegistry serviceRegistry,
             final IsisBeanTypeClassifier isisBeanTypeClassifier,
             final IsisBeanTypeRegistry isisBeanTypeRegistry,
-            final ValueTypeRegistry valueTypeRegistry,
+            final Provider<ValueSemanticsRegistry> valueSemanticsRegistry,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
         this.programmingModel = programmingModel;
         this.postProcessor = new PostProcessor(programmingModel);
@@ -173,12 +171,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         this.serviceRegistry = serviceRegistry;
         this.isisBeanTypeClassifier = isisBeanTypeClassifier;
         this.isisBeanTypeRegistry = isisBeanTypeRegistry;
-        this.valueTypeRegistry = valueTypeRegistry;
+        this.valueSemanticsRegistry = valueSemanticsRegistry;
         this.classSubstitutorRegistry = classSubstitutorRegistry;
-        this.beanClassificationContext = IsisBeanTypeClassifier
-                .newContext(valueTypeRegistry
-                        .streamRegisteredClasses()
-                        .collect(Collectors.toCollection(HashSet::new)));
     }
 
     /** JUnit Test Support */
@@ -193,8 +187,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         val instance = new SpecificationLoaderDefault(
                 programmingModel, isisConfiguration, isisSystemEnvironment,
                 serviceRegistry, isisBeanTypeClassifier, isisBeanTypeRegistry,
-                new ValueTypeRegistry(Collections.singletonList(new ValueTypeProviderDefault())),
-                new ClassSubstitutorRegistry(_Lists.of(
+                ()->new ValueSemanticsRegistryDefault(List.of(), null),
+                new ClassSubstitutorRegistry(List.of(
                         //new ClassSubstitutorForDomainObjects(),
                         new ClassSubstitutorForCollections(),
                         new ClassSubstitutorDefault()
@@ -246,7 +240,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         Stream
             .concat(
                 isisBeanTypeRegistry.getDiscoveredValueTypes().stream(),
-                valueTypeRegistry.streamRegisteredClasses())
+                valueSemanticsRegistry.get().streamClassesWithValueSemantics())
             .forEach(valueType -> {
                 val valueSpec = loadSpecification(valueType, IntrospectionState.NOT_INTROSPECTED);
                 if(valueSpec!=null) {
@@ -394,8 +388,12 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                 __->isisBeanTypeRegistry
                     .lookupIntrospectableType(type)
                     .map(IsisBeanMetaData::getBeanSort)
-                    .orElseGet(()->isisBeanTypeClassifier.classify(type, beanClassificationContext)
-                            .getBeanSort()),
+                    .orElseGet(()->
+                        valueSemanticsRegistry.get().hasValueSemantics(type)
+                        ? BeanSort.VALUE
+                        : isisBeanTypeClassifier.classify(type)
+                                .getBeanSort()
+                    ),
                 upTo);
     }
 
@@ -574,7 +572,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                 && isisConfiguration.getCore().getMetaModel().getIntrospector().isLockAfterFullIntrospection()) {
 
             val sort = isisBeanTypeClassifier
-                    .classify(cls, beanClassificationContext)
+                    .classify(cls)
                     .getBeanSort();
 
 //          ISIS-2256:

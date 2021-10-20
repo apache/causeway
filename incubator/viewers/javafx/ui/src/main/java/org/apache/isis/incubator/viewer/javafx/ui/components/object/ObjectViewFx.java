@@ -206,7 +206,10 @@ public class ObjectViewFx extends VBox {
 
                     interaction.checkUsability();
 
+                    val propNeg = managedProperty.startNegotiation();
+
                     val request = UiComponentFactory.ComponentRequest.of(
+                            propNeg,
                             managedProperty,
                             DisablingUiModel.of(interaction));
 

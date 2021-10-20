@@ -22,6 +22,9 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -31,11 +34,9 @@ import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.Chang
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.dto.BookDto;
-import org.apache.isis.testdomain.util.event.LifecycleEventSubscriberForTesting;
+import org.apache.isis.testdomain.util.event.LifecycleEventSubscriberJdoForTesting;
+import org.apache.isis.testdomain.util.event.LifecycleEventSubscriberJpaForTesting;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.val;
 
@@ -51,7 +52,8 @@ extends PublishingTestAbstract {
 
     @Override
     protected void given() {
-        LifecycleEventSubscriberForTesting.clearPublishedEvents(kvStore);
+        LifecycleEventSubscriberJdoForTesting.clearPublishedEvents(kvStore);
+        LifecycleEventSubscriberJpaForTesting.clearPublishedEvents(kvStore);
     }
 
     @Override
@@ -269,9 +271,9 @@ extends PublishingTestAbstract {
             final Class<? extends AbstractLifecycleEvent<JpaBook>> eventClassWhenJpa,
             final Can<BookDto> expectedBooks) {
 
-        val jdoBooks = LifecycleEventSubscriberForTesting
+        val jdoBooks = LifecycleEventSubscriberJdoForTesting
                 .getPublishedEventsJdo(kvStore, eventClassWhenJdo);
-        val jpaBooks = LifecycleEventSubscriberForTesting
+        val jpaBooks = LifecycleEventSubscriberJpaForTesting
                 .getPublishedEventsJpa(kvStore, eventClassWhenJpa);
 
         assertEquals(0, jdoBooks.size() * jpaBooks.size()); // its either JDO or JPA, cannot be both

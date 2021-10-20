@@ -19,14 +19,13 @@
 package org.apache.isis.extensions.viewer.wicket.exceldownload.ui.components;
 
 import java.io.File;
-import java.util.List;
 
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.link.DownloadLink;
 import org.apache.wicket.model.LoadableDetachableModel;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
@@ -40,7 +39,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
  * @since 2.0 {@index}
  */
 public class CollectionContentsAsExcel
-extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
+extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -61,7 +60,7 @@ extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
         feedback.setOutputMarkupId(true);
         addOrReplace(feedback);
 
-        final LoadableDetachableModel<File> fileModel = new ExcelFileModel(model);
+        final LoadableDetachableModel<File> fileModel = ExcelFileModel.of(model);
         final String xlsxFileName = xlsxFileNameFor(model);
         final DownloadLink link = new ExcelFileDownloadLink(ID_DOWNLOAD, fileModel, xlsxFileName);
 
@@ -79,7 +78,7 @@ extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
     }
 
     @Override
-    public void renderHead(IHeaderResponse response) {
+    public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
 
         PanelUtil.renderHead(response, CollectionContentsAsExcel.class);

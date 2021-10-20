@@ -56,7 +56,7 @@ public class TableColumnVisibilityServiceForSecman implements TableColumnVisibil
             .map(ObjectSpecification::getLogicalTypeName)
             .map(logicalTypeName->{
                 //XXX lombok val issue with lambda
-                final var featureId = ApplicationFeatureId.newMember(logicalTypeName, memberId);
+                val featureId = ApplicationFeatureId.newMember(logicalTypeName, memberId);
                 return permissionSet.evaluate(featureId, ApplicationPermissionMode.VIEWING).isGranted();
             })
             .orElse(false); // do not grant if elementType has no logicalTypeName

@@ -38,6 +38,7 @@ import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserReposito
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /**
  * An implementation of {@link org.apache.isis.applib.services.userreg.UserRegistrationService}
@@ -93,7 +94,7 @@ public class UserRegistrationServiceForSecman implements UserRegistrationService
     public boolean updatePasswordByEmail(final String emailAddress, final String password) {
         return applicationUserRepository.findByEmailAddress(emailAddress)
                 .map(user -> {
-                    final var passwordWasUpdated = applicationUserRepository.updatePassword(user, password);
+                    val passwordWasUpdated = applicationUserRepository.updatePassword(user, password);
                     return passwordWasUpdated;
                 })
                 .orElse(false);

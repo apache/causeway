@@ -18,15 +18,22 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed;
 
+import java.util.function.UnaryOperator;
+
 import org.apache.isis.commons.binding.Bindable;
 import org.apache.isis.commons.binding.Observable;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.binding._Observables.BooleanObservable;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import lombok.val;
+
 public interface ManagedValue {
 
-    ObjectSpecification getSpecification();
+    BooleanObservable isCurrentValueAbsent();
+
+    ObjectSpecification getElementType();
 
     Bindable<ManagedObject> getValue();
     Bindable<String> getValueAsParsableText();
@@ -34,5 +41,17 @@ public interface ManagedValue {
     Observable<String> getValidationMessage();
     Bindable<String> getSearchArgument();
     Observable<Can<ManagedObject>> getChoices();
+
+    default void update(final UnaryOperator<ManagedObject> updater) {
+        val value = getValue();
+        value.setValue(updater.apply(value.getValue()));
+    }
+
+    /**
+     * Requires specified objects, that is ManagedObjects require an ObjectSpecification.
+     */
+    default void updatePojo(final UnaryOperator<Object> updater) {
+        update(v->ManagedObject.of(v.getSpecification(), updater.apply(v.getPojo())));
+    }
 
 }

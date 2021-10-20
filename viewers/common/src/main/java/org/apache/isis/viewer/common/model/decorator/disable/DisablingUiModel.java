@@ -44,6 +44,7 @@ public class DisablingUiModel implements Serializable {
      * @param reason
      * @deprecated use interaction instead
      */
+    @Deprecated
     public static Optional<DisablingUiModel> of(boolean disabled, @Nullable String reason) {
         reason = _Strings.nullToEmpty(reason);
         disabled|=_Strings.isNotEmpty(reason);
@@ -52,7 +53,7 @@ public class DisablingUiModel implements Serializable {
                 : Optional.empty();
     }
 
-    public static Optional<DisablingUiModel> of(@NonNull MemberInteraction<?, ?> memberInteraction) {
+    public static Optional<DisablingUiModel> of(@NonNull final MemberInteraction<?, ?> memberInteraction) {
         return memberInteraction.getInteractionVeto()
                 .map(veto->of(veto.getReason()));
     }

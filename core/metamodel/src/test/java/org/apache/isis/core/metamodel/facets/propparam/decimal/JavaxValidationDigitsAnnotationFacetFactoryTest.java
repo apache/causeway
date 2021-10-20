@@ -73,7 +73,7 @@ extends AbstractFacetFactoryTest {
         final Method method = findMethod(Order.class, "updateCost", new Class[] { BigDecimal.class });
 
         facetFactory.processParams(new FacetFactory
-                .ProcessParameterContext(Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, 0, null, facetedMethodParameter));
+                .ProcessParameterContext(Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, null, facetedMethodParameter));
 
         assertBigDecimalSemantics(facetedMethodParameter, 18, 4);
 

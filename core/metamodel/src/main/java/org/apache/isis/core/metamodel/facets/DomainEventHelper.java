@@ -141,7 +141,7 @@ public class DomainEventHelper {
                             .collect(_Lists.toUnmodifiable());
 
                     final List<Class<?>> parameterTypes = parameters.stream()
-                            .map(ObjectActionParameter::getSpecification)
+                            .map(ObjectActionParameter::getElementType)
                             .map(ObjectSpecification::getCorrespondingClass)
                             .collect(_Lists.toUnmodifiable());
 

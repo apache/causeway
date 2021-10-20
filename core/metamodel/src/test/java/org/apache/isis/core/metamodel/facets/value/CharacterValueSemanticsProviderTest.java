@@ -25,25 +25,19 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.apache.isis.applib.exceptions.recoverable.InvalidEntryException;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
-import org.apache.isis.core.metamodel.facets.value.chars.CharValueSemanticsProviderAbstract;
-import org.apache.isis.core.metamodel.facets.value.chars.CharWrapperValueSemanticsProvider;
+import org.apache.isis.core.metamodel.valuesemantics.CharacterValueSemantics;
 
 public class CharacterValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {
 
-    private CharValueSemanticsProviderAbstract value;
+    private CharacterValueSemantics value;
 
     private Character character;
-
-    private FacetHolder holder;
 
     @Before
     public void setUpObjects() throws Exception {
         character = Character.valueOf('r');
-        holder = FacetHolderAbstract.forTesting(metaModelContext);
-        setValue(value = new CharWrapperValueSemanticsProvider(holder));
+        setSemantics(value = new CharacterValueSemantics());
     }
 
     @Test

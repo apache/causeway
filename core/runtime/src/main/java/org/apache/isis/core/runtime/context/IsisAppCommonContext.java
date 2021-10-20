@@ -22,6 +22,8 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -33,10 +35,10 @@ import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.memento.ObjectMemento;
-import org.apache.isis.core.runtime.memento.ObjectMementoService;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -53,7 +55,7 @@ public class IsisAppCommonContext implements HasMetaModelContext {
     /**
      * Can be bootstrapped from a {@link MetaModelContext}
      */
-    public static IsisAppCommonContext of(MetaModelContext metaModelContext) {
+    public static IsisAppCommonContext of(final MetaModelContext metaModelContext) {
         val webAppCommonContext = new IsisAppCommonContext();
         webAppCommonContext.metaModelContext = metaModelContext;
         return webAppCommonContext;
@@ -83,43 +85,43 @@ public class IsisAppCommonContext implements HasMetaModelContext {
 
     // -- SHORTCUTS
 
-    public <T> Optional<T> lookupService(Class<T> serviceClass) {
+    public <T> Optional<T> lookupService(final Class<T> serviceClass) {
         return getMetaModelContext().getServiceRegistry().lookupService(serviceClass);
     }
 
-    public <T> T lookupServiceElseFail(Class<T> serviceClass) {
+    public <T> T lookupServiceElseFail(final Class<T> serviceClass) {
         return getMetaModelContext().getServiceRegistry().lookupServiceElseFail(serviceClass);
     }
 
-    public <T> T lookupServiceElseFallback(Class<T> serviceClass, Supplier<T> fallback) {
+    public <T> T lookupServiceElseFallback(final Class<T> serviceClass, final Supplier<T> fallback) {
         return getMetaModelContext().getServiceRegistry().lookupService(serviceClass)
                 .orElseGet(fallback);
     }
 
-    public <T> T injectServicesInto(T pojo) {
+    public <T> T loadServiceIfAbsent(final Class<T> type, final @Nullable T instanceIfAny) {
+        return instanceIfAny==null
+                ? lookupServiceElseFail(type)
+                : instanceIfAny;
+    }
+
+    public <T> T injectServicesInto(final T pojo) {
         return getMetaModelContext().getServiceInjector().injectServicesInto(pojo);
     }
 
-    public ObjectMemento mementoFor(ManagedObject adapter) {
+    public ObjectMemento mementoFor(final ManagedObject adapter) {
         return getMementoService().mementoForObject(adapter);
     }
 
-    public ObjectMemento mementoForParameter(@NonNull ManagedObject adapter) {
+    public ObjectMemento mementoForParameter(@NonNull final ManagedObject adapter) {
         return getMementoService().mementoForParameter(adapter);
     }
 
-    public ObjectMemento mementoForBookmark(Bookmark bookmark) {
+    public ObjectMemento mementoForBookmark(final Bookmark bookmark) {
         return getMementoService().mementoForBookmark(bookmark);
     }
 
-    public ManagedObject reconstructObject(ObjectMemento memento) {
+    public ManagedObject reconstructObject(final ObjectMemento memento) {
         return getMementoService().reconstructObject(memento);
-    }
-
-    // -- COMMON CONTEXT PROVIDER INTERFACE
-
-    public static interface Provider {
-        IsisAppCommonContext getCommonContext();
     }
 
     // -- FOR THOSE THAT IMPLEMENT BY DELEGATION

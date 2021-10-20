@@ -18,11 +18,10 @@
  */
 package org.apache.isis.commons.internal.binding;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import org.apache.isis.commons.internal.base._Lazy;
-
-import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -40,7 +39,7 @@ public class _Observables {
 
         private final _Lazy<T> lazyValue;
 
-        public LazyObservable(Supplier<T> factory) {
+        public LazyObservable(final Supplier<T> factory) {
             this.lazyValue = _Lazy.threadSafe(factory);
         }
 
@@ -54,11 +53,30 @@ public class _Observables {
             super.fireValueChanged();
         }
 
+        @Override
+        public void setValue(final T newValue) {
+            // just ignore
+        }
+
     }
 
-    public static <T> LazyObservable<T> forFactory(Supplier<T> factory) {
-        val bindable = new LazyObservable<T>(factory);
-        return bindable;
+    public static <T> LazyObservable<T> lazy(final Supplier<T> factory) {
+        return new LazyObservable<T>(factory);
+    }
+
+    public static class BooleanObservable extends LazyObservable<Boolean> {
+
+        public BooleanObservable(final BooleanSupplier factory) {
+            super(()->factory.getAsBoolean());
+        }
+
+        public boolean booleanValue() {
+            return super.getValue().booleanValue();
+        }
+    }
+
+    public static BooleanObservable lazyBoolean(final BooleanSupplier factory) {
+        return new BooleanObservable(factory);
     }
 
 }

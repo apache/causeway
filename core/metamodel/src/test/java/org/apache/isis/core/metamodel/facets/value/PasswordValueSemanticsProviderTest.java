@@ -34,7 +34,7 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Before
     public void setUpObjects() throws Exception {
-        setSemanitcs(adapter = new PasswordValueSemantics());
+        setSemantics(adapter = new PasswordValueSemantics());
         password = new Password("secret");
     }
 

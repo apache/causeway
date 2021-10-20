@@ -24,21 +24,34 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.schema.common.v2.ValueType;
+
+import lombok.val;
 
 @Component
 @Named("isis.val.LocalResourcePathValueSemantics")
 public class LocalResourcePathValueSemantics
-extends AbstractValueSemanticsProvider<LocalResourcePath>
+extends ValueSemanticsAbstract<LocalResourcePath>
 implements
     EncoderDecoder<LocalResourcePath>,
     Parser<LocalResourcePath>,
     Renderer<LocalResourcePath> {
+
+    @Override
+    public Class<LocalResourcePath> getCorrespondingClass() {
+        return LocalResourcePath.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return UNREPRESENTED;
+    }
 
     // -- ENCODER DECODER
 
@@ -77,7 +90,7 @@ implements
 
     @Override
     public LocalResourcePath parseTextRepresentation(final Context context, final String text) {
-        final var input = _Strings.blankToNullOrTrim(text);
+        val input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
             return null;
         }

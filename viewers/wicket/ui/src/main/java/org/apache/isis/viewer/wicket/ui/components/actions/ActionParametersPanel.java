@@ -25,7 +25,6 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -53,16 +52,6 @@ extends PanelAbstract<ManagedObject, ActionModel> {
 
     ActionModel getActionModel() {
         return super.getModel();
-    }
-
-    /**
-     * Sets the owning action prompt (modal window), if any.
-     *
-     * REVIEW: I wonder if this is necessary... there isn't anything exactly the same for property edits...
-     */
-    public void setActionPrompt(final ActionPrompt actionPrompt) {
-        ActionFormExecutorStrategy formExecutor = new ActionFormExecutorStrategy(getActionModel());
-        formExecutor.setActionPrompt(actionPrompt);
     }
 
     @Override
@@ -95,8 +84,6 @@ extends PanelAbstract<ManagedObject, ActionModel> {
 
         final String actionName = getActionModel().getFriendlyName();
         header.add(new Label(ID_ACTION_NAME, Model.of(actionName)));
-
-
     }
 
 

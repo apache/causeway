@@ -57,7 +57,7 @@ public class ObjectActionArgHelper {
             final JsonRepresentation argRepr = jsonArgList.get(i);
             final int argIndex = i;
             val paramMeta = parameters.getElseFail(argIndex);
-            val paramSpec = paramMeta.getSpecification();
+            val paramSpec = paramMeta.getElementType();
 
             val objectOrVeto = Result.of(()->
                     (paramMeta.isOptional() && argRepr == null)

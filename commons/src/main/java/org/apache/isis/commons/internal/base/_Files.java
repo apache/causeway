@@ -97,7 +97,7 @@ public class _Files {
      * is not {@code null} and the 'file I/O system' can handle this call without
      * throwing an exception.
      */
-    public static Optional<String> canonicalPath(@Nullable File file) {
+    public static Optional<String> canonicalPath(@Nullable final File file) {
         if(file==null) {
             return Optional.empty();
         }
@@ -115,7 +115,7 @@ public class _Files {
      * @return prefix removed from {@code absolutePath}, if {@code commonPath} appears to be a prefix
      * of {@code absolutePath}, otherwise returns the {@code absolutePath} unmodified.
      */
-    public static String toRelativePath(@NonNull String commonPath, @NonNull String absolutePath) {
+    public static String toRelativePath(@NonNull final String commonPath, @NonNull final String absolutePath) {
         if(absolutePath.startsWith(commonPath)) {
             return absolutePath.substring(commonPath.length());
         }
@@ -127,13 +127,23 @@ public class _Files {
      * @param file - the file to be deleted (null-able)
      */
     @SneakyThrows
-    public static void deleteFile(@Nullable File file) {
+    public static void deleteFile(@Nullable final File file) {
         if(file==null
                 || !file.exists()
                 || file.isDirectory()) {
             return; // silently ignore if not an existing file
         }
         Files.delete(file.toPath());
+    }
+
+    public static boolean deleteDirectory(final File directoryToBeDeleted) {
+        File[] allContents = directoryToBeDeleted.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                deleteDirectory(file);
+            }
+        }
+        return directoryToBeDeleted.delete();
     }
 
 }

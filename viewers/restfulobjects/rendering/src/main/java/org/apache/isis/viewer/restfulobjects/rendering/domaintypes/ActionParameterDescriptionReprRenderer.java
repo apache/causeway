@@ -108,7 +108,7 @@ extends AbstractTypeFeatureReprRenderer<ObjectActionParameter> {
 
     @Override
     protected void addLinksSpecificToFeature() {
-        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(resourceContext, Rel.RETURN_TYPE, objectFeature.getSpecification());
+        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(resourceContext, Rel.RETURN_TYPE, objectFeature.getElementType());
         getLinks().arrayAdd(linkBuilder.build());
     }
 

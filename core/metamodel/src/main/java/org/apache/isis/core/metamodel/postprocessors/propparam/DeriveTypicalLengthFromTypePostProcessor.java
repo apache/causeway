@@ -54,7 +54,7 @@ extends ObjectSpecificationPostProcessorAbstract {
             return;
         }
         parameter
-            .getSpecification()
+            .getElementType()
             .lookupNonFallbackFacet(TypicalLengthFacet.class)
             .ifPresent(typicalLengthFacet ->
                     FacetUtil.addFacet(
@@ -68,7 +68,7 @@ extends ObjectSpecificationPostProcessorAbstract {
             return;
         }
         property
-            .getSpecification()
+            .getElementType()
             .lookupNonFallbackFacet(TypicalLengthFacet.class)
             .ifPresent(typicalLengthFacet ->
                     FacetUtil.addFacet(

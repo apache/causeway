@@ -38,7 +38,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
 
     private transient PageParameters current;
 
-    public BookmarkedPagesModel(IsisAppCommonContext commonContext) {
+    public BookmarkedPagesModel(final IsisAppCommonContext commonContext) {
         super(commonContext);
     }
 
@@ -80,7 +80,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
         return getConfiguration().getViewer().getWicket().getBookmarkedPages().getMaxSize();
     }
 
-    private static void trim(List<?> list, int requiredSize) {
+    private static void trim(final List<?> list, final int requiredSize) {
         int numToRetain = Math.min(list.size(), requiredSize);
         list.retainAll(list.subList(0, numToRetain));
     }
@@ -98,11 +98,11 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
         return depthFirstGraph;
     }
 
-    public boolean isCurrent(PageParameters pageParameters) {
+    public boolean isCurrent(final PageParameters pageParameters) {
         return Objects.equals(current, pageParameters);
     }
 
-    private static void cleanUpGarbage(List<BookmarkTreeNode> rootNodes) {
+    private static void cleanUpGarbage(final List<BookmarkTreeNode> rootNodes) {
         final Iterator<BookmarkTreeNode> iter = rootNodes.iterator();
         while(iter.hasNext()) {
             BookmarkTreeNode node = iter.next();
@@ -122,13 +122,13 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
         return rootNodes.isEmpty();
     }
 
-    public void remove(BookmarkTreeNode rootNode) {
-        this.rootNodes.remove(rootNode);
+    public void remove(final BookmarkTreeNode rootNode) {
+        rootNodes.remove(rootNode);
     }
 
-    public void remove(EntityModel entityModel) {
-        val str = entityModel.oidStringIfSupported();
-        rootNodes.removeIf(node->node.getOidNoVerStr().equals(str));
+    public void remove(final EntityModel entityModel) {
+        val bookmark = entityModel.getOwnerBookmark();
+        rootNodes.removeIf(node->node.getOidNoVer().equals(bookmark));
     }
 
 

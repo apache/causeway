@@ -24,7 +24,7 @@ import org.wicketstuff.select2.Select2MultiChoice;
 import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.applib.id.HasLogicalType;
-import org.apache.isis.core.runtime.memento.ObjectMemento;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 
 /**
  * Represents functionality that is common to both {@link Select2Choice} and {@link Select2MultiChoice}, but for

@@ -20,8 +20,9 @@ package org.apache.isis.core.metamodel.postprocessors;
 
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -30,7 +31,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionParameterAbstract;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 
 import lombok.Getter;
@@ -89,10 +89,10 @@ implements ObjectSpecificationPostProcessor {
         return objectMemberImpl.getFacetedMethod();
     }
 
-    protected static TypedHolder peerFor(final ObjectActionParameter param) {
+    protected static FacetHolder peerFor(final ObjectActionParameter param) {
         // TODO: hacky, need to copy facet onto underlying peer, not to the param itself.
-        val paramImpl = (ObjectActionParameterAbstract) param;
-        return paramImpl.getPeer();
+        var paramImpl = (HasFacetHolder) param;
+        return paramImpl.getFacetHolder();
     }
 
 }

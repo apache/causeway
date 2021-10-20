@@ -22,6 +22,10 @@ package org.apache.isis.applib.adapters;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.schema.chg.v2.ChangesDto;
+import org.apache.isis.schema.cmd.v2.CommandDto;
+import org.apache.isis.schema.common.v2.ValueType;
+import org.apache.isis.schema.ixn.v2.InteractionDto;
 
 /**
  * Provides a mechanism for providing a set of value semantics.
@@ -49,6 +53,15 @@ public interface ValueSemanticsProvider<T> {
         Identifier identifier;
         InteractionContext interactionContext;
     }
+
+    Class<T> getCorrespondingClass();
+
+    /**
+     * Values might appear within {@link CommandDto}, {@link InteractionDto} and
+     * {@link ChangesDto}, where a mapping onto one of {@link ValueType}(s) as provided by the
+     * XML schema is required.
+     */
+    ValueType getSchemaValueType();
 
     /**
      * The {@link Renderer}, if any.

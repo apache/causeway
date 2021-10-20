@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.NonNull;
+import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -41,7 +42,7 @@ class _BindingUtil {
             final @NonNull ObjectActionParameter param,
             final @NonNull _BindableAbstract<ManagedObject> bindableParamValue) {
 
-        final var spec = param.getSpecification();
+        val spec = param.getElementType();
 
         if(param.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION) {
             _Bindables.forValue(String.format("Non-scalar action parameters are not parseable: %s",
@@ -65,7 +66,7 @@ class _BindingUtil {
             final @NonNull OneToOneAssociation prop,
             final @NonNull _BindableAbstract<ManagedObject> bindablePropertyValue) {
 
-        final var spec = prop.getSpecification();
+        val spec = prop.getElementType();
 
         // value types should have associated parsers/formatters via value semantics
         return spec.lookupFacet(ValueFacet.class)
@@ -80,6 +81,7 @@ class _BindingUtil {
 
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Bindable<String> bindAsParsableText(
             final @NonNull ObjectSpecification spec,
             final @NonNull _BindableAbstract<ManagedObject> bindableValue,
@@ -88,13 +90,13 @@ class _BindingUtil {
 
         return bindableValue.mapToBindable(
                 value->{
-                    final var pojo = ManagedObjects.UnwrapUtil.single(value);
-                    final var text = parser.parseableTextRepresentation(context, pojo);
+                    val pojo = ManagedObjects.UnwrapUtil.single(value);
+                    val text = parser.parseableTextRepresentation(context, pojo);
                     //System.err.printf("toText: %s -> '%s'%n", ""+value, text);
                     return text;
                 },
                 text->{
-                    final var value = ManagedObject.of(spec, parser.parseTextRepresentation(context, text));
+                    val value = ManagedObject.of(spec, parser.parseTextRepresentation(context, text));
                     //System.err.printf("fromText: '%s' -> %s%n", text, ""+value);
                     return value;
                 });

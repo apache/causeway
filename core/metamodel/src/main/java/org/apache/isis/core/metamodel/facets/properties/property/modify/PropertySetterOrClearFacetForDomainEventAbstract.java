@@ -130,7 +130,7 @@ implements
             final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val emptyValueAdapter = ManagedObject.empty(owningProperty.getSpecification());
+        val emptyValueAdapter = ManagedObject.empty(owningProperty.getElementType());
 
         return setOrClearProperty(EditingVariant.CLEAR,
                 owningProperty, targetAdapter, emptyValueAdapter, interactionInitiatedBy);

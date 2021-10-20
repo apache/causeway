@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -31,6 +31,7 @@ import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
 
@@ -38,9 +39,20 @@ import lombok.val;
 // tag::class[]
 @Component
 public class ComplexNumberJpaValueSemantics
-        extends AbstractValueSemanticsProvider<ComplexNumberJpa>{
+        extends ValueSemanticsAbstract<ComplexNumberJpa>{
 
 // end::class[]
+
+    @Override
+    public Class<ComplexNumberJpa> getCorrespondingClass() {
+        return ComplexNumberJpa.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.STRING;
+    }
+
 // tag::getRenderer[]
     @Override
     public Renderer<ComplexNumberJpa> getRenderer() {

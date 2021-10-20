@@ -52,4 +52,9 @@ public class DemoItem {
     @PropertyLayout(describedAs="The parity of this 'DemoItem'.")
     @Getter @Setter private Parity parity;
 
+    @Override
+    public String toString() {
+        return title();
+    }
+
 }

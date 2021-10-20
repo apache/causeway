@@ -116,7 +116,7 @@ implements MixedInMember {
     }
 
     @Override
-    public ObjectSpecification getOnType() {
+    public ObjectSpecification getDeclaringType() {
         return mixedInType;
     }
 
@@ -133,12 +133,6 @@ implements MixedInMember {
     @Override
     public ActionInteractionHead interactionHead(final @NonNull ManagedObject actionOwner) {
         return ActionInteractionHead.of(this, actionOwner, mixinAdapterFor(actionOwner));
-    }
-
-    @Override
-    public Can<ManagedObject> getDefaults(final ManagedObject mixedInAdapter) {
-        final ManagedObject mixinAdapter = mixinAdapterFor(mixedInAdapter);
-        return mixinAction.getDefaults(mixinAdapter);
     }
 
     @Override

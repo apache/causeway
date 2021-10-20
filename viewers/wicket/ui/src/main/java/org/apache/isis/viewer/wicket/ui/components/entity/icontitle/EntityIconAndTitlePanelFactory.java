@@ -22,10 +22,9 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.common.model.components.ComponentType;
-import org.apache.isis.viewer.wicket.model.models.AdapterForObjectReference;
+import org.apache.isis.viewer.wicket.model.models.ChainingObjectModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -37,7 +36,7 @@ import lombok.val;
  * {@link ComponentFactory} for {@link EntityIconAndTitlePanel}.
  *
  * @implNote Knows how to deal with {@link ObjectAdapterModel}. And for
- * {@link ScalarModel} we have an adapter {@link AdapterForObjectReference}
+ * {@link ScalarModel} we have an adapter {@link ChainingObjectModel}
  * that implements {@link ObjectAdapterModel}, such that it can also deal
  * with {@link ScalarModel}.
  *
@@ -47,16 +46,16 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public EntityIconAndTitlePanelFactory(
-            ComponentType componentType,
-            Class<?> componentClass) {
+            final ComponentType componentType,
+            final Class<?> componentClass) {
 
         super(componentType, componentClass);
     }
 
     public EntityIconAndTitlePanelFactory(
-            ComponentType componentType,
-            String name,
-            Class<?> componentClass) {
+            final ComponentType componentType,
+            final String name,
+            final Class<?> componentClass) {
 
         super(componentType, name, componentClass);
     }
@@ -73,14 +72,15 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
         if (model instanceof ObjectAdapterModel) {
             spec = ((ObjectAdapterModel) model).getTypeOfSpecification();
         } else if (model instanceof ScalarModel) {
-            spec = ((ScalarModel) model).getTypeOfSpecification();
+            spec = ((ScalarModel) model).getScalarTypeSpec();
         } else {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
 
-        return isScalarAndNotAValue(spec)
-                ? ApplicationAdvice.APPLIES
-                : ApplicationAdvice.DOES_NOT_APPLY;
+        return spec.isNotCollection()
+                && !spec.isValue()
+                        ? ApplicationAdvice.APPLIES
+                        : ApplicationAdvice.DOES_NOT_APPLY;
     }
 
     @Override
@@ -94,7 +94,7 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
             val scalarModel = (ScalarModel) model;
 
             // effectively acts as an adapter from ScalarModel to ObjectAdapterModel
-            objectAdapterModel = new AdapterForObjectReference(scalarModel);
+            objectAdapterModel = ChainingObjectModel.chain(scalarModel);
             objectAdapterModel.setRenderingHint(scalarModel.getRenderingHint());
         } else {
             throw _Exceptions.unexpectedCodeReach();
@@ -102,15 +102,5 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
 
         return new EntityIconAndTitlePanel(id, objectAdapterModel);
     }
-
-    // -- HELPER
-
-    private boolean isScalarAndNotAValue(ObjectSpecification spec) {
-        val isObject = spec.isNotCollection();
-        val isValue = spec.containsFacet(ValueFacet.class);
-        return isObject && !isValue;
-    }
-
-
 
 }

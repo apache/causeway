@@ -21,12 +21,14 @@ package org.apache.isis.core.metamodel.spec.feature;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import org.springframework.lang.Nullable;
 import javax.enterprise.inject.Vetoed;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -52,6 +54,14 @@ extends ObjectFeature, CurrentHolder {
      * Returns the 0-based index to this parameter.
      */
     int getNumber();
+
+    default boolean isScalar() {
+        return getFeatureType()==FeatureType.ACTION_PARAMETER_SCALAR;
+    }
+
+    default boolean isNonScalar() {
+        return getFeatureType()==FeatureType.ACTION_PARAMETER_COLLECTION;
+    }
 
     /**
      * Returns the name of this parameter.
@@ -127,17 +137,8 @@ extends ObjectFeature, CurrentHolder {
     @NonNull ManagedObject getDefault(ParameterNegotiationModel pendingArgs);
 
     @NonNull default ManagedObject getEmpty() {
-        return ManagedObject.of(getSpecification(), null);
+        return ManagedObject.of(getElementType(), null);
     }
-
-    /** default value as result of a initial param value fixed point search */
-    default ManagedObject getDefault(final ManagedObject actionOnwer) {
-        return getAction()
-                .interactionHead(actionOnwer).defaults()
-                .getParamValues()
-                .getElseFail(getNumber());
-    }
-
 
     /**
      * Whether this parameter is visible given the entered previous arguments
@@ -225,7 +226,7 @@ extends ObjectFeature, CurrentHolder {
 
                 final OneToManyActionParameter otmap =
                         (OneToManyActionParameter) objectActionParameter;
-                final ObjectSpecification paramElementSpecification = otmap.getSpecification();
+                final ObjectSpecification paramElementSpecification = otmap.getElementType();
                 return this.elementSpecification.isOfType(paramElementSpecification);
             }
         }
@@ -256,7 +257,7 @@ extends ObjectFeature, CurrentHolder {
 
                 final OneToOneActionParameter otoap =
                         (OneToOneActionParameter) objectActionParameter;
-                final ObjectSpecification paramSecification = otoap.getSpecification();
+                final ObjectSpecification paramSecification = otoap.getElementType();
                 return paramSecification == this.specification;
             }
         }
@@ -272,5 +273,7 @@ extends ObjectFeature, CurrentHolder {
     default ActionParameterMemento getMemento() {
         return ActionParameterMemento.forActionParameter(this);
     }
+
+
 
 }

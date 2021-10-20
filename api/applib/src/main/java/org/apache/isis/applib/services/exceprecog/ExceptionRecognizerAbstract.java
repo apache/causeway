@@ -32,6 +32,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -114,9 +115,9 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
                 log.info("Recognized exception, stacktrace : ", throwable);
             }
             if(ex instanceof TranslatableException) {
-                final var translatableException = (TranslatableException) ex;
-                final var translatableMessage = translatableException.getTranslatableMessage();
-                final var translationContext = translatableException.getTranslationContext();
+                val translatableException = (TranslatableException) ex;
+                val translatableMessage = translatableException.getTranslatableMessage();
+                val translationContext = translatableException.getTranslationContext();
                 if(translatableMessage != null
                         && translationContext != null) {
                     return translatableMessage.translate(translationService, translationContext);

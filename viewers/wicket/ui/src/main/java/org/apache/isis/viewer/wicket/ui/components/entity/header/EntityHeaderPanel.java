@@ -81,7 +81,7 @@ extends PanelAbstract<ManagedObject, EntityModel> {
         if (adapter != null) {
             val topLevelActions = ObjectAction.Util.streamTopBarActions(adapter);
             val entityActionLinks = LinkAndLabelUtil
-                    .asActionLinksForAdditionalLinksPanel(model, topLevelActions, null)
+                    .asActionLinksForAdditionalLinksPanel(model, topLevelActions, null, null)
                     .collect(Can.toCan());
 
             AdditionalLinksPanel

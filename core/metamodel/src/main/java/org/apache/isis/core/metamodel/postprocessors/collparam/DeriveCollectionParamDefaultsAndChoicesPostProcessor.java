@@ -72,7 +72,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         //
         // eg Order#getItems() and Order#removeItems(List<OrderItem>)
         //
-        final ObjectSpecification specification = collection.getSpecification();
+        final ObjectSpecification specification = collection.getElementType();
 
         final ObjectActionParameter.Predicates.CollectionParameter whetherCollectionParamOfType =
                 new ObjectActionParameter.Predicates.CollectionParameter(specification);
@@ -111,14 +111,16 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
 
-    private static void addCollectionParamDefaultsFacetIfNoneAlready(final ObjectActionParameter collectionParam) {
+    private static void addCollectionParamDefaultsFacetIfNoneAlready(
+            final ObjectActionParameter collectionParam) {
         if(collectionParam.getNumber()!=0) {
             return; // with current programming model this can only be the first parameter of an action dialog
         }
         if(collectionParam.containsNonFallbackFacet(ActionParameterDefaultsFacet.class)) {
             return;
         }
-        FacetUtil.addFacet(new ActionParameterDefaultsFacetFromAssociatedCollection(collectionParam));
+        FacetUtil.addFacet(ActionParameterDefaultsFacetFromAssociatedCollection
+                .create(collectionParam));
     }
 
     private static void addCollectionParamChoicesFacetIfNoneAlready(

@@ -118,7 +118,7 @@ implements MetaModelRefiner {
             }
         }
 
-        val parameterTypeSpec = parameter.getSpecification();
+        val parameterTypeSpec = parameter.getElementType();
 
         if (parameter.containsFacet(ActionParameterChoicesFacet.class)
                 || parameter.containsFacet(ActionParameterAutoCompleteFacet.class)

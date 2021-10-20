@@ -22,13 +22,16 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.schema.common.v2.ValueType;
+
+import lombok.val;
 
 /**
  * due to auto-boxing also handles the primitive variant
@@ -36,12 +39,22 @@ import org.apache.isis.commons.internal.base._Strings;
 @Component
 @Named("isis.val.LongValueSemantics")
 public class LongValueSemantics
-extends AbstractValueSemanticsProvider<Long>
+extends ValueSemanticsAbstract<Long>
 implements
     DefaultsProvider<Long>,
     EncoderDecoder<Long>,
     Parser<Long>,
     Renderer<Long> {
+
+    @Override
+    public Class<Long> getCorrespondingClass() {
+        return Long.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.LONG;
+    }
 
     @Override
     public Long getDefaultValue() {
@@ -79,7 +92,7 @@ implements
 
     @Override
     public Long parseTextRepresentation(final Context context, final String text) {
-        final var input = _Strings.blankToNullOrTrim(text);
+        val input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
             return null;
         }

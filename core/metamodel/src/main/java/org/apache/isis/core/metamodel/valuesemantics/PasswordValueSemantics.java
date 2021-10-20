@@ -22,21 +22,32 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.val.PasswordValueSemantics")
 public class PasswordValueSemantics
-extends AbstractValueSemanticsProvider<Password>
+extends ValueSemanticsAbstract<Password>
 implements
     EncoderDecoder<Password>,
     Parser<Password>,
     Renderer<Password> {
+
+    @Override
+    public Class<Password> getCorrespondingClass() {
+        return Password.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.STRING;
+    }
 
     // -- ENCODER DECODER
 

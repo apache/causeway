@@ -41,7 +41,7 @@ public class JavaAwtImagePanelFactory extends ComponentFactoryAbstract {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         final ScalarModel scalarModel = (ScalarModel) model;
-        final ObjectSpecification specification = scalarModel.getTypeOfSpecification();
+        final ObjectSpecification specification = scalarModel.getScalarTypeSpec();
         return appliesIf(specification != null
                 && specification.hasValueSemantics(ImageValueSemantics.class));
     }

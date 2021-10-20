@@ -18,10 +18,14 @@
  */
 package org.apache.isis.applib.util;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Strings;
 
+import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -30,11 +34,11 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class Enums {
 
-    public static String getFriendlyNameOf(Enum<?> anEnum) {
+    public static String getFriendlyNameOf(final Enum<?> anEnum) {
         return getFriendlyNameOf(anEnum.name());
     }
 
-    public static String getFriendlyNameOf(String anEnumName) {
+    public static String getFriendlyNameOf(final String anEnumName) {
         return _Strings.splitThenStream(anEnumName, "_")
                 .map(_Strings::lower)
                 .map(_Strings::capitalize)
@@ -42,12 +46,11 @@ public final class Enums {
     }
 
 
-    public static String getEnumNameFromFriendly(String anEnumFriendlyName) {
+    public static String getEnumNameFromFriendly(final String anEnumFriendlyName) {
         return _Strings.splitThenStream(anEnumFriendlyName, " ")
                 .map(_Strings::upper)
                 .collect(Collectors.joining("_"));
     }
-
 
     public static String enumToHttpHeader(final Enum<?> anEnum) {
         return enumNameToHttpHeader(anEnum.name());
@@ -69,11 +72,8 @@ public final class Enums {
     }
 
     public static String enumToCamelCase(final Enum<?> anEnum) {
-        return enumNameToCamelCase(anEnum.name());
-    }
-
-    private static String enumNameToCamelCase(final String name) {
-        final StringBuilder builder = new StringBuilder();
+        val name = anEnum.name();
+        val builder = new StringBuilder();
         boolean nextUpper = false;
         for (final char c : name.toCharArray()) {
             if (c == '_') {
@@ -84,6 +84,28 @@ public final class Enums {
             }
         }
         return builder.toString();
+    }
+
+    public static <T extends Enum<?>> Optional<T> parseFriendlyName(
+            final Class<T> correspondingClass,
+            final @Nullable String text) {
+        val input = _Strings.blankToNullOrTrim(text);
+        if(input==null) {
+            return null;
+        }
+        final T[] enumConstants = correspondingClass.getEnumConstants();
+        for (final T enumConstant : enumConstants) {
+            if (getFriendlyNameOf(enumConstant).equalsIgnoreCase(input)) {
+                return Optional.of(enumConstant);
+            }
+        }
+        // fallback
+        for (final T enumConstant : enumConstants) {
+            if (enumConstant.toString().equalsIgnoreCase(input)) {
+                return Optional.of(enumConstant);
+            }
+        }
+        return Optional.empty();
     }
 
 

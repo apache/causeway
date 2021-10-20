@@ -33,12 +33,10 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
 
-import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
@@ -46,7 +44,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.encoder.EncodableFacetUsingEncoderDecoder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics;
 
@@ -100,22 +97,11 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         });
     }
 
-    protected void setValue(final ValueSemanticsProviderAndFacetAbstract<?> value) {
-        this.valueSemanticsProvider = value;
-        this.encodeableFacet = new EncodableFacetUsingEncoderDecoder(
-                value,
-                mockFacetHolder);
-    }
-
-    protected void setSemanitcs(final AbstractValueSemanticsProvider<?> valueSemantics) {
+    protected void setSemantics(final ValueSemanticsAbstract<?> valueSemantics) {
         this.valueSemanticsProvider = valueSemantics;
         this.encodeableFacet = new EncodableFacetUsingEncoderDecoder(
                 valueSemantics.getEncoderDecoder(),
                 mockFacetHolder);
-    }
-
-    protected <T> ValueSemanticsProviderAndFacetAbstract<T> getValue(final Class<T> type) {
-        return _Casts.uncheckedCast(valueSemanticsProvider);
     }
 
     protected EncodableFacet getEncodeableFacet() {
@@ -129,18 +115,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     @Test
     public void testParseNull() throws Exception {
         Assume.assumeThat(valueSemanticsProvider.getParser(), is(not(nullValue())));
-
-        if(valueSemanticsProvider instanceof ValueSemanticsProviderAndFacetAbstract) {
-
-            try {
-                ((ValueSemanticsProviderAndFacetAbstract<?>)valueSemanticsProvider).parseTextRepresentation(null, null);
-                fail();
-            } catch (final IllegalArgumentException expected) {
-            }
-
-        } else {
-            assertEquals(null, valueSemanticsProvider.getParser().parseTextRepresentation(null, null));
-        }
+        assertEquals(null, valueSemanticsProvider.getParser().parseTextRepresentation(null, null));
     }
 
     @Test
@@ -176,16 +151,12 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     @Test
     public void testTitleOfForNullObject() {
 
-        if(valueSemanticsProvider instanceof ValueSemanticsProviderAndFacetAbstract) {
-            assertEquals("",
-                    ((ValueSemanticsProviderAndFacetAbstract<?>)valueSemanticsProvider)
-                    .simpleTextRepresentation(null, null));
-        } else if(valueSemanticsProvider instanceof StringValueSemantics) {
+        if(valueSemanticsProvider instanceof StringValueSemantics) {
             // string representation has null-to-empty semantics
             assertEquals("",
                     valueSemanticsProvider.getRenderer().simpleTextRepresentation(null, null));
         } else {
-            assertEquals(AbstractValueSemanticsProvider.NULL_REPRESENTATION,
+            assertEquals(ValueSemanticsAbstract.NULL_REPRESENTATION,
                     valueSemanticsProvider.getRenderer().simpleTextRepresentation(null, null));
         }
 

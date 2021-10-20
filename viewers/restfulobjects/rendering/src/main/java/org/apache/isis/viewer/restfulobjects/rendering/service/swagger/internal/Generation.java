@@ -604,7 +604,7 @@ class Generation {
                     .type("object");
             for (final ObjectActionParameter parameter : parameters) {
 
-                final ObjectSpecification specification = parameter.getSpecification();
+                final ObjectSpecification specification = parameter.getElementType();
                 final Property valueProperty = specification.isValue() ? modelFor(specification) : refToLinkModel() ;
                 bodyParam
                 .property(parameter.getId(),
@@ -651,7 +651,7 @@ class Generation {
     }
 
     private Property modelFor(final OneToManyAssociation collection) {
-        ObjectSpecification collectionSpecification = collection.getSpecification();
+        ObjectSpecification collectionSpecification = collection.getElementType();
         return arrayPropertyOf(collectionSpecification);
     }
 
@@ -719,11 +719,11 @@ class Generation {
         for (OneToOneAssociation objectProperty : objectProperties) {
             model.property(
                     objectProperty.getId(),
-                    propertyFor(objectProperty.getSpecification()));
+                    propertyFor(objectProperty.getElementType()));
         }
 
         for (OneToManyAssociation objectCollection : objectCollections) {
-            final ObjectSpecification elementSpec = objectCollection.getSpecification();
+            final ObjectSpecification elementSpec = objectCollection.getElementType();
             model.property(
                     objectCollection.getId(),
                     arrayPropertyOf(elementSpec)
