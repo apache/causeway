@@ -19,7 +19,7 @@ abstract class AggregatorWithLayout : BaseAggregator() {
     }
 
     protected fun handleLayout(layout: Layout, dm: DisplayModelWithLayout, referrer: String) {
-        console.log("[CA.handleLayout] ISIS-2846")
+        console.log("[CA.handleLayout] TODO ISIS-2846")
         console.log(layout)
         if (dm.layout == null) {
             dm.addLayout(layout)

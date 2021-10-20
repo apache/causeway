@@ -18,11 +18,18 @@
  */
 package org.apache.isis.client.kroviz.core.event
 
-import org.apache.isis.client.kroviz.core.aggregator.AggregatorWithLayout
+import kotlinx.browser.window
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.apache.isis.client.kroviz.main
 import org.apache.isis.client.kroviz.to.Link
-import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.to.Represention
+import org.apache.isis.client.kroviz.to.TObject
+import kotlin.js.Date
+
+val AppScope = CoroutineScope(window.asCoroutineDispatcher())
 
 class ReplayCommand {
 
@@ -36,53 +43,55 @@ class ReplayCommand {
     }
 
     private fun replay(userActions: List<LogEntry>) {
-        console.log("[ReplayCommand.replay]")
+        var previous: Date? = null
         userActions.forEach {
-            val link = Link(href = it.url)
-            console.log(link)
-            ResourceProxy().fetch(link, null, it.subType)
+            if (it.state == EventState.USER_ACTION) {
+                var offset: Double = 0.toDouble()
+                if (previous != null) {
+                    offset = it.createdAt.getTime().minus(previous!!.getTime())
+                }
+                val obj = it.obj as TObject
+                AppScope.launch {
+                    delay(offset.toLong()) // non-blocking delay for 1 second (default time unit is ms)
+                    ResourceProxy().load(obj)
+                }
+            } else {
+                val link = Link(href = it.url)
+                ResourceProxy().fetch(link, null, it.subType)
+            }
+            previous = it.createdAt
         }
     }
 
     private fun filterUserActions(events: List<LogEntry>): List<LogEntry> {
-        console.log("[ReplayCommand.filterUserActions]")
-        val userActions = events.filter {
+        return events.filter {
             (it.type == Represention.HOMEPAGE.type) ||
                     it.type == Represention.OBJECT_ACTION.type ||
-                    it.type == Relation.OBJECT_LAYOUT.type ||
-                    it.hasDisplayModel()
+                    it.state == EventState.USER_ACTION
         }
-        console.log(userActions)
-        console.log(userActions.size)
-        return userActions
     }
 
     private fun copyEvents(inputList: List<LogEntry>): List<LogEntry> {
-        console.log("[ReplayCommand.copyEvents]")
         val outputList = mutableListOf<LogEntry>()
         inputList.forEach {
             outputList.add(copyEvent(it))
         }
-        console.log(outputList)
-        console.log(outputList.size)
         return outputList
     }
 
     private fun copyEvent(input: LogEntry): LogEntry {
         val resourceSpecification = ResourceSpecification(input.url, input.subType)
         val output = LogEntry(
-            resourceSpecification,
-            input.title,
-            input.request,
-            input.createdAt
+            rs = resourceSpecification,
+            method = input.method,
+            request = input.request,
+            createdAt = input.createdAt
         )
+        output.title = input.title
         output.type = input.type
+        output.obj = input.obj
+        output.state = input.state
         return output
-    }
-
-    private fun LogEntry.hasDisplayModel(): Boolean {
-        return (this.nOfAggregators > 0) &&
-                (this.getAggregator() is AggregatorWithLayout)
     }
 
 }

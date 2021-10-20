@@ -48,11 +48,11 @@ object EventStore {
         }
     }
 
-    fun start(reSpec: ResourceSpecification,
+    fun start(rs: ResourceSpecification,
               method: String,
               body: String = "",
               aggregator: BaseAggregator? = null): LogEntry {
-        val entry = LogEntry(reSpec, method, request = body)
+        val entry = LogEntry(rs = rs, method = method, request = body)
         if (aggregator != null) {
             entry.addAggregator(aggregator)
         }
@@ -81,6 +81,13 @@ object EventStore {
             logEntry.getAggregator().reset()
             updateStatus(logEntry)
         }
+    }
+
+    fun addUserAction(aggregator: BaseAggregator, obj: TObject) {
+        val entry = LogEntry(title = obj.title, aggregator = aggregator)
+        entry.obj = obj
+        entry.state = EventState.USER_ACTION
+        log(entry)
     }
 
     fun end(reSpec: ResourceSpecification, response: String): LogEntry? {

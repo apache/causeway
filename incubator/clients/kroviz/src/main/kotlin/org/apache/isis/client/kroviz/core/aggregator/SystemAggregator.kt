@@ -49,7 +49,7 @@ class SystemAggregator() : BaseAggregator() {
                         else -> log(logEntry)
                     }
                 } else {
-                    console.log("[SA.update] no blob/image")
+                    console.log("[SA.update] TODO ISIS-2768 no blob/image due to CORS")
                 }
             }
         }

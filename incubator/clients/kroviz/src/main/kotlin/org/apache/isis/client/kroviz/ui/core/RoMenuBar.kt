@@ -120,9 +120,6 @@ class RoMenuBar : SimplePanel() {
             buildMenuEntry(aboutTitle, "Info", { UiManager.add(aboutTitle, About().open()) })
         )
 
-        console.log("[RMB.buildMainMenu]")
-        console.log(mainMenu)
-        console.log(mainMenu.getChildren())
         return mainMenu
     }
 

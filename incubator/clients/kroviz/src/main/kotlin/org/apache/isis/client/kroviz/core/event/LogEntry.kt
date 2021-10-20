@@ -42,6 +42,7 @@ enum class EventState(val id: String, val iconName: String, val style: ButtonSty
     SUCCESS_XML("SUCCESS_XML", "fas fa-code", ButtonStyle.SUCCESS),
     SUCCESS_IMG("SUCCESS_IMG", "fas fa-image", ButtonStyle.SUCCESS),
     VIEW("VIEW", "fas fa-eye", ButtonStyle.INFO),
+    USER_ACTION("ACTION", "fas fa-user-times", ButtonStyle.INFO),
     DUPLICATE("DUPLICATE", "fas fa-copy", ButtonStyle.OUTLINESUCCESS),
     CLOSED("CLOSED", "fas fa-eye-slash", ButtonStyle.OUTLINEINFO),
     RELOAD("RELOAD", "fas fa-retweet", ButtonStyle.OUTLINEWARNING),
@@ -74,7 +75,7 @@ data class LogEntry(
         state = EventState.RUNNING
         title = url
         requestLength = request?.length
-                ?: 0 // ?. is required, otherwise Tabulator.js/EventLogTable shows no entries
+            ?: 0 // ?. is required, otherwise Tabulator.js/EventLogTable shows no entries
     }
 
     @Contextual
@@ -234,8 +235,8 @@ data class LogEntry(
     fun addAggregator(aggregator: BaseAggregator) {
         aggregators.add(aggregator)
         if ((aggregators.size > 1) && ((aggregator is ObjectAggregator) || (aggregator is CollectionAggregator))) {
-            console.log("[LE.addAggregator] last one just added")
-//            console.log(aggregators)
+            console.log("[LE.addAggregator] 2nd/3rd/etc. Object/Collection")
+            console.log(aggregator)
             //          throw Throwable("[LE.addAggregator] not implemented yet")
         }
         nOfAggregators = aggregators.size
