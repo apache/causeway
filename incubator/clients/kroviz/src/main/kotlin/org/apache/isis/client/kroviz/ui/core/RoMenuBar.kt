@@ -87,7 +87,7 @@ class RoMenuBar : SimplePanel() {
         )
 
         mainMenu.add(
-            buildMenuEntry("History", "History", { UiManager.add("Log Entries", EventLogTable(EventStore.log)) })
+            buildMenuEntry("Event Log", "History", { UiManager.add("Event Log", EventLogTable(EventStore.log)) })
         )
 
         val chartTitle = "Sample Chart"

@@ -49,6 +49,7 @@ class ResourceProxy {
         if (le != null) {
             le.addAggregator(aggregator)
             aggregator.update(le, le.subType)
+            EventStore.addUserAction(aggregator, tObject)
         }
     }
 

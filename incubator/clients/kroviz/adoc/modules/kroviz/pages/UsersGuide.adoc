@@ -64,7 +64,7 @@ Which renderers should be provided for what data?
 
 One approach to identifying applicable renderers is https://en.wikipedia.org/wiki/Duck_typing[duck typing].
 This means resorting to behavior / properties of an object. If eg. an object has two properties of type date, labeled "start" and "end"
-it is reasonable to render it as horizontal bar on a timeline. If there is a list of such objects, they can form a gantt chart. 
+it is reasonable to render it as horizontal bar on a timeline. If there is a list of such objects, they can form a gantt chart.
 
 The number of renderers included with kroviz is limited and there isn't yet an example of selecting one of possibly many applicale renderers, but there is room for impovement and creativity.
 Such renderes should as well have links leading back to 'plain old object' renderings.
@@ -76,8 +76,8 @@ include::partial$design/uml-renderer.adoc[]
 * Burger Menu -&gt; Connect, OK
 * Primitives -&gt; Temporals
 * Primitives -&gt; Blob
-* _Burger Menu -&gt; History_:
+* _Burger Menu -&gt; Event Log_:
 ** Sort,
 ** Move Column,
 ** Filter
-* History -&gt; Details Menu, Visualize
+* Event Log -&gt; Details Menu, Visualize
