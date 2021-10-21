@@ -18,12 +18,14 @@
  */
 package org.apache.isis.viewer.wicket.ui.util;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LambdaModel;
-import org.danekja.java.util.function.serializable.SerializableSupplier;
 
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
@@ -34,32 +36,58 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Wkt {
 
+    public <T extends Component> T add(final MarkupContainer container, final T component) {
+        container.addOrReplace((Component)component);
+        return component;
+    }
+
+    // -- FRAGMENT
+
+    /**
+     * @param markupProvider - The component whose markup contains the fragment's markup
+     * @param id - The component id
+     * @param markupId - The associated id of the associated markup fragment
+     */
+    public Fragment fragmentAddNoTab(final MarkupContainer markupProvider, final String id, final String markupId) {
+        return new Fragment(id, markupId, markupProvider) {
+            private static final long serialVersionUID = 1L;
+            @Override protected void onComponentTag(final ComponentTag tag) {
+                super.onComponentTag(tag);
+                tag.put("tabindex", "-1");
+            }
+        };
+    }
+
     // -- LABEL
 
     public Label label(final String id, final String label) {
         return new Label(id, label);
     }
 
-    public Label label(final String id, final SerializableSupplier<String> labelSupplier) {
-        return new Label(id, LambdaModel.<String>of(labelSupplier));
+    public Label label(final String id, final IModel<String> labelModel) {
+        return new Label(id, labelModel);
+    }
+
+    public Label labelNoTab(final String id, final IModel<String> labelModel) {
+        return new Label(id, labelModel) {
+            private static final long serialVersionUID = 1L;
+            @Override protected void onComponentTag(final ComponentTag tag) {
+                super.onComponentTag(tag);
+                tag.put("tabindex", "-1");
+            }
+        };
     }
 
     public Label labelAdd(final MarkupContainer container, final String id, final String label) {
-        val component = label(id, label);
-        container.addOrReplace(component);
-        return component;
-    }
-
-    public Label labelAddLazy(final MarkupContainer container, final String id, final SerializableSupplier<String> labelSupplier) {
-        val component = label(id, labelSupplier);
-        container.addOrReplace(component);
-        return component;
+        return add(container, label(id, label));
     }
 
     public Label labelAdd(final MarkupContainer container, final String id, final IModel<String> labelModel) {
-        val component = new Label(id, labelModel);
-        container.addOrReplace(component);
-        return component;
+        return add(container, new Label(id, labelModel));
+    }
+
+    public Label labelAddNoTab(final MarkupContainer container, final String id, final IModel<String> labelModel) {
+        return add(container, labelNoTab(id, labelModel));
     }
 
     // -- LINK
@@ -86,5 +114,20 @@ public class Wkt {
         return link;
     }
 
+    // -- TEXT AREA
+
+    public TextArea<String> textAreaNoTab(final String id, final IModel<String> textModel) {
+        return new TextArea<String>(id, textModel) {
+            private static final long serialVersionUID = 1L;
+            @Override protected void onComponentTag(final ComponentTag tag) {
+                super.onComponentTag(tag);
+                tag.put("tabindex", "-1");
+            }
+        };
+    }
+
+    public TextArea<String> textAreaAddNoTab(final MarkupContainer container, final String id, final IModel<String> textModel) {
+        return add(container, textAreaNoTab(id, textModel));
+    }
 
 }

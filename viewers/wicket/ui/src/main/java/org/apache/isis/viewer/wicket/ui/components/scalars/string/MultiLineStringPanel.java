@@ -20,7 +20,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.string;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -32,6 +31,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFace
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldStringModel;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -78,17 +78,8 @@ public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract 
             final String id,
             final IModel<String> inlinePromptModel) {
         val fragment = new Fragment(id, "textareaInlinePrompt", this);
-        val inlinePromptTextArea = new TextArea<String>("scalarValue", inlinePromptModel) {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override protected void onComponentTag(final ComponentTag tag) {
-                super.onComponentTag(tag);
-                tag.put("tabindex","-1");
-            }
-        };
+        val inlinePromptTextArea = Wkt.textAreaAddNoTab(fragment, "scalarValue", inlinePromptModel);
         setRowsAndMaxLengthAttributesOn(inlinePromptTextArea);
-        fragment.add(inlinePromptTextArea);
         return fragment;
     }
 
@@ -110,7 +101,7 @@ public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract 
         return textField.add(AttributeModifier.replace(attributeName, ""+i));
     }
 
-    private static Integer getValueOf(ScalarModel model, Class<? extends SingleIntValueFacet> facetType) {
+    private static Integer getValueOf(final ScalarModel model, final Class<? extends SingleIntValueFacet> facetType) {
         final SingleIntValueFacet facet = model.getFacet(facetType);
         return facet != null ? facet.value() : null;
     }

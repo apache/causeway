@@ -31,19 +31,23 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.core.metamodel.commons.CanonicalParameterUtil;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 
 public final class ManagedAction extends ManagedMember {
@@ -127,11 +131,28 @@ public final class ManagedAction extends ManagedMember {
 
     }
 
+    @SneakyThrows
     public ManagedObject invokeWithRuleChecking(
             final @NonNull Can<ManagedObject> actionParameters) throws AuthorizationException {
 
         val action = getAction();
         val head = action.interactionHead(getOwner());
+        val ownerSpec = head.getOwner().getSpecification();
+
+        // value-type mixins have no rule-checking, no domain events and no routing
+        if(ownerSpec.isValue()) {
+
+            val method = ((ObjectMemberAbstract)action).getFacetedMethod().getMethod();
+
+            final Object[] executionParameters = UnwrapUtil.multipleAsArray(actionParameters);
+            final Object targetPojo = UnwrapUtil.single(head.getTarget());
+
+            val resultPojo =  CanonicalParameterUtil
+                    .invoke(method, targetPojo, executionParameters);
+
+            //FIXME[ISIS-2877] don't render a result page, instead inject the result into the parent dialog
+            return mmc().getObjectManager().adapt(resultPojo);
+        }
 
         final ManagedObject actionResult = action
                 .executeWithRuleChecking(head , actionParameters, InteractionInitiatedBy.USER, getWhere());

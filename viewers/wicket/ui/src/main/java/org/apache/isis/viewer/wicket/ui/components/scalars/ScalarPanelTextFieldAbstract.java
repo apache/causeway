@@ -194,20 +194,14 @@ implements TextFieldValueModel.ScalarModelProvider {
 
     /**
      * Overrides default to use a fragment, allowing the inner rendering to switch between a simple span
-     * or a textarea
+     * or a text-area.
      */
     @Override
     protected Component createInlinePromptComponent(
             final String id,
             final IModel<String> inlinePromptModel) {
-        final Fragment fragment = new Fragment(id, "textInlinePrompt", this) {
-            private static final long serialVersionUID = 1L;
 
-            @Override protected void onComponentTag(final ComponentTag tag) {
-                super.onComponentTag(tag);
-                tag.put("tabindex","-1");
-            }
-        };
+        val fragment = Wkt.fragmentAddNoTab(this, id, "textInlinePrompt");
         Wkt.labelAdd(fragment, "scalarValue", inlinePromptModel);
         return fragment;
     }

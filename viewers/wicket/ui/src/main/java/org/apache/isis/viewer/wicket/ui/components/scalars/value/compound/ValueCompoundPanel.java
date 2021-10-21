@@ -47,7 +47,7 @@ extends ScalarPanelTextFieldParseableAbstract {
         System.err.printf("%s%n", scalarModel.getMetaModel().getFeatureIdentifier());
 
         super.onInitialize();
-        onInitializeReadonly(null);
+        //onInitializeReadonly(null);
     }
 
     @Override

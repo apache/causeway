@@ -30,7 +30,6 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
@@ -650,7 +649,9 @@ implements ScalarModelSubscriber {
     private WebMarkupContainer createInlinePromptLink() {
         final IModel<String> inlinePromptModel = obtainInlinePromptModel();
         if(inlinePromptModel == null) {
-            throw new IllegalStateException(this.getClass().getName() + ": obtainInlinePromptModel() returning null is not compatible with supportsInlinePrompt() returning true ");
+            throw new IllegalStateException(this.getClass().getName()
+                    + ": obtainInlinePromptModel() returning null is not compatible "
+                    + "with supportsInlinePrompt() returning true ");
         }
 
         final WebMarkupContainer inlinePromptLink =
@@ -680,14 +681,7 @@ implements ScalarModelSubscriber {
 
     protected Component createInlinePromptComponent(
             final String id, final IModel<String> inlinePromptModel) {
-        return new Label(id, inlinePromptModel) {
-            private static final long serialVersionUID = 1L;
-
-            @Override protected void onComponentTag(final ComponentTag tag) {
-                super.onComponentTag(tag);
-                tag.put("tabindex","-1");
-            }
-        };
+        return Wkt.labelNoTab(id, inlinePromptModel);
     }
 
     // ///////////////////////////////////////////////////////////////////
@@ -700,7 +694,8 @@ implements ScalarModelSubscriber {
     }
 
 
-    private void configureInlinePromptLinkCallback(final WebMarkupContainer inlinePromptLink) {
+    private void configureInlinePromptLinkCallback(
+            final WebMarkupContainer inlinePromptLink) {
 
         inlinePromptLink.add(new AjaxEventBehavior("click") {
             /**

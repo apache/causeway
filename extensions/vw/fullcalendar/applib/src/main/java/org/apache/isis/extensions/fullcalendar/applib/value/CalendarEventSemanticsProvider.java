@@ -29,10 +29,8 @@ import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.schema.common.v2.ValueType;
 
@@ -49,6 +47,7 @@ public class CalendarEventSemanticsProvider
 extends ValueSemanticsAbstract<CalendarEvent>
 implements
     DefaultsProvider<CalendarEvent>,
+//    EncoderDecoder<CalendarEvent>,
     Renderer<CalendarEvent> {
 
     @Override
@@ -68,6 +67,20 @@ implements
         return new CalendarEvent(
                 Instant.now().toEpochMilli(), "Default Calendar", "New Event", "empty");
     }
+
+    // -- ENCODER/DECODER
+
+//    @Override
+//    public String toEncodedString(CalendarEvent toEncode) {
+//        // TODO Auto-generated method stub
+//        return null;
+//    }
+//
+//    @Override
+//    public CalendarEvent fromEncodedString(String encodedString) {
+//        // TODO Auto-generated method stub
+//        return null;
+//    }
 
     // -- RENDERER
 
@@ -111,7 +124,7 @@ implements
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
+    //@ActionLayout(promptStyle = PromptStyle.INLINE_AS_IF_EDIT)
     @RequiredArgsConstructor
     public static class CalendarEvent_update {
 
@@ -161,6 +174,8 @@ implements
         }
 
     }
+
+
 
 
 }
