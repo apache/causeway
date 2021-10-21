@@ -20,13 +20,20 @@ package org.apache.isis.viewer.wicket.ui.util;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
+import org.danekja.java.util.function.serializable.SerializableConsumer;
 
+import org.apache.isis.commons.internal.debug._Probe;
+import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 
@@ -41,15 +48,56 @@ public class Wkt {
         return component;
     }
 
+    public <T extends Behavior> T add(final MarkupContainer container, final T component) {
+        container.add((Behavior)component);
+        return component;
+    }
+
+    // -- BEHAVIOR
+
+    public Behavior behaviorOnClick(final SerializableConsumer<AjaxRequestTarget> onClick) {
+        return new AjaxEventBehavior("click") {
+           private static final long serialVersionUID = 1L;
+
+           @Override
+           protected void onEvent(final AjaxRequestTarget target) {
+               _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
+                       + "originating from User clicking on an "
+                       + "editable Property (to start inline editing)"
+                       + "or an Action (to enter param negotiaton or directly execute the Action).");
+
+               onClick.accept(target);
+           }
+       };
+    }
+
+    public Behavior behaviorAddOnClick(
+            final MarkupContainer markupProvider,
+            final SerializableConsumer<AjaxRequestTarget> onClick) {
+        return add(markupProvider, behaviorOnClick(onClick));
+    }
+
+    // -- CONTAINER
+
+    public WebMarkupContainer container(final String id) {
+        final WebMarkupContainer component = new WebMarkupContainer(id);
+        component.setOutputMarkupId(true);
+        return component;
+    }
+
+    public WebMarkupContainer containerAdd(final MarkupContainer container, final String id) {
+        return add(container, container(id));
+    }
+
     // -- FRAGMENT
 
     /**
-     * @param markupProvider - The component whose markup contains the fragment's markup
+     * @param container - The component whose markup contains the fragment's markup
      * @param id - The component id
      * @param markupId - The associated id of the associated markup fragment
      */
-    public Fragment fragmentAddNoTab(final MarkupContainer markupProvider, final String id, final String markupId) {
-        return new Fragment(id, markupId, markupProvider) {
+    public Fragment fragmentAddNoTab(final MarkupContainer container, final String id, final String markupId) {
+        return new Fragment(id, markupId, container) {
             private static final long serialVersionUID = 1L;
             @Override protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);
@@ -128,6 +176,26 @@ public class Wkt {
 
     public TextArea<String> textAreaAddNoTab(final MarkupContainer container, final String id, final IModel<String> textModel) {
         return add(container, textAreaNoTab(id, textModel));
+    }
+
+    // -- FOCUS UTILITY
+
+    /**
+     * If the container has any child with the marker attribute {@code data-isis-focus},
+     * then the first one found will receive focus (in the browser).
+     * @implNote HTML allows for custom attributes with naming convention {@code data-}.
+     */
+    public void focusOnMarkerAttribute(
+            final MarkupContainer container,
+            final AjaxRequestTarget target) {
+
+        container.streamChildren()
+        .filter(child->child.getMarkupAttributes().containsKey("data-isis-focus"))
+        .findFirst()
+        .ifPresent(child->{
+            target.focusComponent(child);
+        });
+
     }
 
 }

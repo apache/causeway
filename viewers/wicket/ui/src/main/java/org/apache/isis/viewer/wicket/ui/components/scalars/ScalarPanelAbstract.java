@@ -24,7 +24,6 @@ import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -343,12 +342,11 @@ implements ScalarModelSubscriber {
             // are using inline prompts
 
             val componentToHideRef = _Refs.<Component>objectRef(inlinePromptLink);
-            //Component componentToHideIfAny = inlinePromptLink;
 
             if (this.scalarModel.getPromptStyle().isInline()
                     && scalarModel.canEnterEditMode()) {
                 // we configure the prompt link if _this_ property is configured for inline edits...
-                configureInlinePromptLinkCallback(inlinePromptLink);
+                Wkt.behaviorAddOnClick(inlinePromptLink, this::onPropertyInlineEditClick);
                 componentToHideRef.setValue(inlinePromptConfig.getComponentToHideIfAny());
 
             } else {
@@ -358,15 +356,11 @@ implements ScalarModelSubscriber {
                 .map(LinkAndLabelFactory.forPropertyOrParameter(scalarModel))
                 .map(LinkAndLabel::getUiComponent)
                 .map(ActionLink.class::cast)
+                .filter(ActionLink::isVisible)
+                .filter(ActionLink::isEnabled)
                 .ifPresent(actionLinkInlineAsIfEdit->{
-
-                    if(actionLinkInlineAsIfEdit.isVisible()
-                            && actionLinkInlineAsIfEdit.isEnabled()) {
-
-                        configureInlinePromptLinkCallback(inlinePromptLink, actionLinkInlineAsIfEdit);
-                        componentToHideRef.setValue(inlinePromptConfig.getComponentToHideIfAny());
-                    }
-
+                    Wkt.behaviorAddOnClick(inlinePromptLink, actionLinkInlineAsIfEdit::onClick);
+                    componentToHideRef.setValue(inlinePromptConfig.getComponentToHideIfAny());
                 });
             }
 
@@ -693,64 +687,27 @@ implements ScalarModelSubscriber {
         return null;
     }
 
+    private void onPropertyInlineEditClick(final AjaxRequestTarget target) {
+        scalarModel.toEditMode();
 
-    private void configureInlinePromptLinkCallback(
-            final WebMarkupContainer inlinePromptLink) {
+        switchFormForInlinePrompt(target);
 
-        inlinePromptLink.add(new AjaxEventBehavior("click") {
-            /**
-             *
-             */
-            private static final long serialVersionUID = -3034584614218331440L;
+        getComponentForRegular().setVisible(false);
+        scalarIfRegularInlinePromptForm.setVisible(true);
 
-            @Override
-            protected void onEvent(final AjaxRequestTarget target) {
+        target.add(scalarTypeContainer);
 
-                _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
-                        + "originating from User clicking on an editable Property to start inline editing.");
+        Wkt.focusOnMarkerAttribute(scalarIfRegularInlinePromptForm, target);
 
-                scalarModel.toEditMode();
-
-                switchFormForInlinePrompt(target);
-
-                getComponentForRegular().setVisible(false);
-                scalarIfRegularInlinePromptForm.setVisible(true);
-
-                target.add(scalarTypeContainer);
-            }
-
-            @Override
-            public boolean isEnabled(final Component component) {
-                return true;
-            }
-        });
-    }
-
-    private void configureInlinePromptLinkCallback(
-            final WebMarkupContainer inlinePromptLink,
-            final ActionLink actionLink) {
-
-        inlinePromptLink.add(new AjaxEventBehavior("click") {
-            /**
-             *
-             */
-            private static final long serialVersionUID = 2171203212348044948L;
-
-            @Override
-            protected void onEvent(final AjaxRequestTarget target) {
-                actionLink.onClick(target);
-            }
-
-            @Override
-            public boolean isEnabled(final Component component) {
-                return true;
-            }
-        });
     }
 
     private void switchFormForInlinePrompt(final AjaxRequestTarget target) {
-        scalarIfRegularInlinePromptForm = (PropertyEditFormPanel) getComponentFactoryRegistry().addOrReplaceComponent(
-                scalarTypeContainer, ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM, ComponentType.PROPERTY_EDIT_FORM, scalarModel);
+        scalarIfRegularInlinePromptForm = (PropertyEditFormPanel) getComponentFactoryRegistry()
+                .addOrReplaceComponent(
+                    scalarTypeContainer,
+                    ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM,
+                    ComponentType.PROPERTY_EDIT_FORM,
+                    scalarModel);
 
         onSwitchFormForInlinePrompt(scalarIfRegularInlinePromptForm, target);
     }
@@ -770,53 +727,39 @@ implements ScalarModelSubscriber {
     protected void addEditPropertyTo(
             final MarkupContainer scalarIfRegularFormGroup) {
 
-        final PromptStyle promptStyle = scalarModel.getPromptStyle();
-        if(  scalarModel.canEnterEditMode() &&
-                (promptStyle.isDialog() ||
+        if(scalarModel.canEnterEditMode() &&
+                (scalarModel.getPromptStyle().isDialog() ||
                         !getInlinePromptConfig().isSupported())) {
-
-            final WebMarkupContainer editProperty = new WebMarkupContainer(ID_EDIT_PROPERTY);
-            editProperty.setOutputMarkupId(true);
-            scalarIfRegularFormGroup.addOrReplace(editProperty);
-
-            editProperty.add(new AjaxEventBehavior("click") {
-                /**
-                 *
-                 */
-                private static final long serialVersionUID = -3561635292986591682L;
-
-                @Override
-                protected void onEvent(final AjaxRequestTarget target) {
-
-                    final ObjectSpecification specification = scalarModel.getScalarTypeSpec();
-                    final MetaModelService metaModelService = getServiceRegistry()
-                            .lookupServiceElseFail(MetaModelService.class);
-                    final BeanSort sort = metaModelService.sortOf(specification.getCorrespondingClass(), MetaModelService.Mode.RELAXED);
-
-                    final ActionPrompt prompt = ActionPromptProvider
-                            .getFrom(ScalarPanelAbstract.this).getActionPrompt(promptStyle, sort);
-
-                    PropertyEditPromptHeaderPanel titlePanel = new PropertyEditPromptHeaderPanel(
-                            prompt.getTitleId(),
-                            (ScalarPropertyModel)ScalarPanelAbstract.this.scalarModel);
-
-                    final PropertyEditPanel propertyEditPanel =
-                            (PropertyEditPanel) getComponentFactoryRegistry().createComponent(
-                                    ComponentType.PROPERTY_EDIT_PROMPT, prompt.getContentId(),
-                                    ScalarPanelAbstract.this.scalarModel);
-
-                    propertyEditPanel.setShowHeader(false);
-
-                    prompt.setTitle(titlePanel, target);
-                    prompt.setPanel(propertyEditPanel, target);
-                    prompt.showPrompt(target);
-
-                }
-            });
+            val editProperty = Wkt.containerAdd(scalarIfRegularFormGroup, ID_EDIT_PROPERTY);
+            Wkt.behaviorAddOnClick(editProperty, this::onPropertyEditClick);
         } else {
             Components.permanentlyHide(scalarIfRegularFormGroup, ID_EDIT_PROPERTY);
         }
+    }
 
+    private void onPropertyEditClick(final AjaxRequestTarget target) {
+        final ObjectSpecification specification = scalarModel.getScalarTypeSpec();
+        final MetaModelService metaModelService = getServiceRegistry()
+                .lookupServiceElseFail(MetaModelService.class);
+        final BeanSort sort = metaModelService.sortOf(specification.getCorrespondingClass(), MetaModelService.Mode.RELAXED);
+
+        final ActionPrompt prompt = ActionPromptProvider
+                .getFrom(ScalarPanelAbstract.this).getActionPrompt(scalarModel.getPromptStyle(), sort);
+
+        PropertyEditPromptHeaderPanel titlePanel = new PropertyEditPromptHeaderPanel(
+                prompt.getTitleId(),
+                (ScalarPropertyModel)ScalarPanelAbstract.this.scalarModel);
+
+        final PropertyEditPanel propertyEditPanel =
+                (PropertyEditPanel) getComponentFactoryRegistry().createComponent(
+                        ComponentType.PROPERTY_EDIT_PROMPT, prompt.getContentId(),
+                        ScalarPanelAbstract.this.scalarModel);
+
+        propertyEditPanel.setShowHeader(false);
+
+        prompt.setTitle(titlePanel, target);
+        prompt.setPanel(propertyEditPanel, target);
+        prompt.showPrompt(target);
     }
 
     /**

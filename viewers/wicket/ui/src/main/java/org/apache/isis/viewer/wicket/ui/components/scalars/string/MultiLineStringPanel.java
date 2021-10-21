@@ -54,20 +54,6 @@ public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract 
         return textArea;
     }
 
-    private void setRowsAndMaxLengthAttributesOn(final TextArea<String> textField) {
-        val multiLineFacet = getModel().getFacet(MultiLineFacet.class);
-        if(multiLineFacet != null) {
-            setAttribute(textField, "rows", multiLineFacet.numberOfLines());
-        }
-
-        val maxLength = getValueOf(getModel(), MaxLengthFacet.class);
-        if(maxLength != null) {
-            // in conjunction with javascript in jquery.isis.wicket.viewer.js
-            // see http://stackoverflow.com/questions/4459610/set-maxlength-in-html-textarea
-            setAttribute(textField, "maxlength", maxLength);
-        }
-    }
-
     @Override
     protected String createTextFieldFragmentId() {
         return "textarea";
@@ -95,6 +81,22 @@ public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract 
     @Override
     protected String getScalarPanelType() {
         return "multiLineStringPanel";
+    }
+
+    // -- HELPER
+
+    private void setRowsAndMaxLengthAttributesOn(final TextArea<String> textField) {
+        val multiLineFacet = getModel().getFacet(MultiLineFacet.class);
+        if(multiLineFacet != null) {
+            setAttribute(textField, "rows", multiLineFacet.numberOfLines());
+        }
+
+        val maxLength = getValueOf(getModel(), MaxLengthFacet.class);
+        if(maxLength != null) {
+            // in conjunction with javascript in jquery.isis.wicket.viewer.js
+            // see http://stackoverflow.com/questions/4459610/set-maxlength-in-html-textarea
+            setAttribute(textField, "maxlength", maxLength);
+        }
     }
 
     private Component setAttribute(final TextArea<String> textField, final String attributeName, final int i) {

@@ -293,9 +293,9 @@ implements ActionPromptProvider {
         }
         String javaScript = markupId != null
                 ? String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PROPERTY, '%s')", markupId)
-                        : "Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PROPERTY)";
+                : "Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PROPERTY)";
 
-                response.render(OnDomReadyHeaderItem.forScript(javaScript));
+       response.render(OnDomReadyHeaderItem.forScript(javaScript));
 
     }
 
