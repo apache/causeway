@@ -69,7 +69,7 @@ object StringUtils {
         if (title.contains(signature)) {
             // strip off protocol, host, port
             title = title.replace(protocolHostPort + signature, "")
-            title = StringUtils.removeHexCode(title)
+            title = removeHexCode(title)
         }
         return title
     }

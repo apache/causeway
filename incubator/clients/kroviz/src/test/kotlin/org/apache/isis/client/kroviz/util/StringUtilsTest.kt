@@ -5,6 +5,7 @@ import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.utils.StringUtils
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class StringUtilsTest {
     @Test
@@ -14,8 +15,12 @@ class StringUtilsTest {
         val url = "http://localhost:8080/restful/domain-types/demo.JavaLangStrings/collections/entities"
 
         // when
-        val actual = StringUtils.shortTitle(url, UiManager.getUrl())
+        val protocolHostPort = UiManager.getUrl()
+        // then
+        assertTrue(protocolHostPort.startsWith("http://"))
 
+        // when
+        val actual = StringUtils.shortTitle(url, protocolHostPort)
         // then
         val expected = "/domain-types/demo.JavaLangStrings/collections/entities"
         assertEquals(expected, actual)

@@ -27,47 +27,47 @@ import org.apache.isis.client.kroviz.main
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Represention
 import org.apache.isis.client.kroviz.to.TObject
-import kotlin.js.Date
 
 val AppScope = CoroutineScope(window.asCoroutineDispatcher())
 
 class ReplayCommand {
 
     fun execute() {
-        val events = copyEvents(EventStore.log)
+        val expectedEvents = copyEvents(EventStore.log)
         EventStore.reset()
         main() // re-creates the UI, but keeps the UiManager(singleton/object) and the session
 
-        val userActions = filterUserActions(events)
-        replay(userActions)
+        val replayEvents = filterReplayEvents(expectedEvents)
+        replay(replayEvents)
     }
 
     private fun replay(userActions: List<LogEntry>) {
-        var previous: Date? = null
+        var previous: LogEntry? = null
         userActions.forEach {
-            if (it.state == EventState.USER_ACTION) {
-                var offset: Double = 0.toDouble()
-                if (previous != null) {
-                    offset = it.createdAt.getTime().minus(previous!!.getTime())
-                }
-                val obj = it.obj as TObject
+            if (it.isUserAction() && previous != null) {
                 AppScope.launch {
-                    delay(offset.toLong()) // non-blocking delay for 1 second (default time unit is ms)
+                    val ms = calculateDelay(previous!!, it)
+                    delay(ms) // non-blocking delay
+                    val obj = it.obj as TObject
                     ResourceProxy().load(obj)
                 }
             } else {
                 val link = Link(href = it.url)
                 ResourceProxy().fetch(link, null, it.subType)
             }
-            previous = it.createdAt
+            previous = it
         }
     }
 
-    private fun filterUserActions(events: List<LogEntry>): List<LogEntry> {
+    private fun calculateDelay(previous: LogEntry, current: LogEntry): Long {
+        val currentMillis = current.createdAt.getTime().toLong()
+        val previousMillis = previous.createdAt.getTime().toLong()
+        return currentMillis - previousMillis
+    }
+
+    private fun filterReplayEvents(events: List<LogEntry>): List<LogEntry> {
         return events.filter {
-            (it.type == Represention.HOMEPAGE.type) ||
-                    it.type == Represention.OBJECT_ACTION.type ||
-                    it.state == EventState.USER_ACTION
+            (it.hasRelevantType()) || it.isUserAction()
         }
     }
 
@@ -92,6 +92,15 @@ class ReplayCommand {
         output.obj = input.obj
         output.state = input.state
         return output
+    }
+
+    private fun LogEntry.isUserAction(): Boolean {
+        return this.state == EventState.USER_ACTION
+    }
+
+    private fun LogEntry.hasRelevantType(): Boolean {
+        return this.type == Represention.HOMEPAGE.type ||
+                this.type == Represention.OBJECT_ACTION.type
     }
 
 }

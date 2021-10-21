@@ -48,7 +48,7 @@ import org.w3c.dom.events.KeyboardEvent
 object UiManager {
 
     var app: App? = null
-    private var session: Session? = null
+    private val sessions = mutableListOf<Session>()
     private val popups = mutableListOf<Widget>()
     private val settings = mutableMapOf<String, Any>()
     var position: Point? = null
@@ -177,10 +177,15 @@ object UiManager {
         pop()
     }
 
+    fun getSession(): Session {
+        return sessions.first()
+    }
+
     fun getUrl(): String {
-        return when (session) {
+        val s = getSession()
+        return when (s) {
             null -> ""
-            else -> session!!.url
+            else -> s.url
         }
     }
 
@@ -193,12 +198,13 @@ object UiManager {
     }
 
     fun login(url: String, username: String, password: String) {
-        session = Session()
-        session!!.login(url, username, password)
+        val s = Session()
+        s.login(url, username, password)
+        sessions.add(s)
     }
 
     fun getCredentials(): String {
-        return session!!.getCredentials()
+        return getSession().getCredentials()
     }
 
     private fun push(widget: Widget) {

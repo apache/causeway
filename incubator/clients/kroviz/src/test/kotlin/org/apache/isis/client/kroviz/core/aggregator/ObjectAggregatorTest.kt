@@ -18,6 +18,7 @@
  */
 package org.apache.isis.client.kroviz.core.aggregator
 
+import org.apache.isis.client.kroviz.App
 import org.apache.isis.client.kroviz.IntegrationTest
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.ACTION_SO_CREATE
 import org.apache.isis.client.kroviz.to.ResultObject
@@ -30,6 +31,7 @@ class ObjectAggregatorTest : IntegrationTest() {
     @Test
     fun testRestfulServices() {
         // given
+        App()
         val aggregator = ObjectAggregator("object test")
         // when
         val logEntry = mockResponse(ACTION_SO_CREATE, aggregator)

@@ -23,8 +23,6 @@ import io.kvision.panel.SimplePanel
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
-import org.apache.isis.client.kroviz.core.aggregator.CollectionAggregator
-import org.apache.isis.client.kroviz.core.aggregator.ObjectAggregator
 import org.apache.isis.client.kroviz.to.HasLinks
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Relation
@@ -53,10 +51,11 @@ enum class EventState(val id: String, val iconName: String, val style: ButtonSty
 
 @Serializable
 data class LogEntry(
-        @Contextual val rs: ResourceSpecification,
-        val method: String? = "",
-        val request: String = "",
-        @Contextual val createdAt: Date = Date()) {
+    @Contextual val rs: ResourceSpecification,
+    val method: String? = "",
+    val request: String = "",
+    @Contextual val createdAt: Date = Date()
+) {
     val url: String = rs.url
 
     //    val referrer = rs.referrerUrl
@@ -234,11 +233,6 @@ data class LogEntry(
 
     fun addAggregator(aggregator: BaseAggregator) {
         aggregators.add(aggregator)
-        if ((aggregators.size > 1) && ((aggregator is ObjectAggregator) || (aggregator is CollectionAggregator))) {
-            console.log("[LE.addAggregator] 2nd/3rd/etc. Object/Collection")
-            console.log(aggregator)
-            //          throw Throwable("[LE.addAggregator] not implemented yet")
-        }
         nOfAggregators = aggregators.size
     }
 
@@ -258,8 +252,6 @@ data class LogEntry(
     }
 
     fun getLinks(): List<Link> {
-//        console.log("[LE.getLinks]")
-//        console.log(obj)
         return if (obj is HasLinks) {
             (obj as HasLinks).getLinks()
         } else {
