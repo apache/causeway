@@ -49,27 +49,34 @@ public class JavaMathBigDecimalJdo                                          // <
         extends JavaMathBigDecimalEntity {
 
 //end::class[]
-    public JavaMathBigDecimalJdo(java.math.BigDecimal initialValue) {
+    public JavaMathBigDecimalJdo(final java.math.BigDecimal initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
+        this.withMaxScale = initialValue;
     }
 
 //tag::class[]
     @Title(prepend = "java.math.BigDecimalJDO entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
-    @Column(allowsNull = "false")                                               // <.>
+    @Column(allowsNull = "false")                                           // <.>
     @Getter @Setter
     private java.math.BigDecimal readOnlyProperty;
 
-    @Property(editing = Editing.ENABLED)                                        // <.>
+    @Property(editing = Editing.ENABLED)                                    // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Column(allowsNull = "false")
     @Getter @Setter
     private java.math.BigDecimal readWriteProperty;
 
-    @Property(optionality = Optionality.OPTIONAL)                               // <.>
+    @Property(editing = Editing.ENABLED)
+    @PropertyLayout(fieldSetId = "editable-properties", sequence = "2")
+    @Column(allowsNull = "false", scale = 2)                                // <.>
+    @Getter @Setter
+    private java.math.BigDecimal withMaxScale;
+
+    @Property(optionality = Optionality.OPTIONAL)                           // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
-    @Column(allowsNull = "true")                                                // <.>
+    @Column(allowsNull = "true")                                            // <.>
     @Getter @Setter
     private java.math.BigDecimal readOnlyOptionalProperty;
 
@@ -78,6 +85,8 @@ public class JavaMathBigDecimalJdo                                          // <
     @Column(allowsNull = "true")
     @Getter @Setter
     private java.math.BigDecimal readWriteOptionalProperty;
+
+
 
 }
 //end::class[]

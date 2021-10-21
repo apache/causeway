@@ -30,10 +30,8 @@ import org.apache.isis.persistence.jpa.applib.IsisModulePersistenceJpaApplib;
     IsisModuleCoreRuntime.class,
     IsisModulePersistenceJpaApplib.class,
 
-        // TODO: to rationalise with the jpa integration module; JpaProgrammingModel defined in both.
     // @Component's
-    // JpaProgrammingModel.class,
-    //JpaMetamodelMenu.class,
+    JpaProgrammingModel.class,
 
     // @Service's
 

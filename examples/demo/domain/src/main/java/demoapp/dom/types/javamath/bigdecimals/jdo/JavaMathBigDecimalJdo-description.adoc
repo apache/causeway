@@ -11,6 +11,7 @@ include::JavaMathBigDecimalJdo.java[tags=class]
 +
 Apache Isis assumes properties are mandatory, so no additional annotation is required.
 <.> directly editable property as defined to Apache Isis
+<.> `BigDecimal` with at most 2 digits to the right of the decimal point (`scale=2`)
 <.> optional property as defined to Apache Isis
 <.> optional property as defined to JDO/DataNucleus
 

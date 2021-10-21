@@ -53,13 +53,14 @@ import demoapp.dom.types.javamath.bigdecimals.persistence.JavaMathBigDecimalEnti
       logicalTypeName = "demo.JavaMathBigDecimalEntity"
 )
 @NoArgsConstructor
-public class JavaMathBigDecimalJpa
+public class JavaMathBigDecimalJpa                                           // <.>
         extends JavaMathBigDecimalEntity {
 
 //end::class[]
     public JavaMathBigDecimalJpa(final java.math.BigDecimal initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
+        this.withMaxScale = initialValue;
     }
 
 //tag::class[]
@@ -69,19 +70,25 @@ public class JavaMathBigDecimalJpa
 
     @Title(prepend = "java.math.BigDecimalJpa entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
-    @Column(nullable = false)                                                   // <.>
+    @Column(nullable = false)                                               // <.>
     @Getter @Setter
     private java.math.BigDecimal readOnlyProperty;
 
-    @Property(editing = Editing.ENABLED)                                        // <.>
+    @Property(editing = Editing.ENABLED)                                    // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Column(nullable = false)
     @Getter @Setter
     private java.math.BigDecimal readWriteProperty;
 
-    @Property(optionality = Optionality.OPTIONAL)                               // <.>
+    @Property(editing = Editing.ENABLED)
+    @PropertyLayout(fieldSetId = "editable-properties", sequence = "2")
+    @Column(nullable = false, scale = 2)                                    // <.>
+    @Getter @Setter
+    private java.math.BigDecimal withMaxScale;
+
+    @Property(optionality = Optionality.OPTIONAL)                           // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
-    @Column(nullable = true)                                                    // <.>
+    @Column(nullable = true)                                                // <.>
     @Getter @Setter
     private java.math.BigDecimal readOnlyOptionalProperty;
 
