@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jpa.integration.metamodel;
+package org.apache.isis.persistence.jpa.integration.entity;
 
 import org.springframework.stereotype.Component;
 
@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel.Marker;
 import lombok.val;
 
 @Component
-public class JpaProgrammingModel implements MetaModelRefiner {
+public class JpaEntityIntegration implements MetaModelRefiner {
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel pm) {

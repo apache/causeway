@@ -23,6 +23,7 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel.Marker;
+import org.apache.isis.persistence.jpa.metamodel.facets.prop.column.BigDecimalInferredFromJpaColumnAnnotationFacetFactory;
 import org.apache.isis.persistence.jpa.metamodel.facets.prop.column.MandatoryFromJpaColumnAnnotationFacetFactory;
 import org.apache.isis.persistence.jpa.metamodel.facets.prop.transients.JpaTransientAnnotationFacetFactory;
 import org.apache.isis.persistence.jpa.metamodel.object.table.JpaTableAnnotationFacetFactory;
@@ -43,6 +44,7 @@ public class JpaProgrammingModel implements MetaModelRefiner {
         pm.addFactory(step, new JpaTableAnnotationFacetFactory(mmc), Marker.JPA);
         pm.addFactory(step, new JpaTransientAnnotationFacetFactory(mmc), Marker.JPA);
         pm.addFactory(step, new MandatoryFromJpaColumnAnnotationFacetFactory(mmc), Marker.JPA);
+        pm.addFactory(step, new BigDecimalInferredFromJpaColumnAnnotationFacetFactory(mmc), Marker.JPA);
 
     }
 
