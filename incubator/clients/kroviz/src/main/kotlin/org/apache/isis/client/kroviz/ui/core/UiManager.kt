@@ -22,6 +22,7 @@ import io.kvision.core.Widget
 import io.kvision.dropdown.ContextMenu
 import io.kvision.panel.SimplePanel
 import io.kvision.utils.ESC_KEY
+import kotlinx.browser.document
 import kotlinx.browser.window
 import org.apache.isis.client.kroviz.App
 import org.apache.isis.client.kroviz.core.Session
@@ -32,6 +33,7 @@ import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.core.model.ObjectDM
+import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.kv.override.RoTab
@@ -138,6 +140,7 @@ object UiManager {
 
     fun amendMenu(menuBars: Menubars) {
         getRoApp().roMenuBar.amendMenu(menuBars)
+        setNormalCursor()
     }
 
     fun updateStatus(entry: LogEntry) {
@@ -148,12 +151,21 @@ object UiManager {
         getRoStatusBar().updateUser(user)
     }
 
+    fun setBusyCursor() {
+        document.body?.style?.cursor = "progress"
+    }
+
+    fun setNormalCursor() {
+        document.body?.style?.cursor = "default"
+    }
+
     fun openCollectionView(aggregator: BaseAggregator) {
         val displayable = aggregator.dpm
         val title: String = StringUtils.extractTitle(displayable.title)
         val panel = RoTable(displayable as CollectionDM)
         add(title, panel, aggregator)
         displayable.isRendered = true
+        setNormalCursor()
     }
 
     fun openObjectView(aggregator: ObjectAggregator) {
@@ -165,6 +177,7 @@ object UiManager {
         val panel = RoDisplay(dm)
         add(title, panel, aggregator)
         dm.isRendered = true
+        setNormalCursor()
     }
 
     fun openDialog(panel: RoDialog) {
@@ -227,6 +240,12 @@ object UiManager {
             }
             popups.removeAt(len - 1)
         }
+    }
+
+    fun performUserAction(aggregator: BaseAggregator, obj: TObject) {
+        setBusyCursor()
+        getEventStore().addUserAction(aggregator, obj)
+        setNormalCursor()
     }
 
 }

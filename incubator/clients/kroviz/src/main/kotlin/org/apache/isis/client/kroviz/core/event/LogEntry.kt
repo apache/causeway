@@ -22,12 +22,14 @@ import io.kvision.html.ButtonStyle
 import io.kvision.panel.SimplePanel
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.to.HasLinks
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.ui.core.Constants
+import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.w3c.files.Blob
 import kotlin.js.Date
 
@@ -232,6 +234,9 @@ data class LogEntry(
     }
 
     fun addAggregator(aggregator: BaseAggregator) {
+        if (aggregator is ActionDispatcher) {
+            UiManager.setBusyCursor()
+        }
         aggregators.add(aggregator)
         nOfAggregators = aggregators.size
     }

@@ -46,12 +46,11 @@ class ResourceProxy {
     fun load(tObject: TObject) {
         val aggregator = ObjectAggregator(tObject.title)
         // ASSUMPTION: there can be max one LogEntry for an Object
-        val es = UiManager.getEventStore()
-        val le = es.findBy(tObject)
+        val le = UiManager.getEventStore().findBy(tObject)
         if (le != null) {
             le.addAggregator(aggregator)
             aggregator.update(le, le.subType)
-            es.addUserAction(aggregator, tObject)
+            UiManager.performUserAction(aggregator, tObject)
         }
     }
 
