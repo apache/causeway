@@ -21,10 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 import java.util.List;
 
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.Model;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -51,8 +47,7 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
     private static final String ID_ADDITIONAL_LINK_LIST = "additionalLinkList";
     private static final String ID_ADDITIONAL_LINK_ITEM = "additionalLinkItem";
     private static final String ID_ADDITIONAL_LINK_TITLE = "additionalLinkTitle";
-
-    public static final String ID_ADDITIONAL_LINK = "additionalLink";
+    public  static final String ID_ADDITIONAL_LINK = "additionalLink";
 
     public enum Style {
         INLINE_LIST {
@@ -79,10 +74,7 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
             Components.permanentlyHide(markupContainer, id);
             return null;
         }
-
-        final AdditionalLinksPanel additionalLinksPanel =  style.newPanel(id, links);
-        markupContainer.addOrReplace(additionalLinksPanel);
-        return additionalLinksPanel;
+        return Wkt.add(markupContainer, style.newPanel(id, links));
     }
 
     protected AdditionalLinksPanel(
@@ -90,93 +82,58 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
             final Can<LinkAndLabel> linksDoNotUseDirectlyInsteadUseOfListOfLinksModel) {
 
         super(id, new ListOfLinksModel(linksDoNotUseDirectlyInsteadUseOfListOfLinksModel));
-
-        final WebMarkupContainer container = new WebMarkupContainer(ID_ADDITIONAL_LINK_LIST) {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public boolean isVisible() {
-                return AdditionalLinksPanel.this.getModel().hasAnyVisibleLink();
-            }
-        };
-        addOrReplace(container);
-
-        container.setOutputMarkupId(true);
-
         setOutputMarkupId(true);
 
-        final ListView<LinkAndLabel> listView =
-                new ListView<LinkAndLabel>(ID_ADDITIONAL_LINK_ITEM, getModel()) {
+        val container = Wkt.add(this, Wkt.containerWithVisibility(ID_ADDITIONAL_LINK_LIST,
+                    ()->AdditionalLinksPanel.this.getModel().hasAnyVisibleLink()));
 
-            private static final long serialVersionUID = 1L;
+        Wkt.listViewAdd(container, ID_ADDITIONAL_LINK_ITEM, getModel(), item->{
 
-            @Override
-            protected void populateItem(final ListItem<LinkAndLabel> item) {
+            val linkAndLabel = item.getModelObject();
+            val link = linkAndLabel.getUiComponent();
+            val action = linkAndLabel.getManagedAction().getAction();
 
-                val linkAndLabel = item.getModelObject();
-                val actionMeta = linkAndLabel.getManagedAction().getAction();
-                val link = linkAndLabel.getUiComponent();
-                final Model<String> tooltipModel = link instanceof ActionLink
-                        ? new Model<String>() {
-                            private static final long serialVersionUID = 1L;
-                            @Override
-                            public String getObject() {
-                                return firstNonNull(
-                                        ((ActionLink) link).getReasonDisabledIfAny(),
-                                        linkAndLabel.getDescription().orElse(null));
-                            }
-                        }
-                        : Model.of(linkAndLabel.getDescription().orElse(null));
+            Tooltips.addTooltip(link, link instanceof ActionLink
+                        && _Strings.isNotEmpty(((ActionLink) link).getReasonDisabledIfAny())
+                    ? ((ActionLink) link).getReasonDisabledIfAny()
+                    : linkAndLabel.getDescription().orElse(null));
 
-                Tooltips.addTooltip(link, tooltipModel.getObject());
+            if(ObjectAction.Util.returnsBlobOrClob(action)) {
+                link.add(new CssClassAppender("noVeil"));
+            }
+            if(action.isPrototype()) {
+                link.add(new CssClassAppender("prototype"));
+            }
+            link.add(new CssClassAppender(linkAndLabel.getFeatureIdentifierForCss()));
 
-                if(ObjectAction.Util.returnsBlobOrClob(actionMeta)) {
-                    link.add(new CssClassAppender("noVeil"));
-                }
-                if(actionMeta.isPrototype()) {
-                    link.add(new CssClassAppender("prototype"));
-                }
-                link.add(new CssClassAppender(linkAndLabel.getFeatureIdentifierForCss()));
-
-                if (actionMeta.getSemantics().isAreYouSure()) {
-                    if(actionMeta.getParameterCount()==0) {
-                        val hasDisabledReason = link instanceof ActionLink
-                                ? _Strings.isNotEmpty(((ActionLink)link).getReasonDisabledIfAny())
-                                : false;
-                        if (!hasDisabledReason) {
-                            val confirmUiModel = ConfirmUiModel.ofAreYouSure(getTranslationService(), Placement.BOTTOM);
-                            Decorators.getConfirm().decorate(link, confirmUiModel);
-                        }
+            if (action.getSemantics().isAreYouSure()) {
+                if(action.getParameterCount()==0) {
+                    val hasDisabledReason = link instanceof ActionLink
+                            ? _Strings.isNotEmpty(((ActionLink)link).getReasonDisabledIfAny())
+                            : false;
+                    if (!hasDisabledReason) {
+                        val confirmUiModel = ConfirmUiModel.ofAreYouSure(getTranslationService(), Placement.BOTTOM);
+                        Decorators.getConfirm().decorate(link, confirmUiModel);
                     }
-                    // ensure links receive the danger style
-                    // don't care if expressed twice
-                    Decorators.getDanger().decorate(link);
                 }
-
-                linkAndLabel
-                .getAdditionalCssClass()
-                .ifPresent(cssClass->CssClassAppender.appendCssClassTo(link, cssClass));
-
-                val viewTitleLabel = Wkt.labelAdd(link, ID_ADDITIONAL_LINK_TITLE,
-                        linkAndLabel::getFriendlyName);
-
-                val fontAwesome = linkAndLabel.getFontAwesomeUiModel();
-                Decorators.getIcon().decorate(viewTitleLabel, fontAwesome);
-                Decorators.getMissingIcon().decorate(viewTitleLabel, fontAwesome);
-
-                item.addOrReplace(link);
+                // ensure links receive the danger style
+                // don't care if expressed twice
+                Decorators.getDanger().decorate(link);
             }
 
-        };
+            linkAndLabel
+            .getAdditionalCssClass()
+            .ifPresent(cssClass->CssClassAppender.appendCssClassTo(link, cssClass));
 
-        container.addOrReplace(listView);
-    }
+            val viewTitleLabel = Wkt.labelAdd(link, ID_ADDITIONAL_LINK_TITLE,
+                    linkAndLabel::getFriendlyName);
 
-    private static String firstNonNull(final String... str) {
-        for (String s : str) {
-            if(s != null) return s;
-        }
-        return null;
+            val fontAwesome = linkAndLabel.getFontAwesomeUiModel();
+            Decorators.getIcon().decorate(viewTitleLabel, fontAwesome);
+            Decorators.getMissingIcon().decorate(viewTitleLabel, fontAwesome);
+
+            item.addOrReplace(link);
+        });
     }
 
 }

@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.util;
 
+import java.util.List;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -28,8 +30,11 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
+import org.danekja.java.util.function.serializable.SerializableBooleanSupplier;
 import org.danekja.java.util.function.serializable.SerializableConsumer;
 
 import org.apache.isis.commons.internal.debug._Probe;
@@ -81,6 +86,19 @@ public class Wkt {
 
     public WebMarkupContainer container(final String id) {
         final WebMarkupContainer component = new WebMarkupContainer(id);
+        component.setOutputMarkupId(true);
+        return component;
+    }
+
+    public WebMarkupContainer containerWithVisibility(
+            final String id,
+            final SerializableBooleanSupplier isVisible) {
+        final WebMarkupContainer component = new WebMarkupContainer(id) {
+            private static final long serialVersionUID = 1L;
+            @Override public boolean isVisible() {
+                return isVisible.getAsBoolean();
+            }
+        };
         component.setOutputMarkupId(true);
         return component;
     }
@@ -162,6 +180,28 @@ public class Wkt {
         return link;
     }
 
+    // -- LIST VIEW
+
+    public <T> ListView<T> listView(
+            final String id,
+            final IModel<? extends List<T>> listModel,
+            final SerializableConsumer<ListItem<T>> itemPopulator) {
+        return new ListView<T>(id, listModel) {
+            private static final long serialVersionUID = 1L;
+            @Override protected void populateItem(final ListItem<T> item) {
+                itemPopulator.accept(item);
+            }
+        };
+    }
+
+    public <T> ListView<T> listViewAdd(
+            final MarkupContainer container,
+            final String id,
+            final IModel<? extends List<T>> listModel,
+            final SerializableConsumer<ListItem<T>> itemPopulator) {
+        return add(container, listView(id, listModel, itemPopulator));
+    }
+
     // -- TEXT AREA
 
     public TextArea<String> textAreaNoTab(final String id, final IModel<String> textModel) {
@@ -174,7 +214,8 @@ public class Wkt {
         };
     }
 
-    public TextArea<String> textAreaAddNoTab(final MarkupContainer container, final String id, final IModel<String> textModel) {
+    public TextArea<String> textAreaAddNoTab(
+            final MarkupContainer container, final String id, final IModel<String> textModel) {
         return add(container, textAreaNoTab(id, textModel));
     }
 

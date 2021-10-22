@@ -57,8 +57,7 @@ extends ComponentFactoryAbstract {
 
     @Override
     public final Component createComponent(final String id, final IModel<?> model) {
-        final ScalarModel scalarModel = (ScalarModel) model;
-        return createComponent(id, scalarModel);
+        return createComponent(id, (ScalarModel) model);
     }
 
     protected abstract Component createComponent(String id, ScalarModel scalarModel);

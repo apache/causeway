@@ -45,10 +45,10 @@ import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
@@ -57,6 +57,7 @@ import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 public abstract class PromptFormAbstract<T extends
     FormExecutorContext
@@ -67,8 +68,7 @@ implements ScalarModelSubscriber {
     private static final long serialVersionUID = 1L;
 
     private static final String ID_OK_BUTTON = "okButton";
-    public static final String ID_CANCEL_BUTTON = "cancelButton";
-
+    public  static final String ID_CANCEL_BUTTON = "cancelButton";
     private static final String ID_FEEDBACK = "feedback";
 
     protected final List<ScalarPanelAbstract> paramPanels = _Lists.newArrayList();
@@ -80,7 +80,7 @@ implements ScalarModelSubscriber {
     private final AjaxButton okButton;
     private final AjaxButton cancelButton;
 
-    public PromptFormAbstract(
+    protected PromptFormAbstract(
             final String id,
             final Component parentPanel,
             final WicketViewerSettings settings,
@@ -94,8 +94,7 @@ implements ScalarModelSubscriber {
         setOutputMarkupId(true); // for ajax button
         addParameters();
 
-        FormFeedbackPanel formFeedback = new FormFeedbackPanel(ID_FEEDBACK);
-        addOrReplace(formFeedback);
+        Wkt.add(this, new FormFeedbackPanel(ID_FEEDBACK));
 
         okButton = addOkButton();
         cancelButton = addCancelButton();
@@ -147,6 +146,11 @@ implements ScalarModelSubscriber {
 
             @Override
             public void onSubmit(final AjaxRequestTarget target) {
+
+                _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
+                        + "originating from User clicking OK on an inline editing form or "
+                        + "action prompt.");
+
                 onOkSubmittedOf(target, getForm(), this);
             }
 

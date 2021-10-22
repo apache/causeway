@@ -45,6 +45,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Decorators;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -71,8 +72,8 @@ extends PromptFormAbstract<ActionModel> {
     protected void addParameters() {
         val actionModel = getActionModel();
 
-        val repeatingView = new RepeatingView(ActionParametersFormPanel.ID_ACTION_PARAMETERS);
-        add(repeatingView);
+        val repeatingView =
+                Wkt.add(this, new RepeatingView(ActionParametersFormPanel.ID_ACTION_PARAMETERS));
 
         paramPanels.clear();
 
@@ -80,13 +81,10 @@ extends PromptFormAbstract<ActionModel> {
         .map(ParameterUiModelWkt.class::cast)
         .forEach(paramModel->{
 
-            val container = new WebMarkupContainer(repeatingView.newChildId());
-            repeatingView.add(container);
+            val container = Wkt.containerAdd(repeatingView, repeatingView.newChildId());
 
             newParamPanel(container, paramModel)
-            .ifPresent(paramPanel->{
-                paramPanels.add(paramPanel);
-            });
+            .ifPresent(paramPanels::add);
 
         });
 
@@ -115,12 +113,11 @@ extends PromptFormAbstract<ActionModel> {
             }
         }
 
-        //FIXME[ISIS-2877] we don't see the LinkAndLabel(s) added to the UI, event though the model has them
         // ScalarPanelAbstract at this point should have added any associated LinkAndLabel(s)
 
         val paramPanel = (ScalarPanelAbstract) component;
         paramPanel.setOutputMarkupId(true);
-        paramPanel.notifyOnChange(this);
+        paramPanel.notifyOnChange(this); // this is a ScalarModelSubscriber, handling onUpdate and onError
         return Optional.of(paramPanel);
     }
 
