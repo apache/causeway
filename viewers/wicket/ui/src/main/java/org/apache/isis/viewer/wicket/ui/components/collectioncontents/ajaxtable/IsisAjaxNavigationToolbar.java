@@ -19,8 +19,6 @@
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNavigationToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
@@ -61,31 +59,25 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
 
         final MarkupContainer container = navigatorContainer();
 
-        container.add(new AjaxLink<Void>(ID_SHOW_ALL) {
+        Wkt.linkAdd(container, ID_SHOW_ALL, target->{
+            showAllItemsOn(table);
 
-            private static final long serialVersionUID = 1L;
+            final DataTable<?, ?> dataTable = getTable();
+            final CollectionContentsSortableDataProvider dataProvider = (CollectionContentsSortableDataProvider) dataTable.getDataProvider();
+            final EntityCollectionModel collectionModel = dataProvider.getEntityCollectionModel();
 
-            @Override
-            public void onClick(final AjaxRequestTarget target) {
-                showAllItemsOn(table);
-
-                final DataTable<?, ?> dataTable = getTable();
-                final CollectionContentsSortableDataProvider dataProvider = (CollectionContentsSortableDataProvider) dataTable.getDataProvider();
-                final EntityCollectionModel collectionModel = dataProvider.getEntityCollectionModel();
-
-                if(toggleboxColumn != null) {
-                    // clear the underlying backend selection model
-                    collectionModel.getDataTableModel().getSelectAllToggle().setValue(false);
-                    // remove toggle UI components
-                    toggleboxColumn.removeToggles();
-                }
-
-                final UiHintContainer hintContainer = getUiHintContainer();
-                if(hintContainer != null) {
-                    hintContainer.setHint(table, HINT_KEY_SHOW_ALL, "true");
-                }
-                target.add(table);
+            if(toggleboxColumn != null) {
+                // clear the underlying backend selection model
+                collectionModel.getDataTableModel().getSelectAllToggle().setValue(false);
+                // remove toggle UI components
+                toggleboxColumn.removeToggles();
             }
+
+            final UiHintContainer hintContainer = getUiHintContainer();
+            if(hintContainer != null) {
+                hintContainer.setHint(table, HINT_KEY_SHOW_ALL, "true");
+            }
+            target.add(table);
         });
 
         Wkt.labelAdd(container, "prototypingLabel", PrototypingMessageProvider.getTookTimingMessageModel());

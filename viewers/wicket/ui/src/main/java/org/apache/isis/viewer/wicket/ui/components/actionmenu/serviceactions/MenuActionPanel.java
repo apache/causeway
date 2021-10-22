@@ -42,33 +42,26 @@ public abstract class MenuActionPanel extends PanelBase {
     }
 
     protected ListView<CssMenuItem> subMenuItemsView(final List<CssMenuItem> subMenuItems) {
-        return new ListView<CssMenuItem>("subMenuItems", subMenuItems) {
+        return Wkt.listView("subMenuItems", subMenuItems, listItem->{
+            val subMenuItem = listItem.getModelObject();
 
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void populateItem(final ListItem<CssMenuItem> listItem) {
-                val subMenuItem = listItem.getModelObject();
-
-                switch(subMenuItem.getItemType()) {
-                case SPACER:
-                    addSpacer(subMenuItem, listItem);
-                    return;
-                case SECTION_LABEL:
-                    addSectionLabel(subMenuItem, listItem);
-                    return;
-                default:
-                    // fall through
-                }
-
-                if (subMenuItem.hasSubMenuItems()) {
-                    addFolderItem(subMenuItem, listItem);
-                } else {
-                    addLeafItem(subMenuItem, listItem);
-                }
-
+            switch(subMenuItem.getItemType()) {
+            case SPACER:
+                addSpacer(subMenuItem, listItem);
+                return;
+            case SECTION_LABEL:
+                addSectionLabel(subMenuItem, listItem);
+                return;
+            default:
+                // fall through
             }
-        };
+
+            if (subMenuItem.hasSubMenuItems()) {
+                addFolderItem(subMenuItem, listItem);
+            } else {
+                addLeafItem(subMenuItem, listItem);
+            }
+        });
     }
 
     protected List<CssMenuItem> flatten(final List<CssMenuItem> menuItems) {

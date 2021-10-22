@@ -27,8 +27,6 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -77,16 +75,10 @@ public class MmvErrorPage extends WebPageBase {
     }
 
     private void addValidationErrors() {
-        ListView<String> validationErrorsView = new ListView<String>(ID_ERROR, getModel()) {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void populateItem(final ListItem<String> item) {
-                final String validationError = item.getModelObject();
-                Wkt.labelAdd(item, ID_ERROR_MESSAGE, validationError);
-            }
-        };
-        add(validationErrorsView);
+        Wkt.listViewAdd(this, ID_ERROR, getModel(), item->{
+            final String validationError = item.getModelObject();
+            Wkt.labelAdd(item, ID_ERROR_MESSAGE, validationError);
+        });
     }
 
     @Override

@@ -24,8 +24,6 @@ import java.util.stream.Collectors;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -52,26 +50,20 @@ public class ServiceActionsPanel extends MenuActionPanel {
 
     public ServiceActionsPanel(final String id, final List<CssMenuItem> menuItems) {
         super(id);
-        val menuItemsView = new ListView<CssMenuItem>("menuItems", menuItems) {
-            private static final long serialVersionUID = 1L;
 
-            @Override
-            protected void populateItem(final ListItem<CssMenuItem> listItem) {
-                val menuItem = listItem.getModelObject();
+        Wkt.listViewAdd(this, "menuItems", menuItems, listItem->{
+            val menuItem = listItem.getModelObject();
 
-                val topMenu = new WebMarkupContainer("topMenu");
-                topMenu.add(subMenuItemsView(menuItem.getSubMenuItems()));
-                topMenu.add(new CssClassAppender(cssForTopMenu(menuItem)));
+            val topMenu = new WebMarkupContainer("topMenu");
+            topMenu.add(subMenuItemsView(menuItem.getSubMenuItems()));
+            topMenu.add(new CssClassAppender(cssForTopMenu(menuItem)));
 
-                Wkt.labelAdd(listItem, "name", menuItem.getName());
-                listItem.add(topMenu);
-                if(menuItem.getItemType().isActionOrSubMenuContainer()) {
-                    listItem.add(new CssClassAppender(cssForServices(menuItem)));
-                }
-
+            Wkt.labelAdd(listItem, "name", menuItem.getName());
+            listItem.add(topMenu);
+            if(menuItem.getItemType().isActionOrSubMenuContainer()) {
+                listItem.add(new CssClassAppender(cssForServices(menuItem)));
             }
-        };
-        add(menuItemsView);
+        });
     }
 
     @Override

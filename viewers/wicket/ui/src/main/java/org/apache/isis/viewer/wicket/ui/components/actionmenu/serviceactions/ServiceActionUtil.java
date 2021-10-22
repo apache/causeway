@@ -23,7 +23,6 @@ import java.util.function.Consumer;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
@@ -84,22 +83,17 @@ public final class ServiceActionUtil {
 
         Wkt.labelAdd(folderItem, "folderName", ()->subMenuItem.getLinkAndLabel().getFriendlyName());
         final List<CssMenuItem> menuItems = subMenuItem.getSubMenuItems();
-        ListView<CssMenuItem> subMenuItemsView = new ListView<CssMenuItem>("subMenuItems",
-                menuItems) {
-            private static final long serialVersionUID = 1L;
 
-            @Override
-            protected void populateItem(final ListItem<CssMenuItem> listItem) {
-                CssMenuItem subMenuItem = listItem.getModelObject();
+        Wkt.listViewAdd(folderItem, "subMenuItems", menuItems, item->{
+            CssMenuItem menuItem = listItem.getModelObject();
 
-                if (subMenuItem.hasSubMenuItems()) {
-                    addFolderItem(commonContext, subMenuItem, listItem, parent);
-                } else {
-                    addLeafItem(commonContext, subMenuItem, listItem, parent);
-                }
+            if (menuItem.hasSubMenuItems()) {
+                addFolderItem(commonContext, menuItem, item, parent);
+            } else {
+                addLeafItem(commonContext, menuItem, item, parent);
             }
-        };
-        folderItem.add(subMenuItemsView);
+        });
+
     }
 
     @RequiredArgsConstructor(staticName = "of")

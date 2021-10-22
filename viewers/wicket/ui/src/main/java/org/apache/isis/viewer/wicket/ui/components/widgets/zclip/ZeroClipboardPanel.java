@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.zclip;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -29,6 +28,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import de.agilecoders.wicket.jquery.util.Strings2;
 
@@ -41,10 +41,10 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     private static final String ID_COPY_LINK = "copyLink";
     private static final String ID_SIMPLE_CLIPBOARD_MODAL_WINDOW = "simpleClipboardModalWindow";
 
-    private AjaxLink<ManagedObject> copyLink;
+    private AjaxLink<Void> copyLink;
     private SimpleClipboardModalWindow simpleClipboardModalWindow;
 
-    public ZeroClipboardPanel(String id, ObjectAdapterModel entityModel) {
+    public ZeroClipboardPanel(final String id, final ObjectAdapterModel entityModel) {
         super(id, entityModel);
     }
 
@@ -68,60 +68,51 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         setVisibilityAllowed(false);
     }
 
-    private AjaxLink<ManagedObject> createLink(String linkId) {
+    private AjaxLink<Void> createLink(final String linkId) {
         return newSimpleClipboardLink(linkId);
     }
 
-    private AjaxLink<ManagedObject> newSimpleClipboardLink(String linkId) {
-        return new AjaxLink<ManagedObject>(linkId) {
-            private static final long serialVersionUID = 1L;
+    private AjaxLink<Void> newSimpleClipboardLink(final String linkId) {
+        return Wkt.link(linkId, target->{
+            String contentId = simpleClipboardModalWindow.getContentId();
+            SimpleClipboardModalWindowPanel panel = new SimpleClipboardModalWindowPanel(contentId);
+            SimpleClipboardModalWindowForm form = new SimpleClipboardModalWindowForm("form");
 
-            @Override
-            public void onClick(AjaxRequestTarget target) {
+            final TextField<String> textField = new TextField<String>("textField", new LoadableDetachableModel<String>() {
+                private static final long serialVersionUID = 1L;
 
-                String contentId = simpleClipboardModalWindow.getContentId();
-                SimpleClipboardModalWindowPanel panel = new SimpleClipboardModalWindowPanel(contentId);
-                SimpleClipboardModalWindowForm form = new SimpleClipboardModalWindowForm("form");
+                @SuppressWarnings({ "rawtypes", "unchecked" })
+                @Override
+                protected String load() {
 
-                final TextField<String> textField = new TextField<String>("textField", new LoadableDetachableModel<String>() {
-                    private static final long serialVersionUID = 1L;
+                    final Class pageClass = ZeroClipboardPanel.this.getPage().getPageClass();
 
-                    @SuppressWarnings({ "rawtypes", "unchecked" })
-                    @Override
-                    protected String load() {
+                    final ObjectAdapterModel entityModel = ZeroClipboardPanel.this.getModel();
+                    final PageParameters pageParameters = entityModel.getPageParameters();
 
-                        final Class pageClass = ZeroClipboardPanel.this.getPage().getPageClass();
+                    final CharSequence urlFor = getRequestCycle().urlFor(pageClass, pageParameters);
+                    return getRequestCycle().getUrlRenderer().renderFullUrl(Url.parse(urlFor));
+                }
+            });
+            panel.add(form);
+            form.add(textField);
 
-                        final ObjectAdapterModel entityModel = ZeroClipboardPanel.this.getModel();
-                        final PageParameters pageParameters = entityModel.getPageParameters();
+            textField.setOutputMarkupId(true);
 
-                        final CharSequence urlFor = getRequestCycle().urlFor(pageClass, pageParameters);
-                        return getRequestCycle().getUrlRenderer().renderFullUrl(Url.parse(urlFor));
-                    }
-                });
-                panel.add(form);
-                form.add(textField);
+            CharSequence modalId = Strings2.escapeMarkupId(simpleClipboardModalWindow.getMarkupId());
+            CharSequence textFieldId = Strings2.escapeMarkupId(textField.getMarkupId());
+            target.appendJavaScript(String.format("$('#%s').one('shown.bs.modal', function(){Wicket.$('%s').select();});", modalId, textFieldId));
 
-                textField.setOutputMarkupId(true);
+            simpleClipboardModalWindow.setPanel(panel, target);
+            simpleClipboardModalWindow.showPrompt(target);
 
-                CharSequence modalId = Strings2.escapeMarkupId(simpleClipboardModalWindow.getMarkupId());
-                CharSequence textFieldId = Strings2.escapeMarkupId(textField.getMarkupId());
-                target.appendJavaScript(String.format("$('#%s').one('shown.bs.modal', function(){Wicket.$('%s').select();});", modalId, textFieldId));
-
-                simpleClipboardModalWindow.setPanel(panel, target);
-                simpleClipboardModalWindow.showPrompt(target);
-
-                target.focusComponent(textField);
-            }
-        };
+            target.focusComponent(textField);
+        });
     }
-
-
 
     private void addSimpleClipboardModalWindow() {
         simpleClipboardModalWindow = SimpleClipboardModalWindow.newModalWindow(ID_SIMPLE_CLIPBOARD_MODAL_WINDOW);
         addOrReplace(simpleClipboardModalWindow);
     }
-
 
 }

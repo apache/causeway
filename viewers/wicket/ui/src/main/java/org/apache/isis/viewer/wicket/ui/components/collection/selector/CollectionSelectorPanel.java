@@ -22,18 +22,12 @@ import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
@@ -45,7 +39,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import lombok.val;
 
 /**
  * Provides a list of links for selecting other views that support
@@ -98,8 +92,6 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         addDropdown();
     }
 
-
-
     private void addDropdown() {
         final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
         final String selected = selectorHelper.honourViewHintElseDefault(this);
@@ -125,92 +117,74 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 
             this.setOutputMarkupId(true);
 
-            final ListView<ComponentFactory> listView = new ListView<ComponentFactory>(ID_VIEW_ITEM, componentFactories) {
+            Wkt.listViewAdd(container, ID_VIEW_ITEM, componentFactories, item->{
+                final ComponentFactory componentFactory = item.getModelObject();
 
-                private static final long serialVersionUID = 1L;
+                val link = Wkt.linkAdd(item, ID_VIEW_LINK, target->{
+                    CollectionSelectorPanel linksSelectorPanel = CollectionSelectorPanel.this;
+                    linksSelectorPanel.setViewHintAndBroadcast(componentFactory.getName(), target);
 
-                @Override
-                protected void populateItem(final ListItem<ComponentFactory> item) {
+                    linksSelectorPanel.selectedComponentFactory = componentFactory;
 
-                    final ComponentFactory componentFactory = item.getModelObject();
-                    final AbstractLink link = new AjaxLink<Void>(ID_VIEW_LINK) {
-                        private static final long serialVersionUID = 1L;
-                        @Override
-                        public void onClick(final AjaxRequestTarget target) {
-                            CollectionSelectorPanel linksSelectorPanel = CollectionSelectorPanel.this;
-                            linksSelectorPanel.setViewHintAndBroadcast(componentFactory.getName(), target);
+                    CollectionSelectorPanel.this.getModel().parentedHintingBookmark()
+                    .ifPresent(bookmark->componentHintKey.set(bookmark, componentFactory.getName()));
 
-                            linksSelectorPanel.selectedComponentFactory = componentFactory;
-                            componentHintKey.set(domainObjectBookmarkIfAny(), componentFactory.getName());
-                            target.add(linksSelectorPanel, views);
-                        }
+                    target.add(linksSelectorPanel, views);
+                });
 
-                        Bookmark domainObjectBookmarkIfAny() {
-                            return CollectionSelectorPanel.this.getModel().parentedHintingBookmark().orElse(null);
-                        }
+                final IModel<String> title = nameFor(componentFactory);
+                Wkt.labelAdd(link, ID_VIEW_ITEM_TITLE, title);
+                final Label viewItemIcon = Wkt.labelAdd(link, ID_VIEW_ITEM_ICON, "");
 
-                        @Override
-                        protected void onComponentTag(final ComponentTag tag) {
-                            super.onComponentTag(tag);
-                            Buttons.fixDisabledState(this, tag);
-                        }
-                    };
-
-                    final IModel<String> title = nameFor(componentFactory);
-                    Wkt.labelAdd(link, ID_VIEW_ITEM_TITLE, title);
-                    final Label viewItemIcon = Wkt.labelAdd(link, ID_VIEW_ITEM_ICON, "");
-
-                    final boolean selected = componentFactory == CollectionSelectorPanel.this.selectedComponentFactory;
-                    if (selected) {
-                        viewButtonTitle.setDefaultModel(title);
-                        IModel<String> cssClass = cssClassFor(componentFactory, viewButtonIcon);
-                        viewButtonIcon.add(AttributeModifier.replace("class", "ViewLinkItem " + cssClass.getObject()));
-                        link.setVisible(false);
-                    } else {
-                        IModel<String> cssClass = cssClassFor(componentFactory, viewItemIcon);
-                        viewItemIcon.add(new CssClassAppender(cssClass));
-                    }
-
-                    item.add(link);
+                final boolean isSelected = componentFactory == CollectionSelectorPanel.this.selectedComponentFactory;
+                if (isSelected) {
+                    viewButtonTitle.setDefaultModel(title);
+                    IModel<String> cssClass = cssClassFor(componentFactory, viewButtonIcon);
+                    viewButtonIcon.add(AttributeModifier.replace("class", "ViewLinkItem " + cssClass.getObject()));
+                    link.setVisible(false);
+                } else {
+                    IModel<String> cssClass = cssClassFor(componentFactory, viewItemIcon);
+                    viewItemIcon.add(new CssClassAppender(cssClass));
                 }
 
-                private IModel<String> cssClassFor(final ComponentFactory componentFactory, final Label viewIcon) {
-                    IModel<String> cssClass = null;
-                    if (componentFactory instanceof CollectionContentsAsFactory) {
-                        CollectionContentsAsFactory collectionContentsAsFactory = (CollectionContentsAsFactory) componentFactory;
-                        cssClass = collectionContentsAsFactory.getCssClass();
-                        viewIcon.setDefaultModelObject("");
-                        viewIcon.setEscapeModelStrings(true);
-                    }
-                    if (cssClass == null) {
-                        String name = componentFactory.getName();
-                        cssClass = Model.of(StringExtensions.asLowerDashed(name));
-                        // Small hack: if there is no specific CSS class then we assume that background-image is used
-                        // the span.ViewItemLink should have some content to show it
-                        // FIX: find a way to do this with CSS (width and height don't seems to help)
-                        viewIcon.setDefaultModelObject("&#160;&#160;&#160;&#160;&#160;");
-                        viewIcon.setEscapeModelStrings(false);
-                    }
-                    return cssClass;
-                }
+                item.add(link);
+            });
 
-                private IModel<String> nameFor(final ComponentFactory componentFactory) {
-                    IModel<String> name = null;
-                    if (componentFactory instanceof CollectionContentsAsFactory) {
-                        CollectionContentsAsFactory collectionContentsAsFactory = (CollectionContentsAsFactory) componentFactory;
-                        name = collectionContentsAsFactory.getTitleLabel();
-                    }
-                    if (name == null) {
-                        name = Model.of(componentFactory.getName());
-                    }
-                    return name;
-                }
-            };
-            container.add(listView);
             addOrReplace(views);
         }
     }
 
+    private static IModel<String> cssClassFor(final ComponentFactory componentFactory, final Label viewIcon) {
+        IModel<String> cssClass = null;
+        if (componentFactory instanceof CollectionContentsAsFactory) {
+            CollectionContentsAsFactory collectionContentsAsFactory = (CollectionContentsAsFactory) componentFactory;
+            cssClass = collectionContentsAsFactory.getCssClass();
+            viewIcon.setDefaultModelObject("");
+            viewIcon.setEscapeModelStrings(true);
+        }
+        if (cssClass == null) {
+            String name = componentFactory.getName();
+            cssClass = Model.of(StringExtensions.asLowerDashed(name));
+            // Small hack: if there is no specific CSS class then we assume that background-image is used
+            // the span.ViewItemLink should have some content to show it
+            // FIX: find a way to do this with CSS (width and height don't seems to help)
+            viewIcon.setDefaultModelObject("&#160;&#160;&#160;&#160;&#160;");
+            viewIcon.setEscapeModelStrings(false);
+        }
+        return cssClass;
+    }
+
+    private static IModel<String> nameFor(final ComponentFactory componentFactory) {
+        IModel<String> name = null;
+        if (componentFactory instanceof CollectionContentsAsFactory) {
+            CollectionContentsAsFactory collectionContentsAsFactory = (CollectionContentsAsFactory) componentFactory;
+            name = collectionContentsAsFactory.getTitleLabel();
+        }
+        if (name == null) {
+            name = Model.of(componentFactory.getName());
+        }
+        return name;
+    }
 
     protected void setViewHintAndBroadcast(final String viewName, final AjaxRequestTarget target) {
         final CollectionSelectorPanel component = CollectionSelectorPanel.this;

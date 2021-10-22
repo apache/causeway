@@ -339,20 +339,14 @@ extends ScalarPanelAbstract {
         final MarkupContainer formComponent = (MarkupContainer) getComponentForRegular();
         formComponent.setOutputMarkupId(true); // enable ajax link
 
-        final AjaxLink<Void> ajaxLink = new AjaxLink<Void>(ID_SCALAR_IF_REGULAR_CLEAR){
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void onClick(final AjaxRequestTarget target) {
-                setEnabled(false);
-                ScalarModel model = IsisBlobOrClobPanelAbstract.this.getModel();
-                model.setObject(null);
-                target.add(formComponent);
-                target.add(fileNameLabel);
-            }
-        };
+        final AjaxLink<Void> ajaxLink = Wkt.linkAdd(formComponent, ID_SCALAR_IF_REGULAR_CLEAR, ajaxTarget->{
+            setEnabled(false);
+            ScalarModel model = IsisBlobOrClobPanelAbstract.this.getModel();
+            model.setObject(null);
+            ajaxTarget.add(formComponent);
+            ajaxTarget.add(fileNameLabel);
+        });
         ajaxLink.setOutputMarkupId(true);
-        formComponent.addOrReplace(ajaxLink);
 
         final Optional<T> blobOrClob = getBlobOrClobFromModel();
         final Component clearButton = formComponent.get(ID_SCALAR_IF_REGULAR_CLEAR);

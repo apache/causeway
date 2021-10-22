@@ -21,18 +21,15 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.themepicker;
 import javax.inject.Inject;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.cookies.CookieUtils;
 import org.apache.wicket.util.string.Strings;
 
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
+import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
 import lombok.val;
@@ -65,7 +62,7 @@ public class ThemeChooser extends Panel {
      *
      * @param id component id
      */
-    public ThemeChooser(String id) {
+    public ThemeChooser(final String id) {
         super(id);
 
         final ActiveThemeProvider activeThemeProvider = getActiveThemeProvider();
@@ -76,32 +73,28 @@ public class ThemeChooser extends Panel {
             // (on the assumption that it is a persistent store and we don't want to overwrite).
         }
 
-        ListView<String> themesView = new ListView<String>("themes", getThemeSupport().getEnabledThemeNames()) {
-            private static final long serialVersionUID = 1L;
+        Wkt.listViewAdd(this, "themes", getThemeSupport().getEnabledThemeNames(), item->{
 
-            @Override
-            protected void populateItem(ListItem<String> item) {
-                final String themeName = item.getModelObject();
+            final String themeName = item.getModelObject();
 
-                if (themeName.equals(getActiveThemeProvider().getActiveTheme().name())) {
-                    item.add(AttributeModifier.append("class", "active"));
-                }
-                item.add(new AjaxLink<Void>("themeLink") {
-                    private static final long serialVersionUID = 1L;
-                    // use Ajax link because Link's url looks like /ENTITY:3 and this confuses the browser
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
+            if (themeName.equals(getActiveThemeProvider().getActiveTheme().name())) {
+                item.add(AttributeModifier.append("class", "active"));
+            }
+
+            // use Ajax link because Link's url looks like /ENTITY:3 and this confuses the browser
+            Wkt.add(item,
+                    Wkt.link("themeLink", target->{
                         setActiveTheme(themeName);
                         saveActiveThemeToCookie(themeName);
                         target.add(getPage()); // repaint the whole page
-                    }
-                }.setBody(Model.of(themeName)));
-            }
-        };
-        add(themesView);
+                    })
+                    .setBody(Model.of(themeName)));
+
+        });
+
     }
 
-    private void saveActiveThemeToCookie(String themeName) {
+    private void saveActiveThemeToCookie(final String themeName) {
         CookieUtils cookieUtils = new CookieUtils();
         cookieUtils.save(ISIS_THEME_COOKIE_NAME, themeName);
     }
@@ -120,7 +113,7 @@ public class ThemeChooser extends Panel {
         }
     }
 
-    private void setActiveTheme(String activeTheme) {
+    private void setActiveTheme(final String activeTheme) {
         IBootstrapSettings bootstrapSettings = Bootstrap.getSettings();
         ITheme theme = getThemeSupport().getThemeProvider().byName(activeTheme);
         getActiveThemeProvider().setActiveTheme(theme);
@@ -140,7 +133,7 @@ public class ThemeChooser extends Panel {
     }
 
     @Override
-    protected void onComponentTag(ComponentTag tag) {
+    protected void onComponentTag(final ComponentTag tag) {
         super.onComponentTag(tag);
 
         tag.setName("li");

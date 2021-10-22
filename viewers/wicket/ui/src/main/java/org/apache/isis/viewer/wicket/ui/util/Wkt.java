@@ -24,12 +24,12 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -39,11 +39,10 @@ import org.danekja.java.util.function.serializable.SerializableConsumer;
 
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 @UtilityClass
 public class Wkt {
@@ -62,18 +61,18 @@ public class Wkt {
 
     public Behavior behaviorOnClick(final SerializableConsumer<AjaxRequestTarget> onClick) {
         return new AjaxEventBehavior("click") {
-           private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-           @Override
-           protected void onEvent(final AjaxRequestTarget target) {
-               _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
-                       + "originating from User clicking on an "
-                       + "editable Property (to start inline editing)"
-                       + "or an Action (to enter param negotiaton or directly execute the Action).");
+            @Override
+            protected void onEvent(final AjaxRequestTarget target) {
+                _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
+                        + "originating from User clicking on an "
+                        + "editable Property (to start inline editing)"
+                        + "or an Action (to enter param negotiaton or directly execute the Action).");
 
-               onClick.accept(target);
-           }
-       };
+                onClick.accept(target);
+            }
+        };
     }
 
     public Behavior behaviorAddOnClick(
@@ -158,34 +157,66 @@ public class Wkt {
 
     // -- LINK
 
-    public ActionLink linkAdd(final MarkupContainer container, final String id, final LinkAndLabel linkAndLabel) {
-        val component = linkAndLabel.getUiComponent();
-        container.addOrReplace(component);
-        return (ActionLink) component;
-    }
-
-    public Link<Void> linkAdd(
-            final MarkupContainer container,
-            final String linkId,
-            final String labelId,
-            final String linkName) {
-        val link = new Link<Void>(linkId) {
+    public AjaxLink<Void> link(final String id, final SerializableConsumer<AjaxRequestTarget> onClick) {
+        return new AjaxLink<Void>(id) {
             private static final long serialVersionUID = 1L;
-            @Override
-            public void onClick() {
+            @Override public void onClick(final AjaxRequestTarget target) {
+                onClick.accept(target);
+            }
+            @Override protected void onComponentTag(final ComponentTag tag) {
+                super.onComponentTag(tag);
+                Buttons.fixDisabledState(this, tag);
             }
         };
-        container.addOrReplace(link);
-        Wkt.labelAdd(link, labelId, linkName);
-        return link;
     }
+
+    public AjaxLink<Void> linkAdd(
+            final MarkupContainer container,
+            final String id,
+            final SerializableConsumer<AjaxRequestTarget> onClick) {
+        return add(container, link(id, onClick));
+    }
+
+    //    public ActionLink linkAdd(final MarkupContainer container, final String id, final LinkAndLabel linkAndLabel) {
+    //        val component = linkAndLabel.getUiComponent();
+    //        container.addOrReplace(component);
+    //        return (ActionLink) component;
+    //    }
+    //
+    //    public Link<Void> linkAdd(
+    //            final MarkupContainer container,
+    //            final String linkId,
+    //            final String labelId,
+    //            final String linkName) {
+    //        val link = new Link<Void>(linkId) {
+    //            private static final long serialVersionUID = 1L;
+    //            @Override
+    //            public void onClick() {
+    //            }
+    //        };
+    //        container.addOrReplace(link);
+    //        Wkt.labelAdd(link, labelId, linkName);
+    //        return link;
+    //    }
 
     // -- LIST VIEW
 
     public <T> ListView<T> listView(
             final String id,
-            final IModel<? extends List<T>> listModel,
+            final List<T> list,
             final SerializableConsumer<ListItem<T>> itemPopulator) {
+        return new ListView<T>(id, list) {
+            private static final long serialVersionUID = 1L;
+            @Override protected void populateItem(final ListItem<T> item) {
+                itemPopulator.accept(item);
+            }
+        };
+    }
+
+    public <T> ListView<T> listView(
+            final String id,
+            final IModel<? extends List<T>> listModel,
+                    final SerializableConsumer<ListItem<T>> itemPopulator) {
         return new ListView<T>(id, listModel) {
             private static final long serialVersionUID = 1L;
             @Override protected void populateItem(final ListItem<T> item) {
@@ -197,8 +228,16 @@ public class Wkt {
     public <T> ListView<T> listViewAdd(
             final MarkupContainer container,
             final String id,
-            final IModel<? extends List<T>> listModel,
+            final List<T> list,
             final SerializableConsumer<ListItem<T>> itemPopulator) {
+        return add(container, listView(id, list, itemPopulator));
+    }
+
+    public <T> ListView<T> listViewAdd(
+            final MarkupContainer container,
+            final String id,
+            final IModel<? extends List<T>> listModel,
+                    final SerializableConsumer<ListItem<T>> itemPopulator) {
         return add(container, listView(id, listModel, itemPopulator));
     }
 
