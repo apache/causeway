@@ -104,7 +104,7 @@ object MenuFactory {
     }
 
     private fun findMenuByTitle(menuTitle: String): Menu? {
-        val menuBars = EventStore.findMenuBars()!!.obj as Menubars
+        val menuBars = UiManager.getEventStore().findMenuBars()!!.obj as Menubars
         var menu = findMenu(menuBars.primary, menuTitle)
         if (menu == null) menu = findMenu(menuBars.secondary, menuTitle)
         if (menu == null) menu = findMenu(menuBars.tertiary, menuTitle)

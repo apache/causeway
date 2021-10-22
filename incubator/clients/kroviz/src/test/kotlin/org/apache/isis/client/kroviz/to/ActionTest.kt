@@ -20,11 +20,11 @@ package org.apache.isis.client.kroviz.to
 
 import org.apache.isis.client.kroviz.IntegrationTest
 import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
-import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.handler.ActionHandler
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.*
+import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.utils.StringUtils
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -64,8 +64,9 @@ class ActionTest : IntegrationTest() {
             console.log(json)
             ResourceProxy().fetch(link, ActionDispatcher())
             val urlSpec = ResourceSpecification(url)
-            val le = EventStore.findBy(urlSpec)!!
-            console.log(EventStore.log)
+            val es = UiManager.getEventStore()
+            val le = es.findBy(urlSpec)!!
+            console.log(es.log)
             console.log(le)
             assertTrue(!le.isError())
         }

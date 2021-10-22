@@ -34,19 +34,21 @@ class LinkTreeDiagramTest {
 
     //@Test         //TODO rework test to use AggregatorWithLayout
     fun testLinkTreeDiagram() {
+        // given
+        val es = EventStore()
         //when
         val aggregator = SystemAggregator()
-        load(RESTFUL, "", RestfulHandler(), aggregator)
+        load(RESTFUL, "", RestfulHandler(), aggregator, es)
         val referer = RESTFUL.url
-        load(RESTFUL_SERVICES, referer, ServiceHandler(), aggregator)
-        load(RESTFUL_USER, referer, UserHandler(), aggregator)
-        load(RESTFUL_MENUBARS, referer, MenuBarsHandler(), aggregator)
-        load(RESTFUL_VERSION, referer, VersionHandler(), aggregator)
-        load(RESTFUL_DOMAIN_TYPES, referer, DomainTypesHandler(), aggregator)
+        load(RESTFUL_SERVICES, referer, ServiceHandler(), aggregator, es)
+        load(RESTFUL_USER, referer, UserHandler(), aggregator, es)
+        load(RESTFUL_MENUBARS, referer, MenuBarsHandler(), aggregator, es)
+        load(RESTFUL_VERSION, referer, VersionHandler(), aggregator, es)
+        load(RESTFUL_DOMAIN_TYPES, referer, DomainTypesHandler(), aggregator, es)
         // then
-        assertTrue(EventStore.log.size >= 6)
+        assertTrue(es.log.size >= 6)
         val rootRs = ResourceSpecification(RESTFUL.url)
-        val rootLogEntry = EventStore.findBy(rootRs)
+        val rootLogEntry = es.findBy(rootRs)
         assertNotNull(rootLogEntry)  //1
 
         // when
@@ -60,10 +62,10 @@ class LinkTreeDiagramTest {
         assertTrue(code.contains("http://localhost:8080/restful/menuBars"))
     }
 
-    private fun load(response: Response, referer: String, handler: BaseHandler, aggregator: SystemAggregator) {
+    private fun load(response: Response, referer: String, handler: BaseHandler, aggregator: SystemAggregator, es: EventStore) {
         val rs = ResourceSpecification(response.url, referrerUrl = referer)
-        EventStore.start(rs, Method.GET.operation, aggregator = aggregator)
-        val le = EventStore.end(rs, response.str)!!
+        es.start(rs, Method.GET.operation, aggregator = aggregator)
+        val le = es.end(rs, response.str)!!
         val tObj = handler.parse(response.str)!!
         le.setTransferObject(tObj)
     }

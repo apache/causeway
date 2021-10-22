@@ -60,7 +60,7 @@ class DynamicMenuBuilder {
 
         val title = "Chart"
         val a4 = buildMenuEntry(title, title, {
-            UiManager.add(title, ChartFactory().build(EventStore.log))
+            UiManager.add(title, ChartFactory().build(UiManager.getEventStore().log))
         })
         menu.add(a4)
 

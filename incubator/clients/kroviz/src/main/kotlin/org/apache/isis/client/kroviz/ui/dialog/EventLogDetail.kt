@@ -26,6 +26,7 @@ import org.apache.isis.client.kroviz.to.bs3.Grid
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
+import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.ui.diagram.JsonDiagram
 import org.apache.isis.client.kroviz.ui.diagram.LayoutDiagram
 import org.apache.isis.client.kroviz.ui.diagram.LinkTreeDiagram
@@ -41,7 +42,7 @@ class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
         // For a yet unknown reason, aggregators are not transmitted via tabulator.
         // As a WORKAROUND, we fetch the full blown LogEntry from the EventStore again.
         val rs = ResourceSpecification(logEntryFromTabulator.title)
-        logEntry = EventStore.findBy(rs) ?: logEntryFromTabulator  // in case of xml, we use the entry passed in
+        logEntry = UiManager.getEventStore().findBy(rs) ?: logEntryFromTabulator  // in case of xml, we use the entry passed in
     }
 
     // callback parameter

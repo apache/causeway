@@ -48,7 +48,7 @@ object LinkTreeDiagram {
     private fun toPumlCode(node: Node, level: Int): String {
         val url = node.name
         val rs = ResourceSpecification(url)
-        val le = EventStore.findBy(rs)
+        val le = UiManager.getEventStore().findBy(rs)
         val pc = PumlCode()
         if (le != null) {
             val title = StringUtils.shortTitle(url, protocolHostPort)

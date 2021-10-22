@@ -18,6 +18,7 @@
  */
 package org.apache.isis.client.kroviz.core
 
+import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.utils.StringUtils
 
@@ -28,6 +29,7 @@ class Session {
     private var user: String = ""
     private var pw: String = ""
     var url: String = ""
+    val eventStore = EventStore()
 
     fun login(url: String, user: String, pw: String) {
         this.user = user

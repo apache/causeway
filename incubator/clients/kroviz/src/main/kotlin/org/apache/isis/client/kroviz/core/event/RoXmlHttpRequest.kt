@@ -65,14 +65,14 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
             body.isEmpty() -> xhr.send()
             else -> xhr.send(body)
         }
-        EventStore.start(rs, method, body, aggregator)
+        UiManager.getEventStore().start(rs, method, body, aggregator)
     }
 
     private fun buildBody(link: Link): String {
         return when {
             link.hasArguments() -> StringUtils.argumentsAsBody(link)
             link.method == Method.PUT.operation -> {
-                val logEntry = EventStore.findBy(aggregator!!)
+                val logEntry = UiManager.getEventStore().findBy(aggregator!!)
                 when (val obj = logEntry?.obj) {
                     is TObject -> StringUtils.propertiesAsBody(obj)
                     else -> ""
@@ -94,7 +94,7 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
         xhr.send(body)
         val rs = buildResourceSpecificationAndSetupHandler(url, subType, body)
 
-        EventStore.start(rs, method, body, aggregator)
+        UiManager.getEventStore().start(rs, method, body, aggregator)
     }
 
     internal fun invokeKroki(pumlCode: String) {
@@ -108,7 +108,7 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
         val rs = buildResourceSpecificationAndSetupHandler(url, Constants.subTypeJson, pumlCode)
 
         xhr.send(pumlCode)
-        EventStore.start(rs, method, pumlCode, aggregator)
+        UiManager.getEventStore().start(rs, method, pumlCode, aggregator)
     }
 
     private fun buildResourceSpecificationAndSetupHandler(
@@ -124,7 +124,7 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
 
     private fun handleResult(rs: ResourceSpecification, body: String) {
         val response: Any? = xhr.response
-        val le: LogEntry? = EventStore.end(rs, body, response)
+        val le: LogEntry? = UiManager.getEventStore().end(rs, body, response)
         if (le != null) {
             when {
                 aggregator == null -> ResponseHandler.handle(le)
@@ -137,7 +137,7 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
 
     private fun handleError(rs: ResourceSpecification) {
         val responseText = xhr.responseText
-        EventStore.fault(rs, responseText)
+        UiManager.getEventStore().fault(rs, responseText)
     }
 
 }

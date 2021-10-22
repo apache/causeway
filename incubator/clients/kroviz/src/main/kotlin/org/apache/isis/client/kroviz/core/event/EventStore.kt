@@ -37,7 +37,7 @@ import org.w3c.files.Blob
  * @see "https://en.wikipedia.org/wiki/Proxy_pattern"
  * @see "https://martinfowler.com/eaaDev/EventSourcing.html"
  */
-object EventStore {
+class EventStore {
     var log = observableListOf<LogEntry>()
     var logStartTime: Int = 0
 

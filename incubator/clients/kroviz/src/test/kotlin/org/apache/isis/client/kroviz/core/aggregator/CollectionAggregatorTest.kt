@@ -19,12 +19,12 @@
 package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.IntegrationTest
-import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.*
 import org.apache.isis.client.kroviz.to.Property
 import org.apache.isis.client.kroviz.to.Relation
+import org.apache.isis.client.kroviz.ui.core.UiManager
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
@@ -37,14 +37,15 @@ class CollectionAggregatorTest : IntegrationTest() {
     fun testFixtureResult() {
         if (isAppAvailable()) {
             // given
-            EventStore.reset()
+            val es = UiManager.getEventStore()
+            es.reset()
             val obs = CollectionAggregator("test")
             // when
             mockResponse(FR_OBJECT, obs)
             mockResponse(FR_OBJECT_LAYOUT, obs)
             mockResponse(FR_OBJECT_PROPERTY, obs)
             val reSpec = ResourceSpecification(FR_OBJECT_PROPERTY.url)
-            val pLe = EventStore.findBy(reSpec)!!
+            val pLe = es.findBy(reSpec)!!
             val pdLe = mockResponse(FR_PROPERTY_DESCRIPTION, obs)
             val layoutLe = mockResponse(FR_OBJECT_LAYOUT, obs)
 
@@ -81,7 +82,7 @@ class CollectionAggregatorTest : IntegrationTest() {
     fun testService() {
         if (isAppAvailable()) {
             // given
-            EventStore.reset()
+            UiManager.getEventStore().reset()
             val obs = CollectionAggregator("test")
             // when
             mockResponse(SO_LIST_ALL, obs)

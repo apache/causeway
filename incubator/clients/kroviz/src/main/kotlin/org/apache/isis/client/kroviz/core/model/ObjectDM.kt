@@ -18,11 +18,10 @@
  */
 package org.apache.isis.client.kroviz.core.model
 
-import org.apache.isis.client.kroviz.core.event.EventStore
-import org.apache.isis.client.kroviz.core.event.EventStore.findBy
 import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.to.*
+import org.apache.isis.client.kroviz.ui.core.UiManager
 
 class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     var data: Exposer? = null
@@ -30,7 +29,7 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     private var dirty: Boolean = false
 
     override fun canBeDisplayed(): Boolean {
- //       debug()
+        //       debug()
         return when {
             isRendered -> false
             (layout == null) && (grid == null) -> false
@@ -38,7 +37,7 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
         }
     }
 
-    private fun debug()  {
+    private fun debug() {
         console.log("[]")
         console.log("[ODM.debug] data / collections / layout / grid / properties / icon / aggregator / logEntries")
         console.log(data)
@@ -51,10 +50,11 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
             val delegate = (data as Exposer).delegate
             val selfLink = delegate.getSelfLink()
             val rs = ResourceSpecification(selfLink.href)
-            val le = EventStore.findBy(rs)!!
+            val es = UiManager.getEventStore()
+            val le = es.findBy(rs)!!
             val aggt = le.getAggregator()
             console.log(aggt)
-            val logEntries = EventStore.findAllBy(aggt)
+            val logEntries = es.findAllBy(aggt)
             logEntries.forEach {
                 console.log(it)
             }
@@ -94,12 +94,13 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
             val getLink = tObject.links.first()
             val href = getLink.href
             val reSpec = ResourceSpecification(href)
+            val es = UiManager.getEventStore()
             //WATCHOUT this is sequence dependent: GET and PUT share the same URL - if called after PUTting, it may fail
-            val getLogEntry = findBy(reSpec)!!
+            val getLogEntry = es.findBy(reSpec)!!
             getLogEntry.setReload()
 
             val putLink = Link(method = Method.PUT.operation, href = href)
-            val logEntry = findBy(reSpec)
+            val logEntry = es.findBy(reSpec)
             val aggregator = logEntry?.getAggregator()!!
             // there may be more than one aggt - which may break this code
 
@@ -117,27 +118,28 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
 
     private fun createPropertyFrom(m: Member): Property {
         return Property(
-                id = m.id,
-                memberType = m.memberType,
-                links = m.links,
-                optional = m.optional,
-                title = m.id,
-                value = m.value,
-                extensions = m.extensions,
-                format = m.format,
-                disabledReason = m.disabledReason
+            id = m.id,
+            memberType = m.memberType,
+            links = m.links,
+            optional = m.optional,
+            title = m.id,
+            value = m.value,
+            extensions = m.extensions,
+            format = m.format,
+            disabledReason = m.disabledReason
         )
     }
 
     private fun createObjectFrom(resultObject: ResultObject): TObject {
         val r = resultObject.result!!
         return TObject(
-                links = r.links,
-                extensions = r.extensions!!,
-                title = r.title,
-                domainType = r.domainType,
-                instanceId = r.instanceId.toString(),
-                members = r.members)
+            links = r.links,
+            extensions = r.extensions!!,
+            title = r.title,
+            domainType = r.domainType,
+            instanceId = r.instanceId.toString(),
+            members = r.members
+        )
     }
 
 }

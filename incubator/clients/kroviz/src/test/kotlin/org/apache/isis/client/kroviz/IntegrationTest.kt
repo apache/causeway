@@ -67,12 +67,13 @@ open class IntegrationTest {
             else -> Constants.subTypeJson
         }
         val reSpec = ResourceSpecification(response.url, subType)
-        EventStore.start(
+        val es = EventStore()
+        es.start(
                 reSpec,
                 Method.GET.operation,
                 "",
                 aggregator)
-        val le = EventStore.end(reSpec, str)!!
+        val le = es.end(reSpec, str)!!
         ResponseHandler.handle(le)
         wait(100)
         return le

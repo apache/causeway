@@ -96,7 +96,7 @@ object UiManager {
 
     fun add(title: String, panel: SimplePanel, aggregator: BaseAggregator = UndefinedDispatcher()) {
         getRoView().addTab(title, panel)
-        EventStore.addView(title, aggregator, panel)
+        getEventStore().addView(title, aggregator, panel)
     }
 
     fun remove(panel: SimplePanel) {
@@ -126,13 +126,13 @@ object UiManager {
         tab.svg = svg
 
         val aggregator: BaseAggregator = UndefinedDispatcher()
-        EventStore.addView(title, aggregator, panel)
+        getEventStore().addView(title, aggregator, panel)
     }
 
     fun closeView(tab: SimplePanel) {
         val tt = tab.title
         if (tt != null) {
-            EventStore.closeView(tt)
+            getEventStore().closeView(tt)
         }
     }
 
@@ -187,6 +187,10 @@ object UiManager {
             null -> ""
             else -> s.url
         }
+    }
+
+    fun getEventStore() : EventStore {
+        return getSession().eventStore
     }
 
     fun loadDomainTypes(): Boolean {

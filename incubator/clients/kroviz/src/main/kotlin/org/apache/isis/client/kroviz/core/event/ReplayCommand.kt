@@ -27,14 +27,16 @@ import org.apache.isis.client.kroviz.main
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Represention
 import org.apache.isis.client.kroviz.to.TObject
+import org.apache.isis.client.kroviz.ui.core.UiManager
 
 val AppScope = CoroutineScope(window.asCoroutineDispatcher())
 
 class ReplayCommand {
 
     fun execute() {
-        val expectedEvents = copyEvents(EventStore.log)
-        EventStore.reset()
+        val es = UiManager.getEventStore()
+        val expectedEvents = copyEvents(es.log)
+        es.reset()
         main() // re-creates the UI, but keeps the UiManager(singleton/object) and the session
 
         val replayEvents = filterReplayEvents(expectedEvents)

@@ -67,7 +67,7 @@ class DiagramDialog(
     }
 
     private fun getDiagramCode(): String {
-        val logEntry = EventStore.findByDispatcher(callBack as UUID)
+        val logEntry = UiManager.getEventStore().findByDispatcher(callBack as UUID)
         return logEntry.getResponse()
     }
 

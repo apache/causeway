@@ -26,6 +26,7 @@ import org.apache.isis.client.kroviz.handler.ResponseHandler
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Constants
+import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.ui.diagram.Node
 import org.apache.isis.client.kroviz.ui.diagram.Tree
 
@@ -45,11 +46,12 @@ class ResourceProxy {
     fun load(tObject: TObject) {
         val aggregator = ObjectAggregator(tObject.title)
         // ASSUMPTION: there can be max one LogEntry for an Object
-        val le = EventStore.findBy(tObject)
+        val es = UiManager.getEventStore()
+        val le = es.findBy(tObject)
         if (le != null) {
             le.addAggregator(aggregator)
             aggregator.update(le, le.subType)
-            EventStore.addUserAction(aggregator, tObject)
+            es.addUserAction(aggregator, tObject)
         }
     }
 
@@ -59,7 +61,7 @@ class ResourceProxy {
               isRest: Boolean = true,
               referrer: String = "") {
         val rs = ResourceSpecification(link.href, subType = subType, referrerUrl = referrer)
-        val isCached = when (val le = EventStore.findBy(rs)) {
+        val isCached = when (val le = UiManager.getEventStore().findBy(rs)) {
             null -> false
             else -> le.isCached(rs, link.method)
         }
@@ -83,7 +85,8 @@ class ResourceProxy {
     }
 
     private fun processCached(rs: ResourceSpecification, aggregator: BaseAggregator?) {
-        val le = EventStore.findBy(rs)!!
+        val es = UiManager.getEventStore()
+        val le = es.findBy(rs)!!
         le.retrieveResponse()
         if (aggregator == null) {
             ResponseHandler.handle(le)
@@ -91,7 +94,7 @@ class ResourceProxy {
             aggregator.update(le, le.subType)
         }
         le.setCached()
-        EventStore.updateStatus(le)
+        es.updateStatus(le)
     }
 
     fun invokeKroki(pumlCode: String, aggregator: SvgDispatcher) {
