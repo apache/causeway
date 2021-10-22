@@ -35,8 +35,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -68,7 +68,7 @@ public class BooleanPanel extends ScalarPanelAbstract {
         final FormGroup scalarIfRegularFormGroup = new FormGroup(ID_SCALAR_IF_REGULAR, checkBox);
         scalarIfRegularFormGroup.add(checkBox);
         if(getModel().isRequired() && getModel().isEnabled()) {
-            scalarIfRegularFormGroup.add(new CssClassAppender("mandatory"));
+            Wkt.cssAppend(scalarIfRegularFormGroup, "mandatory");
         }
 
         final String labelCaption = getRendering().getLabelCaption(checkBox);

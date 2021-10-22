@@ -24,10 +24,9 @@ import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.request.cycle.RequestCycle;
 
@@ -64,7 +63,6 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.NonNull;
@@ -73,8 +71,7 @@ import lombok.val;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 public final class ActionLink
-extends AjaxLink<ManagedObject>
-implements IAjaxIndicatorAware {
+extends IndicatingAjaxLink<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
 
@@ -83,8 +80,7 @@ implements IAjaxIndicatorAware {
             final @NonNull ActionModel actionModel) {
 
         val actionLink = new ActionLink(linkId, actionModel);
-        actionLink.add(new CssClassAppender("noVeil"));
-        return actionLink;
+        return Wkt.cssAppend(actionLink, "noVeil");
     }
 
     private final AjaxIndicatorAppender indicatorAppenderIfAny;

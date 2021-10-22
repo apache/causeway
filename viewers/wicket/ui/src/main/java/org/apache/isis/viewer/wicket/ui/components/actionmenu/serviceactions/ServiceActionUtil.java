@@ -33,7 +33,6 @@ import org.apache.isis.viewer.common.model.menu.MenuVisitor;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Decorators;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
@@ -76,7 +75,7 @@ public final class ServiceActionUtil {
             final ListItem<CssMenuItem> listItem,
             final MarkupContainer parent) {
 
-        listItem.add(new CssClassAppender("dropdown-submenu"));
+        Wkt.cssAppend(listItem, "dropdown-submenu");
 
         Fragment folderItem = new Fragment("content", "folderItem", parent);
         listItem.add(folderItem);

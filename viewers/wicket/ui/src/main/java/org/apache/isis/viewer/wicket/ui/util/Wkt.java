@@ -36,14 +36,22 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.danekja.java.util.function.serializable.SerializableBooleanSupplier;
 import org.danekja.java.util.function.serializable.SerializableConsumer;
+import org.springframework.lang.Nullable;
 
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 
+import lombok.val;
 import lombok.experimental.UtilityClass;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
+/**
+ * Wicket common idioms, in alphabetical order.
+ */
 @UtilityClass
 public class Wkt {
 
@@ -104,6 +112,57 @@ public class Wkt {
 
     public WebMarkupContainer containerAdd(final MarkupContainer container, final String id) {
         return add(container, container(id));
+    }
+
+    // -- CSS
+
+    /**
+     * If {@code cssClass} is empty, does nothing.
+     */
+    public ComponentTag cssAppend(final ComponentTag tag, final @Nullable String cssClass) {
+        if(_Strings.isNotEmpty(cssClass)) {
+            tag.append("class", cssClass, " ");
+        }
+        return tag;
+    }
+
+    /**
+     * If {@code cssClass} is empty, does nothing.
+     */
+    public <T extends Component> T cssAppend(final T component, final @Nullable String cssClass) {
+        if(_Strings.isNotEmpty(cssClass)) {
+            component.add(new CssClassNameAppender(cssClass));
+        }
+        return component;
+    }
+
+    public <T extends Component> T cssAppend(final T component, final @Nullable IModel<String> cssClassModel) {
+        if(cssClassModel!=null) {
+            component.add(new CssClassNameAppender(cssClassModel));
+        }
+        return component;
+    }
+
+    public <T extends Component> T cssAppend(final T component, final Identifier identifier) {
+        return cssAppend(component, cssNormalize(identifier));
+    }
+
+    public static String cssNormalize(final Identifier identifier) {
+        val sb = new StringBuilder();
+        sb.append("isis-");
+        sb.append(identifier.getLogicalType().getLogicalTypeName());
+        if(_Strings.isNullOrEmpty(identifier.getMemberLogicalName())) {
+            sb.append("-");
+            sb.append(identifier.getMemberLogicalName());
+        }
+        return cssNormalize(sb.toString());
+    }
+
+    public static String cssNormalize(final String cssClass) {
+        val trimmed = _Strings.blankToNullOrTrim(cssClass);
+        return _Strings.isNullOrEmpty(trimmed)
+                ? null
+                : cssClass.replaceAll("\\.", "-").replaceAll("[^A-Za-z0-9- ]", "").replaceAll("\\s+", "-");
     }
 
     // -- FRAGMENT
@@ -277,5 +336,7 @@ public class Wkt {
         });
 
     }
+
+
 
 }

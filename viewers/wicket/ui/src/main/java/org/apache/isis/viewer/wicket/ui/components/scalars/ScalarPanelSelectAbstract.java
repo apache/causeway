@@ -38,8 +38,8 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderAbstract;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.NonNull;
 import lombok.val;
@@ -92,7 +92,7 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
 
         final ScalarModel model = getModel();
         if(model.isRequired() && model.isEnabled()) {
-            formGroup.add(new CssClassAppender("mandatory"));
+            Wkt.cssAppend(formGroup, "mandatory");
         }
         return formGroup;
     }

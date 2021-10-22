@@ -33,7 +33,7 @@ import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel.Variant;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -62,7 +62,7 @@ extends GenericColumnAbstract {
             final IModel<DataRow> rowModel) {
 
         cellItem.add(createComponent(componentId, rowModel));
-        cellItem.add(new CssClassAppender("title-column"));
+        Wkt.cssAppend(cellItem, "title-column");
     }
 
     // -- HELPER

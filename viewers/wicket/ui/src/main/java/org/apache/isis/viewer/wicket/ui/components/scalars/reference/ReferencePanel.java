@@ -46,7 +46,6 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.Obj
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceObjectAutoComplete;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete;
 import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
@@ -260,7 +259,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
             boolean inlinePrompt = scalarModel.isInlinePrompt();
             if(inlinePrompt) {
                 // bit of a hack... allows us to suppress the title using CSS
-                component.add(new CssClassAppender("inlinePrompt"));
+                Wkt.cssAppend(component, "inlinePrompt");
             }
 
             if (adapter != null) {

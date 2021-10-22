@@ -47,7 +47,6 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -196,7 +195,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
         final Component scalarNameAndValueComponent = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
         if(scalarNameAndValueComponent instanceof MarkupContainer) {
-            CssClassAppender.appendCssClassTo((MarkupContainer)scalarNameAndValueComponent, scalarModel.getIdentifier());
+            Wkt.cssAppend(scalarNameAndValueComponent, scalarModel.getIdentifier());
         }
 
         val entity = entityModel.getManagedObject();

@@ -19,12 +19,11 @@
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 /**
  * {@link PanelAbstract Panel} to capture the arguments for an action
@@ -52,12 +51,7 @@ extends PromptFormPanelAbstract<ManagedObject, ActionModel> {
         final ActionParametersForm inputForm =
                 new ActionParametersForm("inputForm", this, this.getWicketViewerSettings(), model);
 
-        final ObjectAction action = model.getAction();
-        CssClassAppender.appendCssClassTo(inputForm,
-                "isis-" + CssClassAppender.asCssStyle(
-                        action.getDeclaringType().getLogicalTypeName().replace(".","-")
-                        + "-"
-                        + action.getId()));
+        Wkt.cssAppend(inputForm, model.getAction().getFeatureIdentifier());
         add(inputForm);
     }
 

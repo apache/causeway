@@ -27,7 +27,6 @@ import org.apache.wicket.markup.html.panel.Fragment;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.viewer.wicket.ui.panels.PanelBase;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -89,7 +88,7 @@ public abstract class MenuActionPanel extends PanelBase {
         final MarkupContainer parent = this;
         val fragment = new Fragment("content", "separatorItem", parent);
         listItem.add(fragment);
-        listItem.add(new CssClassAppender("list-separator"));
+        Wkt.cssAppend(listItem, "list-separator");
     }
 
     private void addSectionLabel(final CssMenuItem menuItem, final ListItem<CssMenuItem> listItem) {
@@ -97,7 +96,7 @@ public abstract class MenuActionPanel extends PanelBase {
         val fragment = new Fragment("content", "sectionItem", parent);
         Wkt.labelAdd(fragment, "sectionLabel", menuItem.getName());
         listItem.add(fragment);
-        listItem.add(new CssClassAppender("list-section-label"));
+        Wkt.cssAppend(listItem, "list-section-label");
     }
 
 

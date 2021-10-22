@@ -29,7 +29,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.commons.internal.base._Either;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
@@ -43,7 +42,6 @@ import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.act.ParameterUiModelWkt;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Decorators;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
@@ -107,10 +105,7 @@ extends PromptFormAbstract<ActionModel> {
         }
 
         if(component instanceof MarkupContainer) {
-            val css = scalarParamModel.getCssClass();
-            if (!_Strings.isNullOrEmpty(css)) {
-                CssClassAppender.appendCssClassTo((MarkupContainer) component, CssClassAppender.asCssStyle(css));
-            }
+            Wkt.cssAppend(component, scalarParamModel.getCssClass());
         }
 
         // ScalarPanelAbstract at this point should have added any associated LinkAndLabel(s)

@@ -48,7 +48,7 @@ import org.apache.isis.viewer.wicket.ui.components.layout.bs3.tabs.TabGroupPanel
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -89,7 +89,7 @@ implements HasDynamicallyVisibleContent {
 
         final WebMarkupContainer div = new WebMarkupContainer(ID_COL);
 
-        CssClassAppender.appendCssClassTo(div, bs3Col.toCssClass());
+        Wkt.cssAppend(div, bs3Col.toCssClass());
 
         // icon/title
         final DomainObjectLayoutData domainObject = bs3Col.getDomainObject();

@@ -74,7 +74,6 @@ import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModa
 import org.apache.isis.viewer.wicket.ui.components.actionpromptsb.ActionPromptSidebar;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.FontAwesomeCssReferenceWkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
@@ -151,9 +150,7 @@ implements ActionPromptProvider {
             themeDiv = new WebMarkupContainer(ID_THEME);
             add(themeDiv);
             String applicationName = getConfiguration().getViewer().getWicket().getApplication().getName();
-            if(applicationName != null) {
-                themeDiv.add(new CssClassAppender(CssClassAppender.asCssStyle(applicationName)));
-            }
+            Wkt.cssAppend(themeDiv, Wkt.cssNormalize(applicationName));
 
             boolean devUtilitiesEnabled = getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled();
             Component debugBar = devUtilitiesEnabled

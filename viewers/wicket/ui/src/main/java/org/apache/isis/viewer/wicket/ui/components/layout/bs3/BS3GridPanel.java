@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.row.Row;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 public class BS3GridPanel
 extends PanelAbstract<ManagedObject, EntityModel> {
@@ -45,7 +46,7 @@ extends PanelAbstract<ManagedObject, EntityModel> {
 
     private void buildGui() {
 
-        Util.appendCssClassIfRequired(this, bs3Page);
+        Wkt.cssAppend(this, bs3Page.getCssClass());
 
         final RepeatingView rv = new RepeatingView(ID_ROWS);
 

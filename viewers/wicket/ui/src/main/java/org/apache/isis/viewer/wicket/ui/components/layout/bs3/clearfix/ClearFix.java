@@ -23,9 +23,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3ClearFix;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.ui.components.layout.bs3.Util;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 public class ClearFix
 extends PanelAbstract<ManagedObject, EntityModel> {
@@ -50,10 +49,10 @@ extends PanelAbstract<ManagedObject, EntityModel> {
     private void buildGui() {
 
         setRenderBodyOnly(true);
-        Util.appendCssClassIfRequired(this, bs3ClearFix);
+        Wkt.cssAppend(this, bs3ClearFix.getCssClass());
 
         final WebMarkupContainer div = new WebMarkupContainer(ID_COL);
-        CssClassAppender.appendCssClassTo(div, bs3ClearFix.toCssClass());
+        Wkt.cssAppend(div, bs3ClearFix.toCssClass());
 
         this.addOrReplace(div);
     }

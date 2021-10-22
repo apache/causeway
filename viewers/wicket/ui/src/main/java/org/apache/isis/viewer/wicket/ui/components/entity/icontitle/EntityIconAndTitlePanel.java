@@ -39,7 +39,6 @@ import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
@@ -85,7 +84,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
         if(isTitleSuppressed()) {
             // bit of a hack... allows us to suppress the title using CSS
-            add(new CssClassAppender("inlinePrompt"));
+            Wkt.cssAppend(this, "inlinePrompt");
         }
 
         setOutputMarkupId(true);
@@ -127,7 +126,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
                 Components.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
             } else {
                 Label dummy = Wkt.labelAdd(link, ID_ENTITY_FONT_AWESOME, "");
-                dummy.add(new CssClassAppender(cssClassFaFactory.asSpaceSeparatedWithAdditional("fa-2x")));
+                Wkt.cssAppend(dummy, cssClassFaFactory.asSpaceSeparatedWithAdditional("fa-2x"));
                 Components.permanentlyHide(link, ID_ENTITY_ICON);
             }
 

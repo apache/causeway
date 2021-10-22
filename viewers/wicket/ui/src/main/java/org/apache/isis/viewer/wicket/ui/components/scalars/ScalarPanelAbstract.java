@@ -33,7 +33,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -71,7 +70,6 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices.ValueCho
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.NonNull;
@@ -300,10 +298,8 @@ implements ScalarModelSubscriber {
      */
     private void buildGui() {
 
-        scalarTypeContainer = new WebMarkupContainer(ID_SCALAR_TYPE_CONTAINER);
-        scalarTypeContainer.setOutputMarkupId(true);
-        scalarTypeContainer.add(new CssClassAppender(Model.of(getScalarPanelType())));
-        addOrReplace(scalarTypeContainer);
+        scalarTypeContainer = Wkt.containerAdd(this, ID_SCALAR_TYPE_CONTAINER);
+        Wkt.cssAppend(scalarTypeContainer, getScalarPanelType());
 
         this.scalarIfCompact = createComponentForCompact();
         this.scalarIfRegular = createComponentForRegular();
@@ -423,19 +419,16 @@ implements ScalarModelSubscriber {
 
     private void addCssFromMetaModel() {
         final String cssForMetaModel = getModel().getCssClass();
-        if (!_Strings.isNullOrEmpty(cssForMetaModel)) {
-            CssClassAppender.appendCssClassTo(this, CssClassAppender.asCssStyle(cssForMetaModel));
-        }
+        Wkt.cssAppend(this, cssForMetaModel);
 
         ScalarModel model = getModel();
         final CssClassFacet facet = model.getFacet(CssClassFacet.class);
         if(facet != null) {
-
             val parentAdapter =
                     model.getParentUiModel().getManagedObject();
 
             final String cssClass = facet.cssClass(parentAdapter);
-            CssClassAppender.appendCssClassTo(this, cssClass);
+            Wkt.cssAppend(this, cssClass);
         }
     }
 
@@ -448,7 +441,7 @@ implements ScalarModelSubscriber {
      * <p>
      * Unlike the constructor and <tt>onInitialize</tt>, which are called only once, the <tt>onConfigure</tt> callback
      * is called multiple times, just prior to <tt>onBeforeRendering</tt>.  It is therefore the correct place for
-     * components to set up their visibility/enablement.
+     * components to set up their visibility/usability.
      * </p>
      *
      */
@@ -617,7 +610,7 @@ implements ScalarModelSubscriber {
         if(scalarModel.isRequired() && scalarModel.isEnabled()) {
             final String label = scalarName.getDefaultModelObjectAsString();
             if(!_Strings.isNullOrEmpty(label)) {
-                scalarName.add(new CssClassAppender("mandatory"));
+                Wkt.cssAppend(scalarName, "mandatory");
             }
         }
 
@@ -663,10 +656,7 @@ implements ScalarModelSubscriber {
     }
 
     protected void configureInlinePromptLink(final WebMarkupContainer inlinePromptLink) {
-        final String append = obtainInlinePromptLinkCssIfAny();
-        if(append != null) {
-            inlinePromptLink.add(new CssClassAppender(append));
-        }
+        Wkt.cssAppend(inlinePromptLink, obtainInlinePromptLinkCssIfAny());
     }
 
     protected String obtainInlinePromptLinkCssIfAny() {
@@ -796,8 +786,8 @@ implements ScalarModelSubscriber {
     private void addPositioningCssTo(
             final MarkupContainer markupContainer,
             final Can<LinkAndLabel> actionLinks) {
-        CssClassAppender.appendCssClassTo(markupContainer, determinePropParamLayoutCss(getModel()));
-        CssClassAppender.appendCssClassTo(markupContainer, determineActionLayoutPositioningCss(actionLinks));
+        Wkt.cssAppend(markupContainer, determinePropParamLayoutCss(getModel()));
+        Wkt.cssAppend(markupContainer, determineActionLayoutPositioningCss(actionLinks));
     }
 
     private static String determinePropParamLayoutCss(final ScalarModel model) {

@@ -36,7 +36,6 @@ import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.isis.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -143,8 +142,7 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
                     viewButtonIcon.add(AttributeModifier.replace("class", "ViewLinkItem " + cssClass.getObject()));
                     link.setVisible(false);
                 } else {
-                    IModel<String> cssClass = cssClassFor(componentFactory, viewItemIcon);
-                    viewItemIcon.add(new CssClassAppender(cssClass));
+                    Wkt.cssAppend(viewItemIcon, cssClassFor(componentFactory, viewItemIcon));
                 }
 
                 item.add(link);

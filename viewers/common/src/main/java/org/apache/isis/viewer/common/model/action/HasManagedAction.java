@@ -21,6 +21,7 @@ package org.apache.isis.viewer.common.model.action;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
@@ -85,6 +86,10 @@ public interface HasManagedAction {
                     .orElse(false);
     }
 
+    default Identifier getFeatureIdentifier() {
+        return getAction().getFeatureIdentifier();
+    }
+
     // -- UI SPECIFICS
 
     default Optional<FontAwesomeUiModel> getFontAwesomeUiModel() {
@@ -92,13 +97,6 @@ public interface HasManagedAction {
         return FontAwesomeUiModel.of(ObjectAction.Util.cssClassFaFactoryFor(
                 managedAction.getAction(),
                 managedAction.getOwner()));
-    }
-
-    default String getFeatureIdentifierForCss() {
-        val identifier = getAction().getFeatureIdentifier();
-        return identifier.getLogicalType().getLogicalTypeName().replace(".","-")
-                + "-"
-                + identifier.getMemberLogicalName();
     }
 
     default Optional<String> getAdditionalCssClass() {

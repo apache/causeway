@@ -220,6 +220,10 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         return getMetaModel().getFacet(facetType);
     }
 
+    public final <T extends Facet> Optional<T> lookupFacet(final Class<T> facetType) {
+        return getMetaModel().lookupFacet(facetType);
+    }
+
     /**
      * Additional links to render (if any)
      */
@@ -352,5 +356,6 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         // was used to state that pending value is in sync with current value
         //getPendingPropertyModel().getValue().setValue(null);
     }
+
 
 }

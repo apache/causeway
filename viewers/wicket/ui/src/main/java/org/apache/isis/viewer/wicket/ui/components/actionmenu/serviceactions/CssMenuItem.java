@@ -30,7 +30,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Decorators;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -115,17 +114,16 @@ implements Serializable {
             .ifPresent(describedAs->Tooltips.addTooltip(actionLink, describedAs));
 
             if (ObjectAction.Util.returnsBlobOrClob(actionMeta)) {
-                actionLink.add(new CssClassAppender("noVeil"));
-            }
+                Wkt.cssAppend(actionLink, "noVeil");           }
             if (actionMeta.isPrototype()) {
-                actionLink.add(new CssClassAppender("prototype"));
+                Wkt.cssAppend(actionLink, "prototype");
             }
 
             linkAndLabel
             .getAdditionalCssClass()
-            .ifPresent(cssClass->actionLink.add(new CssClassAppender(cssClass)));
+            .ifPresent(cssClass->Wkt.cssAppend(actionLink, cssClass));
 
-            actionLink.add(new CssClassAppender(linkAndLabel.getFeatureIdentifierForCss()));
+            Wkt.cssAppend(actionLink, linkAndLabel.getFeatureIdentifier());
 
             val fontAwesome = getLinkAndLabel().getFontAwesomeUiModel();
             Decorators.getIcon().decorate(label, fontAwesome);
@@ -169,12 +167,7 @@ implements Serializable {
         if (!hasSubMenuItems()) {
             return;
         }
-        if (this.hasParent()) {
-            linkComponent.add(new CssClassAppender("parent"));
-        }
-        else {
-            linkComponent.add(new CssClassAppender("top-parent"));
-        }
+        Wkt.cssAppend(linkComponent, this.hasParent() ? "parent" : "top-parent");
     }
 
     @Getter private CssMenuItem parent;

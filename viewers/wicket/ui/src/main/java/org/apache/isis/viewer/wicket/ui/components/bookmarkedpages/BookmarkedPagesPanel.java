@@ -45,7 +45,6 @@ import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Links;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
@@ -126,7 +125,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
                     target.add(container, clearAllBookmarksLink);
                 });
                 if(node.getDepth() == 0) {
-                    clearBookmarkLink.add(new CssClassAppender("clearBookmark"));
+                    Wkt.cssAppend(clearBookmarkLink, "clearBookmark");
                 } else {
                     clearBookmarkLink.setEnabled(true);
                 }
@@ -157,7 +156,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
 //                    if(bookmarkedPagesModel.isCurrent(pageParameters)) {
 //                        item.add(new CssClassAppender("disabled"));
 //                    }
-                item.add(new CssClassAppender("bookmarkDepth" + node.getDepth()));
+                Wkt.cssAppend(item, "bookmarkDepth" + node.getDepth());
             } catch(ObjectNotFoundException ex) {
                 // ignore
                 // this is a partial fix for an infinite redirect loop.

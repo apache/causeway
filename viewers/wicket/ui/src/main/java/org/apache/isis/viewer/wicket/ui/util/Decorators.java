@@ -80,20 +80,18 @@ public class Decorators {
     public final static class Disable implements DisablingDecorator<Component> {
         @Override
         public void decorate(final Component uiComponent, final DisablingUiModel disableUiModel) {
-
             val tooltipUiModel = TooltipUiModel.ofBody(disableUiModel.getReason());
             getTooltip().decorate(uiComponent, tooltipUiModel);
 
-            uiComponent.add(new CssClassAppender("disabled"));
+            Wkt.cssAppend(uiComponent, "disabled");
             uiComponent.setEnabled(false);
-
         }
     }
 
     public final static class Prototyping implements PrototypingDecorator<Component, Component> {
         @Override
         public Component decorate(final Component uiComponent, final PrototypingUiModel prototypingUiModel) {
-            uiComponent.add(new CssClassAppender("prototype"));
+            Wkt.cssAppend(uiComponent, "prototype");
             return uiComponent;
         }
     }
@@ -125,7 +123,7 @@ public class Decorators {
         @Override
         public void decorate(final Component uiComponent) {
             //if(uiComponent instanceof Button) {
-                uiComponent.add(new CssClassAppender("btn-danger"));
+            Wkt.cssAppend(uiComponent, "btn-danger");
             //}
         }
     }
@@ -144,7 +142,7 @@ public class Decorators {
         @Override
         public Component decorate(final Component uiComponent, final Optional<FontAwesomeUiModel> fontAwesome) {
             if(!fontAwesome.isPresent()) {
-                uiComponent.add(new CssClassAppender("menuLinkSpacer"));
+                Wkt.cssAppend(uiComponent, "menuLinkSpacer");
             }
             return uiComponent;
         }
@@ -200,26 +198,18 @@ public class Decorators {
 
         }
 
-
         public void decorateMenuItem(
                 final Component uiComponent,
                 final LinkAndLabel linkAndLabel,
                 final TranslationService translationService) {
 
-            addCssClassForAction(uiComponent, linkAndLabel);
+            Wkt.cssAppend(uiComponent, linkAndLabel.getFeatureIdentifier());
 
             commonDecorateMenuItem(uiComponent, linkAndLabel, translationService);
 
-            linkAndLabel
-            .getAdditionalCssClass()
-            .ifPresent(cssClass->linkAndLabel.getUiComponent().add(new CssClassAppender(cssClass)));
+            linkAndLabel.getAdditionalCssClass()
+                .ifPresent(cssClass->Wkt.cssAppend(linkAndLabel.getUiComponent(), cssClass));
         }
-
-        private void addCssClassForAction(final Component uiComponent, final LinkAndLabel linkAndLabel) {
-            uiComponent.add(new CssClassAppender("isis-"
-                    + CssClassAppender.asCssStyle(linkAndLabel.getFeatureIdentifierForCss())));
-        }
-
 
     }
 

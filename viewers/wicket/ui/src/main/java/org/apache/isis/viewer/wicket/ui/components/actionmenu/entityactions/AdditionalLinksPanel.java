@@ -32,7 +32,6 @@ import org.apache.isis.viewer.wicket.model.links.ListOfLinksModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Decorators;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -99,12 +98,12 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
                     : linkAndLabel.getDescription().orElse(null));
 
             if(ObjectAction.Util.returnsBlobOrClob(action)) {
-                link.add(new CssClassAppender("noVeil"));
+                Wkt.cssAppend(link, "noVeil");
             }
             if(action.isPrototype()) {
-                link.add(new CssClassAppender("prototype"));
+                Wkt.cssAppend(link, "prototype");
             }
-            link.add(new CssClassAppender(linkAndLabel.getFeatureIdentifierForCss()));
+            Wkt.cssAppend(link, linkAndLabel.getFeatureIdentifier());
 
             if (action.getSemantics().isAreYouSure()) {
                 if(action.getParameterCount()==0) {
@@ -123,7 +122,7 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
 
             linkAndLabel
             .getAdditionalCssClass()
-            .ifPresent(cssClass->CssClassAppender.appendCssClassTo(link, cssClass));
+            .ifPresent(cssClass->Wkt.cssAppend(link, cssClass));
 
             val viewTitleLabel = Wkt.labelAdd(link, ID_ADDITIONAL_LINK_TITLE,
                     linkAndLabel::getFriendlyName);

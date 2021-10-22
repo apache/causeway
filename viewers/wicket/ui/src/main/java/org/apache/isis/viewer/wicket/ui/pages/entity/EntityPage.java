@@ -45,7 +45,6 @@ import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAn
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -154,13 +153,12 @@ public class EntityPage extends PageAbstract {
         setTitle(titleStr);
 
         WebMarkupContainer entityPageContainer = new WebMarkupContainer("entityPageContainer");
-        CssClassAppender.appendCssClassTo(entityPageContainer,
-                CssClassAppender.asCssStyle("isis-" + objectSpec.getLogicalTypeName().replace(".","-")));
+        Wkt.cssAppend(entityPageContainer, objectSpec.getFeatureIdentifier());
 
         CssClassFacet cssClassFacet = objectSpec.getFacet(CssClassFacet.class);
         if(cssClassFacet != null) {
             final String cssClass = cssClassFacet.cssClass(objectAdapter);
-            CssClassAppender.appendCssClassTo(entityPageContainer, cssClass);
+            Wkt.cssAppend(entityPageContainer, cssClass);
         }
 
         themeDiv.addOrReplace(entityPageContainer);

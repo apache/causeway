@@ -44,7 +44,7 @@ import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.Addi
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -267,13 +267,12 @@ implements ScalarModelProvider {
             add(new AttributeAppender("class", Model.of(cssForMetaModel), " "));
         }
 
-        ScalarModel model = getModel();
-        final CssClassFacet facet = model.getFacet(CssClassFacet.class);
-        if(facet != null) {
+        final ScalarModel model = getModel();
+        model.lookupFacet(CssClassFacet.class)
+        .ifPresent(facet->{
             val parentAdapter = model.getParentUiModel().getManagedObject();
-            final String cssClass = facet.cssClass(parentAdapter);
-            CssClassAppender.appendCssClassTo(this, cssClass);
-        }
+            Wkt.cssAppend(this, facet.cssClass(parentAdapter));
+        });
     }
 
     /**
@@ -314,8 +313,8 @@ implements ScalarModelProvider {
     protected void addPositioningCssTo(
             final MarkupContainer markupContainer,
             final Can<LinkAndLabel> entityActionLinks) {
-        CssClassAppender.appendCssClassTo(markupContainer, determinePropParamLayoutCss(getModel()));
-        CssClassAppender.appendCssClassTo(markupContainer, determineActionLayoutPositioningCss(entityActionLinks));
+        Wkt.cssAppend(markupContainer, determinePropParamLayoutCss(getModel()));
+        Wkt.cssAppend(markupContainer, determineActionLayoutPositioningCss(entityActionLinks));
     }
 
     protected void addEntityActionLinksBelowAndRight(

@@ -31,7 +31,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -68,7 +68,7 @@ extends GenericColumnAbstract {
                 }
             }
         };
-        bulkToggle.add(new CssClassAppender("title-column"));
+        Wkt.cssAppend(bulkToggle, "title-column");
         return bulkToggle;
     }
 
@@ -80,7 +80,7 @@ extends GenericColumnAbstract {
             final String componentId,
             final IModel<DataRow> rowModel) {
 
-        cellItem.add(new CssClassAppender("togglebox-column"));
+        Wkt.cssAppend(cellItem, "togglebox-column");
 
         final MarkupContainer row = cellItem.getParent().getParent();
         row.setOutputMarkupId(true);
