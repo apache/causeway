@@ -47,10 +47,10 @@ class ReplayCommand {
         var previous: LogEntry? = null
         userActions.forEach {
             if (it.isUserAction() && previous != null) {
+                val ms = calculateDelay(previous!!, it) // needs to be outside of launch{} - or current=previous
+                val obj = it.obj as TObject
                 AppScope.launch {
-                    val ms = calculateDelay(previous!!, it)
                     delay(ms) // non-blocking delay
-                    val obj = it.obj as TObject
                     ResourceProxy().load(obj)
                 }
             } else {
@@ -62,9 +62,9 @@ class ReplayCommand {
     }
 
     private fun calculateDelay(previous: LogEntry, current: LogEntry): Long {
-        val currentMillis = current.createdAt.getTime().toLong()
-        val previousMillis = previous.createdAt.getTime().toLong()
-        return currentMillis - previousMillis
+        val currentMs = current.createdAt.getTime()
+        val previousMs = previous.createdAt.getTime()
+        return  currentMs.minus(previousMs).toLong()
     }
 
     private fun filterReplayEvents(events: List<LogEntry>): List<LogEntry> {
