@@ -31,8 +31,18 @@ import org.apache.wicket.markup.html.form.Form;
  */
 public interface FormExecutor extends Serializable {
 
-    boolean executeAndProcessResults(
+    enum FormExecutionOutcome {
+        FAILURE_SO_STAY_ON_PAGE,
+        SUCCESS_SO_REDIRECT_TO_RESULT_PAGE,
+        SUCCESS_IN_NESTED_CONTEXT_SO_STAY_ON_PAGE;
+
+        public boolean isFailure() { return this == FAILURE_SO_STAY_ON_PAGE; }
+        public boolean isSuccess() { return this != FAILURE_SO_STAY_ON_PAGE; }
+    }
+
+    FormExecutionOutcome executeAndProcessResults(
             final Page page,
             final AjaxRequestTarget targetIfAny,
-            final Form<?> feedbackFormIfAny, final boolean promptStyle);
+            final Form<?> feedbackFormIfAny,
+            final boolean promptStyle);
 }

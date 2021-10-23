@@ -59,6 +59,8 @@ import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
+import lombok.val;
+
 public abstract class PromptFormAbstract<T extends
     FormExecutorContext
     & IModel<ManagedObject>>
@@ -251,10 +253,10 @@ implements ScalarModelSubscriber {
 
         final FormExecutor formExecutor = new FormExecutorDefault(getMemberModel());
 
-        final boolean withinPrompt = formExecutorContext.isWithinPrompt();
-        boolean succeeded = formExecutor.executeAndProcessResults(target.getPage(), target, form, withinPrompt);
+        val outcome = formExecutor
+                .executeAndProcessResults(target.getPage(), target, form, formExecutorContext.isWithinPrompt());
 
-        if (succeeded) {
+        if (outcome.isSuccess()) {
             completePrompt(target);
 
             okButton.send(target.getPage(), Broadcast.EXACT, newCompletedEvent(target, form));

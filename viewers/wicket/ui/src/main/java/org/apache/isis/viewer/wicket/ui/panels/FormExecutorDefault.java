@@ -35,8 +35,8 @@ import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
-import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
@@ -66,7 +66,7 @@ implements FormExecutor {
      * <tt>true</tt> if redirecting to new page, or repainting all components
      */
     @Override
-    public boolean executeAndProcessResults(
+    public FormExecutionOutcome executeAndProcessResults(
             final Page page,
             final AjaxRequestTarget ajaxTarget,
             final Form<?> feedbackFormIfAny,
@@ -77,7 +77,7 @@ implements FormExecutor {
             final Optional<Recognition> invalidReasonIfAny = getReasonInvalidIfAny();
             if (invalidReasonIfAny.isPresent()) {
                 raiseWarning(ajaxTarget, feedbackFormIfAny, invalidReasonIfAny.get());
-                return false; // invalid args, stay on page
+                return FormExecutionOutcome.FAILURE_SO_STAY_ON_PAGE; // invalid args, stay on page
             }
 
             //
@@ -103,8 +103,7 @@ implements FormExecutor {
                         resultAdapter);
             }
 
-            val resultResponse =
-            actionOrPropertyModel.fold(
+            val resultResponse = actionOrPropertyModel.fold(
                     act->ActionResultResponseType
                             .determineAndInterpretResult(act, ajaxTarget, resultAdapter, act.snapshotArgs()),
                     prop->ActionResultResponse
@@ -115,7 +114,7 @@ implements FormExecutor {
                 .getHandlingStrategy()
                 .handleResults(getCommonContext(), resultResponse);
 
-            return true; // valid args, allow redirect
+            return FormExecutionOutcome.SUCCESS_SO_REDIRECT_TO_RESULT_PAGE; // success (valid args), allow redirect
 
         } catch (Throwable ex) {
 
@@ -130,11 +129,10 @@ implements FormExecutor {
 
             // attempt to recognize this exception using the ExceptionRecognizers
             if(recognizeExceptionThenRaise(ex, ajaxTarget, feedbackFormIfAny).isPresent()) {
-                return false; // invalid args, stay on page
+                return FormExecutionOutcome.FAILURE_SO_STAY_ON_PAGE; // invalid args, stay on page
             }
 
             throw ex; // redirect to the error page.
-
         }
     }
 

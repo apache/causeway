@@ -48,7 +48,7 @@ extends PanelAbstract<ManagedObject, EntityModel> {
 
     private final BS3Grid bs3Page;
 
-    public static Optional<BS3GridPanel> extraContent(final String id, final ActionModel actionModel) {
+    public static Optional<BS3GridPanel> extraContentForMixin(final String id, final ActionModel actionModel) {
         final ObjectAction action = actionModel.getAction();
         if(action instanceof ObjectActionMixedIn) {
             final ObjectActionMixedIn actionMixedIn = (ObjectActionMixedIn) action;

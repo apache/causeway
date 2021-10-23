@@ -41,7 +41,6 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptWithExtraContent;
-import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -211,7 +210,7 @@ extends IndicatingAjaxLink<ManagedObject> {
 
         castTo(actionPrompt, ActionPromptWithExtraContent.class)
         .ifPresent(promptWithExtraContent->{
-            BS3GridPanel.extraContent(promptWithExtraContent.getExtraContentId(), actionModel)
+            BS3GridPanel.extraContentForMixin(promptWithExtraContent.getExtraContentId(), actionModel)
             .ifPresent(gridPanel->promptWithExtraContent.setExtraContentPanel(gridPanel, target));
         });
     }
@@ -224,11 +223,10 @@ extends IndicatingAjaxLink<ManagedObject> {
         // returns true - if redirecting to new page, or repainting all components.
         // returns false - if invalid args; if concurrency exception;
 
-        final FormExecutor formExecutor =
-                new FormExecutorDefault(_Either.left(actionModel));
-        boolean succeeded = formExecutor.executeAndProcessResults(page, null, null, actionModel.isWithinPrompt());
+        val formExecutor = new FormExecutorDefault(_Either.left(actionModel));
+        val outcome = formExecutor.executeAndProcessResults(page, null, null, actionModel.isWithinPrompt());
 
-        if(succeeded) {
+        if(outcome.isSuccess()) {
 
             // intercept redirect request to sign-in page
             Optional.ofNullable(actionModel.getObject())
