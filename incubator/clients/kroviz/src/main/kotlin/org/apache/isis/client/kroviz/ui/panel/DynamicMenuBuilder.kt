@@ -20,7 +20,6 @@
 package org.apache.isis.client.kroviz.ui.panel
 
 import io.kvision.utils.obj
-import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.chart.ChartFactory

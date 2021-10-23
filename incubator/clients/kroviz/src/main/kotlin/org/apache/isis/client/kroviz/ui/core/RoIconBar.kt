@@ -20,7 +20,6 @@ package org.apache.isis.client.kroviz.ui.core
 
 import kotlinx.browser.document
 import kotlinx.dom.removeClass
-import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.core.model.Exposer
 import org.apache.isis.client.kroviz.to.TObject

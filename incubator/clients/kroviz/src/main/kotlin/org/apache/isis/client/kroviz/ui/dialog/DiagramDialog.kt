@@ -18,7 +18,6 @@
  */
 package org.apache.isis.client.kroviz.ui.dialog
 
-import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.MenuFactory
