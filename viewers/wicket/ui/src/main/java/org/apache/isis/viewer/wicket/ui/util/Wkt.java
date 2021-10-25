@@ -33,6 +33,7 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -443,6 +444,14 @@ public class Wkt {
 
     }
 
+    public void focusFirstProperty(final AjaxRequestTarget target, final String containerId) {
+        target.appendJavaScript(
+                String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PROPERTY, '%s')", containerId));
+    }
 
+    public void focusFirstParameter(final IHeaderResponse response, final String containerId) {
+        response.render(OnDomReadyHeaderItem.forScript(
+                String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PARAMETER, '%s')", containerId)));
+    }
 
 }

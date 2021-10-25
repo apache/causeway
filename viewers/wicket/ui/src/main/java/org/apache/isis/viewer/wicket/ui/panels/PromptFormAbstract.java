@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.ui.panels;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -27,8 +28,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 
@@ -90,8 +89,7 @@ implements ScalarModelSubscriber {
     @Override
     public final void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        response.render(OnDomReadyHeaderItem.forScript(
-                String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PARAMETER, '%s')", getMarkupId())));
+        Wkt.focusFirstParameter(response, getMarkupId());
     }
 
     @Override
@@ -142,7 +140,6 @@ implements ScalarModelSubscriber {
     @Override
     public final void onCancelSubmitted(final AjaxRequestTarget target) {
         setLastFocusHint();
-        //closePromptIfAny(target);
         completePrompt(target);
     }
 
@@ -166,10 +163,8 @@ implements ScalarModelSubscriber {
 
     private void closePromptIfAny(final AjaxRequestTarget target) {
         try {
-            final ActionPromptProvider promptProvider = ActionPromptProvider.getFrom(parentPanel);
-            if(promptProvider != null) {
-                promptProvider.closePrompt(target);
-            }
+            ActionPromptProvider.getFrom(parentPanel)
+            .closePrompt(target);
         } catch (org.apache.wicket.WicketRuntimeException ex) {
             // if "No Page found for component"
             // do nothing
@@ -181,7 +176,7 @@ implements ScalarModelSubscriber {
         if (entityModel == null) {
             return;
         }
-        MarkupContainer parentContainer = this.parentPanel.getParent();
+        final MarkupContainer parentContainer = this.parentPanel.getParent();
         if (parentContainer != null) {
             entityModel.setHint(getPage(), PageAbstract.UIHINT_FOCUS, parentContainer.getPageRelativePath());
         }
@@ -202,30 +197,19 @@ implements ScalarModelSubscriber {
     }
 
     private void rebuildGuiAfterInlinePromptDone(final AjaxRequestTarget target) {
-        // replace
-        final String id = parentPanel.getId();
-        final MarkupContainer parent = parentPanel.getParent();
-
-        final WebMarkupContainer replacementPropertyEditFormPanel = new WebMarkupContainer(id);
-        replacementPropertyEditFormPanel.setVisible(false);
-
-        parent.addOrReplace(replacementPropertyEditFormPanel);
+        // replace parent panel with new invisible instance
+        Wkt.containerAdd(parentPanel.getParent(), parentPanel.getId())
+            .setVisible(false);
 
         // change visibility of inline components
         formExecutorContext().getInlinePromptContext().onCancel();
 
+        Optional.ofNullable(formExecutorContext().getInlinePromptContext().getScalarTypeContainer())
+        .ifPresent(scalarTypeContainer->
+            Wkt.focusFirstProperty(target, scalarTypeContainer.getMarkupId()));
+
         // redraw
-        MarkupContainer scalarTypeContainer = formExecutorContext().getInlinePromptContext()
-                .getScalarTypeContainer();
-
-        if (scalarTypeContainer != null) {
-            String markupId = scalarTypeContainer.getMarkupId();
-            target.appendJavaScript(
-                    String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PROPERTY, '%s')",
-                            markupId));
-        }
-
-        target.add(parent);
+        target.add(parentPanel.getParent());
     }
 
 }
