@@ -28,19 +28,29 @@ import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Represention
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.ui.dialog.ReplayDiffDialog
+import org.apache.isis.client.kroviz.ui.panel.EventLogTable
 
 val AppScope = CoroutineScope(window.asCoroutineDispatcher())
 
 class ReplayCommand {
+    private val eventStore = UiManager.getEventStore()
 
     fun execute() {
-        val es = UiManager.getEventStore()
-        val expectedEvents = copyEvents(es.log)
-        es.reset()
+        val expectedEvents = copyEvents(eventStore.log)
+        eventStore.reset()
         main() // re-creates the UI, but keeps the UiManager(singleton/object) and the session
 
-        val replayEvents = filterReplayEvents(expectedEvents)
-        replay(replayEvents)
+        val uiEvents = filterReplayEvents(expectedEvents)
+        replay(uiEvents)
+        val actualEvents: MutableList<LogEntry> = eventStore.log
+
+        val expectedTable = EventLogTable(expectedEvents)
+        val actualTable = EventLogTable(actualEvents)
+        val rdd = ReplayDiffDialog()
+        rdd.expectedPanel.add(expectedTable)
+        rdd.actualPanel.add(actualTable)
+        rdd.dialog.open()
     }
 
     private fun replay(userActions: List<LogEntry>) {
@@ -93,6 +103,7 @@ class ReplayCommand {
         output.type = input.type
         output.obj = input.obj
         output.state = input.state
+        output.response = input.response
         return output
     }
 
