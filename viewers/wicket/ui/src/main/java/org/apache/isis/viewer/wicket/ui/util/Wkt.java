@@ -22,11 +22,17 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -34,6 +40,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
+import org.danekja.java.util.function.serializable.SerializableBiConsumer;
 import org.danekja.java.util.function.serializable.SerializableBooleanSupplier;
 import org.danekja.java.util.function.serializable.SerializableConsumer;
 import org.springframework.lang.Nullable;
@@ -42,12 +49,13 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
-
-import lombok.val;
-import lombok.experimental.UtilityClass;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * Wicket common idioms, in alphabetical order.
@@ -83,10 +91,107 @@ public class Wkt {
         };
     }
 
+    public Behavior behaviorFireOnEscapeKey(final SerializableConsumer<AjaxRequestTarget> onRespond) {
+        return new AbstractDefaultAjaxBehavior() {
+            private static final long serialVersionUID = 1L;
+            private static final String PRE_JS =
+                    "" + "$(document).ready( function() { \n"
+                            + "  $(document).bind('keyup', function(evt) { \n"
+                            + "    if (evt.keyCode == 27) { \n";
+            private static final String POST_JS =
+                    "" + "      evt.preventDefault(); \n   "
+                            + "    } \n"
+                            + "  }); \n"
+                            + "});";
+            @Override public void renderHead(final Component component, final IHeaderResponse response) {
+                super.renderHead(component, response);
+                final String javascript = PRE_JS + getCallbackScript() + POST_JS;
+                response.render(
+                        JavaScriptContentHeaderItem.forScript(javascript, null, null));
+            }
+            @Override protected void respond(final AjaxRequestTarget target) {
+                onRespond.accept(target);
+            }
+        };
+    }
+
     public Behavior behaviorAddOnClick(
-            final MarkupContainer markupProvider,
+            final MarkupContainer markupContainer,
             final SerializableConsumer<AjaxRequestTarget> onClick) {
-        return add(markupProvider, behaviorOnClick(onClick));
+        return add(markupContainer, behaviorOnClick(onClick));
+    }
+
+    public Behavior behaviorAddFireOnEscapeKey(
+            final MarkupContainer markupContainer,
+            final SerializableConsumer<AjaxRequestTarget> onRespond) {
+        return add(markupContainer, behaviorFireOnEscapeKey(onRespond));
+    }
+
+    // -- BUTTON
+
+    public AjaxButton button(
+            final String id,
+            final IModel<String> labelModel,
+            final SerializableBiConsumer<AjaxButton, AjaxRequestTarget> onClick) {
+        return new AjaxButton(id, labelModel) {
+            private static final long serialVersionUID = 1L;
+            @Override public void onSubmit(final AjaxRequestTarget target) {
+                onClick.accept(this, target);
+            }
+        };
+    }
+
+    public AjaxButton buttonOk(
+            final String id,
+            final IModel<String> labelModel,
+            final WicketViewerSettings settings,
+            final SerializableBiConsumer<AjaxButton, AjaxRequestTarget> onClick) {
+        return settings.isUseIndicatorForFormSubmit()
+        ? new IndicatingAjaxButton(id, labelModel) {
+            private static final long serialVersionUID = 1L;
+            @Override public void onSubmit(final AjaxRequestTarget target) {
+                onClick.accept(this, target);
+            }
+            @Override protected void updateAjaxAttributes(final AjaxRequestAttributes attributes) {
+                if (settings.isPreventDoubleClickForFormSubmit()) {
+                    PanelUtil.disableBeforeReenableOnComplete(attributes, this);
+                }
+            }
+            @Override protected void onError(final AjaxRequestTarget target) {
+                target.add(getForm());
+            }
+        }
+        : new AjaxButton(id, labelModel) {
+            private static final long serialVersionUID = 1L;
+            @Override public void onSubmit(final AjaxRequestTarget target) {
+                onClick.accept(this, target);
+            }
+            @Override protected void updateAjaxAttributes(final AjaxRequestAttributes attributes) {
+                if (settings.isPreventDoubleClickForFormSubmit()) {
+                    PanelUtil.disableBeforeReenableOnComplete(attributes, this);
+                }
+            }
+            @Override protected void onError(final AjaxRequestTarget target) {
+                target.add(getForm());
+            }
+        };
+    }
+
+    public AjaxButton buttonAdd(
+            final MarkupContainer markupContainer,
+            final String id,
+            final IModel<String> labelModel,
+            final SerializableBiConsumer<AjaxButton, AjaxRequestTarget> onClick) {
+        return add(markupContainer, button(id, labelModel, onClick));
+    }
+
+    public AjaxButton buttonAddOk(
+            final MarkupContainer markupContainer,
+            final String id,
+            final IModel<String> labelModel,
+            final WicketViewerSettings settings,
+            final SerializableBiConsumer<AjaxButton, AjaxRequestTarget> onClick) {
+        return add(markupContainer, buttonOk(id, labelModel, settings, onClick));
     }
 
     // -- CONTAINER
@@ -222,6 +327,7 @@ public class Wkt {
             @Override public void onClick(final AjaxRequestTarget target) {
                 onClick.accept(target);
             }
+            @SuppressWarnings("deprecation")
             @Override protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);
                 Buttons.fixDisabledState(this, tag);

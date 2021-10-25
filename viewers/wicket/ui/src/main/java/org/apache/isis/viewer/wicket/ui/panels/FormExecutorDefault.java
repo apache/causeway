@@ -37,6 +37,7 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
+import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
@@ -52,10 +53,26 @@ implements FormExecutor {
 
     private static final long serialVersionUID = 1L;
 
+    // -- FACTORIES
+
+    public static FormExecutor forAction(final ActionModel actionModel) {
+        return new FormExecutorDefault(_Either.left(actionModel));
+    }
+
+    public static FormExecutor forProperty(final ScalarPropertyModel propertyModel) {
+        return new FormExecutorDefault(_Either.right(propertyModel));
+    }
+
+    public static FormExecutor forMember(final _Either<ActionModel, ScalarPropertyModel> actionOrPropertyModel) {
+        return new FormExecutorDefault(actionOrPropertyModel);
+    }
+
+    // -- CONSTRUCTION
+
     protected final WicketViewerSettings settings;
     private final _Either<ActionModel, ScalarPropertyModel> actionOrPropertyModel;
 
-    public FormExecutorDefault(
+    private FormExecutorDefault(
             final _Either<ActionModel, ScalarPropertyModel> actionOrPropertyModel) {
         this.actionOrPropertyModel = actionOrPropertyModel;
         this.settings = getSettings();
@@ -70,7 +87,7 @@ implements FormExecutor {
             final Page page,
             final AjaxRequestTarget ajaxTarget,
             final Form<?> feedbackFormIfAny,
-            final boolean withinPrompt) {
+            final FormExecutorContext formExecutorContext) {
 
         try {
 
@@ -97,6 +114,14 @@ implements FormExecutor {
                     act->act.executeActionAndReturnResult(),
                     prop->prop.applyValueThenReturnOwner());
 
+            // if we are in a nested dialog/form, the result must be feed into the calling dialog's/form's parameter negotiation model
+            val isNestedContext = actionOrPropertyModel.fold(
+                    act->act.getActionOwner().getSpecification().isValue(), //FIXME[ISIS-2877] we know if the action owner is a value-type, the form is a nested one - however, should be extended for more generic use
+                    prop->false);
+            if(isNestedContext) {
+                return FormExecutionOutcome.SUCCESS_IN_NESTED_CONTEXT_SO_STAY_ON_PAGE;
+            }
+
             if(log.isDebugEnabled()) {
                 log.debug("about to redirect with {} after execution result {}",
                         EntityUtil.getEntityState(resultAdapter),
@@ -121,17 +146,13 @@ implements FormExecutor {
             // there's no need to set the abort cause on the transaction, it will have already been done
             // (in IsisTransactionManager#executeWithinTransaction(...)).
 
-            // if inline prompt then redirect to error page
-            if (withinPrompt) {
-                // throwing an exception will get caught by WebRequestCycleForIsis#onException(...)
-                throw ex; // redirect to the error page.
-            }
-
-            // attempt to recognize this exception using the ExceptionRecognizers
-            if(recognizeExceptionThenRaise(ex, ajaxTarget, feedbackFormIfAny).isPresent()) {
+            // attempt to recognize this exception using the ExceptionRecognizers (but only when not in inline prompt context!?)
+            if(!formExecutorContext.isWithinInlinePrompt()
+                    && recognizeExceptionThenRaise(ex, ajaxTarget, feedbackFormIfAny).isPresent()) {
                 return FormExecutionOutcome.FAILURE_SO_STAY_ON_PAGE; // invalid args, stay on page
             }
 
+            // throwing an exception will get caught by WebRequestCycleForIsis#onException(...)
             throw ex; // redirect to the error page.
         }
     }
@@ -203,5 +224,7 @@ implements FormExecutor {
     private WicketViewerSettings getSettings() {
         return getCommonContext().lookupServiceElseFail(WicketViewerSettings.class);
     }
+
+
 
 }

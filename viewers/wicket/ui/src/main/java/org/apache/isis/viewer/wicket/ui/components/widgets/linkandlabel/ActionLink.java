@@ -28,7 +28,6 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.request.cycle.RequestCycle;
 
-import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -191,10 +190,10 @@ extends IndicatingAjaxLink<ManagedObject> {
     private void startDialogWithParams(final AjaxRequestTarget target) {
 
         val actionModel = this.getActionModel();
-        val actionLink = this;
-        val promptProvider = ActionPromptProvider.getFrom(actionLink.getPage());
         val actionOwnerSpec = actionModel.getActionOwner().getSpecification();
-        val actionPrompt = promptProvider.getActionPrompt(actionModel.getPromptStyle(), actionOwnerSpec.getBeanSort());
+        val actionPrompt = ActionPromptProvider
+                .getFrom(this.getPage())
+                .getActionPrompt(actionModel.getPromptStyle(), actionOwnerSpec.getBeanSort());
 
         val actionParametersPanel = (ActionParametersPanel)
                 getComponentFactoryRegistry()
@@ -217,14 +216,14 @@ extends IndicatingAjaxLink<ManagedObject> {
 
     private void executeWithoutParams() {
         val actionModel = this.getActionModel();
-        val actionLink = this;
-        val page = actionLink.getPage();
+        val page = this.getPage();
 
         // returns true - if redirecting to new page, or repainting all components.
         // returns false - if invalid args; if concurrency exception;
 
-        val formExecutor = new FormExecutorDefault(_Either.left(actionModel));
-        val outcome = formExecutor.executeAndProcessResults(page, null, null, actionModel.isWithinPrompt());
+        val outcome = FormExecutorDefault
+                .forAction(actionModel)
+                .executeAndProcessResults(page, null, null, actionModel);
 
         if(outcome.isSuccess()) {
 

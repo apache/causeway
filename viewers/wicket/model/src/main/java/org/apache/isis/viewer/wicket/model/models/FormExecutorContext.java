@@ -29,7 +29,7 @@ extends HasParentUiModel<EntityModel>, HasCommonContext {
 
     InlinePromptContext getInlinePromptContext();
 
-    default boolean isWithinPrompt() {
+    default boolean isWithinInlinePrompt() {
         return getPromptStyle().isInlineOrInlineAsIfEdit()
                 && getInlinePromptContext() != null;
     }

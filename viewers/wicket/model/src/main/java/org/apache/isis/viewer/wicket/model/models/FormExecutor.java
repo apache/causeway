@@ -38,11 +38,13 @@ public interface FormExecutor extends Serializable {
 
         public boolean isFailure() { return this == FAILURE_SO_STAY_ON_PAGE; }
         public boolean isSuccess() { return this != FAILURE_SO_STAY_ON_PAGE; }
+        public boolean isSuccessWithRedirect() { return this == SUCCESS_SO_REDIRECT_TO_RESULT_PAGE; }
+        public boolean isSuccessWithinNestedContext() { return this == SUCCESS_IN_NESTED_CONTEXT_SO_STAY_ON_PAGE; }
     }
 
     FormExecutionOutcome executeAndProcessResults(
-            final Page page,
-            final AjaxRequestTarget targetIfAny,
-            final Form<?> feedbackFormIfAny,
-            final boolean promptStyle);
+            Page page,
+            AjaxRequestTarget targetIfAny,
+            Form<?> feedbackFormIfAny,
+            FormExecutorContext formExecutorContext);
 }
