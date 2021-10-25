@@ -122,7 +122,7 @@ extends PromptFormAbstract<ActionModel> {
     }
 
     @Override
-    protected void doConfigureOkButton(final AjaxButton okButton) {
+    protected void configureOkButton(final AjaxButton okButton) {
         applyAreYouSure(okButton);
     }
 

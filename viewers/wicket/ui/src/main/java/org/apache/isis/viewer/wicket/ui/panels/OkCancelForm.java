@@ -27,17 +27,20 @@ import org.apache.wicket.util.string.AppendingStringBuffer;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
+/**
+ * Form with <i>Feedback</i> panel and <i>Ok/Cancel</i> buttons.
+ */
 public abstract class OkCancelForm<T extends IModel<ManagedObject>>
 extends FormAbstract<ManagedObject>{
 
     private static final long serialVersionUID = 1L;
     private static final String ID_OK_BUTTON = "okButton";
     public  static final String ID_CANCEL_BUTTON = "cancelButton";
+    private static final String ID_FEEDBACK = "feedback";
 
     protected final WicketViewerSettings settings;
     protected final AjaxButton okButton;
@@ -46,35 +49,27 @@ extends FormAbstract<ManagedObject>{
     protected OkCancelForm(final String id, final WicketViewerSettings settings, final IModel<ManagedObject> model) {
         super(id, model);
         this.settings = settings;
-        okButton = addOkButton();
-        cancelButton = addCancelButton();
-        doConfigureOkButton(okButton);
-        doConfigureCancelButton(cancelButton);
+        okButton = Wkt.buttonAddOk(this, ID_OK_BUTTON, new ResourceModel("okLabel"), settings, this::onOkSubmitted);
+        cancelButton = Wkt.buttonAdd(this, ID_CANCEL_BUTTON, new ResourceModel("cancelLabel"), (button, target)->{
+            onCancelSubmitted(target);
+        });
+        configureOkButton(okButton);
+        configureCancelButton(cancelButton);
+        setDefaultButton(okButton);
+        Wkt.add(this, new FormFeedbackPanel(ID_FEEDBACK));
         setOutputMarkupId(true);
     }
 
-    protected void doConfigureOkButton(final AjaxButton okButton) {};
-    protected abstract void doConfigureCancelButton(AjaxButton cancelButton);
     protected abstract void onOkSubmitted(AjaxButton okButton, AjaxRequestTarget target);
     protected abstract void onCancelSubmitted(AjaxRequestTarget target);
-    protected abstract void closePromptIfAny(AjaxRequestTarget target);
 
-    protected AjaxButton addOkButton() {
-        val okButton = Wkt.buttonAddOk(this, ID_OK_BUTTON, new ResourceModel("okLabel"), settings, this::onOkSubmitted);
+    protected void configureOkButton(final AjaxButton okButton) {
         okButton.add(new JGrowlBehaviour(super.getCommonContext()));
-        setDefaultButton(okButton);
-        return okButton;
     }
 
-    protected AjaxButton addCancelButton() {
-        val cancelButton = Wkt.buttonAdd(this, ID_CANCEL_BUTTON, new ResourceModel("cancelLabel"), (button, target)->{
-            //form.setMultiPart(true);
-            closePromptIfAny(target);
-            onCancelSubmitted(target);
-        });
+    protected void configureCancelButton(final AjaxButton cancelButton) {
         // so can submit with invalid content (eg mandatory params missing)
         cancelButton.setDefaultFormProcessing(false);
-        return cancelButton;
     }
 
     // workaround for https://issues.apache.org/jira/browse/WICKET-6364

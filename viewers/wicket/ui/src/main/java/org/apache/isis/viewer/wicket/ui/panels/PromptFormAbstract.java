@@ -41,12 +41,10 @@ import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
-import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.util.Components;
@@ -62,12 +60,9 @@ implements ScalarModelSubscriber {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_FEEDBACK = "feedback";
-
     protected final List<ScalarPanelAbstract> paramPanels = _Lists.newArrayList();
 
     private final Component parentPanel;
-    private final T formExecutorContext;
 
     protected PromptFormAbstract(
             final String id,
@@ -77,11 +72,13 @@ implements ScalarModelSubscriber {
 
         super(id, settings, model);
         this.parentPanel = parentPanel;
-        this.formExecutorContext = model;
 
         addParameters();
+    }
 
-        Wkt.add(this, new FormFeedbackPanel(ID_FEEDBACK));
+    @SuppressWarnings("unchecked")
+    private FormExecutorContext formExecutorContext() {
+        return (T)getModel();
     }
 
     // -- SETUP
@@ -98,8 +95,9 @@ implements ScalarModelSubscriber {
     }
 
     @Override
-    protected final void doConfigureCancelButton(final AjaxButton cancelButton) {
-        if (formExecutorContext.getPromptStyle().isInlineOrInlineAsIfEdit()) {
+    protected final void configureCancelButton(final AjaxButton cancelButton) {
+        super.configureCancelButton(cancelButton);
+        if (formExecutorContext().getPromptStyle().isInlineOrInlineAsIfEdit()) {
             Wkt.behaviorAddFireOnEscapeKey(cancelButton, this::onCancelSubmitted);
         }
     }
@@ -118,11 +116,10 @@ implements ScalarModelSubscriber {
         setLastFocusHint();
 
         val form = okButton.getForm();
-
-        final FormExecutor formExecutor = FormExecutorDefault.forMember(getMemberModel());
+        val formExecutor = FormExecutorDefault.forMember(getMemberModel());
 
         val outcome = formExecutor
-                .executeAndProcessResults(target.getPage(), target, form, formExecutorContext);
+                .executeAndProcessResults(target.getPage(), target, form, formExecutorContext());
 
         if (outcome.isSuccessWithRedirect()) {
             completePrompt(target);
@@ -132,6 +129,7 @@ implements ScalarModelSubscriber {
             return;
         }
 
+        //FIXME[ISIS-2877] what to do here exactly?
         if (outcome.isSuccessWithinNestedContext()) {
             completePrompt(target);
 
@@ -142,7 +140,31 @@ implements ScalarModelSubscriber {
     }
 
     @Override
-    protected final void closePromptIfAny(final AjaxRequestTarget target) {
+    public final void onCancelSubmitted(final AjaxRequestTarget target) {
+        setLastFocusHint();
+        //closePromptIfAny(target);
+        completePrompt(target);
+    }
+
+    @Override
+    public final void onError(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
+        if (scalarPanel != null) {
+            // ensure that any feedback error associated with the providing component is shown.
+            target.add(scalarPanel);
+        }
+    }
+
+    // -- HELPER
+
+    private void completePrompt(final AjaxRequestTarget target) {
+        if (formExecutorContext().isWithinInlinePrompt()) {
+            rebuildGuiAfterInlinePromptDone(target);
+        } else {
+            closePromptIfAny(target);
+        }
+    }
+
+    private void closePromptIfAny(final AjaxRequestTarget target) {
         try {
             final ActionPromptProvider promptProvider = ActionPromptProvider.getFrom(parentPanel);
             if(promptProvider != null) {
@@ -154,42 +176,18 @@ implements ScalarModelSubscriber {
         }
     }
 
-    @Override
-    public final void onError(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
-        if (scalarPanel != null) {
-            // ensure that any feedback error associated with the providing component is shown.
-            target.add(scalarPanel);
-        }
-    }
-
-    @Override
-    public final void onCancelSubmitted(final AjaxRequestTarget target) {
-        setLastFocusHint();
-        completePrompt(target);
-    }
-
-    // -- HELPER
-
-    private void completePrompt(final AjaxRequestTarget target) {
-        if (formExecutorContext.isWithinInlinePrompt()) {
-            rebuildGuiAfterInlinePromptDone(target);
-        } else {
-            closePromptIfAny(target);
-        }
-    }
-
     private void setLastFocusHint() {
-        final UiHintContainer entityModel = getPageUiHintContainerIfAny();
+        final UiHintContainer entityModel = pageUiHintContainerIfAny();
         if (entityModel == null) {
             return;
         }
-        MarkupContainer parent = this.parentPanel.getParent();
-        if (parent != null) {
-            entityModel.setHint(getPage(), PageAbstract.UIHINT_FOCUS, parent.getPageRelativePath());
+        MarkupContainer parentContainer = this.parentPanel.getParent();
+        if (parentContainer != null) {
+            entityModel.setHint(getPage(), PageAbstract.UIHINT_FOCUS, parentContainer.getPageRelativePath());
         }
     }
 
-    private UiHintContainer getPageUiHintContainerIfAny() {
+    private UiHintContainer pageUiHintContainerIfAny() {
         final Page page;
         try {
             page = getPage();
@@ -214,10 +212,10 @@ implements ScalarModelSubscriber {
         parent.addOrReplace(replacementPropertyEditFormPanel);
 
         // change visibility of inline components
-        formExecutorContext.getInlinePromptContext().onCancel();
+        formExecutorContext().getInlinePromptContext().onCancel();
 
         // redraw
-        MarkupContainer scalarTypeContainer = formExecutorContext.getInlinePromptContext()
+        MarkupContainer scalarTypeContainer = formExecutorContext().getInlinePromptContext()
                 .getScalarTypeContainer();
 
         if (scalarTypeContainer != null) {
