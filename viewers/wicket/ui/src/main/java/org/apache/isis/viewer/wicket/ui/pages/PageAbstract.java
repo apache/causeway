@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.pages;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -42,7 +40,6 @@ import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
@@ -77,14 +74,13 @@ import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.util.FontAwesomeCssReferenceWkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
-
 import de.agilecoders.wicket.core.Bootstrap;
 // import de.agilecoders.wicket.core.markup.html.references.BootlintHeaderItem;
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.core.settings.ITheme;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Convenience adapter for {@link WebPage}s built up using {@link ComponentType}s.
@@ -99,8 +95,10 @@ implements ActionPromptProvider {
     /**
      * @see <a href="http://github.com/brandonaaron/livequery">livequery</a>
      */
-    private static final JavaScriptResourceReference JQUERY_LIVEQUERY_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.livequery.js");
-    private static final JavaScriptResourceReference JQUERY_ISIS_WICKET_VIEWER_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.isis.wicket.viewer.js");
+    private static final JavaScriptResourceReference JQUERY_LIVEQUERY_JS =
+            new JavaScriptResourceReference(PageAbstract.class, "jquery.livequery.js");
+    private static final JavaScriptResourceReference JQUERY_ISIS_WICKET_VIEWER_JS =
+            new JavaScriptResourceReference(PageAbstract.class, "jquery.isis.wicket.viewer.js");
 
     // not to be confused with the bootstrap theme...
     // is simply a CSS class derived from the application's name
@@ -147,8 +145,8 @@ implements ActionPromptProvider {
             MarkupContainer header = createPageHeader("header");
             add(header);
 
-            themeDiv = new WebMarkupContainer(ID_THEME);
-            add(themeDiv);
+            themeDiv = Wkt.containerAdd(this, ID_THEME);
+
             String applicationName = getConfiguration().getViewer().getWicket().getApplication().getName();
             Wkt.cssAppend(themeDiv, Wkt.cssNormalize(applicationName));
 
@@ -164,7 +162,7 @@ implements ActionPromptProvider {
             addActionPromptModalWindow(themeDiv);
             addActionPromptSidebar(themeDiv);
 
-            this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
+            this.childComponentIds = List.of(childComponentIds);
 
             // ensure that all collected JavaScript contributions are loaded at the page footer
             add(new HeaderResponseContainer("footerJS", "footerJS"));
@@ -456,11 +454,15 @@ implements ActionPromptProvider {
 
     @Override
     public void closePrompt(final AjaxRequestTarget target) {
+        //FIXME[ISIS-2877] add support for modal window nesting https://examples8x.wicket.apache.org/ajax/modal-window
+        System.err.printf("closePrompt %s%n", this.getMarkupId());
         actionPromptSidebar.closePrompt(target);
         actionPromptModalWindow.closePrompt(target);
     }
 
     private void addActionPromptModalWindow(final MarkupContainer parent) {
+        //FIXME[ISIS-2877] add support for modal window nesting https://examples8x.wicket.apache.org/ajax/modal-window
+        System.err.printf("addActionPromptModalWindow %s%n", this.getMarkupId());
         actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW);
         parent.addOrReplace(actionPromptModalWindow);
     }

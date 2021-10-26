@@ -197,6 +197,10 @@ implements ScalarModelSubscriber {
     }
 
     private void rebuildGuiAfterInlinePromptDone(final AjaxRequestTarget target) {
+
+        // enlist for redraw
+        target.add(parentPanel.getParent());
+
         // replace parent panel with new invisible instance
         Wkt.containerAdd(parentPanel.getParent(), parentPanel.getId())
             .setVisible(false);
@@ -207,9 +211,6 @@ implements ScalarModelSubscriber {
         Optional.ofNullable(formExecutorContext().getInlinePromptContext().getScalarTypeContainer())
         .ifPresent(scalarTypeContainer->
             Wkt.focusFirstProperty(target, scalarTypeContainer.getMarkupId()));
-
-        // redraw
-        target.add(parentPanel.getParent());
     }
 
 }
