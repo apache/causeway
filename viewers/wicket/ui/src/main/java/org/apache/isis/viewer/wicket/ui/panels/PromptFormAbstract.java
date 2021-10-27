@@ -130,6 +130,7 @@ implements ScalarModelSubscriber {
 
         //FIXME[ISIS-2877] what to do here exactly?
         if (outcome.isSuccessWithinNestedContext()) {
+
             completePrompt(target);
 
             okButton.send(target.getPage(), Broadcast.EXACT, newCompletedEvent(target, form));

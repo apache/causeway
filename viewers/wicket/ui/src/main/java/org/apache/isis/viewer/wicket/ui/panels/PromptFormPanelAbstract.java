@@ -31,10 +31,8 @@ extends PanelAbstract<T, M> {
 
     private static final long serialVersionUID = 1L;
 
-
-    public PromptFormPanelAbstract(final String id, final M model) {
+    protected PromptFormPanelAbstract(final String id, final M model) {
         super(id, model);
     }
-
 
 }

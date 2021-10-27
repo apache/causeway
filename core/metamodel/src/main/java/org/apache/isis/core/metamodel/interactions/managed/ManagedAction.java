@@ -139,7 +139,7 @@ public final class ManagedAction extends ManagedMember {
         val head = action.interactionHead(getOwner());
         val ownerSpec = head.getOwner().getSpecification();
 
-        //FIXME[ISIS-2877] this special code branch should probably be rather placed higher up the call stack
+        //FIXME[ISIS-2877] this special code branch should probably be rather placed earlier in the call stack
         // value-type mixins have no rule-checking, no domain events and no routing
         if(ownerSpec.isValue()) {
 

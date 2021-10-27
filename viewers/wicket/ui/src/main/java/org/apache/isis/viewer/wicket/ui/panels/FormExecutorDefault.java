@@ -119,6 +119,12 @@ implements FormExecutor {
                     act->act.getActionOwner().getSpecification().isValue(), //FIXME[ISIS-2877] we know if the action owner is a value-type, the form is a nested one - however, should be extended for more generic use
                     prop->false);
             if(isNestedContext) {
+
+                formExecutorContext.associatedWithParameter()
+                .ifPresent(associatedParameter->{
+                    associatedParameter.setValue(resultAdapter);
+                });
+
                 return FormExecutionOutcome.SUCCESS_IN_NESTED_CONTEXT_SO_STAY_ON_PAGE;
             }
 

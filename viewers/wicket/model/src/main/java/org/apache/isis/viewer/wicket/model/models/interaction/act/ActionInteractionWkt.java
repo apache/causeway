@@ -133,6 +133,18 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
         return actionInteraction().getMetamodel().orElseThrow();
     }
 
+    public Optional<ScalarPropertyModel> associatedWithProperty() {
+        return Optional.ofNullable(associatedWithPropertyIfAny);
+    }
+
+    public Optional<ScalarParameterModel> associatedWithParameter() {
+        return Optional.ofNullable(associatedWithParameterIfAny);
+    }
+
+    public Optional<EntityCollectionModel> associatedWithCollection() {
+        return Optional.ofNullable(associatedWithCollectionIfAny);
+    }
+
     // -- LAZY BINDING
 
     public Stream<ParameterUiModelWkt> streamParameterUiModels() {

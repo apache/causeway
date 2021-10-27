@@ -451,15 +451,11 @@ implements ActionPromptProvider {
 
     @Override
     public void closePrompt(final AjaxRequestTarget target) {
-        //FIXME[ISIS-2877] add support for modal window nesting https://examples8x.wicket.apache.org/ajax/modal-window
-        System.err.printf("closePrompt %s%n", this.getMarkupId());
         actionPromptSidebar.closePrompt(target);
         actionPromptModalWindow.closePrompt(target);
     }
 
     private void addActionPromptModalWindow(final MarkupContainer parent) {
-        //FIXME[ISIS-2877] add support for modal window nesting https://examples8x.wicket.apache.org/ajax/modal-window
-        System.err.printf("addActionPromptModalWindow %s%n", this.getMarkupId());
         actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW);
         parent.addOrReplace(actionPromptModalWindow);
     }

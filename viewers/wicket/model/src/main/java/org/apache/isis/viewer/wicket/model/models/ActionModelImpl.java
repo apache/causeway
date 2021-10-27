@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.wicket.model.ChainingModel;
@@ -190,6 +191,11 @@ implements ActionModel {
 
         });
 
+    }
+
+    @Override
+    public Optional<ScalarParameterModel> associatedWithParameter() {
+        return delegate.associatedWithParameter();
     }
 
 }

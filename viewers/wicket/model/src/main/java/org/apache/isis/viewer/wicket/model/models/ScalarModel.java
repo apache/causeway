@@ -338,7 +338,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     public abstract String getIdentifier();
 
-    public AssociatedActions getAssociatedActions() {
+    public final AssociatedActions getAssociatedActions() {
         if (associatedActions == null) {
             associatedActions = new AssociatedActions(calcAssociatedActions());
         }

@@ -46,12 +46,12 @@ extends PromptFormPanelAbstract<ManagedObject, ActionModel> {
     }
 
     private void buildGui() {
-        ActionModel model = getModel();
-        model.clearArguments();  // in case previously used, eg prompt displayed then cancelled
+        ActionModel actionModel = getModel();
+        actionModel.clearArguments();  // in case previously used, eg prompt displayed then cancelled
         final ActionParametersForm inputForm =
-                new ActionParametersForm("inputForm", this, this.getWicketViewerSettings(), model);
+                new ActionParametersForm("inputForm", this, this.getWicketViewerSettings(), actionModel);
 
-        Wkt.cssAppend(inputForm, model.getAction().getFeatureIdentifier());
+        Wkt.cssAppend(inputForm, actionModel.getAction().getFeatureIdentifier());
         add(inputForm);
     }
 

@@ -45,8 +45,7 @@ extends ComponentFactoryAbstract {
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final ActionModel actionModel = (ActionModel) model;
-        return new ActionParametersFormPanel(id, actionModel);
+        return new ActionParametersFormPanel(id, (ActionModel) model);
     }
 
 }

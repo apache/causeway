@@ -96,30 +96,30 @@ extends Function<ObjectAction, LinkAndLabel> {
     }
 
     public static LinkAndLabelFactory forProperty(
-            final ScalarPropertyModel scalarModel) {
+            final ScalarPropertyModel propertyModel) {
 
         val linkFactory = new AdditionalLinkFactory();
 
         return action -> LinkAndLabel.of(
                 ActionModelImpl.forEntity(
-                        scalarModel.getParentUiModel(),
+                        propertyModel.getParentUiModel(),
                         action.getFeatureIdentifier(),
                         Where.OBJECT_FORMS,
-                        scalarModel, null, null),
+                        propertyModel, null, null),
                 linkFactory);
     }
 
     public static LinkAndLabelFactory forParameter(
-            final ScalarParameterModel scalarParameterModel) {
+            final ScalarParameterModel parameterModel) {
 
         val linkFactory = new AdditionalLinkFactory();
 
         return action -> LinkAndLabel.of(
                 ActionModelImpl.forEntity(
-                        scalarParameterModel.getParentUiModel(),
+                        parameterModel.getParentUiModel(),
                         action.getFeatureIdentifier(),
                         Where.OBJECT_FORMS,
-                        null, scalarParameterModel, null),
+                        null, parameterModel, null),
                 linkFactory);
     }
 
