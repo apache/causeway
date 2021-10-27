@@ -48,6 +48,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.Obj
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
 import lombok.val;
 
@@ -399,14 +400,9 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     // //////////////////////////////////////
 
     @Override
-    public void onUpdate(
-            final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
-
+    public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
         super.onUpdate(target, scalarPanel);
-
-        target.appendJavaScript(
-                String.format("Wicket.Event.publish(Isis.Topic.CLOSE_SELECT2, '%s')", getMarkupId()));
-
+        Wkt.javaScriptAdd(target, EventTopic.CLOSE_SELECT2, getMarkupId());
     }
 
 

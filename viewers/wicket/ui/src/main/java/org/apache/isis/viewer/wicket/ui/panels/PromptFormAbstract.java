@@ -48,6 +48,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
 import lombok.val;
 
@@ -89,7 +90,7 @@ implements ScalarModelSubscriber {
     @Override
     public final void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        Wkt.focusFirstParameter(response, getMarkupId());
+        Wkt.javaScriptAdd(response, EventTopic.FOCUS_FIRST_PARAMETER, getMarkupId());
     }
 
     @Override
@@ -210,7 +211,7 @@ implements ScalarModelSubscriber {
 
         Optional.ofNullable(formExecutorContext().getInlinePromptContext().getScalarTypeContainer())
         .ifPresent(scalarTypeContainer->
-            Wkt.focusFirstProperty(target, scalarTypeContainer.getMarkupId()));
+            Wkt.javaScriptAdd(target, EventTopic.FOCUS_FIRST_PROPERTY, scalarTypeContainer.getMarkupId()));
     }
 
 }

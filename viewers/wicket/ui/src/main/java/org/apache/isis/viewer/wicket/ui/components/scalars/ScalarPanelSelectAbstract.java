@@ -40,6 +40,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
 import lombok.NonNull;
 import lombok.val;
@@ -147,10 +148,7 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
     protected void onSwitchFormForInlinePrompt(
             final WebMarkupContainer inlinePromptForm,
             final AjaxRequestTarget target) {
-
-        target.appendJavaScript(
-                String.format("Wicket.Event.publish(Isis.Topic.OPEN_SELECT2, '%s')", inlinePromptForm.getMarkupId()));
-
+        Wkt.javaScriptAdd(target, EventTopic.OPEN_SELECT2, inlinePromptForm.getMarkupId());
     }
 
     @Override

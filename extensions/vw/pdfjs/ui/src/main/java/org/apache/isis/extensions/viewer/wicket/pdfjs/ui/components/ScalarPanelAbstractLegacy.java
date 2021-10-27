@@ -45,6 +45,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
 import lombok.val;
 
@@ -242,9 +243,8 @@ implements ScalarModelProvider {
                 subscriber.onUpdate(target, ScalarPanelAbstractLegacy.this);
             }
 
-            // hmmm... this doesn't seem to be picked up...
-            target.appendJavaScript(
-                    String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_ACTION_PARAMETER, '%s')", getMarkupId()));
+            // hmmm... this doesn't seem to be picked up... or does it?
+            Wkt.javaScriptAdd(target, EventTopic.FOCUS_FIRST_PARAMETER, getMarkupId());
         }
 
         @Override

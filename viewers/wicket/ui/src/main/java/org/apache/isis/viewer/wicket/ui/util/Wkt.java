@@ -53,10 +53,11 @@ import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import lombok.val;
 import lombok.experimental.UtilityClass;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 /**
  * Wicket common idioms, in alphabetical order.
@@ -444,14 +445,29 @@ public class Wkt {
 
     }
 
-    public void focusFirstProperty(final AjaxRequestTarget target, final String containerId) {
-        target.appendJavaScript(
-                String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PROPERTY, '%s')", containerId));
+    // -- JAVA SCRIPT UTILITY
+
+    public enum EventTopic {
+        FOCUS_FIRST_PROPERTY,
+        FOCUS_FIRST_PARAMETER,
+        OPEN_SELECT2,
+        CLOSE_SELECT2,
     }
 
-    public void focusFirstParameter(final IHeaderResponse response, final String containerId) {
-        response.render(OnDomReadyHeaderItem.forScript(
-                String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PARAMETER, '%s')", containerId)));
+    public void javaScriptAdd(final AjaxRequestTarget target, final EventTopic topic, final String containerId) {
+        target.appendJavaScript(javaScriptFor(topic, containerId));
     }
+
+    public void javaScriptAdd(final IHeaderResponse response, final EventTopic topic, final String containerId) {
+        response.render(OnDomReadyHeaderItem.forScript(javaScriptFor(topic, containerId)));
+    }
+
+    private String javaScriptFor(final EventTopic topic, final String containerId) {
+        return _Strings.isNotEmpty(containerId)
+                ? String.format("Wicket.Event.publish(Isis.Topic.%s, '%s')", topic.name(), containerId)
+                : String.format("Wicket.Event.publish(Isis.Topic.%s)", topic.name());
+    }
+
+
 
 }

@@ -37,7 +37,6 @@ import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -73,14 +72,16 @@ import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.util.FontAwesomeCssReferenceWkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
+
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 import de.agilecoders.wicket.core.Bootstrap;
 // import de.agilecoders.wicket.core.markup.html.references.BootlintHeaderItem;
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.core.settings.ITheme;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * Convenience adapter for {@link WebPage}s built up using {@link ComponentType}s.
@@ -286,12 +287,8 @@ implements ActionPromptProvider {
 
             }
         }
-        String javaScript = markupId != null
-                ? String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PROPERTY, '%s')", markupId)
-                : "Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PROPERTY)";
 
-       response.render(OnDomReadyHeaderItem.forScript(javaScript));
-
+        Wkt.javaScriptAdd(response, EventTopic.FOCUS_FIRST_PROPERTY, markupId);
     }
 
     protected UiHintContainer getUiHintContainerIfAny() {

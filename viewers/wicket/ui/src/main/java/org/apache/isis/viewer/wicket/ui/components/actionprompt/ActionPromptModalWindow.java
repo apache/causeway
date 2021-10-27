@@ -22,11 +22,12 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import org.apache.isis.viewer.wicket.model.models.ActionPromptWithExtraContent;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.ModalDialog;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 
@@ -71,9 +72,7 @@ implements ActionPromptWithExtraContent {
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-
-        response.render(OnDomReadyHeaderItem.forScript(
-                String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PARAMETER, '%s')", getMarkupId())));
+        Wkt.javaScriptAdd(response, EventTopic.FOCUS_FIRST_PARAMETER, getMarkupId());
     }
 
     @Override

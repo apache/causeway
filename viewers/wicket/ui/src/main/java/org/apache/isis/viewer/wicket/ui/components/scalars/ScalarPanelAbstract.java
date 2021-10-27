@@ -71,6 +71,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLi
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
 import lombok.NonNull;
 import lombok.val;
@@ -511,19 +512,15 @@ implements ScalarModelSubscriber {
     // //////////////////////////////////////
 
     @Override
-    public void onUpdate(
-            final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
-
+    public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
         if(getModel().isParameter()) {
-            target.appendJavaScript(
-                    String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PARAMETER, '%s')", getMarkupId()));
+            Wkt.javaScriptAdd(target, EventTopic.FOCUS_FIRST_PARAMETER, getMarkupId());
         }
     }
 
 
     @Override
-    public void onError(
-            final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
+    public void onError(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
     }
 
 
