@@ -36,8 +36,6 @@ implements ActionPromptWithExtraContent {
     private static final String ID_ACTION_PROMPT = "actionPrompt";
     private static final String ID_EXTRA_CONTENT = "extraContent";
 
-    private CloseHandler closeHandlerIfAny;
-
     public ActionPromptSidebar(final String id) {
         super(id);
 
@@ -113,14 +111,6 @@ implements ActionPromptWithExtraContent {
         if (target != null) {
             hide(target);
         }
-        if(closeHandlerIfAny != null) {
-            closeHandlerIfAny.close(target);
-        }
-    }
-
-    @Override
-    public void setOnClose(final CloseHandler closeHandler) {
-        this.closeHandlerIfAny = closeHandler;
     }
 
     private void show(final AjaxRequestTarget target) {

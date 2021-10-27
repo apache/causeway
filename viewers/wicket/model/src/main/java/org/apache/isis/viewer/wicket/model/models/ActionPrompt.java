@@ -68,9 +68,4 @@ public interface ActionPrompt extends Serializable {
      */
     void closePrompt(AjaxRequestTarget target);
 
-    public interface CloseHandler extends Serializable {
-        public void close(final AjaxRequestTarget target);
-    }
-
-    void setOnClose(CloseHandler closeHandler);
 }
