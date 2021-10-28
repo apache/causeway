@@ -24,14 +24,14 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.poi.xwpf.converter.core.IXWPFConverter;
-import org.apache.poi.xwpf.converter.pdf.PdfConverter;
-import org.apache.poi.xwpf.converter.pdf.PdfOptions;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+import fr.opensagres.poi.xwpf.converter.core.IXWPFConverter;
+import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
+import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
 import fr.opensagres.xdocreport.core.XDocReportException;
 import fr.opensagres.xdocreport.core.io.internal.ByteArrayOutputStream;
 import fr.opensagres.xdocreport.document.IXDocReport;

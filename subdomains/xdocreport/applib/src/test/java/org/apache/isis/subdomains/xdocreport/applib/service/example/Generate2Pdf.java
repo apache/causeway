@@ -25,15 +25,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.apache.poi.xwpf.converter.pdf.PdfConverter;
-import org.apache.poi.xwpf.converter.pdf.PdfOptions;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
+import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
+import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
 import fr.opensagres.xdocreport.core.XDocReportException;
 
 public class Generate2Pdf {
 
-    public static void main(String[] args) throws IOException,
+    public static void main(final String[] args) throws IOException,
             XDocReportException {
 
         // 1) Load DOCX into XWPFDocument

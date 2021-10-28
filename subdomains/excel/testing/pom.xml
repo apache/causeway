@@ -44,6 +44,11 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
+        
+        <dependency>
+        	<groupId>org.apache.isis.testing</groupId>
+			<artifactId>isis-testing-fixtures-applib</artifactId>
+		</dependency>
 
     </dependencies>
 

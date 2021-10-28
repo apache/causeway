@@ -62,7 +62,6 @@
             <groupId>org.apache.isis.subdomains</groupId>
         	<artifactId>isis-subdomains-poi</artifactId>
         	<type>pom</type>
-        	<scope>import</scope>
         	<version>${project.version}</version>
         </dependency>
         
