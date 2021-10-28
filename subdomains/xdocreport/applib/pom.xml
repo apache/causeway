@@ -36,6 +36,12 @@
 		</dependency>
 
 		<dependency>
+            <groupId>org.apache.isis.subdomains</groupId>
+        	<artifactId>isis-subdomains-poi</artifactId>
+        	<type>pom</type>
+		</dependency>
+
+		<dependency>
 			<groupId>fr.opensagres.xdocreport</groupId>
 			<artifactId>fr.opensagres.xdocreport.document.docx</artifactId>
 			<exclusions>
@@ -43,6 +49,14 @@
 				    <groupId>org.osgi</groupId>
 				    <artifactId>org.osgi.core</artifactId>
 			    </exclusion>
+			    <exclusion>
+					<groupId>org.apache.poi</groupId>
+					<artifactId>poi-ooxml</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.xmlbeans</groupId>
+					<artifactId>xmlbeans</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -53,6 +67,14 @@
 				    <groupId>org.osgi</groupId>
 				    <artifactId>org.osgi.core</artifactId>
 			    </exclusion>
+			    <exclusion>
+					<groupId>org.apache.poi</groupId>
+					<artifactId>poi-ooxml</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.xmlbeans</groupId>
+					<artifactId>xmlbeans</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -63,28 +85,44 @@
 				    <groupId>org.osgi</groupId>
 				    <artifactId>org.osgi.core</artifactId>
 			    </exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>fr.opensagres.xdocreport</groupId>
-			<artifactId>org.apache.poi.xwpf.converter.pdf</artifactId>
-			<exclusions>
 				<exclusion>
-				    <groupId>org.osgi</groupId>
-				    <artifactId>org.osgi.core</artifactId>
-			    </exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>fr.opensagres.xdocreport</groupId>
-			<artifactId>org.apache.poi.xwpf.converter.core</artifactId>
-			<exclusions>
+					<groupId>org.apache.poi</groupId>
+					<artifactId>poi-ooxml</artifactId>
+				</exclusion>
 				<exclusion>
-				    <groupId>org.osgi</groupId>
-				    <artifactId>org.osgi.core</artifactId>
-			    </exclusion>
+					<groupId>org.apache.xmlbeans</groupId>
+					<artifactId>xmlbeans</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>fr.opensagres.xdocreport</groupId> -->
+<!-- 			<artifactId>org.apache.poi.xwpf.converter.pdf</artifactId> -->
+<!-- 			<exclusions> -->
+<!-- 				<exclusion> -->
+<!-- 				    <groupId>org.osgi</groupId> -->
+<!-- 				    <artifactId>org.osgi.core</artifactId> -->
+<!-- 			    </exclusion> -->
+<!-- 			    <exclusion> -->
+<!-- 					<groupId>org.apache.poi</groupId> -->
+<!-- 					<artifactId>poi-ooxml</artifactId> -->
+<!-- 				</exclusion> -->
+<!-- 			</exclusions> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>fr.opensagres.xdocreport</groupId> -->
+<!-- 			<artifactId>org.apache.poi.xwpf.converter.core</artifactId> -->
+<!-- 			<exclusions> -->
+<!-- 				<exclusion> -->
+<!-- 				    <groupId>org.osgi</groupId> -->
+<!-- 				    <artifactId>org.osgi.core</artifactId> -->
+<!-- 			    </exclusion> -->
+<!-- 			    <exclusion> -->
+<!-- 					<groupId>org.apache.poi</groupId> -->
+<!-- 					<artifactId>poi-ooxml</artifactId> -->
+<!-- 				</exclusion> -->
+<!-- 			</exclusions> -->
+<!-- 		</dependency> -->
 
 		<!-- test -->
 		<dependency>

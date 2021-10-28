@@ -30,8 +30,9 @@ import javax.inject.Inject;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.apache.commons.compress.utils.IOUtils;
 import org.springframework.stereotype.Service;
+
+import org.apache.isis.commons.internal.base._Bytes;
 
 import lombok.Builder;
 import lombok.Data;
@@ -99,7 +100,7 @@ public class GeoapifyClient implements Serializable {
     }
 
 //tag::class[]
-    public byte[] toJpeg(final String latitude, final String longitude, int zoom) throws IOException {
+    public byte[] toJpeg(final String latitude, final String longitude, final int zoom) throws IOException {
         //...
 //end::class[]
         return toJpeg(JpegRequest.builder().latitude(latitude).longitude(longitude).zoom(zoom).build());
@@ -118,7 +119,7 @@ public class GeoapifyClient implements Serializable {
                 , apiKey);
         val con = (HttpURLConnection) new URL(urlStr).openConnection();
         val is = con.getInputStream();
-        return IOUtils.toByteArray(is);
+        return _Bytes.of(is);
     }
 
     @Data

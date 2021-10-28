@@ -46,24 +46,31 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.testing</groupId>
-            <artifactId>isis-testing-fixtures-applib</artifactId>
+            <groupId>org.apache.isis.subdomains</groupId>
+        	<artifactId>isis-subdomains-poi</artifactId>
+        	<type>pom</type>
         </dependency>
 
-        <!--
-                <dependency>
-                    <groupId>org.apache.poi</groupId>
-                    <artifactId>poi</artifactId>
-                </dependency>
-        -->
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml-schemas</artifactId>
-        </dependency>
+<!--         <dependency> -->
+<!-- 			<groupId>org.apache.poi</groupId> -->
+<!-- 			<artifactId>poi-ooxml</artifactId> -->
+<!-- 			<exclusions> -->
+<!-- 				<exclusion> -->
+<!-- 					<groupId>xml-apis</groupId> -->
+<!-- 					<artifactId>xml-apis</artifactId> -->
+<!-- 				</exclusion> -->
+<!-- 			</exclusions> -->
+<!--         </dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>xml-apis</groupId> -->
+<!-- 			<artifactId>xml-apis</artifactId> -->
+<!-- 			<version>1.4.01</version> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.apache.poi</groupId> -->
+<!-- 			<artifactId>poi-ooxml-lite</artifactId> -->
+<!-- 		</dependency> -->
+
 
         <!-- test -->
         <dependency>

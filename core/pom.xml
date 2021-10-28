@@ -164,7 +164,7 @@
 
 		<pdfbox.version>2.0.24</pdfbox.version>
 		<picocontainer.version>2.15</picocontainer.version>
-		<poi.version>4.1.2</poi.version>
+		<poi.version>5.0.0</poi.version>
 
 		<quartz-scheduler.version>2.3.2</quartz-scheduler.version>
 
@@ -196,7 +196,7 @@
 		<wicketstuff.version>8.13.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
 		<wicketstuff-gmap3.version>${wicket.version}</wicketstuff-gmap3.version>
 
-		<xdocreport.version>1.0.6</xdocreport.version>
+		<xdocreport.version>2.0.2</xdocreport.version>
 
 	</properties>
 
@@ -1185,7 +1185,7 @@
 
 			<dependency>
 				<groupId>org.apache.poi</groupId>
-				<artifactId>poi-ooxml-schemas</artifactId>
+				<artifactId>poi-ooxml-lite</artifactId>
 				<version>${poi.version}</version>
 			</dependency>
 
