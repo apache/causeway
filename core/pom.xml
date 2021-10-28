@@ -137,7 +137,7 @@
 
 		<jdom.version>2.0.2</jdom.version>
 		<jmock.version>2.12.0</jmock.version>
-		<joda-time.version>2.10.10</joda-time.version>
+		<joda-time.version>2.10.13</joda-time.version>
 		<jopt-simple.version>6.0-alpha-3</jopt-simple.version>
 
 		<!-- See org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication -->
