@@ -55,7 +55,7 @@ public class ServiceActionsPanel extends MenuActionPanel {
             topMenu.add(subMenuItemsView(menuItem.getSubMenuItems()));
             val css = Wkt.cssNormalize(menuItem.getName());
             Wkt.cssAppend(topMenu, "top-menu-" + css);
-            Wkt.labelAdd(listItem, "name", css);
+            Wkt.labelAdd(listItem, "name", menuItem.getName());
             listItem.add(topMenu);
         });
     }

@@ -890,7 +890,7 @@ implements ObjectSpecification {
                 val actions = _Lists.newArrayList(this.objectActions);
                 if (isEntityOrViewModelOrAbstract()
                         || getBeanSort().isManagedBeanContributing()
-                        //FIXME[ISIS-2877] - ensure that meta model only collects specific value-type mixins (those that actually return the value type)
+                        // in support of value-type constructor mixins
                         || getBeanSort().isValue()) {
                     createMixedInActions(actions::add);
                 }
