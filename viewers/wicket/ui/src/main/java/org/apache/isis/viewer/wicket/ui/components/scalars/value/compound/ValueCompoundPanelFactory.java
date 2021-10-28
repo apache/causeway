@@ -31,7 +31,7 @@ import lombok.val;
 /**
  * {@link ComponentFactory} for the {@link ValueCompoundPanel}.
  */
-//FIXME[ISIS-2877] introduced for experiments, should be removed before merge into 'master'
+//FIXME[ISIS-2877] introduced for experiments, should be removed
 public class ValueCompoundPanelFactory
 extends ComponentFactoryScalarAbstract {
 
@@ -54,7 +54,8 @@ extends ComponentFactoryScalarAbstract {
         if(valueFacet == null) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        return appliesIf(valueFacet.selectDefaultRenderer().isPresent());
+        //return appliesIf(valueFacet.selectDefaultRenderer().isPresent());
+        return appliesIf(scalarModel.getScalarTypeSpec().getCorrespondingClass().getSimpleName().equals("CalendarEvent"));
     }
 
     @Override

@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 
-//FIXME[ISIS-2877] introduced for experiments, should be removed before merge into 'master'
+//FIXME[ISIS-2877] introduced for experiments, should be removed
 public class ValueCompoundPanel
 extends ScalarPanelTextFieldParseableAbstract {
 

@@ -117,8 +117,8 @@ implements FormExecutor {
             // if we are in a nested dialog/form, that supports an action parameter,
             // the result must be fed back into the calling dialog's/form's parameter
             // negotiation model (instead of redirecting to a new page)
-            if(formExecutorContext.associatedWithParameter().isPresent()) {
-                formExecutorContext.associatedWithParameter().get()
+            if(formExecutorContext.getAssociatedParameter().isPresent()) {
+                formExecutorContext.getAssociatedParameter().get()
                 .setValue(resultAdapter);
                 return FormExecutionOutcome.SUCCESS_IN_NESTED_CONTEXT_SO_STAY_ON_PAGE;
             }

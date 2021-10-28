@@ -194,7 +194,7 @@ implements ActionModel {
     }
 
     @Override
-    public Optional<ScalarParameterModel> associatedWithParameter() {
+    public Optional<ScalarParameterModel> getAssociatedParameter() {
         return delegate.associatedWithParameter();
     }
 

@@ -36,7 +36,7 @@ extends HasParentUiModel<EntityModel>, HasCommonContext {
                 && getInlinePromptContext() != null;
     }
 
-    default Optional<ScalarParameterModel> associatedWithParameter() {
+    default Optional<ScalarParameterModel> getAssociatedParameter() {
         return Optional.empty();
     }
 
