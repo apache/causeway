@@ -49,7 +49,7 @@ final class IsisWicketApplication_experimental {
 
     private final IsisWicketApplication holder;
 
-    IsisWicketApplication_experimental(IsisWicketApplication holder) {
+    IsisWicketApplication_experimental(final IsisWicketApplication holder) {
         this.holder = holder;
     }
 
@@ -62,12 +62,12 @@ final class IsisWicketApplication_experimental {
 
             @Override
             public void updateAjaxAttributes(
-                    AbstractDefaultAjaxBehavior behavior,
-                    AjaxRequestAttributes attributes) {
+                    final AbstractDefaultAjaxBehavior behavior,
+                    final AjaxRequestAttributes attributes) {
 
                 attributes.getAjaxCallListeners().add(new IAjaxCallListener() {
                     @Override
-                    public CharSequence getBeforeSendHandler(Component component) {
+                    public CharSequence getBeforeSendHandler(final Component component) {
 
                         val csrfToken = csrfToken().orElse(null);
 
@@ -106,7 +106,7 @@ final class IsisWicketApplication_experimental {
      idea here is to avoid XmlPartialPageUpdate spitting out warnings, eg:
 
      13:08:36,642  [XmlPartialPageUpdate qtp1988859660-18 WARN ]  Component '[AjaxLink [Component id = copyLink]]' with markupid: 'copyLink94c' not rendered because it was already removed from page
-      13:08:36,642  [XmlPartialPageUpdate qtp1988859660-18 WARN ]  Component '[SimpleClipboardModalWindow [Component id = simpleClipboardModalWindow]]' with markupid: 'simpleClipboardModalWindow94e' not rendered because it was already removed from page
+     13:08:36,642  [XmlPartialPageUpdate qtp1988859660-18 WARN ]  Component '[SimpleClipboardModalWindow [Component id = simpleClipboardModalWindow]]' with markupid: 'simpleClipboardModalWindow94e' not rendered because it was already removed from page
      13:08:36,643  [XmlPartialPageUpdate qtp1988859660-18 WARN ]  Component '[AjaxFallbackLink [Component id = link]]' with markupid: 'link951' not rendered because it was already removed from page
      13:08:36,643  [XmlPartialPageUpdate qtp1988859660-18 WARN ]  Component '[AjaxFallbackLink [Component id = link]]' with markupid: 'link952' not rendered because it was already removed from page
      13:08:36,655  [XmlPartialPageUpdate qtp1988859660-18 WARN ]  Component '[AjaxLink [Component id = clearBookmarkLink]]' with markupid: 'clearBookmarkLink953' not rendered because it was already removed from page
@@ -120,7 +120,7 @@ final class IsisWicketApplication_experimental {
         return holder.getAjaxRequestTargetListeners().add(new IListener(){
 
             @Override
-            public void onBeforeRespond(Map<String, Component> map, AjaxRequestTarget target) {
+            public void onBeforeRespond(final Map<String, Component> map, final AjaxRequestTarget target) {
 
                 System.out.println("=====================================");
                 System.out.println("=== on before respond");

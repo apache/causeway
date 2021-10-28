@@ -52,7 +52,7 @@ implements
     // RENDERER
 
     @Override
-    public String simpleTextRepresentation(final ValueSemanticsProvider.Context context, final Clob value) {
+    public String simpleTextPresentation(final ValueSemanticsProvider.Context context, final Clob value) {
         return render(value, Clob::getName);
     }
 

@@ -23,16 +23,16 @@ import java.util.List;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Decorators;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -75,7 +75,7 @@ implements Serializable {
     /**
      * @param menuItems we assume these have the correct parent already set
      */
-    public void replaceSubMenuItems(List<CssMenuItem> menuItems) {
+    public void replaceSubMenuItems(final List<CssMenuItem> menuItems) {
         subMenuItems.clear();
         subMenuItems.addAll(menuItems);
     }
@@ -97,10 +97,11 @@ implements Serializable {
 
     private Component addMenuItemComponentTo(final MarkupContainer markupContainer) {
 
-        val actionMeta = getLinkAndLabel().getActionUiMetaModel();
+        val linkAndLabel = getLinkAndLabel();
+        val actionMeta = getLinkAndLabel().getManagedAction().getAction();
         val actionLink = getLinkAndLabel().getUiComponent();
 
-        val label = new Label(CssMenuItem.ID_MENU_LABEL, Model.of(this.getName()));
+        val label = Wkt.labelAdd(markupContainer, CssMenuItem.ID_MENU_LABEL, this::getName);
 
         if (actionLink != null) {
 
@@ -108,25 +109,26 @@ implements Serializable {
             markupContainer.add(actionLink);
             actionLink.add(label);
 
-            if (actionMeta.getDescription() != null) {
-                Tooltips.addTooltip(actionLink, actionMeta.getDescription());
-            }
-            if (actionMeta.isBlobOrClob()) {
-                actionLink.add(new CssClassAppender("noVeil"));
-            }
-            if (actionMeta.isPrototyping()) {
-                actionLink.add(new CssClassAppender("prototype"));
+            linkAndLabel
+            .getDescription()
+            .ifPresent(describedAs->Tooltips.addTooltip(actionLink, describedAs));
+
+            if (ObjectAction.Util.returnsBlobOrClob(actionMeta)) {
+                Wkt.cssAppend(actionLink, "noVeil");           }
+            if (actionMeta.isPrototype()) {
+                Wkt.cssAppend(actionLink, "prototype");
             }
 
-            if (actionMeta.getCssClass() != null) {
-                actionLink.add(new CssClassAppender(actionMeta.getCssClass()));
-            }
-            actionLink.add(new CssClassAppender(actionMeta.getActionIdentifier()));
+            linkAndLabel
+            .getAdditionalCssClass()
+            .ifPresent(cssClass->Wkt.cssAppend(actionLink, cssClass));
 
-            val fontAwesome = actionMeta.getFontAwesomeUiModel();
+            Wkt.cssAppend(actionLink, linkAndLabel.getFeatureIdentifier());
+
+            val fontAwesome = getLinkAndLabel().getFontAwesomeUiModel();
             Decorators.getIcon().decorate(label, fontAwesome);
 
-            actionMeta.getDisableUiModel().ifPresent(disableUiModel->{
+            linkAndLabel.getDisableUiModel().ifPresent(disableUiModel->{
                 Decorators.getDisable().decorate(actionLink, disableUiModel);
             });
 
@@ -139,7 +141,7 @@ implements Serializable {
             Components.permanentlyHide(markupContainer, ID_MENU_LINK);
             // ... and show label, along with disabled reason
 
-            actionMeta.getDisableUiModel().ifPresent(disableUiModel->{
+            linkAndLabel.getDisableUiModel().ifPresent(disableUiModel->{
                 Tooltips.addTooltip(label, disableUiModel.getReason());
             });
 
@@ -165,16 +167,11 @@ implements Serializable {
         if (!hasSubMenuItems()) {
             return;
         }
-        if (this.hasParent()) {
-            linkComponent.add(new CssClassAppender("parent"));
-        }
-        else {
-            linkComponent.add(new CssClassAppender("top-parent"));
-        }
+        Wkt.cssAppend(linkComponent, this.hasParent() ? "parent" : "top-parent");
     }
 
     @Getter private CssMenuItem parent;
-    protected void setParent(CssMenuItem parent) {
+    protected void setParent(final CssMenuItem parent) {
         this.parent = parent;
         parent.addSubMenuItem(_Casts.uncheckedCast(this));
     }
@@ -201,7 +198,7 @@ implements Serializable {
         return new CssMenuItem("---", MenuItemType.SPACER);
     }
 
-    public static CssMenuItem newSectionLabel(String named) {
+    public static CssMenuItem newSectionLabel(final String named) {
         return new CssMenuItem(named, MenuItemType.SECTION_LABEL);
     }
 

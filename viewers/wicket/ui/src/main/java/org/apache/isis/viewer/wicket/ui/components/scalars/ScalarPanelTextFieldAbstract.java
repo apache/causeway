@@ -50,6 +50,7 @@ import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.NonNull;
 import lombok.val;
@@ -173,9 +174,10 @@ implements TextFieldValueModel.ScalarModelProvider {
 
         final String labelCaption = getRendering().getLabelCaption(textField);
         final Label scalarName = createScalarName(ID_SCALAR_NAME, labelCaption);
-        final String describedAs = getModel().getDescribedAs();
 
-        Tooltips.addTooltip(scalarName, describedAs);
+        getModel()
+        .getDescribedAs()
+        .ifPresent(describedAs->Tooltips.addTooltip(scalarName, describedAs));
 
         formGroup.add(scalarName);
 
@@ -192,22 +194,15 @@ implements TextFieldValueModel.ScalarModelProvider {
 
     /**
      * Overrides default to use a fragment, allowing the inner rendering to switch between a simple span
-     * or a textarea
+     * or a text-area.
      */
     @Override
     protected Component createInlinePromptComponent(
             final String id,
             final IModel<String> inlinePromptModel) {
-        final Fragment fragment = new Fragment(id, "textInlinePrompt", this) {
-            private static final long serialVersionUID = 1L;
 
-            @Override protected void onComponentTag(final ComponentTag tag) {
-                super.onComponentTag(tag);
-                tag.put("tabindex","-1");
-            }
-        };
-        final Label label = new Label("scalarValue", inlinePromptModel);
-        fragment.add(label);
+        val fragment = Wkt.fragmentAddNoTab(this, id, "textInlinePrompt");
+        Wkt.labelAdd(fragment, "scalarValue", inlinePromptModel);
         return fragment;
     }
 
@@ -272,17 +267,16 @@ implements TextFieldValueModel.ScalarModelProvider {
 
     /**
      * Mandatory hook method to build the component to render the model when in
-     * {@link org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering#COMPACT compact}
+     * {@link org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering#COMPACT}
      * format.
      * <p>
      * This default implementation uses a {@link Label}, however it may be overridden if required.
      */
     @Override
     protected Component createComponentForCompact() {
-        Fragment compactFragment = getCompactFragment(CompactType.SPAN);
-        final Label labelIfCompact = new Label(ID_SCALAR_IF_COMPACT, getModel().getObjectAsString());
-        compactFragment.add(labelIfCompact);
-        return labelIfCompact;
+        return Wkt.labelAdd(
+                getCompactFragment(CompactType.SPAN), ID_SCALAR_IF_COMPACT,
+                ()->getModel().getObjectAsString());
     }
 
     public enum CompactType {

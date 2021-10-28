@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars.value;
+package org.apache.isis.viewer.wicket.ui.components.scalars.value.compound;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -26,15 +26,19 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
 
+import lombok.val;
+
 /**
- * {@link ComponentFactory} for the {@link ValuePanel}.
+ * {@link ComponentFactory} for the {@link ValueCompoundPanel}.
  */
-public class ValuePanelFactory extends ComponentFactoryScalarAbstract {
+//FIXME[ISIS-2877] introduced for experiments, should be removed
+public class ValueCompoundPanelFactory
+extends ComponentFactoryScalarAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public ValuePanelFactory() {
-        super(ValuePanel.class); // not asking the supertype to validate types, so no value types need be provided.
+    public ValueCompoundPanelFactory() {
+        super(ValueCompoundPanel.class);
     }
 
     @Override
@@ -42,20 +46,21 @@ public class ValuePanelFactory extends ComponentFactoryScalarAbstract {
         if (!(model instanceof ScalarModel)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        final ScalarModel scalarModel = (ScalarModel) model;
-        final ValueFacet valueFacet = scalarModel.getScalarTypeSpec().getFacet(ValueFacet.class);
+        val scalarModel = (ScalarModel) model;
+        if(scalarModel.isCollection()) {
+            return ApplicationAdvice.DOES_NOT_APPLY;
+        }
+        final ValueFacet<?> valueFacet = scalarModel.getScalarTypeSpec().getFacet(ValueFacet.class);
         if(valueFacet == null) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        final boolean hasChoices = scalarModel.hasChoices();
-        // autoComplete not supported on values, only references
-        // final boolean hasAutoComplete = scalarModel.hasAutoComplete();
-        return appliesIf( !(hasChoices /*|| hasAutoComplete*/) );
+        //return appliesIf(valueFacet.selectDefaultRenderer().isPresent());
+        return appliesIf(scalarModel.getScalarTypeSpec().getCorrespondingClass().getSimpleName().equals("CalendarEvent"));
     }
 
     @Override
     public Component createComponent(final String id, final ScalarModel scalarModel) {
-        return new ValuePanel(id, scalarModel);
+        return new ValueCompoundPanel(id, scalarModel);
     }
 
 

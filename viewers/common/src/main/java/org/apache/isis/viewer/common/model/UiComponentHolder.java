@@ -20,6 +20,8 @@ package org.apache.isis.viewer.common.model;
 
 import java.util.function.Supplier;
 
+import org.apache.isis.viewer.common.model.mixin.HasUiComponent;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

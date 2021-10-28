@@ -23,7 +23,6 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
@@ -38,7 +37,6 @@ extends MixinFacetAbstract {
             final Optional<DomainObject> domainObjectIfAny,
             final Class<?> candidateMixinType,
             final FacetHolder facetHolder,
-            final ServiceInjector servicesInjector,
             final MetaModelValidatorForMixinTypes mixinTypeValidator) {
 
         return domainObjectIfAny
@@ -60,11 +58,11 @@ extends MixinFacetAbstract {
     }
 
     private MixinFacetForDomainObjectAnnotation(
-            final Class<?> mixinType,
-            final String value,
+            final Class<?> mixinClass,
+            final String mixinMethodName,
             final Constructor<?> constructorType,
             final FacetHolder holder) {
 
-        super(mixinType, value, constructorType, holder);
+        super(mixinClass, mixinMethodName, constructorType, holder);
     }
 }

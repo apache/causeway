@@ -27,8 +27,7 @@ import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionLinkFactory;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import lombok.val;
@@ -44,15 +43,10 @@ extends PanelAbstract<ManagedObject, EntityModel> {
 
     private static final String ID_ENTITY_ACTIONS = "entityActions";
 
-
-
     public EntityHeaderPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
     }
 
-    /**
-     * For the {@link EntityActionLinkFactory}.
-     */
     public EntityModel getEntityModel() {
         return getModel();
     }
@@ -79,13 +73,12 @@ extends PanelAbstract<ManagedObject, EntityModel> {
         final EntityModel model = getModel();
         val adapter = model.getObject();
         if (adapter != null) {
-            val topLevelActions = ObjectAction.Util.streamTopBarActions(adapter);
-            val entityActionLinks = LinkAndLabelUtil
-                    .asActionLinksForAdditionalLinksPanel(model, topLevelActions, null, null)
-                    .collect(Can.toCan());
+            val topLevelActions = ObjectAction.Util.streamTopBarActions(adapter)
+            .map(LinkAndLabelFactory.forEntity(model))
+            .collect(Can.toCan());
 
             AdditionalLinksPanel
-                    .addAdditionalLinks(this, ID_ENTITY_ACTIONS, entityActionLinks,
+                    .addAdditionalLinks(this, ID_ENTITY_ACTIONS, topLevelActions,
                             AdditionalLinksPanel.Style.INLINE_LIST);
         } else {
             permanentlyHide(ID_ENTITY_ACTIONS);

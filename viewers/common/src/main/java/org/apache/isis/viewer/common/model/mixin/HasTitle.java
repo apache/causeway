@@ -16,29 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.internal.functions;
+package org.apache.isis.viewer.common.model.mixin;
 
-import java.util.function.Function;
+@FunctionalInterface
+public interface HasTitle {
 
-import org.apache.isis.commons.internal.functions._Functions.IndexAwareFunction;
-
-/**
- * Package private mixin for _Functions. <br/>
- * Extending a Function to keep track of an index, incremented with each function call.
- */
-class _Functions_IndexAwareFunctionAdapter<T, R> implements Function<T, R> {
-
-
-    private int index=0;
-    private final IndexAwareFunction<T, R> indexAwareFunction;
-
-    _Functions_IndexAwareFunctionAdapter(IndexAwareFunction<T, R> indexAwareFunction) {
-        this.indexAwareFunction = indexAwareFunction;
-    }
-
-    @Override
-    public R apply(T t) {
-        return indexAwareFunction.apply(index++, t);
-    }
+    String getTitle();
 
 }

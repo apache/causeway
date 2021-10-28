@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
-import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -38,10 +37,6 @@ public class PrototypingUiModel {
     private final String featureFriendlyName;
     private final String featureFriendlyIdentifier;
     private final Supplier<Stream<Facet>> facetStreamProvider;
-
-    public static PrototypingUiModel of(final ActionUiMetaModel actionMeta) {
-        return null; // used by wicket, not supported yet
-    }
 
     public static PrototypingUiModel of(final ManagedAction managedAction) {
         Class<?> featureType = managedAction.getAction().getReturnType().getCorrespondingClass();

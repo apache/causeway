@@ -37,11 +37,10 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -70,9 +69,6 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         super(id, objectAdapterModel);
     }
 
-    /**
-     * For the {@link EntityActionLinkFactory}.
-     */
     public ObjectAdapterModel getEntityModel() {
         return getModel();
     }
@@ -88,7 +84,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
         if(isTitleSuppressed()) {
             // bit of a hack... allows us to suppress the title using CSS
-            add(new CssClassAppender("inlinePrompt"));
+            Wkt.cssAppend(this, "inlinePrompt");
         }
 
         setOutputMarkupId(true);
@@ -129,15 +125,13 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
                 link.addOrReplace(this.image = newImage(ID_ENTITY_ICON, adapterIfAny));
                 Components.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
             } else {
-                Label dummy = new Label(ID_ENTITY_FONT_AWESOME, "");
-                link.addOrReplace(dummy);
-                dummy.add(new CssClassAppender(cssClassFaFactory.asSpaceSeparatedWithAdditional("fa-2x")));
+                Label dummy = Wkt.labelAdd(link, ID_ENTITY_FONT_AWESOME, "");
+                Wkt.cssAppend(dummy, cssClassFaFactory.asSpaceSeparatedWithAdditional("fa-2x"));
                 Components.permanentlyHide(link, ID_ENTITY_ICON);
             }
 
             final String title = determineTitle();
-            this.label = newLabel(ID_ENTITY_TITLE, titleAbbreviated(title));
-            link.addOrReplace(this.label);
+            this.label = Wkt.labelAdd(link, ID_ENTITY_TITLE, titleAbbreviated(title));
 
             String entityTypeName = determineFriendlyType() // from actual underlying model
                     .orElseGet(adapterIfAny.getSpecification()::getSingularName); // not sure if this code path is ever reached
@@ -185,10 +179,6 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         };
 
         return link;
-    }
-
-    private Label newLabel(final String id, final String title) {
-        return new Label(id, title);
     }
 
     private String titleAbbreviated(final String titleString) {

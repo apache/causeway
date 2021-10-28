@@ -16,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars.value;
+package org.apache.isis.viewer.wicket.ui.components.scalars.value.fallback;
 
+import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
@@ -31,11 +32,12 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldP
  * This is a fallback panel; values are expected to be {@link Parser parseable}
  * (typically through the Isis' {@link Value} annotation.
  */
-public class ValuePanel extends ScalarPanelTextFieldParseableAbstract {
+public class ValueFallbackPanel
+extends ScalarPanelTextFieldParseableAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public ValuePanel(final String id, final ScalarModel scalarModel) {
+    public ValueFallbackPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
     }
 

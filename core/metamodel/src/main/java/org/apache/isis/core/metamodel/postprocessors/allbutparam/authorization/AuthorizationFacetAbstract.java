@@ -49,7 +49,11 @@ implements AuthorizationFacet {
     }
 
     @Override
-    public String hides(VisibilityContext ic) {
+    public String hides(final VisibilityContext ic) {
+
+        if(ic.getHead().getOwner().getSpecification().isValue()) {
+            return null; // never hide value-types
+        }
 
         val hides = authorizationManager
                 .isVisible(
@@ -66,7 +70,11 @@ implements AuthorizationFacet {
     }
 
     @Override
-    public String disables(UsabilityContext ic) {
+    public String disables(final UsabilityContext ic) {
+
+        if(ic.getHead().getOwner().getSpecification().isValue()) {
+            return null; // never disable value-types
+        }
 
         val disables = authorizationManager
                 .isUsable(

@@ -25,14 +25,26 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 
 /**
- * Passed through the {@link ActionModel} or {@link ScalarModel}, allowing
+ * Passed through the {@link ActionModelImpl} or {@link ScalarModel}, allowing
  * two different Wicket UI components (eg owning <code>ActionPanel</code> and
  * <code>ActionParametersFormPanel</code> to interact.
  */
 public interface FormExecutor extends Serializable {
 
-    boolean executeAndProcessResults(
-            final Page page,
-            final AjaxRequestTarget targetIfAny,
-            final Form<?> feedbackFormIfAny, final boolean promptStyle);
+    enum FormExecutionOutcome {
+        FAILURE_SO_STAY_ON_PAGE,
+        SUCCESS_SO_REDIRECT_TO_RESULT_PAGE,
+        SUCCESS_IN_NESTED_CONTEXT_SO_STAY_ON_PAGE;
+
+        public boolean isFailure() { return this == FAILURE_SO_STAY_ON_PAGE; }
+        public boolean isSuccess() { return this != FAILURE_SO_STAY_ON_PAGE; }
+        public boolean isSuccessWithRedirect() { return this == SUCCESS_SO_REDIRECT_TO_RESULT_PAGE; }
+        public boolean isSuccessWithinNestedContext() { return this == SUCCESS_IN_NESTED_CONTEXT_SO_STAY_ON_PAGE; }
+    }
+
+    FormExecutionOutcome executeAndProcessResults(
+            Page page,
+            AjaxRequestTarget targetIfAny,
+            Form<?> feedbackFormIfAny,
+            FormExecutorContext formExecutorContext);
 }

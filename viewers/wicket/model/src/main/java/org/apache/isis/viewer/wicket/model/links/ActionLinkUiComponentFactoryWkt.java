@@ -22,9 +22,11 @@ import java.io.Serializable;
 
 import org.apache.wicket.markup.html.link.AbstractLink;
 
-import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
+
+import lombok.NonNull;
 
 public interface ActionLinkUiComponentFactoryWkt
 extends Serializable {
-    AbstractLink newActionLinkUiComponent(ActionUiMetaModel actionUiMetaModel);
+    AbstractLink newActionLinkUiComponent(@NonNull ActionModel actionModel);
 }

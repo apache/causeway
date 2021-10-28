@@ -78,6 +78,9 @@ public enum ActionResultResponseType {
             return ActionResultResponse.toPage(new StandaloneCollectionPage(collectionModel));
         }
     },
+    /**
+     * Renders the value-type in its own <i>Standalone Value Page</i>.
+     */
     VALUE {
         @Override
         public ActionResultResponse interpretResult(
@@ -100,7 +103,8 @@ public enum ActionResultResponseType {
                 final ManagedObject resultAdapter,
                 final Can<ManagedObject> args) {
             final Object value = resultAdapter.getPojo();
-            IRequestHandler handler = actionModel.downloadHandler(value);
+            IRequestHandler handler =
+                    _DownloadHandler.downloadHandler(actionModel.getAction(), value);
             return ActionResultResponse.withHandler(handler);
         }
     },
@@ -112,7 +116,8 @@ public enum ActionResultResponseType {
                 final ManagedObject resultAdapter,
                 final Can<ManagedObject> args) {
             final Object value = resultAdapter.getPojo();
-            IRequestHandler handler = actionModel.downloadHandler(value);
+            IRequestHandler handler =
+                    _DownloadHandler.downloadHandler(actionModel.getAction(), value);
             return ActionResultResponse.withHandler(handler);
         }
     },
@@ -139,7 +144,7 @@ public enum ActionResultResponseType {
             // open URL server-side redirect
             final LocalResourcePath localResPath = (LocalResourcePath)resultAdapter.getPojo();
             final var webAppContextPath = actionModel.getCommonContext().getWebAppContextPath();
-            IRequestHandler handler = ActionModel.redirectHandler(localResPath, localResPath.getOpenUrlStrategy(), webAppContextPath);
+            IRequestHandler handler = _RedirectHandler.redirectHandler(localResPath, localResPath.getOpenUrlStrategy(), webAppContextPath);
             return ActionResultResponse.withHandler(handler);
         }
     },
@@ -165,7 +170,7 @@ public enum ActionResultResponseType {
             // open URL server-side redirect
             final Object value = resultAdapter.getPojo();
             final var webAppContextPath = actionModel.getCommonContext().getWebAppContextPath();
-            IRequestHandler handler = ActionModel.redirectHandler(value, OpenUrlStrategy.NEW_WINDOW, webAppContextPath); // default behavior
+            IRequestHandler handler = _RedirectHandler.redirectHandler(value, OpenUrlStrategy.NEW_WINDOW, webAppContextPath); // default behavior
             return ActionResultResponse.withHandler(handler);
         }
     },

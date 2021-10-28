@@ -16,10 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model;
+package org.apache.isis.viewer.wicket.model.links;
 
-public interface HasTitle {
+import java.io.Serializable;
 
-    String getTitle();
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 
+public interface ActionModelProvider
+extends Serializable {
+    ActionModel getActionModelFor(ObjectAction managedAction);
 }

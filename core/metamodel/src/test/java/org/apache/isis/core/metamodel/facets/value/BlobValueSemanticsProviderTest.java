@@ -43,7 +43,7 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testTitleOf() {
-        assertEquals("myfile1.docx", value.presentationValue(null, blob));
+        assertEquals("myfile1.docx", value.simpleTextPresentation(null, blob));
     }
 
     @Test

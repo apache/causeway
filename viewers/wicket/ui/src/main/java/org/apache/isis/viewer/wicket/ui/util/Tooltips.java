@@ -16,14 +16,13 @@
  * under the License. */
 package org.apache.isis.viewer.wicket.ui.util;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipUiModel;
@@ -45,7 +44,7 @@ public class Tooltips {
      * To include the tooltip-css when a page is rendered.
      * @param response
      */
-    public static void renderHead(IHeaderResponse response) {
+    public static void renderHead(final IHeaderResponse response) {
         response.render(CssHeaderItem.forReference(new CssResourceReference(Tooltips.class, "isis-tooltips.css")));
     }
 
@@ -68,11 +67,11 @@ public class Tooltips {
         final IModel<String> bodyModel = Model.of(tooltipUiModel.getBody());
 
         val tooltipBehavior = createTooltipBehavior(labelModel, bodyModel);
-        target.add(new CssClassAppender("isis-component-with-tooltip"));
+        Wkt.cssAppend(target, "isis-component-with-tooltip");
         target.add(tooltipBehavior);
     }
 
-    public static void clearTooltip(Component target) {
+    public static void clearTooltip(final Component target) {
         target.getBehaviors(PopoverBehavior.class)
         .forEach(target::remove);
     }
@@ -81,13 +80,13 @@ public class Tooltips {
 
     //sonar-ignore-on ... fails to interpret _Strings.isEmpty as null guard
 
-    public static void addTooltip(@NonNull Component target, @Nullable String body) {
+    public static void addTooltip(@NonNull final Component target, @Nullable final String body) {
         addTooltip(target, _Strings.isEmpty(body)
                 ? null
                 : TooltipUiModel.ofBody(body));
     }
 
-    public static void addTooltip(@NonNull Component target, @Nullable String label, @Nullable String body) {
+    public static void addTooltip(@NonNull final Component target, @Nullable final String label, @Nullable final String body) {
         addTooltip(target, _Strings.isEmpty(body)
                 ? null
                 : TooltipUiModel.of(label, body));
@@ -97,7 +96,7 @@ public class Tooltips {
 
     // -- HELPER
 
-    private static PopoverBehavior createTooltipBehavior(IModel<String> label, IModel<String> body) {
+    private static PopoverBehavior createTooltipBehavior(final IModel<String> label, final IModel<String> body) {
         return new PopoverBehavior(label, body, createTooltipConfig());
     }
 

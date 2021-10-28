@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed.nonscalar;
 
+import java.util.Optional;
+
 import org.apache.isis.commons.internal.binding._Observables;
 import org.apache.isis.commons.internal.binding._Observables.LazyObservable;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -29,7 +31,7 @@ public class DataColumn {
 
     @Getter private final @NonNull OneToOneAssociation propertyMetaModel;
     @Getter private final @NonNull LazyObservable<String> columnFriendlyName;
-    @Getter private final @NonNull LazyObservable<String> columnDescription;
+    @Getter private final @NonNull LazyObservable<Optional<String>> columnDescription;
 
     public DataColumn(final DataTableModel parentTable, final OneToOneAssociation propertyMetaModel) {
         this.propertyMetaModel = propertyMetaModel;

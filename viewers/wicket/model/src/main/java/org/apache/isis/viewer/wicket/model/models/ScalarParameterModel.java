@@ -21,8 +21,10 @@ package org.apache.isis.viewer.wicket.model.models;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -66,7 +68,7 @@ implements ParameterUiModel {
 
     @Override
     public String getIdentifier() {
-        return "" + getNumber();
+        return "" + getParameterIndex();
     }
 
     @Override
@@ -76,27 +78,28 @@ implements ParameterUiModel {
 
     @Override
     public String whetherDisabled() {
-        return getParameterNegotiationModel().getUsabilityConsent(getNumber()).getReason();
+        return getParameterNegotiationModel().getUsabilityConsent(getParameterIndex()).getReason();
     }
 
     @Override
     public boolean whetherHidden() {
-        return getParameterNegotiationModel().getVisibilityConsent(getNumber()).isVetoed();
+        return getParameterNegotiationModel().getVisibilityConsent(getParameterIndex()).isVetoed();
     }
 
     @Override
     public String validate(final ManagedObject proposedValue) {
-        return getParameterNegotiationModel().getObservableParamValidation(getNumber()).getValue();
+        return getParameterNegotiationModel().getObservableParamValidation(getParameterIndex()).getValue();
     }
 
     @Override
     public String toStringOf() {
-        return getFriendlyName() + ": " + getNumber();
+        return getFriendlyName() + ": " + getParameterIndex();
     }
 
     @Override
     protected Can<ObjectAction> calcAssociatedActions() {
-        return Can.empty();
+        return getScalarTypeSpec().streamActions(ActionType.ANY, MixedIn.INCLUDED)
+                .collect(Can.toCan());
     }
 
     @Override
@@ -111,7 +114,7 @@ implements ParameterUiModel {
 
     @Override
     public ManagedValue proposedValue() {
-        return getParameterNegotiationModel().getParamModels().getElseFail(getNumber());
+        return getParameterNegotiationModel().getParamModels().getElseFail(getParameterIndex());
     }
 
     @Override

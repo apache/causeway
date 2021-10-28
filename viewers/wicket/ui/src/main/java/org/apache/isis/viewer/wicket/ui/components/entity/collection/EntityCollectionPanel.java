@@ -30,7 +30,6 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
@@ -47,8 +46,8 @@ import org.apache.isis.viewer.wicket.ui.components.collection.selector.Collectio
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -110,8 +109,8 @@ implements HasDynamicallyVisibleContent {
 
         val collectionMetaModel = collectionModel.getMetaModel();
 
-        CssClassAppender.appendCssClassTo(div, collectionModel.getIdentifier().getMemberLogicalName());
-        CssClassAppender.appendCssClassTo(div, collectionModel.getElementType().getFullIdentifier().replace('.','-'));
+        Wkt.cssAppend(div, collectionModel.getIdentifier());
+        Wkt.cssAppend(div, collectionModel.getElementType().getFeatureIdentifier());
 
         val objectAdapter = getModel().getObject();
         final Consent visibility = collectionMetaModel
@@ -121,11 +120,10 @@ implements HasDynamicallyVisibleContent {
 
             visible = true;
 
-            final CssClassFacet facet = collectionMetaModel.getFacet(CssClassFacet.class);
-            if(facet != null) {
-                final String cssClass = facet.cssClass(objectAdapter);
-                CssClassAppender.appendCssClassTo(div, cssClass);
-            }
+            collectionMetaModel.lookupFacet(CssClassFacet.class)
+            .ifPresent(facet->
+                Wkt.cssAppend(div, facet.cssClass(objectAdapter)));
+
 
             final CollectionPanel collectionPanel = newCollectionModel(ID_COLLECTION, collectionModel);
             div.addOrReplace(collectionPanel);
@@ -138,7 +136,7 @@ implements HasDynamicallyVisibleContent {
             labelComponent.setEscapeModelStrings(true);
             div.add(labelComponent);
 
-            _Strings.nonEmpty(collectionMetaModel.getDescription(collectionModel::getParentObject))
+            collectionMetaModel.getDescription(collectionModel::getParentObject)
             .ifPresent(description->Tooltips.addTooltip(labelComponent, description));
 
             final Can<LinkAndLabel> links = collectionModel.getLinks();

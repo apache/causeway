@@ -45,17 +45,17 @@ public final class _Functions {
     // -- INDEX AWARE
 
     @FunctionalInterface
-    public interface IndexAwareFunction<T, R> {
+    public interface IndexedFunction<T, R> {
         public R apply(int index, T t);
     }
 
     /**
-     * Converts an IndexAwareFunction into a Function, having its index start at 0,
+     * Converts an {@link IndexedFunction} into a {@link Function}, having its index start at 0,
      * and incremented after each function call.
-     * @param indexAwareFunction
+     * @param indexed
      */
-    public static <T, R> Function<T, R> indexAwareToFunction(IndexAwareFunction<T, R> indexAwareFunction){
-        return new _Functions_IndexAwareFunctionAdapter<T, R>(indexAwareFunction);
+    public static <T, R> Function<T, R> indexedZeroBase(IndexedFunction<T, R> indexed){
+        return new _Functions_IndexedZeroBase<T, R>(indexed);
     }
 
     // -- CHECKED EXCEPTION ADAPTERS (FUNCTION)

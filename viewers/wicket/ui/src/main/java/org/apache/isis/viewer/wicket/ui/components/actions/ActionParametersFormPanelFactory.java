@@ -29,7 +29,8 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 /**
  * {@link ComponentFactory} for {@link ActionParametersFormPanel}.
  */
-public class ActionParametersFormPanelFactory extends ComponentFactoryAbstract {
+public class ActionParametersFormPanelFactory
+extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -44,8 +45,7 @@ public class ActionParametersFormPanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final ActionModel actionModel = (ActionModel) model;
-        return new ActionParametersFormPanel(id, actionModel);
+        return new ActionParametersFormPanel(id, (ActionModel) model);
     }
 
 }

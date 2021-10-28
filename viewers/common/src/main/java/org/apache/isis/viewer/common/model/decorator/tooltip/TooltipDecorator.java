@@ -22,8 +22,4 @@ public interface TooltipDecorator<T> {
 
     void decorate(T uiComponent, TooltipUiModel tooltipUiModel);
 
-
-
-
-
 }

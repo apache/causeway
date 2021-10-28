@@ -29,7 +29,7 @@ public class VoidModel extends ModelAbstract<Void> {
 
     private static final long serialVersionUID = 1L;
 
-    public VoidModel(IsisAppCommonContext commonContext) {
+    public VoidModel(final IsisAppCommonContext commonContext) {
         super(commonContext);
     }
 
@@ -43,10 +43,10 @@ public class VoidModel extends ModelAbstract<Void> {
 
     private ActionModel actionModelHint;
     /**
-     * The {@link ActionModel model} of the {@link ObjectAction action}
+     * The {@link ActionModelImpl model} of the {@link ObjectAction action}
      * that generated this {@link VoidModel}.
      *
-     * @see #setActionHint(ActionModel)
+     * @see #setActionHint(ActionModelImpl)
      */
     public ActionModel getActionModelHint() {
         return actionModelHint;
@@ -56,7 +56,7 @@ public class VoidModel extends ModelAbstract<Void> {
      *
      * @see #getActionModelHint()
      */
-    public void setActionHint(ActionModel actionModelHint) {
+    public void setActionHint(final ActionModel actionModelHint) {
         this.actionModelHint = actionModelHint;
     }
 }

@@ -43,13 +43,13 @@ implements MixinFacet {
         return MixinFacet.class;
     }
 
-    public MixinFacetAbstract(
+    protected MixinFacetAbstract(
             final Class<?> mixinType,
-            final String value,
+            final String mainMethodName,
             final Constructor<?> constructor,
             final FacetHolder holder) {
 
-        super(type(), value, holder);
+        super(type(), mainMethodName, holder);
         this.mixinType = mixinType;
         this.constructor = constructor;
         // by mixin convention: first constructor argument is identified as the holder type
@@ -89,7 +89,7 @@ implements MixinFacet {
     }
 
     @Override
-    public boolean isCandidateForMain(Method method) {
+    public boolean isCandidateForMain(final Method method) {
 
         // include methods from super classes or interfaces
         //

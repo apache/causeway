@@ -19,7 +19,6 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.model.IModel;
 
@@ -31,6 +30,7 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContex
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -54,11 +54,6 @@ implements CancelHintRequired  {
         buildGui();
     }
 
-//    private ManagedObjectModel objectModelForLink() {
-//        final var model = (HasCommonContext & IModel<ManagedObject>)getModel();
-//        return ManagedObjectModel.of(model::getObject);
-//    }
-
     private boolean isEmpty() {
         return ManagedObjects.isNullOrUnspecifiedOrEmpty(getModel().getObject());
     }
@@ -77,7 +72,7 @@ implements CancelHintRequired  {
 
         if(isEmpty()) {
             // represent no object by a simple label displaying '(none)'
-            addOrReplace(new Label(ID_ENTITY_TITLE_NULL, ValueSemanticsAbstract.NULL_REPRESENTATION));
+            Wkt.labelAdd(this, ID_ENTITY_TITLE_NULL, ValueSemanticsAbstract.NULL_REPRESENTATION);
             permanentlyHide(ID_ENTITY_TITLE_NULL);
             permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
 

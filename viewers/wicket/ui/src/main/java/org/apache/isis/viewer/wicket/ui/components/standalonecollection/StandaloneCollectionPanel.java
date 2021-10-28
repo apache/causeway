@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
@@ -36,7 +35,7 @@ import org.apache.isis.viewer.wicket.ui.components.collection.selector.Collectio
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -68,13 +67,11 @@ implements CollectionCountProvider, CollectionSelectorProvider {
         val table = collectionModel.getDataTableModel();
         val featureId = collectionModel.getIdentifier();
 
-        outerDiv.addOrReplace(new Label(StandaloneCollectionPanel.ID_ACTION_NAME,
-                Model.of(table.getTitle().getValue())));
+        Wkt.labelAdd(outerDiv, StandaloneCollectionPanel.ID_ACTION_NAME,
+                table.getTitle().getValue());
 
-        CssClassAppender.appendCssClassTo(outerDiv,
-                CssClassAppender.asCssStyle("isis-" + featureId.getLogicalTypeName().replace('.', '-') + "-" + featureId.getMemberLogicalName()));
-        CssClassAppender.appendCssClassTo(outerDiv,
-                CssClassAppender.asCssStyle("isis-" + collectionModel.getElementType().getLogicalTypeName().replace('.','-')));
+        Wkt.cssAppend(outerDiv, featureId);
+        Wkt.cssAppend(outerDiv, collectionModel.getElementType().getFeatureIdentifier());
 
         // selector
         final CollectionSelectorHelper selectorHelper = new CollectionSelectorHelper(collectionModel, getComponentFactoryRegistry());

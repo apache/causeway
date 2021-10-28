@@ -68,7 +68,10 @@ public class ParentedMarkupPanel extends MultiLineStringPanel {
 
         final String labelCaption = getRendering().getLabelCaption(getTextField());
         final Label scalarName = createScalarName(ID_SCALAR_NAME, labelCaption);
-        Tooltips.addTooltip(scalarName, getModel().getDescribedAs());
+
+        getModel()
+        .getDescribedAs()
+        .ifPresent(describedAs->Tooltips.addTooltip(scalarName, describedAs));
 
         formGroup.add(scalarName);
 

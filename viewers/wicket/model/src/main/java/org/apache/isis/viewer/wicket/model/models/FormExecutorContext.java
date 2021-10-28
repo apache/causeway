@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.common.model.HasParentUiModel;
@@ -29,9 +31,13 @@ extends HasParentUiModel<EntityModel>, HasCommonContext {
 
     InlinePromptContext getInlinePromptContext();
 
-    default boolean isWithinPrompt() {
+    default boolean isWithinInlinePrompt() {
         return getPromptStyle().isInlineOrInlineAsIfEdit()
                 && getInlinePromptContext() != null;
+    }
+
+    default Optional<ScalarParameterModel> getAssociatedParameter() {
+        return Optional.empty();
     }
 
 }

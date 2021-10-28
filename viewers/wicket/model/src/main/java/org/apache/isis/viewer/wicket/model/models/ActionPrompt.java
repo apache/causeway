@@ -24,7 +24,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
 /**
- * Decouples the {@link ActionModel} from its (modal window) prompt.
+ * Decouples the {@link ActionModelImpl} from its (modal window) prompt.
  */
 public interface ActionPrompt extends Serializable {
 
@@ -68,9 +68,4 @@ public interface ActionPrompt extends Serializable {
      */
     void closePrompt(AjaxRequestTarget target);
 
-    public interface CloseHandler extends Serializable {
-        public void close(final AjaxRequestTarget target);
-    }
-
-    void setOnClose(CloseHandler closeHandler);
 }

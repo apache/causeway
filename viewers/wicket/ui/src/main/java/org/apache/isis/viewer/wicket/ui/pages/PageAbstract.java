@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.pages;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -39,12 +37,9 @@ import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -75,8 +70,9 @@ import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModa
 import org.apache.isis.viewer.wicket.ui.components.actionpromptsb.ActionPromptSidebar;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.FontAwesomeCssReferenceWkt;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -100,8 +96,10 @@ implements ActionPromptProvider {
     /**
      * @see <a href="http://github.com/brandonaaron/livequery">livequery</a>
      */
-    private static final JavaScriptResourceReference JQUERY_LIVEQUERY_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.livequery.js");
-    private static final JavaScriptResourceReference JQUERY_ISIS_WICKET_VIEWER_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.isis.wicket.viewer.js");
+    private static final JavaScriptResourceReference JQUERY_LIVEQUERY_JS =
+            new JavaScriptResourceReference(PageAbstract.class, "jquery.livequery.js");
+    private static final JavaScriptResourceReference JQUERY_ISIS_WICKET_VIEWER_JS =
+            new JavaScriptResourceReference(PageAbstract.class, "jquery.isis.wicket.viewer.js");
 
     // not to be confused with the bootstrap theme...
     // is simply a CSS class derived from the application's name
@@ -148,12 +146,10 @@ implements ActionPromptProvider {
             MarkupContainer header = createPageHeader("header");
             add(header);
 
-            themeDiv = new WebMarkupContainer(ID_THEME);
-            add(themeDiv);
+            themeDiv = Wkt.containerAdd(this, ID_THEME);
+
             String applicationName = getConfiguration().getViewer().getWicket().getApplication().getName();
-            if(applicationName != null) {
-                themeDiv.add(new CssClassAppender(CssClassAppender.asCssStyle(applicationName)));
-            }
+            Wkt.cssAppend(themeDiv, Wkt.cssNormalize(applicationName));
 
             boolean devUtilitiesEnabled = getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled();
             Component debugBar = devUtilitiesEnabled
@@ -167,7 +163,7 @@ implements ActionPromptProvider {
             addActionPromptModalWindow(themeDiv);
             addActionPromptSidebar(themeDiv);
 
-            this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
+            this.childComponentIds = List.of(childComponentIds);
 
             // ensure that all collected JavaScript contributions are loaded at the page footer
             add(new HeaderResponseContainer("footerJS", "footerJS"));
@@ -233,9 +229,9 @@ implements ActionPromptProvider {
 
 
     protected void setTitle(final String title) {
-        addOrReplace(new Label(ID_PAGE_TITLE, title != null
+        Wkt.labelAdd(this, ID_PAGE_TITLE, title != null
                 ? title
-                : getConfiguration().getViewer().getWicket().getApplication().getName()));
+                : getConfiguration().getViewer().getWicket().getApplication().getName());
     }
 
     private Class<? extends Page> getSignInPage() {
@@ -291,12 +287,8 @@ implements ActionPromptProvider {
 
             }
         }
-        String javaScript = markupId != null
-                ? String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PROPERTY, '%s')", markupId)
-                        : "Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PROPERTY)";
 
-                response.render(OnDomReadyHeaderItem.forScript(javaScript));
-
+        Wkt.javaScriptAdd(response, EventTopic.FOCUS_FIRST_PROPERTY, markupId);
     }
 
     protected UiHintContainer getUiHintContainerIfAny() {
@@ -384,7 +376,7 @@ implements ActionPromptProvider {
                     private static final long serialVersionUID = 1L;
 
                     @Override
-                    public void onConfigure(Component component) {
+                    public void onConfigure(final Component component) {
                         super.onConfigure(component);
 
                         PageParameters parameters = getPageParameters();

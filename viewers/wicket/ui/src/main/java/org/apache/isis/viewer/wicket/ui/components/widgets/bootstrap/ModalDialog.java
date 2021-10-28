@@ -18,14 +18,18 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap;
 
+import java.util.Stack;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
+
+import lombok.val;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.behavior.Draggable;
@@ -34,39 +38,44 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.behavior.Draggable
 /**
  * A base class for all modal dialogs
  */
-public class ModalDialog<T> extends Modal<T> implements ActionPrompt {
+public class ModalDialog<T>
+extends Modal<T>
+implements ActionPrompt {
 
     private static final long serialVersionUID = 1L;
 
-    private CloseHandler closeHandlerIfAny;
+    private final Stack<Component> nestedPanelStack = new Stack<>();
 
-    public ModalDialog(String markupId) {
+    public ModalDialog(final String markupId) {
         this(markupId, null);
     }
 
-    public ModalDialog(String id, IModel<T> model) {
+    public ModalDialog(final String id, final IModel<T> model) {
         super(id, model);
-
         setFadeIn(false);
         setUseKeyboard(true);
         setDisableEnforceFocus(true);
         setOutputMarkupPlaceholderTag(true);
-        WebMarkupContainer emptyComponent = new WebMarkupContainer(getContentId());
-        add(emptyComponent);
+        Wkt.containerAdd(this, getContentId()); // initial empty content
     }
 
     @Override
-    public void setTitle(Component component, AjaxRequestTarget target) {
+    public void setTitle(final Component component, final AjaxRequestTarget target) {
         ((MarkupContainer)get("dialog:header")).addOrReplace(component);
     }
 
     @Override
-    public void setPanel(Component component, AjaxRequestTarget target) {
+    public void setPanel(final Component component, final AjaxRequestTarget target) {
+        if(!nestedPanelStack.isEmpty()) {
+            addJavaScriptForClosing(target);
+        }
+        nestedPanelStack.add(component);
         addOrReplace(component);
+        showPrompt(target);
     }
 
     @Override
-    public void showPrompt(AjaxRequestTarget target) {
+    public void showPrompt(final AjaxRequestTarget target) {
         setVisible(true);
         target.add(this);
         show(target);
@@ -83,26 +92,35 @@ public class ModalDialog<T> extends Modal<T> implements ActionPrompt {
     }
 
     @Override
-    public void closePrompt(AjaxRequestTarget target) {
-        if (target != null) {
-            close(target);
+    public void closePrompt(final AjaxRequestTarget target) {
+        if(!nestedPanelStack.isEmpty()) {
+            nestedPanelStack.pop();
         }
+
+        addJavaScriptForClosing(target);
         setVisible(false);
-        if(closeHandlerIfAny != null) {
-            closeHandlerIfAny.close(target);
+
+        if(!nestedPanelStack.isEmpty()) {
+            val parentDialogContent = nestedPanelStack.peek();
+            addOrReplace(parentDialogContent);
+            showPrompt(target);
         }
     }
 
     @Override
-    public void setOnClose(final CloseHandler closeHandlerIfAny) {
-        this.closeHandlerIfAny = closeHandlerIfAny;
-    }
-
-    @Override
-    protected WebMarkupContainer createDialog(String id) {
+    protected WebMarkupContainer createDialog(final String id) {
         WebMarkupContainer dialog = super.createDialog(id);
-        dialog.add(AttributeAppender.append("class", "modal-dialog-center"));
+        Wkt.cssAppend(dialog, "modal-dialog-center");
         dialog.add(new Draggable(new DraggableConfig().withHandle(".modal-header").withCursor("move")));
         return dialog;
     }
+
+    // -- HELPER
+
+    private void addJavaScriptForClosing(final AjaxRequestTarget target) {
+        if (target != null) {
+            close(target);
+        }
+    }
+
 }

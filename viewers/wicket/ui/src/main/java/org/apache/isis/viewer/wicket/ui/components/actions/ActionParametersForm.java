@@ -29,7 +29,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.commons.internal.base._Either;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
@@ -43,14 +42,15 @@ import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.act.ParameterUiModelWkt;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Decorators;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 
-class ActionParametersForm extends PromptFormAbstract<ActionModel> {
+class ActionParametersForm
+extends PromptFormAbstract<ActionModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -70,8 +70,8 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
     protected void addParameters() {
         val actionModel = getActionModel();
 
-        val repeatingView = new RepeatingView(ActionParametersFormPanel.ID_ACTION_PARAMETERS);
-        add(repeatingView);
+        val repeatingView =
+                Wkt.add(this, new RepeatingView(ActionParametersFormPanel.ID_ACTION_PARAMETERS));
 
         paramPanels.clear();
 
@@ -79,13 +79,10 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
         .map(ParameterUiModelWkt.class::cast)
         .forEach(paramModel->{
 
-            val container = new WebMarkupContainer(repeatingView.newChildId());
-            repeatingView.add(container);
+            val container = Wkt.containerAdd(repeatingView, repeatingView.newChildId());
 
             newParamPanel(container, paramModel)
-            .ifPresent(paramPanel->{
-                paramPanels.add(paramPanel);
-            });
+            .ifPresent(paramPanels::add);
 
         });
 
@@ -96,31 +93,27 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
             final WebMarkupContainer container,
             final ParameterUiModelWkt paramModel) {
 
-        val id = "scalarNameAndValue"; //paramModel.getNumber()
+        val id = "scalarNameAndValue";
 
         val scalarParamModel = ScalarParameterModel.wrap(paramModel);
 
         final Component component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, id, ComponentType.SCALAR_NAME_AND_VALUE, scalarParamModel);
 
+        if(!(component instanceof ScalarPanelAbstract)) {
+            return Optional.empty();
+        }
+
         if(component instanceof MarkupContainer) {
-            val markupContainer = (MarkupContainer) component;
-            val css = scalarParamModel.getCssClass();
-            if (!_Strings.isNullOrEmpty(css)) {
-                CssClassAppender.appendCssClassTo(markupContainer, CssClassAppender.asCssStyle(css));
-            }
+            Wkt.cssAppend(component, scalarParamModel.getCssClass());
         }
 
-        val paramPanel =
-                component instanceof ScalarPanelAbstract
-                ? (ScalarPanelAbstract) component
-                : null;
+        // ScalarPanelAbstract at this point should have added any associated LinkAndLabel(s)
 
-        if (paramPanel != null) {
-            paramPanel.setOutputMarkupId(true);
-            paramPanel.notifyOnChange(this);
-        }
-        return Optional.ofNullable(paramPanel);
+        val paramPanel = (ScalarPanelAbstract) component;
+        paramPanel.setOutputMarkupId(true);
+        paramPanel.notifyOnChange(this); // this is a ScalarModelSubscriber, handling onUpdate and onError
+        return Optional.of(paramPanel);
     }
 
     @Override
@@ -129,7 +122,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
     }
 
     @Override
-    protected void doConfigureOkButton(final AjaxButton okButton) {
+    protected void configureOkButton(final AjaxButton okButton) {
         applyAreYouSure(okButton);
     }
 
@@ -141,7 +134,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
      */
     private void applyAreYouSure(final AjaxButton button) {
         val actionModel = getActionModel();
-        val action = actionModel.getMetaModel();
+        val action = actionModel.getAction();
 
         if (action.getSemantics().isAreYouSure()) {
             val confirmUiModel = ConfirmUiModel.ofAreYouSure(getTranslationService(), Placement.BOTTOM);
@@ -154,7 +147,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
 
         val actionModel = getActionModel();
         val updatedParamModel = (ParameterUiModel)scalarPanelUpdated.getModel();
-        final int paramNumberUpdated = updatedParamModel.getNumber();
+        final int paramNumberUpdated = updatedParamModel.getParameterIndex();
         // only updates subsequent parameter panels starting from (paramNumberUpdated + 1)
         final int skipCount = paramNumberUpdated + 1;
 
@@ -164,7 +157,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
         .skip(skipCount)
         .forEach(paramModel->{
 
-            val paramNumToUpdate = paramModel.getNumber();
+            val paramNumToUpdate = paramModel.getParameterIndex();
             val paramPanel = paramPanels.get(paramNumToUpdate);
             val repaint = paramPanel.updateIfNecessary(paramModel, Optional.of(target));
 

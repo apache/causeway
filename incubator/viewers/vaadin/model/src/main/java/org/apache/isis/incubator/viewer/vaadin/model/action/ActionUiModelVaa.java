@@ -23,7 +23,6 @@ import com.vaadin.flow.component.html.Label;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.incubator.viewer.vaadin.model.decorator.Decorators;
-import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
 import org.apache.isis.viewer.common.model.action.ActionUiModel;
 
 import lombok.Getter;
@@ -36,10 +35,6 @@ public class ActionUiModelVaa implements ActionUiModel<Component, Component> {
     @Getter
     private final ManagedAction managedAction;
 
-    @Getter(lazy = true, onMethod_ = {@Override})
-    private final ActionUiMetaModel actionUiMetaModel = ActionUiMetaModel.of(getManagedAction());
-
-
     @Override
     public Component createMenuUiComponent() {
         return createRegularUiComponent();
@@ -47,10 +42,9 @@ public class ActionUiModelVaa implements ActionUiModel<Component, Component> {
 
     @Override
     public Component createRegularUiComponent() {
-        val actionMeta = getActionUiMetaModel();
-        val uiLabel = new Label(actionMeta.getLabel());
+        val uiLabel = new Label(getManagedAction().getFriendlyName());
 
-        return Decorators.getIcon().decorate(uiLabel, actionMeta.getFontAwesomeUiModel());
+        return Decorators.getIcon().decorate(uiLabel, getFontAwesomeUiModel());
     }
 
 

@@ -18,15 +18,26 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.layout.bs3;
 
+import java.util.Optional;
+
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
+import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
+import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.row.Row;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
+
+import lombok.val;
 
 public class BS3GridPanel
 extends PanelAbstract<ManagedObject, EntityModel> {
@@ -37,6 +48,28 @@ extends PanelAbstract<ManagedObject, EntityModel> {
 
     private final BS3Grid bs3Page;
 
+    public static Optional<BS3GridPanel> extraContentForMixin(final String id, final ActionModel actionModel) {
+        final ObjectAction action = actionModel.getAction();
+        if(action instanceof ObjectActionMixedIn) {
+            final ObjectActionMixedIn actionMixedIn = (ObjectActionMixedIn) action;
+            final ObjectSpecification mixinSpec = actionMixedIn.getMixinType();
+            if(mixinSpec.isViewModel()) {
+                val commonContext = actionModel.getCommonContext();
+                final ManagedObject targetAdapterForMixin = action.realTargetAdapter(actionModel.getActionOwner());
+                final GridFacet gridFacet = mixinSpec.getFacet(GridFacet.class);
+                final Grid gridForMixin = gridFacet.getGrid(targetAdapterForMixin);
+                if(gridForMixin instanceof BS3Grid) {
+                    final BS3Grid bs3Grid = (BS3Grid) gridForMixin;
+                    final EntityModel entityModelForMixin =
+                            EntityModel.ofAdapter(commonContext, targetAdapterForMixin);
+                    return Optional.of(new BS3GridPanel(id, entityModelForMixin, bs3Grid));
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+
     public BS3GridPanel(final String id, final EntityModel entityModel, final BS3Grid bs3Grid) {
         super(id, entityModel);
         this.bs3Page = bs3Grid;
@@ -45,7 +78,7 @@ extends PanelAbstract<ManagedObject, EntityModel> {
 
     private void buildGui() {
 
-        Util.appendCssClassIfRequired(this, bs3Page);
+        Wkt.cssAppend(this, bs3Page.getCssClass());
 
         final RepeatingView rv = new RepeatingView(ID_ROWS);
 

@@ -16,10 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model;
+package org.apache.isis.commons.internal.functions;
 
-public interface HasUiMenuItem<T> {
+import java.util.function.Function;
 
-    T getUiMenuItem();
+import org.apache.isis.commons.internal.functions._Functions.IndexedFunction;
+
+/**
+ * Package private mixin for _Functions. <br/>
+ * Extending a Function to keep track of an index, incremented with each function call.
+ */
+class _Functions_IndexedZeroBase<T, R> implements Function<T, R> {
+
+
+    private int index=0;
+    private final IndexedFunction<T, R> indexAwareFunction;
+
+    _Functions_IndexedZeroBase(IndexedFunction<T, R> indexAwareFunction) {
+        this.indexAwareFunction = indexAwareFunction;
+    }
+
+    @Override
+    public R apply(T t) {
+        return indexAwareFunction.apply(index++, t);
+    }
 
 }

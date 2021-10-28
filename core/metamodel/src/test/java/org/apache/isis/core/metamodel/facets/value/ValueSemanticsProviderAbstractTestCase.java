@@ -154,10 +154,10 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         if(valueSemanticsProvider instanceof StringValueSemantics) {
             // string representation has null-to-empty semantics
             assertEquals("",
-                    valueSemanticsProvider.getRenderer().simpleTextRepresentation(null, null));
+                    valueSemanticsProvider.getRenderer().simpleTextPresentation(null, null));
         } else {
             assertEquals(ValueSemanticsAbstract.NULL_REPRESENTATION,
-                    valueSemanticsProvider.getRenderer().simpleTextRepresentation(null, null));
+                    valueSemanticsProvider.getRenderer().simpleTextPresentation(null, null));
         }
 
     }

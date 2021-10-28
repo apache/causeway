@@ -25,15 +25,16 @@ import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 
-public abstract class ComponentFactoryScalarAbstract extends ComponentFactoryAbstract {
+public abstract class ComponentFactoryScalarAbstract
+extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
     private final Class<?>[] scalarTypes;
 
-    public ComponentFactoryScalarAbstract(
-            Class<?> componentClass,
-            Class<?>... scalarTypes) {
+    protected ComponentFactoryScalarAbstract(
+            final Class<?> componentClass,
+            final Class<?>... scalarTypes) {
 
         super(ComponentType.SCALAR_NAME_AND_VALUE, componentClass);
         this.scalarTypes = scalarTypes;
@@ -56,8 +57,7 @@ public abstract class ComponentFactoryScalarAbstract extends ComponentFactoryAbs
 
     @Override
     public final Component createComponent(final String id, final IModel<?> model) {
-        final ScalarModel scalarModel = (ScalarModel) model;
-        return createComponent(id, scalarModel);
+        return createComponent(id, (ScalarModel) model);
     }
 
     protected abstract Component createComponent(String id, ScalarModel scalarModel);

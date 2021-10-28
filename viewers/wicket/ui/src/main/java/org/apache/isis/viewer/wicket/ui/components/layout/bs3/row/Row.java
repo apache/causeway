@@ -26,13 +26,13 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3RowContent;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.ui.components.layout.bs3.Util;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.clearfix.ClearFix;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.col.Col;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.col.RepeatingViewWithDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 public class Row
 extends PanelAbstract<ManagedObject, EntityModel>
@@ -86,7 +86,8 @@ implements HasDynamicallyVisibleContent {
 
         final WebMarkupContainer panel = this;
         if(visible) {
-            Util.appendCssClass(panel, bs3Row, "row");
+            Wkt.cssAppend(panel, "row");
+            Wkt.cssAppend(panel, bs3Row.getCssClass());
             panel.add(rv);
         } else {
             Components.permanentlyHide(panel, rv.getId());

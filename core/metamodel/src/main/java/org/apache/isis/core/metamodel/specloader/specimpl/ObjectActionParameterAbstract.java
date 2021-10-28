@@ -102,7 +102,7 @@ implements
      * Parameter number, 0-based.
      */
     @Override
-    public int getNumber() {
+    public int getParameterIndex() {
         return number;
     }
 
@@ -151,26 +151,25 @@ implements
     }
 
     @Override
-    public final String getDescription(final Supplier<ManagedObject> domainObjectProvider) {
+    public final Optional<String> getDescription(final Supplier<ManagedObject> domainObjectProvider) {
         //as we don't support imperative naming for parameters yet ..
         return staticDescription();
     }
 
     @Override
     public final Optional<String> getStaticDescription() {
-        return Optional.of(staticDescription());
+        return staticDescription();
     }
 
     @Override
-    public final String getCanonicalDescription() {
+    public final Optional<String> getCanonicalDescription() {
         //as we don't support imperative naming for parameters yet ..
         return staticDescription();
     }
 
-    private String staticDescription() {
+    private Optional<String> staticDescription() {
         return lookupFacet(ParamDescribedFacet.class)
-        .map(ParamDescribedFacet::translated)
-        .orElse("");
+        .map(ParamDescribedFacet::translated);
     }
 
     public Consent isUsable() {
@@ -258,7 +257,7 @@ implements
                 .map(defaultsFacet->defaultsFacet.getDefault(pendingArgs))
                 .orElseGet(Can::empty);
 
-        if(pendingArgs.getParamMetamodel(getNumber()).isNonScalar()) {
+        if(pendingArgs.getParamMetamodel(getParameterIndex()).isNonScalar()) {
             val nonScalarDefaults = defaults
             // post processing each entry
             .map(obj->ManagedObjects.emptyToDefault(paramSpec, !isOptional(), obj));
@@ -330,7 +329,7 @@ implements
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val visibilityContext = createArgumentVisibilityContext(
-                head, pendingArgs, getNumber(), interactionInitiatedBy);
+                head, pendingArgs, getParameterIndex(), interactionInitiatedBy);
 
         return InteractionUtils.isVisibleResult(this, visibilityContext).createConsent();
     }
@@ -359,7 +358,7 @@ implements
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val usabilityContext = createArgumentUsabilityContext(
-                head, pendingArgs, getNumber(), interactionInitiatedBy);
+                head, pendingArgs, getParameterIndex(), interactionInitiatedBy);
 
         val usableResult = InteractionUtils.isUsableResult(this, usabilityContext);
         return usableResult.createConsent();
@@ -386,7 +385,7 @@ implements
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val validityContext = createProposedArgumentInteractionContext(
-                head, pendingArgs, getNumber(), interactionInitiatedBy);
+                head, pendingArgs, getParameterIndex(), interactionInitiatedBy);
 
         val validResult = InteractionUtils.isValidResult(this, validityContext);
         return validResult.createConsent();
@@ -404,7 +403,7 @@ implements
 
         val argumentAdapters = arguments(proposedValue);
         val validityContext = createProposedArgumentInteractionContext(
-                head, argumentAdapters, getNumber(), interactionInitiatedBy);
+                head, argumentAdapters, getParameterIndex(), interactionInitiatedBy);
 
         final InteractionResultSet buf = new InteractionResultSet();
         InteractionUtils.isValidResultSet(this, validityContext, buf);
@@ -424,7 +423,7 @@ implements
     @Deprecated
     private Can<ManagedObject> arguments(final ManagedObject proposedValue) {
         final int paramCount = getAction().getParameterCount();
-        final int paramIndex = getNumber();
+        final int paramIndex = getParameterIndex();
         val arguments = new ArrayList<ManagedObject>(paramCount);
         for(int i=0; i<paramCount; ++i) {
             arguments.add(i==paramIndex ? proposedValue : ManagedObject.empty(getAction().getParameterTypes().getElseFail(paramIndex)));

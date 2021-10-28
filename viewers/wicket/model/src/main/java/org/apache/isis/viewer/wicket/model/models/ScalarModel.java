@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.wicket.model.ChainingModel;
 
@@ -219,6 +220,10 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         return getMetaModel().getFacet(facetType);
     }
 
+    public final <T extends Facet> Optional<T> lookupFacet(final Class<T> facetType) {
+        return getMetaModel().lookupFacet(facetType);
+    }
+
     /**
      * Additional links to render (if any)
      */
@@ -279,34 +284,21 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     protected transient AssociatedActions associatedActions;
 
     public static class AssociatedActions {
-        private final ObjectAction firstAssociatedWithInlineAsIfEdit;
-        private final List<ObjectAction> remainingAssociated;
+        @Getter private final Optional<ObjectAction> firstAssociatedWithInlineAsIfEdit;
+        @Getter private final List<ObjectAction> remainingAssociated;
 
         AssociatedActions(final Can<ObjectAction> allAssociated) {
             firstAssociatedWithInlineAsIfEdit = firstAssociatedActionWithInlineAsIfEdit(allAssociated);
-            remainingAssociated = (firstAssociatedWithInlineAsIfEdit != null)
-                    ? allAssociated.remove(firstAssociatedWithInlineAsIfEdit).toList()
+            remainingAssociated = firstAssociatedWithInlineAsIfEdit.isPresent()
+                    ? allAssociated.remove(firstAssociatedWithInlineAsIfEdit.get()).toList()
                     : allAssociated.toList();
         }
 
-        public List<ObjectAction> getRemainingAssociated() {
-            return remainingAssociated;
-        }
-        public ObjectAction getFirstAssociatedWithInlineAsIfEdit() {
-            return firstAssociatedWithInlineAsIfEdit;
-        }
-        public boolean hasAssociatedActionWithInlineAsIfEdit() {
-            return firstAssociatedWithInlineAsIfEdit != null;
-        }
-
-        private static ObjectAction firstAssociatedActionWithInlineAsIfEdit(final Can<ObjectAction> objectActions) {
-            for (ObjectAction objectAction : objectActions) {
-                final PromptStyle promptStyle = ObjectAction.Util.promptStyleFor(objectAction);
-                if(promptStyle.isInlineAsIfEdit()) {
-                    return objectAction;
-                }
-            }
-            return null;
+        private static Optional<ObjectAction> firstAssociatedActionWithInlineAsIfEdit(
+                final Can<ObjectAction> objectActions) {
+            return objectActions.stream()
+            .filter(act->ObjectAction.Util.promptStyleFor(act).isInlineAsIfEdit())
+            .findFirst();
         }
     }
 
@@ -346,7 +338,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     public abstract String getIdentifier();
 
-    public AssociatedActions getAssociatedActions() {
+    public final AssociatedActions getAssociatedActions() {
         if (associatedActions == null) {
             associatedActions = new AssociatedActions(calcAssociatedActions());
         }
@@ -356,7 +348,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     protected abstract Can<ObjectAction> calcAssociatedActions();
 
     public final boolean hasAssociatedActionWithInlineAsIfEdit() {
-        return getAssociatedActions().hasAssociatedActionWithInlineAsIfEdit();
+        return getAssociatedActions().getFirstAssociatedWithInlineAsIfEdit().isPresent();
     }
 
     public void clearPending() {
@@ -364,5 +356,6 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         // was used to state that pending value is in sync with current value
         //getPendingPropertyModel().getValue().setValue(null);
     }
+
 
 }

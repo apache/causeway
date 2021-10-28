@@ -59,7 +59,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextRepresentation(final Context context, final TreeNode<?> value) {
+    public String simpleTextPresentation(final Context context, final TreeNode<?> value) {
         return super.render(value, TreeNode::toString);
     }
 

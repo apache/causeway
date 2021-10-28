@@ -27,25 +27,27 @@ import org.apache.isis.applib.services.metamodel.BeanSort;
 
 public interface ActionPromptProvider {
 
-    public static ActionPromptProvider getFrom(Component component) {
+    public static ActionPromptProvider getFrom(final Component component) {
         final Page page = component.getPage();
         if(page == null) {
-            throw new IllegalArgumentException("Programming error: component must be added to a page in order to locate the ActionPromptProvider");
+            throw new IllegalArgumentException("Programming error: component must be added to a page "
+                    + "in order to locate the ActionPromptProvider");
         }
         return getFrom(page);
     }
 
-    public static ActionPromptProvider getFrom(Page page) {
+    public static ActionPromptProvider getFrom(final Page page) {
         if(page instanceof ActionPromptProvider) {
-            final ActionPromptProvider provider = (ActionPromptProvider) page;
-            return provider;
+            return (ActionPromptProvider) page;
         }
         // else
-        throw new IllegalArgumentException("Programming error: all pages should inherit from PageAbstract, which serves as the ActionPromptProvider");
+        throw new IllegalArgumentException("Programming error: all pages should inherit from PageAbstract, "
+                + "which serves as the ActionPromptProvider");
     }
 
     public ActionPrompt getActionPrompt(
             final PromptStyle promptStyle,
             final BeanSort sort);
+
     void closePrompt(final AjaxRequestTarget target);
 }

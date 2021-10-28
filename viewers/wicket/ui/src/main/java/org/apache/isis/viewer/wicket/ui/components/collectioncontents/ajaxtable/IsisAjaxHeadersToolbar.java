@@ -43,7 +43,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
 
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericTitleColumn;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import de.agilecoders.wicket.core.util.Attributes;
 
@@ -111,7 +111,7 @@ public class IsisAjaxHeadersToolbar<S> extends AbstractToolbar
             }
 
             @Override
-            protected void populateItem(Item<IColumn<T, S>> item)
+            protected void populateItem(final Item<IColumn<T, S>> item)
             {
                 final IColumn<T, S> column = item.getModelObject();
 
@@ -151,7 +151,7 @@ public class IsisAjaxHeadersToolbar<S> extends AbstractToolbar
                 header.add(label, sortIcon);
 
                 if(column instanceof GenericTitleColumn) {
-                    header.add(new CssClassAppender("title-column"));
+                    Wkt.cssAppend(header, "title-column");
                 }
             }
         };
@@ -171,10 +171,10 @@ public class IsisAjaxHeadersToolbar<S> extends AbstractToolbar
      *          The model object type of the data table
      * @return A component that should be used as a sort icon
      */
-    protected <T> Component newSortIcon(String id, final IColumn<T, S> column, final ISortStateLocator<S> stateLocator) {
+    protected <T> Component newSortIcon(final String id, final IColumn<T, S> column, final ISortStateLocator<S> stateLocator) {
         return new WebComponent(id) {
             @Override
-            protected void onComponentTag(ComponentTag tag) {
+            protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);
 
                 if(column.isSortable()) {

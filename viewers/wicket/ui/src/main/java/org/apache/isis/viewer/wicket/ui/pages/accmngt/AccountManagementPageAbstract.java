@@ -28,7 +28,6 @@ import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -40,10 +39,12 @@ import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionStackTracePanel;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.WebPageBase;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
+
+import lombok.val;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapJavascriptBehavior;
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
-import lombok.val;
 
 /**
  * Boilerplate, pick up our HTML and CSS.
@@ -67,8 +68,8 @@ public class AccountManagementPageAbstract extends WebPageBase {
     }
 
     protected AccountManagementPageAbstract(
-            PageParameters parameters,
-            ExceptionModel exceptionModel) {
+            final PageParameters parameters,
+            final ExceptionModel exceptionModel) {
 
         super(parameters);
 
@@ -91,12 +92,12 @@ public class AccountManagementPageAbstract extends WebPageBase {
     }
 
 
-    private MarkupContainer addPageTitle() {
-        String applicationName = getConfiguration().getViewer().getWicket().getApplication().getName();
-        return add(new Label(ID_PAGE_TITLE, applicationName));
+    private void addPageTitle() {
+        val applicationName = getConfiguration().getViewer().getWicket().getApplication().getName();
+        Wkt.labelAdd(this, ID_PAGE_TITLE, applicationName);
     }
 
-    private void addApplicationName(MarkupContainer parent) {
+    private void addApplicationName(final MarkupContainer parent) {
         val branding = super.getCommonContext()
                 .lookupServiceElseFail(BrandingUiModelProvider.class)
                 .getSignInBranding();
@@ -106,7 +107,7 @@ public class AccountManagementPageAbstract extends WebPageBase {
     }
 
     @Override
-    public void renderHead(IHeaderResponse response) {
+    public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(

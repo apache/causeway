@@ -18,28 +18,36 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.actionprompt;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 
+import org.apache.isis.viewer.wicket.model.models.ActionPromptWithExtraContent;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.ModalDialog;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 
-public class ActionPromptModalWindow extends ModalDialog<Void> {
+public class ActionPromptModalWindow
+extends ModalDialog<Void>
+implements ActionPromptWithExtraContent {
 
     private static final long serialVersionUID = 1L;
 
-    public static ActionPromptModalWindow newModalWindow(String id) {
+    private static final String ID_EXTRA_CONTENT = "extraContent";
+
+    public static ActionPromptModalWindow newModalWindow(final String id) {
         return new ActionPromptModalWindow(id);
     }
 
-
-    // //////////////////////////////////////
-
-
-    public ActionPromptModalWindow(String id) {
+    public ActionPromptModalWindow(final String id) {
         super(id);
+
+        add(new WebMarkupContainer(getExtraContentId()));
+
         // https://github.com/l0rdn1kk0n/wicket-bootstrap/issues/381
         setDisableEnforceFocus(true);
         // https://github.com/l0rdn1kk0n/wicket-bootstrap/issues/379
@@ -62,11 +70,21 @@ public class ActionPromptModalWindow extends ModalDialog<Void> {
 
 
     @Override
-    public void renderHead(IHeaderResponse response) {
+    public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
+        Wkt.javaScriptAdd(response, EventTopic.FOCUS_FIRST_PARAMETER, getMarkupId());
+    }
 
-        response.render(OnDomReadyHeaderItem.forScript(
-                String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PARAMETER, '%s')", getMarkupId())));
+    @Override
+    public String getExtraContentId() {
+        return ID_EXTRA_CONTENT;
+    }
+
+
+    @Override
+    public void setExtraContentPanel(final Component extraContentComponent, final AjaxRequestTarget target) {
+        extraContentComponent.setMarkupId(getExtraContentId());
+        addOrReplace(extraContentComponent);
     }
 
 }

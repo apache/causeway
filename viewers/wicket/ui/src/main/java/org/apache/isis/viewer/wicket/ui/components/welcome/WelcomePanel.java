@@ -18,13 +18,13 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.welcome;
 
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.LambdaModel;
 
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.viewer.wicket.model.models.WelcomeModel;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 /**
  * {@link PanelAbstract Panel} displaying welcome message (as used on
@@ -39,9 +39,9 @@ extends PanelAbstract<IsisConfiguration.Viewer.Wicket.Welcome, WelcomeModel> {
 
     public WelcomePanel(final String id, final WelcomeModel welcomeModel) {
         super(id, welcomeModel);
-        final Label label = new Label(ID_MESSAGE, LambdaModel.of(()->welcomeModel.getObject().getText()));
-        // safe to not escape, welcome message is read from file (part of deployed WAR)
-        label.setEscapeModelStrings(false);
-        add(label);
+        Wkt.labelAdd(this, ID_MESSAGE, LambdaModel.of(()->welcomeModel.getObject().getText()))
+            // safe to not escape, welcome message is read from file (part of deployed WAR)
+            .setEscapeModelStrings(false);
+
     }
 }

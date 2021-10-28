@@ -24,8 +24,6 @@ import javax.inject.Inject;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
@@ -33,8 +31,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
@@ -49,8 +45,8 @@ import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Links;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -82,7 +78,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
     }
 
     @Override
-    public void renderHead(IHeaderResponse response) {
+    public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
     }
 
@@ -96,7 +92,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
         final WebMarkupContainer container = new WebMarkupContainer(ID_BOOKMARK_LIST) {
             private static final long serialVersionUID = 1L;
             @Override
-            public void renderHead(IHeaderResponse response) {
+            public void renderHead(final IHeaderResponse response) {
                 response.render(CssHeaderItem.forReference(new CssResourceReference(BookmarkedPagesPanel.class, "BookmarkedPagesPanel.css")));
                 response.render(JavaScriptReferenceHeaderItem.forReference(SLIDE_PANEL_JS));
             }
@@ -105,95 +101,68 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
         container.setOutputMarkupId(true);
         add(container);
 
-        final AjaxLink<Void> clearAllBookmarksLink = new AjaxLink<Void>(CLEAR_BOOKMARKS){
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                BookmarkedPagesPanel.this.getModel().clear();
-                setEnabled(false);
-                target.add(container, this);
-            }
-        };
-        clearAllBookmarksLink.setOutputMarkupId(true);
-        add(clearAllBookmarksLink);
+        val clearAllBookmarksLink = Wkt.linkAdd(this, CLEAR_BOOKMARKS, target->{
+            BookmarkedPagesPanel.this.getModel().clear();
+            setEnabled(false);
+            target.add(container, this);
+        });
         clearAllBookmarksLink.setOutputMarkupId(true);
 
         if(getModel().isEmpty()) {
             clearAllBookmarksLink.setVisible(false);
         }
 
+        Wkt.listViewAdd(container, ID_BOOKMARKED_PAGE_ITEM, bookmarkedPagesModel, item->{
+            final BookmarkTreeNode node = item.getModelObject();
+            try {
+                final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(PageType.ENTITY);
 
-        final ListView<BookmarkTreeNode> listView = new ListView<BookmarkTreeNode>(ID_BOOKMARKED_PAGE_ITEM, bookmarkedPagesModel) {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void populateItem(ListItem<BookmarkTreeNode> item) {
-                final BookmarkTreeNode node = item.getModelObject();
-                try {
-                    final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(PageType.ENTITY);
-
-                    final AjaxLink<Object> clearBookmarkLink = new AjaxLink<Object>(ID_CLEAR_BOOKMARK_LINK) {
-
-                        private static final long serialVersionUID = 1L;
-
-                        @Override
-                        public void onClick(AjaxRequestTarget target) {
-                            bookmarkedPagesModel.remove(node);
-                            if(bookmarkedPagesModel.isEmpty()) {
-                                permanentlyHide(CLEAR_BOOKMARKS);
-                            }
-                            target.add(container, clearAllBookmarksLink);
-                        }
-
-                    };
-                    if(node.getDepth() == 0) {
-                        clearBookmarkLink.add(new CssClassAppender("clearBookmark"));
-                    } else {
-                        clearBookmarkLink.setEnabled(true);
+                val clearBookmarkLink = Wkt.linkAdd(item, ID_CLEAR_BOOKMARK_LINK, target->{
+                    bookmarkedPagesModel.remove(node);
+                    if(bookmarkedPagesModel.isEmpty()) {
+                        permanentlyHide(CLEAR_BOOKMARKS);
                     }
-                    item.add(clearBookmarkLink);
+                    target.add(container, clearAllBookmarksLink);
+                });
+                if(node.getDepth() == 0) {
+                    Wkt.cssAppend(clearBookmarkLink, "clearBookmark");
+                } else {
+                    clearBookmarkLink.setEnabled(true);
+                }
 
-                    PageParameters pageParameters = node.getPageParameters();
-                    final AbstractLink link = Links.newBookmarkablePageLink(ID_BOOKMARKED_PAGE_LINK, pageParameters, pageClass);
+                PageParameters pageParameters = node.getPageParameters();
+                final AbstractLink link = Links.newBookmarkablePageLink(ID_BOOKMARKED_PAGE_LINK, pageParameters, pageClass);
 
-                    ObjectSpecification objectSpec = null;
-                    val oid = node.getOidNoVer();
-                    if(oid != null) {
-                        objectSpec = getSpecificationLoader().specForLogicalTypeName(oid.getLogicalTypeName())
-                                .orElse(null);
+                ObjectSpecification objectSpec = null;
+                val oid = node.getOidNoVer();
+                if(oid != null) {
+                    objectSpec = getSpecificationLoader().specForLogicalTypeName(oid.getLogicalTypeName())
+                            .orElse(null);
+                }
+                final ResourceReference imageResource = getImageResourceCache().resourceReferenceForSpec(objectSpec);
+                final Image image = new Image(ID_BOOKMARKED_PAGE_ICON, imageResource) {
+                    private static final long serialVersionUID = 1L;
+                    @Override
+                    protected boolean shouldAddAntiCacheParameter() {
+                        return false;
                     }
-                    final ResourceReference imageResource = getImageResourceCache().resourceReferenceForSpec(objectSpec);
-                    final Image image = new Image(ID_BOOKMARKED_PAGE_ICON, imageResource) {
-                        private static final long serialVersionUID = 1L;
-                        @Override
-                        protected boolean shouldAddAntiCacheParameter() {
-                            return false;
-                        }
-                    };
-                    link.addOrReplace(image);
+                };
+                link.addOrReplace(image);
 
-                    String title = node.getTitle();
-                    final Label label = new Label(ID_BOOKMARKED_PAGE_TITLE, title);
-                    link.add(label);
-                    item.add(link);
+                Wkt.labelAdd(link, ID_BOOKMARKED_PAGE_TITLE, node.getTitle());
+
 //XXX seems broken when there is only one bookmark entry;
 // an alternative idea would be to render the item differently eg. bold, but don't disable it
 //                    if(bookmarkedPagesModel.isCurrent(pageParameters)) {
 //                        item.add(new CssClassAppender("disabled"));
 //                    }
-                    item.add(new CssClassAppender("bookmarkDepth" + node.getDepth()));
-                } catch(ObjectNotFoundException ex) {
-                    // ignore
-                    // this is a partial fix for an infinite redirect loop.
-                    // should be a bit smarter here, though; see ISIS-596.
-                }
-
+                Wkt.cssAppend(item, "bookmarkDepth" + node.getDepth());
+            } catch(ObjectNotFoundException ex) {
+                // ignore
+                // this is a partial fix for an infinite redirect loop.
+                // should be a bit smarter here, though; see ISIS-596.
             }
-        };
-        container.add(listView);
+        });
     }
 
     protected Component addHelpText(final BookmarkedPagesModel bookmarkedPagesModel) {

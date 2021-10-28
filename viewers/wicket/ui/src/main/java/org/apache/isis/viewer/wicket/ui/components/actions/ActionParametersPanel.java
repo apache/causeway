@@ -19,14 +19,13 @@
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.Setter;
 
@@ -78,12 +77,12 @@ extends PanelAbstract<ManagedObject, ActionModel> {
 
         addOrReplace(header);
 
-        getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, getActionModel());
-        getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, actionModel
+        getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, actionModel);
+        getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE,
+                actionModel
                 .getParentUiModel());
 
-        final String actionName = getActionModel().getFriendlyName();
-        header.add(new Label(ID_ACTION_NAME, Model.of(actionName)));
+        Wkt.labelAdd(header, ID_ACTION_NAME, ()->getActionModel().getFriendlyName());
     }
 
 
