@@ -120,45 +120,53 @@ public final class ManagedAction extends ManagedMember {
 
     public _Either<ManagedObject, InteractionVeto> invoke(@NonNull final Can<ManagedObject> actionParameters) {
 
-        val action = getAction();
+        if(isValueTypeMixin()) {
+            return _Either.left(invokeValueTypeMixin(actionParameters));
+        }
 
-        val head = action.interactionHead(getOwner());
-
-        final ManagedObject actionResult = action
-                .execute(head , actionParameters, InteractionInitiatedBy.USER);
+        final ManagedObject actionResult = getAction()
+                .execute(getInteractionHead(), actionParameters, InteractionInitiatedBy.USER);
 
         return _Either.left(route(actionResult));
-
     }
 
     @SneakyThrows
     public ManagedObject invokeWithRuleChecking(
             final @NonNull Can<ManagedObject> actionParameters) throws AuthorizationException {
 
-        val action = getAction();
-        val head = action.interactionHead(getOwner());
-        val ownerSpec = head.getOwner().getSpecification();
-
-        //FIXME[ISIS-2877] this special code branch should probably be rather placed earlier in the call stack
-        // value-type mixins have no rule-checking, no domain events and no routing
-        if(ownerSpec.isValue()) {
-
-            val method = ((ObjectMemberAbstract)action).getFacetedMethod().getMethod();
-
-            final Object[] executionParameters = UnwrapUtil.multipleAsArray(actionParameters);
-            final Object targetPojo = UnwrapUtil.single(head.getTarget());
-
-            val resultPojo =  CanonicalParameterUtil
-                    .invoke(method, targetPojo, executionParameters);
-
-            //FIXME[ISIS-2877] don't render a result page, instead inject the result into the parent dialog
-            return mmc().getObjectManager().adapt(resultPojo);
+        if(isValueTypeMixin()) {
+            return invokeValueTypeMixin(actionParameters);
         }
 
-        final ManagedObject actionResult = action
-                .executeWithRuleChecking(head , actionParameters, InteractionInitiatedBy.USER, getWhere());
+        final ManagedObject actionResult = getAction()
+                .executeWithRuleChecking(
+                        getInteractionHead(), actionParameters, InteractionInitiatedBy.USER, getWhere());
 
         return route(actionResult);
+    }
+
+    // -- INVOKE HELPER
+
+    private boolean isValueTypeMixin() {
+        return getOwner().getSpecification().isValue();
+    }
+
+    /**
+     *  value-type mixins have no rule-checking, no domain events and no routing
+     */
+    @SneakyThrows
+    private ManagedObject invokeValueTypeMixin(
+            final @NonNull Can<ManagedObject> actionParameters) {
+
+        val method = ((ObjectMemberAbstract)action).getFacetedMethod().getMethod();
+
+        final Object[] executionParameters = UnwrapUtil.multipleAsArray(actionParameters);
+        final Object targetPojo = UnwrapUtil.single(getInteractionHead().getTarget());
+
+        val resultPojo = CanonicalParameterUtil
+                .invoke(method, targetPojo, executionParameters);
+
+        return mmc().getObjectManager().adapt(resultPojo);
     }
 
     private ManagedObject route(final @Nullable ManagedObject actionResult) {

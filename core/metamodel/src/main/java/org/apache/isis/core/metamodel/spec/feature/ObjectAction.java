@@ -172,7 +172,6 @@ public interface ObjectAction extends ObjectMember {
 
     // -- INTERACTION HEAD
 
-    @Deprecated// use ManagedAction instead
     ActionInteractionHead interactionHead(@NonNull ManagedObject actionOwner);
 
     // -- Parameters (declarative)

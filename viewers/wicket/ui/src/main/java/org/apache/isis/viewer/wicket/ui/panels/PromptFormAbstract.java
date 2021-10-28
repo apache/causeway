@@ -120,22 +120,10 @@ implements ScalarModelSubscriber {
         val outcome = formExecutor
                 .executeAndProcessResults(target.getPage(), target, form, formExecutorContext());
 
-        if (outcome.isSuccessWithRedirect()) {
+        if (outcome.isSuccess()) {
             completePrompt(target);
-
             okButton.send(target.getPage(), Broadcast.EXACT, newCompletedEvent(target, form));
             Components.addToAjaxRequest(target, form);
-            return;
-        }
-
-        //FIXME[ISIS-2877] what to do here exactly?
-        if (outcome.isSuccessWithinNestedContext()) {
-
-            completePrompt(target);
-
-            okButton.send(target.getPage(), Broadcast.EXACT, newCompletedEvent(target, form));
-            Components.addToAjaxRequest(target, form);
-            return;
         }
     }
 

@@ -114,17 +114,12 @@ implements FormExecutor {
                     act->act.executeActionAndReturnResult(),
                     prop->prop.applyValueThenReturnOwner());
 
-            // if we are in a nested dialog/form, the result must be feed into the calling dialog's/form's parameter negotiation model
-            val isNestedContext = actionOrPropertyModel.fold(
-                    act->act.getActionOwner().getSpecification().isValue(), //FIXME[ISIS-2877] we know if the action owner is a value-type, the form is a nested one - however, should be extended for more generic use
-                    prop->false);
-            if(isNestedContext) {
-
-                formExecutorContext.associatedWithParameter()
-                .ifPresent(associatedParameter->{
-                    associatedParameter.setValue(resultAdapter);
-                });
-
+            // if we are in a nested dialog/form, that supports an action parameter,
+            // the result must be fed back into the calling dialog's/form's parameter
+            // negotiation model (instead of redirecting to a new page)
+            if(formExecutorContext.associatedWithParameter().isPresent()) {
+                formExecutorContext.associatedWithParameter().get()
+                .setValue(resultAdapter);
                 return FormExecutionOutcome.SUCCESS_IN_NESTED_CONTEXT_SO_STAY_ON_PAGE;
             }
 
