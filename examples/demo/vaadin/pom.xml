@@ -38,9 +38,9 @@
 			web-application. Ideally these dependencies are just referenced in module 
 			viewer-vaadin-ui. See https://nodejs.org/en/download/ for latest node and 
 			npm (lts) versions -->
-		<node.version>v14.17.6</node.version>
-		<npm.version>6.14.15</npm.version>
-		<vaadin.version>21.0.0</vaadin.version>
+		<node.version>v16.13.0</node.version>
+		<npm.version>8.1.0</npm.version>
+		<vaadin.version>21.0.3</vaadin.version>
 
 	</properties>
 
