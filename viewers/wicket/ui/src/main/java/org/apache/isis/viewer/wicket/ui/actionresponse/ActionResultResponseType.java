@@ -30,7 +30,6 @@ import org.apache.isis.applib.value.OpenUrlStrategy;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -44,6 +43,8 @@ import org.apache.isis.viewer.wicket.ui.pages.value.ValuePage;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 
 import lombok.SneakyThrows;
+import lombok.Value;
+import lombok.val;
 
 public enum ActionResultResponseType {
     OBJECT {
@@ -198,6 +199,21 @@ public enum ActionResultResponseType {
         throw new UnsupportedOperationException("Cannot render concurrency exception for any result type other than OBJECT");
     }
 
+    // -- UTILITY
+
+    public static ActionResultResponse determineAndInterpretResult(
+            final ActionModel model,
+            final AjaxRequestTarget targetIfAny,
+            final ManagedObject resultAdapter,
+            final Can<ManagedObject> args) {
+
+        val typeAndAdapter = determineFor(resultAdapter, targetIfAny);
+        return typeAndAdapter.type
+                .interpretResult(model, targetIfAny, typeAndAdapter.resultAdapter, args);
+    }
+
+    // -- HELPER
+
     private static ManagedObject determineScalarAdapter(
             final IsisAppCommonContext commonContext,
             final ManagedObject resultAdapter) {
@@ -227,61 +243,61 @@ public enum ActionResultResponseType {
         return ActionResultResponse.toPage(entityPage);
     }
 
-
-    // //////////////////////////////////////
-
-    public static ActionResultResponse determineAndInterpretResult(
-            final ActionModel model,
-            final AjaxRequestTarget targetIfAny,
-            final ManagedObject resultAdapter,
-            final Can<ManagedObject> args) {
-
-        ActionResultResponseType arrt = determineFor(resultAdapter, targetIfAny);
-        return arrt.interpretResult(model, targetIfAny, resultAdapter, args);
+    @Value(staticConstructor = "of")
+    private static class TypeAndAdapter {
+        final ActionResultResponseType type;
+        final ManagedObject resultAdapter;
     }
 
-    private static ActionResultResponseType determineFor(
+    private static TypeAndAdapter determineFor(
             final ManagedObject resultAdapter,
             final AjaxRequestTarget targetIfAny) {
 
         if(resultAdapter == null) {
-            return ActionResultResponseType.VOID;
+            return TypeAndAdapter.of(ActionResultResponseType.VOID, resultAdapter);
         }
 
         final ObjectSpecification resultSpec = resultAdapter.getSpecification();
         if (resultSpec.isNotCollection()) {
-            if (resultSpec.getFacet(ValueFacet.class) != null) {
+            if (resultSpec.isValue()) {
 
                 final Object value = resultAdapter.getPojo();
                 if(value instanceof Clob) {
-                    return ActionResultResponseType.VALUE_CLOB;
+                    return TypeAndAdapter.of(ActionResultResponseType.VALUE_CLOB, resultAdapter);
                 }
                 if(value instanceof Blob) {
-                    return ActionResultResponseType.VALUE_BLOB;
+                    return TypeAndAdapter.of(ActionResultResponseType.VALUE_BLOB, resultAdapter);
                 }
                 if(value instanceof LocalResourcePath) {
                     return targetIfAny != null
-                            ? ActionResultResponseType.VALUE_LOCALRESPATH_AJAX
-                            : ActionResultResponseType.VALUE_LOCALRESPATH_NOAJAX;
+                            ? TypeAndAdapter.of(ActionResultResponseType.VALUE_LOCALRESPATH_AJAX, resultAdapter)
+                            : TypeAndAdapter.of(ActionResultResponseType.VALUE_LOCALRESPATH_NOAJAX, resultAdapter);
                 }
                 if(value instanceof java.net.URL) {
                     return targetIfAny != null
-                            ? ActionResultResponseType.VALUE_URL_AJAX
-                            : ActionResultResponseType.VALUE_URL_NOAJAX;
+                            ? TypeAndAdapter.of(ActionResultResponseType.VALUE_URL_AJAX, resultAdapter)
+                            : TypeAndAdapter.of(ActionResultResponseType.VALUE_URL_NOAJAX, resultAdapter);
                 }
                 // else
-                return ActionResultResponseType.VALUE;
+                return TypeAndAdapter.of(ActionResultResponseType.VALUE, resultAdapter);
             } else {
-                return ActionResultResponseType.OBJECT;
+                return TypeAndAdapter.of(ActionResultResponseType.OBJECT, resultAdapter);
             }
         } else {
 
             final int cardinality = (int)_NullSafe.streamAutodetect(resultAdapter.getPojo()).count();
             switch (cardinality) {
             case 1:
-                return ActionResultResponseType.OBJECT;
+                val firstPojo = _NullSafe.streamAutodetect(resultAdapter.getPojo())
+                    .findFirst()
+                    .get();
+                val firstElement = resultAdapter.getSpecification().getMetaModelContext().getObjectManager()
+                        .adapt(firstPojo);
+
+                // recursively unwrap
+                return determineFor(firstElement, targetIfAny);
             default:
-                return ActionResultResponseType.COLLECTION;
+                return TypeAndAdapter.of(ActionResultResponseType.COLLECTION, resultAdapter);
             }
         }
     }
