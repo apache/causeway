@@ -632,8 +632,14 @@ th > a > div > strong {
     float: left;
 }
 
+/* makes readonly textareas that act as scalar-prompt appear like normal */
+textarea.scalarPrompt[readonly] {
+    background-color: initial;
+    opacity: 1;
+}
+
 /* makes disabled fields darker */
-.form-control:disabled, .form-control[readonly] {
+.form-control:disabled .form-control[readonly] {
     background-color: #e6e6e6;
     opacity: 1;
 }

@@ -38,7 +38,8 @@ import lombok.val;
 /**
  * Panel for rendering MultiLine scalars of type String
  */
-public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract {
+public class MultiLineStringPanel
+extends ScalarPanelTextFieldParseableAbstract {
 
     private static final long serialVersionUID = 1L;
 

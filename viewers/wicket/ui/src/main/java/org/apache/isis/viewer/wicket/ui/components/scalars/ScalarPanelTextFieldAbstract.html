@@ -86,17 +86,20 @@
     </wicket:fragment>
 
     <wicket:fragment wicket:id="textareaInlinePrompt">
-        <textarea class="form-control form-control-sm" wicket:id="scalarValue"></textarea>
+        <textarea
+        		wicket:id="scalarValue"
+        		class="form-control form-control-sm scalarPrompt"
+        		readonly="true">
+        </textarea>
     </wicket:fragment>
 
-
     <wicket:fragment wicket:id="textarea">
-                <textarea
-                		data-isis-focus="true"
-                        name="scalarValue"
-                        class="form-control form-control-sm scalarValue"
-                        wicket:id="scalarValue">
-                </textarea>
+        <textarea
+        		wicket:id="scalarValue"
+        		name="scalarValue"
+        		class="form-control form-control-sm scalarValue"
+        		data-isis-focus="true">
+        </textarea>
     </wicket:fragment>
 
     <wicket:fragment wicket:id="date">
