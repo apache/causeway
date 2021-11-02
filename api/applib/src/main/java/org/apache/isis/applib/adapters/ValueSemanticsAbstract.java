@@ -121,7 +121,8 @@ implements ValueSemanticsProvider<T> {
         }
         val format = getNumberFormat(context);
         format.setParseBigDecimal(true);
-        if(context.getMaximumFractionDigits()>-1) {
+        if(context!=null
+                && context.getMaximumFractionDigits()>-1) {
             format.setMaximumFractionDigits(context.getMaximumFractionDigits());
         }
         val position = new ParsePosition(0);
