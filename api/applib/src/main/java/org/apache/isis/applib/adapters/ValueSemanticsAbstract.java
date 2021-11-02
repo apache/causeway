@@ -121,6 +121,9 @@ implements ValueSemanticsProvider<T> {
         }
         val format = getNumberFormat(context);
         format.setParseBigDecimal(true);
+        if(context.getMaximumFractionDigits()>-1) {
+            format.setMaximumFractionDigits(context.getMaximumFractionDigits());
+        }
         val position = new ParsePosition(0);
 
         try {
@@ -132,6 +135,7 @@ implements ValueSemanticsProvider<T> {
             }
             return number;
         } catch (final NumberFormatException | ParseException e) {
+            System.err.printf("suppressed message %s%n", e.getMessage());
             throw new TextEntryParseException("Not a decimal value " + input, e);
         }
 

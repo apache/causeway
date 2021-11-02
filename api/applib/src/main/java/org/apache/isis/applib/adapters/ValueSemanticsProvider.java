@@ -50,8 +50,18 @@ public interface ValueSemanticsProvider<T> {
 
     @lombok.Value(staticConstructor = "of")
     class Context {
+
         Identifier identifier;
         InteractionContext interactionContext;
+        /**
+         * Optional. Used for for decimal values, when a fixed amount of fractional digits is specified, otherwise {@code -1}
+         */
+        public int getMaximumFractionDigits() {
+            // FIXME[ISIS-2741] provide some means to recover the meta-model member from feature-id,
+            // so we can evaluate facets that provide the MaximumFractionDigits
+            // - as an alternative move this to the Parser<T>
+            return -1;
+        }
     }
 
     Class<T> getCorrespondingClass();

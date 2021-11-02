@@ -19,6 +19,7 @@
 package org.apache.isis.core.security._testing;
 
 import java.util.Optional;
+import java.util.Stack;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
@@ -33,6 +34,7 @@ import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.commons.functional.ThrowingRunnable;
 
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 /**
@@ -42,39 +44,29 @@ import lombok.SneakyThrows;
 public class InteractionService_forTesting
 implements InteractionService {
 
-    private InteractionLayer interactionLayer = null;
+    private Stack<InteractionLayer> interactionLayers = new Stack<>();
 
     @Override
     public InteractionLayer openInteraction() {
         final UserMemento userMemento = UserMemento.system();
-        final UUID uuid = UUID.randomUUID();
-        final Interaction interaction = new Interaction() {
-            @Override public <T> T putAttribute(Class<? super T> type, T value) { return null; }
-            @Override public <T> T computeAttributeIfAbsent(Class<? super T> type, Function<Class<?>, ? extends T> mappingFunction) { return null; }
-            @Override public <T> T getAttribute(Class<T> type) { return null; }
-            @Override public void removeAttribute(Class<?> type) { }
-            @Override public UUID getInteractionId() { return uuid; }
-            @Override public Command getCommand() { return null; }
-            @Override public Execution<?, ?> getCurrentExecution() { return null; }
-            @Override public Execution<?, ?> getPriorExecution() { return null; }
-        };
-        interactionLayer = new InteractionLayer(interaction, InteractionContext.ofUserWithSystemDefaults(userMemento));
-        return null;
+        return openInteraction(InteractionContext.ofUserWithSystemDefaults(userMemento));
     }
 
     @Override
-    public InteractionLayer openInteraction(@NonNull InteractionContext interactionContext) {
-        return openInteraction();
+    public InteractionLayer openInteraction(@NonNull final InteractionContext interactionContext) {
+        final Interaction interaction = new Interaction_forTesting();
+        return interactionLayers.push(
+                new InteractionLayer(interaction, interactionContext));
     }
 
     @Override
     public void closeInteractionLayers() {
-        interactionLayer = null;
+        interactionLayers.clear();
     }
 
     @Override
     public boolean isInInteraction() {
-        return interactionLayer != null;
+        return interactionLayers.size()>0;
     }
 
     @Override public Optional<UUID> getInteractionId() {
@@ -84,32 +76,67 @@ implements InteractionService {
     }
 
     @Override public Optional<InteractionLayer> currentInteractionLayer() {
-        return Optional.ofNullable(this.interactionLayer);
+        return interactionLayers.isEmpty()
+                ? Optional.empty()
+                : Optional.of(interactionLayers.peek());
     }
 
     @Override public int getInteractionLayerCount() {
-        return isInInteraction() ? 1 : 0;
+        return interactionLayers.size();
     }
 
     @Override @SneakyThrows
-    public <R> R call(@NonNull InteractionContext interactionContext, @NonNull Callable<R> callable) {
-        return callable.call();
+    public <R> R call(@NonNull final InteractionContext interactionContext, @NonNull final Callable<R> callable) {
+        try {
+            openInteraction(interactionContext);
+            return callable.call();
+        } finally {
+            interactionLayers.pop();
+        }
     }
 
     @Override @SneakyThrows
-    public void run(@NonNull InteractionContext interactionContext, @NonNull ThrowingRunnable runnable) {
-        runnable.run();
+    public void run(@NonNull final InteractionContext interactionContext, @NonNull final ThrowingRunnable runnable) {
+        try {
+            openInteraction(interactionContext);
+            runnable.run();
+        } finally {
+            interactionLayers.pop();
+        }
     }
 
 
     @Override @SneakyThrows
-    public void runAnonymous(@NonNull ThrowingRunnable runnable) {
-        runnable.run();
+    public void runAnonymous(@NonNull final ThrowingRunnable runnable) {
+        try {
+            openInteraction();
+            runnable.run();
+        } finally {
+            interactionLayers.pop();
+        }
     }
 
     @Override @SneakyThrows
-    public <R> R callAnonymous(@NonNull Callable<R> callable) {
-        return callable.call();
+    public <R> R callAnonymous(@NonNull final Callable<R> callable) {
+        try {
+            openInteraction();
+            return callable.call();
+        } finally {
+            interactionLayers.pop();
+        }
     }
+
+    @RequiredArgsConstructor
+    static class Interaction_forTesting implements Interaction {
+        private final UUID uuid = UUID.randomUUID();
+        @Override public <T> T putAttribute(final Class<? super T> type, final T value) { return null; }
+        @Override public <T> T computeAttributeIfAbsent(final Class<? super T> type, final Function<Class<?>, ? extends T> mappingFunction) { return null; }
+        @Override public <T> T getAttribute(final Class<T> type) { return null; }
+        @Override public void removeAttribute(final Class<?> type) { }
+        @Override public UUID getInteractionId() { return uuid; }
+        @Override public Command getCommand() { return null; }
+        @Override public Execution<?, ?> getCurrentExecution() { return null; }
+        @Override public Execution<?, ?> getPriorExecution() { return null; }
+    };
 
 }

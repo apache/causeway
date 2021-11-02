@@ -65,7 +65,7 @@ implements
      * @see IConverter#convertToObject(String, Locale)
      */
     @Override
-    public T convertToObject(final String text, final Locale locale) throws ConversionException {
+    public final T convertToObject(final String text, final Locale locale) throws ConversionException {
 
         val feature = feature();
         val valueFacet = valueFacet();
@@ -82,7 +82,7 @@ implements
      * @see IConverter#convertToString(String, Locale)
      */
     @Override
-    public String convertToString(final T value, final Locale locale) {
+    public final String convertToString(final T value, final Locale locale) {
 
         val feature = feature();
         val valueFacet = valueFacet();
@@ -126,7 +126,7 @@ implements
     // -- DEPENDENCIES
 
     @Override
-    public IsisAppCommonContext getCommonContext() {
+    public final IsisAppCommonContext getCommonContext() {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
 
