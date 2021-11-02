@@ -29,7 +29,6 @@ import org.apache.isis.client.kroviz.to.Represention
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.ui.dialog.ReplayDiffDialog
-import org.apache.isis.client.kroviz.ui.panel.EventLogTable
 
 val AppScope = CoroutineScope(window.asCoroutineDispatcher())
 
@@ -45,11 +44,7 @@ class ReplayCommand {
         replay(uiEvents)
         val actualEvents: MutableList<LogEntry> = eventStore.log
 
-        val expectedTable = EventLogTable(expectedEvents)
-        val actualTable = EventLogTable(actualEvents)
-        val rdd = ReplayDiffDialog()
-        rdd.expectedPanel.add(expectedTable)
-        rdd.actualPanel.add(actualTable)
+        val rdd = ReplayDiffDialog(expectedEvents, actualEvents)
         rdd.dialog.open()
     }
 

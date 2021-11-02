@@ -20,36 +20,70 @@
 package org.apache.isis.client.kroviz.ui.dialog
 
 import io.kvision.core.CssSize
+import io.kvision.core.FlexDirection
 import io.kvision.core.UNIT
 import io.kvision.panel.Direction
 import io.kvision.panel.SplitPanel
 import io.kvision.panel.VPanel
-import org.apache.isis.client.kroviz.ui.core.FormItem
+import org.apache.isis.client.kroviz.core.event.EventState
+import org.apache.isis.client.kroviz.core.event.LogEntry
+import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.ui.core.RoDialog
+import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.ui.panel.EventLogTable
 
-class ReplayDiffDialog : Command() {
+class ReplayDiffDialog(
+    private val expectedEvents: List<LogEntry>,
+    actualEvents: List<LogEntry>
+) : Command() {
     var dialog: RoDialog
 
-    val expectedPanel = VPanel(spacing = 3) {
+    private val expectedPanel = VPanel(spacing = 3) {
         width = CssSize(20, UNIT.perc)
     }
-    val actualPanel = VPanel(spacing = 3) {
+    private val actualPanel = VPanel(spacing = 3) {
         width = CssSize(80, UNIT.perc)
     }
 
     init {
         dialog = RoDialog(
-            caption = "Replay Diff",
-            items = mutableListOf<FormItem>(),
+            caption = "Replay Events: Expected vs. Actual",
+            items = mutableListOf(),
             command = this,
-            defaultAction = "",
+            defaultAction = "Compare",
             widthPerc = 60,
-            customButtons = mutableListOf<FormItem>()
+            heightPerc = 70,
+            customButtons = mutableListOf()
         )
+        val expectedTable = EventLogTable(expectedEvents)
+        expectedTable.tabulator.addCssClass("tabulator-in-dialog")
+        val actualTable = EventLogTable(actualEvents)
+        actualTable.tabulator.addCssClass("tabulator-in-dialog")
+        expectedPanel.add(expectedTable)
+        actualPanel.add(actualTable)
+
         val splitPanel = SplitPanel(direction = Direction.VERTICAL)
+        splitPanel.addCssClass("dialog-content")
+        splitPanel.flexDirection = FlexDirection.ROW
         splitPanel.add(expectedPanel)
         splitPanel.add(actualPanel)
         dialog.formPanel!!.add(splitPanel)
+    }
+
+    override fun execute(action: String?) {
+        // iterate over expected and set each status to DIFF, where responses don't match
+        expectedEvents.forEach { xp ->
+            val rs = ResourceSpecification(xp.url, xp.subType)
+            val actual = UiManager.getEventStore().findBy(rs)
+            if (actual != null) {
+                val isSame = actual.response == xp.response
+                if (!isSame) {
+                    xp.state = EventState.DIFF
+                }
+            } else {
+                xp.state = EventState.DIFF
+            }
+        }
     }
 
 }

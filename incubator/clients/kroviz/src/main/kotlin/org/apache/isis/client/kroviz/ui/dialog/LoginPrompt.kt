@@ -44,7 +44,7 @@ class LoginPrompt : Command() {
         formItems.add(FormItem("Url", ValueType.TEXT, url))
         formItems.add(FormItem("User", ValueType.TEXT, username))
         formItems.add(FormItem("Password", ValueType.PASSWORD, password))
-        form = RoDialog(caption = "Connect", items = formItems, command = this)
+        form = RoDialog(caption = "Connect", items = formItems, command = this, heightPerc = 27)
         val at = UiManager.position!!
         form.open(at)
     }

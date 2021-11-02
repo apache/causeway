@@ -22,6 +22,7 @@ import org.apache.isis.client.kroviz.to.Argument
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Constants
+import org.apache.isis.client.kroviz.ui.core.UiManager
 
 object StringUtils {
 
@@ -219,6 +220,18 @@ object StringUtils {
             }
         }.dropLast(pad.length)
                 .toString() + pad
+    }
+
+    fun shorten(url: String): String {
+        var result = url
+        val signature = Constants.restInfix
+        if (url.contains(signature)) {
+            // strip off protocol, host, port
+            val protocolHostPort = UiManager.getUrl()
+            result = result.replace(protocolHostPort + signature, "")
+            result = StringUtils.removeHexCode(result)
+        }
+        return result
     }
 
 }

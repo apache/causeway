@@ -24,6 +24,7 @@ import io.kvision.html.ButtonStyle
 import io.kvision.panel.VPanel
 import io.kvision.panel.hPanel
 import io.kvision.tabulator.*
+import io.kvision.utils.auto
 import io.kvision.utils.obj
 import io.kvision.utils.px
 import org.apache.isis.client.kroviz.core.event.LogEntry
@@ -101,28 +102,17 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
 
     private fun buildObjectButton(data: LogEntry): Button {
         val b = Button(
-                text = shorten(data.title),
+                text = StringUtils.shorten(data.title),
                 icon = data.state.iconName,
                 style = ButtonStyle.LINK)
         b.onClick {
             kotlinx.browser.window.open(data.title) //IMPROVE should be URL
         }
         val tto = TooltipOptions(title = data.title)
-        b.enableTooltip(tto)
+        // tabulator tooltip is buggy: often the tooltip doesn't go away and the color is not settable
+        //b.enableTooltip(tto)
         if (data.obj is TObject) b.setDragDropData(Constants.stdMimeType, data.url)
         return b
-    }
-
-    private fun shorten(url: String): String {
-        var result = url
-        val signature = Constants.restInfix
-        if (url.contains(signature)) {
-            // strip off protocol, host, port
-            val protocolHostPort = UiManager.getUrl()
-            result = result.replace(protocolHostPort + signature, "")
-            result = StringUtils.removeHexCode(result)
-        }
-        return result
     }
 
     private fun buildActionButton(data: LogEntry): Button {

@@ -18,16 +18,12 @@
  */
 package org.apache.isis.client.kroviz.ui.core
 
-import io.kvision.core.CssSize
-import io.kvision.core.JustifyContent
-import io.kvision.core.UNIT
-import io.kvision.core.Widget
+import io.kvision.core.*
 import io.kvision.form.FormPanel
 import io.kvision.html.Button
 import io.kvision.html.ButtonStyle
 import io.kvision.panel.HPanel
 import io.kvision.panel.vPanel
-import io.kvision.utils.perc
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.dialog.Command
 import org.apache.isis.client.kroviz.ui.dialog.DiagramDialog
@@ -97,26 +93,33 @@ class RoDialog(
         contentWidth = CssSize(widthPerc, UNIT.perc)
         contentHeight = CssSize(heightPerc, UNIT.perc)
 
-        vPanel(justify = JustifyContent.SPACEBETWEEN) {
-            height = 100.perc
+        vPanel() {
+            height = CssSize(heightPerc, UNIT.vh)
+            this.addCssClass("dialog")
+
             formPanel = FormPanelFactory(items).panel
+            formPanel!!.addCssClass("dialog-content")
+            add(formPanel!!)
 
-            add(formPanel!!, grow = 2)
-
-            val buttonBar = HPanel(spacing = 10)
+            val buttonBar = buildButtonBar(customButtons)
             buttonBar.addCssClass("button-bar")
-            buttonBar.add(okButton)
-            customButtons.forEach {
-                val b = createButton(it)
-                buttonBar.add(b)
-            }
-            buttonBar.add(cancelButton)
-            if (items.isNotEmpty() && hasScalableContent()) {
-                buttonBar.add(scaleUpButton)
-                buttonBar.add(scaleDownButton)
-            }
             add(buttonBar)
         }
+    }
+
+    private fun buildButtonBar(customButtons: List<FormItem>): HPanel {
+        val buttonBar = HPanel(spacing = 10)
+        buttonBar.add(okButton)
+        customButtons.forEach {
+            val b = createButton(it)
+            buttonBar.add(b)
+        }
+        buttonBar.add(cancelButton)
+        if (items.isNotEmpty() && hasScalableContent()) {
+            buttonBar.add(scaleUpButton)
+            buttonBar.add(scaleDownButton)
+        }
+        return buttonBar
     }
 
     private fun execute() {

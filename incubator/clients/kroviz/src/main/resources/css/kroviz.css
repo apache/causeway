@@ -121,11 +121,26 @@ textarea {
 }
 
 .button-bar {
-    display: flex;
-    align-self: baseline !important;
     margin-top: 10px;
     margin-left: 10px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+    position:absolute;
+    bottom:0;
+}
+
+.tabulator-in-dialog {
+    max-height: calc(70vh - 60px);
+}
+
+.dialog-content {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.dialog {
+    display: flex;
+    height: 100vh;
 }
 
 @font-face {
