@@ -743,7 +743,7 @@ public class DomainObjectTesterFactory {
 
         protected abstract Optional<ObjectSpecification> getElementType();
 
-        public ObjectSpecification getElementTypeElseFaile() {
+        public ObjectSpecification getElementTypeElseFail() {
             return getElementType().orElseThrow();
         }
 

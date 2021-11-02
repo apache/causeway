@@ -28,10 +28,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.util.Objects.requireNonNull;
-
 import org.springframework.core.env.AbstractEnvironment;
 
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.grid.GridLoaderService;
 import org.apache.isis.applib.services.grid.GridService;
@@ -63,6 +62,7 @@ import org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryDefault;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIconService;
@@ -90,6 +90,8 @@ import org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics;
 import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsRegistryDefault;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
+
+import static java.util.Objects.requireNonNull;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -131,7 +133,7 @@ implements MetaModelContext {
     private SpecificationLoader specificationLoader;
 
     @Builder.Default
-    private Function<MetaModelContext,  ProgrammingModel> programmingModelFactory = ProgrammingModelFacetsJava11::new;
+    private Function<MetaModelContext, ProgrammingModel> programmingModelFactory = ProgrammingModelFacetsJava11::new;
 
     private InteractionProvider interactionProvider;
 
@@ -166,6 +168,9 @@ implements MetaModelContext {
 
     @Singular
     private List<Object> singletons;
+
+    @Singular
+    private List<ValueSemanticsProvider<?>> valueSemantics;
 
     @Singular
     private List<_ManagedBeanAdapter> singletonProviders;
@@ -213,7 +218,7 @@ implements MetaModelContext {
                 repositoryService,
                 transactionService,
                 transactionState,
-                new ValueSemanticsRegistryDefault(List.of(), getTranslationService()),
+                getValueSemanticsRegistry(),
                 new ObjectMementoService_forTesting(),
                 new BigDecimalValueSemantics(),
                 new URLValueSemantics(),
@@ -288,6 +293,14 @@ implements MetaModelContext {
             translationService = new TranslationService_forTesting();
         }
         return translationService;
+    }
+
+    private ValueSemanticsRegistry valueSemanticsRegistry;
+    private ValueSemanticsRegistry getValueSemanticsRegistry(){
+        if(valueSemanticsRegistry==null) {
+            valueSemanticsRegistry = new ValueSemanticsRegistryDefault(valueSemantics, getTranslationService());
+        }
+        return valueSemanticsRegistry;
     }
 
     private final IsisBeanFactoryPostProcessorForSpring isisBeanFactoryPostProcessorForSpring =

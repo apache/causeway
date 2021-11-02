@@ -23,6 +23,7 @@ import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.BigIntegerConverter;
 
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxFractionalDigitsFacet;
@@ -41,7 +42,9 @@ import lombok.val;
 
 /**
  * A locator for IConverters for ObjectAdapters
+ * @deprecated instead use {@link ValueSemanticsProvider}
  */
+@Deprecated(forRemoval = true, since = "2.0.0-M7")
 public class IsisConverterLocator {
 
     /**
