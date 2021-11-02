@@ -179,7 +179,7 @@
 		<summernote.version>0.8.11</summernote.version>
 		<swagger-core.version>1.6.2</swagger-core.version>
 
-		<togglz.version>2.9.9</togglz.version>
+		<togglz.version>3.0.0</togglz.version>
 
 		<vaadin.version>21.0.3</vaadin.version>
 
