@@ -27,6 +27,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
@@ -39,11 +44,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.isis.core.security._testing.InteractionService_forTesting;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ConverterBasedOnValueSemantics;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -75,10 +75,12 @@ class BigDecimalConverter_roundtrip {
     @BeforeEach
     void setUp() throws Exception {
 
+        BigDecimalValueSemantics valueSemantics;
         mmc = MetaModelContext_forTesting.builder()
-                .valueSemantic(new BigDecimalValueSemantics())
+                .valueSemantic(valueSemantics = new BigDecimalValueSemantics())
                 .interactionProvider(interactionService = new InteractionService_forTesting())
                 .build();
+        valueSemantics.setSpecificationLoader(mmc.getSpecificationLoader());
 
         // pre-requisites for testing
         val reg = mmc.getServiceRegistry().lookupServiceElseFail(ValueSemanticsRegistry.class);

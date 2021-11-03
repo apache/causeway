@@ -71,7 +71,7 @@ implements
         val valueFacet = valueFacet();
 
         val context = valueFacet
-                .createValueSemanticsContext(feature.getFeatureIdentifier());
+                .createValueSemanticsContext(feature);
 
         return valueFacet.selectParserForFeatureElseFallback(feature)
                 .parseTextRepresentation(context, text);
@@ -79,7 +79,7 @@ implements
 
     /**
      * Parameter {@code locale} is ignored!
-     * @see IConverter#convertToString(String, Locale)
+     * @see IConverter#convertToString(Object, Locale)
      */
     @Override
     public final String convertToString(final T value, final Locale locale) {
@@ -88,7 +88,7 @@ implements
         val valueFacet = valueFacet();
 
         val context = valueFacet
-                .createValueSemanticsContext(feature.getFeatureIdentifier());
+                .createValueSemanticsContext(feature);
 
         return valueFacet.selectParserForFeatureElseFallback(feature)
                 .parseableTextRepresentation(context, value);

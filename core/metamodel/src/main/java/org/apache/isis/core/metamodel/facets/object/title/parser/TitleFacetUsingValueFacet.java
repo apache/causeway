@@ -64,26 +64,25 @@ implements TitleFacet {
 
         if(renderRequest.getFeature() instanceof OneToOneAssociation) {
             val prop = (OneToOneAssociation)renderRequest.getFeature();
-            val featureId = prop.getFeatureIdentifier();
             final Renderer renderer = valueFacet
                     .selectRendererForPropertyElseFallback(prop);
-            return renderer.simpleTextPresentation(valueFacet.createValueSemanticsContext(featureId), pojo);
+            return renderer.simpleTextPresentation(valueFacet.createValueSemanticsContext(prop), pojo);
         }
         if(renderRequest.getFeature() instanceof ObjectActionParameter) {
             val param = (ObjectActionParameter)renderRequest.getFeature();
-            val featureId = param.getFeatureIdentifier();
             final Renderer renderer = valueFacet
                     .selectRendererForParameterElseFallback(param);
-            return renderer.simpleTextPresentation(valueFacet.createValueSemanticsContext(featureId), pojo);
+            return renderer.simpleTextPresentation(valueFacet.createValueSemanticsContext(param), pojo);
         }
 
         // fall back to default value semantics ...
 
         val featureId = getFacetHolder().getFeatureIdentifier();
+        val feature = getSpecificationLoader().loadFeature(featureId).orElse(null);
 
         return valueFacet.selectDefaultRenderer()
         .map(renderer->(Renderer) renderer)
-        .map(renderer->renderer.simpleTextPresentation(valueFacet.createValueSemanticsContext(featureId), pojo))
+        .map(renderer->renderer.simpleTextPresentation(valueFacet.createValueSemanticsContext(feature), pojo))
         .orElseGet(()->String.format("Value type %s has no value semantics for title rendering.",
                 renderRequest.getObject().getSpecification().getCorrespondingClass()));
 

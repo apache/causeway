@@ -24,7 +24,7 @@ extends AsciiDocValueSemantics {
         return render(adoc, plainAdoc->
             asciiDocConverterService
             .adocToHtml(
-                    context.getIdentifier().getLogicalType().getCorrespondingClass(),
+                    context.getFeatureIdentifier().getLogicalType().getCorrespondingClass(),
                     plainAdoc.getAdoc()));
     }
 

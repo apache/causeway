@@ -31,6 +31,12 @@ import org.junit.jupiter.api.function.ThrowingSupplier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
@@ -68,12 +74,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -625,7 +625,7 @@ public class DomainObjectTesterFactory {
             val prop = this.getMetaModel().get();
 
             val context = valueFacet
-                    .createValueSemanticsContext(prop.getFeatureIdentifier());
+                    .createValueSemanticsContext(prop);
 
             return valueFacet.selectParserForPropertyElseFallback(prop)
                     .parseableTextRepresentation(context, managedPropertyIfAny.get().getPropertyValue().getPojo());

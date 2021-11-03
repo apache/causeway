@@ -118,7 +118,7 @@ implements
 
     @Override
     public Identifier getFeatureIdentifier() {
-        return getAction().getFeatureIdentifier();
+        return getAction().getFeatureIdentifier().withParameterIndex(number);
     }
 
     @Override

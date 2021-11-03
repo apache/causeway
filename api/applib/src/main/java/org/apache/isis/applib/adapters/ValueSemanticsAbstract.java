@@ -41,7 +41,8 @@ import lombok.val;
  * @since 2.x {@index}
  */
 public abstract class ValueSemanticsAbstract<T>
-implements ValueSemanticsProvider<T> {
+implements
+    ValueSemanticsProvider<T> {
 
     public static final String NULL_REPRESENTATION = "(none)";
     protected static final ValueType UNREPRESENTED = ValueType.STRING;
@@ -121,25 +122,27 @@ implements ValueSemanticsProvider<T> {
         }
         val format = getNumberFormat(context);
         format.setParseBigDecimal(true);
-        if(context!=null
-                && context.getMaximumFractionDigits()>-1) {
-            format.setMaximumFractionDigits(context.getMaximumFractionDigits());
-        }
-        val position = new ParsePosition(0);
+        configureDecimalFormat(context, format);
 
+        val position = new ParsePosition(0);
         try {
             val number = (BigDecimal)format.parse(input, position);
             if (position.getErrorIndex() != -1) {
                 throw new ParseException("could not parse input='" + input + "'", position.getErrorIndex());
             } else if (position.getIndex() < input.length()) {
-                throw new ParseException("input='" + input + "' wasnt processed completely", position.getIndex());
+                throw new ParseException("input='" + input + "' was not processed completely", position.getIndex());
             }
             return number;
         } catch (final NumberFormatException | ParseException e) {
             System.err.printf("suppressed message %s%n", e.getMessage());
             throw new TextEntryParseException("Not a decimal value " + input, e);
         }
-
     }
+
+    /**
+     * typically overridden by BigDecimalValueSemantics to set MaximumFractionDigits
+     * @param format
+     */
+    protected void configureDecimalFormat(final Context context, final DecimalFormat format) {}
 
 }

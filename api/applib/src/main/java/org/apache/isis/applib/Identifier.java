@@ -108,6 +108,11 @@ implements
 
     @Getter private final String memberLogicalName;
 
+    /**
+     * Optional. Used for <i>Action Parameters</i>, otherwise {@code -1}.
+     */
+    @Getter private final int parameterIndex;
+
     @Getter private final Can<String> memberParameterClassNames;
 
     @Getter private final Type type;
@@ -128,19 +133,29 @@ implements
      */
     @Getter(onMethod_ = {@Override}) private final TranslationContext translationContext;
 
-    // -- CONSTRUCTOR
+    // -- CONSTRUCTION
 
     private Identifier(
             final LogicalType logicalType,
             final String memberLogicalName,
             final Can<String> memberParameterClassNames,
             final Type type) {
+        this(logicalType, memberLogicalName, memberParameterClassNames, type, -1);
+    }
+
+    private Identifier(
+            final LogicalType logicalType,
+            final String memberLogicalName,
+            final Can<String> memberParameterClassNames,
+            final Type type,
+            final int parameterIndex) {
 
         this.logicalType = logicalType;
         this.className = logicalType.getClassName();
         this.memberLogicalName = memberLogicalName;
         this.memberParameterClassNames = memberParameterClassNames;
         this.type = type;
+        this.parameterIndex = parameterIndex;
 
         this.memberNameAndParameterClassNamesIdentityString =
                 memberLogicalName + (type.isAction()
@@ -154,6 +169,13 @@ implements
                 ? className
                 : className + "#" + memberNameAndParameterClassNamesIdentityString;
     }
+
+    // -- WITHERS
+
+    public Identifier withParameterIndex(final int parameterIndex) {
+        return new Identifier(logicalType, memberLogicalName, memberParameterClassNames, type, parameterIndex);
+    }
+
 
     // -- LOGICAL ID
 
