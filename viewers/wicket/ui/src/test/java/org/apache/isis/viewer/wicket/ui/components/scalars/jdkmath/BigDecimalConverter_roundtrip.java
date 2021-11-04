@@ -23,6 +23,7 @@ import java.util.Locale;
 
 import javax.validation.constraints.Digits;
 
+import org.apache.wicket.util.convert.ConversionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +34,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
@@ -155,7 +155,7 @@ class BigDecimalConverter_roundtrip {
                 .locale(locale)
                 .build(), ()->{
                     // when
-                    val ex = assertThrows(TextEntryParseException.class, ()->
+                    val ex = assertThrows(ConversionException.class, ()->
                         converter.convertToObject(valueAsText, null));
                     assertEquals(expectedMessage, ex.getMessage());
                 });
