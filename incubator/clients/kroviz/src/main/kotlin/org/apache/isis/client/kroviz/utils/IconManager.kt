@@ -20,7 +20,7 @@ package org.apache.isis.client.kroviz.utils
 
 object IconManager {
     private const val PREFIX = "fas fa-"   //TODO far fa- ???
-    const val DEFAULT_ICON = PREFIX + "bolt"
+    const val DEFAULT_ICON = PREFIX + "play"
 
     const val DANGER = "text-danger"
     const val DISABLED = "text-disabled"
@@ -30,21 +30,27 @@ object IconManager {
 
     /* Merge with configuration values*/
     private val word2Icon = mapOf(
-            "About" to "info",
+            "About" to "lightbulb-o",
             "Actions" to "ellipsis-v",
             "All" to "asterisk",
+            "Basic" to "minus-circle",
             "Blobs" to "cloud",
             "Burger" to "bars",
             "Chart" to "magic",
             "Close" to "times",
+            "Collections" to "list",
             "Compare" to "balance-scale",
             "Configuration" to "wrench",
             "Connect" to "plug",
             "Console" to "terminal",
             "Create" to "plus",
+            "Css" to "css3",
+            "Dates" to "calendar",
             "Debug" to "bug",
             "Delete" to "trash",
+            "Demo" to "eye",
             "Details" to "info-circle",
+            "Described" to "tag",
             "Diagram" to "project-diagram",
             "Download" to "download",
             "Factory" to "industry",
@@ -53,11 +59,12 @@ object IconManager {
             "Edit" to "pencil",
             "Error Handling" to "bug",
             "Error" to "bug",
-            "Event" to "history",
+            "Event" to "bolt",
             "Experimental" to "flask",
             "Export" to "file-export",
             "Facet" to "gem",
             "Find" to "search",
+            "Hidden" to "ban",
             "Hierarchy" to "sitemap",
             "History" to "history",
             "Hsql" to "database",
@@ -66,9 +73,13 @@ object IconManager {
             "List" to "list",
             "Location" to "map-marker",
             "Log" to "history",
+            "Logout" to "user-times",
             "Manager" to "manager",
             "Map" to "map",
             "Me" to "user",
+            "Message" to "envelope",
+            "More" to "plus-circle",
+            "Named" to "book",
             "Notification" to "bell",
             "Notifications" to "bell",
             "Object" to "cube",
@@ -78,6 +89,7 @@ object IconManager {
             "Other" to "asterisk",
             "Pin" to "map-pin",
             "Primitives" to "hashtag",
+            "Properties" to "indent",
             "Prototyping" to "object-group",
             "Queen" to "chess-queen",
             "Replay" to "fast-forward",
@@ -88,17 +100,22 @@ object IconManager {
             "Strings" to "font",
             "Switch" to "power-off",
             "Target" to "bullseye",
+            "Tab" to "folder",
             "Text" to "font",
+            "Times" to "clock",
             "Toast" to "bread-slice", //comment-alt-plus/minus/exclamation
             "Toolbar" to "step-backward",
             "Tooltips" to "comment-alt",
-            "Temporals" to "clock",
+            "Temporal" to "clock",
+            "Tenancy" to "lock",
             "Trees" to "tree",
             "Types" to "typewriter",
             "Undo" to "undo",
             "Unknown" to "question",
             "Visualize" to "eye",
-            "Wikipedia" to "wikipedia-w"
+            "Wikipedia" to "wikipedia-w",
+            "World" to "plane",
+            "Xml" to "code"
     )
 
     @OptIn(ExperimentalStdlibApi::class)
