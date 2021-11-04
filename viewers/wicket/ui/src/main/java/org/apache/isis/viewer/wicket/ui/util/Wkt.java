@@ -37,10 +37,14 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.convert.IConverter;
+import org.apache.wicket.validation.IValidationError;
+import org.apache.wicket.validation.ValidationError;
 import org.danekja.java.util.function.serializable.SerializableBiConsumer;
 import org.danekja.java.util.function.serializable.SerializableBooleanSupplier;
 import org.danekja.java.util.function.serializable.SerializableConsumer;
@@ -309,6 +313,18 @@ public class Wkt {
         };
     }
 
+    public <T> Label labelWithConverter(
+            final String id, final IModel<T> model, final Class<T> type, final IConverter<T> converter) {
+        return new Label(id, model) {
+            private static final long serialVersionUID = 1L;
+            @SuppressWarnings("unchecked")
+            @Override public <C> IConverter<C> getConverter(final Class<C> cType) {
+                return cType == type
+                        ? (IConverter<C>) converter
+                        : super.getConverter(cType);}
+        };
+    }
+
     public Label labelAdd(final MarkupContainer container, final String id, final String label) {
         return add(container, label(id, label));
     }
@@ -319,6 +335,12 @@ public class Wkt {
 
     public Label labelAddNoTab(final MarkupContainer container, final String id, final IModel<String> labelModel) {
         return add(container, labelNoTab(id, labelModel));
+    }
+
+    public <T> Label labelAddWithConverter(
+            final MarkupContainer container,
+            final String id, final IModel<T> model, final Class<T> type, final IConverter<T> converter) {
+        return add(container, labelWithConverter(id, model, type, converter));
     }
 
     // -- LINK
@@ -425,6 +447,28 @@ public class Wkt {
         return add(container, textAreaNoTab(id, textModel));
     }
 
+    // -- TEXT FIELD
+
+    public <T> TextField<T> textFieldWithConverter(
+            final String id, final IModel<T> model, final Class<T> type, final IConverter<T> converter) {
+        return new TextField<T>(id, model, type) {
+            private static final long serialVersionUID = 1L;
+            @SuppressWarnings("unchecked")
+            @Override public <C> IConverter<C> getConverter(final Class<C> cType) {
+                return cType == type
+                        ? (IConverter<C>) converter
+                        : super.getConverter(cType);}
+            @Override public void error(final IValidationError error) {
+                if(error instanceof ValidationError) {
+                    // use plain error message from ConversionException, circumventing resource bundles.
+                    this.error(((ValidationError)error).getMessage());
+                } else {
+                    super.error(error);
+                }
+            }
+        };
+    }
+
     // -- FOCUS UTILITY
 
     /**
@@ -467,7 +511,5 @@ public class Wkt {
                 ? String.format("Wicket.Event.publish(Isis.Topic.%s, '%s')", topic.name(), containerId)
                 : String.format("Wicket.Event.publish(Isis.Topic.%s)", topic.name());
     }
-
-
 
 }

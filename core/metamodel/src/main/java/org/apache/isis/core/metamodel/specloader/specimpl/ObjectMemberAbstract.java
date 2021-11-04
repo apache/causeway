@@ -280,7 +280,7 @@ implements
 
         val spec = getSpecificationLoader().loadSpecification(mixinType);
         val mixinFacet = spec.getFacet(MixinFacet.class);
-        val mixinPojo = mixinFacet.instantiate(Objects.requireNonNull(mixee.getPojo()));
+        val mixinPojo = mixinFacet.instantiate(mixee.getPojo() /*nullable for action parameter mixins*/);
         return ManagedObject.of(spec, Objects.requireNonNull(mixinPojo));
     }
 

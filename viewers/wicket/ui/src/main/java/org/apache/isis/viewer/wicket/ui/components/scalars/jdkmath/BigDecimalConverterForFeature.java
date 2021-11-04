@@ -18,27 +18,17 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath;
 
-import org.apache.wicket.Component;
+import java.math.BigDecimal;
 
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ConverterBasedOnValueSemantics;
 
-/**
- * {@link ComponentFactory} for {@link JavaMathBigDecimalPanel}.
- */
-public class JavaMathBigDecimalPanelFactory
-extends ComponentFactoryScalarAbstract {
+public class BigDecimalConverterForFeature
+extends ConverterBasedOnValueSemantics<BigDecimal> {
 
     private static final long serialVersionUID = 1L;
 
-    public JavaMathBigDecimalPanelFactory() {
-        super(JavaMathBigDecimalPanel.class, java.math.BigDecimal.class);
+    protected BigDecimalConverterForFeature(final ObjectFeature propOrParam) {
+        super(propOrParam);
     }
-
-    @Override
-    public Component createComponent(final String id, final ScalarModel scalarModel) {
-        return new JavaMathBigDecimalPanel(id, scalarModel);
-    }
-
 }

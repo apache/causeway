@@ -118,7 +118,7 @@ implements TextFieldValueModel.ScalarModelProvider {
         return new TextField<>(id, newTextFieldValueModel(), cls);
     }
 
-    TextFieldValueModel<T> newTextFieldValueModel() {
+    protected TextFieldValueModel<T> newTextFieldValueModel() {
         return new TextFieldValueModel<>(this);
     }
 

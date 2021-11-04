@@ -20,11 +20,8 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
-import org.apache.wicket.Session;
-import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.string.Strings;
 import org.springframework.lang.Nullable;
 import org.wicketstuff.select2.ChoiceProvider;
@@ -40,7 +37,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.IsisConverterLocator;
 
 import lombok.Getter;
 import lombok.val;
@@ -71,18 +67,7 @@ extends ChoiceProvider<ObjectMemento> {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(choice)) {
             return "Internal error: broken memento " + choiceMemento;
         }
-        final IConverter<Object> converter = findConverter(choice);
-        return converter != null
-                ? converter.convertToString(choice.getPojo(), getLocale())
-                : choice.titleString();
-    }
-
-    protected Locale getLocale() {
-        return Session.exists() ? Session.get().getLocale() : Locale.ENGLISH;
-    }
-
-    protected IConverter<Object> findConverter(final ManagedObject choice) {
-        return IsisConverterLocator.findConverter(choice, getWicketViewerSettings());
+        return choice.titleString();
     }
 
     @Override

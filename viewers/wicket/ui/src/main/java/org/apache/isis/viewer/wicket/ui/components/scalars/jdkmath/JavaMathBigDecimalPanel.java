@@ -21,39 +21,44 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath;
 import java.math.BigDecimal;
 
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
+import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 /**
  * Panel for rendering scalars of type {@link BigDecimal}.
  */
-public class JavaMathBigDecimalPanel extends ScalarPanelTextFieldNumeric<BigDecimal> {
+public class JavaMathBigDecimalPanel
+extends ScalarPanelTextFieldNumeric<BigDecimal> {
 
     private static final long serialVersionUID = 1L;
 
-    private final BigDecimalConverterWithScale converter;
-
     public JavaMathBigDecimalPanel(
             final String id,
-            final ScalarModel scalarModel,
-            final BigDecimalConverterWithScale converter) {
-        super(id, scalarModel, BigDecimal.class, converter.forViewMode());
-        this.converter = converter;
+            final ScalarModel scalarModel) {
+        super(id, scalarModel, BigDecimal.class);
     }
 
     @Override
     protected AbstractTextComponent<BigDecimal> createTextFieldForRegular(final String id) {
-        final ScalarModel model = getModel();
-        final TextFieldValueModel<BigDecimal> textFieldValueModel = new TextFieldValueModel<>(this);
-        return new BigDecimalTextField(id, textFieldValueModel, cls, model, converter);
+        return Wkt.textFieldWithConverter(
+                id, newTextFieldValueModel(), BigDecimal.class, getConverter(getModel()));
     }
 
 
     @Override
     protected String getScalarPanelType() {
         return "javaMathBigDecimalPanel";
+    }
+
+    @Override
+    protected IConverter<BigDecimal> getConverter(final ScalarModel scalarModel) {
+
+        // honor when not scalarModel.isEditMode()
+
+        return new BigDecimalConverterForFeature(scalarModel.getMetaModel());
     }
 }
 
