@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxFractionalDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaximumFractionDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxTotalDigitsFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -107,8 +107,8 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
                         .map(MaxTotalDigitsFacet::maxTotalDigits)
                         .orElse(-1);
 
-                final int scale = lookupFacet(MaxFractionalDigitsFacet.class, facetHolders)
-                        .map(MaxFractionalDigitsFacet::maxFractionalDigits)
+                final int scale = lookupFacet(MaximumFractionDigitsFacet.class, facetHolders)
+                        .map(MaximumFractionDigitsFacet::getMaximumFractionDigits)
                         .orElse(-1);
 
                 format = String.format("big-decimal(%d,%d)", totalDigits, scale);

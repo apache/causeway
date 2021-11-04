@@ -34,12 +34,12 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * <li><tt>12345.0</tt> has 1 fractional digit</li>
  * </ul>
  */
-public interface MaxFractionalDigitsFacet
+public interface MaximumFractionDigitsFacet
 extends Facet {
 
     /**
      * eg. as provided by {@link Digits#fraction()}
      */
-    int maxFractionalDigits();
+    int getMaximumFractionDigits();
 
 }

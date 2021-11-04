@@ -58,6 +58,9 @@ implements
 
     /**
      * What type of feature this identifies.
+     * @apiNote <i>Action Parameters</i> (for historic reasons) have {@link Type#ACTION},
+     * but other than <i>Actions</i>, have a non-negative {@link #parameterIndex}.
+     * (Future work, might introduce a new Type: eg. PARAMETER)
      */
     public static enum Type {
         CLASS, PROPERTY_OR_COLLECTION, ACTION;

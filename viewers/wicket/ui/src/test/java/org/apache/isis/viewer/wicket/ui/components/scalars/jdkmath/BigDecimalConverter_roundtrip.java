@@ -121,10 +121,10 @@ class BigDecimalConverter_roundtrip {
         assertRoundtrip(CustomerScale2.class, bd_789123_45_scale2, "789123.45", "789,123.45", Locale.ENGLISH);
     }
 
-    @Test @Disabled //FIXME[ISIS-2741] scale not picked up yet
+    @Test
     void scale2_english_tooLargeScale() {
         assertParseError(CustomerScale2.class, "123.454", Locale.ENGLISH,
-                "No more than 2 digits can be entered after the decimal place");
+                "No more than 2 fraction digits can be entered, got 3 in '123.454'.");
     }
 
     // -- HELPER

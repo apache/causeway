@@ -132,16 +132,23 @@ implements
             } else if (position.getIndex() < input.length()) {
                 throw new ParseException("input='" + input + "' was not processed completely", position.getIndex());
             }
+            // check for maxFractionDigits if required ...
+            final int maxFractionDigits = format.getMaximumFractionDigits();
+            if(maxFractionDigits>-1
+                    && number.scale()>format.getMaximumFractionDigits()) {
+                throw new TextEntryParseException(String.format(
+                        "No more than %d fraction digits can be entered, "
+                        + "got %d in '%s'.", maxFractionDigits, number.scale(), input));
+            }
             return number;
         } catch (final NumberFormatException | ParseException e) {
-            System.err.printf("suppressed message %s%n", e.getMessage());
+            System.err.printf("suppressed message %s%n", e.getMessage()); //FIXME[ISIS-2741] remove (debug)
             throw new TextEntryParseException("Not a decimal value " + input, e);
         }
     }
 
     /**
-     * typically overridden by BigDecimalValueSemantics to set MaximumFractionDigits
-     * @param format
+     * Typically overridden by BigDecimalValueSemantics to set MaximumFractionDigits.
      */
     protected void configureDecimalFormat(final Context context, final DecimalFormat format) {}
 

@@ -54,6 +54,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
@@ -62,8 +63,8 @@ implements
     ObjectActionParameter,
     HasFacetHolder {
 
-    private final FeatureType featureType;
-    private final int number;
+    @Getter(onMethod_ = {@Override}) private final FeatureType featureType;
+    @Getter(onMethod_ = {@Override}) private final int parameterIndex;
     private final ObjectActionDefault parentAction;
     private final String javaSourceParamName;
     private final ObjectSpecification paramElementType;
@@ -75,7 +76,7 @@ implements
             final ObjectActionDefault objectAction) {
 
         this.featureType = featureType;
-        this.number = number;
+        this.parameterIndex = number;
         this.parentAction = objectAction;
         this.paramElementType = paramElementType;
 
@@ -89,21 +90,8 @@ implements
     }
 
     @Override
-    public FeatureType getFeatureType() {
-        return featureType;
-    }
-
-    @Override
     public ManagedObject get(final ManagedObject owner, final InteractionInitiatedBy interactionInitiatedBy) {
         throw _Exceptions.unexpectedCodeReach(); // not available for params
-    }
-
-    /**
-     * Parameter number, 0-based.
-     */
-    @Override
-    public int getParameterIndex() {
-        return number;
     }
 
     @Override
@@ -116,10 +104,9 @@ implements
         return paramElementType;
     }
 
-    @Override
-    public Identifier getFeatureIdentifier() {
-        return getAction().getFeatureIdentifier().withParameterIndex(number);
-    }
+    @Getter(lazy = true, onMethod_ = {@Override})
+    private final Identifier featureIdentifier = getAction().getFeatureIdentifier()
+        .withParameterIndex(getParameterIndex());
 
     @Override
     public String getId() {
@@ -181,7 +168,7 @@ implements
     @Override
     public FacetHolder getFacetHolder() {
         // that is the faceted method parameter
-        return parentAction.getFacetedMethod().getParameters().getElseFail(number);
+        return parentAction.getFacetedMethod().getParameters().getElseFail(parameterIndex);
     }
 
     // -- AutoComplete

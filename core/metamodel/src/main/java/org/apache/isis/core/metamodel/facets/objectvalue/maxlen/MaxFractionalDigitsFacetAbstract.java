@@ -26,49 +26,48 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.experimental.Accessors;
 
 public abstract class MaxFractionalDigitsFacetAbstract
 extends FacetAbstract
-implements MaxFractionalDigitsFacet {
+implements MaximumFractionDigitsFacet {
 
     private static final Class<? extends Facet> type() {
-        return MaxFractionalDigitsFacet.class;
+        return MaximumFractionDigitsFacet.class;
     }
 
-    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
-    private final int maxFractionalDigits;
+    @Getter(onMethod_ = {@Override})
+    private final int maximumFractionDigits;
 
     protected MaxFractionalDigitsFacetAbstract(
-            final int maxFractionalDigits,
+            final int maximumFractionDigits,
             final FacetHolder holder) {
         super(type(), holder);
-        this.maxFractionalDigits= maxFractionalDigits;
+        this.maximumFractionDigits = maximumFractionDigits;
     }
 
     protected MaxFractionalDigitsFacetAbstract(
-            final int maxFractionalDigits,
+            final int maximumFractionDigits,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
         super(type(), holder, precedence);
-        this.maxFractionalDigits= maxFractionalDigits;
+        this.maximumFractionDigits = maximumFractionDigits;
     }
 
     @Override
     public boolean semanticEquals(@NonNull final Facet other) {
-        return other instanceof MaxFractionalDigitsFacet
+        return other instanceof MaximumFractionDigitsFacet
                 ? Integer.compare(
-                        this.maxFractionalDigits(),
-                        ((MaxFractionalDigitsFacet)other).maxFractionalDigits()) == 0
+                        this.getMaximumFractionDigits(),
+                        ((MaximumFractionDigitsFacet)other).getMaximumFractionDigits()) == 0
                 : false;
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("maxFractionalDigits", maxFractionalDigits <0
+        visitor.accept("maximumFractionDigits", maximumFractionDigits <0
                 ? "unlimited"
-                : String.valueOf(maxFractionalDigits));
+                : String.valueOf(maximumFractionDigits));
     }
 
 }
