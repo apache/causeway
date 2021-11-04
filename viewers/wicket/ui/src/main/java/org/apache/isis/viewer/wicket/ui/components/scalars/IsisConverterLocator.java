@@ -26,7 +26,7 @@ import org.apache.wicket.util.convert.converter.BigIntegerConverter;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaximumFractionDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxFractionDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -112,8 +112,8 @@ public class IsisConverterLocator {
         }
         if (java.math.BigDecimal.class == correspondingClass) {
             final int scale = objectSpecification
-                .lookupFacet(MaximumFractionDigitsFacet.class)
-                .map(MaximumFractionDigitsFacet::getMaximumFractionDigits)
+                .lookupFacet(MaxFractionDigitsFacet.class)
+                .map(MaxFractionDigitsFacet::getMaximumFractionDigits)
                 .orElse(-1);
             return _Casts.uncheckedCast(new BigDecimalConverterWithScale(scale).forViewMode());
         }

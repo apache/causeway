@@ -24,7 +24,6 @@ import java.util.Locale;
 import javax.validation.constraints.Digits;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -95,20 +94,20 @@ class BigDecimalConverter_roundtrip {
         assertRoundtrip(CustomerScale2.class, bd_123_45_scale2, "123.45", "123.45", Locale.ENGLISH);
     }
 
-    @Test @Disabled //FIXME[ISIS-2741] scale not picked up yet
+    @Test
     void scale4_english() {
-        assertRoundtrip(CustomerScale4.class, bd_123_45_scale4, "123.4500", "123.4500", Locale.ENGLISH);
+        assertRoundtrip(CustomerScale4.class, bd_123_45_scale4, "123.4500", "123.45", Locale.ENGLISH);
     }
 
-    @Test @Disabled //FIXME[ISIS-2741] scale not picked up yet
+    @Test
     void scaleNull_english() {
-        assertRoundtrip(Customer.class, bd_123_45_scale2, "123.45", "123.45", Locale.ENGLISH);
-        assertRoundtrip(Customer.class, bd_123_45_scale4, "123.4500", "123.4500", Locale.ENGLISH);
+        assertRoundtrip(CustomerScaleNone.class, bd_123_45_scale2, "123.45", "123.45", Locale.ENGLISH);
+        assertRoundtrip(CustomerScaleNone.class, bd_123_45_scale4, "123.4500", "123.45", Locale.ENGLISH);
     }
 
     @Test
     void scale2_italian() {
-        assertRoundtrip(Customer.class, bd_123_45_scale2, "123,45", "123,45", Locale.ITALIAN);
+        assertRoundtrip(CustomerScaleNone.class, bd_123_45_scale2, "123,45", "123,45", Locale.ITALIAN);
     }
 
     @Test
@@ -124,7 +123,7 @@ class BigDecimalConverter_roundtrip {
     @Test
     void scale2_english_tooLargeScale() {
         assertParseError(CustomerScale2.class, "123.454", Locale.ENGLISH,
-                "No more than 2 fraction digits can be entered, got 3 in '123.454'.");
+                "No more than 2 digits can be entered after the decimal separator, got 3 in '123.454'.");
     }
 
     // -- HELPER
@@ -169,7 +168,7 @@ class BigDecimalConverter_roundtrip {
     // -- SCENARIOS
 
     @DomainObject
-    static class Customer {
+    static class CustomerScaleNone {
         @Property @Getter @Setter
         private BigDecimal value;
     }

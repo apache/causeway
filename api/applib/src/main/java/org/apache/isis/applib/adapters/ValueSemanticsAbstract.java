@@ -86,9 +86,17 @@ implements
      * @param context - nullable in support of JUnit testing
      * @return {@link NumberFormat} the default from from given context's locale
      * or else system's default locale
+     *
+     * @implNote the format's MaximumFractionDigits are initialized to 16, as
+     * 64 bit IEEE 754 double has 15 decimal digits of precision;
+     * this is typically overruled later by implementations of
+     * {@link #configureDecimalFormat(org.apache.isis.applib.adapters.ValueSemanticsProvider.Context, DecimalFormat) configureDecimalFormat}
      */
     protected DecimalFormat getNumberFormat(final @Nullable ValueSemanticsProvider.Context context) {
-        return (DecimalFormat)NumberFormat.getNumberInstance(getLocale(context));
+        val format = (DecimalFormat)NumberFormat.getNumberInstance(getLocale(context));
+        // prime w/ 16 (64 bit IEEE 754 double has 15 decimal digits of precision)
+        format.setMaximumFractionDigits(16);
+        return format;
     }
 
     protected String render(final T value, final Function<T, String> toString) {
@@ -137,7 +145,7 @@ implements
             if(maxFractionDigits>-1
                     && number.scale()>format.getMaximumFractionDigits()) {
                 throw new TextEntryParseException(String.format(
-                        "No more than %d fraction digits can be entered, "
+                        "No more than %d digits can be entered after the decimal separator, "
                         + "got %d in '%s'.", maxFractionDigits, number.scale(), input));
             }
             return number;

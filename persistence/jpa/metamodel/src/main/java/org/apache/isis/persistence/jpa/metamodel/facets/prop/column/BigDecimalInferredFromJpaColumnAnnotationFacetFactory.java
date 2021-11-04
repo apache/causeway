@@ -54,7 +54,7 @@ extends FacetFactoryAbstract {
                 .create(jpaColumnIfAny, holder));
 
         addFacetIfPresent(
-                MaxFractionalDigitsFacetInferredFromJpaColumn
+                MaxFractionDigitsFacetInferredFromJpaColumn
                 .create(jpaColumnIfAny, holder));
     }
 

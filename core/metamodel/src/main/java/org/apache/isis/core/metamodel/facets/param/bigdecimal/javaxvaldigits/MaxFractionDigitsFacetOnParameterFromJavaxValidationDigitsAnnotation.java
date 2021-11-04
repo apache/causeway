@@ -16,32 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jpa.metamodel.facets.prop.column;
+package org.apache.isis.core.metamodel.facets.param.bigdecimal.javaxvaldigits;
 
 import java.util.Optional;
 
-import javax.persistence.Column;
+import javax.validation.constraints.Digits;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaximumFractionDigitsFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxFractionalDigitsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxFractionDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxFractionDigitsFacetAbstract;
 
-public class MaxFractionalDigitsFacetInferredFromJpaColumn
-extends MaxFractionalDigitsFacetAbstract {
+public class MaxFractionDigitsFacetOnParameterFromJavaxValidationDigitsAnnotation
+extends MaxFractionDigitsFacetAbstract {
 
-     public static Optional<MaximumFractionDigitsFacet> create(
-             final Optional<Column> jpaColumnIfAny,
+     public static Optional<MaxFractionDigitsFacet> create(
+             final Optional<Digits> digitsIfAny,
              final FacetHolder holder) {
 
-         return jpaColumnIfAny
-         .filter(jpaColumn->jpaColumn.scale()>=0)
-         .map(jdoColumn->{
-             return new MaxFractionalDigitsFacetInferredFromJpaColumn(
-                     jdoColumn.scale(), holder);
+         return digitsIfAny
+         .map(digits->{
+             return new MaxFractionDigitsFacetOnParameterFromJavaxValidationDigitsAnnotation(
+                     digits.fraction(), holder);
          });
     }
 
-    private MaxFractionalDigitsFacetInferredFromJpaColumn(
+    private MaxFractionDigitsFacetOnParameterFromJavaxValidationDigitsAnnotation(
             final int maxFractionalDigits, final FacetHolder holder) {
         super(maxFractionalDigits, holder);
     }

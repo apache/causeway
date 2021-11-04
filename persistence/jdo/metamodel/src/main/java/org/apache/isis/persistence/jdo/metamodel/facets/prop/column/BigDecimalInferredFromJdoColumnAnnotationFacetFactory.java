@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaximumFractionDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxFractionDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxTotalDigitsFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -65,7 +65,7 @@ implements MetaModelRefiner {
                 .create(jdoColumnIfAny, holder));
 
         addFacetIfPresent(
-                MaxFractionalDigitsFacetInferredFromJdoColumn
+                MaxFractionDigitsFacetInferredFromJdoColumn
                 .create(jdoColumnIfAny, holder));
     }
 
@@ -104,10 +104,10 @@ implements MetaModelRefiner {
                             b.getClass().getSimpleName());
                 }));
 
-        association.lookupFacet(MaximumFractionDigitsFacet.class)
-        .map(MaximumFractionDigitsFacet::getSharedFacetRankingElseFail)
+        association.lookupFacet(MaxFractionDigitsFacet.class)
+        .map(MaxFractionDigitsFacet::getSharedFacetRankingElseFail)
         .ifPresent(facetRanking->facetRanking
-                .visitTopRankPairsSemanticDiffering(MaximumFractionDigitsFacet.class, (a, b)->{
+                .visitTopRankPairsSemanticDiffering(MaxFractionDigitsFacet.class, (a, b)->{
 
                     ValidationFailure.raiseFormatted(
                             association,

@@ -51,7 +51,7 @@ extends FacetFactoryAbstract {
                 .create(digitsIfAny, processParameterContext.getFacetHolder()));
 
         addFacetIfPresent(
-                MaxFractionalDigitsFacetOnParameterFromJavaxValidationDigitsAnnotation
+                MaxFractionDigitsFacetOnParameterFromJavaxValidationDigitsAnnotation
                 .create(digitsIfAny, processParameterContext.getFacetHolder()));
     }
 

@@ -27,25 +27,25 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import lombok.Getter;
 import lombok.NonNull;
 
-public abstract class MaxFractionalDigitsFacetAbstract
+public abstract class MaxFractionDigitsFacetAbstract
 extends FacetAbstract
-implements MaximumFractionDigitsFacet {
+implements MaxFractionDigitsFacet {
 
     private static final Class<? extends Facet> type() {
-        return MaximumFractionDigitsFacet.class;
+        return MaxFractionDigitsFacet.class;
     }
 
     @Getter(onMethod_ = {@Override})
     private final int maximumFractionDigits;
 
-    protected MaxFractionalDigitsFacetAbstract(
+    protected MaxFractionDigitsFacetAbstract(
             final int maximumFractionDigits,
             final FacetHolder holder) {
         super(type(), holder);
         this.maximumFractionDigits = maximumFractionDigits;
     }
 
-    protected MaxFractionalDigitsFacetAbstract(
+    protected MaxFractionDigitsFacetAbstract(
             final int maximumFractionDigits,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
@@ -55,10 +55,10 @@ implements MaximumFractionDigitsFacet {
 
     @Override
     public boolean semanticEquals(@NonNull final Facet other) {
-        return other instanceof MaximumFractionDigitsFacet
+        return other instanceof MaxFractionDigitsFacet
                 ? Integer.compare(
                         this.getMaximumFractionDigits(),
-                        ((MaximumFractionDigitsFacet)other).getMaximumFractionDigits()) == 0
+                        ((MaxFractionDigitsFacet)other).getMaximumFractionDigits()) == 0
                 : false;
     }
 

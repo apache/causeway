@@ -33,7 +33,7 @@ import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaximumFractionDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxFractionDigitsFacet;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.common.v2.ValueType;
 
@@ -124,10 +124,9 @@ implements
         }
 
         // evaluate any facets that provide the MaximumFractionDigits
-        feature.lookupFacet(MaximumFractionDigitsFacet.class).stream()
-        .mapToInt(MaximumFractionDigitsFacet::getMaximumFractionDigits)
+        feature.lookupFacet(MaxFractionDigitsFacet.class).stream()
+        .mapToInt(MaxFractionDigitsFacet::getMaximumFractionDigits)
         .filter(digits->digits>-1)
-        .peek(digits->System.err.printf("digits: %d%n", digits)) //FIXME[ISIS-2741] remove (debug)
         .forEach(digits-> // cardinality 0 or 1
             format.setMaximumFractionDigits(digits));
     }

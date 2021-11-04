@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaximumFractionDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxFractionDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxTotalDigitsFacet;
 import org.apache.isis.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
 
@@ -112,12 +112,12 @@ extends AbstractFacetFactoryTest {
         }
 
         if(maxFractionalDigits>=0) {
-            final MaximumFractionDigitsFacet facet = facetedMethod.getFacet(MaximumFractionDigitsFacet.class);
+            final MaxFractionDigitsFacet facet = facetedMethod.getFacet(MaxFractionDigitsFacet.class);
             assertNotNull(facet);
-            assertTrue(facet instanceof MaxFractionalDigitsFacetInferredFromJdoColumn);
+            assertTrue(facet instanceof MaxFractionDigitsFacetInferredFromJdoColumn);
             assertThat(facet.getMaximumFractionDigits(), is(maxFractionalDigits));
         } else {
-            assertNull(facetedMethod.getFacet(MaximumFractionDigitsFacet.class));
+            assertNull(facetedMethod.getFacet(MaxFractionDigitsFacet.class));
         }
     }
 
