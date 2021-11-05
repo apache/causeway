@@ -5,6 +5,7 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.math.BigDecimal;
 import java.util.Locale;
 
 import javax.persistence.Column;
@@ -45,22 +46,25 @@ public @interface ValueSemantics {
             default "";
 
     /**
-     * minimum number of integral digits required for this number;
+     * If associated with a {@link Number}, the minimum number of integer digits required for
+     * this number.<br>
      * default = {@code 1}
      */
-    int minIntegralDigits()
+    int minIntegerDigits()
             default 1;
 
     /**
-     * minimum number of fractional digits required for this number;
+     * If associated with a {@link BigDecimal}, the minimum number of fractional digits
+     * required for this number.<br>
      * default = {@code 0}
      */
     int minFractionalDigits()
             default 0;
 
     /**
-     * maximum number of total digits accepted for this number;<br>
-     * can be omitted, if {@link Column#precision()} is used<br>
+     * If associated with a {@link Number}, the maximum number of total digits accepted for
+     * this number.<br>
+     * Can be omitted, if {@link Column#precision()} is used.<br>
      * default = {@code 65}
      * @apiNote SQL's DECIMAL(precision, scale) has max-precision=65 and max-scale=30
      * @see Column#precision()
@@ -69,9 +73,10 @@ public @interface ValueSemantics {
             default 65;
 
     /**
-     * maximum number of fractional digits accepted for this number;<br>
-     * can be omitted, if {@link Column#scale()} is used<br>
-     * default = {@code 30}<br>
+     * If associated with a {@link BigDecimal}, the maximum number of fractional digits accepted
+     * for this number.<br>
+     * Can be omitted, if {@link Column#scale()} is used.<br>
+     * default = {@code 30}
      * @apiNote SQL's DECIMAL(precision, scale) has max-precision=65 and max-scale=30
      * @see Column#scale()
      */
