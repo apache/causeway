@@ -39,10 +39,8 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.isis.core.security._testing.InteractionService_forTesting;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ConverterBasedOnValueSemantics;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -60,16 +58,6 @@ class BigDecimalConverter_roundtrip {
 
     private InteractionService interactionService;
     private MetaModelContext mmc;
-
-    private static class BigDecimalConverterForFeature
-    extends ConverterBasedOnValueSemantics<BigDecimal> {
-
-        private static final long serialVersionUID = 1L;
-
-        protected BigDecimalConverterForFeature(final ObjectFeature propOrParam) {
-            super(propOrParam);
-        }
-    }
 
     @BeforeEach
     void setUp() throws Exception {

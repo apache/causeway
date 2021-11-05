@@ -130,7 +130,9 @@ implements
         }
         val format = getNumberFormat(context);
         format.setParseBigDecimal(true);
+        System.err.printf("before configure %d%n", format.getMaximumFractionDigits()); //FIXME[ISIS-2741] debug remove
         configureDecimalFormat(context, format);
+        System.err.printf("after configure %d%n", format.getMaximumFractionDigits()); //FIXME[ISIS-2741] debug remove
 
         val position = new ParsePosition(0);
         try {
@@ -150,8 +152,9 @@ implements
             }
             return number;
         } catch (final NumberFormatException | ParseException e) {
-            System.err.printf("suppressed message %s%n", e.getMessage()); //FIXME[ISIS-2741] remove (debug)
-            throw new TextEntryParseException("Not a decimal value " + input, e);
+            throw new TextEntryParseException(String.format(
+                    "Not a decimal value '%s': %s", input, e.getMessage()),
+                    e);
         }
     }
 
