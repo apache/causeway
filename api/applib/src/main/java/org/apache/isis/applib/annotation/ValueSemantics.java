@@ -7,6 +7,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Locale;
 
+import javax.persistence.Column;
+
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 
 /**
@@ -26,20 +28,54 @@ import org.apache.isis.applib.adapters.ValueSemanticsProvider;
         ElementType.METHOD,
         ElementType.FIELD,
         ElementType.TYPE,
-        ElementType.ANNOTATION_TYPE
+        ElementType.PARAMETER,
+        ElementType.ANNOTATION_TYPE,
 })
 @Retention(RetentionPolicy.RUNTIME)
 @Domain.Include // meta annotation, in support of meta-model validation
 public @interface ValueSemantics {
 
     /**
-     * <p>
      * Allows to select {@link ValueSemanticsProvider}(s) by qualifier.
      *
-     * @apiNote the selection (qualifier inclusion/exclusion) mechanics is not yet finalized,
-     * currently a single qualifier declared here must exactly match that of the targeted bean
+     * @apiNote the selection (qualifier inclusion/exclusion) mechanics could be improved,
+     * yet a single qualifier declared here must exactly match that of the targeted bean
      */
     String provider()
             default "";
+
+    /**
+     * minimum number of integral digits required for this number;
+     * default = {@code 1}
+     */
+    int minIntegralDigits()
+            default 1;
+
+    /**
+     * minimum number of fractional digits required for this number;
+     * default = {@code 0}
+     */
+    int minFractionalDigits()
+            default 0;
+
+    /**
+     * maximum number of total digits accepted for this number;<br>
+     * can be omitted, if {@link Column#precision()} is used<br>
+     * default = {@code 65}
+     * @apiNote SQL's DECIMAL(precision, scale) has max-precision=65 and max-scale=30
+     * @see Column#precision()
+     */
+    int maxTotalDigits()
+            default 65;
+
+    /**
+     * maximum number of fractional digits accepted for this number;<br>
+     * can be omitted, if {@link Column#scale()} is used<br>
+     * default = {@code 30}<br>
+     * @apiNote SQL's DECIMAL(precision, scale) has max-precision=65 and max-scale=30
+     * @see Column#scale()
+     */
+    int maxFractionalDigits()
+            default 30;
 
 }
