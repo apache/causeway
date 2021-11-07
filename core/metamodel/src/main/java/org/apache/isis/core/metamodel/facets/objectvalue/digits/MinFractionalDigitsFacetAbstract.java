@@ -27,47 +27,45 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import lombok.Getter;
 import lombok.NonNull;
 
-public abstract class MaxFractionalDigitsFacetAbstract
+public abstract class MinFractionalDigitsFacetAbstract
 extends FacetAbstract
-implements MaxFractionalDigitsFacet {
+implements MinFractionalDigitsFacet {
 
     private static final Class<? extends Facet> type() {
-        return MaxFractionalDigitsFacet.class;
+        return MinFractionalDigitsFacet.class;
     }
 
     @Getter(onMethod_ = {@Override})
-    private final int maxFractionalDigits;
+    private final int minFractionalDigits;
 
-    protected MaxFractionalDigitsFacetAbstract(
-            final int maxFractionalDigits,
+    protected MinFractionalDigitsFacetAbstract(
+            final int minFractionalDigits,
             final FacetHolder holder) {
         super(type(), holder);
-        this.maxFractionalDigits = maxFractionalDigits;
+        this.minFractionalDigits = minFractionalDigits;
     }
 
-    protected MaxFractionalDigitsFacetAbstract(
-            final int maxFractionalDigits,
+    protected MinFractionalDigitsFacetAbstract(
+            final int minFractionalDigits,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
         super(type(), holder, precedence);
-        this.maxFractionalDigits = maxFractionalDigits;
+        this.minFractionalDigits = minFractionalDigits;
     }
 
     @Override
     public boolean semanticEquals(@NonNull final Facet other) {
-        return other instanceof MaxFractionalDigitsFacet
+        return other instanceof MinFractionalDigitsFacet
                 ? Integer.compare(
-                        this.getMaxFractionalDigits(),
-                        ((MaxFractionalDigitsFacet)other).getMaxFractionalDigits()) == 0
+                        this.getMinFractionalDigits(),
+                        ((MinFractionalDigitsFacet)other).getMinFractionalDigits()) == 0
                 : false;
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("maxFractionalDigits", maxFractionalDigits <0
-                ? "unlimited"
-                : String.valueOf(maxFractionalDigits));
+        visitor.accept("minFractionalDigits", String.valueOf(minFractionalDigits));
     }
 
 }

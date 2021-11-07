@@ -18,14 +18,12 @@
  */
 package org.apache.isis.core.metamodel.facets.objectvalue.digits;
 
-import javax.validation.constraints.Digits;
-
 import org.apache.isis.applib.annotation.ValueSemantics;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
- * The maximum allowed number of digits to the right of the decimal place (fractional part)
- * for this number.
+ * The minimum required number of digits to the left of the decimal place
+ * (integral/integer part) for this number.
  *
  * <p>
  * For example:
@@ -35,13 +33,12 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * <li><tt>12345.0</tt> has 1 fraction digit</li>
  * </ul>
  */
-public interface MaxFractionalDigitsFacet
+public interface MinIntegerDigitsFacet
 extends Facet {
 
     /**
-     * eg. as provided by {@link Digits#fraction()}
-     * and {@link ValueSemantics#maxFractionalDigits()}
+     * eg. as provided by {@link ValueSemantics#minIntegerDigits()}
      */
-    int getMaxFractionalDigits();
+    int getMinIntegerDigits();
 
 }
