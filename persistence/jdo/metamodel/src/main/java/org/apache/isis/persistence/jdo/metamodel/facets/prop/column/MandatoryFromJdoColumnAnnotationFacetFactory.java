@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
-import org.apache.isis.persistence.jdo.metamodel.facets.prop.primarykey.OptionalFacetInferredFromJdoPrimaryKeyAnnotation;
+import org.apache.isis.persistence.jdo.metamodel.facets.prop.primarykey.OptionalFacetFromJdoPrimaryKeyAnnotation;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
@@ -76,7 +76,7 @@ implements MetaModelRefiner {
         final MandatoryFacet existingFacet = holder.getFacet(MandatoryFacet.class);
         if(existingFacet != null) {
 
-            if (existingFacet instanceof OptionalFacetInferredFromJdoPrimaryKeyAnnotation) {
+            if (existingFacet instanceof OptionalFacetFromJdoPrimaryKeyAnnotation) {
                 // do not replace this facet;
                 // we must keep an optional facet here for different reasons
                 return;
@@ -95,7 +95,7 @@ implements MetaModelRefiner {
         FacetUtil.addFacet(
             columnIfAny.isPresent()
                     ? new MandatoryFacetFromJdoColumnAnnotation(holder, semantics)
-                    : new MandatoryFacetInferredFromAbsenceOfJdoColumnAnnotation(
+                    : new MandatoryFacetFromAbsenceOfJdoColumnAnnotation(
                             holder,
                             semantics,
                             semantics.isRequired()

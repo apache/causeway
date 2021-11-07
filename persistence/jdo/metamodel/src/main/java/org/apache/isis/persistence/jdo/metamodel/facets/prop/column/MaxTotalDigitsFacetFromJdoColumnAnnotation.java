@@ -18,18 +18,31 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.facets.prop.column;
 
+import java.util.Optional;
+
+import javax.jdo.annotations.Column;
+
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacetAbstract;
 
-/**
- * Inferred from absence of an <tt>@Column</tt> method.
- */
-public class MandatoryFacetInferredFromAbsenceOfJdoColumnAnnotation
-extends MandatoryFacetAbstract {
+public class MaxTotalDigitsFacetFromJdoColumnAnnotation
+extends MaxTotalDigitsFacetAbstract {
 
-    public MandatoryFacetInferredFromAbsenceOfJdoColumnAnnotation(
-            final FacetHolder holder, final Semantics semantics, Precedence precedence) {
-        super(holder, semantics, precedence);
+    public static Optional<MaxTotalDigitsFacet> create(
+            final Optional<Column> jdoColumnIfAny,
+            final FacetHolder holder) {
+
+        return jdoColumnIfAny
+        .filter(jdoColumn->jdoColumn.length()>=0)
+        .map(jdoColumn->
+            new MaxTotalDigitsFacetFromJdoColumnAnnotation(
+                    jdoColumn.length(), holder));
+    }
+
+    private MaxTotalDigitsFacetFromJdoColumnAnnotation(
+            final int maxTotalDigits, final FacetHolder holder) {
+        super(maxTotalDigits, holder);
     }
 
 

@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.support.ObjectSupportFacetFactoryTestAbstract;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
-import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetInferredFromToStringMethod;
+import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetFromToStringMethod;
 
 public class TitleFacetViaMethodsFactoryTest
 extends ObjectSupportFacetFactoryTestAbstract {
@@ -55,8 +55,8 @@ extends ObjectSupportFacetFactoryTestAbstract {
 
         final Facet facet = facetedMethod.getFacet(TitleFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof TitleFacetInferredFromToStringMethod);
-        final TitleFacetInferredFromToStringMethod titleFacetViaTitleMethod = (TitleFacetInferredFromToStringMethod) facet;
+        assertTrue(facet instanceof TitleFacetFromToStringMethod);
+        final TitleFacetFromToStringMethod titleFacetViaTitleMethod = (TitleFacetFromToStringMethod) facet;
         assertEquals(toStringMethod, titleFacetViaTitleMethod.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(toStringMethod));
@@ -66,7 +66,7 @@ extends ObjectSupportFacetFactoryTestAbstract {
 
         final Method sampleMethod = Object.class
                 .getMethod("toString", _Constants.emptyClasses);
-        assertFalse(TitleFacetInferredFromToStringMethod
+        assertFalse(TitleFacetFromToStringMethod
                     .create(sampleMethod, facetedMethod)
                     .isPresent());
     }

@@ -16,21 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.logicaltype.classname;
+package org.apache.isis.core.metamodel.facets.actcoll.typeof;
 
-import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacetAbstract;
 
-/**
- * @since 2.0
- */
-public class LogicalTypeFacetInferredFromIoCNamingStrategy
-extends LogicalTypeFacetAbstract {
+public class TypeOfFacetFromArray 
+extends TypeOfFacetAbstract {
 
-    LogicalTypeFacetInferredFromIoCNamingStrategy(
-            final LogicalType logicalType, final FacetHolder holder) {
-        super(logicalType, holder, Precedence.INFERRED);
+    TypeOfFacetFromArray(final Class<?> type, final FacetHolder holder) {
+        super(type, holder);
     }
 
 }

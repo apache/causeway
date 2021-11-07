@@ -23,8 +23,8 @@ import javax.inject.Inject;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterInferredFromType;
-import org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyInferredFromType;
+import org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterFromType;
+import org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyFromType;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -58,7 +58,7 @@ extends ObjectSpecificationPostProcessorAbstract {
             .lookupNonFallbackFacet(TypicalLengthFacet.class)
             .ifPresent(typicalLengthFacet ->
                     FacetUtil.addFacet(
-                            TypicalLengthFacetOnParameterInferredFromType
+                            TypicalLengthFacetOnParameterFromType
                             .createWhilePostprocessing(typicalLengthFacet, peerFor(parameter))));
     }
 
@@ -72,7 +72,7 @@ extends ObjectSpecificationPostProcessorAbstract {
             .lookupNonFallbackFacet(TypicalLengthFacet.class)
             .ifPresent(typicalLengthFacet ->
                     FacetUtil.addFacet(
-                            TypicalLengthFacetOnPropertyInferredFromType
+                            TypicalLengthFacetOnPropertyFromType
                             .createWhilePostprocessing(typicalLengthFacet, facetedMethodFor(property))));
 
     }

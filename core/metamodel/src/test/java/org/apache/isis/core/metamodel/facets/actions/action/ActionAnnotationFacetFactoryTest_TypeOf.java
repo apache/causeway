@@ -28,8 +28,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromArray;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics;
 import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
 
 import static org.apache.isis.core.metamodel.commons.matchers.IsisMatchers.classEqualTo;
@@ -145,7 +145,7 @@ public class ActionAnnotationFacetFactoryTest_TypeOf extends ActionAnnotationFac
         // then
         final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
         Assert.assertNotNull(facet);
-        Assert.assertTrue(facet instanceof TypeOfFacetInferredFromArray);
+        Assert.assertTrue(facet instanceof TypeOfFacetFromArray);
         assertThat(facet.value(), classEqualTo(Order.class));
     }
 
@@ -173,7 +173,7 @@ public class ActionAnnotationFacetFactoryTest_TypeOf extends ActionAnnotationFac
         // then
         final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
         Assert.assertNotNull(facet);
-        Assert.assertEquals(TypeOfFacetInferredFromGenerics.class, facet.getClass());
+        Assert.assertEquals(TypeOfFacetFromGenerics.class, facet.getClass());
         assertThat(facet.value(), classEqualTo(Order.class));
     }
 

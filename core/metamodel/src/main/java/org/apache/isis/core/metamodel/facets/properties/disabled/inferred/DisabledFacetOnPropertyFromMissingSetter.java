@@ -16,28 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.metamodel.facets.prop.primarykey;
+package org.apache.isis.core.metamodel.facets.properties.disabled.inferred;
 
-import javax.jdo.annotations.PrimaryKey;
-
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
-import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 
-/**
- * Inferred from presence of {@link PrimaryKey}.
- *
- * <p>
- * By default mandatory properties are initialized using the
- * {@link PropertyDefaultFacet} facet. We don't want this, so this facet marks
- * the property as optional, meaning that the {@link PrimaryKey} property is left
- * untouched by Isis.
- */
-public class OptionalFacetInferredFromJdoPrimaryKeyAnnotation
-extends MandatoryFacetAbstract {
+public class DisabledFacetOnPropertyFromMissingSetter
+extends DisabledFacetAbstract {
 
-    public OptionalFacetInferredFromJdoPrimaryKeyAnnotation(final FacetHolder holder) {
-        super(holder, Semantics.OPTIONAL, Precedence.INFERRED);
+    public DisabledFacetOnPropertyFromMissingSetter(final FacetHolder holder) {
+        super(Where.ANYWHERE, ALWAYS_DISABLED_REASON, holder);
     }
+
 
 }

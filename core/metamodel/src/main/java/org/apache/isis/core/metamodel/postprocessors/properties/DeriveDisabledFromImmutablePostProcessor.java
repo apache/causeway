@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.editing.Immutab
 import org.apache.isis.core.metamodel.facets.object.immutable.EditingEnabledFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyDerivedFromImmutableFactory;
-import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyInferredFromImmutable;
+import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyFromImmutable;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -88,7 +88,7 @@ extends ObjectSpecificationPostProcessorAbstract {
 
             }
 
-            FacetUtil.addFacet(DisabledFacetOnPropertyInferredFromImmutable
+            FacetUtil.addFacet(DisabledFacetOnPropertyFromImmutable
                             .forImmutable(facetedMethodFor(property), immutableFacet));
         });
     }

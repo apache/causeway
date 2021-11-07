@@ -61,7 +61,7 @@ implements MetaModelRefiner {
         val jdoColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
 
         addFacetIfPresent(
-                MaxTotalDigitsFacetInferredFromJdoColumn
+                MaxTotalDigitsFacetFromJdoColumnAnnotation
                 .create(jdoColumnIfAny, holder));
 
         addFacetIfPresent(

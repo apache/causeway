@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import lombok.Getter;
 import lombok.NonNull;
 
-public class TitleFacetInferredFromToStringMethod
+public class TitleFacetFromToStringMethod
 extends TitleFacetAbstract
 implements HasImperativeAspect {
 
@@ -48,12 +48,12 @@ implements HasImperativeAspect {
         return Optional.ofNullable(methodIfAny)
         .filter(method->!ClassExtensions.isJavaClass(method.getDeclaringClass()))
         .map(method->
-            new TitleFacetInferredFromToStringMethod(
+            new TitleFacetFromToStringMethod(
                     ImperativeAspect.singleMethod(method, Intent.UI_HINT),
                     holder));
     }
 
-    private TitleFacetInferredFromToStringMethod(
+    private TitleFacetFromToStringMethod(
             final ImperativeAspect imperativeAspect,
             final FacetHolder holder) {
         super(holder, Precedence.INFERRED);

@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.facets.object.hidden.HiddenObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.hidden.method.HiddenObjectFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetViaIconNameMethod;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetViaLayoutMethod;
-import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetInferredFromToStringMethod;
+import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetFromToStringMethod;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
@@ -119,7 +119,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         .streamMethodsMatchingSignature(NO_ARG)
         .peek(processClassContext::removeMethod)
         .forEach(method->{
-            addFacetIfPresent(TitleFacetInferredFromToStringMethod
+            addFacetIfPresent(TitleFacetFromToStringMethod
                     .create(method, processClassContext.getFacetHolder()));
         });
 

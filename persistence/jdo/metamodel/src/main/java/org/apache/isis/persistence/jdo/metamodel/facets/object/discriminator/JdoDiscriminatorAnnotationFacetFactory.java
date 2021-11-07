@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
-import org.apache.isis.core.metamodel.facets.object.logicaltype.classname.LogicalTypeFacetInferredFromClassName;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.classname.LogicalTypeFacetFromClassName;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
@@ -71,7 +71,7 @@ implements ObjectTypeFacetFactory {
         final String annotationValue = annotation.value();
         final LogicalTypeFacet logicalTypeFacet; // non-null
         if (!_Strings.isNullOrEmpty(annotationValue)) {
-            logicalTypeFacet = new LogicalTypeFacetInferredFromJdoDiscriminatorValueAnnotation(
+            logicalTypeFacet = new LogicalTypeFacetFromJdoDiscriminatorValueAnnotation(
                         LogicalType.eager(cls, annotationValue),
                         facetHolder);
         } else {
@@ -81,7 +81,7 @@ implements ObjectTypeFacetFactory {
             }
 
             val substituted = substitute.apply(cls);
-            logicalTypeFacet = new LogicalTypeFacetInferredFromClassName(
+            logicalTypeFacet = new LogicalTypeFacetFromClassName(
                             LogicalType.eager(substituted, substituted.getCanonicalName()),
                             facetHolder);
 

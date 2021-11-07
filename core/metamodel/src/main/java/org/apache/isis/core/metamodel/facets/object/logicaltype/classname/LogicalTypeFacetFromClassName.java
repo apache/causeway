@@ -16,20 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.metamodel.facets.object.discriminator;
+package org.apache.isis.core.metamodel.facets.object.logicaltype.classname;
 
 import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacetAbstract;
 
-public class LogicalTypeFacetInferredFromJdoDiscriminatorValueAnnotation
+public class LogicalTypeFacetFromClassName
 extends LogicalTypeFacetAbstract {
 
-    public LogicalTypeFacetInferredFromJdoDiscriminatorValueAnnotation(
-            final LogicalType logicalType,
-            final FacetHolder holder) {
-        super(logicalType, holder);
+    public LogicalTypeFacetFromClassName(final Class<?> cls, final FacetHolder holder) {
+        this(LogicalType.eager(cls, ClassUtil.getCanonicalName_friendlyToInnerClasses(cls)), holder);
+    }
+
+    public LogicalTypeFacetFromClassName(final LogicalType logicalType, final FacetHolder holder) {
+        super(logicalType, holder, Precedence.INFERRED);
     }
 
 }
-

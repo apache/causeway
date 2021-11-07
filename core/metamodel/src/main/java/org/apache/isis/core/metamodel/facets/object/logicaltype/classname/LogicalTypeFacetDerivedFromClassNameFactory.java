@@ -96,11 +96,11 @@ implements
         val isService = serviceId!=null;
 
        return isService
-               ? new LogicalTypeFacetInferredFromIoCNamingStrategy(
+               ? new LogicalTypeFacetFromIoCNamingStrategy(
                         LogicalType
                         .eager(substitutedClass, serviceId),
                         facetHolder)
-               : new LogicalTypeFacetInferredFromClassName(substitutedClass, facetHolder);
+               : new LogicalTypeFacetFromClassName(substitutedClass, facetHolder);
     }
 
     private static String getServiceId(final FacetHolder facetHolder) {
@@ -128,7 +128,7 @@ implements
             }
 
             val logicalTypeFacet = objectSpec.getFacet(LogicalTypeFacet.class);
-            if(logicalTypeFacet instanceof LogicalTypeFacetInferredFromClassName) {
+            if(logicalTypeFacet instanceof LogicalTypeFacetFromClassName) {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
                         "%s: the object type must be specified explicitly ('%s' config property). "

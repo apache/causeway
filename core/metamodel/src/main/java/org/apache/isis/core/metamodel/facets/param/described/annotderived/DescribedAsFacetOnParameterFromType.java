@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.all.described.ParamDescribedFacetAb
 
 import lombok.val;
 
-public class DescribedAsFacetOnParameterInferredFromType
+public class DescribedAsFacetOnParameterFromType
 extends ParamDescribedFacetAbstract {
 
     public static Optional<ParamDescribedFacet> create(
@@ -39,10 +39,10 @@ extends ParamDescribedFacetAbstract {
 
         return Optional.ofNullable(describedIfAny)
         .map(described->
-            new DescribedAsFacetOnParameterInferredFromType(described, holder));
+            new DescribedAsFacetOnParameterFromType(described, holder));
     }
 
-    private DescribedAsFacetOnParameterInferredFromType(
+    private DescribedAsFacetOnParameterFromType(
             final String described,
             final FacetHolder holder) {
         super(described, holder, Precedence.INFERRED);

@@ -16,22 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.objectvalue.labelat;
+package org.apache.isis.persistence.jdo.metamodel.facets.prop.column;
 
-import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
 
 /**
- * If multi-line then position the label at the top.
- *
- * <p>
- *     This can still be overridden using the {@link org.apache.isis.applib.annotation.PropertyLayout} annotation / layout.json.
- * </p>
+ * Inferred from absence of an <tt>@Column</tt> method.
  */
-public class LabelAtFacetInferredFromMultiLineFacet extends LabelAtFacetAbstract {
+public class MandatoryFacetFromAbsenceOfJdoColumnAnnotation
+extends MandatoryFacetAbstract {
 
-    public LabelAtFacetInferredFromMultiLineFacet(final FacetHolder holder) {
-        super(LabelPosition.TOP, holder);
+    public MandatoryFacetFromAbsenceOfJdoColumnAnnotation(
+            final FacetHolder holder, final Semantics semantics, Precedence precedence) {
+        super(holder, semantics, precedence);
     }
+
 
 }

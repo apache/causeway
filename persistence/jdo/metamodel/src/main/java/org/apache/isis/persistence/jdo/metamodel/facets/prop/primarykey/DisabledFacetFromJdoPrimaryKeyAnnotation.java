@@ -16,22 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.logicaltype.classname;
+package org.apache.isis.persistence.jdo.metamodel.facets.prop.primarykey;
 
-import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.core.metamodel.commons.ClassUtil;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 
-public class LogicalTypeFacetInferredFromClassName
-extends LogicalTypeFacetAbstract {
 
-    public LogicalTypeFacetInferredFromClassName(final Class<?> cls, final FacetHolder holder) {
-        this(LogicalType.eager(cls, ClassUtil.getCanonicalName_friendlyToInnerClasses(cls)), holder);
-    }
+/**
+ * Derived by the presence of the primary key.
+ */
+public class DisabledFacetFromJdoPrimaryKeyAnnotation
+extends DisabledFacetAbstract {
 
-    public LogicalTypeFacetInferredFromClassName(final LogicalType logicalType, final FacetHolder holder) {
-        super(logicalType, holder, Precedence.INFERRED);
+    public DisabledFacetFromJdoPrimaryKeyAnnotation(final FacetHolder holder) {
+        super(Where.ANYWHERE, "Primary-keys are immutable", holder);
     }
 
 }

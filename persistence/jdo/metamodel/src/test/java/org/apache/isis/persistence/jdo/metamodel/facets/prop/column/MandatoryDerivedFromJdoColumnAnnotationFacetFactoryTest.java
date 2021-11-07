@@ -66,7 +66,7 @@ extends AbstractFacetFactoryTest {
 
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetInferredFromAbsenceOfJdoColumnAnnotation);
+        assertTrue(facet instanceof MandatoryFacetFromAbsenceOfJdoColumnAnnotation);
         assertThat(facet.getSemantics().isOptional(), is(false));
     }
 
@@ -110,7 +110,7 @@ extends AbstractFacetFactoryTest {
 
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetInferredFromAbsenceOfJdoColumnAnnotation);
+        assertTrue(facet instanceof MandatoryFacetFromAbsenceOfJdoColumnAnnotation);
         assertThat(facet.getSemantics().isOptional(), is(true));
     }
 

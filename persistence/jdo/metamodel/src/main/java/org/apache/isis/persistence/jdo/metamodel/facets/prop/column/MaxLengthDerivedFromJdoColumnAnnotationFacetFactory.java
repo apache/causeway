@@ -67,7 +67,7 @@ implements MetaModelRefiner {
         val facetHolder = processMethodContext.getFacetHolder();
 
         FacetUtil.addFacetIfPresent(
-                MaxTotalDigitsFacetInferredFromJdoColumn
+                MaxTotalDigitsFacetFromJdoColumnAnnotation
                 .create(jdoColumnIfAny, facetHolder));
     }
 

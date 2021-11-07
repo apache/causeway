@@ -16,35 +16,37 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.param.typicallen.fromtype;
+package org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype;
 
 import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacetAbstract;
 
-public class TypicalLengthFacetOnParameterInferredFromType
+public class TypicalLengthFacetOnPropertyFromType
 extends TypicalLengthFacetAbstract {
 
-    // -- FACTORIES
+    // -- FACTORY
 
     /**
      * @apiNote call during post processing only!
      * based on the assumption, that all MultiLineFacet processing already has settled
-     * on the peer (action parameter meta-data)
+     * on the peer (property meta-data)
      */
-    public static TypicalLengthFacetOnParameterInferredFromType createWhilePostprocessing(
+    public static TypicalLengthFacetOnPropertyFromType createWhilePostprocessing(
             final TypicalLengthFacet typicalLengthFacet,
-            final FacetHolder holder) {
+            final FacetedMethod peer) {
 
-        final int numberOfLines = holder.lookupFacet(MultiLineFacet.class)
+        final int numberOfLines = peer.lookupFacet(MultiLineFacet.class)
                 .map(MultiLineFacet::numberOfLines)
                 .orElse(1);
         final int typicalLength = numberOfLines * typicalLengthFacet.value();
 
-        return new TypicalLengthFacetOnParameterInferredFromType(typicalLength, typicalLengthFacet, holder);
+        return new TypicalLengthFacetOnPropertyFromType(
+                typicalLength, typicalLengthFacet, peer);
     }
 
     // -- FIELDS
@@ -56,7 +58,7 @@ extends TypicalLengthFacetAbstract {
 
     // -- CONSTRUCTOR
 
-    private TypicalLengthFacetOnParameterInferredFromType(
+    private TypicalLengthFacetOnPropertyFromType(
             final int typicalLength,
             final TypicalLengthFacet typicalLengthFacet,
             final FacetHolder holder) {

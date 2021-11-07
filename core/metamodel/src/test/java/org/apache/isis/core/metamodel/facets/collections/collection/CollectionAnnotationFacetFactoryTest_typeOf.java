@@ -28,8 +28,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromArray;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class CollectionAnnotationFacetFactoryTest_typeOf
@@ -71,8 +71,8 @@ extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof TypeOfFacetInferredFromGenerics);
-        final TypeOfFacetInferredFromGenerics typeOfFacetInferredFromGenerics = (TypeOfFacetInferredFromGenerics) facet;
+        assertTrue(facet instanceof TypeOfFacetFromGenerics);
+        final TypeOfFacetFromGenerics typeOfFacetInferredFromGenerics = (TypeOfFacetFromGenerics) facet;
         assertEquals(Order.class, typeOfFacetInferredFromGenerics.value());
 
     }
@@ -99,8 +99,8 @@ extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof TypeOfFacetInferredFromGenerics);
-        final TypeOfFacetInferredFromGenerics typeOfFacetInferredFromGenerics = (TypeOfFacetInferredFromGenerics) facet;
+        assertTrue(facet instanceof TypeOfFacetFromGenerics);
+        final TypeOfFacetFromGenerics typeOfFacetInferredFromGenerics = (TypeOfFacetFromGenerics) facet;
         assertEquals(Order.class, typeOfFacetInferredFromGenerics.value());
 
     }
@@ -129,8 +129,8 @@ extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof TypeOfFacetInferredFromArray);
-        final TypeOfFacetInferredFromArray typeOfFacetInferredFromArray = (TypeOfFacetInferredFromArray) facet;
+        assertTrue(facet instanceof TypeOfFacetFromArray);
+        final TypeOfFacetFromArray typeOfFacetInferredFromArray = (TypeOfFacetFromArray) facet;
         assertEquals(Order.class, typeOfFacetInferredFromArray.value());
 
     }

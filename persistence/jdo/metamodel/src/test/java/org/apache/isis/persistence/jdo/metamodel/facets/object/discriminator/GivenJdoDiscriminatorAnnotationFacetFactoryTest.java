@@ -79,7 +79,7 @@ public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFac
 
         final Facet facet = facetHolder.getFacet(LogicalTypeFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof LogicalTypeFacetInferredFromJdoDiscriminatorValueAnnotation);
+        assertTrue(facet instanceof LogicalTypeFacetFromJdoDiscriminatorValueAnnotation);
     }
 
     public void testIfNoEntityAnnotationThenNoFacet() {

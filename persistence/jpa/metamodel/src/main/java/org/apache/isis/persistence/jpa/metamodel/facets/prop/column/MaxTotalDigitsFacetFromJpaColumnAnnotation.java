@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacetAbstract;
 
-public class MaxTotalDigitsFacetInferredFromJpaColumn
+public class MaxTotalDigitsFacetFromJpaColumnAnnotation
 extends MaxTotalDigitsFacetAbstract {
 
     public static Optional<MaxTotalDigitsFacet> create(
@@ -36,11 +36,11 @@ extends MaxTotalDigitsFacetAbstract {
         return jpaColumnIfAny
         .filter(jpaColumn->jpaColumn.length()>=0)
         .map(jdoColumn->
-            new MaxTotalDigitsFacetInferredFromJpaColumn(
+            new MaxTotalDigitsFacetFromJpaColumnAnnotation(
                     jdoColumn.length(), holder));
     }
 
-    private MaxTotalDigitsFacetInferredFromJpaColumn(
+    private MaxTotalDigitsFacetFromJpaColumnAnnotation(
             final int maxTotalDigits, final FacetHolder holder) {
         super(maxTotalDigits, holder);
     }

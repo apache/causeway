@@ -29,16 +29,16 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import lombok.NonNull;
 import lombok.val;
 
-public class DisabledFacetOnPropertyInferredFromImmutable
+public class DisabledFacetOnPropertyFromImmutable
 extends DisabledFacetAbstract {
 
     // -- FACTORY
 
-    public static DisabledFacetOnPropertyInferredFromImmutable forImmutable(
+    public static DisabledFacetOnPropertyFromImmutable forImmutable(
             final @NonNull FacetedMethod facetedMethodFor,
             final @NonNull ImmutableFacet immutableFacet) {
 
-        return new DisabledFacetOnPropertyInferredFromImmutable(facetedMethodFor, immutableFacet);
+        return new DisabledFacetOnPropertyFromImmutable(facetedMethodFor, immutableFacet);
     }
 
     // -- FIELDS
@@ -47,7 +47,7 @@ extends DisabledFacetAbstract {
 
     // -- CONSTRUCTOR
 
-    private DisabledFacetOnPropertyInferredFromImmutable(
+    private DisabledFacetOnPropertyFromImmutable(
             final @NonNull FacetHolder holder,
             final @NonNull ImmutableFacet reasonProvidingImmutableFacet) {
 

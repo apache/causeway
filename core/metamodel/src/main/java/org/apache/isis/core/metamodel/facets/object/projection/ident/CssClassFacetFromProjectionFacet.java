@@ -28,12 +28,12 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.val;
 
-public class CssClassFacetInferredFromProjectionFacet 
+public class CssClassFacetFromProjectionFacet 
 extends CssClassFacetAbstract {
 
     private final ProjectionFacet projectionFacet;
 
-    public CssClassFacetInferredFromProjectionFacet(
+    public CssClassFacetFromProjectionFacet(
             final ProjectionFacet projectionFacet, 
             final FacetHolder holder) {
         super(holder);

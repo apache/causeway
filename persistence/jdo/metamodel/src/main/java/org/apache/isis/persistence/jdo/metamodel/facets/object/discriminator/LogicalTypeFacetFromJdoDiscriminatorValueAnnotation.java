@@ -16,18 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.properties.disabled.inferred;
+package org.apache.isis.persistence.jdo.metamodel.facets.object.discriminator;
 
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacetAbstract;
 
-public class DisabledFacetOnPropertyInferredFromMissingSetter
-extends DisabledFacetAbstract {
+public class LogicalTypeFacetFromJdoDiscriminatorValueAnnotation
+extends LogicalTypeFacetAbstract {
 
-    public DisabledFacetOnPropertyInferredFromMissingSetter(final FacetHolder holder) {
-        super(Where.ANYWHERE, ALWAYS_DISABLED_REASON, holder);
+    public LogicalTypeFacetFromJdoDiscriminatorValueAnnotation(
+            final LogicalType logicalType,
+            final FacetHolder holder) {
+        super(logicalType, holder);
     }
 
-
 }
+

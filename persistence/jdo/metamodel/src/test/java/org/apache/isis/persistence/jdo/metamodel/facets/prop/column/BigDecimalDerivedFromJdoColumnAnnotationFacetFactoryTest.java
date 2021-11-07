@@ -105,7 +105,7 @@ extends AbstractFacetFactoryTest {
         if(maxTotalDigits>=0) {
             final MaxTotalDigitsFacet facet = facetedMethod.getFacet(MaxTotalDigitsFacet.class);
             assertNotNull(facet);
-            assertTrue(facet instanceof MaxTotalDigitsFacetInferredFromJdoColumn);
+            assertTrue(facet instanceof MaxTotalDigitsFacetFromJdoColumnAnnotation);
             assertThat(facet.maxTotalDigits(), is(maxTotalDigits));
         } else {
             assertNull(facetedMethod.getFacet(MaxTotalDigitsFacet.class));

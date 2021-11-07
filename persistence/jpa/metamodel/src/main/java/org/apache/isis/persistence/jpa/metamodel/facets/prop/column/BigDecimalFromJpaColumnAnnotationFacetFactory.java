@@ -30,11 +30,11 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 
 import lombok.val;
 
-public class BigDecimalInferredFromJpaColumnAnnotationFacetFactory
+public class BigDecimalFromJpaColumnAnnotationFacetFactory
 extends FacetFactoryAbstract {
 
     @Inject
-    public BigDecimalInferredFromJpaColumnAnnotationFacetFactory(final MetaModelContext mmc) {
+    public BigDecimalFromJpaColumnAnnotationFacetFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
@@ -50,11 +50,11 @@ extends FacetFactoryAbstract {
         val jpaColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
 
         addFacetIfPresent(
-                MaxTotalDigitsFacetInferredFromJpaColumn
+                MaxTotalDigitsFacetFromJpaColumnAnnotation
                 .create(jpaColumnIfAny, holder));
 
         addFacetIfPresent(
-                MaxFractionDigitsFacetInferredFromJpaColumn
+                MaxFractionDigitsFacetFromJpaColumnAnnotation
                 .create(jpaColumnIfAny, holder));
     }
 
