@@ -28,9 +28,9 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * <p>
  * For example:
  * <ul>
- * <li><tt>12345.789</tt> has 3 fraction digits</li>
- * <li><tt>12345</tt> has 0 fraction digits</li>
- * <li><tt>12345.0</tt> has 1 fraction digit</li>
+ * <li><tt>12345.789</tt> has 3 fractional digits</li>
+ * <li><tt>12345</tt> has 0 fractional digits</li>
+ * <li><tt>12345.0</tt> has 1 fractional digit</li>
  * </ul>
  */
 public interface MinFractionalDigitsFacet

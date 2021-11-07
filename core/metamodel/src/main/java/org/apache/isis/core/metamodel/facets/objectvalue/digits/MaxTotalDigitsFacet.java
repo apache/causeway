@@ -29,9 +29,9 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * <p>
  * For example:
  * <ul>
- * <li><tt>12345.789</tt> has a total of 8</li>
- * <li><tt>12345</tt> has a total of 5</li>
- * <li><tt>12345.0</tt> has a total of 6</li>
+ * <li><tt>12345.789</tt> has a total of 8 digits</li>
+ * <li><tt>12345</tt> has a total of 5 digits</li>
+ * <li><tt>12345.0</tt> has a total of 6 digits</li>
  * </ul>
  */
 public interface MaxTotalDigitsFacet

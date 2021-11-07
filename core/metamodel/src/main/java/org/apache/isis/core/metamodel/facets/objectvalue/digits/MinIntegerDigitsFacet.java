@@ -23,14 +23,13 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * The minimum required number of digits to the left of the decimal place
- * (integral/integer part) for this number.
+ * (integer/integral part) for this number.
  *
  * <p>
  * For example:
  * <ul>
- * <li><tt>12345.789</tt> has 3 fraction digits</li>
- * <li><tt>12345</tt> has 0 fraction digits</li>
- * <li><tt>12345.0</tt> has 1 fraction digit</li>
+ * <li><tt>12345.789</tt> has 5 integer/integral digits</li>
+ * <li><tt>0.123</tt> has 1 integer/integral digit</li>
  * </ul>
  */
 public interface MinIntegerDigitsFacet
