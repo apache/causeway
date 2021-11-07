@@ -28,12 +28,12 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.val;
 
-public class TitleFacetDerivedFromProjectionFacet
+public class TitleFacetFromProjectionFacet
 extends TitleFacetAbstract {
 
     private final ProjectionFacet projectionFacet;
 
-    public TitleFacetDerivedFromProjectionFacet(
+    public TitleFacetFromProjectionFacet(
             final ProjectionFacet projectionFacet,
             final FacetHolder holder) {
         super(holder);

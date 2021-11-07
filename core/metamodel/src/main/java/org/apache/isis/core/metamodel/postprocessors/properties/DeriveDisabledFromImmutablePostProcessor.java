@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.object.immutable.EditingEnabledFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyDerivedFromImmutableFactory;
+import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyFromImmutableFactory;
 import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyFromImmutable;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -39,7 +39,7 @@ import lombok.val;
 
 
 /**
- * Replaces {@link DisabledFacetOnPropertyDerivedFromImmutableFactory}
+ * Replaces {@link DisabledFacetOnPropertyFromImmutableFactory}
  */
 public class DeriveDisabledFromImmutablePostProcessor
 extends ObjectSpecificationPostProcessorAbstract {

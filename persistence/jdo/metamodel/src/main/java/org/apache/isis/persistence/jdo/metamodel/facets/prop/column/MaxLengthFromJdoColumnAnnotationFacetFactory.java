@@ -40,13 +40,13 @@ import org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.notpersist
 
 import lombok.val;
 
-public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory
+public class MaxLengthFromJdoColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
     @Inject private JdoFacetContext jdoFacetContext;
 
-    public MaxLengthDerivedFromJdoColumnAnnotationFacetFactory(final MetaModelContext mmc) {
+    public MaxLengthFromJdoColumnAnnotationFacetFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 

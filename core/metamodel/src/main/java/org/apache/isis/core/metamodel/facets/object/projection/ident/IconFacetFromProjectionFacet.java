@@ -16,55 +16,48 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.properties.defaults.fromtype;
+package org.apache.isis.core.metamodel.facets.object.projection.ident;
 
 import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
-import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
+import org.apache.isis.core.metamodel.facets.object.icon.IconFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.NonNull;
+import lombok.val;
 
-public class PropertyDefaultFacetDerivedFromDefaultedFacet
-extends FacetAbstract
-implements PropertyDefaultFacet {
+public class IconFacetFromProjectionFacet
+extends IconFacetAbstract {
 
-    private final @NonNull DefaultedFacet typeFacet;
+    private final @NonNull ProjectionFacet projectionFacet;
 
-    public PropertyDefaultFacetDerivedFromDefaultedFacet(
-            final DefaultedFacet typeFacet, final FacetHolder holder) {
-
-        super(PropertyDefaultFacet.class, holder);
-        this.typeFacet = typeFacet;
+    public IconFacetFromProjectionFacet(
+            final ProjectionFacet projectionFacet,
+            final FacetHolder holder) {
+        super(holder);
+        this.projectionFacet = projectionFacet;
     }
 
     @Override
-    public ManagedObject getDefault(final ManagedObject inObject) {
-        if (getFacetHolder() == null) {
-            return null;
-        }
-        final Object typeFacetDefault = typeFacet.getDefault();
-        if (typeFacetDefault == null) {
-            return null;
-        }
-        return getObjectManager().adapt(typeFacetDefault);
+    public String iconName(final ManagedObject targetAdapter) {
+        val projectedAdapter = projectionFacet.projected(targetAdapter);
+        return projectedAdapter.getSpecification().getIconName(projectedAdapter);
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("typeFacet", typeFacet);
+        visitor.accept("projectionFacet", projectionFacet.getClass().getName());
     }
 
     @Override
     public boolean semanticEquals(final @NonNull Facet other) {
-        return other instanceof PropertyDefaultFacetDerivedFromDefaultedFacet
-                ? this.typeFacet
-                        .semanticEquals(((PropertyDefaultFacetDerivedFromDefaultedFacet)other).typeFacet)
+        return other instanceof IconFacetFromProjectionFacet
+                ? this.projectionFacet
+                        .semanticEquals(((IconFacetFromProjectionFacet)other).projectionFacet)
                 : false;
     }
 

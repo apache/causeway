@@ -27,12 +27,12 @@ import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServi
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
 
-public class NotInServiceMenuFacetDerivedFromDomainServiceFacet
+public class NotInServiceMenuFacetFromDomainServiceFacet
 extends NotInServiceMenuFacetAbstract {
 
     private final NatureOfService natureOfService;
 
-    public NotInServiceMenuFacetDerivedFromDomainServiceFacet(
+    public NotInServiceMenuFacetFromDomainServiceFacet(
             final NatureOfService natureOfService, final FacetHolder holder) {
         super(holder, Precedence.HIGH); // facet has final say, don't override
         this.natureOfService = natureOfService;

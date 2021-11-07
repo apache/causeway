@@ -27,8 +27,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacetFromProjectingProperty;
-import org.apache.isis.core.metamodel.facets.object.projection.ident.IconFacetDerivedFromProjectionFacet;
-import org.apache.isis.core.metamodel.facets.object.projection.ident.TitleFacetDerivedFromProjectionFacet;
+import org.apache.isis.core.metamodel.facets.object.projection.ident.IconFacetFromProjectionFacet;
+import org.apache.isis.core.metamodel.facets.object.projection.ident.TitleFacetFromProjectionFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -56,15 +56,15 @@ extends ObjectSpecificationPostProcessorAbstract {
         FacetUtil.addFacet(projectionFacet);
         val titleFacet = objectSpecification.getFacet(TitleFacet.class);
         if(canOverwrite(titleFacet)) {
-            FacetUtil.addFacet(new TitleFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
+            FacetUtil.addFacet(new TitleFacetFromProjectionFacet(projectionFacet, objectSpecification));
         }
         val iconFacet = objectSpecification.getFacet(IconFacet.class);
         if(canOverwrite(iconFacet)) {
-            FacetUtil.addFacet(new IconFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
+            FacetUtil.addFacet(new IconFacetFromProjectionFacet(projectionFacet, objectSpecification));
         }
         val cssClassFacet = objectSpecification.getFacet(CssClassFacet.class);
         if(canOverwrite(cssClassFacet)) {
-            FacetUtil.addFacet(new IconFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
+            FacetUtil.addFacet(new IconFacetFromProjectionFacet(projectionFacet, objectSpecification));
         }
     }
 

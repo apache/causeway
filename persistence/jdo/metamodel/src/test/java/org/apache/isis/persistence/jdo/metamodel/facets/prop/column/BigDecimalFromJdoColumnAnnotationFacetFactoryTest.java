@@ -33,17 +33,17 @@ import org.apache.isis.persistence.jdo.metamodel.testing.AbstractFacetFactoryTes
 
 import lombok.val;
 
-public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactoryTest
+public class BigDecimalFromJdoColumnAnnotationFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
-    private BigDecimalInferredFromJdoColumnAnnotationFacetFactory facetFactory;
+    private BigDecimalFromJdoColumnAnnotationFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
         val mmc = MetaModelContext_forTesting.buildDefault();
-        facetFactory = new BigDecimalInferredFromJdoColumnAnnotationFacetFactory(mmc);
+        facetFactory = new BigDecimalFromJdoColumnAnnotationFacetFactory(mmc);
     }
 
     @Override

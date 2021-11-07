@@ -27,11 +27,11 @@ import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 
 import lombok.val;
 
-public class ActionParameterChoicesFacetDerivedFromChoicesFacetFactory
+public class ActionParameterChoicesFacetFromChoicesFacetFactory
 extends FacetFactoryAbstract {
 
     @Inject
-    public ActionParameterChoicesFacetDerivedFromChoicesFacetFactory(final MetaModelContext mmc) {
+    public ActionParameterChoicesFacetFromChoicesFacetFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.PARAMETERS_ONLY);
     }
 

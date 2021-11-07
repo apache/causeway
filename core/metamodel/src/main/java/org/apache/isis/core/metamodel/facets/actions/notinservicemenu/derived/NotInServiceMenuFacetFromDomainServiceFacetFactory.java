@@ -31,11 +31,11 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory
+public class NotInServiceMenuFacetFromDomainServiceFacetFactory
 extends FacetFactoryAbstract {
 
     @Inject
-    public NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory(final MetaModelContext mmc) {
+    public NotInServiceMenuFacetFromDomainServiceFacetFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.ACTIONS_ONLY);
     }
 
@@ -58,7 +58,7 @@ extends FacetFactoryAbstract {
         }
 
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new NotInServiceMenuFacetDerivedFromDomainServiceFacet(natureOfService, facetHolder));
+        FacetUtil.addFacet(new NotInServiceMenuFacetFromDomainServiceFacet(natureOfService, facetHolder));
     }
 
 }

@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
 
-public class MaxLengthFacetDerivedFromJdoColumn
+public class MaxLengthFacetFromJdoColumnAnnotation
 extends MaxLengthFacetAbstract {
 
     public static Optional<MaxLengthFacet> create(
@@ -35,11 +35,11 @@ extends MaxLengthFacetAbstract {
 
         return jdoColumnIfAny
         .map(jdoColumn->
-            new MaxLengthFacetDerivedFromJdoColumn(
+            new MaxLengthFacetFromJdoColumnAnnotation(
                     jdoColumn.length(), holder));
     }
 
-    private MaxLengthFacetDerivedFromJdoColumn(
+    private MaxLengthFacetFromJdoColumnAnnotation(
             final int maxLength, final FacetHolder holder) {
         super(maxLength, holder);
     }

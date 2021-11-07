@@ -29,12 +29,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.logicaltype.classname.LogicalTypeFacetDerivedFromClassNameFactory;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.classname.LogicalTypeFacetFromClassNameFactory;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.classname.LogicalTypeFacetFromClassName;
 import org.apache.isis.core.metamodel.facets.value.annotation.LogicalTypeFacetForValueAnnotation;
 import org.apache.isis.core.metamodel.facets.value.annotation.ValueAnnotationFacetFactory;
 
-public class LogicalTypeFacetDerivedFromClassNameFactoryTest
+public class LogicalTypeFacetFromClassNameFactoryTest
 extends AbstractFacetFactoryJUnit4TestCase {
 
     private ObjectTypeFacetFactory facetFactory;
@@ -45,7 +45,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
     @Test
     public void installsFacet_passedThroughClassSubstitutor() {
 
-        facetFactory = LogicalTypeFacetDerivedFromClassNameFactory.forTesting(metaModelContext);
+        facetFactory = LogicalTypeFacetFromClassNameFactory.forTesting(metaModelContext);
 
         expectNoMethodsRemoved();
 
@@ -65,7 +65,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
     @Test
     public void installsFacet_onValues() {
 
-        facetFactory = LogicalTypeFacetDerivedFromClassNameFactory.forTesting(metaModelContext);
+        facetFactory = LogicalTypeFacetFromClassNameFactory.forTesting(metaModelContext);
 
         expectNoMethodsRemoved();
 

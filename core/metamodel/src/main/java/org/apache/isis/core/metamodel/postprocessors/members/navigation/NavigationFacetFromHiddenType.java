@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
-public class NavigationFacetDerivedFromHiddenType
+public class NavigationFacetFromHiddenType
 extends FacetAbstract
 implements
     NavigationFacet {
@@ -41,7 +41,7 @@ implements
         return NavigationFacet.class;
     }
 
-    public NavigationFacetDerivedFromHiddenType(final FacetHolder holder, final ObjectSpecification navigatedType) {
+    public NavigationFacetFromHiddenType(final FacetHolder holder, final ObjectSpecification navigatedType) {
         super(type(), holder);
         this.navigatedType = navigatedType;
     }

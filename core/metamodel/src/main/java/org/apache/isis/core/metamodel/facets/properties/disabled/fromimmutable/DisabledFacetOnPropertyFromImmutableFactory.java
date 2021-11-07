@@ -16,34 +16,46 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.properties.choices.enums;
+package org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable;
 
 import javax.inject.Inject;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 
-public class PropertyChoicesFacetDerivedFromChoicesFacetFactory
+import lombok.val;
+
+public class DisabledFacetOnPropertyFromImmutableFactory
 extends FacetFactoryAbstract {
 
     @Inject
-    public PropertyChoicesFacetDerivedFromChoicesFacetFactory(final MetaModelContext mmc) {
+    public DisabledFacetOnPropertyFromImmutableFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
+        val declaringClass = processMethodContext.getMethod().getDeclaringClass();
+        val spec = getSpecificationLoader().loadSpecification(declaringClass);
 
-        final Class<?> returnType = processMethodContext.getMethod().getReturnType();
+        spec.lookupNonFallbackFacet(ImmutableFacet.class)
+        .ifPresent(immutableFacet->{
+            val facetHolder = processMethodContext.getFacetHolder();
 
-        if(!getSpecificationLoader().loadSpecification(returnType).containsNonFallbackFacet(ChoicesFacet.class)) {
-            return;
-        }
+            val semantics = facetHolder.lookupNonFallbackFacet(DisabledFacet.class)
+            .map(DisabledFacet::getSemantics)
+            .orElse(DisabledFacet.Semantics.ENABLED);
 
-        addFacet(
-                new PropertyChoicesFacetDerivedFromChoicesFacet(processMethodContext.getFacetHolder()));
+            if(semantics.isEnabled()) {
+                return;
+            }
+            addFacet(
+                    DisabledFacetOnPropertyFromImmutable
+                    .forImmutable(facetHolder, immutableFacet));
+        });
     }
 
 }

@@ -28,9 +28,10 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.val;
 
-public class PropertyChoicesFacetDerivedFromChoicesFacet extends PropertyChoicesFacetAbstract {
+public class PropertyChoicesFacetFromChoicesFacet 
+extends PropertyChoicesFacetAbstract {
 
-    public PropertyChoicesFacetDerivedFromChoicesFacet(final FacetHolder holder) {
+    public PropertyChoicesFacetFromChoicesFacet(final FacetHolder holder) {
         super(holder);
     }
 

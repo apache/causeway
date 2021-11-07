@@ -30,7 +30,7 @@ import org.apache.isis.persistence.jdo.metamodel.testing.AbstractFacetFactoryTes
 
 import lombok.val;
 
-public class MandatoryDerivedFromJdoColumnAnnotationFacetFactoryTest
+public class MandatoryFromJdoColumnAnnotationFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
     private MandatoryFromJdoColumnAnnotationFacetFactory facetFactory;

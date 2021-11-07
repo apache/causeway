@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 
 import lombok.val;
 
-public class HiddenTypeFacetDerivedFromAuthorization
+public class HiddenTypeFacetFromAuthorization
 extends FacetAbstract
 implements HiddenTypeFacet {
 
@@ -36,7 +36,7 @@ implements HiddenTypeFacet {
         return HiddenTypeFacet.class;
     }
 
-    public HiddenTypeFacetDerivedFromAuthorization(final FacetHolder holder) {
+    public HiddenTypeFacetFromAuthorization(final FacetHolder holder) {
         super(type(), holder, Precedence.HIGH); // facet has final say, don't override
     }
 

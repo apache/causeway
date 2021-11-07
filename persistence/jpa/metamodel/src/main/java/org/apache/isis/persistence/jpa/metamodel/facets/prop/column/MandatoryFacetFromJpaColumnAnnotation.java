@@ -24,10 +24,11 @@ import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFace
 /**
  * Derived by presence of an <tt>@Column</tt> method.
  */
-public class MandatoryFacetDerivedFromJpaColumn extends MandatoryFacetAbstract {
+public class MandatoryFacetFromJpaColumnAnnotation 
+extends MandatoryFacetAbstract {
 
 
-    public MandatoryFacetDerivedFromJpaColumn(final FacetHolder holder, final boolean required) {
+    public MandatoryFacetFromJpaColumnAnnotation(final FacetHolder holder, final boolean required) {
         super(holder, Semantics.of(required));
     }
 

@@ -32,11 +32,11 @@ import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 
 import lombok.val;
 
-public class ContributingFacetDerivedFromMixinFacetFactory
+public class ContributingFacetFromMixinFacetFactory
 extends FacetFactoryAbstract {
 
     @Inject
-    public ContributingFacetDerivedFromMixinFacetFactory(final MetaModelContext mmc) {
+    public ContributingFacetFromMixinFacetFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.ACTIONS_ONLY);
     }
 

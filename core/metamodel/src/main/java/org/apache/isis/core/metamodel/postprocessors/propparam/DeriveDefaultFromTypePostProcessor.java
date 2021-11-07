@@ -24,8 +24,8 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetDerivedFromDefaultedFacet;
-import org.apache.isis.core.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetDerivedFromTypeFactory;
+import org.apache.isis.core.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetFromDefaultedFacet;
+import org.apache.isis.core.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetFromTypeFactory;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 
 /**
- * Installs {@link PropertyDefaultFacetDerivedFromTypeFactory} as a fallback.
+ * Installs {@link PropertyDefaultFacetFromTypeFactory} as a fallback.
  */
 public class DeriveDefaultFromTypePostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
@@ -60,7 +60,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         }
         property.getElementType()
         .lookupNonFallbackFacet(DefaultedFacet.class)
-        .ifPresent(specFacet -> FacetUtil.addFacet(new PropertyDefaultFacetDerivedFromDefaultedFacet(
+        .ifPresent(specFacet -> FacetUtil.addFacet(new PropertyDefaultFacetFromDefaultedFacet(
                                     specFacet, facetedMethodFor(property))));
     }
 

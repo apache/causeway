@@ -28,21 +28,21 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
- * Installs the {@link HiddenTypeFacetDerivedFromAuthorization} on the
+ * Installs the {@link HiddenTypeFacetFromAuthorization} on the
  * {@link ObjectSpecification}.
  */
-public class HiddenTypeFacetDerivedFromAuthorizationFactory
+public class HiddenTypeFacetFromAuthorizationFactory
 extends FacetFactoryAbstract {
 
     @Inject
-    public HiddenTypeFacetDerivedFromAuthorizationFactory(final MetaModelContext mmc) {
+    public HiddenTypeFacetFromAuthorizationFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
-        FacetUtil.addFacet(new HiddenTypeFacetDerivedFromAuthorization(facetHolder));
+        FacetUtil.addFacet(new HiddenTypeFacetFromAuthorization(facetHolder));
     }
 
 }

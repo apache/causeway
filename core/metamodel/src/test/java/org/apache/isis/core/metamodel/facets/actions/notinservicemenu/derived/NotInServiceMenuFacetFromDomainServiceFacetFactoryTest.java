@@ -36,14 +36,14 @@ import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServi
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacetAbstract;
 
-public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactoryTest
+public class NotInServiceMenuFacetFromDomainServiceFacetFactoryTest
 extends AbstractFacetFactoryJUnit4TestCase {
 
-    private NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory facetFactory;
+    private NotInServiceMenuFacetFromDomainServiceFacetFactory facetFactory;
 
     @Before
     public void setUp() throws Exception {
-        facetFactory = new NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory(metaModelContext);
+        facetFactory = new NotInServiceMenuFacetFromDomainServiceFacetFactory(metaModelContext);
     }
 
     //TODO[2142] NatureOfService.VIEW_CONTRIBUTIONS_ONLY was deprecated, remove ?

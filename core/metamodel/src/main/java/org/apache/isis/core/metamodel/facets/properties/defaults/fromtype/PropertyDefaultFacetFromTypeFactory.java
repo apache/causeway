@@ -28,11 +28,11 @@ import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class PropertyDefaultFacetDerivedFromTypeFactory
+public class PropertyDefaultFacetFromTypeFactory
 extends FacetFactoryAbstract {
 
     @Inject
-    public PropertyDefaultFacetDerivedFromTypeFactory(final MetaModelContext mmc) {
+    public PropertyDefaultFacetFromTypeFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
@@ -56,7 +56,7 @@ extends FacetFactoryAbstract {
         final DefaultedFacet returnTypeDefaultedFacet = getDefaultedFacet(returnType);
         if (returnTypeDefaultedFacet != null) {
             FacetUtil.addFacet(
-                    new PropertyDefaultFacetDerivedFromDefaultedFacet(
+                    new PropertyDefaultFacetFromDefaultedFacet(
                             returnTypeDefaultedFacet, processMethodContext.getFacetHolder()));
         }
     }
