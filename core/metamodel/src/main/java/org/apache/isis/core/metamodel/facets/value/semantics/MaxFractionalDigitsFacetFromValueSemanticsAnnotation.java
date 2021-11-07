@@ -16,33 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.param.bigdecimal.javaxvaldigits;
+package org.apache.isis.core.metamodel.facets.value.semantics;
 
 import java.util.Optional;
 
-import javax.validation.constraints.Digits;
-
+import org.apache.isis.applib.annotation.ValueSemantics;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetAbstract;
 
-public class MaxTotalDigitsFacetOnParameterFromJavaxValidationDigitsAnnotation
-extends MaxTotalDigitsFacetAbstract {
+public class MaxFractionalDigitsFacetFromValueSemanticsAnnotation
+extends MaxFractionalDigitsFacetAbstract {
 
-    public static Optional<MaxTotalDigitsFacet> create(
-            final Optional<Digits> digitsIfAny,
+    public static Optional<MaxFractionalDigitsFacet> create(
+            final Optional<ValueSemantics> digitsIfAny,
             final FacetHolder holder) {
 
         return digitsIfAny
         .map(digits->{
-            return new MaxTotalDigitsFacetOnParameterFromJavaxValidationDigitsAnnotation(
-                    digits.integer() + digits.fraction(), holder);
+            return new MaxFractionalDigitsFacetFromValueSemanticsAnnotation(
+                    digits.maxFractionalDigits(), holder);
         });
    }
 
-   private MaxTotalDigitsFacetOnParameterFromJavaxValidationDigitsAnnotation(
-           final int maxTotalDigits, final FacetHolder holder) {
-       super(maxTotalDigits, holder);
+   private MaxFractionalDigitsFacetFromValueSemanticsAnnotation(
+           final int maxFractionalDigits, final FacetHolder holder) {
+       super(maxFractionalDigits, holder);
    }
 
 

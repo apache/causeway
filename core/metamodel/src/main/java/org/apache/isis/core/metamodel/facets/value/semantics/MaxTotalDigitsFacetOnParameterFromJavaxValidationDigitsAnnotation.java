@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigits;
+package org.apache.isis.core.metamodel.facets.value.semantics;
 
 import java.util.Optional;
 
@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacetAbstract;
 
-public class MaxTotalDigitsFacetOnPropertyFromJavaxValidationDigitsAnnotation
+public class MaxTotalDigitsFacetOnParameterFromJavaxValidationDigitsAnnotation
 extends MaxTotalDigitsFacetAbstract {
 
     public static Optional<MaxTotalDigitsFacet> create(
@@ -35,12 +35,12 @@ extends MaxTotalDigitsFacetAbstract {
 
         return digitsIfAny
         .map(digits->{
-            return new MaxTotalDigitsFacetOnPropertyFromJavaxValidationDigitsAnnotation(
+            return new MaxTotalDigitsFacetOnParameterFromJavaxValidationDigitsAnnotation(
                     digits.integer() + digits.fraction(), holder);
         });
    }
 
-   private MaxTotalDigitsFacetOnPropertyFromJavaxValidationDigitsAnnotation(
+   private MaxTotalDigitsFacetOnParameterFromJavaxValidationDigitsAnnotation(
            final int maxTotalDigits, final FacetHolder holder) {
        super(maxTotalDigits, holder);
    }

@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 import javax.inject.Inject;
+import javax.validation.constraints.Digits;
 
 import org.apache.isis.applib.annotation.ValueSemantics;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -47,28 +48,66 @@ extends FacetFactoryAbstract {
                         ValueSemantics.class,
                         () -> MetaModelValidatorForAmbiguousMixinAnnotations
                             .addValidationFailure(processMethodContext.getFacetHolder(), ValueSemantics.class));
-        processProvider(processMethodContext.getFacetHolder(), valueSemanticsIfAny);
+
+        // support for @javax.validataion.Digits
+        val digitsIfAny = BigDecimal.class == processMethodContext.getMethod().getReturnType()
+                ? processMethodContext
+                    .synthesizeOnMethodOrMixinType(
+                            Digits.class,
+                            () -> MetaModelValidatorForAmbiguousMixinAnnotations
+                                .addValidationFailure(processMethodContext.getFacetHolder(), Digits.class))
+                : Optional.<Digits>empty();
+
+        processAll(processMethodContext.getFacetHolder(), valueSemanticsIfAny, digitsIfAny);
     }
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        if(BigDecimal.class != processParameterContext.getParameterType()) {
-            return;
-        }
         val valueSemanticsIfAny = processParameterContext.synthesizeOnParameter(ValueSemantics.class);
-        processProvider(processParameterContext.getFacetHolder(), valueSemanticsIfAny);
+
+        // support for @javax.validataion.Digits
+        val digitsIfAny = BigDecimal.class == processParameterContext.getParameterType()
+                ? processParameterContext.synthesizeOnParameter(Digits.class)
+                : Optional.<Digits>empty();
+
+        processAll(processParameterContext.getFacetHolder(), valueSemanticsIfAny, digitsIfAny);
     }
 
     // -- HELPER
 
-    void processProvider(
+    private void processAll(
             final TypedHolderAbstract facetHolder,
-            final Optional<ValueSemantics> valueSemanticsIfAny) {
+            final Optional<ValueSemantics> valueSemanticsIfAny,
+            final Optional<Digits> digitsIfAny) {
+        processProvider(facetHolder, valueSemanticsIfAny, digitsIfAny);
+        processDigits(facetHolder, valueSemanticsIfAny, digitsIfAny);
+    }
+
+    private void processProvider(
+            final TypedHolderAbstract facetHolder,
+            final Optional<ValueSemantics> valueSemanticsIfAny,
+            final Optional<Digits> digitsIfAny) {
 
         // check for @ValueSemantics(provider=...)
         addFacetIfPresent(
                 ValueSemanticsSelectingFacetForAnnotation
                 .create(valueSemanticsIfAny, facetHolder));
+    }
+
+    private void processDigits(
+            final TypedHolderAbstract facetHolder,
+            final Optional<ValueSemantics> valueSemanticsIfAny,
+            final Optional<Digits> digitsIfAny){
+
+        addFacetIfPresent(
+                MaxTotalDigitsFacetOnPropertyFromJavaxValidationDigitsAnnotation
+                .create(digitsIfAny, facetHolder));
+
+        addFacetIfPresent(
+                MaxFractionalDigitsFacetOnPropertyFromJavaxValidationDigitsAnnotation
+                .create(digitsIfAny, facetHolder));
+
+        //FIXME[ISIS-2871] actually process @ValueSemantics(min/max...) and merge with the above
     }
 
 }
