@@ -23,8 +23,8 @@ import java.util.Optional;
 import javax.validation.constraints.Digits;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxFractionDigitsFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxFractionDigitsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionDigitsFacetAbstract;
 
 public class MaxFractionDigitsFacetOnPropertyFromJavaxValidationDigitsAnnotation
 extends MaxFractionDigitsFacetAbstract {

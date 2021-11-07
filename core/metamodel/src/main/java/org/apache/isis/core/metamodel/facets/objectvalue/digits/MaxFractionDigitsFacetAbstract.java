@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.objectvalue.maxlen;
+package org.apache.isis.core.metamodel.facets.objectvalue.digits;
 
 import java.util.function.BiConsumer;
 

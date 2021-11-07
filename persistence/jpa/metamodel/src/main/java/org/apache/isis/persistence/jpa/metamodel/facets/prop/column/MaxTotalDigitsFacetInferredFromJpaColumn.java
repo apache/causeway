@@ -23,8 +23,8 @@ import java.util.Optional;
 import javax.persistence.Column;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxTotalDigitsFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxTotalDigitsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacetAbstract;
 
 public class MaxTotalDigitsFacetInferredFromJpaColumn
 extends MaxTotalDigitsFacetAbstract {
