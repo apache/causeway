@@ -33,7 +33,7 @@ import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
-import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.common.v2.ValueType;
 
@@ -124,8 +124,8 @@ implements
         }
 
         // evaluate any facets that provide the MaximumFractionDigits
-        feature.lookupFacet(MaxFractionDigitsFacet.class).stream()
-        .mapToInt(MaxFractionDigitsFacet::getMaximumFractionDigits)
+        feature.lookupFacet(MaxFractionalDigitsFacet.class).stream()
+        .mapToInt(MaxFractionalDigitsFacet::getMaxFractionalDigits)
         .filter(digits->digits>-1)
         .forEach(digits-> // cardinality 0 or 1
             format.setMaximumFractionDigits(digits));

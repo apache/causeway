@@ -23,13 +23,13 @@ import java.util.Optional;
 import javax.validation.constraints.Digits;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionDigitsFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionDigitsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetAbstract;
 
 public class MaxFractionDigitsFacetOnPropertyFromJavaxValidationDigitsAnnotation
-extends MaxFractionDigitsFacetAbstract {
+extends MaxFractionalDigitsFacetAbstract {
 
-     public static Optional<MaxFractionDigitsFacet> create(
+     public static Optional<MaxFractionalDigitsFacet> create(
              final Optional<Digits> digitsIfAny,
              final FacetHolder holder) {
 

@@ -26,7 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Specify the minimum number of characters for an autocomplete search argument.
+ * Specify the minimum number of characters for an auto-complete search argument.
  * @since 1.x {@index}
  */
 @Inherited

@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.param.bigdecimal.javaxvaldigits.BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.param.bigdecimal.javaxvaldigits.MaxFractionDigitsFacetOnParameterFromJavaxValidationDigitsAnnotation;
@@ -92,11 +92,11 @@ extends AbstractFacetFactoryTest {
         }
 
         if(maxFractionalDigits>=0) {
-            final MaxFractionDigitsFacet facet = facetedMethod.getFacet(MaxFractionDigitsFacet.class);
+            final MaxFractionalDigitsFacet facet = facetedMethod.getFacet(MaxFractionalDigitsFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof MaxFractionDigitsFacetOnPropertyFromJavaxValidationDigitsAnnotation
                     ||facet instanceof MaxFractionDigitsFacetOnParameterFromJavaxValidationDigitsAnnotation);
-            assertThat(facet.getMaximumFractionDigits(), is(maxFractionalDigits));
+            assertThat(facet.getMaxFractionalDigits(), is(maxFractionalDigits));
         }
     }
 

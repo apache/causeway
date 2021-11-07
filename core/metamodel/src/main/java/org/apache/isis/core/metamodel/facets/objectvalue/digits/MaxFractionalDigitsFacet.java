@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.facets.objectvalue.digits;
 
 import javax.validation.constraints.Digits;
 
+import org.apache.isis.applib.annotation.ValueSemantics;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
@@ -34,12 +35,13 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * <li><tt>12345.0</tt> has 1 fraction digit</li>
  * </ul>
  */
-public interface MaxFractionDigitsFacet
+public interface MaxFractionalDigitsFacet
 extends Facet {
 
     /**
      * eg. as provided by {@link Digits#fraction()}
+     * and {@link ValueSemantics#maxFractionalDigits()}
      */
-    int getMaximumFractionDigits();
+    int getMaxFractionalDigits();
 
 }

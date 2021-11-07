@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.facets.objectvalue.digits;
 
 import javax.validation.constraints.Digits;
 
+import org.apache.isis.applib.annotation.ValueSemantics;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
@@ -38,6 +39,7 @@ extends Facet {
 
     /**
      * eg. as provided by {@link Digits#fraction()}
+     * and {@link ValueSemantics#maxTotalDigits()}
      */
     int maxTotalDigits();
 

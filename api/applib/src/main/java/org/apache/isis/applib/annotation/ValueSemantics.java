@@ -45,6 +45,8 @@ public @interface ValueSemantics {
     String provider()
             default "";
 
+    // -- NUMBER CONSTRAINTS
+
     /**
      * EXPERIMENTAL - considered to be moved to a separate {@code @Digits} annotation<p>
      * If associated with a {@link Number}, the minimum number of integer digits required for

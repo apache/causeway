@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -104,10 +104,10 @@ implements MetaModelRefiner {
                             b.getClass().getSimpleName());
                 }));
 
-        association.lookupFacet(MaxFractionDigitsFacet.class)
-        .map(MaxFractionDigitsFacet::getSharedFacetRankingElseFail)
+        association.lookupFacet(MaxFractionalDigitsFacet.class)
+        .map(MaxFractionalDigitsFacet::getSharedFacetRankingElseFail)
         .ifPresent(facetRanking->facetRanking
-                .visitTopRankPairsSemanticDiffering(MaxFractionDigitsFacet.class, (a, b)->{
+                .visitTopRankPairsSemanticDiffering(MaxFractionalDigitsFacet.class, (a, b)->{
 
                     ValidationFailure.raiseFormatted(
                             association,
