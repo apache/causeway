@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.value.semantics;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -53,10 +52,10 @@ extends FacetFactoryAbstract {
 
         // support for @javax.validation.constraints.Digits
         val digitsIfAny = processMethodContext
-                    .synthesizeOnMethodOrMixinType(
-                            Digits.class,
-                            () -> MetaModelValidatorForAmbiguousMixinAnnotations
-                                .addValidationFailure(processMethodContext.getFacetHolder(), Digits.class));
+                .synthesizeOnMethodOrMixinType(
+                        Digits.class,
+                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
+                            .addValidationFailure(processMethodContext.getFacetHolder(), Digits.class));
 
         processAll(processMethodContext.getFacetHolder(), valueSemanticsIfAny, digitsIfAny);
     }
@@ -66,9 +65,7 @@ extends FacetFactoryAbstract {
         val valueSemanticsIfAny = processParameterContext.synthesizeOnParameter(ValueSemantics.class);
 
         // support for @javax.validation.constraints.Digits
-        val digitsIfAny = BigDecimal.class == processParameterContext.getParameterType()
-                ? processParameterContext.synthesizeOnParameter(Digits.class)
-                : Optional.<Digits>empty();
+        val digitsIfAny = processParameterContext.synthesizeOnParameter(Digits.class);
 
         processAll(processParameterContext.getFacetHolder(), valueSemanticsIfAny, digitsIfAny);
     }
