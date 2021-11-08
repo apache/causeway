@@ -177,7 +177,7 @@ extends AbstractFacetFactoryTest {
         assertDigitsFacets(facetedMethodParameter, 18, 4);
     }
 
-    // -- CONTRAINT MERGERS
+    // -- CONSTRAINT MERGERS
 
     public void testMultipleAnnotationsMergedOnProperty() {
         // given

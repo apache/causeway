@@ -52,13 +52,11 @@ extends FacetFactoryAbstract {
                             .addValidationFailure(processMethodContext.getFacetHolder(), ValueSemantics.class));
 
         // support for @javax.validation.constraints.Digits
-        val digitsIfAny = BigDecimal.class == processMethodContext.getMethod().getReturnType()
-                ? processMethodContext
+        val digitsIfAny = processMethodContext
                     .synthesizeOnMethodOrMixinType(
                             Digits.class,
                             () -> MetaModelValidatorForAmbiguousMixinAnnotations
-                                .addValidationFailure(processMethodContext.getFacetHolder(), Digits.class))
-                : Optional.<Digits>empty();
+                                .addValidationFailure(processMethodContext.getFacetHolder(), Digits.class));
 
         processAll(processMethodContext.getFacetHolder(), valueSemanticsIfAny, digitsIfAny);
     }
