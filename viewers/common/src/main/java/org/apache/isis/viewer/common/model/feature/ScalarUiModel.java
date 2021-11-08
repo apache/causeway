@@ -57,7 +57,7 @@ public interface ScalarUiModel {
      */
     default Integer getLength() {
         return getMetaModel().lookupFacet(MaxTotalDigitsFacet.class)
-                .map(MaxTotalDigitsFacet::maxTotalDigits)
+                .map(MaxTotalDigitsFacet::getMaxTotalDigits)
                 .orElse(null);
     }
 

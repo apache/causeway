@@ -29,6 +29,8 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.TypedHolderAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacetAbstract;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
 
 import lombok.val;
@@ -49,7 +51,7 @@ extends FacetFactoryAbstract {
                         () -> MetaModelValidatorForAmbiguousMixinAnnotations
                             .addValidationFailure(processMethodContext.getFacetHolder(), ValueSemantics.class));
 
-        // support for @javax.validataion.Digits
+        // support for @javax.validation.constraints.Digits
         val digitsIfAny = BigDecimal.class == processMethodContext.getMethod().getReturnType()
                 ? processMethodContext
                     .synthesizeOnMethodOrMixinType(
@@ -65,7 +67,7 @@ extends FacetFactoryAbstract {
     public void processParams(final ProcessParameterContext processParameterContext) {
         val valueSemanticsIfAny = processParameterContext.synthesizeOnParameter(ValueSemantics.class);
 
-        // support for @javax.validataion.Digits
+        // support for @javax.validation.constraints.Digits
         val digitsIfAny = BigDecimal.class == processParameterContext.getParameterType()
                 ? processParameterContext.synthesizeOnParameter(Digits.class)
                 : Optional.<Digits>empty();
@@ -100,14 +102,31 @@ extends FacetFactoryAbstract {
             final Optional<Digits> digitsIfAny){
 
         addFacetIfPresent(
-                MaxTotalDigitsFacetOnPropertyFromJavaxValidationDigitsAnnotation
-                .create(digitsIfAny, facetHolder));
+                MaxTotalDigitsFacetAbstract.minimum(
+                        MaxTotalDigitsFacetFromValueSemanticsAnnotation
+                        .create(valueSemanticsIfAny, facetHolder),
+                        // support for @javax.validation.constraints.Digits
+                        MaxTotalDigitsFacetFromJavaxValidationDigitsAnnotation
+                        .create(digitsIfAny, facetHolder)
+                        ));
 
         addFacetIfPresent(
-                MaxFractionalDigitsFacetOnPropertyFromJavaxValidationDigitsAnnotation
-                .create(digitsIfAny, facetHolder));
+                MinIntegerDigitsFacetFromValueSemanticsAnnotation
+                .create(valueSemanticsIfAny, facetHolder));
 
-        //FIXME[ISIS-2871] actually process @ValueSemantics(min/max...) and merge with the above
+        addFacetIfPresent(
+                MaxFractionalDigitsFacetAbstract.minimum(
+                        MaxFractionalDigitsFacetFromValueSemanticsAnnotation
+                        .create(valueSemanticsIfAny, facetHolder),
+                        // support for @javax.validation.constraints.Digits
+                        MaxFractionalDigitsFacetFromJavaxValidationDigitsAnnotation
+                        .create(digitsIfAny, facetHolder)
+                        ));
+
+        addFacetIfPresent(
+                MinFractionalDigitsFacetFromValueSemanticsAnnotation
+                .create(valueSemanticsIfAny, facetHolder));
+
     }
 
 }

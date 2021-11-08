@@ -104,7 +104,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
                         valueAdapterIfAny != null ? valueAdapterIfAny.getSpecification() : null);
 
                 final int totalDigits = lookupFacet(MaxTotalDigitsFacet.class, facetHolders)
-                        .map(MaxTotalDigitsFacet::maxTotalDigits)
+                        .map(MaxTotalDigitsFacet::getMaxTotalDigits)
                         .orElse(-1);
 
                 final int scale = lookupFacet(MaxFractionalDigitsFacet.class, facetHolders)

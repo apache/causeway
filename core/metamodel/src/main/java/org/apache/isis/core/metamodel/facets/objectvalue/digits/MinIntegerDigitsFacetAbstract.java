@@ -55,10 +55,10 @@ implements MinIntegerDigitsFacet {
 
     @Override
     public boolean semanticEquals(@NonNull final Facet other) {
-        return other instanceof MinFractionalDigitsFacet
+        return other instanceof MinIntegerDigitsFacet
                 ? Integer.compare(
                         this.getMinIntegerDigits(),
-                        ((MinFractionalDigitsFacet)other).getMinFractionalDigits()) == 0
+                        ((MinIntegerDigitsFacet)other).getMinIntegerDigits()) == 0
                 : false;
     }
 

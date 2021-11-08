@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacetAbstract;
 
-public class MaxTotalDigitsFacetOnParameterFromJavaxValidationDigitsAnnotation
+public class MaxTotalDigitsFacetFromJavaxValidationDigitsAnnotation
 extends MaxTotalDigitsFacetAbstract {
 
     public static Optional<MaxTotalDigitsFacet> create(
@@ -35,12 +35,12 @@ extends MaxTotalDigitsFacetAbstract {
 
         return digitsIfAny
         .map(digits->{
-            return new MaxTotalDigitsFacetOnParameterFromJavaxValidationDigitsAnnotation(
+            return new MaxTotalDigitsFacetFromJavaxValidationDigitsAnnotation(
                     digits.integer() + digits.fraction(), holder);
         });
    }
 
-   private MaxTotalDigitsFacetOnParameterFromJavaxValidationDigitsAnnotation(
+   private MaxTotalDigitsFacetFromJavaxValidationDigitsAnnotation(
            final int maxTotalDigits, final FacetHolder holder) {
        super(maxTotalDigits, holder);
    }

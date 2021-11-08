@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.objectvalue.digits;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -26,7 +27,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.experimental.Accessors;
 
 public abstract class MaxTotalDigitsFacetAbstract
 extends FacetAbstract
@@ -36,7 +36,7 @@ implements MaxTotalDigitsFacet {
         return MaxTotalDigitsFacet.class;
     }
 
-    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    @Getter(onMethod_ = {@Override})
     private final int maxTotalDigits;
 
     protected MaxTotalDigitsFacetAbstract(
@@ -58,8 +58,8 @@ implements MaxTotalDigitsFacet {
     public boolean semanticEquals(@NonNull final Facet other) {
         return other instanceof MaxTotalDigitsFacet
                 ? Integer.compare(
-                        this.maxTotalDigits(),
-                        ((MaxTotalDigitsFacet)other).maxTotalDigits()) == 0
+                        this.getMaxTotalDigits(),
+                        ((MaxTotalDigitsFacet)other).getMaxTotalDigits()) == 0
                 : false;
     }
 
@@ -71,4 +71,20 @@ implements MaxTotalDigitsFacet {
                 : String.valueOf(maxTotalDigits));
     }
 
+    /**
+     * If equal, first argument wins over second.
+     */
+    public static Optional<MaxTotalDigitsFacet> minimum(
+            final Optional<MaxTotalDigitsFacet> a,
+            final Optional<MaxTotalDigitsFacet> b) {
+        if(b.isEmpty()) {
+            return a;
+        }
+        if(a.isEmpty()) {
+            return b;
+        }
+        return a.get().getMaxTotalDigits() <= b.get().getMaxTotalDigits()
+                ? a
+                : b;
+    }
 }

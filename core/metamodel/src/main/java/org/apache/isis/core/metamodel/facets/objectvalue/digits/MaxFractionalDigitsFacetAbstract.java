@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.objectvalue.digits;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -68,6 +69,23 @@ implements MaxFractionalDigitsFacet {
         visitor.accept("maxFractionalDigits", maxFractionalDigits <0
                 ? "unlimited"
                 : String.valueOf(maxFractionalDigits));
+    }
+
+    /**
+     * If equal, first argument wins over second.
+     */
+    public static Optional<MaxFractionalDigitsFacet> minimum(
+            final Optional<MaxFractionalDigitsFacet> a,
+            final Optional<MaxFractionalDigitsFacet> b) {
+        if(b.isEmpty()) {
+            return a;
+        }
+        if(a.isEmpty()) {
+            return b;
+        }
+        return a.get().getMaxFractionalDigits() <= b.get().getMaxFractionalDigits()
+                ? a
+                : b;
     }
 
 }

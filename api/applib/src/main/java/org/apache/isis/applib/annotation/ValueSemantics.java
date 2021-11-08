@@ -49,24 +49,6 @@ public @interface ValueSemantics {
 
     /**
      * EXPERIMENTAL - considered to be moved to a separate {@code @Digits} annotation<p>
-     * If associated with a {@link Number}, the minimum number of integer digits required for
-     * this number.<br>
-     * default = {@code 1}
-     */
-    int minIntegerDigits()
-            default 1;
-
-    /**
-     * EXPERIMENTAL - considered to be moved to a separate {@code @Digits} annotation<p>
-     * If associated with a {@link BigDecimal}, the minimum number of fractional digits
-     * required for this number.<br>
-     * default = {@code 0}
-     */
-    int minFractionalDigits()
-            default 0;
-
-    /**
-     * EXPERIMENTAL - considered to be moved to a separate {@code @Digits} annotation<p>
      * If associated with a {@link Number}, the maximum number of total digits accepted for
      * this number.<br>
      * Can be omitted, if {@link Column#precision()} is used.<br>
@@ -79,6 +61,15 @@ public @interface ValueSemantics {
 
     /**
      * EXPERIMENTAL - considered to be moved to a separate {@code @Digits} annotation<p>
+     * If associated with a {@link Number}, the minimum number of integer digits required for
+     * this number.<br>
+     * default = {@code 1}
+     */
+    int minIntegerDigits()
+            default 1;
+
+    /**
+     * EXPERIMENTAL - considered to be moved to a separate {@code @Digits} annotation<p>
      * If associated with a {@link BigDecimal}, the maximum number of fractional digits accepted
      * for this number.<br>
      * Can be omitted, if {@link Column#scale()} is used.<br>
@@ -88,5 +79,14 @@ public @interface ValueSemantics {
      */
     int maxFractionalDigits()
             default 30;
+
+    /**
+     * EXPERIMENTAL - considered to be moved to a separate {@code @Digits} annotation<p>
+     * If associated with a {@link BigDecimal}, the minimum number of fractional digits
+     * required for this number.<br>
+     * default = {@code 0}
+     */
+    int minFractionalDigits()
+            default 0;
 
 }

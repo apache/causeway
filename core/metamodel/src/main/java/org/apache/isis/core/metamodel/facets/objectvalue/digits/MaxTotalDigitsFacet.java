@@ -41,6 +41,6 @@ extends Facet {
      * eg. as provided by {@link Digits#fraction()}
      * and {@link ValueSemantics#maxTotalDigits()}
      */
-    int maxTotalDigits();
+    int getMaxTotalDigits();
 
 }
