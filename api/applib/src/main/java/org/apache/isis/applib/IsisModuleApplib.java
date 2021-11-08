@@ -53,6 +53,7 @@ import org.apache.isis.applib.services.publishing.log.EntityPropertyChangeLogger
 import org.apache.isis.applib.services.publishing.log.ExecutionLogger;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.session.SessionLoggingServiceLogging;
+import org.apache.isis.applib.services.sitemap.SitemapServiceMenu;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.ImpersonateMenu;
 import org.apache.isis.applib.services.user.ImpersonateStopMenu;
@@ -101,6 +102,7 @@ import org.apache.isis.schema.IsisModuleSchema;
         ClockService.class,
         ConfigurationMenu.class,
         LayoutServiceMenu.class,
+        SitemapServiceMenu.class,
         ImpersonateMenu.class,
         ImpersonateStopMenu.class,
         MetaModelServiceMenu.class,
