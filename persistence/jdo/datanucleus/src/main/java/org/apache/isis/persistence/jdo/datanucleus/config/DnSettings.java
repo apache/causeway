@@ -108,7 +108,8 @@ public class DnSettings {
             // nothing further to do
         }
 
-        props.computeIfAbsent(PropertyNames.PROPERTY_OBJECT_PROVIDER_CLASS_NAME, key->DnObjectProviderForIsis.class.getName());
+        props.computeIfAbsent(PropertyNames.PROPERTY_STATE_MANAGER_CLASS_NAME,
+                key->DnObjectProviderForIsis.class.getName());
 
     }
 
