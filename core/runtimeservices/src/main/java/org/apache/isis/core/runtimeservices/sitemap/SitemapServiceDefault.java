@@ -27,10 +27,13 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.layout.grid.Grid;
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.layout.Style;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.services.sitemap.SitemapService;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -54,12 +57,26 @@ public class SitemapServiceDefault implements SitemapService {
 
         val adoc = new StringBuilder();
         adoc.append(String.format("= %s\n\n", title));
+        adoc.append(":sectnums:\n\n");
 
         val menuBars = menuBarsService.menuBars(MenuBarsService.Type.DEFAULT);
-        menuBars.visit(actionLayout->{
-            //TODO structor by sections
-            adoc.append(String.format("== %s\n\n", actionLayout.getId()));
-        });
+
+        menuBars.visit(BS3MenuBars.VisitorAdapter.visitingMenus(menu->{
+            val menuName = _Strings.isNotEmpty(menu.getNamed())
+                ? menu.getNamed()
+                : "Unnamed Menu";
+
+            adoc.append(String.format("== %s\n\n", menuName));
+
+            _NullSafe.stream(menu.getSections())
+            .forEach(menuSection->{
+                val sectionName = _Strings.isNotEmpty(menuSection.getNamed())
+                        ? menuSection.getNamed()
+                        : "Unnamed Section";
+                adoc.append(String.format("=== %s\n\n", sectionName));
+            });
+
+        }));
 
         return adoc.toString();
     }
@@ -93,6 +110,5 @@ public class SitemapServiceDefault implements SitemapService {
         }
         throw new IllegalArgumentException("unsupported style");
     }
-
 
 }
