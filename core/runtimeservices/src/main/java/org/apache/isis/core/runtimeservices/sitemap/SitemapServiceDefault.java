@@ -18,6 +18,9 @@
  */
 package org.apache.isis.core.runtimeservices.sitemap;
 
+import java.util.Optional;
+import java.util.Stack;
+
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -26,6 +29,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.layout.component.ActionLayoutData;
+import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.applib.layout.component.FieldSet;
+import org.apache.isis.applib.layout.component.PropertyLayoutData;
+import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
 import org.apache.isis.applib.services.grid.GridService;
@@ -35,6 +43,8 @@ import org.apache.isis.applib.services.sitemap.SitemapService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
+import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.RequiredArgsConstructor;
@@ -74,6 +84,70 @@ public class SitemapServiceDefault implements SitemapService {
                         ? menuSection.getNamed()
                         : "Unnamed Section";
                 adoc.append(String.format("=== %s\n\n", sectionName));
+
+                _NullSafe.stream(menuSection.getServiceActions())
+                .map(this::lookupAction)
+                .flatMap(Optional::stream)
+                .forEach(menuAction->{
+                    adoc.append(String.format("==== %s\n\n", menuAction.getCanonicalFriendlyName()));
+                    menuAction.getCanonicalDescription()
+                    .ifPresent(describedAs->{
+                        adoc.append(String.format("_%s_\n\n", describedAs));
+                    });
+
+                    val actionReturnType = menuAction.getReturnType();
+                    val actionElementType = menuAction.getElementType();
+
+                    if(actionElementType.getCorrespondingClass()==void.class) {
+                        adoc.append("WARNING: ");
+                    }
+                    if(actionReturnType.isParentedOrFreeCollection()) {
+                        adoc.append(String.format("Returns collection of: `%s`\n\n", actionElementType.getLogicalTypeName()));
+                    } else {
+                        adoc.append(String.format("Returns scalar of: `%s`\n\n", actionElementType.getLogicalTypeName()));
+                    }
+
+                    val groupStack = new Stack<String>();
+                    groupStack.push("Top-Bar");
+
+                    val grid = toGrid(actionElementType.getCorrespondingClass(), Style.CURRENT);
+                    grid.visit(new Grid.VisitorAdapter() {
+                        @Override public void visit(final ActionLayoutData actionLayoutData) {
+                            actionElementType.getAction(actionLayoutData.getId())
+                            .ifPresent(action->{
+                                if(!groupStack.isEmpty()){
+                                    adoc.append(String.format("===== %s\n\n", groupStack.pop()));
+                                }
+                                adoc.append(String.format("* [ ] Action `%s`\n\n", action.getCanonicalFriendlyName()));
+                            });
+                        }
+                        @Override public void visit(final PropertyLayoutData propertyLayoutData) {
+                            actionElementType.getProperty(propertyLayoutData.getId())
+                            .ifPresent(property->{
+                                if(!groupStack.isEmpty()){
+                                    adoc.append(String.format("===== %s\n\n", groupStack.pop()));
+                                }
+                                adoc.append(String.format("* [ ] Property `%s`\n\n", property.getCanonicalFriendlyName()));
+                            });
+                        }
+                        @Override public void visit(final CollectionLayoutData collectionLayoutData) {
+                            actionElementType.getProperty(collectionLayoutData.getId())
+                            .ifPresent(collection->{
+                                groupStack.clear();
+                                adoc.append(String.format("Collection %s\n\n", collection.getCanonicalFriendlyName()));
+                            });
+                        }
+                        @Override public void visit(final FieldSet fieldSet) {
+                            if(_NullSafe.isEmpty(fieldSet.getActions())) {
+                                return;
+                            }
+                            groupStack.clear();
+                            adoc.append(String.format("===== FieldSet %s\n\n", fieldSet.getName()));
+                        }
+                    });
+
+                });
+
             });
 
         }));
@@ -82,6 +156,12 @@ public class SitemapServiceDefault implements SitemapService {
     }
 
     // -- HELPER
+
+    private Optional<ObjectAction> lookupAction(final ServiceActionLayoutData actionLayout) {
+        return specificationLoader
+        .specForLogicalTypeName(actionLayout.getLogicalTypeName())
+        .map(typeSpec->typeSpec.getAction(actionLayout.getId(), ActionType.USER).orElse(null));
+    }
 
     private Grid toGrid(final Class<?> domainClass, final Style style) {
 

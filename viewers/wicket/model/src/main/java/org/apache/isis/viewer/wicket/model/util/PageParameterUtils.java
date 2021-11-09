@@ -219,7 +219,7 @@ public class PageParameterUtils {
 
         val specLoader = commonContext.getSpecificationLoader();
         val owningLogicalTypeName = PageParameterNames.ACTION_OWNING_SPEC.getStringFrom(pageParameters);
-        val owningLogicalType = specLoader.lookupLogicalType(owningLogicalTypeName);
+        val owningLogicalType = specLoader.lookupLogicalTypeElseFail(owningLogicalTypeName);
 
         final ActionType actionType = PageParameterNames.ACTION_TYPE.getEnumFrom(pageParameters, ActionType.class);
         final String actionNameParms = PageParameterNames.ACTION_ID.getStringFrom(pageParameters);

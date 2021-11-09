@@ -127,7 +127,17 @@ public interface SpecificationLoader {
      */
     boolean loadSpecifications(Class<?>... domainTypes);
 
-    LogicalType lookupLogicalType(@Nullable String logicalTypeName);
+    Optional<LogicalType> lookupLogicalType(@Nullable String logicalTypeName);
+
+    default LogicalType lookupLogicalTypeElseFail(@NonNull final String logicalTypeName) {
+        return lookupLogicalType(logicalTypeName)
+        .orElseThrow(()->_Exceptions.unrecoverableFormatted(
+                "Lookup of logical-type-name '%s' failed, also found no matching fully qualified "
+                        + "class name to use instead. This indicates, that the class we are not finding here"
+                        + " is not discovered by Spring during bootstrapping of this application.",
+                        logicalTypeName)
+        );
+    }
 
     /**
      * queue {@code objectSpec} for later validation
@@ -145,11 +155,10 @@ public interface SpecificationLoader {
         if(_Strings.isNullOrEmpty(logicalTypeName)) {
             return null;
         }
-        val logicalType = lookupLogicalType(logicalTypeName);
-        if(logicalType==null) {
-            return null;
-        }
-        return loadSpecification(logicalType.getCorrespondingClass(), introspectionState);
+        return lookupLogicalType(logicalTypeName)
+            .map(logicalType->
+                    loadSpecification(logicalType.getCorrespondingClass(), introspectionState))
+            .orElse(null);
     }
 
     // -- SHORTCUTS - 1
