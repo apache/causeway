@@ -109,36 +109,52 @@ public class SitemapServiceDefault implements SitemapService {
 
                     val groupStack = new Stack<String>();
                     groupStack.push("Top-Bar");
+                    final Runnable flushGroupStack = ()->{
+                        if(!groupStack.isEmpty()){
+                            adoc.append(String.format("===== %s\n\n", groupStack.pop()));
+                        }
+                    };
 
                     val grid = toGrid(actionElementType.getCorrespondingClass(), Style.CURRENT);
                     grid.visit(new Grid.VisitorAdapter() {
                         @Override public void visit(final ActionLayoutData actionLayoutData) {
                             actionElementType.getAction(actionLayoutData.getId(), ActionType.USER)
                             .ifPresent(action->{
-                                if(!groupStack.isEmpty()){
-                                    adoc.append(String.format("===== %s\n\n", groupStack.pop()));
-                                }
-                                adoc.append(String.format("* [ ] Action `%s`\n\n", action.getCanonicalFriendlyName()));
+                                flushGroupStack.run();
+                                val describedAs = action.getCanonicalDescription()
+                                    .map(desc->String.format("_%s_", desc))
+                                    .orElse("");
+                                adoc.append(String.format("* [ ] Action `%s` %s\n\n",
+                                        action.getCanonicalFriendlyName(),
+                                        describedAs));
                             });
                         }
                         @Override public void visit(final PropertyLayoutData propertyLayoutData) {
                             actionElementType.getProperty(propertyLayoutData.getId())
                             .ifPresent(property->{
-                                if(!groupStack.isEmpty()){
-                                    adoc.append(String.format("===== %s\n\n", groupStack.pop()));
-                                }
-                                adoc.append(String.format("* [ ] Property `%s`\n\n", property.getCanonicalFriendlyName()));
+                                flushGroupStack.run();
+                                val describedAs = property.getCanonicalDescription()
+                                        .map(desc->String.format("_%s_", desc))
+                                        .orElse("");
+                                adoc.append(String.format("* [ ] Property `%s` %s\n\n",
+                                        property.getCanonicalFriendlyName(),
+                                        describedAs));
                             });
                         }
                         @Override public void visit(final CollectionLayoutData collectionLayoutData) {
-                            actionElementType.getProperty(collectionLayoutData.getId())
+                            actionElementType.getCollection(collectionLayoutData.getId())
                             .ifPresent(collection->{
                                 groupStack.clear();
-                                adoc.append(String.format("Collection %s\n\n", collection.getCanonicalFriendlyName()));
+                                adoc.append(String.format("===== Collection %s\n\n", collection.getCanonicalFriendlyName()));
+                                collection.getCanonicalDescription()
+                                .ifPresent(describedAs->{
+                                    adoc.append(String.format("_%s_\n\n", describedAs));
+                                });
+                                //FIXME[ISIS-2883] break down into element type as well
                             });
                         }
                         @Override public void visit(final FieldSet fieldSet) {
-                            if(_NullSafe.isEmpty(fieldSet.getActions())) {
+                            if(_NullSafe.isEmpty(fieldSet.getProperties())) {
                                 return;
                             }
                             groupStack.clear();
