@@ -113,7 +113,7 @@ public class SitemapServiceDefault implements SitemapService {
                     val grid = toGrid(actionElementType.getCorrespondingClass(), Style.CURRENT);
                     grid.visit(new Grid.VisitorAdapter() {
                         @Override public void visit(final ActionLayoutData actionLayoutData) {
-                            actionElementType.getAction(actionLayoutData.getId())
+                            actionElementType.getAction(actionLayoutData.getId(), ActionType.USER)
                             .ifPresent(action->{
                                 if(!groupStack.isEmpty()){
                                     adoc.append(String.format("===== %s\n\n", groupStack.pop()));
