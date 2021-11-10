@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.excel.applib.dom.util;
+package org.apache.isis.subdomains.excel.applib.util;
 
 /**
  * @since 2.0 {@index}

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.excel.applib.dom;
+package org.apache.isis.subdomains.excel.applib.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -37,8 +37,10 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.subdomains.excel.applib.dom.util.ExcelServiceImpl;
-import org.apache.isis.subdomains.excel.applib.dom.util.Mode;
+import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
+import org.apache.isis.subdomains.excel.applib.dom.WorksheetContent;
+import org.apache.isis.subdomains.excel.applib.dom.WorksheetSpec;
+import org.apache.isis.subdomains.excel.applib.util.Mode;
 
 
 @Service
@@ -47,39 +49,23 @@ import org.apache.isis.subdomains.excel.applib.dom.util.Mode;
 @Qualifier("Default")
 public class ExcelServiceDefault implements ExcelService {
 
-    private ExcelServiceImpl excelServiceImpl;
-
-    public ExcelServiceDefault() {
-    }
+    private _ExcelServiceHelper helper;
 
     @PostConstruct
     public void init() {
-        excelServiceImpl = new ExcelServiceImpl();
-        serviceInjector.injectServicesInto(excelServiceImpl);
+        helper = new _ExcelServiceHelper();
+        serviceInjector.injectServicesInto(helper);
     }
 
     // //////////////////////////////////////
 
-    /**
-     * Creates a Blob holding a spreadsheet of the domain objects.
-     *
-     * <p>
-     *     There are no specific restrictions on the domain objects; they can be either persistable entities or
-     *     view models.  Do be aware though that if imported back using {@link #fromExcel(Blob, Class, String)},
-     *     then new instances are always created.  It is generally better therefore to work with view models than to
-     *     work with entities.  This also makes it easier to maintain backward compatibility in the future if the
-     *     persistence model changes; using view models represents a stable API for import/export.
-     * </p>
-     *
-     * @param sheetName - must be 31 chars or less
-     */
     @Override
     public <T> Blob toExcel(
             final List<T> domainObjects,
             final Class<T> cls,
             final String sheetName,
             final String fileName) throws ExcelServiceDefault.Exception {
-        return excelServiceImpl.toExcel(domainObjects, cls, sheetName, fileName);
+        return helper.toExcel(domainObjects, cls, sheetName, fileName);
     }
 
     @Override
@@ -89,14 +75,14 @@ public class ExcelServiceDefault implements ExcelService {
             final String sheetName,
             final String fileName,
             final InputStream in) throws ExcelServiceDefault.Exception {
-        return excelServiceImpl.toExcel(domainObjects, cls, sheetName, fileName, in);
+        return helper.toExcel(domainObjects, cls, sheetName, fileName, in);
     }
 
     @Override
     public <T> Blob toExcel(
             final WorksheetContent worksheetContent,
             final String fileName) throws ExcelServiceDefault.Exception {
-        return excelServiceImpl.toExcel(worksheetContent, fileName);
+        return helper.toExcel(worksheetContent, fileName);
     }
 
     @Override
@@ -104,14 +90,14 @@ public class ExcelServiceDefault implements ExcelService {
             final WorksheetContent worksheetContent,
             final String fileName,
             final InputStream in) throws ExcelServiceDefault.Exception {
-        return excelServiceImpl.toExcel(worksheetContent, fileName, in);
+        return helper.toExcel(worksheetContent, fileName, in);
     }
 
     @Override
     public Blob toExcel(
             final List<WorksheetContent> worksheetContents,
             final String fileName) throws ExcelServiceDefault.Exception {
-        return excelServiceImpl.toExcel(worksheetContents, fileName);
+        return helper.toExcel(worksheetContents, fileName);
     }
 
     @Override
@@ -119,7 +105,7 @@ public class ExcelServiceDefault implements ExcelService {
             final List<WorksheetContent> worksheetContents,
             final String fileName,
             final InputStream in) throws ExcelServiceDefault.Exception {
-        return excelServiceImpl.toExcel(worksheetContents, fileName, in);
+        return helper.toExcel(worksheetContents, fileName, in);
     }
 
     @Override
@@ -127,7 +113,7 @@ public class ExcelServiceDefault implements ExcelService {
             final List<T> domainObjects,
             final Class<T> cls,
             final String fileName) throws ExcelServiceDefault.Exception {
-        return excelServiceImpl.toExcelPivot(domainObjects, cls, fileName);
+        return helper.toExcelPivot(domainObjects, cls, fileName);
     }
 
     @Override
@@ -136,14 +122,14 @@ public class ExcelServiceDefault implements ExcelService {
             final Class<T> cls,
             final String sheetName,
             final String fileName) throws ExcelServiceDefault.Exception {
-        return excelServiceImpl.toExcelPivot(domainObjects, cls, sheetName, fileName);
+        return helper.toExcelPivot(domainObjects, cls, sheetName, fileName);
     }
 
     @Override
     public <T> Blob toExcelPivot(
             final WorksheetContent worksheetContent,
             final String fileName) throws ExcelServiceDefault.Exception {
-        return excelServiceImpl.toExcelPivot(worksheetContent, fileName);
+        return helper.toExcelPivot(worksheetContent, fileName);
     }
 
     @Override
@@ -151,17 +137,9 @@ public class ExcelServiceDefault implements ExcelService {
             final List<WorksheetContent> worksheetContents,
             final String fileName) throws ExcelServiceDefault.Exception {
 
-        return excelServiceImpl.toExcelPivot(worksheetContents, fileName);
+        return helper.toExcelPivot(worksheetContents, fileName);
     }
 
-    /**
-     * Returns a list of objects for each line in the spreadsheet, of the specified type.
-     *
-     * <p>
-     *     If the class is a view model then the objects will be properly instantiated, with the correct
-     *     view model memento); otherwise the objects will be simple transient objects.
-     * </p>
-     */
     @Override
     public <T> List<T> fromExcel(
             final Blob excelBlob,
@@ -183,14 +161,14 @@ public class ExcelServiceDefault implements ExcelService {
     public <T> List<T> fromExcel(
             final Blob excelBlob,
             final WorksheetSpec worksheetSpec) throws ExcelServiceDefault.Exception {
-        return excelServiceImpl.fromExcel(excelBlob, worksheetSpec);
+        return helper.fromExcel(excelBlob, worksheetSpec);
     }
 
     @Override
     public List<List<?>> fromExcel(
             final Blob excelBlob,
             final List<WorksheetSpec> worksheetSpecs) throws ExcelServiceDefault.Exception {
-        return excelServiceImpl.fromExcel(excelBlob, worksheetSpecs);
+        return helper.fromExcel(excelBlob, worksheetSpecs);
     }
 
     @Override

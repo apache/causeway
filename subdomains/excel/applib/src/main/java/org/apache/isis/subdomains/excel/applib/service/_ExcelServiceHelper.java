@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.excel.applib.dom.util;
+package org.apache.isis.subdomains.excel.applib.service;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,19 +33,16 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.subdomains.excel.applib.dom.ExcelServiceDefault;
 import org.apache.isis.subdomains.excel.applib.dom.PivotColumn;
 import org.apache.isis.subdomains.excel.applib.dom.PivotRow;
 import org.apache.isis.subdomains.excel.applib.dom.PivotValue;
 import org.apache.isis.subdomains.excel.applib.dom.WorksheetContent;
 import org.apache.isis.subdomains.excel.applib.dom.WorksheetSpec;
+import org.apache.isis.subdomains.excel.applib.util.ExcelFileBlobConverter;
 
 import lombok.SneakyThrows;
 
-/**
- * @since 2.0 {@index}
- */
-public class ExcelServiceImpl {
+class _ExcelServiceHelper {
 
     private final ExcelFileBlobConverter excelFileBlobConverter = new ExcelFileBlobConverter();
 
@@ -63,7 +60,7 @@ public class ExcelServiceImpl {
      *
      * @param sheetName - must be 31 chars or less
      */
-    public <T> Blob toExcel(
+    <T> Blob toExcel(
             final List<T> domainObjects,
             final Class<T> cls,
             final String sheetName,
@@ -78,7 +75,7 @@ public class ExcelServiceImpl {
      * @param sheetName - must be 31 chars or less
      * @param in - an existing excel workbook to which this sheet will be appended
      */
-    public <T> Blob toExcel(
+    <T> Blob toExcel(
             final List<T> domainObjects,
             final Class<T> cls,
             final String sheetName,
@@ -91,7 +88,7 @@ public class ExcelServiceImpl {
      * As {@link #toExcel(List, Class, String, String)}, but with the domain objects, class and sheet name provided using a
      * {@link WorksheetContent}.
      */
-    public <T> Blob toExcel(WorksheetContent worksheetContent, final String fileName) {
+    <T> Blob toExcel(final WorksheetContent worksheetContent, final String fileName) {
         return toExcel(Collections.singletonList(worksheetContent), fileName);
     }
 
@@ -99,14 +96,14 @@ public class ExcelServiceImpl {
      * As {@link #toExcel(List, Class, String, String)}, but with the domain objects, class and sheet name provided using a
      * {@link WorksheetContent} and with an input stream.
      */
-    public <T> Blob toExcel(WorksheetContent worksheetContent, final String fileName, final InputStream in) {
+    <T> Blob toExcel(final WorksheetContent worksheetContent, final String fileName, final InputStream in) {
         return toExcel(Collections.singletonList(worksheetContent), fileName, in);
     }
 
     /**
      * As {@link #toExcel(WorksheetContent, String)}, but with multiple sheets.
      */
-    public Blob toExcel(final List<WorksheetContent> worksheetContents, final String fileName) {
+    Blob toExcel(final List<WorksheetContent> worksheetContents, final String fileName) {
         try {
             final File file = newExcelConverter().appendSheet(worksheetContents, new XSSFWorkbook());
             return excelFileBlobConverter.toBlob(fileName, file);
@@ -118,7 +115,7 @@ public class ExcelServiceImpl {
     /**
      * As {@link #toExcel(WorksheetContent, String)}, but with multiple sheets and an input stream.
      */
-    public Blob toExcel(final List<WorksheetContent> worksheetContents, final String fileName, final InputStream in) {
+    Blob toExcel(final List<WorksheetContent> worksheetContents, final String fileName, final InputStream in) {
         try {
             final File file = newExcelConverter().appendSheet(worksheetContents, new XSSFWorkbook(in));
             return excelFileBlobConverter.toBlob(fileName, file);
@@ -148,14 +145,14 @@ public class ExcelServiceImpl {
      *     </li>
      * </ul>
      */
-    public <T> Blob toExcelPivot(
+    <T> Blob toExcelPivot(
             final List<T> domainObjects,
             final Class<T> cls,
             final String fileName) throws ExcelServiceDefault.Exception {
         return toExcelPivot(domainObjects, cls, null, fileName);
     }
 
-    public <T> Blob toExcelPivot(
+    <T> Blob toExcelPivot(
             final List<T> domainObjects,
             final Class<T> cls,
             final String sheetName,
@@ -163,11 +160,11 @@ public class ExcelServiceImpl {
         return toExcelPivot(new WorksheetContent(domainObjects, new WorksheetSpec(cls, sheetName)), fileName);
     }
 
-    public <T> Blob toExcelPivot(WorksheetContent worksheetContent, final String fileName) {
+    <T> Blob toExcelPivot(final WorksheetContent worksheetContent, final String fileName) {
         return toExcelPivot(Collections.singletonList(worksheetContent), fileName);
     }
 
-    public <T> Blob toExcelPivot(final List<WorksheetContent> worksheetContents, final String fileName) {
+    <T> Blob toExcelPivot(final List<WorksheetContent> worksheetContents, final String fileName) {
         try {
             final File file = newExcelConverter().appendPivotSheet(worksheetContents);
             return excelFileBlobConverter.toBlob(fileName, file);
@@ -191,7 +188,7 @@ public class ExcelServiceImpl {
      *  @param sheetName - must be 30 characters or less
      *
      */
-    public <T> List<T> fromExcel(
+    <T> List<T> fromExcel(
             final Blob excelBlob,
             final Class<T> cls,
             final String sheetName) throws ExcelServiceDefault.Exception {
@@ -203,7 +200,7 @@ public class ExcelServiceImpl {
      * As {@link #fromExcel(Blob, Class, String)}, but specifying the class name and sheet name by way of a
      * {@link WorksheetSpec}.
      */
-    public <T> List<T> fromExcel(
+     <T> List<T> fromExcel(
             final Blob excelBlob,
             final WorksheetSpec worksheetSpec) throws ExcelServiceDefault.Exception {
         final List<List<?>> listOfList =
@@ -215,7 +212,7 @@ public class ExcelServiceImpl {
      * As {@link #fromExcel(Blob, WorksheetSpec)}, but reading multiple sheets (and returning a list of lists of
      * domain objects).
      */
-    public List<List<?>> fromExcel(
+    List<List<?>> fromExcel(
             final Blob excelBlob,
             final List<WorksheetSpec> worksheetSpecs) throws ExcelServiceDefault.Exception {
         try {
@@ -225,14 +222,14 @@ public class ExcelServiceImpl {
         }
     }
 
+    // -- HELPER
+
     @SneakyThrows
     private _ExcelConverter newExcelConverter() {
         return new _ExcelConverter(specificationLoader, objectManager, bookmarkService, serviceInjector);
     }
 
-
-    // //////////////////////////////////////
-
+    // -- DEPENDENCIES
 
     @javax.inject.Inject
     BookmarkService bookmarkService;
@@ -245,6 +242,5 @@ public class ExcelServiceImpl {
 
     @javax.inject.Inject
     ObjectManager objectManager;
-
 
 }

@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.subdomains.excel.applib.dom.ExcelServiceDefault;
+import org.apache.isis.subdomains.excel.applib.service.ExcelServiceDefault;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 
 @DomainService(

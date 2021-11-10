@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.excel.applib.dom.util;
+package org.apache.isis.subdomains.excel.applib.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -65,7 +65,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.subdomains.excel.applib.dom.AggregationType;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelMetaDataEnabled;
-import org.apache.isis.subdomains.excel.applib.dom.ExcelServiceDefault;
 import org.apache.isis.subdomains.excel.applib.dom.HyperLink;
 import org.apache.isis.subdomains.excel.applib.dom.PivotColumn;
 import org.apache.isis.subdomains.excel.applib.dom.PivotDecoration;
@@ -74,6 +73,9 @@ import org.apache.isis.subdomains.excel.applib.dom.PivotValue;
 import org.apache.isis.subdomains.excel.applib.dom.RowHandler;
 import org.apache.isis.subdomains.excel.applib.dom.WorksheetContent;
 import org.apache.isis.subdomains.excel.applib.dom.WorksheetSpec;
+import org.apache.isis.subdomains.excel.applib.util.Mode;
+import org.apache.isis.subdomains.excel.applib.util.PivotUtils;
+import org.apache.isis.subdomains.excel.applib.util.SheetPivoter;
 
 import lombok.ToString;
 import lombok.val;

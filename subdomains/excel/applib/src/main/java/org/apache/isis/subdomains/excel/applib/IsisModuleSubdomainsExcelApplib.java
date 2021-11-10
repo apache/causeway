@@ -21,7 +21,7 @@ package org.apache.isis.subdomains.excel.applib;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.subdomains.excel.applib.dom.ExcelServiceDefault;
+import org.apache.isis.subdomains.excel.applib.service.ExcelServiceDefault;
 
 /**
  * @since 2.0 {@index}

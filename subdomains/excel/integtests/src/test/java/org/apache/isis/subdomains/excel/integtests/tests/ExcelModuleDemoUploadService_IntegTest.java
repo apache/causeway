@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.resources._Resources;
-import org.apache.isis.subdomains.excel.applib.dom.util.ExcelFileBlobConverter;
+import org.apache.isis.subdomains.excel.applib.util.ExcelFileBlobConverter;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.fixturehandlers.excelupload.ExcelUploadServiceForDemoToDoItem;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;

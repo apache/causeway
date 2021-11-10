@@ -16,13 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.excel.applib.dom.util;
+package org.apache.isis.subdomains.excel.applib.util;
 
 import java.util.Arrays;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
+
+import org.apache.isis.subdomains.excel.applib.util.AnnotationList;
+import org.apache.isis.subdomains.excel.applib.util.AnnotationTriplet;
 
 public class AnnotationListTest {
 

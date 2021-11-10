@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.excel.applib.dom.util;
+package org.apache.isis.subdomains.excel.applib.service;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -272,7 +272,7 @@ final class _CellMarshaller {
         anchor.setRow1(row.getRowNum());
         anchor.setRow2(row.getRowNum()+3);
 
-        Drawing drawing = sheet.createDrawingPatriarch();
+        Drawing<?> drawing = sheet.createDrawingPatriarch();
         Comment comment1 = drawing.createCellComment(anchor);
 
         RichTextString commentRtf = creationHelper.createRichTextString(commentText);

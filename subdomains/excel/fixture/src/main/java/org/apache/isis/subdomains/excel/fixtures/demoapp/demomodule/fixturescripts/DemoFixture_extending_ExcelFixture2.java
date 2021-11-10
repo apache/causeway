@@ -21,7 +21,7 @@ package org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.fixturescri
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.subdomains.excel.applib.dom.WorksheetSpec;
-import org.apache.isis.subdomains.excel.applib.dom.util.Mode;
+import org.apache.isis.subdomains.excel.applib.util.Mode;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2;
 import org.apache.isis.subdomains.excel.testing.ExcelFixture2;
 

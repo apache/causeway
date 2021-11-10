@@ -5,7 +5,8 @@ import java.util.List;
 
 import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.subdomains.excel.applib.dom.util.Mode;
+import org.apache.isis.subdomains.excel.applib.service.ExcelServiceDefault;
+import org.apache.isis.subdomains.excel.applib.util.Mode;
 
 /**
  * @since 2.0 {@index}
