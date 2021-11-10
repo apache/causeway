@@ -38,5 +38,5 @@ object Constants {
     const val demoUrl = "http://localhost:8080/"
     const val demoUser = "sven"
     const val demoPass = "pass"
-    //const val demoUrl = "https://demo-wicket.jdo.isis.incode.work/"
+    const val demoUrlRemote = "https://demo-wicket.jdo.isis.incode.work/"
 }

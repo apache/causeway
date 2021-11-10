@@ -38,10 +38,12 @@ class ErrorDialog(val logEntry: LogEntry) : Command() {
         }
         val label = "HttpError " + error.httpStatusCode.toString()
         RoDialog(
-                caption = label,
-                items = formItems,
-                command = this,
-                widthPerc = 80).open()
+            caption = label,
+            items = formItems,
+            command = this,
+            widthPerc = 80,
+            heightPerc = 70
+        ).open()
     }
 
     private fun toString(stackTrace: List<String>): String {

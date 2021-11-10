@@ -27,6 +27,7 @@ import org.apache.isis.client.kroviz.main
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Represention
 import org.apache.isis.client.kroviz.to.TObject
+import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.ui.dialog.ReplayDiffDialog
 
@@ -34,21 +35,29 @@ val AppScope = CoroutineScope(window.asCoroutineDispatcher())
 
 class ReplayCommand {
     private val eventStore = UiManager.getEventStore()
+    private val oldBaseUrl = UiManager.getBaseUrl()
 
-    fun execute() {
+    fun execute(
+        urlUnderTest: String = Constants.demoUrlRemote,
+        userUnderTest: String = Constants.demoUser,
+        passUnderTest: String = Constants.demoPass
+    ) {
         val expectedEvents = copyEvents(eventStore.log)
         eventStore.reset()
         main() // re-creates the UI, but keeps the UiManager(singleton/object) and the session
+        UiManager.login(urlUnderTest, userUnderTest, passUnderTest)
+        console.log("[RC.execute]")
+        console.log(urlUnderTest)
 
         val uiEvents = filterReplayEvents(expectedEvents)
-        replay(uiEvents)
-        val actualEvents: MutableList<LogEntry> = eventStore.log
+        replay(uiEvents, urlUnderTest)
 
+        val actualEvents: MutableList<LogEntry> = eventStore.log
         val rdd = ReplayDiffDialog(expectedEvents, actualEvents)
         rdd.dialog.open()
     }
 
-    private fun replay(userActions: List<LogEntry>) {
+    private fun replay(userActions: List<LogEntry>, newBaseUrl: String) {
         var previous: LogEntry? = null
         userActions.forEach {
             if (it.isUserAction() && previous != null) {
@@ -59,7 +68,11 @@ class ReplayCommand {
                     ResourceProxy().load(obj)
                 }
             } else {
-                val link = Link(href = it.url)
+                var href = it.url
+                if (href.startsWith(oldBaseUrl)) {
+                    href = href.replace(oldBaseUrl, newBaseUrl)
+                }
+                val link = Link(href = href)
                 ResourceProxy().fetch(link, null, it.subType)
             }
             previous = it
@@ -69,7 +82,7 @@ class ReplayCommand {
     private fun calculateDelay(previous: LogEntry, current: LogEntry): Long {
         val currentMs = current.createdAt.getTime()
         val previousMs = previous.createdAt.getTime()
-        return  currentMs.minus(previousMs).toLong()
+        return currentMs.minus(previousMs).toLong()
     }
 
     private fun filterReplayEvents(events: List<LogEntry>): List<LogEntry> {

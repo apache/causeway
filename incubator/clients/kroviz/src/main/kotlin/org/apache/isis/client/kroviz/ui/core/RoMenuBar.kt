@@ -32,6 +32,7 @@ import org.apache.isis.client.kroviz.core.event.ReplayCommand
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.chart.SampleChartModel
 import org.apache.isis.client.kroviz.ui.dialog.About
+import org.apache.isis.client.kroviz.ui.dialog.EventDialog
 import org.apache.isis.client.kroviz.ui.dialog.LoginPrompt
 import org.apache.isis.client.kroviz.ui.dialog.SvgInline
 import org.apache.isis.client.kroviz.ui.panel.*
@@ -82,7 +83,11 @@ class RoMenuBar : SimplePanel() {
         )
 
         mainMenu.add(
-            buildMenuEntry("Replay", "Replay", { ReplayCommand().execute() })
+            buildMenuEntry("Events", "Event", { EventDialog().open() })
+        )
+
+        mainMenu.add(
+            buildMenuEntry("Replay", "Replay", {  })
         )
 
         mainMenu.add(

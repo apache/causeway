@@ -227,7 +227,7 @@ object StringUtils {
         val signature = Constants.restInfix
         if (url.contains(signature)) {
             // strip off protocol, host, port
-            val protocolHostPort = UiManager.getUrl()
+            val protocolHostPort = UiManager.getBaseUrl()
             result = result.replace(protocolHostPort + signature, "")
             result = StringUtils.removeHexCode(result)
         }

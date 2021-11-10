@@ -28,15 +28,14 @@ import org.apache.isis.client.kroviz.utils.StringUtils
 class Session {
     private var user: String = ""
     private var pw: String = ""
-    var url: String = ""
+    var baseUrl: String = ""
     val eventStore = EventStore()
 
     fun login(url: String, user: String, pw: String) {
         this.user = user
         this.pw = pw
-        this.url = url
+        this.baseUrl = url
         UiManager.updateUser(user)
-//        UiManager.updatePower("Powered By: Apache Isis")
     }
 
     fun getCredentials(): String {

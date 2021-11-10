@@ -31,7 +31,7 @@ import org.apache.isis.client.kroviz.utils.StringUtils
 
 object LinkTreeDiagram {
 
-    private val protocolHostPort = UiManager.getUrl()
+    private val protocolHostPort = UiManager.getBaseUrl()
 
     fun build(aggregator: BaseAggregator): String {
         val pc = PumlCode()

@@ -20,15 +20,12 @@ package org.apache.isis.client.kroviz.ui.dialog
 
 import io.kvision.form.text.Password
 import io.kvision.form.text.Text
-import kotlinx.browser.document
-import kotlinx.browser.window
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
 import org.apache.isis.client.kroviz.ui.core.UiManager
-import org.apache.isis.client.kroviz.utils.Point
 
 class LoginPrompt : Command() {
 

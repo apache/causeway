@@ -231,6 +231,10 @@ data class LogEntry(
     fun getAggregator(): BaseAggregator {
         //TODO the last aggt is not always the right one
         // callers need to filter  !!!
+        if (aggregators.size == 0) {
+            console.log("[LE.getAggregator]")
+            console.log(this)
+        }
         return aggregators.last()
     }
 

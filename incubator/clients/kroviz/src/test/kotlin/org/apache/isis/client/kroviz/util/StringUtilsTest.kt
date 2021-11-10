@@ -15,7 +15,7 @@ class StringUtilsTest {
         val url = "http://localhost:8080/restful/domain-types/demo.JavaLangStrings/collections/entities"
 
         // when
-        val protocolHostPort = UiManager.getUrl()
+        val protocolHostPort = UiManager.getBaseUrl()
         // then
         assertTrue(protocolHostPort.startsWith("http://"))
 

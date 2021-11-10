@@ -194,11 +194,11 @@ object UiManager {
         return sessions.first()
     }
 
-    fun getUrl(): String {
+    fun getBaseUrl(): String {
         val s = getSession()
         return when (s) {
             null -> ""
-            else -> s.url
+            else -> s.baseUrl
         }
     }
 
@@ -217,7 +217,7 @@ object UiManager {
     fun login(url: String, username: String, password: String) {
         val s = Session()
         s.login(url, username, password)
-        sessions.add(s)
+        sessions.add(0,s)
     }
 
     fun getCredentials(): String {
