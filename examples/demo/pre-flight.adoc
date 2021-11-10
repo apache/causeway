@@ -1,771 +1,2962 @@
-= Demo App Pre-Flight Checklist
+= Site-Map
 
-:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :sectnums:
 
 == Domain Objects
 
-=== @DomainObjects
+=== @DomainObject
 
-==== autoComplete
-WARNING: not yet implemented
+==== Auto Complete
 
-==== bounded
-WARNING: not yet implemented
+_Search object in prompt_
 
-==== editing
-WARNING: not yet implemented
+WARNING: Returns scalar of: `void`
 
-==== entityChangePublishing
-Viewmodel:
+==== Bounded
 
- * [ ] 4 field groups with 2 entries each ('Hallo', 'World') are shown.
+_Choose 'reference data' object (one of a bounded set) in prompt_
 
-Top-bar actions:
+WARNING: Returns scalar of: `void`
 
- * [ ] create
- * [ ] update all
- * [ ] delete
- * [ ] clear
+==== Editing
 
-==== mixinMethod
-WARNING: not yet implemented
+_Default editability of properties_
 
-==== natureStateful
-==== natureStatefulRefsEntity
-==== logicalTypeName
-WARNING: not yet implemented
+WARNING: Returns scalar of: `void`
 
-==== xxxDomainEvent
-WARNING: not yet implemented
+==== Entity Change Publishing
 
-==== xxxLifecycleEvent
-WARNING: not yet implemented
+_Entity changed events as XML_
 
-[source,xml]
-----
-<mb3:section>
-    <mb3:named>@DomainObject</mb3:named>
-    <mb3:serviceAction id="autoComplete" objectType="demo.DomainObjectMenu">
-    <mb3:serviceAction id="bounded" objectType="demo.DomainObjectMenu">
-    <mb3:serviceAction id="editing" objectType="demo.DomainObjectMenu">
-    <mb3:serviceAction id="entityChangePublishing" objectType="demo.DomainObjectMenu">
-    <mb3:serviceAction id="mixinMethod" objectType="demo.DomainObjectMenu">
-    <mb3:serviceAction id="natureStateful" objectType="demo.DomainObjectMenu">
-    <mb3:serviceAction id="natureStatefulRefsEntity" objectType="demo.DomainObjectMenu">
-    <mb3:serviceAction id="logicalTypeName" objectType="demo.DomainObjectMenu">
-    <mb3:serviceAction id="xxxDomainEvent" objectType="demo.DomainObjectMenu">
-    <mb3:serviceAction id="xxxLifecycleEvent" objectType="demo.DomainObjectMenu">
-</mb3:section>
-<mb3:section>
-    <mb3:named>@DomainObjectLayout</mb3:named>
-    <mb3:serviceAction id="bookmarking" objectType="demo.DomainObjectLayoutMenu">
-        <cpt:logicalTypeName>demo.DomainObjectLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="cssClass" objectType="demo.DomainObjectLayoutMenu">
-        <cpt:logicalTypeName>demo.DomainObjectLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="cssClassFa" objectType="demo.DomainObjectLayoutMenu">
-        <cpt:logicalTypeName>demo.DomainObjectLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="describedAs" objectType="demo.DomainObjectLayoutMenu">
-        <cpt:logicalTypeName>demo.DomainObjectLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="named" objectType="demo.DomainObjectLayoutMenu">
-        <cpt:logicalTypeName>demo.DomainObjectLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="paged" objectType="demo.DomainObjectLayoutMenu">
-        <cpt:logicalTypeName>demo.DomainObjectLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="plural" objectType="demo.DomainObjectLayoutMenu">
-        <cpt:logicalTypeName>demo.DomainObjectLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="xxxUiEvent" objectType="demo.DomainObjectLayoutMenu">
-        <cpt:logicalTypeName>demo.DomainObjectLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>Other</mb3:named>
-    <mb3:serviceAction id="mixins" objectType="demo.MixinMenu">
-        <cpt:logicalTypeName>demo.MixinMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="embeddedTypes" objectType="demo.EmbeddedTypeMenu">
-        <cpt:logicalTypeName>demo.EmbeddedTypeMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-----
+Returns scalar of: `demo.DomainObjectEntityChangePublishingVm`
+
+===== Top-Bar
+
+* [ ] Action `Create` _Creates one publishing enabled entity and one publishing disabled entity_
+
+* [ ] Action `Update All` _Updates all publishing enabled entities and all publishing disabled entities_
+
+* [ ] Action `Delete` _Deletes one publishing enabled entity and one publishing disabled entity_
+
+* [ ] Action `Clear` 
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Publishing Enabled Annotated Entities
+
+===== Collection Publishing Disabled Annotated Entities
+
+===== Collection Publishing Enabled Meta Annotated Entities
+
+===== Collection Publishing Enabled Meta Annot Overridden Entities
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Mixin Method
+
+_For mixins, override the default method name_
+
+WARNING: Returns scalar of: `void`
+
+==== Nature Stateful
+
+_@DomainObject(nature=VIEW_MODEL) for a Stateful View Model_
+
+Returns scalar of: `demo.StatefulVmUsingJaxb`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Demo
+
+* [ ] Property `Message` 
+
+===== FieldSet Referenced Property
+
+===== Collection Children
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Nature Stateful Refs Entity
+
+_@DomainObject(nature=VIEW_MODEL) for a Stateful View Model referencing an entity_
+
+Returns scalar of: `demo.StatefulViewModelJaxbRefsEntity`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet General
+
+* [ ] Property `Message` 
+
+===== FieldSet Other
+
+* [ ] Property `Favorite Child` 
+
+===== Collection Children
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Logical Type Name
+
+_Explicitly specify the logical type name_
+
+WARNING: Returns scalar of: `void`
+
+==== Xxx Domain Event
+
+_Default class of the domain event emitted when interacting with the domain object's actions, properties or collections_
+
+WARNING: Returns scalar of: `void`
+
+==== Xxx Lifecycle Event
+
+_Class of the lifecycle event emitted when the domain entity transitions through its persistence lifecycle_
+
+WARNING: Returns scalar of: `void`
+
+=== @DomainObjectLayout
+
+==== Bookmarking
+
+_Add link to object once visited as a bookmark_
+
+WARNING: Returns scalar of: `void`
+
+==== Css Class
+
+_CSS class to wrap the UI component representing the domain object_
+
+WARNING: Returns scalar of: `void`
+
+==== Css Class Fa
+
+_Font awesome icon to represent domain object_
+
+WARNING: Returns scalar of: `void`
+
+==== Described As
+
+_Description of the property, shown as a tooltip_
+
+WARNING: Returns scalar of: `void`
+
+==== Named
+
+_Custom text for the domain object's type wherever labelled_
+
+WARNING: Returns scalar of: `void`
+
+==== Paged
+
+_Number of domain objects per page in collections_
+
+WARNING: Returns scalar of: `void`
+
+==== Plural
+
+_Overrides plural form for the domain object's type, eg for irregular plurals_
+
+WARNING: Returns scalar of: `void`
+
+==== Xxx Ui Event
+
+_Class of the UI events emitted to allow subscribers to specify title, icon etc_
+
+WARNING: Returns scalar of: `void`
+
+=== Other
+
+==== Mixins
+
+_Contribute behaviour to domain objects_
+
+Returns scalar of: `demo.MixinVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Actions
+
+* [ ] Property `Count` 
+
+===== FieldSet Properties
+
+* [ ] Property `Explanation` 
+
+===== Collection Fibonacci Sequence
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Embedded Types
+
+_Experimental support for embedded types_
+
+Returns scalar of: `demo.EmbeddedTypeVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection All Constants
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
 
 == Actions
 
-[source,xml]
-----
+=== @Action
 
-<mb3:section>
-    <mb3:named>@Action</mb3:named>
-    <mb3:serviceAction id="associateWith" objectType="demo.ActionMenu">
-        <cpt:logicalTypeName>demo.ActionMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="commandPublishing" objectType="demo.ActionMenu">
-        <cpt:logicalTypeName>demo.ActionMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="domainEvent" objectType="demo.ActionMenu">
-        <cpt:logicalTypeName>demo.ActionMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="executionPublishing" objectType="demo.ActionMenu">
-        <cpt:logicalTypeName>demo.ActionMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="hidden" objectType="demo.ActionMenu">
-        <cpt:logicalTypeName>demo.ActionMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="restrictTo" objectType="demo.ActionMenu">
-        <cpt:logicalTypeName>demo.ActionMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="semantics" objectType="demo.ActionMenu">
-        <cpt:logicalTypeName>demo.ActionMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="typeOf" objectType="demo.ActionMenu">
-        <cpt:logicalTypeName>demo.ActionMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>@ActionLayout</mb3:named>
-    <mb3:serviceAction id="bookmarking" objectType="demo.ActionLayoutMenu">
-        <cpt:logicalTypeName>demo.ActionLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="cssClass" objectType="demo.ActionLayoutMenu">
-        <cpt:logicalTypeName>demo.ActionLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="cssClassFa" objectType="demo.ActionLayoutMenu">
-        <cpt:logicalTypeName>demo.ActionLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="describedAs" objectType="demo.ActionLayoutMenu">
-        <cpt:logicalTypeName>demo.ActionLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="hidden" objectType="demo.ActionLayoutMenu">
-        <cpt:logicalTypeName>demo.ActionLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="named" objectType="demo.ActionLayoutMenu">
-        <cpt:logicalTypeName>demo.ActionLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="position" objectType="demo.ActionLayoutMenu">
-        <cpt:logicalTypeName>demo.ActionLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="promptStyle" objectType="demo.ActionLayoutMenu">
-        <cpt:logicalTypeName>demo.ActionLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="redirectPolicy" objectType="demo.ActionLayoutMenu">
-        <cpt:logicalTypeName>demo.ActionLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>Programming Model</mb3:named>
-    <mb3:serviceAction id="associatedActions" objectType="demo.AssociatedActionMenu">
-        <cpt:logicalTypeName>demo.AssociatedActionMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="dependentArgsActions" objectType="demo.DependentArgsActionMenu">
-        <cpt:logicalTypeName>demo.DependentArgsActionMenu</cpt:logicalTypeName>
-        <cpt:named>Dependent Arguments</cpt:named>
-    </mb3:serviceAction>
-</mb3:section>
-----
+==== Associate With
+
+_Semantic relationship between actions and other properties or collections_
+
+Returns scalar of: `demo.ActionAssociateWithVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Annotated
+
+* [ ] Property `Text` 
+
+* [ ] Property `Other Property` 
+
+===== Collection Children
+
+===== Collection Favorites
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Command Publishing
+
+_Action invocation intentions as XML_
+
+Returns scalar of: `demo.ActionCommandPublishingEntity`
+
+===== Top-Bar
+
+* [ ] Action `Mixin Update Property` _@ActionPublishingEnabledMetaAnnotation_
+
+* [ ] Action `Mixin Update Property` _@Action(command = DISABLED)_
+
+* [ ] Action `Mixin Update Property` _@Action(command = ENABLED)_
+
+* [ ] Action `Mixin Update Property` _@ActionCommandDisabledMetaAnnotation @Action(command = ENABLED)_
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Commands
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Domain Event
+
+_Class of the domain event emitted when interacting with the action_
+
+Returns scalar of: `demo.ActionDomainEventVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Annotated
+
+* [ ] Property `Text` 
+
+===== FieldSet Contributed
+
+* [ ] Property `Control Update Text` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Execution Publishing
+
+_Action invocation events as XML_
+
+Returns scalar of: `demo.ActionExecutionPublishingEntity`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Interactions
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Hidden
+
+_Visibility of actions_
+
+Returns scalar of: `demo.ActionHiddenVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Properties
+
+* [ ] Property `Text` 
+
+* [ ] Property `Other Text` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Restrict To
+
+_Availability of actions per environment_
+
+Returns scalar of: `demo.ActionRestrictToVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Not annotated
+
+* [ ] Property `Property No Annotation` 
+
+===== FieldSet Annotated
+
+* [ ] Property `Property For Prototyping` 
+
+* [ ] Property `Property For No Restrictions` 
+
+===== FieldSet Meta-annotated
+
+* [ ] Property `Property For Meta Annotations` 
+
+===== FieldSet Meta-annotated Overridden
+
+* [ ] Property `Property For Meta Annotations Overridden` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Semantics
+
+_Whether the action has side-effects_
+
+Returns scalar of: `demo.ActionSemanticsVm`
+
+===== Top-Bar
+
+* [ ] Action `Query Property For Safe And Request Cacheable` 
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Not annotated
+
+* [ ] Property `Property No Annotation` 
+
+===== FieldSet Annotated as Safe
+
+* [ ] Property `Property For Safe` 
+
+* [ ] Property `Property For Safe And Request Cacheable` 
+
+===== FieldSet Annotated as Idempotent
+
+* [ ] Property `Property For Idempotent` 
+
+* [ ] Property `Property For Idempotent Are You Sure` 
+
+===== FieldSet Annotated as Non-Idempotent
+
+* [ ] Property `Property For Non Idempotent` 
+
+* [ ] Property `Property For Non Idempotent Are You Sure` 
+
+===== FieldSet Meta-annotated
+
+* [ ] Property `Property For Meta Annotations` 
+
+===== FieldSet Meta-annotated Overridden
+
+* [ ] Property `Property For Meta Annotations Overridden` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Type Of
+
+_Semantic relationship between actions and other properties or collections_
+
+Returns scalar of: `demo.ActionTypeOfVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Children
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+=== @ActionLayout
+
+==== Bookmarking
+
+_Add link to action prompt as a bookmark_
+
+WARNING: Returns scalar of: `void`
+
+==== Css Class
+
+_CSS class to wrap the UI component representing this action_
+
+WARNING: Returns scalar of: `void`
+
+==== Css Class Fa
+
+_Font awesome icon to represent action_
+
+WARNING: Returns scalar of: `void`
+
+==== Described As
+
+_Description of the action, shown as a tooltip_
+
+WARNING: Returns scalar of: `void`
+
+==== Hidden
+
+_Visibility of the action in different contexts_
+
+WARNING: Returns scalar of: `void`
+
+==== Named
+
+_Custom text for the action's label_
+
+WARNING: Returns scalar of: `void`
+
+==== Position
+
+_Position of action buttons_
+
+Returns scalar of: `demo.ActionLayoutPositionVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Annotated
+
+* [ ] Property `Read Only Property1` 
+
+===== FieldSet Layout
+
+* [ ] Action `Positioned on panel` _<cpt:property id="..."><cpt:action id="..." position=PANEL/></cpt:property>_
+
+* [ ] Action `Positioned on panel in drop down` _<cpt:property id="..."><cpt:action id="..." position=PANEL_DROPDOWN/></cpt:property>_
+
+* [ ] Property `Read Only Property2` 
+
+* [ ] Action `Positioned below` _<cpt:property id="..."><cpt:action id="..." position=BELOW/></cpt:property>_
+
+* [ ] Action `Positioned right` _<cpt:property id="..."><cpt:action id="..." position=RIGHT/></cpt:property>_
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Prompt Style
+
+_Location and style of action's prompt dialog_
+
+Returns scalar of: `demo.ActionLayoutPromptStyleVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Annotated
+
+* [ ] Property `Read Only Property1` 
+
+* [ ] Property `Read Only Property2` _has associated action with promptStyle=INLINE_AS_IF_EDIT_
+
+===== FieldSet Layout
+
+* [ ] Property `Read Only Property3` 
+
+* [ ] Action `Inline` _<cpt:property id="..."><cpt:action id="..." promptStyle = INLINE/></cpt:property>_
+
+* [ ] Action `Dialog` _<cpt:property id="..."><cpt:action id="..." promptStyle = DIALOG/></cpt:property>_
+
+* [ ] Property `Read Only Property4` _has associated action with promptStyle=INLINE_AS_IF_EDIT_
+
+* [ ] Action `Layout Inline As If Edit` _<cpt:property id="..."><cpt:action id="..." promptStyle = INLINE_AS_IF_EDIT/></cpt:property>_
+
+===== FieldSet Other
+
+* [ ] Property `Title` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Redirect Policy
+
+_Whether to redraw page if action returns same object_
+
+WARNING: Returns scalar of: `void`
+
+=== Programming Model
+
+==== Associated Actions
+
+Returns scalar of: `demo.AssociatedAction`
+
+===== Top-Bar
+
+* [ ] Action `Clear Hints` 
+
+===== Collection Items
+
+* [ ] Action `Do Something With Items` 
+
+===== FieldSet Description
+
+* [ ] Property `Description` 
+
+* [ ] Property `Sources` 
+
+==== Dependent Arguments
+
+Returns scalar of: `demo.DependentArgs`
+
+===== Top-Bar
+
+* [ ] Action `Clear Hints` 
+
+===== FieldSet Action Parameter Support
+
+* [ ] Action `Choices` 
+
+* [ ] Action `MultiChoices` 
+
+* [ ] Action `Auto Complete` 
+
+* [ ] Action `Default` 
+
+* [ ] Property `Dependent Text1` 
+
+* [ ] Property `Dialog Parity Default` _Default for first dialog paramater in 'Choices', 'Auto Complete' and 'Default'_
+
+===== FieldSet Action Parameter Support
+
+* [ ] Action `Hide` 
+
+* [ ] Action `Disable` 
+
+* [ ] Property `Dependent Text2` 
+
+* [ ] Property `Dialog Checkbox Default` _Default for first dialog paramater in 'Hide' and 'Disable'_
+
+===== FieldSet Action Parameter Support
+
+* [ ] Action `Independent Args` 
+
+* [ ] Property `Independent Text` 
+
+===== Collection Items
+
+===== FieldSet Description
+
+* [ ] Property `Description` 
+
+* [ ] Property `Sources` 
 
 == Properties
 
-[source,xml]
-----
-<mb3:section>
-    <mb3:named>@Property</mb3:named>
-    <mb3:serviceAction id="commandPublishing" objectType="demo.PropertyMenu">
-        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="domainEvent" objectType="demo.PropertyMenu">
-        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="editing" objectType="demo.PropertyMenu">
-        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="executionPublishing" objectType="demo.PropertyMenu">
-        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="fileAccept" objectType="demo.PropertyMenu">
-        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="hidden" objectType="demo.PropertyMenu">
-        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="maxLength" objectType="demo.PropertyMenu">
-        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="mustSatisfy" objectType="demo.PropertyMenu">
-        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="optionality" objectType="demo.PropertyMenu">
-        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="projecting" objectType="demo.PropertyMenu">
-        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="regexPattern" objectType="demo.PropertyMenu">
-        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="snapshot" objectType="demo.PropertyMenu">
-        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>@PropertyLayout</mb3:named>
-    <mb3:serviceAction id="cssClass" objectType="demo.PropertyLayoutMenu">
-        <cpt:logicalTypeName>demo.PropertyLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="describedAs" objectType="demo.PropertyLayoutMenu">
-        <cpt:logicalTypeName>demo.PropertyLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="hidden" objectType="demo.PropertyLayoutMenu">
-        <cpt:logicalTypeName>demo.PropertyLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="labelPosition" objectType="demo.PropertyLayoutMenu">
-        <cpt:logicalTypeName>demo.PropertyLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="multiLine" objectType="demo.PropertyLayoutMenu">
-        <cpt:logicalTypeName>demo.PropertyLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="named" objectType="demo.PropertyLayoutMenu">
-        <cpt:logicalTypeName>demo.PropertyLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="navigable" objectType="demo.PropertyLayoutMenu">
-        <cpt:logicalTypeName>demo.PropertyLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="renderDay" objectType="demo.PropertyLayoutMenu">
-        <cpt:logicalTypeName>demo.PropertyLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="repainting" objectType="demo.PropertyLayoutMenu">
-        <cpt:logicalTypeName>demo.PropertyLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="typicalLength" objectType="demo.PropertyLayoutMenu">
-        <cpt:logicalTypeName>demo.PropertyLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-----
+=== @Property
+
+==== Command Publishing
+
+_Action invocation intentions as XML_
+
+Returns scalar of: `demo.PropertyCommandPublishingEntity`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Commands
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Domain Event
+
+_Class of the domain event emitted when interacting with the property_
+
+Returns scalar of: `demo.PropertyDomainEventVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Annotated
+
+* [ ] Property `Text` _@Property(domainEvent = TextDomainEvent.class)_
+
+===== FieldSet Contributed
+
+* [ ] Property `Control Text` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Editing
+
+_Editable fields_
+
+Returns scalar of: `demo.PropertyEditingVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Annotated
+
+* [ ] Property `Property Using Annotation` _@Property(editing = ENABLED)_
+
+===== FieldSet Meta-annotated
+
+* [ ] Property `Property Using Meta Annotation` _@EditingEnabledMetaAnnotation_
+
+===== FieldSet Meta-annotated Overridden
+
+* [ ] Property `Property Using Meta Annotation But Overridden` _@EditingEnabledMetaAnnotation @PropertyLayout(editing = DISABLED)_
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Execution Publishing
+
+_Property changed events as XML_
+
+Returns scalar of: `demo.PropertyExecutionPublishingEntity`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Interactions
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== File Accept
+
+_Length of text fields_
+
+Returns scalar of: `demo.PropertyFileAcceptVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Annotated
+
+* [ ] Property `Pdf Property Using Annotation` _@Property(fileAccept = ".pdf")_
+
+* [ ] Property `Txt Property Using Annotation` _@Property(fileAccept = ".txt")_
+
+===== FieldSet Meta-annotated
+
+* [ ] Property `Pdf Property Using Meta Annotation` _@FileAcceptPdfMetaAnnotation_
+
+===== FieldSet Meta-annotated Overridden
+
+* [ ] Property `Docx Property Using Meta Annotation But Overridden` _@FileAcceptPdfMetaAnnotation @PropertyLayout(...)_
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Hidden
+
+_Visibility of properties, eg in tables_
+
+Returns scalar of: `demo.PropertyHiddenVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Annotated
+
+* [ ] Property `Property Hidden Nowhere Using Annotation` _@Property(hidden = Where.NOWHERE)_
+
+===== FieldSet Variants
+
+* [ ] Property `Property Hidden Everywhere` _@Property(hidden = Where.EVERYWHERE)_
+
+* [ ] Property `Property Hidden Anywhere` _@Property(hidden = Where.ANYWHERE)_
+
+===== FieldSet Meta-annotated
+
+* [ ] Property `Property Using Meta Annotation` _@HiddenEverywhereMetaAnnotation_
+
+===== FieldSet Meta-annotated Overridden
+
+* [ ] Property `Mixin Property With Meta Annotation Overridden` _@HiddenEverywhereMetaAnnotation @Property(hidden = NOWHERE)_
+
+* [ ] Property `Property Using Meta Annotation But Overridden` _@HiddenEverywhereMetaAnnotation @Property(hidden = Where.NOWHERE)_
+
+===== Collection Children
+
+* [ ] Action `Returns Children` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Max Length
+
+_Length of text fields_
+
+Returns scalar of: `demo.PropertyMaxLengthVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Annotated
+
+* [ ] Property `Property Using Annotation` _@Property(maxLength = 10)_
+
+===== FieldSet Meta-annotated
+
+* [ ] Property `Property Using Meta Annotation` _@MaxLength10MetaAnnotation_
+
+===== FieldSet Meta-annotated Overridden
+
+* [ ] Property `Property Using Meta Annotation But Overridden` _@MaxLength10MetaAnnotation @PropertyLayout(maxLength = 3)_
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Must Satisfy
+
+_Regular expressions, such as email_
+
+Returns scalar of: `demo.PropertyMustSatisfyVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Annotated
+
+* [ ] Property `Customer Age Property Using Annotation` _mustSatisfy = OfWorkingAgeSpecification.class_
+
+===== FieldSet Meta-annotated
+
+* [ ] Property `Customer Age Property Using Meta Annotation` _@MustSatisfyOfWorkingAgeMetaAnnotation_
+
+===== FieldSet Meta-annotated Overridden
+
+* [ ] Property `Customer Age Property Using Meta Annotation But Overridden` _@MustSatisfyOfWorkingAgeMetaAnnotation @PropertyLayout(mustSatisfy = OfRetirementAgeSpecification.class)_
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Optionality
+
+_Regular expressions, such as email_
+
+Returns scalar of: `demo.PropertyOptionalityVm`
+
+===== FieldSet Other
+
+* [ ] Property `Property Using Annotation` _@Property(optionality = OPTIONAL)_
+
+* [ ] Property `Mandatory Property Using Annotation` _@Property(optionality = MANDATORY)_
+
+* [ ] Property `Description` 
+
+* [ ] Property `Property Using Meta Annotation` _@OptionalityOptionalMetaAnnotation_
+
+* [ ] Property `Property Using Meta Annotation But Overridden` _@OptionalityOptionalMetaAnnotation @PropertyLayout(optionality = MANDATORY)_
+
+* [ ] Property `Sources` 
+
+===== FieldSet Metadata
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Logical Type Name` 
+
+* [ ] Property `Object Identifier` 
+
+==== Projecting
+
+_Regular expressions, such as email_
+
+Returns scalar of: `demo.PropertyProjectingVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Properties
+
+* [ ] Property `First Child` 
+
+===== Collection Children
+
+* [ ] Action `Returns Children` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Regex Pattern
+
+_Regular expressions, such as email_
+
+Returns scalar of: `demo.PropertyRegexPatternVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Annotated
+
+* [ ] Property `Email Address Property Using Annotation` _@Property(regexPattern = "^\w+@\w+[.]com$"")_
+
+===== FieldSet Meta-annotated
+
+* [ ] Property `Email Address Property Using Meta Annotation` _@RegexPatternEmailComMetaAnnotation_
+
+===== FieldSet Meta-annotated Overridden
+
+* [ ] Property `Email Address Property Using Meta Annotation But Overridden` _@RegexPatternEmailComMetaAnnotation @Property(regexPattern = "^\w+@\w+[.]org$"")_
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Snapshot
+
+_Snapshot inclusion/exclusion_
+
+Returns scalar of: `demo.PropertySnapshotVm`
+
+===== Top-Bar
+
+* [ ] Action `Take Xml Snapshot` 
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Not annotated
+
+* [ ] Property `Text` 
+
+===== FieldSet Annotated
+
+* [ ] Property `Not Specified Property` _@Property(snapshot = NOT_SPECIFIED)_
+
+* [ ] Property `Excluded Property` _@Property(snapshot = EXCLUDED)_
+
+* [ ] Property `Included Property` _@Property(snapshot = INCLUDED)_
+
+===== FieldSet Meta-annotated
+
+* [ ] Property `Meta Annotated Property` _@SnapshotExcludedMetaAnnotation _
+
+===== FieldSet Meta-annotated overridden
+
+* [ ] Property `Meta Annotated Property Overridden` _@SnapshotIncludedMetaAnnotation @Property(snapshot = EXCLUDED)_
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+=== @PropertyLayout
+
+==== Css Class
+
+_CSS class to wrap the UI component representing this property_
+
+Returns scalar of: `demo.PropertyLayoutCssClassVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Annotated
+
+* [ ] Property `Property Using Annotation` _@PropertyLayout(cssClass = "red")_
+
+===== FieldSet Layout File
+
+* [ ] Property `Property Using Layout` _<cpt:property id="..." cssClass="red"/>_
+
+===== FieldSet Contributed
+
+* [ ] Property `Mixin Property` _@PropertyLayout(cssClass = "red")_
+
+===== FieldSet Meta-annotated
+
+* [ ] Property `Property Using Meta Annotation` _@CssClassRedMetaAnnotation_
+
+* [ ] Property `Mixin Property With Meta Annotation` _@CssClassRedMetaAnnotation_
+
+===== FieldSet Meta-annotated Overridden
+
+* [ ] Property `Property Using Meta Annotation But Overridden` _@CssClassRedMetaAnnotation @PropertyLayout(...)_
+
+* [ ] Property `Mixin Property With Meta Annotation Overridden` _@CssClassRedMetaAnnotation  @ParameterLayout(...)_
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Described As
+
+_Description of the property, shown as a tooltip_
+
+Returns scalar of: `demo.PropertyLayoutDescribedAsVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Annotated
+
+* [ ] Property `Property Using Annotation` _@PropertyLayout(describedAs= "...")_
+
+===== FieldSet Layout File
+
+* [ ] Property `Property Using Layout` 
+
+===== FieldSet Contributed
+
+* [ ] Property `Mixin Property` _@PropertyLayout(describedAs = "...")_
+
+===== FieldSet Meta-annotated
+
+* [ ] Property `Property Using Meta Annotation` _@DescribedAsMetaAnnotation_
+
+* [ ] Property `Mixin Property With Meta Annotation` _@DescribedAsMetaAnnotation)_
+
+===== FieldSet Meta-annotated Overridden
+
+* [ ] Property `Property Using Meta Annotation But Overridden` _@DescribedAsMetaAnnotation @PropertyLayout(...)_
+
+* [ ] Property `Mixin Property With Meta Annotation Overridden` _@DescribedAsMetaAnnotation overridden with @PropertyLayout(...)_
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Hidden
+
+_Visibility of the property in different contexts_
+
+Returns scalar of: `demo.PropertyLayoutHiddenVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Annotated
+
+* [ ] Property `Property Hidden Nowhere Using Annotation` _@PropertyLayout(hidden = Where.NOWHERE)_
+
+===== FieldSet Layout File
+
+* [ ] Property `Property Hidden Nowhere Using Layout` _<cpt:property id="..." hidden="NOWHERE"/>_
+
+===== FieldSet Variants
+
+* [ ] Property `Property Hidden Everywhere` _@PropertyLayout(hidden = Where.EVERYWHERE)_
+
+* [ ] Property `Property Hidden Anywhere` _@PropertyLayout(hidden = Where.ANYWHERE)_
+
+===== FieldSet Meta-annotated
+
+* [ ] Property `Property Using Meta Annotation` _@HiddenEverywhereMetaAnnotation_
+
+===== FieldSet Meta-annotated Overridden
+
+* [ ] Property `Mixin Property With Meta Annotation Overridden` _@HiddenEverywhereMetaAnnotation @PropertyLayout(hidden = NOWHERE)_
+
+* [ ] Property `Property Using Meta Annotation But Overridden` _@HiddenEverywhereMetaAnnotation @PropertyLayout(hidden = Where.NOWHERE)_
+
+===== Collection Children
+
+* [ ] Action `Returns Children` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Label Position
+
+_Label positions_
+
+Returns scalar of: `demo.PropertyLayoutLabelPositionVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Annotated
+
+* [ ] Property `Property Using Annotation` _@PropertyLayout(labelPosition = TOP)_
+
+===== FieldSet Layout File
+
+* [ ] Property `Property Using Layout` _<cpt:property id="..." labelPosition="TOP"/>_
+
+===== FieldSet Contributed
+
+* [ ] Property `Mixin Property` _@PropertyLayout(labelPosition = TOP)_
+
+===== FieldSet Meta-annotated
+
+* [ ] Property `Property Using Meta Annotation` _@LabelPositionTopMetaAnnotation_
+
+* [ ] Property `Mixin Property With Meta Annotation` _@LabelPositionTopMetaAnnotation_
+
+===== FieldSet Meta-annotated Overridden
+
+* [ ] Property `Property Using Meta Annotation But Overridden` _@LabelPositionTopMetaAnnotation @PropertyLayout(...)_
+
+* [ ] Property `Mixin Property With Meta Annotation Overridden` _@LabelPositionTopMetaAnnotation @ParameterLayout(...)_
+
+===== FieldSet Variants
+
+* [ ] Property `Property Label Position Top` _@PropertyLayout(labelPosition = TOP)_
+
+* [ ] Property `Property Label Position Left` _@PropertyLayout(labelPosition = LEFT)_
+
+* [ ] Property `Property Label Position Right` _@PropertyLayout(labelPosition = RIGHT)_
+
+* [ ] Property `Property Boolean Label Position Right` _@PropertyLayout(labelPosition = RIGHT)_
+
+* [ ] Property `Property Label Position None` _@PropertyLayout(labelPosition = NONE)_
+
+* [ ] Property `Property Label Position None Multiline` _@PropertyLayout(labelPosition = NONE, multiLine = 10)_
+
+* [ ] Property `Property Label Position Not Specified` _@PropertyLayout(labelPosition = NONE)_
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Multi Line
+
+_Textboxes_
+
+Returns scalar of: `demo.PropertyLayoutMultiLineVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Annotated
+
+* [ ] Property `Property Using Annotation` _@PropertyLayout(multiLine = 5)_
+
+* [ ] Property `Property Using Annotation Read Only` _@PropertyLayout(multiLine = 5)_
+
+===== FieldSet Layout File
+
+* [ ] Property `Property Using Layout` _<cpt:property id="..." multiLine="5"/>_
+
+===== FieldSet Contributed
+
+* [ ] Property `Mixin Property` _@PropertyLayout(multiLine = 5)_
+
+===== FieldSet Meta-annotated
+
+* [ ] Property `Property Using Meta Annotation` _@MultiLine10MetaAnnotation_
+
+* [ ] Property `Mixin Property With Meta Annotation` _@MultiLine10MetaAnnotation_
+
+===== FieldSet Meta-annotated Overridden
+
+* [ ] Property `Property Using Meta Annotation But Overridden` _@MultiLine10MetaAnnotation @PropertyLayout(multiLine = 3)_
+
+* [ ] Property `Mixin Property With Meta Annotation Overridden` _@MultiLine10MetaAnnotation @PropertyLayout(multiLine = 3)_
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Named
+
+_Custom text for the property's label_
+
+Returns scalar of: `demo.PropertyLayoutNamedVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Annotated
+
+* [ ] Property `Named using @PropertyLayout` _@PropertyLayout(named= "...")_
+
+===== FieldSet Layout File
+
+* [ ] Property `Property Using Layout` _<cpt:property id="..."><cpt:named>...</cpt:named></cpt:property>_
+
+===== FieldSet Contributed
+
+* [ ] Property `Mixin named using @PropertyLayout` _@PropertyLayout(named = "...")_
+
+===== FieldSet Meta-annotated
+
+* [ ] Property `Named from meta-annotation` _@NamedMetaAnnotation_
+
+* [ ] Property `Named from meta-annotation` _@NamedMetaAnnotation_
+
+===== FieldSet Meta-annotated Overridden
+
+* [ ] Property `@PropertyLayout name overrides meta-annotation` _@NamedMetaAnnotation @PropertyLayout(...)_
+
+* [ ] Property `@PropertyLayout overrides meta-annotation for mixin` _@NamedMetaAnnotation @PropertyLayout(...)_
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Navigable
+
+_Breadcrumbs (and trees)_
+
+Returns scalar of: `demo.FileNode`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Tree
+
+* [ ] Property `Tree` 
+
+===== FieldSet Detail
+
+* [ ] Property `Parent` 
+
+* [ ] Property `Path` 
+
+* [ ] Property `Type` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Render Day
+
+_Inclusive and exclusive date ranges_
+
+Returns scalar of: `demo.PropertyLayoutRenderDayVm`
+
+===== Top-Bar
+
+* [ ] Action `Download As Xml` 
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Annotated
+
+* [ ] Property `Start Date` _@PropertyLayout(renderDay = NOT_SPECIFIED)_
+
+* [ ] Property `End Date` _@PropertyLayout(renderDay = AS_DAY_BEFORE)_
+
+* [ ] Property `End Date Raw` _Value of getEndDate(), but @PropertyLayout(renderDay = AS_DAY)_
+
+===== FieldSet Layout File
+
+* [ ] Property `End Date Using Layout` _<cpt:property id="endDateLayoutFile" renderedAsDayBefore="true"/>_
+
+===== FieldSet Contributed
+
+* [ ] Property `Mixin End Date With Property Layout` _@PropertyLayout(renderDay = AS_DAY_BEFORE)_
+
+===== FieldSet Meta-annotated
+
+* [ ] Property `End Date Using Meta Annotation` _@RenderDayMetaAnnotationEndDateExclusive_
+
+* [ ] Property `Mixin End Date With Meta Annotation` _@RenderDayMetaAnnotationEndDateExclusive_
+
+===== FieldSet Meta-annotated Overridden
+
+* [ ] Property `End Date Using Meta Annotation But Overridden` _@RenderDayMetaAnnotationEndDateExclusive_
+
+* [ ] Property `Mixin End Date With Meta Annotation Overridden` _@RenderDayMetaAnnotationStartDateInclusive @PropertyLayout(renderDay = AS_DAY_BEFORE_
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Repainting
+
+_Performance hint for properties holding unchanging large objects_
+
+Returns scalar of: `demo.PropertyLayoutRepaintingVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Edit
+
+* [ ] Property `Edit Me` _Editable property (PDFs should not repaint if it changes)_
+
+===== FieldSet Annotated
+
+* [ ] Property `Property Using Annotation` _@PropertyLayout(repainting = NO_REPAINT)_
+
+===== FieldSet Layout File
+
+* [ ] Property `Property Using Layout` _<cpt:property id="..." repainting = "NO_REPAINT"/>_
+
+===== FieldSet Contributed
+
+* [ ] Property `Mixin Property` _@PropertyLayout(repainting = NO_REPAINT)_
+
+===== FieldSet Meta-annotated
+
+* [ ] Property `Property Using Meta Annotation` _@RepaintingNoRepaintMetaAnnotation_
+
+* [ ] Property `Mixin Property With Meta Annotation` _@RepaintingNoRepaintMetaAnnotation_
+
+===== FieldSet Meta-annotated Overridden
+
+* [ ] Property `Property Using Meta Annotation But Overridden` _@RepaintingRepaintMetaAnnotation @PropertyLayout(...)_
+
+* [ ] Property `Mixin Property With Meta Annotation Overridden` _@RepaintingRepaintMetaAnnotation @PropertyLayout(repainting = NO_REPAINT)_
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Typical Length
+
+_Length of text fields_
+
+Returns scalar of: `demo.PropertyLayoutTypicalLengthVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Annotated
+
+* [ ] Property `Property Using Annotation` _@PropertyLayout(typicalLength = 10)_
+
+===== FieldSet Layout File
+
+* [ ] Property `Property Using Layout` _<cpt:property id="..." typicalLength="10"/>_
+
+===== FieldSet Contributed
+
+* [ ] Property `Mixin Property` _@PropertyLayout(typicalLength = 10)_
+
+===== FieldSet Meta-annotated
+
+* [ ] Property `Property Using Meta Annotation` _@TypicalLengthMetaAnnotation_
+
+* [ ] Property `Mixin Property With Meta Annotation` _@TypicalLengthMetaAnnotation_
+
+===== FieldSet Meta-annotated Overridden
+
+* [ ] Property `Property Using Meta Annotation But Overridden` _@TypicalLengthMetaAnnotation @PropertyLayout(...)_
+
+* [ ] Property `Mixin Property With Meta Annotation Overridden` _@TypicalLengthMetaAnnotation @PropertyLayout(...)_
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
 
 == Collections
 
-[source,xml]
-----
-<mb3:section>
-    <mb3:named>@Collection</mb3:named>
-    <mb3:serviceAction id="domainEvent" objectType="demo.CollectionMenu">
-        <cpt:logicalTypeName>demo.CollectionMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="hidden" objectType="demo.CollectionMenu">
-        <cpt:logicalTypeName>demo.CollectionMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="typeOf" objectType="demo.CollectionMenu">
-        <cpt:logicalTypeName>demo.CollectionMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>@CollectionLayout</mb3:named>
-    <mb3:serviceAction id="cssClass" objectType="demo.CollectionLayoutMenu">
-        <cpt:logicalTypeName>demo.CollectionLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="defaultView" objectType="demo.CollectionLayoutMenu">
-        <cpt:logicalTypeName>demo.CollectionLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="describedAs" objectType="demo.CollectionLayoutMenu">
-        <cpt:logicalTypeName>demo.CollectionLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="hidden" objectType="demo.CollectionLayoutMenu">
-        <cpt:logicalTypeName>demo.CollectionLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="named" objectType="demo.CollectionLayoutMenu">
-        <cpt:logicalTypeName>demo.CollectionLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="paged" objectType="demo.CollectionLayoutMenu">
-        <cpt:logicalTypeName>demo.CollectionLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="sortedBy" objectType="demo.CollectionLayoutMenu">
-        <cpt:logicalTypeName>demo.CollectionLayoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-----
-           
+=== @Collection
+
+==== Domain Event
+
+_Class of the domain event emitted when interacting with the collection_
+
+Returns scalar of: `demo.CollectionDomainEventVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Children
+
+_@Collection(domainEvent = ChildrenDomainEvent.class)_
+
+===== FieldSet Contributed
+
+* [ ] Property `Control Children` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Hidden
+
+_Visibility of collections_
+
+WARNING: Returns scalar of: `void`
+
+==== Type Of
+
+_Element type of collections_
+
+WARNING: Returns scalar of: `void`
+
+=== @CollectionLayout
+
+==== Css Class
+
+_CSS class to wrap the UI component representing this collection_
+
+WARNING: Returns scalar of: `void`
+
+==== Default View
+
+_View collection as a table, or collapsed, or some other representation if available_
+
+WARNING: Returns scalar of: `void`
+
+==== Described As
+
+_Description of the collection, shown as a tooltip_
+
+WARNING: Returns scalar of: `void`
+
+==== Hidden
+
+_Visibility of the collection in different contexts_
+
+WARNING: Returns scalar of: `void`
+
+==== Named
+
+_Custom text for the collection's label_
+
+WARNING: Returns scalar of: `void`
+
+==== Paged
+
+_Number of domain objects per page in this collection_
+
+WARNING: Returns scalar of: `void`
+
+==== Sorted By
+
+_Sort domain objects in this collection, overriding their default comparator_
+
+WARNING: Returns scalar of: `void`
+
 == Basic Types
 
-[source,xml]
-----
-<mb3:section>
-    <mb3:named>Primitives</mb3:named>
-    <mb3:serviceAction id="shorts" objectType="demo.PrimitiveTypesMenu">
-        <cpt:logicalTypeName>demo.PrimitiveTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="ints" objectType="demo.PrimitiveTypesMenu">
-        <cpt:logicalTypeName>demo.PrimitiveTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="longs" objectType="demo.PrimitiveTypesMenu">
-        <cpt:logicalTypeName>demo.PrimitiveTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="bytes" objectType="demo.PrimitiveTypesMenu">
-        <cpt:logicalTypeName>demo.PrimitiveTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="floats" objectType="demo.PrimitiveTypesMenu">
-        <cpt:logicalTypeName>demo.PrimitiveTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="doubles" objectType="demo.PrimitiveTypesMenu">
-        <cpt:logicalTypeName>demo.PrimitiveTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="chars" objectType="demo.PrimitiveTypesMenu">
-        <cpt:logicalTypeName>demo.PrimitiveTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="booleans" objectType="demo.PrimitiveTypesMenu">
-        <cpt:logicalTypeName>demo.PrimitiveTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>Wrappers</mb3:named>
-    <mb3:serviceAction id="bytes" objectType="demo.JavaLangWrapperTypesMenu">
-        <cpt:logicalTypeName>demo.JavaLangWrapperTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="shorts" objectType="demo.JavaLangWrapperTypesMenu">
-        <cpt:logicalTypeName>demo.JavaLangWrapperTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="integers" objectType="demo.JavaLangWrapperTypesMenu">
-        <cpt:logicalTypeName>demo.JavaLangWrapperTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="longs" objectType="demo.JavaLangWrapperTypesMenu">
-        <cpt:logicalTypeName>demo.JavaLangWrapperTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="floats" objectType="demo.JavaLangWrapperTypesMenu">
-        <cpt:logicalTypeName>demo.JavaLangWrapperTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="doubles" objectType="demo.JavaLangWrapperTypesMenu">
-        <cpt:logicalTypeName>demo.JavaLangWrapperTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="characters" objectType="demo.JavaLangWrapperTypesMenu">
-        <cpt:logicalTypeName>demo.JavaLangWrapperTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="booleans" objectType="demo.JavaLangWrapperTypesMenu">
-        <cpt:logicalTypeName>demo.JavaLangWrapperTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>Common</mb3:named>
-    <mb3:serviceAction id="strings" objectType="demo.JavaLangTypesMenu">
-        <cpt:logicalTypeName>demo.JavaLangTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="voids" objectType="demo.JavaLangTypesMenu">
-        <cpt:logicalTypeName>demo.JavaLangTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-----
-           
+=== Primitives
+
+==== Shorts
+
+Returns scalar of: `demo.PrimitiveShorts`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Ints
+
+Returns scalar of: `demo.PrimitiveInts`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Longs
+
+Returns scalar of: `demo.PrimitiveLongs`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Bytes
+
+Returns scalar of: `demo.PrimitiveBytes`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Floats
+
+Returns scalar of: `demo.PrimitiveFloats`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Doubles
+
+Returns scalar of: `demo.PrimitiveDoubles`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Chars
+
+Returns scalar of: `demo.PrimitiveChars`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Booleans
+
+Returns scalar of: `demo.PrimitiveBooleans`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+=== Wrappers
+
+==== Bytes
+
+Returns scalar of: `demo.WrapperBytes`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Shorts
+
+Returns scalar of: `demo.WrapperShorts`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Integers
+
+Returns scalar of: `demo.WrapperIntegers`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Longs
+
+Returns scalar of: `demo.WrapperLongs`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Floats
+
+Returns scalar of: `demo.WrapperFloats`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Doubles
+
+Returns scalar of: `demo.WrapperDoubles`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Characters
+
+Returns scalar of: `demo.WrapperCharacters`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Booleans
+
+Returns scalar of: `demo.WrapperBooleans`
+
+===== Top-Bar
+
+* [ ] Action `Boolean Boxed Params` _FIXME[ISIS-2387] contrary to the above, second parameter works; however, first parameter is however, first parameter is initialized to null but not rendered as 3-state.  Either we fix rendering or we initialize with FALSE when null_
+
+* [ ] Action `Boolean Params` _FIXME[ISIS-2387] even though primitive1 gets initialized with true, the model thinks its null_
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+=== Common
+
+==== Strings
+
+Returns scalar of: `demo.JavaLangStrings`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Voids
+
+Returns scalar of: `demo.JavaLangVoids`
+
+===== Top-Bar
+
+* [ ] Action `Returns Java Lang Void` 
+
+* [ ] Action `Returns Void` 
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
 == Temporal Types
 
-[source,xml]
-----
-<mb3:section>
-    <mb3:named>java.sql</mb3:named>
-    <mb3:serviceAction id="dates" objectType="demo.JavaSqlTypesMenu">
-        <cpt:logicalTypeName>demo.JavaSqlTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="timestamps" objectType="demo.JavaSqlTypesMenu">
-        <cpt:logicalTypeName>demo.JavaSqlTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>java.time</mb3:named>
-    <mb3:serviceAction id="localDates" objectType="demo.JavaTimeTypesMenu">
-        <cpt:logicalTypeName>demo.JavaTimeTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="localDateTimes" objectType="demo.JavaTimeTypesMenu">
-        <cpt:logicalTypeName>demo.JavaTimeTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="offsetDateTimes" objectType="demo.JavaTimeTypesMenu">
-        <cpt:logicalTypeName>demo.JavaTimeTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="offsetTimes" objectType="demo.JavaTimeTypesMenu">
-        <cpt:logicalTypeName>demo.JavaTimeTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="zonedDateTimes" objectType="demo.JavaTimeTypesMenu">
-        <cpt:logicalTypeName>demo.JavaTimeTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>java.util</mb3:named>
-    <mb3:serviceAction id="dates" objectType="demo.JavaUtilTypesMenu">
-        <cpt:logicalTypeName>demo.JavaUtilTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>JodaTime</mb3:named>
-    <mb3:serviceAction id="localDates" objectType="demo.JodaTimeTypesMenu">
-        <cpt:logicalTypeName>demo.JodaTimeTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="localDateTimes" objectType="demo.JodaTimeTypesMenu">
-        <cpt:logicalTypeName>demo.JodaTimeTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="localTimes" objectType="demo.JodaTimeTypesMenu">
-        <cpt:logicalTypeName>demo.JodaTimeTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="dateTimes" objectType="demo.JodaTimeTypesMenu">
-        <cpt:logicalTypeName>demo.JodaTimeTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-----
-           
+=== java.sql
+
+==== Dates
+
+Returns scalar of: `demo.JavaSqlDates`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Timestamps
+
+Returns scalar of: `demo.JavaSqlTimestamps`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+=== java.time
+
+==== Local Dates
+
+Returns scalar of: `demo.JavaTimeLocalDates`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Local Date Times
+
+Returns scalar of: `demo.JavaTimeLocalDateTimes`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Offset Date Times
+
+Returns scalar of: `demo.JavaTimeOffsetDateTimes`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Offset Times
+
+Returns scalar of: `demo.JavaTimeOffsetTimes`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Zoned Date Times
+
+Returns scalar of: `demo.JavaTimeZonedDateTimes`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+=== java.util
+
+==== Dates
+
+Returns scalar of: `demo.JavaUtilDates`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+=== JodaTime
+
+==== Local Dates
+
+Returns scalar of: `demo.JodaLocalDates`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Local Date Times
+
+Returns scalar of: `demo.JodaLocalDateTimes`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Local Times
+
+Returns scalar of: `demo.JodaLocalTimes`
+
+===== Top-Bar
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Other
+
+* [ ] Property `Description` 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Metadata
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Logical Type Name` 
+
+* [ ] Property `Object Identifier` 
+
+===== Collection Entities
+
+==== Date Times
+
+Returns scalar of: `demo.JodaDateTimes`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
 == More Types
 
-[source,xml]
-----
-<mb3:section>
-    <mb3:named>java.awt</mb3:named>
-    <mb3:serviceAction id="bufferedImages" objectType="demo.JavaAwtTypesMenu">
-        <cpt:logicalTypeName>demo.JavaAwtTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>java.math</mb3:named>
-    <mb3:serviceAction id="bigDecimals" objectType="demo.JavaMathTypesMenu">
-        <cpt:logicalTypeName>demo.JavaMathTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="bigIntegers" objectType="demo.JavaMathTypesMenu">
-        <cpt:logicalTypeName>demo.JavaMathTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>java.net</mb3:named>
-    <mb3:serviceAction id="urls" objectType="demo.JavaNetTypesMenu">
-        <cpt:logicalTypeName>demo.JavaNetTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>java.util</mb3:named>
-    <mb3:serviceAction id="uuids" objectType="demo.JavaUtilTypesMenu">
-        <cpt:logicalTypeName>demo.JavaUtilTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>Apache Isis Core</mb3:named>
-    <mb3:serviceAction id="blobs" objectType="demo.IsisTypesMenu">
-        <cpt:logicalTypeName>demo.IsisTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="clobs" objectType="demo.IsisTypesMenu">
-        <cpt:logicalTypeName>demo.IsisTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="localResourcePaths" objectType="demo.IsisTypesMenu">
-        <cpt:logicalTypeName>demo.IsisTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="markups" objectType="demo.IsisTypesMenu">
-        <cpt:logicalTypeName>demo.IsisTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="passwords" objectType="demo.IsisTypesMenu">
-        <cpt:logicalTypeName>demo.IsisTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>Apache Isis Extensions</mb3:named>
-    <mb3:serviceAction id="asciiDocs" objectType="demo.IsisExtTypesMenu">
-        <cpt:logicalTypeName>demo.IsisExtTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="markdowns" objectType="demo.IsisExtTypesMenu">
-        <cpt:logicalTypeName>demo.IsisExtTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="calendarEvents" objectType="demo.IsisExtTypesMenu">
-        <cpt:logicalTypeName>demo.IsisExtTypesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="asyncActions" objectType="demo.AsyncActionMenu">
-        <cpt:logicalTypeName>demo.AsyncActionMenu</cpt:logicalTypeName>
-        <cpt:named>SSE</cpt:named>
-        <cpt:describedAs>Background (Async) Actions</cpt:describedAs>
-    </mb3:serviceAction>
-</mb3:section>
-----
-           
+=== java.awt
+
+==== Buffered Images
+
+Returns scalar of: `demo.JavaAwtBufferedImages`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+=== java.math
+
+==== Big Decimals
+
+Returns scalar of: `demo.JavaMathBigDecimals`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Big Integers
+
+Returns scalar of: `demo.JavaMathBigIntegers`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+=== java.net
+
+==== Urls
+
+Returns scalar of: `demo.JavaNetUrls`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+=== java.util
+
+==== Uuids
+
+Returns scalar of: `demo.JavaUtilUuids`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+=== Apache Isis Core
+
+==== Blobs
+
+Returns scalar of: `demo.IsisBlobs`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Clobs
+
+Returns scalar of: `demo.IsisClobs`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Local Resource Paths
+
+Returns scalar of: `demo.IsisLocalResourcePaths`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Markups
+
+Returns scalar of: `demo.IsisMarkups`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Passwords
+
+Returns scalar of: `demo.IsisPasswords`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+=== Apache Isis Extensions
+
+==== Ascii Docs
+
+Returns scalar of: `demo.IsisAsciiDocs`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Markdowns
+
+Returns scalar of: `demo.IsisMarkdowns`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== Calendar Events
+
+Returns scalar of: `demo.IsisCalendarEvents`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Entities
+
+* [ ] Action `Open View Model` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+==== SSE
+
+_Background (Async) Actions_
+
+Returns scalar of: `demo.AsyncAction`
+
+===== Top-Bar
+
+* [ ] Action `Clear Hints` 
+
+===== FieldSet Server Sent Events
+
+* [ ] Action `Start Simple Task` 
+
+* [ ] Action `Start Task With Its Own Session` 
+
+* [ ] Property `Progress View` 
+
+===== FieldSet Description
+
+* [ ] Property `Description` 
+
+* [ ] Property `Sources` 
+
 == Services
 
-[source,xml]
-----
-<mb3:section>
-    <mb3:named>Core</mb3:named>
-    <mb3:serviceAction id="errorReportingService" objectType="demo.ServicesMenu">
-        <cpt:logicalTypeName>demo.ServicesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="eventBusService" objectType="demo.ServicesMenu">
-        <cpt:logicalTypeName>demo.ServicesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="messageService" objectType="demo.ServicesMenu">
-        <cpt:logicalTypeName>demo.ServicesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="wrapperFactory" objectType="demo.ServicesMenu">
-        <cpt:logicalTypeName>demo.ServicesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="xmlSnapshot" objectType="demo.ServicesMenu">
-        <cpt:logicalTypeName>demo.ServicesMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>Extensions - SecMan</mb3:named>
-    <mb3:serviceAction id="appTenancy" objectType="demo.ExtSecManMenu">
-        <cpt:logicalTypeName>demo.ExtSecManMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-----
-           
+=== Core
+
+==== Error Reporting Service
+
+Returns scalar of: `demo.ErrorReportingServiceDemoVm`
+
+===== Top-Bar
+
+* [ ] Action `Trigger An Error` 
+
+===== FieldSet Other
+
+* [ ] Property `Description` 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Metadata
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Logical Type Name` 
+
+* [ ] Property `Object Identifier` 
+
+==== Event Bus Service
+
+Returns scalar of: `demo.EventBusServiceDemoVm`
+
+===== Top-Bar
+
+* [ ] Action `Clear Hints` 
+
+===== Collection All Events
+
+* [ ] Action `Trigger Event` _Writes a new EventLog entry to the persistent eventlog._
+
+===== FieldSet Description
+
+* [ ] Property `Description` 
+
+* [ ] Property `Sources` 
+
+==== Message Service
+
+Returns scalar of: `demo.MessageServiceDemoVm`
+
+===== Top-Bar
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Action `Info Message` _Presents an info style message._
+
+* [ ] Action `Warn Message` _Presents an warning style message._
+
+* [ ] Action `Error Message` _Presents an error style message._
+
+===== FieldSet Description
+
+* [ ] Property `Description` 
+
+* [ ] Property `Sources` 
+
+==== Wrapper Factory
+
+_Formal object interactions + async_
+
+Returns scalar of: `demo.WrapperFactoryEntity`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Other
+
+* [ ] Property `Property Async` 
+
+* [ ] Property `Property Async Mixin` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+===== Collection Commands
+
+==== Xml Snapshot
+
+_Snapshot object graphs as XML_
+
+Returns scalar of: `demo.XmlSnapshotParentVm`
+
+===== Top-Bar
+
+* [ ] Action `Take Xml Snapshot` 
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Properties
+
+* [ ] Property `Text` 
+
+* [ ] Property `Peer` 
+
+===== Collection Children
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
+=== Extensions - SecMan
+
+==== App Tenancy
+
+_Restricts access to objects dependent upon who "owns" those objects_
+
+Returns scalar of: `demo.SecManVm`
+
+===== FieldSet 
+
+* [ ] Property `Sources` 
+
+===== Collection Tenanted Entities
+
+===== FieldSet General
+
+* [ ] Property `Hide Regex` 
+
+* [ ] Property `Disable Regex` 
+
+===== FieldSet Description
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Description` 
+
 == Featured
 
-[source,xml]
-----
-<mb3:section>
-    <mb3:named>Layout</mb3:named>
-    <mb3:serviceAction id="describedAs" objectType="demo.DescribedAsMenu">
-        <cpt:logicalTypeName>demo.DescribedAsMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="tabDemo" objectType="demo.TabMenu">
-        <cpt:logicalTypeName>demo.TabMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>Custom UI</mb3:named>
-    <mb3:serviceAction id="whereInTheWorld" objectType="demo.WhereInTheWorldMenu">
-        <cpt:logicalTypeName>demo.WhereInTheWorldMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-----
-           
+=== Layout
+
+==== Described As
+
+_Opens the Tooltip-Demo page._
+
+Returns scalar of: `demo.Tooltip`
+
+===== Top-Bar
+
+* [ ] Action `Clear Hints` 
+
+===== FieldSet Actions without Arguments
+
+* [ ] Action `No Arguments` _This is a no-arg action with a tooltip._
+
+* [ ] Action `No Arguments With Confirm` _This is a no-arg action with a tooltip and 'are you sure' semantics._
+
+* [ ] Property `Text1` 
+
+===== FieldSet Actions with Arguments
+
+* [ ] Action `With Arguments` _This is an action with arguments and a tooltip._
+
+* [ ] Action `With Arguments And Confirm` _This is an action with arguments, a tooltip and 'are you sure' semantics._
+
+* [ ] Property `Text2` 
+
+===== FieldSet Disabled Actions
+
+* [ ] Action `Disabled` _This is a disabled action with a tooltip._
+
+* [ ] Action `Disabled With Confirm` _This is a disabled action with a tooltip and 'are you sure' semantics._
+
+* [ ] Property `Text3` 
+
+===== FieldSet Properties
+
+* [ ] Property `Text4` 
+
+* [ ] Property `String Property` _This is a property with a tooltip._
+
+* [ ] Property `Readonly String Property` _This is a readonly property with a tooltip._
+
+* [ ] Property `Editing Disabled String Property` _This is a 'editing-disabled' property with a tooltip._
+
+===== Collection Collection
+
+_This is a collection with a tooltip. Also note, you can mouse-over the 'Name' column's head label._
+
+===== FieldSet Description
+
+* [ ] Property `Description` 
+
+* [ ] Property `Sources` 
+
+==== Tab Demo
+
+_Opens the Tabs-Demo page._
+
+Returns scalar of: `demo.Tab`
+
+===== Top-Bar
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Action `Do Hide Field` 
+
+* [ ] Action `Do Show Field` 
+
+===== FieldSet Hideable Field
+
+* [ ] Property `Field1` 
+
+===== FieldSet null
+
+* [ ] Property `Field2` 
+
+===== FieldSet Fieldset 3
+
+* [ ] Property `Field3` 
+
+===== FieldSet Fieldset 4
+
+* [ ] Property `Field4` 
+
+===== FieldSet Description
+
+* [ ] Property `Description` 
+
+* [ ] Property `Sources` 
+
+=== Custom UI
+
+==== Where In The World
+
+_Opens a Custom UI page displaying a map for the provided address_
+
+Returns scalar of: `demo.CustomUiVm`
+
+===== FieldSet Other
+
+* [ ] Property `Address` 
+
+* [ ] Property `Latitude` 
+
+* [ ] Property `Longitude` 
+
+* [ ] Property `Zoom` 
+
+* [ ] Property `Description` 
+
+* [ ] Property `Sources` 
+
+===== FieldSet Metadata
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Logical Type Name` 
+
+* [ ] Property `Object Identifier` 
+
+== Other
+
 == Prototyping
 
-[source,xml]
-----
-<mb3:named>Prototyping</mb3:named>
-<mb3:section>
-    <mb3:named>Fixtures</mb3:named>
-    <mb3:serviceAction id="runFixtureScript" objectType="isis.testing.fixtures.FixtureScripts">
-        <cpt:logicalTypeName>isis.testing.fixtures.FixtureScripts</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="recreateObjectsAndReturnFirst" objectType="isis.testing.fixtures.FixtureScripts">
-        <cpt:logicalTypeName>isis.testing.fixtures.FixtureScripts</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>Layouts</mb3:named>
-    <mb3:serviceAction id="downloadLayouts" objectType="isis.applib.LayoutServiceMenu">
-        <cpt:logicalTypeName>isis.applib.LayoutServiceMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="downloadMenuBarsLayout" objectType="isis.applib.LayoutServiceMenu">
-        <cpt:logicalTypeName>isis.applib.LayoutServiceMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>Meta Model and Features</mb3:named>
-    <mb3:serviceAction id="downloadMetaModelXml" objectType="isis.applib.MetaModelServiceMenu">
-        <cpt:logicalTypeName>isis.applib.MetaModelServiceMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="downloadMetaModelCsv" objectType="isis.applib.MetaModelServiceMenu">
-        <cpt:logicalTypeName>isis.applib.MetaModelServiceMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="downloadMetaModelAscii" objectType="isis.applib.MetaModelServiceMenu">
-        <cpt:logicalTypeName>isis.applib.MetaModelServiceMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="downloadMetaModelDiff" objectType="isis.applib.MetaModelServiceMenu">
-        <cpt:logicalTypeName>isis.applib.MetaModelServiceMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="allNamespaces" objectType="isis.feat.ApplicationFeatureMenu">
-        <cpt:logicalTypeName>isis.feat.ApplicationFeatureMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="allTypes" objectType="isis.feat.ApplicationFeatureMenu">
-        <cpt:logicalTypeName>isis.feat.ApplicationFeatureMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="allActions" objectType="isis.feat.ApplicationFeatureMenu">
-        <cpt:logicalTypeName>isis.feat.ApplicationFeatureMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="allProperties" objectType="isis.feat.ApplicationFeatureMenu">
-        <cpt:logicalTypeName>isis.feat.ApplicationFeatureMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="allCollections" objectType="isis.feat.ApplicationFeatureMenu">
-        <cpt:logicalTypeName>isis.feat.ApplicationFeatureMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>Persistence</mb3:named>
-    <mb3:serviceAction id="downloadMetamodels" objectType="isis.persistence.jdo.JdoMetamodelMenu">
-        <cpt:logicalTypeName>isis.persistence.jdo.JdoMetamodelMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="openH2Console" objectType="isis.ext.h2Console.H2ManagerMenu">
-        <cpt:logicalTypeName>isis.ext.h2Console.H2ManagerMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>REST API</mb3:named>
-    <mb3:serviceAction id="openSwaggerUi" objectType="isis.viewer.restfulobjects.SwaggerServiceMenu">
-        <cpt:logicalTypeName>isis.viewer.restfulobjects.SwaggerServiceMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="openRestApi" objectType="isis.viewer.restfulobjects.SwaggerServiceMenu">
-        <cpt:logicalTypeName>isis.viewer.restfulobjects.SwaggerServiceMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="downloadSwaggerSchemaDefinition" objectType="isis.viewer.restfulobjects.SwaggerServiceMenu">
-        <cpt:logicalTypeName>isis.viewer.restfulobjects.SwaggerServiceMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>i18n</mb3:named>
-    <mb3:serviceAction id="downloadTranslations" objectType="isis.applib.TranslationServicePoMenu">
-        <cpt:logicalTypeName>isis.applib.TranslationServicePoMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="resetTranslationCache" objectType="isis.applib.TranslationServicePoMenu">
-        <cpt:logicalTypeName>isis.applib.TranslationServicePoMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="switchToReadingTranslations" objectType="isis.applib.TranslationServicePoMenu">
-        <cpt:logicalTypeName>isis.applib.TranslationServicePoMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="switchToWritingTranslations" objectType="isis.applib.TranslationServicePoMenu">
-        <cpt:logicalTypeName>isis.applib.TranslationServicePoMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>Prototype Actions (on Object)</mb3:named>
-    <mb3:serviceAction id="showPrototypeActions" objectType="demo.PrototypeActionsVisibilityAdvisor">
-        <cpt:logicalTypeName>demo.PrototypeActionsVisibilityAdvisor</cpt:logicalTypeName>
-        <cpt:named>Show for Object</cpt:named>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="doNotShowPrototypeActions" objectType="demo.PrototypeActionsVisibilityAdvisor">
-        <cpt:logicalTypeName>demo.PrototypeActionsVisibilityAdvisor</cpt:logicalTypeName>
-        <cpt:named>Do not Show for Object</cpt:named>
-    </mb3:serviceAction>
-</mb3:section>
-----
-           
+=== Fixtures
+
+=== Layouts
+
+=== Site-Map
+
+=== Meta Model and Features
+
+=== Persistence
+
+=== REST API
+
+=== i18n
+
+=== Prototype Actions (on Object)
+
 == Security
 
-[source,xml]
-----
-<mb3:section>
-    <mb3:named>Users</mb3:named>
-    <mb3:serviceAction id="userManager" objectType="isis.ext.secman.ApplicationUserMenu">
-        <cpt:logicalTypeName>isis.ext.secman.ApplicationUserMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="findUsers" objectType="isis.ext.secman.ApplicationUserMenu">
-        <cpt:logicalTypeName>isis.ext.secman.ApplicationUserMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>Roles</mb3:named>
-    <mb3:serviceAction id="findRoles" objectType="isis.ext.secman.ApplicationRoleMenu">
-        <cpt:logicalTypeName>isis.ext.secman.ApplicationRoleMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="newRole" objectType="isis.ext.secman.ApplicationRoleMenu">
-        <cpt:logicalTypeName>isis.ext.secman.ApplicationRoleMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="allRoles" objectType="isis.ext.secman.ApplicationRoleMenu">
-        <cpt:logicalTypeName>isis.ext.secman.ApplicationRoleMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>Permissions</mb3:named>
-    <mb3:serviceAction id="allPermissions" objectType="isis.ext.secman.ApplicationPermissionMenu">
-        <cpt:logicalTypeName>isis.ext.secman.ApplicationPermissionMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="findOrphanedPermissions" objectType="isis.ext.secman.ApplicationPermissionMenu">
-        <cpt:logicalTypeName>isis.ext.secman.ApplicationPermissionMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>Tenancies</mb3:named>
-    <mb3:serviceAction id="findTenancies" objectType="isis.ext.secman.ApplicationTenancyMenu">
-        <cpt:logicalTypeName>isis.ext.secman.ApplicationTenancyMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="newTenancy" objectType="isis.ext.secman.ApplicationTenancyMenu">
-        <cpt:logicalTypeName>isis.ext.secman.ApplicationTenancyMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="allTenancies" objectType="isis.ext.secman.ApplicationTenancyMenu">
-        <cpt:logicalTypeName>isis.ext.secman.ApplicationTenancyMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-----
-           
+=== Users
+
+==== User Manager
+
+Returns scalar of: `isis.ext.secman.ApplicationUserManager`
+
+===== Collection All Users
+
+===== FieldSet Metadata
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Logical Type Name` 
+
+* [ ] Property `Object Identifier` 
+
+==== Find Users
+
+Returns collection of: `isis.ext.secman.ApplicationUser`
+
+===== Top-Bar
+
+* [ ] Action `Open` 
+
+===== FieldSet Identity
+
+* [ ] Property `Name` 
+
+* [ ] Property `Username` 
+
+===== FieldSet Other
+
+* [ ] Property `Encrypted Password` 
+
+===== FieldSet Metadata
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Logical Type Name` 
+
+* [ ] Property `Object Identifier` 
+
+===== FieldSet Access
+
+* [ ] Property `Status` 
+
+* [ ] Property `Account Type` 
+
+* [ ] Property `Has password?` 
+
+* [ ] Property `At Path` 
+
+===== FieldSet Contact Details
+
+* [ ] Property `Email Address` 
+
+* [ ] Property `Phone Number` 
+
+* [ ] Property `Fax Number` 
+
+===== FieldSet Name
+
+* [ ] Property `Family Name` 
+
+* [ ] Property `Given Name` 
+
+* [ ] Property `Known As` 
+
+===== Collection Roles
+
+===== Collection Effective Member Permissions
+
+=== Roles
+
+==== Find Roles
+
+Returns collection of: `isis.ext.secman.ApplicationRole`
+
+===== FieldSet Identity
+
+* [ ] Property `Name` 
+
+===== FieldSet Metadata
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Logical Type Name` 
+
+* [ ] Property `Object Identifier` 
+
+===== FieldSet Details
+
+* [ ] Property `Description` 
+
+===== Collection Permissions
+
+===== Collection Users
+
+==== New Role
+
+Returns scalar of: `isis.ext.secman.ApplicationRole`
+
+===== FieldSet Identity
+
+* [ ] Property `Name` 
+
+===== FieldSet Metadata
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Logical Type Name` 
+
+* [ ] Property `Object Identifier` 
+
+===== FieldSet Details
+
+* [ ] Property `Description` 
+
+===== Collection Permissions
+
+===== Collection Users
+
+==== All Roles
+
+Returns collection of: `isis.ext.secman.ApplicationRole`
+
+===== FieldSet Identity
+
+* [ ] Property `Name` 
+
+===== FieldSet Metadata
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Logical Type Name` 
+
+* [ ] Property `Object Identifier` 
+
+===== FieldSet Details
+
+* [ ] Property `Description` 
+
+===== Collection Permissions
+
+===== Collection Users
+
+=== Permissions
+
+==== Find Orphaned Permissions
+
+Returns scalar of: `isis.ext.secman.ApplicationOrphanedPermissionManager`
+
+===== Collection Orphaned Permissions
+
+===== FieldSet Metadata
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Logical Type Name` 
+
+* [ ] Property `Object Identifier` 
+
+=== Tenancies
+
+==== Find Tenancies
+
+Returns collection of: `isis.ext.secman.ApplicationTenancy`
+
+===== FieldSet Identity
+
+* [ ] Property `Path` 
+
+===== FieldSet Metadata
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Logical Type Name` 
+
+* [ ] Property `Object Identifier` 
+
+===== FieldSet Details
+
+* [ ] Property `Name` 
+
+* [ ] Property `Parent` 
+
+===== Collection Children
+
+===== Collection Users
+
+==== New Tenancy
+
+Returns scalar of: `isis.ext.secman.ApplicationTenancy`
+
+===== FieldSet Identity
+
+* [ ] Property `Path` 
+
+===== FieldSet Metadata
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Logical Type Name` 
+
+* [ ] Property `Object Identifier` 
+
+===== FieldSet Details
+
+* [ ] Property `Name` 
+
+* [ ] Property `Parent` 
+
+===== Collection Children
+
+===== Collection Users
+
 == Activity
 
-[source,xml]
-----
-<mb3:named>Activity</mb3:named>
-<mb3:section>
-    <mb3:named>Command Log</mb3:named>
-    <mb3:serviceAction id="activeCommands" objectType="isis.ext.commandLog.CommandServiceMenu">
-        <cpt:logicalTypeName>isis.ext.commandLog.CommandServiceMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="findCommands" objectType="isis.ext.commandLog.CommandServiceMenu">
-        <cpt:logicalTypeName>isis.ext.commandLog.CommandServiceMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="findCommandById" objectType="isis.ext.commandLog.CommandServiceMenu">
-        <cpt:logicalTypeName>isis.ext.commandLog.CommandServiceMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="truncateLog" objectType="isis.ext.commandLog.CommandServiceMenu">
-        <cpt:logicalTypeName>isis.ext.commandLog.CommandServiceMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>Command Replay - Primary</mb3:named>
-    <mb3:serviceAction id="findCommands" objectType="isis.ext.commandReplayPrimary.CommandReplayOnPrimaryService">
-        <cpt:logicalTypeName>isis.ext.commandReplayPrimary.CommandReplayOnPrimaryService</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="downloadCommands" objectType="isis.ext.commandReplayPrimary.CommandReplayOnPrimaryService">
-        <cpt:logicalTypeName>isis.ext.commandReplayPrimary.CommandReplayOnPrimaryService</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="downloadCommandById" objectType="isis.ext.commandReplayPrimary.CommandReplayOnPrimaryService">
-        <cpt:logicalTypeName>isis.ext.commandReplayPrimary.CommandReplayOnPrimaryService</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>Command Replay - Secondary</mb3:named>
-    <mb3:serviceAction id="findMostRecentReplayed" objectType="isis.ext.commandReplaySecondary.CommandReplayOnSecondaryService">
-        <cpt:logicalTypeName>isis.ext.commandReplaySecondary.CommandReplayOnSecondaryService</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="uploadCommands" objectType="isis.ext.commandReplaySecondary.CommandReplayOnSecondaryService">
-        <cpt:logicalTypeName>isis.ext.commandReplaySecondary.CommandReplayOnSecondaryService</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>Demo Replay Controller</mb3:named>
-    <mb3:serviceAction id="pauseReplay" objectType="demo.web.DemoReplayController">
-        <cpt:logicalTypeName>demo.web.DemoReplayController</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="resumeReplay" objectType="demo.web.DemoReplayController">
-        <cpt:logicalTypeName>demo.web.DemoReplayController</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-----
-           
-== Tertiary Menu
+=== Command Log
 
-[source,xml]
-----
-<mb3:section>
-    <mb3:named>Configuration</mb3:named>
-    <mb3:serviceAction id="configuration" objectType="isis.conf.ConfigurationMenu">
-        <cpt:logicalTypeName>isis.conf.ConfigurationMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>Impersonate</mb3:named>
-    <mb3:serviceAction id="impersonate" objectType="isis.sudo.ImpersonateMenu">
-        <cpt:logicalTypeName>isis.sudo.ImpersonateMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="impersonateWithRoles" objectType="isis.sudo.ImpersonateMenu">
-        <cpt:logicalTypeName>isis.sudo.ImpersonateMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="stopImpersonating" objectType="isis.applib.ImpersonateStopMenu">
-        <cpt:logicalTypeName>isis.applib.ImpersonateStopMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-<mb3:section>
-    <mb3:named>Security</mb3:named>
-    <mb3:serviceAction id="me" objectType="isis.ext.secman.MeService">
-        <cpt:logicalTypeName>isis.ext.secman.MeService</cpt:logicalTypeName>
-        <cpt:named>Me (SecMan)</cpt:named>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="me" objectType="isis.applib.UserMenu">
-        <cpt:logicalTypeName>isis.applib.UserMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-    <mb3:serviceAction id="logout" objectType="isis.security.LogoutMenu">
-        <cpt:logicalTypeName>isis.security.LogoutMenu</cpt:logicalTypeName>
-    </mb3:serviceAction>
-</mb3:section>
-----
+=== Command Replay - Primary
+
+=== Command Replay - Secondary
+
+=== Demo Replay Controller
+
+== Unnamed Menu
+
+=== Configuration
+
+==== Configuration
+
+Returns scalar of: `isis.conf.ConfigurationViewmodel`
+
+===== Collection Configuration
+
+===== Collection Environment
+
+===== FieldSet Metadata
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Logical Type Name` 
+
+* [ ] Property `Object Identifier` 
+
+=== Impersonate
+
+=== Security
+
+==== Me (SecMan)
+
+_Looks up ApplicationUser entity corresponding to your user account_
+
+Returns scalar of: `isis.ext.secman.ApplicationUser`
+
+===== Top-Bar
+
+* [ ] Action `Open` 
+
+===== FieldSet Identity
+
+* [ ] Property `Name` 
+
+* [ ] Property `Username` 
+
+===== FieldSet Other
+
+* [ ] Property `Encrypted Password` 
+
+===== FieldSet Metadata
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Logical Type Name` 
+
+* [ ] Property `Object Identifier` 
+
+===== FieldSet Access
+
+* [ ] Property `Status` 
+
+* [ ] Property `Account Type` 
+
+* [ ] Property `Has password?` 
+
+* [ ] Property `At Path` 
+
+===== FieldSet Contact Details
+
+* [ ] Property `Email Address` 
+
+* [ ] Property `Phone Number` 
+
+* [ ] Property `Fax Number` 
+
+===== FieldSet Name
+
+* [ ] Property `Family Name` 
+
+* [ ] Property `Given Name` 
+
+* [ ] Property `Known As` 
+
+===== Collection Roles
+
+===== Collection Effective Member Permissions
+
+==== Me
+
+_Returns your user account details_
+
+Returns scalar of: `isis.applib.UserMemento`
+
+===== FieldSet Identity
+
+* [ ] Property `Name` 
+
+===== FieldSet Other
+
+* [ ] Property `Authentication Code` 
+
+===== FieldSet Metadata
+
+* [ ] Action `Clear Hints` 
+
+* [ ] Property `Logical Type Name` 
+
+* [ ] Property `Object Identifier` 
+
+===== FieldSet Details
+
+* [ ] Property `Real Name` 
+
+* [ ] Property `Avatar Url` 
+
+===== FieldSet Security
+
+* [ ] Property `Authentication Source` 
+
+* [ ] Property `Impersonating` 
+
+* [ ] Property `Multi Tenancy Token` 
+
+===== Collection Roles
+
+==== Logout
+
+Returns scalar of: `java.lang.Object`
+
