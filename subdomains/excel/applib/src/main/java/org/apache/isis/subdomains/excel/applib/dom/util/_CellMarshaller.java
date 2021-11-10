@@ -46,13 +46,13 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-final class CellMarshaller {
+final class _CellMarshaller {
 
     private final CellStyle dateCellStyle;
     private final CellStyle defaultCellStyle;
     private final BookmarkService bookmarkService;
 
-    CellMarshaller(
+    _CellMarshaller(
             final BookmarkService bookmarkService,
             final CellStyle dateCellStyle,
             final CellStyle defaultCellStyle){

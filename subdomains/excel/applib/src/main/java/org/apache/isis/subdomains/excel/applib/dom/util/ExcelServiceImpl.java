@@ -33,7 +33,7 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
+import org.apache.isis.subdomains.excel.applib.dom.ExcelServiceDefault;
 import org.apache.isis.subdomains.excel.applib.dom.PivotColumn;
 import org.apache.isis.subdomains.excel.applib.dom.PivotRow;
 import org.apache.isis.subdomains.excel.applib.dom.PivotValue;
@@ -111,7 +111,7 @@ public class ExcelServiceImpl {
             final File file = newExcelConverter().appendSheet(worksheetContents, new XSSFWorkbook());
             return excelFileBlobConverter.toBlob(fileName, file);
         } catch (final IOException ex) {
-            throw new ExcelService.Exception(ex);
+            throw new ExcelServiceDefault.Exception(ex);
         }
     }
 
@@ -123,7 +123,7 @@ public class ExcelServiceImpl {
             final File file = newExcelConverter().appendSheet(worksheetContents, new XSSFWorkbook(in));
             return excelFileBlobConverter.toBlob(fileName, file);
         } catch (final IOException ex) {
-            throw new ExcelService.Exception(ex);
+            throw new ExcelServiceDefault.Exception(ex);
         }
     }
 
@@ -151,7 +151,7 @@ public class ExcelServiceImpl {
     public <T> Blob toExcelPivot(
             final List<T> domainObjects,
             final Class<T> cls,
-            final String fileName) throws ExcelService.Exception {
+            final String fileName) throws ExcelServiceDefault.Exception {
         return toExcelPivot(domainObjects, cls, null, fileName);
     }
 
@@ -172,7 +172,7 @@ public class ExcelServiceImpl {
             final File file = newExcelConverter().appendPivotSheet(worksheetContents);
             return excelFileBlobConverter.toBlob(fileName, file);
         } catch (final IOException ex) {
-            throw new ExcelService.Exception(ex);
+            throw new ExcelServiceDefault.Exception(ex);
         }
     }
 
@@ -194,7 +194,7 @@ public class ExcelServiceImpl {
     public <T> List<T> fromExcel(
             final Blob excelBlob,
             final Class<T> cls,
-            final String sheetName) throws ExcelService.Exception {
+            final String sheetName) throws ExcelServiceDefault.Exception {
         final WorksheetSpec worksheetSpec = new WorksheetSpec(cls, sheetName);
         return fromExcel(excelBlob, worksheetSpec);
     }
@@ -205,7 +205,7 @@ public class ExcelServiceImpl {
      */
     public <T> List<T> fromExcel(
             final Blob excelBlob,
-            final WorksheetSpec worksheetSpec) throws ExcelService.Exception {
+            final WorksheetSpec worksheetSpec) throws ExcelServiceDefault.Exception {
         final List<List<?>> listOfList =
                 fromExcel(excelBlob, Collections.singletonList(worksheetSpec));
         return _Casts.uncheckedCast(listOfList.get(0));
@@ -217,17 +217,17 @@ public class ExcelServiceImpl {
      */
     public List<List<?>> fromExcel(
             final Blob excelBlob,
-            final List<WorksheetSpec> worksheetSpecs) throws ExcelService.Exception {
+            final List<WorksheetSpec> worksheetSpecs) throws ExcelServiceDefault.Exception {
         try {
             return newExcelConverter().fromBytes(worksheetSpecs, excelBlob.getBytes());
         } catch (final IOException | InvalidFormatException e) {
-            throw new ExcelService.Exception(e);
+            throw new ExcelServiceDefault.Exception(e);
         }
     }
 
     @SneakyThrows
-    private ExcelConverter newExcelConverter() {
-        return new ExcelConverter(specificationLoader, objectManager, bookmarkService, serviceInjector);
+    private _ExcelConverter newExcelConverter() {
+        return new _ExcelConverter(specificationLoader, objectManager, bookmarkService, serviceInjector);
     }
 
 

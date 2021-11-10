@@ -45,7 +45,7 @@ import fr.opensagres.xdocreport.template.TemplateEngineKind;
 import fr.opensagres.xdocreport.template.formatter.FieldsMetadata;
 
 @Service
-@Named("isis.sub.zip.XDocReportServiceDefault")
+@Named("isis.sub.xdocreport.XDocReportServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class XDocReportServiceDefault implements XDocReportService {

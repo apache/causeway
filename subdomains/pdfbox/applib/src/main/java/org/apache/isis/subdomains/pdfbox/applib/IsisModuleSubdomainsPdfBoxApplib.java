@@ -18,11 +18,13 @@
  */
 package org.apache.isis.subdomains.pdfbox.applib;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 @Configuration
-@ComponentScan
+@Import({
+
+})
 public class IsisModuleSubdomainsPdfBoxApplib {
 
 }

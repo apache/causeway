@@ -29,6 +29,7 @@ import org.apache.poi.util.IOUtils;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
+import org.apache.isis.subdomains.excel.applib.dom.ExcelServiceDefault;
 
 import lombok.val;
 
@@ -46,7 +47,7 @@ public class ExcelFileBlobConverter {
             IOUtils.copy(fis, baos);
             return new Blob(name, ExcelService.XSLX_MIME_TYPE, baos.toByteArray());
         } catch (IOException ex) {
-            throw new ExcelService.Exception(ex);
+            throw new ExcelServiceDefault.Exception(ex);
         } finally {
             IOUtils.closeQuietly(fis);
             IOUtils.closeQuietly(baos);

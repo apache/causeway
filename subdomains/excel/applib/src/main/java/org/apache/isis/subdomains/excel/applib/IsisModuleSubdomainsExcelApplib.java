@@ -18,14 +18,18 @@
  */
 package org.apache.isis.subdomains.excel.applib;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+import org.apache.isis.subdomains.excel.applib.dom.ExcelServiceDefault;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
-@ComponentScan
+@Import({
+    ExcelServiceDefault.class
+})
 public class IsisModuleSubdomainsExcelApplib {
 
     public static final String NAMESPACE = "isis.sub.excel";
