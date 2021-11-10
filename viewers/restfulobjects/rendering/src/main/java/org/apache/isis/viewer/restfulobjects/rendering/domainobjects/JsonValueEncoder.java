@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 import javax.annotation.PostConstruct;
@@ -145,10 +146,8 @@ public class JsonValueEncoder {
 
             final Object value = ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)
                     ? NullNode.getInstance()
-                    : objectSpecification.lookupFacet(ValueFacet.class)
-                        .<EncoderDecoder>flatMap(ValueFacet::selectDefaultEncoderDecoder)
-                        .<Object>map(codec->
-                            codec.toEncodedString(objectAdapter.getPojo()))
+                    : toEncodedString(objectSpecification, objectAdapter.getPojo())
+                        .map(Object.class::cast)
                         .orElseGet(()->{
                             log.warn("{Could not resolve an EncoderDecoder for {}, "
                                     + "falling back to rendering as 'null'. "
@@ -164,6 +163,13 @@ public class JsonValueEncoder {
             appendFormats(repr, "string", "string", suppressExtensions);
             return value;
         }
+    }
+
+    private static <T> Optional<String> toEncodedString(final ObjectSpecification spec, final T pojo) {
+        return spec.lookupFacet(ValueFacet.class)
+            .flatMap(ValueFacet::selectDefaultEncoderDecoder)
+            .map(EncoderDecoder.class::cast)
+            .map(codec->((EncoderDecoder<T>)codec).toEncodedString(pojo));
     }
 
     @Nullable
