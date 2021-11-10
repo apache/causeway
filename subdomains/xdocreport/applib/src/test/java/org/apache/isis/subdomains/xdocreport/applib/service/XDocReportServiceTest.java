@@ -30,6 +30,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import org.apache.isis.subdomains.xdocreport.applib.XDocReportService;
+import org.apache.isis.subdomains.xdocreport.applib.XDocReportService.OutputType;
 import org.apache.isis.subdomains.xdocreport.applib.service.example.models.Developer;
 import org.apache.isis.subdomains.xdocreport.applib.service.example.models.Project;
 import org.apache.isis.subdomains.xdocreport.applib.service.example.models.ProjectDevelopersModel;
@@ -49,7 +51,7 @@ public class XDocReportServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        service = new XDocReportService();
+        service = new XDocReportServiceDefault();
     }
 
     @Test

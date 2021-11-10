@@ -23,11 +23,15 @@ import java.io.IOException;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
+import javax.inject.Named;
 
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.subdomains.xdocreport.applib.XDocReportService;
 
 import fr.opensagres.poi.xwpf.converter.core.IXWPFConverter;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
@@ -40,11 +44,11 @@ import fr.opensagres.xdocreport.template.IContext;
 import fr.opensagres.xdocreport.template.TemplateEngineKind;
 import fr.opensagres.xdocreport.template.formatter.FieldsMetadata;
 
-/**
- * @since 2.0 {@index}
- */
 @Service
-public class XDocReportService {
+@Named("isis.sub.zip.XDocReportServiceDefault")
+@Priority(PriorityPrecedence.MIDPOINT)
+@Qualifier("Default")
+public class XDocReportServiceDefault implements XDocReportService {
 
     PdfOptions pdfOptions;
 
@@ -53,7 +57,7 @@ public class XDocReportService {
         pdfOptions = PdfOptions.create();
     }
 
-    @Programmatic
+    @Override
     public byte[] render(
             final byte[] templateBytes,
             final XDocReportModel dataModel,
@@ -72,6 +76,13 @@ public class XDocReportService {
             throw new IOException(e);
         }
     }
+
+
+    protected IXWPFConverter<PdfOptions> pdfConverter() {
+        return PdfConverter.getInstance();
+    }
+
+    // -- HELPER
 
     private byte[] toDocx(final byte[] bytes, final XDocReportModel dataModel) throws IOException, XDocReportException {
         final IXDocReport report = XDocReportRegistry
@@ -105,7 +116,4 @@ public class XDocReportService {
         return baos.toByteArray();
     }
 
-    protected IXWPFConverter<PdfOptions> pdfConverter() {
-        return PdfConverter.getInstance();
-    }
 }

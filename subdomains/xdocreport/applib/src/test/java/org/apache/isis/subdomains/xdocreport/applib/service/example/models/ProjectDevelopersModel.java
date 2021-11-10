@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.subdomains.xdocreport.applib.service.XDocReportModel;
+import org.apache.isis.subdomains.xdocreport.applib.XDocReportService.XDocReportModel;
 
 import lombok.Data;
 
