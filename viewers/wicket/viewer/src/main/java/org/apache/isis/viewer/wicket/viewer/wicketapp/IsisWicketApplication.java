@@ -204,7 +204,7 @@ implements
     protected void init() {
         super.init();
 
-        getCspSettings().blocking().disabled();
+        getCspSettings().blocking().disabled(); // since Wicket 9, CSP is enabled by default [https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP]
 
         // Initialize Spring Dependency Injection (into Wicket components)
         val springInjector = new SpringComponentInjector(this);
