@@ -242,6 +242,10 @@ object UiManager {
         }
     }
 
+    fun getNumberOfPopups(): Int {
+        return popups.size
+    }
+
     fun performUserAction(aggregator: BaseAggregator, obj: TObject) {
         setBusyCursor()
         getEventStore().addUserAction(aggregator, obj)

@@ -128,8 +128,9 @@ class RoDialog(
     }
 
     fun open(at: Point = Point(100, 100)): Widget {
-        left = CssSize(at.x, UNIT.px)
-        top = CssSize(at.y, UNIT.px)
+        val offset = UiManager.getNumberOfPopups() * 4
+        left = CssSize(at.x + offset, UNIT.px)
+        top = CssSize(at.y + offset, UNIT.px)
         UiManager.openDialog(this)
         super.show()
         okButton.focus()
