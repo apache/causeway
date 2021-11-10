@@ -28,7 +28,6 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
@@ -45,6 +44,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.Links;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 public class ExceptionStackTracePanel extends Panel {
 
@@ -66,20 +66,20 @@ public class ExceptionStackTracePanel extends Panel {
 
         private static final long serialVersionUID = -3556235292216447710L;
 
-        public ExternalImageUrl(String id, String imageUrl) {
+        public ExternalImageUrl(final String id, final String imageUrl) {
             super(id);
             add(new AttributeModifier("src", new Model<>(imageUrl)));
             setVisible(!(imageUrl==null || imageUrl.equals("")));
         }
 
         @Override
-        protected void onComponentTag(ComponentTag tag) {
+        protected void onComponentTag(final ComponentTag tag) {
             super.onComponentTag(tag);
             checkComponentTag(tag, "img");
         }
     }
 
-    public ExceptionStackTracePanel(String id, ExceptionModel exceptionModel) {
+    public ExceptionStackTracePanel(final String id, final ExceptionModel exceptionModel) {
         super(id, exceptionModel);
 
         final Ticket ticket = exceptionModel.getTicket();
@@ -88,13 +88,11 @@ public class ExceptionStackTracePanel extends Panel {
                 ? ticket.getUserMessage()
                         : exceptionModel.getMainMessage();
 
-                final Label label = new Label(ID_MAIN_MESSAGE, mainMessage);
+                Wkt.labelAdd(this, ID_MAIN_MESSAGE, mainMessage);
 
                 // to avoid potential XSS attacks, no longer escape model strings
                 // (risk is low but could just happen: error message being rendered might accidentally or deliberately contain rogue JavaScript)
                 // label.setEscapeModelStrings(false);
-                add(label);
-
 
                 final String ticketMarkup = ticket != null ? ticket.getMarkup(): null;
                 if(ticketMarkup == null) {
@@ -113,7 +111,7 @@ public class ExceptionStackTracePanel extends Panel {
                     MarkupContainer container = new WebMarkupContainer(ID_EXCEPTION_DETAIL_DIV) {
                         private static final long serialVersionUID = 1L;
                         @Override
-                        public void renderHead(IHeaderResponse response) {
+                        public void renderHead(final IHeaderResponse response) {
                             response.render(JavaScriptReferenceHeaderItem.forReference(DIV_TOGGLE_JS));
                         }
                     };

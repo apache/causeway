@@ -57,7 +57,6 @@ import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.Mus
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.snapshot.SnapshotExcludeFacetForPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.valuesemantics.ValueSemanticsSelectingFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -99,7 +98,6 @@ extends FacetFactoryAbstract {
         processOptional(processMethodContext, propertyIfAny);
         processRegEx(processMethodContext, propertyIfAny);
         processFileAccept(processMethodContext, propertyIfAny);
-        processValueSemantics(processMethodContext, propertyIfAny);
     }
 
     void inferIntentWhenOnTypeLevel(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
@@ -377,15 +375,6 @@ extends FacetFactoryAbstract {
         // check for @Property(maxLength=...)
         addFacetIfPresent(
                 FileAcceptFacetForPropertyAnnotation
-                .create(propertyIfAny, holder));
-    }
-
-    void processValueSemantics(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
-        val holder = processMethodContext.getFacetHolder();
-
-        // check for @Property(valueSemantics=...)
-        addFacetIfPresent(
-                ValueSemanticsSelectingFacetForPropertyAnnotation
                 .create(propertyIfAny, holder));
     }
 

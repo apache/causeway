@@ -18,13 +18,10 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.actioninfo;
 
-import org.apache.wicket.markup.html.basic.Label;
-
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-
-import lombok.val;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 /**
  * Renders a panel providing summary information about an action.
@@ -40,12 +37,9 @@ extends PanelAbstract<ManagedObject, ActionModel> {
     public ActionInfoPanel(final String id, final ActionModel actionModel) {
         super(id, actionModel);
 
-        val targetAdapter = getModel().getOwner();
-        val objectAction = getModel().getMetaModel();
-
         // TODO: render instead as links (providing isn't a service; provide a
         // component for this?)
-        add(new Label(ID_TARGET, targetAdapter.titleString()));
-        add(new Label(ID_ACTION_NAME, objectAction.getFriendlyName(targetAdapter.asProvider())));
+        Wkt.labelAdd(this, ID_TARGET, ()->actionModel.getParentObject().titleString());
+        Wkt.labelAdd(this, ID_ACTION_NAME, ()->actionModel.getFriendlyName());
     }
 }

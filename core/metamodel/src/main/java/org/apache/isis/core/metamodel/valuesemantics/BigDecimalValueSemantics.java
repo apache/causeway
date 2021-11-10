@@ -19,19 +19,26 @@
 package org.apache.isis.core.metamodel.valuesemantics;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
+import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.common.v2.ValueType;
+
+import lombok.Setter;
+import lombok.val;
 
 @Component
 @Named("isis.val.BigDecimalValueSemantics")
@@ -42,6 +49,9 @@ implements
     EncoderDecoder<BigDecimal>,
     Parser<BigDecimal>,
     Renderer<BigDecimal> {
+
+    @Setter @Inject
+    private SpecificationLoader specificationLoader;
 
     @Override
     public Class<BigDecimal> getCorrespondingClass() {
@@ -77,7 +87,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextRepresentation(final ValueSemanticsProvider.Context context, final BigDecimal value) {
+    public String simpleTextPresentation(final ValueSemanticsProvider.Context context, final BigDecimal value) {
         return render(value, getNumberFormat(context)::format);
     }
 
@@ -99,6 +109,26 @@ implements
     @Override
     public int typicalLength() {
         return 10;
+    }
+
+    @Override
+    protected void configureDecimalFormat(final Context context, final DecimalFormat format) {
+        if(context==null) {
+            return;
+        }
+        context.getFeatureIdentifier();
+        val feature = specificationLoader.loadFeature(context.getFeatureIdentifier())
+                .orElse(null);
+        if(feature==null) {
+            return;
+        }
+
+        // evaluate any facets that provide the MaximumFractionDigits
+        feature.lookupFacet(MaxFractionalDigitsFacet.class).stream()
+        .mapToInt(MaxFractionalDigitsFacet::getMaxFractionalDigits)
+        .filter(digits->digits>-1)
+        .forEach(digits-> // cardinality 0 or 1
+            format.setMaximumFractionDigits(digits));
     }
 
 }

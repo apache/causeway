@@ -286,6 +286,10 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 <mb3:serviceAction objectType="isis.applib.LayoutServiceMenu" id="downloadMenuBarsLayout"/>
             </mb3:section>
             <mb3:section>
+                <mb3:named>Site-Map</mb3:named>
+                <mb3:serviceAction objectType="isis.applib.SitemapServiceMenu" id="downloadSitemap"/>
+            </mb3:section>
+            <mb3:section>
                 <mb3:named>Meta Model and Features</mb3:named>
                 <mb3:serviceAction objectType="isis.applib.MetaModelServiceMenu" id="downloadMetaModelXml"/>
                 <mb3:serviceAction objectType="isis.applib.MetaModelServiceMenu" id="downloadMetaModelCsv"/>

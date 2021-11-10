@@ -19,12 +19,12 @@ extends AsciiDocValueSemantics {
     @Inject AsciiDocConverterService asciiDocConverterService;
 
     @Override
-    public String simpleTextRepresentation(final ValueSemanticsProvider.Context context, final AsciiDoc adoc) {
+    public String simpleTextPresentation(final ValueSemanticsProvider.Context context, final AsciiDoc adoc) {
 
         return render(adoc, plainAdoc->
             asciiDocConverterService
             .adocToHtml(
-                    context.getIdentifier().getLogicalType().getCorrespondingClass(),
+                    context.getFeatureIdentifier().getLogicalType().getCorrespondingClass(),
                     plainAdoc.getAdoc()));
     }
 

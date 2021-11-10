@@ -75,7 +75,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextRepresentation(final ValueSemanticsProvider.Context context, final java.net.URL value) {
+    public String simpleTextPresentation(final ValueSemanticsProvider.Context context, final java.net.URL value) {
         return value != null ? value.toString(): "";
     }
 

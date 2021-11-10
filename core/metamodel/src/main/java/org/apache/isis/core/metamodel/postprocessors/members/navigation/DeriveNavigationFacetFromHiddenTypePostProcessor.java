@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 /**
- * Installs the {@link NavigationFacetDerivedFromHiddenType} on all of the
+ * Installs the {@link NavigationFacetFromHiddenType} on all of the
  * {@link ObjectMember}s of the {@link ObjectSpecification}.
  */
 public class DeriveNavigationFacetFromHiddenTypePostProcessor extends ObjectSpecificationPostProcessorAbstract {
@@ -68,7 +68,7 @@ public class DeriveNavigationFacetFromHiddenTypePostProcessor extends ObjectSpec
 
     private static void addFacetIfRequired(final FacetHolder facetHolder, final ObjectSpecification navigatedType) {
         if(navigatedType.containsNonFallbackFacet(HiddenTypeFacet.class)) {
-            FacetUtil.addFacet(new NavigationFacetDerivedFromHiddenType(facetHolder, navigatedType));
+            FacetUtil.addFacet(new NavigationFacetFromHiddenType(facetHolder, navigatedType));
         }
     }
 

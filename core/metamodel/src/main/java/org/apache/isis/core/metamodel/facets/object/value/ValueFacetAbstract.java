@@ -23,6 +23,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.adapters.EncoderDecoder;
@@ -41,6 +42,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.valuesemantics.ValueSemanticsSelectingFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.Getter;
@@ -92,13 +94,15 @@ implements ValueFacet<T> {
     }
 
     @Override
-    public ValueSemanticsProvider.Context createValueSemanticsContext(final Identifier featureIdentifier) {
+    public ValueSemanticsProvider.Context createValueSemanticsContext(final @Nullable ObjectFeature feature) {
         val iaProvider = super.getInteractionProvider();
         if(iaProvider==null) {
             return null; // JUnit context
         }
         return ValueSemanticsProvider.Context.of(
-                featureIdentifier,
+                feature!=null
+                    ? feature.getFeatureIdentifier()
+                    : null,
                 iaProvider.currentInteractionContext().orElse(null));
     }
 
@@ -257,7 +261,7 @@ implements ValueFacet<T> {
         private final String message;
 
         @Override
-        public String simpleTextRepresentation(final Context context, final T value) {
+        public String simpleTextPresentation(final Context context, final T value) {
             return message;
         }
 

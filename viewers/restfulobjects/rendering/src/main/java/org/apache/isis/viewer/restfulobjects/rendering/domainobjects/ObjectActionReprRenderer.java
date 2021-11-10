@@ -145,7 +145,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
     private Object paramDetails(final ManagedParameter paramMod, final ParameterNegotiationModel paramNeg) {
         val paramMeta = paramMod.getMetaModel();
         final JsonRepresentation paramRep = JsonRepresentation.newMap();
-        paramRep.mapPut("num", paramMeta.getNumber());
+        paramRep.mapPut("num", paramMeta.getParameterIndex());
         paramRep.mapPut("id", paramMeta.getId());
         paramRep.mapPut("name", paramMeta.getFriendlyName(objectAdapter.asProvider()));
         paramRep.mapPut("description", paramMeta.getDescription(objectAdapter.asProvider()));

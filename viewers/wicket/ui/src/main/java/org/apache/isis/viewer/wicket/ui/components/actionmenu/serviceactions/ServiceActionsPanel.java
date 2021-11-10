@@ -19,20 +19,15 @@
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.resource.CssResourceReference;
 
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.SSESupport;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -50,67 +45,27 @@ public class ServiceActionsPanel extends MenuActionPanel {
 
     private static final long serialVersionUID = 1L;
 
-    public ServiceActionsPanel(String id, List<CssMenuItem> menuItems) {
+    public ServiceActionsPanel(final String id, final List<CssMenuItem> menuItems) {
         super(id);
-        val menuItemsView = new ListView<CssMenuItem>("menuItems", menuItems) {
-            private static final long serialVersionUID = 1L;
 
-            @Override
-            protected void populateItem(ListItem<CssMenuItem> listItem) {
-                val menuItem = listItem.getModelObject();
+        Wkt.listViewAdd(this, "menuItems", menuItems, listItem->{
+            val menuItem = listItem.getModelObject();
 
-                val topMenu = new WebMarkupContainer("topMenu");
-                topMenu.add(subMenuItemsView(menuItem.getSubMenuItems()));
-                topMenu.add(new CssClassAppender(cssForTopMenu(menuItem)));
-
-                listItem.add(new Label("name", menuItem.getName()));
-                listItem.add(topMenu);
-                if(menuItem.getItemType().isActionOrSubMenuContainer()) {
-                    listItem.add(new CssClassAppender(cssForServices(menuItem)));
-                }
-
-            }
-        };
-        add(menuItemsView);
+            val topMenu = new WebMarkupContainer("topMenu");
+            topMenu.add(subMenuItemsView(menuItem.getSubMenuItems()));
+            val css = Wkt.cssNormalize(menuItem.getName());
+            Wkt.cssAppend(topMenu, "top-menu-" + css);
+            Wkt.labelAdd(listItem, "name", menuItem.getName());
+            listItem.add(topMenu);
+        });
     }
 
     @Override
-    public void renderHead(IHeaderResponse response) {
+    public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-
         response.render(CssHeaderItem.forReference(new CssResourceReference(ServiceActionsPanel.class, "ServiceActionsPanel.css")));
         Tooltips.renderHead(response);
         SSESupport.renderHead(response);
-
     }
-
-    // -- HELPER
-
-    private static String cssForTopMenu(CssMenuItem menuItem) {
-        return "top-menu-" + CssClassAppender.asCssStyle(menuItem.getName());
-    }
-
-    private static String cssForServices(CssMenuItem menuItem) {
-        return _NullSafe.stream(menuItem.getSubMenuItems())
-        .filter(cssMenuItem->cssMenuItem.getItemType().isActionOrSubMenuContainer())
-        .map(cssMenuItem -> {
-            val actionIdentifier = cssMenuItem.getLinkAndLabel().getActionUiMetaModel().getActionIdentifier();
-            if (actionIdentifier != null) {
-                // busrules-busrulesobjects-findbyname
-                final String actionId = CssClassAppender.asCssStyle(actionIdentifier);
-                final int i = actionId.lastIndexOf("-");
-                // busrules-busrulesobjects
-                return i == -1 ? actionId : actionId.substring(0, i);
-            } else {
-                return null;
-            }
-        })
-        .filter(_NullSafe::isPresent)
-        .map((final String input) -> "isis-" + input)
-        .distinct()
-        .collect(Collectors.joining(" "));
-    }
-
-
 
 }

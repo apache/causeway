@@ -19,13 +19,12 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.FloatConverter;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 /**
  * Panel for rendering scalars of type {@link Float} or <tt>float</tt>.
@@ -35,21 +34,13 @@ public class FloatPanel extends ScalarPanelTextFieldNumeric<Float> {
     private static final long serialVersionUID = 1L;
 
     public FloatPanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, Float.class, FloatConverter.INSTANCE);
+        super(id, scalarModel, Float.class);
     }
 
     @Override
     protected AbstractTextComponent<Float> createTextFieldForRegular(final String id) {
-        final TextFieldValueModel<Float> textFieldValueModel = new TextFieldValueModel<>(this);
-        return new TextField<Float>(id, textFieldValueModel, Float.class) {
-            private static final long serialVersionUID = 1L;
-
-            @SuppressWarnings("unchecked")
-            @Override
-            public <C> IConverter<C> getConverter(Class<C> type) {
-                return (IConverter<C>) (type == Float.class? FloatConverter.INSTANCE: super.getConverter(type));
-            }
-        };
+        return Wkt.textFieldWithConverter(
+                id, newTextFieldValueModel(), Float.class, getConverter(getModel()));
     }
 
     @Override
@@ -57,5 +48,9 @@ public class FloatPanel extends ScalarPanelTextFieldNumeric<Float> {
         return "floatPanel";
     }
 
+    @Override
+    protected IConverter<Float> getConverter(final ScalarModel scalarModel) {
+        return FloatConverter.INSTANCE;
+    }
 
 }

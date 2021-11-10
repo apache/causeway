@@ -54,6 +54,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
@@ -62,8 +63,8 @@ implements
     ObjectActionParameter,
     HasFacetHolder {
 
-    private final FeatureType featureType;
-    private final int number;
+    @Getter(onMethod_ = {@Override}) private final FeatureType featureType;
+    @Getter(onMethod_ = {@Override}) private final int parameterIndex;
     private final ObjectActionDefault parentAction;
     private final String javaSourceParamName;
     private final ObjectSpecification paramElementType;
@@ -75,7 +76,7 @@ implements
             final ObjectActionDefault objectAction) {
 
         this.featureType = featureType;
-        this.number = number;
+        this.parameterIndex = number;
         this.parentAction = objectAction;
         this.paramElementType = paramElementType;
 
@@ -89,21 +90,8 @@ implements
     }
 
     @Override
-    public FeatureType getFeatureType() {
-        return featureType;
-    }
-
-    @Override
     public ManagedObject get(final ManagedObject owner, final InteractionInitiatedBy interactionInitiatedBy) {
         throw _Exceptions.unexpectedCodeReach(); // not available for params
-    }
-
-    /**
-     * Parameter number, 0-based.
-     */
-    @Override
-    public int getNumber() {
-        return number;
     }
 
     @Override
@@ -116,10 +104,9 @@ implements
         return paramElementType;
     }
 
-    @Override
-    public Identifier getFeatureIdentifier() {
-        return getAction().getFeatureIdentifier();
-    }
+    @Getter(lazy = true, onMethod_ = {@Override})
+    private final Identifier featureIdentifier = getAction().getFeatureIdentifier()
+        .withParameterIndex(getParameterIndex());
 
     @Override
     public String getId() {
@@ -151,26 +138,25 @@ implements
     }
 
     @Override
-    public final String getDescription(final Supplier<ManagedObject> domainObjectProvider) {
+    public final Optional<String> getDescription(final Supplier<ManagedObject> domainObjectProvider) {
         //as we don't support imperative naming for parameters yet ..
         return staticDescription();
     }
 
     @Override
     public final Optional<String> getStaticDescription() {
-        return Optional.of(staticDescription());
+        return staticDescription();
     }
 
     @Override
-    public final String getCanonicalDescription() {
+    public final Optional<String> getCanonicalDescription() {
         //as we don't support imperative naming for parameters yet ..
         return staticDescription();
     }
 
-    private String staticDescription() {
+    private Optional<String> staticDescription() {
         return lookupFacet(ParamDescribedFacet.class)
-        .map(ParamDescribedFacet::translated)
-        .orElse("");
+        .map(ParamDescribedFacet::translated);
     }
 
     public Consent isUsable() {
@@ -182,7 +168,7 @@ implements
     @Override
     public FacetHolder getFacetHolder() {
         // that is the faceted method parameter
-        return parentAction.getFacetedMethod().getParameters().getElseFail(number);
+        return parentAction.getFacetedMethod().getParameters().getElseFail(parameterIndex);
     }
 
     // -- AutoComplete
@@ -258,7 +244,7 @@ implements
                 .map(defaultsFacet->defaultsFacet.getDefault(pendingArgs))
                 .orElseGet(Can::empty);
 
-        if(pendingArgs.getParamMetamodel(getNumber()).isNonScalar()) {
+        if(pendingArgs.getParamMetamodel(getParameterIndex()).isNonScalar()) {
             val nonScalarDefaults = defaults
             // post processing each entry
             .map(obj->ManagedObjects.emptyToDefault(paramSpec, !isOptional(), obj));
@@ -330,7 +316,7 @@ implements
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val visibilityContext = createArgumentVisibilityContext(
-                head, pendingArgs, getNumber(), interactionInitiatedBy);
+                head, pendingArgs, getParameterIndex(), interactionInitiatedBy);
 
         return InteractionUtils.isVisibleResult(this, visibilityContext).createConsent();
     }
@@ -359,7 +345,7 @@ implements
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val usabilityContext = createArgumentUsabilityContext(
-                head, pendingArgs, getNumber(), interactionInitiatedBy);
+                head, pendingArgs, getParameterIndex(), interactionInitiatedBy);
 
         val usableResult = InteractionUtils.isUsableResult(this, usabilityContext);
         return usableResult.createConsent();
@@ -386,7 +372,7 @@ implements
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val validityContext = createProposedArgumentInteractionContext(
-                head, pendingArgs, getNumber(), interactionInitiatedBy);
+                head, pendingArgs, getParameterIndex(), interactionInitiatedBy);
 
         val validResult = InteractionUtils.isValidResult(this, validityContext);
         return validResult.createConsent();
@@ -404,7 +390,7 @@ implements
 
         val argumentAdapters = arguments(proposedValue);
         val validityContext = createProposedArgumentInteractionContext(
-                head, argumentAdapters, getNumber(), interactionInitiatedBy);
+                head, argumentAdapters, getParameterIndex(), interactionInitiatedBy);
 
         final InteractionResultSet buf = new InteractionResultSet();
         InteractionUtils.isValidResultSet(this, validityContext, buf);
@@ -424,7 +410,7 @@ implements
     @Deprecated
     private Can<ManagedObject> arguments(final ManagedObject proposedValue) {
         final int paramCount = getAction().getParameterCount();
-        final int paramIndex = getNumber();
+        final int paramIndex = getParameterIndex();
         val arguments = new ArrayList<ManagedObject>(paramCount);
         for(int i=0; i<paramCount; ++i) {
             arguments.add(i==paramIndex ? proposedValue : ManagedObject.empty(getAction().getParameterTypes().getElseFail(paramIndex)));

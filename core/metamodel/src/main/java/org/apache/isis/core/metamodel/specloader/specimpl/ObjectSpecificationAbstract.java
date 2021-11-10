@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -794,18 +795,33 @@ implements ObjectSpecification {
             return;
         }
         // don't mixin Object_ mixins to domain services
-        if(mixinFacet.isMixinFor(java.lang.Object.class) && getBeanSort().isManagedBeanContributing()) {
+        if(getBeanSort().isManagedBeanContributing()
+                && mixinFacet.isMixinFor(java.lang.Object.class)) {
             return;
         }
+
         val mixinMethodName = mixinFacet.value();
 
         mixinSpec.streamActions(ActionType.ANY, MixedIn.EXCLUDED)
+        // value types only support constructor mixins
+        .filter(this::whenIsValueThenIsAlsoConstructorMixin)
         .filter(_SpecPredicates::isMixedInAction)
         .map(ObjectActionDefault.class::cast)
         .map(_MixedInMemberFactory.mixedInAction(this, mixinType, mixinMethodName))
         .peek(facetProcessor::processMemberOrder)
         .forEach(onNewMixedInAction);
+    }
 
+    /**
+     * Whether the mixin's main method returns an instance of type equal to the mixee's type.
+     * <p>
+     * Introduced to support constructor mixins for value-types and
+     * also to support associated <i>Actions</i> for <i>Action Parameters</i>.
+     */
+    private boolean whenIsValueThenIsAlsoConstructorMixin(final ObjectAction act) {
+        return getBeanSort().isValue()
+                ? Objects.equals(this, act.getReturnType())
+                : true;
     }
 
     // -- VALIDITY
@@ -873,7 +889,9 @@ implements ObjectSpecification {
             if(!mixedInActionsAdded) {
                 val actions = _Lists.newArrayList(this.objectActions);
                 if (isEntityOrViewModelOrAbstract()
-                        || getBeanSort().isManagedBeanContributing()) {
+                        || getBeanSort().isManagedBeanContributing()
+                        // in support of value-type constructor mixins
+                        || getBeanSort().isValue()) {
                     createMixedInActions(actions::add);
                 }
                 sortCacheAndUpdateActions(actions);

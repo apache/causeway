@@ -22,20 +22,17 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.wicket.Application;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.viewer.wicket.ui.pages.WebPageBase;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
 
@@ -51,7 +48,7 @@ public class MmvErrorPage extends WebPageBase {
     private static final String ID_ERROR = "error";
     private static final String ID_ERROR_MESSAGE = "errorMessage";
 
-    public MmvErrorPage(Collection<String> validationErrors) {
+    public MmvErrorPage(final Collection<String> validationErrors) {
         this(Model.ofList(_Lists.newArrayList(validationErrors)));
     }
 
@@ -67,29 +64,25 @@ public class MmvErrorPage extends WebPageBase {
         return (IModel<List<String>>) getDefaultModel();
     }
 
-    private MarkupContainer addPageTitle() {
-        return add(new Label(ID_PAGE_TITLE, getConfiguration().getViewer().getWicket().getApplication().getName()));
+    private void addPageTitle() {
+        Wkt.labelAdd(this, ID_PAGE_TITLE,
+                getConfiguration().getViewer().getWicket().getApplication().getName());
     }
 
     private void addApplicationName() {
-        add(new Label(ID_APPLICATION_NAME, getConfiguration().getViewer().getWicket().getApplication().getName()));
+        Wkt.labelAdd(this, ID_APPLICATION_NAME,
+                getConfiguration().getViewer().getWicket().getApplication().getName());
     }
 
     private void addValidationErrors() {
-        ListView<String> validationErrorsView = new ListView<String>(ID_ERROR, getModel()) {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void populateItem(ListItem<String> item) {
-                final String validationError = item.getModelObject();
-                item.add(new Label(ID_ERROR_MESSAGE, validationError));
-            }
-        };
-        add(validationErrorsView);
+        Wkt.listViewAdd(this, ID_ERROR, getModel(), item->{
+            final String validationError = item.getModelObject();
+            Wkt.labelAdd(item, ID_ERROR_MESSAGE, validationError);
+        });
     }
 
     @Override
-    public void renderHead(IHeaderResponse response) {
+    public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(BootstrapJavaScriptReference.instance())));

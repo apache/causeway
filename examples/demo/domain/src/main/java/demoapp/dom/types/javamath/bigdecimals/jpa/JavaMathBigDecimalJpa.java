@@ -60,7 +60,7 @@ public class JavaMathBigDecimalJpa                                           // 
     public JavaMathBigDecimalJpa(final java.math.BigDecimal initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
-        this.withMaxScale = initialValue;
+        this.withMax2FractionDigits = initialValue;
     }
 
 //tag::class[]
@@ -81,10 +81,11 @@ public class JavaMathBigDecimalJpa                                           // 
     private java.math.BigDecimal readWriteProperty;
 
     @Property(editing = Editing.ENABLED)
-    @PropertyLayout(fieldSetId = "editable-properties", sequence = "2")
+    @PropertyLayout(fieldSetId = "editable-properties", sequence = "2",
+            describedAs = "has a maximum of 2 fraction digits (scale=2)")
     @Column(nullable = false, scale = 2)                                    // <.>
     @Getter @Setter
-    private java.math.BigDecimal withMaxScale;
+    private java.math.BigDecimal withMax2FractionDigits;
 
     @Property(optionality = Optionality.OPTIONAL)                           // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")

@@ -25,7 +25,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -47,8 +46,9 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.Obj
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceObjectAutoComplete;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete;
 import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
 import lombok.val;
 
@@ -260,7 +260,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
             boolean inlinePrompt = scalarModel.isInlinePrompt();
             if(inlinePrompt) {
                 // bit of a hack... allows us to suppress the title using CSS
-                component.add(new CssClassAppender("inlinePrompt"));
+                Wkt.cssAppend(component, "inlinePrompt");
             }
 
             if (adapter != null) {
@@ -272,7 +272,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
                 if(inlinePrompt) {
                     Components.permanentlyHide(componentForRegular, "entityTitleIfNull");
                 } else {
-                    componentForRegular.addOrReplace(new Label("entityTitleIfNull", "(none)"));
+                    Wkt.labelAdd(componentForRegular, "entityTitleIfNull", "(none)");
                 }
             }
 
@@ -400,14 +400,9 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     // //////////////////////////////////////
 
     @Override
-    public void onUpdate(
-            final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
-
+    public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
         super.onUpdate(target, scalarPanel);
-
-        target.appendJavaScript(
-                String.format("Wicket.Event.publish(Isis.Topic.CLOSE_SELECT2, '%s')", getMarkupId()));
-
+        Wkt.javaScriptAdd(target, EventTopic.CLOSE_SELECT2, getMarkupId());
     }
 
 

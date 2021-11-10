@@ -70,7 +70,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextRepresentation(final ValueSemanticsProvider.Context context, final Markup value) {
+    public String simpleTextPresentation(final ValueSemanticsProvider.Context context, final Markup value) {
         return value != null? value.asHtml(): "[null]";
     }
 

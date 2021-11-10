@@ -52,55 +52,19 @@
 	</build>
 
     <dependencies>
+    
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
             <artifactId>isis-viewer-wicket-ui</artifactId>
-            <scope>provided</scope>
-            <exclusions>
-            	<exclusion>
-            		<groupId>org.apache.commons</groupId>
-            		<artifactId>commons-collections4</artifactId>
-            	</exclusion>
-            </exclusions>
         </dependency>
         
-        <dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi-ooxml</artifactId>
-			<exclusions>
-				<exclusion>
-					<!-- version clash with org.apache.wicket:wicket-util:8.6.1 -->
-					<groupId>org.apache.commons</groupId>
-					<artifactId>commons-collections4</artifactId>
-				</exclusion>
-			</exclusions>
+    	<dependency>
+            <groupId>org.apache.isis.subdomains</groupId>
+        	<artifactId>isis-subdomains-poi</artifactId>
+        	<type>pom</type>
+        	<version>${project.version}</version>
         </dependency>
-		
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi-ooxml-schemas</artifactId>
-		</dependency>
-
+        
     </dependencies>
-
-    <profiles>
-        <profile>
-            <id>resolve-dependency-convergence</id>
-            <activation>
-                <property>
-                    <name>!skip.resolve-dependency-convergence</name>
-                </property>
-            </activation>
-            <dependencyManagement>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.commons</groupId>
-                        <artifactId>commons-collections4</artifactId>
-                        <version>4.4</version>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
-        </profile>
-    </profiles>
 
 </project>

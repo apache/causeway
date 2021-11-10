@@ -28,13 +28,14 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelParented;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -67,15 +68,11 @@ implements
 
         val collMetaModel = getModel().getMetaModel();
 
-        val entityActionLinks = LinkAndLabelUtil
-                .asActionLinksForAdditionalLinksPanel(
-                        collectionModel.getEntityModel(),
-                        collMetaModel.streamAssociatedActions(),
-                        null,
-                        collectionModel)
-                .collect(Can.toCan());
+        val associatedActions = collMetaModel.streamAssociatedActions()
+        .map(LinkAndLabelFactory.forCollection(collectionModel))
+        .collect(Can.toCan());
 
-        collectionModel.setLinkAndLabels(entityActionLinks);
+        collectionModel.setLinkAndLabels(associatedActions);
 
     }
 
@@ -94,7 +91,7 @@ implements
     }
 
     public Label createLabel(final String id, final String collectionName) {
-        this.label = new Label(id, collectionName);
+        this.label = Wkt.label(id, collectionName);
         label.setOutputMarkupId(true);
         return this.label;
     }

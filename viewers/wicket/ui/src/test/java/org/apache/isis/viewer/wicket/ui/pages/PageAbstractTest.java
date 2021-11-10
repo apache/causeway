@@ -23,7 +23,7 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 public abstract class PageAbstractTest {
 
@@ -31,12 +31,17 @@ public abstract class PageAbstractTest {
 
         @Test
         public void withSpacesAndCapitals() throws Exception {
-            assertThat(CssClassAppender.asCssStyle("Simple App"), is("Simple-App"));
+            assertThat(Wkt.cssNormalize("Simple App"), is("Simple-App"));
         }
 
         @Test
         public void withOtherCharacters() throws Exception {
-            assertThat(CssClassAppender.asCssStyle("Kitchen Sink (Demo) App"), is("Kitchen-Sink-Demo-App"));
+            assertThat(Wkt.cssNormalize("Kitchen Sink (Demo) App"), is("Kitchen-Sink-Demo-App"));
+        }
+
+        @Test
+        public void withPeriod() throws Exception {
+            assertThat(Wkt.cssNormalize("Simple.App"), is("Simple-App"));
         }
 
     }

@@ -25,12 +25,12 @@ import org.jmock.Expectations;
 import org.junit.Rule;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel._testing.MethodRemover_forTesting;
@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.layout.CollectionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyLayoutFacetFactory;
@@ -138,12 +139,36 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         return Utils.contains(featureTypes, featureType);
     }
 
-    protected static Method findMethod(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
-        return Utils.findMethod(type, methodName, methodTypes);
+    protected static Method findMethod(final Class<?> type, final String methodName, final Class<?>[] signature) {
+        return Utils.findMethod(type, methodName, signature);
     }
 
     protected Method findMethod(final Class<?> type, final String methodName) {
         return Utils.findMethod(type, methodName);
+    }
+
+    protected void processMethod(
+            final FacetFactory facetFactory,
+            final Class<?> type,
+            final String methodName,
+            final Class<?>[] signature) {
+
+        facetFactory.process(ProcessMethodContext
+                .forTesting(type, null,
+                        findMethod(type, methodName, signature),
+                        methodRemover, facetedMethod));
+    }
+
+    protected void processParams(
+            final FacetFactory facetFactory,
+            final Class<?> type,
+            final String methodName,
+            final Class<?>[] signature) {
+
+        facetFactory.processParams(new FacetFactory
+                .ProcessParameterContext(type, IntrospectionPolicy.ANNOTATION_OPTIONAL,
+                        findMethod(type, methodName, signature),
+                        null, facetedMethodParameter));
     }
 
     protected void assertNoMethodsRemoved() {
@@ -154,30 +179,15 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     // -- FACTORIES
 
     protected static PropertyLayoutFacetFactory createPropertyLayoutFacetFactory(final MetaModelContext mmc) {
-        return new PropertyLayoutFacetFactory(mmc) {
-            @Override
-            public IsisConfiguration getConfiguration() {
-                return new IsisConfiguration(null);
-            }
-        };
+        return new PropertyLayoutFacetFactory(mmc);
     }
 
     protected static CollectionLayoutFacetFactory createCollectionLayoutFacetFactory(final MetaModelContext mmc) {
-        return new CollectionLayoutFacetFactory(mmc) {
-            @Override
-            public IsisConfiguration getConfiguration() {
-                return new IsisConfiguration(null);
-            }
-        };
+        return new CollectionLayoutFacetFactory(mmc);
     }
 
     protected static ActionLayoutFacetFactory createActionLayoutFacetFactory(final MetaModelContext mmc) {
-        return new ActionLayoutFacetFactory(mmc) {
-            @Override
-            public IsisConfiguration getConfiguration() {
-                return new IsisConfiguration(null);
-            }
-        };
+        return new ActionLayoutFacetFactory(mmc);
     }
 
 

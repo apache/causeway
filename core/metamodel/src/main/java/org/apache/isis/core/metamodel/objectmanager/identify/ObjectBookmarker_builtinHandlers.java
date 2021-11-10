@@ -23,6 +23,7 @@ import java.io.ObjectOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
+import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.commons.internal.base._Bytes;
@@ -107,11 +108,33 @@ class ObjectBookmarker_builtinHandlers {
             return managedObject.getSpecification().containsFacet(ValueFacet.class);
         }
 
+        @SneakyThrows
         @Override
         public Bookmark handle(final ManagedObject managedObject) {
-            throw _Exceptions.illegalArgument("cannot 'identify' the value type %s, "
-                    + "as values have no identifier",
-                    managedObject.getSpecification().getCorrespondingClass().getName());
+//            throw _Exceptions.illegalArgument("cannot 'identify' the value type %s, "
+//                    + "as values have no identifier",
+//                    managedObject.getSpecification().getCorrespondingClass().getName());
+
+            val spec = managedObject.getSpecification();
+
+            if(java.io.Serializable.class.isAssignableFrom(spec.getCorrespondingClass())) {
+                return new BookmarkForSerializable().handle(managedObject);
+            }
+
+            val valueFacet = spec.getFacet(ValueFacet.class);
+            EncoderDecoder<Object> codec = (EncoderDecoder) valueFacet.selectDefaultEncoderDecoder()
+                    .orElseThrow(()->_Exceptions.illegalArgument(
+                            "Cannot create a bookmark for the value type %s, "
+                          + "as no appropriate EncoderDecoder could be found.",
+                          managedObject.getSpecification().getCorrespondingClass().getName()));
+
+            val encoded = codec.toEncodedString(managedObject.getPojo()).getBytes();
+
+            val identifier = _Strings.ofBytes(
+                    _Bytes.asUrlBase64.apply(encoded),
+                    StandardCharsets.UTF_8);
+
+            return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), identifier);
         }
 
     }
@@ -121,7 +144,8 @@ class ObjectBookmarker_builtinHandlers {
         @Override
         public boolean isHandling(final ManagedObject managedObject) {
             val spec = managedObject.getSpecification();
-            return spec.isViewModel() && java.io.Serializable.class.isAssignableFrom(spec.getCorrespondingClass());
+            return spec.isViewModel()
+                    && java.io.Serializable.class.isAssignableFrom(spec.getCorrespondingClass());
         }
 
         @SneakyThrows

@@ -26,7 +26,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.5.5</version>
+		<version>2.5.6</version>
 		<relativePath />
 	</parent>
 
@@ -41,8 +41,8 @@
 
 		<maven.compiler.release>11</maven.compiler.release>
 
-		<spring-boot.version>2.5.5</spring-boot.version>
-		<approvaltests.version>12.0.1</approvaltests.version>
+		<spring-boot.version>2.5.6</spring-boot.version>
+		<approvaltests.version>12.1.1</approvaltests.version>
 		
 		<resteasy.version>4.6.2.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
 
@@ -158,9 +158,9 @@
 			<properties>
 
 				<!-- keep in sync with versions used in Apache Isis -->
-				<datanucleus-api-jdo.version>6.0.0-m2</datanucleus-api-jdo.version>
-				<datanucleus-core.version>6.0.0-m2</datanucleus-core.version>
-				<datanucleus-jodatime.version>6.0.0-m2</datanucleus-jodatime.version>
+				<datanucleus-api-jdo.version>6.0.0-m3</datanucleus-api-jdo.version>
+				<datanucleus-core.version>6.0.0-m3</datanucleus-core.version>
+				<datanucleus-jodatime.version>6.0.0-m3</datanucleus-jodatime.version>
 				<datanucleus-maven-plugin.version>6.0.0-m1</datanucleus-maven-plugin.version>
 		
 				<datanucleus-maven-plugin.log4jConfiguration>${basedir}/logging-dn-enhance.properties</datanucleus-maven-plugin.log4jConfiguration>

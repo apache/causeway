@@ -231,7 +231,7 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */
-    public void setReturned(Object returned) {
+    public void setReturned(final Object returned) {
         this.returned = returned;
     }
 
@@ -245,7 +245,7 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */
-    public void setThrew(Exception threw) {
+    public void setThrew(final Exception threw) {
         this.threw = threw;
     }
 

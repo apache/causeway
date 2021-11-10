@@ -21,14 +21,13 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 import java.util.List;
 
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.viewer.wicket.ui.panels.PanelBase;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -42,33 +41,26 @@ public abstract class MenuActionPanel extends PanelBase {
     }
 
     protected ListView<CssMenuItem> subMenuItemsView(final List<CssMenuItem> subMenuItems) {
-        return new ListView<CssMenuItem>("subMenuItems", subMenuItems) {
+        return Wkt.listView("subMenuItems", subMenuItems, listItem->{
+            val subMenuItem = listItem.getModelObject();
 
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void populateItem(ListItem<CssMenuItem> listItem) {
-                val subMenuItem = listItem.getModelObject();
-
-                switch(subMenuItem.getItemType()) {
-                case SPACER:
-                    addSpacer(subMenuItem, listItem);
-                    return;
-                case SECTION_LABEL:
-                    addSectionLabel(subMenuItem, listItem);
-                    return;
-                default:
-                    // fall through
-                }
-
-                if (subMenuItem.hasSubMenuItems()) {
-                    addFolderItem(subMenuItem, listItem);
-                } else {
-                    addLeafItem(subMenuItem, listItem);
-                }
-
+            switch(subMenuItem.getItemType()) {
+            case SPACER:
+                addSpacer(subMenuItem, listItem);
+                return;
+            case SECTION_LABEL:
+                addSectionLabel(subMenuItem, listItem);
+                return;
+            default:
+                // fall through
             }
-        };
+
+            if (subMenuItem.hasSubMenuItems()) {
+                addFolderItem(subMenuItem, listItem);
+            } else {
+                addLeafItem(subMenuItem, listItem);
+            }
+        });
     }
 
     protected List<CssMenuItem> flatten(final List<CssMenuItem> menuItems) {
@@ -81,31 +73,30 @@ public abstract class MenuActionPanel extends PanelBase {
 
     // -- HELPER
 
-    private void addFolderItem(CssMenuItem menuItem, ListItem<CssMenuItem> listItem) {
+    private void addFolderItem(final CssMenuItem menuItem, final ListItem<CssMenuItem> listItem) {
         final MarkupContainer parent = this;
         ServiceActionUtil.addFolderItem(super.getCommonContext(), menuItem, listItem, parent);
     }
 
-    private void addLeafItem(CssMenuItem menuItem, ListItem<CssMenuItem> listItem) {
+    private void addLeafItem(final CssMenuItem menuItem, final ListItem<CssMenuItem> listItem) {
         final MarkupContainer parent = this;
         ServiceActionUtil.addLeafItem(
                 super.getCommonContext(), menuItem, listItem, parent);
     }
 
-    private void addSpacer(CssMenuItem menuItem, ListItem<CssMenuItem> listItem) {
+    private void addSpacer(final CssMenuItem menuItem, final ListItem<CssMenuItem> listItem) {
         final MarkupContainer parent = this;
         val fragment = new Fragment("content", "separatorItem", parent);
         listItem.add(fragment);
-        listItem.add(new CssClassAppender("list-separator"));
+        Wkt.cssAppend(listItem, "list-separator");
     }
 
-    private void addSectionLabel(CssMenuItem menuItem, ListItem<CssMenuItem> listItem) {
+    private void addSectionLabel(final CssMenuItem menuItem, final ListItem<CssMenuItem> listItem) {
         final MarkupContainer parent = this;
-        val menuItemUiLabel = new Label("sectionLabel", menuItem.getName());
         val fragment = new Fragment("content", "sectionItem", parent);
-        fragment.add(menuItemUiLabel);
+        Wkt.labelAdd(fragment, "sectionLabel", menuItem.getName());
         listItem.add(fragment);
-        listItem.add(new CssClassAppender("list-section-label"));
+        Wkt.cssAppend(listItem, "list-section-label");
     }
 
 

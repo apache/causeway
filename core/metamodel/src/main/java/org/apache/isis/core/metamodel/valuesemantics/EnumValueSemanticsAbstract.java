@@ -130,7 +130,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextRepresentation(final Context context, final T value) {
+    public String simpleTextPresentation(final Context context, final T value) {
         return render(value, v->friendlyName(context, v));
     }
 

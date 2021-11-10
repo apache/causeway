@@ -23,6 +23,7 @@ import java.util.function.Consumer;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
@@ -31,6 +32,8 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
@@ -124,7 +127,17 @@ public interface SpecificationLoader {
      */
     boolean loadSpecifications(Class<?>... domainTypes);
 
-    LogicalType lookupLogicalType(@Nullable String logicalTypeName);
+    Optional<LogicalType> lookupLogicalType(@Nullable String logicalTypeName);
+
+    default LogicalType lookupLogicalTypeElseFail(@NonNull final String logicalTypeName) {
+        return lookupLogicalType(logicalTypeName)
+        .orElseThrow(()->_Exceptions.unrecoverableFormatted(
+                "Lookup of logical-type-name '%s' failed, also found no matching fully qualified "
+                        + "class name to use instead. This indicates, that the class we are not finding here"
+                        + " is not discovered by Spring during bootstrapping of this application.",
+                        logicalTypeName)
+        );
+    }
 
     /**
      * queue {@code objectSpec} for later validation
@@ -142,11 +155,10 @@ public interface SpecificationLoader {
         if(_Strings.isNullOrEmpty(logicalTypeName)) {
             return null;
         }
-        val logicalType = lookupLogicalType(logicalTypeName);
-        if(logicalType==null) {
-            return null;
-        }
-        return loadSpecification(logicalType.getCorrespondingClass(), introspectionState);
+        return lookupLogicalType(logicalTypeName)
+            .map(logicalType->
+                    loadSpecification(logicalType.getCorrespondingClass(), introspectionState))
+            .orElse(null);
     }
 
     // -- SHORTCUTS - 1
@@ -216,6 +228,28 @@ public interface SpecificationLoader {
     default @Nullable ObjectSpecification loadSpecification(
             final @Nullable Class<?> domainType) {
         return loadSpecification(domainType, TYPE_INTROSPECTED);
+    }
+
+    // -- FEATURE RECOVERY
+
+    default Optional<ObjectFeature> loadFeature(final @Nullable Identifier featureIdentifier) {
+        if(featureIdentifier==null) {
+            return Optional.empty();
+        }
+        val typeSpec = specForLogicalType(featureIdentifier.getLogicalType()).orElse(null);
+        if(typeSpec==null) {
+            return Optional.empty();
+        }
+        val member = typeSpec.getMember(featureIdentifier.getMemberLogicalName()).orElse(null);
+        if(member==null) {
+            return Optional.empty();
+        }
+
+        final int paramIndex = featureIdentifier.getParameterIndex();
+
+        return featureIdentifier.getParameterIndex()<0
+                ? Optional.of(member)
+                : Optional.of(((ObjectAction)member).getParameters().getElseFail(paramIndex));
     }
 
 }

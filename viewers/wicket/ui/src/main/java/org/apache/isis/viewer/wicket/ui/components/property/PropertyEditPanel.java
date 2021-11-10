@@ -19,8 +19,6 @@
 package org.apache.isis.viewer.wicket.ui.components.property;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.common.model.components.ComponentType;
@@ -29,8 +27,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-
-import lombok.val;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 /**
  * Corresponding component to prompt for action (parameters) is {@link ActionParametersPanel}.
@@ -87,11 +84,8 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
         getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PROPERTY_EDIT_FORM, getScalarModel());
         getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, scalarModel.getParentUiModel());
 
-        val propertyName = getScalarModel().getFriendlyName();
-        val label = new Label(ID_PROPERTY_NAME, Model.of(propertyName));
-
-        label.setEscapeModelStrings(true);
-        header.add(label);
+        Wkt.labelAdd(header, ID_PROPERTY_NAME, getScalarModel()::getFriendlyName)
+            .setEscapeModelStrings(true);
     }
 
     private WebMarkupContainer addHeader() {

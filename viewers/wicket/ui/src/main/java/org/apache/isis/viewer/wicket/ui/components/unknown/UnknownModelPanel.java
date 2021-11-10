@@ -18,14 +18,13 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.unknown;
 
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -34,14 +33,13 @@ extends PanelAbstract<Object, IModel<Object>> {
 
     private static final long serialVersionUID = 1L;
 
-    public UnknownModelPanel(final String id, IModel<?> model) {
+    public UnknownModelPanel(final String id, final IModel<?> model) {
         super(id, _Casts.uncheckedCast(model));
         buildGui(id);
     }
 
     private void buildGui(final String id) {
-        addOrReplace(
-                new Label("unknown", Model.of(buildMessage())));
+        Wkt.labelAdd(this, "unknown", buildMessage());
     }
 
     private String buildMessage() {
@@ -54,7 +52,7 @@ extends PanelAbstract<Object, IModel<Object>> {
         return buf.toString();
     }
 
-    private void buildMessageForModel(StringBuilder buf, IModel<?> model) {
+    private void buildMessageForModel(final StringBuilder buf, final IModel<?> model) {
         buf.append(model.getClass().getSimpleName()).append(" ");
         if(model instanceof EntityModel) {
             EntityModel entityModel = (EntityModel) model;

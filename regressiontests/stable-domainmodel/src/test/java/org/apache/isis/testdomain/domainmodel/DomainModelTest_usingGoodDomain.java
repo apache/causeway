@@ -423,7 +423,7 @@ class DomainModelTest_usingGoodDomain {
         val sampleObject = ManagedObject.of(objectSpec, new ProperMemberSupport());
 
         assertEquals(named, member.getFriendlyName(()->sampleObject));
-        assertEquals(described, member.getDescription(()->sampleObject));
+        assertEquals(described, member.getDescription(()->sampleObject).orElse(null));
     }
 
     @Test

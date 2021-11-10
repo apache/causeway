@@ -31,19 +31,23 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.core.metamodel.commons.CanonicalParameterUtil;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 
 public final class ManagedAction extends ManagedMember {
@@ -116,27 +120,53 @@ public final class ManagedAction extends ManagedMember {
 
     public _Either<ManagedObject, InteractionVeto> invoke(@NonNull final Can<ManagedObject> actionParameters) {
 
-        val action = getAction();
+        if(isValueTypeMixin()) {
+            return _Either.left(invokeValueTypeMixin(actionParameters));
+        }
 
-        val head = action.interactionHead(getOwner());
-
-        final ManagedObject actionResult = action
-                .execute(head , actionParameters, InteractionInitiatedBy.USER);
+        final ManagedObject actionResult = getAction()
+                .execute(getInteractionHead(), actionParameters, InteractionInitiatedBy.USER);
 
         return _Either.left(route(actionResult));
-
     }
 
+    @SneakyThrows
     public ManagedObject invokeWithRuleChecking(
             final @NonNull Can<ManagedObject> actionParameters) throws AuthorizationException {
 
-        val action = getAction();
-        val head = action.interactionHead(getOwner());
+        if(isValueTypeMixin()) {
+            return invokeValueTypeMixin(actionParameters);
+        }
 
-        final ManagedObject actionResult = action
-                .executeWithRuleChecking(head , actionParameters, InteractionInitiatedBy.USER, getWhere());
+        final ManagedObject actionResult = getAction()
+                .executeWithRuleChecking(
+                        getInteractionHead(), actionParameters, InteractionInitiatedBy.USER, getWhere());
 
         return route(actionResult);
+    }
+
+    // -- INVOKE HELPER
+
+    private boolean isValueTypeMixin() {
+        return getOwner().getSpecification().isValue();
+    }
+
+    /**
+     *  value-type mixins have no rule-checking, no domain events and no routing
+     */
+    @SneakyThrows
+    private ManagedObject invokeValueTypeMixin(
+            final @NonNull Can<ManagedObject> actionParameters) {
+
+        val method = ((ObjectMemberAbstract)action).getFacetedMethod().getMethod();
+
+        final Object[] executionParameters = UnwrapUtil.multipleAsArray(actionParameters);
+        final Object targetPojo = UnwrapUtil.single(getInteractionHead().getTarget());
+
+        val resultPojo = CanonicalParameterUtil
+                .invoke(method, targetPojo, executionParameters);
+
+        return mmc().getObjectManager().adapt(resultPojo);
     }
 
     private ManagedObject route(final @Nullable ManagedObject actionResult) {

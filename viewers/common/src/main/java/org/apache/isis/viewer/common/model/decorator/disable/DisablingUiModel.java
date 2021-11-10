@@ -21,9 +21,7 @@ package org.apache.isis.viewer.common.model.decorator.disable;
 import java.io.Serializable;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
-
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.MemberInteraction;
 
 import lombok.AccessLevel;
@@ -39,23 +37,14 @@ public class DisablingUiModel implements Serializable {
 
     final @NonNull String reason;
 
-    /**
-     * @param disabled - overwritten to be {@code true}, whenever {@code reason} is not empty
-     * @param reason
-     * @deprecated use interaction instead
-     */
-    @Deprecated
-    public static Optional<DisablingUiModel> of(boolean disabled, @Nullable String reason) {
-        reason = _Strings.nullToEmpty(reason);
-        disabled|=_Strings.isNotEmpty(reason);
-        return disabled
-                ? Optional.of(of(reason))
-                : Optional.empty();
+    public static Optional<DisablingUiModel> of(@NonNull final Optional<InteractionVeto> usabilityVeto) {
+        return usabilityVeto
+                .map(veto->of(veto.getReason()));
     }
 
     public static Optional<DisablingUiModel> of(@NonNull final MemberInteraction<?, ?> memberInteraction) {
-        return memberInteraction.getInteractionVeto()
-                .map(veto->of(veto.getReason()));
+        return of(memberInteraction.getInteractionVeto());
     }
+
 
 }

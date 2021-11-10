@@ -143,8 +143,8 @@ implements MixedInMember {
         return mixinAction.getChoices(mixinAdapter, interactionInitiatedBy);
     }
 
-    protected ManagedObject mixinAdapterFor(final ManagedObject mixedInAdapter) {
-        return mixinAdapterFor(mixinType, mixedInAdapter);
+    protected ManagedObject mixinAdapterFor(final ManagedObject mixeeAdapter) {
+        return mixinAdapterFor(mixinType, mixeeAdapter);
     }
 
     @Override

@@ -28,7 +28,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Decorates a click-able UI component of type {@code <T>} based various UiModels.
+ * Decorates a click-able UI component of various type {@code <T>} based UiModels.
  *
  * @since 2.0.0
  * @param <T> - link component type, native to the viewer
@@ -42,7 +42,5 @@ public class ActionUiDecorator<T> {
     private final ConfirmDecorator<T> confirmDecorator;
     private final PrototypingDecorator<T, T> prototypingDecorator;
     private final IconDecorator<T, T> iconDecorator;
-
-
 
 }

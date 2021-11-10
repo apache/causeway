@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.AbstractItem;
 import org.apache.wicket.markup.repeater.RepeatingView;
@@ -43,6 +42,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -101,8 +101,8 @@ implements CollectionCountProvider {
 
             repeating.add(item);
 
-            String propertyColumnName = numberAssociation.getCanonicalFriendlyName();
-            item.add(new Label(ID_PROPERTY_NAME, new Model<String>(propertyColumnName)));
+            val propertyColumnName = numberAssociation.getCanonicalFriendlyName();
+            Wkt.labelAdd(item, ID_PROPERTY_NAME, propertyColumnName);
 
             val visibleAdapters = model.getDataTableModel().getDataRowsFiltered()
                     .getValue()

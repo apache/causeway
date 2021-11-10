@@ -18,14 +18,12 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.propertyheader;
 
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.IModel;
-
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -45,17 +43,8 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
                 ComponentType.ENTITY_ICON_AND_TITLE,
                 EntityModel.ofAdapter(model.getCommonContext(), targetAdapter));
 
-        final Label label = new Label(ID_PROPERTY_NAME, new IModel<String>() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public String getObject() {
-                return model.getFriendlyName();
-            }
-        });
-
-        label.setEscapeModelStrings(true);
-        add(label);
+        Wkt.labelAdd(this, ID_PROPERTY_NAME, model::getFriendlyName)
+            .setEscapeModelStrings(true);
     }
 
 }

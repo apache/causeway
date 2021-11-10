@@ -18,8 +18,8 @@
  */
 package org.apache.isis.valuetypes.asciidoc.metamodel.semantics;
 
-import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.Renderer;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
@@ -44,12 +44,11 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextRepresentation(final ValueSemanticsProvider.Context context, final T value) {
+    public String simpleTextPresentation(final ValueSemanticsProvider.Context context, final T value) {
         return render(value, xmlContainer->presentationValue(context, value).asHtml());
     }
 
-    @Override
-    public AsciiDoc presentationValue(final Context context, final T value) {
+    private AsciiDoc presentationValue(final Context context, final T value) {
         return asAdoc(asXml(context, value));
     }
 

@@ -24,7 +24,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.Button;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.viewer.common.model.action.decorator.ActionUiDecorator;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmDecorator;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
@@ -73,35 +72,33 @@ public class Decorators {
 
     public final static class Tooltip implements TooltipDecorator<Component> {
         @Override
-        public void decorate(Component uiComponent, TooltipUiModel tooltipUiModel) {
+        public void decorate(final Component uiComponent, final TooltipUiModel tooltipUiModel) {
             Tooltips.addTooltip(uiComponent, tooltipUiModel);
         }
     }
 
     public final static class Disable implements DisablingDecorator<Component> {
         @Override
-        public void decorate(Component uiComponent, DisablingUiModel disableUiModel) {
-
+        public void decorate(final Component uiComponent, final DisablingUiModel disableUiModel) {
             val tooltipUiModel = TooltipUiModel.ofBody(disableUiModel.getReason());
             getTooltip().decorate(uiComponent, tooltipUiModel);
 
-            uiComponent.add(new CssClassAppender("disabled"));
+            Wkt.cssAppend(uiComponent, "disabled");
             uiComponent.setEnabled(false);
-
         }
     }
 
     public final static class Prototyping implements PrototypingDecorator<Component, Component> {
         @Override
-        public Component decorate(Component uiComponent, PrototypingUiModel prototypingUiModel) {
-            uiComponent.add(new CssClassAppender("prototype"));
+        public Component decorate(final Component uiComponent, final PrototypingUiModel prototypingUiModel) {
+            Wkt.cssAppend(uiComponent, "prototype");
             return uiComponent;
         }
     }
 
     public final static class Confirm implements ConfirmDecorator<Component> {
         @Override
-        public void decorate(Component uiComponent, ConfirmUiModel confirmUiModel) {
+        public void decorate(final Component uiComponent, final ConfirmUiModel confirmUiModel) {
 
             val confirmationConfig = new ConfirmationConfig()
                     .withTitle(confirmUiModel.getTitle())
@@ -124,16 +121,16 @@ public class Decorators {
 
     public final static class Danger implements DangerDecorator<Component> {
         @Override
-        public void decorate(Component uiComponent) {
+        public void decorate(final Component uiComponent) {
             //if(uiComponent instanceof Button) {
-                uiComponent.add(new CssClassAppender("btn-danger"));
+            Wkt.cssAppend(uiComponent, "btn-danger");
             //}
         }
     }
 
     public final static class IconDecoratorWkt implements IconDecorator<Component, Component> {
         @Override
-        public Component decorate(Component uiComponent, Optional<FontAwesomeUiModel> fontAwesome) {
+        public Component decorate(final Component uiComponent, final Optional<FontAwesomeUiModel> fontAwesome) {
             if(fontAwesome.isPresent()) {
                 uiComponent.add(new CssClassFaBehavior(fontAwesome.get()));
             }
@@ -143,9 +140,9 @@ public class Decorators {
 
     public final static class MissingIconDecorator implements IconDecorator<Component, Component> {
         @Override
-        public Component decorate(Component uiComponent, Optional<FontAwesomeUiModel> fontAwesome) {
+        public Component decorate(final Component uiComponent, final Optional<FontAwesomeUiModel> fontAwesome) {
             if(!fontAwesome.isPresent()) {
-                uiComponent.add(new CssClassAppender("menuLinkSpacer"));
+                Wkt.cssAppend(uiComponent, "menuLinkSpacer");
             }
             return uiComponent;
         }
@@ -165,25 +162,27 @@ public class Decorators {
         //even another UI component
         private <T extends Component> void commonDecorateMenuItem(
                 final T uiComponent, // UI component #1
-                final LinkAndLabel actionUiModel,
+                final LinkAndLabel linkAndLabel,
                 final TranslationService translationService) {
 
-            val actionLinkUiComponent = actionUiModel.getUiComponent(); // UI component #2
-            val actionMeta = actionUiModel.getActionUiMetaModel();
+            val actionLinkUiComponent = linkAndLabel.getUiComponent(); // UI component #2
+            val actionMeta = linkAndLabel.getManagedAction().getAction();
 
-            actionMeta.getDisableUiModel().ifPresent(disableUiModel->{
+            linkAndLabel.getDisableUiModel().ifPresent(disableUiModel->{
                 getDisableDecorator().decorate(uiComponent, disableUiModel);
                 getTooltipDecorator().decorate(uiComponent, TooltipUiModel.ofBody(disableUiModel.getReason()));
             });
 
-            if (!actionMeta.getDisableUiModel().isPresent()) {
+            if (!linkAndLabel.getDisableUiModel().isPresent()) {
 
-                if(!_Strings.isNullOrEmpty(actionMeta.getDescription())) {
-                    getTooltipDecorator().decorate(uiComponent, TooltipUiModel.ofBody(actionMeta.getDescription()));
-                }
+                linkAndLabel
+                .getDescription()
+                .ifPresent(describedAs->
+                    getTooltipDecorator()
+                    .decorate(uiComponent, TooltipUiModel.ofBody(describedAs)));
 
                 //XXX ISIS-1626, confirmation dialog for no-parameter menu actions
-                if (actionMeta.isRequiresImmediateConfirmation()) {
+                if (actionMeta.isImmediateConfirmationRequired()) {
 
                     val confirmUiModel = ConfirmUiModel.ofAreYouSure(translationService, ConfirmUiModel.Placement.BOTTOM);
                     getConfirmDecorator().decorate(actionLinkUiComponent, confirmUiModel);
@@ -192,38 +191,25 @@ public class Decorators {
 
             }
 
-            if (actionMeta.isPrototyping()) {
-                getPrototypingDecorator().decorate(actionLinkUiComponent, PrototypingUiModel.of(actionMeta));
+            if (actionMeta.isPrototype()) {
+                getPrototypingDecorator()
+                .decorate(actionLinkUiComponent, PrototypingUiModel.of(linkAndLabel.getManagedAction()));
             }
 
         }
-
 
         public void decorateMenuItem(
                 final Component uiComponent,
-                final LinkAndLabel actionUiModel,
+                final LinkAndLabel linkAndLabel,
                 final TranslationService translationService) {
 
-            addCssClassForAction(uiComponent, actionUiModel);
+            Wkt.cssAppend(uiComponent, linkAndLabel.getFeatureIdentifier());
 
-            commonDecorateMenuItem(uiComponent, actionUiModel, translationService);
+            commonDecorateMenuItem(uiComponent, linkAndLabel, translationService);
 
-            val actionMeta = actionUiModel.getActionUiMetaModel();
-            val actionLinkUiComponent = actionUiModel.getUiComponent();
-
-            String cssClass = actionMeta.getCssClass();
-            if (!_Strings.isNullOrEmpty(cssClass)) {
-                actionLinkUiComponent.add(new CssClassAppender(cssClass));
-            }
-
+            linkAndLabel.getAdditionalCssClass()
+                .ifPresent(cssClass->Wkt.cssAppend(linkAndLabel.getUiComponent(), cssClass));
         }
-
-        private void addCssClassForAction(Component uiComponent, LinkAndLabel actionUiModel) {
-            val actionMeta = actionUiModel.getActionUiMetaModel();
-            uiComponent.add(new CssClassAppender("isis-"
-                    + CssClassAppender.asCssStyle(actionMeta.getActionIdentifier())));
-        }
-
 
     }
 

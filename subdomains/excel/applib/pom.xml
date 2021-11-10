@@ -46,23 +46,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.testing</groupId>
-            <artifactId>isis-testing-fixtures-applib</artifactId>
-        </dependency>
-
-        <!--
-                <dependency>
-                    <groupId>org.apache.poi</groupId>
-                    <artifactId>poi</artifactId>
-                </dependency>
-        -->
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml-schemas</artifactId>
+            <groupId>org.apache.isis.subdomains</groupId>
+        	<artifactId>isis-subdomains-poi</artifactId>
+        	<type>pom</type>
         </dependency>
 
         <!-- test -->

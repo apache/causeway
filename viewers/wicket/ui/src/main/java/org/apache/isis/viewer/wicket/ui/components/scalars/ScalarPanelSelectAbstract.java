@@ -38,8 +38,9 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderAbstract;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
 import lombok.NonNull;
 import lombok.val;
@@ -66,15 +67,14 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
             final FormComponent<?> component,
             final String formGroupId, final String nameId) {
         final FormGroup formGroup = new FormGroup(formGroupId, component);
-        final String describedAs = getModel().getDescribedAs();
         formGroup.add(component);
 
         final String labelCaption = getRendering().getLabelCaption(select2.component());
         final Label scalarName = createScalarName(nameId, labelCaption);
 
-        if(describedAs != null) {
-            Tooltips.addTooltip(scalarName, describedAs);
-        }
+        getModel()
+        .getDescribedAs()
+        .ifPresent(describedAs->Tooltips.addTooltip(scalarName, describedAs));
 
         formGroup.addOrReplace(scalarName);
         return formGroup;
@@ -93,7 +93,7 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
 
         final ScalarModel model = getModel();
         if(model.isRequired() && model.isEnabled()) {
-            formGroup.add(new CssClassAppender("mandatory"));
+            Wkt.cssAppend(formGroup, "mandatory");
         }
         return formGroup;
     }
@@ -148,10 +148,7 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
     protected void onSwitchFormForInlinePrompt(
             final WebMarkupContainer inlinePromptForm,
             final AjaxRequestTarget target) {
-
-        target.appendJavaScript(
-                String.format("Wicket.Event.publish(Isis.Topic.OPEN_SELECT2, '%s')", inlinePromptForm.getMarkupId()));
-
+        Wkt.javaScriptAdd(target, EventTopic.OPEN_SELECT2, inlinePromptForm.getMarkupId());
     }
 
     @Override

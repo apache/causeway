@@ -50,7 +50,7 @@ public interface ValueSemanticsProvider<T> {
 
     @lombok.Value(staticConstructor = "of")
     class Context {
-        Identifier identifier;
+        Identifier featureIdentifier;
         InteractionContext interactionContext;
     }
 

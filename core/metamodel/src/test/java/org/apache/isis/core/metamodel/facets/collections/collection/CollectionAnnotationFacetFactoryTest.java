@@ -37,8 +37,8 @@ import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromArray;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetOnCollectionFromCollectionAnnotation;
@@ -210,7 +210,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
             // then
             final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
             Assert.assertNotNull(facet);
-            Assert.assertTrue(facet instanceof TypeOfFacetInferredFromArray);
+            Assert.assertTrue(facet instanceof TypeOfFacetFromArray);
             assertThat(facet.value(), IsisMatchers.classEqualTo(Order.class));
         }
 
@@ -240,7 +240,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
             // then
             final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
             Assert.assertNotNull(facet);
-            Assert.assertTrue(facet instanceof TypeOfFacetInferredFromGenerics);
+            Assert.assertTrue(facet instanceof TypeOfFacetFromGenerics);
             assertThat(facet.value(), IsisMatchers.classEqualTo(Order.class));
         }
 

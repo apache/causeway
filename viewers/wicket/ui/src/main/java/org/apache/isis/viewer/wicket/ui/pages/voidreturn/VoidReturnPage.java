@@ -19,13 +19,13 @@
 package org.apache.isis.viewer.wicket.ui.pages.voidreturn;
 
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.markup.html.basic.Label;
 
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.VoidModel;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 /**
  * Web page representing an action invocation.
@@ -44,10 +44,9 @@ public class VoidReturnPage extends PageAbstract {
     private VoidReturnPage(final VoidModel model, final String actionName) {
         super(PageParameterUtils.newPageParameters(), actionName, ComponentType.VOID_RETURN);
 
-        themeDiv.addOrReplace(new Label(ID_ACTION_NAME, actionName));
+        Wkt.labelAdd(themeDiv, ID_ACTION_NAME, actionName);
 
         addChildComponents(themeDiv, model);
-
         addBookmarkedPages(themeDiv);
     }
 

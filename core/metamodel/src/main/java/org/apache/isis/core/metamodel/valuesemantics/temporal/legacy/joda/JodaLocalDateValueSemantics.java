@@ -194,7 +194,7 @@ implements
     // ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    public String simpleTextRepresentation(final Context context, final LocalDate value) {
+    public String simpleTextPresentation(final Context context, final LocalDate value) {
         if (value == null) {
             return null;
         }

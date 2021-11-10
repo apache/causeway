@@ -20,7 +20,7 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.viewer.common.model.HasTitle;
+import org.apache.isis.viewer.common.model.mixin.HasTitle;
 
 public interface BookmarkableModel
 extends HasTitle {

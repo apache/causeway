@@ -21,11 +21,11 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.valuesemantics.LongValueSemantics;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.core.metamodel.valuesemantics.LongValueSemantics;
 
 public class LongValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {
@@ -53,7 +53,7 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testOutputAsString() {
-        assertEquals("367,322", value.presentationValue(null, longObj));
+        assertEquals("367,322", value.simpleTextPresentation(null, longObj));
     }
 
     @Test

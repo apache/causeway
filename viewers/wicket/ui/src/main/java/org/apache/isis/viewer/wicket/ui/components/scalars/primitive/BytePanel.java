@@ -19,41 +19,38 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.ByteConverter;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 /**
  * Panel for rendering scalars of type {@link Byte} or <tt>byte</tt>.
  */
-public class BytePanel extends ScalarPanelTextFieldNumeric<Byte> {
+public class BytePanel
+extends ScalarPanelTextFieldNumeric<Byte> {
 
     private static final long serialVersionUID = 1L;
 
     public BytePanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, Byte.class, ByteConverter.INSTANCE);
+        super(id, scalarModel, Byte.class);
     }
 
     @Override
     protected AbstractTextComponent<Byte> createTextFieldForRegular(final String id) {
-        final TextFieldValueModel<Byte> textFieldValueModel = new TextFieldValueModel<>(this);
-        return new TextField<Byte>(id, textFieldValueModel, Byte.class) {
-            private static final long serialVersionUID = 1L;
-
-            @SuppressWarnings("unchecked")
-            @Override
-            public <C> IConverter<C> getConverter(Class<C> type) {
-                return (IConverter<C>) (type == Byte.class? ByteConverter.INSTANCE: super.getConverter(type));
-            }
-        };
+        return Wkt.textFieldWithConverter(
+                id, newTextFieldValueModel(), Byte.class, getConverter(getModel()));
     }
 
     @Override
     protected String getScalarPanelType() {
         return "bytePanel";
+    }
+
+    @Override
+    protected IConverter<Byte> getConverter(final ScalarModel scalarModel) {
+        return ByteConverter.INSTANCE;
     }
 }

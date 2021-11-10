@@ -19,13 +19,12 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.IntegerConverter;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 /**
  * Panel for rendering scalars of type {@link Integer} or <tt>int</tt>.
@@ -35,26 +34,23 @@ public class IntegerPanel extends ScalarPanelTextFieldNumeric<Integer> {
     private static final long serialVersionUID = 1L;
 
     public IntegerPanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, Integer.class, IntegerConverter.INSTANCE);
+        super(id, scalarModel, Integer.class);
     }
 
     @Override
     protected AbstractTextComponent<Integer> createTextFieldForRegular(final String id) {
-        final TextFieldValueModel<Integer> textFieldValueModel = new TextFieldValueModel<>(this);
-        return new TextField<Integer>(id, textFieldValueModel, Integer.class) {
-            private static final long serialVersionUID = 1L;
-
-            @SuppressWarnings("unchecked")
-            @Override
-            public <C> IConverter<C> getConverter(Class<C> type) {
-                return (IConverter<C>) (type == Integer.class? IntegerConverter.INSTANCE: super.getConverter(type));
-            }
-        };
+        return Wkt.textFieldWithConverter(
+                id, newTextFieldValueModel(), Integer.class, getConverter(getModel()));
     }
 
     @Override
     protected String getScalarPanelType() {
         return "integerPanel";
+    }
+
+    @Override
+    protected IConverter<Integer> getConverter(final ScalarModel scalarModel) {
+        return IntegerConverter.INSTANCE;
     }
 
 }

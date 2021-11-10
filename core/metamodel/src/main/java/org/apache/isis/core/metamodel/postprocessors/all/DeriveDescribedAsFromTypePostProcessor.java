@@ -25,8 +25,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.described.ParamDescribedFacet;
-import org.apache.isis.core.metamodel.facets.members.described.annotprop.DescribedAsFacetOnMemberInferredFromType;
-import org.apache.isis.core.metamodel.facets.param.described.annotderived.DescribedAsFacetOnParameterInferredFromType;
+import org.apache.isis.core.metamodel.facets.members.described.annotprop.DescribedAsFacetOnMemberFromType;
+import org.apache.isis.core.metamodel.facets.param.described.annotderived.DescribedAsFacetOnParameterFromType;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -56,7 +56,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         objectAction.getReturnType()
         .lookupNonFallbackFacet(ObjectDescribedFacet.class)
         .ifPresent(specFacet -> FacetUtil.addFacetIfPresent(
-                DescribedAsFacetOnMemberInferredFromType
+                DescribedAsFacetOnMemberFromType
                 .create(
                         specFacet,
                         facetedMethodFor(objectAction))));
@@ -71,7 +71,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         paramSpec.lookupNonFallbackFacet(ObjectDescribedFacet.class)
         .ifPresent(describedAsFacet->{
             FacetUtil.addFacetIfPresent(
-                    DescribedAsFacetOnParameterInferredFromType
+                    DescribedAsFacetOnParameterFromType
                     .create(describedAsFacet, peerFor(parameter)));
         });
     }
@@ -93,7 +93,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         objectAssociation.getElementType()
         .lookupNonFallbackFacet(ObjectDescribedFacet.class)
         .ifPresent(specFacet -> FacetUtil.addFacetIfPresent(
-                DescribedAsFacetOnMemberInferredFromType
+                DescribedAsFacetOnMemberFromType
                 .create(specFacet, facetedMethodFor(objectAssociation))));
     }
 

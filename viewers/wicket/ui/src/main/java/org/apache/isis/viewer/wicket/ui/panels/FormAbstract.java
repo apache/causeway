@@ -40,20 +40,22 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor {
     private transient PageClassRegistry pageClassRegistry;
     private transient IsisAppCommonContext commonContext;
 
-    public FormAbstract(final String id) {
+    protected FormAbstract(final String id) {
         super(id);
     }
 
-    public FormAbstract(final String id, final IModel<T> model) {
+    protected FormAbstract(final String id, final IModel<T> model) {
         super(id, model);
     }
 
-    public IsisAppCommonContext getCommonContext() {
+    // -- DEPENDENCIES
+
+    public final IsisAppCommonContext getCommonContext() {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
 
     @Override
-    public ComponentFactoryRegistry getComponentFactoryRegistry() {
+    public final ComponentFactoryRegistry getComponentFactoryRegistry() {
         if(componentFactoryRegistry==null) {
             componentFactoryRegistry = ((ComponentFactoryRegistryAccessor) getApplication()).getComponentFactoryRegistry();
         }
@@ -61,22 +63,22 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor {
     }
 
     @Override
-    public PageClassRegistry getPageClassRegistry() {
+    public final PageClassRegistry getPageClassRegistry() {
         if(pageClassRegistry==null) {
             pageClassRegistry = ((PageClassRegistryAccessor) getApplication()).getPageClassRegistry();
         }
         return pageClassRegistry;
     }
 
-    protected SpecificationLoader getSpecificationLoader() {
+    protected final SpecificationLoader getSpecificationLoader() {
         return getCommonContext().getSpecificationLoader();
     }
 
-    protected ServiceRegistry getServiceRegistry() {
+    protected final ServiceRegistry getServiceRegistry() {
         return getCommonContext().getServiceRegistry();
     }
 
-    protected TranslationService getTranslationService() {
+    protected final TranslationService getTranslationService() {
         return getCommonContext().getTranslationService();
     }
 

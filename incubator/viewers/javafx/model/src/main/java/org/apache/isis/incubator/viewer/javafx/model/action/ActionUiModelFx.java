@@ -20,7 +20,6 @@ package org.apache.isis.incubator.viewer.javafx.model.action;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
-import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
 import org.apache.isis.viewer.common.model.action.ActionUiModel;
 
 import lombok.Getter;
@@ -32,33 +31,29 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 
 @RequiredArgsConstructor(staticName = "of")
-public class ActionUiModelFx implements ActionUiModel<MenuItem, Node> {
+public class ActionUiModelFx
+implements ActionUiModel<MenuItem, Node> {
 
     private final UiContextFx uiContext;
 
     @Getter
     private final ManagedAction managedAction;
 
-    @Getter(lazy = true, onMethod_ = {@Override})
-    private final ActionUiMetaModel actionUiMetaModel = ActionUiMetaModel.of(getManagedAction());
-
-
     @Override
     public MenuItem createMenuUiComponent() {
-        val actionMeta = getActionUiMetaModel();
-        val menuItem = new MenuItem(actionMeta.getLabel());
+        val menuItem = new MenuItem(getManagedAction().getFriendlyName());
 
         return uiContext.getIconDecoratorForMenuItem()
-                .decorate(menuItem, actionMeta.getFontAwesomeUiModel());
+                .decorate(menuItem, getFontAwesomeUiModel());
     }
 
     @Override
     public Node createRegularUiComponent() {
-        val actionMeta = getActionUiMetaModel();
-        val uiLabel = new Label(actionMeta.getLabel());
+
+        val uiLabel = new Label(getManagedAction().getFriendlyName());
 
         return uiContext.getIconDecoratorForLabeled()
-                .decorate(uiLabel, actionMeta.getFontAwesomeUiModel());
+                .decorate(uiLabel, getFontAwesomeUiModel());
     }
 
 

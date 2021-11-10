@@ -38,6 +38,11 @@ public interface ManagedFeature {
     String getFriendlyName();
 
     /**
+     * @return Optionally the feature's translated description, as rendered with the UI (eg. tooltips).
+     */
+    Optional<String> getDescription();
+
+    /**
      * @return The specification of the feature's underlying type.
      * For actions this is the specification of the action's return type.
      */

@@ -20,7 +20,7 @@ package org.apache.isis.persistence.jdo.datanucleus.dialect;
 
 import java.util.Optional;
 
-import org.datanucleus.api.jdo.NucleusJDOHelper;
+import org.datanucleus.api.jdo.JDOAdapter;
 import org.datanucleus.exceptions.NucleusException;
 import org.springframework.dao.DataAccessException;
 
@@ -39,12 +39,12 @@ import lombok.val;
  */
 public class DnJdoDialect extends DefaultJdoDialect {
 
-    public DnJdoDialect(Object connectionFactory) {
+    public DnJdoDialect(final Object connectionFactory) {
         super(connectionFactory);
     }
 
     @Override
-    public DataAccessException translateExceptionIfPossible(RuntimeException cause) {
+    public DataAccessException translateExceptionIfPossible(final RuntimeException cause) {
 
         val translatedException =
 
@@ -57,7 +57,7 @@ public class DnJdoDialect extends DefaultJdoDialect {
 
         // converts to JDOException
         .mapFailure(ex->ex instanceof NucleusException
-                ? NucleusJDOHelper
+                ? JDOAdapter
                         .getJDOExceptionForNucleusException(((NucleusException)ex))
                 : ex)
 

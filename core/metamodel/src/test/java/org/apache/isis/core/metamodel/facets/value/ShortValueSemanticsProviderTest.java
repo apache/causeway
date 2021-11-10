@@ -21,11 +21,11 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.valuesemantics.ShortValueSemantics;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.core.metamodel.valuesemantics.ShortValueSemantics;
 
 public class ShortValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {
@@ -53,12 +53,12 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testTitleOfForPositiveValue() {
-        assertEquals("32", value.presentationValue(null, short1));
+        assertEquals("32", value.simpleTextPresentation(null, short1));
     }
 
     @Test
     public void testTitleOfForLargestNegativeValue() {
-        assertEquals("-128", value.presentationValue(null, Short.valueOf((short) -128)));
+        assertEquals("-128", value.simpleTextPresentation(null, Short.valueOf((short) -128)));
     }
 
     @Test

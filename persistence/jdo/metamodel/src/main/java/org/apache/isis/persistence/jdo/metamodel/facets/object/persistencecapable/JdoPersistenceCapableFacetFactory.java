@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
-import org.apache.isis.persistence.jdo.metamodel.facets.object.domainobject.objectspecid.LogicalTypeFacetInferredFromJdoPersistenceCapableAnnotation;
+import org.apache.isis.persistence.jdo.metamodel.facets.object.domainobject.objectspecid.LogicalTypeFacetFromJdoPersistenceCapableAnnotation;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.val;
@@ -74,7 +74,7 @@ implements ObjectTypeFacetFactory {
         .ifPresent(jdoPersistenceCapableFacet->{
 
             FacetUtil.addFacetIfPresent(
-                    LogicalTypeFacetInferredFromJdoPersistenceCapableAnnotation
+                    LogicalTypeFacetFromJdoPersistenceCapableAnnotation
                     .create(jdoPersistenceCapableFacet, cls, facetHolder));
 
             FacetUtil.addFacet(

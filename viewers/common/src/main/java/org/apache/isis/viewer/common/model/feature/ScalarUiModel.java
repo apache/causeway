@@ -19,12 +19,12 @@
 package org.apache.isis.viewer.common.model.feature;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxFractionalDigitsFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxTotalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
@@ -46,7 +46,7 @@ public interface ScalarUiModel {
                 || getMetaModel().getFeatureType() == FeatureType.COLLECTION;
     }
 
-    default String getDescribedAs() {
+    default Optional<String> getDescribedAs() {
         return getMetaModel().getDescription(this::getOwner);
     }
 
@@ -57,18 +57,7 @@ public interface ScalarUiModel {
      */
     default Integer getLength() {
         return getMetaModel().lookupFacet(MaxTotalDigitsFacet.class)
-                .map(MaxTotalDigitsFacet::maxTotalDigits)
-                .orElse(null);
-    }
-
-    /**
-     * for {@link BigDecimal}s only.
-     *
-     * @see #getScale()
-     */
-    default Integer getScale() {
-        return getMetaModel().lookupFacet(MaxFractionalDigitsFacet.class)
-                .map(MaxFractionalDigitsFacet::maxFractionalDigits)
+                .map(MaxTotalDigitsFacet::getMaxTotalDigits)
                 .orElse(null);
     }
 
@@ -88,7 +77,5 @@ public interface ScalarUiModel {
     ManagedObject getDefault();
     Can<ManagedObject> getChoices();
     Can<ManagedObject> getAutoComplete(final String searchArg);
-
-
 
 }

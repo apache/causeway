@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
+import java.util.Optional;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.markup.html.basic.Label;
@@ -35,8 +37,8 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -68,14 +70,14 @@ extends GenericColumnAbstract {
             final String propertyId,
             final boolean escaped,
             final String parentTypeName,
-            final String describedAs) {
+            final Optional<String> describedAs) {
 
         super(commonContext, columnNameModel, sortProperty);
         this.collectionVariant = collectionVariant;
         this.propertyId = propertyId;
         this.escaped = escaped;
         this.parentTypeName = parentTypeName;
-        this.describedAs = describedAs;
+        this.describedAs = describedAs.orElse(null);
 
     }
 
@@ -92,8 +94,10 @@ extends GenericColumnAbstract {
     @Override
     public String getCssClass() {
         final String cssClass = super.getCssClass();
-        return (!_Strings.isNullOrEmpty(cssClass) ? (cssClass + " ") : "") +
-                CssClassAppender.asCssStyle("isis-" + parentTypeName.replace(".","-") + "-" + propertyId);
+        return (_Strings.isNotEmpty(cssClass)
+                        ? (cssClass + " ")
+                        : "")
+                + Wkt.cssNormalize("isis-" + parentTypeName + "-" + propertyId);
     }
 
     @Override

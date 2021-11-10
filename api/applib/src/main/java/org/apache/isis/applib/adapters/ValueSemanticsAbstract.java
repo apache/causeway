@@ -41,7 +41,8 @@ import lombok.val;
  * @since 2.x {@index}
  */
 public abstract class ValueSemanticsAbstract<T>
-implements ValueSemanticsProvider<T> {
+implements
+    ValueSemanticsProvider<T> {
 
     public static final String NULL_REPRESENTATION = "(none)";
     protected static final ValueType UNREPRESENTED = ValueType.STRING;
@@ -85,9 +86,17 @@ implements ValueSemanticsProvider<T> {
      * @param context - nullable in support of JUnit testing
      * @return {@link NumberFormat} the default from from given context's locale
      * or else system's default locale
+     *
+     * @implNote the format's MaximumFractionDigits are initialized to 16, as
+     * 64 bit IEEE 754 double has 15 decimal digits of precision;
+     * this is typically overruled later by implementations of
+     * {@link #configureDecimalFormat(org.apache.isis.applib.adapters.ValueSemanticsProvider.Context, DecimalFormat) configureDecimalFormat}
      */
     protected DecimalFormat getNumberFormat(final @Nullable ValueSemanticsProvider.Context context) {
-        return (DecimalFormat)NumberFormat.getNumberInstance(getLocale(context));
+        val format = (DecimalFormat)NumberFormat.getNumberInstance(getLocale(context));
+        // prime w/ 16 (64 bit IEEE 754 double has 15 decimal digits of precision)
+        format.setMaximumFractionDigits(16);
+        return format;
     }
 
     protected String render(final T value, final Function<T, String> toString) {
@@ -121,20 +130,37 @@ implements ValueSemanticsProvider<T> {
         }
         val format = getNumberFormat(context);
         format.setParseBigDecimal(true);
-        val position = new ParsePosition(0);
+        System.err.printf("before configure %d%n", format.getMaximumFractionDigits()); //FIXME[ISIS-2741] debug remove
+        configureDecimalFormat(context, format);
+        System.err.printf("after configure %d%n", format.getMaximumFractionDigits()); //FIXME[ISIS-2741] debug remove
 
+        val position = new ParsePosition(0);
         try {
             val number = (BigDecimal)format.parse(input, position);
             if (position.getErrorIndex() != -1) {
                 throw new ParseException("could not parse input='" + input + "'", position.getErrorIndex());
             } else if (position.getIndex() < input.length()) {
-                throw new ParseException("input='" + input + "' wasnt processed completely", position.getIndex());
+                throw new ParseException("input='" + input + "' was not processed completely", position.getIndex());
+            }
+            // check for maxFractionDigits if required ...
+            final int maxFractionDigits = format.getMaximumFractionDigits();
+            if(maxFractionDigits>-1
+                    && number.scale()>format.getMaximumFractionDigits()) {
+                throw new TextEntryParseException(String.format(
+                        "No more than %d digits can be entered after the decimal separator, "
+                        + "got %d in '%s'.", maxFractionDigits, number.scale(), input));
             }
             return number;
         } catch (final NumberFormatException | ParseException e) {
-            throw new TextEntryParseException("Not a decimal value " + input, e);
+            throw new TextEntryParseException(String.format(
+                    "Not a decimal value '%s': %s", input, e.getMessage()),
+                    e);
         }
-
     }
+
+    /**
+     * Typically overridden by BigDecimalValueSemantics to set MaximumFractionDigits.
+     */
+    protected void configureDecimalFormat(final Context context, final DecimalFormat format) {}
 
 }

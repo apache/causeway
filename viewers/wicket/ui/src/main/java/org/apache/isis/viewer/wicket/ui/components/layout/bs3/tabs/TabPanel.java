@@ -25,12 +25,12 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.hints.HasUiHintDisambiguator;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.ui.components.layout.bs3.Util;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.col.RepeatingViewWithDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.row.Row;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 public class TabPanel
 extends PanelAbstract<ManagedObject, EntityModel>
@@ -43,11 +43,11 @@ implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
 
     private final BS3Tab bs3Tab;
 
-    public TabPanel(String id, final EntityModel model, final BS3Tab bs3Tab) {
+    public TabPanel(final String id, final EntityModel model, final BS3Tab bs3Tab) {
         this(id, model, bs3Tab, null);
     }
 
-    public TabPanel(String id, final EntityModel model, final BS3Tab bs3Tab, final RepeatingViewWithDynamicallyVisibleContent repeatingViewWithDynamicallyVisibleContent) {
+    public TabPanel(final String id, final EntityModel model, final BS3Tab bs3Tab, final RepeatingViewWithDynamicallyVisibleContent repeatingViewWithDynamicallyVisibleContent) {
         super(id);
 
         this.bs3Tab = bs3Tab;
@@ -73,7 +73,7 @@ implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
 
         final WebMarkupContainer panel = this;
         if(visible) {
-            Util.appendCssClassIfRequired(panel, bs3Tab);
+            Wkt.cssAppend(panel, bs3Tab.getCssClass());
             panel.add(div);
         } else {
             Components.permanentlyHide(panel, div.getId());

@@ -26,14 +26,6 @@ public interface Renderer<T> {
     /**
      * The value in its read-only summarizing text presentation form. (irreversible)
      */
-    String simpleTextRepresentation(ValueSemanticsProvider.Context context, T value);
-
-    /**
-     * The value as read-only presentation form. (irreversible)
-     * @apiNote defaulting to the {@link String} type.
-     */
-    default Object presentationValue(final ValueSemanticsProvider.Context context, final T value) {
-        return simpleTextRepresentation(context, value);
-    }
+    String simpleTextPresentation(ValueSemanticsProvider.Context context, T value);
 
 }

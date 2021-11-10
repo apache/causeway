@@ -113,7 +113,7 @@ extends ObjectSpecificationPostProcessorAbstract {
 
     private static void addCollectionParamDefaultsFacetIfNoneAlready(
             final ObjectActionParameter collectionParam) {
-        if(collectionParam.getNumber()!=0) {
+        if(collectionParam.getParameterIndex()!=0) {
             return; // with current programming model this can only be the first parameter of an action dialog
         }
         if(collectionParam.containsNonFallbackFacet(ActionParameterDefaultsFacet.class)) {

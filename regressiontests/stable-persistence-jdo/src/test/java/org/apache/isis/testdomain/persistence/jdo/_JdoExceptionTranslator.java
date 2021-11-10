@@ -23,7 +23,7 @@ import java.util.NoSuchElementException;
 import javax.jdo.JDODataStoreException;
 import javax.jdo.JDOException;
 
-import org.datanucleus.api.jdo.NucleusJDOHelper;
+import org.datanucleus.api.jdo.JDOAdapter;
 import org.datanucleus.exceptions.NucleusException;
 import org.springframework.dao.DataAccessException;
 
@@ -35,7 +35,7 @@ import org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager;
 final class _JdoExceptionTranslator {
 
     // not used, but maybe keep for debugging purposes
-    static DataAccessException translate(Throwable failure, JdoTransactionManager txManager) {
+    static DataAccessException translate(final Throwable failure, final JdoTransactionManager txManager) {
 
         return (DataAccessException) Result.failure(failure)
 
@@ -49,7 +49,7 @@ final class _JdoExceptionTranslator {
 
         // converts to JDOException
         .mapFailure(ex->ex instanceof NucleusException
-                ? NucleusJDOHelper
+                ? JDOAdapter
                         .getJDOExceptionForNucleusException(((NucleusException)ex))
                 : ex)
 
@@ -65,7 +65,5 @@ final class _JdoExceptionTranslator {
         .orElse(new NoSuchElementException("No value present"));
 
     }
-
-
 
 }

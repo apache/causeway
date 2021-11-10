@@ -31,7 +31,8 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
  * s where moreover the scalar parameter or property is a value type that is
  * parseable.
  */
-public abstract class ScalarPanelTextFieldParseableAbstract extends ScalarPanelTextFieldAbstract<String> {
+public abstract class ScalarPanelTextFieldParseableAbstract
+extends ScalarPanelTextFieldAbstract<String> {
 
     private static final long serialVersionUID = 1L;
 

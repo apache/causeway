@@ -19,7 +19,6 @@
 package org.apache.isis.viewer.wicket.ui.components.header;
 
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -37,7 +36,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandName;
 import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -61,7 +60,7 @@ extends PanelAbstract<String, Model<String>> {
      *
      * @param id The component id
      */
-    public HeaderPanel(String id) {
+    public HeaderPanel(final String id) {
         super(id);
     }
 
@@ -84,7 +83,7 @@ extends PanelAbstract<String, Model<String>> {
         setVisible(parameters.get(PageParameterUtils.ISIS_NO_HEADER_PARAMETER_NAME).isNull());
     }
 
-    protected void addApplicationName(BrandingUiModel branding) {
+    protected void addApplicationName(final BrandingUiModel branding) {
         val homePage = getApplication().getHomePage();
         val applicationNameLink = new BookmarkablePageLink<Void>("applicationName", homePage);
         applicationNameLink.add(
@@ -94,7 +93,7 @@ extends PanelAbstract<String, Model<String>> {
         add(applicationNameLink);
     }
 
-    protected void addUserName(UserProfileUiModel userProfile) {
+    protected void addUserName(final UserProfileUiModel userProfile) {
         add(new MarkupContainer(ID_USER_ICON){
             private static final long serialVersionUID = 1L;
 
@@ -105,10 +104,10 @@ extends PanelAbstract<String, Model<String>> {
             }
         });
         add(new AvatarImage(ID_USER_AVATAR, userProfile));
-        add(new Label(ID_USER_NAME, userProfile.getUserProfileName()));
+        Wkt.labelAdd(this, ID_USER_NAME, userProfile.getUserProfileName());
     }
 
-    protected void addServiceActionMenuBars(HeaderUiModel headerUiModel) {
+    protected void addServiceActionMenuBars(final HeaderUiModel headerUiModel) {
         if (getPage() instanceof ErrorPage) {
             Components.permanentlyHide(this, ID_PRIMARY_MENU_BAR);
             Components.permanentlyHide(this, ID_SECONDARY_MENU_BAR);
@@ -128,10 +127,8 @@ extends PanelAbstract<String, Model<String>> {
         val menuModel = new ServiceActionsModel(super.getCommonContext(), menuUiModel);
         val menuBarComponent = getComponentFactoryRegistry()
                 .createComponent(ComponentType.SERVICE_ACTIONS, id, menuModel);
-        menuBarComponent.add(new CssClassAppender(menuUiModel.getCssClass()));
+        Wkt.cssAppend(menuBarComponent, menuUiModel.getCssClass());
         container.add(menuBarComponent);
     }
-
-
 
 }

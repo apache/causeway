@@ -21,9 +21,9 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics;
-
 import static org.junit.Assert.assertEquals;
+
+import org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics;
 
 public class StringValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {
@@ -40,7 +40,7 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testTitleOf() {
-        assertEquals("text entry", value.presentationValue(null, string));
+        assertEquals("text entry", value.simpleTextPresentation(null, string));
     }
 
     @Test

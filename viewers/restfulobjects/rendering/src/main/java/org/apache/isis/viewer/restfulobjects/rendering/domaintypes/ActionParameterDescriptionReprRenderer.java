@@ -99,7 +99,7 @@ extends AbstractTypeFeatureReprRenderer<ObjectActionParameter> {
         representation.mapPut("name", getObjectFeature()
                 .getStaticFriendlyName()
                 .orElseThrow(_Exceptions::unexpectedCodeReach));
-        representation.mapPut("number", getObjectFeature().getNumber());
+        representation.mapPut("number", getObjectFeature().getParameterIndex());
         representation.mapPut("optional", getObjectFeature().isOptional());
         getObjectFeature()
             .lookupNonFallbackFacet(MaxLengthFacet.class)

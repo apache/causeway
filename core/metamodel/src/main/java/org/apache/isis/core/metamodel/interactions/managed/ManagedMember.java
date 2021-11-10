@@ -138,6 +138,11 @@ implements ManagedFeature {
         return getMetaModel().getFriendlyName(this::getOwner);
     }
 
+    @Override
+    public Optional<String> getDescription() {
+        return getMetaModel().getDescription(this::getOwner);
+    }
+
     @Getter @Setter @NonNull
     private RepresentationMode representationMode = RepresentationMode.AUTO;
 

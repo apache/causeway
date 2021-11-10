@@ -23,7 +23,6 @@ import java.util.Optional;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -37,6 +36,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbst
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForValueChoices;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -57,7 +57,7 @@ extends ScalarPanelSelectAbstract {
 
     @Override
     protected Component createComponentForCompact() {
-        return new Label(ID_SCALAR_IF_COMPACT, "placeholder");
+        return Wkt.label(ID_SCALAR_IF_COMPACT, "placeholder");
     }
 
     @Override

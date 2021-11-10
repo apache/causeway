@@ -45,13 +45,13 @@ public interface TypeOfFacet extends SingleClassValueFacet {
     static TypeOfFacet inferredFromArray(
             final Class<?> elementType,
             final FacetHolder holder) {
-        return new TypeOfFacetInferredFromArray(elementType, holder);
+        return new TypeOfFacetFromArray(elementType, holder);
     }
 
     static TypeOfFacet inferredFromGenerics(
             final Class<?> elementType,
             final FacetHolder holder) {
-        return new TypeOfFacetInferredFromGenerics(elementType, holder);
+        return new TypeOfFacetFromGenerics(elementType, holder);
     }
 
     static Optional<TypeOfFacet> inferFromParameterType(

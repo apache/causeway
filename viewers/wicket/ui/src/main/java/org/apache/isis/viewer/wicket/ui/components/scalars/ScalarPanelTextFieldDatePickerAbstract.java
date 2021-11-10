@@ -54,7 +54,7 @@ extends ScalarPanelTextFieldAbstract<T>  {
      * <p>
      * Is not passed into constructor only to allow subclass to read from injected {@link #getWicketViewerSettings()}.
      */
-    protected void init(DateConverter<T> converter) {
+    protected void init(final DateConverter<T> converter) {
         this.converter = converter;
     }
 
@@ -81,7 +81,7 @@ extends ScalarPanelTextFieldAbstract<T>  {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public <C> IConverter<C> getConverter(Class<C> type) {
+            public <C> IConverter<C> getConverter(final Class<C> type) {
                 return _Casts.uncheckedCast(converter);
             }
         };
@@ -90,13 +90,14 @@ extends ScalarPanelTextFieldAbstract<T>  {
         // adding an amount because seemed to truncate in tables in certain circumstances
         final int lengthAdjust =
                 getLengthAdjustHint() != null ? getLengthAdjustHint() : 1;
-                final String dateTimePattern = converter.getDateTimePattern(getLocale());
-                final int length = dateTimePattern.length() + lengthAdjust;
-                label.add(new AttributeModifier("size", Model.of("" + length)));
 
-                compactFragment.add(label);
+        final String dateTimePattern = converter.getDateTimePattern(getLocale());
+        final int length = dateTimePattern.length() + lengthAdjust;
+        label.add(new AttributeModifier("size", Model.of("" + length)));
 
-                return label;
+        compactFragment.add(label);
+
+        return label;
     }
 
     @Override

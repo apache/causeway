@@ -19,13 +19,12 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.ShortConverter;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 /**
  * Panel for rendering scalars of type {@link Short} or <tt>short</tt>.
@@ -35,25 +34,22 @@ public class ShortPanel extends ScalarPanelTextFieldNumeric<Short> {
     private static final long serialVersionUID = 1L;
 
     public ShortPanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, Short.class, ShortConverter.INSTANCE);
+        super(id, scalarModel, Short.class);
     }
 
     @Override
     protected AbstractTextComponent<Short> createTextFieldForRegular(final String id) {
-        final TextFieldValueModel<Short> textFieldValueModel = new TextFieldValueModel<>(this);
-        return new TextField<Short>(id, textFieldValueModel, Short.class) {
-            private static final long serialVersionUID = 1L;
-
-            @SuppressWarnings("unchecked")
-            @Override
-            public <C> IConverter<C> getConverter(Class<C> type) {
-                return (IConverter<C>) (type == Short.class? ShortConverter.INSTANCE: super.getConverter(type));
-            }
-        };
+        return Wkt.textFieldWithConverter(
+                id, newTextFieldValueModel(), Short.class, getConverter(getModel()));
     }
 
     @Override
     protected String getScalarPanelType() {
         return "shortPanel";
+    }
+
+    @Override
+    protected IConverter<Short> getConverter(final ScalarModel scalarModel) {
+        return ShortConverter.INSTANCE;
     }
 }

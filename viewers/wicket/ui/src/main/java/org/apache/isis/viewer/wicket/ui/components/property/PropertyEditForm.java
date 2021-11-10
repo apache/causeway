@@ -24,7 +24,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.hints.IsisPropertyEditCompletedEvent;
@@ -65,15 +64,15 @@ class PropertyEditForm extends PromptFormAbstract<ScalarPropertyModel> {
 
         final Component component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, model);
-        final ScalarPanelAbstract paramPanel =
-                component instanceof ScalarPanelAbstract
-                ? (ScalarPanelAbstract) component
-                        : null;
-                if (paramPanel != null) {
-                    paramPanel.setOutputMarkupId(true);
-                    paramPanel.notifyOnChange(this);
-                }
-                return paramPanel;
+
+        if(!(component instanceof ScalarPanelAbstract)) {
+            return null;
+        }
+
+        final ScalarPanelAbstract paramPanel = (ScalarPanelAbstract) component;
+        paramPanel.setOutputMarkupId(true);
+        paramPanel.notifyOnChange(this);
+        return paramPanel;
     }
 
     @Override
@@ -87,22 +86,22 @@ class PropertyEditForm extends PromptFormAbstract<ScalarPropertyModel> {
 
     }
 
-    // REVIEW: this overload may not be necessary, recall that the important call needed is getScalarModel().reset(),
-    // which is called in the superclass.
-    @Override
-    public void onCancelSubmitted(
-            final AjaxRequestTarget target) {
-
-        final PromptStyle promptStyle = getScalarModel().getPromptStyle();
-
-        if (promptStyle.isInlineOrInlineAsIfEdit()) {
-
-            getScalarModel().toViewMode();
-            getScalarModel().clearPending();
-        }
-
-        super.onCancelSubmitted(target);
-    }
+//    // REVIEW: this overload may not be necessary, recall that the important call needed is getScalarModel().reset(),
+//    // which is called in the superclass.
+//    @Override
+//    public void onCancelSubmitted(
+//            final AjaxRequestTarget target) {
+//
+//        final PromptStyle promptStyle = getScalarModel().getPromptStyle();
+//
+//        if (promptStyle.isInlineOrInlineAsIfEdit()) {
+//
+//            getScalarModel().toViewMode();
+//            getScalarModel().clearPending();
+//        }
+//
+//        super.onCancelSubmitted(target);
+//    }
 
     @Override
     protected _Either<ActionModel, ScalarPropertyModel> getMemberModel() {

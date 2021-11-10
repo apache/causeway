@@ -24,7 +24,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -41,7 +40,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.facets.actions.action.associateWith.ChoicesFromFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
@@ -61,20 +59,24 @@ import lombok.val;
 
 public interface ObjectAction extends ObjectMember {
 
-    // -- getSemantics, getOnType
     /**
      * The semantics of this action.
      */
     SemanticsOf getSemantics();
 
-    // -- getType, isPrototype
+    /**
+     * An action with no parameters AND <i>are-you-sure</i> semantics
+     * does require an immediate confirmation dialog.
+     */
+    default boolean isImmediateConfirmationRequired() {
+        return getSemantics().isAreYouSure()
+        && ObjectAction.Util.isNoParameters(this);
+    }
 
     ActionType getType();
 
     boolean isPrototype();
 
-
-    // -- ReturnType
     /**
      * Returns the specifications for the return type.
      */
@@ -85,9 +87,6 @@ public interface ObjectAction extends ObjectMember {
      * else returns false.
      */
     boolean hasReturn();
-
-
-    // -- execute, executeWithRuleChecking
 
     /**
      * Invokes the action's method on the target object given the specified set
@@ -173,7 +172,6 @@ public interface ObjectAction extends ObjectMember {
 
     // -- INTERACTION HEAD
 
-    @Deprecated// use ManagedAction instead
     ActionInteractionHead interactionHead(@NonNull ManagedObject actionOwner);
 
     // -- Parameters (declarative)
@@ -229,8 +227,6 @@ public interface ObjectAction extends ObjectMember {
      */
     ManagedObject realTargetAdapter(ManagedObject targetAdapter);
 
-
-
     // -- Parameters (per instance)
 
     /**
@@ -257,19 +253,6 @@ public interface ObjectAction extends ObjectMember {
 
     public static final class Util {
 
-        private static SemanticsOf semanticsOf(final ObjectAction objectAction) {
-            return objectAction.getSemantics();
-        }
-
-        public static boolean isAreYouSureSemantics(final ObjectAction objectAction) {
-            return semanticsOf(objectAction).isAreYouSure();
-        }
-
-        public static boolean isIdempotentOrCachable(final ObjectAction objectAction) {
-            final SemanticsOf semantics = semanticsOf(objectAction);
-            return semantics.isIdempotentInNature() || semantics.isSafeAndRequestCacheable();
-        }
-
         public static boolean isNoParameters(final ObjectAction objectAction) {
             return objectAction.getParameterCount()==0;
         }
@@ -278,25 +261,18 @@ public interface ObjectAction extends ObjectMember {
             final ObjectSpecification returnType = objectAction.getReturnType();
             if (returnType != null) {
                 Class<?> cls = returnType.getCorrespondingClass();
-                if (Blob.class.isAssignableFrom(cls) || Clob.class.isAssignableFrom(cls)) {
+                if (Blob.class.isAssignableFrom(cls)
+                        || Clob.class.isAssignableFrom(cls)) {
                     return true;
                 }
             }
             return false;
         }
 
-        public static String actionIdentifierFor(final ObjectAction action) {
-            @SuppressWarnings("unused")
-            final Identifier identifier = action.getFeatureIdentifier();
-
-            final String className = action.getDeclaringType().getLogicalTypeName().replace(".","-");
-            final String actionId = action.getId();
-            return className + "-" + actionId;
-        }
-
         public static ActionLayout.Position actionLayoutPositionOf(final ObjectAction action) {
-            final ActionPositionFacet layoutFacet = action.getFacet(ActionPositionFacet.class);
-            return layoutFacet != null ? layoutFacet.position() : ActionLayout.Position.BELOW;
+            return action.lookupFacet(ActionPositionFacet.class)
+            .map(ActionPositionFacet::position)
+            .orElse(ActionLayout.Position.BELOW);
         }
 
         public static Optional<CssClassFaFactory> cssClassFaFactoryFor(
@@ -313,11 +289,6 @@ public interface ObjectAction extends ObjectMember {
                                     ? null
                                     : hasImperativeFaIcon.getCssClassFaFactory(domainObject.asProvider())))
             .filter(_NullSafe::isPresent);
-        }
-
-        public static String cssClassFor(final ObjectAction action, final ManagedObject domainObject) {
-            final CssClassFacet cssClassFacet = action.getFacet(CssClassFacet.class);
-            return cssClassFacet != null ? cssClassFacet.cssClass(domainObject) : null;
         }
 
         /**
@@ -385,6 +356,11 @@ public interface ObjectAction extends ObjectMember {
 
         public static Predicate<ObjectAction> ofActionType(final ActionType type) {
             return (final ObjectAction oa) -> oa.getType() == type;
+        }
+
+        public static Predicate<ObjectAction> isPositioned(
+                final ActionLayout.Position position) {
+            return (final ObjectAction oa) -> ObjectAction.Util.actionLayoutPositionOf(oa) == position;
         }
 
         public static Predicate<ObjectAction> isSameLayoutGroupAs(

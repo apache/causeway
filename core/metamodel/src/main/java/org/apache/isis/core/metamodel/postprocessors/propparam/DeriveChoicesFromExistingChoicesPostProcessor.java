@@ -24,11 +24,11 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
-import org.apache.isis.core.metamodel.facets.param.choices.enums.ActionParameterChoicesFacetDerivedFromChoicesFacetFactory;
+import org.apache.isis.core.metamodel.facets.param.choices.enums.ActionParameterChoicesFacetFromChoicesFacetFactory;
 import org.apache.isis.core.metamodel.facets.param.choices.enums.ActionParameterChoicesFacetInferredFromChoicesFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
-import org.apache.isis.core.metamodel.facets.properties.choices.enums.PropertyChoicesFacetDerivedFromChoicesFacet;
-import org.apache.isis.core.metamodel.facets.properties.choices.enums.PropertyChoicesFacetDerivedFromChoicesFacetFactory;
+import org.apache.isis.core.metamodel.facets.properties.choices.enums.PropertyChoicesFacetFromChoicesFacet;
+import org.apache.isis.core.metamodel.facets.properties.choices.enums.PropertyChoicesFacetFromChoicesFacetFactory;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -37,8 +37,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 /**
- * Replaces {@link ActionParameterChoicesFacetDerivedFromChoicesFacetFactory}
- * and {@link PropertyChoicesFacetDerivedFromChoicesFacetFactory}
+ * Replaces {@link ActionParameterChoicesFacetFromChoicesFacetFactory}
+ * and {@link PropertyChoicesFacetFromChoicesFacetFactory}
  */
 public class DeriveChoicesFromExistingChoicesPostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
@@ -75,7 +75,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         property.getElementType()
         .lookupNonFallbackFacet(ChoicesFacet.class)
         .ifPresent(specFacet -> FacetUtil
-                .addFacet(new PropertyChoicesFacetDerivedFromChoicesFacet(facetedMethodFor(property))));
+                .addFacet(new PropertyChoicesFacetFromChoicesFacet(facetedMethodFor(property))));
    }
 
     @Override

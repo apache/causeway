@@ -18,9 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.apache.wicket.Component;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -30,10 +27,10 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScala
 /**
  * {@link ComponentFactory} for {@link JavaMathBigDecimalPanel}.
  */
-public class JavaMathBigDecimalPanelFactory extends ComponentFactoryScalarAbstract {
+public class JavaMathBigDecimalPanelFactory
+extends ComponentFactoryScalarAbstract {
 
     private static final long serialVersionUID = 1L;
-
 
     public JavaMathBigDecimalPanelFactory() {
         super(JavaMathBigDecimalPanel.class, java.math.BigDecimal.class);
@@ -41,27 +38,7 @@ public class JavaMathBigDecimalPanelFactory extends ComponentFactoryScalarAbstra
 
     @Override
     public Component createComponent(final String id, final ScalarModel scalarModel) {
-        BigDecimalConverterWithScale converter = getConverter(scalarModel);
-        return new JavaMathBigDecimalPanel(id, scalarModel, converter);
-    }
-
-
-    // //////////////////////////////////////
-
-    private final BigDecimalConverterWithScale converterForNullScale = new BigDecimalConverterWithScale(null);
-    private final Map<Integer, BigDecimalConverterWithScale> converterByScale = new ConcurrentHashMap<>();
-
-    private BigDecimalConverterWithScale getConverter(final ScalarModel scalarModel) {
-        final Integer scale = scalarModel.getScale();
-        if(scale == null) {
-            return converterForNullScale;
-        }
-        BigDecimalConverterWithScale bigDecimalConverter = converterByScale.get(scale);
-        if(bigDecimalConverter == null) {
-            bigDecimalConverter = new BigDecimalConverterWithScale(scale);
-            converterByScale.put(scale, bigDecimalConverter);
-        }
-        return bigDecimalConverter;
+        return new JavaMathBigDecimalPanel(id, scalarModel);
     }
 
 }

@@ -471,6 +471,10 @@ implements ObjectAction {
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters) {
 
+        if(head.getOwner().getSpecification().isValue()) {
+            return; // do not record value type mixin actions
+        }
+
         setupCommand(head,
                 interactionId->commandDtoFor(interactionId, head, argumentAdapters));
     }

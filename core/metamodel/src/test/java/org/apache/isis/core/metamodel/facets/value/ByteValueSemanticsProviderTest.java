@@ -21,11 +21,11 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.valuesemantics.ByteValueSemantics;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.core.metamodel.valuesemantics.ByteValueSemantics;
 
 public class ByteValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {
@@ -58,7 +58,7 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testTitleOf() throws Exception {
-        assertEquals("102", value.presentationValue(null, byteObj));
+        assertEquals("102", value.simpleTextPresentation(null, byteObj));
     }
 
     @Test

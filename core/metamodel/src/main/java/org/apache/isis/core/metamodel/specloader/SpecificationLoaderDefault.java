@@ -451,10 +451,9 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     }
 
     @Override
-    public LogicalType lookupLogicalType(final @NonNull String logicalTypeName) {
-        val logicalType = logicalTypeResolver.lookup(logicalTypeName)
-                .orElse(null);
-        if(logicalType!=null) {
+    public Optional<LogicalType> lookupLogicalType(final @NonNull String logicalTypeName) {
+        val logicalType = logicalTypeResolver.lookup(logicalTypeName);
+        if(logicalType.isPresent()) {
             return logicalType;
         }
 
@@ -472,15 +471,10 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 //                    + "discovered by Spring during bootstrapping of this application.",
 //                    logicalType.getName(),
 //                    cls.getName());
-            return LogicalType.fqcn(cls);
+            return Optional.of(LogicalType.fqcn(cls));
         }
 
-        // immediately fail to not cause any NPEs further down the path
-        throw _Exceptions.unrecoverableFormatted(
-                "Lookup of logical-type-name '%s' failed, also found no matching fully qualified "
-                + "class name to use instead. This indicates, that the class we are not finding here"
-                + " is not discovered by Spring during bootstrapping of this application.",
-                logicalTypeName);
+        return Optional.empty();
     }
 
     // -- VALIDATION STUFF

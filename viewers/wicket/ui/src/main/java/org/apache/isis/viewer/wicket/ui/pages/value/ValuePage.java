@@ -20,13 +20,13 @@ package org.apache.isis.viewer.wicket.ui.pages.value;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.markup.html.basic.Label;
 
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 /**
  * Web page representing an action invocation.
@@ -46,16 +46,13 @@ public class ValuePage extends PageAbstract {
 
     }
 
-
     private ValuePage(final ValueModel valueModel, final String actionName) {
         super(PageParameterUtils.newPageParameters(), actionName, ComponentType.VALUE);
 
-        themeDiv.addOrReplace(new Label(ID_ACTION_NAME, actionName));
+        Wkt.labelAdd(themeDiv, ID_ACTION_NAME, actionName);
 
         addChildComponents(themeDiv, valueModel);
-
         addBookmarkedPages(themeDiv);
-
     }
 
     private static String actionNameFrom(final ValueModel valueModel) {

@@ -114,17 +114,20 @@ extends ReprRendererAbstract<ParentSpecAndFeature<T>> {
     protected void putExtensionsDescriptionIfAvailable() {
         getObjectFeature()
         .getStaticOrCanonicalDescription()
-        .accept(
-                staticForm->{
-                    if(staticForm.isEmpty()) return;
-                    getExtensions().mapPut("description", staticForm);
-                    getExtensions().mapPut("descriptionForm", "static");
-                },
-                canonicalForm->{
-                    if(canonicalForm.isEmpty()) return;
-                    getExtensions().mapPut("description", canonicalForm);
-                    getExtensions().mapPut("descriptionForm", "canonical");
-                });
+        .ifPresent(description->{
+            description.accept(
+                    staticForm->{
+                        if(staticForm.isEmpty()) return;
+                        getExtensions().mapPut("description", staticForm);
+                        getExtensions().mapPut("descriptionForm", "static");
+                    },
+                    canonicalForm->{
+                        if(canonicalForm.isEmpty()) return;
+                        getExtensions().mapPut("description", canonicalForm);
+                        getExtensions().mapPut("descriptionForm", "canonical");
+                    });
+        });
+
     }
 
 }

@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Snapshot;
+import org.apache.isis.applib.annotation.ValueSemantics;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
@@ -31,8 +32,8 @@ import lombok.RequiredArgsConstructor;
 
 import demoapp.dom._infra.resources.AsciiDocReaderService;
 
-@Property(snapshot = Snapshot.EXCLUDED
-    , valueSemantics = "demo-adoc-pre-processor")
+@Property(snapshot = Snapshot.EXCLUDED)
+@ValueSemantics(provider = "demo-adoc-pre-processor")
 @RequiredArgsConstructor
 public class HasAsciiDocDescription_description {
 

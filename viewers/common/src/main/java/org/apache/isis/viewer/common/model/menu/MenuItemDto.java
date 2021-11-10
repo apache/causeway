@@ -22,7 +22,6 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -42,18 +41,18 @@ public class MenuItemDto {
 
     private final boolean isTertiaryRoot;
 
-    public static MenuItemDto topLevel(String name, String cssClassFa) {
+    public static MenuItemDto topLevel(final String name, final String cssClassFa) {
         return of(name, cssClassFa, null, false);
     }
 
-    public static MenuItemDto tertiaryRoot(String name, String cssClassFa) {
+    public static MenuItemDto tertiaryRoot(final String name, final String cssClassFa) {
         return of(name, cssClassFa, null, true);
     }
 
-    public static MenuItemDto subMenu(@NonNull ManagedAction managedAction, String named, String cssClassFa) {
+    public static MenuItemDto subMenu(@NonNull final ManagedAction managedAction, final String named, final String cssClassFa) {
         val name = _Strings.isNotEmpty(named)
                 ? named
-                : ActionUiMetaModel.of(managedAction).getLabel();
+                : managedAction.getFriendlyName();
         return of(name, cssClassFa, managedAction, false);
     }
 

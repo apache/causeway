@@ -62,7 +62,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextRepresentation(final Context context, final InteractionDto value) {
+    public String simpleTextPresentation(final Context context, final InteractionDto value) {
         return render(value, InteractionDtoUtils::toXml);
     }
 
