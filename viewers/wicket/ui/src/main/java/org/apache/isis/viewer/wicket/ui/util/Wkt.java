@@ -38,9 +38,11 @@ import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -162,7 +164,7 @@ public class Wkt {
                 super.renderHead(component, response);
                 final String javascript = PRE_JS + getCallbackScript() + POST_JS;
                 response.render(
-                        JavaScriptContentHeaderItem.forScript(javascript, null, null));
+                        new JavaScriptContentHeaderItem(javascript, null));
             }
             @Override protected void respond(final AjaxRequestTarget target) {
                 onRespond.accept(target);
@@ -512,12 +514,39 @@ public class Wkt {
             @Override public void onClick(final AjaxRequestTarget target) {
                 onClick.accept(target);
             }
-            @SuppressWarnings("deprecation")
             @Override protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);
-                Buttons.fixDisabledState(this, tag);
+                fixDisabledState(this, tag);
             }
         };
+    }
+
+    /**
+     * MOVED over from Wicket 8 - potentially no longer required
+     * <p>
+     * HACK issue #79: wicket changes tag name if component wasn't enabled
+     *
+     * @param component the component to fix
+     * @param tag       the component tag
+     * @deprecated since Wicket 7.0: doesn't mangle the link/button's markup anymore
+     */
+    @Deprecated
+    public static void fixDisabledState(final Component component, final ComponentTag tag) {
+        if (!component.isEnabledInHierarchy()) {
+            if (component instanceof AbstractLink) {
+                tag.setName("a");
+            } else if (component instanceof Button) {
+                tag.setName("button");
+            } else {
+                if (tag.getAttribute("value") != null) {
+                    tag.setName("input");
+                } else {
+                    tag.setName("button");
+                }
+            }
+
+            tag.put("disabled", "disabled");
+        }
     }
 
     public AjaxLink<Void> linkAdd(

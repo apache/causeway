@@ -42,7 +42,6 @@ import org.apache.wicket.request.http.flow.AbortWithHttpErrorCodeException;
 import org.apache.wicket.request.resource.ByteArrayResource;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.IResource;
-import org.apache.wicket.util.time.Duration;
 import org.wicketstuff.pdfjs.PdfJsPanel;
 
 import org.apache.isis.applib.services.user.UserService;
@@ -333,7 +332,7 @@ implements IRequestListener {
                 @Override protected void configureResponse(
                         final ResourceResponse response, final Attributes attributes) {
                     super.configureResponse(response, attributes);
-                    response.setCacheDuration(Duration.NONE);
+                    response.disableCaching();
                 }
             };
             final ResourceRequestHandler handler = new ResourceRequestHandler(resource, null);

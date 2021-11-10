@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.actionresponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Duration;
 
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
@@ -105,7 +106,7 @@ final class _DownloadHandler {
         }
         if(downloadHandler instanceof ResourceStreamRequestHandler)
             ((ResourceStreamRequestHandler) downloadHandler)
-            .setCacheDuration(org.apache.wicket.util.time.Duration.seconds(0));
+            .setCacheDuration(Duration.ZERO);
 
         return downloadHandler;
     }
