@@ -19,8 +19,14 @@
 package org.apache.isis.subdomains.docx.applib;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+import org.apache.isis.subdomains.docx.applib.services.DocxServiceDefault;
 
 @Configuration
+@Import({
+    DocxServiceDefault.class
+})
 public class IsisModuleSubdomainsDocxApplib {
 
 }

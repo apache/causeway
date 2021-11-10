@@ -33,6 +33,7 @@ import static org.assertj.core.api.Assumptions.assumeThat;
 
 import org.apache.isis.subdomains.docx.applib.exceptions.LoadInputException;
 import org.apache.isis.subdomains.docx.applib.exceptions.MergeException;
+import org.apache.isis.subdomains.docx.applib.services.DocxServiceDefault;
 
 import lombok.val;
 
@@ -45,7 +46,7 @@ class DocxService_merge_Test {
 
     @BeforeEach
     public void setUp() throws Exception {
-        docxService = new DocxService();
+        docxService = new DocxServiceDefault();
 
         // given
         docxTemplate = docxService.loadPackage(io.openInputStream("Template.docx"));
@@ -55,7 +56,7 @@ class DocxService_merge_Test {
     @Nested
     public class Strict {
 
-        private DocxService.MatchingPolicy matchingPolicy = DocxService.MatchingPolicy.STRICT;
+        private DocxServiceDefault.MatchingPolicy matchingPolicy = DocxService.MatchingPolicy.STRICT;
 
         @Test
         public void exactMatch() throws Exception {
@@ -129,7 +130,7 @@ class DocxService_merge_Test {
     @Nested
     public class AllowUnmatchedInput {
 
-        private DocxService.MatchingPolicy matchingPolicy = DocxService.MatchingPolicy.ALLOW_UNMATCHED_INPUT;
+        private DocxServiceDefault.MatchingPolicy matchingPolicy = DocxService.MatchingPolicy.ALLOW_UNMATCHED_INPUT;
 
         @Test
         public void exactMatch() throws Exception {
@@ -186,7 +187,7 @@ class DocxService_merge_Test {
     @Nested
     public class AllowUnmatchedPlaceholders {
 
-        private DocxService.MatchingPolicy matchingPolicy = DocxService.MatchingPolicy.ALLOW_UNMATCHED_PLACEHOLDERS;
+        private DocxServiceDefault.MatchingPolicy matchingPolicy = DocxService.MatchingPolicy.ALLOW_UNMATCHED_PLACEHOLDERS;
 
         @Test
         public void exactMatch() throws Exception {
@@ -242,7 +243,7 @@ class DocxService_merge_Test {
     @Nested
     public class Lax {
 
-        private DocxService.MatchingPolicy matchingPolicy = DocxService.MatchingPolicy.LAX;
+        private DocxServiceDefault.MatchingPolicy matchingPolicy = DocxService.MatchingPolicy.LAX;
 
         @Test
         public void exactMatch() throws Exception {
@@ -322,7 +323,7 @@ class DocxService_merge_Test {
     @Nested
     public class GeneratePdf {
 
-        private DocxService.MatchingPolicy matchingPolicy = DocxService.MatchingPolicy.STRICT;
+        private DocxServiceDefault.MatchingPolicy matchingPolicy = DocxService.MatchingPolicy.STRICT;
 
         @BeforeEach
         public void setUp() throws Exception {
