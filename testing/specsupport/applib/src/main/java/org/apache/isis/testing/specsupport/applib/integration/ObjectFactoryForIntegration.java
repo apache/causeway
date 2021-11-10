@@ -47,12 +47,12 @@ public class ObjectFactoryForIntegration implements ObjectFactory {
     }
 
     @Override
-    public boolean addClass(Class<?> clazz) {
+    public boolean addClass(final Class<?> clazz) {
         return true;
     }
 
     @Override
-    public <T> T getInstance(Class<T> type) {
+    public <T> T getInstance(final Class<T> type) {
         T instance = type.cast(this.instances.get(type));
         if (instance == null) {
             instance = this.newInstance(type);
@@ -67,12 +67,12 @@ public class ObjectFactoryForIntegration implements ObjectFactory {
         return instance;
     }
 
-    private <T> T cacheInstance(Class<T> type, T instance) {
+    private <T> T cacheInstance(final Class<T> type, final T instance) {
         this.instances.put(type, instance);
         return instance;
     }
 
-    private <T> T newInstance(Class<T> type) {
+    private <T> T newInstance(final Class<T> type) {
         try {
             Constructor<T> constructor = type.getConstructor();
             return constructor.newInstance();

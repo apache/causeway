@@ -18,13 +18,23 @@
  */
 package org.apache.isis.testdomain.cucumber;
 
+import org.springframework.boot.test.context.SpringBootTest;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.apache.isis.testdomain.conf.Configuration_headless;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.spring.CucumberContextConfiguration;
 
-public class StepDefs extends HeadlessCucumberTestAbstract {
+@CucumberContextConfiguration
+@SpringBootTest(
+        classes = {
+                Configuration_headless.class,
+        })
+public class StepDefs {
     private String today;
     private String actualAnswer;
 
@@ -32,9 +42,9 @@ public class StepDefs extends HeadlessCucumberTestAbstract {
 //    public void today_is_sunday() {
 //        this.today = "Sunday";
 //    }
-    
+
     @Given("^today is (.+)$")
-    public void today_is(String today) {
+    public void today_is(final String today) {
         this.today = today;
     }
 
@@ -44,7 +54,7 @@ public class StepDefs extends HeadlessCucumberTestAbstract {
     }
 
     @Then("I should be told {string}")
-    public void i_should_be_told(String expectedAnswer) {
+    public void i_should_be_told(final String expectedAnswer) {
         assertEquals(expectedAnswer, actualAnswer);
     }
 }
