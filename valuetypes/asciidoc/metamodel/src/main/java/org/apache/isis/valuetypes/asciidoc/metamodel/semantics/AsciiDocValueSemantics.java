@@ -22,9 +22,10 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
+import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
@@ -35,7 +36,8 @@ public class AsciiDocValueSemantics
 extends ValueSemanticsAbstract<AsciiDoc>
 implements
     Renderer<AsciiDoc>,
-    Parser<AsciiDoc> {
+    Parser<AsciiDoc>,
+    EncoderDecoder<AsciiDoc> {
 
     @Override
     public Class<AsciiDoc> getCorrespondingClass() {
@@ -69,6 +71,18 @@ implements
     @Override
     public int typicalLength() {
         return 0;
+    }
+
+    // -- ENCODER DECODER
+
+    @Override
+    public String toEncodedString(final AsciiDoc adoc) {
+        return parseableTextRepresentation(null, adoc);
+    }
+
+    @Override
+    public AsciiDoc fromEncodedString(final String encodedString) {
+        return AsciiDoc.valueOf(encodedString);
     }
 
 }
