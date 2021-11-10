@@ -16,13 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.zip.dom;
+package org.apache.isis.subdomains.zip.applib;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+import org.apache.isis.subdomains.zip.applib.service.ZipServiceDefault;
 
 @Configuration
-@ComponentScan
+@Import({
+    ZipServiceDefault.class
+})
 public class IsisModuleExtZip {
 
 }

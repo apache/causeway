@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.docx.applib.services;
+package org.apache.isis.subdomains.docx.applib.service;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -69,7 +69,7 @@ import org.apache.isis.subdomains.docx.applib.util.Types;
 import lombok.val;
 
 @Service
-@Named("isis.sub.docx.ClockService")
+@Named("isis.sub.docx.DocxServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class DocxServiceDefault implements DocxService {

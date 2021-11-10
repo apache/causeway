@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assumptions.assumeThat;
 
 import org.apache.isis.subdomains.docx.applib.exceptions.LoadInputException;
 import org.apache.isis.subdomains.docx.applib.exceptions.MergeException;
-import org.apache.isis.subdomains.docx.applib.services.DocxServiceDefault;
+import org.apache.isis.subdomains.docx.applib.service.DocxServiceDefault;
 
 import lombok.val;
 
