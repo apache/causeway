@@ -29,6 +29,7 @@ import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.utils.StringUtils
 import org.apache.isis.client.kroviz.utils.UrlUtils
 import org.w3c.xhr.BLOB
+import org.w3c.xhr.TEXT
 import org.w3c.xhr.XMLHttpRequest
 import org.w3c.xhr.XMLHttpRequestResponseType
 
@@ -112,9 +113,10 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
     }
 
     private fun buildResourceSpecificationAndSetupHandler(
-            url: String,
-            subType: String,
-            body: String): ResourceSpecification {
+        url: String,
+        subType: String,
+        body: String
+    ): ResourceSpecification {
         val rs = ResourceSpecification(url, subType)
         xhr.onload = { _ -> handleResult(rs, body) }
         xhr.onerror = { _ -> handleError(rs) }
@@ -136,8 +138,12 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
     }
 
     private fun handleError(rs: ResourceSpecification) {
-        val responseText = xhr.responseText
-        UiManager.getEventStore().fault(rs, responseText)
+        val error = when (xhr.responseType) {
+            XMLHttpRequestResponseType.BLOB -> "blob error"
+            XMLHttpRequestResponseType.TEXT -> xhr.responseText
+            else -> "neither text nor blob"
+        }
+        UiManager.getEventStore().fault(rs, error)
     }
 
 }

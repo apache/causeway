@@ -108,7 +108,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
         b.onClick {
             kotlinx.browser.window.open(data.title) //IMPROVE should be URL
         }
-        val tto = TooltipOptions(title = data.title)
+        //val tto = TooltipOptions(title = data.title)
         // tabulator tooltip is buggy: often the tooltip doesn't go away and the color is not settable
         //b.enableTooltip(tto)
         if (data.obj is TObject) b.setDragDropData(Constants.stdMimeType, data.url)

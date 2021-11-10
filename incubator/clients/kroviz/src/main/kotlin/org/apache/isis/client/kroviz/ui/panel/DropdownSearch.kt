@@ -40,7 +40,7 @@ class DropdownSearch() : SimplePanel() {
         this.marginTop = 10.px
         this.marginLeft = 40.px
         this.width = 100.pc
-        val formPanel = formPanel<Form> {
+        formPanel<Form> {
             add(
                     Form::select, Select(
                     options = cachedValues,
