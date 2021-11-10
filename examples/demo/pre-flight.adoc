@@ -1,0 +1,771 @@
+= Demo App Pre-Flight Checklist
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:sectnums:
+
+== Domain Objects
+
+=== @DomainObjects
+
+==== autoComplete
+WARNING: not yet implemented
+
+==== bounded
+WARNING: not yet implemented
+
+==== editing
+WARNING: not yet implemented
+
+==== entityChangePublishing
+Viewmodel:
+
+ * [ ] 4 field groups with 2 entries each ('Hallo', 'World') are shown.
+
+Top-bar actions:
+
+ * [ ] create
+ * [ ] update all
+ * [ ] delete
+ * [ ] clear
+
+==== mixinMethod
+WARNING: not yet implemented
+
+==== natureStateful
+==== natureStatefulRefsEntity
+==== logicalTypeName
+WARNING: not yet implemented
+
+==== xxxDomainEvent
+WARNING: not yet implemented
+
+==== xxxLifecycleEvent
+WARNING: not yet implemented
+
+[source,xml]
+----
+<mb3:section>
+    <mb3:named>@DomainObject</mb3:named>
+    <mb3:serviceAction id="autoComplete" objectType="demo.DomainObjectMenu">
+    <mb3:serviceAction id="bounded" objectType="demo.DomainObjectMenu">
+    <mb3:serviceAction id="editing" objectType="demo.DomainObjectMenu">
+    <mb3:serviceAction id="entityChangePublishing" objectType="demo.DomainObjectMenu">
+    <mb3:serviceAction id="mixinMethod" objectType="demo.DomainObjectMenu">
+    <mb3:serviceAction id="natureStateful" objectType="demo.DomainObjectMenu">
+    <mb3:serviceAction id="natureStatefulRefsEntity" objectType="demo.DomainObjectMenu">
+    <mb3:serviceAction id="logicalTypeName" objectType="demo.DomainObjectMenu">
+    <mb3:serviceAction id="xxxDomainEvent" objectType="demo.DomainObjectMenu">
+    <mb3:serviceAction id="xxxLifecycleEvent" objectType="demo.DomainObjectMenu">
+</mb3:section>
+<mb3:section>
+    <mb3:named>@DomainObjectLayout</mb3:named>
+    <mb3:serviceAction id="bookmarking" objectType="demo.DomainObjectLayoutMenu">
+        <cpt:logicalTypeName>demo.DomainObjectLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="cssClass" objectType="demo.DomainObjectLayoutMenu">
+        <cpt:logicalTypeName>demo.DomainObjectLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="cssClassFa" objectType="demo.DomainObjectLayoutMenu">
+        <cpt:logicalTypeName>demo.DomainObjectLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="describedAs" objectType="demo.DomainObjectLayoutMenu">
+        <cpt:logicalTypeName>demo.DomainObjectLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="named" objectType="demo.DomainObjectLayoutMenu">
+        <cpt:logicalTypeName>demo.DomainObjectLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="paged" objectType="demo.DomainObjectLayoutMenu">
+        <cpt:logicalTypeName>demo.DomainObjectLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="plural" objectType="demo.DomainObjectLayoutMenu">
+        <cpt:logicalTypeName>demo.DomainObjectLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="xxxUiEvent" objectType="demo.DomainObjectLayoutMenu">
+        <cpt:logicalTypeName>demo.DomainObjectLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>Other</mb3:named>
+    <mb3:serviceAction id="mixins" objectType="demo.MixinMenu">
+        <cpt:logicalTypeName>demo.MixinMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="embeddedTypes" objectType="demo.EmbeddedTypeMenu">
+        <cpt:logicalTypeName>demo.EmbeddedTypeMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+----
+
+== Actions
+
+[source,xml]
+----
+
+<mb3:section>
+    <mb3:named>@Action</mb3:named>
+    <mb3:serviceAction id="associateWith" objectType="demo.ActionMenu">
+        <cpt:logicalTypeName>demo.ActionMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="commandPublishing" objectType="demo.ActionMenu">
+        <cpt:logicalTypeName>demo.ActionMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="domainEvent" objectType="demo.ActionMenu">
+        <cpt:logicalTypeName>demo.ActionMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="executionPublishing" objectType="demo.ActionMenu">
+        <cpt:logicalTypeName>demo.ActionMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="hidden" objectType="demo.ActionMenu">
+        <cpt:logicalTypeName>demo.ActionMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="restrictTo" objectType="demo.ActionMenu">
+        <cpt:logicalTypeName>demo.ActionMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="semantics" objectType="demo.ActionMenu">
+        <cpt:logicalTypeName>demo.ActionMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="typeOf" objectType="demo.ActionMenu">
+        <cpt:logicalTypeName>demo.ActionMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>@ActionLayout</mb3:named>
+    <mb3:serviceAction id="bookmarking" objectType="demo.ActionLayoutMenu">
+        <cpt:logicalTypeName>demo.ActionLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="cssClass" objectType="demo.ActionLayoutMenu">
+        <cpt:logicalTypeName>demo.ActionLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="cssClassFa" objectType="demo.ActionLayoutMenu">
+        <cpt:logicalTypeName>demo.ActionLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="describedAs" objectType="demo.ActionLayoutMenu">
+        <cpt:logicalTypeName>demo.ActionLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="hidden" objectType="demo.ActionLayoutMenu">
+        <cpt:logicalTypeName>demo.ActionLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="named" objectType="demo.ActionLayoutMenu">
+        <cpt:logicalTypeName>demo.ActionLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="position" objectType="demo.ActionLayoutMenu">
+        <cpt:logicalTypeName>demo.ActionLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="promptStyle" objectType="demo.ActionLayoutMenu">
+        <cpt:logicalTypeName>demo.ActionLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="redirectPolicy" objectType="demo.ActionLayoutMenu">
+        <cpt:logicalTypeName>demo.ActionLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>Programming Model</mb3:named>
+    <mb3:serviceAction id="associatedActions" objectType="demo.AssociatedActionMenu">
+        <cpt:logicalTypeName>demo.AssociatedActionMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="dependentArgsActions" objectType="demo.DependentArgsActionMenu">
+        <cpt:logicalTypeName>demo.DependentArgsActionMenu</cpt:logicalTypeName>
+        <cpt:named>Dependent Arguments</cpt:named>
+    </mb3:serviceAction>
+</mb3:section>
+----
+
+== Properties
+
+[source,xml]
+----
+<mb3:section>
+    <mb3:named>@Property</mb3:named>
+    <mb3:serviceAction id="commandPublishing" objectType="demo.PropertyMenu">
+        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="domainEvent" objectType="demo.PropertyMenu">
+        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="editing" objectType="demo.PropertyMenu">
+        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="executionPublishing" objectType="demo.PropertyMenu">
+        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="fileAccept" objectType="demo.PropertyMenu">
+        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="hidden" objectType="demo.PropertyMenu">
+        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="maxLength" objectType="demo.PropertyMenu">
+        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="mustSatisfy" objectType="demo.PropertyMenu">
+        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="optionality" objectType="demo.PropertyMenu">
+        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="projecting" objectType="demo.PropertyMenu">
+        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="regexPattern" objectType="demo.PropertyMenu">
+        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="snapshot" objectType="demo.PropertyMenu">
+        <cpt:logicalTypeName>demo.PropertyMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>@PropertyLayout</mb3:named>
+    <mb3:serviceAction id="cssClass" objectType="demo.PropertyLayoutMenu">
+        <cpt:logicalTypeName>demo.PropertyLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="describedAs" objectType="demo.PropertyLayoutMenu">
+        <cpt:logicalTypeName>demo.PropertyLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="hidden" objectType="demo.PropertyLayoutMenu">
+        <cpt:logicalTypeName>demo.PropertyLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="labelPosition" objectType="demo.PropertyLayoutMenu">
+        <cpt:logicalTypeName>demo.PropertyLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="multiLine" objectType="demo.PropertyLayoutMenu">
+        <cpt:logicalTypeName>demo.PropertyLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="named" objectType="demo.PropertyLayoutMenu">
+        <cpt:logicalTypeName>demo.PropertyLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="navigable" objectType="demo.PropertyLayoutMenu">
+        <cpt:logicalTypeName>demo.PropertyLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="renderDay" objectType="demo.PropertyLayoutMenu">
+        <cpt:logicalTypeName>demo.PropertyLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="repainting" objectType="demo.PropertyLayoutMenu">
+        <cpt:logicalTypeName>demo.PropertyLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="typicalLength" objectType="demo.PropertyLayoutMenu">
+        <cpt:logicalTypeName>demo.PropertyLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+----
+
+== Collections
+
+[source,xml]
+----
+<mb3:section>
+    <mb3:named>@Collection</mb3:named>
+    <mb3:serviceAction id="domainEvent" objectType="demo.CollectionMenu">
+        <cpt:logicalTypeName>demo.CollectionMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="hidden" objectType="demo.CollectionMenu">
+        <cpt:logicalTypeName>demo.CollectionMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="typeOf" objectType="demo.CollectionMenu">
+        <cpt:logicalTypeName>demo.CollectionMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>@CollectionLayout</mb3:named>
+    <mb3:serviceAction id="cssClass" objectType="demo.CollectionLayoutMenu">
+        <cpt:logicalTypeName>demo.CollectionLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="defaultView" objectType="demo.CollectionLayoutMenu">
+        <cpt:logicalTypeName>demo.CollectionLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="describedAs" objectType="demo.CollectionLayoutMenu">
+        <cpt:logicalTypeName>demo.CollectionLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="hidden" objectType="demo.CollectionLayoutMenu">
+        <cpt:logicalTypeName>demo.CollectionLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="named" objectType="demo.CollectionLayoutMenu">
+        <cpt:logicalTypeName>demo.CollectionLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="paged" objectType="demo.CollectionLayoutMenu">
+        <cpt:logicalTypeName>demo.CollectionLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="sortedBy" objectType="demo.CollectionLayoutMenu">
+        <cpt:logicalTypeName>demo.CollectionLayoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+----
+           
+== Basic Types
+
+[source,xml]
+----
+<mb3:section>
+    <mb3:named>Primitives</mb3:named>
+    <mb3:serviceAction id="shorts" objectType="demo.PrimitiveTypesMenu">
+        <cpt:logicalTypeName>demo.PrimitiveTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="ints" objectType="demo.PrimitiveTypesMenu">
+        <cpt:logicalTypeName>demo.PrimitiveTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="longs" objectType="demo.PrimitiveTypesMenu">
+        <cpt:logicalTypeName>demo.PrimitiveTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="bytes" objectType="demo.PrimitiveTypesMenu">
+        <cpt:logicalTypeName>demo.PrimitiveTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="floats" objectType="demo.PrimitiveTypesMenu">
+        <cpt:logicalTypeName>demo.PrimitiveTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="doubles" objectType="demo.PrimitiveTypesMenu">
+        <cpt:logicalTypeName>demo.PrimitiveTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="chars" objectType="demo.PrimitiveTypesMenu">
+        <cpt:logicalTypeName>demo.PrimitiveTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="booleans" objectType="demo.PrimitiveTypesMenu">
+        <cpt:logicalTypeName>demo.PrimitiveTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>Wrappers</mb3:named>
+    <mb3:serviceAction id="bytes" objectType="demo.JavaLangWrapperTypesMenu">
+        <cpt:logicalTypeName>demo.JavaLangWrapperTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="shorts" objectType="demo.JavaLangWrapperTypesMenu">
+        <cpt:logicalTypeName>demo.JavaLangWrapperTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="integers" objectType="demo.JavaLangWrapperTypesMenu">
+        <cpt:logicalTypeName>demo.JavaLangWrapperTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="longs" objectType="demo.JavaLangWrapperTypesMenu">
+        <cpt:logicalTypeName>demo.JavaLangWrapperTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="floats" objectType="demo.JavaLangWrapperTypesMenu">
+        <cpt:logicalTypeName>demo.JavaLangWrapperTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="doubles" objectType="demo.JavaLangWrapperTypesMenu">
+        <cpt:logicalTypeName>demo.JavaLangWrapperTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="characters" objectType="demo.JavaLangWrapperTypesMenu">
+        <cpt:logicalTypeName>demo.JavaLangWrapperTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="booleans" objectType="demo.JavaLangWrapperTypesMenu">
+        <cpt:logicalTypeName>demo.JavaLangWrapperTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>Common</mb3:named>
+    <mb3:serviceAction id="strings" objectType="demo.JavaLangTypesMenu">
+        <cpt:logicalTypeName>demo.JavaLangTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="voids" objectType="demo.JavaLangTypesMenu">
+        <cpt:logicalTypeName>demo.JavaLangTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+----
+           
+== Temporal Types
+
+[source,xml]
+----
+<mb3:section>
+    <mb3:named>java.sql</mb3:named>
+    <mb3:serviceAction id="dates" objectType="demo.JavaSqlTypesMenu">
+        <cpt:logicalTypeName>demo.JavaSqlTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="timestamps" objectType="demo.JavaSqlTypesMenu">
+        <cpt:logicalTypeName>demo.JavaSqlTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>java.time</mb3:named>
+    <mb3:serviceAction id="localDates" objectType="demo.JavaTimeTypesMenu">
+        <cpt:logicalTypeName>demo.JavaTimeTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="localDateTimes" objectType="demo.JavaTimeTypesMenu">
+        <cpt:logicalTypeName>demo.JavaTimeTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="offsetDateTimes" objectType="demo.JavaTimeTypesMenu">
+        <cpt:logicalTypeName>demo.JavaTimeTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="offsetTimes" objectType="demo.JavaTimeTypesMenu">
+        <cpt:logicalTypeName>demo.JavaTimeTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="zonedDateTimes" objectType="demo.JavaTimeTypesMenu">
+        <cpt:logicalTypeName>demo.JavaTimeTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>java.util</mb3:named>
+    <mb3:serviceAction id="dates" objectType="demo.JavaUtilTypesMenu">
+        <cpt:logicalTypeName>demo.JavaUtilTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>JodaTime</mb3:named>
+    <mb3:serviceAction id="localDates" objectType="demo.JodaTimeTypesMenu">
+        <cpt:logicalTypeName>demo.JodaTimeTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="localDateTimes" objectType="demo.JodaTimeTypesMenu">
+        <cpt:logicalTypeName>demo.JodaTimeTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="localTimes" objectType="demo.JodaTimeTypesMenu">
+        <cpt:logicalTypeName>demo.JodaTimeTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="dateTimes" objectType="demo.JodaTimeTypesMenu">
+        <cpt:logicalTypeName>demo.JodaTimeTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+----
+           
+== More Types
+
+[source,xml]
+----
+<mb3:section>
+    <mb3:named>java.awt</mb3:named>
+    <mb3:serviceAction id="bufferedImages" objectType="demo.JavaAwtTypesMenu">
+        <cpt:logicalTypeName>demo.JavaAwtTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>java.math</mb3:named>
+    <mb3:serviceAction id="bigDecimals" objectType="demo.JavaMathTypesMenu">
+        <cpt:logicalTypeName>demo.JavaMathTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="bigIntegers" objectType="demo.JavaMathTypesMenu">
+        <cpt:logicalTypeName>demo.JavaMathTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>java.net</mb3:named>
+    <mb3:serviceAction id="urls" objectType="demo.JavaNetTypesMenu">
+        <cpt:logicalTypeName>demo.JavaNetTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>java.util</mb3:named>
+    <mb3:serviceAction id="uuids" objectType="demo.JavaUtilTypesMenu">
+        <cpt:logicalTypeName>demo.JavaUtilTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>Apache Isis Core</mb3:named>
+    <mb3:serviceAction id="blobs" objectType="demo.IsisTypesMenu">
+        <cpt:logicalTypeName>demo.IsisTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="clobs" objectType="demo.IsisTypesMenu">
+        <cpt:logicalTypeName>demo.IsisTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="localResourcePaths" objectType="demo.IsisTypesMenu">
+        <cpt:logicalTypeName>demo.IsisTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="markups" objectType="demo.IsisTypesMenu">
+        <cpt:logicalTypeName>demo.IsisTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="passwords" objectType="demo.IsisTypesMenu">
+        <cpt:logicalTypeName>demo.IsisTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>Apache Isis Extensions</mb3:named>
+    <mb3:serviceAction id="asciiDocs" objectType="demo.IsisExtTypesMenu">
+        <cpt:logicalTypeName>demo.IsisExtTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="markdowns" objectType="demo.IsisExtTypesMenu">
+        <cpt:logicalTypeName>demo.IsisExtTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="calendarEvents" objectType="demo.IsisExtTypesMenu">
+        <cpt:logicalTypeName>demo.IsisExtTypesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="asyncActions" objectType="demo.AsyncActionMenu">
+        <cpt:logicalTypeName>demo.AsyncActionMenu</cpt:logicalTypeName>
+        <cpt:named>SSE</cpt:named>
+        <cpt:describedAs>Background (Async) Actions</cpt:describedAs>
+    </mb3:serviceAction>
+</mb3:section>
+----
+           
+== Services
+
+[source,xml]
+----
+<mb3:section>
+    <mb3:named>Core</mb3:named>
+    <mb3:serviceAction id="errorReportingService" objectType="demo.ServicesMenu">
+        <cpt:logicalTypeName>demo.ServicesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="eventBusService" objectType="demo.ServicesMenu">
+        <cpt:logicalTypeName>demo.ServicesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="messageService" objectType="demo.ServicesMenu">
+        <cpt:logicalTypeName>demo.ServicesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="wrapperFactory" objectType="demo.ServicesMenu">
+        <cpt:logicalTypeName>demo.ServicesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="xmlSnapshot" objectType="demo.ServicesMenu">
+        <cpt:logicalTypeName>demo.ServicesMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>Extensions - SecMan</mb3:named>
+    <mb3:serviceAction id="appTenancy" objectType="demo.ExtSecManMenu">
+        <cpt:logicalTypeName>demo.ExtSecManMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+----
+           
+== Featured
+
+[source,xml]
+----
+<mb3:section>
+    <mb3:named>Layout</mb3:named>
+    <mb3:serviceAction id="describedAs" objectType="demo.DescribedAsMenu">
+        <cpt:logicalTypeName>demo.DescribedAsMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="tabDemo" objectType="demo.TabMenu">
+        <cpt:logicalTypeName>demo.TabMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>Custom UI</mb3:named>
+    <mb3:serviceAction id="whereInTheWorld" objectType="demo.WhereInTheWorldMenu">
+        <cpt:logicalTypeName>demo.WhereInTheWorldMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+----
+           
+== Prototyping
+
+[source,xml]
+----
+<mb3:named>Prototyping</mb3:named>
+<mb3:section>
+    <mb3:named>Fixtures</mb3:named>
+    <mb3:serviceAction id="runFixtureScript" objectType="isis.testing.fixtures.FixtureScripts">
+        <cpt:logicalTypeName>isis.testing.fixtures.FixtureScripts</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="recreateObjectsAndReturnFirst" objectType="isis.testing.fixtures.FixtureScripts">
+        <cpt:logicalTypeName>isis.testing.fixtures.FixtureScripts</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>Layouts</mb3:named>
+    <mb3:serviceAction id="downloadLayouts" objectType="isis.applib.LayoutServiceMenu">
+        <cpt:logicalTypeName>isis.applib.LayoutServiceMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="downloadMenuBarsLayout" objectType="isis.applib.LayoutServiceMenu">
+        <cpt:logicalTypeName>isis.applib.LayoutServiceMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>Meta Model and Features</mb3:named>
+    <mb3:serviceAction id="downloadMetaModelXml" objectType="isis.applib.MetaModelServiceMenu">
+        <cpt:logicalTypeName>isis.applib.MetaModelServiceMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="downloadMetaModelCsv" objectType="isis.applib.MetaModelServiceMenu">
+        <cpt:logicalTypeName>isis.applib.MetaModelServiceMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="downloadMetaModelAscii" objectType="isis.applib.MetaModelServiceMenu">
+        <cpt:logicalTypeName>isis.applib.MetaModelServiceMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="downloadMetaModelDiff" objectType="isis.applib.MetaModelServiceMenu">
+        <cpt:logicalTypeName>isis.applib.MetaModelServiceMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="allNamespaces" objectType="isis.feat.ApplicationFeatureMenu">
+        <cpt:logicalTypeName>isis.feat.ApplicationFeatureMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="allTypes" objectType="isis.feat.ApplicationFeatureMenu">
+        <cpt:logicalTypeName>isis.feat.ApplicationFeatureMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="allActions" objectType="isis.feat.ApplicationFeatureMenu">
+        <cpt:logicalTypeName>isis.feat.ApplicationFeatureMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="allProperties" objectType="isis.feat.ApplicationFeatureMenu">
+        <cpt:logicalTypeName>isis.feat.ApplicationFeatureMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="allCollections" objectType="isis.feat.ApplicationFeatureMenu">
+        <cpt:logicalTypeName>isis.feat.ApplicationFeatureMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>Persistence</mb3:named>
+    <mb3:serviceAction id="downloadMetamodels" objectType="isis.persistence.jdo.JdoMetamodelMenu">
+        <cpt:logicalTypeName>isis.persistence.jdo.JdoMetamodelMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="openH2Console" objectType="isis.ext.h2Console.H2ManagerMenu">
+        <cpt:logicalTypeName>isis.ext.h2Console.H2ManagerMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>REST API</mb3:named>
+    <mb3:serviceAction id="openSwaggerUi" objectType="isis.viewer.restfulobjects.SwaggerServiceMenu">
+        <cpt:logicalTypeName>isis.viewer.restfulobjects.SwaggerServiceMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="openRestApi" objectType="isis.viewer.restfulobjects.SwaggerServiceMenu">
+        <cpt:logicalTypeName>isis.viewer.restfulobjects.SwaggerServiceMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="downloadSwaggerSchemaDefinition" objectType="isis.viewer.restfulobjects.SwaggerServiceMenu">
+        <cpt:logicalTypeName>isis.viewer.restfulobjects.SwaggerServiceMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>i18n</mb3:named>
+    <mb3:serviceAction id="downloadTranslations" objectType="isis.applib.TranslationServicePoMenu">
+        <cpt:logicalTypeName>isis.applib.TranslationServicePoMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="resetTranslationCache" objectType="isis.applib.TranslationServicePoMenu">
+        <cpt:logicalTypeName>isis.applib.TranslationServicePoMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="switchToReadingTranslations" objectType="isis.applib.TranslationServicePoMenu">
+        <cpt:logicalTypeName>isis.applib.TranslationServicePoMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="switchToWritingTranslations" objectType="isis.applib.TranslationServicePoMenu">
+        <cpt:logicalTypeName>isis.applib.TranslationServicePoMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>Prototype Actions (on Object)</mb3:named>
+    <mb3:serviceAction id="showPrototypeActions" objectType="demo.PrototypeActionsVisibilityAdvisor">
+        <cpt:logicalTypeName>demo.PrototypeActionsVisibilityAdvisor</cpt:logicalTypeName>
+        <cpt:named>Show for Object</cpt:named>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="doNotShowPrototypeActions" objectType="demo.PrototypeActionsVisibilityAdvisor">
+        <cpt:logicalTypeName>demo.PrototypeActionsVisibilityAdvisor</cpt:logicalTypeName>
+        <cpt:named>Do not Show for Object</cpt:named>
+    </mb3:serviceAction>
+</mb3:section>
+----
+           
+== Security
+
+[source,xml]
+----
+<mb3:section>
+    <mb3:named>Users</mb3:named>
+    <mb3:serviceAction id="userManager" objectType="isis.ext.secman.ApplicationUserMenu">
+        <cpt:logicalTypeName>isis.ext.secman.ApplicationUserMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="findUsers" objectType="isis.ext.secman.ApplicationUserMenu">
+        <cpt:logicalTypeName>isis.ext.secman.ApplicationUserMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>Roles</mb3:named>
+    <mb3:serviceAction id="findRoles" objectType="isis.ext.secman.ApplicationRoleMenu">
+        <cpt:logicalTypeName>isis.ext.secman.ApplicationRoleMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="newRole" objectType="isis.ext.secman.ApplicationRoleMenu">
+        <cpt:logicalTypeName>isis.ext.secman.ApplicationRoleMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="allRoles" objectType="isis.ext.secman.ApplicationRoleMenu">
+        <cpt:logicalTypeName>isis.ext.secman.ApplicationRoleMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>Permissions</mb3:named>
+    <mb3:serviceAction id="allPermissions" objectType="isis.ext.secman.ApplicationPermissionMenu">
+        <cpt:logicalTypeName>isis.ext.secman.ApplicationPermissionMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="findOrphanedPermissions" objectType="isis.ext.secman.ApplicationPermissionMenu">
+        <cpt:logicalTypeName>isis.ext.secman.ApplicationPermissionMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>Tenancies</mb3:named>
+    <mb3:serviceAction id="findTenancies" objectType="isis.ext.secman.ApplicationTenancyMenu">
+        <cpt:logicalTypeName>isis.ext.secman.ApplicationTenancyMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="newTenancy" objectType="isis.ext.secman.ApplicationTenancyMenu">
+        <cpt:logicalTypeName>isis.ext.secman.ApplicationTenancyMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="allTenancies" objectType="isis.ext.secman.ApplicationTenancyMenu">
+        <cpt:logicalTypeName>isis.ext.secman.ApplicationTenancyMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+----
+           
+== Activity
+
+[source,xml]
+----
+<mb3:named>Activity</mb3:named>
+<mb3:section>
+    <mb3:named>Command Log</mb3:named>
+    <mb3:serviceAction id="activeCommands" objectType="isis.ext.commandLog.CommandServiceMenu">
+        <cpt:logicalTypeName>isis.ext.commandLog.CommandServiceMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="findCommands" objectType="isis.ext.commandLog.CommandServiceMenu">
+        <cpt:logicalTypeName>isis.ext.commandLog.CommandServiceMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="findCommandById" objectType="isis.ext.commandLog.CommandServiceMenu">
+        <cpt:logicalTypeName>isis.ext.commandLog.CommandServiceMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="truncateLog" objectType="isis.ext.commandLog.CommandServiceMenu">
+        <cpt:logicalTypeName>isis.ext.commandLog.CommandServiceMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>Command Replay - Primary</mb3:named>
+    <mb3:serviceAction id="findCommands" objectType="isis.ext.commandReplayPrimary.CommandReplayOnPrimaryService">
+        <cpt:logicalTypeName>isis.ext.commandReplayPrimary.CommandReplayOnPrimaryService</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="downloadCommands" objectType="isis.ext.commandReplayPrimary.CommandReplayOnPrimaryService">
+        <cpt:logicalTypeName>isis.ext.commandReplayPrimary.CommandReplayOnPrimaryService</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="downloadCommandById" objectType="isis.ext.commandReplayPrimary.CommandReplayOnPrimaryService">
+        <cpt:logicalTypeName>isis.ext.commandReplayPrimary.CommandReplayOnPrimaryService</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>Command Replay - Secondary</mb3:named>
+    <mb3:serviceAction id="findMostRecentReplayed" objectType="isis.ext.commandReplaySecondary.CommandReplayOnSecondaryService">
+        <cpt:logicalTypeName>isis.ext.commandReplaySecondary.CommandReplayOnSecondaryService</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="uploadCommands" objectType="isis.ext.commandReplaySecondary.CommandReplayOnSecondaryService">
+        <cpt:logicalTypeName>isis.ext.commandReplaySecondary.CommandReplayOnSecondaryService</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>Demo Replay Controller</mb3:named>
+    <mb3:serviceAction id="pauseReplay" objectType="demo.web.DemoReplayController">
+        <cpt:logicalTypeName>demo.web.DemoReplayController</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="resumeReplay" objectType="demo.web.DemoReplayController">
+        <cpt:logicalTypeName>demo.web.DemoReplayController</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+----
+           
+== Tertiary Menu
+
+[source,xml]
+----
+<mb3:section>
+    <mb3:named>Configuration</mb3:named>
+    <mb3:serviceAction id="configuration" objectType="isis.conf.ConfigurationMenu">
+        <cpt:logicalTypeName>isis.conf.ConfigurationMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>Impersonate</mb3:named>
+    <mb3:serviceAction id="impersonate" objectType="isis.sudo.ImpersonateMenu">
+        <cpt:logicalTypeName>isis.sudo.ImpersonateMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="impersonateWithRoles" objectType="isis.sudo.ImpersonateMenu">
+        <cpt:logicalTypeName>isis.sudo.ImpersonateMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="stopImpersonating" objectType="isis.applib.ImpersonateStopMenu">
+        <cpt:logicalTypeName>isis.applib.ImpersonateStopMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+<mb3:section>
+    <mb3:named>Security</mb3:named>
+    <mb3:serviceAction id="me" objectType="isis.ext.secman.MeService">
+        <cpt:logicalTypeName>isis.ext.secman.MeService</cpt:logicalTypeName>
+        <cpt:named>Me (SecMan)</cpt:named>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="me" objectType="isis.applib.UserMenu">
+        <cpt:logicalTypeName>isis.applib.UserMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+    <mb3:serviceAction id="logout" objectType="isis.security.LogoutMenu">
+        <cpt:logicalTypeName>isis.security.LogoutMenu</cpt:logicalTypeName>
+    </mb3:serviceAction>
+</mb3:section>
+----
