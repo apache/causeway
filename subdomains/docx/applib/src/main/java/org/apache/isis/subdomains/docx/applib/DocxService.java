@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 
+import org.apache.isis.subdomains.docx.applib.DocxService.MergeParams;
 import org.apache.isis.subdomains.docx.applib.exceptions.LoadInputException;
 import org.apache.isis.subdomains.docx.applib.exceptions.LoadTemplateException;
 import org.apache.isis.subdomains.docx.applib.exceptions.MergeException;
@@ -15,8 +16,10 @@ import lombok.Getter;
 
 /**
  * Merges input HTML against a provided <i>docx</i> template, generating a <i>Word docx</i>.
+ * @apiNote Was migrated from platform.incode.org.
  *
  * @since 2.x {@index}
+ * @see "http://platform.incode.org/modules/lib/docx/lib-docx.html"
  */
 public interface DocxService {
 
