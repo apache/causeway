@@ -84,7 +84,6 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
 
         addFacet(new NamedFacetFallbackFromMemberName(facetedMethod));
-        addFacet(new HelpFacetNone(facetedMethod));
 
         final FeatureType featureType = facetedMethod.getFeatureType();
         if (featureType.isProperty()) {
@@ -109,9 +108,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
         final TypedHolder typedHolder = processParameterContext.getFacetHolder();
         if (typedHolder.getFeatureType().isActionParameter()) {
-            addFacet(new HelpFacetNone(typedHolder));
             addFacet(new MultiLineFacetNone(typedHolder));
-
             addFacet(new MaxLengthFacetUnlimited(typedHolder));
 
             addFacet(newPropParamLayoutFacetIfAny(typedHolder, "parameterLayout", getConfiguration().getApplib().getAnnotation().getParameterLayout()));
