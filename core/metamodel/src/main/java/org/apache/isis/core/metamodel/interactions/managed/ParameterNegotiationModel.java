@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
@@ -99,9 +100,13 @@ public class ParameterNegotiationModel {
     }
 
     @NonNull public Can<ManagedObject> getParamValues() {
-        return paramModels
+        return paramModels.stream()
+                .peek(x->System.err.printf("\tparam[%d]%s%n", x.getParamNr(), x.getValue().getValue()))
                 .map(ParameterModel::getValue)
-                .map(Bindable::getValue);
+                .map(Bindable::getValue)
+                .peek(managedObj->Objects.requireNonNull(managedObj, ()->
+                        String.format("param wrapper cannot be null %s", "?")))
+                .collect(Can.toCan());
     }
 
     @NonNull public ManagedObject getActionTarget() {
@@ -267,6 +272,11 @@ public class ParameterNegotiationModel {
 
             bindableParamValue = _Bindables.forValue(initialValue);
             bindableParamValue.addListener((e,o,n)->{
+                if(n==null) {
+                    // lift null to empty ...
+                    bindableParamValue.setValue(metaModel.getEmpty());
+                    return;
+                }
                 getNegotiationModel().onNewParamValue();
             });
 

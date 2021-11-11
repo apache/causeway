@@ -71,17 +71,17 @@ implements
 
     protected ObjectActionParameterAbstract(
             final FeatureType featureType,
-            final int number,
+            final int parameterIndex,
             final ObjectSpecification paramElementType,
             final ObjectActionDefault objectAction) {
 
         this.featureType = featureType;
-        this.parameterIndex = number;
+        this.parameterIndex = parameterIndex;
         this.parentAction = objectAction;
         this.paramElementType = paramElementType;
 
         this.javaSourceParamName =
-                objectAction.getFacetedMethod().getMethod().getParameters()[number].getName();
+                objectAction.getFacetedMethod().getMethod().getParameters()[parameterIndex].getName();
     }
 
     @Override

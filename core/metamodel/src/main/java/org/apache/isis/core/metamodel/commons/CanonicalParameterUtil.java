@@ -55,7 +55,7 @@ public final class CanonicalParameterUtil {
 
         // supports effective private constructors as well
         return _Reflect.invokeConstructor(constructor, adaptedExecutionParameters)
-        .mapFailure(ex->toVerboseException(constructor.getParameterTypes(), adaptedExecutionParameters, ex))
+        .mapFailure(ex->toVerboseException(constructor, adaptedExecutionParameters, ex))
         .presentElseFail();
     }
 
@@ -66,7 +66,7 @@ public final class CanonicalParameterUtil {
 
         // supports effective private methods as well
         return _Reflect.invokeMethodOn(method, targetPojo, adaptedExecutionParameters)
-        .mapFailure(ex->toVerboseException(method.getParameterTypes(), adaptedExecutionParameters, ex))
+        .mapFailure(ex->toVerboseException(method, adaptedExecutionParameters, ex))
         .optionalElseFail()
         .orElse(null);
     }
@@ -144,10 +144,11 @@ public final class CanonicalParameterUtil {
     }
 
     private static Throwable toVerboseException(
-            final Class<?>[] parameterTypes,
+            final Executable executable,
             final Object[] adaptedExecutionParameters,
             final Throwable e) {
 
+        final Class<?>[] parameterTypes = executable.getParameterTypes();
         final int expectedParamCount = _NullSafe.size(parameterTypes);
         final int actualParamCount = _NullSafe.size(adaptedExecutionParameters);
         if(expectedParamCount!=actualParamCount) {
@@ -188,7 +189,7 @@ public final class CanonicalParameterUtil {
                 }
             }
             if(paramTypeMismatchEncountered) {
-                sb.insert(0, "expected param type mismatch\n");
+                sb.insert(0, String.format("expected param type mismatch in %s\n", executable));
                 return new IllegalArgumentException(sb.toString(), e);
             }
         }
