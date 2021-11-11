@@ -18,7 +18,9 @@
  */
 package org.apache.isis.client.kroviz.ui.core
 
-import io.kvision.core.*
+import io.kvision.core.CssSize
+import io.kvision.core.UNIT
+import io.kvision.core.Widget
 import io.kvision.form.FormPanel
 import io.kvision.html.Button
 import io.kvision.html.ButtonStyle
@@ -127,11 +129,8 @@ class RoDialog(
         close()
     }
 
-    fun open(at: Point = Point(100, 100)): Widget {
-        val offset = UiManager.getNumberOfPopups() * 4
-        left = CssSize(at.x + offset, UNIT.px)
-        top = CssSize(at.y + offset, UNIT.px)
-        UiManager.openDialog(this)
+    fun open(at: Point = Point(x = 100, y = 100)): Widget {
+        UiManager.openDialog(this, at)
         super.show()
         okButton.focus()
         return this

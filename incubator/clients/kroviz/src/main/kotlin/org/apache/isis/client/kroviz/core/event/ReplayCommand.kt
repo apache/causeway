@@ -52,8 +52,8 @@ class ReplayCommand {
         val uiEvents = filterReplayEvents(expectedEvents)
         replay(uiEvents, urlUnderTest)
 
-        val actualEvents: MutableList<LogEntry> = eventStore.log
-        val rdd = ReplayDiffDialog(expectedEvents, actualEvents)
+        val title = "Replay Events: " + oldBaseUrl + " -> " + urlUnderTest
+        val rdd = ReplayDiffDialog(expectedEvents, title)
         rdd.dialog.open()
     }
 

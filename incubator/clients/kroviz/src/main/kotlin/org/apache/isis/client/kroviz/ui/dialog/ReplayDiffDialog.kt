@@ -34,7 +34,7 @@ import org.apache.isis.client.kroviz.ui.panel.EventLogTable
 
 class ReplayDiffDialog(
     private val expectedEvents: List<LogEntry>,
-    actualEvents: List<LogEntry>
+    title: String
 ) : Command() {
     var dialog: RoDialog
 
@@ -47,7 +47,7 @@ class ReplayDiffDialog(
 
     init {
         dialog = RoDialog(
-            caption = "Replay Events: Expected vs. Actual",
+            caption = title,
             items = mutableListOf(),
             command = this,
             defaultAction = "Compare",
@@ -57,6 +57,8 @@ class ReplayDiffDialog(
         )
         val expectedTable = EventLogTable(expectedEvents)
         expectedTable.tabulator.addCssClass("tabulator-in-dialog")
+        val actualEvents: MutableList<LogEntry> = UiManager.getEventStore().log
+
         val actualTable = EventLogTable(actualEvents)
         actualTable.tabulator.addCssClass("tabulator-in-dialog")
         expectedPanel.add(expectedTable)

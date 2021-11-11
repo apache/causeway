@@ -18,6 +18,8 @@
  */
 package org.apache.isis.client.kroviz.ui.core
 
+import io.kvision.core.CssSize
+import io.kvision.core.UNIT
 import io.kvision.core.Widget
 import io.kvision.dropdown.ContextMenu
 import io.kvision.panel.SimplePanel
@@ -180,7 +182,10 @@ object UiManager {
         setNormalCursor()
     }
 
-    fun openDialog(panel: RoDialog) {
+    fun openDialog(panel: RoDialog, at: Point = Point(100, 100)) {
+        val offset = UiManager.getNumberOfPopups() * 4
+        panel.left = CssSize(at.x + offset, UNIT.px)
+        panel.top = CssSize(at.y + offset, UNIT.px)
         getRoApp().add(panel)
         push(panel)
     }
@@ -202,7 +207,7 @@ object UiManager {
         }
     }
 
-    fun getEventStore() : EventStore {
+    fun getEventStore(): EventStore {
         return getSession().eventStore
     }
 
@@ -217,7 +222,7 @@ object UiManager {
     fun login(url: String, username: String, password: String) {
         val s = Session()
         s.login(url, username, password)
-        sessions.add(0,s)
+        sessions.add(0, s)
     }
 
     fun getCredentials(): String {
