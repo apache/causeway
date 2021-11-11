@@ -112,6 +112,12 @@ extends Function<ObjectAction, LinkAndLabel> {
     public static LinkAndLabelFactory forParameter(
             final ScalarParameterModel parameterModel) {
 
+        // only supported, when parameter type is scalar and also is a value-type
+        if(!parameterModel.getMetaModel().isScalar()
+                || !parameterModel.getMetaModel().getElementType().isValue()) {
+            return action -> null;
+        }
+
         val linkFactory = new AdditionalLinkFactory();
 
         return action -> LinkAndLabel.of(
