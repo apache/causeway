@@ -113,20 +113,21 @@ extends Function<ObjectAction, LinkAndLabel> {
             final ScalarParameterModel parameterModel) {
 
         // only supported, when parameter type is scalar and also is a value-type
-        if(!parameterModel.getMetaModel().isScalar()
-                || !parameterModel.getMetaModel().getElementType().isValue()) {
-            return action -> null;
+        if(parameterModel.getMetaModel().isScalar()
+                && parameterModel.getMetaModel().getElementType().isValue()) {
+
+            val linkFactory = new AdditionalLinkFactory();
+
+            return action -> LinkAndLabel.of(
+                    ActionModelImpl.forEntity(
+                            parameterModel.getParentUiModel(),
+                            action.getFeatureIdentifier(),
+                            Where.OBJECT_FORMS,
+                            null, parameterModel, null),
+                    linkFactory);
         }
 
-        val linkFactory = new AdditionalLinkFactory();
-
-        return action -> LinkAndLabel.of(
-                ActionModelImpl.forEntity(
-                        parameterModel.getParentUiModel(),
-                        action.getFeatureIdentifier(),
-                        Where.OBJECT_FORMS,
-                        null, parameterModel, null),
-                linkFactory);
+        return action -> null;
     }
 
     // -- HELPER
