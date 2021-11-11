@@ -101,11 +101,12 @@ public class ParameterNegotiationModel {
 
     @NonNull public Can<ManagedObject> getParamValues() {
         return paramModels.stream()
-                .peek(x->System.err.printf("\tparam[%d]%s%n", x.getParamNr(), x.getValue().getValue()))
                 .map(ParameterModel::getValue)
                 .map(Bindable::getValue)
+                // guard against framework bugs
                 .peek(managedObj->Objects.requireNonNull(managedObj, ()->
-                        String.format("param wrapper cannot be null %s", "?")))
+                        String.format("Internal Error: Parameter value adapter must not be null in %s",
+                                managedAction.getAction().getFeatureIdentifier())))
                 .collect(Can.toCan());
     }
 
