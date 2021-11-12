@@ -34,12 +34,25 @@ data class DomainTypes(override val links: List<Link> = emptyList(),
                        val extensions: Extensions? = null
 ) : TransferObject, HasLinks
 
+interface HttpResponse {
+    val detail: HttpErrorDetail?
+    fun getMessage(): String
+    fun getStatusCode(): Int
+}
+
 @Serializable
 data class HttpError(
-        val httpStatusCode: Int,
-        val message: String,
-        val detail: HttpErrorDetail? = null
-) : TransferObject
+    private val httpStatusCode: Int,
+    private val message: String,
+    override val detail: HttpErrorDetail? = null
+) : TransferObject, HttpResponse {
+    override fun getMessage() : String {
+        return message
+    }
+    override fun getStatusCode() : Int {
+        return httpStatusCode
+    }
+}
 
 @Serializable
 data class HttpErrorDetail(
@@ -48,6 +61,23 @@ data class HttpErrorDetail(
         val element: List<String>,
         var causedBy: HttpErrorDetail? = null
 ) : TransferObject
+
+@Serializable
+data class Http401Error(
+    private val timestamp: String,
+    private val status: Int,
+    private val error: String,
+    private val path: String,
+    override val detail: HttpErrorDetail? = null
+) : TransferObject, HttpResponse {
+    override fun getMessage(): String {
+        return error + " / " + path + " / " + timestamp
+    }
+    override fun getStatusCode() : Int {
+        return status
+    }
+
+}
 
 @Serializable
 data class Links(

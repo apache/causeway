@@ -18,9 +18,11 @@
  */
 package org.apache.isis.client.kroviz.to
 
+import org.apache.isis.client.kroviz.handler.Http401ErrorHandler
 import org.apache.isis.client.kroviz.handler.HttpErrorHandler
-import org.apache.isis.client.kroviz.snapshots.demo2_0_0.HTTP_ERROR_500
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.HTTP_ERROR_401
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.HTTP_ERROR_405
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.HTTP_ERROR_500
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.HTTP_ERROR
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.HTTP_ERROR_500_UNIQUE_CONSTRAINT_VIOLATION
 import kotlin.test.Test
@@ -34,15 +36,15 @@ class HttpErrorTest {
     fun testDemo500() {
         val jsonStr = HTTP_ERROR_500.str
         val error = HttpErrorHandler().parse(jsonStr) as HttpError
-        val code = error.httpStatusCode
+        val code = error.getStatusCode()
         assertEquals(500, code)
-        assertNotNull(error.message)
+        assertNotNull(error.getMessage())
 
         val detail = error.detail
         assertNotNull(detail)
         assertNotNull(detail.className)
         assertNotNull(detail.message)
-        assertEquals(error.message, detail.message)
+        assertEquals(error.getMessage(), detail.message)
         assertNotNull(detail.element)
         assertTrue(detail.element.size > 0)
     }
@@ -51,15 +53,15 @@ class HttpErrorTest {
     fun test405() {
         val jsonStr = HTTP_ERROR_405.str
         val error = HttpErrorHandler().parse(jsonStr) as HttpError
-        val code = error.httpStatusCode
+        val code = error.getStatusCode()
         assertEquals(405, code)
-        assertNotNull(error.message)
+        assertNotNull(error.getMessage())
 
         val detail = error.detail
         assertNotNull(detail)
         assertNotNull(detail.className)
         assertNotNull(detail.message)
-        assertEquals(error.message, detail.message)
+        assertEquals(error.getMessage(), detail.message)
         assertNotNull(detail.element)
         assertTrue(detail.element.size > 0)
     }
@@ -68,32 +70,42 @@ class HttpErrorTest {
     fun test400() {
         val jsonStr = HTTP_ERROR.str
         val error = HttpErrorHandler().parse(jsonStr) as HttpError
-        val code = error.httpStatusCode
+        val code = error.getStatusCode()
         assertEquals(400, code)
-        assertNotNull(error.message)
+        assertNotNull(error.getMessage())
 
         val detail = error.detail
         assertNotNull(detail)
         assertNotNull(detail.className)
         assertNotNull(detail.message)
-        assertEquals(error.message, detail.message)
+        assertEquals(error.getMessage(), detail.message)
         assertNotNull(detail.element)
         assertTrue(detail.element.size > 0)
+    }
+
+    @Test
+    fun test401() {
+        val jsonStr = HTTP_ERROR_401.str
+        val error = Http401ErrorHandler().parse(jsonStr) as Http401Error
+
+        assertEquals(401, error.getStatusCode())
+        assertTrue(error.getMessage().startsWith("Unauthorized"))
+        assertTrue(error.getMessage().contains("/restful/"))
     }
 
     //@Test //TODO handle nested causedBy's
     fun test500() {
         val jsonStr = HTTP_ERROR_500_UNIQUE_CONSTRAINT_VIOLATION.str
         val error = HttpErrorHandler().parse(jsonStr) as HttpError
-        val code = error.httpStatusCode
+        val code = error.getStatusCode()
         assertEquals(400, code)
-        assertNotNull(error.message)
+        assertNotNull(error.getMessage())
 
         val detail = error.detail
         assertNotNull(detail)
         assertNotNull(detail.className)
         assertNotNull(detail.message)
-        assertEquals(error.message, detail.message)
+        assertEquals(error.getMessage(), detail.message)
         assertNotNull(detail.element)
         assertTrue(detail.element.size > 0)
     }

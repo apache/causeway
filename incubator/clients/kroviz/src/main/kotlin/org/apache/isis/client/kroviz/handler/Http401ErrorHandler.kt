@@ -16,24 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.core.aggregator
+package org.apache.isis.client.kroviz.handler
 
-import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.core.event.ResourceSpecification
-import org.apache.isis.client.kroviz.to.HttpError
-import org.apache.isis.client.kroviz.to.HttpResponse
-import org.apache.isis.client.kroviz.ui.core.UiManager
-import org.apache.isis.client.kroviz.ui.dialog.ErrorDialog
+import kotlinx.serialization.json.Json
+import org.apache.isis.client.kroviz.core.aggregator.ErrorDispatcher
+import org.apache.isis.client.kroviz.to.Http401Error
+import org.apache.isis.client.kroviz.to.TransferObject
 
-class ErrorDispatcher : BaseAggregator() {
+class Http401ErrorHandler : BaseHandler() {
 
-    override fun update(logEntry: LogEntry, subType: String) {
-        val error = logEntry.getTransferObject() as HttpResponse
-        val url = logEntry.url
-        val message = error.getMessage()
-        val reSpec = ResourceSpecification(url)
-        UiManager.getEventStore().fault(reSpec, message)
-        ErrorDialog(logEntry).open()
+    override fun doHandle() {
+        logEntry.addAggregator(ErrorDispatcher())
+        update()
     }
 
+    override fun parse(response: String): TransferObject {
+        return Json.decodeFromString(Http401Error.serializer(), response)
+    }
 }

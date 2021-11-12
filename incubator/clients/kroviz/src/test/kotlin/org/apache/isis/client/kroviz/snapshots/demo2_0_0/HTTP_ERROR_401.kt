@@ -16,24 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.core.aggregator
+package org.apache.isis.client.kroviz.snapshots.demo2_0_0
 
-import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.core.event.ResourceSpecification
-import org.apache.isis.client.kroviz.to.HttpError
-import org.apache.isis.client.kroviz.to.HttpResponse
-import org.apache.isis.client.kroviz.ui.core.UiManager
-import org.apache.isis.client.kroviz.ui.dialog.ErrorDialog
+import org.apache.isis.client.kroviz.snapshots.Response
 
-class ErrorDispatcher : BaseAggregator() {
-
-    override fun update(logEntry: LogEntry, subType: String) {
-        val error = logEntry.getTransferObject() as HttpResponse
-        val url = logEntry.url
-        val message = error.getMessage()
-        val reSpec = ResourceSpecification(url)
-        UiManager.getEventStore().fault(reSpec, message)
-        ErrorDialog(logEntry).open()
-    }
-
+object HTTP_ERROR_401 : Response() {
+    override val url = ""
+    override val str = """{
+        "timestamp": "2021-11-12T15:39:15.039+00:00",
+        "status": 401,
+        "error": "Unauthorized",
+        "path": "/restful/"
+}"""
 }

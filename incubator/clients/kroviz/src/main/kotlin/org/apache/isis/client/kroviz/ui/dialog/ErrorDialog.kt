@@ -19,7 +19,9 @@
 package org.apache.isis.client.kroviz.ui.dialog
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
+import org.apache.isis.client.kroviz.to.Http401Error
 import org.apache.isis.client.kroviz.to.HttpError
+import org.apache.isis.client.kroviz.to.HttpResponse
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
@@ -27,16 +29,16 @@ import org.apache.isis.client.kroviz.ui.core.RoDialog
 class ErrorDialog(val logEntry: LogEntry) : Command() {
 
     fun open() {
-        val error = logEntry.getTransferObject() as HttpError
+        val error = logEntry.getTransferObject() as HttpResponse
         val formItems = mutableListOf<FormItem>()
         formItems.add(FormItem("URL", ValueType.TEXT, logEntry.url))
-        formItems.add(FormItem("Message", ValueType.TEXT, error.message))
+        formItems.add(FormItem("Message", ValueType.TEXT, error.getMessage()))
         val detail = error.detail
         if (detail != null) {
             formItems.add(FormItem("StackTrace", ValueType.TEXT_AREA, toString(detail.element), 10))
             formItems.add(FormItem("Caused by", ValueType.TEXT, detail.causedBy))
         }
-        val label = "HttpError " + error.httpStatusCode.toString()
+        val label = "HttpError " + error.getStatusCode().toString()
         RoDialog(
             caption = label,
             items = formItems,

@@ -42,6 +42,7 @@ object ResponseHandler {
     private var _7a = CollectionHandler()
     private var _8 = MemberHandler()
     private var _9 = HttpErrorHandler()
+    private var _9a = Http401ErrorHandler()
     private var _10 = UserHandler()
     private var _11 = VersionHandler()
     private var _12 = DomainTypesHandler()
@@ -65,7 +66,8 @@ object ResponseHandler {
         _7.successor = _7a
         _7a.successor = _8
         _8.successor = _9
-        _9.successor = _10
+        _9.successor = _9a
+        _9a.successor = _10
         _10.successor = _11
         _11.successor = _12
         _12.successor = _13
