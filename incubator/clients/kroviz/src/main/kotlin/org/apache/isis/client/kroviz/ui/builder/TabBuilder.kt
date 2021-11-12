@@ -20,7 +20,6 @@ package org.apache.isis.client.kroviz.ui.builder
 
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.bs3.Tab
-import org.apache.isis.client.kroviz.ui.core.RoDisplay
 import io.kvision.core.Component
 import io.kvision.panel.SimplePanel
 

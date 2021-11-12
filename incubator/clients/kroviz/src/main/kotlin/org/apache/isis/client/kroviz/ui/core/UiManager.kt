@@ -38,6 +38,7 @@ import org.apache.isis.client.kroviz.core.model.ObjectDM
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.to.mb.Menubars
+import org.apache.isis.client.kroviz.ui.builder.RoDisplay
 import org.apache.isis.client.kroviz.ui.kv.override.RoTab
 import org.apache.isis.client.kroviz.utils.*
 import org.w3c.dom.events.KeyboardEvent

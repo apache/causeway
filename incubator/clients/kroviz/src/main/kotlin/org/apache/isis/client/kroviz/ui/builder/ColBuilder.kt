@@ -25,8 +25,8 @@ import io.kvision.panel.HPanel
 import io.kvision.panel.SimplePanel
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.bs3.Col
+import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.MenuFactory
-import org.apache.isis.client.kroviz.ui.core.RoDisplay
 import org.apache.isis.client.kroviz.ui.core.RoTable
 import org.apache.isis.client.kroviz.utils.StringUtils
 import kotlin.math.round
@@ -79,12 +79,13 @@ class ColBuilder : UiBuilder() {
 
     private fun buildPanel(): FlexPanel {
         return FlexPanel(
-                FlexDirection.COLUMN,
-                FlexWrap.NOWRAP,
-                JustifyContent.SPACEBETWEEN,
-                AlignItems.CENTER,
-                AlignContent.STRETCH,
-                spacing = 10)
+            FlexDirection.COLUMN,
+            FlexWrap.NOWRAP,
+            JustifyContent.SPACEBETWEEN,
+            AlignItems.CENTER,
+            AlignContent.STRETCH,
+            spacing = Constants.spacing
+        )
     }
 
     fun createMenu(tObject: TObject, dsp: RoDisplay): HPanel {
@@ -92,8 +93,8 @@ class ColBuilder : UiBuilder() {
         style(panel)
 
         val dd = MenuFactory.buildForObject(tObject)
-        dd.marginTop = CssSize(10, UNIT.px)
-        dd.marginBottom = CssSize(10, UNIT.px)
+        dd.marginTop = CssSize(Constants.spacing, UNIT.px)
+        dd.marginBottom = CssSize(Constants.spacing, UNIT.px)
         dd.width = CssSize(100, UNIT.perc)
         MenuFactory.amendWithSaveUndo(dd, tObject)
         MenuFactory.disableSaveUndo(dd)

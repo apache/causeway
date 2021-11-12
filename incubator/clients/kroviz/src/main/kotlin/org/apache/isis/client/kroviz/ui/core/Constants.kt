@@ -39,4 +39,6 @@ object Constants {
     const val demoUser = "sven"
     const val demoPass = "pass"
     const val demoUrlRemote = "https://demo-wicket.jdo.isis.incode.work/"
+
+    const val spacing = 10
 }

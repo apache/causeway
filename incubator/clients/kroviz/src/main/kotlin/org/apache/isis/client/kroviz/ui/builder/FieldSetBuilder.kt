@@ -24,7 +24,6 @@ import org.apache.isis.client.kroviz.to.TypeMapper
 import org.apache.isis.client.kroviz.to.bs3.FieldSet
 import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.FormPanelFactory
-import org.apache.isis.client.kroviz.ui.core.RoDisplay
 
 class FieldSetBuilder {
 

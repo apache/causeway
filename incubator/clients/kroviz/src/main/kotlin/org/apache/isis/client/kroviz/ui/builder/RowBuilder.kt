@@ -23,7 +23,7 @@ import io.kvision.panel.FlexPanel
 import io.kvision.panel.SimplePanel
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.bs3.Row
-import org.apache.isis.client.kroviz.ui.core.RoDisplay
+import org.apache.isis.client.kroviz.ui.core.Constants
 
 class RowBuilder : UiBuilder() {
 
@@ -45,7 +45,7 @@ class RowBuilder : UiBuilder() {
                 JustifyContent.FLEXSTART,
                 AlignItems.FLEXSTART,
                 AlignContent.STRETCH,
-                spacing = 10)
+                spacing = Constants.spacing)
     }
 
 }

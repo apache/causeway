@@ -16,17 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.ui.core
+package org.apache.isis.client.kroviz.ui.builder
 
-import io.kvision.core.CssSize
-import io.kvision.core.FontStyle
-import io.kvision.core.FontWeight
-import io.kvision.core.UNIT
+import io.kvision.core.*
 import io.kvision.dropdown.DropDown
 import io.kvision.panel.VPanel
 import org.apache.isis.client.kroviz.core.model.ObjectDM
 import org.apache.isis.client.kroviz.to.TObject
-import org.apache.isis.client.kroviz.ui.builder.LayoutBuilder
+import org.apache.isis.client.kroviz.ui.core.Displayable
+import org.apache.isis.client.kroviz.ui.core.MenuFactory
 
 class RoDisplay(val displayModel: ObjectDM) : Displayable, VPanel() {
 
@@ -38,6 +36,7 @@ class RoDisplay(val displayModel: ObjectDM) : Displayable, VPanel() {
         val tObject: TObject = model.delegate
         val grid = displayModel.grid!!
         objectPanel = LayoutBuilder().create(grid, tObject, this)
+        objectPanel.overflow = Overflow.AUTO
         objectPanel.width = CssSize(100, UNIT.perc)
         add(objectPanel)
     }
