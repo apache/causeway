@@ -22,17 +22,19 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
 
-public abstract class HelpFacetAbstract extends SingleStringValueFacetAbstract implements HelpFacet {
+public abstract class HelpFacetAbstract
+extends SingleStringValueFacetAbstract
+implements HelpFacet {
 
     private static final Class<? extends Facet> type() {
         return HelpFacet.class;
     }
 
-    public HelpFacetAbstract(final String value, final FacetHolder holder) {
+    protected HelpFacetAbstract(final String value, final FacetHolder holder) {
         super(type(), holder, value);
     }
 
-    public HelpFacetAbstract(final String value, final FacetHolder holder, final Facet.Precedence precedence) {
+    protected HelpFacetAbstract(final String value, final FacetHolder holder, final Facet.Precedence precedence) {
         super(type(), holder, value, precedence);
     }
 

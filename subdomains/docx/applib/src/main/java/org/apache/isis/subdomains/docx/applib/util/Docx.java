@@ -44,11 +44,11 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Docx {
 
-    public static Function<SdtElement, String> tagToValue() {
+    public Function<SdtElement, String> tagToValue() {
         return input -> input.getSdtPr().getTag().getVal();
     }
 
-    public static Predicate<Object> withAnyTag() {
+    public Predicate<Object> withAnyTag() {
         return object -> {
             if(!(object instanceof SdtElement)) {
                 return false;
@@ -59,7 +59,7 @@ public class Docx {
         };
     }
 
-    public static Predicate<Object> withTagVal(final String tagVal) {
+    public Predicate<Object> withTagVal(final String tagVal) {
         return object -> {
             if(!(object instanceof SdtElement)) {
                 return false;
@@ -70,9 +70,8 @@ public class Docx {
         };
     }
 
-    @SuppressWarnings({ "rawtypes", "restriction" })
-    public
-    static boolean setText(R run, String value) {
+    @SuppressWarnings({ "rawtypes" })
+    public boolean setText(final R run, final String value) {
         List<Object> runContent = run.getContent();
         if(runContent.isEmpty()) {
             return false;
@@ -92,13 +91,13 @@ public class Docx {
         return true;
     }
 
-    public static Body docxBodyFor(WordprocessingMLPackage docxPkg) {
+    public Body docxBodyFor(final WordprocessingMLPackage docxPkg) {
         val docxMdp = docxPkg.getMainDocumentPart();
         val docxDoc = docxMdp.getJaxbElement();
         return docxDoc.getBody();
     }
 
-    public static WordprocessingMLPackage clone(WordprocessingMLPackage docxTemplate) throws MergeException {
+    public WordprocessingMLPackage clone(WordprocessingMLPackage docxTemplate) throws MergeException {
         val foxc = new FlatOpcXmlCreator(docxTemplate);
         val baos = new ByteArrayOutputStream();
         try {
@@ -108,7 +107,7 @@ public class Docx {
             docxTemplate = (WordprocessingMLPackage) foxi.get();
         } catch (Docx4JException e) {
             throw new MergeException("unable to defensive copy (problem exporting)", e);
-        } catch (@SuppressWarnings("restriction") JAXBException e) {
+        } catch (JAXBException e) {
             throw new MergeException("unable to defensive copy (problem importing)", e);
         }
         return docxTemplate;

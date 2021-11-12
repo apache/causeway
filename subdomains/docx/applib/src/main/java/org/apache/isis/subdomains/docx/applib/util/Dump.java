@@ -39,7 +39,7 @@ import org.docx4j.wml.Body;
 
 public class Dump {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
 
         //String filename = "helloWorld.docx";
         String filename = "TypicalDocument.docx";
@@ -60,11 +60,11 @@ public class Dump {
 
     private Map<Part, Part> handled = new HashMap<Part, Part>();
 
-    public Dump(File file) {
+    public Dump(final File file) {
         this.file = file;
     }
 
-    public void partsList(PrintStream out) throws Exception {
+    public void partsList(final PrintStream out) throws Exception {
 
         OpcPackage opcPackage = OpcPackage.load(file);
 
@@ -81,8 +81,8 @@ public class Dump {
         // saver.save(System.getProperty("user.dir") + "/out.docx");
     }
 
-    @SuppressWarnings({ "restriction", "rawtypes" })
-    private void appendInfo(Part p, StringBuilder sb, String indent) {
+    @SuppressWarnings({ "rawtypes" })
+    private void appendInfo(final Part p, final StringBuilder sb, final String indent) {
 
         String relationshipType = "";
         if (p.getSourceRelationships().size() > 0) {
@@ -101,7 +101,7 @@ public class Dump {
         }
     }
 
-    private void traverseRelationships(OpcPackage opcPackage, RelationshipsPart rp, StringBuilder sb, String indent) {
+    private void traverseRelationships(final OpcPackage opcPackage, final RelationshipsPart rp, final StringBuilder sb, final String indent) {
 
         // TODO: order by rel id
 
@@ -134,11 +134,11 @@ public class Dump {
         }
     }
 
-    public void documentTraverse(PrintStream out) throws Docx4JException {
+    public void documentTraverse(final PrintStream out) throws Docx4JException {
         WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(file);
         MainDocumentPart documentPart = wordMLPackage.getMainDocumentPart();
 
-        org.docx4j.wml.Document wmlDocumentEl = (org.docx4j.wml.Document) documentPart.getJaxbElement();
+        org.docx4j.wml.Document wmlDocumentEl = documentPart.getJaxbElement();
         Body body = wmlDocumentEl.getBody();
 
         new TraversalUtil(body,
@@ -147,7 +147,8 @@ public class Dump {
 
                 String indent = "";
 
-                public List<Object> apply(Object o) {
+                @Override
+                public List<Object> apply(final Object o) {
 
                     String text = "";
                     if (o instanceof org.docx4j.wml.Text)
@@ -157,12 +158,14 @@ public class Dump {
                     return null;
                 }
 
-                public boolean shouldTraverse(Object o) {
+                @Override
+                public boolean shouldTraverse(final Object o) {
                     return true;
                 }
 
                 // Depth first
-                public void walkJAXBElements(Object parent) {
+                @Override
+                public void walkJAXBElements(final Object parent) {
 
                     indent += "    ";
 
@@ -187,7 +190,8 @@ public class Dump {
                     indent = indent.substring(0, indent.length() - 4);
                 }
 
-                public List<Object> getChildren(Object o) {
+                @Override
+                public List<Object> getChildren(final Object o) {
                     return TraversalUtil.getChildrenImpl(o);
                 }
             }

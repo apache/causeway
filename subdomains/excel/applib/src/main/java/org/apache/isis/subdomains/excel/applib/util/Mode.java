@@ -16,12 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.xdocreport.applib.service;
+package org.apache.isis.subdomains.excel.applib.util;
 
 /**
  * @since 2.0 {@index}
  */
-public enum OutputType {
-    DOCX,
-    PDF
+public enum Mode {
+    /**
+     * All cells must be well formed and with valid data
+     */
+    STRICT,
+    /**
+     * Ignore any cells that cannot be interpreted.
+     */
+    RELAXED
 }

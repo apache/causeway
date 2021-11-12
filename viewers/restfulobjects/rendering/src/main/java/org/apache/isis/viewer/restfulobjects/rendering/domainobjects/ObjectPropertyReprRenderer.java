@@ -117,7 +117,13 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
                 // look for facet on member, else on the value's spec
                 format = String.format("big-integer");
             }
-            return jsonValueEncoder.appendValueAndFormat(valueAdapterIfAny, spec, representation, format, resourceContext.suppressMemberExtensions());
+            return jsonValueEncoder
+                    .appendValueAndFormat(
+                            valueAdapterIfAny,
+                            spec,
+                            representation,
+                            format,
+                            resourceContext.suppressMemberExtensions());
         }
 
         boolean eagerlyRender =

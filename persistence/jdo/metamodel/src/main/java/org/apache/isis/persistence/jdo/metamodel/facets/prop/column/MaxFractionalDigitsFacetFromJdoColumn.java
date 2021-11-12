@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetAbstract;
 
-public class MaxFractionDigitsFacetInferredFromJdoColumn
+public class MaxFractionalDigitsFacetFromJdoColumn
 extends MaxFractionalDigitsFacetAbstract {
 
      public static Optional<MaxFractionalDigitsFacet> create(
@@ -36,12 +36,12 @@ extends MaxFractionalDigitsFacetAbstract {
          return jdoColumnIfAny
          .filter(jdoColumn->jdoColumn.scale()>=0)
          .map(jdoColumn->{
-             return new MaxFractionDigitsFacetInferredFromJdoColumn(
+             return new MaxFractionalDigitsFacetFromJdoColumn(
                      jdoColumn.scale(), holder);
          });
     }
 
-    private MaxFractionDigitsFacetInferredFromJdoColumn(
+    private MaxFractionalDigitsFacetFromJdoColumn(
             final int maxFractionalDigits, final FacetHolder holder) {
         super(maxFractionalDigits, holder);
     }

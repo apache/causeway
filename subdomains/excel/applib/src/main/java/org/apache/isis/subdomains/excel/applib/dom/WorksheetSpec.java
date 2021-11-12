@@ -24,7 +24,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.subdomains.excel.applib.dom.util.Mode;
+import org.apache.isis.subdomains.excel.applib.util.Mode;
 
 import lombok.Setter;
 

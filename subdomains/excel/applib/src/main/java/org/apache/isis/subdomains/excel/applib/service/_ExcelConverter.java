@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.excel.applib.dom.util;
+package org.apache.isis.subdomains.excel.applib.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -65,7 +65,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.subdomains.excel.applib.dom.AggregationType;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelMetaDataEnabled;
-import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
 import org.apache.isis.subdomains.excel.applib.dom.HyperLink;
 import org.apache.isis.subdomains.excel.applib.dom.PivotColumn;
 import org.apache.isis.subdomains.excel.applib.dom.PivotDecoration;
@@ -74,11 +73,14 @@ import org.apache.isis.subdomains.excel.applib.dom.PivotValue;
 import org.apache.isis.subdomains.excel.applib.dom.RowHandler;
 import org.apache.isis.subdomains.excel.applib.dom.WorksheetContent;
 import org.apache.isis.subdomains.excel.applib.dom.WorksheetSpec;
+import org.apache.isis.subdomains.excel.applib.util.Mode;
+import org.apache.isis.subdomains.excel.applib.util.PivotUtils;
+import org.apache.isis.subdomains.excel.applib.util.SheetPivoter;
 
 import lombok.ToString;
 import lombok.val;
 
-class ExcelConverter {
+class _ExcelConverter {
 
     private static final String XLSX_SUFFIX = ".xlsx";
 
@@ -106,7 +108,7 @@ class ExcelConverter {
     private final BookmarkService bookmarkService;
     private final ServiceInjector serviceInjector;
 
-    ExcelConverter(
+    _ExcelConverter(
             final SpecificationLoader specificationLoader,
             final ObjectManager objectManager,
             final BookmarkService bookmarkService,
@@ -135,7 +137,7 @@ class ExcelConverter {
         }
 
         final File tempFile =
-                File.createTempFile(ExcelConverter.class.getName(), UUID.randomUUID().toString() + XLSX_SUFFIX);
+                File.createTempFile(_ExcelConverter.class.getName(), UUID.randomUUID().toString() + XLSX_SUFFIX);
         try(final FileOutputStream fos = new FileOutputStream(tempFile)) {
 
             for (WorksheetContent worksheetContent : worksheetContents) {
@@ -184,7 +186,7 @@ class ExcelConverter {
             cell.setCellValue(property.getCanonicalFriendlyName());
         }
 
-        final CellMarshaller cellMarshaller = newCellMarshaller(workbook);
+        final _CellMarshaller cellMarshaller = newCellMarshaller(workbook);
 
         // detail rows
         for (final ManagedObject objectAdapter : adapters) {
@@ -230,7 +232,7 @@ class ExcelConverter {
 
         try(final XSSFWorkbook workbook = new XSSFWorkbook()) {
             final File tempFile =
-                    File.createTempFile(ExcelConverter.class.getName(), UUID.randomUUID().toString() + XLSX_SUFFIX);
+                    File.createTempFile(_ExcelConverter.class.getName(), UUID.randomUUID().toString() + XLSX_SUFFIX);
             try(final FileOutputStream fos = new FileOutputStream(tempFile)) {
 
                 for (WorksheetContent worksheetContent : worksheetContents) {
@@ -401,7 +403,7 @@ class ExcelConverter {
 
         final List<T> importedItems = _Lists.newArrayList();
 
-        final CellMarshaller cellMarshaller = this.newCellMarshaller(workbook);
+        final _CellMarshaller cellMarshaller = this.newCellMarshaller(workbook);
 
         final Sheet sheet = lookupSheet(cls, sheetName, workbook);
 
@@ -431,7 +433,7 @@ class ExcelConverter {
                         case RELAXED:
                             // ignore
                         default:
-                            throw new ExcelService.Exception(String.format("Error processing Excel row nr. %d. Message: %s", row.getRowNum(), e.getMessage()), e);
+                            throw new ExcelServiceDefault.Exception(String.format("Error processing Excel row nr. %d. Message: %s", row.getRowNum(), e.getMessage()), e);
                         }
                     }
 
@@ -479,7 +481,7 @@ class ExcelConverter {
                             // ignore
                             break;
                         default:
-                            throw new ExcelService.Exception(String.format("Error processing Excel row nr. %d. Message: %s", row.getRowNum(), e.getMessage()), e);
+                            throw new ExcelServiceDefault.Exception(String.format("Error processing Excel row nr. %d. Message: %s", row.getRowNum(), e.getMessage()), e);
 
                         }
                     }
@@ -605,10 +607,10 @@ class ExcelConverter {
 
     // //////////////////////////////////////
 
-    protected CellMarshaller newCellMarshaller(final Workbook wb) {
+    protected _CellMarshaller newCellMarshaller(final Workbook wb) {
         final CellStyle dateCellStyle = createDateFormatCellStyle(wb);
         final CellStyle defaultCellStyle = defaultCellStyle(wb);
-        final CellMarshaller cellMarshaller = new CellMarshaller(bookmarkService, dateCellStyle, defaultCellStyle);
+        final _CellMarshaller cellMarshaller = new _CellMarshaller(bookmarkService, dateCellStyle, defaultCellStyle);
         return cellMarshaller;
     }
 

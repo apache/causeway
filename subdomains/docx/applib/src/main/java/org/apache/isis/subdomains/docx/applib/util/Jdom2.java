@@ -34,11 +34,12 @@ import org.jdom2.input.SAXBuilder;
 import org.apache.isis.subdomains.docx.applib.exceptions.LoadInputException;
 import org.apache.isis.subdomains.docx.applib.exceptions.MergeException;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public final class Jdom2 {
 
-    private Jdom2(){}
-
-    public static String textValueOf(Element htmlElement) {
+    public String textValueOf(final Element htmlElement) {
         List<Content> htmlContent = htmlElement.getContent();
         if(htmlContent.isEmpty()) {
             return null;
@@ -52,19 +53,20 @@ public final class Jdom2 {
     }
 
 
-    private static String normalized(String value) {
+    private String normalized(final String value) {
         String replaceAll = value.replaceAll("\\s+", " ");
         return replaceAll;
     }
 
-    public static Function<Element, String> textValue() {
+    public Function<Element, String> textValue() {
         return  new Function<Element, String>(){
-        public String apply(Element input) {
+        @Override
+        public String apply(final Element input) {
             return textValueOf(input);
         }};
     }
 
-    public static String attrOf(Element input, String attname) {
+    public String attrOf(final Element input, final String attname) {
         Attribute attribute = input.getAttribute(attname);
         if(attribute == null) {
             return null;
@@ -72,7 +74,7 @@ public final class Jdom2 {
         return attribute.getValue();
     }
 
-    public static Document loadInput(String html) throws LoadInputException {
+    public Document loadInput(final String html) throws LoadInputException {
         try {
             return new SAXBuilder().build(new StringReader(html));
         } catch (JDOMException e) {
@@ -82,7 +84,7 @@ public final class Jdom2 {
         }
     }
 
-    public static Element htmlBodyFor(Document htmlDoc) throws MergeException {
+    public Element htmlBodyFor(final Document htmlDoc) throws MergeException {
         Element htmlEl = htmlDoc.getRootElement();
         Element bodyEl = htmlEl.getChild("body");
         if (bodyEl == null) {

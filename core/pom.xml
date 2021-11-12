@@ -95,7 +95,7 @@
 		<commons-httpclient.version>4.5.12</commons-httpclient.version>
 		<commons-io.version>2.11.0</commons-io.version>
 
-		<cucumber.version>6.11.0</cucumber.version>
+		<cucumber.version>7.0.0</cucumber.version>
 
 		<cxf-rt-rs-client.version>3.4.4</cxf-rt-rs-client.version>
 
@@ -113,7 +113,7 @@
 		<docx4j.version>8.3.1</docx4j.version>
 
 		<easymock.version>4.3</easymock.version>
-		<error_prone_annotations.version>2.9.0</error_prone_annotations.version>
+		<error_prone_annotations.version>2.10.0</error_prone_annotations.version>
 
 		<git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
 		<guava.version>31.0.1-jre</guava.version>
@@ -143,7 +143,7 @@
 		<!-- See org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication -->
 		<jquery.version>3.5.1</jquery.version> <!-- org.webjars:jquery, dictated by bootstrap.version -->
 
-		<jquery-ui.version>1.12.1</jquery-ui.version> <!-- org.webjars:jquery-ui -->
+		<jquery-ui.version>1.13.0</jquery-ui.version> <!-- org.webjars:jquery-ui -->
 
 		<jsr305.version>3.0.2</jsr305.version>
 		<junit-jupiter.version>5.8.1</junit-jupiter.version> <!-- overrides spring -->
@@ -168,8 +168,8 @@
 
 		<quartz-scheduler.version>2.3.2</quartz-scheduler.version>
 
-		<resteasy-spring-boot-starter.version>4.9.0.Final</resteasy-spring-boot-starter.version>
-		<resteasy.version>4.7.0.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
+		<resteasy-spring-boot-starter.version>4.9.1.Final</resteasy-spring-boot-starter.version>
+		<resteasy.version>4.7.2.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
 
 		<select2.version>4.0.13</select2.version>
 		<shiro.version>1.8.0</shiro.version>

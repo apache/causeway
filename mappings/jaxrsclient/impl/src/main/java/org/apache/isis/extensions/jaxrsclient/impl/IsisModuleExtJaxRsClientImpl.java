@@ -18,14 +18,16 @@
  */
 package org.apache.isis.extensions.jaxrsclient.impl;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
-@ComponentScan
+@Import({
+
+})
 public class IsisModuleExtJaxRsClientImpl {
 
 }

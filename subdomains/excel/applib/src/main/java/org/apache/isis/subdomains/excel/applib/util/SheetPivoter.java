@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.excel.applib.dom.util;
+package org.apache.isis.subdomains.excel.applib.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,7 +35,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellReference;
 
 import org.apache.isis.subdomains.excel.applib.dom.AggregationType;
-import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
+import org.apache.isis.subdomains.excel.applib.service.ExcelServiceDefault;
 
 import lombok.val;
 
@@ -200,7 +200,7 @@ public class SheetPivoter {
         decoRowOffsetX = SourceLayOut.numberOfRowAnnotationsInSource;
     }
 
-    private void validateAndAdaptSourceDataIfNeeded() throws ExcelService.Exception {
+    private void validateAndAdaptSourceDataIfNeeded() throws ExcelServiceDefault.Exception {
 
         val sourceNotValid = sourceNotValid();
         if (sourceNotValid!=null){

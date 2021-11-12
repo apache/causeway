@@ -16,26 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.fallback;
+package org.apache.isis.subdomains.zip.applib;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.HasSemanticEqualityByClass;
-import org.apache.isis.core.metamodel.facets.all.help.HelpFacetAbstract;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-/**
- * Has a description of <tt>null</tt>.
- */
-public class HelpFacetNone
-extends HelpFacetAbstract
-implements HasSemanticEqualityByClass {
+import org.apache.isis.subdomains.zip.applib.service.ZipServiceDefault;
 
-    public HelpFacetNone(final FacetHolder holder) {
-        super(null, holder, Precedence.FALLBACK);
-    }
-
-    @Override
-    public String value() {
-        return "No help available";
-    }
+@Configuration
+@Import({
+    ZipServiceDefault.class
+})
+public class IsisModuleExtZip {
 
 }

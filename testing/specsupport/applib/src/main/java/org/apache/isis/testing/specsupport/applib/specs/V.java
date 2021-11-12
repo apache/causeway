@@ -36,6 +36,7 @@ public class V {
      *
      * @param <T>
      */
+    @Deprecated
     public static abstract class Transformer<T> {
         public abstract T transform(java.lang.String value);
     }
@@ -47,16 +48,16 @@ public class V {
     public static class Byte extends Transformer<java.lang.Byte> {
 
         @Override
-        public java.lang.Byte transform(java.lang.String value) {
+        public java.lang.Byte transform(final java.lang.String value) {
             return value == null || "null".equals(value)
                     ? null
-                            : java.lang.Byte.parseByte(value);
+                    : java.lang.Byte.parseByte(value);
         }
 
-        public static java.lang.Byte as(Object value) {
+        public static java.lang.Byte as(final Object value) {
             return value != null && value instanceof java.lang.String
                     ? new Byte().transform((java.lang.String) value)
-                            : null;
+                    : null;
         }
     }
 
@@ -67,16 +68,16 @@ public class V {
     public static class Short extends Transformer<java.lang.Short> {
 
         @Override
-        public java.lang.Short transform(java.lang.String value) {
+        public java.lang.Short transform(final java.lang.String value) {
             return value == null || "null".equals(value)
                     ? null
-                            : java.lang.Short.parseShort(value);
+                    : java.lang.Short.parseShort(value);
         }
 
-        public static java.lang.Short as(Object value) {
+        public static java.lang.Short as(final Object value) {
             return value != null && value instanceof java.lang.String
                     ? new Short().transform((java.lang.String) value)
-                            : null;
+                    : null;
         }
     }
 
@@ -87,16 +88,16 @@ public class V {
     public static class Integer extends Transformer<java.lang.Integer> {
 
         @Override
-        public java.lang.Integer transform(java.lang.String value) {
+        public java.lang.Integer transform(final java.lang.String value) {
             return value == null || "null".equals(value)
                     ? null
-                            : java.lang.Integer.parseInt(value);
+                    : java.lang.Integer.parseInt(value);
         }
 
-        public static java.lang.Integer as(Object value) {
+        public static java.lang.Integer as(final Object value) {
             return value != null && value instanceof java.lang.String
                     ? new Integer().transform((java.lang.String) value)
-                            : null;
+                    : null;
         }
     }
 
@@ -107,16 +108,16 @@ public class V {
     public static class Long extends Transformer<java.lang.Long> {
 
         @Override
-        public java.lang.Long transform(java.lang.String value) {
+        public java.lang.Long transform(final java.lang.String value) {
             return value == null || "null".equals(value)
                     ? null
-                            : java.lang.Long.parseLong(value);
+                    : java.lang.Long.parseLong(value);
         }
 
-        public static java.lang.Long as(Object value) {
+        public static java.lang.Long as(final Object value) {
             return value != null && value instanceof java.lang.String
                     ? new Long().transform((java.lang.String) value)
-                            : null;
+                    : null;
         }
     }
 
@@ -127,16 +128,16 @@ public class V {
     public static class Float extends Transformer<java.lang.Float> {
 
         @Override
-        public java.lang.Float transform(java.lang.String value) {
+        public java.lang.Float transform(final java.lang.String value) {
             return value == null || "null".equals(value)
                     ? null
-                            : java.lang.Float.parseFloat(value);
+                    : java.lang.Float.parseFloat(value);
         }
 
-        public static java.lang.Float as(Object value) {
+        public static java.lang.Float as(final Object value) {
             return value != null && value instanceof java.lang.String
                     ? new Float().transform((java.lang.String) value)
-                            : null;
+                    : null;
         }
     }
 
@@ -147,16 +148,16 @@ public class V {
     public static class Double extends Transformer<java.lang.Double> {
 
         @Override
-        public java.lang.Double transform(java.lang.String value) {
+        public java.lang.Double transform(final java.lang.String value) {
             return value == null || "null".equals(value)
                     ? null
-                            : java.lang.Double.parseDouble(value);
+                    : java.lang.Double.parseDouble(value);
         }
 
-        public static java.lang.Double as(Object value) {
+        public static java.lang.Double as(final Object value) {
             return value != null && value instanceof java.lang.String
                     ? new Double().transform((java.lang.String) value)
-                            : null;
+                    : null;
         }
     }
 
@@ -167,16 +168,16 @@ public class V {
     public static class BigInteger extends Transformer<java.math.BigInteger> {
 
         @Override
-        public java.math.BigInteger transform(java.lang.String value) {
+        public java.math.BigInteger transform(final java.lang.String value) {
             return value == null || "null".equals(value)
                     ? null
-                            : new java.math.BigInteger(value);
+                    : new java.math.BigInteger(value);
         }
 
-        public static java.math.BigInteger as(Object value) {
+        public static java.math.BigInteger as(final Object value) {
             return value != null && value instanceof java.lang.String
                     ? new BigInteger().transform((java.lang.String) value)
-                            : null;
+                    : null;
         }
     }
 
@@ -187,16 +188,16 @@ public class V {
     public static class BigDecimal extends Transformer<java.math.BigDecimal> {
 
         @Override
-        public java.math.BigDecimal transform(java.lang.String value) {
+        public java.math.BigDecimal transform(final java.lang.String value) {
             return value == null || "null".equals(value)
                     ? null
-                            : new java.math.BigDecimal(value);
+                    : new java.math.BigDecimal(value);
         }
 
-        public static java.math.BigDecimal as(Object value) {
+        public static java.math.BigDecimal as(final Object value) {
             return value != null && value instanceof java.lang.String
                     ? new BigDecimal().transform((java.lang.String) value)
-                            : null;
+                    : null;
         }
     }
 
@@ -207,16 +208,16 @@ public class V {
     public static class Character extends Transformer<java.lang.Character> {
 
         @Override
-        public java.lang.Character transform(java.lang.String value) {
+        public java.lang.Character transform(final java.lang.String value) {
             return value == null || "null".equals(value) || value.length() <1
                     ? null
-                            : value.charAt(0);
+                    : value.charAt(0);
         }
 
-        public static java.lang.Character as(Object value) {
+        public static java.lang.Character as(final Object value) {
             return value != null && value instanceof java.lang.String
                     ? new Character().transform((java.lang.String) value)
-                            : null;
+                    : null;
         }
     }
 
@@ -227,16 +228,16 @@ public class V {
     public static class String extends Transformer<java.lang.String> {
 
         @Override
-        public java.lang.String transform(java.lang.String value) {
+        public java.lang.String transform(final java.lang.String value) {
             return value == null || "null".equals(value)
                     ? null
-                            : value;
+                    : value;
         }
 
-        public static java.lang.String as(Object value) {
+        public static java.lang.String as(final Object value) {
             return value != null && value instanceof java.lang.String
                     ? new String().transform((java.lang.String) value)
-                            : null;
+                    : null;
         }
     }
 
@@ -247,16 +248,16 @@ public class V {
     public static class LyyyyMMdd extends Transformer<org.joda.time.LocalDate> {
 
         @Override
-        public org.joda.time.LocalDate transform(java.lang.String value) {
+        public org.joda.time.LocalDate transform(final java.lang.String value) {
             return value == null || "null".equals(value)
                     ? null
-                            : DateTimeFormat.forPattern("yyyy-MM-dd").parseLocalDate(value);
+                    : DateTimeFormat.forPattern("yyyy-MM-dd").parseLocalDate(value);
         }
 
-        public static org.joda.time.LocalDate as(Object value) {
+        public static org.joda.time.LocalDate as(final Object value) {
             return value != null && value instanceof java.lang.String
                     ? new LyyyyMMdd().transform((java.lang.String) value)
-                            : null;
+                    : null;
         }
     }
 
@@ -267,16 +268,16 @@ public class V {
     public static class yyyyMMddHHmmss extends Transformer<org.joda.time.DateTime> {
 
         @Override
-        public org.joda.time.DateTime transform(java.lang.String value) {
+        public org.joda.time.DateTime transform(final java.lang.String value) {
             return value == null || "null".equals(value)
                     ? null
-                            : DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").parseDateTime(value);
+                    : DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").parseDateTime(value);
         }
 
-        public static org.joda.time.DateTime as(Object value) {
+        public static org.joda.time.DateTime as(final Object value) {
             return value != null && value instanceof java.lang.String
                     ? new yyyyMMddHHmmss().transform((java.lang.String) value)
-                            : null;
+                    : null;
         }
     }
 
@@ -287,16 +288,16 @@ public class V {
     public static class yyyyMMddHHmm extends Transformer<org.joda.time.DateTime> {
 
         @Override
-        public org.joda.time.DateTime transform(java.lang.String value) {
+        public org.joda.time.DateTime transform(final java.lang.String value) {
             return value == null || "null".equals(value)
                     ? null
-                            : DateTimeFormat.forPattern("yyyy-MM-dd HH:mm").parseDateTime(value);
+                    : DateTimeFormat.forPattern("yyyy-MM-dd HH:mm").parseDateTime(value);
         }
 
-        public static org.joda.time.DateTime as(Object value) {
+        public static org.joda.time.DateTime as(final Object value) {
             return value != null && value instanceof java.lang.String
                     ? new yyyyMMddHHmmss().transform((java.lang.String) value)
-                            : null;
+                    : null;
         }
     }
 
@@ -307,16 +308,16 @@ public class V {
     public static class LyyyyMMddHHmm extends Transformer<org.joda.time.LocalDateTime> {
 
         @Override
-        public org.joda.time.LocalDateTime transform(java.lang.String value) {
+        public org.joda.time.LocalDateTime transform(final java.lang.String value) {
             return value == null || "null".equals(value)
                     ? null
-                            : DateTimeFormat.forPattern("yyyy-MM-dd HH:mm").parseLocalDateTime(value);
+                    : DateTimeFormat.forPattern("yyyy-MM-dd HH:mm").parseLocalDateTime(value);
         }
 
-        public static org.joda.time.DateTime as(Object value) {
+        public static org.joda.time.DateTime as(final Object value) {
             return value != null && value instanceof java.lang.String
                     ? new yyyyMMddHHmmss().transform((java.lang.String) value)
-                            : null;
+                    : null;
         }
     }
 
@@ -327,16 +328,16 @@ public class V {
     public static class LyyyyMMddHHmmss extends Transformer<org.joda.time.LocalDateTime> {
 
         @Override
-        public org.joda.time.LocalDateTime transform(java.lang.String value) {
+        public org.joda.time.LocalDateTime transform(final java.lang.String value) {
             return value == null || "null".equals(value)
                     ? null
-                            : DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").parseLocalDateTime(value);
+                    : DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").parseLocalDateTime(value);
         }
 
-        public static org.joda.time.DateTime as(Object value) {
+        public static org.joda.time.DateTime as(final Object value) {
             return value != null && value instanceof java.lang.String
                     ? new yyyyMMddHHmmss().transform((java.lang.String) value)
-                            : null;
+                    : null;
         }
     }
 

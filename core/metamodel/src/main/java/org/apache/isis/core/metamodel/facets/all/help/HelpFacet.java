@@ -22,7 +22,7 @@ import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
 
 /**
  * Provide help about a class, a property, collection or action or a parameter.
- *
+ * @apiNote currently not implemented - kept for potential future extensions
  */
 public interface HelpFacet extends SingleStringValueFacet {
 }

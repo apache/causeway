@@ -19,13 +19,13 @@
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import com.fasterxml.jackson.databind.node.NullNode;
 
@@ -33,13 +33,15 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -47,7 +49,7 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
-
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Similar to Isis' value encoding, but with additional support for JSON
@@ -57,7 +59,7 @@ import lombok.val;
 @Named("isis.viewer.ro.JsonValueEncoder")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
-@Singleton
+@Log4j2
 public class JsonValueEncoder {
 
     @Inject private SpecificationLoader specificationLoader;
@@ -141,20 +143,33 @@ public class JsonValueEncoder {
         if(jsonValueConverter != null) {
             return jsonValueConverter.appendValueAndFormat(objectAdapter, format, repr, suppressExtensions);
         } else {
-            val encodableFacet = objectSpecification.getFacet(EncodableFacet.class);
-            if (encodableFacet == null) {
-                throw _Exceptions.illegalArgument(
-                        "objectSpec '%s' expected to have EncodableFacet "
-                        + "or a registered JsonValueConverter",
-                        objectSpecification.getLogicalTypeName());
-            }
-            Object value = objectAdapter != null
-                    ? encodableFacet.toEncodedString(objectAdapter)
-                            : NullNode.getInstance();
+
+            final Object value = ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)
+                    ? NullNode.getInstance()
+                    : toEncodedString(objectSpecification, objectAdapter.getPojo())
+                        .map(Object.class::cast)
+                        .orElseGet(()->{
+                            log.warn("{Could not resolve an EncoderDecoder for {}, "
+                                    + "falling back to rendering as 'null'. "
+                                    + "Make sure the framework has access to a ValueSemanticsProvider<{}> "
+                                    + "that implements EncoderDecoder<{}>}",
+                                    objectSpecification.getLogicalTypeName(),
+                                    objectSpecification.getCorrespondingClass().getSimpleName(),
+                                    objectSpecification.getCorrespondingClass().getSimpleName());
+                            return NullNode.getInstance();
+                        });
+
             repr.mapPut("value", value);
             appendFormats(repr, "string", "string", suppressExtensions);
             return value;
         }
+    }
+
+    private static <T> Optional<String> toEncodedString(final ObjectSpecification spec, final T pojo) {
+        return spec.lookupFacet(ValueFacet.class)
+            .flatMap(ValueFacet::selectDefaultEncoderDecoder)
+            .map(EncoderDecoder.class::cast)
+            .map(codec->((EncoderDecoder<T>)codec).toEncodedString(pojo));
     }
 
     @Nullable

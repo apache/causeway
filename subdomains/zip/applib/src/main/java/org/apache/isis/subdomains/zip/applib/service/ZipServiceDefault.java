@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.zip.dom.impl;
+package org.apache.isis.subdomains.zip.applib.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -27,27 +27,26 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.annotation.Priority;
+import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.subdomains.zip.applib.ZipService;
 
-import lombok.Data;
 import lombok.val;
 
 @Service
-public class ZipService {
+@Named("isis.sub.zip.ZipServiceDefault")
+@Priority(PriorityPrecedence.MIDPOINT)
+@Qualifier("Default")
+public class ZipServiceDefault implements ZipService {
 
-    @Data
-    public static class FileAndName {
-        private final String name;
-        private final File file;
-    }
-
-    /**
-     * Rather than use the name of the file (which might be temporary files, for example)
-     * we explicitly provide the name to use (in the ZipEntry).
-     */
+    @Override
     public byte[] zipNamedFiles(final List<FileAndName> fileAndNameList) {
 
         try {
@@ -70,10 +69,7 @@ public class ZipService {
         }
     }
 
-    /**
-     * As per {@link #zipNamedFiles(List)},
-     * but using each file's name as the zip entry (rather than providing it).
-     */
+    @Override
     public byte[] zipFiles(final List<File> fileList) {
         return zipNamedFiles(fileList.stream()
                            .map(file -> new FileAndName(file.getName(), file))
@@ -81,17 +77,7 @@ public class ZipService {
                 );
     }
 
-    @Data
-    public static class BytesAndName {
-        private final String name;
-        private final byte[] bytes;
-    }
-
-    /**
-     * Similar to {@link #zipNamedFiles(List)}, but uses simple byte[] as the input, rather than files.
-     *
-     * @param bytesAndNameList
-     */
+    @Override
     public byte[] zipNamedBytes(final List<BytesAndName> bytesAndNameList) {
 
         final byte[] bytes;

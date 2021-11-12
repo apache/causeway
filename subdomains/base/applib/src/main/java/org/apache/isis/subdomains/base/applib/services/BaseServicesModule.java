@@ -18,13 +18,17 @@
  */
 package org.apache.isis.subdomains.base.applib.services;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+import org.apache.isis.subdomains.base.applib.services.calendar.CalendarServiceDefault;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
-@ComponentScan
+@Import({
+    CalendarServiceDefault.class
+})
 public class BaseServicesModule {
 }

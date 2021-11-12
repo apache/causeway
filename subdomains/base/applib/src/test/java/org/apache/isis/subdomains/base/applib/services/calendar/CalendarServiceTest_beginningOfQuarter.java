@@ -81,7 +81,7 @@ public class CalendarServiceTest_beginningOfQuarter {
                 return VirtualClock.frozenAt(Instant.from(now));
             }
         };
-        calendarService = new CalendarService(stubClockService);
+        calendarService = new CalendarServiceDefault(stubClockService);
     }
 
     @Test

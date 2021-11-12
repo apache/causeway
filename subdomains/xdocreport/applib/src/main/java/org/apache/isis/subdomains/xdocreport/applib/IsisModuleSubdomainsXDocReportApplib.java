@@ -18,14 +18,18 @@
  */
 package org.apache.isis.subdomains.xdocreport.applib;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+import org.apache.isis.subdomains.xdocreport.applib.service.XDocReportServiceDefault;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
-@ComponentScan
+@Import({
+    XDocReportServiceDefault.class
+})
 public class IsisModuleSubdomainsXDocReportApplib {
 
 }

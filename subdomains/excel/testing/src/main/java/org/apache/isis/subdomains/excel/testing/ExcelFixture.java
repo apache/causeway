@@ -42,7 +42,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.subdomains.excel.applib.IsisModuleSubdomainsExcelApplib;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
-import org.apache.isis.subdomains.excel.applib.dom.util.ExcelServiceImpl;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResultList;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
@@ -65,6 +64,7 @@ public class ExcelFixture extends FixtureScript {
     public final static String LOGICAL_TYPE_NAME = IsisModuleSubdomainsExcelApplib.NAMESPACE + ".ExcelFixture";
 
     @Inject SpecificationLoader specLoader;
+    @Inject ExcelService excelService;
 
     private final List<Class<?>> classes;
 
@@ -147,16 +147,13 @@ public class ExcelFixture extends FixtureScript {
     @Override
     protected void execute(final ExecutionContext ec) {
 
-        final ExcelServiceImpl excelServiceImpl = new ExcelServiceImpl();
-        serviceInjector.injectServicesInto(excelServiceImpl);
-
         if (blob == null){
             byte[] bytes = getBytes();
             blob = new Blob("unused", ExcelService.XSLX_MIME_TYPE, bytes);
         }
 
         for (Class<?> cls : classes) {
-            final List<?> rowObjects = excelServiceImpl.fromExcel(blob, cls, cls.getSimpleName());
+            final List<?> rowObjects = excelService.fromExcel(blob, cls, cls.getSimpleName());
             Object previousRow = null;
             for (final Object rowObj : rowObjects) {
                 final List<Object> createdObjects = create(rowObj, ec, previousRow);

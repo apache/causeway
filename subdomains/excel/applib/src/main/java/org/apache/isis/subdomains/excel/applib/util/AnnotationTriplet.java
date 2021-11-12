@@ -16,18 +16,38 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.excel.applib.dom.util;
+package org.apache.isis.subdomains.excel.applib.util;
 
 /**
  * @since 2.0 {@index}
  */
-public enum Mode {
-    /**
-     * All cells must be well formed and with valid data
-     */
-    STRICT,
-    /**
-     * Ignore any cells that cannot be interpreted.
-     */
-    RELAXED
+public class AnnotationTriplet implements Comparable<AnnotationTriplet>{
+
+    AnnotationTriplet(final String annotation, final Integer colNumber, final Integer order){
+        this.annotation = annotation;
+        this.colNumber = colNumber;
+        this.order = order;
+    }
+
+    private String annotation;
+    private Integer order;
+    private Integer colNumber;
+
+    String getAnnotation() {
+        return annotation;
+    }
+
+    Integer getColnumber() {
+        return colNumber;
+    }
+
+    @Override public int compareTo(final AnnotationTriplet o) {
+
+        if (this.annotation.equals(o.annotation)){
+            return this.order.compareTo(o.order);
+        } else {
+            return this.annotation.compareTo(o.annotation);
+        }
+
+    }
 }

@@ -19,23 +19,30 @@
 package org.apache.isis.persistence.jpa.metamodel.facets.prop.column;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.persistence.Column;
 
+import org.apache.isis.commons.internal.base._Optionals;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetForPersistentBigDecimalWhenUnspecified;
 
 import lombok.val;
 
 public class BigDecimalFromJpaColumnAnnotationFacetFactory
 extends FacetFactoryAbstract {
 
+    private Optional<IsisBeanTypeRegistry> beanTypeRegistryIfAny; // JUnit support (allowed to be empty)
+
     @Inject
     public BigDecimalFromJpaColumnAnnotationFacetFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.PROPERTIES_ONLY);
+        beanTypeRegistryIfAny = mmc.getServiceRegistry().lookupService(IsisBeanTypeRegistry.class);
     }
 
     @Override
@@ -54,8 +61,16 @@ extends FacetFactoryAbstract {
                 .create(jpaColumnIfAny, holder));
 
         addFacetIfPresent(
-                MaxFractionDigitsFacetFromJpaColumnAnnotation
+                MaxFractionalDigitsFacetFromJpaColumnAnnotation
                 .create(jpaColumnIfAny, holder));
+
+        // adds additional constraints if applicable
+        beanTypeRegistryIfAny.ifPresent(beanTypeRegistry->{
+            addFacetIfPresent(
+                    MaxFractionalDigitsFacetForPersistentBigDecimalWhenUnspecified
+                    .create(_Optionals.toInt(jpaColumnIfAny, Column::scale), processMethodContext, beanTypeRegistry));
+        });
+
     }
 
 }

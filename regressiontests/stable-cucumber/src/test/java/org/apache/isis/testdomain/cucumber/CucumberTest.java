@@ -18,18 +18,25 @@
  */
 package org.apache.isis.testdomain.cucumber;
 
-import io.cucumber.junit.platform.engine.Cucumber;
+import org.junit.platform.suite.api.IncludeEngines;
+import org.junit.platform.suite.api.SelectClasspathResource;
+import org.junit.platform.suite.api.Suite;
+
 
 /**
  * Cucumber will scan the package of a class annotated with @Cucumber for feature files.
  * <p>
- * Make sure this class name ends with Test, as Surefire when bundled with Apache Isis 
- * filters JUnit tests also by class name. 
+ * Make sure this class name ends with Test, as Surefire when bundled with Apache Isis
+ * filters JUnit tests also by class name.
  */
-@Cucumber
+@Suite
+@IncludeEngines("cucumber")
+@SelectClasspathResource("org/apache/isis/testdomain/cucumber")
 public class CucumberTest {
 
-    // See:
+    // See 7.x:
+    // https://github.com/cucumber/cucumber-jvm/blob/main/release-notes/v7.0.0.md
+    // See 6.x:
     // https://github.com/cucumber/cucumber-jvm/issues/1149
     // https://github.com/cucumber/cucumber-jvm/tree/master/junit-platform-engine
 

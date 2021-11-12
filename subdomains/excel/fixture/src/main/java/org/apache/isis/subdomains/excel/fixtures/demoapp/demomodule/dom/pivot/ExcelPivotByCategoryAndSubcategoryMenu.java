@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
+import org.apache.isis.subdomains.excel.applib.service.ExcelServiceDefault;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 
 @DomainService(
@@ -67,7 +67,7 @@ public class ExcelPivotByCategoryAndSubcategoryMenu {
         return repositoryService.allInstances(ExcelDemoToDoItem.class);
     }
 
-    @Inject ExcelService excelService;
+    @Inject ExcelServiceDefault excelService;
     @Inject RepositoryService repositoryService;
 
 }

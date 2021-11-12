@@ -1,80 +1,19 @@
-/*
- *  Licensed to the Apache Software Foundation (ASF) under one
- *  or more contributor license agreements.  See the NOTICE file
- *  distributed with this work for additional information
- *  regarding copyright ownership.  The ASF licenses this file
- *  to you under the Apache License, Version 2.0 (the
- *  "License"); you may not use this file except in compliance
- *  with the License.  You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied.  See the License for the
- *  specific language governing permissions and limitations
- *  under the License.
- */
 package org.apache.isis.subdomains.excel.applib.dom;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.exceptions.RecoverableException;
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.subdomains.excel.applib.dom.util.ExcelServiceImpl;
-import org.apache.isis.subdomains.excel.applib.dom.util.Mode;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+
+import org.apache.isis.applib.exceptions.RecoverableException;
+import org.apache.isis.applib.value.Blob;
+import org.apache.isis.subdomains.excel.applib.service.ExcelServiceDefault;
+import org.apache.isis.subdomains.excel.applib.util.Mode;
 
 /**
  * @since 2.0 {@index}
  */
-@Service
-@Named("isis.sub.excel.ExcelService")
-@Priority(PriorityPrecedence.MIDPOINT)
-@Qualifier("Default")
-public class ExcelService {
+public interface ExcelService {
 
-    public static class Exception extends RecoverableException {
-
-        private static final long serialVersionUID = 1L;
-
-        public Exception(final String msg, final Throwable ex) {
-            super(msg, ex);
-        }
-
-        public Exception(final Throwable ex) {
-            super(ex);
-        }
-    }
-
-    public static final String XSLX_MIME_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-
-    private ExcelServiceImpl excelServiceImpl;
-
-    public ExcelService() {
-    }
-
-    @PostConstruct
-    public void init() {
-        excelServiceImpl = new ExcelServiceImpl();
-        serviceInjector.injectServicesInto(excelServiceImpl);
-    }
-
-    // //////////////////////////////////////
+    String XSLX_MIME_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
     /**
      * Creates a Blob holding a spreadsheet of the domain objects.
@@ -89,76 +28,30 @@ public class ExcelService {
      *
      * @param sheetName - must be 31 chars or less
      */
-    public <T> Blob toExcel(
-            final List<T> domainObjects,
-            final Class<T> cls,
-            final String sheetName,
-            final String fileName) throws ExcelService.Exception {
-        return excelServiceImpl.toExcel(domainObjects, cls, sheetName, fileName);
-    }
+    <T> Blob toExcel(List<T> domainObjects, Class<T> cls, String sheetName, String fileName)
+            throws ExcelServiceDefault.Exception;
 
-    public <T> Blob toExcel(
-            final List<T> domainObjects,
-            final Class<T> cls,
-            final String sheetName,
-            final String fileName,
-            final InputStream in) throws ExcelService.Exception {
-        return excelServiceImpl.toExcel(domainObjects, cls, sheetName, fileName, in);
-    }
+    <T> Blob toExcel(List<T> domainObjects, Class<T> cls, String sheetName, String fileName, InputStream in)
+            throws ExcelServiceDefault.Exception;
 
-    public <T> Blob toExcel(
-            final WorksheetContent worksheetContent,
-            final String fileName) throws ExcelService.Exception {
-        return excelServiceImpl.toExcel(worksheetContent, fileName);
-    }
+    <T> Blob toExcel(WorksheetContent worksheetContent, String fileName) throws ExcelServiceDefault.Exception;
 
-    public <T> Blob toExcel(
-            final WorksheetContent worksheetContent,
-            final String fileName,
-            final InputStream in) throws ExcelService.Exception {
-        return excelServiceImpl.toExcel(worksheetContent, fileName, in);
-    }
+    <T> Blob toExcel(WorksheetContent worksheetContent, String fileName, InputStream in)
+            throws ExcelServiceDefault.Exception;
 
-    public Blob toExcel(
-            final List<WorksheetContent> worksheetContents,
-            final String fileName) throws ExcelService.Exception {
-        return excelServiceImpl.toExcel(worksheetContents, fileName);
-    }
+    Blob toExcel(List<WorksheetContent> worksheetContents, String fileName) throws ExcelServiceDefault.Exception;
 
-    public Blob toExcel(
-            final List<WorksheetContent> worksheetContents,
-            final String fileName,
-            final InputStream in) throws ExcelService.Exception {
-        return excelServiceImpl.toExcel(worksheetContents, fileName, in);
-    }
+    Blob toExcel(List<WorksheetContent> worksheetContents, String fileName, InputStream in)
+            throws ExcelServiceDefault.Exception;
 
-    public <T> Blob toExcelPivot(
-            final List<T> domainObjects,
-            final Class<T> cls,
-            final String fileName) throws ExcelService.Exception {
-        return excelServiceImpl.toExcelPivot(domainObjects, cls, fileName);
-    }
+    <T> Blob toExcelPivot(List<T> domainObjects, Class<T> cls, String fileName) throws ExcelServiceDefault.Exception;
 
-    public <T> Blob toExcelPivot(
-            final List<T> domainObjects,
-            final Class<T> cls,
-            final String sheetName,
-            final String fileName) throws ExcelService.Exception {
-        return excelServiceImpl.toExcelPivot(domainObjects, cls, sheetName, fileName);
-    }
+    <T> Blob toExcelPivot(List<T> domainObjects, Class<T> cls, String sheetName, String fileName)
+            throws ExcelServiceDefault.Exception;
 
-    public <T> Blob toExcelPivot(
-            final WorksheetContent worksheetContent,
-            final String fileName) throws ExcelService.Exception {
-        return excelServiceImpl.toExcelPivot(worksheetContent, fileName);
-    }
+    <T> Blob toExcelPivot(WorksheetContent worksheetContent, String fileName) throws ExcelServiceDefault.Exception;
 
-    public Blob toExcelPivot(
-            final List<WorksheetContent> worksheetContents,
-            final String fileName) throws ExcelService.Exception {
-
-        return excelServiceImpl.toExcelPivot(worksheetContents, fileName);
-    }
+    Blob toExcelPivot(List<WorksheetContent> worksheetContents, String fileName) throws ExcelServiceDefault.Exception;
 
     /**
      * Returns a list of objects for each line in the spreadsheet, of the specified type.
@@ -168,68 +61,31 @@ public class ExcelService {
      *     view model memento); otherwise the objects will be simple transient objects.
      * </p>
      */
-    public <T> List<T> fromExcel(
-            final Blob excelBlob,
-            final Class<T> cls,
-            final String sheetName) throws ExcelService.Exception {
-        return fromExcel(excelBlob, new WorksheetSpec(cls, sheetName));
-    }
+    <T> List<T> fromExcel(Blob excelBlob, Class<T> cls, String sheetName) throws ExcelServiceDefault.Exception;
 
-    public <T> List<T> fromExcel(
-            final Blob excelBlob,
-            final Class<T> cls,
-            final String sheetName,
-            final Mode mode) throws ExcelService.Exception {
-        return fromExcel(excelBlob, new WorksheetSpec(cls, sheetName, mode));
-    }
+    <T> List<T> fromExcel(Blob excelBlob, Class<T> cls, String sheetName, Mode mode)
+            throws ExcelServiceDefault.Exception;
 
-    public <T> List<T> fromExcel(
-            final Blob excelBlob,
-            final WorksheetSpec worksheetSpec) throws ExcelService.Exception {
-        return excelServiceImpl.fromExcel(excelBlob, worksheetSpec);
-    }
+    <T> List<T> fromExcel(Blob excelBlob, WorksheetSpec worksheetSpec) throws ExcelServiceDefault.Exception;
 
-    public List<List<?>> fromExcel(
-            final Blob excelBlob,
-            final List<WorksheetSpec> worksheetSpecs) throws ExcelService.Exception {
-        return excelServiceImpl.fromExcel(excelBlob, worksheetSpecs);
-    }
+    List<List<?>> fromExcel(Blob excelBlob, List<WorksheetSpec> worksheetSpecs) throws ExcelServiceDefault.Exception;
 
-    public List<List<?>> fromExcel(
-            final Blob excelBlob,
-            final WorksheetSpec.Matcher matcher) throws ExcelService.Exception {
+    List<List<?>> fromExcel(Blob excelBlob, WorksheetSpec.Matcher matcher) throws ExcelServiceDefault.Exception;
 
-        return fromExcel(excelBlob, matcher, null);
-    }
+    List<List<?>> fromExcel(Blob excelBlob, WorksheetSpec.Matcher matcher, WorksheetSpec.Sequencer sequencer)
+            throws ExcelServiceDefault.Exception;
 
-    public List<List<?>> fromExcel(
-            final Blob excelBlob,
-            final WorksheetSpec.Matcher matcher,
-            final WorksheetSpec.Sequencer sequencer) throws ExcelService.Exception {
+    public static class Exception extends RecoverableException {
 
-        List<WorksheetSpec> worksheetSpecs = _Lists.newArrayList();
-        try (ByteArrayInputStream bais = new ByteArrayInputStream(excelBlob.getBytes())) {
-            try (final Workbook wb = org.apache.poi.ss.usermodel.WorkbookFactory.create(bais)) {
-                final int numberOfSheets = wb.getNumberOfSheets();
-                for (int i = 0; i < numberOfSheets; i++) {
-                    final Sheet sheet = wb.getSheetAt(i);
-                    WorksheetSpec worksheetSpec = matcher.fromSheet(sheet.getSheetName());
-                    if(worksheetSpec != null) {
-                        worksheetSpecs.add(worksheetSpec);
-                    }
-                }
-            }
-        } catch (IOException e) {
-            throw new ExcelService.Exception(e);
+        private static final long serialVersionUID = 1L;
+
+        public Exception(final String msg, final Throwable ex) {
+            super(msg, ex);
         }
 
-        if(sequencer != null) {
-            worksheetSpecs = sequencer.sequence(worksheetSpecs);
+        public Exception(final Throwable ex) {
+            super(ex);
         }
-
-        return fromExcel(excelBlob, worksheetSpecs);
     }
-
-    @Inject private ServiceInjector serviceInjector;
 
 }

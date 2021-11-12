@@ -38,7 +38,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * Same as {@link ImpersonateMenu.impersonateWithRoles#act(String, List, String)},
+ * Same as {@link org.apache.isis.applib.services.user.ImpersonateMenu.impersonateWithRoles#act(String, List, String)},
  * but implemented as a mixin so that can be invoked while accessing an object.
  *
  * @since 2.0 {@index}

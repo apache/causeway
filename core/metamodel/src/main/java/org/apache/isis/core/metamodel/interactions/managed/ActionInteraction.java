@@ -185,9 +185,8 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
 
     public <X extends Throwable>
     ManagedAction getManagedActionElseFail() {
-        return getManagedActionElseThrow(veto->_Exceptions.unrecoverable("action vetoed: " + veto.getReason()));
+        return getManagedActionElseThrow(veto->
+            _Exceptions.unrecoverable("action vetoed: " + veto.getReason()));
     }
-
-
 
 }

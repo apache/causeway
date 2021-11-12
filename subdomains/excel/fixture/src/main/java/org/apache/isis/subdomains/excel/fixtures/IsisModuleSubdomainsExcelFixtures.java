@@ -33,7 +33,7 @@ import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
         IsisModuleSubdomainsExcelApplib.class,
         IsisModuleTestingFixturesApplib.class
 })
-@ComponentScan
+@ComponentScan //TODO eventually create a concrete list of Components to import
 public class IsisModuleSubdomainsExcelFixtures implements ModuleWithFixtures {
 
     @Override public FixtureScript getTeardownFixture() {

@@ -25,7 +25,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class Types {
 
-    public static Predicate<Object> withType(final Class<?> cls) {
+    public Predicate<Object> withType(final Class<?> cls) {
         return object -> cls.isAssignableFrom(object.getClass());
     }
 
