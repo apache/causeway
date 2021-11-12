@@ -22,8 +22,10 @@ import io.kvision.core.BsBorder
 import io.kvision.core.Component
 import io.kvision.core.addBsBorder
 import io.kvision.panel.SimplePanel
+import org.apache.isis.client.kroviz.ui.kv.override.RoTab
 import org.apache.isis.client.kroviz.ui.kv.override.RoTabPanel
 import org.apache.isis.client.kroviz.utils.IconManager
+import org.w3c.dom.Element
 
 /**
  * Area between menu bar at the top and the status bar at the bottom.
@@ -35,8 +37,9 @@ class RoView() {
     private var tabCount = 0
 
     fun addTab(
-            title: String,
-            panel: Component) {
+        title: String,
+        panel: Component
+    ) {
         panel.addBsBorder(BsBorder.BORDER)
         val index = tabPanel.findTab(title)
         if (index != null) {
@@ -47,13 +50,20 @@ class RoView() {
         }
 
         val icon = IconManager.find(title)
+        val tab = RoTab(
+            title,
+            panel,
+            icon,
+            image = null,
+            closable = true
+        )
+        tab.addAfterInsertHook {
+            tab.getElement()?.unsafeCast<Element>()?.querySelector("i")?.addEventListener("click", {
+                console.log("icon clicked")
+            })
+        }
 
-        tabPanel.addTab(
-                title,
-                panel,
-                icon,
-                image = null,
-                closable = true)
+        tabPanel.add(tab)
         tabPanel.activeIndex = tabCount
         tabCount += 1
     }

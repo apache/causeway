@@ -18,6 +18,8 @@
  */
 package org.apache.isis.client.kroviz.ui.dialog
 
+import io.kvision.core.StringPair
+import io.kvision.form.select.SimpleSelect
 import io.kvision.form.text.Password
 import io.kvision.form.text.Text
 import org.apache.isis.client.kroviz.to.Link
@@ -38,7 +40,10 @@ class LoginPrompt : Command() {
 
     fun open() {
         val formItems = mutableListOf<FormItem>()
-        formItems.add(FormItem("Url", ValueType.TEXT, url))
+        val urlList = mutableListOf<StringPair>()
+        urlList.add(StringPair(Constants.demoUrl, Constants.demoUrl))
+        urlList.add(StringPair(Constants.demoUrlRemote, Constants.demoUrlRemote))
+        formItems.add(FormItem("Url", ValueType.SIMPLE_SELECT, urlList))
         formItems.add(FormItem("User", ValueType.TEXT, username))
         formItems.add(FormItem("Password", ValueType.PASSWORD, password))
         form = RoDialog(caption = "Connect", items = formItems, command = this, heightPerc = 27)
@@ -62,10 +67,11 @@ class LoginPrompt : Command() {
         //iterate over FormItems (0,1,2) but not Buttons(3,4)
         for (i in kids) {
             when (i) {
+                is SimpleSelect -> {
+                    url = i.getValue()!!
+                }
                 is Text -> {
                     key = i.label!!
-                    if (key == "Url")
-                        url = i.getValue()!!
                     if (key == "User")
                         username = i.getValue()!!
                 }

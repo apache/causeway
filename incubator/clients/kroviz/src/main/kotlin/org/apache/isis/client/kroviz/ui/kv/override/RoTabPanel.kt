@@ -71,7 +71,7 @@ enum class SideTabSize {
 open class RoTabPanel(
     protected val tabPosition: TabPosition = TabPosition.TOP,
     protected val sideTabSize: SideTabSize = SideTabSize.SIZE_3,
-    val scrollableTabs: Boolean = false,
+    val scrollableTabs: Boolean = true,
     val draggableTabs: Boolean = false,
     className: String? = null,
     init: (RoTabPanel.() -> Unit)? = null
