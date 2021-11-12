@@ -63,7 +63,14 @@ implements
      * (Future work, might introduce a new Type: eg. PARAMETER)
      */
     public static enum Type {
-        CLASS, PROPERTY_OR_COLLECTION, ACTION;
+        CLASS,
+        PROPERTY_OR_COLLECTION,
+        /**
+         * Mixed in <i>Properties</i> and mixed in <i>Collections</i> are both categorized
+         * as {@link #ACTION}
+         * @apiNote future work might deal with this ambiguity
+         */
+        ACTION;
         public boolean isAction() { return this == ACTION; }
         public boolean isPropertyOrCollection() { return this == PROPERTY_OR_COLLECTION; }
         public boolean isClass() { return this == CLASS; }

@@ -50,21 +50,21 @@ implements ManagedFeature {
     @RequiredArgsConstructor
     public static enum MemberType {
         PROPERTY(OneToOneAssociation.class, (spec, propertyId)->
-        spec.getAssociation(propertyId)
-        .map(property->property.isOneToOneAssociation()?property:null)),
+            spec.getAssociation(propertyId)
+            .map(property->property.isOneToOneAssociation()?property:null)),
 
         COLLECTION(OneToManyAssociation.class, (spec, collectionId)->
-        spec.getAssociation(collectionId)
-        .map(collection->collection.isOneToManyAssociation()?collection:null)),
+            spec.getAssociation(collectionId)
+            .map(collection->collection.isOneToManyAssociation()?collection:null)),
 
         ACTION(ObjectAction.class, (spec, actionId)->
-        spec.getAction(actionId));
+            spec.getAction(actionId));
 
         @Getter private final Class<? extends ObjectMember> memberType;
         private final BiFunction<
-                ObjectSpecification, String,
-                Optional<? extends ObjectMember>
-            > memberProvider;
+                ObjectSpecification,
+                String,
+                Optional<? extends ObjectMember>> memberProvider;
 
         public <T extends ObjectMember> Optional<T> lookup(
                 final @NonNull ManagedObject owner,
@@ -72,6 +72,11 @@ implements ManagedFeature {
             val onwerSpec = owner.getSpecification();
             val member = memberProvider.apply(onwerSpec, memberId);
             return _Casts.uncheckedCast(member);
+        }
+
+        public boolean isPropertyOrCollection() {
+            return this == PROPERTY
+                    || this == COLLECTION;
         }
 
     }

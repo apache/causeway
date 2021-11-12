@@ -34,7 +34,7 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObje
 public class DomainObjectEntityChangePublishingVm_publishingEnabledAnnotatedEntities {
 
     @SuppressWarnings("unused")
-    private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
+    private final DomainObjectEntityChangePublishingVm mixee;
 
     public List<? extends DomainObjectEntityChangePublishingEnabledEntity> coll() {
         return publishingEnabledEntities.all();
