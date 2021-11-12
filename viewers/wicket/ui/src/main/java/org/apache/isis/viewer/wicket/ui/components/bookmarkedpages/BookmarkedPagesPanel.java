@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.ui.components.bookmarkedpages;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -29,17 +30,12 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.Image;
-import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.Strings;
 
 import org.apache.isis.applib.exceptions.unrecoverable.ObjectNotFoundException;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.BookmarkTreeNode;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -113,50 +109,43 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
         }
 
         Wkt.listViewAdd(container, ID_BOOKMARKED_PAGE_ITEM, bookmarkedPagesModel, item->{
-            final BookmarkTreeNode node = item.getModelObject();
+            final BookmarkTreeNode bookmarkNode = item.getModelObject();
             try {
                 final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(PageType.ENTITY);
 
                 val clearBookmarkLink = Wkt.linkAdd(item, ID_CLEAR_BOOKMARK_LINK, target->{
-                    bookmarkedPagesModel.remove(node);
+                    bookmarkedPagesModel.remove(bookmarkNode);
                     if(bookmarkedPagesModel.isEmpty()) {
                         permanentlyHide(CLEAR_BOOKMARKS);
                     }
                     target.add(container, clearAllBookmarksLink);
                 });
-                if(node.getDepth() == 0) {
+
+                if(bookmarkNode.getDepth() == 0) {
                     Wkt.cssAppend(clearBookmarkLink, "clearBookmark");
                 } else {
                     clearBookmarkLink.setEnabled(true);
                 }
 
-                PageParameters pageParameters = node.getPageParameters();
-                final AbstractLink link = Links.newBookmarkablePageLink(ID_BOOKMARKED_PAGE_LINK, pageParameters, pageClass);
+                val link = Wkt.add(item, Links.newBookmarkablePageLink(ID_BOOKMARKED_PAGE_LINK,
+                                bookmarkNode.getPageParameters(),
+                                pageClass));
 
-                ObjectSpecification objectSpec = null;
-                val oid = node.getOidNoVer();
-                if(oid != null) {
-                    objectSpec = getSpecificationLoader().specForLogicalTypeName(oid.getLogicalTypeName())
-                            .orElse(null);
-                }
-                final ResourceReference imageResource = getImageResourceCache().resourceReferenceForSpec(objectSpec);
-                final Image image = new Image(ID_BOOKMARKED_PAGE_ICON, imageResource) {
-                    private static final long serialVersionUID = 1L;
-                    @Override
-                    protected boolean shouldAddAntiCacheParameter() {
-                        return false;
-                    }
-                };
-                link.addOrReplace(image);
+                Optional.ofNullable(bookmarkNode.getOidNoVer())
+                .flatMap(oid->getSpecificationLoader().specForLogicalTypeName(oid.getLogicalTypeName()))
+                .ifPresent(objectSpec->{
+                    Wkt.imageAddCachable(link, ID_BOOKMARKED_PAGE_ICON,
+                            getImageResourceCache().resourceReferenceForSpec(objectSpec));
+                });
 
-                Wkt.labelAdd(link, ID_BOOKMARKED_PAGE_TITLE, node.getTitle());
+                Wkt.labelAdd(link, ID_BOOKMARKED_PAGE_TITLE, bookmarkNode.getTitle());
 
 //XXX seems broken when there is only one bookmark entry;
 // an alternative idea would be to render the item differently eg. bold, but don't disable it
 //                    if(bookmarkedPagesModel.isCurrent(pageParameters)) {
 //                        item.add(new CssClassAppender("disabled"));
 //                    }
-                Wkt.cssAppend(item, "bookmarkDepth" + node.getDepth());
+                Wkt.cssAppend(item, "bookmarkDepth" + bookmarkNode.getDepth());
             } catch(ObjectNotFoundException ex) {
                 // ignore
                 // this is a partial fix for an infinite redirect loop.

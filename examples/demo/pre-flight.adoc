@@ -64,29 +64,29 @@ _For mixins, override the default method name_
 
 WARNING: Returns scalar of: `void`
 
-==== Nature Stateful
+==== Nature Stateful ✔ 
 
 _@DomainObject(nature=VIEW_MODEL) for a Stateful View Model_
 
 Returns scalar of: `demo.StatefulVmUsingJaxb`
 
-===== FieldSet 
-
-* [ ] Property `Sources` 
-
-===== FieldSet Demo
-
-* [ ] Property `Message` 
-
-===== FieldSet Referenced Property
-
 ===== Collection Children
+* [x] Test: add Child(ren) 
+* [ ] Test: open a Child, then return to previous page (browser back button)
 
-===== FieldSet Description
-
-* [ ] Action `Clear Hints` 
-
-* [ ] Property `Description` 
+[IMPORTANT]
+====
+ Caused by: java.util.NoSuchElementException: sources
+ 	at org.apache.isis.commons.internal.exceptions._Exceptions.noSuchElement(_Exceptions.java:110) ~[classes/:?]
+	at org.apache.isis.viewer.wicket.model.models.interaction.prop.PropertyInteractionWkt.lambda$1(PropertyInteractionWkt.java:80) ~[classes/:?]
+	at java.util.Optional.orElseThrow(Optional.java:408) ~[?:?]
+	at org.apache.isis.viewer.wicket.model.models.interaction.prop.PropertyInteractionWkt.load(PropertyInteractionWkt.java:80) ~[classes/:?]
+	at org.apache.isis.viewer.wicket.model.models.interaction.prop.PropertyInteractionWkt.load(PropertyInteractionWkt.java:1) ~[classes/:?]
+	at org.apache.wicket.model.LoadableDetachableModel.getObject(LoadableDetachableModel.java:128) ~[wicket-core-8.13.0.jar:8.13.0]
+	at org.apache.wicket.model.ChainingModel.getObject(ChainingModel.java:95) ~[wicket-core-8.13.0.jar:8.13.0]
+	at org.apache.isis.viewer.wicket.model.models.interaction.prop.PropertyUiModelWkt.propertyInteraction(PropertyUiModelWkt.java:61) ~[classes/:?]
+==== 
+* [x] Test: remove Child(ren)
 
 ==== Nature Stateful Refs Entity
 
