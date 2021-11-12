@@ -114,7 +114,7 @@ extends AbstractFacetFactoryTest {
         if(maxFractionalDigits>=0) {
             final MaxFractionalDigitsFacet facet = facetedMethod.getFacet(MaxFractionalDigitsFacet.class);
             assertNotNull(facet);
-            assertTrue(facet instanceof MaxFractionDigitsFacetInferredFromJdoColumn);
+            assertTrue(facet instanceof MaxFractionalDigitsFacetFromJdoColumn);
             assertThat(facet.getMaxFractionalDigits(), is(maxFractionalDigits));
         } else {
             assertNull(facetedMethod.getFacet(MaxFractionalDigitsFacet.class));

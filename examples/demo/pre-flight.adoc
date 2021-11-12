@@ -80,6 +80,7 @@ Returns scalar of: `demo.StatefulVmUsingJaxb`
 * [ ] Test: click on the viewmodel's title, should render the very same thing
 
 IMPORTANT: renders an empty object (JAXB serialization is not working as expected here)   
+
 * [ ] Test: open a Child, then return to previous page (browser back button)
 
 [IMPORTANT]

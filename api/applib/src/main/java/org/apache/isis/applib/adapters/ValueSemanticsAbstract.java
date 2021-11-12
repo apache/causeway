@@ -130,9 +130,7 @@ implements
         }
         val format = getNumberFormat(context);
         format.setParseBigDecimal(true);
-        System.err.printf("before configure %d%n", format.getMaximumFractionDigits()); //FIXME[ISIS-2741] debug remove
         configureDecimalFormat(context, format);
-        System.err.printf("after configure %d%n", format.getMaximumFractionDigits()); //FIXME[ISIS-2741] debug remove
 
         val position = new ParsePosition(0);
         try {

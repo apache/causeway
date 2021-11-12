@@ -1,0 +1,73 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.apache.isis.core.metamodel.facets.objectvalue.digits;
+
+import java.math.BigDecimal;
+import java.util.Optional;
+import java.util.OptionalInt;
+
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+
+import lombok.val;
+
+/**
+ * With {@link BigDecimal}, both JDO and JPA, if left unspecified,
+ * default their max-fractional digits to 0.
+ * (However, I could not find specific documents to support this claim.)
+ *
+ * @apiNote This facet should be applied in the absence of a corresponding {@code @Column} annotation,
+ * but only for properties of type {@link BigDecimal} that appear within a (persistable) entity.
+ * However, entities might extend abstract classes, where the framework - on type introspection -
+ * cannot distinguish entity from non-entity type.
+ * It is safe to assume that mixed-in properties are not to consider here.
+ */
+public class MaxFractionalDigitsFacetForPersistentBigDecimalWhenUnspecified
+extends MaxFractionalDigitsFacetAbstract {
+
+    public static Optional<MaxFractionalDigitsFacet> create(
+            final OptionalInt scaleIfAny,
+            final ProcessMethodContext processMethodContext,
+            final IsisBeanTypeRegistry beanTypeRegistry) {
+
+        val cls = processMethodContext.getCls();
+        val facetHolder = processMethodContext.getFacetHolder();
+
+        // only applies in a very specific context, see class java-doc
+        if(facetHolder.getFeatureType().isProperty()
+                || !processMethodContext.getMethod().getReturnType().equals(BigDecimal.class)
+                || !beanTypeRegistry.getEntityTypes().contains(cls)) {
+            return Optional.empty();
+        }
+
+        final int scale = scaleIfAny.orElse(-1);
+
+        return scale<0
+                ? Optional.of(new MaxFractionalDigitsFacetForPersistentBigDecimalWhenUnspecified(
+                        facetHolder))
+                : Optional.empty();
+    }
+
+    private MaxFractionalDigitsFacetForPersistentBigDecimalWhenUnspecified(
+            final FacetHolder holder) {
+        super(0, holder);
+    }
+
+}

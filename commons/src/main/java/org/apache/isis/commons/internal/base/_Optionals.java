@@ -19,7 +19,9 @@
 package org.apache.isis.commons.internal.base;
 
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.function.Supplier;
+import java.util.function.ToIntFunction;
 
 import lombok.experimental.UtilityClass;
 
@@ -41,5 +43,13 @@ public class _Optionals {
         return orNullable(orNullable(a, b), c);
     }
 
+
+    public <T> OptionalInt toInt(
+            final Optional<T> optional,
+            final ToIntFunction<? super T> mapper) {
+        return optional.isPresent()
+            ? OptionalInt.of(mapper.applyAsInt(optional.get()))
+            : OptionalInt.empty();
+    }
 
 }

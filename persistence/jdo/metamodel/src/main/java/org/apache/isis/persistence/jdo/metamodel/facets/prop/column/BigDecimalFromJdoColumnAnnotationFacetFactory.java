@@ -19,17 +19,21 @@
 package org.apache.isis.persistence.jdo.metamodel.facets.prop.column;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 
+import org.apache.isis.commons.internal.base._Optionals;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetForPersistentBigDecimalWhenUnspecified;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -44,9 +48,12 @@ public class BigDecimalFromJdoColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
+    private Optional<IsisBeanTypeRegistry> beanTypeRegistryIfAny; // JUnit support (allowed to be empty)
+
     @Inject
     public BigDecimalFromJdoColumnAnnotationFacetFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.PROPERTIES_ONLY);
+        beanTypeRegistryIfAny = mmc.getServiceRegistry().lookupService(IsisBeanTypeRegistry.class);
     }
 
     @Override
@@ -65,8 +72,16 @@ implements MetaModelRefiner {
                 .create(jdoColumnIfAny, holder));
 
         addFacetIfPresent(
-                MaxFractionDigitsFacetInferredFromJdoColumn
+                MaxFractionalDigitsFacetFromJdoColumn
                 .create(jdoColumnIfAny, holder));
+
+        // adds additional constraints if applicable
+        beanTypeRegistryIfAny.ifPresent(beanTypeRegistry->{
+            addFacetIfPresent(
+                    MaxFractionalDigitsFacetForPersistentBigDecimalWhenUnspecified
+                    .create(_Optionals.toInt(jdoColumnIfAny, Column::scale), processMethodContext, beanTypeRegistry));
+        });
+
     }
 
     @Override
