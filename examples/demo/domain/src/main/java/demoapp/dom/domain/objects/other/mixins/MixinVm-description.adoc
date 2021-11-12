@@ -2,7 +2,7 @@
 
 
 Mixins allow domain object behaviour to be encapsulated as a separate class.
-This behaviour isthen contributed to a target object as an action, property or collection.
+This behaviour is then contributed to a target object as an action, property or collection.
 
 Mixins only contribute behaviour, not state.
 In the case of a contributed property or collection, these are in effect _derived_.

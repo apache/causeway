@@ -1,6 +1,18 @@
-= Site-Map
+= Demo Pre-Flight Checklist
 
 :sectnums:
+
+[NOTE]
+====
+The entire checklist originates from a template export of the _Demo App_ itself.
+
+(Level 3) sections - once edited - are marked with a ✏, 
+to distinguish them from the yet untouched auto-generated ones.
+
+Once all sections have been edited, the ✏ marker can be removed.
+
+✔ indicates a section where all checks are green-lighted.
+==== 
 
 == Domain Objects
 
@@ -24,11 +36,13 @@ _Default editability of properties_
 
 WARNING: Returns scalar of: `void`
 
-==== Entity Change Publishing
+==== Entity Change Publishing ✏
 
 _Entity changed events as XML_
 
 Returns scalar of: `demo.DomainObjectEntityChangePublishingVm`
+
+WARNING: _Work in Progress_ - should show pretty rendered Change Publishing DTOs, but yet does not 
 
 ===== Top-Bar
 
@@ -40,9 +54,6 @@ Returns scalar of: `demo.DomainObjectEntityChangePublishingVm`
 
 * [ ] Action `Clear` 
 
-===== FieldSet 
-
-* [ ] Property `Sources` 
 
 ===== Collection Publishing Enabled Annotated Entities
 
@@ -52,26 +63,23 @@ Returns scalar of: `demo.DomainObjectEntityChangePublishingVm`
 
 ===== Collection Publishing Enabled Meta Annot Overridden Entities
 
-===== FieldSet Description
-
-* [ ] Action `Clear Hints` 
-
-* [ ] Property `Description` 
-
 ==== Mixin Method
 
 _For mixins, override the default method name_
 
 WARNING: Returns scalar of: `void`
 
-==== Nature Stateful ✔ 
+==== Nature Stateful ✏ 
 
 _@DomainObject(nature=VIEW_MODEL) for a Stateful View Model_
 
 Returns scalar of: `demo.StatefulVmUsingJaxb`
 
 ===== Collection Children
-* [x] Test: add Child(ren) 
+* [x] Test: add Child(ren)
+* [ ] Test: click on the viewmodel's title, should render the very same thing
+
+IMPORTANT: renders an empty object (JAXB serialization is not working as expected here)   
 * [ ] Test: open a Child, then return to previous page (browser back button)
 
 [IMPORTANT]
@@ -88,19 +96,11 @@ Returns scalar of: `demo.StatefulVmUsingJaxb`
 ==== 
 * [x] Test: remove Child(ren)
 
-==== Nature Stateful Refs Entity
+==== Nature Stateful Refs Entity ✏
 
 _@DomainObject(nature=VIEW_MODEL) for a Stateful View Model referencing an entity_
 
 Returns scalar of: `demo.StatefulViewModelJaxbRefsEntity`
-
-===== FieldSet 
-
-* [ ] Property `Sources` 
-
-===== FieldSet General
-
-* [ ] Property `Message` 
 
 ===== FieldSet Other
 
@@ -108,11 +108,7 @@ Returns scalar of: `demo.StatefulViewModelJaxbRefsEntity`
 
 ===== Collection Children
 
-===== FieldSet Description
-
-* [ ] Action `Clear Hints` 
-
-* [ ] Property `Description` 
+WARNING: Demo not implemented.
 
 ==== Logical Type Name
 
@@ -184,49 +180,38 @@ WARNING: Returns scalar of: `void`
 
 === Other
 
-==== Mixins
+==== Mixins ✏✔
 
 _Contribute behaviour to domain objects_
 
 Returns scalar of: `demo.MixinVm`
 
-===== FieldSet 
-
-* [ ] Property `Sources` 
+* [x] Test: click on the viewmodel's title, should render the very same thing
 
 ===== FieldSet Actions
 
-* [ ] Property `Count` 
+* [x] Property `Count` should be rendered readonly with value `10` 
 
 ===== FieldSet Properties
 
-* [ ] Property `Explanation` 
+* [x] Property `Explanation` should be rendered readonly with value `The collection shows the first 10 fibonacci numbers` 
 
 ===== Collection Fibonacci Sequence
 
-===== FieldSet Description
+* [x] Table should be rendered with two columns `Number` and `Fibonacci` showing the first 10 of the sequence. Last = {10, 55}. 
 
-* [ ] Action `Clear Hints` 
-
-* [ ] Property `Description` 
-
-==== Embedded Types
+==== Embedded Types ✏
 
 _Experimental support for embedded types_
 
 Returns scalar of: `demo.EmbeddedTypeVm`
 
-===== FieldSet 
-
-* [ ] Property `Sources` 
+WARNING: _Work in Progress_ `ISIS-2877` - Support for Value Type Composition
 
 ===== Collection All Constants
 
-===== FieldSet Description
+* [ ] Table should be rendered with 3 value-type entries, that have an icon and a title 
 
-* [ ] Action `Clear Hints` 
-
-* [ ] Property `Description` 
 
 == Actions
 
