@@ -51,15 +51,12 @@ extends MaxFractionalDigitsFacetAbstract {
         val facetHolder = processMethodContext.getFacetHolder();
 
         // only applies in a very specific context, see class java-doc
-        if(facetHolder.getFeatureType().isProperty()
-                || !processMethodContext.getMethod().getReturnType().equals(BigDecimal.class)
-                || !beanTypeRegistry.getEntityTypes().contains(cls)) {
-            return Optional.empty();
-        }
+        val isApplicable = scaleIfAny.orElse(-1)<0
+                && facetHolder.getFeatureType().isProperty()
+                && processMethodContext.getMethod().getReturnType().equals(BigDecimal.class)
+                && beanTypeRegistry.getEntityTypes().contains(cls);
 
-        final int scale = scaleIfAny.orElse(-1);
-
-        return scale<0
+        return isApplicable
                 ? Optional.of(new MaxFractionalDigitsFacetForPersistentBigDecimalWhenUnspecified(
                         facetHolder))
                 : Optional.empty();
