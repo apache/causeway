@@ -20,15 +20,27 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath;
 
 import java.math.BigDecimal;
 
+import org.apache.isis.core.metamodel.facets.object.value.ValueRepresentation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ConverterBasedOnValueSemantics;
+
+import lombok.NonNull;
 
 public class BigDecimalConverterForFeature
 extends ConverterBasedOnValueSemantics<BigDecimal> {
 
     private static final long serialVersionUID = 1L;
 
-    protected BigDecimalConverterForFeature(final ObjectFeature propOrParam) {
-        super(propOrParam);
+    public BigDecimalConverterForFeature(
+            final @NonNull ScalarModel scalarModel) {
+        super(scalarModel);
     }
+
+    public BigDecimalConverterForFeature(
+            final @NonNull ObjectFeature objFeature,
+            final @NonNull ValueRepresentation valueRepresentation) {
+        super(objFeature, valueRepresentation);
+    }
+
 }

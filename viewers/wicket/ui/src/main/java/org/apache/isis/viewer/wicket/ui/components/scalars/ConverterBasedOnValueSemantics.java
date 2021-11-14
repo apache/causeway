@@ -27,13 +27,16 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueRepresentation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 
+import lombok.NonNull;
 import lombok.Synchronized;
 import lombok.val;
 
@@ -45,10 +48,20 @@ implements
     private static final long serialVersionUID = 1L;
 
     private final Identifier featureIdentifier;
+    private final ValueRepresentation valueRepresentation;
     private transient _Either<OneToOneAssociation,  ObjectActionParameter> propOrParam;
     private transient IsisAppCommonContext commonContext;
 
-    protected ConverterBasedOnValueSemantics(final ObjectFeature propOrParam) {
+    protected ConverterBasedOnValueSemantics(final ScalarModel scalarModel) {
+        this(scalarModel.getMetaModel(), scalarModel.isEditMode()
+                ? ValueRepresentation.EDITING
+                : ValueRepresentation.RENDERING);
+    }
+
+    protected ConverterBasedOnValueSemantics(
+            final @NonNull ObjectFeature propOrParam,
+            final @NonNull ValueRepresentation valueRepresentation) {
+        this.valueRepresentation = valueRepresentation;
         this.propOrParam = propOrParam instanceof OneToOneAssociation // memoize
                 ? _Either.left((OneToOneAssociation)propOrParam)
                 : _Either.right((ObjectActionParameter)propOrParam);
@@ -61,6 +74,14 @@ implements
      */
     @Override
     public final T convertToObject(final String text, final Locale locale) throws ConversionException {
+
+        // guard against framework bugs
+        if(valueRepresentation.isRendering()) {
+            throw _Exceptions.illegalArgument("Internal Error: "
+                    + "cannot convert a rendering representation back to its value-type '%s' -> %s",
+                        text,
+                        featureIdentifier);
+        }
 
         val feature = feature();
         val valueFacet = valueFacet();
@@ -93,8 +114,19 @@ implements
         val context = valueFacet
                 .createValueSemanticsContext(feature);
 
-        return valueFacet.selectParserForFeatureElseFallback(feature)
-                .parseableTextRepresentation(context, value);
+        switch(valueRepresentation) {
+        case EDITING:
+            return valueFacet.selectParserForFeatureElseFallback(feature)
+                    .parseableTextRepresentation(context, value);
+        case RENDERING:
+            return propOrParam.fold(
+                    prop->valueFacet.selectRendererForPropertyElseFallback(prop)
+                            .simpleTextPresentation(context, value),
+                    param->valueFacet.selectRendererForParameterElseFallback(param)
+                            .simpleTextPresentation(context, value));
+        }
+
+        throw _Exceptions.unmatchedCase(valueRepresentation);
     }
 
     // -- HELPER

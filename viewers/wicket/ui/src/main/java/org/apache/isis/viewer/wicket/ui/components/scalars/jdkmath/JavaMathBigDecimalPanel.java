@@ -55,10 +55,7 @@ extends ScalarPanelTextFieldNumeric<BigDecimal> {
 
     @Override
     protected IConverter<BigDecimal> getConverter(final ScalarModel scalarModel) {
-
-        // honor when not scalarModel.isEditMode()
-
-        return new BigDecimalConverterForFeature(scalarModel.getMetaModel());
+        return new BigDecimalConverterForFeature(scalarModel);
     }
 }
 

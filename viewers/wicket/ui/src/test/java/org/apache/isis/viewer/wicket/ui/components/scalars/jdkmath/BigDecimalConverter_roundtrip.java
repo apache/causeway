@@ -39,6 +39,7 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facets.object.value.ValueRepresentation;
 import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.isis.core.security._testing.InteractionService_forTesting;
 
@@ -178,7 +179,7 @@ class BigDecimalConverter_roundtrip {
     private BigDecimalConverterForFeature newConverter(final Class<?> type) {
         val customerSpec = mmc.getSpecificationLoader().specForTypeElseFail(type);
         val prop = customerSpec.getPropertyElseFail("value");
-        return new BigDecimalConverterForFeature(prop);
+        return new BigDecimalConverterForFeature(prop, ValueRepresentation.EDITING);
     }
 
 }

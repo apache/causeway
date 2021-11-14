@@ -66,7 +66,9 @@ implements TitleFacet {
             val prop = (OneToOneAssociation)renderRequest.getFeature();
             final Renderer renderer = valueFacet
                     .selectRendererForPropertyElseFallback(prop);
-            return renderer.simpleTextPresentation(valueFacet.createValueSemanticsContext(prop), pojo);
+            return renderer
+                    .simpleTextPresentation(valueFacet
+                            .createValueSemanticsContext(prop), pojo);
         }
         if(renderRequest.getFeature() instanceof ObjectActionParameter) {
             val param = (ObjectActionParameter)renderRequest.getFeature();

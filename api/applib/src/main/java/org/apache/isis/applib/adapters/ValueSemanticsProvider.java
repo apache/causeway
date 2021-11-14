@@ -19,6 +19,8 @@
 
 package org.apache.isis.applib.adapters;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
@@ -50,8 +52,8 @@ public interface ValueSemanticsProvider<T> {
 
     @lombok.Value(staticConstructor = "of")
     class Context {
-        Identifier featureIdentifier;
-        InteractionContext interactionContext;
+        private final @Nullable Identifier featureIdentifier;
+        private final @Nullable InteractionContext interactionContext;
     }
 
     Class<T> getCorrespondingClass();
