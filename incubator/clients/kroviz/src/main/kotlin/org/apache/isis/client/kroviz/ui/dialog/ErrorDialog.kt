@@ -19,9 +19,7 @@
 package org.apache.isis.client.kroviz.ui.dialog
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.to.Http401Error
-import org.apache.isis.client.kroviz.to.HttpError
-import org.apache.isis.client.kroviz.to.HttpResponse
+import org.apache.isis.client.kroviz.to.HttpErrorResponse
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
@@ -29,7 +27,7 @@ import org.apache.isis.client.kroviz.ui.core.RoDialog
 class ErrorDialog(val logEntry: LogEntry) : Command() {
 
     fun open() {
-        val error = logEntry.getTransferObject() as HttpResponse
+        val error = logEntry.getTransferObject() as HttpErrorResponse
         val formItems = mutableListOf<FormItem>()
         formItems.add(FormItem("URL", ValueType.TEXT, logEntry.url))
         formItems.add(FormItem("Message", ValueType.TEXT, error.getMessage()))

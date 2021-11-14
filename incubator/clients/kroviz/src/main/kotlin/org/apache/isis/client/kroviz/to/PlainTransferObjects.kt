@@ -34,7 +34,7 @@ data class DomainTypes(override val links: List<Link> = emptyList(),
                        val extensions: Extensions? = null
 ) : TransferObject, HasLinks
 
-interface HttpResponse {
+interface HttpErrorResponse {
     val detail: HttpErrorDetail?
     fun getMessage(): String
     fun getStatusCode(): Int
@@ -45,7 +45,7 @@ data class HttpError(
     private val httpStatusCode: Int,
     private val message: String,
     override val detail: HttpErrorDetail? = null
-) : TransferObject, HttpResponse {
+) : TransferObject, HttpErrorResponse {
     override fun getMessage() : String {
         return message
     }
@@ -69,7 +69,7 @@ data class Http401Error(
     private val error: String,
     private val path: String,
     override val detail: HttpErrorDetail? = null
-) : TransferObject, HttpResponse {
+) : TransferObject, HttpErrorResponse {
     override fun getMessage(): String {
         return error + " / " + path + " / " + timestamp
     }
