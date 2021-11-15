@@ -71,6 +71,7 @@ import org.apache.isis.testdomain.model.good.ElementTypeInterface;
 import org.apache.isis.testdomain.model.good.ProperChoicesWhenChoicesFrom;
 import org.apache.isis.testdomain.model.good.ProperElementTypeVm;
 import org.apache.isis.testdomain.model.good.ProperFullyImpl;
+import org.apache.isis.testdomain.model.good.ProperGenericImpl;
 import org.apache.isis.testdomain.model.good.ProperInterface2;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritanceInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingAbstract;
@@ -210,6 +211,13 @@ class DomainModelTest_usingGoodDomain {
         tester.assertIcon("icon");
         tester.assertCssClass("css");
         tester.assertLayout("layout");
+    }
+
+    @Test
+    void genericInterface_whenImplemented_shouldBeSupported() {
+        val tester = testerFactory.propertyTester(ProperGenericImpl.class, "value");
+        tester.assertExists(true);
+        tester.assertValue("aValue");
     }
 
     @ParameterizedTest
