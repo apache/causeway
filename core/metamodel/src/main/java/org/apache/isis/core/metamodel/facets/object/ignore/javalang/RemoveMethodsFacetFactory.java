@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -89,14 +90,21 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
         .forEach(method->{
             // remove synthetic methods (except when is a mixin)
             // (it seems that javac marks methods synthetic in the context of non-static inner classes)
+
             if (!isConcreteMixin
-                    && method.isSynthetic()) {
+                    //FIXME[ISIS-2894] method.isSynthetic() seems a bad indicator for nested inner,
+                    // perhaps find a better way
+                    && method.isSynthetic()
+                    // workaround ... don't remove getters, even if synthetic
+                    && !ProgrammingModelConstants.AccessorPrefix.isGetter(method)) {
                 processClassContext.removeMethod(method);
+                return;
             }
 
             // removeJavaLangComparable(processClassContext);
             if(method.getName().equals("compareTo")) {
                 processClassContext.removeMethod(method);
+                return;
             }
 
             // remove property setter, if has not explicitly an @Action annotation
@@ -108,6 +116,7 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
 
                 if(!_Annotations.synthesize(method, Action.class).isPresent()) {
                     processClassContext.removeMethod(method);
+                    return;
                 }
             }
         });
