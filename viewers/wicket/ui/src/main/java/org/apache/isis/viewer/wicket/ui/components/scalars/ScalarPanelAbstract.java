@@ -44,6 +44,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -367,7 +368,7 @@ implements ScalarModelSubscriber {
 
         // prevent from tabbing into non-editable widgets.
         if(scalarModel.isProperty()
-                && scalarModel.getMode() == EntityModel.EitherViewOrEdit.VIEW
+                && scalarModel.getMode() == ScalarRepresentation.VIEWING
                 && (scalarModel.getPromptStyle().isDialog()
                         || !scalarModel.canEnterEditMode())) {
             getScalarValueComponent().add(new AttributeAppender("tabindex", "-1"));

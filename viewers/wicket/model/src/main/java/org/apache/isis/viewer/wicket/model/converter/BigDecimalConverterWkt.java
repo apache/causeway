@@ -20,9 +20,8 @@ package org.apache.isis.viewer.wicket.model.converter;
 
 import java.math.BigDecimal;
 
-import org.apache.isis.core.metamodel.facets.object.value.ValueRepresentation;
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.NonNull;
 
@@ -32,14 +31,9 @@ extends ConverterBasedOnValueSemantics<BigDecimal> {
     private static final long serialVersionUID = 1L;
 
     public BigDecimalConverterWkt(
-            final @NonNull ScalarModel scalarModel) {
-        super(scalarModel);
-    }
-
-    public BigDecimalConverterWkt(
             final @NonNull ObjectFeature objFeature,
-            final @NonNull ValueRepresentation valueRepresentation) {
-        super(objFeature, valueRepresentation);
+            final @NonNull ScalarRepresentation scalarRepresentation) {
+        super(objFeature, scalarRepresentation);
     }
 
 }

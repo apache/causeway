@@ -23,10 +23,14 @@ import java.math.BigInteger;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.util.convert.IConverter;
 
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.converter.BigIntegerConverterWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+
+import lombok.NonNull;
 
 /**
  * Panel for rendering scalars of type {@link BigInteger}.
@@ -52,8 +56,10 @@ extends ScalarPanelTextFieldNumeric<BigInteger> {
     }
 
     @Override
-    protected IConverter<BigInteger> getConverter(final ScalarModel scalarModel) {
-        return new BigIntegerConverterWkt(scalarModel);
+    protected IConverter<BigInteger> getConverter(
+            final @NonNull ObjectFeature propOrParam,
+            final @NonNull ScalarRepresentation scalarRepresentation) {
+        return new BigIntegerConverterWkt(propOrParam, scalarRepresentation);
     }
 
 }

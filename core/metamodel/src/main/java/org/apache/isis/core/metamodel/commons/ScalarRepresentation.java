@@ -16,31 +16,37 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.value;
+package org.apache.isis.core.metamodel.commons;
 
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 
 /**
  * Introduced specifically for value-types.
- *
- * @apiNote there are similarities with org.apache.isis.viewer.common.model.object.ObjectUiModel.EitherViewOrEdit,
- * which is not specific to value-types, but covers any scalars;
- * (thinking about unifying these two into one - more generic - enum)
  */
-public enum ValueRepresentation {
+public enum ScalarRepresentation {
 
-    /** Indicates that for value-type to {@link String} conversion a {@link Parser} is required. */
+    /**
+     * Editing (parsing) mode, corresponds to 'regular' UI components.
+     * <p>
+     * In case of value-types, indicates that for value-type to {@link String} conversion,
+     * a {@link Parser} is required.
+     */
     EDITING,
 
-    /** Indicates that for value-type to {@link String} conversion a {@link Renderer} is required. */
-    RENDERING;
+    /**
+     * Viewing (rendering) mode, corresponds to 'compact' UI components.
+     * <p>
+     * In case of value-types, indicates that for value-type to {@link String} conversion,
+     * a {@link Renderer} is required.
+     */
+    VIEWING;
 
     public boolean isEditing() {
         return this == EDITING;
     }
 
     public boolean isRendering() {
-        return this == RENDERING;
+        return this == VIEWING;
     }
 }

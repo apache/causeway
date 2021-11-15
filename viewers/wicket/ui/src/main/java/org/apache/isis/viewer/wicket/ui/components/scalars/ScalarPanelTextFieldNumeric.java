@@ -24,9 +24,12 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
 
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -58,11 +61,18 @@ extends ScalarPanelTextFieldAbstract<T> {
         return super.toStringConvertingModelOf(getConverter(scalarModel));
     }
 
+    protected final IConverter<T> getConverter(final ScalarModel scalarModel) {
+        return getConverter(scalarModel.getMetaModel(), scalarModel.isEditMode()
+                ? ScalarRepresentation.EDITING
+                : ScalarRepresentation.VIEWING);
+    }
+
     /**
-     * The converter that is going to be used for the regular view of the panel, i.e. for the text field.
-     * The same converter should be used to render the compact view as well, to show the same precision and scale
-     * for the floating point types
+     * Converter that is used for the either regular (editing) or compact (HTML) view of the panel,
+     * based on argument {@code scalarRepresentation}.
      */
-    protected abstract IConverter<T> getConverter(final ScalarModel scalarModel);
+    protected abstract IConverter<T> getConverter(
+            @NonNull ObjectFeature propOrParam,
+            @NonNull ScalarRepresentation scalarRepresentation);
 
 }

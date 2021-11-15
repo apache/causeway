@@ -18,15 +18,20 @@
  */
 package org.apache.isis.viewer.wicket.model.converter;
 
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
+
+import lombok.NonNull;
 
 public class ByteConverterWkt
 extends ConverterBasedOnValueSemantics<Byte> {
 
     private static final long serialVersionUID = 1L;
 
-    public ByteConverterWkt(final ScalarModel scalarModel) {
-        super(scalarModel);
+    public ByteConverterWkt(
+            final @NonNull ObjectFeature objFeature,
+            final @NonNull ScalarRepresentation scalarRepresentation) {
+        super(objFeature, scalarRepresentation);
     }
 
 }

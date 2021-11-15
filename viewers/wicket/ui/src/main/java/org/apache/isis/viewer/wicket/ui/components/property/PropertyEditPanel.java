@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.property;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -51,7 +52,7 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
             final ScalarPropertyModel scalarModel) {
 
         super(id, scalarModel.copyHaving(
-                EntityModel.EitherViewOrEdit.EDIT,
+                ScalarRepresentation.EDITING,
                 EntityModel.RenderingHint.REGULAR));
 
         buildGui(scalarModel);

@@ -24,6 +24,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
@@ -60,8 +61,8 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         addSimpleClipboardModalWindow();
 
         EntityModel.RenderingHint renderingHint = model.getRenderingHint();
-        EntityModel.EitherViewOrEdit mode = model.getMode();
-        setVisible(renderingHint == EntityModel.RenderingHint.REGULAR && mode == EntityModel.EitherViewOrEdit.VIEW);
+        ScalarRepresentation mode = model.getMode();
+        setVisible(renderingHint == EntityModel.RenderingHint.REGULAR && mode == ScalarRepresentation.VIEWING);
 
         // disable, since currently not honoured if used as a URL (think that session hints are taking precedence).
         // (see ISIS-1660 to resurrect)

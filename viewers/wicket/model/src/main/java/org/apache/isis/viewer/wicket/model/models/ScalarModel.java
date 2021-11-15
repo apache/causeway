@@ -27,6 +27,7 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
@@ -36,7 +37,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.feature.ScalarUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
-import org.apache.isis.viewer.common.model.object.ObjectUiModel.EitherViewOrEdit;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -81,7 +81,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
-    private EitherViewOrEdit mode;
+    private ScalarRepresentation mode;
 
     @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
@@ -95,7 +95,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     protected ScalarModel(
             final EntityModel parentEntityModel) {
         this(EitherParamOrProp.PARAMETER,
-                parentEntityModel, EitherViewOrEdit.EDIT, RenderingHint.REGULAR);
+                parentEntityModel, ScalarRepresentation.EDITING, RenderingHint.REGULAR);
     }
 
     /**
@@ -105,7 +105,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
      */
     protected ScalarModel(
             final EntityModel parentEntityModel,
-            final ObjectUiModel.EitherViewOrEdit viewOrEdit,
+            final ScalarRepresentation viewOrEdit,
             final ObjectUiModel.RenderingHint renderingHint) {
         this(EitherParamOrProp.PROPERTY,
                 parentEntityModel, viewOrEdit, renderingHint);
@@ -114,7 +114,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     private ScalarModel(
             final @NonNull EitherParamOrProp paramOrProp,
             final @NonNull EntityModel parentEntityModel,
-            final @NonNull ObjectUiModel.EitherViewOrEdit viewOrEdit,
+            final @NonNull ScalarRepresentation viewOrEdit,
             final @NonNull ObjectUiModel.RenderingHint renderingHint) {
 
         super(parentEntityModel); // the so called target model, we are chaining us to
@@ -311,7 +311,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
      * @return <tt>true</tt> if the widget for this model must be editable.
      */
     public boolean mustBeEditable() {
-        return getMode() == EitherViewOrEdit.EDIT
+        return getMode() == ScalarRepresentation.EDITING
                 || getParamOrProp() == EitherParamOrProp.PARAMETER
                 || hasAssociatedActionWithInlineAsIfEdit();
     }

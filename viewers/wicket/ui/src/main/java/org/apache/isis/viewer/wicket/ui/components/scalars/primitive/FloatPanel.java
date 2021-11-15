@@ -21,10 +21,14 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.util.convert.IConverter;
 
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.converter.FloatConverterWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+
+import lombok.NonNull;
 
 /**
  * Panel for rendering scalars of type {@link Float} or <tt>float</tt>.
@@ -49,8 +53,10 @@ public class FloatPanel extends ScalarPanelTextFieldNumeric<Float> {
     }
 
     @Override
-    protected IConverter<Float> getConverter(final ScalarModel scalarModel) {
-        return new FloatConverterWkt(scalarModel);
+    protected IConverter<Float> getConverter(
+            final @NonNull ObjectFeature propOrParam,
+            final @NonNull ScalarRepresentation scalarRepresentation) {
+        return new FloatConverterWkt(propOrParam, scalarRepresentation);
     }
 
 }

@@ -18,15 +18,20 @@
  */
 package org.apache.isis.viewer.wicket.model.converter;
 
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
+
+import lombok.NonNull;
 
 public class DoubleConverterWkt
 extends ConverterBasedOnValueSemantics<Double> {
 
     private static final long serialVersionUID = 1L;
 
-    public DoubleConverterWkt(final ScalarModel scalarModel) {
-        super(scalarModel);
+    public DoubleConverterWkt(
+            final @NonNull ObjectFeature objFeature,
+            final @NonNull ScalarRepresentation scalarRepresentation) {
+        super(objFeature, scalarRepresentation);
     }
 
 }

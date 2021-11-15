@@ -38,8 +38,8 @@ import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.object.value.ValueRepresentation;
 import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.isis.core.security._testing.InteractionService_forTesting;
 import org.apache.isis.viewer.wicket.model.converter.BigDecimalConverterWkt;
@@ -180,7 +180,7 @@ class BigDecimalConverter_roundtrip {
     private BigDecimalConverterWkt newConverter(final Class<?> type) {
         val customerSpec = mmc.getSpecificationLoader().specForTypeElseFail(type);
         val prop = customerSpec.getPropertyElseFail("value");
-        return new BigDecimalConverterWkt(prop, ValueRepresentation.EDITING);
+        return new BigDecimalConverterWkt(prop, ScalarRepresentation.EDITING);
     }
 
 }

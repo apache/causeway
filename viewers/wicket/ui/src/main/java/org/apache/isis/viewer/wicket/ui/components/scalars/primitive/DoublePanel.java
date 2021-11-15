@@ -21,10 +21,14 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.util.convert.IConverter;
 
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.converter.DoubleConverterWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+
+import lombok.NonNull;
 
 /**
  * Panel for rendering scalars of type {@link Double} or <tt>double</tt>.
@@ -49,8 +53,10 @@ public class DoublePanel extends ScalarPanelTextFieldNumeric<Double> {
     }
 
     @Override
-    protected IConverter<Double> getConverter(final ScalarModel scalarModel) {
-        return new DoubleConverterWkt(scalarModel);
+    protected IConverter<Double> getConverter(
+            final @NonNull ObjectFeature propOrParam,
+            final @NonNull ScalarRepresentation scalarRepresentation) {
+        return new DoubleConverterWkt(propOrParam, scalarRepresentation);
     }
 
 }

@@ -21,9 +21,9 @@ package org.apache.isis.viewer.wicket.model.models;
 import org.apache.wicket.model.ChainingModel;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.common.model.object.ObjectUiModel.EitherViewOrEdit;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
 
 /**
@@ -74,8 +74,8 @@ implements ObjectAdapterModel {
     }
 
     @Override
-    public EntityModel.EitherViewOrEdit getMode() {
-        return EntityModel.EitherViewOrEdit.VIEW;
+    public ScalarRepresentation getMode() {
+        return ScalarRepresentation.VIEWING;
     }
 
     @Override
@@ -90,7 +90,7 @@ implements ObjectAdapterModel {
     }
 
     @Override
-    public void setMode(final EitherViewOrEdit mode) {
+    public void setMode(final ScalarRepresentation mode) {
         throw _Exceptions.unexpectedCodeReach();
     }
 
