@@ -20,8 +20,8 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.converter.DoubleConverter;
 
+import org.apache.isis.viewer.wicket.model.converter.DoubleConverterWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -50,7 +50,7 @@ public class DoublePanel extends ScalarPanelTextFieldNumeric<Double> {
 
     @Override
     protected IConverter<Double> getConverter(final ScalarModel scalarModel) {
-        return DoubleConverter.INSTANCE;
+        return new DoubleConverterWkt(scalarModel);
     }
 
 }

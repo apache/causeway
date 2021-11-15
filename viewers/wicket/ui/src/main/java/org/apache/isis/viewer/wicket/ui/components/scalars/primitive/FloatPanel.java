@@ -20,8 +20,8 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.converter.FloatConverter;
 
+import org.apache.isis.viewer.wicket.model.converter.FloatConverterWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -50,7 +50,7 @@ public class FloatPanel extends ScalarPanelTextFieldNumeric<Float> {
 
     @Override
     protected IConverter<Float> getConverter(final ScalarModel scalarModel) {
-        return FloatConverter.INSTANCE;
+        return new FloatConverterWkt(scalarModel);
     }
 
 }
