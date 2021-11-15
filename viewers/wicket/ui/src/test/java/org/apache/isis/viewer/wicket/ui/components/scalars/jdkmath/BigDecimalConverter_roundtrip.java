@@ -42,6 +42,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.value.ValueRepresentation;
 import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.isis.core.security._testing.InteractionService_forTesting;
+import org.apache.isis.viewer.wicket.model.converter.BigDecimalConverterWkt;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -176,10 +177,10 @@ class BigDecimalConverter_roundtrip {
         private BigDecimal value;
     }
 
-    private BigDecimalConverterForFeature newConverter(final Class<?> type) {
+    private BigDecimalConverterWkt newConverter(final Class<?> type) {
         val customerSpec = mmc.getSpecificationLoader().specForTypeElseFail(type);
         val prop = customerSpec.getPropertyElseFail("value");
-        return new BigDecimalConverterForFeature(prop, ValueRepresentation.EDITING);
+        return new BigDecimalConverterWkt(prop, ValueRepresentation.EDITING);
     }
 
 }

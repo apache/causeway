@@ -16,31 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath;
+package org.apache.isis.viewer.wicket.model.converter;
 
-import java.math.BigDecimal;
-
-import org.apache.isis.core.metamodel.facets.object.value.ValueRepresentation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ConverterBasedOnValueSemantics;
 
-import lombok.NonNull;
-
-public class BigDecimalConverterForFeature
-extends ConverterBasedOnValueSemantics<BigDecimal> {
+public class ByteConverterWkt
+extends ConverterBasedOnValueSemantics<Byte> {
 
     private static final long serialVersionUID = 1L;
 
-    public BigDecimalConverterForFeature(
-            final @NonNull ScalarModel scalarModel) {
+    public ByteConverterWkt(final ScalarModel scalarModel) {
         super(scalarModel);
-    }
-
-    public BigDecimalConverterForFeature(
-            final @NonNull ObjectFeature objFeature,
-            final @NonNull ValueRepresentation valueRepresentation) {
-        super(objFeature, valueRepresentation);
     }
 
 }

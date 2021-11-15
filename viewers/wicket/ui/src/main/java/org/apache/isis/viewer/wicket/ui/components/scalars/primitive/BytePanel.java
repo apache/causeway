@@ -20,8 +20,8 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.converter.ByteConverter;
 
+import org.apache.isis.viewer.wicket.model.converter.ByteConverterWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -51,6 +51,6 @@ extends ScalarPanelTextFieldNumeric<Byte> {
 
     @Override
     protected IConverter<Byte> getConverter(final ScalarModel scalarModel) {
-        return ByteConverter.INSTANCE;
+        return new ByteConverterWkt(scalarModel);
     }
 }
