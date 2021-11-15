@@ -86,7 +86,7 @@ public class CommandUtil {
             final @Nullable Command command,
             final @Nullable ObjectMember objectMember) {
         return command!=null
-                && objectMember==null
+                && objectMember!=null
                 && logicalMemberIdentifierFor(objectMember)
                     .equals(command.getLogicalMemberIdentifier());
     }
