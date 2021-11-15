@@ -22,12 +22,12 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Renderer;
 
 /**
- * Introduced specifically for value-types.
+ * Mode of representation for a Scalar within the UI.
  */
 public enum ScalarRepresentation {
 
     /**
-     * Editing (parsing) mode, corresponds to 'regular' UI components.
+     * Editing (text-parsing) mode, corresponds to 'regular' UI components.
      * <p>
      * In case of value-types, indicates that for value-type to {@link String} conversion,
      * a {@link Parser} is required.
@@ -35,7 +35,7 @@ public enum ScalarRepresentation {
     EDITING,
 
     /**
-     * Viewing (rendering) mode, corresponds to 'compact' UI components.
+     * Viewing (HTML-rendering) mode, corresponds to 'compact' UI components.
      * <p>
      * In case of value-types, indicates that for value-type to {@link String} conversion,
      * a {@link Renderer} is required.
@@ -46,7 +46,7 @@ public enum ScalarRepresentation {
         return this == EDITING;
     }
 
-    public boolean isRendering() {
+    public boolean isViewing() {
         return this == VIEWING;
     }
 }

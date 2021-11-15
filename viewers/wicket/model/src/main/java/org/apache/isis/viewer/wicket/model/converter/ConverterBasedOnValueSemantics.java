@@ -69,7 +69,7 @@ implements
     public final T convertToObject(final String text, final Locale locale) throws ConversionException {
 
         // guard against framework bugs
-        if(scalarRepresentation.isRendering()) {
+        if(scalarRepresentation.isViewing()) {
             throw _Exceptions.illegalArgument("Internal Error: "
                     + "cannot convert a rendering representation back to its value-type '%s' -> %s",
                         text,

@@ -35,10 +35,6 @@ public interface ObjectUiModel {
                 .isVisible(getManagedObject(), InteractionInitiatedBy.USER);
     }
 
-//    public enum ScalarRepresentation {
-//        VIEW, EDIT
-//    }
-
     @RequiredArgsConstructor
     public enum RenderingHint {
         // normal form
