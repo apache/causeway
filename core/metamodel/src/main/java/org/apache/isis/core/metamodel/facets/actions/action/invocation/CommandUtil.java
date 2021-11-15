@@ -85,22 +85,10 @@ public class CommandUtil {
     public boolean matches(
             final @Nullable Command command,
             final @Nullable ObjectMember objectMember) {
-        if(command==null
-                || objectMember==null) {
-            return false;
-        }
-        if(!objectMember.isMixedIn()) {
-            val featureIdentifier = objectMember.getFeatureIdentifier();
-            return (featureIdentifier.getLogicalTypeName() + "#" + featureIdentifier.getMemberLogicalName())
+        return command!=null
+                && objectMember==null
+                && logicalMemberIdentifierFor(objectMember)
                     .equals(command.getLogicalMemberIdentifier());
-        }
-
-        return logicalMemberIdentifierFor(objectMember)
-                .equals(command.getLogicalMemberIdentifier());
-
-        //FIXME[ISIS-2893] eg. when the Command's memberId is "Employment#bookLeave",
-        // and the objectMember.getFeatureIdentifier() is "Employment_bookLeave#act"
-
     }
 
     // -- HELPER
