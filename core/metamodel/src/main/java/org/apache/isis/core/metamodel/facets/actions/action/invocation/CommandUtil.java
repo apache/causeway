@@ -20,7 +20,10 @@ package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 
 import java.util.List;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -35,28 +38,28 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * Factoring out the commonality between <tt>ActionInvocationFacetViaMethod</tt>
  * and <tt>BackgroundServiceDefault</tt>.
  */
+@UtilityClass
 public class CommandUtil {
 
-    private CommandUtil(){}
-
-    public static String targetClassNameFor(final ManagedObject targetAdapter) {
+    public String targetClassNameFor(final ManagedObject targetAdapter) {
         return targetClassNameFor(targetAdapter.getSpecification());
     }
 
-    public static String targetClassNameFor(final ObjectSpecification spec) {
+    public String targetClassNameFor(final ObjectSpecification spec) {
         return StringExtensions.asNaturalName2(spec.getSingularName());
     }
 
-    public static String memberIdentifierFor(final ObjectMember objectMember) {
+    public String memberIdentifierFor(final ObjectMember objectMember) {
         return objectMember.getFeatureIdentifier().getFullIdentityString();
     }
 
-    public static String logicalMemberIdentifierFor(final ObjectMember objectMember) {
+    public String logicalMemberIdentifierFor(final ObjectMember objectMember) {
         if(objectMember instanceof ObjectAction) {
             return logicalMemberIdentifierFor((ObjectAction)objectMember);
         }
@@ -66,22 +69,50 @@ public class CommandUtil {
         throw new IllegalArgumentException(objectMember.getClass() + " is not supported");
     }
 
-    public static String logicalMemberIdentifierFor(final ObjectAction objectAction) {
+    public String logicalMemberIdentifierFor(final ObjectAction objectAction) {
         return logicalMemberIdentifierFor(objectAction.getDeclaringType(), objectAction);
     }
 
-    public static String logicalMemberIdentifierFor(final OneToOneAssociation otoa) {
+    public String logicalMemberIdentifierFor(final OneToOneAssociation otoa) {
         return logicalMemberIdentifierFor(otoa.getDeclaringType(), otoa);
     }
 
-    private static String logicalMemberIdentifierFor(
+    /**
+     * Whether given command corresponds to given objectMember.
+     * <p>
+     * Is related to {@link #logicalMemberIdentifierFor(ObjectMember)}.
+     */
+    public boolean matches(
+            final @Nullable Command command,
+            final @Nullable ObjectMember objectMember) {
+        if(command==null
+                || objectMember==null) {
+            return false;
+        }
+        if(!objectMember.isMixedIn()) {
+            val featureIdentifier = objectMember.getFeatureIdentifier();
+            return (featureIdentifier.getLogicalTypeName() + "#" + featureIdentifier.getMemberLogicalName())
+                    .equals(command.getLogicalMemberIdentifier());
+        }
+
+        return logicalMemberIdentifierFor(objectMember)
+                .equals(command.getLogicalMemberIdentifier());
+
+        //FIXME[ISIS-2893] eg. when the Command's memberId is "Employment#bookLeave",
+        // and the objectMember.getFeatureIdentifier() is "Employment_bookLeave#act"
+
+    }
+
+    // -- HELPER
+
+    private String logicalMemberIdentifierFor(
             final ObjectSpecification onType, final ObjectMember objectMember) {
         final String logicalTypeName = onType.getLogicalTypeName();
         final String localId = objectMember.getFeatureIdentifier().getMemberLogicalName();
         return logicalTypeName + "#" + localId;
     }
 
-    public static String argDescriptionFor(final ManagedObject valueAdapter) {
+    public String argDescriptionFor(final ManagedObject valueAdapter) {
         final StringBuilder buf = new StringBuilder();
         if(valueAdapter != null) {
             appendArg(buf, "new value", valueAdapter);
@@ -91,7 +122,7 @@ public class CommandUtil {
         return buf.toString();
     }
 
-    public static String argDescriptionFor(
+    public String argDescriptionFor(
             final ObjectAction owningAction,
             final List<ManagedObject> arguments) {
 
@@ -107,12 +138,12 @@ public class CommandUtil {
         return argsBuf.toString();
     }
 
-    public static Bookmark bookmarkFor(final ManagedObject adapter) {
+    public Bookmark bookmarkFor(final ManagedObject adapter) {
         return ManagedObjects.bookmark(adapter)
                 .orElse(null);
     }
 
-    static void appendParamArg(
+    void appendParamArg(
             final StringBuilder buf,
             final ObjectActionParameter param,
             final ManagedObject objectAdapter) {
@@ -122,7 +153,7 @@ public class CommandUtil {
         appendArg(buf, name, objectAdapter);
     }
 
-    private static void appendArg(
+    private void appendArg(
             final StringBuilder buf,
             final String name,
             final ManagedObject objectAdapter) {
@@ -131,7 +162,7 @@ public class CommandUtil {
         buf.append(name).append(": ").append(titleOf).append("\n");
     }
 
-    public static ManagedObject[] adaptersFor(
+    public ManagedObject[] adaptersFor(
             final Object[] args,
             final ObjectManager objectManager) {
 
