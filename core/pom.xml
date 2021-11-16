@@ -177,7 +177,7 @@
 		<slf4j-api.version>1.7.32</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
 		<spring-boot.version>2.5.6</spring-boot.version> <!-- has no effect here, needs to be set in isis-parent/pom.xml -->
 		<summernote.version>0.8.11</summernote.version>
-		<swagger-core.version>1.6.2</swagger-core.version>
+		<swagger-core.version>1.6.3</swagger-core.version>
 
 		<togglz.version>3.0.0</togglz.version>
 
