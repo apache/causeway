@@ -686,5 +686,11 @@ public final class _Reflect {
         + ")";
     }
 
+    /**
+     * Determine if the supplied method is declared within a non-static <em>inner class</em>.
+     */
+    public static boolean isNonStaticInnerMethod(final @NonNull Method method) {
+        return ClassUtils.isInnerClass(method.getDeclaringClass());
+    }
 
 }

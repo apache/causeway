@@ -55,9 +55,17 @@ class ReflectTest {
 
     }
 
-    Method a;
-    Method b;
-    Method c;
+    static class Outer{
+        class NonStaticInner {
+            public void nonStaticInnerMethod() {}
+        }
+        static class StaticInner {
+            public void staticInnerMethod() {}
+        }
+    }
+
+    Method a, b, c;
+    Method nonStaticInnerMethod, staticInnerMethod;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -67,10 +75,16 @@ class ReflectTest {
         a = ReflectionUtils.findMethod(Parent.class, "getSomething", new Class[] {Collection.class});
         b = ReflectionUtils.findMethod(Child.class, "getSomething", new Class[] {Collection.class});
         c = ReflectionUtils.findMethod(Child.class, "getSomething", new Class[] {List.class});
+        nonStaticInnerMethod = ReflectionUtils
+                .findMethod(Outer.NonStaticInner.class, "nonStaticInnerMethod", new Class[] {});
+        staticInnerMethod = ReflectionUtils
+                .findMethod(Outer.StaticInner.class, "staticInnerMethod", new Class[] {});
 
         assertNotNull(a);
         assertNotNull(b);
         assertNotNull(c);
+        assertNotNull(nonStaticInnerMethod);
+        assertNotNull(staticInnerMethod);
 
         assertNotEquals(a, b);
         assertNotEquals(a, c);
@@ -89,6 +103,10 @@ class ReflectTest {
         assertTrue(_Reflect.methodWeakCompare(a, c) != 0);
     }
 
-
+    @Test
+    void methodIsInner() {
+        assertTrue(_Reflect.isNonStaticInnerMethod(nonStaticInnerMethod));
+        assertFalse(_Reflect.isNonStaticInnerMethod(staticInnerMethod));
+    }
 
 }
