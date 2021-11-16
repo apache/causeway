@@ -97,7 +97,7 @@
 
 		<cucumber.version>7.0.0</cucumber.version>
 
-		<cxf-rt-rs-client.version>3.4.4</cxf-rt-rs-client.version>
+		<cxf-rt-rs-client.version>3.4.5</cxf-rt-rs-client.version>
 
 		<danhaywood-java-assertjext.version>0.1.0</danhaywood-java-assertjext.version>
 		<danhaywood-java-testsupport.version>1.0.0</danhaywood-java-testsupport.version>
