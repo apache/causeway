@@ -23,6 +23,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
@@ -55,12 +56,21 @@ extends PanelAbstract<Object, IModel<Object>> {
     private void buildMessageForModel(final StringBuilder buf, final IModel<?> model) {
         buf.append(model.getClass().getSimpleName()).append(" ");
         if(model instanceof EntityModel) {
-            EntityModel entityModel = (EntityModel) model;
+            val entityModel = (EntityModel) model;
             val objectAdapter = entityModel.getObject();
             if(objectAdapter != null) {
                 buf.append("??? objectAdapter oid: " + ManagedObjects.bookmark(objectAdapter).orElse(null));
             } else {
                 buf.append("??? objectAdapter is NULL");
+            }
+        } else if(model instanceof ScalarModel) {
+            val scalarModel = (ScalarModel) model;
+            val scalarAdapter = scalarModel.getObject();
+            if(ManagedObjects.isSpecified(scalarAdapter)) {
+                buf.append(String.format("??? spec=%s, value='%s'",
+                        scalarAdapter.getSpecification(), scalarAdapter.getPojo()));
+            } else {
+                buf.append("??? scalarAdapter is NULL or UNSPECIFIED");
             }
         }
 

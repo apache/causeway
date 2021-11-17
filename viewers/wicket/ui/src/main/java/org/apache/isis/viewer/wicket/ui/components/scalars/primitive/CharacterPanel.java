@@ -18,18 +18,34 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
+import org.apache.wicket.util.convert.IConverter;
+import org.apache.wicket.util.convert.converter.CharacterConverter;
+import org.springframework.util.ClassUtils;
+
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldAbstract;
+
+import lombok.val;
 
 /**
  * Panel for rendering scalars of type {@link Character} or <tt>char</tt>.
  */
-public class CharacterPanel extends ScalarPanelTextFieldParseableAbstract {
+public class CharacterPanel
+extends ScalarPanelTextFieldAbstract<Character> {
 
     private static final long serialVersionUID = 1L;
 
     public CharacterPanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel);
+        super(id, scalarModel, Character.class);
+    }
+
+    @Override
+    public <C> IConverter<C> getConverter(final Class<C> _type) {
+        val type = ClassUtils.resolvePrimitiveIfNecessary(_type);
+        if(Character.class.equals(type)) {
+            return (IConverter<C>) CharacterConverter.INSTANCE; //FIXME[ISIS-2882] use value semantics instead
+        }
+        return super.getConverter(_type);
     }
 
 }

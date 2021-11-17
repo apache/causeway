@@ -100,8 +100,23 @@ implements TextFieldValueModel.ScalarModelProvider {
         this.cls = cls;
     }
 
-    // ///////////////////////////////////////////////////////////////////
+    // -- CONVERSION
 
+//    protected final IConverter<T> getConverter(final ScalarModel scalarModel) {
+//        return getConverter(scalarModel.getMetaModel(), scalarModel.isEditMode()
+//                ? ScalarRepresentation.EDITING
+//                : ScalarRepresentation.VIEWING);
+//    }
+//
+//    /**
+//     * Converter that is used for the either regular (editing) or compact (HTML) view of the panel,
+//     * based on argument {@code scalarRepresentation}.
+//     */
+//    protected abstract IConverter<T> getConverter(
+//            @NonNull ObjectFeature propOrParam,
+//            @NonNull ScalarRepresentation scalarRepresentation);
+
+    // --
 
     protected AbstractTextComponent<T> getTextField() {
         return textField;

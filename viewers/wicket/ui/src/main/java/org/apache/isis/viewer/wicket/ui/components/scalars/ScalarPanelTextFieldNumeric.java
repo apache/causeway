@@ -61,6 +61,7 @@ extends ScalarPanelTextFieldAbstract<T> {
         return super.toStringConvertingModelOf(getConverter(scalarModel));
     }
 
+    //FIXME move up in hierarchy
     protected final IConverter<T> getConverter(final ScalarModel scalarModel) {
         return getConverter(scalarModel.getMetaModel(), scalarModel.isEditMode()
                 ? ScalarRepresentation.EDITING
@@ -71,6 +72,7 @@ extends ScalarPanelTextFieldAbstract<T> {
      * Converter that is used for the either regular (editing) or compact (HTML) view of the panel,
      * based on argument {@code scalarRepresentation}.
      */
+    //FIXME move up in hierarchy
     protected abstract IConverter<T> getConverter(
             @NonNull ObjectFeature propOrParam,
             @NonNull ScalarRepresentation scalarRepresentation);
