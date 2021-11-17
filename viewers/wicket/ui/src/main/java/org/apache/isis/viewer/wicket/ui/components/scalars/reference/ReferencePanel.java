@@ -106,7 +106,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         this.select2 = createSelect2AndSemantics();
         entityLink.addOrReplace(select2.component());
 
-        syncWithInput();
+        //syncWithInput();
 
         entityLink.setOutputMarkupId(true);
 
@@ -208,11 +208,11 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     @Override
     protected void onInitializeReadonly(final String disableReason) {
         super.onInitializeReadonly(disableReason);
-        syncWithInput();
         val entityLinkModel = (HasRenderingHints) entityLink.getModel();
         entityLinkModel.toViewMode();
         entityLink.setEnabled(false);
         Tooltips.addTooltip(entityLink, disableReason);
+        syncWithInput();
     }
 
     @Override
@@ -231,13 +231,6 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         entityLink.add(new AttributeModifier("title", Model.of("")));
     }
 
-
-
-    // //////////////////////////////////////
-    // syncWithInput
-    // //////////////////////////////////////
-
-
     // called from onInitialize*
     // (was previous called by EntityLinkSelect2Panel in onBeforeRender, this responsibility now moved)
     private void syncWithInput() {
@@ -250,30 +243,23 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
             val scalarModel = getModel();
 
-            val componentFactory = getComponentFactoryRegistry()
-                    .findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, scalarModel);
-            val component = componentFactory
-                    .createComponent(ComponentType.ENTITY_ICON_AND_TITLE.getId(), scalarModel);
+            val component = getComponentFactoryRegistry()
+                    .addOrReplaceComponent(componentForRegular,
+                            ComponentType.ENTITY_ICON_AND_TITLE.getId(),
+                            ComponentType.ENTITY_ICON_AND_TITLE,
+                            scalarModel);
 
-            componentForRegular.addOrReplace(component);
-
-            boolean inlinePrompt = scalarModel.isInlinePrompt();
-            if(inlinePrompt) {
+            val isInlinePrompt = scalarModel.isInlinePrompt();
+            if(isInlinePrompt) {
                 // bit of a hack... allows us to suppress the title using CSS
                 Wkt.cssAppend(component, "inlinePrompt");
             }
 
-            if (adapter != null) {
-
+            if(adapter != null
+                    || isInlinePrompt) {
                 Components.permanentlyHide(componentForRegular, "entityTitleIfNull");
-
             } else {
-
-                if(inlinePrompt) {
-                    Components.permanentlyHide(componentForRegular, "entityTitleIfNull");
-                } else {
-                    Wkt.labelAdd(componentForRegular, "entityTitleIfNull", "(none)");
-                }
+                Wkt.labelAdd(componentForRegular, "entityTitleIfNull", "(none)");
             }
 
         }
@@ -304,12 +290,10 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
                 select2.clearInput();
             }
 
-            if(getComponentForRegular() != null) {
-                Components.permanentlyHide((MarkupContainer)getComponentForRegular(), ID_ENTITY_ICON_TITLE);
+            if(componentForRegular != null) {
+                Components.permanentlyHide(componentForRegular, ID_ENTITY_ICON_TITLE);
                 Components.permanentlyHide(componentForRegular, "entityTitleIfNull");
             }
-
-
 
             // syncUsability
             if(select2 != null) {

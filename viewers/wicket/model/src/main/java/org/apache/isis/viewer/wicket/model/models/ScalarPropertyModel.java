@@ -107,7 +107,7 @@ implements PropertyUiModel {
     }
 
     @Override
-    public String whetherDisabled() {
+    public String disableReasonIfAny() {
         return getManagedProperty()
                 .checkUsability()
                 .map(InteractionVeto::getReason)

@@ -206,7 +206,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     public abstract boolean whetherHidden();
 
-    public abstract String whetherDisabled();
+    public abstract String disableReasonIfAny();
 
     public abstract String validate(ManagedObject proposedAdapter);
 
@@ -257,7 +257,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     }
 
     public boolean isEnabled() {
-        return whetherDisabled() == null;
+        return disableReasonIfAny() == null;
     }
 
     // //////////////////////////////////////

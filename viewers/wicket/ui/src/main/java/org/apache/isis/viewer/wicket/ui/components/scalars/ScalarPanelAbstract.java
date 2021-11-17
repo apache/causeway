@@ -246,7 +246,7 @@ implements ScalarModelSubscriber {
 
         final ScalarModel scalarModel = getModel();
 
-        final String disableReasonIfAny = scalarModel.whetherDisabled();
+        final String disableReasonIfAny = scalarModel.disableReasonIfAny();
         final boolean mustBeEditable = scalarModel.mustBeEditable();
         if (disableReasonIfAny != null) {
             if(mustBeEditable) {

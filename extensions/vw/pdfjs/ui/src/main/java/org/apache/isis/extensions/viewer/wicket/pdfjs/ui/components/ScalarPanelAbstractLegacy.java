@@ -178,12 +178,12 @@ implements ScalarModelProvider {
 
         final ScalarModel scalarModel = getModel();
 
-        final String disableReasonIfAny = scalarModel.whetherDisabled();
+        final String disableReasonIfAny = scalarModel.disableReasonIfAny();
         if (disableReasonIfAny != null) {
             if(disableReasonIfAny.contains("Always disabled")) {
                 onBeforeRenderWhenViewMode();
             } else {
-                onBeforeRenderWhenDisabled(disableReasonIfAny.toString());
+                onBeforeRenderWhenDisabled(disableReasonIfAny);
             }
         } else {
             if (scalarModel.isViewMode()) {
