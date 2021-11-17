@@ -29,7 +29,7 @@ class DownloadDialog(val fileName:String, val content:String) : Command() {
     private lateinit var form: RoDialog
     val formItems = mutableListOf<FormItem>()
 
-    fun open() {
+    override fun open() {
         formItems.add(FormItem("Preview", ValueType.TEXT_AREA, content, 15))
         form = RoDialog(caption = "Download: $fileName", items = formItems, command = this)
         form.open()

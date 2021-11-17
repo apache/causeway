@@ -49,7 +49,7 @@ class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
     private val LNK: String = "lnk"
     private val DPM: String = "dpm"
 
-    fun open() {
+    override fun open() {
         val responseStr = if (logEntry.subType == Constants.subTypeJson) {
             StringUtils.format(logEntry.response)
         } else {

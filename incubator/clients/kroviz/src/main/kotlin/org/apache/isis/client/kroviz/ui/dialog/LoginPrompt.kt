@@ -22,6 +22,7 @@ import io.kvision.core.StringPair
 import io.kvision.form.select.SimpleSelect
 import io.kvision.form.text.Password
 import io.kvision.form.text.Text
+import org.apache.isis.client.kroviz.core.event.ReplayCommand
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.core.Constants
@@ -29,7 +30,7 @@ import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
 import org.apache.isis.client.kroviz.ui.core.UiManager
 
-class LoginPrompt : Command() {
+class LoginPrompt(val nextCommand: Command? = null) : Command() {
 
     private lateinit var form: RoDialog
 
@@ -38,7 +39,7 @@ class LoginPrompt : Command() {
     private var username = Constants.demoUser
     private var password = Constants.demoPass
 
-    fun open() {
+    override fun open() {
         val formItems = mutableListOf<FormItem>()
         val urlList = mutableListOf<StringPair>()
         urlList.add(StringPair(Constants.demoUrl, Constants.demoUrl))
@@ -53,10 +54,15 @@ class LoginPrompt : Command() {
 
     override fun execute(action: String?) {
         extractUserInput()
-        UiManager.login(url, username, password)
-        val link = Link(href = url + Constants.restInfix)
-        invoke(link)
-        UiManager.closeDialog(form)
+        if (nextCommand is ReplayCommand) {
+            nextCommand.initUnderTest(url, username, password)
+            nextCommand.open()
+        } else {
+            UiManager.login(url, username, password)
+            val link = Link(href = url + Constants.restInfix)
+            invoke(link)
+            UiManager.closeDialog(form)
+        }
     }
 
     private fun extractUserInput() {

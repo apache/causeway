@@ -26,7 +26,7 @@ import org.apache.isis.client.kroviz.ui.core.RoDialog
 
 class FileDialog(val logEntry: LogEntry) : Command() {
 
-    fun open() {
+    override fun open() {
         val rv = logEntry.getTransferObject() as ResultValue
         val rvr = rv.result!!
         val value = rvr.value!!.content as String

@@ -26,7 +26,7 @@ import org.apache.isis.client.kroviz.ui.core.RoDialog
 
 class ErrorDialog(val logEntry: LogEntry) : Command() {
 
-    fun open() {
+    override fun open() {
         val error = logEntry.getTransferObject() as HttpErrorResponse
         val formItems = mutableListOf<FormItem>()
         formItems.add(FormItem("URL", ValueType.TEXT, logEntry.url))

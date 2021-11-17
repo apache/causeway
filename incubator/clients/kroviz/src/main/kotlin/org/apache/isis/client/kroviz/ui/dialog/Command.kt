@@ -28,6 +28,10 @@ abstract class Command {
         // subclass responsibility
     }
 
+    open fun open() {
+        // subclass responsibility
+    }
+
     fun invoke(link: Link) {
         ResourceProxy().fetch(link, ActionDispatcher())
     }

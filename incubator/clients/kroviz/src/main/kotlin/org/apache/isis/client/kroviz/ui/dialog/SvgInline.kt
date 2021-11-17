@@ -32,7 +32,7 @@ class SvgInline : Command() {
     private var dialog: RoDialog
     private val formItems = mutableListOf<FormItem>()
 
-    fun open() {
+    override fun open() {
         dialog.open()
     }
 

@@ -35,7 +35,7 @@ class DiagramDialog(
     private var dialog: RoDialog
     private val formItems = mutableListOf<FormItem>()
 
-    fun open() {
+    override fun open() {
         dialog.open()
         UmlUtils.generateJsonDiagram(pumlCode, callBack)
     }
@@ -81,7 +81,7 @@ class DiagramDialog(
         DomUtil.replaceWith(callBack as UUID, svg)
     }
 
-    fun buildMenu(): List<KvisionHtmlLink> {
+    private fun buildMenu(): List<KvisionHtmlLink> {
         val menu = mutableListOf<KvisionHtmlLink>()
         menu.add(buildPinAction())
         menu.add(buildDownloadAction())

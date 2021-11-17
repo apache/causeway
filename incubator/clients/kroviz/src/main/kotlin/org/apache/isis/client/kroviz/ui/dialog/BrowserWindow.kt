@@ -24,7 +24,7 @@ import org.apache.isis.client.kroviz.ui.core.RoDialog
 
 class BrowserWindow(val url: String) : Command() {
 
-    fun open() {
+    override fun open() {
         val formItems = mutableListOf<FormItem>()
         formItems.add(FormItem("URL", ValueType.IFRAME, url))
         RoDialog(

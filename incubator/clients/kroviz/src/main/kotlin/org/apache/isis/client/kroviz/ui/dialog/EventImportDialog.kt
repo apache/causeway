@@ -120,7 +120,7 @@ class EventImportDialog() : Command() {
         }
     }
 
-    fun open() {
+    override fun open() {
         val format = mutableListOf<StringPair>()
         format.add(StringPair("CSV", "CSV"))
         format.add(StringPair("JSON", "JSON"))

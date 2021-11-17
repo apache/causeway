@@ -121,7 +121,7 @@ class RoMenuBar : SimplePanel() {
 
         val aboutTitle = "About"
         mainMenu.add(
-            buildMenuEntry(aboutTitle, "Info", { UiManager.add(aboutTitle, About().open()) })
+            buildMenuEntry(aboutTitle, "Info", { UiManager.add(aboutTitle, About().dialog) })
         )
 
         return mainMenu

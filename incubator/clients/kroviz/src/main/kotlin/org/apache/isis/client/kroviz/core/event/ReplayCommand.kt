@@ -29,25 +29,29 @@ import org.apache.isis.client.kroviz.to.Represention
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.ui.dialog.Command
 import org.apache.isis.client.kroviz.ui.dialog.ReplayDiffDialog
 
 val AppScope = CoroutineScope(window.asCoroutineDispatcher())
 
-class ReplayCommand {
+class ReplayCommand : Command() {
     private val eventStore = UiManager.getEventStore()
     private val oldBaseUrl = UiManager.getBaseUrl()
+    private var urlUnderTest: String = Constants.demoUrlRemote
+    private var userUnderTest: String = Constants.demoUser
+    private var passUnderTest: String = Constants.demoPass
 
-    fun execute(
-        urlUnderTest: String = Constants.demoUrlRemote,
-        userUnderTest: String = Constants.demoUser,
-        passUnderTest: String = Constants.demoPass
-    ) {
+    fun initUnderTest(url:String, user:String, pass:String) {
+        urlUnderTest = url
+        userUnderTest = user
+        passUnderTest = pass
+    }
+
+    override fun open() {
         val expectedEvents = copyEvents(eventStore.log)
         eventStore.reset()
         main() // re-creates the UI, but keeps the UiManager(singleton/object) and the session
         UiManager.login(urlUnderTest, userUnderTest, passUnderTest)
-        console.log("[RC.execute]")
-        console.log(urlUnderTest)
 
         val uiEvents = filterReplayEvents(expectedEvents)
         replay(uiEvents, urlUnderTest)

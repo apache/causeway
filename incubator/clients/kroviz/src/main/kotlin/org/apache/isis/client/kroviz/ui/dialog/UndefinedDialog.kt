@@ -33,7 +33,7 @@ class UndefinedDialog(val logEntry: LogEntry) : Command() {
 4. Implement a Handler under main/kotlin/org.ro.handler
 5. Amend main/kotlin/org.ro.handler/ResponseHandler by this new Handler"""
 
-    fun open() {
+    override fun open() {
         val formItems = mutableListOf<FormItem>()
         formItems.add(FormItem("Instructions", ValueType.TEXT_AREA, instruction, size = 7))
         formItems.add(FormItem("URL", ValueType.TEXT, logEntry.url))

@@ -84,7 +84,7 @@ class EventDialog() : Command() {
                 dialog.close()
             }
             action == REP -> {
-                ReplayCommand().execute()
+                LoginPrompt(ReplayCommand()).open()
                 dialog.close()
             }
             else -> {
@@ -92,7 +92,7 @@ class EventDialog() : Command() {
         }
     }
 
-    fun open() {
+    override fun open() {
         dialog.open()
     }
 

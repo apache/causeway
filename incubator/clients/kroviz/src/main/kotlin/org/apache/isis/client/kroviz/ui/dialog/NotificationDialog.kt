@@ -26,7 +26,7 @@ import org.apache.isis.client.kroviz.ui.core.UiManager
 
 class NotificationDialog(val message: String) : Command() {
 
-    fun open() {
+    override fun open() {
         val formItems = mutableListOf<FormItem>()
         val fi = FormItem("Message", ValueType.TEXT_AREA, message, size = 5)
         fi.readOnly = true
