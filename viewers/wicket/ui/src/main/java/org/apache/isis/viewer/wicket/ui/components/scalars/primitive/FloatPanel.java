@@ -48,11 +48,6 @@ public class FloatPanel extends ScalarPanelTextFieldNumeric<Float> {
     }
 
     @Override
-    protected String getScalarPanelType() {
-        return "floatPanel";
-    }
-
-    @Override
     protected IConverter<Float> getConverter(
             final @NonNull ObjectFeature propOrParam,
             final @NonNull ScalarRepresentation scalarRepresentation) {

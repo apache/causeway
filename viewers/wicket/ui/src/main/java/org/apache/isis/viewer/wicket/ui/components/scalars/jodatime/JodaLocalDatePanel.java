@@ -35,8 +35,4 @@ public class JodaLocalDatePanel extends ScalarPanelTextFieldDatePickerAbstract<L
         init(new DateConverterForJodaLocalDate(getWicketViewerSettings(), getAdjustBy()));
     }
 
-    @Override
-    protected String getScalarPanelType() {
-        return "jodaDateTimePanel";
-    }
 }

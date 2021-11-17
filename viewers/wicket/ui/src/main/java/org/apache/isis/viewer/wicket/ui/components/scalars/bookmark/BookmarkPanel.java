@@ -34,11 +34,4 @@ public class BookmarkPanel extends ScalarPanelTextFieldParseableAbstract {
         super(id, scalarModel);
     }
 
-    @Override
-    protected String getScalarPanelType() {
-        return "bookmarkPanel";
-    }
-
-
-
 }

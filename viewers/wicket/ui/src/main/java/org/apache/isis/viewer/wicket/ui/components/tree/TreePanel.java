@@ -40,11 +40,6 @@ public class TreePanel extends ScalarPanelTextFieldParseableAbstract {
     }
 
     @Override
-    protected String getScalarPanelType() {
-        return "treePanel";
-    }
-
-    @Override
     protected MarkupContainer createScalarIfRegularFormGroup() {
 
         if(getModel().isEditMode()) {

@@ -79,11 +79,6 @@ extends ScalarPanelTextFieldParseableAbstract {
         return null;
     }
 
-    @Override
-    protected String getScalarPanelType() {
-        return "multiLineStringPanel";
-    }
-
     // -- HELPER
 
     private void setRowsAndMaxLengthAttributesOn(final TextArea<String> textField) {

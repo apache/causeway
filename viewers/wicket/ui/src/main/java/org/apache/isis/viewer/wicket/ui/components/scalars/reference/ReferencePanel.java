@@ -243,11 +243,11 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
             val scalarModel = getModel();
 
-            val component = getComponentFactoryRegistry()
-                    .addOrReplaceComponent(componentForRegular,
-                            ComponentType.ENTITY_ICON_AND_TITLE.getId(),
-                            ComponentType.ENTITY_ICON_AND_TITLE,
-                            scalarModel);
+            val componentFactory = getComponentFactoryRegistry()
+                    .findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, scalarModel);
+            val component = componentFactory
+                    .createComponent(ComponentType.ENTITY_ICON_AND_TITLE.getId(), scalarModel);
+            componentForRegular.addOrReplace(component);
 
             val isInlinePrompt = scalarModel.isInlinePrompt();
             if(isInlinePrompt) {
@@ -413,13 +413,6 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
                 (typeOfSpecification != null)? typeOfSpecification.getFacet(AutoCompleteFacet.class):null;
                 return autoCompleteFacet != null;
     }
-
-
-    @Override
-    protected String getScalarPanelType() {
-        return "referencePanel";
-    }
-
 
 }
 

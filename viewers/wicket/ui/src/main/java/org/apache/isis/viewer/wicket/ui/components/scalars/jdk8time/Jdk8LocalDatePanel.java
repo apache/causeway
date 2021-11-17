@@ -34,8 +34,4 @@ public class Jdk8LocalDatePanel extends ScalarPanelTextFieldDatePickerAbstract<L
         init(new DateConverterForJdk8LocalDate(getWicketViewerSettings(), getAdjustBy()));
     }
 
-    @Override
-    protected String getScalarPanelType() {
-        return "jdk8DateTimePanel";
-    }
 }

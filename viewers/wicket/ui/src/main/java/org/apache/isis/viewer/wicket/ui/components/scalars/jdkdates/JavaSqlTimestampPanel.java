@@ -41,9 +41,4 @@ public class JavaSqlTimestampPanel extends ScalarPanelTextFieldDatePickerAbstrac
         return +3;
     }
 
-    @Override
-    protected String getScalarPanelType() {
-        return "javaSqlTimestampPanel";
-    }
-
 }

@@ -59,8 +59,10 @@ public interface ComponentFactoryRegistry {
         return streamComponentFactories(componentType, model)
                 .findFirst()
                 .orElseThrow(()->new RuntimeException(String.format(
-                        "could not find component for componentType = '%s'; model object is of type %s",
-                        componentType, model.getClass().getName())));
+                        "could not find component for componentType = '%s'; "
+                        + "model object is of type %s; "
+                        + "model object='%s'",
+                        componentType, model.getClass().getName(), model.getObject())));
     }
 
     /**

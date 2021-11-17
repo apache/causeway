@@ -389,10 +389,4 @@ extends ScalarPanelAbstract {
     protected abstract IResource newResource(final T namedWithMimeType);
 
 
-    @Override
-    protected String getScalarPanelType() {
-        return "isisBlobPanel";
-    }
-
-
 }

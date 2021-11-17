@@ -48,11 +48,6 @@ public class LongPanel extends ScalarPanelTextFieldNumeric<Long> {
     }
 
     @Override
-    protected String getScalarPanelType() {
-        return "longPanel";
-    }
-
-    @Override
     protected IConverter<Long> getConverter(
             final @NonNull ObjectFeature propOrParam,
             final @NonNull ScalarRepresentation scalarRepresentation) {

@@ -265,9 +265,11 @@ implements ScalarModelSubscriber {
     }
 
     /**
-     * Mandatory hook; simply determines the CSS that is added to the outermost 'scalarTypeContainer' div.
+     * determines the CSS that is added to the outermost 'scalarTypeContainer' div.
      */
-    protected abstract String getScalarPanelType();
+    public final String getCssClassName() {
+        return _Strings.decapitalize(getClass().getSimpleName());
+    }
 
     /**
      * Mandatory hook for implementations to indicate whether it supports the {@link PromptStyle#INLINE inline} or
@@ -301,7 +303,7 @@ implements ScalarModelSubscriber {
     private void buildGui() {
 
         scalarTypeContainer = Wkt.containerAdd(this, ID_SCALAR_TYPE_CONTAINER);
-        Wkt.cssAppend(scalarTypeContainer, getScalarPanelType());
+        Wkt.cssAppend(scalarTypeContainer, getCssClassName());
 
         this.scalarIfCompact = createComponentForCompact();
         this.scalarIfRegular = createComponentForRegular();

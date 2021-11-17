@@ -51,11 +51,6 @@ extends ScalarPanelTextFieldNumeric<BigInteger> {
     }
 
     @Override
-    protected String getScalarPanelType() {
-        return "javaMathBigIntegerPanel";
-    }
-
-    @Override
     protected IConverter<BigInteger> getConverter(
             final @NonNull ObjectFeature propOrParam,
             final @NonNull ScalarRepresentation scalarRepresentation) {

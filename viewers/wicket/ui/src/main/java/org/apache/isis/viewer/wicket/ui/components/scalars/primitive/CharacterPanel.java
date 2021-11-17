@@ -32,8 +32,4 @@ public class CharacterPanel extends ScalarPanelTextFieldParseableAbstract {
         super(id, scalarModel);
     }
 
-    @Override
-    protected String getScalarPanelType() {
-        return "characterPanel";
-    }
 }

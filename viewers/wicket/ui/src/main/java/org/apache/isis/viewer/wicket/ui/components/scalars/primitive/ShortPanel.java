@@ -48,11 +48,6 @@ public class ShortPanel extends ScalarPanelTextFieldNumeric<Short> {
     }
 
     @Override
-    protected String getScalarPanelType() {
-        return "shortPanel";
-    }
-
-    @Override
     protected IConverter<Short> getConverter(
             final @NonNull ObjectFeature propOrParam,
             final @NonNull ScalarRepresentation scalarRepresentation) {

@@ -35,8 +35,4 @@ public class JavaSqlDatePanel extends ScalarPanelTextFieldDatePickerAbstract<jav
         init(new DateConverterForJavaSqlDate(getWicketViewerSettings(), getAdjustBy()));
     }
 
-    @Override
-    protected String getScalarPanelType() {
-        return "javaSqlDatePanel";
-    }
 }

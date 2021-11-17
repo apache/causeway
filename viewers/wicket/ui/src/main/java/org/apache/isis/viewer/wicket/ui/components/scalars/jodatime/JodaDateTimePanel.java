@@ -45,8 +45,4 @@ public class JodaDateTimePanel extends ScalarPanelTextFieldDatePickerAbstract<Da
         return new TextFieldWithDateTimePicker<>(super.getCommonContext(), id, textFieldValueModel, cls, converter);
     }
 
-    @Override
-    protected String getScalarPanelType() {
-        return "jodaDateTimePanel";
-    }
 }

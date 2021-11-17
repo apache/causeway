@@ -52,12 +52,6 @@ extends ScalarPanelTextFieldNumeric<BigDecimal> {
                 id, newTextFieldValueModel(), BigDecimal.class, getConverter(getModel()));
     }
 
-
-    @Override
-    protected String getScalarPanelType() {
-        return "javaMathBigDecimalPanel";
-    }
-
     @Override
     protected IConverter<BigDecimal> getConverter(
             final @NonNull ObjectFeature propOrParam,

@@ -30,7 +30,8 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldW
 /**
  * Panel for rendering scalars of type {@link OffsetDateTime}.
  */
-public class Jdk8OffsetDateTimePanel extends ScalarPanelTextFieldDatePickerAbstract<OffsetDateTime> {
+public class Jdk8OffsetDateTimePanel
+extends ScalarPanelTextFieldDatePickerAbstract<OffsetDateTime> {
 
     private static final long serialVersionUID = 1L;
 
@@ -45,8 +46,4 @@ public class Jdk8OffsetDateTimePanel extends ScalarPanelTextFieldDatePickerAbstr
         return new TextFieldWithDateTimePicker<>(super.getCommonContext(), id, textFieldValueModel, cls, converter);
     }
 
-    @Override
-    protected String getScalarPanelType() {
-        return "jdk8DateTimePanel";
-    }
 }

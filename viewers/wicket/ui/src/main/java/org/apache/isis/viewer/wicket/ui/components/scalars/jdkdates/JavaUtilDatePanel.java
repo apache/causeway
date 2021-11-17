@@ -26,7 +26,8 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldD
 /**
  * Panel for rendering scalars of type {@link java.util.Date}.
  */
-public class JavaUtilDatePanel extends ScalarPanelTextFieldDatePickerAbstract<java.util.Date> {
+public class JavaUtilDatePanel
+extends ScalarPanelTextFieldDatePickerAbstract<java.util.Date> {
 
     private static final long serialVersionUID = 1L;
 
@@ -40,8 +41,4 @@ public class JavaUtilDatePanel extends ScalarPanelTextFieldDatePickerAbstract<ja
         return +3;
     }
 
-    @Override
-    protected String getScalarPanelType() {
-        return "javaUtilDatePanel";
-    }
 }

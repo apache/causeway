@@ -18,13 +18,14 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.jodatime;
 
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.util.convert.IConverter;
 import org.joda.time.LocalTime;
+
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
 
 /**
  * Panel for rendering scalars of type {@link LocalTime}.
@@ -45,14 +46,10 @@ public class JodaLocalTimePanel extends ScalarPanelTextFieldAbstract<LocalTime> 
 
             @SuppressWarnings("unchecked")
             @Override
-            public <C> IConverter<C> getConverter(Class<C> type) {
+            public <C> IConverter<C> getConverter(final Class<C> type) {
                 return (IConverter<C>) (type == LocalTime.class ? new ConverterForJodaLocalTime() : super.getConverter(type));
             }
         };
     }
 
-    @Override
-    protected String getScalarPanelType() {
-        return "jodaLocalTimePanel";
-    }
 }

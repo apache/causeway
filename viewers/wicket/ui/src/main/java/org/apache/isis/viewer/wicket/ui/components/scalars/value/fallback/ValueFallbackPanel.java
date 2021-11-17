@@ -41,9 +41,4 @@ extends ScalarPanelTextFieldParseableAbstract {
         super(id, scalarModel);
     }
 
-
-    @Override
-    protected String getScalarPanelType() {
-        return "valuePanel";
-    }
 }

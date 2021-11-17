@@ -46,11 +46,6 @@ public class ParentedMarkupPanel extends MultiLineStringPanel {
     }
 
     @Override
-    protected String getScalarPanelType() {
-        return "markupPanel";
-    }
-
-    @Override
     protected MarkupContainer createScalarIfRegularFormGroup() {
 
         if(getModel().isEditMode()) {

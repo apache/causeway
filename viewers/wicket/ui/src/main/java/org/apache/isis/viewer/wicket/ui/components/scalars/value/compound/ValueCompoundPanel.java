@@ -38,11 +38,6 @@ extends ScalarPanelTextFieldParseableAbstract {
     }
 
     @Override
-    protected String getScalarPanelType() {
-        return "valuePanel";
-    }
-
-    @Override
     protected void onInitialize() {
         System.err.printf("%s%n", scalarModel.getMetaModel().getFeatureIdentifier());
 

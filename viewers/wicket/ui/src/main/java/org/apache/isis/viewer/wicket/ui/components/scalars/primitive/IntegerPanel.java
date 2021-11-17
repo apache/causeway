@@ -48,11 +48,6 @@ public class IntegerPanel extends ScalarPanelTextFieldNumeric<Integer> {
     }
 
     @Override
-    protected String getScalarPanelType() {
-        return "integerPanel";
-    }
-
-    @Override
     protected IConverter<Integer> getConverter(
             final @NonNull ObjectFeature propOrParam,
             final @NonNull ScalarRepresentation scalarRepresentation) {

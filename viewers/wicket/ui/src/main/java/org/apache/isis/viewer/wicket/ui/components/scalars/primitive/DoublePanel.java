@@ -48,11 +48,6 @@ public class DoublePanel extends ScalarPanelTextFieldNumeric<Double> {
     }
 
     @Override
-    protected String getScalarPanelType() {
-        return "doublePanel";
-    }
-
-    @Override
     protected IConverter<Double> getConverter(
             final @NonNull ObjectFeature propOrParam,
             final @NonNull ScalarRepresentation scalarRepresentation) {

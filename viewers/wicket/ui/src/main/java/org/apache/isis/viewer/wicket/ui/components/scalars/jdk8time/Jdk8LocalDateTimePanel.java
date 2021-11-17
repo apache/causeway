@@ -45,9 +45,4 @@ public class Jdk8LocalDateTimePanel extends ScalarPanelTextFieldDatePickerAbstra
         return new TextFieldWithDateTimePicker<>(super.getCommonContext(), id, textFieldValueModel, cls, converter);
     }
 
-    @Override
-    protected String getScalarPanelType() {
-        return "jdk8LocalDateTimePanel";
-    }
-
 }

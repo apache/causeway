@@ -49,11 +49,6 @@ extends ScalarPanelTextFieldNumeric<Byte> {
     }
 
     @Override
-    protected String getScalarPanelType() {
-        return "bytePanel";
-    }
-
-    @Override
     protected IConverter<Byte> getConverter(
             final @NonNull ObjectFeature propOrParam,
             final @NonNull ScalarRepresentation scalarRepresentation) {

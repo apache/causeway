@@ -42,13 +42,13 @@ public class IsisPasswordPanel extends ScalarPanelTextFieldParseableAbstract {
 
 
     @Override
-    protected AbstractTextComponent<String> createTextFieldForRegular(String id) {
+    protected AbstractTextComponent<String> createTextFieldForRegular(final String id) {
         final TextFieldStringModel textModel = new TextFieldStringModel(this);
         final PasswordTextField passwordField = new PasswordTextField(id, textModel) {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void onComponentTag(ComponentTag tag) {
+            protected void onComponentTag(final ComponentTag tag) {
                 Attributes.set(tag, "type", "password");
                 super.onComponentTag(tag);
             }
@@ -57,11 +57,6 @@ public class IsisPasswordPanel extends ScalarPanelTextFieldParseableAbstract {
         passwordField.setResetPassword(false);
 
         return passwordField;
-    }
-
-    @Override
-    protected String getScalarPanelType() {
-        return "isisPasswordPanel";
     }
 
 }

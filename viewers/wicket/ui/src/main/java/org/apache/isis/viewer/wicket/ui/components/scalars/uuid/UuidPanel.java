@@ -48,11 +48,6 @@ public class UuidPanel extends ScalarPanelTextFieldAbstract<UUID> {
         return new UuidTextField(id, textFieldValueModel, cls, model, converter);
     }
 
-
-    @Override
-    protected String getScalarPanelType() {
-        return "uuidPanel";
-    }
 }
 
 

@@ -33,11 +33,4 @@ public class OidDtoPanel extends ScalarPanelTextFieldParseableAbstract {
         super(id, scalarModel);
     }
 
-    @Override
-    protected String getScalarPanelType() {
-        return "oidDtoPanel";
-    }
-
-
-
 }
