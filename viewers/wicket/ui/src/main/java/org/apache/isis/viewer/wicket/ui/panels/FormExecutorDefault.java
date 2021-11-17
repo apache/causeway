@@ -91,7 +91,13 @@ implements FormExecutor {
 
         try {
 
-            final Optional<Recognition> invalidReasonIfAny = getReasonInvalidIfAny();
+            final Optional<Recognition> invalidReasonIfAny = Recognition.of(
+                    Category.CONSTRAINT_VIOLATION,
+                    actionOrPropertyModel
+                        .fold(
+                                act->act.getValidityConsent().getReason(),
+                                prop->prop.getReasonInvalidIfAny()));
+
             if (invalidReasonIfAny.isPresent()) {
                 raiseWarning(ajaxTarget, feedbackFormIfAny, invalidReasonIfAny.get());
                 return FormExecutionOutcome.FAILURE_SO_STAY_ON_PAGE; // invalid args, stay on page
@@ -187,14 +193,6 @@ implements FormExecutor {
         } else {
             getMessageService().warnUser(errorMsg);
         }
-    }
-
-    private Optional<Recognition> getReasonInvalidIfAny() {
-        val reason = actionOrPropertyModel
-                .fold(
-                        act->act.getValidityConsent().getReason(),
-                        prop->prop.getReasonInvalidIfAny());
-        return Recognition.of(Category.CONSTRAINT_VIOLATION, reason);
     }
 
     // -- DEPENDENCIES

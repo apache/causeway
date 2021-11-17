@@ -73,7 +73,7 @@ public class ParameterNegotiationModel {
             final @NonNull ManagedAction managedAction,
             final @NonNull Can<ManagedObject> initialParamValues) {
         this.managedAction = managedAction;
-        this.head = managedAction.getInteractionHead(); //TODO maybe don't memoize
+        this.head = managedAction.interactionHead(); //TODO maybe don't memoize
         this.validationFeedbackActive = _Bindables.forValue(false);
 
         val paramNrIterator = IntStream.range(0, initialParamValues.size()).iterator();
