@@ -30,7 +30,6 @@ import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldStringModel;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -49,8 +48,7 @@ extends ScalarPanelTextFieldParseableAbstract {
 
     @Override
     protected AbstractTextComponent<String> createTextField(final String id) {
-        val model = new TextFieldStringModel(this);
-        val textArea = new TextArea<String>(id, model);
+        val textArea = new TextArea<String>(id, newTextFieldValueModel());
         setRowsAndMaxLengthAttributesOn(textArea);
         return textArea;
     }

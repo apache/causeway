@@ -30,7 +30,7 @@ import lombok.val;
 
 /**
  * For custom {@link ScalarPanelTextFieldAbstract}s to use as the {@link Model}
- * of their {@link TextField} (as constructed in {@link ScalarPanelTextFieldAbstract#createTextFieldForRegular(String)}).
+ * of their {@link TextField} (as constructed in {@link ScalarPanelTextFieldAbstract#createTextField(String)}).
  */
 public class TextFieldValueModel<T extends Serializable> extends Model<T> {
 
@@ -42,7 +42,7 @@ public class TextFieldValueModel<T extends Serializable> extends Model<T> {
 
     private final ScalarModelProvider scalarModelProvider;
 
-    public TextFieldValueModel(ScalarModelProvider scalarModelProvider) {
+    public TextFieldValueModel(final ScalarModelProvider scalarModelProvider) {
         this.scalarModelProvider = scalarModelProvider;
     }
 
@@ -54,7 +54,7 @@ public class TextFieldValueModel<T extends Serializable> extends Model<T> {
     }
 
     @SuppressWarnings("unchecked")
-    private T asT(ManagedObject objectAdapter) {
+    private T asT(final ManagedObject objectAdapter) {
         return (T) (objectAdapter != null? objectAdapter.getPojo(): null);
     }
 
