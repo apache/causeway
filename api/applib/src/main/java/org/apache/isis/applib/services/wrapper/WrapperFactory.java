@@ -120,7 +120,7 @@ public interface WrapperFactory {
      *     whether the action is executed.  See {@link #wrap(Object, SyncControl)} for more details on this.
      * </p>
      */
-    <T> T wrapMixin(Class<T> mixinClass, Object mixedIn,
+    <T> T wrapMixin(Class<T> mixinClass, Object mixee,
                     SyncControl syncControl);
 
     /**
@@ -128,7 +128,7 @@ public interface WrapperFactory {
      * returning a wrapper to invoke the action synchronously, enforcing business rules.
      * Any exceptions will be propagated, not swallowed.
      */
-    <T> T wrapMixin(Class<T> mixinClass, Object mixedIn);
+    <T> T wrapMixin(Class<T> mixinClass, Object mixee);
 
     /**
      * Obtains the underlying domain object, if wrapped.
@@ -175,13 +175,13 @@ public interface WrapperFactory {
      *
      * @param <T>
      * @param mixinClass
-     * @param mixedIn
+     * @param mixee
      * @param asyncControl
      *
      * @since 2.0
      */
     <T,R> T asyncWrapMixin(
-                   Class<T> mixinClass, Object mixedIn,
+                   Class<T> mixinClass, Object mixee,
                    AsyncControl<R> asyncControl);
 
 
