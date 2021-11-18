@@ -66,6 +66,7 @@ import org.apache.isis.core.metamodel.valuesemantics.InteractionDtoValueSemantic
 import org.apache.isis.core.metamodel.valuesemantics.LocalResourcePathValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.LongValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.MarkupValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.OidDtoValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.PasswordValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.ShortValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics;
@@ -127,6 +128,7 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         MarkupValueSemantics.class,
         URLValueSemantics.class,
         LocalResourcePathValueSemantics.class,
+        OidDtoValueSemantics.class,
         BookmarkValueSemantics.class,
         UUIDValueSemantics.class,
         TreeNodeValueSemantics.class,
