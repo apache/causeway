@@ -20,7 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.oiddto;
 
 import org.apache.wicket.Component;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.schema.common.v2.OidDto;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
 
@@ -29,7 +29,7 @@ public class OidDtoPanelFactory extends ComponentFactoryScalarAbstract {
     private static final long serialVersionUID = 1L;
 
     public OidDtoPanelFactory() {
-        super(OidDtoPanel.class, Bookmark.class);
+        super(OidDtoPanel.class, OidDto.class);
     }
 
     @Override

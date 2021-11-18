@@ -21,12 +21,12 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates;
 import java.sql.Time;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldBasedOnStringSemanticsAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldTextualAbstract;
 
 /**
  * Panel for rendering scalars of type {@link Time java.sql.Time}.
  */
-public class JavaSqlTimePanel extends ScalarPanelTextFieldBasedOnStringSemanticsAbstract {
+public class JavaSqlTimePanel extends ScalarPanelTextFieldTextualAbstract {
 
     private static final long serialVersionUID = 1L;
 

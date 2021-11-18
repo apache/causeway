@@ -19,12 +19,12 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.string;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldBasedOnStringSemanticsAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldTextualAbstract;
 
 /**
  * Panel for rendering scalars of type {@link String}.
  */
-public class StringPanel extends ScalarPanelTextFieldBasedOnStringSemanticsAbstract {
+public class StringPanel extends ScalarPanelTextFieldTextualAbstract {
 
     private static final long serialVersionUID = 1L;
 

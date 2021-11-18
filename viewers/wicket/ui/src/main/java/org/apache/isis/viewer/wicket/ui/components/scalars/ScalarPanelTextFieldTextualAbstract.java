@@ -16,29 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars.value.fallback;
+package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.annotation.Value;
+import org.apache.wicket.util.convert.IConverter;
+
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldTextualAbstract;
+
+import lombok.NonNull;
 
 /**
- * Panel for rendering any value types that do not have their own custom
- * {@link ScalarPanelAbstract panel} to render them.
- *
- * <p>
- * This is a fallback panel; values are expected to be {@link Parser parseable}
- * (typically through the Isis' {@link Value} annotation.
+ * Specialization of {@link ScalarPanelTextFieldAbstract},
+ * where the scalar (parameter or property) is a value-type, that is
+ * textual and requires no conversion.
  */
-public class ValueFallbackPanel
-extends ScalarPanelTextFieldTextualAbstract {
+public abstract class ScalarPanelTextFieldTextualAbstract
+extends ScalarPanelTextFieldAbstract<String> {
 
     private static final long serialVersionUID = 1L;
 
-    public ValueFallbackPanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel);
+    protected ScalarPanelTextFieldTextualAbstract(final String id, final ScalarModel scalarModel) {
+        super(id, scalarModel, String.class);
     }
+
+    @Override
+    protected final IConverter<String> getConverter(
+            final @NonNull ObjectFeature propOrParam,
+            final @NonNull ScalarRepresentation scalarRepresentation) {
+        return null; // does not use conversion
+    }
+
 
 }

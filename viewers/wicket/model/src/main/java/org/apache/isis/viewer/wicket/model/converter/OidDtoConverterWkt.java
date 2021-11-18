@@ -16,36 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars;
-
-import org.apache.wicket.util.convert.IConverter;
+package org.apache.isis.viewer.wicket.model.converter;
 
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.schema.common.v2.OidDto;
 
 import lombok.NonNull;
 
-/**
- * Adapter for {@link ScalarPanelTextFieldAbstract textField-based scalar panel}
- * s where moreover the scalar parameter or property is a value type that is
- * parseable.
- */
-public abstract class ScalarPanelTextFieldBasedOnStringSemanticsAbstract
-extends ScalarPanelTextFieldAbstract<String> {
+public class OidDtoConverterWkt
+extends ConverterBasedOnValueSemantics<OidDto> {
 
     private static final long serialVersionUID = 1L;
 
-    protected ScalarPanelTextFieldBasedOnStringSemanticsAbstract(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, String.class);
-    }
-
-    @Override
-    protected final IConverter<String> getConverter(
-            final @NonNull ObjectFeature propOrParam,
+    public OidDtoConverterWkt(
+            final @NonNull ObjectFeature objFeature,
             final @NonNull ScalarRepresentation scalarRepresentation) {
-        return null; // does not use conversion
+        super(objFeature, scalarRepresentation);
     }
-
 
 }

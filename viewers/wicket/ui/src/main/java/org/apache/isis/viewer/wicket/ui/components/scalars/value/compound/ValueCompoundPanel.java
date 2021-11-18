@@ -25,11 +25,11 @@ import org.apache.wicket.model.LambdaModel;
 import org.apache.isis.applib.adapters.Renderer;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldBasedOnStringSemanticsAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldTextualAbstract;
 
 //FIXME[ISIS-2877] introduced for experiments, should be removed
 public class ValueCompoundPanel
-extends ScalarPanelTextFieldBasedOnStringSemanticsAbstract {
+extends ScalarPanelTextFieldTextualAbstract {
 
     private static final long serialVersionUID = 1L;
 
