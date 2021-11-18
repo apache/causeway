@@ -25,14 +25,14 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldStringModel;
 
 import de.agilecoders.wicket.core.util.Attributes;
 
 /**
  * Panel for rendering scalars of type {@link Password Isis' applib.Password}.
  */
-public class IsisPasswordPanel extends ScalarPanelTextFieldParseableAbstract {
+public class IsisPasswordPanel
+extends ScalarPanelTextFieldParseableAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -40,11 +40,10 @@ public class IsisPasswordPanel extends ScalarPanelTextFieldParseableAbstract {
         super(id, scalarModel);
     }
 
-
     @Override
-    protected AbstractTextComponent<String> createTextFieldForRegular(final String id) {
-        final TextFieldStringModel textModel = new TextFieldStringModel(this);
-        final PasswordTextField passwordField = new PasswordTextField(id, textModel) {
+    protected AbstractTextComponent<String> createTextField(final String id) {
+
+        final PasswordTextField passwordField = new PasswordTextField(id, newTextFieldValueModel()) {
             private static final long serialVersionUID = 1L;
 
             @Override

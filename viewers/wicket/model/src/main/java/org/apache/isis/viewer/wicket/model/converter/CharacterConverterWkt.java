@@ -16,37 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath;
-
-import java.math.BigInteger;
-
-import org.apache.wicket.util.convert.IConverter;
+package org.apache.isis.viewer.wicket.model.converter;
 
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.isis.viewer.wicket.model.converter.BigIntegerConverterWkt;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
 
 import lombok.NonNull;
 
-/**
- * Panel for rendering scalars of type {@link BigInteger}.
- */
-public class JavaMathBigIntegerPanel
-extends ScalarPanelTextFieldNumeric<BigInteger> {
+public class CharacterConverterWkt
+extends ConverterBasedOnValueSemantics<Character> {
 
     private static final long serialVersionUID = 1L;
 
-    public JavaMathBigIntegerPanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, BigInteger.class);
-    }
-
-    @Override
-    protected IConverter<BigInteger> getConverter(
-            final @NonNull ObjectFeature propOrParam,
+    public CharacterConverterWkt(
+            final @NonNull ObjectFeature objFeature,
             final @NonNull ScalarRepresentation scalarRepresentation) {
-        return new BigIntegerConverterWkt(propOrParam, scalarRepresentation);
+        super(objFeature, scalarRepresentation);
     }
 
 }

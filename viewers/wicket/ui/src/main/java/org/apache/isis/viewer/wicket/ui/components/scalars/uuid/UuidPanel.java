@@ -20,32 +20,33 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.uuid;
 
 import java.util.UUID;
 
-import org.apache.wicket.markup.html.form.AbstractTextComponent;
+import org.apache.wicket.util.convert.IConverter;
 
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.isis.viewer.wicket.model.converter.UuidConverterWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
+
+import lombok.NonNull;
 
 /**
  * Panel for rendering scalars of type {@link UUID}.
  */
-public class UuidPanel extends ScalarPanelTextFieldAbstract<UUID> {
+public class UuidPanel
+extends ScalarPanelTextFieldAbstract<UUID> {
 
     private static final long serialVersionUID = 1L;
 
-    private static final UuidConverter converter = new UuidConverter();
-
-    public UuidPanel(
-            final String id,
-            final ScalarModel scalarModel) {
+    public UuidPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, UUID.class);
     }
 
     @Override
-    protected AbstractTextComponent<UUID> createTextFieldForRegular(final String id) {
-        final ScalarModel model = getModel();
-        final TextFieldValueModel<UUID> textFieldValueModel = new TextFieldValueModel<>(this);
-        return new UuidTextField(id, textFieldValueModel, cls, model, converter);
+    protected IConverter<UUID> getConverter(
+            final @NonNull ObjectFeature propOrParam,
+            final @NonNull ScalarRepresentation scalarRepresentation) {
+        return new UuidConverterWkt(propOrParam, scalarRepresentation);
     }
 
 }

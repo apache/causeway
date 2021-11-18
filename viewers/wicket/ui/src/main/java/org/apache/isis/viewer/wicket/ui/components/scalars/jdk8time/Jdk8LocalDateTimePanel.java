@@ -20,29 +20,20 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time;
 
 import java.time.LocalDateTime;
 
-import org.apache.wicket.markup.html.form.AbstractTextComponent;
-
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldDatePickerAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDateTimePicker;
 
 /**
  * Panel for rendering scalars of type {@link LocalDateTime}.
  */
-public class Jdk8LocalDateTimePanel extends ScalarPanelTextFieldDatePickerAbstract<LocalDateTime> {
+public class Jdk8LocalDateTimePanel
+extends ScalarPanelTextFieldDatePickerAbstract<LocalDateTime> {
 
     private static final long serialVersionUID = 1L;
 
     public Jdk8LocalDateTimePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, LocalDateTime.class);
         init(new DateConverterForJdk8LocalDateTime(getWicketViewerSettings(), getAdjustBy()));
-    }
-
-    @Override
-    protected AbstractTextComponent<LocalDateTime> createTextFieldForRegular(final String id) {
-        final TextFieldValueModel<LocalDateTime> textFieldValueModel = new TextFieldValueModel<>(this);
-        return new TextFieldWithDateTimePicker<>(super.getCommonContext(), id, textFieldValueModel, cls, converter);
     }
 
 }

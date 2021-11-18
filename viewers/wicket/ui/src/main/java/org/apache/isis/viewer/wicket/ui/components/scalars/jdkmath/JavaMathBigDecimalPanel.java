@@ -20,7 +20,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath;
 
 import java.math.BigDecimal;
 
-import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
@@ -28,7 +27,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.converter.BigDecimalConverterWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
-import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.NonNull;
 
@@ -44,12 +42,6 @@ extends ScalarPanelTextFieldNumeric<BigDecimal> {
             final String id,
             final ScalarModel scalarModel) {
         super(id, scalarModel, BigDecimal.class);
-    }
-
-    @Override
-    protected AbstractTextComponent<BigDecimal> createTextFieldForRegular(final String id) {
-        return Wkt.textFieldWithConverter(
-                id, newTextFieldValueModel(), BigDecimal.class, getConverter(getModel()));
     }
 
     @Override

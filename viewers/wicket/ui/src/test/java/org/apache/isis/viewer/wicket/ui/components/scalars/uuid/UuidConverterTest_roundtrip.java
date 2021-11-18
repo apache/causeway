@@ -22,52 +22,100 @@ import java.util.Locale;
 import java.util.UUID;
 
 import org.apache.wicket.util.convert.ConversionException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class UuidConverterTest_roundtrip {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
+import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics;
+import org.apache.isis.core.security._testing.InteractionService_forTesting;
+import org.apache.isis.viewer.wicket.model.converter.UuidConverterWkt;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.val;
+
+// see also BigDecimalConverter_roundtrip, for more rigorous testing
+@SuppressWarnings("unused")
+class UuidConverterTest_roundtrip {
 
     final UUID valid = UUID.randomUUID();
 
-    private UuidConverter converter;
+    private UuidConverterWkt converter;
 
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
+    private InteractionService interactionService;
+    private MetaModelContext mmc;
 
-    @Before
-    public void setUp() throws Exception {
-        converter = newConverter();
+    @BeforeEach
+    void setUp() throws Exception {
+
+        UUIDValueSemantics valueSemantics;
+        mmc = MetaModelContext_forTesting.builder()
+                .valueSemantic(valueSemantics = new UUIDValueSemantics())
+                .interactionProvider(interactionService = new InteractionService_forTesting())
+                .build();
+        //valueSemantics.setSpecificationLoader(mmc.getSpecificationLoader());
+
+        // pre-requisites for testing
+        val reg = mmc.getServiceRegistry().lookupServiceElseFail(ValueSemanticsRegistry.class);
+        assertNotNull(reg.selectValueSemantics(UUID.class));
+        assertTrue(reg.selectValueSemantics(UUID.class).isNotEmpty());
+        assertNotNull(mmc.getServiceRegistry().lookupServiceElseFail(InteractionService.class));
+        assertNotNull(mmc.getInteractionProvider());
+
+
+        converter = newConverter(CustomerWithUuid.class);
     }
 
     @Test
-    public void happy_case() {
+    void happy_case() {
 
-        Assert.assertEquals(
+        assertEquals(
                 valid, converter.convertToObject(valid.toString(), Locale.ENGLISH));
-        Assert.assertEquals(
+        assertEquals(
                 valid.toString(), converter.convertToString(valid, Locale.ENGLISH));
     }
 
     @Test
-    public void when_null() {
-        Assert.assertNull(converter.convertToObject(null, Locale.ENGLISH));
-        Assert.assertNull(converter.convertToObject("", Locale.ENGLISH));
-        Assert.assertNull(converter.convertToString(null, Locale.ENGLISH));
+    void when_null() {
+        assertNull(converter.convertToObject(null, Locale.ENGLISH));
+        assertNull(converter.convertToObject("", Locale.ENGLISH));
+        assertNull(converter.convertToString(null, Locale.ENGLISH));
     }
 
     @Test
-    public void invalid() {
-        exception.expect(ConversionException.class);
-        exception.expectMessage("Failed to convert 'junk' to a UUID");
-        Assert.assertNull(converter.convertToObject("junk", Locale.ENGLISH));
+    void invalid() {
+        assertThrows(ConversionException.class,
+                ()->converter.convertToObject("junk", Locale.ENGLISH),
+                "Failed to convert 'junk' to a UUID");
     }
 
-    private UuidConverter newConverter() {
-        return new
-                UuidConverter();
+    // -- HELPER
+
+    private UuidConverterWkt newConverter(final Class<?> type) {
+        val customerSpec = mmc.getSpecificationLoader().specForTypeElseFail(type);
+        val prop = customerSpec.getPropertyElseFail("value");
+        return new UuidConverterWkt(prop, ScalarRepresentation.EDITING);
     }
+
+    // -- SCENARIOS
+
+    @DomainObject
+    static class CustomerWithUuid {
+        @Property @Getter @Setter
+        private UUID value;
+    }
+
 
 }

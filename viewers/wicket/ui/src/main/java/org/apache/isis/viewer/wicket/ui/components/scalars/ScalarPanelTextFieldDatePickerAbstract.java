@@ -30,9 +30,13 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDateTimePicker;
+
+import lombok.NonNull;
 
 /**
  * Panel for rendering scalars representing dates, along with a date picker.
@@ -64,8 +68,9 @@ extends ScalarPanelTextFieldAbstract<T>  {
     }
 
     @Override
-    protected TextField<T> createTextField(final String id) {
-        return new TextFieldWithDateTimePicker<>(super.getCommonContext(), id, newTextFieldValueModel(), cls, converter);
+    protected final TextField<T> createTextField(final String id) {
+        return new TextFieldWithDateTimePicker<>(
+                super.getCommonContext(), id, newTextFieldValueModel(), cls, converter);
     }
 
 
@@ -110,6 +115,14 @@ extends ScalarPanelTextFieldAbstract<T>  {
      * Optional override for subclasses to explicitly indicate desired amount to adjust compact form of textField
      */
     protected Integer getLengthAdjustHint() {
+        return null;
+    }
+
+    //FIXME[ISIS-2882] wire up correctly
+    @Override
+    protected IConverter<T> getConverter(@NonNull final ObjectFeature propOrParam,
+            @NonNull final ScalarRepresentation scalarRepresentation) {
+        // TODO Auto-generated method stub
         return null;
     }
 

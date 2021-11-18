@@ -22,14 +22,10 @@ import java.io.Serializable;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.util.convert.IConverter;
 
-import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
-import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -48,7 +44,7 @@ extends ScalarPanelTextFieldAbstract<T> {
     }
 
     @Override
-    protected Component createComponentForCompact() {
+    protected final Component createComponentForCompact() {
         val label = Wkt.labelAddWithConverter(
                 getCompactFragment(CompactType.SPAN),
                 ID_SCALAR_IF_COMPACT, newTextFieldValueModel(), cls, getConverter(getModel()));
@@ -57,24 +53,8 @@ extends ScalarPanelTextFieldAbstract<T> {
     }
 
     @Override
-    protected IModel<String> obtainInlinePromptModel() {
+    protected final IModel<String> obtainInlinePromptModel() {
         return super.toStringConvertingModelOf(getConverter(scalarModel));
     }
-
-    //FIXME move up in hierarchy
-    protected final IConverter<T> getConverter(final ScalarModel scalarModel) {
-        return getConverter(scalarModel.getMetaModel(), scalarModel.isEditMode()
-                ? ScalarRepresentation.EDITING
-                : ScalarRepresentation.VIEWING);
-    }
-
-    /**
-     * Converter that is used for the either regular (editing) or compact (HTML) view of the panel,
-     * based on argument {@code scalarRepresentation}.
-     */
-    //FIXME move up in hierarchy
-    protected abstract IConverter<T> getConverter(
-            @NonNull ObjectFeature propOrParam,
-            @NonNull ScalarRepresentation scalarRepresentation);
 
 }

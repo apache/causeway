@@ -27,7 +27,8 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldD
 /**
  * Panel for rendering scalars of type {@link java.sql.Timestamp}.
  */
-public class JavaSqlTimestampPanel extends ScalarPanelTextFieldDatePickerAbstract<Timestamp> {
+public class JavaSqlTimestampPanel
+extends ScalarPanelTextFieldDatePickerAbstract<Timestamp> {
 
     private static final long serialVersionUID = 1L;
 

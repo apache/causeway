@@ -30,7 +30,7 @@ public enum ScalarRepresentation {
      * Editing (text-parsing) mode, corresponds to 'regular' UI components.
      * <p>
      * In case of value-types, indicates that for value-type to {@link String} conversion,
-     * a {@link Parser} is required.
+     * and vice versa, a {@link Parser} is required.
      */
     EDITING,
 

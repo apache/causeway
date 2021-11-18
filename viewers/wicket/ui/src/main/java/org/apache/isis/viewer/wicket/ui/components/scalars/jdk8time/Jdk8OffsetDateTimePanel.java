@@ -20,12 +20,8 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time;
 
 import java.time.OffsetDateTime;
 
-import org.apache.wicket.markup.html.form.AbstractTextComponent;
-
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldDatePickerAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDateTimePicker;
 
 /**
  * Panel for rendering scalars of type {@link OffsetDateTime}.
@@ -38,12 +34,6 @@ extends ScalarPanelTextFieldDatePickerAbstract<OffsetDateTime> {
     public Jdk8OffsetDateTimePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, OffsetDateTime.class);
         init(new DateConverterForJdk8OffsetDateTime(getWicketViewerSettings(), getAdjustBy()));
-    }
-
-    @Override
-    protected AbstractTextComponent<OffsetDateTime> createTextFieldForRegular(final String id) {
-        final TextFieldValueModel<OffsetDateTime> textFieldValueModel = new TextFieldValueModel<>(this);
-        return new TextFieldWithDateTimePicker<>(super.getCommonContext(), id, textFieldValueModel, cls, converter);
     }
 
 }

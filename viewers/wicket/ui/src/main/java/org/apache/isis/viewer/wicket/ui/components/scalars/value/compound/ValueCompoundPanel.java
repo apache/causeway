@@ -46,7 +46,7 @@ extends ScalarPanelTextFieldParseableAbstract {
     }
 
     @Override
-    protected AbstractTextComponent<String> createTextFieldForRegular(final String id) {
+    protected AbstractTextComponent<String> createTextField(final String id) {
         return new TextField<>(id, LambdaModel.of(()->
             renderer().simpleTextPresentation(null, scalarModel.getObject().getPojo())));
     }

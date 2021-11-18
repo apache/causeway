@@ -19,13 +19,14 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
 import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.converter.CharacterConverter;
-import org.springframework.util.ClassUtils;
 
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.isis.viewer.wicket.model.converter.CharacterConverterWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldAbstract;
 
-import lombok.val;
+import lombok.NonNull;
 
 /**
  * Panel for rendering scalars of type {@link Character} or <tt>char</tt>.
@@ -40,12 +41,10 @@ extends ScalarPanelTextFieldAbstract<Character> {
     }
 
     @Override
-    public <C> IConverter<C> getConverter(final Class<C> _type) {
-        val type = ClassUtils.resolvePrimitiveIfNecessary(_type);
-        if(Character.class.equals(type)) {
-            return (IConverter<C>) CharacterConverter.INSTANCE; //FIXME[ISIS-2882] use value semantics instead
-        }
-        return super.getConverter(_type);
+    protected IConverter<Character> getConverter(
+            final @NonNull ObjectFeature propOrParam,
+            final @NonNull ScalarRepresentation scalarRepresentation) {
+        return new CharacterConverterWkt(propOrParam, scalarRepresentation);
     }
 
 }

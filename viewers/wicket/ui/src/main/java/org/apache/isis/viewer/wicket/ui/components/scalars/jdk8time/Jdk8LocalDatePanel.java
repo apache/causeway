@@ -25,7 +25,8 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldD
 /**
  * Panel for rendering scalars of type {@link LocalDate}.
  */
-public class Jdk8LocalDatePanel extends ScalarPanelTextFieldDatePickerAbstract<LocalDate> {
+public class Jdk8LocalDatePanel
+extends ScalarPanelTextFieldDatePickerAbstract<LocalDate> {
 
     private static final long serialVersionUID = 1L;
 

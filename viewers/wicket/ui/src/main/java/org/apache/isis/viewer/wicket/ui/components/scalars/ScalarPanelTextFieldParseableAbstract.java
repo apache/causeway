@@ -18,51 +18,51 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import org.apache.wicket.markup.html.form.AbstractTextComponent;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.validation.validator.StringValidator;
 
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+
+import lombok.NonNull;
 
 /**
  * Adapter for {@link ScalarPanelTextFieldAbstract textField-based scalar panel}
  * s where moreover the scalar parameter or property is a value type that is
  * parseable.
  */
+@Deprecated //FIXME[ISIS-2882] probably remove class, have each value-type implement their own
 public abstract class ScalarPanelTextFieldParseableAbstract
 extends ScalarPanelTextFieldAbstract<String> {
 
     private static final long serialVersionUID = 1L;
 
-    public ScalarPanelTextFieldParseableAbstract(final String id, final ScalarModel scalarModel) {
+    protected ScalarPanelTextFieldParseableAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, String.class);
-    }
-
-    @Override
-    protected AbstractTextComponent<String> createTextFieldForRegular(final String id) {
-        final TextFieldStringModel model = new TextFieldStringModel(this);
-        return new TextField<>(id, model);
     }
 
     @Override
     protected void addStandardSemantics() {
         super.addStandardSemantics();
-
         addMaxLengthValidator();
     }
 
+    @Override
+    protected IConverter<String> getConverter(
+            final @NonNull ObjectFeature propOrParam,
+            final @NonNull ScalarRepresentation scalarRepresentation) {
+        return null; // does not use conversion
+    }
+
+    // -- HELPER
+
+    //FIXME[ISIS-2882] move up in hierarchy - also make sure logic is not already duplicated
     private void addMaxLengthValidator() {
-        final ScalarModel scalarModel = getModel();
-        final AbstractTextComponent<String> textField = getTextField();
-
-        final ObjectSpecification facetHolder = scalarModel.getScalarTypeSpec();
-
-        final MaxLengthFacet maxLengthFacet = facetHolder.getFacet(MaxLengthFacet.class);
-        if (maxLengthFacet != null) {
-            textField.add(StringValidator.maximumLength(maxLengthFacet.value()));
-        }
+        getModel().getScalarTypeSpec().lookupFacet(MaxLengthFacet.class)
+        .ifPresent(maxLengthFacet->
+            getTextField().add(StringValidator.maximumLength(maxLengthFacet.value())));
     }
 
 }

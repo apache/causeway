@@ -48,7 +48,7 @@ extends ScalarPanelTextFieldParseableAbstract {
     }
 
     @Override
-    protected AbstractTextComponent<String> createTextFieldForRegular(final String id) {
+    protected AbstractTextComponent<String> createTextField(final String id) {
         val model = new TextFieldStringModel(this);
         val textArea = new TextArea<String>(id, model);
         setRowsAndMaxLengthAttributesOn(textArea);

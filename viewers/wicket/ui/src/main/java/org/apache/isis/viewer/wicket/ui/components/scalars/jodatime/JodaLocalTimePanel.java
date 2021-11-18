@@ -23,14 +23,19 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.util.convert.IConverter;
 import org.joda.time.LocalTime;
 
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
 
+import lombok.NonNull;
+
 /**
  * Panel for rendering scalars of type {@link LocalTime}.
  */
-public class JodaLocalTimePanel extends ScalarPanelTextFieldAbstract<LocalTime> {
+public class JodaLocalTimePanel
+extends ScalarPanelTextFieldAbstract<LocalTime> {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,7 +44,7 @@ public class JodaLocalTimePanel extends ScalarPanelTextFieldAbstract<LocalTime> 
     }
 
     @Override
-    protected AbstractTextComponent<LocalTime> createTextFieldForRegular(final String id) {
+    protected AbstractTextComponent<LocalTime> createTextField(final String id) {
         final TextFieldValueModel<LocalTime> textFieldValueModel = new TextFieldValueModel<>(this);
         return new TextField<LocalTime>(id, textFieldValueModel, LocalTime.class) {
             private static final long serialVersionUID = 1L;
@@ -50,6 +55,14 @@ public class JodaLocalTimePanel extends ScalarPanelTextFieldAbstract<LocalTime> 
                 return (IConverter<C>) (type == LocalTime.class ? new ConverterForJodaLocalTime() : super.getConverter(type));
             }
         };
+    }
+
+    //FIXME[ISIS-2882] wire up correctly
+    @Override
+    protected IConverter<LocalTime> getConverter(@NonNull final ObjectFeature propOrParam,
+            final @NonNull ScalarRepresentation scalarRepresentation) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

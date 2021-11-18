@@ -29,7 +29,6 @@ public class BookmarkPanel extends ScalarPanelTextFieldParseableAbstract {
 
     private static final long serialVersionUID = 1L;
 
-
     public BookmarkPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
     }
