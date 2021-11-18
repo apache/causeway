@@ -20,7 +20,22 @@
 <xs:schema targetNamespace="http://isis.apache.org/schema/common"
            elementFormDefault="qualified"
            xmlns="http://isis.apache.org/schema/common"
-           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+           jaxb:extensionBindingPrefixes="xjc"
+           jaxb:version="1.0"
+           
+           >
+           
+	<xs:annotation>
+	   <xs:appinfo>
+	      <jaxb:globalBindings generateIsSetMethod="true">
+	          <xjc:serializable uid="1"/>
+	      </jaxb:globalBindings>
+	   </xs:appinfo>
+	</xs:annotation>
 
     <xs:complexType name="valueDto">
         <xs:choice minOccurs="0" maxOccurs="1">
