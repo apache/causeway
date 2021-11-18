@@ -18,19 +18,34 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.bookmark;
 
+import org.apache.wicket.util.convert.IConverter;
+
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.isis.viewer.wicket.model.converter.BookmarkConverterWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldAbstract;
+
+import lombok.NonNull;
 
 /**
  * Panel for rendering scalars of type {@link Bookmark}.
  */
-public class BookmarkPanel extends ScalarPanelTextFieldParseableAbstract {
+public class BookmarkPanel
+extends ScalarPanelTextFieldAbstract<Bookmark> {
 
     private static final long serialVersionUID = 1L;
 
     public BookmarkPanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel);
+        super(id, scalarModel, Bookmark.class);
+    }
+
+    @Override
+    protected IConverter<Bookmark> getConverter(
+            final @NonNull ObjectFeature propOrParam,
+            final @NonNull ScalarRepresentation scalarRepresentation) {
+        return new BookmarkConverterWkt(propOrParam, scalarRepresentation);
     }
 
 }

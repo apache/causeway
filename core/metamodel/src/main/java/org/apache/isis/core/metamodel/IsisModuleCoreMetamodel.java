@@ -51,6 +51,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.BigIntegerValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.BlobValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.BookmarkValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.BooleanValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.BufferedImageValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.ByteValueSemantics;
@@ -126,6 +127,7 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         MarkupValueSemantics.class,
         URLValueSemantics.class,
         LocalResourcePathValueSemantics.class,
+        BookmarkValueSemantics.class,
         UUIDValueSemantics.class,
         TreeNodeValueSemantics.class,
         ChangesDtoValueSemantics.class,

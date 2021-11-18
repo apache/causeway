@@ -16,24 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time;
+package org.apache.isis.viewer.wicket.model.converter;
 
-import java.time.LocalDateTime;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithTemporalPickerAbstract;
+import lombok.NonNull;
 
-/**
- * Panel for rendering scalars of type {@link LocalDateTime}.
- */
-public class Jdk8LocalDateTimePanel
-extends ScalarPanelTextFieldWithTemporalPickerAbstract<LocalDateTime> {
+public class BookmarkConverterWkt
+extends ConverterBasedOnValueSemantics<Bookmark> {
 
     private static final long serialVersionUID = 1L;
 
-    public Jdk8LocalDateTimePanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, LocalDateTime.class);
-        init(new DateConverterForJdk8LocalDateTime(getWicketViewerSettings(), getAdjustBy()));
+    public BookmarkConverterWkt(
+            final @NonNull ObjectFeature objFeature,
+            final @NonNull ScalarRepresentation scalarRepresentation) {
+        super(objFeature, scalarRepresentation);
     }
 
 }

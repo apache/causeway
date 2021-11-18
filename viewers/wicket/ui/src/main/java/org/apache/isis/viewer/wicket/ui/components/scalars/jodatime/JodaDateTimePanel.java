@@ -22,13 +22,13 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldDatePickerAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithTemporalPickerAbstract;
 
 /**
  * Panel for rendering scalars of type {@link LocalDateTime}.
  */
 public class JodaDateTimePanel
-extends ScalarPanelTextFieldDatePickerAbstract<DateTime> {
+extends ScalarPanelTextFieldWithTemporalPickerAbstract<DateTime> {
 
     private static final long serialVersionUID = 1L;
 

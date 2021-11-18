@@ -24,7 +24,7 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldBasedOnStringSemanticsAbstract;
 
 import de.agilecoders.wicket.core.util.Attributes;
 
@@ -32,7 +32,7 @@ import de.agilecoders.wicket.core.util.Attributes;
  * Panel for rendering scalars of type {@link Password Isis' applib.Password}.
  */
 public class IsisPasswordPanel
-extends ScalarPanelTextFieldParseableAbstract {
+extends ScalarPanelTextFieldBasedOnStringSemanticsAbstract {
 
     private static final long serialVersionUID = 1L;
 

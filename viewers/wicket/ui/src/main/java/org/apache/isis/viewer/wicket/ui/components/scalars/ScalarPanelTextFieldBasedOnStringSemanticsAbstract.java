@@ -19,10 +19,8 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.validation.validator.StringValidator;
 
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
@@ -33,36 +31,21 @@ import lombok.NonNull;
  * s where moreover the scalar parameter or property is a value type that is
  * parseable.
  */
-@Deprecated //FIXME[ISIS-2882] probably remove class, have each value-type implement their own
-public abstract class ScalarPanelTextFieldParseableAbstract
+public abstract class ScalarPanelTextFieldBasedOnStringSemanticsAbstract
 extends ScalarPanelTextFieldAbstract<String> {
 
     private static final long serialVersionUID = 1L;
 
-    protected ScalarPanelTextFieldParseableAbstract(final String id, final ScalarModel scalarModel) {
+    protected ScalarPanelTextFieldBasedOnStringSemanticsAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, String.class);
     }
 
     @Override
-    protected void addStandardSemantics() {
-        super.addStandardSemantics();
-        addMaxLengthValidator();
-    }
-
-    @Override
-    protected IConverter<String> getConverter(
+    protected final IConverter<String> getConverter(
             final @NonNull ObjectFeature propOrParam,
             final @NonNull ScalarRepresentation scalarRepresentation) {
         return null; // does not use conversion
     }
 
-    // -- HELPER
-
-    //FIXME[ISIS-2882] move up in hierarchy - also make sure logic is not already duplicated
-    private void addMaxLengthValidator() {
-        getModel().getScalarTypeSpec().lookupFacet(MaxLengthFacet.class)
-        .ifPresent(maxLengthFacet->
-            getTextField().add(StringValidator.maximumLength(maxLengthFacet.value())));
-    }
 
 }

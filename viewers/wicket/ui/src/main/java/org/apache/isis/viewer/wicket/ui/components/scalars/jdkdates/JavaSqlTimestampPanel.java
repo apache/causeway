@@ -22,13 +22,13 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates;
 import java.sql.Timestamp;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldDatePickerAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithTemporalPickerAbstract;
 
 /**
  * Panel for rendering scalars of type {@link java.sql.Timestamp}.
  */
 public class JavaSqlTimestampPanel
-extends ScalarPanelTextFieldDatePickerAbstract<Timestamp> {
+extends ScalarPanelTextFieldWithTemporalPickerAbstract<Timestamp> {
 
     private static final long serialVersionUID = 1L;
 

@@ -21,13 +21,13 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates;
 
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldDatePickerAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithTemporalPickerAbstract;
 
 /**
  * Panel for rendering scalars of type {@link java.util.Date}.
  */
 public class JavaUtilDatePanel
-extends ScalarPanelTextFieldDatePickerAbstract<java.util.Date> {
+extends ScalarPanelTextFieldWithTemporalPickerAbstract<java.util.Date> {
 
     private static final long serialVersionUID = 1L;
 

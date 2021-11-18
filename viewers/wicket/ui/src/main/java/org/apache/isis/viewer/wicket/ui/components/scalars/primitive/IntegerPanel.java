@@ -24,14 +24,14 @@ import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.converter.IntegerConverterWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumericAbstract;
 
 import lombok.NonNull;
 
 /**
  * Panel for rendering scalars of type {@link Integer} or <tt>int</tt>.
  */
-public class IntegerPanel extends ScalarPanelTextFieldNumeric<Integer> {
+public class IntegerPanel extends ScalarPanelTextFieldNumericAbstract<Integer> {
 
     private static final long serialVersionUID = 1L;
 

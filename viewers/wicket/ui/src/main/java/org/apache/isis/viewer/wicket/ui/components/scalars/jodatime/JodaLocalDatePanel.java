@@ -21,13 +21,13 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jodatime;
 import org.joda.time.LocalDate;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldDatePickerAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithTemporalPickerAbstract;
 
 /**
  * Panel for rendering scalars of type {@link LocalDate}.
  */
 public class JodaLocalDatePanel
-extends ScalarPanelTextFieldDatePickerAbstract<LocalDate> {
+extends ScalarPanelTextFieldWithTemporalPickerAbstract<LocalDate> {
 
     private static final long serialVersionUID = 1L;
 

@@ -34,6 +34,7 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
+import org.apache.wicket.validation.validator.StringValidator;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
@@ -191,8 +192,27 @@ implements TextFieldValueModel.ScalarModelProvider {
     protected void addStandardSemantics() {
         textField.setRequired(getModel().isRequired());
         setTextFieldSizeAndMaxLengthIfSpecified();
-
         addValidatorForIsisValidation();
+    }
+
+    private void setTextFieldSizeAndMaxLengthIfSpecified() {
+
+        final Integer maxLength = getMaxLengthOf(getModel());
+        Integer typicalLength = getTypicalLenghtOf(getModel());
+
+        // doesn't make sense for typical length to be > maxLength
+        if(typicalLength != null && maxLength != null && typicalLength > maxLength) {
+            typicalLength = maxLength;
+        }
+
+        if (typicalLength != null) {
+            textField.add(new AttributeModifier("size", Model.of("" + typicalLength)));
+        }
+
+        if(maxLength != null) {
+            textField.add(new AttributeModifier("maxlength", Model.of("" + maxLength)));
+            textField.add(StringValidator.maximumLength(maxLength));
+        }
     }
 
     private void addValidatorForIsisValidation() {
@@ -225,27 +245,7 @@ implements TextFieldValueModel.ScalarModelProvider {
         });
     }
 
-    private void setTextFieldSizeAndMaxLengthIfSpecified() {
-
-        final Integer maxLength = getMaxLengthOf(getModel());
-        Integer typicalLength = getTypicalLenghtOf(getModel());
-
-        // doesn't make sense for typical length to be > maxLength
-        if(typicalLength != null && maxLength != null && typicalLength > maxLength) {
-            typicalLength = maxLength;
-        }
-
-        if (typicalLength != null) {
-            textField.add(new AttributeModifier("size", Model.of("" + typicalLength)));
-        }
-
-        if(maxLength != null) {
-            textField.add(new AttributeModifier("maxlength", Model.of("" + maxLength)));
-        }
-    }
-
-
-    // //////////////////////////////////////
+    // --
 
     /**
      * Mandatory hook method to build the component to render the model when in
@@ -256,6 +256,7 @@ implements TextFieldValueModel.ScalarModelProvider {
      */
     @Override
     protected Component createComponentForCompact() {
+        //FIXME[ISIS-2882] wire-up with value semantics to use Renderer instead of Parser here
         return Wkt.labelAdd(
                 getCompactFragment(CompactType.SPAN), ID_SCALAR_IF_COMPACT,
                 ()->getModel().getObjectAsString());
@@ -265,7 +266,6 @@ implements TextFieldValueModel.ScalarModelProvider {
         INPUT_CHECKBOX,
         SPAN
     }
-
 
     Fragment getCompactFragment(final CompactType type) {
         Fragment compactFragment;

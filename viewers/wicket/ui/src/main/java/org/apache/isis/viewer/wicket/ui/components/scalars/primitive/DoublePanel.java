@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.converter.DoubleConverterWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumericAbstract;
 
 import lombok.NonNull;
 
@@ -32,7 +32,7 @@ import lombok.NonNull;
  * Panel for rendering scalars of type {@link Double} or <tt>double</tt>.
  */
 public class DoublePanel
-extends ScalarPanelTextFieldNumeric<Double> {
+extends ScalarPanelTextFieldNumericAbstract<Double> {
 
     private static final long serialVersionUID = 1L;
 

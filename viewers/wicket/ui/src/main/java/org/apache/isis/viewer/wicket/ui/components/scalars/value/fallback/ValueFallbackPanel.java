@@ -22,7 +22,7 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldBasedOnStringSemanticsAbstract;
 
 /**
  * Panel for rendering any value types that do not have their own custom
@@ -33,7 +33,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldP
  * (typically through the Isis' {@link Value} annotation.
  */
 public class ValueFallbackPanel
-extends ScalarPanelTextFieldParseableAbstract {
+extends ScalarPanelTextFieldBasedOnStringSemanticsAbstract {
 
     private static final long serialVersionUID = 1L;
 

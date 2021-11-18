@@ -41,22 +41,23 @@ import lombok.NonNull;
 /**
  * Panel for rendering scalars representing dates, along with a date picker.
  */
-public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializable>
+public abstract class ScalarPanelTextFieldWithTemporalPickerAbstract<T extends Serializable>
 extends ScalarPanelTextFieldAbstract<T>  {
 
     private static final long serialVersionUID = 1L;
 
     protected DateConverter<T> converter;
 
-    public ScalarPanelTextFieldDatePickerAbstract(final String id, final ScalarModel scalarModel, final Class<T> cls) {
+    public ScalarPanelTextFieldWithTemporalPickerAbstract(
+            final String id, final ScalarModel scalarModel, final Class<T> cls) {
         super(id, scalarModel, cls);
     }
 
     /**
      * Expected to be in subclasses' constructor.
-     *
      * <p>
-     * Is not passed into constructor only to allow subclass to read from injected {@link #getWicketViewerSettings()}.
+     * Is not passed into constructor only to allow subclass to read from injected
+     * {@link #getWicketViewerSettings()}.
      */
     protected void init(final DateConverter<T> converter) {
         this.converter = converter;
@@ -110,9 +111,9 @@ extends ScalarPanelTextFieldAbstract<T>  {
         return super.toStringConvertingModelOf(converter);
     }
 
-
     /**
-     * Optional override for subclasses to explicitly indicate desired amount to adjust compact form of textField
+     * Optional override for subclasses to explicitly indicate desired amount to adjust
+     * compact form of textField
      */
     protected Integer getLengthAdjustHint() {
         return null;

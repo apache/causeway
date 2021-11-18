@@ -21,13 +21,13 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time;
 import java.time.OffsetDateTime;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldDatePickerAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithTemporalPickerAbstract;
 
 /**
  * Panel for rendering scalars of type {@link OffsetDateTime}.
  */
 public class Jdk8OffsetDateTimePanel
-extends ScalarPanelTextFieldDatePickerAbstract<OffsetDateTime> {
+extends ScalarPanelTextFieldWithTemporalPickerAbstract<OffsetDateTime> {
 
     private static final long serialVersionUID = 1L;
 
