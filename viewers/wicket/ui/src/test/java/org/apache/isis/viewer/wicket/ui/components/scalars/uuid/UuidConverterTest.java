@@ -59,7 +59,7 @@ class UuidConverterTest {
 
     @Test
     void invalid() {
-        converterTester.assertConversionFailure("junk", "Failed to convert 'junk' to a UUID");
+        converterTester.assertConversionFailure("junk", "Invalid UUID string: junk");
     }
 
     // -- SCENARIOS

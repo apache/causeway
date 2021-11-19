@@ -63,7 +63,6 @@ class BigDecimalConverter {
     void scale4_english() {
         converterTester.setScenario(Locale.ENGLISH, newConverter(CustomerScale4.class));
         converterTester.assertRoundtrip(bd_123_45_scale4, "123.4500", "123.45");
-
     }
 
     @Test
