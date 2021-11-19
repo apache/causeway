@@ -36,7 +36,6 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@SuppressWarnings("unused")
 class MixinIntendedAsActionTest extends MixinIntendedAs {
 
     @BeforeEach
@@ -52,69 +51,69 @@ class MixinIntendedAsActionTest extends MixinIntendedAs {
     // the non holder
     @DomainObject
     static class NoCustomer {
-        
+
     }
-    
+
     // the (shared) holder
     @DomainObject @Data
     static class Customer {
         String name;
     }
-    
+
     // ------------------------------
     // -- classic mix-in declaration
     // ------------------------------
-    
-    @Action @RequiredArgsConstructor 
+
+    @Action @RequiredArgsConstructor
     static class Customer_mixin {
-        
+
         private final Customer holder;
-        
-        public void act(String newName) { holder.setName(newName); }
+
+        public void act(final String newName) { holder.setName(newName); }
     }
-    
+
     @Test
     void classicMixin_shouldHaveProperFacet() {
 
         val mixinFacet = super.runTypeContextOn(Customer_mixin.class)
                 .getFacet(MixinFacet.class);
-        
+
         // proper predicates
         assertNotNull(mixinFacet);
         assertTrue(mixinFacet.isMixinFor(Customer.class));
         assertFalse(mixinFacet.isMixinFor(NoCustomer.class));
-        
+
         // proper instantiation
         val holderPojo = new Customer();
         val mixinPojo = mixinFacet.instantiate(holderPojo);
         ((Customer_mixin)mixinPojo).act("hello");
         assertEquals("hello", holderPojo.getName());
-        
+
     }
-    
+
     // ------------------------------------------
     // -- advanced mix-in declaration ... @Action
     // ------------------------------------------
-    
-    @Action @RequiredArgsConstructor 
+
+    @Action @RequiredArgsConstructor
     static class Customer_action {
-        
+
         private final Customer holder;
 
-        public void $$(String newName) { holder.setName(newName); }
+        public void $$(final String newName) { holder.setName(newName); }
     }
-    
+
     @Test
     void actionMixin_shouldHaveProperFacet() {
 
         val mixinFacet = super.runTypeContextOn(Customer_action.class)
                 .getFacet(MixinFacet.class);
-        
+
         // proper predicates
         assertNotNull(mixinFacet);
         assertTrue(mixinFacet.isMixinFor(Customer.class));
         assertFalse(mixinFacet.isMixinFor(NoCustomer.class));
-        
+
         // proper instantiation
         val holderPojo = new Customer();
         val mixinPojo = mixinFacet.instantiate(holderPojo);
@@ -125,46 +124,46 @@ class MixinIntendedAsActionTest extends MixinIntendedAs {
     // ------------------------------------------
     // -- advanced mix-in declaration ... @Property
     // ------------------------------------------
-    
-    @Property @RequiredArgsConstructor 
+
+    @Property @RequiredArgsConstructor
     static class Customer_property {
-        
+
         private final Customer holder;
 
-        public void $$(String newName) { holder.setName(newName); }
+        public void $$(final String newName) { holder.setName(newName); }
     }
-    
+
     @Test
     void propertyMixin_shouldHaveProperFacet() {
 
         val mixinFacet = super.runTypeContextOn(Customer_property.class)
                 .getFacet(MixinFacet.class);
-        
+
         // proper predicates
         assertNotNull(mixinFacet);
         assertTrue(mixinFacet.isMixinFor(Customer.class));
         assertFalse(mixinFacet.isMixinFor(NoCustomer.class));
 
     }
-    
+
     // ------------------------------------------
     // -- advanced mix-in declaration ... @Property
     // ------------------------------------------
-    
-    @Collection @RequiredArgsConstructor 
+
+    @Collection @RequiredArgsConstructor
     static class Customer_collection {
-        
+
         private final Customer holder;
 
-        public void $$(String newName) { holder.setName(newName); }
+        public void $$(final String newName) { holder.setName(newName); }
     }
-    
+
     @Test
     void collectionMixin_shouldHaveProperFacet() {
 
         val mixinFacet = super.runTypeContextOn(Customer_collection.class)
                 .getFacet(MixinFacet.class);
-        
+
         // proper predicates
         assertNotNull(mixinFacet);
         assertTrue(mixinFacet.isMixinFor(Customer.class));

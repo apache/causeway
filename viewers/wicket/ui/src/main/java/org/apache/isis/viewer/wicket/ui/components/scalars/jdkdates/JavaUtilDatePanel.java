@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates;
 
-
-
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithTemporalPickerAbstract;
 
@@ -33,12 +31,6 @@ extends ScalarPanelTextFieldWithTemporalPickerAbstract<java.util.Date> {
 
     public JavaUtilDatePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, java.util.Date.class);
-        init(new DateConverterForJavaUtilDate(getWicketViewerSettings(), getAdjustBy()));
-    }
-
-    @Override
-    protected Integer getLengthAdjustHint() {
-        return +3;
     }
 
 }

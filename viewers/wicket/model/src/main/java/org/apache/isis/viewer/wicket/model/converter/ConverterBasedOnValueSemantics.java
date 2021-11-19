@@ -48,7 +48,7 @@ implements
 
     private final Identifier featureIdentifier;
     private final ScalarRepresentation scalarRepresentation;
-    private transient _Either<OneToOneAssociation,  ObjectActionParameter> propOrParam;
+    private transient _Either<OneToOneAssociation, ObjectActionParameter> propOrParam;
     private transient IsisAppCommonContext commonContext;
 
     public ConverterBasedOnValueSemantics(
@@ -120,6 +120,15 @@ implements
         }
 
         throw _Exceptions.unmatchedCase(scalarRepresentation);
+    }
+
+    public String getEditingPattern() {
+        val feature = feature();
+        val valueFacet = valueFacet();
+        val context = valueFacet
+                .createValueSemanticsContext(feature);
+        return valueFacet.selectParserForFeatureElseFallback(feature)
+                .getPattern(context);
     }
 
     // -- HELPER

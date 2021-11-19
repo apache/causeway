@@ -19,18 +19,12 @@
 package org.apache.isis.core.metamodel.valuesemantics.temporal;
 
 import java.time.OffsetTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.schema.common.v2.ValueType;
-
-import lombok.val;
 
 @Component
 @Named("isis.val.OffsetTimeValueSemantics")
@@ -51,33 +45,11 @@ extends TemporalValueSemanticsProvider<OffsetTime> {
         return ValueType.OFFSET_TIME;
     }
 
-    public OffsetTimeValueSemantics(final IsisConfiguration config) {
+    public OffsetTimeValueSemantics() {
         super(TemporalCharacteristic.TIME_ONLY, OffsetCharacteristic.OFFSET,
                 TYPICAL_LENGTH, MAX_LENGTH,
                 OffsetTime::from,
                 TemporalAdjust::adjustOffsetTime);
-
-        val basicTimeNoMillis = "HHmmssZ";
-        val basicTime = "HHmmss.SSSZ";
-
-        super.addNamedFormat("iso", basicTimeNoMillis);
-        super.addNamedFormat("iso_encoding", basicTime);
-        super.updateParsers();
-
-        setEncodingFormatter(lookupNamedFormatterElseFail("iso_encoding"));
-
-        val configuredNameOrPattern = config.getValueTypes().getJavaTime().getOffsetTime().getFormat();
-
-        // walk through 3 methods of generating a formatter, first one to return non empty wins
-        val formatter = formatterFirstOf(Can.of(
-                ()->lookupFormatStyle(configuredNameOrPattern).map(DateTimeFormatter::ofLocalizedTime),
-                ()->lookupNamedFormatter(configuredNameOrPattern),
-                ()->formatterFromPattern(configuredNameOrPattern)
-                ))
-        .orElseGet(()->DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM));  // fallback
-
-        //TODO those FormatStyle based formatters potentially need additional zone information
-        setTitleFormatter(formatter);
     }
 
 

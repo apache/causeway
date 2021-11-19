@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.adapters;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+
 /**
  * Provides a mechanism for parsing and rendering string representations of
  * objects.
@@ -97,6 +99,10 @@ public interface Parser<T> {
      */
     default int maxLength() {
         return -1;
+    }
+
+    default String getPattern(final ValueSemanticsProvider.Context context) {
+        throw _Exceptions.notImplemented(); // implement in sub classes
     }
 
 }

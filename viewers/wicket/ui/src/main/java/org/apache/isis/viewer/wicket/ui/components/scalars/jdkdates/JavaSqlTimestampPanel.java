@@ -34,12 +34,6 @@ extends ScalarPanelTextFieldWithTemporalPickerAbstract<Timestamp> {
 
     public JavaSqlTimestampPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, java.sql.Timestamp.class);
-        init(new DateConverterForJavaSqlTimestamp(getWicketViewerSettings(), getAdjustBy()));
-    }
-
-    @Override
-    protected Integer getLengthAdjustHint() {
-        return +3;
     }
 
 }

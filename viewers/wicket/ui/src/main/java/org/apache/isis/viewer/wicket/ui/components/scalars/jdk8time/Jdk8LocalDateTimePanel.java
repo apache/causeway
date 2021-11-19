@@ -33,7 +33,6 @@ extends ScalarPanelTextFieldWithTemporalPickerAbstract<LocalDateTime> {
 
     public Jdk8LocalDateTimePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, LocalDateTime.class);
-        init(new DateConverterForJdk8LocalDateTime(getWicketViewerSettings(), getAdjustBy()));
     }
 
 }

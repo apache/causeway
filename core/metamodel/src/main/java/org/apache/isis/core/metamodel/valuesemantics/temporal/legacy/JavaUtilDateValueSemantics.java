@@ -18,29 +18,19 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics.temporal.legacy;
 
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-import java.util.TimeZone;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.clock.VirtualClock;
-import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
+import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsAdapter;
 import org.apache.isis.schema.common.v2.ValueType;
-
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * An adapter that handles {@link java.util.Date} as both a date AND time
@@ -52,120 +42,36 @@ import lombok.Setter;
 @Component
 @Named("isis.val.JavaUtilDateValueSemantics")
 public class JavaUtilDateValueSemantics
-extends LegacyTemporalValueSemanticsAbstract<java.util.Date> {
+extends ValueSemanticsAdapter<Date, LocalDateTime>  {
 
-    private static Map<String, DateFormat> formats = _Maps.newHashMap();
-
-    @Inject ClockService clockService;
-
-    static {
-        formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("yyyyMMdd'T'HHmmssSSS"));
-        formats.put("iso", createDateFormat("yyyy-MM-dd HH:mm"));
-        formats.put("medium", DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT));
-    }
+    @Inject LocalDateTimeValueSemantics localDateTimeValueSemantics;
 
     @Override
     public Class<Date> getCorrespondingClass() {
-        return Date.class;
+        return java.util.Date.class;
     }
 
     @Override
     public ValueType getSchemaValueType() {
-        return ValueType.LOCAL_DATE;
-    }
-
-    @Getter @Setter
-    private String configuredFormat;
-
-    public JavaUtilDateValueSemantics(final IsisConfiguration config) {
-        super(Date.class, 18);
-
-        final Map<String, DateFormat> formats = formats();
-        configuredFormat = config.getValueTypes().getJavaUtil().getDate().getFormat();
-        format = formats.get(configuredFormat);
-        if (format == null) {
-            setMask(configuredFormat);
-        }
-    }
-
-    // //////////////////////////////////////////////////////////////////
-    // temporal-specific stuff
-    // //////////////////////////////////////////////////////////////////
-
-    @Override
-    protected Map<String, DateFormat> formats() {
-        return formats;
+        return UNREPRESENTED;
     }
 
     @Override
-    protected DateFormat format() {
-        final Locale locale = Locale.getDefault();
-        final TimeZone timeZone = TimeZone.getDefault();
-
-        final DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, locale);
-        dateFormat.setTimeZone(timeZone);
-        return dateFormat;
+    public ValueSemanticsAbstract<LocalDateTime> getDelegate() {
+        return localDateTimeValueSemantics;
     }
 
     @Override
-    protected List<DateFormat> formatsToTry() {
-        List<DateFormat> formats = new ArrayList<>();
-
-        final Locale locale = Locale.getDefault();
-        final TimeZone timeZone = TimeZone.getDefault();
-
-        formats.add(DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale));
-        formats.add(createDateFormat("yyyy-MM-dd HH:mm:ss.SSS"));
-        formats.add(createDateFormat("yyyyMMdd'T'HHmmssSSS"));
-        formats.add(DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, locale));
-        formats.add(createDateFormat("yyyy-MM-dd HH:mm:ss"));
-        formats.add(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale));
-        formats.add(createDateFormat("yyyyMMdd'T'HHmmss"));
-        formats.add(createDateFormat("yyyy-MM-dd HH:mm"));
-        formats.add(createDateFormat("yyyyMMdd'T'HHmm"));
-        formats.add(createDateFormat("dd-MMM-yyyy HH:mm"));
-
-        for (DateFormat format : formats) {
-            format.setTimeZone(timeZone);
-        }
-
-        return formats;
-    }
-
-
-    @Override
-    protected Date dateValue(final Object value) {
-        return value == null ? null : (Date) value;
+    public Date fromDelegateValue(final LocalDateTime delegateValue) {
+        return java.util.Date.from(delegateValue
+                    .atZone(ZoneId.systemDefault())
+                    .toInstant());
     }
 
     @Override
-    protected Date add(final Date original, final int years, final int months, final int days, final int hours, final int minutes) {
-        final Date date = original;
-        final Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-
-        cal.add(Calendar.YEAR, years);
-        cal.add(Calendar.MONTH, months);
-        cal.add(Calendar.DAY_OF_MONTH, days);
-        cal.add(Calendar.HOUR, hours);
-        cal.add(Calendar.MINUTE, minutes);
-
-        return setDate(cal.getTime());
+    public LocalDateTime toDelegateValue(final java.util.Date value) {
+        return LocalDateTime.ofInstant(
+                        value.toInstant(), ZoneId.systemDefault());
     }
 
-    @Override
-    protected Date now() {
-        return Optional.ofNullable(clockService)
-                .map(ClockService::getClock)
-                .map(VirtualClock::nowAsEpochMilli)
-                .map(Date::new)
-                .orElseGet(Date::new); // fallback to system time
-    }
-
-    @Override
-    protected Date setDate(final Date date) {
-        return date;
-    }
 }

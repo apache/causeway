@@ -19,19 +19,12 @@
 package org.apache.isis.core.metamodel.valuesemantics.temporal;
 
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Locale;
 
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.schema.common.v2.ValueType;
-
-import lombok.val;
 
 @Component
 @Named("isis.val.OffsetDateTimeValueSemantics")
@@ -52,35 +45,11 @@ extends TemporalValueSemanticsProvider<OffsetDateTime> {
         return ValueType.OFFSET_DATE_TIME;
     }
 
-    public OffsetDateTimeValueSemantics(final IsisConfiguration config) {
+    public OffsetDateTimeValueSemantics() {
         super(TemporalCharacteristic.DATE_TIME, OffsetCharacteristic.OFFSET,
                 TYPICAL_LENGTH, MAX_LENGTH,
                 OffsetDateTime::from,
                 TemporalAdjust::adjustOffsetDateTime);
-
-        val basicDateTimeNoMillis = "yyyyMMdd'T'HHmmssZ";
-        val basicDateTime = "yyyyMMdd'T'HHmmss.SSSZ";
-
-        super.addNamedFormat("iso", basicDateTimeNoMillis);
-        super.addNamedFormat("iso_encoding", basicDateTime);
-
-        super.updateParsers();
-
-        setEncodingFormatter(DateTimeFormatter.ofPattern(basicDateTime, Locale.getDefault()));
-
-        val configuredNameOrPattern = config.getValueTypes().getJavaTime().getOffsetDateTime().getFormat();
-
-        // walk through 3 methods of generating a formatter, first one to return non empty wins
-        val formatter = formatterFirstOf(Can.of(
-                ()->lookupFormatStyle(configuredNameOrPattern).map(DateTimeFormatter::ofLocalizedDateTime),
-                ()->lookupNamedFormatter(configuredNameOrPattern),
-                ()->formatterFromPattern(configuredNameOrPattern)
-                ))
-        .orElseGet(()->DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));  // fallback
-
-        //TODO those FormatStyle based formatters potentially need additional zone information
-        setTitleFormatter(formatter);
-
     }
 
 }

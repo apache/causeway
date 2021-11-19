@@ -18,42 +18,49 @@
  */
 package org.apache.isis.core.metamodel.facets.value;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import java.util.Locale;
-import java.util.TimeZone;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
+import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider.Context;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaUtilDateValueSemantics;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.val;
 
-public class JavaUtilDateValueSemanticsProviderTest
+class JavaUtilDateValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {
 
-    private java.util.Date date;
-    private JavaUtilDateValueSemantics value;
+    @SuppressWarnings("deprecation")
+    private final java.util.Date date = new java.util.Date(2013-1900, 03-1, 13, 17, 59);
+    private JavaUtilDateValueSemantics valueSemantics;
 
-    @Before
+    @BeforeEach
     public void setUpObjects() throws Exception {
 
-        date = new java.util.Date(0);
+        ValueSemanticsAbstract<LocalDateTime> delegate =
+                new LocalDateTimeValueSemantics();
 
-        setSemantics(value = new JavaUtilDateValueSemantics(metaModelContext.getConfiguration()) {
+        setSemantics(valueSemantics = new JavaUtilDateValueSemantics() {
+            @Override
+            public ValueSemanticsAbstract<LocalDateTime> getDelegate() {
+                return delegate;
+            }
         });
     }
 
     @Test
     public void testInvalidParse() throws Exception {
         try {
-            value.parseTextRepresentation(null, "invalid entry");
+            valueSemantics.parseTextRepresentation(null, "invalid entry");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -65,33 +72,16 @@ extends ValueSemanticsProviderAbstractTestCase {
      * don't know where that dependency is coming from.
      */
     @Test
-    public void testTitleOf() {
-        final String EXPECTED = DateFormat.getDateTimeInstance(SimpleDateFormat.MEDIUM, SimpleDateFormat.SHORT).format(new java.util.Date(0));
-        assertEquals(EXPECTED, value.simpleTextPresentation(null, date));
+    public void testRendering() {
+        val _context = Context.of(null, InteractionContext.builder().locale(Locale.ENGLISH).build());
+        assertEquals("Mar 13, 2013, 5:59:00 PM", valueSemantics.simpleTextPresentation(_context , date));
     }
 
     @Test
     public void testParse() throws Exception {
-
-        // prepare environment
-        val defaultLocale = Locale.getDefault();
-        val defaultTimezone = TimeZone.getDefault();
-        Locale.setDefault(Locale.UK);
-        TimeZone.setDefault(TimeZone.getTimeZone("Etc/UTC"));
-
-        val parsedDate = value.parseTextRepresentation(null, "1980-01-01 10:40");
-
-        // restore environment
-        Locale.setDefault(defaultLocale);
-        TimeZone.setDefault(defaultTimezone);
-
-
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
-        calendar.set(1980, 0, 1, 10, 40, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-
-        assertEquals(calendar.getTime(), parsedDate);
+        val _context = Context.of(null, InteractionContext.builder().locale(Locale.ENGLISH).build());
+        val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:00");
+        assertEquals(date.getTime(), parsedDate.getTime());
     }
 
 }

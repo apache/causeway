@@ -34,7 +34,6 @@ extends ScalarPanelTextFieldWithTemporalPickerAbstract<DateTime> {
 
     public JodaDateTimePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, DateTime.class);
-        init(new DateConverterForJodaDateTime(getWicketViewerSettings(), getAdjustBy()));
     }
 
 }

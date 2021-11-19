@@ -33,7 +33,6 @@ extends ScalarPanelTextFieldWithTemporalPickerAbstract<LocalDate> {
 
     public JodaLocalDatePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, LocalDate.class);
-        init(new DateConverterForJodaLocalDate(getWicketViewerSettings(), getAdjustBy()));
     }
 
 }

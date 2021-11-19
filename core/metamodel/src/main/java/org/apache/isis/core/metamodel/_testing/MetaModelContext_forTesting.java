@@ -208,7 +208,7 @@ implements MetaModelContext {
                 serviceRegistry,
                 metamodelEventService,
                 messageService,
-                specificationLoader,
+//                specificationLoader,
                 interactionProvider,
                 getTranslationService(),
                 authentication,
@@ -240,7 +240,8 @@ implements MetaModelContext {
                     _ManagedBeanAdapter.forTestingLazy(GridService.class, this::getGridService),
                     _ManagedBeanAdapter.forTestingLazy(JaxbService.class, this::getJaxbService),
                     _ManagedBeanAdapter.forTestingLazy(MenuBarsService.class, this::getMenuBarsService),
-                    _ManagedBeanAdapter.forTestingLazy(LayoutService.class, this::getLayoutService)
+                    _ManagedBeanAdapter.forTestingLazy(LayoutService.class, this::getLayoutService),
+                    _ManagedBeanAdapter.forTestingLazy(SpecificationLoader.class, this::getSpecificationLoader)
                 ),
                 singletonProviders.stream());
     }
@@ -274,10 +275,6 @@ implements MetaModelContext {
     public ServiceInjector getServiceInjector() {
         if(serviceInjector==null) {
             serviceInjector = new ServiceInjector_forTesting(this);
-            // hotfix
-            if(specificationLoader==null) {
-                getSpecificationLoader();
-            }
         }
         return serviceInjector;
     }

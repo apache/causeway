@@ -33,7 +33,6 @@ extends ScalarPanelTextFieldWithTemporalPickerAbstract<java.sql.Date> {
 
     public JavaSqlDatePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, java.sql.Date.class);
-        init(new DateConverterForJavaSqlDate(getWicketViewerSettings(), getAdjustBy()));
     }
 
 }
