@@ -16,24 +16,41 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.model.converter;
+package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import java.util.UUID;
+import java.io.Serializable;
 
+import org.apache.wicket.util.convert.IConverter;
+
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.isis.viewer.wicket.model.converter.ConverterBasedOnValueSemantics;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.NonNull;
 
-public class UuidConverterWkt
-extends ConverterBasedOnValueSemantics<UUID> {
+/**
+ * Specialization of {@link ScalarPanelTextFieldAbstract},
+ * where the scalar (parameter or property) is a value-type,
+ * using conversion that is backed by a {@link ValueSemanticsProvider}.
+ */
+public abstract class ScalarPanelTextFieldWithValueSemanticsAbstract<T extends Serializable>
+extends ScalarPanelTextFieldAbstract<T> {
 
     private static final long serialVersionUID = 1L;
 
-    public UuidConverterWkt(
-            final @NonNull ObjectFeature objFeature,
+    protected ScalarPanelTextFieldWithValueSemanticsAbstract(
+            final String id,
+            final ScalarModel scalarModel, final Class<T> type) {
+        super(id, scalarModel, type);
+    }
+
+    @Override
+    protected IConverter<T> getConverter(
+            final @NonNull ObjectFeature propOrParam,
             final @NonNull ScalarRepresentation scalarRepresentation) {
-        super(objFeature, scalarRepresentation);
+        return new ConverterBasedOnValueSemantics<>(propOrParam, scalarRepresentation);
     }
 
 }

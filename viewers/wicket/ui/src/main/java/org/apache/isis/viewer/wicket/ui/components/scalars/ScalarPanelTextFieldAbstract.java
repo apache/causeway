@@ -211,7 +211,9 @@ implements TextFieldValueModel.ScalarModelProvider {
 
         if(maxLength != null) {
             textField.add(new AttributeModifier("maxlength", Model.of("" + maxLength)));
-            textField.add(StringValidator.maximumLength(maxLength));
+            if(cls.equals(String.class)) {
+                textField.add(StringValidator.maximumLength(maxLength));
+            }
         }
     }
 

@@ -39,7 +39,7 @@ import lombok.NonNull;
 import lombok.Synchronized;
 import lombok.val;
 
-public abstract class ConverterBasedOnValueSemantics<T>
+public class ConverterBasedOnValueSemantics<T>
 implements
     IConverter<T>,
     HasCommonContext {
@@ -51,7 +51,7 @@ implements
     private transient _Either<OneToOneAssociation,  ObjectActionParameter> propOrParam;
     private transient IsisAppCommonContext commonContext;
 
-    protected ConverterBasedOnValueSemantics(
+    public ConverterBasedOnValueSemantics(
             final @NonNull ObjectFeature propOrParam,
             final @NonNull ScalarRepresentation scalarRepresentation) {
         this.scalarRepresentation = scalarRepresentation;

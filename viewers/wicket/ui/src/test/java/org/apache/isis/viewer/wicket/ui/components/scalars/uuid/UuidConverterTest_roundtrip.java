@@ -25,12 +25,6 @@ import org.apache.wicket.util.convert.ConversionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
@@ -40,7 +34,13 @@ import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics;
 import org.apache.isis.core.security._testing.InteractionService_forTesting;
-import org.apache.isis.viewer.wicket.model.converter.UuidConverterWkt;
+import org.apache.isis.viewer.wicket.model.converter.ConverterBasedOnValueSemantics;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -52,7 +52,7 @@ class UuidConverterTest_roundtrip {
 
     final UUID valid = UUID.randomUUID();
 
-    private UuidConverterWkt converter;
+    private ConverterBasedOnValueSemantics<UUID> converter;
 
     private InteractionService interactionService;
     private MetaModelContext mmc;
@@ -103,10 +103,10 @@ class UuidConverterTest_roundtrip {
 
     // -- HELPER
 
-    private UuidConverterWkt newConverter(final Class<?> type) {
+    private ConverterBasedOnValueSemantics<UUID> newConverter(final Class<?> type) {
         val customerSpec = mmc.getSpecificationLoader().specForTypeElseFail(type);
         val prop = customerSpec.getPropertyElseFail("value");
-        return new UuidConverterWkt(prop, ScalarRepresentation.EDITING);
+        return new ConverterBasedOnValueSemantics<>(prop, ScalarRepresentation.EDITING);
     }
 
     // -- SCENARIOS
