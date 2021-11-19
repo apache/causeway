@@ -18,33 +18,19 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
-import org.apache.wicket.util.convert.IConverter;
-
-import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.isis.viewer.wicket.model.converter.CharacterConverterWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldAbstract;
-
-import lombok.NonNull;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemanticsAbstract;
 
 /**
  * Panel for rendering scalars of type {@link Character} or <tt>char</tt>.
  */
 public class CharacterPanel
-extends ScalarPanelTextFieldAbstract<Character> {
+extends ScalarPanelTextFieldWithValueSemanticsAbstract<Character> {
 
     private static final long serialVersionUID = 1L;
 
     public CharacterPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, Character.class);
-    }
-
-    @Override
-    protected IConverter<Character> getConverter(
-            final @NonNull ObjectFeature propOrParam,
-            final @NonNull ScalarRepresentation scalarRepresentation) {
-        return new CharacterConverterWkt(propOrParam, scalarRepresentation);
     }
 
 }
