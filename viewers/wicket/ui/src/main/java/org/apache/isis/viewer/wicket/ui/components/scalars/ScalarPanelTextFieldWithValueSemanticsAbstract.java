@@ -47,7 +47,7 @@ extends ScalarPanelTextFieldAbstract<T> {
     }
 
     @Override
-    protected IConverter<T> getConverter(
+    protected final IConverter<T> getConverter(
             final @NonNull ObjectFeature propOrParam,
             final @NonNull ScalarRepresentation scalarRepresentation) {
         return new ConverterBasedOnValueSemantics<>(propOrParam, scalarRepresentation);

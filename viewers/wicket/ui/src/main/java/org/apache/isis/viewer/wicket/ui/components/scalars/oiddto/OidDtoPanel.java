@@ -18,34 +18,20 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.oiddto;
 
-import org.apache.wicket.util.convert.IConverter;
-
-import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.schema.common.v2.OidDto;
-import org.apache.isis.viewer.wicket.model.converter.OidDtoConverterWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldAbstract;
-
-import lombok.NonNull;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemanticsAbstract;
 
 /**
  * Panel for rendering scalars of type {@link org.apache.isis.schema.common.v2.OidDto}.
  */
 public class OidDtoPanel
-extends ScalarPanelTextFieldAbstract<OidDto> {
+extends ScalarPanelTextFieldWithValueSemanticsAbstract<OidDto> {
 
     private static final long serialVersionUID = 1L;
 
     public OidDtoPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, OidDto.class);
-    }
-
-    @Override
-    protected IConverter<OidDto> getConverter(
-            final @NonNull ObjectFeature propOrParam,
-            final @NonNull ScalarRepresentation scalarRepresentation) {
-        return new OidDtoConverterWkt(propOrParam, scalarRepresentation);
     }
 
 }
