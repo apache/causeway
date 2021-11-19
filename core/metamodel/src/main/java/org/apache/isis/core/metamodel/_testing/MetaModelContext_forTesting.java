@@ -274,6 +274,10 @@ implements MetaModelContext {
     public ServiceInjector getServiceInjector() {
         if(serviceInjector==null) {
             serviceInjector = new ServiceInjector_forTesting(this);
+            // hotfix
+            if(specificationLoader==null) {
+                getSpecificationLoader();
+            }
         }
         return serviceInjector;
     }
