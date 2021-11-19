@@ -18,15 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
-import org.apache.wicket.util.convert.IConverter;
-
-import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.isis.viewer.wicket.model.converter.ShortConverterWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumericAbstract;
-
-import lombok.NonNull;
 
 /**
  * Panel for rendering scalars of type {@link Short} or <tt>short</tt>.
@@ -40,10 +33,4 @@ extends ScalarPanelTextFieldNumericAbstract<Short> {
         super(id, scalarModel, Short.class);
     }
 
-    @Override
-    protected IConverter<Short> getConverter(
-            final @NonNull ObjectFeature propOrParam,
-            final @NonNull ScalarRepresentation scalarRepresentation) {
-        return new ShortConverterWkt(propOrParam, scalarRepresentation);
-    }
 }

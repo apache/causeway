@@ -32,7 +32,7 @@ import lombok.val;
  * Panel for rendering numeric scalars.
  */
 public abstract class ScalarPanelTextFieldNumericAbstract<T extends Serializable>
-extends ScalarPanelTextFieldAbstract<T> {
+extends ScalarPanelTextFieldWithValueSemanticsAbstract<T> {
 
     private static final long serialVersionUID = 1L;
 

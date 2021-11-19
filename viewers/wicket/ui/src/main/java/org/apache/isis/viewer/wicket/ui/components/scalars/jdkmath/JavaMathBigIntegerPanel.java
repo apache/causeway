@@ -20,15 +20,8 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath;
 
 import java.math.BigInteger;
 
-import org.apache.wicket.util.convert.IConverter;
-
-import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.isis.viewer.wicket.model.converter.BigIntegerConverterWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumericAbstract;
-
-import lombok.NonNull;
 
 /**
  * Panel for rendering scalars of type {@link BigInteger}.
@@ -41,12 +34,4 @@ extends ScalarPanelTextFieldNumericAbstract<BigInteger> {
     public JavaMathBigIntegerPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, BigInteger.class);
     }
-
-    @Override
-    protected IConverter<BigInteger> getConverter(
-            final @NonNull ObjectFeature propOrParam,
-            final @NonNull ScalarRepresentation scalarRepresentation) {
-        return new BigIntegerConverterWkt(propOrParam, scalarRepresentation);
-    }
-
 }

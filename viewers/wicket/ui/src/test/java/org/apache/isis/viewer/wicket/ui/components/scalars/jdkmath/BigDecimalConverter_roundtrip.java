@@ -27,11 +27,6 @@ import org.apache.wicket.util.convert.ConversionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
@@ -42,7 +37,12 @@ import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.isis.core.security._testing.InteractionService_forTesting;
-import org.apache.isis.viewer.wicket.model.converter.BigDecimalConverterWkt;
+import org.apache.isis.viewer.wicket.model.converter.ConverterBasedOnValueSemantics;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -177,10 +177,10 @@ class BigDecimalConverter_roundtrip {
         private BigDecimal value;
     }
 
-    private BigDecimalConverterWkt newConverter(final Class<?> type) {
+    private ConverterBasedOnValueSemantics<BigDecimal> newConverter(final Class<?> type) {
         val customerSpec = mmc.getSpecificationLoader().specForTypeElseFail(type);
         val prop = customerSpec.getPropertyElseFail("value");
-        return new BigDecimalConverterWkt(prop, ScalarRepresentation.EDITING);
+        return new ConverterBasedOnValueSemantics<>(prop, ScalarRepresentation.EDITING);
     }
 
 }

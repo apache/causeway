@@ -18,15 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
-import org.apache.wicket.util.convert.IConverter;
-
-import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.isis.viewer.wicket.model.converter.FloatConverterWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumericAbstract;
-
-import lombok.NonNull;
 
 /**
  * Panel for rendering scalars of type {@link Float} or <tt>float</tt>.
@@ -37,13 +30,6 @@ public class FloatPanel extends ScalarPanelTextFieldNumericAbstract<Float> {
 
     public FloatPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, Float.class);
-    }
-
-    @Override
-    protected IConverter<Float> getConverter(
-            final @NonNull ObjectFeature propOrParam,
-            final @NonNull ScalarRepresentation scalarRepresentation) {
-        return new FloatConverterWkt(propOrParam, scalarRepresentation);
     }
 
 }
