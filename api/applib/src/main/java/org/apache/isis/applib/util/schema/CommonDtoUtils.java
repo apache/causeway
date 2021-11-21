@@ -411,6 +411,7 @@ public final class CommonDtoUtils {
         return _Casts.uncheckedCast(getValueAsObject(valueDto, valueType));
     }
 
+    @SuppressWarnings("deprecation")
     private static Object getValueAsObject(
             final ValueDto valueDto,
             final ValueType valueType) {
@@ -454,14 +455,14 @@ public final class CommonDtoUtils {
             return JavaTimeXMLGregorianCalendarMarshalling.toZonedDateTime(valueDto.getZonedDateTime());
         case JAVA_SQL_TIMESTAMP:
             return JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(valueDto.getTimestamp());
-//        case JODA_DATE_TIME:
-//            return JodaTimeXMLGregorianCalendarMarshalling.toDateTime(valueDto.getOffsetDateTime());
-//        case JODA_LOCAL_DATE:
-//            return JodaTimeXMLGregorianCalendarMarshalling.toLocalDate(valueDto.getLocalDate());
-//        case JODA_LOCAL_DATE_TIME:
-//            return JodaTimeXMLGregorianCalendarMarshalling.toLocalDateTime(valueDto.getLocalDateTime());
-//        case JODA_LOCAL_TIME:
-//            return JodaTimeXMLGregorianCalendarMarshalling.toLocalTime(valueDto.getLocalTime());
+        case JODA_DATE_TIME:
+            return _JodaTimeHelper.toDateTime(valueDto.getOffsetDateTime());
+        case JODA_LOCAL_DATE:
+            return _JodaTimeHelper.toLocalDate(valueDto.getLocalDate());
+        case JODA_LOCAL_DATE_TIME:
+            return _JodaTimeHelper.toLocalDateTime(valueDto.getLocalDateTime());
+        case JODA_LOCAL_TIME:
+            return _JodaTimeHelper.toLocalTime(valueDto.getLocalTime());
         case ENUM:
             final EnumDto enumDto = valueDto.getEnum();
             final String enumType = enumDto.getEnumType();
