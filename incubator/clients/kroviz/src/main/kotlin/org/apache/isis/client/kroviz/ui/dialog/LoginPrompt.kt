@@ -32,8 +32,6 @@ import org.apache.isis.client.kroviz.ui.core.UiManager
 
 class LoginPrompt(val nextCommand: Command? = null) : Command() {
 
-    private lateinit var form: RoDialog
-
     //Default values
     private var url = Constants.demoUrl
     private var username = Constants.demoUser
@@ -47,9 +45,9 @@ class LoginPrompt(val nextCommand: Command? = null) : Command() {
         formItems.add(FormItem("Url", ValueType.SIMPLE_SELECT, urlList))
         formItems.add(FormItem("User", ValueType.TEXT, username))
         formItems.add(FormItem("Password", ValueType.PASSWORD, password))
-        form = RoDialog(caption = "Connect", items = formItems, command = this, heightPerc = 27)
+        dialog = RoDialog(caption = "Connect", items = formItems, command = this, heightPerc = 27)
         val at = UiManager.position!!
-        form.open(at)
+        dialog.open(at)
     }
 
     override fun execute(action: String?) {
@@ -61,14 +59,14 @@ class LoginPrompt(val nextCommand: Command? = null) : Command() {
             UiManager.login(url, username, password)
             val link = Link(href = url + Constants.restInfix)
             invoke(link)
-            UiManager.closeDialog(form)
+            UiManager.closeDialog(dialog)
         }
     }
 
     private fun extractUserInput() {
         //TODO function has a side effect, ie. changes variable values
         var key: String?
-        val formPanel = form.formPanel
+        val formPanel = dialog.formPanel
         val kids = formPanel!!.getChildren()
         //iterate over FormItems (0,1,2) but not Buttons(3,4)
         for (i in kids) {

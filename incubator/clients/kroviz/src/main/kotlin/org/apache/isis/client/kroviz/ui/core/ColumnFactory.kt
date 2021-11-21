@@ -41,7 +41,6 @@ class ColumnFactory {
     }
 
     fun buildColumns(displayCollection: CollectionDM): List<ColumnDefinition<dynamic>> {
-
         val columns = mutableListOf<ColumnDefinition<Exposer>>()
         addColumnForObjectIcon(displayCollection, columns)
         addColumnsForProperties(displayCollection, columns)

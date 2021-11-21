@@ -33,13 +33,12 @@ import org.apache.isis.client.kroviz.utils.Flatted
 import org.apache.isis.client.kroviz.utils.StringUtils
 import org.apache.isis.client.kroviz.utils.XmlHelper
 
-class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
+class EventLogDetail(logEntryFromTabulator: LogEntry) : Command() {
     private var logEntry: LogEntry
-    private lateinit var dialog: RoDialog
 
     init {
         // For a yet unknown reason, aggregators are not transmitted via tabulator.
-        // As a WORKAROUND, we fetch the full blown LogEntry from the EventStore again.
+        // As a WORKAROUND, we fetch the full-blown LogEntry from the EventStore again.
         val rs = ResourceSpecification(logEntryFromTabulator.title)
         logEntry = UiManager.getEventStore().findBy(rs) ?: logEntryFromTabulator  // in case of xml, we use the entry passed in
     }
@@ -90,7 +89,7 @@ class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
             }
             else -> {
                 console.log(logEntry)
-                console.log("Action not defined yet: " + action)
+                console.log("Action not defined yet: $action")
             }
         }
     }

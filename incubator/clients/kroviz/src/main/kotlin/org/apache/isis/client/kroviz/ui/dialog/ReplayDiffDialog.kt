@@ -25,8 +25,10 @@ import io.kvision.core.UNIT
 import io.kvision.panel.Direction
 import io.kvision.panel.SplitPanel
 import io.kvision.panel.VPanel
-import org.apache.isis.client.kroviz.core.event.EventState
+import io.kvision.state.ObservableList
+import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.LogEntry
+import org.apache.isis.client.kroviz.core.event.LogEntryComparison
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.ui.core.RoDialog
 import org.apache.isis.client.kroviz.ui.core.UiManager
@@ -36,7 +38,6 @@ class ReplayDiffDialog(
     private val expectedEvents: List<LogEntry>,
     title: String
 ) : Command() {
-    var dialog: RoDialog
 
     private val expectedPanel = VPanel(spacing = 3) {
         width = CssSize(20, UNIT.perc)
@@ -73,19 +74,26 @@ class ReplayDiffDialog(
     }
 
     override fun execute(action: String?) {
-        // iterate over expected and set each status to DIFF, where responses don't match
-        expectedEvents.forEach { xp ->
-            val rs = ResourceSpecification(xp.url, xp.subType)
-            val actual = UiManager.getEventStore().findBy(rs)
-            if (actual != null) {
-                val isSame = actual.response == xp.response
-                if (!isSame) {
-                    xp.state = EventState.DIFF
-                }
-            } else {
-                xp.state = EventState.DIFF
-            }
+        val comparisons = mutableListOf<LogEntryComparison>()
+        // first pass: iterate over expected
+        val actualStore = UiManager.getEventStore()
+        expectedEvents.forEach {
+            val rs = ResourceSpecification(it.url, it.subType)
+            val actualEvent: LogEntry? = actualStore.findBy(rs)
+            comparisons.add(LogEntryComparison(it, actualEvent))
         }
+
+        // second pass: iterate over actual
+        val actualEvents = actualStore.log
+        val expectedStore = EventStore()
+        expectedStore.log = expectedEvents as ObservableList<LogEntry>
+        actualEvents.forEach {
+            val rs = ResourceSpecification(it.url, it.subType)
+            val expectedEvent = expectedStore.findBy(rs)
+            //TODO check for duplicates?
+            comparisons.add(LogEntryComparison(expectedEvent, it))
+        }
+        EventCompareDialog(comparisons).open()
     }
 
 }

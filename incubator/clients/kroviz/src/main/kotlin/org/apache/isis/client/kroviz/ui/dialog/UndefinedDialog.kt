@@ -25,7 +25,7 @@ import org.apache.isis.client.kroviz.ui.core.RoDialog
 
 class UndefinedDialog(val logEntry: LogEntry) : Command() {
 
-    val instruction = """1. Create a ResponseClass under test/kotlin/org.ro.urls with
+    private val instruction = """1. Create a ResponseClass under test/kotlin/org.ro.urls with
     - url 
     - str (JSON)
 2. Create a TestCase under test/kotlin/org.ro.to

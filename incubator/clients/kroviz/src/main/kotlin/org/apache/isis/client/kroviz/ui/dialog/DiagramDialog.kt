@@ -32,11 +32,10 @@ class DiagramDialog(
 ) : Command() {
 
     private var callBack: Any = UUID()
-    private var dialog: RoDialog
     private val formItems = mutableListOf<FormItem>()
 
     override fun open() {
-        dialog.open()
+        super.open()
         UmlUtils.generateJsonDiagram(pumlCode, callBack)
     }
 

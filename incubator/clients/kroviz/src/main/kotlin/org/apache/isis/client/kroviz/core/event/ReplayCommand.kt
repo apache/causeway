@@ -56,7 +56,7 @@ class ReplayCommand : Command() {
         val uiEvents = filterReplayEvents(expectedEvents)
         replay(uiEvents, urlUnderTest)
 
-        val title = "Replay Events: " + oldBaseUrl + " -> " + urlUnderTest
+        val title = "Replay Events: $oldBaseUrl -> $urlUnderTest"
         val rdd = ReplayDiffDialog(expectedEvents, title)
         rdd.dialog.open()
     }

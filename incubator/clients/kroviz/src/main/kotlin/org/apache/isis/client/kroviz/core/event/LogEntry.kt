@@ -47,7 +47,6 @@ enum class EventState(val id: String, val iconName: String, val style: ButtonSty
     CLOSED("CLOSED", "fas fa-eye-slash", ButtonStyle.OUTLINEINFO),
     RELOAD("RELOAD", "fas fa-retweet", ButtonStyle.OUTLINEWARNING),
     MISSING("MISSING", "fas fa-bug", ButtonStyle.OUTLINEDANGER),
-    DIFF("DIFF", "fas fa-bell", ButtonStyle.DANGER),
     // IMPROVE multiple aspects intermangled: req/resp, view, as well as cache
     // encapsulate access with managers?
 }

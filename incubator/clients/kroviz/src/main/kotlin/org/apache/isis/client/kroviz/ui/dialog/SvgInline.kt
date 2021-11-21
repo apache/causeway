@@ -16,7 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package org.apache.isis.client.kroviz.ui.dialog
 
 import org.apache.isis.client.kroviz.core.aggregator.SvgDispatcher
@@ -29,12 +28,7 @@ import org.apache.isis.client.kroviz.ui.core.RoDialog
 import org.apache.isis.client.kroviz.utils.UUID
 
 class SvgInline : Command() {
-    private var dialog: RoDialog
     private val formItems = mutableListOf<FormItem>()
-
-    override fun open() {
-        dialog.open()
-    }
 
     init {
         val callBack = UUID()

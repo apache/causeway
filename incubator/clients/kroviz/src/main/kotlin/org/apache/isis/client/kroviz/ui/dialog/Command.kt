@@ -21,15 +21,17 @@ package org.apache.isis.client.kroviz.ui.dialog
 import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.to.Link
+import org.apache.isis.client.kroviz.ui.core.RoDialog
 
 abstract class Command {
+    lateinit var dialog: RoDialog
 
     open fun execute(action: String? = null) {
         // subclass responsibility
     }
 
     open fun open() {
-        // subclass responsibility
+        dialog.open()
     }
 
     fun invoke(link: Link) {

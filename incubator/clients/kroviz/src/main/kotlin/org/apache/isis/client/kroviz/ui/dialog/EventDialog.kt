@@ -30,8 +30,7 @@ import org.apache.isis.client.kroviz.ui.core.RoDialog
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.ui.panel.EventLogTable
 
-class EventDialog() : Command() {
-    var dialog: RoDialog
+class EventDialog : Command() {
 
     private val eventPanel = VPanel(spacing = 3) {
         width = CssSize(100, UNIT.perc)
@@ -84,16 +83,12 @@ class EventDialog() : Command() {
                 dialog.close()
             }
             action == REP -> {
-                LoginPrompt(ReplayCommand()).open()
+                LoginPrompt(nextCommand = ReplayCommand()).open()
                 dialog.close()
             }
             else -> {
             }
         }
-    }
-
-    override fun open() {
-        dialog.open()
     }
 
 }
