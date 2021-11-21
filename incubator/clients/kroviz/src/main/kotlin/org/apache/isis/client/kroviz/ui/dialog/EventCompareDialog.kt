@@ -24,8 +24,7 @@ import io.kvision.core.UNIT
 import io.kvision.panel.VPanel
 import org.apache.isis.client.kroviz.core.event.LogEntryComparison
 import org.apache.isis.client.kroviz.ui.core.RoDialog
-import org.apache.isis.client.kroviz.ui.core.UiManager
-import org.apache.isis.client.kroviz.ui.panel.EventLogTable
+import org.apache.isis.client.kroviz.ui.panel.EventComparisonTable
 
 class EventCompareDialog(val data: List<LogEntryComparison>) : Command() {
 
@@ -43,7 +42,7 @@ class EventCompareDialog(val data: List<LogEntryComparison>) : Command() {
             heightPerc = 70,
         )
         //FIXME -> reuse -> ColumnFactory and RoTable if possible
-        val table = EventLogTable(UiManager.getEventStore().log)
+        val table = EventComparisonTable(data)
         table.tabulator.addCssClass("tabulator-in-dialog")
         panel.add(table)
 

@@ -86,7 +86,7 @@ class ReplayDiffDialog(
         // second pass: iterate over actual
         val actualEvents = actualStore.log
         val expectedStore = EventStore()
-        expectedStore.log = expectedEvents as ObservableList<LogEntry>
+        expectedStore.log.addAll(expectedEvents)
         actualEvents.forEach {
             val rs = ResourceSpecification(it.url, it.subType)
             val expectedEvent = expectedStore.findBy(rs)

@@ -19,6 +19,7 @@
 package org.apache.isis.client.kroviz.core.event
 
 import io.kvision.html.ButtonStyle
+import kotlinx.serialization.Serializable
 
 enum class ChangeType(val id: String, val iconName: String, val style: ButtonStyle) {
     ADDED("ADDED", "fas fa-plus", ButtonStyle.INFO),
@@ -28,20 +29,28 @@ enum class ChangeType(val id: String, val iconName: String, val style: ButtonSty
     ERROR("ERROR", "fas fa-bug", ButtonStyle.OUTLINEDANGER),
 }
 
-class LogEntryComparison(val expected: LogEntry?, val actual: LogEntry?) {
+@Serializable
+data class LogEntryComparison(val expected: LogEntry?, val actual: LogEntry?) {
     var changeType: ChangeType
+    var title: String
     var iconName: String
-    var expectedResponse: String?
-    var actualResponse: String?
+    var expectedResponse: String? = null
+    var actualResponse: String? = null
 
     init {
         if (expected == null && actual == null) {
-            throw Throwable("[LogEntryComparison.init] actual and expected not set")
+            throw Throwable("[LogEntryComparison.init] neither actual nor expected set")
         } else {
             changeType = compare()
             iconName = changeType.iconName
-            expectedResponse = expected?.response
-            actualResponse = actual?.response
+            if (expected == null) {
+                actualResponse = actual?.response
+                title = actual?.title.toString()
+            } else {
+                expectedResponse = expected.response
+                title = expected.title
+            }
+
         }
     }
 
@@ -57,8 +66,8 @@ class LogEntryComparison(val expected: LogEntry?, val actual: LogEntry?) {
     }
 
     private fun areResponsesEqual(): Boolean {
-        val expectedBaseUrl: String = ""
-        val actualBaseUrl: String = "" //FIXME
+        val expectedBaseUrl = ""
+        val actualBaseUrl = "" //FIXME
         val expected = expectedResponse?.replace(expectedBaseUrl, "")
         val actual = actualResponse?.replace(actualBaseUrl, "")
         return (expected == actual)
