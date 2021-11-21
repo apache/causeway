@@ -18,8 +18,6 @@
  */
 package org.apache.isis.applib.util.schema;
 
-import static org.apache.isis.commons.internal.collections._Maps.entry;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -40,7 +38,6 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
-import org.apache.isis.applib.jaxb.JodaTimeXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.value.Blob;
@@ -62,6 +59,8 @@ import org.apache.isis.schema.common.v2.OidDto;
 import org.apache.isis.schema.common.v2.ValueDto;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
+
+import static org.apache.isis.commons.internal.collections._Maps.entry;
 
 import lombok.NonNull;
 import lombok.val;
@@ -181,6 +180,7 @@ public final class CommonDtoUtils {
         return valueWithTypeDto;
     }
 
+    @SuppressWarnings("deprecation")
     public static <T extends ValueDto> T setValueOn(
             final T valueDto,
             final ValueType valueType,
@@ -280,22 +280,22 @@ public final class CommonDtoUtils {
         }
         case JODA_DATE_TIME: {
             final org.joda.time.DateTime argValue = (org.joda.time.DateTime) pojo;
-            valueDto.setOffsetDateTime(JodaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(argValue));
+            valueDto.setOffsetDateTime(_JodaTimeHelper.toXMLGregorianCalendar(argValue));
             return valueDto;
         }
         case JODA_LOCAL_DATE_TIME: {
             final org.joda.time.LocalDateTime argValue = (org.joda.time.LocalDateTime) pojo;
-            valueDto.setLocalDateTime(JodaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(argValue));
+            valueDto.setLocalDateTime(_JodaTimeHelper.toXMLGregorianCalendar(argValue));
             return valueDto;
         }
         case JODA_LOCAL_DATE: {
             final org.joda.time.LocalDate argValue = (org.joda.time.LocalDate) pojo;
-            valueDto.setLocalDate(JodaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(argValue));
+            valueDto.setLocalDate(_JodaTimeHelper.toXMLGregorianCalendar(argValue));
             return valueDto;
         }
         case JODA_LOCAL_TIME: {
             final org.joda.time.LocalTime argValue = (org.joda.time.LocalTime) pojo;
-            valueDto.setLocalTime(JodaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(argValue));
+            valueDto.setLocalTime(_JodaTimeHelper.toXMLGregorianCalendar(argValue));
             return valueDto;
         }
         case JAVA_SQL_TIMESTAMP: {
@@ -395,7 +395,7 @@ public final class CommonDtoUtils {
 
     // -- getValue (from valueDto)
 
-    private static ValueType reduce(ValueType acc, ValueType next) {
+    private static ValueType reduce(final ValueType acc, final ValueType next) {
         if(acc==null) {
             return next;
         }
@@ -454,14 +454,14 @@ public final class CommonDtoUtils {
             return JavaTimeXMLGregorianCalendarMarshalling.toZonedDateTime(valueDto.getZonedDateTime());
         case JAVA_SQL_TIMESTAMP:
             return JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(valueDto.getTimestamp());
-        case JODA_DATE_TIME:
-            return JodaTimeXMLGregorianCalendarMarshalling.toDateTime(valueDto.getOffsetDateTime());
-        case JODA_LOCAL_DATE:
-            return JodaTimeXMLGregorianCalendarMarshalling.toLocalDate(valueDto.getLocalDate());
-        case JODA_LOCAL_DATE_TIME:
-            return JodaTimeXMLGregorianCalendarMarshalling.toLocalDateTime(valueDto.getLocalDateTime());
-        case JODA_LOCAL_TIME:
-            return JodaTimeXMLGregorianCalendarMarshalling.toLocalTime(valueDto.getLocalTime());
+//        case JODA_DATE_TIME:
+//            return JodaTimeXMLGregorianCalendarMarshalling.toDateTime(valueDto.getOffsetDateTime());
+//        case JODA_LOCAL_DATE:
+//            return JodaTimeXMLGregorianCalendarMarshalling.toLocalDate(valueDto.getLocalDate());
+//        case JODA_LOCAL_DATE_TIME:
+//            return JodaTimeXMLGregorianCalendarMarshalling.toLocalDateTime(valueDto.getLocalDateTime());
+//        case JODA_LOCAL_TIME:
+//            return JodaTimeXMLGregorianCalendarMarshalling.toLocalTime(valueDto.getLocalTime());
         case ENUM:
             final EnumDto enumDto = valueDto.getEnum();
             final String enumType = enumDto.getEnumType();
@@ -634,7 +634,7 @@ public final class CommonDtoUtils {
     }
 
 
-    public static boolean isValueType(Class<?> type) {
+    public static boolean isValueType(final Class<?> type) {
         return VALUE_TYPES.contains(type);
     }
 

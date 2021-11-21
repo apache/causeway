@@ -32,13 +32,12 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.jaxb.JodaTimeJaxbAdapters;
-
-import lombok.Getter;
-import lombok.Setter;
+import org.apache.isis.valuetypes.jodatime.applib.jaxb.JodaTimeJaxbAdapters;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.jodatime.jodalocaldatetime.holder.JodaLocalDateTimeHolder3;
+import lombok.Getter;
+import lombok.Setter;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -53,7 +52,7 @@ public class JodaLocalDateTimeVm
         implements HasAsciiDocDescription, JodaLocalDateTimeHolder3 {
 
 //end::class[]
-    public JodaLocalDateTimeVm(org.joda.time.LocalDateTime initialValue) {
+    public JodaLocalDateTimeVm(final org.joda.time.LocalDateTime initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
@@ -62,7 +61,7 @@ public class JodaLocalDateTimeVm
     @Title(prepend = "org.joda.time.LocalDateTime view model: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
-    @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateTimeToStringAdapter.class)                    // <.>
+    @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateTimeToStringAdapter.class)// <.>
     @Getter @Setter
     private org.joda.time.LocalDateTime readOnlyProperty;
 

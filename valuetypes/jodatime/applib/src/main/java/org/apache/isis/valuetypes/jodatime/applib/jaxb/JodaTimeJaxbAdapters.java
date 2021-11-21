@@ -28,15 +28,13 @@ import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
-import org.apache.isis.applib.jaxb.JodaTimeXMLGregorianCalendarMarshalling;
-
 import lombok.experimental.UtilityClass;
 
 /**
  * @since 2.0 {@index}
  */
 @UtilityClass
-public final class JodatimeJaxbAdapters {
+public final class JodaTimeJaxbAdapters {
 
     public static class LocalDateToStringAdapter extends XmlAdapter<String, LocalDate> {
 

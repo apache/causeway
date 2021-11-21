@@ -32,13 +32,12 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.jaxb.JodaTimeJaxbAdapters;
-
-import lombok.Getter;
-import lombok.Setter;
+import org.apache.isis.valuetypes.jodatime.applib.jaxb.JodaTimeJaxbAdapters;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.jodatime.jodalocaltime.holder.JodaLocalTimeHolder2;
+import lombok.Getter;
+import lombok.Setter;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -53,7 +52,7 @@ public class JodaLocalTimeVm
       implements HasAsciiDocDescription, JodaLocalTimeHolder2 {
 
 //end::class[]
-  public JodaLocalTimeVm(org.joda.time.LocalTime initialValue) {
+  public JodaLocalTimeVm(final org.joda.time.LocalTime initialValue) {
       this.readOnlyProperty = initialValue;
       this.readWriteProperty = initialValue;
   }

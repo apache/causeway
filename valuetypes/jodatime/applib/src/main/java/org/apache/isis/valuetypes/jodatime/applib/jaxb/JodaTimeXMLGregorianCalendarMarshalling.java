@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.jaxb;
+package org.apache.isis.valuetypes.jodatime.applib.jaxb;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -31,6 +31,8 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
+import org.apache.isis.applib.jaxb.DataTypeFactory;
+
 import lombok.experimental.UtilityClass;
 
 /**
@@ -39,7 +41,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class JodaTimeXMLGregorianCalendarMarshalling {
 
-    public static DateTime toDateTime(final XMLGregorianCalendar xgc) {
+    public DateTime toDateTime(final XMLGregorianCalendar xgc) {
         if(xgc == null) return null;
 
         final GregorianCalendar gc = xgc.toGregorianCalendar();
@@ -50,7 +52,7 @@ public class JodaTimeXMLGregorianCalendarMarshalling {
         return new DateTime(time, dateTimeZone);
     }
 
-    public static LocalDate toLocalDate(final XMLGregorianCalendar xgc) {
+    public LocalDate toLocalDate(final XMLGregorianCalendar xgc) {
         if(xgc == null) return null;
 
         final int year = xgc.getYear();
@@ -60,7 +62,7 @@ public class JodaTimeXMLGregorianCalendarMarshalling {
         return new LocalDate(year, month, day);
     }
 
-    public static LocalDateTime toLocalDateTime(final XMLGregorianCalendar xgc) {
+    public LocalDateTime toLocalDateTime(final XMLGregorianCalendar xgc) {
         if(xgc == null) return null;
 
         final int year = xgc.getYear();
@@ -74,7 +76,7 @@ public class JodaTimeXMLGregorianCalendarMarshalling {
         return new LocalDateTime(year, month, day, hour, minute, second, millisecond);
     }
 
-    public static LocalTime toLocalTime(final XMLGregorianCalendar xgc) {
+    public LocalTime toLocalTime(final XMLGregorianCalendar xgc) {
         if(xgc == null) {
             return null;
         }
@@ -87,14 +89,14 @@ public class JodaTimeXMLGregorianCalendarMarshalling {
         return new LocalTime(hour, minute, second, millisecond);
     }
 
-    public static XMLGregorianCalendar toXMLGregorianCalendar(DateTime dateTime) {
+    public XMLGregorianCalendar toXMLGregorianCalendar(final DateTime dateTime) {
         return dateTime!=null
                 ? DataTypeFactory.withTypeFactoryDo(factory->factory.newXMLGregorianCalendar(
                         dateTime.toGregorianCalendar()))
                 : null;
     }
 
-    public static XMLGregorianCalendar toXMLGregorianCalendar(final LocalDateTime localDateTime) {
+    public XMLGregorianCalendar toXMLGregorianCalendar(final LocalDateTime localDateTime) {
         return localDateTime !=null
                 ? DataTypeFactory.withTypeFactoryDo(factory->factory.newXMLGregorianCalendar(
                         localDateTime.getYear(),
@@ -109,7 +111,7 @@ public class JodaTimeXMLGregorianCalendarMarshalling {
                 : null;
     }
 
-    public static XMLGregorianCalendar toXMLGregorianCalendar(final LocalDate localDate) {
+    public XMLGregorianCalendar toXMLGregorianCalendar(final LocalDate localDate) {
         return localDate !=null
                 ? DataTypeFactory.withTypeFactoryDo(factory->factory.newXMLGregorianCalendarDate(
                         localDate.getYear(),
@@ -120,7 +122,7 @@ public class JodaTimeXMLGregorianCalendarMarshalling {
                 : null;
     }
 
-    public static XMLGregorianCalendar toXMLGregorianCalendar(final LocalTime localTime) {
+    public XMLGregorianCalendar toXMLGregorianCalendar(final LocalTime localTime) {
         return localTime !=null
                 ? DataTypeFactory.withTypeFactoryDo(factory->factory.newXMLGregorianCalendarTime(
                         localTime.getHourOfDay(),
