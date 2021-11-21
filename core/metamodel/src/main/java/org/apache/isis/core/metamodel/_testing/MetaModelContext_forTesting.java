@@ -439,7 +439,7 @@ implements MetaModelContext {
     private final GridService createGridService() {
         return new GridServiceDefault(
             getGridLoaderService(), _Lists.of(
-                    new GridSystemServiceBootstrap(getGridReader(),
+                    new GridSystemServiceBootstrap(this::getGridReader,
                             getSpecificationLoader(),
                             getTranslationService(),
                             getJaxbService(),

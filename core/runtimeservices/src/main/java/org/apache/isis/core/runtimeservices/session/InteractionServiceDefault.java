@@ -34,6 +34,7 @@ import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -69,8 +70,8 @@ import org.apache.isis.core.security.authentication.InteractionContextFactory;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Is the factory of {@link Interaction}s.
@@ -101,7 +102,7 @@ implements
     final InteractionScopeLifecycleHandler interactionScopeLifecycleHandler;
 
     // to allow implementations to have dependencies back on this service.
-    @Inject List<TransactionBoundaryAware> transactionBoundaryAwareBeans;
+    @Inject @Lazy List<TransactionBoundaryAware> transactionBoundaryAwareBeans;
 
     @Inject
     public InteractionServiceDefault(
