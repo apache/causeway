@@ -626,7 +626,7 @@ extends DelegatingInvocationHandlerDefault<T> {
     }
 
     private void zeroArgsElseThrow(final Object[] args, final String name) {
-        if (args.length != 0) {
+        if (!_NullSafe.isEmpty(args)) {
             throw new IllegalArgumentException(String.format(
                     "Invoking '%s' should have no arguments", name));
         }
