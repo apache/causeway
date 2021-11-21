@@ -34,6 +34,12 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import javax.activation.DataSource;
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
@@ -2683,6 +2689,179 @@ public class IsisConfiguration {
             }
         }
 
+        private final JavaTime javaTime = new JavaTime();
+        @Data
+        public static class JavaTime {
+            private final LocalDateTime localDateTime = new LocalDateTime();
+            @Data
+            public static class LocalDateTime {
+                /**
+                 * Configures the formats understood by <code>LocalDateTimeValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
+                private String format = "medium";
+            }
+
+            private final OffsetDateTime offsetDateTime = new OffsetDateTime();
+            @Data
+            public static class OffsetDateTime {
+                /**
+                 * Configures the formats understood by <code>OffsetDateTimeValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
+                private String format = "medium";
+            }
+
+            private final OffsetTime offsetTime = new OffsetTime();
+            @Data
+            public static class OffsetTime {
+                /**
+                 * Configures the formats understood by <code>OffsetTimeValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
+                private String format = "medium";
+            }
+
+            private final LocalDate localDate = new LocalDate();
+            @Data
+            public static class LocalDate {
+                /**
+                 * Configures the formats understood by <code>LocalDateValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
+                private String format = "medium";
+            }
+
+            private final LocalTime localTime = new LocalTime();
+            @Data
+            public static class LocalTime {
+                /**
+                 * Configures the formats understood by <code>LocalTimeValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
+                private String format = "medium";
+            }
+
+            private final ZonedDateTime zonedDateTime = new ZonedDateTime();
+            @Data
+            public static class ZonedDateTime {
+                /**
+                 * Configures the formats understood by <code>ZonedDateTimeValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
+                private String format = "medium";
+            }
+        }
+
+        private final JavaUtil javaUtil = new JavaUtil();
+        @Data
+        public static class JavaUtil {
+
+            private final Date date = new Date();
+            @Data
+            public static class Date {
+                /**
+                 * Configures the formats understood by <code>JavaUtilDateValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
+                private String format = "medium";
+            }
+
+        }
+
+        private final JavaSql javaSql = new JavaSql();
+        @Data
+        public static class JavaSql {
+            private final Date date = new Date();
+            @Data
+            public static class Date {
+                /**
+                 * Configures the formats understood by <code>JavaSqlDateValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
+                private String format = "medium";
+            }
+            private final Time time = new Time();
+            @Data
+            public static class Time {
+                /**
+                 * Configures the formats understood by <code>JavaSqlTimeValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
+                private String format = "short";
+            }
+
+            private final Timestamp timestamp = new Timestamp();
+            @Data
+            public static class Timestamp {
+                /**
+                 * Configures the formats understood by <code>JavaSqlTimeStampValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
+                private String format = "short";
+            }
+
+        }
+
+        private final Joda joda = new Joda();
+        @Data
+        public static class Joda {
+            private final LocalDateTime localDateTime = new LocalDateTime();
+            @Data
+            public static class LocalDateTime {
+                /**
+                 * Configures the formats understood by <code>JodaLocalDateTimeValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
+                private String format = "medium";
+            }
+
+            private final LocalDate localDate = new LocalDate();
+            @Data
+            public static class LocalDate {
+                /**
+                 * Configures the formats understood by <code>JodaLocalDateValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
+                private String format = "medium";
+            }
+
+            private final DateTime dateTime = new DateTime();
+            @Data
+            public static class DateTime {
+                /**
+                 * Configures the formats understood by <code>JodaDateTimeValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
+                private String format = "medium";
+            }
+        }
     }
 
     private final Testing testing = new Testing();
