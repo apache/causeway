@@ -73,12 +73,6 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-jodatime-integration</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-devutils</artifactId>
 			<exclusions>

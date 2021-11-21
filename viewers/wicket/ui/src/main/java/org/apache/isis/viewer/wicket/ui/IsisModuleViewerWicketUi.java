@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.valuetypes.jodatime.integration.IsisModuleValJodatimeIntegration;
 import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
 import org.apache.isis.viewer.wicket.model.IsisModuleViewerWicketModel;
 import org.apache.isis.viewer.wicket.ui.app.logout.LogoutHandlerWkt;
@@ -35,7 +34,6 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicke
         // modules
         IsisModuleViewerCommon.class,
         IsisModuleViewerWicketModel.class,
-        IsisModuleValJodatimeIntegration.class, //XXX should ultimately be removed
 
         // @Service's
         IsisWicketThemeSupportDefault.class,
