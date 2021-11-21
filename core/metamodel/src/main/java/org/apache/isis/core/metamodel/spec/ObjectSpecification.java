@@ -29,10 +29,10 @@ import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.id.HasLogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
+import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Streams;
 import org.apache.isis.commons.internal.exceptions._Exceptions;

@@ -83,10 +83,6 @@ import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaSqlDate
 import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaSqlTimeStampValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaSqlTimeValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaUtilDateValueSemantics;
-import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.joda.JodaDateTimeValueSemantics;
-import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.joda.JodaLocalDateTimeValueSemantics;
-import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.joda.JodaLocalDateValueSemantics;
-import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.joda.JodaLocalTimeValueSemantics;
 import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsRegistryDefault;
 import org.apache.isis.core.security.IsisModuleCoreSecurity;
 
@@ -147,11 +143,6 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         JavaSqlTimeValueSemantics.class,
         JavaSqlTimeStampValueSemantics.class,
         JavaUtilDateValueSemantics.class,
-        // Value Semantics (temporal joda)
-        JodaLocalTimeValueSemantics.class,
-        JodaDateTimeValueSemantics.class,
-        JodaLocalDateTimeValueSemantics.class,
-        JodaLocalDateValueSemantics.class,
 
         // @Service's
         ObjectManagerDefault.class,

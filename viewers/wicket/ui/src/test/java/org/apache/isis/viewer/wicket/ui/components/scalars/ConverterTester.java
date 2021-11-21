@@ -24,11 +24,15 @@ import java.util.Locale;
 import java.util.Objects;
 
 import org.apache.wicket.util.convert.ConversionException;
+import org.assertj.core.util.Arrays;
 
-import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
+import org.apache.isis.applib.clock.VirtualClock;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.functional.ThrowingRunnable;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
@@ -60,10 +64,25 @@ public class ConverterTester<T extends Serializable> {
         ConverterBasedOnValueSemantics<T> converter;
     }
 
-    public ConverterTester(final Class<T> valueType, final ValueSemanticsAbstract<T> valueSemantics) {
+    public ConverterTester(final Class<T> valueType, final ValueSemanticsAbstract<T> valueSemantics,
+            final Object ...additionalSingletons) {
+        this(valueType, valueSemantics, VirtualClock.frozenTestClock(), additionalSingletons);
+    }
+
+    public ConverterTester(
+            final @NonNull Class<T> valueType,
+            final @NonNull ValueSemanticsAbstract<T> valueSemantics,
+            final @NonNull VirtualClock virtualClock,
+            final Object ...additionalSingletons) {
 
         mmc = MetaModelContext_forTesting.builder()
                 .valueSemantic(valueSemantics)
+                .singleton(new ClockService(null) {
+                    @Override public VirtualClock getClock() {
+                        return virtualClock;
+                    }
+                })
+                .singletons(Arrays.asList(additionalSingletons))
                 .interactionProvider(interactionService = new InteractionService_forTesting())
                 .build();
 
@@ -118,14 +137,17 @@ public class ConverterTester<T extends Serializable> {
             final @NonNull String expectedText) {
         runWithInteraction(()->{
 
+            val parsedValue = scenario.converter.convertToObject(valueAsText, LOCALE_NOT_USED);
+
             if(value instanceof BigDecimal) {
-
                 assertNumberEquals(
-                        (BigDecimal)value, (BigDecimal)scenario.converter.convertToObject(valueAsText, LOCALE_NOT_USED));
-
+                        (BigDecimal)value, (BigDecimal)parsedValue);
+            } else if(value instanceof java.util.Date) {
+                assertTemporalEquals(
+                        (java.util.Date)value, (java.util.Date)parsedValue);
             } else {
                 assertEquals(
-                        value, scenario.converter.convertToObject(valueAsText, LOCALE_NOT_USED));
+                        value, parsedValue);
             }
 
             assertEquals(
@@ -137,7 +159,7 @@ public class ConverterTester<T extends Serializable> {
         runWithInteraction(()->{
             assertNull(scenario.converter.convertToObject(null, LOCALE_NOT_USED));
             assertNull(scenario.converter.convertToObject("", LOCALE_NOT_USED));
-            assertNull(scenario.converter.convertToString(null, LOCALE_NOT_USED));
+            assertTrue(_Strings.isEmpty(scenario.converter.convertToString(null, LOCALE_NOT_USED)));
         });
     }
 
@@ -161,5 +183,12 @@ public class ConverterTester<T extends Serializable> {
                 b.setScale(maxScale));
     }
 
+    @SuppressWarnings("deprecation")
+    private void assertTemporalEquals(final java.util.Date a, final java.util.Date b) {
+        assertEquals(a.getDay(), b.getDay());
+        assertEquals(a.getMonth(), b.getMonth());
+        assertEquals(a.getYear(), b.getYear());
+        assertEquals(a.getTime(), b.getTime());
+    }
 
 }

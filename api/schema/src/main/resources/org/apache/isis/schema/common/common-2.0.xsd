@@ -69,7 +69,21 @@
             <xs:element name="collection" type="collectionDto"/>
             <xs:element name="blob" type="blobDto"/>
             <xs:element name="clob" type="clobDto"/>
+            
+            <xs:element name="composite" type="typedTupleDto"/>
         </xs:choice>
+    </xs:complexType>
+
+	<xs:complexType name="typedTupleDto">
+        <xs:annotation>
+            <xs:documentation>A fixed-size ordered list of named type/value pairs.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="element" type="namedValueWithTypeDto" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="type" use="required" type="xs:string"/>
+        <xs:attribute name="cardinality" use="required" type="xs:int"/>
     </xs:complexType>
 
     <xs:complexType name="oidDto">
@@ -169,6 +183,7 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
+            <xs:enumeration value="composite"/>
         </xs:restriction>
     </xs:simpleType>
 
@@ -226,7 +241,18 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-
+    
+    <xs:complexType name="namedValueWithTypeDto">
+        <xs:annotation>
+            <xs:documentation>Defines a named value, a tuple of: name, type and value.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="valueWithTypeDto">
+                <xs:attribute name="name" use="required" type="xs:string"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
 
     <xs:simpleType name="interactionType" >
         <xs:annotation>

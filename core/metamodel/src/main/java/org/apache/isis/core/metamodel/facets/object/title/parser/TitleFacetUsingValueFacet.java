@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.title.parser;
 
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.adapters.Renderer;
+import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

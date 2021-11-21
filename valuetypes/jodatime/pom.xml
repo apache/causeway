@@ -28,6 +28,7 @@
 
 	<modules>
 		<module>applib</module>
+		<module>integration</module>
 	</modules>
 
 </project>

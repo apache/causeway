@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.encodeable.encoder;
 
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
+import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

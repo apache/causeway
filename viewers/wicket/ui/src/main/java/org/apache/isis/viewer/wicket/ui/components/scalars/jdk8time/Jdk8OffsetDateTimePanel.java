@@ -33,7 +33,6 @@ extends ScalarPanelTextFieldWithTemporalPickerAbstract<OffsetDateTime> {
 
     public Jdk8OffsetDateTimePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, OffsetDateTime.class);
-        init(new DateConverterForJdk8OffsetDateTime(getWicketViewerSettings(), getAdjustBy()));
     }
 
 }

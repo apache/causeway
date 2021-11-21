@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.object.value.vsp;
 
-import org.apache.isis.applib.adapters.ValueSemanticsProvider;
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacetAbstract;

@@ -429,11 +429,11 @@ public final class InteractionDtoUtils {
         final ParamDto paramDto = getParameter(ai, paramNum);
         return paramDto.getType();
     }
+
     public static boolean isNull(final ActionInvocationDto ai, final int paramNum) {
         final ParamDto paramDto = getParameter(ai, paramNum);
         return paramDto.isNull();
     }
-
 
     // -- getParameterArgValue
 

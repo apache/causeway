@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.value;
 
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -26,15 +27,17 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalTimeValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaSqlTimeValueSemantics;
+
+import static org.junit.Assert.assertEquals;
 
 public class JavaSqlTimeValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {
 
     private Time twoOClock;
-    private JavaSqlTimeValueSemantics value;
+    private JavaSqlTimeValueSemantics valueSemantics;
 
     @Before
     public void setUpObjects() throws Exception {
@@ -54,27 +57,36 @@ extends ValueSemanticsProviderAbstractTestCase {
 
         twoOClock = new Time(c.getTimeInMillis());
 
-        setSemantics(value = new JavaSqlTimeValueSemantics(metaModelContext.getConfiguration()));
+        ValueSemanticsAbstract<LocalTime> delegate =
+                new LocalTimeValueSemantics();
+
+        setSemantics(valueSemantics = new JavaSqlTimeValueSemantics() {
+            @Override
+            public ValueSemanticsAbstract<LocalTime> getDelegate() {
+                return delegate;
+            }
+        });
+
     }
 
     @Ignore // flaky
     @Test
     public void testNewTime() {
-        final String asEncodedString = value.toEncodedString(twoOClock);
+        final String asEncodedString = valueSemantics.toEncodedString(twoOClock);
         assertEquals("140000000", asEncodedString);
     }
 
-    @Ignore // flaky
-    @Test
-    public void testAdd() {
-        final Object newValue = value.add(twoOClock, 0, 0, 0, 1, 15);
-        assertEquals("15:15:00", newValue.toString());
-    }
-
-    @Ignore // flaky
-    @Test
-    public void testAdd2() {
-        final Object newValue = value.add(twoOClock, 0, 0, 0, 0, 0);
-        assertEquals("14:00:00", newValue.toString());
-    }
+//    @Ignore // flaky
+//    @Test
+//    public void testAdd() {
+//        final Object newValue = value.add(twoOClock, 0, 0, 0, 1, 15);
+//        assertEquals("15:15:00", newValue.toString());
+//    }
+//
+//    @Ignore // flaky
+//    @Test
+//    public void testAdd2() {
+//        final Object newValue = value.add(twoOClock, 0, 0, 0, 0, 0);
+//        assertEquals("14:00:00", newValue.toString());
+//    }
 }

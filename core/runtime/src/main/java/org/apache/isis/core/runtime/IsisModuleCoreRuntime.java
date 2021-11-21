@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.core.runtime.events.MetamodelEventService;
 import org.apache.isis.core.runtime.events.TransactionEventEmitter;
 import org.apache.isis.core.transaction.IsisModuleCoreTransaction;
+import org.apache.isis.valuetypes.jodatime.integration.IsisModuleValJodatimeIntegration;
 
 @Configuration
 @Import({
@@ -33,6 +34,9 @@ import org.apache.isis.core.transaction.IsisModuleCoreTransaction;
         IsisModuleCoreMetamodel.class,
         IsisModuleCoreInteraction.class,
         IsisModuleCoreTransaction.class,
+
+        // Joda Time support
+        IsisModuleValJodatimeIntegration.class,
 
         // @Service's
         MetamodelEventService.class,

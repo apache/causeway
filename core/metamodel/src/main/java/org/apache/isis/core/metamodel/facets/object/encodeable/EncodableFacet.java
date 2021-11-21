@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.object.encodeable;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
+import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 

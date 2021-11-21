@@ -26,8 +26,8 @@ import javax.inject.Named;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
-import org.apache.isis.applib.adapters.EncoderDecoder;
+import org.apache.isis.applib.value.semantics.EncoderDecoder;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.image._Images;
 import org.apache.isis.core.metamodel.spec.ManagedObject;

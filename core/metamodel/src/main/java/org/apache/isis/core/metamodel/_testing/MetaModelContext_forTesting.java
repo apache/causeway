@@ -30,7 +30,6 @@ import java.util.stream.Stream;
 
 import org.springframework.core.env.AbstractEnvironment;
 
-import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.grid.GridLoaderService;
 import org.apache.isis.applib.services.grid.GridService;
@@ -48,6 +47,7 @@ import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;

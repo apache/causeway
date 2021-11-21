@@ -18,8 +18,8 @@
  */
 package org.apache.isis.core.metamodel.commons;
 
-import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.adapters.Renderer;
+import org.apache.isis.applib.value.semantics.Parser;
+import org.apache.isis.applib.value.semantics.Renderer;
 
 /**
  * Mode of representation for a Scalar within the UI.
