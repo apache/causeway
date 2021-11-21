@@ -28,13 +28,13 @@
  *
  *
  * <p>
- * The {@link org.apache.isis.applib.adapters.ValueSemanticsProvider} interface
+ * The {@link org.apache.isis.applib.value.semantics.ValueSemanticsProvider} interface
  * allows the framework to recognize its corresponding type as being a value
- * type (that is, having value semantics).  The {@link org.apache.isis.applib.adapters.ValueSemanticsAbstract}
+ * type (that is, having value semantics).  The {@link org.apache.isis.applib.value.semantics.ValueSemanticsAbstract}
  * class is an base adapter for this interface.
  *
  * <p>
- * The association between {@link org.apache.isis.applib.adapters.ValueSemanticsProvider}
+ * The association between {@link org.apache.isis.applib.value.semantics.ValueSemanticsProvider}
  * and its corresponding type can be done in several ways.  Most straightforward
  * is to annotate the class with the {@link org.apache.isis.applib.annotation.Value}
  * annotation.  However, if the value type source code cannot be modified (for
@@ -43,4 +43,4 @@
  *
  * @deprecated
  */
-package org.apache.isis.applib.adapters;
+package org.apache.isis.applib.value.semantics;

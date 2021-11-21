@@ -18,11 +18,11 @@
  */
 package org.apache.isis.core.metamodel.facets.object.value.annotcfg;
 
-import org.apache.isis.applib.adapters.DefaultsProvider;
-import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.value.semantics.DefaultsProvider;
+import org.apache.isis.applib.value.semantics.EncoderDecoder;
+import org.apache.isis.applib.value.semantics.Parser;
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;

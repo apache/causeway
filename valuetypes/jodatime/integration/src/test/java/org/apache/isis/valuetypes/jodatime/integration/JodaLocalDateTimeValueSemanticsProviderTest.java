@@ -22,7 +22,7 @@ import org.joda.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
 import org.apache.isis.valuetypes.jodatime.integration.valuesemantics.JodaLocalDateTimeValueSemantics;
 

@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 import org.apache.wicket.util.convert.IConverter;
 
-import org.apache.isis.applib.adapters.ValueSemanticsProvider;
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.converter.ConverterBasedOnValueSemantics;

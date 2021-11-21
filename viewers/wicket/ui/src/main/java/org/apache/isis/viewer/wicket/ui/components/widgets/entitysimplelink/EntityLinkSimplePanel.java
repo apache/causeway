@@ -22,7 +22,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;

@@ -25,7 +25,7 @@
  *
  * <p>
  * Each of these value types has a corresponding implementation of
- * {@link org.apache.isis.applib.adapters.ValueSemanticsProvider} (implemented
+ * {@link org.apache.isis.applib.value.semantics.ValueSemanticsProvider} (implemented
  * within the <tt>core.progmodel</tt> module).
  */
 package org.apache.isis.applib.value;

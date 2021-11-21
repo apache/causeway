@@ -26,11 +26,11 @@ import java.util.Objects;
 import org.apache.wicket.util.convert.ConversionException;
 import org.assertj.core.util.Arrays;
 
-import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;

@@ -24,11 +24,11 @@ import java.time.temporal.Temporal;
 import java.time.temporal.TemporalQuery;
 import java.util.function.BiFunction;
 
-import org.apache.isis.applib.adapters.EncodingException;
-import org.apache.isis.applib.adapters.TemporalValueSemantics;
-import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
-import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.applib.value.semantics.EncodingException;
+import org.apache.isis.applib.value.semantics.TemporalValueSemantics;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.Getter;

@@ -27,7 +27,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalTimeValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaSqlTimeValueSemantics;
 

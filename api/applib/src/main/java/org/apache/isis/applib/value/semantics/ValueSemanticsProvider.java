@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.adapters;
+package org.apache.isis.applib.value.semantics;
 
 import org.springframework.lang.Nullable;
 

@@ -23,7 +23,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalDateValueSemantics;
 import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsAdapter;
 import org.apache.isis.schema.common.v2.ValueType;

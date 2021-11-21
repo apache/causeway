@@ -22,10 +22,10 @@ import java.time.LocalDate;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.adapters.TemporalValueSemantics;
-import org.apache.isis.applib.adapters.TemporalValueSemantics.OffsetCharacteristic;
-import org.apache.isis.applib.adapters.TemporalValueSemantics.TemporalCharacteristic;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.value.semantics.TemporalValueSemantics;
+import org.apache.isis.applib.value.semantics.TemporalValueSemantics.OffsetCharacteristic;
+import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalCharacteristic;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.incubator.viewer.javafx.model.binding.BindingsFx;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;

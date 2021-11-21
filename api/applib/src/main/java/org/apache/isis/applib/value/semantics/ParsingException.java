@@ -16,16 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.adapters;
+package org.apache.isis.applib.value.semantics;
 
 /**
- * @since 2.x {@index}
+ * Indicates that parsing has failed, ie the entry is illegal (rather than
+ * invalid).
+ *
+ * @since 1.x {@index}
  */
-public interface Renderer<T> {
+public class ParsingException extends RuntimeException {
+    private static final long serialVersionUID = 1L;
 
-    /**
-     * The value in its read-only summarizing text presentation form. (irreversible)
-     */
-    String simpleTextPresentation(ValueSemanticsProvider.Context context, T value);
+    public ParsingException() {
+        super();
+    }
+
+    public ParsingException(final String msg) {
+        super(msg);
+    }
+
+    public ParsingException(final String msg, final Throwable cause) {
+        super(msg, cause);
+    }
+
+    public ParsingException(final Throwable cause) {
+        super(cause);
+    }
 
 }

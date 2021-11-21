@@ -16,30 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.jodatime.integration.valuesemantics;
+package org.apache.isis.applib.value.semantics;
 
-import javax.inject.Named;
+/**
+ * @since 2.x {@index}
+ */
+public interface Renderer<T> {
 
-import org.joda.time.LocalTime;
-import org.springframework.stereotype.Component;
-
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
-import org.apache.isis.schema.common.v2.ValueType;
-
-//FIXME[ISIS-2882] convert to ValueSemanticsAdapter once java.time.LocalTime has a ValueSemantics
-@Component
-@Named("isis.val.JodaLocalTimeValueSemantics")
-public class JodaLocalTimeValueSemantics
-extends ValueSemanticsAbstract<org.joda.time.LocalTime> {
-
-    @Override
-    public Class<LocalTime> getCorrespondingClass() {
-        return org.joda.time.LocalTime.class;
-    }
-
-    @Override
-    public ValueType getSchemaValueType() {
-        return ValueType.JODA_LOCAL_TIME;
-    }
+    /**
+     * The value in its read-only summarizing text presentation form. (irreversible)
+     */
+    String simpleTextPresentation(ValueSemanticsProvider.Context context, T value);
 
 }

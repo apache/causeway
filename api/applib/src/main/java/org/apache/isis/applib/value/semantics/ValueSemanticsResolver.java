@@ -16,31 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.adapters;
+package org.apache.isis.applib.value.semantics;
 
-/**
- * Indicates that parsing has failed, ie the entry is illegal (rather than
- * invalid).
- *
- * @since 1.x {@index}
- */
-public class ParsingException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
+import java.io.Serializable;
 
-    public ParsingException() {
-        super();
-    }
+//FIXME[ISIS-2877] implement (will be required by the various XxxDtoUtils)
+@FunctionalInterface
+public interface ValueSemanticsResolver {
 
-    public ParsingException(final String msg) {
-        super(msg);
-    }
-
-    public ParsingException(final String msg, final Throwable cause) {
-        super(msg, cause);
-    }
-
-    public ParsingException(final Throwable cause) {
-        super(cause);
-    }
+    public <T extends Serializable> ValueSemanticsProvider<T> resolveValueSemantics(Class<T> valueType);
 
 }

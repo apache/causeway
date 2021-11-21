@@ -24,10 +24,10 @@ import java.util.Locale;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.applib.adapters.ValueSemanticsAbstract;
-import org.apache.isis.applib.adapters.ValueSemanticsProvider.Context;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider.Context;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaUtilDateValueSemantics;
 
