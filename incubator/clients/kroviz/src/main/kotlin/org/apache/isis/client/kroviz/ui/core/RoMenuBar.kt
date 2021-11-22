@@ -21,14 +21,11 @@ package org.apache.isis.client.kroviz.ui.core
 import io.kvision.core.CssSize
 import io.kvision.core.UNIT
 import io.kvision.dropdown.DropDown
-import io.kvision.html.Button
 import io.kvision.html.ButtonStyle
 import io.kvision.html.Link
 import io.kvision.navbar.*
 import io.kvision.panel.SimplePanel
 import io.kvision.panel.vPanel
-import kotlinx.browser.window
-import org.apache.isis.client.kroviz.core.event.ReplayCommand
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.chart.SampleChartModel
 import org.apache.isis.client.kroviz.ui.dialog.About
@@ -50,7 +47,6 @@ class RoMenuBar : SimplePanel() {
                 marginLeft = CssSize(-32, UNIT.px)
                 height = CssSize(40, UNIT.px)
                 nav = nav()
-//                logoButton() leaves an empty space here without network connection
                 val mainEntry = buildMainMenu()
                 nav.add(mainEntry)
             }
@@ -84,14 +80,6 @@ class RoMenuBar : SimplePanel() {
 
         mainMenu.add(
             buildMenuEntry("Events", "Event", { EventDialog().open() })
-        )
-
-        mainMenu.add(
-            buildMenuEntry("Replay", "Replay", {  })
-        )
-
-        mainMenu.add(
-            buildMenuEntry("Event Log", "History", { UiManager.add("Event Log", EventLogTable(UiManager.getEventStore().log)) })
         )
 
         val chartTitle = "Sample Chart"
@@ -128,23 +116,12 @@ class RoMenuBar : SimplePanel() {
     }
 
     fun amendMenu(menuBars: Menubars) {
-        //       logoButton()
         menuBars.primary.menu.forEach { m ->
             val dd = MenuFactory.buildForMenu(m)
             if (dd.getChildren().isNotEmpty()) nav.add(dd)
         }
         nav.add(MenuFactory.buildForMenu(menuBars.secondary.menu.first()))
         nav.add(MenuFactory.buildForMenu(menuBars.tertiary.menu.first()))
-    }
-
-    private fun logoButton() {
-        val classNames = "isis-logo-button-image logo-button"
-        val logo = Button("", style = ButtonStyle.LINK)
-        logo.addCssClass(classNames)
-        logo.onClick {
-            window.open("https://isis.apache.org")
-        }
-        nav.add(logo)
     }
 
 }

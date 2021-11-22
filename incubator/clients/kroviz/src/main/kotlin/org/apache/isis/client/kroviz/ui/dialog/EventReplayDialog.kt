@@ -25,7 +25,6 @@ import io.kvision.core.UNIT
 import io.kvision.panel.Direction
 import io.kvision.panel.SplitPanel
 import io.kvision.panel.VPanel
-import io.kvision.state.ObservableList
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.LogEntryComparison
@@ -33,8 +32,9 @@ import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.ui.core.RoDialog
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.ui.panel.EventLogTable
+import org.apache.isis.client.kroviz.utils.StringUtils
 
-class ReplayDiffDialog(
+class EventReplayDialog(
     private val expectedEvents: List<LogEntry>,
     title: String
 ) : Command() {
@@ -74,13 +74,14 @@ class ReplayDiffDialog(
     }
 
     override fun execute(action: String?) {
-        val comparisons = mutableListOf<LogEntryComparison>()
+        val comparisonMap = mutableMapOf<String, LogEntryComparison>()
         // first pass: iterate over expected
         val actualStore = UiManager.getEventStore()
         expectedEvents.forEach {
-            val rs = ResourceSpecification(it.url, it.subType)
-            val actualEvent: LogEntry? = actualStore.findBy(rs)
-            comparisons.add(LogEntryComparison(it, actualEvent))
+            val shortTitle = StringUtils.shortTitle(it.title)
+            val actualEvent: LogEntry? = actualStore.findBy(shortTitle)
+            val lec = LogEntryComparison(shortTitle, it, actualEvent)
+            comparisonMap.put(shortTitle, lec)
         }
 
         // second pass: iterate over actual
@@ -88,12 +89,17 @@ class ReplayDiffDialog(
         val expectedStore = EventStore()
         expectedStore.log.addAll(expectedEvents)
         actualEvents.forEach {
-            val rs = ResourceSpecification(it.url, it.subType)
-            val expectedEvent = expectedStore.findBy(rs)
-            //TODO check for duplicates?
-            comparisons.add(LogEntryComparison(expectedEvent, it))
+            val shortTitle = StringUtils.shortTitle(it.title)
+            if (!comparisonMap.contains(shortTitle)) {
+                val rs = ResourceSpecification(it.url, it.subType)
+                val expectedEvent = expectedStore.findBy(rs)
+                val lec = LogEntryComparison(shortTitle, expectedEvent, it)
+                comparisonMap.put(shortTitle, lec)
+            }
         }
-        EventCompareDialog(comparisons).open()
+        val comparisonList = mutableListOf<LogEntryComparison>()
+        comparisonList.addAll(comparisonMap.values)
+        EventCompareDialog(comparisonList).open()
     }
 
 }

@@ -20,6 +20,7 @@ package org.apache.isis.client.kroviz.core.event
 
 import io.kvision.html.ButtonStyle
 import kotlinx.serialization.Serializable
+import org.apache.isis.client.kroviz.ui.core.Constants
 
 enum class ChangeType(val id: String, val iconName: String, val style: ButtonStyle) {
     ADDED("ADDED", "fas fa-plus", ButtonStyle.INFO),
@@ -30,12 +31,14 @@ enum class ChangeType(val id: String, val iconName: String, val style: ButtonSty
 }
 
 @Serializable
-data class LogEntryComparison(val expected: LogEntry?, val actual: LogEntry?) {
+data class LogEntryComparison(val title: String, val expected: LogEntry?, val actual: LogEntry?) {
     var changeType: ChangeType
-    var title: String
     var iconName: String
     var expectedResponse: String? = null
     var actualResponse: String? = null
+    var expectedBaseUrl = ""
+    var actualBaseUrl = ""
+
 
     init {
         if (expected == null && actual == null) {
@@ -43,15 +46,20 @@ data class LogEntryComparison(val expected: LogEntry?, val actual: LogEntry?) {
         } else {
             changeType = compare()
             iconName = changeType.iconName
-            if (expected == null) {
-                actualResponse = actual?.response
-                title = actual?.title.toString()
-            } else {
-                expectedResponse = expected.response
-                title = expected.title
+            actualResponse = actual?.response
+            expectedResponse = expected?.response
+            if (expected != null) {
+                expectedBaseUrl = extractBaseUrl(expected)
             }
-
+            if (actual != null) {
+                actualBaseUrl = extractBaseUrl(actual)
+            }
         }
+    }
+
+    private fun extractBaseUrl(event: LogEntry): String {
+        val title = event.title
+        return title.split(Constants.restInfix).first()
     }
 
     private fun compare(): ChangeType {
@@ -66,8 +74,6 @@ data class LogEntryComparison(val expected: LogEntry?, val actual: LogEntry?) {
     }
 
     private fun areResponsesEqual(): Boolean {
-        val expectedBaseUrl = ""
-        val actualBaseUrl = "" //FIXME
         val expected = expectedResponse?.replace(expectedBaseUrl, "")
         val actual = actualResponse?.replace(actualBaseUrl, "")
         return (expected == actual)

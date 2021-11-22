@@ -20,17 +20,13 @@ package org.apache.isis.client.kroviz.ui.panel
 
 import io.kvision.core.*
 import io.kvision.html.Button
-import io.kvision.html.ButtonStyle
 import io.kvision.panel.VPanel
 import io.kvision.panel.hPanel
 import io.kvision.tabulator.*
 import io.kvision.utils.px
-import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.LogEntryComparison
-import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Constants
-import org.apache.isis.client.kroviz.ui.dialog.EventLogDetail
-import org.apache.isis.client.kroviz.utils.StringUtils
+import org.apache.isis.client.kroviz.ui.dialog.ResponseComparisonDialog
 
 class EventComparisonTable(val model: List<LogEntryComparison>) : VPanel() {
     val tabulator: Tabulator<LogEntryComparison>
@@ -41,50 +37,39 @@ class EventComparisonTable(val model: List<LogEntryComparison>) : VPanel() {
             title = "",
             field = "changeType",
             width = "50",
-   //         headerMenu = DynamicMenuBuilder().buildTableMenu(this),
             hozAlign = Align.CENTER,
             vertAlign = VAlign.MIDDLE,
             formatterComponentFunction = { _, _, data -> buildActionButton(data) }
         ),
         ColumnDefinition(
             download = false,
+            title = "Status",
+            field = "changeType",
+            headerFilter = Editor.INPUT,
+            width = "100",
+        ),
+        ColumnDefinition(
+            download = false,
             title = "Title",
             field = "title",
             headerFilter = Editor.INPUT,
-            width = "200",
-            formatterComponentFunction = { _, _, data -> buildObjectButton(data) }
+            width = "700",
         ),
         ColumnDefinition(
             download = false,
-            title = "expectedResponse",
+            title = "Expected Response",
             field = "expectedResponse",
             headerFilter = Editor.INPUT,
-            width = "400",
+            width = "150",
         ),
         ColumnDefinition(
             download = false,
-            title = "actualResponse",
+            title = "Actual Response",
             field = "actualResponse",
             headerFilter = Editor.INPUT,
-            width = "400",
+            width = "150",
         )
     )
-
-    private fun buildObjectButton(data: LogEntryComparison): Button {
-        val b = Button(
-            text = StringUtils.shorten(data.title),
-            icon = data.changeType.iconName,
-            style = ButtonStyle.LINK
-        )
-        b.onClick {
-            kotlinx.browser.window.open(data.title) //IMPROVE should be URL
-        }
-        //val tto = TooltipOptions(title = data.title)
-        // tabulator tooltip is buggy: often the tooltip doesn't go away and the color is not settable
-        //b.enableTooltip(tto)
-    //    if (data.obj is TObject) b.setDragDropData(Constants.stdMimeType, data.url)
-        return b
-    }
 
     private fun buildActionButton(data: LogEntryComparison): Button {
         val b = Button(
@@ -92,7 +77,6 @@ class EventComparisonTable(val model: List<LogEntryComparison>) : VPanel() {
             icon = "fa fa-info-circle",
             style = data.changeType.style
         )
-//        b.onClick { EventLogDetail(data).open() }
         b.margin = CssSize(-10, UNIT.px)
         b.addCssClass("btn-sm")
         return b
@@ -117,6 +101,15 @@ class EventComparisonTable(val model: List<LogEntryComparison>) : VPanel() {
 
         tabulator = tabulator(model, options = options) {
             setEventListener<Tabulator<LogEntryComparison>> {
+                cellClickTabulator = {
+                    // can't check cast to external interface
+                    val cc = it.detail as io.kvision.tabulator.js.Tabulator.CellComponent
+                    val column = cc.getColumn().getField()
+                    if (column == "changeType") {
+                        val obj = cc.getData() as LogEntryComparison
+                        ResponseComparisonDialog(obj).open()
+                    }
+                }
             }
         }
     }

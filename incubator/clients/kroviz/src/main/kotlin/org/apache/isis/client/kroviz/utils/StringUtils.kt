@@ -64,9 +64,10 @@ object StringUtils {
         return if (input == outputWithoutWhiteSpace) input else output
     }
 
-    fun shortTitle(url: String, protocolHostPort: String): String {
-        var title = url
+    fun shortTitle(url: String): String {
         val signature = Constants.restInfix
+        val protocolHostPort = url.split(signature).first()
+        var title = url
         if (title.contains(signature)) {
             // strip off protocol, host, port
             title = title.replace(protocolHostPort + signature, "")

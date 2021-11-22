@@ -19,34 +19,46 @@
 package org.apache.isis.client.kroviz.ui.dialog
 
 import io.kvision.core.CssSize
+import io.kvision.core.FlexDirection
 import io.kvision.core.UNIT
+import io.kvision.form.text.TextArea
+import io.kvision.panel.Direction
+import io.kvision.panel.SplitPanel
 import io.kvision.panel.VPanel
 import org.apache.isis.client.kroviz.core.event.LogEntryComparison
 import org.apache.isis.client.kroviz.ui.core.RoDialog
-import org.apache.isis.client.kroviz.ui.panel.EventComparisonTable
 
-class EventCompareDialog(val data: List<LogEntryComparison>) : Command() {
-    private var table: EventComparisonTable
+class ResponseComparisonDialog(obj: LogEntryComparison) : Command() {
+    private val title = "Response Diff"
 
-    private val panel = VPanel(spacing = 3) {
-        width = CssSize(100, UNIT.perc)
+    private val expectedPanel = VPanel(spacing = 3) {
+        width = CssSize(50, UNIT.perc)
+    }
+    private val actualPanel = VPanel(spacing = 3) {
+        width = CssSize(50, UNIT.perc)
     }
 
     init {
         dialog = RoDialog(
-            caption = "Event Comparison",
+            caption = title,
             items = mutableListOf(),
             command = this,
-            defaultAction = "Pin",
-            widthPerc = 60,
+            widthPerc = 80,
             heightPerc = 70,
+            customButtons = mutableListOf()
         )
-        //IMPROVE: reuse ColumnFactory and RoTable if possible
-        table = EventComparisonTable(data)
-        table.tabulator.addCssClass("tabulator-in-dialog")
-        panel.add(table)
+        val expectedText = TextArea(label = "Expected", value = obj.expectedResponse, rows = 30)
+        expectedPanel.add(expectedText)
+        val actualText = TextArea(label = "Actual", value = obj.actualResponse, rows = 30)
+        actualPanel.add(actualText)
 
-        dialog.formPanel!!.add(panel)
+        val splitPanel = SplitPanel(direction = Direction.VERTICAL)
+        splitPanel.addCssClass("dialog-content")
+        splitPanel.flexDirection = FlexDirection.ROW
+        splitPanel.add(expectedPanel)
+        splitPanel.add(actualPanel)
+        dialog.formPanel!!.add(splitPanel)
+        dialog.open()
     }
 
 }

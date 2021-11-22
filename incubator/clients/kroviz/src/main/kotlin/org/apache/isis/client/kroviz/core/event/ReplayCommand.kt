@@ -30,7 +30,7 @@ import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.ui.dialog.Command
-import org.apache.isis.client.kroviz.ui.dialog.ReplayDiffDialog
+import org.apache.isis.client.kroviz.ui.dialog.EventReplayDialog
 
 val AppScope = CoroutineScope(window.asCoroutineDispatcher())
 
@@ -57,7 +57,7 @@ class ReplayCommand : Command() {
         replay(uiEvents, urlUnderTest)
 
         val title = "Replay Events: $oldBaseUrl -> $urlUnderTest"
-        val rdd = ReplayDiffDialog(expectedEvents, title)
+        val rdd = EventReplayDialog(expectedEvents, title)
         rdd.dialog.open()
     }
 

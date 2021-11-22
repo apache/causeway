@@ -20,7 +20,7 @@ class StringUtilsTest {
         assertTrue(protocolHostPort.startsWith("http://"))
 
         // when
-        val actual = StringUtils.shortTitle(url, protocolHostPort)
+        val actual = StringUtils.shortTitle(url)
         // then
         val expected = "/domain-types/demo.JavaLangStrings/collections/entities"
         assertEquals(expected, actual)

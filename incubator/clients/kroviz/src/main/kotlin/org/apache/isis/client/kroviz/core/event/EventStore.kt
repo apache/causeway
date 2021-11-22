@@ -26,6 +26,7 @@ import org.apache.isis.client.kroviz.to.HasLinks
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.utils.StringUtils
 import org.apache.isis.client.kroviz.utils.UUID
 import org.w3c.files.Blob
 
@@ -148,6 +149,10 @@ class EventStore {
         return log.firstOrNull() {
             it.obj is TObject && (it.obj as TObject).instanceId == tObject.instanceId
         }
+    }
+
+    fun findBy(shortTitle: String): LogEntry? {
+        return log.firstOrNull { StringUtils.shortTitle(it.title) == shortTitle }
     }
 
     fun findBy(aggregator: BaseAggregator): LogEntry? {

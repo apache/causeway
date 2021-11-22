@@ -50,7 +50,7 @@ object LinkTreeDiagram {
         val le = UiManager.getEventStore().findBy(rs)
         val pc = PumlCode()
         if (le != null) {
-            val title = StringUtils.shortTitle(url, protocolHostPort)
+            val title = StringUtils.shortTitle(url)
             pc.addStereotype(le.type)
             pc.addLink(url, title)
             pc.addHorizontalLine()
@@ -78,7 +78,7 @@ object LinkTreeDiagram {
                 obj.links.forEach {
                     if (it.relation() != Relation.SELF) {
                         val url = it.href
-                        val title = StringUtils.shortTitle(url, protocolHostPort)
+                        val title = StringUtils.shortTitle(url)
                         pc.addLink(url, title)
                     }
                 }
