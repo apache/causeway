@@ -39,6 +39,8 @@
 			<artifactId>isis-core-metamodel</artifactId>
 		</dependency>
 
+		<!--  TESTING -->
+
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-internaltestsupport</artifactId>
