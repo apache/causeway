@@ -18,8 +18,6 @@
  */
 package org.apache.isis.testdomain.model.valuetypes;
 
-import java.util.UUID;
-
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
@@ -28,15 +26,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 @DomainObject(
-        logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleUuid",
+        logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleString",
         nature = Nature.BEAN)
-public class ValueTypeExampleUuid
-extends ValueTypeExample<UUID> {
+public class ValueTypeExampleString
+extends ValueTypeExample<String> {
 
     @Property @Getter @Setter
-    private UUID value = UUID.randomUUID();
+    private String value = "aString";
 
     @Getter
-    private UUID updateValue = UUID.randomUUID();
+    private String updateValue = "anotherString";
 
 }

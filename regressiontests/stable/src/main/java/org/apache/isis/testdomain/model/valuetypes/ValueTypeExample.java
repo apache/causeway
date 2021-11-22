@@ -31,6 +31,9 @@ public abstract class ValueTypeExample<T> {
     public abstract T getValue();
     public abstract void setValue(T value);
 
+    @Programmatic
+    public abstract T getUpdateValue();
+
     @Action
     public final void updateValue(final T value) {
         setValue(value);
@@ -38,7 +41,7 @@ public abstract class ValueTypeExample<T> {
 
     @Collection
     public final List<T> getValues() {
-        return List.of(getValue(), getValue());
+        return List.of(getValue(), getUpdateValue());
     }
 
     @SuppressWarnings("unchecked")
