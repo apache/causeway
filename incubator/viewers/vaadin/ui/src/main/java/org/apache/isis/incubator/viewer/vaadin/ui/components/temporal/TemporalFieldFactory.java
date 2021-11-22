@@ -26,11 +26,11 @@ import com.vaadin.flow.data.converter.DateToSqlDateConverter;
 import com.vaadin.flow.data.converter.LocalDateToDateConverter;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.value.semantics.TemporalValueSemantics;
+import org.apache.isis.applib.value.semantics.TemporalValueSemantics.OffsetCharacteristic;
+import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalCharacteristic;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.valuesemantics.temporal.TemporalValueSemantics;
-import org.apache.isis.core.metamodel.valuesemantics.temporal.TemporalValueSemantics.OffsetCharacteristic;
-import org.apache.isis.core.metamodel.valuesemantics.temporal.TemporalValueSemantics.TemporalCharacteristic;
 import org.apache.isis.incubator.viewer.vaadin.ui.binding.BindingsVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;

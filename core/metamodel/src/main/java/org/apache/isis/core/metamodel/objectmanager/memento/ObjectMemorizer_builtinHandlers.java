@@ -20,6 +20,8 @@ package org.apache.isis.core.metamodel.objectmanager.memento;
 
 import javax.inject.Inject;
 
+import org.springframework.context.annotation.Lazy;
+
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -28,7 +30,7 @@ final class ObjectMemorizer_builtinHandlers {
 
     public static class MemorizeViaObjectMementoService implements ObjectMemorizer.Handler {
 
-        @Inject private ObjectMementoService objectMementoService;
+        @Inject @Lazy private ObjectMementoService objectMementoService;
 
         @Override
         public boolean isHandling(final ObjectSpecification spec) {

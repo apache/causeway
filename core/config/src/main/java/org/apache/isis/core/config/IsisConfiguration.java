@@ -68,6 +68,7 @@ import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.applib.services.userui.UserMenu;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.config.IsisConfiguration.Viewer;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
@@ -76,6 +77,12 @@ import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.PropertyP
 import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.viewer.web.DialogMode;
+
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import lombok.Data;
 import lombok.Getter;

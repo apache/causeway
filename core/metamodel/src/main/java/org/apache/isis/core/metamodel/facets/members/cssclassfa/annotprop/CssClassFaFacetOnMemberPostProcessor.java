@@ -41,11 +41,11 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification) {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
 
         val hasExplicitFaIcon = objectAction
                 .lookupNonFallbackFacet(CssClassFaFacet.class)
@@ -54,21 +54,21 @@ extends ObjectSpecificationPostProcessorAbstract {
         if(!hasExplicitFaIcon) {
             FacetUtil.addFacetIfPresent(
                     CssClassFaFacetOnMemberFromConfiguredRegex
-                    .create(objectAction));
+                    .create(objectSpecification, objectAction));
         }
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction,
-            ObjectActionParameter param) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction,
+            final ObjectActionParameter param) {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, OneToOneAssociation prop) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
     }
 
 }

@@ -83,7 +83,6 @@ public final class ManagedAction extends ManagedMember {
     // -- IMPLEMENTATION
 
     @Getter private final ObjectAction action;
-    @Getter private final ActionInteractionHead interactionHead;
     @Getter private final MultiselectChoices multiselectChoices;
 
     private ManagedAction(
@@ -94,8 +93,12 @@ public final class ManagedAction extends ManagedMember {
 
         super(owner, where);
         this.action = action;
-        this.interactionHead = action.interactionHead(owner);
         this.multiselectChoices = multiselectChoices;
+    }
+
+    //ISIS-2897 ... don't memoize the head, as owner might dynamically re-attach (when entity)
+    ActionInteractionHead interactionHead() {
+        return action.interactionHead(getOwner());
     }
 
     /**
@@ -103,7 +106,7 @@ public final class ManagedAction extends ManagedMember {
      * parameters if any are initialized with their defaults (taking into account any supporting methods)
      */
     public ParameterNegotiationModel startParameterNegotiation() {
-        return interactionHead.defaults(this);
+        return interactionHead().defaults(this);
     }
 
     @Override
@@ -125,7 +128,7 @@ public final class ManagedAction extends ManagedMember {
         }
 
         final ManagedObject actionResult = getAction()
-                .execute(getInteractionHead(), actionParameters, InteractionInitiatedBy.USER);
+                .execute(interactionHead(), actionParameters, InteractionInitiatedBy.USER);
 
         return _Either.left(route(actionResult));
     }
@@ -140,7 +143,7 @@ public final class ManagedAction extends ManagedMember {
 
         final ManagedObject actionResult = getAction()
                 .executeWithRuleChecking(
-                        getInteractionHead(), actionParameters, InteractionInitiatedBy.USER, getWhere());
+                        interactionHead(), actionParameters, InteractionInitiatedBy.USER, getWhere());
 
         return route(actionResult);
     }
@@ -161,7 +164,7 @@ public final class ManagedAction extends ManagedMember {
         val method = ((ObjectMemberAbstract)action).getFacetedMethod().getMethod();
 
         final Object[] executionParameters = UnwrapUtil.multipleAsArray(actionParameters);
-        final Object targetPojo = UnwrapUtil.single(getInteractionHead().getTarget());
+        final Object targetPojo = UnwrapUtil.single(interactionHead().getTarget());
 
         val resultPojo = CanonicalParameterUtil
                 .invoke(method, targetPojo, executionParameters);

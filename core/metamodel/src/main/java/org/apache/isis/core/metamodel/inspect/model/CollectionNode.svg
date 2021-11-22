@@ -1,87 +1,80 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="160mm"
-   height="160mm"
-   viewBox="0 0 160 160"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="CollectionNode.svg"
+   id="svg4"
    version="1.1"
-   id="svg4563"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)"
-   sodipodi:docname="CollectionNode.svg">
+   viewBox="0 0 448 512"
+   role="img"
+   class="svg-inline--fa fa-square fa-w-14"
+   data-icon="square"
+   data-prefix="far"
+   focusable="false"
+   aria-hidden="true"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
   <defs
-     id="defs4557" />
+     id="defs8" />
   <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="0.62"
-     inkscape:cx="-146.03225"
-     inkscape:cy="172.90323"
-     inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
-     showgrid="false"
-     inkscape:window-width="1602"
-     inkscape:window-height="1005"
-     inkscape:window-x="899"
-     inkscape:window-y="198"
+     inkscape:current-layer="svg4"
      inkscape:window-maximized="0"
-     units="mm" />
-  <metadata
-     id="metadata4560">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(0,-137)">
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:50.79999924px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="46.869045"
-       y="110.27975"
-       id="text5110"><tspan
-         sodipodi:role="line"
-         id="tspan5108"
-         x="46.869045"
-         y="155.22585"
-         style="font-size:50.79999924px;stroke-width:0.26458332" /></text>
-    <rect
-       style="opacity:0.98000004;fill:#cad17d;fill-opacity:1;stroke:#7b7b7b;stroke-width:6.82075405;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect5116"
-       width="148.51277"
-       height="148.95171"
-       x="5.0820398"
-       y="142.35172" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="15.365664"
-       y="206.60106"
-       id="text5114-6"><tspan
-         sodipodi:role="line"
-         id="tspan5112-5"
-         x="15.365664"
-         y="206.60106"
-         style="font-size:50.79999924px;stroke-width:0.26458332">coll</tspan></text>
-  </g>
+     inkscape:window-y="65"
+     inkscape:window-x="1022"
+     inkscape:cy="320.73465"
+     inkscape:cx="116.72874"
+     inkscape:zoom="1.3921165"
+     showgrid="false"
+     id="namedview6"
+     inkscape:window-height="1163"
+     inkscape:window-width="1706"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     inkscape:pagecheckerboard="0" />
+  <path
+     style="fill:#ffde8a;fill-opacity:1"
+     id="path2"
+     d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-6 400H54c-3.3 0-6-2.7-6-6V86c0-3.3 2.7-6 6-6h340c3.3 0 6 2.7 6 6v340c0 3.3-2.7 6-6 6z"
+     fill="currentColor" />
+  <path
+     id="path869"
+     d="m 49.968008,429.6923 -1.561876,-1.66254 V 256.27418 c 0,-94.46556 0.200796,-172.278836 0.446213,-172.918384 1.313879,-3.423912 -7.23172,-3.264671 175.197195,-3.264671 128.3901,0 171.07525,0.207079 172.25546,0.835665 0.86295,0.459616 1.9628,1.34855 2.44409,1.975409 0.6821,0.888418 0.8801,39.015681 0.89791,172.903491 l 0.0228,171.76374 -1.48879,1.89271 -1.4888,1.8927 H 224.11106 51.529885 Z"
+     style="fill:#fff7e1;fill-opacity:1;stroke:none;stroke-width:3.59165;stroke-linejoin:round" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:192px;line-height:0.95;font-family:Bahnschrift;-inkscape-font-specification:Bahnschrift;letter-spacing:0px;word-spacing:0px;fill:#ddb347;fill-opacity:1;stroke:none;stroke-width:4.13695"
+     x="66.514931"
+     y="325.22214"
+     id="text857-3"><tspan
+       sodipodi:role="line"
+       x="66.514931"
+       y="325.22214"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:192px;font-family:Bahnschrift;-inkscape-font-specification:Bahnschrift;fill:#ddb347;fill-opacity:1;stroke-width:4.13695"
+       id="tspan859-3">coll</tspan></text>
 </svg>

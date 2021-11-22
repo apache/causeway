@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.objectvalue.digits;
 
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -26,19 +27,20 @@ import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 
-import lombok.val;
-
 /**
  * With {@link BigDecimal}, both JDO and JPA, if left unspecified,
  * default their max-fractional digits to 0.
  * (However, I could not find specific documents to support this claim.)
  *
  * @apiNote This facet should be applied in the absence of a corresponding {@code @Column} annotation,
- * but only for properties of type {@link BigDecimal} that appear within a (persistable) entity.
- * However, entities might extend abstract classes, where the framework - on type introspection -
+ * but only for properties of type {@link BigDecimal} that appear within a (persistable) entity
+ * and are also persistable.
+ * Entities might extend abstract classes, where the framework - on type introspection -
  * cannot distinguish entity from non-entity type.
  * It is safe to assume that mixed-in properties are not to consider here.
+ * @deprecated remove (we don't know how to implement)
  */
+@Deprecated
 public class MaxFractionalDigitsFacetForPersistentBigDecimalWhenUnspecified
 extends MaxFractionalDigitsFacetAbstract {
 
@@ -47,24 +49,35 @@ extends MaxFractionalDigitsFacetAbstract {
             final ProcessMethodContext processMethodContext,
             final IsisBeanTypeRegistry beanTypeRegistry) {
 
-        val cls = processMethodContext.getCls();
-        val facetHolder = processMethodContext.getFacetHolder();
+        // not properly implemented yet
+        return Optional.empty();
 
-        // only applies in a very specific context, see class java-doc
-        val isApplicable = scaleIfAny.orElse(-1)<0
-                && facetHolder.getFeatureType().isProperty()
-                && processMethodContext.getMethod().getReturnType().equals(BigDecimal.class)
-                && beanTypeRegistry.getEntityTypes().contains(cls);
-
-        return isApplicable
-                ? Optional.of(new MaxFractionalDigitsFacetForPersistentBigDecimalWhenUnspecified(
-                        facetHolder))
-                : Optional.empty();
+//        val cls = processMethodContext.getCls();
+//        val facetHolder = processMethodContext.getFacetHolder();
+//
+//        // only applies in a very specific context, see class java-doc
+//        val isApplicable = scaleIfAny.orElse(-1)<0
+//                && facetHolder.getFeatureType().isProperty()
+//                && processMethodContext.getMethod().getReturnType().equals(BigDecimal.class)
+//                && beanTypeRegistry.getEntityTypes().contains(cls)
+//                && isPersistable(processMethodContext.getMethod());
+//
+//        return isApplicable
+//                ? Optional.of(new MaxFractionalDigitsFacetForPersistentBigDecimalWhenUnspecified(
+//                        facetHolder))
+//                : Optional.empty();
     }
 
     private MaxFractionalDigitsFacetForPersistentBigDecimalWhenUnspecified(
             final FacetHolder holder) {
         super(0, holder);
+    }
+
+    // -- HELPER
+
+    private static boolean isPersistable(final Method method) {
+        // TODO don't know how to do that
+        return false;
     }
 
 }

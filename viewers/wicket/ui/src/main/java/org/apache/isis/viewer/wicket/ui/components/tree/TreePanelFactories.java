@@ -41,7 +41,7 @@ public class TreePanelFactories {
         private static final long serialVersionUID = 1L;
 
         public Parented() {
-            super(ComponentType.SCALAR_NAME_AND_VALUE, TreePanel.class);
+            super(ComponentType.SCALAR_NAME_AND_VALUE, ParentedTreePanel.class);
         }
 
         @Override
@@ -62,7 +62,7 @@ public class TreePanelFactories {
         @Override
         public final Component createComponent(final String id, final IModel<?> model) {
 
-            return new TreePanel(id, (ScalarModel) model);
+            return new ParentedTreePanel(id, (ScalarModel) model);
         }
     }
 

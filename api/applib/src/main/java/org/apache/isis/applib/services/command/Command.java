@@ -363,6 +363,4 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
         return UPDATER;
     }
 
-
-
 }

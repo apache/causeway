@@ -29,8 +29,7 @@ import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldStringModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldTextualAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -39,7 +38,7 @@ import lombok.val;
  * Panel for rendering MultiLine scalars of type String
  */
 public class MultiLineStringPanel
-extends ScalarPanelTextFieldParseableAbstract {
+extends ScalarPanelTextFieldTextualAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -48,9 +47,8 @@ extends ScalarPanelTextFieldParseableAbstract {
     }
 
     @Override
-    protected AbstractTextComponent<String> createTextFieldForRegular(final String id) {
-        val model = new TextFieldStringModel(this);
-        val textArea = new TextArea<String>(id, model);
+    protected AbstractTextComponent<String> createTextField(final String id) {
+        val textArea = new TextArea<String>(id, newTextFieldValueModel());
         setRowsAndMaxLengthAttributesOn(textArea);
         return textArea;
     }
@@ -77,11 +75,6 @@ extends ScalarPanelTextFieldParseableAbstract {
     @Override
     protected String obtainInlinePromptLinkCssIfAny() {
         return null;
-    }
-
-    @Override
-    protected String getScalarPanelType() {
-        return "multiLineStringPanel";
     }
 
     // -- HELPER

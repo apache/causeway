@@ -20,40 +20,18 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath;
 
 import java.math.BigInteger;
 
-import org.apache.wicket.markup.html.form.AbstractTextComponent;
-import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.converter.BigIntegerConverter;
-
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
-import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumericAbstract;
 
 /**
  * Panel for rendering scalars of type {@link BigInteger}.
  */
 public class JavaMathBigIntegerPanel
-extends ScalarPanelTextFieldNumeric<BigInteger> {
+extends ScalarPanelTextFieldNumericAbstract<BigInteger> {
 
     private static final long serialVersionUID = 1L;
 
     public JavaMathBigIntegerPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, BigInteger.class);
     }
-
-    @Override
-    protected AbstractTextComponent<BigInteger> createTextFieldForRegular(final String id) {
-        return Wkt.textFieldWithConverter(
-                id, newTextFieldValueModel(), BigInteger.class, getConverter(getModel()));
-    }
-
-    @Override
-    protected String getScalarPanelType() {
-        return "javaMathBigIntegerPanel";
-    }
-
-    @Override
-    protected IConverter<BigInteger> getConverter(final ScalarModel scalarModel) {
-        return new BigIntegerConverter();
-    }
-
 }

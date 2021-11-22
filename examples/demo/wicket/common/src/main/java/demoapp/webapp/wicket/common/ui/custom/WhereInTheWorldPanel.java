@@ -23,6 +23,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.request.resource.ByteArrayResource;
 
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
@@ -86,7 +87,7 @@ extends PanelAbstract<ManagedObject, EntityModel>  {
 
 //tag::createMapComponent[]
     @SneakyThrows
-    private Image createMapComponent(String id, WhereInTheWorldVm vm)  {
+    private Image createMapComponent(final String id, final WhereInTheWorldVm vm)  {
         val bytes = geoapifyClient.toJpeg(
                         vm.getLatitude(), vm.getLongitude(), vm.getZoom());  // <.>
         return new Image(id, new ByteArrayResource("image/jpeg", bytes));    // <.>
@@ -102,7 +103,7 @@ extends PanelAbstract<ManagedObject, EntityModel>  {
 
         val scalarModel =
                 getModel().getPropertyModel(                                       // <.>
-                    property, ObjectUiModel.EitherViewOrEdit.VIEW,
+                    property, ScalarRepresentation.VIEWING,
                     ObjectUiModel.RenderingHint.REGULAR);
         return getComponentFactoryRegistry().createComponent(                      // <.>
                 ComponentType.SCALAR_NAME_AND_VALUE, propertyId, scalarModel);

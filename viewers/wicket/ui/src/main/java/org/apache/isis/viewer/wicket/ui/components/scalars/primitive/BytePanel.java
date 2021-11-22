@@ -18,19 +18,14 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
-import org.apache.wicket.markup.html.form.AbstractTextComponent;
-import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.converter.ByteConverter;
-
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
-import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumericAbstract;
 
 /**
  * Panel for rendering scalars of type {@link Byte} or <tt>byte</tt>.
  */
 public class BytePanel
-extends ScalarPanelTextFieldNumeric<Byte> {
+extends ScalarPanelTextFieldNumericAbstract<Byte> {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,19 +33,4 @@ extends ScalarPanelTextFieldNumeric<Byte> {
         super(id, scalarModel, Byte.class);
     }
 
-    @Override
-    protected AbstractTextComponent<Byte> createTextFieldForRegular(final String id) {
-        return Wkt.textFieldWithConverter(
-                id, newTextFieldValueModel(), Byte.class, getConverter(getModel()));
-    }
-
-    @Override
-    protected String getScalarPanelType() {
-        return "bytePanel";
-    }
-
-    @Override
-    protected IConverter<Byte> getConverter(final ScalarModel scalarModel) {
-        return ByteConverter.INSTANCE;
-    }
 }

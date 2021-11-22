@@ -18,39 +18,18 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
-import org.apache.wicket.markup.html.form.AbstractTextComponent;
-import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.converter.IntegerConverter;
-
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
-import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumericAbstract;
 
 /**
  * Panel for rendering scalars of type {@link Integer} or <tt>int</tt>.
  */
-public class IntegerPanel extends ScalarPanelTextFieldNumeric<Integer> {
+public class IntegerPanel extends ScalarPanelTextFieldNumericAbstract<Integer> {
 
     private static final long serialVersionUID = 1L;
 
     public IntegerPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, Integer.class);
-    }
-
-    @Override
-    protected AbstractTextComponent<Integer> createTextFieldForRegular(final String id) {
-        return Wkt.textFieldWithConverter(
-                id, newTextFieldValueModel(), Integer.class, getConverter(getModel()));
-    }
-
-    @Override
-    protected String getScalarPanelType() {
-        return "integerPanel";
-    }
-
-    @Override
-    protected IConverter<Integer> getConverter(final ScalarModel scalarModel) {
-        return IntegerConverter.INSTANCE;
     }
 
 }

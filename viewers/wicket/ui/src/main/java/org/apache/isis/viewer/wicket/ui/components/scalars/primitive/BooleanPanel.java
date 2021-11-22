@@ -254,10 +254,4 @@ public class BooleanPanel extends ScalarPanelAbstract {
         return variation;
     }
 
-    @Override
-    protected String getScalarPanelType() {
-        return "booleanPanel";
-    }
-
-
 }

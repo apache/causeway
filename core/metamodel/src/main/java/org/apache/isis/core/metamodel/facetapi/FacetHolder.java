@@ -23,7 +23,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.adapters.ValueSemanticsProvider;
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;

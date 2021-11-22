@@ -22,24 +22,19 @@ import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.LambdaModel;
 
-import org.apache.isis.applib.adapters.Renderer;
+import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldTextualAbstract;
 
 //FIXME[ISIS-2877] introduced for experiments, should be removed
 public class ValueCompoundPanel
-extends ScalarPanelTextFieldParseableAbstract {
+extends ScalarPanelTextFieldTextualAbstract {
 
     private static final long serialVersionUID = 1L;
 
     public ValueCompoundPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
-    }
-
-    @Override
-    protected String getScalarPanelType() {
-        return "valuePanel";
     }
 
     @Override
@@ -51,7 +46,7 @@ extends ScalarPanelTextFieldParseableAbstract {
     }
 
     @Override
-    protected AbstractTextComponent<String> createTextFieldForRegular(final String id) {
+    protected AbstractTextComponent<String> createTextField(final String id) {
         return new TextField<>(id, LambdaModel.of(()->
             renderer().simpleTextPresentation(null, scalarModel.getObject().getPojo())));
     }

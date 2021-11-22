@@ -18,6 +18,7 @@
  */
 package org.apache.isis.commons.internal.functions;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -54,7 +55,7 @@ public final class _Functions {
      * and incremented after each function call.
      * @param indexed
      */
-    public static <T, R> Function<T, R> indexedZeroBase(IndexedFunction<T, R> indexed){
+    public static <T, R> Function<T, R> indexedZeroBase(final IndexedFunction<T, R> indexed){
         return new _Functions_IndexedZeroBase<T, R>(indexed);
     }
 
@@ -72,15 +73,15 @@ public final class _Functions {
 
         R apply(T t) throws Exception;
 
-        default <U extends RuntimeException> Function<T, R> toUnchecked(Function<Exception, U> toUncheckedException) {
+        default <U extends RuntimeException> Function<T, R> toUnchecked(final Function<Exception, U> toUncheckedException) {
             return uncheckedFunction(this, toUncheckedException);
         }
 
     }
 
     public static <T, R, U extends RuntimeException> Function<T, R> uncheckedFunction(
-            CheckedFunction<T, R> checkedFunction,
-            Function<Exception, U> toUncheckedException) {
+            final CheckedFunction<T, R> checkedFunction,
+            final Function<Exception, U> toUncheckedException) {
         return t->{
             try {
                 return checkedFunction.apply(t);
@@ -102,15 +103,15 @@ public final class _Functions {
 
         void run() throws Exception;
 
-        default <U extends RuntimeException> Runnable toUnchecked(Function<Exception, U> toUncheckedException) {
+        default <U extends RuntimeException> Runnable toUnchecked(final Function<Exception, U> toUncheckedException) {
             return uncheckedRunnable(this, toUncheckedException);
         }
 
     }
 
     public static <U extends RuntimeException> Runnable uncheckedRunnable(
-            CheckedRunnable checkedRunnable,
-            Function<Exception, U> toUncheckedException) {
+            final CheckedRunnable checkedRunnable,
+            final Function<Exception, U> toUncheckedException) {
         return ()->{
             try {
                 checkedRunnable.run();
@@ -120,7 +121,7 @@ public final class _Functions {
         };
     }
 
-    public static  Runnable uncheckedRunnable(CheckedRunnable checkedRunnable) {
+    public static  Runnable uncheckedRunnable(final CheckedRunnable checkedRunnable) {
         return ()->{
             try {
                 checkedRunnable.run();
@@ -143,15 +144,15 @@ public final class _Functions {
 
         void accept(T t) throws Exception;
 
-        default <U extends RuntimeException> Consumer<T> toUnchecked(Function<Exception, U> toUncheckedException) {
+        default <U extends RuntimeException> Consumer<T> toUnchecked(final Function<Exception, U> toUncheckedException) {
             return uncheckedConsumer(this, toUncheckedException);
         }
 
     }
 
     public static <T, U extends RuntimeException> Consumer<T> uncheckedConsumer(
-            CheckedConsumer<T> checkedConsumer,
-            Function<Exception, U> toUncheckedException) {
+            final CheckedConsumer<T> checkedConsumer,
+            final Function<Exception, U> toUncheckedException) {
         return t->{
             try {
                 checkedConsumer.accept(t);
@@ -160,6 +161,36 @@ public final class _Functions {
             }
         };
     }
+
+    /**
+    *
+    * Similar to {@link BiConsumer}, but allows checked exceptions to be thrown.
+    *
+    * @param <T>
+    */
+   @FunctionalInterface
+   public interface CheckedBiConsumer<T, U> {
+
+       void accept(T t, U u) throws Exception;
+
+       default <V extends RuntimeException> BiConsumer<T, U> toUnchecked(
+               final Function<Exception, V> toUncheckedException) {
+           return uncheckedBiConsumer(this, toUncheckedException);
+       }
+
+   }
+
+   public static <T, U, V extends RuntimeException> BiConsumer<T, U> uncheckedBiConsumer(
+           final CheckedBiConsumer<T, U> checkedBiConsumer,
+           final Function<Exception, V> toUncheckedException) {
+       return (t, u)->{
+           try {
+               checkedBiConsumer.accept(t, u);
+           } catch (Exception e) {
+               throw toUncheckedException.apply(e);
+           }
+       };
+   }
 
     // -- CHECKED EXCEPTION ADAPTERS (SUPPLIER)
 
@@ -174,15 +205,15 @@ public final class _Functions {
 
         T get() throws Exception;
 
-        default <U extends RuntimeException> Supplier<T> toUnchecked(Function<Exception, U> toUncheckedException) {
+        default <U extends RuntimeException> Supplier<T> toUnchecked(final Function<Exception, U> toUncheckedException) {
             return uncheckedSupplier(this, toUncheckedException);
         }
 
     }
 
     public static <T, U extends RuntimeException> Supplier<T> uncheckedSupplier(
-            CheckedSupplier<T> checkedSupplier,
-            Function<Exception, U> toUncheckedException) {
+            final CheckedSupplier<T> checkedSupplier,
+            final Function<Exception, U> toUncheckedException) {
         return ()->{
             try {
                 return checkedSupplier.get();
@@ -193,7 +224,7 @@ public final class _Functions {
     }
 
     public static <T, U extends RuntimeException> Supplier<T> uncheckedSupplier(
-            CheckedSupplier<T> checkedSupplier) {
+            final CheckedSupplier<T> checkedSupplier) {
         return ()->{
             try {
                 return checkedSupplier.get();

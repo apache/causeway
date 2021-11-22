@@ -18,39 +18,19 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
-import org.apache.wicket.markup.html.form.AbstractTextComponent;
-import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.converter.DoubleConverter;
-
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
-import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumericAbstract;
 
 /**
  * Panel for rendering scalars of type {@link Double} or <tt>double</tt>.
  */
-public class DoublePanel extends ScalarPanelTextFieldNumeric<Double> {
+public class DoublePanel
+extends ScalarPanelTextFieldNumericAbstract<Double> {
 
     private static final long serialVersionUID = 1L;
 
     public DoublePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, Double.class);
-    }
-
-    @Override
-    protected AbstractTextComponent<Double> createTextFieldForRegular(final String id) {
-        return Wkt.textFieldWithConverter(
-                id, newTextFieldValueModel(), Double.class, getConverter(getModel()));
-    }
-
-    @Override
-    protected String getScalarPanelType() {
-        return "doublePanel";
-    }
-
-    @Override
-    protected IConverter<Double> getConverter(final ScalarModel scalarModel) {
-        return DoubleConverter.INSTANCE;
     }
 
 }

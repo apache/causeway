@@ -33,6 +33,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -190,7 +191,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
             final Consumer<LinkAndLabel> onAssociatedAction) {
 
         final ScalarModel scalarModel =
-                entityModel.getPropertyModel(property, EntityModel.EitherViewOrEdit.VIEW, EntityModel.RenderingHint.REGULAR);
+                entityModel.getPropertyModel(property, ScalarRepresentation.VIEWING, EntityModel.RenderingHint.REGULAR);
 
         final Component scalarNameAndValueComponent = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);

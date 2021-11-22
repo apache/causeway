@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -91,18 +92,17 @@ extends GridSystemServiceAbstract<BS3Grid> {
     public static final String TNS = "http://isis.apache.org/applib/layout/grid/bootstrap3";
     public static final String SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd";
 
-    private final GridReaderUsingJaxb gridReader;
+    private Provider<GridReaderUsingJaxb> gridReaderProvider;
 
     @Inject
     public GridSystemServiceBootstrap(
-            final GridReaderUsingJaxb gridReader,
+            final Provider<GridReaderUsingJaxb> gridReaderProvider,
             final SpecificationLoader specificationLoader,
             final TranslationService translationService,
             final JaxbService jaxbService,
             final MessageService messageService,
             final IsisSystemEnvironment isisSystemEnvironment) {
         super(specificationLoader, translationService, jaxbService, messageService, isisSystemEnvironment);
-        this.gridReader = gridReader;
     }
 
     @Override
@@ -127,7 +127,7 @@ extends GridSystemServiceAbstract<BS3Grid> {
         try {
             final String content = _Resources.loadAsStringUtf8(getClass(), "GridFallbackLayout.xml");
             return Optional.ofNullable(content)
-                    .map(xml -> gridReader.loadGrid(xml))
+                    .map(xml -> gridReaderProvider.get().loadGrid(xml))
                     .filter(BS3Grid.class::isInstance)
                     .map(BS3Grid.class::cast)
                     .map(bs3Grid -> withDomainClass(bs3Grid, domainClass))

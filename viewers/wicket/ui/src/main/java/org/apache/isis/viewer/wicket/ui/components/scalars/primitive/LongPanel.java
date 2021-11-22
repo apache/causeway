@@ -18,39 +18,19 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
-import org.apache.wicket.markup.html.form.AbstractTextComponent;
-import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.converter.LongConverter;
-
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
-import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumericAbstract;
 
 /**
  * Panel for rendering scalars of type {@link Long} or <tt>long</tt>.
  */
-public class LongPanel extends ScalarPanelTextFieldNumeric<Long> {
+public class LongPanel
+extends ScalarPanelTextFieldNumericAbstract<Long> {
 
     private static final long serialVersionUID = 1L;
 
     public LongPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, Long.class);
-    }
-
-    @Override
-    protected AbstractTextComponent<Long> createTextFieldForRegular(final String id) {
-        return Wkt.textFieldWithConverter(
-                id, newTextFieldValueModel(), Long.class, getConverter(getModel()));
-    }
-
-    @Override
-    protected String getScalarPanelType() {
-        return "longPanel";
-    }
-
-    @Override
-    protected IConverter<Long> getConverter(final ScalarModel scalarModel) {
-        return LongConverter.INSTANCE;
     }
 
 }

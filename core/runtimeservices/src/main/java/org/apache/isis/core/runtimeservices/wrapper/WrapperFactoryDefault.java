@@ -36,6 +36,7 @@ import javax.inject.Named;
 import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 
@@ -121,7 +122,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @Inject SpecificationLoader specificationLoader;
     @Inject ServiceInjector serviceInjector;
     @Inject _ProxyFactoryService proxyFactoryService; // protected to allow JUnit test
-    @Inject CommandDtoFactory commandDtoFactory;
+    @Inject @Lazy CommandDtoFactory commandDtoFactory;
 
     private final List<InteractionListener> listeners = new ArrayList<>();
     private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher>
@@ -186,11 +187,11 @@ public class WrapperFactoryDefault implements WrapperFactory {
         return createProxy(domainObject, syncControl);
     }
 
-    private static boolean equivalent(ImmutableEnumSet<ExecutionMode> first, ImmutableEnumSet<ExecutionMode> second) {
+    private static boolean equivalent(final ImmutableEnumSet<ExecutionMode> first, final ImmutableEnumSet<ExecutionMode> second) {
         return equivalent(first.toEnumSet(), second.toEnumSet());
     }
 
-    private static boolean equivalent(EnumSet<ExecutionMode> first, EnumSet<ExecutionMode> second) {
+    private static boolean equivalent(final EnumSet<ExecutionMode> first, final EnumSet<ExecutionMode> second) {
         return first.containsAll(second) && second.containsAll(first);
     }
 
@@ -222,24 +223,24 @@ public class WrapperFactoryDefault implements WrapperFactory {
         return createMixinProxy(mixee, mixin, syncControl);
     }
 
-    protected <T> T createProxy(T domainObject, SyncControl syncControl) {
+    protected <T> T createProxy(final T domainObject, final SyncControl syncControl) {
         val objAdapter = adaptAndGuardAgainstWrappingNotSupported(domainObject);
         return proxyContextHandler.proxy(domainObject, objAdapter, syncControl);
     }
 
-    protected <T> T createMixinProxy(Object mixee, T mixin, SyncControl syncControl) {
+    protected <T> T createMixinProxy(final Object mixee, final T mixin, final SyncControl syncControl) {
         val mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixee);
         val mixinAdapter = adaptAndGuardAgainstWrappingNotSupported(mixin);
         return proxyContextHandler.mixinProxy(mixin, mixeeAdapter, mixinAdapter, syncControl);
     }
 
     @Override
-    public boolean isWrapper(Object obj) {
+    public boolean isWrapper(final Object obj) {
         return obj instanceof WrappingObject;
     }
 
     @Override
-    public <T> T unwrap(T possibleWrappedDomainObject) {
+    public <T> T unwrap(final T possibleWrappedDomainObject) {
         if(isWrapper(possibleWrappedDomainObject)) {
             val wrappingObject = (WrappingObject) possibleWrappedDomainObject;
             return _Casts.uncheckedCast(wrappingObject.__isis_wrapped());
@@ -463,10 +464,10 @@ public class WrapperFactoryDefault implements WrapperFactory {
         static MemberAndTarget notFound() {
             return new MemberAndTarget(Type.NONE, null, null, null, null);
         }
-        static MemberAndTarget foundAction(ObjectAction action, ManagedObject target, final Method method) {
+        static MemberAndTarget foundAction(final ObjectAction action, final ManagedObject target, final Method method) {
             return new MemberAndTarget(Type.ACTION, action, null, target, method);
         }
-        static MemberAndTarget foundProperty(OneToOneAssociation property, ManagedObject target, final Method method) {
+        static MemberAndTarget foundProperty(final OneToOneAssociation property, final ManagedObject target, final Method method) {
             return new MemberAndTarget(Type.PROPERTY, null, property, target, method);
         }
 
@@ -507,17 +508,17 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
     @Override
-    public boolean addInteractionListener(InteractionListener listener) {
+    public boolean addInteractionListener(final InteractionListener listener) {
         return listeners.add(listener);
     }
 
     @Override
-    public boolean removeInteractionListener(InteractionListener listener) {
+    public boolean removeInteractionListener(final InteractionListener listener) {
         return listeners.remove(listener);
     }
 
     @Override
-    public void notifyListeners(InteractionEvent interactionEvent) {
+    public void notifyListeners(final InteractionEvent interactionEvent) {
         val dispatcher = dispatchersByEventClass.get(interactionEvent.getClass());
         if (dispatcher == null) {
             val msg = String.format("Unknown InteractionEvent %s - "
@@ -545,11 +546,11 @@ public class WrapperFactoryDefault implements WrapperFactory {
     // -- HELPER - SETUP
 
     private <T extends InteractionEvent> void putDispatcher(
-            Class<T> type, BiConsumer<InteractionListener, T> onDispatch) {
+            final Class<T> type, final BiConsumer<InteractionListener, T> onDispatch) {
 
         val dispatcher = new InteractionEventDispatcherTypeSafe<T>() {
             @Override
-            public void dispatchTypeSafe(T interactionEvent) {
+            public void dispatchTypeSafe(final T interactionEvent) {
                 for (InteractionListener l : listeners) {
                     onDispatch.accept(l, interactionEvent);
                 }

@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -87,16 +88,18 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
         getClassCache()
         .streamPublicMethods(cls)
         .forEach(method->{
-            // remove synthetic methods (except when is a mixin)
-            // (it seems that javac marks methods synthetic in the context of non-static inner classes)
+            // remove methods in the context of non-static inner classes,
+            // except cls when is a mixin
             if (!isConcreteMixin
-                    && method.isSynthetic()) {
+                    && _Reflect.isNonStaticInnerMethod(method)) {
                 processClassContext.removeMethod(method);
+                return;
             }
 
             // removeJavaLangComparable(processClassContext);
             if(method.getName().equals("compareTo")) {
                 processClassContext.removeMethod(method);
+                return;
             }
 
             // remove property setter, if has not explicitly an @Action annotation
@@ -108,6 +111,7 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
 
                 if(!_Annotations.synthesize(method, Action.class).isPresent()) {
                     processClassContext.removeMethod(method);
+                    return;
                 }
             }
         });

@@ -35,9 +35,12 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactor
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaImperativeFacetAbstract;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaStaticFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.NonNull;
+import lombok.val;
 
 /**
  * Installed by {@link CssClassFaFacetOnMemberPostProcessor},
@@ -56,16 +59,21 @@ extends CssClassFaImperativeFacetAbstract {
      * if the memberNamedFacet provides static names, we can also provide a static CssClassFaFactory
      */
     private final @NonNull Optional<CssClassFaFactory> staticCssClassFaFactory;
+    private ObjectSpecification objectSpecification;
 
-    public static Optional<CssClassFaFacet> create(final ObjectAction objectAction) {
+    public static Optional<CssClassFaFacet> create(
+            final ObjectSpecification objectSpecification,
+            final ObjectAction objectAction) {
         return objectAction.lookupFacet(MemberNamedFacet.class)
-        .map(memberNamedFacet->new CssClassFaFacetOnMemberFromConfiguredRegex(memberNamedFacet, objectAction));
+        .map(memberNamedFacet->new CssClassFaFacetOnMemberFromConfiguredRegex(objectSpecification, memberNamedFacet, objectAction));
     }
 
     private CssClassFaFacetOnMemberFromConfiguredRegex(
+            final ObjectSpecification objectSpecification,
             final MemberNamedFacet memberNamedFacet,
             final FacetHolder holder) {
         super(holder);
+        this.objectSpecification = objectSpecification;
         this.faIconByPattern = getConfiguration().getApplib().getAnnotation().getActionLayout().getCssClassFa().getPatternsAsMap();
         this.memberNamedFacet = memberNamedFacet;
 
@@ -121,10 +129,24 @@ extends CssClassFaImperativeFacetAbstract {
         .getSpecialization()
         .fold(
                 hasStaticName->hasStaticName.translated(), // unexpected code reach, due to optimization above
-                hasImperativeName->hasImperativeName.textElseNull(domainObjectProvider.get()));
+                hasImperativeName->hasImperativeName.textElseNull(targetFor(domainObjectProvider)));
 
         return cssClassFaFactoryForMemberFriendlyName(memberFriendlyName);
 
+    }
+
+    private ManagedObject targetFor(final Supplier<ManagedObject> domainObjectProvider) {
+        val ownerAdapter = domainObjectProvider.get();
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(ownerAdapter)) {
+            return ManagedObject.empty(objectSpecification);
+        }
+        return objectSpecification.isMixin()
+                ? ManagedObject.of(
+                        objectSpecification,
+                        objectSpecification
+                            .getFactoryService()
+                            .mixin(objectSpecification.getCorrespondingClass(), ownerAdapter.getPojo()))
+                : ownerAdapter;
     }
 
     /**

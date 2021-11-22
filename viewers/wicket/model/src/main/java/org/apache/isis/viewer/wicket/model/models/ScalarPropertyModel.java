@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
@@ -43,7 +44,7 @@ implements PropertyUiModel {
 
     public static ScalarPropertyModel wrap(
             final PropertyUiModelWkt delegate,
-            final EntityModel.EitherViewOrEdit viewOrEdit,
+            final ScalarRepresentation viewOrEdit,
             final EntityModel.RenderingHint renderingHint) {
         return new ScalarPropertyModel(delegate, viewOrEdit, renderingHint);
     }
@@ -55,7 +56,7 @@ implements PropertyUiModel {
      */
     private ScalarPropertyModel(
             final PropertyUiModelWkt delegate,
-            final EntityModel.EitherViewOrEdit viewOrEdit,
+            final ScalarRepresentation viewOrEdit,
             final EntityModel.RenderingHint renderingHint) {
         super(EntityModel.ofAdapter(delegate.getCommonContext(), delegate.getOwner()),
                 viewOrEdit, renderingHint);
@@ -64,7 +65,7 @@ implements PropertyUiModel {
 
     /** @return new instance bound to the same delegate */
     public ScalarPropertyModel copyHaving(
-            final EntityModel.EitherViewOrEdit viewOrEdit,
+            final ScalarRepresentation viewOrEdit,
             final EntityModel.RenderingHint renderingHint) {
         return wrap(delegate, viewOrEdit, renderingHint);
     }
@@ -106,7 +107,7 @@ implements PropertyUiModel {
     }
 
     @Override
-    public String whetherDisabled() {
+    public String disableReasonIfAny() {
         return getManagedProperty()
                 .checkUsability()
                 .map(InteractionVeto::getReason)

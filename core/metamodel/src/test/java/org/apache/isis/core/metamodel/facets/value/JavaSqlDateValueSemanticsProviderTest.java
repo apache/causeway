@@ -21,17 +21,20 @@ package org.apache.isis.core.metamodel.facets.value;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.TimeZone;
+import java.time.LocalDate;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalDateValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaSqlDateValueSemantics;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaSqlDateValueSemantics;
+import lombok.val;
 
 public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -43,7 +46,16 @@ public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProvide
 
         date = new Date(0);
 
-        setSemantics(value = new JavaSqlDateValueSemantics(metaModelContext.getConfiguration()) {
+        ValueSemanticsAbstract<LocalDate> delegate =
+                new LocalDateValueSemantics();
+
+        setSemantics(value = new JavaSqlDateValueSemantics() {
+
+            @Override
+            public ValueSemanticsAbstract<LocalDate> getDelegate() {
+                return delegate;
+            }
+
         });
     }
 
@@ -63,14 +75,8 @@ public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProvide
 
     @Test
     public void testParse() throws Exception {
-        final Object newValue = value.parseTextRepresentation(null, "1/1/1980");
-
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
-        calendar.set(1980, 0, 1, 0, 0, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-
-        assertEquals(calendar.getTime(), newValue);
+        val parsedDate = value.parseTextRepresentation(null, "1980-01-01");
+        assertEquals("1980-01-01", parsedDate.toString());
     }
 
 }

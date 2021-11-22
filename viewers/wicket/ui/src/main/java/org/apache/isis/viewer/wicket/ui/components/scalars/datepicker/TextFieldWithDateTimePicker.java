@@ -34,7 +34,7 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.ui.components.scalars.DateConverter;
+import org.apache.isis.viewer.wicket.model.converter.ConverterBasedOnValueSemantics;
 
 import static de.agilecoders.wicket.jquery.JQuery.$;
 
@@ -47,20 +47,22 @@ import de.agilecoders.wicket.core.util.Attributes;
  *
  * @param <T> The type of the date/time
  */
-public class TextFieldWithDateTimePicker<T> extends TextField<T> implements IConverter<T> {
+public class TextFieldWithDateTimePicker<T>
+extends TextField<T>
+implements IConverter<T> {
 
     private static final long serialVersionUID = 1L;
 
-    protected final DateConverter<T> converter;
+    protected final IConverter<T> converter;
 
     private final DateTimeConfig config;
 
     public TextFieldWithDateTimePicker(
-            IsisAppCommonContext commonContext,
-            String id,
-            IModel<T> model,
-            Class<T> type,
-            DateConverter<T> converter) {
+            final IsisAppCommonContext commonContext,
+            final String id,
+            final IModel<T> model,
+            final Class<T> type,
+            final IConverter<T> converter) {
 
         super(id, model, type);
 
@@ -72,15 +74,15 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
 
         // if this text field is for a LocalDate, then note that pattern obtained will just be a simple date format
         // (with no hour/minute components).
-        final String dateTimePattern = converter.getDateTimePattern(getLocale());
+        final String dateTimePattern = ((ConverterBasedOnValueSemantics<T>)this.converter).getEditingPattern();
         final String pattern = convertToMomentJsFormat(dateTimePattern);
         config.withFormat(pattern);
 
-        boolean patternContainsTimeComponent = pattern.contains("HH");
-        if (patternContainsTimeComponent) {
-            // no longer do this, since for sidebar actions takes up too much real estate.
-            //config.sideBySide(true);
-        }
+//        boolean patternContainsTimeComponent = pattern.contains("HH");
+//        if (patternContainsTimeComponent) {
+//            // no longer do this, since for sidebar actions takes up too much real estate.
+//            //config.sideBySide(true);
+//        }
 
         config.calendarWeeks(true);
         config.useCurrent(false);
@@ -97,21 +99,21 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
 
         this.config = config;
 
-        //XXX ISIS-2834 
-        //Adding OnChangeAjaxBehavior registers a JavaScript event listener on change event. 
-        //Since OnChangeAjaxBehavior extends AjaxFormComponentUpdatingBehavior the Ajax request 
-        // also updates the Wicket model for this form component on the server side.  
-        // onUpdate() is a callback method that you could use to do something more or don't do anything 
+        //XXX ISIS-2834
+        //Adding OnChangeAjaxBehavior registers a JavaScript event listener on change event.
+        //Since OnChangeAjaxBehavior extends AjaxFormComponentUpdatingBehavior the Ajax request
+        // also updates the Wicket model for this form component on the server side.
+        // onUpdate() is a callback method that you could use to do something more or don't do anything
         add(new OnChangeAjaxBehavior() {
             private static final long serialVersionUID = 1L;
             @Override
-            protected void onUpdate(AjaxRequestTarget target) {
+            protected void onUpdate(final AjaxRequestTarget target) {
                 // nothing to do
             }
         });
     }
 
-    private String convertToMomentJsFormat(String javaDateTimeFormat) {
+    private String convertToMomentJsFormat(final String javaDateTimeFormat) {
         String momentJsFormat = javaDateTimeFormat;
         momentJsFormat = momentJsFormat.replace('d', 'D');
         momentJsFormat = momentJsFormat.replace('y', 'Y');
@@ -119,30 +121,30 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
     }
 
     @Override
-    public T convertToObject(String value, Locale locale) {
+    public T convertToObject(final String value, final Locale locale) {
         return converter.convertToObject(value, locale);
     }
 
     @Override
-    public String convertToString(T value, Locale locale) {
+    public String convertToString(final T value, final Locale locale) {
         return converter.convertToString(value, locale);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <C> IConverter<C> getConverter(Class<C> type) {
+    public <C> IConverter<C> getConverter(final Class<C> type) {
         // we use isAssignableFrom rather than a simple == to handle
         // the persistence of JDO/DataNucleus:
         // if persisting a java.sql.Date, the object we are given is actually a
         // org.datanucleus.store.types.simple.SqlDate (a subclass of java.sql.Date)
-        if (converter.getConvertableClass().isAssignableFrom(type)) {
+        if (super.getType().isAssignableFrom(type)) {
             return (IConverter<C>) this;
         }
         return super.getConverter(type);
     }
 
     @Override
-    protected void onComponentTag(ComponentTag tag) {
+    protected void onComponentTag(final ComponentTag tag) {
         super.onComponentTag(tag);
 
         checkComponentTag(tag, "input");

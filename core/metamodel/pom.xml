@@ -109,7 +109,7 @@
             </exclusions>
         </dependency>
 
-        <!-- TEST -->
+        <!-- TESTING -->
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>

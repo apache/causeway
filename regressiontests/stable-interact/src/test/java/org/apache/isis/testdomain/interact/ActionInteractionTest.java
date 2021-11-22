@@ -25,10 +25,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.isis.testdomain.model.interaction.DemoEnum;
@@ -38,11 +44,6 @@ import org.apache.isis.testdomain.model.interaction.InteractionDemo_biListOfStri
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_multiEnum;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_multiInt;
 import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 
@@ -101,7 +102,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     }
 
     @Test
-    void mixinwhenDisabled_shouldProvideActionMetadata() {
+    void mixinWhenDisabled_shouldProvideActionMetadata() {
 
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgDisabled", Where.OBJECT_FORMS)
                 .checkVisibility()
@@ -123,6 +124,17 @@ class ActionInteractionTest extends InteractionTestAbstract {
         tester.assertVisibilityIsNotVetoed();
         tester.assertUsabilityIsNotVetoed();
         tester.assertInvocationResult(99, UnaryOperator.identity());
+
+
+        val capturedCommands = tester.getCapturedCommands();
+        assertEquals(1, capturedCommands.size());
+        val command = capturedCommands.getElseFail(1);
+        assertEquals("regressiontests.InteractionDemo#noArgEnabled",
+                command.getLogicalMemberIdentifier());
+
+        // test feature-identifier to command matching ...
+        val act = tester.getActionMetaModelElseFail();
+        assertTrue(CommandUtil.matches(command, act));
     }
 
     @Test
@@ -151,7 +163,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     }
 
     @Test
-    void withParams_shouldProduceCorrectResult() throws Throwable {
+    void mixinWithParams_shouldProduceCorrectResult() throws Throwable {
 
         val tester =
                 testerFactory.actionTester(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS);
@@ -159,6 +171,16 @@ class ActionInteractionTest extends InteractionTestAbstract {
         tester.assertVisibilityIsNotVetoed();
         tester.assertUsabilityIsNotVetoed();
         tester.assertInvocationResult(46, arg0->12, arg1->34);
+
+        val capturedCommands = tester.getCapturedCommands();
+        assertEquals(1, capturedCommands.size());
+        val command = capturedCommands.getElseFail(1);
+        assertEquals("regressiontests.InteractionDemo#biArgEnabled",
+                command.getLogicalMemberIdentifier());
+
+        // test feature-identifier to command matching ...
+        val act = tester.getActionMetaModelElseFail();
+        assertTrue(CommandUtil.matches(command, act));
     }
 
     @Test
@@ -431,8 +453,6 @@ class ActionInteractionTest extends InteractionTestAbstract {
   //TODO also deal with non-scalar parameter values
   //TODO test whether actions do emit their domain events
   //TODO test whether actions can be vetoed via domain event interception
-  //TODO test command reification
   //TODO test whether interactions spawn their own transactions, commands, interactions(applib)
-
 
 }

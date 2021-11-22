@@ -16,9 +16,6 @@
  */
 package org.apache.isis.applib.util.schema;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
 import java.io.CharArrayReader;
 import java.io.CharArrayWriter;
 import java.math.BigDecimal;
@@ -55,6 +52,9 @@ import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import lombok.val;
 
 public class Roundtrip {
@@ -86,7 +86,7 @@ public class Roundtrip {
         return interactionDto;
     }
 
-    private static void addArg(InteractionDto interactionDto, Object sampleValue) {
+    private static void addArg(final InteractionDto interactionDto, final Object sampleValue) {
         val type = sampleValue.getClass();
         val name = type.getSimpleName();
         InteractionDtoUtils.addParamArg(interactionDto, "a"+name, type, sampleValue, null);
@@ -94,19 +94,19 @@ public class Roundtrip {
     }
 
     private static void testArg(
-            ActionInvocationDto invocationDto,
-            LongAdder paramIndex,
-            ValueType valueType,
-            Object expectedValue) {
+            final ActionInvocationDto invocationDto,
+            final LongAdder paramIndex,
+            final ValueType valueType,
+            final Object expectedValue) {
         testArg(invocationDto, paramIndex, valueType, expectedValue, null);
     }
 
     private static void testArg(
-            ActionInvocationDto invocationDto,
-            LongAdder paramIndex,
-            ValueType valueType,
-            Object expectedValue,
-            String nameOverride) {
+            final ActionInvocationDto invocationDto,
+            final LongAdder paramIndex,
+            final ValueType valueType,
+            final Object expectedValue,
+            final String nameOverride) {
 
         paramIndex.increment();
         int param = paramIndex.intValue();

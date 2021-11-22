@@ -10,7 +10,7 @@ import java.util.Locale;
 
 import javax.persistence.Column;
 
-import org.apache.isis.applib.adapters.ValueSemanticsProvider;
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 
 /**
  * Collects all the value-type specific customization attributes.

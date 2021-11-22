@@ -23,6 +23,9 @@ for non-public class member introspection.
 | Imperative _Object_ method `boolean disabled(Type type)` took a single argument.
 | The `Type` argument was removed, use `boolean disabled()` instead.
 
+| `org.apache.isis.applib.jaxb.JodaTimeJaxbAdapters` 
+| moved to `org.apache.isis.valuetypes.jodatime.applib.jaxb` 
+
 |===
 
 == Configuration

@@ -30,7 +30,6 @@ import java.util.stream.Stream;
 
 import org.springframework.core.env.AbstractEnvironment;
 
-import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.grid.GridLoaderService;
 import org.apache.isis.applib.services.grid.GridService;
@@ -48,6 +47,7 @@ import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -208,7 +208,7 @@ implements MetaModelContext {
                 serviceRegistry,
                 metamodelEventService,
                 messageService,
-                specificationLoader,
+//                specificationLoader,
                 interactionProvider,
                 getTranslationService(),
                 authentication,
@@ -240,7 +240,8 @@ implements MetaModelContext {
                     _ManagedBeanAdapter.forTestingLazy(GridService.class, this::getGridService),
                     _ManagedBeanAdapter.forTestingLazy(JaxbService.class, this::getJaxbService),
                     _ManagedBeanAdapter.forTestingLazy(MenuBarsService.class, this::getMenuBarsService),
-                    _ManagedBeanAdapter.forTestingLazy(LayoutService.class, this::getLayoutService)
+                    _ManagedBeanAdapter.forTestingLazy(LayoutService.class, this::getLayoutService),
+                    _ManagedBeanAdapter.forTestingLazy(SpecificationLoader.class, this::getSpecificationLoader)
                 ),
                 singletonProviders.stream());
     }
@@ -438,7 +439,7 @@ implements MetaModelContext {
     private final GridService createGridService() {
         return new GridServiceDefault(
             getGridLoaderService(), _Lists.of(
-                    new GridSystemServiceBootstrap(getGridReader(),
+                    new GridSystemServiceBootstrap(this::getGridReader,
                             getSpecificationLoader(),
                             getTranslationService(),
                             getJaxbService(),

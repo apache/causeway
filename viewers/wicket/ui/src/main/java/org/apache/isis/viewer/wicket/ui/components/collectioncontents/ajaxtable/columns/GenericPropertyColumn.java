@@ -27,6 +27,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -118,7 +119,7 @@ extends GenericColumnAbstract {
         final ScalarModel scalarModel = entityModel
                 .getPropertyModel(
                         property,
-                        EntityModel.EitherViewOrEdit.VIEW,
+                        ScalarRepresentation.VIEWING,
                         collectionVariant.getColumnRenderingHint());
 
         final ComponentFactory componentFactory = findComponentFactory(ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);

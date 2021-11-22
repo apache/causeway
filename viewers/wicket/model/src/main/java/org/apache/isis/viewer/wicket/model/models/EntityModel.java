@@ -30,6 +30,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.spec.feature.memento.PropertyMemento;
@@ -80,14 +81,14 @@ implements
             final @NonNull IsisAppCommonContext commonContext,
             final @Nullable ManagedObject adapter) {
         return new EntityModel(BookmarkedObjectWkt.ofAdapter(commonContext, adapter),
-                EitherViewOrEdit.VIEW, RenderingHint.REGULAR);
+                ScalarRepresentation.VIEWING, RenderingHint.REGULAR);
     }
 
     public static EntityModel ofBookmark(
             final @NonNull IsisAppCommonContext commonContext,
             final @Nullable Bookmark bookmark) {
         return new EntityModel(BookmarkedObjectWkt.ofBookmark(commonContext, bookmark),
-                EitherViewOrEdit.VIEW, RenderingHint.REGULAR);
+                ScalarRepresentation.VIEWING, RenderingHint.REGULAR);
     }
 
     // -- CONSTRUCTORS
@@ -99,12 +100,12 @@ implements
             final IsisAppCommonContext commonContext,
             final ManagedObject adapter) {
         this(BookmarkedObjectWkt.ofAdapter(commonContext, adapter),
-                EitherViewOrEdit.VIEW, RenderingHint.REGULAR);
+                ScalarRepresentation.VIEWING, RenderingHint.REGULAR);
     }
 
     private EntityModel(
             final @NonNull BookmarkedObjectWkt bookmarkedObject,
-            final EitherViewOrEdit mode,
+            final ScalarRepresentation mode,
             final RenderingHint renderingHint) {
         super(bookmarkedObject);
         this.mode = mode;
@@ -145,7 +146,7 @@ implements
 
     @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
-    private EitherViewOrEdit mode;
+    private ScalarRepresentation mode;
 
     @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
@@ -198,7 +199,7 @@ implements
      */
     public ScalarModel getPropertyModel(
             final OneToOneAssociation property,
-            final EitherViewOrEdit viewOrEdit,
+            final ScalarRepresentation viewOrEdit,
             final RenderingHint renderingHint) {
 
         val pm = property.getMemento();
@@ -230,7 +231,7 @@ implements
 
     @Override
     public EntityModel toEditMode() {
-        setMode(EitherViewOrEdit.EDIT);
+        setMode(ScalarRepresentation.EDITING);
         propertyScalarModels().values()
             .forEach(ScalarPropertyModel::toEditMode);
         return this;
@@ -238,7 +239,7 @@ implements
 
     @Override
     public EntityModel toViewMode() {
-        setMode(EitherViewOrEdit.VIEW);
+        setMode(ScalarRepresentation.VIEWING);
         propertyScalarModels().values()
             .forEach(ScalarPropertyModel::toViewMode);
         return this;

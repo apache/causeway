@@ -20,39 +20,21 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.uuid;
 
 import java.util.UUID;
 
-import org.apache.wicket.markup.html.form.AbstractTextComponent;
-
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemanticsAbstract;
 
 /**
  * Panel for rendering scalars of type {@link UUID}.
  */
-public class UuidPanel extends ScalarPanelTextFieldAbstract<UUID> {
+public class UuidPanel
+extends ScalarPanelTextFieldWithValueSemanticsAbstract<UUID> {
 
     private static final long serialVersionUID = 1L;
 
-    private static final UuidConverter converter = new UuidConverter();
-
-    public UuidPanel(
-            final String id,
-            final ScalarModel scalarModel) {
+    public UuidPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, UUID.class);
     }
 
-    @Override
-    protected AbstractTextComponent<UUID> createTextFieldForRegular(final String id) {
-        final ScalarModel model = getModel();
-        final TextFieldValueModel<UUID> textFieldValueModel = new TextFieldValueModel<>(this);
-        return new UuidTextField(id, textFieldValueModel, cls, model, converter);
-    }
-
-
-    @Override
-    protected String getScalarPanelType() {
-        return "uuidPanel";
-    }
 }
 
 

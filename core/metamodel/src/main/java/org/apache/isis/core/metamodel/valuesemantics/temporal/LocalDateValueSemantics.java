@@ -19,18 +19,12 @@
 package org.apache.isis.core.metamodel.valuesemantics.temporal;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.schema.common.v2.ValueType;
-
-import lombok.val;
 
 @Component
 @Named("isis.val.LocalDateValueSemantics")
@@ -51,30 +45,11 @@ extends TemporalValueSemanticsProvider<LocalDate> {
         return ValueType.LOCAL_DATE;
     }
 
-    public LocalDateValueSemantics(final IsisConfiguration config) {
+    public LocalDateValueSemantics() {
         super(TemporalCharacteristic.DATE_ONLY, OffsetCharacteristic.LOCAL,
                 TYPICAL_LENGTH, MAX_LENGTH,
                 LocalDate::from,
                 TemporalAdjust::adjustLocalDate);
-
-        super.addNamedFormat("iso", "yyyy-MM-dd");
-        super.addNamedFormat("iso_encoding", "yyyy-MM-dd");
-        super.updateParsers();
-
-        setEncodingFormatter(lookupNamedFormatterElseFail("iso_encoding"));
-
-        val configuredNameOrPattern = config.getValueTypes().getJavaTime().getLocalDate().getFormat();
-
-        // walk through 3 methods of generating a formatter, first one to return non empty wins
-        val formatter = formatterFirstOf(Can.of(
-                ()->lookupFormatStyle(configuredNameOrPattern).map(DateTimeFormatter::ofLocalizedDate),
-                ()->lookupNamedFormatter(configuredNameOrPattern),
-                ()->formatterFromPattern(configuredNameOrPattern)
-                ))
-        .orElseGet(()->DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM));  // fallback
-
-        setTitleFormatter(formatter);
-
     }
 
 }

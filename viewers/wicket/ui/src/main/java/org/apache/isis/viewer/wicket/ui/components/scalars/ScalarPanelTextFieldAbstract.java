@@ -25,11 +25,8 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -37,13 +34,16 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
+import org.apache.wicket.validation.validator.StringValidator;
 
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
@@ -52,6 +52,8 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
@@ -79,51 +81,45 @@ implements TextFieldValueModel.ScalarModelProvider {
 
     protected final Class<T> cls;
 
-    protected static class ReplaceDisabledTagWithReadonlyTagBehaviour extends Behavior {
-        private static final long serialVersionUID = 1L;
-
-        @Override public void onComponentTag(final Component component, final ComponentTag tag) {
-            super.onComponentTag(component, tag);
-            if(component.isEnabled()) {
-                return;
-            }
-            tag.remove("disabled");
-            tag.put("readonly","readonly");
-        }
-    }
-
+    @Getter(value = AccessLevel.PROTECTED)
     private AbstractTextComponent<T> textField;
 
-
-    public ScalarPanelTextFieldAbstract(final String id, final ScalarModel scalarModel, final Class<T> cls) {
+    protected ScalarPanelTextFieldAbstract(final String id, final ScalarModel scalarModel, final Class<T> cls) {
         super(id, scalarModel);
         this.cls = cls;
     }
 
-    // ///////////////////////////////////////////////////////////////////
+    // -- CONVERSION
 
-
-    protected AbstractTextComponent<T> getTextField() {
-        return textField;
+    protected final IConverter<T> getConverter(final ScalarModel scalarModel) {
+        return getConverter(scalarModel.getMetaModel(), scalarModel.isEditMode()
+                ? ScalarRepresentation.EDITING
+                : ScalarRepresentation.VIEWING);
     }
 
     /**
-     * Optional hook for subclasses to override
+     * Converter that is used for the either regular (editing) or compact (HTML) view of the panel,
+     * based on argument {@code scalarRepresentation}.
      */
-    protected AbstractTextComponent<T> createTextFieldForRegular(final String id) {
-        return createTextField(id);
+    protected abstract IConverter<T> getConverter(
+            @NonNull ObjectFeature propOrParam,
+            @NonNull ScalarRepresentation scalarRepresentation);
+
+    // --
+
+    /**
+     * TextField, with converter.
+     */
+    protected AbstractTextComponent<T> createTextField(final String id) {
+        return Wkt.textFieldWithConverter(
+                id, newTextFieldValueModel(), cls, getConverter(getModel()));
     }
 
-    protected TextField<T> createTextField(final String id) {
-        return new TextField<>(id, newTextFieldValueModel(), cls);
-    }
-
-    protected TextFieldValueModel<T> newTextFieldValueModel() {
+    protected final TextFieldValueModel<T> newTextFieldValueModel() {
         return new TextFieldValueModel<>(this);
     }
 
-    // ///////////////////////////////////////////////////////////////////
-
+    // --
 
     @Override
     protected MarkupContainer createComponentForRegular() {
@@ -132,7 +128,7 @@ implements TextFieldValueModel.ScalarModelProvider {
         // am instantiating both to avoid NPEs
         // elsewhere can use Component#isVisibilityAllowed or ScalarModel.getEditStyle() to check whichis visible.
 
-        textField = createTextFieldForRegular(ID_SCALAR_VALUE);
+        textField = createTextField(ID_SCALAR_VALUE);
         textField.setOutputMarkupId(true);
 
         addStandardSemantics();
@@ -148,19 +144,6 @@ implements TextFieldValueModel.ScalarModelProvider {
     @Override
     protected Component getScalarValueComponent() {
         return textField;
-    }
-
-    private void addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(final Component component) {
-        if(!getWicketViewerSettings().isReplaceDisabledTagWithReadonlyTag()) {
-            return;
-        }
-        if (component == null) {
-            return;
-        }
-        if (!component.getBehaviors(ReplaceDisabledTagWithReadonlyTagBehaviour.class).isEmpty()) {
-            return;
-        }
-        component.add(new ReplaceDisabledTagWithReadonlyTagBehaviour());
     }
 
     protected MarkupContainer createScalarIfRegularFormGroup() {
@@ -209,8 +192,29 @@ implements TextFieldValueModel.ScalarModelProvider {
     protected void addStandardSemantics() {
         textField.setRequired(getModel().isRequired());
         setTextFieldSizeAndMaxLengthIfSpecified();
-
         addValidatorForIsisValidation();
+    }
+
+    private void setTextFieldSizeAndMaxLengthIfSpecified() {
+
+        final Integer maxLength = getMaxLengthOf(getModel());
+        Integer typicalLength = getTypicalLenghtOf(getModel());
+
+        // doesn't make sense for typical length to be > maxLength
+        if(typicalLength != null && maxLength != null && typicalLength > maxLength) {
+            typicalLength = maxLength;
+        }
+
+        if (typicalLength != null) {
+            textField.add(new AttributeModifier("size", Model.of("" + typicalLength)));
+        }
+
+        if(maxLength != null) {
+            textField.add(new AttributeModifier("maxlength", Model.of("" + maxLength)));
+            if(cls.equals(String.class)) {
+                textField.add(StringValidator.maximumLength(maxLength));
+            }
+        }
     }
 
     private void addValidatorForIsisValidation() {
@@ -243,27 +247,7 @@ implements TextFieldValueModel.ScalarModelProvider {
         });
     }
 
-    private void setTextFieldSizeAndMaxLengthIfSpecified() {
-
-        final Integer maxLength = getMaxLengthOf(getModel());
-        Integer typicalLength = getTypicalLenghtOf(getModel());
-
-        // doesn't make sense for typical length to be > maxLength
-        if(typicalLength != null && maxLength != null && typicalLength > maxLength) {
-            typicalLength = maxLength;
-        }
-
-        if (typicalLength != null) {
-            textField.add(new AttributeModifier("size", Model.of("" + typicalLength)));
-        }
-
-        if(maxLength != null) {
-            textField.add(new AttributeModifier("maxlength", Model.of("" + maxLength)));
-        }
-    }
-
-
-    // //////////////////////////////////////
+    // --
 
     /**
      * Mandatory hook method to build the component to render the model when in
@@ -274,6 +258,7 @@ implements TextFieldValueModel.ScalarModelProvider {
      */
     @Override
     protected Component createComponentForCompact() {
+        //FIXME[ISIS-2882] wire-up with value semantics to use Renderer instead of Parser here
         return Wkt.labelAdd(
                 getCompactFragment(CompactType.SPAN), ID_SCALAR_IF_COMPACT,
                 ()->getModel().getObjectAsString());
@@ -283,7 +268,6 @@ implements TextFieldValueModel.ScalarModelProvider {
         INPUT_CHECKBOX,
         SPAN
     }
-
 
     Fragment getCompactFragment(final CompactType type) {
         Fragment compactFragment;
@@ -345,7 +329,10 @@ implements TextFieldValueModel.ScalarModelProvider {
         super.onInitializeNotEditable();
 
         textField.setEnabled(false);
-        addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(textField);
+
+        if(getWicketViewerSettings().isReplaceDisabledTagWithReadonlyTag()) {
+            Wkt.behaviorAddReplaceDisabledTagWithReadonlyTag(textField);
+        }
 
         clearTooltip();
     }
@@ -355,7 +342,10 @@ implements TextFieldValueModel.ScalarModelProvider {
         super.onInitializeReadonly(disableReason);
 
         textField.setEnabled(false);
-        addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(textField);
+
+        if(getWicketViewerSettings().isReplaceDisabledTagWithReadonlyTag()) {
+            Wkt.behaviorAddReplaceDisabledTagWithReadonlyTag(textField);
+        }
 
         inlinePromptLink.setEnabled(false);
 

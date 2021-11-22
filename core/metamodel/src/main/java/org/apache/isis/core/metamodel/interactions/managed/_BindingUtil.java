@@ -18,8 +18,8 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed;
 
-import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.adapters.ValueSemanticsProvider.Context;
+import org.apache.isis.applib.value.semantics.Parser;
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider.Context;
 import org.apache.isis.commons.binding.Bindable;
 import org.apache.isis.commons.internal.binding._BindableAbstract;
 import org.apache.isis.commons.internal.binding._Bindables;

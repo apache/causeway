@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.util.interaction;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -41,6 +42,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -227,6 +229,7 @@ public class DomainObjectTesterFactory {
         }
 
         private final @NonNull ThrowingSupplier<ParameterNegotiationModel> parameterNegotiationStarter;
+        private List<Command> capturedCommands = new ArrayList<>();
 
         private ActionTester(
                 final @NonNull Class<T> domainObjectType,
@@ -315,9 +318,12 @@ public class DomainObjectTesterFactory {
                 val actionResultAsPojo = resultOrVeto.leftIfAny().getPojo();
                 assertEquals(expectedResult, actionResultAsPojo);
 
+                captureCommand();
             });
 
         }
+
+
 
         public Object invokeWithPojos(final List<Object> pojoArgList) {
 
@@ -340,6 +346,8 @@ public class DomainObjectTesterFactory {
 
                 val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
                 assertTrue(resultOrVeto.isLeft()); // assert action did not throw
+
+                captureCommand();
 
                 return resultOrVeto.leftIfAny().getPojo();
             });
@@ -402,9 +410,16 @@ public class DomainObjectTesterFactory {
                                     ));
                 });
 
+                captureCommand();
+
             });
 
         }
+
+        public Can<Command> getCapturedCommands() {
+            return Can.ofCollection(capturedCommands);
+        }
+
 
         /**
          * Use on non scalar results.
@@ -473,6 +488,11 @@ public class DomainObjectTesterFactory {
                                     .orElse("no such action")));
         }
 
+
+        private void captureCommand() {
+            capturedCommands.add(
+                    interactionService.currentInteraction().get().getCommand());
+        }
 
     }
 

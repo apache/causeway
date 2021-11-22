@@ -20,18 +20,14 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath;
 
 import java.math.BigDecimal;
 
-import org.apache.wicket.markup.html.form.AbstractTextComponent;
-import org.apache.wicket.util.convert.IConverter;
-
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
-import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumericAbstract;
 
 /**
  * Panel for rendering scalars of type {@link BigDecimal}.
  */
 public class JavaMathBigDecimalPanel
-extends ScalarPanelTextFieldNumeric<BigDecimal> {
+extends ScalarPanelTextFieldNumericAbstract<BigDecimal> {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,26 +35,6 @@ extends ScalarPanelTextFieldNumeric<BigDecimal> {
             final String id,
             final ScalarModel scalarModel) {
         super(id, scalarModel, BigDecimal.class);
-    }
-
-    @Override
-    protected AbstractTextComponent<BigDecimal> createTextFieldForRegular(final String id) {
-        return Wkt.textFieldWithConverter(
-                id, newTextFieldValueModel(), BigDecimal.class, getConverter(getModel()));
-    }
-
-
-    @Override
-    protected String getScalarPanelType() {
-        return "javaMathBigDecimalPanel";
-    }
-
-    @Override
-    protected IConverter<BigDecimal> getConverter(final ScalarModel scalarModel) {
-
-        // honor when not scalarModel.isEditMode()
-
-        return new BigDecimalConverterForFeature(scalarModel.getMetaModel());
     }
 }
 

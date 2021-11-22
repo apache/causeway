@@ -20,25 +20,18 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.bookmark;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemanticsAbstract;
 
 /**
  * Panel for rendering scalars of type {@link Bookmark}.
  */
-public class BookmarkPanel extends ScalarPanelTextFieldParseableAbstract {
+public class BookmarkPanel
+extends ScalarPanelTextFieldWithValueSemanticsAbstract<Bookmark> {
 
     private static final long serialVersionUID = 1L;
 
-
     public BookmarkPanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel);
+        super(id, scalarModel, Bookmark.class);
     }
-
-    @Override
-    protected String getScalarPanelType() {
-        return "bookmarkPanel";
-    }
-
-
 
 }

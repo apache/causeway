@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.applib.id.HasLogicalType;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.i18n.HasTranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -193,11 +192,6 @@ implements
         return getLogicalTypeName()
                 + delimiter
                 + memberNameAndParameterClassNamesIdentityString;
-    }
-
-    public boolean matchesCommand(final @NonNull Command command) {
-        return (getLogicalTypeName() + "#" + memberLogicalName)
-                .equals(command.getLogicalMemberIdentifier());
     }
 
     // -- NATURAL NAMES

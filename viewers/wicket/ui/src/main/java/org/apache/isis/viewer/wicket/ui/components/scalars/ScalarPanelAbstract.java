@@ -44,6 +44,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -245,7 +246,7 @@ implements ScalarModelSubscriber {
 
         final ScalarModel scalarModel = getModel();
 
-        final String disableReasonIfAny = scalarModel.whetherDisabled();
+        final String disableReasonIfAny = scalarModel.disableReasonIfAny();
         final boolean mustBeEditable = scalarModel.mustBeEditable();
         if (disableReasonIfAny != null) {
             if(mustBeEditable) {
@@ -264,9 +265,11 @@ implements ScalarModelSubscriber {
     }
 
     /**
-     * Mandatory hook; simply determines the CSS that is added to the outermost 'scalarTypeContainer' div.
+     * determines the CSS that is added to the outermost 'scalarTypeContainer' div.
      */
-    protected abstract String getScalarPanelType();
+    public final String getCssClassName() {
+        return _Strings.decapitalize(getClass().getSimpleName());
+    }
 
     /**
      * Mandatory hook for implementations to indicate whether it supports the {@link PromptStyle#INLINE inline} or
@@ -300,7 +303,7 @@ implements ScalarModelSubscriber {
     private void buildGui() {
 
         scalarTypeContainer = Wkt.containerAdd(this, ID_SCALAR_TYPE_CONTAINER);
-        Wkt.cssAppend(scalarTypeContainer, getScalarPanelType());
+        Wkt.cssAppend(scalarTypeContainer, getCssClassName());
 
         this.scalarIfCompact = createComponentForCompact();
         this.scalarIfRegular = createComponentForRegular();
@@ -367,7 +370,7 @@ implements ScalarModelSubscriber {
 
         // prevent from tabbing into non-editable widgets.
         if(scalarModel.isProperty()
-                && scalarModel.getMode() == EntityModel.EitherViewOrEdit.VIEW
+                && scalarModel.getMode() == ScalarRepresentation.VIEWING
                 && (scalarModel.getPromptStyle().isDialog()
                         || !scalarModel.canEnterEditMode())) {
             getScalarValueComponent().add(new AttributeAppender("tabindex", "-1"));

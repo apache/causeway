@@ -21,21 +21,17 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time;
 import java.time.LocalDate;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldDatePickerAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithTemporalPickerAbstract;
 /**
  * Panel for rendering scalars of type {@link LocalDate}.
  */
-public class Jdk8LocalDatePanel extends ScalarPanelTextFieldDatePickerAbstract<LocalDate> {
+public class Jdk8LocalDatePanel
+extends ScalarPanelTextFieldWithTemporalPickerAbstract<LocalDate> {
 
     private static final long serialVersionUID = 1L;
 
     public Jdk8LocalDatePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, LocalDate.class);
-        init(new DateConverterForJdk8LocalDate(getWicketViewerSettings(), getAdjustBy()));
     }
 
-    @Override
-    protected String getScalarPanelType() {
-        return "jdk8DateTimePanel";
-    }
 }

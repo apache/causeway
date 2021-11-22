@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.common.model.object;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -32,10 +33,6 @@ public interface ObjectUiModel {
     default boolean isVisible() {
         return ManagedObjects.VisibilityUtil
                 .isVisible(getManagedObject(), InteractionInitiatedBy.USER);
-    }
-
-    public enum EitherViewOrEdit {
-        VIEW, EDIT
     }
 
     @RequiredArgsConstructor
@@ -98,27 +95,27 @@ public interface ObjectUiModel {
         @Deprecated// make immutable? - need to recreate any bound UI components anyway
         void setRenderingHint(RenderingHint renderingHint);
 
-        EitherViewOrEdit getMode();
+        ScalarRepresentation getMode();
         @Deprecated// make immutable? - need to recreate any bound UI components anyway
-        void setMode(EitherViewOrEdit mode);
+        void setMode(ScalarRepresentation mode);
 
         // -- SHORTCUTS
 
         default boolean isViewMode() {
-            return getMode() == EitherViewOrEdit.VIEW;
+            return getMode() == ScalarRepresentation.VIEWING;
         }
 
         default boolean isEditMode() {
-            return getMode() == EitherViewOrEdit.EDIT;
+            return getMode() == ScalarRepresentation.EDITING;
         }
 
         default HasRenderingHints toEditMode() {
-            setMode(EitherViewOrEdit.EDIT);
+            setMode(ScalarRepresentation.EDITING);
             return this;
         }
 
         default HasRenderingHints toViewMode() {
-            setMode(EitherViewOrEdit.VIEW);
+            setMode(ScalarRepresentation.VIEWING);
             return this;
         }
 

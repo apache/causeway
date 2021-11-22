@@ -173,9 +173,4 @@ extends ScalarPanelSelectAbstract {
         return scalarModel;
     }
 
-    @Override
-    protected String getScalarPanelType() {
-        return "valueChoicesSelect2Panel";
-    }
-
 }

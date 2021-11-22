@@ -77,7 +77,7 @@ implements ParameterUiModel {
     }
 
     @Override
-    public String whetherDisabled() {
+    public String disableReasonIfAny() {
         return getParameterNegotiationModel().getUsabilityConsent(getParameterIndex()).getReason();
     }
 

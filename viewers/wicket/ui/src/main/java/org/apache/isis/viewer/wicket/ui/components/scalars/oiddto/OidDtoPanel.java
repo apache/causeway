@@ -18,26 +18,20 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.oiddto;
 
+import org.apache.isis.schema.common.v2.OidDto;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemanticsAbstract;
 
 /**
  * Panel for rendering scalars of type {@link org.apache.isis.schema.common.v2.OidDto}.
  */
-public class OidDtoPanel extends ScalarPanelTextFieldParseableAbstract {
+public class OidDtoPanel
+extends ScalarPanelTextFieldWithValueSemanticsAbstract<OidDto> {
 
     private static final long serialVersionUID = 1L;
 
-
     public OidDtoPanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel);
+        super(id, scalarModel, OidDto.class);
     }
-
-    @Override
-    protected String getScalarPanelType() {
-        return "oidDtoPanel";
-    }
-
-
 
 }

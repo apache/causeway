@@ -18,39 +18,18 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
-import org.apache.wicket.markup.html.form.AbstractTextComponent;
-import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.converter.FloatConverter;
-
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
-import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumericAbstract;
 
 /**
  * Panel for rendering scalars of type {@link Float} or <tt>float</tt>.
  */
-public class FloatPanel extends ScalarPanelTextFieldNumeric<Float> {
+public class FloatPanel extends ScalarPanelTextFieldNumericAbstract<Float> {
 
     private static final long serialVersionUID = 1L;
 
     public FloatPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, Float.class);
-    }
-
-    @Override
-    protected AbstractTextComponent<Float> createTextFieldForRegular(final String id) {
-        return Wkt.textFieldWithConverter(
-                id, newTextFieldValueModel(), Float.class, getConverter(getModel()));
-    }
-
-    @Override
-    protected String getScalarPanelType() {
-        return "floatPanel";
-    }
-
-    @Override
-    protected IConverter<Float> getConverter(final ScalarModel scalarModel) {
-        return FloatConverter.INSTANCE;
     }
 
 }

@@ -32,13 +32,12 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.jaxb.JodaTimeJaxbAdapters;
-
-import lombok.Getter;
-import lombok.Setter;
+import org.apache.isis.valuetypes.jodatime.applib.jaxb.JodaTimeJaxbAdapters;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.jodatime.jodadatetime.holder.JodaDateTimeHolder3;
+import lombok.Getter;
+import lombok.Setter;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -53,7 +52,7 @@ public class JodaDateTimeVm
         implements HasAsciiDocDescription, JodaDateTimeHolder3 {
 
 //end::class[]
-    public JodaDateTimeVm(org.joda.time.DateTime initialValue) {
+    public JodaDateTimeVm(final org.joda.time.DateTime initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
@@ -62,7 +61,7 @@ public class JodaDateTimeVm
     @Title(prepend = "org.joda.time.DateTime view model: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
-    @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.DateTimeToStringAdapter.class)                    // <.>
+    @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.DateTimeToStringAdapter.class)     // <.>
     @Getter @Setter
     private org.joda.time.DateTime readOnlyProperty;
 

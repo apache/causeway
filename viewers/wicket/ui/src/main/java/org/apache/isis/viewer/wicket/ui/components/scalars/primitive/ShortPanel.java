@@ -18,18 +18,14 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
-import org.apache.wicket.markup.html.form.AbstractTextComponent;
-import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.converter.ShortConverter;
-
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
-import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumericAbstract;
 
 /**
  * Panel for rendering scalars of type {@link Short} or <tt>short</tt>.
  */
-public class ShortPanel extends ScalarPanelTextFieldNumeric<Short> {
+public class ShortPanel
+extends ScalarPanelTextFieldNumericAbstract<Short> {
 
     private static final long serialVersionUID = 1L;
 
@@ -37,19 +33,4 @@ public class ShortPanel extends ScalarPanelTextFieldNumeric<Short> {
         super(id, scalarModel, Short.class);
     }
 
-    @Override
-    protected AbstractTextComponent<Short> createTextFieldForRegular(final String id) {
-        return Wkt.textFieldWithConverter(
-                id, newTextFieldValueModel(), Short.class, getConverter(getModel()));
-    }
-
-    @Override
-    protected String getScalarPanelType() {
-        return "shortPanel";
-    }
-
-    @Override
-    protected IConverter<Short> getConverter(final ScalarModel scalarModel) {
-        return ShortConverter.INSTANCE;
-    }
 }

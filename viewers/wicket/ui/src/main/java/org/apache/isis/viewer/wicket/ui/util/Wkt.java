@@ -123,6 +123,22 @@ public class Wkt {
         };
     }
 
+    private static class ReplaceDisabledTagWithReadonlyTagBehavior extends Behavior {
+        private static final long serialVersionUID = 1L;
+        @Override public void onComponentTag(final Component component, final ComponentTag tag) {
+            super.onComponentTag(component, tag);
+            if(component.isEnabled()) {
+                return;
+            }
+            tag.remove("disabled");
+            tag.put("readonly","readonly");
+        }
+    }
+
+    public Behavior behaviorReplaceDisabledTagWithReadonlyTag() {
+        return new ReplaceDisabledTagWithReadonlyTagBehavior();
+    }
+
     public Behavior behaviorAddOnClick(
             final MarkupContainer markupContainer,
             final SerializableConsumer<AjaxRequestTarget> onClick) {
@@ -133,6 +149,12 @@ public class Wkt {
             final MarkupContainer markupContainer,
             final SerializableConsumer<AjaxRequestTarget> onRespond) {
         return add(markupContainer, behaviorFireOnEscapeKey(onRespond));
+    }
+
+    public void behaviorAddReplaceDisabledTagWithReadonlyTag(final Component component) {
+        if (component.getBehaviors(ReplaceDisabledTagWithReadonlyTagBehavior.class).isEmpty()) {
+            component.add(new ReplaceDisabledTagWithReadonlyTagBehavior());
+        }
     }
 
     // -- BUTTON
@@ -464,24 +486,30 @@ public class Wkt {
 
     // -- TEXT FIELD
 
+    /**
+     * @param converter - if {@code null} returns {@link TextField} using Wicket's default converters.
+     */
     public <T> TextField<T> textFieldWithConverter(
-            final String id, final IModel<T> model, final Class<T> type, final IConverter<T> converter) {
-        return new TextField<T>(id, model, type) {
-            private static final long serialVersionUID = 1L;
-            @SuppressWarnings("unchecked")
-            @Override public <C> IConverter<C> getConverter(final Class<C> cType) {
-                return cType == type
-                        ? (IConverter<C>) converter
-                        : super.getConverter(cType);}
-            @Override public void error(final IValidationError error) {
-                if(error instanceof ValidationError) {
-                    // use plain error message from ConversionException, circumventing resource bundles.
-                    this.error(((ValidationError)error).getMessage());
-                } else {
-                    super.error(error);
+            final String id, final IModel<T> model, final Class<T> type,
+            final @Nullable IConverter<T> converter) {
+        return converter!=null
+            ? new TextField<T>(id, model, type) {
+                    private static final long serialVersionUID = 1L;
+                    @SuppressWarnings("unchecked")
+                    @Override public <C> IConverter<C> getConverter(final Class<C> cType) {
+                        return cType == type
+                                ? (IConverter<C>) converter
+                                : super.getConverter(cType);}
+                    @Override public void error(final IValidationError error) {
+                        if(error instanceof ValidationError) {
+                            // use plain error message from ConversionException, circumventing resource bundles.
+                            this.error(((ValidationError)error).getMessage());
+                        } else {
+                            super.error(error);
+                        }
+                    }
                 }
-            }
-        };
+            : new TextField<>(id, model, type);
     }
 
     // -- FOCUS UTILITY
