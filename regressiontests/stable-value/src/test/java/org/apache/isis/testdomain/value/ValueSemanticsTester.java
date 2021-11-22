@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.value;
 
 import java.io.Serializable;
+import java.util.Optional;
 import java.util.function.Function;
 
 import javax.inject.Inject;
@@ -82,8 +83,16 @@ public class ValueSemanticsTester<T extends Serializable> {
                 .createValueSemanticsContext(prop);
 
         codecCallback.accept(context, codec(prop));
-        parserCallback.accept(context, parser(prop));
-        renderCallback.accept(context, renderer(prop));
+
+        val parserIfAny = parser(prop);
+        if(parserIfAny.isPresent()) {
+            parserCallback.accept(context, parserIfAny.get());
+        }
+
+        val rendererIfAny = renderer(prop);
+        if(rendererIfAny.isPresent()) {
+            renderCallback.accept(context, rendererIfAny.get());
+        }
 
         interactionService.run(interactionContext, ()->{
 
@@ -127,17 +136,16 @@ public class ValueSemanticsTester<T extends Serializable> {
                 .orElseThrow(()->_Exceptions.noSuchElement());
     }
 
-    private Parser<T> parser(
+    private Optional<Parser<T>> parser(
             final ObjectFeature feature) {
         val valueFacet = valueFacet(feature);
-        return valueFacet.selectParserForFeatureElseFallback(feature);
+        return valueFacet.selectParserForFeature(feature);
     }
 
-    private Renderer<T> renderer(
+    private Optional<Renderer<T>> renderer(
             final ObjectFeature feature) {
         val valueFacet = valueFacet(feature);
-        return valueFacet.selectDefaultRenderer()
-                .orElseThrow(()->_Exceptions.noSuchElement());
+        return valueFacet.selectDefaultRenderer();
     }
 
 }
