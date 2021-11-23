@@ -648,7 +648,8 @@ public class DomainObjectTesterFactory {
                     .createValueSemanticsContext(prop);
 
             return valueFacet.selectParserForPropertyElseFallback(prop)
-                    .parseableTextRepresentation(context, managedPropertyIfAny.get().getPropertyValue().getPojo());
+                    .parseableTextRepresentation(context,
+                            managedPropertyIfAny.get().getPropertyValue().getPojo());
         }
 
     }

@@ -19,6 +19,8 @@
 package org.apache.isis.testdomain.model.valuetypes;
 
 import java.awt.image.BufferedImage;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URL;
 import java.util.List;
 import java.util.UUID;
@@ -229,14 +231,117 @@ public abstract class ValueTypeExample<T> {
 
     // -- EXAMPLES - NUMBERS
 
-//TODO  Byte
-//TODO  Short
-//TODO  Integer
-//TODO  Long
-//TODO  Float
-//TODO  Double
-//TODO    BigDecimal
-//TODO    BigInteger
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleByte",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleByte
+    extends ValueTypeExample<Byte> {
+
+        @Property @Getter @Setter
+        private Byte value = -63;
+
+        @Getter
+        private Byte updateValue = 0;
+
+    }
+
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleShort",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleShort
+    extends ValueTypeExample<Short> {
+
+        @Property @Getter @Setter
+        private Short value = -63;
+
+        @Getter
+        private Short updateValue = 0;
+
+    }
+
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleInteger",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleInteger
+    extends ValueTypeExample<Integer> {
+
+        @Property @Getter @Setter
+        private Integer value = -63;
+
+        @Getter
+        private Integer updateValue = 0;
+
+    }
+
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleLong",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleLong
+    extends ValueTypeExample<Long> {
+
+        @Property @Getter @Setter
+        private Long value = -63L;
+
+        @Getter
+        private Long updateValue = 0L;
+
+    }
+
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleFloat",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleFloat
+    extends ValueTypeExample<Float> {
+
+        @Property @Getter @Setter
+        private Float value = -63.1f;
+
+        @Getter
+        private Float updateValue = 0.f;
+
+    }
+
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleDouble",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleDouble
+    extends ValueTypeExample<Double> {
+
+        @Property @Getter @Setter
+        private Double value = -63.1;
+
+        @Getter
+        private Double updateValue = 0.;
+
+    }
+
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleBigInteger",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleBigInteger
+    extends ValueTypeExample<BigInteger> {
+
+        @Property @Getter @Setter
+        private BigInteger value = BigInteger.valueOf(-63L);
+
+        @Getter
+        private BigInteger updateValue = BigInteger.ZERO;
+
+    }
+
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleBigDecimal",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleBigDecimal
+    extends ValueTypeExample<BigDecimal> {
+
+        @Property @Getter @Setter
+        private BigDecimal value = new BigDecimal("-63.1");
+
+        @Getter
+        private BigDecimal updateValue = BigDecimal.ZERO;
+
+    }
 
 
     // -- EXAMPLES - TEMPORAL
