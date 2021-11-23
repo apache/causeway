@@ -54,6 +54,12 @@ implements
 
     @SuppressWarnings("unchecked")
     @Override
+    public OrderRelation<T, ?> getOrderRelation() {
+        return this instanceof OrderRelation ? (OrderRelation<T, ?>)this : null;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
     public Renderer<T> getRenderer() {
         return this instanceof Renderer ? (Renderer<T>)this : null;
     }

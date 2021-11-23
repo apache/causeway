@@ -31,6 +31,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
+import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
@@ -60,6 +61,7 @@ public class ValueSemanticsTester<T extends Serializable> {
 
     private final Class<T> valueType;
     private final Object domainObject;
+    private Optional<OrderRelation<T, ?>> currentOrderRelation = Optional.empty();
 
     public ValueSemanticsTester(final Class<T> valueType, final Object domainObject) {
         this.valueType = valueType;
@@ -134,6 +136,11 @@ public class ValueSemanticsTester<T extends Serializable> {
             //assertEquals(a, b, message);
             return;
         }
+
+        if(currentOrderRelation.isPresent()) {
+            currentOrderRelation.get().equals(a, (T)b);
+        }
+
         assertEquals(a, b, message);
     }
 
@@ -160,6 +167,8 @@ public class ValueSemanticsTester<T extends Serializable> {
                 .orElseThrow(()->_Exceptions.noSuchElement(
                         "Value type Property or Parameter %s is missing a ValueFacet",
                         feature.getFeatureIdentifier()));
+
+        currentOrderRelation = valueFacet.selectDefaultOrderRelation();
 
         return _Casts.uncheckedCast(valueFacet);
     }
