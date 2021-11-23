@@ -32,7 +32,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -41,18 +40,15 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.commons.internal.base._Refs;
-import org.apache.isis.commons.internal.resources._Xml;
-import org.apache.isis.commons.internal.resources._Xml.WriteOptions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
-import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.valuetypes.Configuration_usingValueTypes;
 import org.apache.isis.testdomain.model.valuetypes.ValueTypeExample;
 import org.apache.isis.testdomain.model.valuetypes.ValueTypeExampleService;
+import org.apache.isis.testdomain.model.valuetypes.ValueTypeExampleService.Scenario;
 
 import lombok.val;
 
@@ -94,7 +90,11 @@ class ValueSemanticsTest {
 
                     // CoderDecoder round-trip test
                     val serialized = codec.toEncodedString(example.getValue());
-                    assertEquals(example.getValue(), codec.fromEncodedString(serialized));
+
+                    tester.assertValueEquals(
+                            example.getValue(),
+                            codec.fromEncodedString(serialized),
+                            "serialization roundtrip failed");
 
                 },
                 (context, parser)->{
@@ -109,7 +109,10 @@ class ValueSemanticsTest {
 
                     } else {
 
-                        assertEquals(example.getValue(), parser.parseTextRepresentation(context, stringified));
+                        tester.assertValueEquals(
+                                example.getValue(),
+                                parser.parseTextRepresentation(context, stringified),
+                                "parser roundtrip failed");
                     }
 
                 },
@@ -128,7 +131,7 @@ class ValueSemanticsTest {
                         return;
                     }
 
-                    assertEquals(example.getUpdateValue(), newValueRecorded);
+                    tester.assertValueEquals(example.getUpdateValue(), newValueRecorded, "command failed");
 
 //                    //debug
 //                    System.err.printf("Value %s %s%n", name,
@@ -150,19 +153,6 @@ class ValueSemanticsTest {
 
     // -- HELPER
 
-    // eg.. <ValueWithTypeDto type="string"><com:string>anotherString</com:string></ValueWithTypeDto>
-    private static String valueToXml(final ValueWithTypeDto valueWithTypeDto) {
-        val xmlResult = _Xml.writeXml(valueWithTypeDto,
-                WriteOptions.builder().allowMissingRootElement(true).useContextCache(true).build());
-        val rawXml = xmlResult.presentElseFail();
-        val xmlRef = _Refs.stringRef(rawXml);
-        xmlRef.cutAtIndexOf("<ValueWithTypeDto");
-        return xmlRef.cutAtLastIndexOf("</ValueWithTypeDto>")
-                .replace(" null=\"false\" xmlns:com=\"http://isis.apache.org/schema/common\" xmlns:cmd=\"http://isis.apache.org/schema/cmd\"", "")
-                + "</ValueWithTypeDto>";
-
-    }
-
     private InteractionContext interactionContext() {
         return InteractionContext.builder().locale(Locale.ENGLISH).build();
     }
@@ -176,8 +166,8 @@ class ValueSemanticsTest {
     @Inject ValueSemanticsRegistry valueSemanticsRegistry;
 
     Stream<Arguments> provideValueTypeExamples() {
-        return valueTypeExampleProvider.streamExamples()
-                .map(x->Arguments.of(x.getValueType().getSimpleName(), x.getValueType(), x));
+        return valueTypeExampleProvider.streamScenarios()
+                .map(Scenario::getArguments);
     }
 
 }

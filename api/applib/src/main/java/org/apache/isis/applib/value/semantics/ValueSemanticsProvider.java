@@ -65,6 +65,9 @@ public interface ValueSemanticsProvider<T> {
      */
     ValueType getSchemaValueType();
 
+    //TODO implement
+    //OrderRelation<T> getOrderRelation();
+
     /**
      * The {@link Renderer}, if any.
      */

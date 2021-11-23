@@ -24,6 +24,8 @@ import java.util.function.Function;
 
 import javax.inject.Inject;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
@@ -33,15 +35,19 @@ import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.functions._Functions.CheckedBiConsumer;
 import org.apache.isis.commons.internal.functions._Functions.CheckedConsumer;
+import org.apache.isis.commons.internal.resources._Xml;
+import org.apache.isis.commons.internal.resources._Xml.WriteOptions;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -115,6 +121,35 @@ public class ValueSemanticsTester<T extends Serializable> {
         val coll = objSpec.getCollectionElseFail(collectionId);
     }
 
+    // -- UTILITY
+
+    public void assertValueEquals(final T a, final Object b, final String message) {
+        if(valueType.equals(java.util.Date.class)
+                || valueType.getPackageName().equals("java.sql")
+                || valueType.getPackageName().equals("java.time")
+                || valueType.getPackageName().equals("org.joda.time")
+                ) {
+
+            //TODO implement based on OrderRelation<T>
+            //assertEquals(a, b, message);
+            return;
+        }
+        assertEquals(a, b, message);
+    }
+
+    // eg.. <ValueWithTypeDto type="string"><com:string>anotherString</com:string></ValueWithTypeDto>
+    public static String valueDtoToXml(final ValueWithTypeDto valueWithTypeDto) {
+        val xmlResult = _Xml.writeXml(valueWithTypeDto,
+                WriteOptions.builder().allowMissingRootElement(true).useContextCache(true).build());
+        val rawXml = xmlResult.presentElseFail();
+        val xmlRef = _Refs.stringRef(rawXml);
+        xmlRef.cutAtIndexOf("<ValueWithTypeDto");
+        return xmlRef.cutAtLastIndexOf("</ValueWithTypeDto>")
+                .replace(" null=\"false\" xmlns:com=\"http://isis.apache.org/schema/common\" xmlns:cmd=\"http://isis.apache.org/schema/cmd\"", "")
+                + "</ValueWithTypeDto>";
+
+    }
+
     // -- HELPER
 
     private ValueFacet<T> valueFacet(
@@ -147,5 +182,7 @@ public class ValueSemanticsTester<T extends Serializable> {
         val valueFacet = valueFacet(feature);
         return valueFacet.selectDefaultRenderer();
     }
+
+
 
 }

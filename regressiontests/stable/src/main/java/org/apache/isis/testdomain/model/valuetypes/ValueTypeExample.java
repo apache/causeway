@@ -22,6 +22,13 @@ import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -74,13 +81,10 @@ public abstract class ValueTypeExample<T> {
             nature = Nature.BEAN)
     public static class ValueTypeExampleBoolean
     extends ValueTypeExample<Boolean> {
-
         @Property @Getter @Setter
         private Boolean value = Boolean.TRUE;
-
         @Getter
         private Boolean updateValue = Boolean.FALSE;
-
     }
 
     @DomainObject(
@@ -88,13 +92,10 @@ public abstract class ValueTypeExample<T> {
             nature = Nature.BEAN)
     public static class ValueTypeExampleCharacter
     extends ValueTypeExample<Character> {
-
         @Property @Getter @Setter
         private Character value = 'a';
-
         @Getter
         private Character updateValue = 'b';
-
     }
 
     @DomainObject(
@@ -102,13 +103,10 @@ public abstract class ValueTypeExample<T> {
             nature = Nature.BEAN)
     public static class ValueTypeExampleString
     extends ValueTypeExample<String> {
-
         @Property @Getter @Setter
         private String value = "aString";
-
         @Getter
         private String updateValue = "anotherString";
-
     }
 
     @DomainObject(
@@ -116,13 +114,10 @@ public abstract class ValueTypeExample<T> {
             nature = Nature.BEAN)
     public static class ValueTypeExamplePassword
     extends ValueTypeExample<Password> {
-
         @Property @Getter @Setter
         private Password value = Password.of("aPassword");
-
         @Getter
         private Password updateValue = Password.of("anotherPassword");
-
     }
 
     @DomainObject(
@@ -130,13 +125,11 @@ public abstract class ValueTypeExample<T> {
             nature = Nature.BEAN)
     public static class ValueTypeExampleBufferedImage
     extends ValueTypeExample<BufferedImage> {
-
         @Property @Getter @Setter
         private BufferedImage value = new BufferedImage(4, 4, BufferedImage.TYPE_INT_RGB);
 
         @Getter
         private BufferedImage updateValue = new BufferedImage(8, 8, BufferedImage.TYPE_INT_RGB);
-
     }
 
     @DomainObject(
@@ -144,13 +137,10 @@ public abstract class ValueTypeExample<T> {
             nature = Nature.BEAN)
     public static class ValueTypeExampleBlob
     extends ValueTypeExample<Blob> {
-
         @Property @Getter @Setter
         private Blob value = Blob.of("aBlob", CommonMimeType.BIN, new byte[] {1, 2, 3});
-
         @Getter
         private Blob updateValue = Blob.of("anotherBlob", CommonMimeType.BIN, new byte[] {3, 4});
-
     }
 
     @DomainObject(
@@ -158,13 +148,10 @@ public abstract class ValueTypeExample<T> {
             nature = Nature.BEAN)
     public static class ValueTypeExampleClob
     extends ValueTypeExample<Clob> {
-
         @Property @Getter @Setter
         private Clob value = Clob.of("aClob", CommonMimeType.TXT, "abc");
-
         @Getter
         private Clob updateValue = Clob.of("anotherClob", CommonMimeType.TXT, "ef");
-
     }
 
     @DomainObject(
@@ -172,13 +159,10 @@ public abstract class ValueTypeExample<T> {
             nature = Nature.BEAN)
     public static class ValueTypeExampleLocalResourcePath
     extends ValueTypeExample<LocalResourcePath> {
-
         @Property @Getter @Setter
         private LocalResourcePath value = new LocalResourcePath("img/a");
-
         @Getter
         private LocalResourcePath updateValue = new LocalResourcePath("img/b");
-
     }
 
     @DomainObject(
@@ -186,18 +170,14 @@ public abstract class ValueTypeExample<T> {
             nature = Nature.BEAN)
     public static class ValueTypeExampleUrl
     extends ValueTypeExample<URL> {
-
         @Property @Getter @Setter
         private URL value = url("https://a.b.c");
-
         @Getter
         private URL updateValue = url("https://b.c.d");
-
         @SneakyThrows
         private static URL url(final String url) {
             return new URL(url);
         }
-
     }
 
     @DomainObject(
@@ -205,13 +185,10 @@ public abstract class ValueTypeExample<T> {
             nature = Nature.BEAN)
     public static class ValueTypeExampleMarkup
     extends ValueTypeExample<Markup> {
-
         @Property @Getter @Setter
         private Markup value = Markup.valueOf("aMarkup");
-
         @Getter
         private Markup updateValue = Markup.valueOf("anotherMarkup");
-
     }
 
     @DomainObject(
@@ -219,15 +196,11 @@ public abstract class ValueTypeExample<T> {
             nature = Nature.BEAN)
     public static class ValueTypeExampleUuid
     extends ValueTypeExample<UUID> {
-
         @Property @Getter @Setter
         private UUID value = UUID.randomUUID();
-
         @Getter
         private UUID updateValue = UUID.randomUUID();
-
     }
-
 
     // -- EXAMPLES - NUMBERS
 
@@ -236,13 +209,10 @@ public abstract class ValueTypeExample<T> {
             nature = Nature.BEAN)
     public static class ValueTypeExampleByte
     extends ValueTypeExample<Byte> {
-
         @Property @Getter @Setter
         private Byte value = -63;
-
         @Getter
         private Byte updateValue = 0;
-
     }
 
     @DomainObject(
@@ -250,13 +220,10 @@ public abstract class ValueTypeExample<T> {
             nature = Nature.BEAN)
     public static class ValueTypeExampleShort
     extends ValueTypeExample<Short> {
-
         @Property @Getter @Setter
         private Short value = -63;
-
         @Getter
         private Short updateValue = 0;
-
     }
 
     @DomainObject(
@@ -264,13 +231,10 @@ public abstract class ValueTypeExample<T> {
             nature = Nature.BEAN)
     public static class ValueTypeExampleInteger
     extends ValueTypeExample<Integer> {
-
         @Property @Getter @Setter
         private Integer value = -63;
-
         @Getter
         private Integer updateValue = 0;
-
     }
 
     @DomainObject(
@@ -278,13 +242,10 @@ public abstract class ValueTypeExample<T> {
             nature = Nature.BEAN)
     public static class ValueTypeExampleLong
     extends ValueTypeExample<Long> {
-
         @Property @Getter @Setter
         private Long value = -63L;
-
         @Getter
         private Long updateValue = 0L;
-
     }
 
     @DomainObject(
@@ -292,13 +253,10 @@ public abstract class ValueTypeExample<T> {
             nature = Nature.BEAN)
     public static class ValueTypeExampleFloat
     extends ValueTypeExample<Float> {
-
         @Property @Getter @Setter
         private Float value = -63.1f;
-
         @Getter
         private Float updateValue = 0.f;
-
     }
 
     @DomainObject(
@@ -306,13 +264,10 @@ public abstract class ValueTypeExample<T> {
             nature = Nature.BEAN)
     public static class ValueTypeExampleDouble
     extends ValueTypeExample<Double> {
-
         @Property @Getter @Setter
         private Double value = -63.1;
-
         @Getter
         private Double updateValue = 0.;
-
     }
 
     @DomainObject(
@@ -320,13 +275,10 @@ public abstract class ValueTypeExample<T> {
             nature = Nature.BEAN)
     public static class ValueTypeExampleBigInteger
     extends ValueTypeExample<BigInteger> {
-
         @Property @Getter @Setter
         private BigInteger value = BigInteger.valueOf(-63L);
-
         @Getter
         private BigInteger updateValue = BigInteger.ZERO;
-
     }
 
     @DomainObject(
@@ -334,40 +286,181 @@ public abstract class ValueTypeExample<T> {
             nature = Nature.BEAN)
     public static class ValueTypeExampleBigDecimal
     extends ValueTypeExample<BigDecimal> {
-
         @Property @Getter @Setter
         private BigDecimal value = new BigDecimal("-63.1");
-
         @Getter
         private BigDecimal updateValue = BigDecimal.ZERO;
-
     }
 
+    // -- EXAMPLES - TEMPORAL - LEGACY
 
-    // -- EXAMPLES - TEMPORAL
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleJavaUtilDate",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleJavaUtilDate
+    extends ValueTypeExample<java.util.Date> {
+        @Property @Getter @Setter
+        private java.util.Date value = new java.util.Date();
+        @Getter
+        private java.util.Date updateValue = new java.util.Date(0L);
+    }
 
-//TODO  Date
-//TODO  DateTime
-//TODO  LocalDate
-//TODO  LocalDateTime
-//TODO  LocalTime
-//TODO  Time
-//TODO  Timestamp
-//TODO  OffsetDateTime
-//TODO  OffsetTime
-//TODO  ZonedDateTime
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleJavaSqlDate",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleJavaSqlDate
+    extends ValueTypeExample<java.sql.Date> {
+        @Property @Getter @Setter
+        private java.sql.Date value = new java.sql.Date(new java.util.Date().getTime());
+        @Getter
+        private java.sql.Date updateValue = new java.sql.Date(0L);
+    }
 
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleJavaSqlTime",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleJavaSqlTime
+    extends ValueTypeExample<java.sql.Time> {
+        @Property @Getter @Setter
+        private java.sql.Time value = new java.sql.Time(new java.util.Date().getTime());
+        @Getter
+        private java.sql.Time updateValue = new java.sql.Time(0L);
+    }
 
- // -- EXAMPLES - OTHER
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleTimestamp",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleTimestamp
+    extends ValueTypeExample<Timestamp> {
+        @Property @Getter @Setter
+        private Timestamp value = new Timestamp(new java.util.Date().getTime());
+        @Getter
+        private Timestamp updateValue = new Timestamp(0L);
+    }
 
-//TODO    Bookmark
-//TODO    OidDto
+    // -- EXAMPLES - TEMPORAL - JAVA TIME
 
-//TODO    ChangesDto
-//TODO    CommandDto
-//TODO    InteractionDto
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleLocalDate",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleLocalDate
+    extends ValueTypeExample<LocalDate> {
+        @Property @Getter @Setter
+        private LocalDate value = LocalDate.now();
+        @Getter
+        private LocalDate updateValue = LocalDate.now().plusDays(2);
+    }
 
-//TODO    TreeNode
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleLocalDateTime",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleLocalDateTime
+    extends ValueTypeExample<LocalDateTime> {
+        @Property @Getter @Setter
+        private LocalDateTime value = LocalDateTime.now();
+        @Getter
+        private LocalDateTime updateValue = LocalDateTime.now().plusDays(2).plusSeconds(15);
+    }
+
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleLocalTime",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleLocalTime
+    extends ValueTypeExample<LocalTime> {
+        @Property @Getter @Setter
+        private LocalTime value = LocalTime.now();
+        @Getter
+        private LocalTime updateValue = LocalTime.now().plusSeconds(15);
+    }
+
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleOffsetDateTime",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleOffsetDateTime
+    extends ValueTypeExample<OffsetDateTime> {
+        @Property @Getter @Setter
+        private OffsetDateTime value = OffsetDateTime.now();
+        @Getter
+        private OffsetDateTime updateValue = OffsetDateTime.now().plusDays(2).plusSeconds(15);
+    }
+
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleOffsetTime",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleOffsetTime
+    extends ValueTypeExample<OffsetTime> {
+        @Property @Getter @Setter
+        private OffsetTime value = OffsetTime.now();
+        @Getter
+        private OffsetTime updateValue = OffsetTime.now().plusSeconds(15);
+    }
+
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleZonedDateTime",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleZonedDateTime
+    extends ValueTypeExample<ZonedDateTime> {
+        @Property @Getter @Setter
+        private ZonedDateTime value = ZonedDateTime.now();
+        @Getter
+        private ZonedDateTime updateValue = ZonedDateTime.now().plusDays(2).plusSeconds(15);
+    }
+    // -- EXAMPLES - TEMPORAL - JODA TIME
+
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleJodaDateTime",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleJodaDateTime
+    extends ValueTypeExample<org.joda.time.DateTime> {
+        @Property @Getter @Setter
+        private org.joda.time.DateTime value = org.joda.time.DateTime.now();
+        @Getter
+        private org.joda.time.DateTime updateValue = org.joda.time.DateTime.now().plusDays(2).plusSeconds(15);
+    }
+
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleJodaLocalDateTime",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleJodaLocalDateTime
+    extends ValueTypeExample<org.joda.time.LocalDateTime> {
+        @Property @Getter @Setter
+        private org.joda.time.LocalDateTime value = org.joda.time.LocalDateTime.now();
+        @Getter
+        private org.joda.time.LocalDateTime updateValue = org.joda.time.LocalDateTime.now().plusDays(2).plusSeconds(15);
+    }
+
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleJodaLocalDate",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleJodaLocalDate
+    extends ValueTypeExample<org.joda.time.LocalDate> {
+        @Property @Getter @Setter
+        private org.joda.time.LocalDate value = org.joda.time.LocalDate.now();
+        @Getter
+        private org.joda.time.LocalDate updateValue = org.joda.time.LocalDate.now().plusDays(2);
+    }
+
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleJodaLocalTime",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleJodaLocalTime
+    extends ValueTypeExample<org.joda.time.LocalTime> {
+        @Property @Getter @Setter
+        private org.joda.time.LocalTime value = org.joda.time.LocalTime.now();
+        @Getter
+        private org.joda.time.LocalTime updateValue = org.joda.time.LocalTime.now().plusSeconds(15);
+    }
+
+    // -- EXAMPLES - OTHER
+
+    //TODO    Bookmark
+    //TODO    OidDto
+
+    //TODO    ChangesDto
+    //TODO    CommandDto
+    //TODO    InteractionDto
+
+    //TODO    TreeNode
 
 
 }
