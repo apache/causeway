@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics.temporal;
 
+import java.time.Duration;
 import java.time.ZonedDateTime;
 
 import javax.inject.Named;
@@ -50,6 +51,13 @@ extends TemporalValueSemanticsProvider<ZonedDateTime> {
                 TYPICAL_LENGTH, MAX_LENGTH,
                 ZonedDateTime::from,
                 TemporalAdjust::adjustZonedDateTime);
+    }
+
+    // -- ORDER RELATION
+
+    @Override
+    public Duration epsilon() {
+        return ALMOST_A_SECOND;
     }
 
 }

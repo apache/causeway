@@ -103,6 +103,7 @@ implements
      * this is typically overruled later by implementations of
      * {@link #configureDecimalFormat(org.apache.isis.applib.adapters.ValueSemanticsProvider.Context, DecimalFormat) configureDecimalFormat}
      */
+    @SuppressWarnings("javadoc")
     protected DecimalFormat getNumberFormat(final @Nullable ValueSemanticsProvider.Context context) {
         val format = (DecimalFormat)NumberFormat.getNumberInstance(getLocale(context));
         // prime w/ 16 (64 bit IEEE 754 double has 15 decimal digits of precision)

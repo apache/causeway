@@ -25,14 +25,14 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalTimeValueSemantics;
-import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsAdapter;
+import org.apache.isis.core.metamodel.valuetypes.TemporalSemanticsAdapter;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.valuetypes.jodatime.applib.value.JodatimeConverters;
 
 @Component
 @Named("isis.val.JodaLocalTimeValueSemantics")
 public class JodaLocalTimeValueSemantics
-extends ValueSemanticsAdapter<org.joda.time.LocalTime, java.time.LocalTime>  {
+extends TemporalSemanticsAdapter<org.joda.time.LocalTime, java.time.LocalTime>  {
 
     @Inject LocalTimeValueSemantics localTimeValueSemantics;
 

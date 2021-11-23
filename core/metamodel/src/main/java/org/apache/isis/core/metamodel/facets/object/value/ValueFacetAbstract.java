@@ -107,7 +107,7 @@ implements ValueFacet<T> {
                 iaProvider.currentInteractionContext().orElse(null));
     }
 
-    // -- ORDER RELATIONN
+    // -- ORDER RELATION
 
     @Override
     public Optional<OrderRelation<T, ?>> selectDefaultOrderRelation() {

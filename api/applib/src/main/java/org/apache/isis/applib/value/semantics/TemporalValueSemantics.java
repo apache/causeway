@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.value.semantics;
 
+import java.time.Duration;
 import java.time.temporal.Temporal;
 
 /**
@@ -29,6 +30,7 @@ import java.time.temporal.Temporal;
  */
 public interface TemporalValueSemantics<T extends Temporal>
 extends
+    OrderRelation<T, Duration>,
     EncoderDecoder<T>,
     Parser<T>,
     Renderer<T> {

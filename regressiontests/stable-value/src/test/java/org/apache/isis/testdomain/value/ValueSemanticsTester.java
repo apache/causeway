@@ -25,6 +25,7 @@ import java.util.function.Function;
 import javax.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
@@ -125,7 +126,10 @@ public class ValueSemanticsTester<T extends Serializable> {
 
     // -- UTILITY
 
-    public void assertValueEquals(final T a, final Object b, final String message) {
+    public void assertValueEquals(final T a, final Object _b, final String message) {
+
+        val b = _Casts.<T>uncheckedCast(_b);
+
         if(valueType.equals(java.util.Date.class)
                 || valueType.getPackageName().equals("java.sql")
                 || valueType.getPackageName().equals("java.time")
@@ -134,14 +138,16 @@ public class ValueSemanticsTester<T extends Serializable> {
 
             //TODO implement based on OrderRelation<T>
             //assertEquals(a, b, message);
-            return;
+            //return;
         }
 
         if(currentOrderRelation.isPresent()) {
-            currentOrderRelation.get().equals(a, (T)b);
+            assertTrue(currentOrderRelation.get().equals(a, b), ()->
+                String.format("%s ==> expected: %s but was: %s",
+                        message, ""+a, ""+b));
+        } else {
+            assertEquals(a, b, message);
         }
-
-        assertEquals(a, b, message);
     }
 
     // eg.. <ValueWithTypeDto type="string"><com:string>anotherString</com:string></ValueWithTypeDto>

@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.valuetypes;
 
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
+import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
@@ -26,9 +27,10 @@ import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 
 import lombok.val;
 
-public abstract class ValueSemanticsAdapter<T, D>
+public abstract class ValueSemanticsAdapter<T, D, E>
 extends ValueSemanticsAbstract<T>
 implements
+    OrderRelation<T, E>,
     EncoderDecoder<T>,
     Parser<T>,
     Renderer<T> {
@@ -37,6 +39,26 @@ implements
 
     public abstract T fromDelegateValue(D value);
     public abstract D toDelegateValue(T value);
+
+    // -- ORDER RELATION
+
+    @Override
+    public final E epsilon() {
+        return delegateOrderRelation().epsilon();
+    }
+
+    @Override
+    public final int compare(final T a, final T b, final E epsilon) {
+        return delegateOrderRelation()
+                .compare(toDelegateValue(a), toDelegateValue(b), epsilon);
+    }
+
+    @Override
+    public final boolean equals(final T a, final T b, final E epsilon) {
+        return delegateOrderRelation()
+                .equals(toDelegateValue(a), toDelegateValue(b), epsilon);
+    }
+
 
     // -- ENCODER DECODER
 
@@ -91,6 +113,11 @@ implements
     }
 
     // -- HELPER
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private OrderRelation<D, E> delegateOrderRelation() {
+        return ((OrderRelation)getDelegate());
+    }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private Parser<D> delegateParser() {

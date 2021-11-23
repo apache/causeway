@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics.temporal;
 
+import java.time.Duration;
 import java.time.LocalTime;
 
 import javax.inject.Named;
@@ -50,6 +51,13 @@ extends TemporalValueSemanticsProvider<LocalTime> {
                 TYPICAL_LENGTH, MAX_LENGTH,
                 LocalTime::from,
                 TemporalAdjust::adjustLocalTime);
+    }
+
+    // -- ORDER RELATION
+
+    @Override
+    public Duration epsilon() {
+        return ALMOST_A_SECOND;
     }
 
 }

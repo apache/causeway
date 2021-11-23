@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics.temporal;
 
+import java.time.Duration;
 import java.time.OffsetDateTime;
 
 import javax.inject.Named;
@@ -50,6 +51,13 @@ extends TemporalValueSemanticsProvider<OffsetDateTime> {
                 TYPICAL_LENGTH, MAX_LENGTH,
                 OffsetDateTime::from,
                 TemporalAdjust::adjustOffsetDateTime);
+    }
+
+    // -- ORDER RELATION
+
+    @Override
+    public Duration epsilon() {
+        return ALMOST_A_SECOND;
     }
 
 }

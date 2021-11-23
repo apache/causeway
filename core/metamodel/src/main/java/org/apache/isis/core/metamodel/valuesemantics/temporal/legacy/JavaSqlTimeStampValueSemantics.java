@@ -28,13 +28,13 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
-import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsAdapter;
+import org.apache.isis.core.metamodel.valuetypes.TemporalSemanticsAdapter;
 import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.val.JavaSqlTimeStampValueSemantics")
 public class JavaSqlTimeStampValueSemantics
-extends ValueSemanticsAdapter<Timestamp, LocalDateTime>  {
+extends TemporalSemanticsAdapter<Timestamp, LocalDateTime> {
 
     @Inject LocalDateTimeValueSemantics localDateTimeValueSemantics;
 

@@ -18,19 +18,22 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics.temporal;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.val.LocalDateTimeValueSemantics")
 //@Log4j2
 public class LocalDateTimeValueSemantics
-extends TemporalValueSemanticsProvider<LocalDateTime> {
+extends TemporalValueSemanticsProvider<LocalDateTime>
+implements OrderRelation<LocalDateTime, Duration> {
 
     public static final int MAX_LENGTH = 36;
     public static final int TYPICAL_LENGTH = 22;
@@ -50,6 +53,13 @@ extends TemporalValueSemanticsProvider<LocalDateTime> {
                 TYPICAL_LENGTH, MAX_LENGTH,
                 LocalDateTime::from,
                 TemporalAdjust::adjustLocalDateTime);
+    }
+
+    // -- ORDER RELATION
+
+    @Override
+    public Duration epsilon() {
+        return ALMOST_A_SECOND;
     }
 
 }
