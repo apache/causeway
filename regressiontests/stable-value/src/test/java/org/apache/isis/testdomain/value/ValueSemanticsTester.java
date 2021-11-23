@@ -39,7 +39,6 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.functions._Functions.CheckedBiConsumer;
-import org.apache.isis.commons.internal.functions._Functions.CheckedConsumer;
 import org.apache.isis.commons.internal.resources._Xml;
 import org.apache.isis.commons.internal.resources._Xml.WriteOptions;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -82,7 +81,7 @@ public class ValueSemanticsTester<T> {
             final @NonNull CheckedBiConsumer<ValueSemanticsProvider.Context, EncoderDecoder<T>> codecCallback,
             final @NonNull CheckedBiConsumer<ValueSemanticsProvider.Context, Parser<T>> parserCallback,
             final @NonNull CheckedBiConsumer<ValueSemanticsProvider.Context, Renderer<T>> renderCallback,
-            final @NonNull CheckedConsumer<Command> commandCallback) {
+            final @NonNull CheckedBiConsumer<Command, EncoderDecoder<T>> commandCallback) {
 
         val objSpec = specLoader.specForTypeElseFail(domainObject.getClass());
         val prop = objSpec.getPropertyElseFail(propertyId);
@@ -90,7 +89,9 @@ public class ValueSemanticsTester<T> {
         val context = valueFacet(prop)
                 .createValueSemanticsContext(prop);
 
-        codecCallback.accept(context, codec(prop));
+        val codec = codec(prop);
+
+        codecCallback.accept(context, codec);
 
         val parserIfAny = parser(prop);
         if(parserIfAny.isPresent()) {
@@ -112,7 +113,7 @@ public class ValueSemanticsTester<T> {
             propInteraction.modifyProperty(managedProp->
                 ManagedObject.of(managedProp.getElementType(), newProperyValueProvider.apply(managedProp)));
 
-            commandCallback.accept(command);
+            commandCallback.accept(command, codec);
         });
     }
 

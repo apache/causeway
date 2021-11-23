@@ -227,10 +227,8 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
                             "need an id to lookup an object, got logical-type %s", memento.logicalType);
                 }
 
-                final Bookmark bookmark = Bookmark.parse(memento.persistentOidStr)
-                        .orElseThrow(()->_Exceptions.illegalArgument(
-                                "cannot parse a bookmark from '%s'",
-                                memento.persistentOidStr));
+                final Bookmark bookmark = Bookmark.parseElseFail(memento.persistentOidStr);
+
                 try {
 
                     log.debug("lookup by oid [{}]", bookmark);

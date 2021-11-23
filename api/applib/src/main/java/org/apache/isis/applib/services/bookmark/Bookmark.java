@@ -28,6 +28,7 @@ import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.schema.common.v2.OidDto;
 
 import lombok.AccessLevel;
@@ -100,7 +101,7 @@ public final class Bookmark implements Oid {
     /**
      * Round-trip with {@link #stringify()} representation.
      */
-    public static Optional<Bookmark> parse(@Nullable String str) {
+    public static Optional<Bookmark> parse(final @Nullable String str) {
 
         if(str==null) {
             return Optional.empty();
@@ -120,7 +121,13 @@ public final class Bookmark implements Oid {
         return Optional.empty();
     }
 
-    public static Optional<Bookmark> parseUrlEncoded(@Nullable String urlEncodedStr) {
+
+    public static Bookmark parseElseFail(final @Nullable String input) {
+        return parse(input)
+                .orElseThrow(()->_Exceptions.illegalArgument("cannot parse Bookmark %s", input));
+    }
+
+    public static Optional<Bookmark> parseUrlEncoded(@Nullable final String urlEncodedStr) {
         return _Strings.isEmpty(urlEncodedStr)
                 ? Optional.empty()
                 : parse(_UrlDecoderUtil.urlDecode(urlEncodedStr));
@@ -185,7 +192,7 @@ public final class Bookmark implements Oid {
 
     // -- HELPER
 
-    private String stringify(String id) {
+    private String stringify(final String id) {
         return logicalTypeName + SEPARATOR + id;
     }
 

@@ -40,7 +40,7 @@ public class IsisBookmarkConverter implements TypeConverter<Bookmark, String>{
     public Bookmark toMemberType(final String datastoreValue) {
         return datastoreValue != null
                 ? Bookmark.parse(datastoreValue).orElse(null)
-                        : null;
+                : null;
     }
 
 }

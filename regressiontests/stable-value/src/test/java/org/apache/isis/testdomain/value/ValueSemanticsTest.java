@@ -31,9 +31,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -112,17 +114,24 @@ class ValueSemanticsTest {
                 (context, renderer)->{
 
                 },
-                command->{
+                (command, codec)->{
 
                     val propertyDto = (PropertyDto)command.getCommandDto().getMember();
                     val newValueRecordedDto = propertyDto.getNewValue();
 
+                    //TODO needs a codec to recover values that are not directly represented by the schema
                     val newValueRecorded = CommonDtoUtils.getValue(newValueRecordedDto);
 
                     // TODO skip tests, because some value-types are not represented by the schema yet
-                    if(newValueRecorded==null) {
+                    if(newValueRecorded==null
+                            || valueType.equals(Bookmark.class)) {
+                        System.err.printf("skipping command test on %s%n", valueType.getName());
                         return;
                     }
+
+                    assertEquals(valueType, newValueRecorded.getClass(), ()->
+                        String.format("command value parsing type mismatch '%s'",
+                                ValueSemanticsTester.valueDtoToXml(newValueRecordedDto)));
 
                     tester.assertValueEquals(example.getUpdateValue(), newValueRecorded, "command failed");
 

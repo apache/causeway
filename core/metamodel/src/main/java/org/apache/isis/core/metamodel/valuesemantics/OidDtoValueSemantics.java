@@ -24,12 +24,12 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
+import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.schema.common.v2.OidDto;
 import org.apache.isis.schema.common.v2.ValueType;
 
@@ -40,6 +40,7 @@ import lombok.val;
 public class OidDtoValueSemantics
 extends ValueSemanticsAbstract<OidDto>
 implements
+    OrderRelation<OidDto, Void>,
     EncoderDecoder<OidDto>,
     Parser<OidDto>,
     Renderer<OidDto> {
@@ -54,6 +55,31 @@ implements
         return UNREPRESENTED;
     }
 
+    // -- ORDER RELATION
+
+    @Override
+    public Void epsilon() {
+        return null; // not used
+    }
+
+    @Override
+    public int compare(final OidDto a, final OidDto b, final Void epsilon) {
+        int c = _Strings.compareNullsFirst(a.getType(), b.getType());
+        if(c!=0) {
+            return c;
+        }
+        c = _Strings.compareNullsFirst(a.getId(), b.getId());
+        if(c!=0) {
+            return c;
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean equals(final OidDto a, final OidDto b, final Void epsilon) {
+        return compare(a, b, epsilon) == 0;
+    }
+
     // -- ENCODER DECODER
 
     @Override
@@ -63,8 +89,7 @@ implements
 
     @Override
     public OidDto fromEncodedString(final String data) {
-        return Bookmark.parse(data)
-                .orElseThrow(()->_Exceptions.illegalArgument("%s", data))
+        return Bookmark.parseElseFail(data)
                 .toOidDto();
     }
 
@@ -79,15 +104,14 @@ implements
 
     @Override
     public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final OidDto value) {
-        return value == null ? null : value.toString();
+        return value == null ? null : Bookmark.forOidDto(value).stringify();
     }
 
     @Override
     public OidDto parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
         val input = _Strings.blankToNullOrTrim(text);
         return input!=null
-                ? Bookmark.parse(input)
-                        .orElseThrow(()->_Exceptions.illegalArgument("%s", input))
+                ? Bookmark.parseElseFail(input)
                         .toOidDto()
                 : null;
     }

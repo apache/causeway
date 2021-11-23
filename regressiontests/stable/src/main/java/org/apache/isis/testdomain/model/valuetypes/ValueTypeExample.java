@@ -30,7 +30,9 @@ import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Collection;
@@ -38,12 +40,20 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.graph.tree.TreeAdapter;
+import org.apache.isis.applib.graph.tree.TreeNode;
+import org.apache.isis.applib.graph.tree.TreeState;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.Markup;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.applib.value.Password;
+import org.apache.isis.schema.chg.v2.ChangesDto;
+import org.apache.isis.schema.cmd.v2.CommandDto;
+import org.apache.isis.schema.common.v2.OidDto;
+import org.apache.isis.schema.ixn.v2.InteractionDto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -451,16 +461,89 @@ public abstract class ValueTypeExample<T> {
         private org.joda.time.LocalTime updateValue = org.joda.time.LocalTime.now().plusSeconds(15);
     }
 
-    // -- EXAMPLES - OTHER
-
-    //TODO    Bookmark
-    //TODO    OidDto
-
-    //TODO    ChangesDto
-    //TODO    CommandDto
-    //TODO    InteractionDto
+    // -- EXAMPLES - DATA STRUCTURE
 
     //TODO    TreeNode
+//    @DomainObject(
+//            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleTreeNode",
+//            nature = Nature.BEAN)
+    public static class ValueTypeExampleTreeNode
+    extends ValueTypeExample<TreeNode<String>> {
+        @Property @Getter @Setter
+        private TreeNode<String> value = TreeNode.of("root", TreeAdapterString.class, TreeState.rootCollapsed());
+        @Getter
+        private TreeNode<String> updateValue = TreeNode.of("anotherRoot", TreeAdapterString.class, TreeState.rootCollapsed());
 
+        private static class TreeAdapterString implements TreeAdapter<String> {
+            @Override public Optional<String> parentOf(final String value) {
+                return null; }
+            @Override public int childCountOf(final String value) {
+                return 0; }
+            @Override public Stream<String> childrenOf(final String value) {
+                return Stream.empty(); }
+        }
+
+    }
+
+    // -- EXAMPLES - OTHER
+
+  //TODO    Bookmark - fails because semantics needs to be adapted from OidDto
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleBookmark",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleBookmark
+    extends ValueTypeExample<Bookmark> {
+        @Property @Getter @Setter
+        private Bookmark value = Bookmark.parseElseFail("a:b");
+        @Getter
+        private Bookmark updateValue = Bookmark.parseElseFail("c:d");
+    }
+
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleOidDto",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleOidDto
+    extends ValueTypeExample<OidDto> {
+        @Property @Getter @Setter
+        private OidDto value = Bookmark.parseElseFail("a:b").toOidDto();
+        @Getter
+        private OidDto updateValue = Bookmark.parseElseFail("c:d").toOidDto();
+    }
+
+    //TODO    ChangesDto
+//    @DomainObject(
+//            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleChangesDto",
+//            nature = Nature.BEAN)
+    public static class ValueTypeExampleChangesDto
+    extends ValueTypeExample<ChangesDto> {
+        @Property @Getter @Setter
+        private ChangesDto value = new ChangesDto();
+        @Getter
+        private ChangesDto updateValue = new ChangesDto();
+    }
+
+    //TODO    CommandDto
+//    @DomainObject(
+//            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleCommandDto",
+//            nature = Nature.BEAN)
+    public static class ValueTypeExampleCommandDto
+    extends ValueTypeExample<CommandDto> {
+        @Property @Getter @Setter
+        private CommandDto value = new CommandDto();
+        @Getter
+        private CommandDto updateValue = new CommandDto();
+    }
+
+    //TODO    InteractionDto
+//    @DomainObject(
+//            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleInteractionDto",
+//            nature = Nature.BEAN)
+    public static class ValueTypeExampleInteractionDto
+    extends ValueTypeExample<InteractionDto> {
+        @Property @Getter @Setter
+        private InteractionDto value = new InteractionDto();
+        @Getter
+        private InteractionDto updateValue = new InteractionDto();
+    }
 
 }
