@@ -18,7 +18,6 @@
  */
 package org.apache.isis.testdomain.value;
 
-import java.io.Serializable;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -55,7 +54,7 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 
-public class ValueSemanticsTester<T extends Serializable> {
+public class ValueSemanticsTester<T> {
 
     @Inject InteractionService interactionService;
     @Inject SpecificationLoader specLoader;
@@ -129,17 +128,6 @@ public class ValueSemanticsTester<T extends Serializable> {
     public void assertValueEquals(final T a, final Object _b, final String message) {
 
         val b = _Casts.<T>uncheckedCast(_b);
-
-        if(valueType.equals(java.util.Date.class)
-                || valueType.getPackageName().equals("java.sql")
-                || valueType.getPackageName().equals("java.time")
-                || valueType.getPackageName().equals("org.joda.time")
-                ) {
-
-            //TODO implement based on OrderRelation<T>
-            //assertEquals(a, b, message);
-            //return;
-        }
 
         if(currentOrderRelation.isPresent()) {
             assertTrue(currentOrderRelation.get().equals(a, b), ()->

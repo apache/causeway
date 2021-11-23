@@ -18,7 +18,6 @@
  */
 package org.apache.isis.testdomain.value;
 
-import java.io.Serializable;
 import java.util.Locale;
 import java.util.stream.Stream;
 
@@ -69,7 +68,7 @@ class ValueSemanticsTest {
 
     @ParameterizedTest(name = "{index} {0}")
     @MethodSource("provideValueTypeExamples")
-    <T extends Serializable> void valueTypes(
+    <T> void valueTypes(
             final String name,
             final Class<T> valueType,
             final ValueTypeExample<T> example) {
@@ -82,11 +81,6 @@ class ValueSemanticsTest {
                 interactionContext(),
                 managedProp->example.getUpdateValue(),
                 (context, codec)->{
-
-                    // TODO skip tests, because some value-types are not serializable
-                    if(!(example.getValue() instanceof Serializable)) {
-                        return;
-                    }
 
                     // CoderDecoder round-trip test
                     val serialized = codec.toEncodedString(example.getValue());
@@ -103,7 +97,6 @@ class ValueSemanticsTest {
                     val stringified = parser.parseableTextRepresentation(context, example.getValue());
 
                     if(valueType.equals(Password.class)) {
-
                         val recoveredValue = (Password)parser.parseTextRepresentation(context, stringified);
                         assertTrue(recoveredValue.checkPassword("*"));
 

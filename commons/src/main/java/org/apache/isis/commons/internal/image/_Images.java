@@ -28,8 +28,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 
-import org.springframework.lang.Nullable;
 import javax.imageio.ImageIO;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -155,6 +156,26 @@ public class _Images {
             0xff,
             0xff<<24,
     };
+
+    public static int compare(final BufferedImage a, final BufferedImage b) {
+        int c = Integer.compare(a.getWidth(), b.getWidth());
+        if(c!=0) {
+            return c;
+        }
+        c = Integer.compare(a.getHeight(), b.getHeight());
+        if(c!=0) {
+            return c;
+        }
+        for (int x = 0; x < a.getWidth(); x++) {
+            for (int y = 0; y < a.getHeight(); y++) {
+                c = Integer.compare(a.getRGB(x, y), b.getRGB(x, y));
+                if(c!=0) {
+                    return c;
+                }
+            }
+        }
+        return 0;
+    }
 
 //    public static void draw(BufferedImage image, BufferedImage virtualImage) {
 //        Graphics2D g2d = virtualImage.createGraphics();
