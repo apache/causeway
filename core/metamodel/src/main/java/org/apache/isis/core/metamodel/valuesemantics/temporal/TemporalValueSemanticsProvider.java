@@ -186,13 +186,13 @@ implements TemporalValueSemantics<T> {
      */
     protected DateTimeFormatter getEditingFormat(final ValueSemanticsProvider.Context context) {
         return getEditingFormat(context, temporalCharacteristic, offsetCharacteristic,
-                "yyyy-MM-dd", "HH:mm:ss", "Z");
+                "yyyy-MM-dd", "HH:mm:ss", "x");
     }
 
     @Override
     public String getPattern(final ValueSemanticsProvider.Context context) {
         return getEditingFormatAsPattern(temporalCharacteristic, offsetCharacteristic,
-                "yyyy-MM-dd", "HH:mm:ss", "Z");
+                "yyyy-MM-dd", "HH:mm:ss", "x");
     }
 
     /**
