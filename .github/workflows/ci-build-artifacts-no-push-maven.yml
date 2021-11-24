@@ -43,14 +43,16 @@ jobs:
       uses: actions/setup-ruby@v1
       with:
         ruby-version: 2.7
-         
-    - name: Set up Rubygems
-      shell: bash
-      run: |
-         gem -v
-         whoami
-         sudo gem update --system
-         gem -v
+        bundler-cache: true
+        cache-version: 2021-11-24
+
+# is broken         
+#    - name: Set up Rubygems
+#      shell: bash
+#      run: |
+#         gem -v
+#         sudo gem update --system
+#         gem -v
       
     - name: Activate Cache for Maven Downloads
       uses: actions/cache@v2.1.7
