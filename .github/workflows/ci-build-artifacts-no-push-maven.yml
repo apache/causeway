@@ -40,7 +40,7 @@ jobs:
       run: mvn --version
       
     - name: Activate Cache for Maven Downloads
-      uses: actions/cache@v2.1.6
+      uses: actions/cache@v2.1.7
       env:
         # change the cache-name if we want to rebuild the cache
         # currently there is no concept of cache clearing 
