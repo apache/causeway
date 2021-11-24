@@ -408,9 +408,9 @@ public abstract class ValueTypeExample<T> {
     }
 
   //TODO    ZonedDateTime - fails because format with time-zone fails on CI
-//    @DomainObject(
-//            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleZonedDateTime",
-//            nature = Nature.BEAN)
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleZonedDateTime",
+            nature = Nature.BEAN)
     public static class ValueTypeExampleZonedDateTime
     extends ValueTypeExample<ZonedDateTime> {
         @Property @Getter @Setter
