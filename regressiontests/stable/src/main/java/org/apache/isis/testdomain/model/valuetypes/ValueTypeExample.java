@@ -383,7 +383,6 @@ public abstract class ValueTypeExample<T> {
         private LocalTime updateValue = LocalTime.now().plusSeconds(15);
     }
 
-  //TODO    OffsetDateTime - fails because format with time-zone fails on CI
     @DomainObject(
             logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleOffsetDateTime",
             nature = Nature.BEAN)
@@ -395,7 +394,6 @@ public abstract class ValueTypeExample<T> {
         private OffsetDateTime updateValue = OffsetDateTime.now().plusDays(2).plusSeconds(15);
     }
 
-  //TODO    OffsetTime - fails because format with time-zone fails on CI
     @DomainObject(
             logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleOffsetTime",
             nature = Nature.BEAN)
@@ -420,9 +418,9 @@ public abstract class ValueTypeExample<T> {
     // -- EXAMPLES - TEMPORAL - JODA TIME
 
   //TODO    org.joda.time.DateTime - fails because format with time-zone fails on CI
-//    @DomainObject(
-//            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleJodaDateTime",
-//            nature = Nature.BEAN)
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleJodaDateTime",
+            nature = Nature.BEAN)
     public static class ValueTypeExampleJodaDateTime
     extends ValueTypeExample<org.joda.time.DateTime> {
         @Property @Getter @Setter
