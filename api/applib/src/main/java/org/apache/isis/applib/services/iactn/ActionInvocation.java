@@ -30,7 +30,8 @@ import lombok.Getter;
 /**
  * @since 1.x {@index}
  */
-public class ActionInvocation extends Execution<ActionInvocationDto, ActionDomainEvent<?>> {
+public class ActionInvocation
+extends Execution<ActionInvocationDto, ActionDomainEvent<?>> {
 
     @Getter
     private final List<Object> args;

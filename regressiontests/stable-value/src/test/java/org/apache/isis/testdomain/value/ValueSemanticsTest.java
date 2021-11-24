@@ -35,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
@@ -43,6 +44,9 @@ import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.testdomain.conf.Configuration_headless;
@@ -83,6 +87,33 @@ class ValueSemanticsTest {
                 interactionContext(),
                 managedProp->example.getUpdateValue(),
                 (context, codec)->{
+
+                    val constructorExtractor = codec.getConstructorExtractor(example.getValue());
+                    if(constructorExtractor!=null) {
+
+                        val spec = specLoader.specForTypeElseFail(constructorExtractor.getClass());
+                        val interaction = ActionInteraction
+                                .start(ManagedObject.of(spec,  constructorExtractor), "act", Where.ANYWHERE);
+
+                        val pendingParams = interaction
+                                .startParameterNegotiation()
+                                .get();
+
+                        val managedAction = interaction.getManagedActionElseFail();
+                        val typedTuple = pendingParams.getParamValues();
+
+                        val recoveredValue = managedAction
+                                .invoke(typedTuple, InteractionInitiatedBy.PASS_THROUGH)
+                                .leftIfAny()
+                                .getPojo();
+
+                        tester.assertValueEquals(
+                                example.getValue(),
+                                recoveredValue,
+                                "serialization roundtrip failed");
+
+                        return;
+                    }
 
                     // CoderDecoder round-trip test
                     val serialized = codec.toEncodedString(example.getValue());

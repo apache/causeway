@@ -30,6 +30,7 @@ import org.apache.isis.applib.services.iactn.ActionInvocation;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.metamodel.commons.CanonicalParameterUtil;
@@ -91,8 +92,10 @@ implements ImperativeFacet {
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val executionResult =
-                getTransactionService().callWithinCurrentTransactionElseCreateNew(()->
+        val executionResult = interactionInitiatedBy.isPassThrough()
+                ? Result.of(()->
+                    doInvoke(owningAction, head, argumentAdapters, interactionInitiatedBy))
+                : getTransactionService().callWithinCurrentTransactionElseCreateNew(()->
                     doInvoke(owningAction, head, argumentAdapters, interactionInitiatedBy));
 
         //PersistableTypeGuard.instate(executionResult);

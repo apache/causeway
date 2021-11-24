@@ -393,7 +393,9 @@ implements ObjectAction {
         _Assert.assertEquals(this.getParameterCount(), argumentAdapters.size(),
                 "action's parameter count and provided argument count must match");
 
-        setupCommand(head, argumentAdapters);
+        if(!interactionInitiatedBy.isPassThrough()) {
+            setupCommand(head, argumentAdapters);
+        }
 
         return this.executeInternal(head, argumentAdapters, interactionInitiatedBy);
     }

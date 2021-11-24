@@ -22,6 +22,8 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.OrderRelation;
@@ -33,6 +35,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.common.v2.OidDto;
 import org.apache.isis.schema.common.v2.ValueType;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Component
@@ -80,6 +83,31 @@ implements
         return compare(a, b, epsilon) == 0;
     }
 
+    // -- CONSTRUCTOR EXTRACTOR
+
+    @Action
+    @RequiredArgsConstructor
+    public static class ConstructorExtractor {
+
+        final OidDto value;
+
+        @MemberSupport
+        public OidDto act(final String data) {
+            return Bookmark.parseElseFail(data).toOidDto();
+        }
+
+        @MemberSupport
+        public String defaultData() {
+            return Bookmark.forOidDto(value).stringify();
+        }
+
+    }
+
+    @Override
+    public ConstructorExtractor getConstructorExtractor(final OidDto object) {
+        return new ConstructorExtractor(object);
+    }
+
     // -- ENCODER DECODER
 
     @Override
@@ -89,8 +117,7 @@ implements
 
     @Override
     public OidDto fromEncodedString(final String data) {
-        return Bookmark.parseElseFail(data)
-                .toOidDto();
+        return Bookmark.parseElseFail(data).toOidDto();
     }
 
     // -- RENDERER

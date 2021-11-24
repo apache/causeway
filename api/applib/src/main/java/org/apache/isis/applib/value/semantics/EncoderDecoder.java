@@ -66,4 +66,8 @@ public interface EncoderDecoder<T> {
      */
     T fromEncodedString(String encodedString);
 
+    default Object getConstructorExtractor(final T value) {
+        return null;
+    }
+
 }
