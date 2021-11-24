@@ -39,10 +39,12 @@ jobs:
     - name: Print Maven Version
       run: mvn --version
       
-    - name: Set up Ruby 2.7 and Rubygems
+    - name: Set up Ruby 2.7
       uses: actions/setup-ruby@v1
       with:
         ruby-version: 2.7
+         
+    - name: Set up Rubygems
       shell: bash
       run: |
          gem -v
