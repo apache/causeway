@@ -104,6 +104,8 @@ class ValueSemanticsTest {
 
                     } else {
 
+                        System.err.printf("using %s trying to parse '%s'%n", valueType.getName(), stringified);
+
                         tester.assertValueEquals(
                                 example.getValue(),
                                 parser.parseTextRepresentation(context, stringified),
