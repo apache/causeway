@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.extensions.fullcalendar.applib.spi.CalendarableDereferencingService;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
-import org.apache.isis.valuetypes.jodatime.applib.value.JodatimeConverters;
+import org.apache.isis.valuetypes.jodatime.applib.value.JodaTimeConverters;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 
 import lombok.val;
@@ -99,7 +99,7 @@ public abstract class EventProviderAbstract implements EventProvider {
                     .map(InteractionContext::getTimeZone)
                     .orElse(ZoneId.systemDefault());
 
-            val start = JodatimeConverters.toJoda(calendarEvent.asDateTime(timeZone));
+            val start = JodaTimeConverters.toJoda(calendarEvent.asDateTime(timeZone));
             val end = start;
 
             final Event event = new Event();

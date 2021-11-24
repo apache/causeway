@@ -27,7 +27,7 @@ import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
 import org.apache.isis.core.metamodel.valuetypes.TemporalSemanticsAdapter;
 import org.apache.isis.schema.common.v2.ValueType;
-import org.apache.isis.valuetypes.jodatime.applib.value.JodatimeConverters;
+import org.apache.isis.valuetypes.jodatime.applib.value.JodaTimeConverters;
 
 @Component
 @Named("isis.val.JodaLocalDateTimeValueSemantics")
@@ -53,12 +53,12 @@ extends TemporalSemanticsAdapter<org.joda.time.LocalDateTime, java.time.LocalDat
 
     @Override
     public org.joda.time.LocalDateTime fromDelegateValue(final java.time.LocalDateTime delegateValue) {
-        return JodatimeConverters.toJoda(delegateValue);
+        return JodaTimeConverters.toJoda(delegateValue);
     }
 
     @Override
     public java.time.LocalDateTime toDelegateValue(final org.joda.time.LocalDateTime value) {
-        return JodatimeConverters.fromJoda(value);
+        return JodaTimeConverters.fromJoda(value);
     }
 
 }
