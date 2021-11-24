@@ -43,7 +43,8 @@ package org.apache.isis.applib.value.semantics;
  *
  * @since 1.x {@index}
  */
-public interface EncoderDecoder<T> {
+public interface EncoderDecoder<T>
+extends ValueComposer<T> {
 
     /**
      * Returns the provided object as an encoded string.
@@ -65,9 +66,5 @@ public interface EncoderDecoder<T> {
      * @see #toEncodedString(Object)
      */
     T fromEncodedString(String encodedString);
-
-    default Object getConstructorExtractor(final T value) {
-        return null;
-    }
 
 }

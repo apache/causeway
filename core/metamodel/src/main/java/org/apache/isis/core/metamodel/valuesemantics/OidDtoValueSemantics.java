@@ -87,7 +87,7 @@ implements
 
     @Action
     @RequiredArgsConstructor
-    public static class ConstructorExtractor {
+    public static class ValueMixin {
 
         final OidDto value;
 
@@ -104,8 +104,8 @@ implements
     }
 
     @Override
-    public ConstructorExtractor getConstructorExtractor(final OidDto object) {
-        return new ConstructorExtractor(object);
+    public ValueMixin getValueMixin(final OidDto object) {
+        return new ValueMixin(object);
     }
 
     // -- ENCODER DECODER

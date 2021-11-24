@@ -86,14 +86,14 @@ class ValueSemanticsTest {
         tester.propertyInteraction("value",
                 interactionContext(),
                 managedProp->example.getUpdateValue(),
-                (context, codec)->{
+                (context, composer)->{
 
-                    val constructorExtractor = codec.getConstructorExtractor(example.getValue());
-                    if(constructorExtractor!=null) {
+                    val valueMixin = composer.getValueMixin(example.getValue());
+                    if(valueMixin!=null) {
 
-                        val spec = specLoader.specForTypeElseFail(constructorExtractor.getClass());
+                        val spec = specLoader.specForTypeElseFail(valueMixin.getClass());
                         val interaction = ActionInteraction
-                                .start(ManagedObject.of(spec,  constructorExtractor), "act", Where.ANYWHERE);
+                                .start(ManagedObject.of(spec,  valueMixin), "act", Where.ANYWHERE);
 
                         val pendingParams = interaction
                                 .startParameterNegotiation()
@@ -116,11 +116,11 @@ class ValueSemanticsTest {
                     }
 
                     // CoderDecoder round-trip test
-                    val serialized = codec.toEncodedString(example.getValue());
+                    val serialized = composer.toEncodedString(example.getValue());
 
                     tester.assertValueEquals(
                             example.getValue(),
-                            codec.fromEncodedString(serialized),
+                            composer.fromEncodedString(serialized),
                             "serialization roundtrip failed");
 
                 },
