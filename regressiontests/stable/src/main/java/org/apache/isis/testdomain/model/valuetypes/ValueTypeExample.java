@@ -384,9 +384,9 @@ public abstract class ValueTypeExample<T> {
     }
 
   //TODO    OffsetDateTime - fails because format with time-zone fails on CI
-//    @DomainObject(
-//            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleOffsetDateTime",
-//            nature = Nature.BEAN)
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleOffsetDateTime",
+            nature = Nature.BEAN)
     public static class ValueTypeExampleOffsetDateTime
     extends ValueTypeExample<OffsetDateTime> {
         @Property @Getter @Setter
