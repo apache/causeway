@@ -39,6 +39,17 @@ jobs:
     - name: Print Maven Version
       run: mvn --version
       
+    - name: Set up Ruby 2.7 and Rubygems
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.7
+      shell: bash
+      run: |
+         gem -v
+         whoami
+         sudo gem update --system
+         gem -v
+      
     - name: Activate Cache for Maven Downloads
       uses: actions/cache@v2.1.7
       env:
