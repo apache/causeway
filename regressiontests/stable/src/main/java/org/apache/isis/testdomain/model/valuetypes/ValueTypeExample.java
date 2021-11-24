@@ -396,9 +396,9 @@ public abstract class ValueTypeExample<T> {
     }
 
   //TODO    OffsetTime - fails because format with time-zone fails on CI
-//    @DomainObject(
-//            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleOffsetTime",
-//            nature = Nature.BEAN)
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleOffsetTime",
+            nature = Nature.BEAN)
     public static class ValueTypeExampleOffsetTime
     extends ValueTypeExample<OffsetTime> {
         @Property @Getter @Setter
@@ -407,7 +407,6 @@ public abstract class ValueTypeExample<T> {
         private OffsetTime updateValue = OffsetTime.now().plusSeconds(15);
     }
 
-  //TODO    ZonedDateTime - fails because format with time-zone fails on CI
     @DomainObject(
             logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleZonedDateTime",
             nature = Nature.BEAN)
