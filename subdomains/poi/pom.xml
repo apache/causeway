@@ -40,6 +40,16 @@
 					<groupId>com.fasterxml.woodstox</groupId>
 					<artifactId>woodstox-core</artifactId>
 				</exclusion>
+				<!-- circumventing convergence issues since maven-enforcer-plugin.version=3.0.0 -->
+				<exclusion>
+					<groupId>org.codehaus.plexus</groupId>
+					<artifactId>plexus-utils</artifactId>
+				</exclusion>
+				<!-- circumventing convergence issues since maven-enforcer-plugin.version=3.0.0 -->
+				<exclusion>
+					<groupId>org.osgi</groupId>
+					<artifactId>org.osgi.core</artifactId>
+				</exclusion>
 			</exclusions>
         </dependency>
 		<dependency>

@@ -48,6 +48,11 @@
 		    		<groupId>org.apiguardian</groupId>
 		    		<artifactId>apiguardian-api</artifactId>
 		    	</exclusion>
+		    	<exclusion>
+		    		<!-- version clash, explicitly import below -->
+		    		<groupId>io.cucumber</groupId>
+		    		<artifactId>messages</artifactId>
+		    	</exclusion>
 		    </exclusions>
 		</dependency>
 		<dependency>
@@ -58,6 +63,11 @@
 		    		<!-- version clash, already provided by org.junit.jupiter:junit-jupiter-api -->
 		    		<groupId>org.apiguardian</groupId>
 		    		<artifactId>apiguardian-api</artifactId>
+		    	</exclusion>
+		    	<exclusion>
+		    		<!-- version clash, explicitly import below -->
+		    		<groupId>io.cucumber</groupId>
+		    		<artifactId>messages</artifactId>
 		    	</exclusion>
 		    </exclusions>
 		</dependency>
@@ -70,11 +80,21 @@
 		    		<groupId>org.apiguardian</groupId>
 		    		<artifactId>apiguardian-api</artifactId>
 		    	</exclusion>
+		    	<exclusion>
+		    		<!-- version clash, explicitly import below -->
+		    		<groupId>io.cucumber</groupId>
+		    		<artifactId>messages</artifactId>
+		    	</exclusion>
 		    </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+    		<artifactId>messages</artifactId>
+    		<version>17.1.1</version>
 		</dependency>
 
 		<!-- convenience -->
