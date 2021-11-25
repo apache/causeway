@@ -19,21 +19,22 @@
 package org.apache.isis.extensions.secman.applib.user.dom.mixins;
 
 import java.util.Objects;
-import java.util.Optional;
 
 import javax.inject.Inject;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_updatePassword.DomainEvent;
-import org.apache.isis.extensions.secman.applib.user.spi.PasswordEncryptionService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -53,7 +54,7 @@ public class ApplicationUser_updatePassword {
             extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_updatePassword> {}
 
     @Inject private ApplicationUserRepository applicationUserRepository;
-    @Inject private Optional<PasswordEncryptionService> passwordEncryptionService; // empty if no candidate is available
+    @Autowired(required = false) private @Qualifier("secman") PasswordEncoder passwordEncoder;
 
     private final ApplicationUser target;
 
@@ -87,12 +88,12 @@ public class ApplicationUser_updatePassword {
             return "Password feature is not available for this User";
         }
 
-        val encrypter = passwordEncryptionService.orElseThrow(_Exceptions::unexpectedCodeReach);
+        Objects.requireNonNull(passwordEncoder);
 
         val encryptedPassword = target.getEncryptedPassword();
 
         if(target.getEncryptedPassword() != null) {
-            if (!encrypter.matches(existingPassword.getPassword(), encryptedPassword)) {
+            if (!passwordEncoder.matches(existingPassword.getPassword(), encryptedPassword)) {
                 return "Existing password is incorrect";
             }
         }

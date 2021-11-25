@@ -27,13 +27,13 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId>
-    <name>Apache Isis Ext - Sec Man Encryption (Using jbcrypt)</name>
+    <artifactId>isis-extensions-secman-encryption-spring</artifactId>
+    <name>Apache Isis Ext - Sec Man Encryption (Using Spring)</name>
     <description></description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.extensions.secman.encryption.jbcrypt</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/secman/encryption/jbcrypt</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.secman.encryption.spring</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/secman/encryption/spring</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>
@@ -49,11 +49,6 @@
 			<artifactId>isis-extensions-secman-applib</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
-		<dependency>
-            <groupId>org.mindrot</groupId>
-            <artifactId>jbcrypt</artifactId>
-        </dependency>
 
     </dependencies>
 

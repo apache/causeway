@@ -26,6 +26,9 @@ for non-public class member introspection.
 | `org.apache.isis.applib.jaxb.JodaTimeJaxbAdapters` 
 | moved to `org.apache.isis.valuetypes.jodatime.applib.jaxb` 
 
+| _SecMan's_ `PasswordEncryptionService` was removed
+| Using Spring's `org.springframework.security.crypto.password.PasswordEncoder` instead.
+
 |===
 
 == Configuration
@@ -43,6 +46,14 @@ isis.core.meta-model.introspector.policy=ANNOTATION_OPTIONAL
 isis.core.meta-model.introspector.policy=ANNOTATION_REQUIRED
 
 ----
+
+=== Password Hashing
+
+_SecMan_ provides a _Jbcrypt_ based password encryption service. 
+We added an alternative based on _Spring-Security_.
+To switch out the old vs the new replace `IsisModuleExtSecmanEncryptionJbcrypt` with 
+`IsisModuleExtSecmanEncryptionSpring`. However note, that the new password hashes are 
+not compatible with the old ones. 
 
 == Maven Artifacts
 

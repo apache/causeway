@@ -22,6 +22,9 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
@@ -30,9 +33,7 @@ import org.apache.isis.core.security.authentication.Authenticator;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.applib.user.spi.PasswordEncryptionService;
 
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -50,11 +51,19 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Log4j2
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
+//@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class AuthenticatorSecman implements Authenticator {
 
     private final ApplicationUserRepository applicationUserRepository;
-    private final PasswordEncryptionService passwordEncryptionService;
+    private final PasswordEncoder passwordEncoder;
+
+    @Inject
+    public AuthenticatorSecman(
+            final ApplicationUserRepository applicationUserRepository,
+            final @Qualifier("secman") PasswordEncoder passwordEncoder) {
+        this.applicationUserRepository = applicationUserRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public final boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
@@ -65,15 +74,14 @@ public class AuthenticatorSecman implements Authenticator {
     public InteractionContext authenticate(final AuthenticationRequest request, final String code) {
         val authRequest = (AuthenticationRequestPassword) request;
         val username = authRequest.getName();
-        val password = authRequest.getPassword();
-        val encryptedPassword = passwordEncryptionService.encrypt(password);
+        val rawPassword = authRequest.getPassword();
         if(username == null) {
             log.info("login failed: username is null");
             return null;
         }
 
         return applicationUserRepository.findByUsername(username)
-                .filter(appUser -> appUser.getEncryptedPassword().equals(encryptedPassword))
+                .filter(appUser -> passwordEncoder.matches(rawPassword, appUser.getEncryptedPassword()))
                 .map(appUser -> {
                     val roleNames = Stream.concat(
                             appUser.getRoles().stream().map(ApplicationRole::getName),
@@ -92,5 +100,7 @@ public class AuthenticatorSecman implements Authenticator {
         // object; this will cause the next http request made by the user to
         // be re-authenticated.
     }
+
+
 
 }

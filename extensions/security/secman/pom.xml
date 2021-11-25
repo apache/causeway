@@ -102,6 +102,7 @@
     	<module>applib</module>
     	<module>integration</module>
     	<module>encryption-jbcrypt</module>
+    	<module>encryption-spring</module>
     	<module>persistence-jdo</module>
     	<module>persistence-jpa</module>
     	<module>shiro-realm</module>

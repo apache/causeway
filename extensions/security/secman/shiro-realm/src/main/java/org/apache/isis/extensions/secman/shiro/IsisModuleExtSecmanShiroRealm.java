@@ -34,6 +34,9 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -47,7 +50,6 @@ import org.apache.isis.core.security.authorization.Authorizor;
 import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
 import org.apache.isis.extensions.secman.applib.user.dom.AccountType;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.applib.user.spi.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.shiro.util.ShiroUtils;
 
 import lombok.Getter;
@@ -85,7 +87,7 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm {
      * invalid password.
      */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+    protected AuthenticationInfo doGetAuthenticationInfo(final AuthenticationToken token) throws AuthenticationException {
         if (!(token instanceof UsernamePasswordToken)) {
             throw new AuthenticationException();
         }
@@ -157,7 +159,7 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm {
     }
 
     @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+    protected AuthorizationInfo doGetAuthorizationInfo(final PrincipalCollection principals) {
         return principals.oneByType(PrincipalForApplicationUser.class);
     }
 
@@ -174,7 +176,7 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm {
      * @return {@code null} if not applicable
      */
     private PrincipalForApplicationUser getPrincipal_fromAlreadyAuthenticatedSubjectIfApplicable(
-            AuthenticationToken token) {
+            final AuthenticationToken token) {
 
         // this optimization is only implemented for the simple case of a single realm setup
         if(!ShiroUtils.isSingleRealm()) {
@@ -198,7 +200,7 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm {
         return null;
     }
 
-    private DisabledAccountException disabledAccountException(String username) {
+    private DisabledAccountException disabledAccountException(final String username) {
         return new DisabledAccountException(String.format("username='%s'", username));
     }
 
@@ -215,7 +217,7 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm {
         };
     }
 
-    private void authenticateElseThrow_usingDelegatedMechanism(AuthenticationToken token) {
+    private void authenticateElseThrow_usingDelegatedMechanism(final AuthenticationToken token) {
         AuthenticationInfo delegateAccount = null;
         try {
             delegateAccount = delegateAuthenticationRealm.getAuthenticationInfo(token);
@@ -260,17 +262,19 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm {
 
     private CheckPasswordResult checkPassword(final char[] candidate, final String actualEncryptedPassword) {
         return execute(new Supplier<CheckPasswordResult>() {
+
+            @Autowired(required = false) private @Qualifier("secman") PasswordEncoder passwordEncoder;
+
             @Override
             public CheckPasswordResult get() {
-                if (passwordEncryptionService == null) {
+                if (passwordEncoder == null) {
                     return CheckPasswordResult.NO_PASSWORD_ENCRYPTION_SERVICE_CONFIGURED;
                 }
-                return passwordEncryptionService.matches(new String(candidate), actualEncryptedPassword)
+                return passwordEncoder.matches(new String(candidate), actualEncryptedPassword)
                         ? CheckPasswordResult.OK
-                                : CheckPasswordResult.BAD_PASSWORD;
+                        : CheckPasswordResult.BAD_PASSWORD;
             }
 
-            @Inject private PasswordEncryptionService passwordEncryptionService;
         });
     }
 

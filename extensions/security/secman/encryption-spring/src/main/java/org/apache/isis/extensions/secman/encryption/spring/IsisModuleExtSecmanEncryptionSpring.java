@@ -16,33 +16,43 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.integration.authenticator;
+package org.apache.isis.extensions.secman.encryption.spring;
+
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.core.security.authentication.Authenticator;
-import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
+import lombok.val;
 
 /**
  * @since 2.0 {@index}
  */
-@AutoConfigureOrder(PriorityPrecedence.LATE)
 @Configuration
-public class AuthenticatorSecmanAutoConfiguration  {
+@Import({
 
-    @Bean("isis.ext.secman.AuthenticatorSecman")
-    @ConditionalOnMissingBean(Authenticator.class)
-    @Qualifier("Secman")
-    public Authenticator authenticatorSecman(
-            final ApplicationUserRepository applicationUserRepository,
-            final @Qualifier("secman") PasswordEncoder passwordEncoder) {
-        return new AuthenticatorSecman(applicationUserRepository, passwordEncoder);
+})
+public class IsisModuleExtSecmanEncryptionSpring {
+
+    /**
+     * @see "https://www.baeldung.com/spring-security-5-default-password-encoder"
+     */
+    @Bean @Qualifier("secman") @Order(Ordered.LOWEST_PRECEDENCE)
+    public PasswordEncoder passwordEncoder() {
+        // set up the list of supported encoders and their prefixes
+        val encoders = Map.<String, PasswordEncoder>of(
+                "bcrypt", new BCryptPasswordEncoder(),
+                "scrypt", new SCryptPasswordEncoder());
+
+        return new DelegatingPasswordEncoder("bcrypt", encoders);
     }
 
 }
