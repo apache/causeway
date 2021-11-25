@@ -55,6 +55,24 @@ To switch out the old vs the new replace `IsisModuleExtSecmanEncryptionJbcrypt` 
 `IsisModuleExtSecmanEncryptionSpring`. However note, that the new password hashes are 
 not compatible with the old ones. 
 
+[source,xml]
+.IsisModuleExtSecmanEncryptionJbcrypt
+----
+<dependency>
+  <groupId>org.apache.isis.extensions</groupId>
+  <artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId>
+</dependency>
+----
+
+[source,xml]
+.IsisModuleExtSecmanEncryptionSpring
+----
+<dependency>
+  <groupId>org.apache.isis.extensions</groupId>
+  <artifactId>isis-extensions-secman-encryption-spring</artifactId>
+</dependency>
+----
+
 == Maven Artifacts
 
 `-dn5` suffix was removed from artifacts, because we migrated DataNucleus 5.x to 6.x
