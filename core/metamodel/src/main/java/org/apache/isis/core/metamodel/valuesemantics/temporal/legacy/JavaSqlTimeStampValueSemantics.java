@@ -45,7 +45,7 @@ extends TemporalSemanticsAdapter<Timestamp, LocalDateTime> {
 
     @Override
     public ValueType getSchemaValueType() {
-        return ValueType.JAVA_SQL_TIMESTAMP;
+        return ValueType.LOCAL_DATE_TIME;
     }
 
     @Override

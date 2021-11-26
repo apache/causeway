@@ -18,12 +18,21 @@
  */
 package org.apache.isis.applib.value.semantics;
 
-import java.io.Serializable;
+import java.util.stream.Stream;
 
-//FIXME[ISIS-2877] implement (will be required by the various XxxDtoUtils)
-@FunctionalInterface
+import org.apache.isis.commons.collections.Can;
+
+/**
+ * @since 2.0 {@index}
+ */
 public interface ValueSemanticsResolver {
 
-    public <T extends Serializable> ValueSemanticsProvider<T> resolveValueSemantics(Class<T> valueType);
+    boolean hasValueSemantics(Class<?> valueType);
+
+    <T> Stream<ValueSemanticsProvider<T>> streamValueSemantics(Class<T> valueType);
+
+    <T> Can<ValueSemanticsProvider<T>> selectValueSemantics(Class<T> valueType);
+
+    Stream<Class<?>> streamClassesWithValueSemantics();
 
 }

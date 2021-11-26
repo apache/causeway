@@ -29,11 +29,11 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
+import org.apache.isis.applib.util.schema.DtoContext;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
@@ -68,7 +68,7 @@ import lombok.val;
 public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
 
     @Inject private CommandDtoFactory commandDtoServiceInternal;
-    @Inject private BookmarkService bookmarkService;
+    @Inject private DtoContext dtoContext;
     @Inject private javax.inject.Provider<InteractionProvider> interactionProviderProvider;
     @Inject private UserService userService;
 
@@ -114,7 +114,7 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         final Class<?> returnType = returnSpec.getCorrespondingClass();
 
         InteractionDtoUtils.addReturn(
-                actionInvocationDto, returnType, resultPojo, bookmarkService);
+                actionInvocationDto, returnType, resultPojo, dtoContext);
 
         return actionInvocationDto;
     }
@@ -146,8 +146,5 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
                 newValue, currentUser
                 );
     }
-
-
-
 
 }

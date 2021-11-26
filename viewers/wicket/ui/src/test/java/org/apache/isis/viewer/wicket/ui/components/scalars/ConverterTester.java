@@ -26,25 +26,25 @@ import java.util.Objects;
 import org.apache.wicket.util.convert.ConversionException;
 import org.assertj.core.util.Arrays;
 
-import org.apache.isis.applib.clock.VirtualClock;
-import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.iactnlayer.InteractionContext;
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
-import org.apache.isis.commons.functional.ThrowingRunnable;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
-import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.security._testing.InteractionService_forTesting;
-import org.apache.isis.viewer.wicket.model.converter.ConverterBasedOnValueSemantics;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.isis.applib.clock.VirtualClock;
+import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
+import org.apache.isis.commons.functional.ThrowingRunnable;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.security._testing.InteractionService_forTesting;
+import org.apache.isis.viewer.wicket.model.converter.ConverterBasedOnValueSemantics;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -89,7 +89,7 @@ public class ConverterTester<T extends Serializable> {
         mmc.getServiceInjector().injectServicesInto(valueSemantics);
 
         // pre-requisites for testing
-        val reg = mmc.getServiceRegistry().lookupServiceElseFail(ValueSemanticsRegistry.class);
+        val reg = mmc.getServiceRegistry().lookupServiceElseFail(ValueSemanticsResolver.class);
         assertNotNull(reg.selectValueSemantics(valueType));
         assertTrue(reg.selectValueSemantics(valueType).isNotEmpty());
         assertNotNull(mmc.getServiceRegistry().lookupServiceElseFail(InteractionService.class));

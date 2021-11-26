@@ -46,9 +46,9 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.Password;
+import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -188,14 +188,14 @@ class ValueSemanticsTest {
     @Test @Disabled
     void fullTypeCoverage() {
 
-        valueSemanticsRegistry.streamClassesWithValueSemantics()
+        valueSemanticsResolver.streamClassesWithValueSemantics()
         .forEach(valueType->System.err.printf("%s%n", valueType.getName()));
 
         final Set<Class<?>> valueTypesCovered = valueTypeExampleProvider.streamExamples()
         .map(ValueTypeExample::getValueType)
         .collect(Collectors.toSet());
 
-        final Set<Class<?>> valueTypesKnown = valueSemanticsRegistry.streamClassesWithValueSemantics()
+        final Set<Class<?>> valueTypesKnown = valueSemanticsResolver.streamClassesWithValueSemantics()
         .collect(Collectors.toSet());
 
         val valueTypesNotCovered = _Sets.minus(valueTypesKnown, valueTypesCovered);
@@ -219,7 +219,7 @@ class ValueSemanticsTest {
     @Inject SpecificationLoader specLoader;
     @Inject InteractionService interactionService;
     @Inject ServiceInjector serviceInjector;
-    @Inject ValueSemanticsRegistry valueSemanticsRegistry;
+    @Inject ValueSemanticsResolver valueSemanticsResolver;
 
     Stream<Arguments> provideValueTypeExamples() {
         return valueTypeExampleProvider.streamScenarios()

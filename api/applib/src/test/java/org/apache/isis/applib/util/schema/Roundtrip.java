@@ -42,6 +42,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -87,10 +89,18 @@ public class Roundtrip {
     }
 
     private static void addArg(final InteractionDto interactionDto, final Object sampleValue) {
+
+        val dtoContext = new DtoContext() {
+            @Override public BookmarkService getBookmarkService() {
+                return null; }
+            @Override public ValueSemanticsResolver getValueSemanticsResolver() {
+                return null; }
+        };
+
         val type = sampleValue.getClass();
         val name = type.getSimpleName();
-        InteractionDtoUtils.addParamArg(interactionDto, "a"+name, type, sampleValue, null);
-        InteractionDtoUtils.addParamArg(interactionDto, "null"+name, type, type.cast(null), null);
+        InteractionDtoUtils.addParamArg(interactionDto, "a"+name, type, sampleValue, dtoContext);
+        InteractionDtoUtils.addParamArg(interactionDto, "null"+name, type, type.cast(null), dtoContext);
     }
 
     private static void testArg(

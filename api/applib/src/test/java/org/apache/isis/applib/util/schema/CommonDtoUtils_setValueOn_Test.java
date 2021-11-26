@@ -29,7 +29,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 
-import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.schema.common.v2.BlobDto;
@@ -43,7 +42,7 @@ public class CommonDtoUtils_setValueOn_Test {
     public JUnitRuleMockery context = new JUnitRuleMockery();
 
     @Mock
-    private BookmarkService mockBookmarkService;
+    private DtoContext mockDtoContext;
 
     ValueDto valueDto;
     @Before
@@ -53,7 +52,7 @@ public class CommonDtoUtils_setValueOn_Test {
 
     @Test
     public void when_blob_is_null() {
-        CommonDtoUtils.setValueOn(valueDto, ValueType.BLOB, null, mockBookmarkService);
+        CommonDtoUtils.setValueOn(valueDto, ValueType.BLOB, null, mockDtoContext);
         final BlobDto blobDto = valueDto.getBlob();
         Assert.assertThat(blobDto, is(nullValue()));
     }
@@ -61,7 +60,7 @@ public class CommonDtoUtils_setValueOn_Test {
     @Test
     public void when_blob_is_not_null() {
         final Blob val = new Blob("image.png", "image/png", new byte[]{1,2,3,4,5});
-        CommonDtoUtils.setValueOn(valueDto, ValueType.BLOB, val, mockBookmarkService);
+        CommonDtoUtils.setValueOn(valueDto, ValueType.BLOB, val, mockDtoContext);
         final BlobDto blobDto = valueDto.getBlob();
         Assert.assertThat(blobDto, is(notNullValue()));
         Assert.assertThat(blobDto.getBytes(), is(val.getBytes()));
@@ -71,7 +70,7 @@ public class CommonDtoUtils_setValueOn_Test {
 
     @Test
     public void when_clob_is_null() {
-        CommonDtoUtils.setValueOn(valueDto, ValueType.CLOB, null, mockBookmarkService);
+        CommonDtoUtils.setValueOn(valueDto, ValueType.CLOB, null, mockDtoContext);
         final ClobDto clobDto = valueDto.getClob();
         Assert.assertThat(clobDto, is(nullValue()));
     }
@@ -79,7 +78,7 @@ public class CommonDtoUtils_setValueOn_Test {
     @Test
     public void when_clob_is_not_null() {
         final Clob val = new Clob("image.png", "image/png", new char[]{1,2,3,4,5});
-        CommonDtoUtils.setValueOn(valueDto, ValueType.CLOB, val, mockBookmarkService);
+        CommonDtoUtils.setValueOn(valueDto, ValueType.CLOB, val, mockDtoContext);
         final ClobDto clobDto = valueDto.getClob();
         Assert.assertThat(clobDto, is(notNullValue()));
         Assert.assertThat(clobDto.getChars(), is(val.getChars()));

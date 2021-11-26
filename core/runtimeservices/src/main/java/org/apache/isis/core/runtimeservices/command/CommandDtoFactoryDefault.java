@@ -29,11 +29,11 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
+import org.apache.isis.applib.util.schema.DtoContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -66,9 +66,9 @@ import lombok.val;
 @Qualifier("Default")
 public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
-    @Inject BookmarkService bookmarkService;
-    @Inject ClockService clockService;
-    @Inject UserService userService;
+    @Inject private DtoContext dtoContext;
+    @Inject private ClockService clockService;
+    @Inject private UserService userService;
 
     @Override
     public CommandDto asCommandDto(
@@ -132,13 +132,13 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
                                 .orElseThrow(_Exceptions::unexpectedCodeReach),
                             paramTypeOrElementType,
                             arg,
-                            bookmarkService)
+                            dtoContext)
                     : CommonDtoUtils.newParamDto(
                             actionParameter.getStaticFriendlyName()
                                 .orElseThrow(_Exceptions::unexpectedCodeReach),
                             paramTypeOrElementType,
                             arg,
-                            bookmarkService);
+                            dtoContext);
 
             CommandDtoUtils.parametersFor(actionDto)
                 .getParameter()
@@ -159,7 +159,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
         val valueType = valueSpec.getCorrespondingClass();
 
         val newValue = CommonDtoUtils.newValueWithTypeDto(
-                valueType, UnwrapUtil.single(valueAdapter), bookmarkService);
+                valueType, UnwrapUtil.single(valueAdapter), dtoContext);
         propertyDto.setNewValue(newValue);
     }
 

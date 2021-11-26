@@ -23,9 +23,9 @@ import org.apache.isis.applib.value.semantics.DefaultsProvider;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -93,7 +93,7 @@ extends FacetFactoryAbstract {
                 .create(valueIfAny, cls, facetHolder));
 
         final Can<ValueSemanticsProvider> valueSemantics = _Casts.uncheckedCast(
-                getValueSemanticsRegistry().selectValueSemantics(cls));
+                getValueSemanticsResolver().selectValueSemantics(cls));
 
         if(!valueSemantics.isEmpty()) {
             addAllFacetsForValueSemantics(valueSemantics, facetHolder);
@@ -166,7 +166,7 @@ extends FacetFactoryAbstract {
     // -- DEPENDENCIES
 
     @Getter(lazy = true, value = AccessLevel.PRIVATE)
-    private final ValueSemanticsRegistry valueSemanticsRegistry =
-        getServiceRegistry().lookupServiceElseFail(ValueSemanticsRegistry.class);
+    private final ValueSemanticsResolver valueSemanticsResolver =
+        getServiceRegistry().lookupServiceElseFail(ValueSemanticsResolver.class);
 
 }

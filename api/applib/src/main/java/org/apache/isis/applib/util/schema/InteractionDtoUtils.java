@@ -35,7 +35,6 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.util.JaxbUtil;
@@ -53,6 +52,8 @@ import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
 import org.apache.isis.schema.ixn.v2.PropertyEditDto;
+
+import lombok.NonNull;
 
 /**
  * @since 1.x {@index}
@@ -344,10 +345,10 @@ public final class InteractionDtoUtils {
             final String parameterName,
             final Class<?> parameterType,
             final Object arg,
-            final BookmarkService bookmarkService) {
+            final @NonNull DtoContext dtoContext) {
 
         final List<ParamDto> params = parameterListFor(interactionDto);
-        ParamDto paramDto = CommonDtoUtils.newParamDto(parameterName, parameterType, arg, bookmarkService);
+        ParamDto paramDto = CommonDtoUtils.newParamDto(parameterName, parameterType, arg, dtoContext);
         params.add(paramDto);
     }
 
@@ -358,16 +359,16 @@ public final class InteractionDtoUtils {
      *
      * @param returnType - to determine the value type (if any)
      * @param result - either a value type (possibly boxed primitive), or a reference type
-     * @param bookmarkService - used if not a value type
+     * @param dtoContext - used if not a fundamental value type
      */
     public static void addReturn(
             final ActionInvocationDto invocationDto,
             final Class<?> returnType,
             final Object result,
-            final BookmarkService bookmarkService) {
+            final @NonNull DtoContext dtoContext) {
 
         final ValueWithTypeDto returned = CommonDtoUtils
-                .newValueWithTypeDto(returnType, result, bookmarkService);
+                .newValueWithTypeDto(returnType, result, dtoContext);
         invocationDto.setReturned(returned);
     }
 

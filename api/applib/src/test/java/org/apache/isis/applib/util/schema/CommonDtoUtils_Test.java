@@ -29,7 +29,6 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.schema.cmd.v2.MapDto;
 import org.apache.isis.schema.common.v2.ValueDto;
 import org.apache.isis.schema.common.v2.ValueType;
@@ -40,7 +39,7 @@ public class CommonDtoUtils_Test {
     public JUnitRuleMockery context = new JUnitRuleMockery();
 
     @Mock
-    private BookmarkService mockBookmarkService;
+    private DtoContext mockDtoContext;
 
     @Test
     public void enums() {
@@ -65,7 +64,7 @@ public class CommonDtoUtils_Test {
         assertThat(valueType, is(ValueType.ENUM));
 
         // and when
-        final ValueDto valueDto = CommonDtoUtils.newValueDto(valueType, enumVal, mockBookmarkService);
+        final ValueDto valueDto = CommonDtoUtils.newValueDto(valueType, enumVal, mockDtoContext);
 
         // then
         Object value = CommonDtoUtils.getValue(valueDto, valueType);
@@ -76,8 +75,8 @@ public class CommonDtoUtils_Test {
 
     @Test
     public void getMapValue() {
-        Assert.assertThat(CommonDtoUtils.getMapValue(null, "someKey"), is(nullValue()));
-        Assert.assertThat(CommonDtoUtils.getMapValue(new MapDto(), "someKey"), is(nullValue()));
+        assertThat(CommonDtoUtils.getMapValue(null, "someKey"), is(nullValue()));
+        assertThat(CommonDtoUtils.getMapValue(new MapDto(), "someKey"), is(nullValue()));
 
         // given
         final MapDto mapDto = new MapDto();
@@ -86,8 +85,8 @@ public class CommonDtoUtils_Test {
         e.setValue("someValue");
         mapDto.getEntry().add(e);
 
-        Assert.assertThat(CommonDtoUtils.getMapValue(mapDto, "someKey"), is("someValue"));
-        Assert.assertThat(CommonDtoUtils.getMapValue(mapDto, "someThingElse"), is(nullValue()));
+        assertThat(CommonDtoUtils.getMapValue(mapDto, "someKey"), is("someValue"));
+        assertThat(CommonDtoUtils.getMapValue(mapDto, "someThingElse"), is(nullValue()));
     }
 
     @Test
@@ -100,7 +99,7 @@ public class CommonDtoUtils_Test {
         final MapDto mapDto = new MapDto();
         CommonDtoUtils.putMapKeyValue(mapDto, "someKey", "someValue");
 
-        Assert.assertThat(CommonDtoUtils.getMapValue(mapDto, "someKey"), is("someValue"));
+        assertThat(CommonDtoUtils.getMapValue(mapDto, "someKey"), is("someValue"));
     }
 
 }

@@ -32,21 +32,21 @@ import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
 import org.apache.isis.core.metamodel.valuesemantics.EnumValueSemanticsAbstract;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
-@Named("isis.metamodel.ValueSemanticsRegistryDefault")
+@Named("isis.metamodel.ValueSemanticsResolverDefault")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class ValueSemanticsRegistryDefault
-implements ValueSemanticsRegistry {
+public class ValueSemanticsResolverDefault
+implements ValueSemanticsResolver {
 
     // managed by Spring
     private final List<ValueSemanticsProvider<?>> valueSemanticsProviders;

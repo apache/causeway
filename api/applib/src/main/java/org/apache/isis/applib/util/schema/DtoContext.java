@@ -16,21 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.config.valuetypes;
+package org.apache.isis.applib.util.schema;
 
-import java.util.stream.Stream;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 
-import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
-import org.apache.isis.commons.collections.Can;
+/**
+ * Provides the runtime context for converting <i>Schema</i> DTOs
+ * between their XML and their Java type representation.
+ *
+ * @since 2.x {@index}
+ */
+public interface DtoContext {
 
-public interface ValueSemanticsRegistry {
-
-    boolean hasValueSemantics(Class<?> valueType);
-
-    <T> Stream<ValueSemanticsProvider<T>> streamValueSemantics(Class<T> valueType);
-
-    <T> Can<ValueSemanticsProvider<T>> selectValueSemantics(Class<T> valueType);
-
-    Stream<Class<?>> streamClassesWithValueSemantics();
+    BookmarkService getBookmarkService();
+    ValueSemanticsResolver getValueSemanticsResolver();
 
 }
