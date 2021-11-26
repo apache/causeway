@@ -43,7 +43,7 @@ extends TemporalSemanticsAdapter<org.joda.time.LocalDate, java.time.LocalDate>  
 
     @Override
     public ValueType getSchemaValueType() {
-        return ValueType.JODA_LOCAL_DATE;
+        return ValueType.LOCAL_DATE;
     }
 
     @Override

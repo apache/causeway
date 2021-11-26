@@ -38,6 +38,9 @@ import java.util.concurrent.atomic.LongAdder;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -51,9 +54,6 @@ import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 
 import lombok.val;
 
@@ -289,12 +289,6 @@ public class Roundtrip {
         testArg(invocationDto, paramIndex, ValueType.OFFSET_TIME, sampleValues.offsetTime);
         testArg(invocationDto, paramIndex, ValueType.OFFSET_DATE_TIME, sampleValues.offsetDateTime);
         testArg(invocationDto, paramIndex, ValueType.ZONED_DATE_TIME, sampleValues.zonedDateTime);
-
-        // joda.time
-        testArg(invocationDto, paramIndex, ValueType.JODA_DATE_TIME, sampleValues.jodaDateTime);
-        testArg(invocationDto, paramIndex, ValueType.JODA_LOCAL_DATE, sampleValues.jodaLocalDate);
-        testArg(invocationDto, paramIndex, ValueType.JODA_LOCAL_DATE_TIME, sampleValues.jodaLocalDateTime);
-        testArg(invocationDto, paramIndex, ValueType.JODA_LOCAL_TIME, sampleValues.jodaLocalTime);
 
         // iterables
         testArg(invocationDto, paramIndex, ValueType.COLLECTION, sampleValues.list);

@@ -38,6 +38,21 @@
 			<artifactId>isis-persistence-jdo-datanucleus</artifactId>
 			<optional>true</optional>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-asciidoc-metamodel</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-markdown-metamodel</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-sse-metamodel</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.testing</groupId>

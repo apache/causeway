@@ -57,11 +57,6 @@
             <xs:element name="offsetTime" type="xs:time"/>
             <xs:element name="offsetDateTime" type="xs:dateTime"/>
             <xs:element name="zonedDateTime" type="xs:dateTime"/>
-            <!-- joda -->
-            <xs:element name="jodaDateTime" type="xs:dateTime"/>
-            <xs:element name="jodaLocalDate" type="xs:date"/>
-            <xs:element name="jodaLocalTime" type="xs:time"/>
-            <xs:element name="jodaLocalDateTime" type="xs:dateTime"/>
             <!--  -->
             <xs:element name="timestamp" type="xs:dateTime"/>
             <xs:element name="enum" type="enumDto"/>
@@ -166,11 +161,6 @@
             <xs:enumeration value="offsetDateTime"/>
             <xs:enumeration value="offsetTime"/>
             <xs:enumeration value="zonedDateTime"/>
-            <!-- joda -->
-            <xs:enumeration value="jodaDateTime"/>
-            <xs:enumeration value="jodaLocalDate"/>
-            <xs:enumeration value="jodaLocalTime"/>
-            <xs:enumeration value="jodaLocalDateTime"/>
             <!--  -->
             <xs:enumeration value="enum"/>
             <xs:enumeration value="reference"/>

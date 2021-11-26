@@ -19,10 +19,14 @@
 package org.apache.isis.testdomain.value;
 
 import java.util.Locale;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -42,6 +46,7 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.Password;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -180,11 +185,27 @@ class ValueSemanticsTest {
 
     }
 
-//    @Test
-//    void list() {
-//        valueSemanticsRegistry.streamClassesWithValueSemantics()
-//        .forEach(valueType->System.err.printf("%s%n", valueType.getSimpleName()));
-//    }
+    @Test @Disabled
+    void fullTypeCoverage() {
+
+        valueSemanticsRegistry.streamClassesWithValueSemantics()
+        .forEach(valueType->System.err.printf("%s%n", valueType.getName()));
+
+        final Set<Class<?>> valueTypesCovered = valueTypeExampleProvider.streamExamples()
+        .map(ValueTypeExample::getValueType)
+        .collect(Collectors.toSet());
+
+        final Set<Class<?>> valueTypesKnown = valueSemanticsRegistry.streamClassesWithValueSemantics()
+        .collect(Collectors.toSet());
+
+        val valueTypesNotCovered = _Sets.minus(valueTypesKnown, valueTypesCovered);
+
+        assertTrue(valueTypesNotCovered.isEmpty(), ()->
+            String.format("value-types not covered by tests:\n\t%s",
+                    valueTypesNotCovered.stream()
+                    .map(Class::getName)
+                    .collect(Collectors.joining("\n\t"))));
+    }
 
     // -- HELPER
 

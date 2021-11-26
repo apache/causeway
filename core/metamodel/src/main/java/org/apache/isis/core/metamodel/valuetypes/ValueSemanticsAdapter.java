@@ -112,6 +112,11 @@ implements
         return delegateParser().maxLength();
     }
 
+    @Override
+    public String getPattern(final Context context) {
+        return delegateParser().getPattern(context);
+    }
+
     // -- HELPER
 
     @SuppressWarnings({ "rawtypes", "unchecked" })

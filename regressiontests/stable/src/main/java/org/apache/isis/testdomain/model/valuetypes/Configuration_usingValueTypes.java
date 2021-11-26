@@ -22,9 +22,15 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
+import org.apache.isis.valuetypes.markdown.metamodel.IsisModuleValMarkdownMetaModel;
+import org.apache.isis.valuetypes.sse.metamodel.IsisModuleValSseMetaModel;
+
 @Configuration
 @Import({
-
+    IsisModuleValAsciidocMetaModel.class,
+    IsisModuleValMarkdownMetaModel.class,
+    IsisModuleValSseMetaModel.class,
 })
 @ComponentScan(
         basePackageClasses= {

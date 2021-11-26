@@ -46,7 +46,7 @@ extends TemporalSemanticsAdapter<org.joda.time.DateTime, ZonedDateTime>  {
 
     @Override
     public ValueType getSchemaValueType() {
-        return ValueType.JODA_DATE_TIME;
+        return ValueType.ZONED_DATE_TIME;
     }
 
     @Override
