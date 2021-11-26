@@ -125,10 +125,6 @@ public class Roundtrip {
             assertThat( ((OidDto)actualValue).getId(), is(((OidDto)expectedValue).getId()) );
             assertThat( ((OidDto)actualValue).getType(), is(((OidDto)expectedValue).getType()) );
 
-        } else if(expectedValue instanceof org.joda.time.DateTime) {
-
-            assertThat( actualValue.toString(), is(expectedValue.toString()) );
-
         } else if(expectedValue instanceof Iterable
                 || expectedValue.getClass().isArray()) {
 
@@ -177,12 +173,6 @@ public class Roundtrip {
         final LocalDateTime localDateTime = LocalDateTime.of(2015, 5, 23, 9, 54, 1);
         final OffsetDateTime offsetDateTime = OffsetDateTime.of(2015, 5, 23, 9, 54, 1, 0, ZoneOffset.UTC);
         final ZonedDateTime zonedDateTime = ZonedDateTime.of(2015, 5, 23, 9, 54, 1, 0, ZoneOffset.UTC);
-
-        // joda.time
-        final org.joda.time.DateTime jodaDateTime = new org.joda.time.DateTime(2015, 5, 23, 9, 54, 1);
-        final org.joda.time.LocalDate jodaLocalDate = new org.joda.time.LocalDate(2015, 5, 23);
-        final org.joda.time.LocalDateTime jodaLocalDateTime = new org.joda.time.LocalDateTime(2015, 5, 23, 9, 54, 1);
-        final org.joda.time.LocalTime jodaLocalTime = new org.joda.time.LocalTime(9, 54, 1);
 
         // iterables
         final List<Long> list = _Lists.of(1L, 2L, 3L);
@@ -236,12 +226,6 @@ public class Roundtrip {
         addArg(interactionDto, sampleValues.offsetTime);
         addArg(interactionDto, sampleValues.offsetDateTime);
         addArg(interactionDto, sampleValues.zonedDateTime);
-
-        // joda.time
-        addArg(interactionDto, sampleValues.jodaDateTime);
-        addArg(interactionDto, sampleValues.jodaLocalDate);
-        addArg(interactionDto, sampleValues.jodaLocalDateTime);
-        addArg(interactionDto, sampleValues.jodaLocalTime);
 
         // iterables
         addArg(interactionDto, sampleValues.list);
