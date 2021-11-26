@@ -18,47 +18,45 @@
  */
 package org.apache.isis.client.kroviz.ui.dialog
 
-import io.kvision.core.CssSize
-import io.kvision.core.FlexDirection
-import io.kvision.core.UNIT
-import io.kvision.form.text.TextArea
-import io.kvision.panel.Direction
-import io.kvision.panel.SplitPanel
-import io.kvision.panel.VPanel
+import io.kvision.utils.obj
 import org.apache.isis.client.kroviz.core.event.LogEntryComparison
+import org.apache.isis.client.kroviz.to.ValueType
+import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
+import org.apache.isis.client.kroviz.utils.Diff
+import org.apache.isis.client.kroviz.utils.Diff2Html
 
 class ResponseComparisonDialog(obj: LogEntryComparison) : Command() {
-    private val title = "Response Diff"
-
-    private val expectedPanel = VPanel(spacing = 3) {
-        width = CssSize(50, UNIT.perc)
-    }
-    private val actualPanel = VPanel(spacing = 3) {
-        width = CssSize(50, UNIT.perc)
-    }
 
     init {
+        val html = diff2Html(obj)
+        val fi = FormItem("Diff", ValueType.HTML, html, size = 30)
+        val formItems = mutableListOf<FormItem>()
+        formItems.add(fi)
+
+        val title = "Diff: " + obj.title
         dialog = RoDialog(
             caption = title,
-            items = mutableListOf(),
+            items = formItems,
             command = this,
             widthPerc = 80,
             heightPerc = 70,
             customButtons = mutableListOf()
         )
-        val expectedText = TextArea(label = "Expected", value = obj.expectedResponse, rows = 30)
-        expectedPanel.add(expectedText)
-        val actualText = TextArea(label = "Actual", value = obj.actualResponse, rows = 30)
-        actualPanel.add(actualText)
-
-        val splitPanel = SplitPanel(direction = Direction.VERTICAL)
-        splitPanel.addCssClass("dialog-content")
-        splitPanel.flexDirection = FlexDirection.ROW
-        splitPanel.add(expectedPanel)
-        splitPanel.add(actualPanel)
-        dialog.formPanel!!.add(splitPanel)
         dialog.open()
+    }
+
+    private fun diff2Html(obj: LogEntryComparison): String {
+        val oldText: String = obj.expectedResponse!!
+        val newText: String = obj.actualResponse!!
+        val diff = Diff.createTwoFilesPatch("file", "file", oldText, newText);
+        val options = obj {
+            drawFileList = false
+            matching = "lines"
+            outputFormat = "line-by-line"
+        }
+        val html = Diff2Html.html(diff, options)
+        return html
     }
 
 }
