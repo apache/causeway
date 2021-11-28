@@ -60,6 +60,12 @@ implements
 
     @SuppressWarnings("unchecked")
     @Override
+    public Converter<T, ?> getConverter() {
+        return this instanceof Converter ? (Converter<T, ?>)this : null;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
     public Renderer<T> getRenderer() {
         return this instanceof Renderer ? (Renderer<T>)this : null;
     }

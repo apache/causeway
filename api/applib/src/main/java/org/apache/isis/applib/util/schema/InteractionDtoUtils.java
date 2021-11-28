@@ -37,6 +37,7 @@ import javax.xml.bind.Unmarshaller;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.schema.SchemaValueMarshaller;
 import org.apache.isis.applib.util.JaxbUtil;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -60,11 +61,9 @@ import lombok.NonNull;
  */
 public final class InteractionDtoUtils {
 
-
     public static void init() {
         getJaxbContext();
     }
-
 
     // -- marshalling
     static JAXBContext jaxbContext;
@@ -345,10 +344,10 @@ public final class InteractionDtoUtils {
             final String parameterName,
             final Class<?> parameterType,
             final Object arg,
-            final @NonNull DtoContext dtoContext) {
+            final @NonNull SchemaValueMarshaller valueMarshaller) {
 
         final List<ParamDto> params = parameterListFor(interactionDto);
-        ParamDto paramDto = CommonDtoUtils.newParamDto(parameterName, parameterType, arg, dtoContext);
+        final ParamDto paramDto = valueMarshaller.newParamDtoScalar(parameterName, parameterType, arg);
         params.add(paramDto);
     }
 
@@ -359,17 +358,15 @@ public final class InteractionDtoUtils {
      *
      * @param returnType - to determine the value type (if any)
      * @param result - either a value type (possibly boxed primitive), or a reference type
-     * @param dtoContext - used if not a fundamental value type
+     * @param valueMarshaller - used if not a fundamental value type
      */
     public static void addReturn(
             final ActionInvocationDto invocationDto,
             final Class<?> returnType,
             final Object result,
-            final @NonNull DtoContext dtoContext) {
+            final @NonNull SchemaValueMarshaller valueMarshaller) {
 
-        final ValueWithTypeDto returned = CommonDtoUtils
-                .newValueWithTypeDto(returnType, result, dtoContext);
-        invocationDto.setReturned(returned);
+        valueMarshaller.putActionResult(invocationDto, returnType, result);
     }
 
 
@@ -393,14 +390,14 @@ public final class InteractionDtoUtils {
     public static List<String> getParameterNames(final ActionInvocationDto ai) {
         return Collections.unmodifiableList(
                 _NullSafe.stream(getParameters(ai))
-                .map(CommonDtoUtils.PARAM_DTO_TO_NAME)
+                .map(ParamDto::getName)
                 .collect(Collectors.toList())
                 );
     }
     public static List<ValueType> getParameterTypes(final ActionInvocationDto ai) {
         return Collections.unmodifiableList(
                 _NullSafe.stream(getParameters(ai))
-                .map(CommonDtoUtils.PARAM_DTO_TO_TYPE)
+                .map(ParamDto::getType)
                 .collect(Collectors.toList())
                 );
     }
@@ -438,9 +435,10 @@ public final class InteractionDtoUtils {
 
     // -- getParameterArgValue
 
-    public static <T> T getParameterArgValue(final ActionInvocationDto ai, final int paramNum) {
+    public static <T> T getParameterArgValue(final ActionInvocationDto ai, final int paramNum,
+            @NonNull final SchemaValueMarshaller valueMarshaller) {
         final ParamDto paramDto = getParameter(ai, paramNum);
-        return CommonDtoUtils.getValue(paramDto);
+        return (T) valueMarshaller.recoverValueFrom(ai.getLogicalMemberIdentifier(), paramDto);
     }
 
     // -- debugging (dump)

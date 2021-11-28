@@ -16,20 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.util.schema;
-
-import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
+package org.apache.isis.applib.value.semantics;
 
 /**
- * Provides the runtime context for converting <i>Schema</i> DTOs
- * between their XML and their Java type representation.
+ * Provides forth and back conversion between 2 types.
+ *
+ * @param <T> - value-type
+ * @param <D> - value-type, the <i>delegate</i>
+ *
+ * @see DefaultsProvider
+ * @see Parser
+ * @see EncoderDecoder
+ * @see ValueSemanticsProvider
  *
  * @since 2.x {@index}
  */
-public interface DtoContext {
+public interface Converter<T, D> {
 
-    BookmarkService getBookmarkService();
-    ValueSemanticsResolver getValueSemanticsResolver();
+    public abstract T fromDelegateValue(D value);
+    public abstract D toDelegateValue(T value);
 
 }

@@ -18,12 +18,14 @@
  */
 package org.apache.isis.core.metamodel.valuetypes;
 
+import org.apache.isis.applib.value.semantics.Converter;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
 
@@ -33,12 +35,19 @@ implements
     OrderRelation<T, E>,
     EncoderDecoder<T>,
     Parser<T>,
-    Renderer<T> {
+    Renderer<T>,
+    Converter<T, D>{
 
     public abstract ValueSemanticsAbstract<D> getDelegate();
 
-    public abstract T fromDelegateValue(D value);
-    public abstract D toDelegateValue(T value);
+    /**
+     * By design, adapters always share their <i>SchemaValueType</i> with their delegate.
+     * @see ValueSemanticsProvider#getSchemaValueType()
+     */
+    @Override
+    public final ValueType getSchemaValueType() {
+        return getDelegate().getSchemaValueType();
+    }
 
     // -- ORDER RELATION
 
@@ -58,6 +67,8 @@ implements
         return delegateOrderRelation()
                 .equals(toDelegateValue(a), toDelegateValue(b), epsilon);
     }
+
+    // -- CONVERTER
 
 
     // -- ENCODER DECODER

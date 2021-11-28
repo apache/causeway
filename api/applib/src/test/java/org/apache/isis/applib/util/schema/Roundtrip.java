@@ -42,13 +42,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
+import org.apache.isis.applib.services.schema.SchemaValueMarshaller;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.schema.cmd.v2.ParamDto;
+import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.schema.common.v2.InteractionType;
 import org.apache.isis.schema.common.v2.OidDto;
 import org.apache.isis.schema.common.v2.ValueType;
@@ -90,17 +90,57 @@ public class Roundtrip {
 
     private static void addArg(final InteractionDto interactionDto, final Object sampleValue) {
 
-        val dtoContext = new DtoContext() {
-            @Override public BookmarkService getBookmarkService() {
-                return null; }
-            @Override public ValueSemanticsResolver getValueSemanticsResolver() {
-                return null; }
-        };
+        val valueMarshaller = schemaValueMarshaller();
 
         val type = sampleValue.getClass();
         val name = type.getSimpleName();
-        InteractionDtoUtils.addParamArg(interactionDto, "a"+name, type, sampleValue, dtoContext);
-        InteractionDtoUtils.addParamArg(interactionDto, "null"+name, type, type.cast(null), dtoContext);
+        InteractionDtoUtils.addParamArg(interactionDto, "a"+name, type, sampleValue, valueMarshaller);
+        InteractionDtoUtils.addParamArg(interactionDto, "null"+name, type, type.cast(null), valueMarshaller);
+    }
+
+    private static SchemaValueMarshaller schemaValueMarshaller() {
+        return new SchemaValueMarshaller() {
+
+            @Override
+            public Object recoverValueFrom(final PropertyDto propertyDto) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+
+            @Override
+            public ActionInvocationDto putActionResult(final ActionInvocationDto invocationDto, final Class<?> returnType,
+                    final Object result) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public PropertyDto putValueInto(final PropertyDto propertyDto, final Class<?> propertyType, final Object valuePojo) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public ParamDto newParamDtoScalar(final String parameterName, final Class<?> paramType, final Object valuePojo) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public ParamDto newParamDtoNonScalar(final String parameterName, final Class<?> paramElementType, final Object valuePojo) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+
+            @Override
+            public Object recoverValueFrom(final String logicalMemberIdentifier, final ParamDto paramDto) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+        };
     }
 
     private static void testArg(
@@ -108,6 +148,7 @@ public class Roundtrip {
             final LongAdder paramIndex,
             final ValueType valueType,
             final Object expectedValue) {
+
         testArg(invocationDto, paramIndex, valueType, expectedValue, null);
     }
 
@@ -118,6 +159,8 @@ public class Roundtrip {
             final Object expectedValue,
             final String nameOverride) {
 
+        val valueMarshaller = schemaValueMarshaller();
+
         paramIndex.increment();
         int param = paramIndex.intValue();
 
@@ -127,7 +170,7 @@ public class Roundtrip {
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(valueType));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
 
-        val actualValue = InteractionDtoUtils.getParameterArgValue(invocationDto, param);
+        val actualValue = InteractionDtoUtils.getParameterArgValue(invocationDto, param, valueMarshaller);
 
         // equals test, some types need special checks ...
         if(expectedValue instanceof OidDto) {

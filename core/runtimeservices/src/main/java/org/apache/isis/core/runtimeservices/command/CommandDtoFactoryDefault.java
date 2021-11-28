@@ -30,10 +30,9 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.schema.SchemaValueMarshaller;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.applib.util.schema.CommonDtoUtils;
-import org.apache.isis.applib.util.schema.DtoContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -66,7 +65,7 @@ import lombok.val;
 @Qualifier("Default")
 public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
-    @Inject private DtoContext dtoContext;
+    @Inject private SchemaValueMarshaller valueMarshaller;
     @Inject private ClockService clockService;
     @Inject private UserService userService;
 
@@ -127,18 +126,16 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
             val paramTypeOrElementType = actionParameter.getElementType().getCorrespondingClass();
 
             val paramDto = actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION
-                    ? CommonDtoUtils.newParamDtoNonScalar(
+                    ? valueMarshaller.newParamDtoNonScalar(
                             actionParameter.getStaticFriendlyName()
                                 .orElseThrow(_Exceptions::unexpectedCodeReach),
                             paramTypeOrElementType,
-                            arg,
-                            dtoContext)
-                    : CommonDtoUtils.newParamDto(
+                            arg)
+                    : valueMarshaller.newParamDtoScalar(
                             actionParameter.getStaticFriendlyName()
                                 .orElseThrow(_Exceptions::unexpectedCodeReach),
                             paramTypeOrElementType,
-                            arg,
-                            dtoContext);
+                            arg);
 
             CommandDtoUtils.parametersFor(actionDto)
                 .getParameter()
@@ -158,9 +155,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
         val valueSpec = property.getElementType();
         val valueType = valueSpec.getCorrespondingClass();
 
-        val newValue = CommonDtoUtils.newValueWithTypeDto(
-                valueType, UnwrapUtil.single(valueAdapter), dtoContext);
-        propertyDto.setNewValue(newValue);
+        valueMarshaller.putValueInto(propertyDto, valueType, UnwrapUtil.single(valueAdapter));
     }
 
     // -- HELPER

@@ -29,7 +29,6 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalDateValueSemantics;
 import org.apache.isis.core.metamodel.valuetypes.TemporalSemanticsAdapter;
-import org.apache.isis.schema.common.v2.ValueType;
 
 /**
  * An adapter that handles {@link java.sql.Date} with only date component.
@@ -47,11 +46,6 @@ extends TemporalSemanticsAdapter<Date, LocalDate> {
     @Override
     public Class<Date> getCorrespondingClass() {
         return java.sql.Date.class;
-    }
-
-    @Override
-    public ValueType getSchemaValueType() {
-        return UNREPRESENTED;
     }
 
     @Override

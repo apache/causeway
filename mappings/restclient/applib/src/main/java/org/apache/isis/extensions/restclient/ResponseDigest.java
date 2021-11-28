@@ -28,7 +28,6 @@ import java.util.Optional;
 import java.util.concurrent.Future;
 import java.util.function.Function;
 
-import org.springframework.lang.Nullable;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
@@ -37,8 +36,9 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.applib.client.RepresentationTypeSimplifiedV2;
-import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
@@ -107,7 +107,7 @@ public class ResponseDigest<T> {
     private Exception failureCause;
 
 
-    protected ResponseDigest(Response response, Class<T> entityType, GenericType<List<T>> genericType) {
+    protected ResponseDigest(final Response response, final Class<T> entityType, final GenericType<List<T>> genericType) {
         this.response = response;
         this.entityType = entityType;
         this.genericType = genericType;
@@ -152,7 +152,7 @@ public class ResponseDigest<T> {
      * @param failureMapper - fallback, to calculate a result from given failure exception
      * @return the result if cardinality is exactly ONE, otherwise the result of applying the failure to the {@code failureMapper}
      */
-    public T singletonOrElseMapFailure(Function<Exception, T> failureMapper) {
+    public T singletonOrElseMapFailure(final Function<Exception, T> failureMapper) {
         return isSuccess()
                 ? getEntity().orElseGet(()->failureMapper.apply(new NoSuchElementException()))
                 : failureMapper.apply(getFailureCause());
@@ -162,10 +162,10 @@ public class ResponseDigest<T> {
      * @param failureMapper - fallback, to calculate a result from given failure exception
      * @return the result of any cardinality, otherwise the result of applying the failure to the {@code failureMapper}
      */
-    public Can<T> multipleOrElseMapFailure(Function<Exception, Can<T>> failureMapper) {
+    public Can<T> multipleOrElseMapFailure(final Function<Exception, Can<T>> failureMapper) {
         return isSuccess()
                 ? getEntities()
-                        : failureMapper.apply(getFailureCause());
+                : failureMapper.apply(getFailureCause());
     }
 
     // -- HELPER
@@ -235,7 +235,7 @@ public class ResponseDigest<T> {
         log.debug("readSingle({})", reprType);
 
         if(reprType.isValue()
-                || isValueType(entityType)) {
+                || reprType.isValues()) {
             val mapper = new ObjectMapper();
             val jsonInput = response.readEntity(String.class);
             val scalarValueDto = mapper.readValue(jsonInput, ScalarValueDtoV2.class);
@@ -250,7 +250,7 @@ public class ResponseDigest<T> {
         log.debug("readList({})", reprType);
 
         if(reprType.isValues()
-                || isValueType(entityType)) {
+                || reprType.isValue()) {
             val mapper = new ObjectMapper();
             val jsonInput = response.readEntity(String.class);
             final List<ScalarValueDtoV2> scalarValueDtoList =
@@ -269,7 +269,7 @@ public class ResponseDigest<T> {
         return response.readEntity(genericType);
     }
 
-    private ResponseDigest<T> digestAsyncFailure(boolean isCancelled, Exception failure) {
+    private ResponseDigest<T> digestAsyncFailure(final boolean isCancelled, final Exception failure) {
 
         entities = Can.empty();
 
@@ -289,7 +289,7 @@ public class ResponseDigest<T> {
 
     }
 
-    private String defaultFailureMessage(Response response) {
+    private String defaultFailureMessage(final Response response) {
         String failureMessage = "non-successful JAX-RS response: " +
                 String.format("%s (Http-Status-Code: %d)",
                         response.getStatusInfo().getReasonPhrase(),
@@ -309,11 +309,7 @@ public class ResponseDigest<T> {
 
     // -- VALUE TYPE HANDLING
 
-    private boolean isValueType(Class<T> entityType) {
-        return CommonDtoUtils.isValueType(entityType);
-    }
-
-    private T extractValue(ScalarValueDtoV2 scalarValueDto)
+    private T extractValue(final ScalarValueDtoV2 scalarValueDto)
             throws JsonParseException, JsonMappingException, IOException {
         return _Casts.uncheckedCast(scalarValueDto.getValue());
     }

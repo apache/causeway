@@ -20,21 +20,14 @@ package org.apache.isis.applib.util.schema;
 
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.Clob;
-import org.apache.isis.schema.common.v2.BlobDto;
-import org.apache.isis.schema.common.v2.ClobDto;
+import org.apache.isis.applib.services.schema.SchemaValueMarshaller;
 import org.apache.isis.schema.common.v2.ValueDto;
-import org.apache.isis.schema.common.v2.ValueType;
 
 public class CommonDtoUtils_setValueOn_Test {
 
@@ -42,7 +35,7 @@ public class CommonDtoUtils_setValueOn_Test {
     public JUnitRuleMockery context = new JUnitRuleMockery();
 
     @Mock
-    private DtoContext mockDtoContext;
+    private SchemaValueMarshaller mockDtoContext;
 
     ValueDto valueDto;
     @Before
@@ -51,38 +44,43 @@ public class CommonDtoUtils_setValueOn_Test {
     }
 
     @Test
-    public void when_blob_is_null() {
-        CommonDtoUtils.setValueOn(valueDto, ValueType.BLOB, null, mockDtoContext);
-        final BlobDto blobDto = valueDto.getBlob();
-        Assert.assertThat(blobDto, is(nullValue()));
+    public void not_implemented() {
+        fail("setValueOn not implemented");
     }
 
-    @Test
-    public void when_blob_is_not_null() {
-        final Blob val = new Blob("image.png", "image/png", new byte[]{1,2,3,4,5});
-        CommonDtoUtils.setValueOn(valueDto, ValueType.BLOB, val, mockDtoContext);
-        final BlobDto blobDto = valueDto.getBlob();
-        Assert.assertThat(blobDto, is(notNullValue()));
-        Assert.assertThat(blobDto.getBytes(), is(val.getBytes()));
-        Assert.assertThat(blobDto.getName(), is(val.getName()));
-        Assert.assertThat(blobDto.getMimeType(), is(val.getMimeType().toString()));
-    }
-
-    @Test
-    public void when_clob_is_null() {
-        CommonDtoUtils.setValueOn(valueDto, ValueType.CLOB, null, mockDtoContext);
-        final ClobDto clobDto = valueDto.getClob();
-        Assert.assertThat(clobDto, is(nullValue()));
-    }
-
-    @Test
-    public void when_clob_is_not_null() {
-        final Clob val = new Clob("image.png", "image/png", new char[]{1,2,3,4,5});
-        CommonDtoUtils.setValueOn(valueDto, ValueType.CLOB, val, mockDtoContext);
-        final ClobDto clobDto = valueDto.getClob();
-        Assert.assertThat(clobDto, is(notNullValue()));
-        Assert.assertThat(clobDto.getChars(), is(val.getChars()));
-        Assert.assertThat(clobDto.getName(), is(val.getName()));
-        Assert.assertThat(clobDto.getMimeType(), is(val.getMimeType().toString()));
-    }
+//    @Test
+//    public void when_blob_is_null() {
+//        CommonDtoUtils.setValueOn(valueDto, ValueTypeAndSemantics.of(ValueType.BLOB, null), null, mockDtoContext);
+//        final BlobDto blobDto = valueDto.getBlob();
+//        Assert.assertThat(blobDto, is(nullValue()));
+//    }
+//
+//    @Test
+//    public void when_blob_is_not_null() {
+//        final Blob val = new Blob("image.png", "image/png", new byte[]{1,2,3,4,5});
+//        CommonDtoUtils.setValueOn(valueDto, ValueTypeAndSemantics.of(ValueType.BLOB, null), val, mockDtoContext);
+//        final BlobDto blobDto = valueDto.getBlob();
+//        Assert.assertThat(blobDto, is(notNullValue()));
+//        Assert.assertThat(blobDto.getBytes(), is(val.getBytes()));
+//        Assert.assertThat(blobDto.getName(), is(val.getName()));
+//        Assert.assertThat(blobDto.getMimeType(), is(val.getMimeType().toString()));
+//    }
+//
+//    @Test
+//    public void when_clob_is_null() {
+//        CommonDtoUtils.setValueOn(valueDto, ValueTypeAndSemantics.of(ValueType.CLOB, null), null, mockDtoContext);
+//        final ClobDto clobDto = valueDto.getClob();
+//        Assert.assertThat(clobDto, is(nullValue()));
+//    }
+//
+//    @Test
+//    public void when_clob_is_not_null() {
+//        final Clob val = new Clob("image.png", "image/png", new char[]{1,2,3,4,5});
+//        CommonDtoUtils.setValueOn(valueDto, ValueTypeAndSemantics.of(ValueType.CLOB, null), val, mockDtoContext);
+//        final ClobDto clobDto = valueDto.getClob();
+//        Assert.assertThat(clobDto, is(notNullValue()));
+//        Assert.assertThat(clobDto.getChars(), is(val.getChars()));
+//        Assert.assertThat(clobDto.getName(), is(val.getName()));
+//        Assert.assertThat(clobDto.getMimeType(), is(val.getMimeType().toString()));
+//    }
 }

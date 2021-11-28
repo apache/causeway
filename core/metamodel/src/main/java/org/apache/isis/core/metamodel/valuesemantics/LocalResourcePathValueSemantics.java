@@ -50,7 +50,7 @@ implements
 
     @Override
     public ValueType getSchemaValueType() {
-        return UNREPRESENTED;
+        return ValueType.STRING; // this type can be easily converted to string and back
     }
 
     // -- ENCODER DECODER

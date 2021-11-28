@@ -38,7 +38,6 @@ import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.functions._Functions.CheckedBiConsumer;
 import org.apache.isis.commons.internal.resources._Xml;
 import org.apache.isis.commons.internal.resources._Xml.WriteOptions;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -73,15 +72,19 @@ public class ValueSemanticsTester<T> {
         val act = objSpec.getActionElseFail(actionId);
     }
 
+    public static interface PropertyInteractionProbe<T> {
+        void testEncoderDecoder(ValueSemanticsProvider.Context context, EncoderDecoder<T> codec);
+        void testParser(ValueSemanticsProvider.Context context, Parser<T> parser);
+        void testRenderer(ValueSemanticsProvider.Context context, Renderer<T> renderer);
+        void testCommand(ValueSemanticsProvider.Context context, Command command, EncoderDecoder<T> codec);
+    }
+
     @SneakyThrows
     public void propertyInteraction(
             final @NonNull String propertyId,
             final @NonNull InteractionContext interactionContext,
             final @NonNull Function<ManagedProperty, Object> newProperyValueProvider,
-            final @NonNull CheckedBiConsumer<ValueSemanticsProvider.Context, EncoderDecoder<T>> codecCallback,
-            final @NonNull CheckedBiConsumer<ValueSemanticsProvider.Context, Parser<T>> parserCallback,
-            final @NonNull CheckedBiConsumer<ValueSemanticsProvider.Context, Renderer<T>> renderCallback,
-            final @NonNull CheckedBiConsumer<Command, EncoderDecoder<T>> commandCallback) {
+            final @NonNull PropertyInteractionProbe<T> probe) {
 
         val objSpec = specLoader.specForTypeElseFail(domainObject.getClass());
         val prop = objSpec.getPropertyElseFail(propertyId);
@@ -91,16 +94,16 @@ public class ValueSemanticsTester<T> {
 
         val codec = codec(prop);
 
-        codecCallback.accept(context, codec);
+        probe.testEncoderDecoder(context, codec);
 
         val parserIfAny = parser(prop);
         if(parserIfAny.isPresent()) {
-            parserCallback.accept(context, parserIfAny.get());
+            probe.testParser(context, parserIfAny.get());
         }
 
         val rendererIfAny = renderer(prop);
         if(rendererIfAny.isPresent()) {
-            renderCallback.accept(context, rendererIfAny.get());
+            probe.testRenderer(context, rendererIfAny.get());
         }
 
         interactionService.run(interactionContext, ()->{
@@ -113,7 +116,7 @@ public class ValueSemanticsTester<T> {
             propInteraction.modifyProperty(managedProp->
                 ManagedObject.of(managedProp.getElementType(), newProperyValueProvider.apply(managedProp)));
 
-            commandCallback.accept(command, codec);
+            probe.testCommand(context, command, codec);
         });
     }
 

@@ -27,7 +27,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsAdapter;
 import org.apache.isis.schema.common.v2.OidDto;
-import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.val.BookmarkValueSemantics")
@@ -39,11 +38,6 @@ extends ValueSemanticsAdapter<Bookmark, OidDto, Void> {
     @Override
     public Class<Bookmark> getCorrespondingClass() {
         return Bookmark.class;
-    }
-
-    @Override
-    public ValueType getSchemaValueType() {
-        return UNREPRESENTED;
     }
 
     @Override
@@ -60,7 +54,5 @@ extends ValueSemanticsAdapter<Bookmark, OidDto, Void> {
     public OidDto toDelegateValue(final Bookmark value) {
         return value!=null ? value.toOidDto() : null;
     }
-
-
 
 }

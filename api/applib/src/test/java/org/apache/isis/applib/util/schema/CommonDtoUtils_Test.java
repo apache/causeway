@@ -20,18 +20,16 @@ package org.apache.isis.applib.util.schema;
 
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
 
+import org.apache.isis.applib.services.schema.SchemaValueMarshaller;
 import org.apache.isis.schema.cmd.v2.MapDto;
-import org.apache.isis.schema.common.v2.ValueDto;
-import org.apache.isis.schema.common.v2.ValueType;
 
 public class CommonDtoUtils_Test {
 
@@ -39,7 +37,7 @@ public class CommonDtoUtils_Test {
     public JUnitRuleMockery context = new JUnitRuleMockery();
 
     @Mock
-    private DtoContext mockDtoContext;
+    private SchemaValueMarshaller mockDtoContext;
 
     @Test
     public void enums() {
@@ -57,20 +55,23 @@ public class CommonDtoUtils_Test {
 
     private void test(final Enum<?> enumVal) {
 
-        // when
-        final ValueType valueType = CommonDtoUtils.asValueType(enumVal.getClass());
+        fail("not implemented");
 
-        // then
-        assertThat(valueType, is(ValueType.ENUM));
-
-        // and when
-        final ValueDto valueDto = CommonDtoUtils.newValueDto(valueType, enumVal, mockDtoContext);
-
-        // then
-        Object value = CommonDtoUtils.getValue(valueDto, valueType);
-        assertThat(value, is(notNullValue()));
-
-        Assert.assertEquals(value, enumVal);
+//        // when
+//        val valueTypeAndSemantics = CommonDtoUtils.asValueType(enumVal.getClass(), mockDtoContext);
+//        final ValueType valueType = valueTypeAndSemantics.getValueType();
+//
+//        // then
+//        assertThat(valueType, is(ValueType.ENUM));
+//
+//        // and when
+//        final ValueDto valueDto = CommonDtoUtils.newValueDto(valueTypeAndSemantics, enumVal, mockDtoContext);
+//
+//        // then
+//        Object value = CommonDtoUtils.getValue(valueDto, valueTypeAndSemantics);
+//        assertThat(value, is(notNullValue()));
+//
+//        Assert.assertEquals(value, enumVal);
     }
 
     @Test

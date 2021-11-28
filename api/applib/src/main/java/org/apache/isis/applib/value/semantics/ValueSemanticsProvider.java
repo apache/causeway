@@ -71,6 +71,11 @@ public interface ValueSemanticsProvider<T> {
     OrderRelation<T, ?> getOrderRelation();
 
     /**
+     * The {@link Converter}, if any.
+     */
+    Converter<T, ?> getConverter();
+
+    /**
      * The {@link Renderer}, if any.
      */
     Renderer<T> getRenderer();

@@ -18,10 +18,19 @@
  */
 package org.apache.isis.core.runtimeservices.command;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Optional;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
+
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -33,10 +42,10 @@ import org.apache.isis.applib.services.command.CommandOutcomeHandler;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
+import org.apache.isis.applib.services.schema.SchemaValueMarshaller;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -53,22 +62,20 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
-import org.apache.isis.schema.cmd.v2.*;
+import org.apache.isis.schema.cmd.v2.ActionDto;
+import org.apache.isis.schema.cmd.v2.CommandDto;
+import org.apache.isis.schema.cmd.v2.MemberDto;
+import org.apache.isis.schema.cmd.v2.ParamDto;
+import org.apache.isis.schema.cmd.v2.ParamsDto;
+import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.schema.common.v2.InteractionType;
 import org.apache.isis.schema.common.v2.OidDto;
 import org.apache.isis.schema.common.v2.OidsDto;
-import org.apache.isis.schema.common.v2.ValueWithTypeDto;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Optional;
-import java.util.regex.Pattern;
-import java.util.stream.Stream;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isis.runtimeservices.CommandExecutorServiceDefault")
@@ -86,6 +93,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     @Inject final ClockService clockService;
     @Inject final TransactionService transactionService;
     @Inject final InteractionLayerTracker iInteractionLayerTracker;
+    @Inject final SchemaValueMarshaller valueMarshaller;
 
     @Inject @Getter final InteractionService interactionService;
     @Inject @Getter final SpecificationLoader specificationLoader;
@@ -234,7 +242,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
                 final OneToOneAssociation property = findOneToOneAssociation(targetAdapter, memberId);
 
-                val newValueAdapter = newValueAdapterFor(propertyDto);
+                val newValueAdapter = recoverValueFrom(propertyDto);
 
                 property.set(targetAdapter, newValueAdapter, InteractionInitiatedBy.FRAMEWORK);
 
@@ -317,17 +325,23 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         return property;
     }
 
-    private static String localPartOf(String memberId) {
+    private static String localPartOf(final String memberId) {
         val matcher = ID_PARSER.matcher(memberId);
         return matcher.matches()
                 ? matcher.group("localId")
                 : "";
     }
 
-    private ManagedObject newValueAdapterFor(final PropertyDto propertyDto) {
-        final ValueWithTypeDto newValue = propertyDto.getNewValue();
-        final Object arg = CommonDtoUtils.getValue(newValue);
-        return adapterFor(arg);
+    private ManagedObject recoverValueFrom(final PropertyDto propertyDto) {
+        val newValue = valueMarshaller.recoverValueFrom(propertyDto);
+        return adapterFor(newValue);
+    }
+
+    private ManagedObject recoverValueFrom(
+            final ActionDto actionDto,
+            final ParamDto paramDto) {
+        val newValue = valueMarshaller.recoverValueFrom(actionDto.getLogicalMemberIdentifier(), paramDto);
+        return adapterFor(newValue);
     }
 
     private static ObjectAction findActionElseNull(
@@ -349,8 +363,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     private Can<ManagedObject> argAdaptersFor(final ActionDto actionDto) {
         return streamParamDtosFrom(actionDto)
-                .map(CommonDtoUtils::getValue)
-                .map(this::adapterFor)
+                .map(paramDto->recoverValueFrom(actionDto, paramDto))
                 .collect(Can.toCan());
     }
 

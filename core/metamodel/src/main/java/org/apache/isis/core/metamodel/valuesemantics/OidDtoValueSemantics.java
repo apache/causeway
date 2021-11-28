@@ -55,7 +55,7 @@ implements
 
     @Override
     public ValueType getSchemaValueType() {
-        return UNREPRESENTED;
+        return ValueType.REFERENCE;
     }
 
     // -- ORDER RELATION
