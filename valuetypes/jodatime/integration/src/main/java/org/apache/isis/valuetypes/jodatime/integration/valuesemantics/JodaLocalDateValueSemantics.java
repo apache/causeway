@@ -26,7 +26,6 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalDateValueSemantics;
 import org.apache.isis.core.metamodel.valuetypes.TemporalSemanticsAdapter;
-import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.valuetypes.jodatime.applib.value.JodaTimeConverters;
 
 @Component
@@ -39,11 +38,6 @@ extends TemporalSemanticsAdapter<org.joda.time.LocalDate, java.time.LocalDate>  
     @Override
     public Class<org.joda.time.LocalDate> getCorrespondingClass() {
         return org.joda.time.LocalDate.class;
-    }
-
-    @Override
-    public ValueType getSchemaValueType() {
-        return ValueType.LOCAL_DATE;
     }
 
     @Override

@@ -486,9 +486,25 @@ public abstract class ValueTypeExample<T> {
 
     }
 
+    // -- EXAMPLES - ENUM
+
+    public static enum ExampleEnum {
+        HALLO, WORLD
+    }
+
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleEnum",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleEnum
+    extends ValueTypeExample<ExampleEnum> {
+        @Property @Getter @Setter
+        private ExampleEnum value = ExampleEnum.HALLO;
+        @Getter
+        private ExampleEnum updateValue = ExampleEnum.WORLD;
+    }
+
     // -- EXAMPLES - OTHER
 
-  //TODO    Bookmark - fails because semantics needs to be adapted from OidDto
     @DomainObject(
             logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleBookmark",
             nature = Nature.BEAN)
@@ -500,6 +516,7 @@ public abstract class ValueTypeExample<T> {
         private Bookmark updateValue = Bookmark.parseElseFail("c:d");
     }
 
+  //TODO    OidDto
     @DomainObject(
             logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleOidDto",
             nature = Nature.BEAN)

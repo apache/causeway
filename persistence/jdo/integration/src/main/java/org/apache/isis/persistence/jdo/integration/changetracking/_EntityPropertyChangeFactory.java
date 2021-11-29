@@ -23,7 +23,7 @@ import java.util.UUID;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.xactn.TransactionId;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 
 import lombok.val;
@@ -43,7 +43,7 @@ final class _EntityPropertyChangeFactory {
         final String memberId = propertyChangeRecord.getMemberId();
         final String preValue = propertyChangeRecord.getPreAndPostValue().getPreString();
         final String postValue = propertyChangeRecord.getPreAndPostValue().getPostString();
-        final String targetClass = CommandUtil.targetClassNameFor(spec);
+        final String targetClass = IdentifierUtil.targetClassNameFor(spec);
 
         final UUID transactionId = txId.getInteractionId();
         final int sequence = txId.getSequence();

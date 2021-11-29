@@ -37,43 +37,43 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class JavaTimeXMLGregorianCalendarMarshalling {
 
-    public static LocalDate toLocalDate(XMLGregorianCalendar cal) {
+    public static LocalDate toLocalDate(final XMLGregorianCalendar cal) {
         return LocalDate.of(cal.getYear(), cal.getMonth(), cal.getDay());
     }
 
-    public static LocalTime toLocalTime(XMLGregorianCalendar cal) {
+    public static LocalTime toLocalTime(final XMLGregorianCalendar cal) {
         return LocalTime.of(cal.getHour(), cal.getMinute(), cal.getSecond(),
                 cal.getMillisecond()*1000_000);
     }
 
-    public static LocalDateTime toLocalDateTime(XMLGregorianCalendar cal) {
+    public static LocalDateTime toLocalDateTime(final XMLGregorianCalendar cal) {
         return LocalDateTime.of(cal.getYear(), cal.getMonth(), cal.getDay(),
                 cal.getHour(), cal.getMinute(), cal.getSecond(),
                 cal.getMillisecond()*1000_000);
     }
 
-    public static OffsetDateTime toOffsetDateTime(XMLGregorianCalendar cal) {
+    public static OffsetDateTime toOffsetDateTime(final XMLGregorianCalendar cal) {
         return OffsetDateTime.of(cal.getYear(), cal.getMonth(), cal.getDay(),
                 cal.getHour(), cal.getMinute(), cal.getSecond(),
                 cal.getMillisecond()*1000_000,
                 ZoneOffset.ofTotalSeconds(cal.getTimezone()*60));
     }
 
-    public static OffsetTime toOffsetTime(XMLGregorianCalendar cal) {
+    public static OffsetTime toOffsetTime(final XMLGregorianCalendar cal) {
         return OffsetTime.of(
                 cal.getHour(), cal.getMinute(), cal.getSecond(),
                 cal.getMillisecond()*1000_000,
                 ZoneOffset.ofTotalSeconds(cal.getTimezone()*60));
     }
 
-    public static ZonedDateTime toZonedDateTime(XMLGregorianCalendar cal) {
+    public static ZonedDateTime toZonedDateTime(final XMLGregorianCalendar cal) {
         return ZonedDateTime.of(cal.getYear(), cal.getMonth(), cal.getDay(),
                 cal.getHour(), cal.getMinute(), cal.getSecond(),
                 cal.getMillisecond()*1000_000,
                 ZoneOffset.ofTotalSeconds(cal.getTimezone()*60));
     }
 
-    public static XMLGregorianCalendar toXMLGregorianCalendar2(LocalDate localDate) {
+    public static XMLGregorianCalendar toXMLGregorianCalendar(final LocalDate localDate) {
         return localDate!=null
                 ? DataTypeFactory.withTypeFactoryDo(factory->factory.newXMLGregorianCalendarDate(
                         localDate.getYear(),
@@ -84,7 +84,7 @@ public final class JavaTimeXMLGregorianCalendarMarshalling {
                 : null;
     }
 
-    public static XMLGregorianCalendar toXMLGregorianCalendar2(LocalTime localTime) {
+    public static XMLGregorianCalendar toXMLGregorianCalendar(final LocalTime localTime) {
         return localTime!=null
                 ? DataTypeFactory.withTypeFactoryDo(factory->factory.newXMLGregorianCalendarTime(
                         localTime.getHour(),
@@ -96,7 +96,7 @@ public final class JavaTimeXMLGregorianCalendarMarshalling {
                 : null;
     }
 
-    public static XMLGregorianCalendar toXMLGregorianCalendar2(LocalDateTime localDateTime) {
+    public static XMLGregorianCalendar toXMLGregorianCalendar(final LocalDateTime localDateTime) {
         return localDateTime!=null
                 ? DataTypeFactory.withTypeFactoryDo(factory->factory.newXMLGregorianCalendar(
                         localDateTime.getYear(),
@@ -111,7 +111,7 @@ public final class JavaTimeXMLGregorianCalendarMarshalling {
                 : null;
     }
 
-    public static XMLGregorianCalendar toXMLGregorianCalendar2(OffsetTime offsetTime) {
+    public static XMLGregorianCalendar toXMLGregorianCalendar(final OffsetTime offsetTime) {
         return offsetTime!=null
                 ? DataTypeFactory.withTypeFactoryDo(factory->factory.newXMLGregorianCalendarTime(
                         offsetTime.getHour(),
@@ -123,7 +123,7 @@ public final class JavaTimeXMLGregorianCalendarMarshalling {
                 : null;
     }
 
-    public static XMLGregorianCalendar toXMLGregorianCalendar2(OffsetDateTime offsetDateTime) {
+    public static XMLGregorianCalendar toXMLGregorianCalendar(final OffsetDateTime offsetDateTime) {
         return offsetDateTime!=null
                 ? DataTypeFactory.withTypeFactoryDo(factory->factory.newXMLGregorianCalendar(
                         offsetDateTime.getYear(),
@@ -138,7 +138,7 @@ public final class JavaTimeXMLGregorianCalendarMarshalling {
                 : null;
     }
 
-    public static XMLGregorianCalendar toXMLGregorianCalendar2(ZonedDateTime zonedDateTime) {
+    public static XMLGregorianCalendar toXMLGregorianCalendar(final ZonedDateTime zonedDateTime) {
         return zonedDateTime!=null
                 ? DataTypeFactory.withTypeFactoryDo(factory->factory.newXMLGregorianCalendar(
                         zonedDateTime.getYear(),

@@ -252,4 +252,11 @@ public interface SpecificationLoader {
                 : Optional.of(((ObjectAction)member).getParameters().getElseFail(paramIndex));
     }
 
+    default ObjectFeature loadFeatureElseFail(final @NonNull Identifier featureIdentifier) {
+        return loadFeature(featureIdentifier)
+                .orElseThrow(()->_Exceptions.noSuchElement(
+                        "meta-model is not aware of feature with id '%s'",
+                        featureIdentifier));
+    }
+
 }

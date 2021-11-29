@@ -30,14 +30,13 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.schema.SchemaValueMarshaller;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.applib.util.schema.CommonDtoUtils;
-import org.apache.isis.applib.util.schema.DtoContext;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -48,6 +47,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.CommandDto;
+import org.apache.isis.schema.cmd.v2.ParamDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.schema.common.v2.InteractionType;
 import org.apache.isis.schema.common.v2.OidsDto;
@@ -66,7 +66,7 @@ import lombok.val;
 @Qualifier("Default")
 public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
-    @Inject private DtoContext dtoContext;
+    @Inject private SchemaValueMarshaller valueMarshaller;
     @Inject private ClockService clockService;
     @Inject private UserService userService;
 
@@ -112,8 +112,8 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
             final ActionDto actionDto,
             final Can<ManagedObject> argAdapters) {
 
-        actionDto.setLogicalMemberIdentifier(CommandUtil.logicalMemberIdentifierFor(objectAction));
-        actionDto.setMemberIdentifier(CommandUtil.memberIdentifierFor(objectAction));
+        actionDto.setLogicalMemberIdentifier(IdentifierUtil.logicalMemberIdentifierFor(objectAction));
+        actionDto.setMemberIdentifier(IdentifierUtil.memberIdentifierFor(objectAction));
 
         val actionParameters = objectAction.getParameters();
         for (int paramNum = 0; paramNum < actionParameters.size(); paramNum++) {
@@ -126,19 +126,15 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
             // in case of non-scalar params returns the element type
             val paramTypeOrElementType = actionParameter.getElementType().getCorrespondingClass();
 
-            val paramDto = actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION
-                    ? CommonDtoUtils.newParamDtoNonScalar(
-                            actionParameter.getStaticFriendlyName()
-                                .orElseThrow(_Exceptions::unexpectedCodeReach),
-                            paramTypeOrElementType,
-                            arg,
-                            dtoContext)
-                    : CommonDtoUtils.newParamDto(
-                            actionParameter.getStaticFriendlyName()
-                                .orElseThrow(_Exceptions::unexpectedCodeReach),
-                            paramTypeOrElementType,
-                            arg,
-                            dtoContext);
+            val paramDto = new ParamDto();
+            paramDto.setName(actionParameter.getStaticFriendlyName()
+                    .orElseThrow(_Exceptions::unexpectedCodeReach));
+
+            actionParameter.getFeatureIdentifier();
+
+            valueMarshaller.recordParamValue(
+                    actionParameter.getFeatureIdentifier(), paramDto, paramTypeOrElementType,
+                        _Casts.uncheckedCast(arg));
 
             CommandDtoUtils.parametersFor(actionDto)
                 .getParameter()
@@ -152,15 +148,14 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
             final PropertyDto propertyDto,
             final ManagedObject valueAdapter) {
 
-        propertyDto.setLogicalMemberIdentifier(CommandUtil.logicalMemberIdentifierFor(property));
-        propertyDto.setMemberIdentifier(CommandUtil.memberIdentifierFor(property));
+        propertyDto.setLogicalMemberIdentifier(IdentifierUtil.logicalMemberIdentifierFor(property));
+        propertyDto.setMemberIdentifier(IdentifierUtil.memberIdentifierFor(property));
 
         val valueSpec = property.getElementType();
         val valueType = valueSpec.getCorrespondingClass();
 
-        val newValue = CommonDtoUtils.newValueWithTypeDto(
-                valueType, UnwrapUtil.single(valueAdapter), dtoContext);
-        propertyDto.setNewValue(newValue);
+        valueMarshaller.recordPropertyValue(propertyDto, valueType,
+                _Casts.uncheckedCast(UnwrapUtil.single(valueAdapter)));
     }
 
     // -- HELPER

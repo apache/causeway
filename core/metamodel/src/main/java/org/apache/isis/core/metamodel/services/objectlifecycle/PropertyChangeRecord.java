@@ -25,7 +25,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
@@ -110,7 +110,7 @@ public final class PropertyChangeRecord {
         final String memberId = property.getFeatureIdentifier().getFullIdentityString();
         final String preValueStr = getPreAndPostValue().getPreString();
         final String postValueStr = getPreAndPostValue().getPostString();
-        final String targetClass = CommandUtil.targetClassNameFor(spec);
+        final String targetClass = IdentifierUtil.targetClassNameFor(spec);
 
         final UUID transactionId = txId.getInteractionId();
         final int sequence = txId.getSequence();
