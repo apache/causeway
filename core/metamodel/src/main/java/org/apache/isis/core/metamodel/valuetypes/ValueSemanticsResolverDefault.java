@@ -28,6 +28,7 @@ import javax.inject.Named;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -39,6 +40,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.valuesemantics.EnumValueSemanticsAbstract;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -77,7 +79,10 @@ implements ValueSemanticsResolver {
     }
 
     @Override
-    public <T> Can<ValueSemanticsProvider<T>> selectValueSemantics(final Class<T> valueType) {
+    public <T> Can<ValueSemanticsProvider<T>> selectValueSemantics(
+            final @NonNull Identifier featureIdentifier,
+            final Class<T> valueType) {
+        //FIXME[ISIS-2877] honor customizations
         return streamValueSemantics(valueType)
                 .collect(Can.toCan());
     }
@@ -104,6 +109,5 @@ implements ValueSemanticsResolver {
                           IntrospectionPolicy.ENCAPSULATION_ENABLED,
                   enumType));
     }
-
 
 }

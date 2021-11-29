@@ -53,7 +53,6 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.functions._Functions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -224,7 +223,8 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
                 // REVIEW: this doesn't really make sense if >1 action
                 if(resultAdapter != null) {
-                    return CommandUtil.bookmarkFor(resultAdapter);
+                    return ManagedObjects.bookmark(resultAdapter)
+                            .orElse(null);
                 }
             }
         } else {
@@ -365,7 +365,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     private Can<ManagedObject> argAdaptersFor(final ActionDto actionDto) {
 
-        final Identifier actionIdentifier = valueMarshaller.getActionIdentifier(actionDto);
+        final Identifier actionIdentifier = valueMarshaller.actionIdentifier(actionDto);
 
         return streamParamDtosFrom(actionDto)
                 .map(_Functions.indexedZeroBase((i, paramDto)->

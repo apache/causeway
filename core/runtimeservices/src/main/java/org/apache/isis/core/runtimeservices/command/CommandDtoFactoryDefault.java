@@ -35,7 +35,7 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -111,8 +111,8 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
             final ActionDto actionDto,
             final Can<ManagedObject> argAdapters) {
 
-        actionDto.setLogicalMemberIdentifier(CommandUtil.logicalMemberIdentifierFor(objectAction));
-        actionDto.setMemberIdentifier(CommandUtil.memberIdentifierFor(objectAction));
+        actionDto.setLogicalMemberIdentifier(IdentifierUtil.logicalMemberIdentifierFor(objectAction));
+        actionDto.setMemberIdentifier(IdentifierUtil.memberIdentifierFor(objectAction));
 
         val actionParameters = objectAction.getParameters();
         for (int paramNum = 0; paramNum < actionParameters.size(); paramNum++) {
@@ -146,8 +146,8 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
             final PropertyDto propertyDto,
             final ManagedObject valueAdapter) {
 
-        propertyDto.setLogicalMemberIdentifier(CommandUtil.logicalMemberIdentifierFor(property));
-        propertyDto.setMemberIdentifier(CommandUtil.memberIdentifierFor(property));
+        propertyDto.setLogicalMemberIdentifier(IdentifierUtil.logicalMemberIdentifierFor(property));
+        propertyDto.setMemberIdentifier(IdentifierUtil.memberIdentifierFor(property));
 
         val valueSpec = property.getElementType();
         val valueType = valueSpec.getCorrespondingClass();

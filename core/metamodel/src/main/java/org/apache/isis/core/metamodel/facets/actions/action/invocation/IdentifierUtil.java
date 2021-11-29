@@ -18,25 +18,23 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 
-import java.util.List;
-
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.commons.internal.base._Refs;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
+import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
@@ -45,7 +43,7 @@ import lombok.experimental.UtilityClass;
  * and <tt>BackgroundServiceDefault</tt>.
  */
 @UtilityClass
-public class CommandUtil {
+public class IdentifierUtil {
 
     public String targetClassNameFor(final ManagedObject targetAdapter) {
         return targetClassNameFor(targetAdapter.getSpecification());
@@ -77,12 +75,36 @@ public class CommandUtil {
         return logicalMemberIdentifierFor(otoa.getDeclaringType(), otoa);
     }
 
+    @SneakyThrows
+    public Identifier memberIdentifierFor(
+            final @NonNull Identifier.Type indentifierType,
+            final @NonNull String memberIdentifier,
+            final @NonNull String logicalMemberIdentifier) {
+
+        val ref = _Refs.stringRef(memberIdentifier);
+        val clsName = ref.cutAtIndexOfAndDrop("#");
+        val memberId = ref.getValue();
+        val logicalTypeName = _Refs.stringRef(logicalMemberIdentifier).cutAtIndexOfAndDrop("#");
+        val logicalType = LogicalType.eager(_Context.loadClassAndInitialize(clsName), logicalTypeName);
+
+        if(indentifierType.isAction()) {
+            return Identifier.actionIdentifier(logicalType, memberId);
+        }
+
+        if(indentifierType.isPropertyOrCollection()) {
+            return Identifier.propertyOrCollectionIdentifier(logicalType, memberId);
+        }
+
+        throw _Exceptions.illegalArgument("unsupported identifier type %s (memberIdentifier=%s)",
+                indentifierType, memberIdentifier);
+    }
+
     /**
      * Whether given command corresponds to given objectMember.
      * <p>
      * Is related to {@link #logicalMemberIdentifierFor(ObjectMember)}.
      */
-    public boolean matches(
+    public boolean isCommandForMember(
             final @Nullable Command command,
             final @Nullable ObjectMember objectMember) {
         return command!=null
@@ -98,65 +120,6 @@ public class CommandUtil {
         final String logicalTypeName = onType.getLogicalTypeName();
         final String localId = objectMember.getFeatureIdentifier().getMemberLogicalName();
         return logicalTypeName + "#" + localId;
-    }
-
-    public String argDescriptionFor(final ManagedObject valueAdapter) {
-        final StringBuilder buf = new StringBuilder();
-        if(valueAdapter != null) {
-            appendArg(buf, "new value", valueAdapter);
-        } else {
-            buf.append("cleared");
-        }
-        return buf.toString();
-    }
-
-    public String argDescriptionFor(
-            final ObjectAction owningAction,
-            final List<ManagedObject> arguments) {
-
-        val argsBuf = new StringBuilder();
-        val parameters = owningAction.getParameters();
-        if(parameters.size() == arguments.size()) {
-            // should be the case
-            int i=0;
-            for (ObjectActionParameter param : parameters) {
-                CommandUtil.appendParamArg(argsBuf, param, arguments.get(i++));
-            }
-        }
-        return argsBuf.toString();
-    }
-
-    public Bookmark bookmarkFor(final ManagedObject adapter) {
-        return ManagedObjects.bookmark(adapter)
-                .orElse(null);
-    }
-
-    void appendParamArg(
-            final StringBuilder buf,
-            final ObjectActionParameter param,
-            final ManagedObject objectAdapter) {
-
-        final String name = param.getStaticFriendlyName()
-                .orElseThrow(_Exceptions::unexpectedCodeReach);
-        appendArg(buf, name, objectAdapter);
-    }
-
-    private void appendArg(
-            final StringBuilder buf,
-            final String name,
-            final ManagedObject objectAdapter) {
-
-        String titleOf = objectAdapter != null? objectAdapter.titleString(): "null";
-        buf.append(name).append(": ").append(titleOf).append("\n");
-    }
-
-    public ManagedObject[] adaptersFor(
-            final Object[] args,
-            final ObjectManager objectManager) {
-
-        return _NullSafe.stream(args)
-                .map(objectManager::adapt)
-                .collect(_Arrays.toArray(ManagedObject.class, _NullSafe.size(args)));
     }
 
 }

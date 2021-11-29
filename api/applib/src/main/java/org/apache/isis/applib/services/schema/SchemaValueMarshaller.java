@@ -40,8 +40,20 @@ public interface SchemaValueMarshaller {
 
     // -- RECOVER IDENTIFIERS
 
-    Identifier getActionIdentifier(@NonNull ActionInvocationDto ai);
-    Identifier getActionIdentifier(@NonNull ActionDto actionDto);
+    /**
+     * Recovers a <i>Action's</i> {@link Identifier} from given DTO.
+     */
+    Identifier actionIdentifier(@NonNull ActionInvocationDto actionInvocationDto);
+
+    /**
+     * Recovers an <i>Action's</i> {@link Identifier} from given DTO.
+     */
+    Identifier actionIdentifier(@NonNull ActionDto actionDto);
+
+    /**
+     * Recovers a <i>Property's</i> {@link Identifier} from given DTO.
+     */
+    Identifier propertyIdentifier(@NonNull PropertyDto propertyDto);
 
     // -- RECOVER VALUES FROM DTO
 
@@ -86,7 +98,5 @@ public interface SchemaValueMarshaller {
             @NonNull ParamDto paramDto,
             @NonNull Class<?> paramType,
             @Nullable Object valuePojo);
-
-
 
 }

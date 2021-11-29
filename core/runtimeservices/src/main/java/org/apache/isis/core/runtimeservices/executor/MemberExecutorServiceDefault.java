@@ -50,7 +50,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.execution.InteractionInternal;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterOrClearFacetForDomainEventAbstract.EditingVariant;
@@ -134,7 +134,7 @@ implements MemberExecutorService {
                 .collect(_Lists.toUnmodifiable());
 
         val targetMemberName = ObjectAction.Util.friendlyNameFor(owningAction, head);
-        val targetClass = CommandUtil.targetClassNameFor(targetAdapter);
+        val targetClass = IdentifierUtil.targetClassNameFor(targetAdapter);
 
         val actionInvocation =
                 new ActionInvocation(
@@ -205,7 +205,7 @@ implements MemberExecutorService {
         val argValue = UnwrapUtil.single(newValueAdapter);
 
         val targetMemberName = owningProperty.getFriendlyName(head::getTarget);
-        val targetClass = CommandUtil.targetClassNameFor(targetManagedObject);
+        val targetClass = IdentifierUtil.targetClassNameFor(targetManagedObject);
 
         val propertyEdit = new PropertyEdit(interaction, propertyId, target, argValue, targetMemberName, targetClass);
         val executor = propertyExecutorFactory

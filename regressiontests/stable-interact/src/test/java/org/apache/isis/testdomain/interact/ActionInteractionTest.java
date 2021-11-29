@@ -34,7 +34,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.isis.testdomain.model.interaction.DemoEnum;
@@ -134,7 +134,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
 
         // test feature-identifier to command matching ...
         val act = tester.getActionMetaModelElseFail();
-        assertTrue(CommandUtil.matches(command, act));
+        assertTrue(IdentifierUtil.isCommandForMember(command, act));
     }
 
     @Test
@@ -180,7 +180,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
 
         // test feature-identifier to command matching ...
         val act = tester.getActionMetaModelElseFail();
-        assertTrue(CommandUtil.matches(command, act));
+        assertTrue(IdentifierUtil.isCommandForMember(command, act));
     }
 
     @Test

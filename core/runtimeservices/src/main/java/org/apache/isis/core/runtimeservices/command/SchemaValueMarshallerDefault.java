@@ -20,6 +20,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.Identifier.Type;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -36,6 +37,10 @@ import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.ParamDto;
@@ -71,30 +76,43 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
     // -- RECOVER IDENTIFIERS
 
     @Override
-    public Identifier getActionIdentifier(final @NonNull ActionDto actionDto) {
-        // FIXME Auto-generated method stub
-        return null;
+    public Identifier actionIdentifier(final @NonNull ActionDto actionDto) {
+        return IdentifierUtil.memberIdentifierFor(
+                Type.ACTION,
+                actionDto.getMemberIdentifier(),
+                actionDto.getLogicalMemberIdentifier());
     }
 
     @Override
-    public Identifier getActionIdentifier(final @NonNull ActionInvocationDto ai) {
-        // FIXME Auto-generated method stub
-        return null;
+    public Identifier actionIdentifier(final @NonNull ActionInvocationDto actionInvocationDto) {
+        return IdentifierUtil.memberIdentifierFor(
+                Type.ACTION,
+                actionInvocationDto.getMemberIdentifier(),
+                actionInvocationDto.getLogicalMemberIdentifier());
+    }
+
+    @Override
+    public Identifier propertyIdentifier(final @NonNull PropertyDto propertyDto) {
+        return IdentifierUtil.memberIdentifierFor(
+                Type.PROPERTY_OR_COLLECTION,
+                propertyDto.getMemberIdentifier(),
+                propertyDto.getLogicalMemberIdentifier());
     }
 
     // -- RECOVER VALUES FROM DTO
 
     @Override
     public Object recoverValueFrom(final PropertyDto propertyDto) {
-        final ValueWithTypeDto valueWithTypeDto = propertyDto.getNewValue();
-        return recoverValue(valueWithTypeDto, this);
+        val identifier = propertyIdentifier(propertyDto);
+        val valueWithTypeDto = propertyDto.getNewValue();
+        return recoverValue(identifier, valueWithTypeDto);
     }
 
     @Override
     public Object recoverValueFrom(
             final Identifier paramIdentifier,
             final ParamDto paramDto) {
-        return recoverValue(paramDto, this);
+        return recoverValue(paramIdentifier, paramDto);
     }
 
     // -- RECORD VALUES INTO DTO
@@ -104,8 +122,8 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
             final ActionInvocationDto invocationDto,
             final Class<?> returnType,
             final Object result) {
-        final ValueTypeWrapper<?> valueTypeAndSemantics = resolve(this, returnType);
-        final ValueWithTypeDto returned = newValueWithTypeDto(valueTypeAndSemantics, result, this);
+        final ValueTypeWrapper<?> valueTypeAndSemantics = wrap(actionIdentifier(invocationDto), returnType);
+        final ValueWithTypeDto returned = newValueWithTypeDto(valueTypeAndSemantics, result);
         invocationDto.setReturned(returned);
         return invocationDto;
     }
@@ -115,8 +133,14 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
             final PropertyDto propertyDto,
             final Class<?> propertyType,
             final Object valuePojo) {
-        final ValueTypeWrapper<?> valueTypeAndSemantics = resolve(this, propertyType);
-        final ValueWithTypeDto newValue = newValueWithTypeDto(valueTypeAndSemantics, valuePojo, this);
+        final Identifier propertyIdentifier = propertyIdentifier(propertyDto);
+        final OneToOneAssociation property =
+                (OneToOneAssociation)specLoader.loadFeatureElseFail(propertyIdentifier);
+
+        val elementType = property.getElementType().getCorrespondingClass();
+        final ValueTypeWrapper<?> valueTypeAndSemantics = wrap(propertyIdentifier, elementType);
+
+        final ValueWithTypeDto newValue = newValueWithTypeDto(valueTypeAndSemantics, valuePojo);
         propertyDto.setNewValue(newValue);
         return propertyDto;
     }
@@ -128,64 +152,26 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
             final Class<?> paramType,
             final Object valuePojo) {
 
-        //specLoader.loadFeature(null);
+        final ObjectActionParameter actionParameter =
+                (ObjectActionParameter)specLoader.loadFeatureElseFail(paramIdentifier);
 
-//        val paramDto = actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION
-//                ? valueMarshaller.newParamDtoNonScalar(
-//                        actionParameter.getStaticFriendlyName()
-//                            .orElseThrow(_Exceptions::unexpectedCodeReach),
-//                        paramTypeOrElementType,
-//                        arg)
-//                : valueMarshaller.newParamDtoScalar(
-//                        actionParameter.getStaticFriendlyName()
-//                            .orElseThrow(_Exceptions::unexpectedCodeReach),
-//                        paramTypeOrElementType,
-//                        arg);
-        // TODO Auto-generated method stub
-        return null;
-    }
+        val elementType = actionParameter.getElementType().getCorrespondingClass();
+        final ValueTypeWrapper<?> valueTypeAndSemantics = wrap(paramIdentifier, elementType);
 
+        if(actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION) {
+            recordValues(paramDto, valueTypeAndSemantics, valuePojo);
+        } else {
 
-    private ParamDto newParamDtoScalar(
-            final String parameterName,
-            final Class<?> paramType,
-            final Object valuePojo) {
-        val paramDto = new ParamDto();
-        paramDto.setName(parameterName);
-
-        final ValueTypeWrapper<?> valueTypeAndSemantics = resolve(this, paramType);
-
-//        ValueType valueType = valueTypeAndSemantics.getValueType();
-//
-//        // this hack preserves previous behaviour before we were able to serialize blobs and clobs into XML
-//        // however, we also don't want this new behaviour for parameter arguments
-//        // (else these large objects could end up being persisted).
-//        if(valueType == ValueType.BLOB) valueType = ValueType.REFERENCE;
-//        if(valueType == ValueType.CLOB) valueType = ValueType.REFERENCE;
-
-        paramDto.setType(valueTypeAndSemantics.getValueType());
-
-        recordValue(paramDto, valueTypeAndSemantics, valuePojo, this);
-
+            //          ValueType valueType = valueTypeAndSemantics.getValueType();
+            //
+            //          // this hack preserves previous behaviour before we were able to serialize blobs and clobs into XML
+            //          // however, we also don't want this new behaviour for parameter arguments
+            //          // (else these large objects could end up being persisted).
+            //          if(valueType == ValueType.BLOB) valueType = ValueType.REFERENCE;
+            //          if(valueType == ValueType.CLOB) valueType = ValueType.REFERENCE;
+            recordValue(paramDto, valueTypeAndSemantics, valuePojo);
+        }
         return paramDto;
-    }
-
-
-    private ParamDto newParamDtoNonScalar(
-            final String parameterName,
-            final Class<?> paramElementType,
-            final Object valuePojo) {
-
-        val paramDto = new ParamDto();
-        paramDto.setName(parameterName);
-        paramDto.setType(ValueType.COLLECTION);
-
-        ValueTypeWrapper<?> elementValueTypeAndSemantics = resolve(this, paramElementType);
-
-        setValueOnNonScalar(paramDto, elementValueTypeAndSemantics, valuePojo, this);
-
-        return paramDto;
-
     }
 
     // -- HELPER
@@ -208,32 +194,22 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
 
     }
 
-    private ValueTypeWrapper<?> resolve(
-            @NonNull final SchemaValueMarshaller valueMarshaller,
-            @NonNull final Class<?> type) {
-        return valueSemanticsResolver.selectValueSemantics(type)
+    private ValueTypeWrapper<?> wrap(
+            final @NonNull Identifier featureIdentifier,
+            final @NonNull Class<?> type) {
+        return valueSemanticsResolver.selectValueSemantics(featureIdentifier, type)
         .getFirst()
         .map(valueSemantics->ValueTypeWrapper.of(valueSemantics.getSchemaValueType(), valueSemantics))
         // assume reference otherwise
         .orElseGet(()->ValueTypeWrapper.of(ValueType.REFERENCE, null));
     }
 
-    private ValueTypeWrapper<?> resolve(
-            @NonNull final SchemaValueMarshaller valueMarshaller,
-            //@NonNull final Class<?> type,
-            final ValueWithTypeDto valueWithTypeDto) {
-        // TODO Auto-generated method stub
-
-        return ValueTypeWrapper.of(valueWithTypeDto.getType(), null);
-    }
-
     private ValueWithTypeDto newValueWithTypeDto(
             final ValueTypeWrapper<?> valueTypeAndSemantics,
-            final Object valuePojo,
-            final @NonNull SchemaValueMarshaller valueMarshaller) {
+            final Object valuePojo) {
 
         final ValueWithTypeDto valueWithTypeDto = new ValueWithTypeDto();
-        recordValue(valueWithTypeDto, valueTypeAndSemantics, valuePojo, valueMarshaller);
+        recordValue(valueWithTypeDto, valueTypeAndSemantics, valuePojo);
 
         return valueWithTypeDto;
     }
@@ -241,22 +217,26 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
     private <T extends ValueDto> T recordValue(
             final T valueDto,
             final ValueTypeWrapper<?> valueTypeAndSemantics,
-            final Object pojo,
-            final @NonNull SchemaValueMarshaller valueMarshaller) {
+            final Object pojo) {
 
-        val valueType = valueTypeAndSemantics.getValueType();
+        val schemaValueType = valueTypeAndSemantics.getValueType();
+
+        if(valueDto instanceof ValueWithTypeDto) {
+            ((ValueWithTypeDto)valueDto).setType(schemaValueType);
+        }
+
         val semantics = valueTypeAndSemantics.getSemantics();
         val converter = valueTypeAndSemantics.getConverter();
 
-        switch (valueType) {
+        switch (schemaValueType) {
         case COLLECTION: {
             final CollectionDto collectionDto = asCollectionDto(
-                    pojo, ValueTypeWrapper.empty(), valueMarshaller);
+                    pojo, ValueTypeWrapper.empty());
             valueDto.setCollection(collectionDto);
             return valueDto;
         }
         case COMPOSITE: {
-            final TypedTupleDto typedTupleDto = asTypedTupleDto(pojo, valueMarshaller);
+            final TypedTupleDto typedTupleDto = asTypedTupleDto(pojo);
             valueDto.setComposite(typedTupleDto);
             return valueDto;
         }
@@ -397,20 +377,18 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
             return null;
         }
         default:
-            throw _Exceptions.unmatchedCase(valueType);
+            throw _Exceptions.unmatchedCase(schemaValueType);
         }
     }
 
-    @Deprecated
-    private <T extends ValueWithTypeDto> T setValueOnNonScalar(
+    private <T extends ValueWithTypeDto> T recordValues(
             final T valueWithTypeDto,
             final ValueTypeWrapper<?> elementValueTypeAndSemantics,
-            final Object value,
-            final @NonNull SchemaValueMarshaller valueMarshaller) {
+            final Object value) {
 
         valueWithTypeDto.setType(ValueType.COLLECTION);
 
-        val collectionDto = asCollectionDto(value, elementValueTypeAndSemantics, valueMarshaller);
+        val collectionDto = asCollectionDto(value, elementValueTypeAndSemantics);
         valueWithTypeDto.setCollection(collectionDto);
         valueWithTypeDto.setNull(value == null);
 
@@ -419,8 +397,7 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
 
     private CollectionDto asCollectionDto(
             final @Nullable Object iterableOrArray,
-            final @NonNull ValueTypeWrapper<?> commonElementValueTypeAndSemantics,
-            final @NonNull SchemaValueMarshaller valueMarshaller) {
+            final @NonNull ValueTypeWrapper<?> commonElementValueTypeAndSemantics) {
 
         val commonElementValueType = commonElementValueTypeAndSemantics.getValueType();
         val collectionDto = new CollectionDto();
@@ -434,14 +411,13 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
         .forEach(element->{
             val valueDto = new ValueDto();
             if(element==null) {
-                recordValue(valueDto, ValueTypeWrapper.empty(), element, valueMarshaller);
+                recordValue(valueDto, ValueTypeWrapper.empty(), element);
             } else {
-                ValueTypeWrapper<?> elementValueTypeAndSemantics =
-                        resolve(valueMarshaller, element.getClass());
-                recordValue(valueDto, elementValueTypeAndSemantics, element, valueMarshaller);
+
+                recordValue(valueDto, commonElementValueTypeAndSemantics, element);
 
                 if(needsCommonElementValueTypeAutodetect) {
-                    commonElementValueTypeRef.update(acc->reduce(acc, elementValueTypeAndSemantics.getValueType()));
+                    commonElementValueTypeRef.update(acc->reduce(acc, commonElementValueTypeAndSemantics.getValueType()));
                 }
 
             }
@@ -465,9 +441,8 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
         throw _Exceptions.unsupportedOperation("mixing types within a collection is not supported yet");
     }
 
-    private static TypedTupleDto asTypedTupleDto(
-            final @Nullable Object composite,
-            final @NonNull SchemaValueMarshaller valueMarshaller) {
+    private TypedTupleDto asTypedTupleDto(
+            final @Nullable Object composite) {
         val typedTupleDto = new TypedTupleDto();
         //TODO implement
         return typedTupleDto;
@@ -476,17 +451,19 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
     // -- HELPER - RECOVERY
 
     private <T> T recoverValue(
-            final ValueWithTypeDto valueWithTypeDto,
-            final @NonNull SchemaValueMarshaller valueMarshaller) {
+            final Identifier featureIdentifier,
+            final ValueWithTypeDto valueWithTypeDto) {
         if(valueWithTypeDto==null
                 || (valueWithTypeDto.isSetNull()
                     && valueWithTypeDto.isNull())) {
             return null;
         }
-        return recoverValue(valueWithTypeDto, resolve(valueMarshaller, valueWithTypeDto));
+        val feature = specLoader.loadFeatureElseFail(featureIdentifier);
+        val type = feature.getElementType().getCorrespondingClass();
+        return recoverValue(valueWithTypeDto, wrap(featureIdentifier, type));
     }
 
-    private static <T> T recoverValue(
+    private <T> T recoverValue(
             final ValueDto valueDto,
             final @NonNull ValueTypeWrapper<?> valueTypeAndSemantics) {
         return _Casts.uncheckedCast(recoverValueAsObject(valueDto, valueTypeAndSemantics));

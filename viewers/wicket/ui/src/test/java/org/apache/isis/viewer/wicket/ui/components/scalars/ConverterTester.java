@@ -32,7 +32,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.clock.VirtualClock;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
@@ -89,9 +91,10 @@ public class ConverterTester<T extends Serializable> {
         mmc.getServiceInjector().injectServicesInto(valueSemantics);
 
         // pre-requisites for testing
+        val identifier = Identifier.classIdentifier(LogicalType.fqcn(valueType));
         val reg = mmc.getServiceRegistry().lookupServiceElseFail(ValueSemanticsResolver.class);
-        assertNotNull(reg.selectValueSemantics(valueType));
-        assertTrue(reg.selectValueSemantics(valueType).isNotEmpty());
+        assertNotNull(reg.selectValueSemantics(identifier, valueType));
+        assertTrue(reg.selectValueSemantics(identifier, valueType).isNotEmpty());
         assertNotNull(mmc.getServiceRegistry().lookupServiceElseFail(InteractionService.class));
         assertNotNull(mmc.getInteractionProvider());
     }

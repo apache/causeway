@@ -435,7 +435,7 @@ public final class InteractionDtoUtils {
             final @NonNull ActionInvocationDto ai,
             final int paramNum) {
 
-        final Identifier actionIdentifier = valueMarshaller.getActionIdentifier(ai);
+        final Identifier actionIdentifier = valueMarshaller.actionIdentifier(ai);
         final ParamDto paramDto = getParameter(ai, paramNum);
         return (T) valueMarshaller.recoverValueFrom(actionIdentifier.withParameterIndex(paramNum), paramDto);
     }

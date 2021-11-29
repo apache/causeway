@@ -29,6 +29,12 @@ for non-public class member introspection.
 | _SecMan's_ `PasswordEncryptionService` was removed
 | Using Spring's `org.springframework.security.crypto.password.PasswordEncoder` instead.
 
+| `CommandUtil` was renamed ..
+| to `IdentifierUtil`
+
+| Several `CommonDtoUtil` methods have been refactored ..
+| into a new service `SchemaValueMarshaller`
+
 |===
 
 == Configuration

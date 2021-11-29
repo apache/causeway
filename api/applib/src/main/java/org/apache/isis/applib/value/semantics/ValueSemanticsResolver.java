@@ -20,7 +20,10 @@ package org.apache.isis.applib.value.semantics;
 
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.collections.Can;
+
+import lombok.NonNull;
 
 /**
  * @since 2.0 {@index}
@@ -31,8 +34,10 @@ public interface ValueSemanticsResolver {
 
     <T> Stream<ValueSemanticsProvider<T>> streamValueSemantics(Class<T> valueType);
 
-    <T> Can<ValueSemanticsProvider<T>> selectValueSemantics(Class<T> valueType);
-
     Stream<Class<?>> streamClassesWithValueSemantics();
+
+    <T> Can<ValueSemanticsProvider<T>> selectValueSemantics(
+            @NonNull Identifier featureIdentifier,
+            @NonNull Class<T> valueType);
 
 }

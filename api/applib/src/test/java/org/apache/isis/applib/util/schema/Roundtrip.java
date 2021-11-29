@@ -106,45 +106,52 @@ public class Roundtrip {
         return new SchemaValueMarshaller() {
 
             @Override
-            public Object recoverValueFrom(final PropertyDto propertyDto) {
+            public Identifier actionIdentifier(@NonNull final ActionInvocationDto actionInvocationDto) {
                 // TODO Auto-generated method stub
                 return null;
             }
 
             @Override
-            public Object recoverValueFrom(final Identifier paramIdentifier, final ParamDto paramDto) {
+            public Identifier actionIdentifier(@NonNull final ActionDto actionDto) {
                 // TODO Auto-generated method stub
                 return null;
             }
 
             @Override
-            public ActionInvocationDto recordActionResult(final ActionInvocationDto invocationDto, final Class<?> returnType,
-                    final Object result) {
+            public Identifier propertyIdentifier(@NonNull final PropertyDto propertyDto) {
                 // TODO Auto-generated method stub
                 return null;
             }
 
             @Override
-            public PropertyDto recordPropertyValue(final PropertyDto propertyDto, final Class<?> propertyType, final Object valuePojo) {
+            public Object recoverValueFrom(@NonNull final PropertyDto propertyDto) {
                 // TODO Auto-generated method stub
                 return null;
             }
 
             @Override
-            public ParamDto recordParamValue(final Identifier paramIdentifier, final ParamDto paramDto, final Class<?> paramType,
+            public Object recoverValueFrom(@NonNull final Identifier paramIdentifier, @NonNull final ParamDto paramDto) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public ActionInvocationDto recordActionResult(@NonNull final ActionInvocationDto invocationDto,
+                    @NonNull final Class<?> returnType, final Object result) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public PropertyDto recordPropertyValue(@NonNull final PropertyDto propertyDto, @NonNull final Class<?> propertyType,
                     final Object valuePojo) {
                 // TODO Auto-generated method stub
                 return null;
             }
 
             @Override
-            public Identifier getActionIdentifier(@NonNull final ActionInvocationDto ai) {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Identifier getActionIdentifier(final ActionDto actionDto) {
+            public ParamDto recordParamValue(@NonNull final Identifier paramIdentifier, @NonNull final ParamDto paramDto,
+                    @NonNull final Class<?> paramType, final Object valuePojo) {
                 // TODO Auto-generated method stub
                 return null;
             }
