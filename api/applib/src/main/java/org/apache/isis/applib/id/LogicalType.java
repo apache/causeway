@@ -123,10 +123,10 @@ implements
     }
 
     /**
-     * Name of the corresponding class.
+     * Canonical name of the corresponding class.
      */
     public String getClassName() {
-        return getCorrespondingClass().getName();
+        return getCorrespondingClass().getCanonicalName();
     }
 
     /**

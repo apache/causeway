@@ -78,25 +78,25 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
 
     @Override
     public Identifier actionIdentifier(final @NonNull ActionDto actionDto) {
-        return IdentifierUtil.memberIdentifierFor(
+        return IdentifierUtil.memberIdentifierFor(specLoader,
                 Type.ACTION,
-                actionDto.getMemberIdentifier(),
+//                actionDto.getMemberIdentifier(),
                 actionDto.getLogicalMemberIdentifier());
     }
 
     @Override
     public Identifier actionIdentifier(final @NonNull ActionInvocationDto actionInvocationDto) {
-        return IdentifierUtil.memberIdentifierFor(
+        return IdentifierUtil.memberIdentifierFor(specLoader,
                 Type.ACTION,
-                actionInvocationDto.getMemberIdentifier(),
+//                actionInvocationDto.getMemberIdentifier(),
                 actionInvocationDto.getLogicalMemberIdentifier());
     }
 
     @Override
     public Identifier propertyIdentifier(final @NonNull PropertyDto propertyDto) {
-        return IdentifierUtil.memberIdentifierFor(
+        return IdentifierUtil.memberIdentifierFor(specLoader,
                 Type.PROPERTY_OR_COLLECTION,
-                propertyDto.getMemberIdentifier(),
+//                propertyDto.getMemberIdentifier(),
                 propertyDto.getLogicalMemberIdentifier());
     }
 

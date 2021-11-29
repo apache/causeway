@@ -18,64 +18,19 @@
  */
 package org.apache.isis.applib.util.schema;
 
-import org.jmock.auto.Mock;
-import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.junit.Rule;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
 
-import org.apache.isis.applib.services.schema.SchemaValueMarshaller;
 import org.apache.isis.schema.cmd.v2.MapDto;
 
-public class CommonDtoUtils_Test {
-
-    @Rule
-    public JUnitRuleMockery context = new JUnitRuleMockery();
-
-    @Mock
-    private SchemaValueMarshaller mockDtoContext;
+class CommonDtoUtils_Test {
 
     @Test
-    public void enums() {
-        test(Vertical.DOWN);
-    }
-
-    enum Horizontal {
-        LEFT, RIGHT
-    }
-
-    @Test
-    public void nested_enums() {
-        test(Horizontal.LEFT);
-    }
-
-    private void test(final Enum<?> enumVal) {
-
-        fail("not implemented");
-
-//        // when
-//        val valueTypeAndSemantics = CommonDtoUtils.asValueType(enumVal.getClass(), mockDtoContext);
-//        final ValueType valueType = valueTypeAndSemantics.getValueType();
-//
-//        // then
-//        assertThat(valueType, is(ValueType.ENUM));
-//
-//        // and when
-//        final ValueDto valueDto = CommonDtoUtils.newValueDto(valueTypeAndSemantics, enumVal, mockDtoContext);
-//
-//        // then
-//        Object value = CommonDtoUtils.getValue(valueDto, valueTypeAndSemantics);
-//        assertThat(value, is(notNullValue()));
-//
-//        Assert.assertEquals(value, enumVal);
-    }
-
-    @Test
-    public void getMapValue() {
+    void getMapValue() {
         assertThat(CommonDtoUtils.getMapValue(null, "someKey"), is(nullValue()));
         assertThat(CommonDtoUtils.getMapValue(new MapDto(), "someKey"), is(nullValue()));
 
@@ -91,7 +46,7 @@ public class CommonDtoUtils_Test {
     }
 
     @Test
-    public void putMapKeyValue() {
+    void putMapKeyValue() {
 
         // is ignored
         CommonDtoUtils.putMapKeyValue(null, "someKey", "someValue");

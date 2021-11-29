@@ -24,7 +24,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.internal.base._Refs;
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -32,6 +31,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -75,17 +75,20 @@ public class IdentifierUtil {
         return logicalMemberIdentifierFor(otoa.getDeclaringType(), otoa);
     }
 
+    /**
+     * Recovers an {@link Identifier} for given {@code logicalMemberIdentifier}.
+     */
     @SneakyThrows
     public Identifier memberIdentifierFor(
+            final @NonNull SpecificationLoader specLoader,
             final @NonNull Identifier.Type indentifierType,
-            final @NonNull String memberIdentifier,
             final @NonNull String logicalMemberIdentifier) {
 
-        val ref = _Refs.stringRef(memberIdentifier);
-        val clsName = ref.cutAtIndexOfAndDrop("#");
+        val ref = _Refs.stringRef(logicalMemberIdentifier);
+        val logicalTypeName = ref.cutAtIndexOfAndDrop("#");
         val memberId = ref.getValue();
-        val logicalTypeName = _Refs.stringRef(logicalMemberIdentifier).cutAtIndexOfAndDrop("#");
-        val logicalType = LogicalType.eager(_Context.loadClassAndInitialize(clsName), logicalTypeName);
+        val typeSpec = specLoader.specForLogicalTypeNameElseFail(logicalTypeName);
+        val logicalType = LogicalType.eager(typeSpec.getCorrespondingClass(), logicalTypeName);
 
         if(indentifierType.isAction()) {
             return Identifier.actionIdentifier(logicalType, memberId);
@@ -95,8 +98,8 @@ public class IdentifierUtil {
             return Identifier.propertyOrCollectionIdentifier(logicalType, memberId);
         }
 
-        throw _Exceptions.illegalArgument("unsupported identifier type %s (memberIdentifier=%s)",
-                indentifierType, memberIdentifier);
+        throw _Exceptions.illegalArgument("unsupported identifier type %s (logicalMemberIdentifier=%s)",
+                indentifierType, logicalMemberIdentifier);
     }
 
     /**

@@ -40,7 +40,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
@@ -199,13 +198,6 @@ class ValueSemanticsTest {
 
                         val newValueRecorded = valueMarshaller.recoverValueFrom(propertyDto);
                         assertNotNull(newValueRecorded);
-
-                        // TODO skip tests, because some value-types are not represented by the schema yet
-                        if(newValueRecorded==null
-                                || valueType.equals(Bookmark.class)) {
-                            System.err.printf("skipping command test on %s%n", valueType.getName());
-                            return;
-                        }
 
                         assertEquals(valueType, newValueRecorded.getClass(), ()->
                             String.format("command value parsing type mismatch '%s'",
