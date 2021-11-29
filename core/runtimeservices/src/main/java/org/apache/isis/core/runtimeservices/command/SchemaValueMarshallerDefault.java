@@ -123,8 +123,8 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
             final Class<?> returnType,
             final Object result) {
         final ValueTypeWrapper<?> valueTypeAndSemantics = wrap(actionIdentifier(invocationDto), returnType);
-        final ValueWithTypeDto returned = newValueWithTypeDto(valueTypeAndSemantics, result);
-        invocationDto.setReturned(returned);
+        invocationDto.setReturned(
+                recordValue(new ValueWithTypeDto(), valueTypeAndSemantics, result));
         return invocationDto;
     }
 
@@ -139,9 +139,8 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
 
         val elementType = property.getElementType().getCorrespondingClass();
         final ValueTypeWrapper<?> valueTypeAndSemantics = wrap(propertyIdentifier, elementType);
-
-        final ValueWithTypeDto newValue = newValueWithTypeDto(valueTypeAndSemantics, valuePojo);
-        propertyDto.setNewValue(newValue);
+        propertyDto.setNewValue(
+                recordValue(new ValueWithTypeDto(), valueTypeAndSemantics, valuePojo));
         return propertyDto;
     }
 
@@ -192,29 +191,45 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
                     : null;
         }
 
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+        public Object fromFundamentalValue(final Object fundamentalValue) {
+            final Converter converter = getConverter();
+            return converter!=null
+                    ? _Casts.uncheckedCast(converter.fromDelegateValue(fundamentalValue))
+                    : _Casts.uncheckedCast(fundamentalValue);
+        }
+
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+        public Object toFundamentalValue(final Object valuePojo) {
+            final Converter converter = getConverter();
+            return converter!=null
+                    ? converter.toDelegateValue(valuePojo)
+                    : valuePojo;
+        }
+
     }
 
     private ValueTypeWrapper<?> wrap(
             final @NonNull Identifier featureIdentifier,
-            final @NonNull Class<?> type) {
-        return valueSemanticsResolver.selectValueSemantics(featureIdentifier, type)
+            final @NonNull Class<?> desiredType) {
+        return valueSemanticsResolver.selectValueSemantics(featureIdentifier, desiredType)
         .getFirst()
         .map(valueSemantics->ValueTypeWrapper.of(valueSemantics.getSchemaValueType(), valueSemantics))
         // assume reference otherwise
         .orElseGet(()->ValueTypeWrapper.of(ValueType.REFERENCE, null));
     }
 
-    private ValueWithTypeDto newValueWithTypeDto(
-            final ValueTypeWrapper<?> valueTypeAndSemantics,
-            final Object valuePojo) {
-
-        final ValueWithTypeDto valueWithTypeDto = new ValueWithTypeDto();
-        recordValue(valueWithTypeDto, valueTypeAndSemantics, valuePojo);
-
-        return valueWithTypeDto;
-    }
+    // -- HELPER - RECORDING
 
     private <T extends ValueDto> T recordValue(
+            final T valueDto,
+            final ValueTypeWrapper<?> valueTypeAndSemantics,
+            final Object valuePojo) {
+        return recordFundamentalValue(
+                valueDto, valueTypeAndSemantics, valueTypeAndSemantics.toFundamentalValue(valuePojo));
+    }
+
+    private <T extends ValueDto> T recordFundamentalValue(
             final T valueDto,
             final ValueTypeWrapper<?> valueTypeAndSemantics,
             final Object pojo) {
@@ -226,7 +241,6 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
         }
 
         val semantics = valueTypeAndSemantics.getSemantics();
-        val converter = valueTypeAndSemantics.getConverter();
 
         switch (schemaValueType) {
         case COLLECTION: {
@@ -306,9 +320,7 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
             return valueDto;
         }
         case LOCAL_DATE_TIME: {
-            final LocalDateTime argValue = converter!=null
-                    ? (LocalDateTime) converter.toDelegateValue(_Casts.uncheckedCast(pojo))
-                    : (LocalDateTime) pojo;
+            final LocalDateTime argValue = (LocalDateTime) pojo;
             valueDto.setLocalDateTime(JavaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(argValue));
             return valueDto;
         }
@@ -459,24 +471,24 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
             return null;
         }
         val feature = specLoader.loadFeatureElseFail(featureIdentifier);
-        val type = feature.getElementType().getCorrespondingClass();
-        return recoverValue(valueWithTypeDto, wrap(featureIdentifier, type));
+        val desiredType = feature.getElementType().getCorrespondingClass();
+        return recoverValue(valueWithTypeDto, wrap(featureIdentifier, desiredType));
     }
 
     private <T> T recoverValue(
             final ValueDto valueDto,
             final @NonNull ValueTypeWrapper<?> valueTypeAndSemantics) {
-        return _Casts.uncheckedCast(recoverValueAsObject(valueDto, valueTypeAndSemantics));
+
+        return _Casts.uncheckedCast(valueTypeAndSemantics.fromFundamentalValue(
+                recoverFundamentalValue(valueDto, valueTypeAndSemantics)));
     }
 
     @SneakyThrows
-    private static Object recoverValueAsObject(
+    private static Object recoverFundamentalValue(
             final ValueDto valueDto,
             final ValueTypeWrapper<?> valueTypeAndSemantics) {
 
         val valueType = valueTypeAndSemantics.getValueType();
-        //val semantics = valueTypeAndSemantics.getSemantics();
-        //val converter = valueTypeAndSemantics.getConverter();
 
         switch(valueType) {
         case STRING:

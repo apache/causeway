@@ -123,10 +123,10 @@ implements
     }
 
     /**
-     * Canonical name of the corresponding class.
+     * Name of the corresponding class.
      */
     public String getClassName() {
-        return getCorrespondingClass().getCanonicalName();
+        return getCorrespondingClass().getName();
     }
 
     /**
@@ -245,7 +245,7 @@ implements
         return new SerializationProxy(this);
     }
 
-    private void readObject(ObjectInputStream stream) throws InvalidObjectException {
+    private void readObject(final ObjectInputStream stream) throws InvalidObjectException {
         throw new InvalidObjectException("Proxy required");
     }
 
@@ -254,7 +254,7 @@ implements
         private final @NonNull Class<?> correspondingClass;
         private final @NonNull String logicalTypeName;
 
-        private SerializationProxy(LogicalType typeIdentifier) {
+        private SerializationProxy(final LogicalType typeIdentifier) {
             this.correspondingClass = typeIdentifier.getCorrespondingClass();
             this.logicalTypeName = typeIdentifier.getLogicalTypeName();
         }

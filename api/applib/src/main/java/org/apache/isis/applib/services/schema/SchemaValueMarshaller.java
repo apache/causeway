@@ -41,7 +41,7 @@ public interface SchemaValueMarshaller {
     // -- RECOVER IDENTIFIERS
 
     /**
-     * Recovers a <i>Action's</i> {@link Identifier} from given DTO.
+     * Recovers an <i>Action's</i> {@link Identifier} from given DTO.
      */
     Identifier actionIdentifier(@NonNull ActionInvocationDto actionInvocationDto);
 

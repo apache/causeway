@@ -197,7 +197,6 @@ class ValueSemanticsTest {
                         val propertyDto = (PropertyDto)command.getCommandDto().getMember();
                         val newValueRecordedDto = propertyDto.getNewValue();
 
-                        //TODO needs a codec to recover values that are not directly represented by the schema
                         val newValueRecorded = valueMarshaller.recoverValueFrom(propertyDto);
                         assertNotNull(newValueRecorded);
 
