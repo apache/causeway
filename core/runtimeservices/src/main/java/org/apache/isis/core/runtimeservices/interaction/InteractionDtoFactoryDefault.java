@@ -37,6 +37,7 @@ import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.execution.InteractionInternal;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -114,7 +115,7 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         final Class<?> returnType = returnSpec.getCorrespondingClass();
 
         InteractionDtoUtils.addReturn(
-                actionInvocationDto, returnType, resultPojo, valueMarshaller);
+                valueMarshaller, actionInvocationDto, returnType, _Casts.uncheckedCast(resultPojo));
 
         return actionInvocationDto;
     }

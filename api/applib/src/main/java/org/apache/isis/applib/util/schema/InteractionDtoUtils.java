@@ -332,13 +332,13 @@ public final class InteractionDtoUtils {
 
     // -- addParamArg
 
-    public static void addParamArg(
+    public static <T> void addParamArg(
             final @NonNull SchemaValueMarshaller valueMarshaller,
             final Identifier paramIdentifier,
             final InteractionDto interactionDto,
             final String parameterName,
-            final Class<?> parameterType,
-            final Object arg) {
+            final Class<T> parameterType,
+            final T arg) {
 
         final List<ParamDto> params = parameterListFor(interactionDto);
         val paramDto = new ParamDto();
@@ -356,11 +356,11 @@ public final class InteractionDtoUtils {
      * @param result - either a value type (possibly boxed primitive), or a reference type
      * @param valueMarshaller - used if not a fundamental value type
      */
-    public static void addReturn(
+    public static <T> void addReturn(
+            final @NonNull SchemaValueMarshaller valueMarshaller,
             final ActionInvocationDto invocationDto,
-            final Class<?> returnType,
-            final Object result,
-            final @NonNull SchemaValueMarshaller valueMarshaller) {
+            final Class<T> returnType,
+            final T result) {
 
         valueMarshaller.recordActionResult(invocationDto, returnType, result);
     }

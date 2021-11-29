@@ -10,6 +10,7 @@ import java.time.OffsetTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.stream.Stream;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -29,6 +30,7 @@ import org.apache.isis.applib.services.schema.SchemaValueMarshaller;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.semantics.Converter;
+import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.internal.base._Casts;
@@ -40,7 +42,6 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.ParamDto;
@@ -118,57 +119,57 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
     // -- RECORD VALUES INTO DTO
 
     @Override
-    public ActionInvocationDto recordActionResult(
+    public <T> ActionInvocationDto recordActionResult(
             final ActionInvocationDto invocationDto,
-            final Class<?> returnType,
-            final Object result) {
-        final ValueTypeWrapper<?> valueTypeAndSemantics = wrap(actionIdentifier(invocationDto), returnType);
+            final Class<T> returnType,
+            final T result) {
+        final ValueTypeWrapper<T> valueWrapper = wrap(actionIdentifier(invocationDto), returnType);
         invocationDto.setReturned(
-                recordValue(new ValueWithTypeDto(), valueTypeAndSemantics, result));
+                recordValue(new ValueWithTypeDto(), valueWrapper, result));
         return invocationDto;
     }
 
     @Override
-    public PropertyDto recordPropertyValue(
+    public <T> PropertyDto recordPropertyValue(
             final PropertyDto propertyDto,
-            final Class<?> propertyType,
-            final Object valuePojo) {
+            final Class<T> propertyType,
+            final T valuePojo) {
         final Identifier propertyIdentifier = propertyIdentifier(propertyDto);
-        final OneToOneAssociation property =
-                (OneToOneAssociation)specLoader.loadFeatureElseFail(propertyIdentifier);
-
-        val elementType = property.getElementType().getCorrespondingClass();
-        final ValueTypeWrapper<?> valueTypeAndSemantics = wrap(propertyIdentifier, elementType);
+//        final OneToOneAssociation property =
+//                (OneToOneAssociation)specLoader.loadFeatureElseFail(propertyIdentifier);
+//
+//        val elementType = property.getElementType().getCorrespondingClass();
+        final ValueTypeWrapper<T> valueWrapper = wrap(propertyIdentifier, propertyType);
         propertyDto.setNewValue(
-                recordValue(new ValueWithTypeDto(), valueTypeAndSemantics, valuePojo));
+                recordValue(new ValueWithTypeDto(), valueWrapper, valuePojo));
         return propertyDto;
     }
 
     @Override
-    public ParamDto recordParamValue(
+    public <T> ParamDto recordParamValue(
             final Identifier paramIdentifier,
             final ParamDto paramDto,
-            final Class<?> paramType,
-            final Object valuePojo) {
+            final Class<T> paramType,
+            final T valuePojo) {
 
         final ObjectActionParameter actionParameter =
                 (ObjectActionParameter)specLoader.loadFeatureElseFail(paramIdentifier);
 
         val elementType = actionParameter.getElementType().getCorrespondingClass();
-        final ValueTypeWrapper<?> valueTypeAndSemantics = wrap(paramIdentifier, elementType);
+        final ValueTypeWrapper<?> valueWrapper = wrap(paramIdentifier, elementType);
 
         if(actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION) {
-            recordValues(paramDto, valueTypeAndSemantics, valuePojo);
+            recordValues(paramDto, valueWrapper, _Casts.uncheckedCast(_NullSafe.streamAutodetect(valuePojo)));
         } else {
 
-            //          ValueType valueType = valueTypeAndSemantics.getValueType();
+            //          ValueType valueType = valueWrapper.getValueType();
             //
             //          // this hack preserves previous behaviour before we were able to serialize blobs and clobs into XML
             //          // however, we also don't want this new behaviour for parameter arguments
             //          // (else these large objects could end up being persisted).
             //          if(valueType == ValueType.BLOB) valueType = ValueType.REFERENCE;
             //          if(valueType == ValueType.CLOB) valueType = ValueType.REFERENCE;
-            recordValue(paramDto, valueTypeAndSemantics, valuePojo);
+            recordValue(paramDto, valueWrapper, _Casts.uncheckedCast(valuePojo));
         }
         return paramDto;
     }
@@ -185,33 +186,51 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
             return VOID;
         }
 
-        public Converter<T, ?> getConverter() {
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+        public T fromFundamentalValue(final Object fundamentalValue) {
+            final Converter converter = converter();
+            val valuePojo = converter!=null
+                    ? converter.fromDelegateValue(fundamentalValue)
+                    : supportsConversionViaEncoderDecoder()
+                            ? encoderDecoder().fromEncodedString((String)fundamentalValue)
+                            : fundamentalValue;
+
+            return _Casts.uncheckedCast(valuePojo);
+        }
+
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+        public Object toFundamentalValue(final T valuePojo) {
+            final Converter converter = converter();
+            return converter!=null
+                    ? converter.toDelegateValue(valuePojo)
+                    : supportsConversionViaEncoderDecoder()
+                            ? encoderDecoder().toEncodedString(valuePojo)
+                            : valuePojo;
+        }
+
+        private boolean supportsConversionViaEncoderDecoder() {
+            return semantics.getSchemaValueType() == ValueType.STRING
+                    && !semantics.getCorrespondingClass().equals(String.class)
+                    && encoderDecoder()!=null;
+        }
+
+        private EncoderDecoder<T> encoderDecoder() {
+            return semantics!=null
+                    ? semantics.getEncoderDecoder()
+                    : null;
+        }
+
+        private Converter<T, ?> converter() {
             return semantics!=null
                     ? semantics.getConverter()
                     : null;
         }
 
-        @SuppressWarnings({ "unchecked", "rawtypes" })
-        public Object fromFundamentalValue(final Object fundamentalValue) {
-            final Converter converter = getConverter();
-            return converter!=null
-                    ? _Casts.uncheckedCast(converter.fromDelegateValue(fundamentalValue))
-                    : _Casts.uncheckedCast(fundamentalValue);
-        }
-
-        @SuppressWarnings({ "unchecked", "rawtypes" })
-        public Object toFundamentalValue(final Object valuePojo) {
-            final Converter converter = getConverter();
-            return converter!=null
-                    ? converter.toDelegateValue(valuePojo)
-                    : valuePojo;
-        }
-
     }
 
-    private ValueTypeWrapper<?> wrap(
+    private <T> ValueTypeWrapper<T> wrap(
             final @NonNull Identifier featureIdentifier,
-            final @NonNull Class<?> desiredType) {
+            final @NonNull Class<T> desiredType) {
         return valueSemanticsResolver.selectValueSemantics(featureIdentifier, desiredType)
         .getFirst()
         .map(valueSemantics->ValueTypeWrapper.of(valueSemantics.getSchemaValueType(), valueSemantics))
@@ -221,37 +240,33 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
 
     // -- HELPER - RECORDING
 
-    private <T extends ValueDto> T recordValue(
-            final T valueDto,
-            final ValueTypeWrapper<?> valueTypeAndSemantics,
-            final Object valuePojo) {
+    private <D extends ValueDto, T> D recordValue(
+            final D valueDto,
+            final ValueTypeWrapper<T> valueWrapper,
+            final T valuePojo) {
         return recordFundamentalValue(
-                valueDto, valueTypeAndSemantics, valueTypeAndSemantics.toFundamentalValue(valuePojo));
+                valueDto, valueWrapper, valueWrapper.toFundamentalValue(valuePojo));
     }
 
-    private <T extends ValueDto> T recordFundamentalValue(
-            final T valueDto,
-            final ValueTypeWrapper<?> valueTypeAndSemantics,
+    private <D extends ValueDto, T> D recordFundamentalValue(
+            final D valueDto,
+            final ValueTypeWrapper<T> valueWrapper,
             final Object pojo) {
 
-        val schemaValueType = valueTypeAndSemantics.getValueType();
+        val schemaValueType = valueWrapper.getValueType();
 
         if(valueDto instanceof ValueWithTypeDto) {
             ((ValueWithTypeDto)valueDto).setType(schemaValueType);
         }
 
-        val semantics = valueTypeAndSemantics.getSemantics();
-
         switch (schemaValueType) {
         case COLLECTION: {
-            final CollectionDto collectionDto = asCollectionDto(
-                    pojo, ValueTypeWrapper.empty());
-            valueDto.setCollection(collectionDto);
+            valueDto.setCollection(
+                    asCollectionDto(_Casts.uncheckedCast(pojo), ValueTypeWrapper.empty()));
             return valueDto;
         }
         case COMPOSITE: {
-            final TypedTupleDto typedTupleDto = asTypedTupleDto(pojo);
-            valueDto.setComposite(typedTupleDto);
+            valueDto.setComposite(asTypedTupleDto(pojo));
             return valueDto;
         }
         case STRING: {
@@ -393,50 +408,46 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
         }
     }
 
-    private <T extends ValueWithTypeDto> T recordValues(
-            final T valueWithTypeDto,
-            final ValueTypeWrapper<?> elementValueTypeAndSemantics,
-            final Object value) {
+    private <D extends ValueWithTypeDto, T> D recordValues(
+            final D valueWithTypeDto,
+            final ValueTypeWrapper<T> elementValueTypeAndSemantics,
+            final Stream<T> streamOfValues) {
 
         valueWithTypeDto.setType(ValueType.COLLECTION);
-
-        val collectionDto = asCollectionDto(value, elementValueTypeAndSemantics);
-        valueWithTypeDto.setCollection(collectionDto);
-        valueWithTypeDto.setNull(value == null);
-
+        valueWithTypeDto.setCollection(asCollectionDto(streamOfValues, elementValueTypeAndSemantics));
+        valueWithTypeDto.setNull(false);
         return valueWithTypeDto;
     }
 
-    private CollectionDto asCollectionDto(
-            final @Nullable Object iterableOrArray,
-            final @NonNull ValueTypeWrapper<?> commonElementValueTypeAndSemantics) {
+    private <T> CollectionDto asCollectionDto(
+            final @NonNull Stream<T> iterableOrArray,
+            final @NonNull ValueTypeWrapper<T> elementValueTypeAndSemantics) {
 
-        val commonElementValueType = commonElementValueTypeAndSemantics.getValueType();
+        val elementValueType = elementValueTypeAndSemantics.getValueType();
         val collectionDto = new CollectionDto();
-        collectionDto.setType(commonElementValueType);
+        collectionDto.setType(elementValueType);
 
-        val needsCommonElementValueTypeAutodetect = commonElementValueType==ValueType.VOID;
-
+        val needsElementValueTypeAutodetect = elementValueType==ValueType.VOID;
         val commonElementValueTypeRef = _Refs.<ValueType>objectRef(null);
 
         _NullSafe.streamAutodetect(iterableOrArray)
         .forEach(element->{
             val valueDto = new ValueDto();
             if(element==null) {
-                recordValue(valueDto, ValueTypeWrapper.empty(), element);
+                recordValue(valueDto, ValueTypeWrapper.empty(), _Casts.uncheckedCast(element));
             } else {
 
-                recordValue(valueDto, commonElementValueTypeAndSemantics, element);
+                recordValue(valueDto, elementValueTypeAndSemantics, _Casts.uncheckedCast(element));
 
-                if(needsCommonElementValueTypeAutodetect) {
-                    commonElementValueTypeRef.update(acc->reduce(acc, commonElementValueTypeAndSemantics.getValueType()));
+                if(needsElementValueTypeAutodetect) {
+                    commonElementValueTypeRef.update(acc->reduce(acc, elementValueTypeAndSemantics.getValueType()));
                 }
 
             }
             collectionDto.getValue().add(valueDto);
         });
 
-        if(needsCommonElementValueTypeAutodetect) {
+        if(needsElementValueTypeAutodetect) {
             collectionDto.setType(commonElementValueTypeRef.getValueElseDefault(ValueType.VOID));
         }
 
@@ -477,18 +488,18 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
 
     private <T> T recoverValue(
             final ValueDto valueDto,
-            final @NonNull ValueTypeWrapper<?> valueTypeAndSemantics) {
+            final @NonNull ValueTypeWrapper<?> valueWrapper) {
 
-        return _Casts.uncheckedCast(valueTypeAndSemantics.fromFundamentalValue(
-                recoverFundamentalValue(valueDto, valueTypeAndSemantics)));
+        return _Casts.uncheckedCast(valueWrapper.fromFundamentalValue(
+                recoverFundamentalValue(valueDto, valueWrapper)));
     }
 
     @SneakyThrows
     private static Object recoverFundamentalValue(
             final ValueDto valueDto,
-            final ValueTypeWrapper<?> valueTypeAndSemantics) {
+            final ValueTypeWrapper<?> valueWrapper) {
 
-        val valueType = valueTypeAndSemantics.getValueType();
+        val valueType = valueWrapper.getValueType();
 
         switch(valueType) {
         case STRING:

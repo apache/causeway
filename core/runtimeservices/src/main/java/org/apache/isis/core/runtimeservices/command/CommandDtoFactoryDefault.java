@@ -34,6 +34,7 @@ import org.apache.isis.applib.services.schema.SchemaValueMarshaller;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -132,7 +133,8 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
             actionParameter.getFeatureIdentifier();
 
             valueMarshaller.recordParamValue(
-                    actionParameter.getFeatureIdentifier(), paramDto, paramTypeOrElementType, arg);
+                    actionParameter.getFeatureIdentifier(), paramDto, paramTypeOrElementType,
+                        _Casts.uncheckedCast(arg));
 
             CommandDtoUtils.parametersFor(actionDto)
                 .getParameter()
@@ -152,7 +154,8 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
         val valueSpec = property.getElementType();
         val valueType = valueSpec.getCorrespondingClass();
 
-        valueMarshaller.recordPropertyValue(propertyDto, valueType, UnwrapUtil.single(valueAdapter));
+        valueMarshaller.recordPropertyValue(propertyDto, valueType,
+                _Casts.uncheckedCast(UnwrapUtil.single(valueAdapter)));
     }
 
     // -- HELPER

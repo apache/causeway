@@ -45,6 +45,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.schema.SchemaValueMarshaller;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -98,8 +99,10 @@ public class Roundtrip {
         val type = sampleValue.getClass();
         val name = type.getSimpleName();
         final Identifier paramId = null;
-        InteractionDtoUtils.addParamArg(valueMarshaller, paramId, interactionDto, "a"+name, type, sampleValue);
-        InteractionDtoUtils.addParamArg(valueMarshaller, paramId, interactionDto, "null"+name, type, type.cast(null));
+        InteractionDtoUtils.addParamArg(valueMarshaller, paramId, interactionDto, "a"+name, type,
+                _Casts.uncheckedCast(sampleValue));
+        InteractionDtoUtils.addParamArg(valueMarshaller, paramId, interactionDto, "null"+name, type,
+                _Casts.uncheckedCast(null));
     }
 
     private static SchemaValueMarshaller schemaValueMarshaller() {
@@ -136,22 +139,22 @@ public class Roundtrip {
             }
 
             @Override
-            public ActionInvocationDto recordActionResult(@NonNull final ActionInvocationDto invocationDto,
-                    @NonNull final Class<?> returnType, final Object result) {
+            public <T> ActionInvocationDto recordActionResult(@NonNull final ActionInvocationDto invocationDto,
+                    @NonNull final Class<T> returnType, final T result) {
                 // TODO Auto-generated method stub
                 return null;
             }
 
             @Override
-            public PropertyDto recordPropertyValue(@NonNull final PropertyDto propertyDto, @NonNull final Class<?> propertyType,
-                    final Object valuePojo) {
+            public <T> PropertyDto recordPropertyValue(@NonNull final PropertyDto propertyDto, @NonNull final Class<T> propertyType,
+                    final T valuePojo) {
                 // TODO Auto-generated method stub
                 return null;
             }
 
             @Override
-            public ParamDto recordParamValue(@NonNull final Identifier paramIdentifier, @NonNull final ParamDto paramDto,
-                    @NonNull final Class<?> paramType, final Object valuePojo) {
+            public <T> ParamDto recordParamValue(@NonNull final Identifier paramIdentifier, @NonNull final ParamDto paramDto,
+                    @NonNull final Class<T> paramType, final T valuePojo) {
                 // TODO Auto-generated method stub
                 return null;
             }

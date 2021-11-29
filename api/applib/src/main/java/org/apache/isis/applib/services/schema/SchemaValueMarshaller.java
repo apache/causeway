@@ -75,28 +75,28 @@ public interface SchemaValueMarshaller {
      * Records given result value into given DTO object,
      * using {@link ValueSemanticsProvider} for corresponding <i>Action</i>.
      */
-    ActionInvocationDto recordActionResult(
+    <T> ActionInvocationDto recordActionResult(
             @NonNull ActionInvocationDto invocationDto,
-            @NonNull Class<?> returnType,
-            @Nullable Object result);
+            @NonNull Class<T> returnType,
+            @Nullable T result);
 
     /**
      * Records given property value into given DTO object,
      * using {@link ValueSemanticsProvider} for corresponding <i>Property</i>.
      */
-    PropertyDto recordPropertyValue(
+    <T> PropertyDto recordPropertyValue(
             @NonNull PropertyDto propertyDto,
-            @NonNull Class<?> propertyType,
-            @Nullable Object valuePojo);
+            @NonNull Class<T> propertyType,
+            @Nullable T valuePojo);
 
     /**
      * Records given parameter value into given DTO object,
      * using {@link ValueSemanticsProvider} for corresponding <i>Action Parameter</i>.
      */
-    ParamDto recordParamValue(
+    <T> ParamDto recordParamValue(
             @NonNull Identifier paramIdentifier,
             @NonNull ParamDto paramDto,
-            @NonNull Class<?> paramType,
-            @Nullable Object valuePojo);
+            @NonNull Class<T> paramType,
+            @Nullable T valuePojo);
 
 }
