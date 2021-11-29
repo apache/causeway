@@ -214,7 +214,8 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
         }
 
         private boolean supportsConversionViaEncoderDecoder() {
-            return semantics.getSchemaValueType() == ValueType.STRING
+            return semantics!=null
+                    && semantics.getSchemaValueType() == ValueType.STRING
                     && !semantics.getCorrespondingClass().equals(String.class)
                     && encoderDecoder()!=null;
         }
@@ -425,7 +426,7 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
     }
 
     private <T> CollectionDto asCollectionDto(
-            final @NonNull Stream<T> iterableOrArray,
+            final @NonNull Stream<T> streamOfValues,
             final @NonNull ValueTypeWrapper<T> elementValueTypeAndSemantics) {
 
         val elementValueType = elementValueTypeAndSemantics.getValueType();
@@ -435,9 +436,11 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
         val needsElementValueTypeAutodetect = elementValueType==ValueType.VOID;
         val commonElementValueTypeRef = _Refs.<ValueType>objectRef(null);
 
-        _NullSafe.streamAutodetect(iterableOrArray)
+        streamOfValues
         .forEach(element->{
             val valueDto = new ValueDto();
+            collectionDto.getValue().add(valueDto);
+
             if(element==null) {
                 recordValue(valueDto, ValueTypeWrapper.empty(), _Casts.uncheckedCast(element));
             } else {
@@ -447,9 +450,7 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
                 if(needsElementValueTypeAutodetect) {
                     commonElementValueTypeRef.update(acc->reduce(acc, elementValueTypeAndSemantics.getValueType()));
                 }
-
             }
-            collectionDto.getValue().add(valueDto);
         });
 
         if(needsElementValueTypeAutodetect) {
@@ -500,13 +501,36 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
     }
 
     @SneakyThrows
-    private static Object recoverFundamentalValue(
+    private Object recoverFundamentalValue(
             final ValueDto valueDto,
             final ValueTypeWrapper<?> valueWrapper) {
 
-        val valueType = valueWrapper.getValueType();
+        val elementType = valueWrapper.getValueType();
 
-        switch(valueType) {
+        if(valueDto.getCollection()!=null) {
+            val collectionDto = valueDto.getCollection();
+            if(_NullSafe.isEmpty(collectionDto.getValue())) {
+                return Collections.emptyList();
+            }
+            val list = new ArrayList<Object>();
+
+            _Assert.assertEquals(elementType, collectionDto.getType());
+
+            for(val elementDto : collectionDto.getValue()) {
+                if(elementDto instanceof ValueWithTypeDto) {
+                    _Assert.assertEquals(elementType, ((ValueWithTypeDto)elementDto).getType(), "mixing types not supported");
+                }
+                list.add(recoverValue(elementDto, valueWrapper));
+
+            }
+            return list;
+        }
+
+        if(valueDto.getComposite()!=null) {
+            //TODO implement
+        }
+
+        switch(elementType) {
         case STRING:
             return valueDto.getString();
         case BYTE:
@@ -552,26 +576,6 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
             return Enum.valueOf(_Casts.uncheckedCast(enumClass), enumDto.getEnumName());
         case REFERENCE:
             return valueDto.getReference();
-        case COLLECTION:
-            val collectionDto = valueDto.getCollection();
-            if(_NullSafe.isEmpty(collectionDto.getValue())) {
-                return Collections.emptyList();
-            }
-            val list = new ArrayList<Object>();
-
-            val elementValueType = collectionDto.getType();
-
-            for(val elementValueDto : collectionDto.getValue()) {
-
-                //FIXME[ISIS-2877]
-//                if(elementValueDto instanceof ValueWithTypeDto) {
-//                    list.add(getValueAsObject(elementValueDto, ((ValueWithTypeDto)elementValueDto).getType()));
-//                } else {
-//                    list.add(getValueAsObject(elementValueDto, elementValueType));
-//                }
-
-            }
-            return list;
         case BLOB:
             final BlobDto blobDto = valueDto.getBlob();
             return new Blob(blobDto.getName(), blobDto.getMimeType(), blobDto.getBytes());
@@ -581,8 +585,9 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
         case VOID:
             return null;
         default:
-            throw _Exceptions.unmatchedCase(valueType);
         }
+
+        throw _Exceptions.unmatchedCase(elementType);
     }
 
 }

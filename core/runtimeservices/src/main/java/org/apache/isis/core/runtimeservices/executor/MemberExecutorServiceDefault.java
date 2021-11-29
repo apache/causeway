@@ -44,6 +44,7 @@ import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.commons.CanonicalParameterUtil;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -110,6 +111,11 @@ implements MemberExecutorService {
 
         _Assert.assertEquals(owningAction.getParameterCount(), argumentAdapters.size(),
                 "action's parameter count and provided argument count must match");
+
+        // guard against malformed initialArgs
+        argumentAdapters.forEach(arg->{if(!ManagedObjects.isSpecified(arg)) {
+            throw _Exceptions.illegalArgument("arguments must be specified for action %s", owningAction);
+        }});
 
         if(interactionInitiatedBy.isPassThrough()) {
             val resultPojo = invokeMethodPassThrough(method, head, argumentAdapters);
