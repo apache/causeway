@@ -35,7 +35,6 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactn.Interaction;
@@ -44,7 +43,6 @@ import org.apache.isis.applib.util.JaxbUtil;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.resources._Resources;
-import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.ParamDto;
 import org.apache.isis.schema.cmd.v2.ParamsDto;
 import org.apache.isis.schema.common.v2.InteractionType;
@@ -430,29 +428,16 @@ public final class InteractionDtoUtils {
         return paramDto.isNull();
     }
 
-    public static Identifier getActionIdentifier(final ActionInvocationDto ai) {
-        //FIXME[ISIS-2877]
-        return Identifier.actionIdentifier(LogicalType.eager(null, null), null);
-                //ai.getLogicalMemberIdentifier();
-    }
-
-    public static Identifier getActionIdentifier(final ActionDto actionDto) {
-        //FIXME[ISIS-2877]
-        return Identifier.actionIdentifier(LogicalType.eager(null, null), null);
-    }
-
-    public static Identifier getParameterIdentifier(final ActionInvocationDto ai, final int paramNum) {
-        return getActionIdentifier(ai).withParameterIndex(paramNum);
-    }
-
     // -- getParameterArgValue
 
     public static <T> T getParameterArgValue(
+            final @NonNull SchemaValueMarshaller valueMarshaller,
             final @NonNull ActionInvocationDto ai,
-            final int paramNum,
-            final @NonNull SchemaValueMarshaller valueMarshaller) {
+            final int paramNum) {
+
+        final Identifier actionIdentifier = valueMarshaller.getActionIdentifier(ai);
         final ParamDto paramDto = getParameter(ai, paramNum);
-        return (T) valueMarshaller.recoverValueFrom(getParameterIdentifier(ai, paramNum), paramDto);
+        return (T) valueMarshaller.recoverValueFrom(actionIdentifier.withParameterIndex(paramNum), paramDto);
     }
 
     // -- DEBUGGING (DUMP)

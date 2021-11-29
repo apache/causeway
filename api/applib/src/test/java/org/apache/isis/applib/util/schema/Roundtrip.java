@@ -48,6 +48,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.ParamDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.schema.common.v2.InteractionType;
@@ -58,6 +59,7 @@ import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
 
+import lombok.NonNull;
 import lombok.val;
 
 public class Roundtrip {
@@ -135,6 +137,18 @@ public class Roundtrip {
                 return null;
             }
 
+            @Override
+            public Identifier getActionIdentifier(@NonNull final ActionInvocationDto ai) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public Identifier getActionIdentifier(final ActionDto actionDto) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
         };
     }
 
@@ -165,7 +179,7 @@ public class Roundtrip {
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(valueType));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
 
-        val actualValue = InteractionDtoUtils.getParameterArgValue(invocationDto, param, valueMarshaller);
+        val actualValue = InteractionDtoUtils.getParameterArgValue(valueMarshaller, invocationDto, param);
 
         // equals test, some types need special checks ...
         if(expectedValue instanceof OidDto) {

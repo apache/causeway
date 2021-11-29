@@ -18,11 +18,16 @@
  */
 package org.apache.isis.applib.services.schema;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.ParamDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
+
+import lombok.NonNull;
 
 /**
  * Provides the runtime context for converting values
@@ -33,48 +38,55 @@ import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
  */
 public interface SchemaValueMarshaller {
 
+    // -- RECOVER IDENTIFIERS
+
+    Identifier getActionIdentifier(@NonNull ActionInvocationDto ai);
+    Identifier getActionIdentifier(@NonNull ActionDto actionDto);
+
     // -- RECOVER VALUES FROM DTO
 
     /**
      * Recovers a property value, using {@link ValueSemanticsProvider}
      * for corresponding <i>Property</i>.
      */
-    Object recoverValueFrom(PropertyDto propertyDto);
+    @Nullable Object recoverValueFrom(@NonNull PropertyDto propertyDto);
 
     /**
      * Recovers a parameter value, using {@link ValueSemanticsProvider}
      * for corresponding <i>Action Parameter</i>.
      */
-    Object recoverValueFrom(Identifier paramIdentifier, ParamDto paramDto);
+    @Nullable Object recoverValueFrom(@NonNull Identifier paramIdentifier, @NonNull ParamDto paramDto);
 
-    // -- PUT VALUES INTO DTO
+    // -- RECORD VALUES INTO DTO
 
     /**
      * Records given result value into given DTO object,
      * using {@link ValueSemanticsProvider} for corresponding <i>Action</i>.
      */
     ActionInvocationDto recordActionResult(
-            ActionInvocationDto invocationDto,
-            Class<?> returnType,
-            Object result);
+            @NonNull ActionInvocationDto invocationDto,
+            @NonNull Class<?> returnType,
+            @Nullable Object result);
 
     /**
      * Records given property value into given DTO object,
      * using {@link ValueSemanticsProvider} for corresponding <i>Property</i>.
      */
     PropertyDto recordPropertyValue(
-            PropertyDto propertyDto,
-            Class<?> propertyType,
-            Object valuePojo);
+            @NonNull PropertyDto propertyDto,
+            @NonNull Class<?> propertyType,
+            @Nullable Object valuePojo);
 
     /**
      * Records given parameter value into given DTO object,
      * using {@link ValueSemanticsProvider} for corresponding <i>Action Parameter</i>.
      */
     ParamDto recordParamValue(
-            Identifier paramIdentifier,
-            ParamDto paramDto,
-            Class<?> paramType,
-            Object valuePojo);
+            @NonNull Identifier paramIdentifier,
+            @NonNull ParamDto paramDto,
+            @NonNull Class<?> paramType,
+            @Nullable Object valuePojo);
+
+
 
 }

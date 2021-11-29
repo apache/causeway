@@ -47,7 +47,6 @@ import org.apache.isis.applib.services.schema.SchemaValueMarshaller;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -366,7 +365,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     private Can<ManagedObject> argAdaptersFor(final ActionDto actionDto) {
 
-        final Identifier actionIdentifier = InteractionDtoUtils.getActionIdentifier(actionDto);
+        final Identifier actionIdentifier = valueMarshaller.getActionIdentifier(actionDto);
 
         return streamParamDtosFrom(actionDto)
                 .map(_Functions.indexedZeroBase((i, paramDto)->

@@ -37,6 +37,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.ParamDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.schema.common.v2.BlobDto;
@@ -66,6 +67,20 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
     @Inject private BookmarkService bookmarkService;
     @Inject private ValueSemanticsResolver valueSemanticsResolver;
     @Inject private SpecificationLoader specLoader;
+
+    // -- RECOVER IDENTIFIERS
+
+    @Override
+    public Identifier getActionIdentifier(final @NonNull ActionDto actionDto) {
+        // FIXME Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Identifier getActionIdentifier(final @NonNull ActionInvocationDto ai) {
+        // FIXME Auto-generated method stub
+        return null;
+    }
 
     // -- RECOVER VALUES FROM DTO
 
