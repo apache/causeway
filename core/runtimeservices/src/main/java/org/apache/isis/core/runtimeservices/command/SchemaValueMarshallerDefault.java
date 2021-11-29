@@ -191,26 +191,21 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
             return VOID;
         }
 
-        @SuppressWarnings({ "unchecked", "rawtypes" })
         public T fromFundamentalValue(final Object fundamentalValue) {
-            final Converter converter = converter();
-            val valuePojo = converter!=null
-                    ? converter.fromDelegateValue(fundamentalValue)
-                    : supportsConversionViaEncoderDecoder()
-                            ? encoderDecoder().fromEncodedString((String)fundamentalValue)
-                            : fundamentalValue;
-
+            val valuePojo = supportsConversionViaEncoderDecoder()
+                    ? encoderDecoder().fromEncodedString((String)fundamentalValue)
+                    : converter()!=null
+                        ? converter().fromDelegateValue(_Casts.uncheckedCast(fundamentalValue))
+                        : fundamentalValue;
             return _Casts.uncheckedCast(valuePojo);
         }
 
-        @SuppressWarnings({ "unchecked", "rawtypes" })
         public Object toFundamentalValue(final T valuePojo) {
-            final Converter converter = converter();
-            return converter!=null
-                    ? converter.toDelegateValue(valuePojo)
-                    : supportsConversionViaEncoderDecoder()
-                            ? encoderDecoder().toEncodedString(valuePojo)
-                            : valuePojo;
+            return supportsConversionViaEncoderDecoder()
+                    ? encoderDecoder().toEncodedString(valuePojo)
+                    : converter()!=null
+                        ? converter().toDelegateValue(valuePojo)
+                        : valuePojo;
         }
 
         private boolean supportsConversionViaEncoderDecoder() {
@@ -230,6 +225,16 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
             return semantics!=null
                     ? semantics.getConverter()
                     : null;
+        }
+
+        public T fromTypedTuple(final TypedTupleDto typedTupleDto) {
+            // FIXME[ISIS-2877] implement
+            return null;
+        }
+
+        public TypedTupleDto toTypedTupleDto(final Object pojo) {
+            // FIXME[ISIS-2877] implement
+            return null;
         }
 
     }
@@ -272,7 +277,7 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
             return valueDto;
         }
         case COMPOSITE: {
-            valueDto.setComposite(asTypedTupleDto(pojo));
+            valueDto.setComposite(valueWrapper.toTypedTupleDto(pojo));
             return valueDto;
         }
         case STRING: {
@@ -470,13 +475,6 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
         throw _Exceptions.unsupportedOperation("mixing types within a collection is not supported yet");
     }
 
-    private TypedTupleDto asTypedTupleDto(
-            final @Nullable Object composite) {
-        val typedTupleDto = new TypedTupleDto();
-        //TODO implement
-        return typedTupleDto;
-    }
-
     // -- HELPER - RECOVERY
 
     private <T> T recoverValue(
@@ -496,6 +494,14 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
             final ValueDto valueDto,
             final @NonNull ValueTypeWrapper<?> valueWrapper) {
 
+        if(valueDto.getCollection()!=null) {
+            return _Casts.uncheckedCast(recoverCollection(valueWrapper, valueDto.getCollection()));
+        }
+
+        if(valueDto.getComposite()!=null) {
+            return _Casts.uncheckedCast(valueWrapper.fromTypedTuple(valueDto.getComposite()));
+        }
+
         return _Casts.uncheckedCast(valueWrapper.fromFundamentalValue(
                 recoverFundamentalValue(valueDto, valueWrapper)));
     }
@@ -506,29 +512,6 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
             final ValueTypeWrapper<?> valueWrapper) {
 
         val elementType = valueWrapper.getValueType();
-
-        if(valueDto.getCollection()!=null) {
-            val collectionDto = valueDto.getCollection();
-            if(_NullSafe.isEmpty(collectionDto.getValue())) {
-                return Collections.emptyList();
-            }
-            val list = new ArrayList<Object>();
-
-            _Assert.assertEquals(elementType, collectionDto.getType());
-
-            for(val elementDto : collectionDto.getValue()) {
-                if(elementDto instanceof ValueWithTypeDto) {
-                    _Assert.assertEquals(elementType, ((ValueWithTypeDto)elementDto).getType(), "mixing types not supported");
-                }
-                list.add(recoverValue(elementDto, valueWrapper));
-
-            }
-            return list;
-        }
-
-        if(valueDto.getComposite()!=null) {
-            //TODO implement
-        }
 
         switch(elementType) {
         case STRING:
@@ -585,9 +568,29 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
         case VOID:
             return null;
         default:
+            throw _Exceptions.unmatchedCase(elementType);
         }
 
-        throw _Exceptions.unmatchedCase(elementType);
     }
+
+    private Object recoverCollection(final ValueTypeWrapper<?> valueWrapper, final CollectionDto collectionDto) {
+
+        _Assert.assertEquals(valueWrapper.getValueType(), collectionDto.getType());
+
+        if(_NullSafe.isEmpty(collectionDto.getValue())) {
+            return Collections.emptyList();
+        }
+        val list = new ArrayList<Object>();
+
+        for(val elementDto : collectionDto.getValue()) {
+            if(elementDto instanceof ValueWithTypeDto) {
+                _Assert.assertEquals(valueWrapper, ((ValueWithTypeDto)elementDto).getType(),
+                        "mixing types not supported");
+            }
+            list.add(recoverValue(elementDto, valueWrapper));
+        }
+        return list;
+    }
+
 
 }

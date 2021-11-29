@@ -52,6 +52,7 @@ import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 import org.apache.isis.schema.cmd.v2.CommandDto;
+import org.apache.isis.schema.common.v2.OidDto;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 
 import lombok.Getter;
@@ -516,16 +517,16 @@ public abstract class ValueTypeExample<T> {
     }
 
   //TODO    OidDto
-//    @DomainObject(
-//            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleOidDto",
-//            nature = Nature.BEAN)
-//    public static class ValueTypeExampleOidDto
-//    extends ValueTypeExample<OidDto> {
-//        @Property @Getter @Setter
-//        private OidDto value = Bookmark.parseElseFail("a:b").toOidDto();
-//        @Getter
-//        private OidDto updateValue = Bookmark.parseElseFail("c:d").toOidDto();
-//    }
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleOidDto",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleOidDto
+    extends ValueTypeExample<OidDto> {
+        @Property @Getter @Setter
+        private OidDto value = Bookmark.parseElseFail("a:b").toOidDto();
+        @Getter
+        private OidDto updateValue = Bookmark.parseElseFail("c:d").toOidDto();
+    }
 
     //TODO    ChangesDto
 //    @DomainObject(

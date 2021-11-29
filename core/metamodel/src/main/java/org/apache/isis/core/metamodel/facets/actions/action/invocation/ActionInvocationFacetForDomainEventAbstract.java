@@ -215,10 +215,6 @@ implements ImperativeFacet {
             return actionDomainEvent.getReturnValue();
         }
 
-        private void debug(final ManagedObject arg) {
-
-            System.err.printf("arg: %s%n", arg.getSpecification());
-        }
     }
 
     private static Can<ManagedObject> updateArguments(

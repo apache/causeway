@@ -53,7 +53,6 @@ extends ValueSemanticsAdapter<OidDto, Bookmark, Void> {
     @Override
     public Bookmark toDelegateValue(final OidDto value) {
         return value!=null ? Bookmark.forOidDto(value) : null;
-
     }
 
 }
