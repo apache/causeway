@@ -41,6 +41,7 @@ import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.schema.SchemaValueMarshaller;
 import org.apache.isis.commons.collections.Can;
@@ -94,8 +95,9 @@ public class Roundtrip {
 
         val type = sampleValue.getClass();
         val name = type.getSimpleName();
-        InteractionDtoUtils.addParamArg(interactionDto, "a"+name, type, sampleValue, valueMarshaller);
-        InteractionDtoUtils.addParamArg(interactionDto, "null"+name, type, type.cast(null), valueMarshaller);
+        final Identifier paramId = null;
+        InteractionDtoUtils.addParamArg(valueMarshaller, paramId, interactionDto, "a"+name, type, sampleValue);
+        InteractionDtoUtils.addParamArg(valueMarshaller, paramId, interactionDto, "null"+name, type, type.cast(null));
     }
 
     private static SchemaValueMarshaller schemaValueMarshaller() {
@@ -107,35 +109,28 @@ public class Roundtrip {
                 return null;
             }
 
+            @Override
+            public Object recoverValueFrom(final Identifier paramIdentifier, final ParamDto paramDto) {
+                // TODO Auto-generated method stub
+                return null;
+            }
 
             @Override
-            public ActionInvocationDto putActionResult(final ActionInvocationDto invocationDto, final Class<?> returnType,
+            public ActionInvocationDto recordActionResult(final ActionInvocationDto invocationDto, final Class<?> returnType,
                     final Object result) {
                 // TODO Auto-generated method stub
                 return null;
             }
 
             @Override
-            public PropertyDto putValueInto(final PropertyDto propertyDto, final Class<?> propertyType, final Object valuePojo) {
+            public PropertyDto recordPropertyValue(final PropertyDto propertyDto, final Class<?> propertyType, final Object valuePojo) {
                 // TODO Auto-generated method stub
                 return null;
             }
 
             @Override
-            public ParamDto newParamDtoScalar(final String parameterName, final Class<?> paramType, final Object valuePojo) {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public ParamDto newParamDtoNonScalar(final String parameterName, final Class<?> paramElementType, final Object valuePojo) {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-
-            @Override
-            public Object recoverValueFrom(final String logicalMemberIdentifier, final ParamDto paramDto) {
+            public ParamDto recordParamValue(final Identifier paramIdentifier, final ParamDto paramDto, final Class<?> paramType,
+                    final Object valuePojo) {
                 // TODO Auto-generated method stub
                 return null;
             }

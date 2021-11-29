@@ -18,13 +18,16 @@
  */
 package org.apache.isis.applib.services.schema;
 
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.schema.cmd.v2.ParamDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 
 /**
  * Provides the runtime context for converting values
- * between their XML <i>Schema</i> and their <i>Java</i> type representation.
+ * between their XML <i>Schema</i> and their <i>Java</i> type representation,
+ * based on {@link ValueSemanticsProvider value-semantics} if specified.
  *
  * @since 2.x {@index}
  */
@@ -32,29 +35,46 @@ public interface SchemaValueMarshaller {
 
     // -- RECOVER VALUES FROM DTO
 
+    /**
+     * Recovers a property value, using {@link ValueSemanticsProvider}
+     * for corresponding <i>Property</i>.
+     */
     Object recoverValueFrom(PropertyDto propertyDto);
-    Object recoverValueFrom(String logicalActionIdentifier, ParamDto paramDto);
+
+    /**
+     * Recovers a parameter value, using {@link ValueSemanticsProvider}
+     * for corresponding <i>Action Parameter</i>.
+     */
+    Object recoverValueFrom(Identifier paramIdentifier, ParamDto paramDto);
 
     // -- PUT VALUES INTO DTO
 
-    ActionInvocationDto putActionResult(
+    /**
+     * Records given result value into given DTO object,
+     * using {@link ValueSemanticsProvider} for corresponding <i>Action</i>.
+     */
+    ActionInvocationDto recordActionResult(
             ActionInvocationDto invocationDto,
             Class<?> returnType,
             Object result);
 
-    PropertyDto putValueInto(
+    /**
+     * Records given property value into given DTO object,
+     * using {@link ValueSemanticsProvider} for corresponding <i>Property</i>.
+     */
+    PropertyDto recordPropertyValue(
             PropertyDto propertyDto,
             Class<?> propertyType,
             Object valuePojo);
 
-    ParamDto newParamDtoScalar(
-            String parameterName,
+    /**
+     * Records given parameter value into given DTO object,
+     * using {@link ValueSemanticsProvider} for corresponding <i>Action Parameter</i>.
+     */
+    ParamDto recordParamValue(
+            Identifier paramIdentifier,
+            ParamDto paramDto,
             Class<?> paramType,
-            Object valuePojo);
-
-    ParamDto newParamDtoNonScalar(
-            String parameterName,
-            Class<?> paramElementType,
             Object valuePojo);
 
 }

@@ -34,6 +34,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactn.Interaction;
@@ -42,6 +44,7 @@ import org.apache.isis.applib.util.JaxbUtil;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.ParamDto;
 import org.apache.isis.schema.cmd.v2.ParamsDto;
 import org.apache.isis.schema.common.v2.InteractionType;
@@ -55,6 +58,7 @@ import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
 import org.apache.isis.schema.ixn.v2.PropertyEditDto;
 
 import lombok.NonNull;
+import lombok.val;
 
 /**
  * @since 1.x {@index}
@@ -153,9 +157,6 @@ public final class InteractionDtoUtils {
             private MemberExecutionDto clone(final MemberExecutionDto memberExecutionDto) {
                 return MemberExecutionDtoUtils.clone(memberExecutionDto);
             }
-
-
-
         };
 
 
@@ -208,7 +209,7 @@ public final class InteractionDtoUtils {
             final MemberExecutionDto executionDto) {
         final InteractionDto interactionDto = new InteractionDto();
 
-        interactionDto.setMajorVersion("1");
+        interactionDto.setMajorVersion("2");
         interactionDto.setMinorVersion("0");
 
         interactionDto.setInteractionId(interactionId);
@@ -216,15 +217,11 @@ public final class InteractionDtoUtils {
 
         executionDto.setInteractionType(
                 executionDto instanceof ActionInvocationDto
-                ? InteractionType.ACTION_INVOCATION
-                        : InteractionType.PROPERTY_EDIT);
+                    ? InteractionType.ACTION_INVOCATION
+                    : InteractionType.PROPERTY_EDIT);
 
         return interactionDto;
     }
-
-
-
-
 
     // -- newActionInvocation, newPropertyModification
 
@@ -298,13 +295,13 @@ public final class InteractionDtoUtils {
     }
 
     static String deriveLogicalMemberId(final Bookmark bookmark, final String memberId) {
-        String logicalTypeName = bookmark.getLogicalTypeName();
-        int hashAt = memberId.lastIndexOf("#");
-        String localMemberId = hashAt >= 0 && hashAt < memberId.length() ? memberId.substring(hashAt + 1) : memberId;
+        final String logicalTypeName = bookmark.getLogicalTypeName();
+        final int hashAt = memberId.lastIndexOf("#");
+        final String localMemberId = hashAt >= 0 && hashAt < memberId.length()
+                ? memberId.substring(hashAt + 1)
+                : memberId;
         return logicalTypeName + "#" + localMemberId;
     }
-
-
 
     // -- invocationFor, actionFor, timingsFor
 
@@ -335,19 +332,20 @@ public final class InteractionDtoUtils {
         return parametersFor(invocationDto).getParameter();
     }
 
-
-
     // -- addParamArg
 
     public static void addParamArg(
+            final @NonNull SchemaValueMarshaller valueMarshaller,
+            final Identifier paramIdentifier,
             final InteractionDto interactionDto,
             final String parameterName,
             final Class<?> parameterType,
-            final Object arg,
-            final @NonNull SchemaValueMarshaller valueMarshaller) {
+            final Object arg) {
 
         final List<ParamDto> params = parameterListFor(interactionDto);
-        final ParamDto paramDto = valueMarshaller.newParamDtoScalar(parameterName, parameterType, arg);
+        val paramDto = new ParamDto();
+        paramDto.setName(parameterName);
+        valueMarshaller.recordParamValue(paramIdentifier, paramDto, parameterType, arg);
         params.add(paramDto);
     }
 
@@ -366,7 +364,7 @@ public final class InteractionDtoUtils {
             final Object result,
             final @NonNull SchemaValueMarshaller valueMarshaller) {
 
-        valueMarshaller.putActionResult(invocationDto, returnType, result);
+        valueMarshaller.recordActionResult(invocationDto, returnType, result);
     }
 
 
@@ -402,9 +400,8 @@ public final class InteractionDtoUtils {
                 );
     }
 
-
-
     // -- getParameter, getParameterName, getParameterType, getParameterArgument
+
     public static ParamDto getParameter(final ActionInvocationDto ai, final int paramNum) {
         final int parameterNumber = getNumberOfParameters(ai);
         if(paramNum > parameterNumber) {
@@ -433,15 +430,33 @@ public final class InteractionDtoUtils {
         return paramDto.isNull();
     }
 
-    // -- getParameterArgValue
-
-    public static <T> T getParameterArgValue(final ActionInvocationDto ai, final int paramNum,
-            @NonNull final SchemaValueMarshaller valueMarshaller) {
-        final ParamDto paramDto = getParameter(ai, paramNum);
-        return (T) valueMarshaller.recoverValueFrom(ai.getLogicalMemberIdentifier(), paramDto);
+    public static Identifier getActionIdentifier(final ActionInvocationDto ai) {
+        //FIXME[ISIS-2877]
+        return Identifier.actionIdentifier(LogicalType.eager(null, null), null);
+                //ai.getLogicalMemberIdentifier();
     }
 
-    // -- debugging (dump)
+    public static Identifier getActionIdentifier(final ActionDto actionDto) {
+        //FIXME[ISIS-2877]
+        return Identifier.actionIdentifier(LogicalType.eager(null, null), null);
+    }
+
+    public static Identifier getParameterIdentifier(final ActionInvocationDto ai, final int paramNum) {
+        return getActionIdentifier(ai).withParameterIndex(paramNum);
+    }
+
+    // -- getParameterArgValue
+
+    public static <T> T getParameterArgValue(
+            final @NonNull ActionInvocationDto ai,
+            final int paramNum,
+            final @NonNull SchemaValueMarshaller valueMarshaller) {
+        final ParamDto paramDto = getParameter(ai, paramNum);
+        return (T) valueMarshaller.recoverValueFrom(getParameterIdentifier(ai, paramNum), paramDto);
+    }
+
+    // -- DEBUGGING (DUMP)
+
     public static void dump(final InteractionDto ixnDto, final PrintStream out) throws JAXBException {
         out.println(toXml(ixnDto));
     }

@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -35,6 +36,7 @@ import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.cmd.v2.ParamDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.schema.common.v2.BlobDto;
@@ -63,6 +65,7 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
 
     @Inject private BookmarkService bookmarkService;
     @Inject private ValueSemanticsResolver valueSemanticsResolver;
+    @Inject private SpecificationLoader specLoader;
 
     // -- RECOVER VALUES FROM DTO
 
@@ -73,43 +76,69 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
     }
 
     @Override
-    public Object recoverValueFrom(final String logicalMemberIdentifier, final ParamDto paramDto) {
+    public Object recoverValueFrom(
+            final Identifier paramIdentifier,
+            final ParamDto paramDto) {
         return recoverValue(paramDto, this);
     }
 
-    // -- PUT VALUES INTO DTO
+    // -- RECORD VALUES INTO DTO
 
     @Override
-    public ActionInvocationDto putActionResult(
+    public ActionInvocationDto recordActionResult(
             final ActionInvocationDto invocationDto,
             final Class<?> returnType,
             final Object result) {
-        final ValueTypeAndSemantics<?> valueTypeAndSemantics = resolve(this, returnType);
+        final ValueTypeWrapper<?> valueTypeAndSemantics = resolve(this, returnType);
         final ValueWithTypeDto returned = newValueWithTypeDto(valueTypeAndSemantics, result, this);
         invocationDto.setReturned(returned);
         return invocationDto;
     }
 
     @Override
-    public PropertyDto putValueInto(
+    public PropertyDto recordPropertyValue(
             final PropertyDto propertyDto,
             final Class<?> propertyType,
             final Object valuePojo) {
-        final ValueTypeAndSemantics<?> valueTypeAndSemantics = resolve(this, propertyType);
+        final ValueTypeWrapper<?> valueTypeAndSemantics = resolve(this, propertyType);
         final ValueWithTypeDto newValue = newValueWithTypeDto(valueTypeAndSemantics, valuePojo, this);
         propertyDto.setNewValue(newValue);
         return propertyDto;
     }
 
     @Override
-    public ParamDto newParamDtoScalar(
+    public ParamDto recordParamValue(
+            final Identifier paramIdentifier,
+            final ParamDto paramDto,
+            final Class<?> paramType,
+            final Object valuePojo) {
+
+        //specLoader.loadFeature(null);
+
+//        val paramDto = actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION
+//                ? valueMarshaller.newParamDtoNonScalar(
+//                        actionParameter.getStaticFriendlyName()
+//                            .orElseThrow(_Exceptions::unexpectedCodeReach),
+//                        paramTypeOrElementType,
+//                        arg)
+//                : valueMarshaller.newParamDtoScalar(
+//                        actionParameter.getStaticFriendlyName()
+//                            .orElseThrow(_Exceptions::unexpectedCodeReach),
+//                        paramTypeOrElementType,
+//                        arg);
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+
+    private ParamDto newParamDtoScalar(
             final String parameterName,
             final Class<?> paramType,
             final Object valuePojo) {
         val paramDto = new ParamDto();
         paramDto.setName(parameterName);
 
-        final ValueTypeAndSemantics<?> valueTypeAndSemantics = resolve(this, paramType);
+        final ValueTypeWrapper<?> valueTypeAndSemantics = resolve(this, paramType);
 
 //        ValueType valueType = valueTypeAndSemantics.getValueType();
 //
@@ -121,13 +150,13 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
 
         paramDto.setType(valueTypeAndSemantics.getValueType());
 
-        putValueInto(paramDto, valueTypeAndSemantics, valuePojo, this);
+        recordValue(paramDto, valueTypeAndSemantics, valuePojo, this);
 
         return paramDto;
     }
 
-    @Override
-    public ParamDto newParamDtoNonScalar(
+
+    private ParamDto newParamDtoNonScalar(
             final String parameterName,
             final Class<?> paramElementType,
             final Object valuePojo) {
@@ -136,7 +165,7 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
         paramDto.setName(parameterName);
         paramDto.setType(ValueType.COLLECTION);
 
-        ValueTypeAndSemantics<?> elementValueTypeAndSemantics = resolve(this, paramElementType);
+        ValueTypeWrapper<?> elementValueTypeAndSemantics = resolve(this, paramElementType);
 
         setValueOnNonScalar(paramDto, elementValueTypeAndSemantics, valuePojo, this);
 
@@ -147,12 +176,12 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
     // -- HELPER
 
     @Value(staticConstructor = "of")
-    private static class ValueTypeAndSemantics<T> {
+    private static class ValueTypeWrapper<T> {
         final @NonNull ValueType valueType;
         final @Nullable ValueSemanticsProvider<T> semantics;
 
-        private final static ValueTypeAndSemantics<Void> VOID = ValueTypeAndSemantics.of(ValueType.VOID, null);
-        public static ValueTypeAndSemantics<Void> empty() {
+        private final static ValueTypeWrapper<Void> VOID = ValueTypeWrapper.of(ValueType.VOID, null);
+        public static ValueTypeWrapper<Void> empty() {
             return VOID;
         }
 
@@ -164,48 +193,39 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
 
     }
 
-    private ValueTypeAndSemantics<?> resolve(
+    private ValueTypeWrapper<?> resolve(
             @NonNull final SchemaValueMarshaller valueMarshaller,
             @NonNull final Class<?> type) {
         return valueSemanticsResolver.selectValueSemantics(type)
         .getFirst()
-        .map(valueSemantics->ValueTypeAndSemantics.of(valueSemantics.getSchemaValueType(), valueSemantics))
+        .map(valueSemantics->ValueTypeWrapper.of(valueSemantics.getSchemaValueType(), valueSemantics))
         // assume reference otherwise
-        .orElseGet(()->ValueTypeAndSemantics.of(ValueType.REFERENCE, null));
+        .orElseGet(()->ValueTypeWrapper.of(ValueType.REFERENCE, null));
     }
 
-    private ValueTypeAndSemantics<?> resolve(
-            @NonNull final SchemaValueMarshaller valueMarshaller,
-            //@NonNull final Class<?> type,
-            final ParamDto paramDto) {
-        // TODO Auto-generated method stub
-
-        return ValueTypeAndSemantics.of(paramDto.getType(), null);
-    }
-
-    private ValueTypeAndSemantics<?> resolve(
+    private ValueTypeWrapper<?> resolve(
             @NonNull final SchemaValueMarshaller valueMarshaller,
             //@NonNull final Class<?> type,
             final ValueWithTypeDto valueWithTypeDto) {
         // TODO Auto-generated method stub
 
-        return ValueTypeAndSemantics.of(valueWithTypeDto.getType(), null);
+        return ValueTypeWrapper.of(valueWithTypeDto.getType(), null);
     }
 
     private ValueWithTypeDto newValueWithTypeDto(
-            final ValueTypeAndSemantics<?> valueTypeAndSemantics,
+            final ValueTypeWrapper<?> valueTypeAndSemantics,
             final Object valuePojo,
             final @NonNull SchemaValueMarshaller valueMarshaller) {
 
         final ValueWithTypeDto valueWithTypeDto = new ValueWithTypeDto();
-        putValueInto(valueWithTypeDto, valueTypeAndSemantics, valuePojo, valueMarshaller);
+        recordValue(valueWithTypeDto, valueTypeAndSemantics, valuePojo, valueMarshaller);
 
         return valueWithTypeDto;
     }
 
-    private <T extends ValueDto> T putValueInto(
+    private <T extends ValueDto> T recordValue(
             final T valueDto,
-            final ValueTypeAndSemantics<?> valueTypeAndSemantics,
+            final ValueTypeWrapper<?> valueTypeAndSemantics,
             final Object pojo,
             final @NonNull SchemaValueMarshaller valueMarshaller) {
 
@@ -216,7 +236,7 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
         switch (valueType) {
         case COLLECTION: {
             final CollectionDto collectionDto = asCollectionDto(
-                    pojo, ValueTypeAndSemantics.empty(), valueMarshaller);
+                    pojo, ValueTypeWrapper.empty(), valueMarshaller);
             valueDto.setCollection(collectionDto);
             return valueDto;
         }
@@ -369,7 +389,7 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
     @Deprecated
     private <T extends ValueWithTypeDto> T setValueOnNonScalar(
             final T valueWithTypeDto,
-            final ValueTypeAndSemantics<?> elementValueTypeAndSemantics,
+            final ValueTypeWrapper<?> elementValueTypeAndSemantics,
             final Object value,
             final @NonNull SchemaValueMarshaller valueMarshaller) {
 
@@ -384,7 +404,7 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
 
     private CollectionDto asCollectionDto(
             final @Nullable Object iterableOrArray,
-            final @NonNull ValueTypeAndSemantics<?> commonElementValueTypeAndSemantics,
+            final @NonNull ValueTypeWrapper<?> commonElementValueTypeAndSemantics,
             final @NonNull SchemaValueMarshaller valueMarshaller) {
 
         val commonElementValueType = commonElementValueTypeAndSemantics.getValueType();
@@ -399,11 +419,11 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
         .forEach(element->{
             val valueDto = new ValueDto();
             if(element==null) {
-                putValueInto(valueDto, ValueTypeAndSemantics.empty(), element, valueMarshaller);
+                recordValue(valueDto, ValueTypeWrapper.empty(), element, valueMarshaller);
             } else {
-                ValueTypeAndSemantics<?> elementValueTypeAndSemantics =
+                ValueTypeWrapper<?> elementValueTypeAndSemantics =
                         resolve(valueMarshaller, element.getClass());
-                putValueInto(valueDto, elementValueTypeAndSemantics, element, valueMarshaller);
+                recordValue(valueDto, elementValueTypeAndSemantics, element, valueMarshaller);
 
                 if(needsCommonElementValueTypeAutodetect) {
                     commonElementValueTypeRef.update(acc->reduce(acc, elementValueTypeAndSemantics.getValueType()));
@@ -453,14 +473,14 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
 
     private static <T> T recoverValue(
             final ValueDto valueDto,
-            final @NonNull ValueTypeAndSemantics<?> valueTypeAndSemantics) {
+            final @NonNull ValueTypeWrapper<?> valueTypeAndSemantics) {
         return _Casts.uncheckedCast(recoverValueAsObject(valueDto, valueTypeAndSemantics));
     }
 
     @SneakyThrows
     private static Object recoverValueAsObject(
             final ValueDto valueDto,
-            final ValueTypeAndSemantics<?> valueTypeAndSemantics) {
+            final ValueTypeWrapper<?> valueTypeAndSemantics) {
 
         val valueType = valueTypeAndSemantics.getValueType();
         //val semantics = valueTypeAndSemantics.getSemantics();
@@ -544,6 +564,5 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
             throw _Exceptions.unmatchedCase(valueType);
         }
     }
-
 
 }

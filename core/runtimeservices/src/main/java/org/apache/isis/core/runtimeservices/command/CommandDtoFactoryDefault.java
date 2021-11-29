@@ -35,7 +35,6 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
@@ -47,6 +46,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.CommandDto;
+import org.apache.isis.schema.cmd.v2.ParamDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.schema.common.v2.InteractionType;
 import org.apache.isis.schema.common.v2.OidsDto;
@@ -125,17 +125,14 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
             // in case of non-scalar params returns the element type
             val paramTypeOrElementType = actionParameter.getElementType().getCorrespondingClass();
 
-            val paramDto = actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION
-                    ? valueMarshaller.newParamDtoNonScalar(
-                            actionParameter.getStaticFriendlyName()
-                                .orElseThrow(_Exceptions::unexpectedCodeReach),
-                            paramTypeOrElementType,
-                            arg)
-                    : valueMarshaller.newParamDtoScalar(
-                            actionParameter.getStaticFriendlyName()
-                                .orElseThrow(_Exceptions::unexpectedCodeReach),
-                            paramTypeOrElementType,
-                            arg);
+            val paramDto = new ParamDto();
+            paramDto.setName(actionParameter.getStaticFriendlyName()
+                    .orElseThrow(_Exceptions::unexpectedCodeReach));
+
+            actionParameter.getFeatureIdentifier();
+
+            valueMarshaller.recordParamValue(
+                    actionParameter.getFeatureIdentifier(), paramDto, paramTypeOrElementType, arg);
 
             CommandDtoUtils.parametersFor(actionDto)
                 .getParameter()
@@ -155,7 +152,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
         val valueSpec = property.getElementType();
         val valueType = valueSpec.getCorrespondingClass();
 
-        valueMarshaller.putValueInto(propertyDto, valueType, UnwrapUtil.single(valueAdapter));
+        valueMarshaller.recordPropertyValue(propertyDto, valueType, UnwrapUtil.single(valueAdapter));
     }
 
     // -- HELPER

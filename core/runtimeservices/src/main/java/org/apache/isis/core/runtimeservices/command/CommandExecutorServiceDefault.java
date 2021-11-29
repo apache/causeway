@@ -31,6 +31,7 @@ import javax.inject.Named;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -46,10 +47,12 @@ import org.apache.isis.applib.services.schema.SchemaValueMarshaller;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
+import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.functions._Functions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -338,9 +341,9 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     }
 
     private ManagedObject recoverValueFrom(
-            final ActionDto actionDto,
+            final Identifier paramIdentifier,
             final ParamDto paramDto) {
-        val newValue = valueMarshaller.recoverValueFrom(actionDto.getLogicalMemberIdentifier(), paramDto);
+        val newValue = valueMarshaller.recoverValueFrom(paramIdentifier, paramDto);
         return adapterFor(newValue);
     }
 
@@ -362,8 +365,12 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     }
 
     private Can<ManagedObject> argAdaptersFor(final ActionDto actionDto) {
+
+        final Identifier actionIdentifier = InteractionDtoUtils.getActionIdentifier(actionDto);
+
         return streamParamDtosFrom(actionDto)
-                .map(paramDto->recoverValueFrom(actionDto, paramDto))
+                .map(_Functions.indexedZeroBase((i, paramDto)->
+                        recoverValueFrom(actionIdentifier.withParameterIndex(i), paramDto)))
                 .collect(Can.toCan());
     }
 
