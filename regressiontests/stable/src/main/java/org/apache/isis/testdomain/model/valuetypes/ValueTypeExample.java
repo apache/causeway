@@ -52,7 +52,6 @@ import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 import org.apache.isis.schema.cmd.v2.CommandDto;
-import org.apache.isis.schema.common.v2.OidDto;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 
 import lombok.Getter;
@@ -505,7 +504,6 @@ public abstract class ValueTypeExample<T> {
 
     // -- EXAMPLES - OTHER
 
-  //TODO    Bookmark - fails because semantics needs to be adapted from OidDto
     @DomainObject(
             logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleBookmark",
             nature = Nature.BEAN)
@@ -517,16 +515,17 @@ public abstract class ValueTypeExample<T> {
         private Bookmark updateValue = Bookmark.parseElseFail("c:d");
     }
 
-    @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleOidDto",
-            nature = Nature.BEAN)
-    public static class ValueTypeExampleOidDto
-    extends ValueTypeExample<OidDto> {
-        @Property @Getter @Setter
-        private OidDto value = Bookmark.parseElseFail("a:b").toOidDto();
-        @Getter
-        private OidDto updateValue = Bookmark.parseElseFail("c:d").toOidDto();
-    }
+  //TODO    OidDto
+//    @DomainObject(
+//            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleOidDto",
+//            nature = Nature.BEAN)
+//    public static class ValueTypeExampleOidDto
+//    extends ValueTypeExample<OidDto> {
+//        @Property @Getter @Setter
+//        private OidDto value = Bookmark.parseElseFail("a:b").toOidDto();
+//        @Getter
+//        private OidDto updateValue = Bookmark.parseElseFail("c:d").toOidDto();
+//    }
 
     //TODO    ChangesDto
 //    @DomainObject(

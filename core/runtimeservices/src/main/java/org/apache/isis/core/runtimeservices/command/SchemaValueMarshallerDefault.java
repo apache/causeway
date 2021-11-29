@@ -33,6 +33,7 @@ import org.apache.isis.applib.value.semantics.Converter;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Refs;
@@ -42,6 +43,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.ParamDto;
@@ -80,7 +82,6 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
     public Identifier actionIdentifier(final @NonNull ActionDto actionDto) {
         return IdentifierUtil.memberIdentifierFor(specLoader,
                 Type.ACTION,
-//                actionDto.getMemberIdentifier(),
                 actionDto.getLogicalMemberIdentifier());
     }
 
@@ -88,7 +89,6 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
     public Identifier actionIdentifier(final @NonNull ActionInvocationDto actionInvocationDto) {
         return IdentifierUtil.memberIdentifierFor(specLoader,
                 Type.ACTION,
-//                actionInvocationDto.getMemberIdentifier(),
                 actionInvocationDto.getLogicalMemberIdentifier());
     }
 
@@ -96,7 +96,6 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
     public Identifier propertyIdentifier(final @NonNull PropertyDto propertyDto) {
         return IdentifierUtil.memberIdentifierFor(specLoader,
                 Type.PROPERTY_OR_COLLECTION,
-//                propertyDto.getMemberIdentifier(),
                 propertyDto.getLogicalMemberIdentifier());
     }
 
@@ -135,10 +134,16 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
             final Class<T> propertyType,
             final T valuePojo) {
         final Identifier propertyIdentifier = propertyIdentifier(propertyDto);
-//        final OneToOneAssociation property =
-//                (OneToOneAssociation)specLoader.loadFeatureElseFail(propertyIdentifier);
-//
-//        val elementType = property.getElementType().getCorrespondingClass();
+
+        // guard against property not being a scalar
+        {
+            final OneToOneAssociation property =
+                    (OneToOneAssociation)specLoader.loadFeatureElseFail(propertyIdentifier);
+
+            val elementType = property.getElementType().getCorrespondingClass();
+            _Assert.assertEquals(elementType, propertyType);
+        }
+
         final ValueTypeWrapper<T> valueWrapper = wrap(propertyIdentifier, propertyType);
         propertyDto.setNewValue(
                 recordValue(new ValueWithTypeDto(), valueWrapper, valuePojo));
