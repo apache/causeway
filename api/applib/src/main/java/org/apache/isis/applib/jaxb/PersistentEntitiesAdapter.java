@@ -42,7 +42,6 @@ public class PersistentEntitiesAdapter extends XmlAdapter<OidsDto, Iterable<Obje
 
     @Override
     public List<Object> unmarshal(final OidsDto oidsDto) {
-        System.err.printf("unmarshal[] %s%n", oidsDto);
         List<Object> domainObjects = new ArrayList<>();
         for (val oidDto : oidsDto.getOid()) {
             val bookmark = Bookmark.forOidDto(oidDto);
@@ -54,7 +53,6 @@ public class PersistentEntitiesAdapter extends XmlAdapter<OidsDto, Iterable<Obje
 
     @Override
     public OidsDto marshal(final Iterable<Object> domainObjects) {
-        System.err.printf("marshal[] %s%n", domainObjects);
         if(domainObjects == null) {
             return null;
         }

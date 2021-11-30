@@ -34,14 +34,12 @@ public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
 
     @Override
     public Object unmarshal(final OidDto oidDto) throws Exception {
-        System.err.printf("unmarshal %s%n", oidDto);
         val bookmark = Bookmark.forOidDto(oidDto);
         return bookmarkService.lookup(bookmark).orElse(null);
     }
 
     @Override
     public OidDto marshal(final Object domainObject) throws Exception {
-        System.err.printf("marshal %s%n", domainObject);
         if(domainObject == null) {
             return null;
         }
