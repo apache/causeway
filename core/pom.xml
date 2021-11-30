@@ -147,7 +147,7 @@
 
 		<jsr305.version>3.0.2</jsr305.version>
 		<junit-jupiter.version>5.8.1</junit-jupiter.version> <!-- overrides spring -->
-		<junit-platform.version>1.8.1</junit-platform.version>
+		<junit-platform.version>1.8.2</junit-platform.version>
 
 		<log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
 
