@@ -22,8 +22,6 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -62,14 +60,14 @@ implements
     // -- ACTIONS
 
     @Override
-    public Optional<ObjectAction> getAction(final String id, @Nullable final ActionScope type) {
+    public Optional<ObjectAction> getAction(
+            final String id, final ImmutableEnumSet<ActionScope> scopes, final MixedIn mixedIn) {
 
-        val declaredAction = getDeclaredAction(id); // no inheritance nor type considered
+        val declaredAction = getDeclaredAction(id, mixedIn); // no inheritance nor type considered
 
         if(declaredAction.isPresent()) {
             // action found but if its not the right type, stop searching
-            if(type!=null
-                    && declaredAction.get().getType() != type) {
+            if(!scopes.contains(declaredAction.get().getScope())) {
                 return Optional.empty();
             }
             return declaredAction;
@@ -77,7 +75,7 @@ implements
 
         return isTypeHierarchyRoot()
                 ? Optional.empty() // stop searching
-                : superclass().getAction(id, type);
+                : superclass().getAction(id, scopes, mixedIn);
     }
 
     @Override

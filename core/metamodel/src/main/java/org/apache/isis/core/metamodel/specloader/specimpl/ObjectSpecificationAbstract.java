@@ -702,7 +702,7 @@ implements ObjectSpecification {
 
     @Override
     public Stream<ObjectAction> streamDeclaredActions(
-            final ImmutableEnumSet<ActionScope> actionTypes,
+            final ImmutableEnumSet<ActionScope> actionScopes,
             final MixedIn mixedIn) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
@@ -710,8 +710,8 @@ implements ObjectSpecification {
             createMixedInActions(); // only if not already
         }
 
-        return actionTypes.stream()
-                .flatMap(actionType->stream(objectActionsByType.get(actionType)))
+        return actionScopes.stream()
+                .flatMap(actionScope->stream(objectActionsByType.get(actionScope)))
                 .filter(mixedIn.isIncluded()
                         ? _Predicates.alwaysTrue()
                         : MixedIn::isNotMixedIn);

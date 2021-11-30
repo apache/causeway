@@ -147,11 +147,11 @@ implements ObjectAction {
     // -- TYPE
 
     @Override
-    public ActionScope getType() {
-        return getType(this);
+    public ActionScope getScope() {
+        return getScope(this);
     }
 
-    private static ActionScope getType(final FacetHolder facetHolder) {
+    private static ActionScope getScope(final FacetHolder facetHolder) {
         return facetHolder.containsFacet(PrototypeFacet.class)
             ? ActionScope.PROTOTYPE
             : ActionScope.PRODUCTION;
@@ -458,7 +458,7 @@ implements ObjectAction {
 
     @Override
     public boolean isPrototype() {
-        return getType().isPrototype();
+        return getScope().isPrototype();
     }
 
     @Getter(lazy=true, onMethod_ = {@Override})
@@ -491,8 +491,8 @@ implements ObjectAction {
         final StringBuffer sb = new StringBuffer();
         sb.append("Action [");
         sb.append(super.toString());
-        sb.append(",type=");
-        sb.append(getType());
+        sb.append(",scope=");
+        sb.append(getScope());
         sb.append(",returns=");
         sb.append(getReturnType());
         sb.append(",parameters={");

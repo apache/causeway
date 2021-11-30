@@ -73,7 +73,7 @@ public interface ObjectAction extends ObjectMember {
         && ObjectAction.Util.isNoParameters(this);
     }
 
-    ActionScope getType();
+    ActionScope getScope();
 
     boolean isPrototype();
 
@@ -354,8 +354,8 @@ public interface ObjectAction extends ObjectMember {
 
     public static final class Predicates {
 
-        public static Predicate<ObjectAction> ofActionType(final ActionScope type) {
-            return (final ObjectAction oa) -> oa.getType() == type;
+        public static Predicate<ObjectAction> ofActionType(final ActionScope scope) {
+            return (final ObjectAction oa) -> oa.getScope() == scope;
         }
 
         public static Predicate<ObjectAction> isPositioned(

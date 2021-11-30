@@ -263,22 +263,19 @@ implements FacetHolder {
     @Override
     public Optional<ObjectAction> getDeclaredAction(
             final @Nullable String id,
-            final @Nullable ActionScope type) {
+            final ImmutableEnumSet<ActionScope> actionScopes,
+            final MixedIn mixedIn) {
 
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
         return id == null
-                ? Optional.empty()
-                : streamDeclaredActions(
-                        type==null
-                            ? ActionScope.ANY
-                            : ImmutableEnumSet.of(type),
-                        MixedIn.INCLUDED)
-                    .filter(action->
-                        id.equals(action.getFeatureIdentifier().getMemberNameAndParameterClassNamesIdentityString())
-                                || id.equals(action.getFeatureIdentifier().getMemberLogicalName())
-                    )
-                    .findFirst();
+            ? Optional.empty()
+            : streamDeclaredActions(actionScopes, mixedIn)
+                .filter(action->
+                    id.equals(action.getFeatureIdentifier().getMemberNameAndParameterClassNamesIdentityString())
+                            || id.equals(action.getFeatureIdentifier().getMemberLogicalName())
+                )
+                .findFirst();
     }
 
     @Override

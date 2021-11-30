@@ -172,16 +172,17 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Optional<ObjectAction> getDeclaredAction(final String id, final ActionScope type) {
+    public Optional<ObjectAction> getDeclaredAction(
+            final String id, final ImmutableEnumSet<ActionScope> scopes, final MixedIn mixedIn) {
         val nameParmsIdentityString = id.substring(0, id.indexOf('('));
         val action = lookupObjectAction(nameParmsIdentityString);
 
-        if(type==null) {
+        if(scopes==null) {
             return action;
         }
 
         if (action.isPresent()
-                && action.get().getType() == type) {
+                && scopes.contains(action.get().getScope())) {
             return action;
         }
         return Optional.empty();
@@ -346,9 +347,10 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Optional<ObjectAction> getAction(final String id, final ActionScope type) {
+    public Optional<ObjectAction> getAction(
+            final String id, final ImmutableEnumSet<ActionScope> scopes, final MixedIn mixedIn) {
         // poorly implemented, inheritance not supported
-        return getDeclaredAction(id, type);
+        return getDeclaredAction(id, scopes, mixedIn);
     }
 
     @Override

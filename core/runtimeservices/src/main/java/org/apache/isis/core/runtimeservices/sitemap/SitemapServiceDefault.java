@@ -118,7 +118,7 @@ public class SitemapServiceDefault implements SitemapService {
                     val grid = toGrid(actionElementType.getCorrespondingClass(), Style.CURRENT);
                     grid.visit(new Grid.VisitorAdapter() {
                         @Override public void visit(final ActionLayoutData actionLayoutData) {
-                            actionElementType.getAction(actionLayoutData.getId(), ActionScope.PRODUCTION)
+                            actionElementType.getAction(actionLayoutData.getId(), ActionScope.PRODUCTION_ONLY)
                             .ifPresent(action->{
                                 flushGroupStack.run();
                                 val describedAs = action.getCanonicalDescription()
@@ -177,7 +177,7 @@ public class SitemapServiceDefault implements SitemapService {
     private Optional<ObjectAction> lookupAction(final ServiceActionLayoutData actionLayout) {
         return specificationLoader
         .specForLogicalTypeName(actionLayout.getLogicalTypeName())
-        .map(typeSpec->typeSpec.getAction(actionLayout.getId(), ActionScope.PRODUCTION).orElse(null));
+        .map(typeSpec->typeSpec.getAction(actionLayout.getId(), ActionScope.PRODUCTION_ONLY).orElse(null));
     }
 
     private Grid toGrid(final Class<?> domainClass, final Style style) {

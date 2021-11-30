@@ -155,7 +155,7 @@ class Generation {
                 continue;
             }
 
-            val serviceActions = Util.actionsOf(spec, visibility, classExcluder);
+            val serviceActions = _Util.actionsOf(spec, visibility, classExcluder);
             if(serviceActions.isEmpty()) {
                 continue;
             }
@@ -192,7 +192,7 @@ class Generation {
             if (mixinFacet != null) {
                 continue;
             }
-            if(visibility.isPublic() && !Util.isVisibleForPublic(objectSpec)) {
+            if(visibility.isPublic() && !_Util.isVisibleForPublic(objectSpec)) {
                 continue;
             }
             if(objectSpec.isAbstract()) {
@@ -206,9 +206,9 @@ class Generation {
                 continue;
             }
 
-            final List<OneToOneAssociation> objectProperties = Util.propertiesOf(objectSpec, visibility);
-            final List<OneToManyAssociation> objectCollections = Util.collectionsOf(objectSpec, visibility);
-            final List<ObjectAction> objectActions = Util.actionsOf(objectSpec, visibility, classExcluder);
+            final List<OneToOneAssociation> objectProperties = _Util.propertiesOf(objectSpec, visibility);
+            final List<OneToManyAssociation> objectCollections = _Util.collectionsOf(objectSpec, visibility);
+            final List<ObjectAction> objectActions = _Util.actionsOf(objectSpec, visibility, classExcluder);
 
             if(objectProperties.isEmpty() && objectCollections.isEmpty()) {
                 continue;
@@ -234,26 +234,26 @@ class Generation {
                 new Path()
                 .get(newOperation("home-page")
                         .tag(tag)
-                        .description(Util.roSpec("5.1"))
+                        .description(_Util.roSpec("5.1"))
                         .response(200,
                                 newResponse(Caching.NON_EXPIRING)
                                 .description("OK")
                                 .schema(newRefProperty("RestfulObjectsSupportingHomePageRepr"))
                                 )));
-        addDefinition("RestfulObjectsSupportingHomePageRepr", newModel(Util.roSpec("5.2")));
+        addDefinition("RestfulObjectsSupportingHomePageRepr", newModel(_Util.roSpec("5.2")));
 
         swagger.path("/user",
                 new Path()
                 .get(newOperation("user")
                         .tag(tag)
-                        .description(Util.roSpec("6.1"))
+                        .description(_Util.roSpec("6.1"))
                         .response(200,
                                 newResponse(Caching.USER_INFO)
                                 .description("OK")
                                 .schema(newRefProperty("RestfulObjectsSupportingUserRepr"))
                                 )));
         addDefinition("RestfulObjectsSupportingUserRepr",
-                newModel(Util.roSpec("6.2"))
+                newModel(_Util.roSpec("6.2"))
                 .property("userName", stringProperty())
                 .property("roles", arrayOfStrings())
                 .property("links", arrayOfLinks())
@@ -264,14 +264,14 @@ class Generation {
                 new Path()
                 .get(newOperation("services")
                         .tag(tag)
-                        .description(Util.roSpec("7.1"))
+                        .description(_Util.roSpec("7.1"))
                         .response(200,
                                 newResponse(Caching.USER_INFO)
                                 .description("OK")
                                 .schema(newRefProperty("RestfulObjectsSupportingServicesRepr"))
                                 )));
         addDefinition("RestfulObjectsSupportingServicesRepr",
-                newModel(Util.roSpec("7.2"))
+                newModel(_Util.roSpec("7.2"))
                 .property("value", arrayOfLinks())
                 .required("userName")
                 .required("roles"));
@@ -280,14 +280,14 @@ class Generation {
                 new Path()
                 .get(newOperation("RestfulObjectsSupportingServicesRepr")
                         .tag(tag)
-                        .description(Util.roSpec("8.1"))
+                        .description(_Util.roSpec("8.1"))
                         .response(200,
                                 newResponse(Caching.NON_EXPIRING)
                                 .description("OK")
                                 .schema(new ObjectProperty())
                                 )));
         swagger.addDefinition("RestfulObjectsSupportingServicesRepr",
-                newModel(Util.roSpec("8.2"))
+                newModel(_Util.roSpec("8.2"))
                 .property("specVersion", stringProperty())
                 .property("implVersion", stringProperty())
                 .property("optionalCapabilities",
@@ -341,7 +341,7 @@ class Generation {
         path.get(
                 newOperation("object")
                 .tag(tag)
-                .description(Util.roSpec("15.1"))
+                .description(_Util.roSpec("15.1"))
                 .response(200,
                         newResponse(Caching.TRANSACTIONAL)
                         .description("OK")
@@ -349,7 +349,7 @@ class Generation {
                 );
 
         final ModelImpl model =
-                newModel(Util.roSpec("15.1.2") + ": representation of " + serviceId)
+                newModel(_Util.roSpec("15.1.2") + ": representation of " + serviceId)
                 .property("title", stringProperty())
                 .property("serviceId", stringProperty()._default(serviceId))
                 .property("members", new ObjectProperty());
@@ -369,7 +369,7 @@ class Generation {
         path.get(operation);
         operation
         .tag(tag)
-        .description(Util.roSpec("14.1"))
+        .description(_Util.roSpec("14.1"))
         .parameter(
                 new PathParameter()
                 .name("objectId")
@@ -386,7 +386,7 @@ class Generation {
                     .schema(newRefProperty(restfulObjectsModelDefinition)));
 
             final ModelImpl roSpecModel =
-                    newModel(Util.roSpec("14.4") + ": representation of " + logicalTypeName)
+                    newModel(_Util.roSpec("14.4") + ": representation of " + logicalTypeName)
                     .property("title", stringProperty())
                     .property("domainType", stringProperty()._default(logicalTypeName))
                     .property("instanceId", stringProperty())
@@ -443,7 +443,7 @@ class Generation {
         final Operation invokeOperation =
                 newOperation("object", "action-result")
                 .tag(tag)
-                .description(Util.roSpec("19.1") + ": (invoke) resource of " + serviceId + "#" + actionId);
+                .description(_Util.roSpec("19.1") + ": (invoke) resource of " + serviceId + "#" + actionId);
 
         final SemanticsOf semantics = serviceAction.getSemantics();
         if(semantics.isSafeInNature()) {
@@ -457,7 +457,7 @@ class Generation {
                 .parameter(
                         new QueryParameter()
                         .name(parameter.getId())
-                        .description(Util.roSpec("2.9.1")
+                        .description(_Util.roSpec("2.9.1")
                                 + (_Strings.isNotEmpty(describedAs)
                                         ? (": " + describedAs)
                                         : ""))
@@ -468,7 +468,7 @@ class Generation {
             if(!parameters.isEmpty()) {
                 invokeOperation.parameter(new QueryParameter()
                         .name("x-isis-querystring")
-                        .description(Util.roSpec("2.10") + ": all (formal) arguments as base64 encoded string")
+                        .description(_Util.roSpec("2.10") + ": all (formal) arguments as base64 encoded string")
                         .required(false)
                         .type("string"));
             }
@@ -528,7 +528,7 @@ class Generation {
         final Operation collectionOperation =
                 newOperation("object-collection")
                 .tag(tag)
-                .description(Util.roSpec("17.1") + ": resource of " + logicalTypeName + "#" + collectionId)
+                .description(_Util.roSpec("17.1") + ": resource of " + logicalTypeName + "#" + collectionId)
                 .parameter(
                         new PathParameter()
                         .name("objectId")
@@ -558,7 +558,7 @@ class Generation {
         final Operation invokeOperation =
                 newOperation("action-result")
                 .tag(tag)
-                .description(Util.roSpec("19.1") + ": (invoke) resource of " + logicalTypeName + "#" + actionId)
+                .description(_Util.roSpec("19.1") + ": (invoke) resource of " + logicalTypeName + "#" + actionId)
                 .parameter(
                         new PathParameter()
                         .name("objectId")
@@ -576,7 +576,7 @@ class Generation {
                 .parameter(
                         new QueryParameter()
                         .name(parameter.getId())
-                        .description(Util.roSpec("2.9.1")
+                        .description(_Util.roSpec("2.9.1")
                                 + (_Strings.isNotEmpty(describedAs)
                                         ? (": " + describedAs)
                                         : ""))
@@ -587,7 +587,7 @@ class Generation {
             if(!parameters.isEmpty()) {
                 invokeOperation.parameter(new QueryParameter()
                         .name("x-isis-querystring")
-                        .description(Util.roSpec("2.10") + ": all (formal) arguments as base64 encoded string")
+                        .description(_Util.roSpec("2.10") + ": all (formal) arguments as base64 encoded string")
                         .required(false)
                         .type("string"));
             }
@@ -807,7 +807,7 @@ class Generation {
     }
 
     static Response newResponse(final Caching caching) {
-        return Util.withCachingHeaders(new Response(), caching);
+        return _Util.withCachingHeaders(new Response(), caching);
     }
 
     String tagForlogicalTypeName(final String logicalTypeName, final String fallback) {

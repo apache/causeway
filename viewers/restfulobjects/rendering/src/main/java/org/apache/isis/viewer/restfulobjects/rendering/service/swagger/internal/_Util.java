@@ -38,21 +38,21 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
 import io.swagger.models.Response;
 
-public final class Util {
+@UtilityClass
+final class _Util {
 
-    private Util(){}
-
-    static boolean isVisibleForPublic(final ObjectAction objectAction) {
+    boolean isVisibleForPublic(final ObjectAction objectAction) {
 
         final ObjectSpecification specification = objectAction.getReturnType();
         return ( isVisibleForPublic(specification) || isTypeOfVisibleForPublic(objectAction) )
                 && isVisibleForPublic(objectAction.getParameterTypes());
     }
 
-    private static boolean isTypeOfVisibleForPublic(final ObjectAction objectAction) {
+    private boolean isTypeOfVisibleForPublic(final ObjectAction objectAction) {
         final TypeOfFacet typeOfFacet = objectAction.getFacet(TypeOfFacet.class);
         if (typeOfFacet == null) {
             return false;
@@ -60,27 +60,27 @@ public final class Util {
         return isVisibleForPublic(typeOfFacet.valueSpec());
     }
 
-    private static boolean isVisibleForPublic(final Can<ObjectSpecification> parameterTypes) {
+    private boolean isVisibleForPublic(final Can<ObjectSpecification> parameterTypes) {
 
         final boolean atLeastOneParamNotVisible =
                 parameterTypes.stream()
-                    .map(Util::isNotVisibleForPublic)
+                    .map(_Util::isNotVisibleForPublic)
                     .findAny()
                     .isPresent();
 
         return !atLeastOneParamNotVisible;
     }
 
-    static boolean isVisibleForPublic(final ObjectAssociation objectAssociation) {
+    boolean isVisibleForPublic(final ObjectAssociation objectAssociation) {
         final ObjectSpecification specification = objectAssociation.getElementType();
         return isVisibleForPublic(specification);
     }
 
-    static boolean isNotVisibleForPublic(final ObjectSpecification specification) {
+    boolean isNotVisibleForPublic(final ObjectSpecification specification) {
         return ! isVisibleForPublic(specification);
     }
 
-    static boolean isVisibleForPublic(final ObjectSpecification specification) {
+    boolean isVisibleForPublic(final ObjectSpecification specification) {
         if (specification == null) {
             return true;
         }
@@ -105,7 +105,7 @@ public final class Util {
                 correspondingClass == Void.class;
     }
 
-    static Predicate<ObjectAssociation> associationsWith(final Visibility visibility) {
+    Predicate<ObjectAssociation> associationsWith(final Visibility visibility) {
         return new Predicate<ObjectAssociation>() {
             @Override
             public boolean test(final ObjectAssociation objectAssociation) {
@@ -114,19 +114,19 @@ public final class Util {
         };
     }
 
-    static List<OneToOneAssociation> propertiesOf(
+    List<OneToOneAssociation> propertiesOf(
             final ObjectSpecification objectSpecification,
             final Visibility visibility) {
         return associationsOf(objectSpecification, ObjectAssociation.Predicates.PROPERTIES, visibility);
     }
 
-    static List<OneToManyAssociation> collectionsOf(
+    List<OneToManyAssociation> collectionsOf(
             final ObjectSpecification objectSpecification,
             final Visibility visibility) {
         return associationsOf(objectSpecification, ObjectAssociation.Predicates.COLLECTIONS, visibility);
     }
 
-    private static <T extends ObjectAssociation> List<T> associationsOf(
+    private <T extends ObjectAssociation> List<T> associationsOf(
             final ObjectSpecification objectSpecification,
             final Predicate<ObjectAssociation> associationPredicate, final Visibility visibility) {
 
@@ -136,7 +136,7 @@ public final class Util {
                 .collect(Collectors.toList());
     }
 
-    static List<ObjectAction> actionsOf(
+    List<ObjectAction> actionsOf(
             final ObjectSpecification objectSpec,
             final Visibility visibility,
             final ClassExcluder classExcluder) {
@@ -150,17 +150,17 @@ public final class Util {
                 .collect(Collectors.toList());
     }
 
-    static String roSpec(final String section) {
+    String roSpec(final String section) {
         return "RO Spec v1.0, section " + section;
     }
 
-    static Response withCachingHeaders(final Response response, final Caching caching) {
+    Response withCachingHeaders(final Response response, final Caching caching) {
         caching.withHeaders(response);
 
         return response;
     }
 
-    static ImmutableEnumSet<ActionScope> actionScopesFor(final Visibility visibility) {
+    ImmutableEnumSet<ActionScope> actionScopesFor(final Visibility visibility) {
         switch (visibility) {
         case PUBLIC:
         case PRIVATE:
