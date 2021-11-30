@@ -28,6 +28,7 @@ import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.utils.StringUtils
 import org.apache.isis.client.kroviz.utils.UrlUtils
+import org.apache.isis.client.kroviz.utils.XmlHelper
 import org.w3c.xhr.BLOB
 import org.w3c.xhr.TEXT
 import org.w3c.xhr.XMLHttpRequest
@@ -125,7 +126,17 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
     }
 
     private fun handleResult(rs: ResourceSpecification, body: String) {
-        val response: Any? = xhr.response
+        var response: Any? = xhr.response
+       if (rs.url.contains("layout")) {
+            if (rs.subType == Constants.subTypeXml) {
+               response = XmlHelper.format(response as String)
+                console.log("[RXHR.handleResult]")
+                console.log(response)
+            }
+  /*          if (rs.subType == Constants.subTypeJson) {
+                response = StringUtils.format(response as String)
+            }*/
+        }
         val le: LogEntry? = UiManager.getEventStore().end(rs, body, response)
         if (le != null) {
             when {
