@@ -22,11 +22,12 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Map;
 
-import org.springframework.lang.Nullable;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -57,8 +58,8 @@ public interface JaxbService {
      * @param xml
      */
     default Object fromXml(
-            JAXBContext jaxbContext,
-            String xml) {
+            final JAXBContext jaxbContext,
+            final String xml) {
         return fromXml(jaxbContext, xml, null);
     }
 
@@ -78,7 +79,7 @@ public interface JaxbService {
     /**
      * Unmarshalls the XML to the specified domain class.
      */
-    default <T> T fromXml(Class<T> domainClass, String xml) {
+    default <T> T fromXml(final Class<T> domainClass, final String xml) {
         return fromXml(domainClass, xml, null);
     }
 
@@ -96,7 +97,7 @@ public interface JaxbService {
      * Marshalls the object into XML (using a {@link JAXBContext} for the
      * object's class).
      */
-    default String toXml(Object domainObject) {
+    default String toXml(final Object domainObject) {
         return toXml(domainObject, null);
     }
 
@@ -133,7 +134,7 @@ public interface JaxbService {
         @Override
         @SneakyThrows
         @Nullable
-        public Object fromXml(
+        public final Object fromXml(
                 final @NonNull JAXBContext jaxbContext,
                 final @Nullable String xml,
                 final @Nullable Map<String, Object> unmarshallerProperties) {
@@ -147,7 +148,7 @@ public interface JaxbService {
         @Override
         @SneakyThrows
         @Nullable
-        public <T> T fromXml(
+        public final <T> T fromXml(
                 final @NonNull Class<T> domainClass,
                 final @Nullable String xml,
                 final @Nullable Map<String, Object> unmarshallerProperties) {
@@ -162,7 +163,7 @@ public interface JaxbService {
 
         @Override
         @SneakyThrows
-        public String toXml(
+        public final String toXml(
                 final @NonNull Object domainObject,
                 final @Nullable Map<String, Object> marshallerProperties) {
 
@@ -241,7 +242,7 @@ public interface JaxbService {
 
         @Override
         @SneakyThrows
-        public Map<String, String> toXsd(
+        public final Map<String, String> toXsd(
                 final @NonNull Object domainObject,
                 final @NonNull IsisSchemas isisSchemas) {
 

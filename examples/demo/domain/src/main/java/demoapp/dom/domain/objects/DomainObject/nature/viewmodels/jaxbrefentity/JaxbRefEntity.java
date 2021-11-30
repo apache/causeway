@@ -18,6 +18,8 @@
  */
 package demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity;
 
+import java.util.Objects;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
@@ -38,7 +40,7 @@ implements
 
     @ObjectSupport
     public String title() {
-        return getName();
+        return Objects.requireNonNull(getName(), "most likely a serialization or re-attach issue");
     }
 
     @Property
