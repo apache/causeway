@@ -47,12 +47,13 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import static org.apache.isis.commons.internal.reflection._Reflect.Filter.isPublic;
 import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramCount;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
@@ -149,7 +150,7 @@ implements MetaModelRefiner {
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
         final List<TypeValidator> typeValidators = getTypeValidators(getConfiguration());
-        final List<PropertyValidator> propertyValidators = getPropertyValidators(getConfiguration());
+        final List<AssociationValidator> associationValidators = getAssociationValidators(getConfiguration());
 
         programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec->{
 
@@ -167,15 +168,15 @@ implements MetaModelRefiner {
                 typeValidator.validate(objectSpec);
             }
 
-            final Stream<OneToOneAssociation> properties = objectSpec
-                    .streamProperties(MixedIn.EXCLUDED);
+            final Stream<ObjectAssociation> associations = objectSpec
+                    .streamAssociations(MixedIn.EXCLUDED);
 
-            properties
+            associations
             // ignore derived
-            .filter(property->property.containsNonFallbackFacet(PropertySetterFacet.class))
-            .forEach(property->{
-                for (final PropertyValidator adapterValidator : propertyValidators) {
-                    adapterValidator.validate(objectSpec, property);
+            .filter(association->association.containsNonFallbackFacet(PropertySetterFacet.class))
+            .forEach(association->{
+                for (final AssociationValidator adapterValidator : associationValidators) {
+                    adapterValidator.validate(objectSpec, association);
                 }
             });
 
@@ -198,24 +199,24 @@ implements MetaModelRefiner {
         return typeValidators;
     }
 
-    private List<PropertyValidator> getPropertyValidators(final IsisConfiguration configuration) {
-        final List<PropertyValidator> propertyValidators = _Lists.newArrayList();
+    private List<AssociationValidator> getAssociationValidators(final IsisConfiguration configuration) {
+        final List<AssociationValidator> associationValidators = _Lists.newArrayList();
         if(configuration.getCore().getMetaModel().getValidator().getJaxbViewModel().isReferenceTypeAdapter()) {
-            propertyValidators.add(new PropertyValidatorForReferenceTypes());
+            associationValidators.add(new PropertyValidatorForReferenceTypes());
         }
         if(configuration.getCore().getMetaModel().getValidator().getJaxbViewModel().isDateTimeTypeAdapter()) {
-            propertyValidators.add(new PropertyValidatorForDateTypes(java.sql.Timestamp.class));
-            propertyValidators.add(new PropertyValidatorForDateTypes(ZonedDateTime.class));
-            propertyValidators.add(new PropertyValidatorForDateTypes(OffsetDateTime.class));
-            propertyValidators.add(new PropertyValidatorForDateTypes(LocalDate.class));
-            propertyValidators.add(new PropertyValidatorForDateTypes(LocalDateTime.class));
-            propertyValidators.add(new PropertyValidatorForDateTypes(LocalTime.class));
-            propertyValidators.add(new PropertyValidatorForDateTypes(org.joda.time.DateTime.class));
-            propertyValidators.add(new PropertyValidatorForDateTypes(org.joda.time.LocalDate.class));
-            propertyValidators.add(new PropertyValidatorForDateTypes(org.joda.time.LocalDateTime.class));
-            propertyValidators.add(new PropertyValidatorForDateTypes(org.joda.time.LocalTime.class));
+            associationValidators.add(new PropertyValidatorForDateTypes(java.sql.Timestamp.class));
+            associationValidators.add(new PropertyValidatorForDateTypes(ZonedDateTime.class));
+            associationValidators.add(new PropertyValidatorForDateTypes(OffsetDateTime.class));
+            associationValidators.add(new PropertyValidatorForDateTypes(LocalDate.class));
+            associationValidators.add(new PropertyValidatorForDateTypes(LocalDateTime.class));
+            associationValidators.add(new PropertyValidatorForDateTypes(LocalTime.class));
+            associationValidators.add(new PropertyValidatorForDateTypes(org.joda.time.DateTime.class));
+            associationValidators.add(new PropertyValidatorForDateTypes(org.joda.time.LocalDate.class));
+            associationValidators.add(new PropertyValidatorForDateTypes(org.joda.time.LocalDateTime.class));
+            associationValidators.add(new PropertyValidatorForDateTypes(org.joda.time.LocalTime.class));
         }
-        return propertyValidators;
+        return associationValidators;
     }
 
     private static abstract class TypeValidator {
@@ -223,78 +224,77 @@ implements MetaModelRefiner {
 
     }
 
-    private static abstract class PropertyValidator {
+    private static abstract class AssociationValidator {
         abstract void validate(
                 ObjectSpecification objectSpec,
-                OneToOneAssociation property);
+                ObjectAssociation propertyOrCollection);
 
     }
 
-    private static class PropertyValidatorForReferenceTypes extends PropertyValidator {
+    private static class PropertyValidatorForReferenceTypes extends AssociationValidator {
 
         @Override
         void validate(
                 final ObjectSpecification objectSpec,
-                final OneToOneAssociation property) {
+                final ObjectAssociation propertyOrCollection) {
 
-            final ObjectSpecification propertyTypeSpec = property.getElementType();
-            if (!propertyTypeSpec.isEntity()) {
-                return;
-            }
+            val elementTypeSpec = propertyOrCollection.getElementType();
+            if (elementTypeSpec.isEntity()
+                    && !propertyOrCollection.containsFacet(XmlJavaTypeAdapterFacet.class)
+                    && !propertyOrCollection.containsFacet(XmlTransientFacet.class)) {
 
-            final XmlJavaTypeAdapterFacet xmlJavaTypeAdapterFacet =
-                    propertyTypeSpec.getFacet(XmlJavaTypeAdapterFacet.class);
-            if(xmlJavaTypeAdapterFacet != null) {
-                return;
+                val elementType = elementTypeSpec.getCorrespondingClass();
+                ValidationFailure.raiseFormatted(
+                        propertyOrCollection,
+                        "JAXB view model '%s' %s '%s' is of entity type '%s', "
+                        + "but is not annotated with @XmlJavaTypeAdapter. "
+                        + "The referenced entity types must be annotated with "
+                        + "@XmlJavaTypeAdapter(org.apache.isis.applib.jaxb.%s.class) or equivalent.",
+                        objectSpec.getFullIdentifier(),
+                        elementTypeSpec.isNotCollection()
+                            ? "@Property"
+                            : "@Collection",
+                        propertyOrCollection.getId(),
+                        elementType.getName(),
+                        elementTypeSpec.isNotCollection()
+                            ? "PersistentEntityAdapter"
+                            : "PersistentEntitiesAdapter");
             }
-            final Class<?> propertyType = propertyTypeSpec.getCorrespondingClass();
-            ValidationFailure.raiseFormatted(
-                    property,
-                    "JAXB view model '%s' property '%s' is of type '%s' but that type is not annotated with @XmlJavaTypeAdapter.  The type must be annotated with @XmlJavaTypeAdapter(org.apache.isis.applib.jaxb.PersistentEntityAdapter.class) or equivalent.",
-                    objectSpec.getFullIdentifier(),
-                    property.getId(),
-                    propertyType.getName());
 
         }
     }
 
-    private static class PropertyValidatorForDateTypes extends PropertyValidator {
-        private final Class<?> jodaType;
-
-        private PropertyValidatorForDateTypes(final Class<?> jodaType) {
-            this.jodaType = jodaType;
-        }
+    @RequiredArgsConstructor
+    private static class PropertyValidatorForDateTypes extends AssociationValidator {
+        private final Class<?> dateType;
 
         @Override
         void validate(
                 final ObjectSpecification objectSpec,
-                final OneToOneAssociation property) {
+                final ObjectAssociation propertyOrCollection) {
 
-            final ObjectSpecification propertyTypeSpec = property.getElementType();
-            final Class<?> propertyType = propertyTypeSpec.getCorrespondingClass();
+            val elementTypeSpec = propertyOrCollection.getElementType();
+            val elementType = elementTypeSpec.getCorrespondingClass();
+            if (dateType.isAssignableFrom(elementType)
+                    && !propertyOrCollection.containsFacet(XmlJavaTypeAdapterFacet.class)
+                    && !propertyOrCollection.containsFacet(XmlTransientFacet.class)) {
 
-            if (!jodaType.isAssignableFrom(propertyType)) {
-                return;
+                ValidationFailure.raiseFormatted(
+                        propertyOrCollection,
+                        "JAXB view model '%s' %s '%s' is of type '%s', "
+                        + "but is not annotated with @XmlJavaTypeAdapter. "
+                        + "The field/method must be annotated with "
+                        + "@XmlJavaTypeAdapter(org.apache.isis.schema.utils.jaxbadapters.XxxAdapter.ForJaxb.class) "
+                        + "or equivalent, "
+                        + "or be ignored by being annotated with @XmlTransient.",
+                        objectSpec.getFullIdentifier(),
+                        elementTypeSpec.isNotCollection()
+                            ? "@Property"
+                            : "@Collection",
+                        propertyOrCollection.getId(),
+                        dateType.getName());
+
             }
-
-            final XmlJavaTypeAdapterFacet xmlJavaTypeAdapterFacet = property.getFacet(XmlJavaTypeAdapterFacet.class);
-            if (xmlJavaTypeAdapterFacet != null) {
-                return;
-            }
-
-            final XmlTransientFacet xmlTransientFacet =
-                    property.getFacet(XmlTransientFacet.class);
-            if(xmlTransientFacet != null) {
-                return;
-            }
-
-            // else
-            ValidationFailure.raiseFormatted(
-                    property,
-                    "JAXB view model '%s' property '%s' is of type '%s' but is not annotated with @XmlJavaTypeAdapter.  The field/method must be annotated with @XmlJavaTypeAdapter(org.apache.isis.schema.utils.jaxbadapters.XxxAdapter.ForJaxb.class) or equivalent, or be ignored by being annotated with @XmlTransient.",
-                    objectSpec.getFullIdentifier(),
-                    property.getId(),
-                    jodaType.getName());
         }
     }
 

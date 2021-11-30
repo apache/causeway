@@ -73,6 +73,9 @@ class DomainModelTest {
         assertFalse(specificationLoader.snapshotSpecifications().isEmpty());
 
         val validateDomainModel = new DomainModelValidator(serviceRegistry);
+
+        validateDomainModel.getFailures().forEach(f->System.err.printf("%s:%s%n", f.getOrigin(), f.getMessage()));
+
         validateDomainModel.throwIfInvalid(); // should not throw
     }
 

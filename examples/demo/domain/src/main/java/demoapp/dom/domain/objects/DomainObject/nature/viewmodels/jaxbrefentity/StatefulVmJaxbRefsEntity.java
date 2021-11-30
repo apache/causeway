@@ -26,10 +26,10 @@ import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -42,6 +42,8 @@ import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.jaxb.PersistentEntitiesAdapter;
+import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -77,6 +79,7 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
     @Getter @Setter
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @XmlElement(required = false)
+    @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
     private JaxbRefEntity favoriteChild = null;
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
@@ -132,8 +135,8 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
 //tag::class[]
     @Getter @Setter
     @Collection
-    @XmlElementWrapper(name = "children")
     @XmlElement(name = "child")
+    @XmlJavaTypeAdapter(PersistentEntitiesAdapter.class)
     private List<JaxbRefEntity> children = new ArrayList<>();
 
     @Action(choicesFrom = "children", semantics = SemanticsOf.NON_IDEMPOTENT)
