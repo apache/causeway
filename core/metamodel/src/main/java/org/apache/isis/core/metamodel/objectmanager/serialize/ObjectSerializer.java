@@ -40,13 +40,13 @@ public interface ObjectSerializer {
      */
     BiForm serializeObject(BiForm request);
 
-    default ManagedObject deserialize(ObjectSpecification spec, byte[] serializedObjectBytes) {
+    default ManagedObject deserialize(final ObjectSpecification spec, final byte[] serializedObjectBytes) {
         val request = BiForm.deSerializationRequest(SerializedObject.of(spec, serializedObjectBytes));
         val response = serializeObject(request);
         return response.getObject();
     }
 
-    default byte[] serialize(ManagedObject object) {
+    default byte[] serialize(final ManagedObject object) {
         val request = BiForm.serializationRequest(object);
         val response = serializeObject(request);
         return response.getSerializedObject().getSerializedObjectBytes();
@@ -66,16 +66,16 @@ public interface ObjectSerializer {
         @Nullable private SerializedObject serializedObject;
         public boolean isSerialized() { return serializedObject!=null; }
         public boolean isDeserialized() { return object!=null; }
-        public static BiForm serializationRequest(ManagedObject object) {
+        public static BiForm serializationRequest(final ManagedObject object) {
             return of(object, null);
         }
-        public static BiForm deSerializationRequest(SerializedObject serializedObject) {
+        public static BiForm deSerializationRequest(final SerializedObject serializedObject) {
             return of(null, serializedObject);
         }
-        public static BiForm serializationResponse(SerializedObject serializedObject) {
+        public static BiForm serializationResponse(final SerializedObject serializedObject) {
             return of(null, serializedObject);
         }
-        public static BiForm deSerializationResponse(ManagedObject object) {
+        public static BiForm deSerializationResponse(final ManagedObject object) {
             return of(object, null);
         }
         public ObjectSpecification getSpecification() {
@@ -91,13 +91,13 @@ public interface ObjectSerializer {
     extends ChainOfResponsibility.Handler<BiForm, BiForm> {
 
         @Override
-        default boolean isHandling(BiForm request) {
+        default boolean isHandling(final BiForm request) {
             val spec = request.getSpecification();
             return isHandling(spec);
         }
 
         @Override
-        default BiForm handle(BiForm request) {
+        default BiForm handle(final BiForm request) {
             val spec = request.getSpecification();
             if(request.isSerialized()) {
                 val serializedObjectBytes = request.getSerializedObject().getSerializedObjectBytes();
@@ -115,17 +115,14 @@ public interface ObjectSerializer {
 
     // -- FACTORY
 
-    public static ObjectSerializer createDefault(MetaModelContext metaModelContext) {
-
-        val chainOfHandlers = _Lists.<ObjectSerializer.Handler>of(
-                new ObjectSerializer_builtinHandlers.SerializeSerializable(),
-                new ObjectSerializer_builtinHandlers.SerializeOther()
-                );
-
-        val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
-
-        return request -> chainOfRespo.handle(request).orElse(null);
-
+    public static ObjectSerializer createDefault(final MetaModelContext metaModelContext) {
+        return request ->
+        ChainOfResponsibility.named(
+                "ObjectSerializer",
+                _Lists.of(
+                        new ObjectSerializer_builtinHandlers.SerializeSerializable(),
+                        new ObjectSerializer_builtinHandlers.SerializeOther()))
+            .handle(request);
     }
 
 }

@@ -27,7 +27,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.commons.handler.ChainOfResponsibility;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
@@ -61,7 +60,7 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, Node> {
 
         this.isPrototyping = isisSystemEnvironment.isPrototyping();
         this.uiContext = uiContext;
-        this.chainOfHandlers = ChainOfResponsibility.of(handlers);
+        this.chainOfHandlers = ChainOfResponsibility.named("Component Mapper", handlers);
         this.registeredHandlers = handlers.stream()
                 .map(Handler::getClass)
                 .collect(Collectors.toList());
@@ -70,11 +69,7 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, Node> {
     @Override
     public Node componentFor(final ComponentRequest request) {
 
-        val formField = chainOfHandlers
-                .handle(request)
-                .orElseThrow(()->_Exceptions.unrecoverableFormatted(
-                        "Component Mapper failed to handle request %s", request));
-
+        val formField = chainOfHandlers.handle(request);
         val managedMember = (ManagedMember) request.getManagedFeature();
 
         request.getDisablingUiModelIfAny().ifPresent(disablingUiModel->{
@@ -111,10 +106,7 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, Node> {
 
     @Override
     public Node parameterFor(final ComponentRequest request) {
-        val formField = chainOfHandlers
-                .handle(request)
-                .orElseThrow(()->_Exceptions.unrecoverableFormatted(
-                        "Component Mapper failed to handle request %s", request));
+        val formField = chainOfHandlers.handle(request);
         return formField;
     }
 

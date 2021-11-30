@@ -20,14 +20,12 @@ package org.apache.isis.core.metamodel.objectmanager.load;
 
 import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Value;
-import lombok.val;
 
 /**
  * @since 2.0
@@ -56,23 +54,18 @@ public interface ObjectLoader {
     // -- FACTORY
 
     public static ObjectLoader createDefault(final MetaModelContext mmc) {
-
-        val chainOfHandlers = _Lists.of(
-                new ObjectLoader_builtinHandlers.GuardAgainstNull(mmc),
-                new ObjectLoader_builtinHandlers.LoadService(mmc),
-                new ObjectLoader_builtinHandlers.LoadValue(mmc),
-                new ObjectLoader_builtinHandlers.LoadSerializable(mmc),
-                new ObjectLoader_builtinHandlers.LoadViewModel(mmc),
-                new ObjectLoader_builtinHandlers.LoadEntity(mmc),
-                new ObjectLoader_builtinHandlers.LoadOther(mmc));
-
-        val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
-
-        return request -> chainOfRespo
-                .handle(request)
-                .orElseThrow(()->_Exceptions.unrecoverableFormatted(
-                        "ObjectLoader failed to handle request %s", request));
-
+        return request ->
+        ChainOfResponsibility.named(
+                "ObjectLoader",
+                _Lists.of(
+                        new ObjectLoader_builtinHandlers.GuardAgainstNull(mmc),
+                        new ObjectLoader_builtinHandlers.LoadService(mmc),
+                        new ObjectLoader_builtinHandlers.LoadValue(mmc),
+                        new ObjectLoader_builtinHandlers.LoadSerializable(mmc),
+                        new ObjectLoader_builtinHandlers.LoadViewModel(mmc),
+                        new ObjectLoader_builtinHandlers.LoadEntity(mmc),
+                        new ObjectLoader_builtinHandlers.LoadOther(mmc)))
+            .handle(request);
     }
 
 }

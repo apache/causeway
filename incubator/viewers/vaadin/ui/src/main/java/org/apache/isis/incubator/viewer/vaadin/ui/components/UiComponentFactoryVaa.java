@@ -46,7 +46,7 @@ public class UiComponentFactoryVaa implements UiComponentFactory<Component, Comp
 
     @Inject
     private UiComponentFactoryVaa(final List<Handler<Component>> handlers) {
-        this.chainOfHandlers = ChainOfResponsibility.of(handlers);
+        this.chainOfHandlers = ChainOfResponsibility.named("UiComponentFactoryVaa", handlers);
         this.registeredHandlers = handlers.stream()
                 .map(Handler::getClass)
                 .collect(Collectors.toList());
@@ -77,18 +77,12 @@ public class UiComponentFactoryVaa implements UiComponentFactory<Component, Comp
 
     @Override
     public Component componentFor(final ComponentRequest request) {
-        return chainOfHandlers
-                .handle(request)
-                .orElseThrow(()->_Exceptions.unrecoverableFormatted(
-                        "Component Mapper failed to handle request %s", request));
+        return chainOfHandlers.handle(request);
     }
 
     @Override
     public Component parameterFor(final ComponentRequest request) {
-        return chainOfHandlers
-                .handle(request)
-                .orElseThrow(()->_Exceptions.unrecoverableFormatted(
-                        "Component Mapper failed to handle request %s", request));
+        return chainOfHandlers.handle(request);
     }
 
     @Override

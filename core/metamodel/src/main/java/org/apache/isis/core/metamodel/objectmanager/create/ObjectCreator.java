@@ -18,17 +18,14 @@
  */
 package org.apache.isis.core.metamodel.objectmanager.create;
 
-import java.util.List;
-
 import org.apache.isis.commons.handler.ChainOfResponsibility;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Value;
-import lombok.val;
 
 /**
  * @since 2.0
@@ -57,23 +54,20 @@ public interface ObjectCreator {
 
     public static ObjectCreator createDefault(final MetaModelContext mmc) {
 
-        val chainOfHandlers = List.of(
-                new ObjectCreator_builtinHandlers.DefaultCreationHandler(mmc)
-
-//                new ObjectCreator_builtinHandlers.GuardAgainstNull(),
-//                new ObjectCreator_builtinHandlers.LoadService(),
-//                new ObjectCreator_builtinHandlers.CreateValueDefault(),
-//                new ObjectCreator_builtinHandlers.CreateViewModel(),
-//                new ObjectCreator_builtinHandlers.CreateEntity(),
-//                new ObjectCreator_builtinHandlers.CreateOther()
-                );
-
-        val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
-
-        return request -> chainOfRespo
-                .handle(request)
-                .orElseThrow(()->_Exceptions.unrecoverableFormatted(
-                        "ObjectCreator failed to hanlde request %s", request));
+        return request ->
+        ChainOfResponsibility.named(
+                "ObjectCreator",
+                _Lists.of(
+                        new ObjectCreator_builtinHandlers.DefaultCreationHandler(mmc)
+//                      new ObjectCreator_builtinHandlers.GuardAgainstNull(),
+//                      new ObjectCreator_builtinHandlers.LoadService(),
+//                      new ObjectCreator_builtinHandlers.CreateValueDefault(),
+//                      new ObjectCreator_builtinHandlers.CreateViewModel(),
+//                      new ObjectCreator_builtinHandlers.CreateEntity(),
+//                      new ObjectCreator_builtinHandlers.CreateOther()
+                        )
+        )
+        .handle(request);
 
     }
 

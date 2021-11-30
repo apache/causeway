@@ -19,7 +19,8 @@
 package org.apache.isis.commons.handler;
 
 import java.util.List;
-import java.util.Optional;
+
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
  * Building blocks for the <em>Chain of Responsibility</em> design pattern.
@@ -40,7 +41,7 @@ public interface ChainOfResponsibility<X, R> {
      * @return response of the first handler that handled the request wrapped in an Optional,
      * or an empty Optional, if no handler handled the request
      */
-    Optional<R> handle(X request);
+    R handle(X request);
 
     /**
      * A chain of responsibility is made up of handlers, that are asked in sequence,
@@ -57,24 +58,43 @@ public interface ChainOfResponsibility<X, R> {
     }
 
     /**
-     * Creates a new ChainOfResponsibility of given {@code chainOfHandlers}
-     * @param <X>
-     * @param <R>
-     * @param chainOfHandlers
+     * Creates a {@link ChainOfResponsibility} for given {@code chainOfHandlers}
      */
     static <X, R> ChainOfResponsibility<X, R>
-    of(
-            final List<? extends ChainOfResponsibility.Handler<? super X, R>> chainOfHandlers) {
+    of(final List<? extends ChainOfResponsibility.Handler<? super X, R>> chainOfHandlers) {
 
-        return request -> {
-
-            final Optional<R> responseIfAny = chainOfHandlers.stream()
+        return new ChainOfResponsibility<X, R>(){
+            @Override
+            public R handle(final X request) {
+                return chainOfHandlers.stream()
                     .filter(h -> h.isHandling(request))
                     .findFirst()
-                    .map(h -> h.handle(request));
-            return responseIfAny;
+                    .orElseThrow(()->
+                        _Exceptions.noSuchElement("no handler found for request %s", request))
+                    .handle(request);
+            }
         };
-
     }
+
+    /**
+     * Creates a named {@link ChainOfResponsibility} for given {@code chainOfHandlers}
+     */
+    static <X, R> ChainOfResponsibility<X, R>
+    named(  final String name,
+            final List<? extends ChainOfResponsibility.Handler<? super X, R>> chainOfHandlers) {
+
+    return new ChainOfResponsibility<X, R>(){
+        @Override
+        public R handle(final X request) {
+            return chainOfHandlers.stream()
+                .filter(h -> h.isHandling(request))
+                .findFirst()
+                .orElseThrow(()->
+                    _Exceptions.noSuchElement("no %s handler found for request %s", name, request))
+                .handle(request);
+        }
+    };
+}
+
 
 }

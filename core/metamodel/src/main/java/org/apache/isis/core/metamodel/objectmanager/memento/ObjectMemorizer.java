@@ -37,7 +37,7 @@ public interface ObjectMemorizer {
     /**
      * Does both, serialize or deserialize, depending on the request's type.
      * @apiNote Rather use the more convenient specialized variants
-     * {@link #serialize(ManagedObject)} and {@link #deserialize(ObjectSpecification, ObjectMemento))}
+     * {@link #serialize(ManagedObject)} and {@link #deserialize(ObjectSpecification, ObjectMemento)}
      * @param request
      */
     BiForm serializeObject(BiForm request);
@@ -125,8 +125,6 @@ public interface ObjectMemorizer {
                 new ObjectMemorizer_builtinHandlers.MemorizeOther()
                 );
 
-
-
         if(metaModelContext instanceof MetaModelContext_forTesting) {
             ((MetaModelContext_forTesting)(metaModelContext))
             .registerPostconstruct(()->chainOfHandlers.forEach(serviceInjector::injectServicesInto));
@@ -134,10 +132,8 @@ public interface ObjectMemorizer {
             chainOfHandlers.forEach(serviceInjector::injectServicesInto);
         }
 
-        val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
-
-        return request -> chainOfRespo.handle(request).orElse(null);
-
+        return request -> ChainOfResponsibility.of(chainOfHandlers)
+                .handle(request);
     }
 
 }
