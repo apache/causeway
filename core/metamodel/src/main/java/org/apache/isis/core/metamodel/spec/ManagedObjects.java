@@ -342,8 +342,6 @@ public final class ManagedObjects {
         .collect(Can.toCan());
     }
 
-
-
     /**
      * eg. in order to prevent wrapping an object that is already wrapped
      */

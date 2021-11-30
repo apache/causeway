@@ -19,6 +19,8 @@
 package demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity;
 
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.ObjectSupport;
+import org.apache.isis.applib.annotation.Property;
 
 import demoapp.dom._infra.values.ValueHolder;
 
@@ -34,7 +36,13 @@ implements
         return getName();
     }
 
-    protected abstract String getName();
+    @ObjectSupport
+    public String title() {
+        return getName();
+    }
+
+    @Property
+    public abstract String getName();
     protected abstract void setName(String value);
 
 }
