@@ -19,11 +19,19 @@
 package org.apache.isis.testdomain.model.valuetypes;
 
 import java.util.List;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.params.provider.Arguments;
 import org.springframework.stereotype.Service;
+
+import org.apache.isis.commons.internal.base._Strings;
+
+import lombok.Value;
+import lombok.val;
 
 @Service
 public class ValueTypeExampleService {
@@ -32,6 +40,29 @@ public class ValueTypeExampleService {
 
     public Stream<ValueTypeExample<?>> streamExamples() {
         return examples.stream();
+    }
+
+    @Value(staticConstructor = "of")
+    public static class Scenario implements Comparable<Scenario> {
+        static Scenario of(final ValueTypeExample<?> example) {
+            val name = String.format("%s", example.getValueType().getName());
+            return Scenario.of(name, Arguments.of(
+                    name,
+                    example.getValueType(),
+                    example));
+        }
+        String name;
+        Arguments arguments;
+        @Override public int compareTo(final Scenario other) {
+            return _Strings.compareNullsFirst(this.name, other.name);
+        }
+    }
+
+    public Stream<Scenario> streamScenarios() {
+        val sortedScenarios = streamExamples()
+            .map(Scenario::of)
+            .collect(Collectors.toCollection(TreeSet::new));
+        return sortedScenarios.stream();
     }
 
 }

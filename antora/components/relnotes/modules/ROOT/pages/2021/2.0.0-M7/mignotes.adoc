@@ -26,6 +26,15 @@ for non-public class member introspection.
 | `org.apache.isis.applib.jaxb.JodaTimeJaxbAdapters` 
 | moved to `org.apache.isis.valuetypes.jodatime.applib.jaxb` 
 
+| _SecMan's_ `PasswordEncryptionService` was removed
+| Using Spring's `org.springframework.security.crypto.password.PasswordEncoder` instead.
+
+| `CommandUtil` was renamed ..
+| to `IdentifierUtil`
+
+| Several `CommonDtoUtil` methods have been refactored ..
+| into a new service `SchemaValueMarshaller`
+
 |===
 
 == Configuration
@@ -42,6 +51,32 @@ isis.core.meta-model.introspector.policy=ANNOTATION_OPTIONAL
 // semantic equivalent replacement for i.c.m.a.action.explicit=true 
 isis.core.meta-model.introspector.policy=ANNOTATION_REQUIRED
 
+----
+
+=== Password Hashing
+
+_SecMan_ provides a _Jbcrypt_ based password encryption service. 
+We added an alternative based on _Spring-Security_.
+To switch out the old vs the new replace `IsisModuleExtSecmanEncryptionJbcrypt` with 
+`IsisModuleExtSecmanEncryptionSpring`. However note, that the new password hashes are 
+not compatible with the old ones. 
+
+[source,xml]
+.IsisModuleExtSecmanEncryptionJbcrypt
+----
+<dependency>
+  <groupId>org.apache.isis.extensions</groupId>
+  <artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId>
+</dependency>
+----
+
+[source,xml]
+.IsisModuleExtSecmanEncryptionSpring
+----
+<dependency>
+  <groupId>org.apache.isis.extensions</groupId>
+  <artifactId>isis-extensions-secman-encryption-spring</artifactId>
+</dependency>
 ----
 
 == Maven Artifacts

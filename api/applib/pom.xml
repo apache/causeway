@@ -87,6 +87,12 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-schema</artifactId>
         </dependency>
+        
+        <!-- marked for deprecation -->
+    	<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+		</dependency>
 
         <!-- TEST -->
 

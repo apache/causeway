@@ -27,6 +27,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
+import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.image._Images;
@@ -40,6 +41,7 @@ public class BufferedImageValueSemantics
 extends ValueSemanticsAbstract<BufferedImage>
 implements
     ImageValueSemantics,
+    OrderRelation<BufferedImage, Void>,
     EncoderDecoder<BufferedImage> {
 
     @Override
@@ -50,6 +52,23 @@ implements
     @Override
     public ValueType getSchemaValueType() {
         return UNREPRESENTED;
+    }
+
+    // -- ORDER RELATION
+
+    @Override
+    public Void epsilon() {
+        return null; // not used
+    }
+
+    @Override
+    public int compare(final BufferedImage a, final BufferedImage b, final Void epsilon) {
+        return _Images.compare(a, b);
+    }
+
+    @Override
+    public boolean equals(final BufferedImage a, final BufferedImage b, final Void epsilon) {
+        return compare(a, b, epsilon) == 0;
     }
 
     // -- ENCODER DECODER
@@ -99,6 +118,8 @@ implements
         return Optional.ofNullable((BufferedImage) adapter.getPojo());
         /*sonar-ignore-off*/
     }
+
+
 
 
 }

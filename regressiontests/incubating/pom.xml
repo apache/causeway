@@ -72,7 +72,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId>
+			<artifactId>isis-extensions-secman-encryption-spring</artifactId>
 			<scope>test</scope>
 		</dependency>
 

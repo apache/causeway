@@ -54,7 +54,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
-import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -71,8 +71,8 @@ public class ObjectActionDefault
 extends ObjectMemberAbstract
 implements ObjectAction {
 
-    public static ActionType getType(final String typeStr) {
-        final ActionType type = ActionType.valueOf(typeStr);
+    public static ActionScope getType(final String typeStr) {
+        final ActionScope type = ActionScope.valueOf(typeStr);
         if (type == null) {
             throw new IllegalArgumentException();
         }
@@ -147,14 +147,14 @@ implements ObjectAction {
     // -- TYPE
 
     @Override
-    public ActionType getType() {
-        return getType(this);
+    public ActionScope getScope() {
+        return getScope(this);
     }
 
-    private static ActionType getType(final FacetHolder facetHolder) {
+    private static ActionScope getScope(final FacetHolder facetHolder) {
         return facetHolder.containsFacet(PrototypeFacet.class)
-            ? ActionType.PROTOTYPE
-            : ActionType.USER;
+            ? ActionScope.PROTOTYPE
+            : ActionScope.PRODUCTION;
     }
 
     @Override
@@ -393,7 +393,9 @@ implements ObjectAction {
         _Assert.assertEquals(this.getParameterCount(), argumentAdapters.size(),
                 "action's parameter count and provided argument count must match");
 
-        setupCommand(head, argumentAdapters);
+        if(!interactionInitiatedBy.isPassThrough()) {
+            setupCommand(head, argumentAdapters);
+        }
 
         return this.executeInternal(head, argumentAdapters, interactionInitiatedBy);
     }
@@ -456,7 +458,7 @@ implements ObjectAction {
 
     @Override
     public boolean isPrototype() {
-        return getType().isPrototype();
+        return getScope().isPrototype();
     }
 
     @Getter(lazy=true, onMethod_ = {@Override})
@@ -489,8 +491,8 @@ implements ObjectAction {
         final StringBuffer sb = new StringBuffer();
         sb.append("Action [");
         sb.append(super.toString());
-        sb.append(",type=");
-        sb.append(getType());
+        sb.append(",scope=");
+        sb.append(getScope());
         sb.append(",returns=");
         sb.append(getReturnType());
         sb.append(",parameters={");

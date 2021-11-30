@@ -18,8 +18,10 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics.temporal;
 
+import java.time.Duration;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalQuery;
 import java.util.function.BiFunction;
@@ -32,6 +34,7 @@ import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.Accessors;
 
@@ -76,6 +79,32 @@ implements TemporalValueSemantics<T> {
 
         this.query = query;
         this.adjuster = adjuster;
+    }
+
+    // -- ORDER RELATION
+
+    protected final static Duration ALMOST_A_SECOND = Duration.ofNanos(999_999_999);
+    protected final static Duration ALMOST_A_MILLI_SECOND = Duration.ofNanos(999_999);
+
+    @Override
+    public final int compare(final T a, final T b, final @NonNull Duration epsilon) {
+
+        val delta = (!a.isSupported(ChronoUnit.SECONDS))
+                ? Duration.ofDays(a.until(b, ChronoUnit.DAYS))
+                : Duration.between(a, b);
+
+        if(epsilon.minus(delta.abs()).isNegative()) {
+            // negative delta means a > b => should return +1
+            return delta.isNegative()
+                    ? 1
+                    : -1;
+        }
+        return 0;
+    }
+
+    @Override
+    public final boolean equals(final T a, final T b, final @NonNull Duration epsilon) {
+        return compare(a, b, epsilon) == 0;
     }
 
     // -- ENCODER/DECODER
@@ -157,13 +186,13 @@ implements TemporalValueSemantics<T> {
      */
     protected DateTimeFormatter getEditingFormat(final ValueSemanticsProvider.Context context) {
         return getEditingFormat(context, temporalCharacteristic, offsetCharacteristic,
-                "yyyy-MM-dd", "HH:mm:ss", "Z");
+                "yyyy-MM-dd", "HH:mm:ss", "x");
     }
 
     @Override
     public String getPattern(final ValueSemanticsProvider.Context context) {
         return getEditingFormatAsPattern(temporalCharacteristic, offsetCharacteristic,
-                "yyyy-MM-dd", "HH:mm:ss", "Z");
+                "yyyy-MM-dd", "HH:mm:ss", "x");
     }
 
     /**

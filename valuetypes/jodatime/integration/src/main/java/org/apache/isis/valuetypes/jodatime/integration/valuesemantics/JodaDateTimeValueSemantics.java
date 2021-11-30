@@ -28,14 +28,13 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.ZonedDateTimeValueSemantics;
-import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsAdapter;
-import org.apache.isis.schema.common.v2.ValueType;
-import org.apache.isis.valuetypes.jodatime.applib.value.JodatimeConverters;
+import org.apache.isis.core.metamodel.valuetypes.TemporalSemanticsAdapter;
+import org.apache.isis.valuetypes.jodatime.applib.value.JodaTimeConverters;
 
 @Component
 @Named("isis.val.JodaDateTimeValueSemantics")
 public class JodaDateTimeValueSemantics
-extends ValueSemanticsAdapter<org.joda.time.DateTime, ZonedDateTime>  {
+extends TemporalSemanticsAdapter<org.joda.time.DateTime, ZonedDateTime>  {
 
     @Inject ZonedDateTimeValueSemantics zonedDateTimeValueSemantics;
 
@@ -45,23 +44,18 @@ extends ValueSemanticsAdapter<org.joda.time.DateTime, ZonedDateTime>  {
     }
 
     @Override
-    public ValueType getSchemaValueType() {
-        return ValueType.JODA_DATE_TIME;
-    }
-
-    @Override
     public ValueSemanticsAbstract<ZonedDateTime> getDelegate() {
         return zonedDateTimeValueSemantics;
     }
 
     @Override
     public DateTime fromDelegateValue(final ZonedDateTime delegateValue) {
-        return JodatimeConverters.toJoda(delegateValue);
+        return JodaTimeConverters.toJoda(delegateValue);
     }
 
     @Override
     public ZonedDateTime toDelegateValue(final DateTime value) {
-        return JodatimeConverters.fromJoda(value);
+        return JodaTimeConverters.fromJoda(value);
     }
 
 }

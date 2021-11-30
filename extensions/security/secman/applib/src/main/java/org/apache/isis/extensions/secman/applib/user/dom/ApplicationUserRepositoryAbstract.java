@@ -25,7 +25,10 @@ import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.eventbus.EventBusService;
@@ -35,7 +38,6 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
@@ -43,7 +45,6 @@ import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_lock;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_unlock;
 import org.apache.isis.extensions.secman.applib.user.events.UserCreatedEvent;
-import org.apache.isis.extensions.secman.applib.user.spi.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.applib.util.RegexReplacer;
 
 import lombok.NonNull;
@@ -55,16 +56,18 @@ implements ApplicationUserRepository {
     @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;
     @Inject private SecmanConfiguration configBean;
-    @Inject private Optional<PasswordEncryptionService> passwordEncryptionService; // empty if no candidate is available
 	@Inject protected IsisConfiguration isisConfiguration;
     @Inject private EventBusService eventBusService;
     @Inject RegexReplacer regexReplacer;
+
+    //@Inject private Optional<PasswordEncryptionService> passwordEncryptionService; // empty if no candidate is available
+    @Autowired(required = false) @Qualifier("secman") PasswordEncoder passwordEncoder;
 
     @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
 
     private final Class<U> applicationUserClass;
 
-    protected ApplicationUserRepositoryAbstract(Class<U> applicationUserClass) {
+    protected ApplicationUserRepositoryAbstract(final Class<U> applicationUserClass) {
         this.applicationUserClass = applicationUserClass;
     }
 
@@ -145,7 +148,7 @@ implements ApplicationUserRepository {
     }
 
     @Override
-    public Collection<ApplicationUser> findByRole(ApplicationRole role) {
+    public Collection<ApplicationUser> findByRole(final ApplicationRole role) {
 
         return _NullSafe.stream(role.getUsers())
                 .collect(_Sets.toUnmodifiableSorted());
@@ -179,7 +182,7 @@ implements ApplicationUserRepository {
     // -- UPDATE USER STATE
 
     @Override
-    public void enable(ApplicationUser user) {
+    public void enable(final ApplicationUser user) {
         if(user.getStatus() != ApplicationUserStatus.UNLOCKED) {
              factoryService.mixin(ApplicationUser_unlock.class, user)
              .act();
@@ -187,7 +190,7 @@ implements ApplicationUserRepository {
     }
 
     @Override
-    public void disable(ApplicationUser user) {
+    public void disable(final ApplicationUser user) {
         if(user.getStatus() != ApplicationUserStatus.LOCKED) {
             factoryService.mixin(ApplicationUser_lock.class, user)
             .act();
@@ -195,15 +198,15 @@ implements ApplicationUserRepository {
     }
 
     @Override
-    public boolean isAdminUser(ApplicationUser user) {
+    public boolean isAdminUser(final ApplicationUser user) {
         return configBean.getAdminUserName().equals(user.getName());
     }
 
     @Override
     public ApplicationUser newUser(
-            @NonNull String username,
-            @Nullable AccountType accountType,
-            Consumer<ApplicationUser> beforePersist) {
+            @NonNull final String username,
+            @Nullable final AccountType accountType,
+            final Consumer<ApplicationUser> beforePersist) {
 
         val user = newApplicationUser();
         user.setUsername(username);
@@ -227,19 +230,15 @@ implements ApplicationUserRepository {
         if(!isPasswordFeatureEnabled(user)) {
             return false;
         }
-        val encrypter = passwordEncryptionService.orElseThrow(_Exceptions::unexpectedCodeReach);
-        user.setEncryptedPassword(encrypter.encrypt(password));
+        user.setEncryptedPassword(passwordEncoder.encode(password));
         repository.persistAndFlush(user);
         return true;
     }
 
     @Override
-    public boolean isPasswordFeatureEnabled(ApplicationUser user) {
+    public boolean isPasswordFeatureEnabled(final ApplicationUser user) {
         return user.isLocalAccount()
-                /*sonar-ignore-on*/
-                && passwordEncryptionService != null // if for any reason injection fails
-                /*sonar-ignore-off*/
-                && passwordEncryptionService.isPresent();
+                && passwordEncoder != null;
     }
 
 

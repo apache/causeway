@@ -113,10 +113,9 @@ implements MultiselectChoices {
 
         dataRowsFiltered = _Observables.lazy(()->
             dataElements.getValue().stream()
-                //TODO filter by searchArgument
+                //XXX future extension: filter by searchArgument
                 .filter(this::ignoreHidden)
                 .sorted(managedMember.getMetaModel().getElementComparator())
-                //TODO apply projection conversion (if any)
                 .map(domainObject->new DataRow(this, domainObject))
                 .collect(Can.toCan()));
 
@@ -151,7 +150,7 @@ implements MultiselectChoices {
             .map(property->new DataColumn(this, property))
             .collect(Can.toCan()));
 
-        //XXX the tile could dynamically reflect the number of elements selected
+        //XXX future extension: the tile could dynamically reflect the number of elements selected
         //eg... 5 Orders selected
         title = _Observables.lazy(()->
             managedMember
@@ -263,15 +262,15 @@ implements MultiselectChoices {
                 // bypass domain events
                 val collInteraction = CollectionInteraction.start(owner, memberId, where);
                 val managedColl = collInteraction.getManagedCollection().orElseThrow();
-                //FIXME[ISIS-2871] bypass domain events
+                // invocation bypassing domain events (pass-through)
                 return new DataTableModel(managedColl, where, ()->
-                    managedColl.streamElements().collect(Can.toCan()));
+                    managedColl.streamElements(InteractionInitiatedBy.PASS_THROUGH).collect(Can.toCan()));
             }
             val actionInteraction = ActionInteraction.start(owner, memberId, where);
             val managedAction = actionInteraction.getManagedActionElseFail();
             val args = argsMemento.getArgumentList(managedAction.getMetaModel());
-            //FIXME[ISIS-2871] bypass domain events
-            val actionResult = managedAction.invoke(args).left().orElseThrow();
+            // invocation bypassing domain events (pass-through)
+            val actionResult = managedAction.invoke(args, InteractionInitiatedBy.PASS_THROUGH).left().orElseThrow();
             return forAction(managedAction, args, actionResult);
         }
     }

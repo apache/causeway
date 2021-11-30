@@ -29,7 +29,6 @@ import java.util.regex.Pattern;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.applib.spec.Specification;
-import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -454,9 +453,8 @@ class MetaModelExporter {
     }
 
     private boolean isValueType(final ObjectSpecification specification) {
-        return CommonDtoUtils.isValueType(specification.getCorrespondingClass());
+        return specification.getBeanSort().isValue();
     }
-
 
     private String asStr(final Object attributeObj) {
         String str;

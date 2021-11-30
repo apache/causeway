@@ -18,14 +18,16 @@
  */
 package org.apache.isis.core.metamodel.facets.object.value.annotcfg;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -88,12 +90,18 @@ extends FacetFactoryAbstract {
         val facetHolder = processClassContext.getFacetHolder();
         val valueIfAny = processClassContext.synthesizeOnType(Value.class);
 
-        addFacetIfPresent(
+        val logicalTypeFacetIfAny = addFacetIfPresent(
                 LogicalTypeFacetForValueAnnotation
                 .create(valueIfAny, cls, facetHolder));
 
+        val logicalType = logicalTypeFacetIfAny
+                .map(logicalTypeFacet->logicalTypeFacet.getLogicalType())
+                .orElseGet(()->LogicalType.fqcn(cls));
+
+        val identifier = Identifier.classIdentifier(logicalType);
+
         final Can<ValueSemanticsProvider> valueSemantics = _Casts.uncheckedCast(
-                getValueSemanticsRegistry().selectValueSemantics(cls));
+                getValueSemanticsResolver().selectValueSemantics(identifier, cls));
 
         if(!valueSemantics.isEmpty()) {
             addAllFacetsForValueSemantics(valueSemantics, facetHolder);
@@ -106,7 +114,7 @@ extends FacetFactoryAbstract {
             if(valueSemantics.isCardinalityMultiple()) {
                 log.warn("found multiple ValueSemanticsProvider for value type {}; using the first", cls);
             } else if(valueSemantics.isEmpty()) {
-                log.warn("could not find a ValueSemanticsProvider for value type {}; ",cls);
+                log.warn("could not find a ValueSemanticsProvider for value type {}; ", cls);
                 addAllFacetsForValueSemantics(Can.empty(), facetHolder);
             }
 
@@ -166,7 +174,7 @@ extends FacetFactoryAbstract {
     // -- DEPENDENCIES
 
     @Getter(lazy = true, value = AccessLevel.PRIVATE)
-    private final ValueSemanticsRegistry valueSemanticsRegistry =
-        getServiceRegistry().lookupServiceElseFail(ValueSemanticsRegistry.class);
+    private final ValueSemanticsResolver valueSemanticsResolver =
+        getServiceRegistry().lookupServiceElseFail(ValueSemanticsResolver.class);
 
 }

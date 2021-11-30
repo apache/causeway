@@ -23,9 +23,10 @@ import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
 
+import lombok.Getter;
+
 public class RecreatableObjectFacetForXmlRootElementAnnotation
 extends RecreatableObjectFacetAbstract {
-
 
     public RecreatableObjectFacetForXmlRootElementAnnotation(
             final FacetHolder holder,
@@ -36,30 +37,28 @@ extends RecreatableObjectFacetAbstract {
 
     @Override
     protected Object doInstantiate(final Class<?> viewModelClass, final String mementoStr) {
-
         final String xmlStr = getUrlEncodingService().decodeToString(mementoStr);
         final Object viewModelPojo = getJaxbService().fromXml(viewModelClass, xmlStr);
-
         return viewModelPojo;
     }
 
     @Override
-    public String memento(final Object pojo) {
-
-        final String xml = getJaxbService().toXml(pojo);
+    public String memento(final Object vmPojo) {
+        final String xml = getJaxbService().toXml(vmPojo);
         final String encoded = getUrlEncodingService().encodeString(xml);
-
+        //FIXME[ISIS-2903] gets called about 4 times per same object, why?
+        //System.err.printf("%s%n", encoded);
         return encoded;
     }
 
     // -- DEPENDENCIES
 
-    private JaxbService getJaxbService() {
-        return getServiceRegistry().lookupServiceElseFail(JaxbService.class);
-    }
+    @Getter(lazy=true)
+    private final JaxbService jaxbService =
+        getServiceRegistry().lookupServiceElseFail(JaxbService.class);
 
-    private UrlEncodingService getUrlEncodingService() {
-        return getServiceRegistry().lookupServiceElseFail(UrlEncodingService.class);
-    }
+    @Getter(lazy=true)
+    private final UrlEncodingService urlEncodingService =
+        getServiceRegistry().lookupServiceElseFail(UrlEncodingService.class);
 
 }

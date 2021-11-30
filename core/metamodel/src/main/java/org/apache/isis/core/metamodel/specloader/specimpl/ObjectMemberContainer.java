@@ -22,13 +22,11 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
-import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.Hierarchical;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -55,21 +53,21 @@ implements
     ObjectAssociationContainer,
     Hierarchical {
 
-    protected ObjectMemberContainer(MetaModelContext metaModelContext) {
+    protected ObjectMemberContainer(final MetaModelContext metaModelContext) {
         super(metaModelContext);
     }
 
     // -- ACTIONS
 
     @Override
-    public Optional<ObjectAction> getAction(String id, @Nullable ActionType type) {
+    public Optional<ObjectAction> getAction(
+            final String id, final ImmutableEnumSet<ActionScope> scopes, final MixedIn mixedIn) {
 
-        val declaredAction = getDeclaredAction(id); // no inheritance nor type considered
+        val declaredAction = getDeclaredAction(id, mixedIn); // no inheritance nor type considered
 
         if(declaredAction.isPresent()) {
             // action found but if its not the right type, stop searching
-            if(type!=null
-                    && declaredAction.get().getType() != type) {
+            if(!scopes.contains(declaredAction.get().getScope())) {
                 return Optional.empty();
             }
             return declaredAction;
@@ -77,12 +75,12 @@ implements
 
         return isTypeHierarchyRoot()
                 ? Optional.empty() // stop searching
-                : superclass().getAction(id, type);
+                : superclass().getAction(id, scopes, mixedIn);
     }
 
     @Override
     public Stream<ObjectAction> streamActions(
-            final ImmutableEnumSet<ActionType> actionTypes,
+            final ImmutableEnumSet<ActionScope> actionTypes,
             final MixedIn mixedIn,
             final Consumer<ObjectAction> onActionOverloaded) {
 
@@ -120,9 +118,9 @@ implements
     // -- ASSOCIATIONS
 
     @Override
-    public Optional<ObjectAssociation> getAssociation(String id) {
+    public Optional<ObjectAssociation> getAssociation(final String id, final MixedIn mixedIn) {
 
-        val declaredAssociation = getDeclaredAssociation(id); // no inheritance considered
+        val declaredAssociation = getDeclaredAssociation(id, mixedIn); // no inheritance considered
 
         if(declaredAssociation.isPresent()) {
             return declaredAssociation;
@@ -130,11 +128,11 @@ implements
 
         return isTypeHierarchyRoot()
                ? Optional.empty() // stop searching
-               : superclass().getAssociation(id);
+               : superclass().getAssociation(id, mixedIn);
     }
 
     @Override
-    public Stream<ObjectAssociation> streamAssociations(MixedIn mixedIn) {
+    public Stream<ObjectAssociation> streamAssociations(final MixedIn mixedIn) {
 
         if(isTypeHierarchyRoot()) {
             return streamDeclaredAssociations(mixedIn); // stop going deeper

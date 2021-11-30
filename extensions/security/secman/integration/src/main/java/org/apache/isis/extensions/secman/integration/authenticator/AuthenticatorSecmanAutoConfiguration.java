@@ -18,16 +18,16 @@
  */
 package org.apache.isis.extensions.secman.integration.authenticator;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.security.authentication.Authenticator;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.applib.user.spi.PasswordEncryptionService;
 
 /**
  * @since 2.0 {@index}
@@ -41,8 +41,8 @@ public class AuthenticatorSecmanAutoConfiguration  {
     @Qualifier("Secman")
     public Authenticator authenticatorSecman(
             final ApplicationUserRepository applicationUserRepository,
-            final PasswordEncryptionService passwordEncryptionService) {
-        return new AuthenticatorSecman(applicationUserRepository, passwordEncryptionService);
+            final @Qualifier("secman") PasswordEncoder passwordEncoder) {
+        return new AuthenticatorSecman(applicationUserRepository, passwordEncoder);
     }
 
 }

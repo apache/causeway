@@ -75,7 +75,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
-import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -156,7 +156,7 @@ implements ObjectSpecification {
             _Lazy.threadSafe(()->Can.ofCollection(objectActions));
 
     // partitions and caches objectActions by type; updated in sortCacheAndUpdateActions()
-    private final ListMultimap<ActionType, ObjectAction> objectActionsByType =
+    private final ListMultimap<ActionScope, ObjectAction> objectActionsByType =
             _Multimaps.newConcurrentListMultimap();
 
     // -- INTERFACES
@@ -378,7 +378,7 @@ implements ObjectSpecification {
             this.objectActions.addAll(orderedActions);
             unmodifiableActions.clear(); // invalidate
 
-            for (val actionType : ActionType.values()) {
+            for (val actionType : ActionScope.values()) {
                 val objectActionForType = objectActionsByType.getOrElseNew(actionType);
                 objectActionForType.clear();
                 objectActions.stream()
@@ -654,10 +654,10 @@ implements ObjectSpecification {
     // -- ASSOCIATIONS
 
     @Override
-    public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn contributed) {
+    public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn mixedIn) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
-        if(contributed.isIncluded()) {
+        if(mixedIn.isIncluded()) {
             createMixedInAssociations(); // only if not already
             synchronized(unmodifiableAssociations) {
                 return stream(unmodifiableAssociations.get());
@@ -687,24 +687,22 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Optional<ObjectAssociation> getDeclaredAssociation(final String id) {
+    public Optional<ObjectAssociation> getDeclaredAssociation(final String id, final MixedIn mixedIn) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
-        return streamDeclaredAssociations(MixedIn.INCLUDED)
+        return streamDeclaredAssociations(mixedIn)
                 .filter(objectAssociation->objectAssociation.getId().equals(id))
                 .findFirst();
     }
 
     @Override
     public Stream<ObjectAction> streamRuntimeActions(final MixedIn mixedIn) {
-        val actionTypes = getMetaModelContext().getSystemEnvironment().isPrototyping()
-                ? ActionType.USER_AND_PROTOTYPE
-                : ActionType.USER_ONLY;
-        return streamActions(actionTypes, mixedIn);
+        val actionScopes = ActionScope.forEnvironment(getMetaModelContext().getSystemEnvironment());
+        return streamActions(actionScopes, mixedIn);
     }
 
     @Override
     public Stream<ObjectAction> streamDeclaredActions(
-            final ImmutableEnumSet<ActionType> actionTypes,
+            final ImmutableEnumSet<ActionScope> actionScopes,
             final MixedIn mixedIn) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
@@ -712,8 +710,8 @@ implements ObjectSpecification {
             createMixedInActions(); // only if not already
         }
 
-        return actionTypes.stream()
-                .flatMap(actionType->stream(objectActionsByType.get(actionType)))
+        return actionScopes.stream()
+                .flatMap(actionScope->stream(objectActionsByType.get(actionScope)))
                 .filter(mixedIn.isIncluded()
                         ? _Predicates.alwaysTrue()
                         : MixedIn::isNotMixedIn);
@@ -753,7 +751,7 @@ implements ObjectSpecification {
         }
         val mixinMethodName = mixinFacet.value();
 
-        specification.streamActions(ActionType.ANY, MixedIn.INCLUDED)
+        specification.streamActions(ActionScope.ANY, MixedIn.INCLUDED)
         .filter(_SpecPredicates::isMixedInAssociation)
         .map(ObjectActionDefault.class::cast)
         .map(_MixedInMemberFactory.mixedInAssociation(this, mixinType, mixinMethodName))
@@ -802,7 +800,7 @@ implements ObjectSpecification {
 
         val mixinMethodName = mixinFacet.value();
 
-        mixinSpec.streamActions(ActionType.ANY, MixedIn.EXCLUDED)
+        mixinSpec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED)
         // value types only support constructor mixins
         .filter(this::whenIsValueThenIsAlsoConstructorMixin)
         .filter(_SpecPredicates::isMixedInAction)

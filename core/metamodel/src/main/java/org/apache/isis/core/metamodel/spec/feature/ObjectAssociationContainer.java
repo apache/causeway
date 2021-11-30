@@ -31,40 +31,55 @@ public interface ObjectAssociationContainer {
     // -- ASSOCIATION LOOKUP, PROPERTIES/COLLECTIONS (INHERITANCE CONSIDERED)
 
     /**
-     * Same as {@link #getDeclaredAssociation(String)}, but also considering any inherited object members.
-     * @param id
+     * Similar to {@link #getDeclaredAssociation(String, MixedIn)},
+     * but also considering any inherited object members.
      *
      * @implSpec If not found on the current 'type' search for the 'nearest' match in super-types,
      * and if nothing found there, search the interfaces.
      */
-    Optional<ObjectAssociation> getAssociation(String id);
+    Optional<ObjectAssociation> getAssociation(String id, MixedIn mixedIn);
 
-    default ObjectAssociation getAssociationElseFail(final String id) {
-        return getAssociation(id)
+    default ObjectAssociation getAssociationElseFail(final String id, final MixedIn mixedIn) {
+        return getAssociation(id, mixedIn)
                 .orElseThrow(()->_Exceptions.noSuchElement("id=%s", id));
     }
 
-    default Optional<OneToOneAssociation> getProperty(final String id) {
-        return getAssociation(id)
+    default Optional<OneToOneAssociation> getProperty(final String id, final MixedIn mixedIn) {
+        return getAssociation(id, mixedIn)
                 .filter(ObjectAssociation.Predicates.PROPERTIES)
                 .map(OneToOneAssociation.class::cast);
     }
 
-    default OneToOneAssociation getPropertyElseFail(final String id) {
-        return getProperty(id)
+    default OneToOneAssociation getPropertyElseFail(final String id, final MixedIn mixedIn) {
+        return getProperty(id, mixedIn)
                 .orElseThrow(()->_Exceptions.noSuchElement("id=%s", id));
     }
 
-    default Optional<OneToManyAssociation> getCollection(final String id) {
-        return getAssociation(id)
+    default Optional<OneToManyAssociation> getCollection(final String id, final MixedIn mixedIn) {
+        return getAssociation(id, mixedIn)
                 .filter(ObjectAssociation.Predicates.COLLECTIONS)
                 .map(OneToManyAssociation.class::cast);
     }
 
-    default OneToManyAssociation getCollectionElseFail(final String id) {
-        return getCollection(id)
+    default OneToManyAssociation getCollectionElseFail(final String id, final MixedIn mixedIn) {
+        return getCollection(id, mixedIn)
                 .orElseThrow(()->_Exceptions.noSuchElement("id=%s", id));
     }
+
+    // -- MIXED-IN INCLUDED
+
+    default Optional<ObjectAssociation> getAssociation(final String id) {
+        return getAssociation(id, MixedIn.INCLUDED);}
+    default ObjectAssociation getAssociationElseFail(final String id) {
+        return getAssociationElseFail(id, MixedIn.INCLUDED);}
+    default Optional<OneToOneAssociation> getProperty(final String id) {
+        return getProperty(id, MixedIn.INCLUDED);}
+    default OneToOneAssociation getPropertyElseFail(final String id) {
+        return getPropertyElseFail(id, MixedIn.INCLUDED);}
+    default Optional<OneToManyAssociation> getCollection(final String id) {
+        return getCollection(id, MixedIn.INCLUDED);}
+    default OneToManyAssociation getCollectionElseFail(final String id) {
+        return getCollectionElseFail(id, MixedIn.INCLUDED);}
 
     // -- ASSOCIATION LOOKUP, DECLARED PROPERTIES/COLLECTIONS (NO INHERITANCE CONSIDERED)
 
@@ -76,7 +91,7 @@ public interface ObjectAssociationContainer {
      * Throw a {@link ObjectSpecificationException} if no such association
      * exists.
      */
-    Optional<ObjectAssociation> getDeclaredAssociation(String id);
+    Optional<ObjectAssociation> getDeclaredAssociation(String id, MixedIn mixedIn);
 
     // -- ASSOCIATION STREAMS (INHERITANCE CONSIDERED)
 
@@ -87,15 +102,15 @@ public interface ObjectAssociationContainer {
      * @implSpec Walk through the type hierarchy nearest to farthest and add any ObjectAssociation to the stream,
      * except don't add ObjectAssociations that already have been added (due to inheritance).
      */
-    Stream<ObjectAssociation> streamAssociations(MixedIn contributed);
+    Stream<ObjectAssociation> streamAssociations(MixedIn mixedIn);
 
 
     /**
      * All {@link ObjectAssociation association}s that represent
      * {@link OneToOneAssociation properties}.
      */
-    default Stream<OneToOneAssociation> streamProperties(final MixedIn contributed) {
-        return streamAssociations(contributed)
+    default Stream<OneToOneAssociation> streamProperties(final MixedIn mixedIn) {
+        return streamAssociations(mixedIn)
                 .filter(ObjectAssociation.Predicates.PROPERTIES)
                 .map(OneToOneAssociation.class::cast);
     }
@@ -104,8 +119,8 @@ public interface ObjectAssociationContainer {
      * All {@link ObjectAssociation association}s that represents
      * {@link OneToManyAssociation collections}.
      */
-    default Stream<OneToManyAssociation> streamCollections(final MixedIn contributed){
-        return streamAssociations(contributed)
+    default Stream<OneToManyAssociation> streamCollections(final MixedIn mixedIn){
+        return streamAssociations(mixedIn)
                 .filter(ObjectAssociation.Predicates.COLLECTIONS)
                 .map(OneToManyAssociation.class::cast);
     }
@@ -127,7 +142,7 @@ public interface ObjectAssociationContainer {
      * unauthorized fields have been removed) use
      * <tt>ObjectAssociationFilters#staticallyVisible(...)</tt>
      */
-    Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn contributed);
+    Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn mixedIn);
 
 
 }

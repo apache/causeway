@@ -28,6 +28,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
+import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
@@ -104,6 +105,19 @@ implements ValueFacet<T> {
                     ? feature.getFeatureIdentifier()
                     : null,
                 iaProvider.currentInteractionContext().orElse(null));
+    }
+
+    // -- ORDER RELATION
+
+    @Override
+    public Optional<OrderRelation<T, ?>> selectDefaultOrderRelation() {
+        return getValueSemantics()
+                .stream()
+                .filter(isMatchingAnyOf(Can.empty()))
+                .map(ValueSemanticsProvider::getOrderRelation)
+                .filter(_NullSafe::isPresent)
+                .findFirst()
+                .map(rel->(OrderRelation<T, ?>)rel);
     }
 
     // -- ENCODER DECODER

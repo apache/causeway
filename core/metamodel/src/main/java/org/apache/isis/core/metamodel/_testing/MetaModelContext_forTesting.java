@@ -28,6 +28,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.Objects.requireNonNull;
+
 import org.springframework.core.env.AbstractEnvironment;
 
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -48,6 +50,7 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -62,7 +65,6 @@ import org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryDefault;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
-import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIconService;
@@ -87,11 +89,9 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.URLValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics;
-import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsRegistryDefault;
+import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
-
-import static java.util.Objects.requireNonNull;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -218,7 +218,7 @@ implements MetaModelContext {
                 repositoryService,
                 transactionService,
                 transactionState,
-                getValueSemanticsRegistry(),
+                getValueSemanticsResolver(),
                 new ObjectMementoService_forTesting(),
                 new BigDecimalValueSemantics(),
                 new URLValueSemantics(),
@@ -296,12 +296,12 @@ implements MetaModelContext {
         return translationService;
     }
 
-    private ValueSemanticsRegistry valueSemanticsRegistry;
-    private ValueSemanticsRegistry getValueSemanticsRegistry(){
-        if(valueSemanticsRegistry==null) {
-            valueSemanticsRegistry = new ValueSemanticsRegistryDefault(valueSemantics, getTranslationService());
+    private ValueSemanticsResolver valueSemanticsResolver;
+    private ValueSemanticsResolver getValueSemanticsResolver(){
+        if(valueSemanticsResolver==null) {
+            valueSemanticsResolver = new ValueSemanticsResolverDefault(valueSemantics, getTranslationService());
         }
-        return valueSemanticsRegistry;
+        return valueSemanticsResolver;
     }
 
     private final IsisBeanFactoryPostProcessorForSpring isisBeanFactoryPostProcessorForSpring =

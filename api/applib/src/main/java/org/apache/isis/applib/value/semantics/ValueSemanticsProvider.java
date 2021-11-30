@@ -66,6 +66,16 @@ public interface ValueSemanticsProvider<T> {
     ValueType getSchemaValueType();
 
     /**
+     * The {@link OrderRelation}, if any.
+     */
+    OrderRelation<T, ?> getOrderRelation();
+
+    /**
+     * The {@link Converter}, if any.
+     */
+    Converter<T, ?> getConverter();
+
+    /**
      * The {@link Renderer}, if any.
      */
     Renderer<T> getRenderer();

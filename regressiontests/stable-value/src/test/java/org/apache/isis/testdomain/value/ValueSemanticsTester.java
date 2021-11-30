@@ -18,42 +18,48 @@
  */
 package org.apache.isis.testdomain.value;
 
-import java.io.Serializable;
 import java.util.Optional;
 import java.util.function.Function;
 
 import javax.inject.Inject;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
+import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.functions._Functions.CheckedBiConsumer;
-import org.apache.isis.commons.internal.functions._Functions.CheckedConsumer;
+import org.apache.isis.commons.internal.resources._Xml;
+import org.apache.isis.commons.internal.resources._Xml.WriteOptions;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 
-public class ValueSemanticsTester<T extends Serializable> {
+public class ValueSemanticsTester<T> {
 
     @Inject InteractionService interactionService;
     @Inject SpecificationLoader specLoader;
 
     private final Class<T> valueType;
     private final Object domainObject;
+    private Optional<OrderRelation<T, ?>> currentOrderRelation = Optional.empty();
 
     public ValueSemanticsTester(final Class<T> valueType, final Object domainObject) {
         this.valueType = valueType;
@@ -66,15 +72,19 @@ public class ValueSemanticsTester<T extends Serializable> {
         val act = objSpec.getActionElseFail(actionId);
     }
 
+    public static interface PropertyInteractionProbe<T> {
+        void testEncoderDecoder(ValueSemanticsProvider.Context context, EncoderDecoder<T> codec);
+        void testParser(ValueSemanticsProvider.Context context, Parser<T> parser);
+        void testRenderer(ValueSemanticsProvider.Context context, Renderer<T> renderer);
+        void testCommand(ValueSemanticsProvider.Context context, Command command, EncoderDecoder<T> codec);
+    }
+
     @SneakyThrows
     public void propertyInteraction(
             final @NonNull String propertyId,
             final @NonNull InteractionContext interactionContext,
             final @NonNull Function<ManagedProperty, Object> newProperyValueProvider,
-            final @NonNull CheckedBiConsumer<ValueSemanticsProvider.Context, EncoderDecoder<T>> codecCallback,
-            final @NonNull CheckedBiConsumer<ValueSemanticsProvider.Context, Parser<T>> parserCallback,
-            final @NonNull CheckedBiConsumer<ValueSemanticsProvider.Context, Renderer<T>> renderCallback,
-            final @NonNull CheckedConsumer<Command> commandCallback) {
+            final @NonNull PropertyInteractionProbe<T> probe) {
 
         val objSpec = specLoader.specForTypeElseFail(domainObject.getClass());
         val prop = objSpec.getPropertyElseFail(propertyId);
@@ -82,16 +92,18 @@ public class ValueSemanticsTester<T extends Serializable> {
         val context = valueFacet(prop)
                 .createValueSemanticsContext(prop);
 
-        codecCallback.accept(context, codec(prop));
+        val codec = codec(prop);
+
+        probe.testEncoderDecoder(context, codec);
 
         val parserIfAny = parser(prop);
         if(parserIfAny.isPresent()) {
-            parserCallback.accept(context, parserIfAny.get());
+            probe.testParser(context, parserIfAny.get());
         }
 
         val rendererIfAny = renderer(prop);
         if(rendererIfAny.isPresent()) {
-            renderCallback.accept(context, rendererIfAny.get());
+            probe.testRenderer(context, rendererIfAny.get());
         }
 
         interactionService.run(interactionContext, ()->{
@@ -104,7 +116,7 @@ public class ValueSemanticsTester<T extends Serializable> {
             propInteraction.modifyProperty(managedProp->
                 ManagedObject.of(managedProp.getElementType(), newProperyValueProvider.apply(managedProp)));
 
-            commandCallback.accept(command);
+            probe.testCommand(context, command, codec);
         });
     }
 
@@ -113,6 +125,34 @@ public class ValueSemanticsTester<T extends Serializable> {
             final @NonNull InteractionContext interactionContext) {
         val objSpec = specLoader.specForTypeElseFail(domainObject.getClass());
         val coll = objSpec.getCollectionElseFail(collectionId);
+    }
+
+    // -- UTILITY
+
+    public void assertValueEquals(final T a, final Object _b, final String message) {
+
+        val b = _Casts.<T>uncheckedCast(_b);
+
+        if(currentOrderRelation.isPresent()) {
+            assertTrue(currentOrderRelation.get().equals(a, b), ()->
+                String.format("%s ==> expected: %s but was: %s",
+                        message, ""+a, ""+b));
+        } else {
+            assertEquals(a, b, message);
+        }
+    }
+
+    // eg.. <ValueWithTypeDto type="string"><com:string>anotherString</com:string></ValueWithTypeDto>
+    public static String valueDtoToXml(final ValueWithTypeDto valueWithTypeDto) {
+        val xmlResult = _Xml.writeXml(valueWithTypeDto,
+                WriteOptions.builder().allowMissingRootElement(true).useContextCache(true).build());
+        val rawXml = xmlResult.presentElseFail();
+        val xmlRef = _Refs.stringRef(rawXml);
+        xmlRef.cutAtIndexOf("<ValueWithTypeDto");
+        return xmlRef.cutAtLastIndexOf("</ValueWithTypeDto>")
+                .replace(" null=\"false\" xmlns:com=\"http://isis.apache.org/schema/common\" xmlns:cmd=\"http://isis.apache.org/schema/cmd\"", "")
+                + "</ValueWithTypeDto>";
+
     }
 
     // -- HELPER
@@ -125,6 +165,8 @@ public class ValueSemanticsTester<T extends Serializable> {
                 .orElseThrow(()->_Exceptions.noSuchElement(
                         "Value type Property or Parameter %s is missing a ValueFacet",
                         feature.getFeatureIdentifier()));
+
+        currentOrderRelation = valueFacet.selectDefaultOrderRelation();
 
         return _Casts.uncheckedCast(valueFacet);
     }
@@ -147,5 +189,7 @@ public class ValueSemanticsTester<T extends Serializable> {
         val valueFacet = valueFacet(feature);
         return valueFacet.selectDefaultRenderer();
     }
+
+
 
 }

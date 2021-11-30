@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.model.models;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
-import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -98,7 +98,7 @@ implements ParameterUiModel {
 
     @Override
     protected Can<ObjectAction> calcAssociatedActions() {
-        return getScalarTypeSpec().streamActions(ActionType.ANY, MixedIn.INCLUDED)
+        return getScalarTypeSpec().streamActions(ActionScope.ANY, MixedIn.INCLUDED)
                 .collect(Can.toCan());
     }
 

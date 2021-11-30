@@ -77,8 +77,9 @@ extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
 
         return PropertyInteraction.wrap(
                 ManagedProperty.lookupProperty(getBookmarkedOwner(), memberId, where)
-                .orElseThrow(()->_Exceptions.noSuchElement(memberId)));
-
+                .orElseThrow(()->_Exceptions.noSuchElement("property '%s' in %s",
+                        memberId,
+                        getBookmarkedOwner().getSpecification())));
     }
 
     @Override

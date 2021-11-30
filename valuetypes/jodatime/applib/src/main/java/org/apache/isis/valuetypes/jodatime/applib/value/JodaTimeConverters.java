@@ -31,7 +31,7 @@ import lombok.experimental.UtilityClass;
  * @since 2.0 {@index}
  */
 @UtilityClass
-public final class JodatimeConverters {
+public final class JodaTimeConverters {
 
     // -- INSTANT
 
@@ -106,11 +106,11 @@ public final class JodatimeConverters {
     // -- TIME ZONE
 
     public DateTimeZone toJoda(final java.time.ZoneId input) {
-        return DateTimeZone.forID(input.getId());
+        return DateTimeZone.forTimeZone(java.util.TimeZone.getTimeZone(input));
     }
 
     public java.time.ZoneId fromJoda(final DateTimeZone input) {
-        return java.time.ZoneId.of(input.getID());
+        return input.toTimeZone().toZoneId();
     }
 
     // -- HELPER

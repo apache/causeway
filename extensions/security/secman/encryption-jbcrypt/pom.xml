@@ -34,8 +34,6 @@
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.extensions.secman.encryption.jbcrypt</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/isis/extensions/secman/encryption/jbcrypt</git-plugin.propertiesDir>
-
-        <jbcrypt.version>0.4</jbcrypt.version>
     </properties>
 
     <dependencies>

@@ -18,66 +18,21 @@
  */
 package org.apache.isis.applib.util.schema;
 
-import org.jmock.auto.Mock;
-import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.schema.cmd.v2.MapDto;
-import org.apache.isis.schema.common.v2.ValueDto;
-import org.apache.isis.schema.common.v2.ValueType;
 
-public class CommonDtoUtils_Test {
-
-    @Rule
-    public JUnitRuleMockery context = new JUnitRuleMockery();
-
-    @Mock
-    private BookmarkService mockBookmarkService;
+class CommonDtoUtils_Test {
 
     @Test
-    public void enums() {
-        test(Vertical.DOWN);
-    }
-
-    enum Horizontal {
-        LEFT, RIGHT
-    }
-
-    @Test
-    public void nested_enums() {
-        test(Horizontal.LEFT);
-    }
-
-    private void test(final Enum<?> enumVal) {
-
-        // when
-        final ValueType valueType = CommonDtoUtils.asValueType(enumVal.getClass());
-
-        // then
-        assertThat(valueType, is(ValueType.ENUM));
-
-        // and when
-        final ValueDto valueDto = CommonDtoUtils.newValueDto(valueType, enumVal, mockBookmarkService);
-
-        // then
-        Object value = CommonDtoUtils.getValue(valueDto, valueType);
-        assertThat(value, is(notNullValue()));
-
-        Assert.assertEquals(value, enumVal);
-    }
-
-    @Test
-    public void getMapValue() {
-        Assert.assertThat(CommonDtoUtils.getMapValue(null, "someKey"), is(nullValue()));
-        Assert.assertThat(CommonDtoUtils.getMapValue(new MapDto(), "someKey"), is(nullValue()));
+    void getMapValue() {
+        assertThat(CommonDtoUtils.getMapValue(null, "someKey"), is(nullValue()));
+        assertThat(CommonDtoUtils.getMapValue(new MapDto(), "someKey"), is(nullValue()));
 
         // given
         final MapDto mapDto = new MapDto();
@@ -86,12 +41,12 @@ public class CommonDtoUtils_Test {
         e.setValue("someValue");
         mapDto.getEntry().add(e);
 
-        Assert.assertThat(CommonDtoUtils.getMapValue(mapDto, "someKey"), is("someValue"));
-        Assert.assertThat(CommonDtoUtils.getMapValue(mapDto, "someThingElse"), is(nullValue()));
+        assertThat(CommonDtoUtils.getMapValue(mapDto, "someKey"), is("someValue"));
+        assertThat(CommonDtoUtils.getMapValue(mapDto, "someThingElse"), is(nullValue()));
     }
 
     @Test
-    public void putMapKeyValue() {
+    void putMapKeyValue() {
 
         // is ignored
         CommonDtoUtils.putMapKeyValue(null, "someKey", "someValue");
@@ -100,7 +55,7 @@ public class CommonDtoUtils_Test {
         final MapDto mapDto = new MapDto();
         CommonDtoUtils.putMapKeyValue(mapDto, "someKey", "someValue");
 
-        Assert.assertThat(CommonDtoUtils.getMapValue(mapDto, "someKey"), is("someValue"));
+        assertThat(CommonDtoUtils.getMapValue(mapDto, "someKey"), is("someValue"));
     }
 
 }

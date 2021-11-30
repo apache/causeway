@@ -16,25 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javalang.strings.samples;
+package org.apache.isis.applib.value.semantics;
 
-import java.util.stream.Stream;
+/**
+ * Provides forth and back conversion between 2 types.
+ *
+ * @param <T> - value-type
+ * @param <D> - value-type, the <i>delegate</i>
+ *
+ * @see DefaultsProvider
+ * @see Parser
+ * @see EncoderDecoder
+ * @see ValueSemanticsProvider
+ *
+ * @since 2.x {@index}
+ */
+public interface Converter<T, D> {
 
-import javax.annotation.Priority;
-
-import org.springframework.stereotype.Service;
-
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-
-import demoapp.dom.types.Samples;
-
-@Service
-@Priority(PriorityPrecedence.EARLY)
-public class JavaLangStringSamples implements Samples<String> {
-
-    @Override
-    public Stream<String> stream() {
-        return Stream.of("Hello", "world");
-    }
+    public abstract T fromDelegateValue(D value);
+    public abstract D toDelegateValue(T value);
 
 }

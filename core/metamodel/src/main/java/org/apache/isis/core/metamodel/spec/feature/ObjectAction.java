@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFac
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
-import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -73,7 +73,7 @@ public interface ObjectAction extends ObjectMember {
         && ObjectAction.Util.isNoParameters(this);
     }
 
-    ActionType getType();
+    ActionScope getScope();
 
     boolean isPrototype();
 
@@ -354,8 +354,8 @@ public interface ObjectAction extends ObjectMember {
 
     public static final class Predicates {
 
-        public static Predicate<ObjectAction> ofActionType(final ActionType type) {
-            return (final ObjectAction oa) -> oa.getType() == type;
+        public static Predicate<ObjectAction> ofActionType(final ActionScope scope) {
+            return (final ObjectAction oa) -> oa.getScope() == scope;
         }
 
         public static Predicate<ObjectAction> isPositioned(

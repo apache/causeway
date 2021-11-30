@@ -202,7 +202,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
 
     @Override
     protected void putExtensionsIsisProprietary() {
-        getExtensions().mapPut("actionType", objectMember.getType().name().toLowerCase());
+        getExtensions().mapPut("actionScope", objectMember.getScope().name().toLowerCase());
 
         final SemanticsOf semantics = objectMember.getSemantics();
         getExtensions().mapPut("actionSemantics", semantics.getCamelCaseName());

@@ -35,7 +35,6 @@ import org.springframework.transaction.TransactionStatus;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.metrics.MetricsService;
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.interaction.scope.TransactionBoundaryAware;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
@@ -66,13 +65,13 @@ public class Configuration_headless {
 
         @Override
         public void beforeEnteringTransactionalBoundary(final Interaction interaction) {
-            _Probe.errOut("Interaction HAS_STARTED conversationId=%s", interaction.getInteractionId());
+//            _Probe.errOut("Interaction HAS_STARTED conversationId=%s", interaction.getInteractionId());
             setupCommandCreateIfMissing();
         }
 
         @Override
         public void afterLeavingTransactionalBoundary(final Interaction interaction) {
-            _Probe.errOut("Interaction IS_ENDING conversationId=%s", interaction.getInteractionId());
+//            _Probe.errOut("Interaction IS_ENDING conversationId=%s", interaction.getInteractionId());
         }
 
         public void setupCommandCreateIfMissing() {

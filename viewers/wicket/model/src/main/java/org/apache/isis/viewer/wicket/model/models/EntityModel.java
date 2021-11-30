@@ -72,8 +72,7 @@ implements
     public static EntityModel ofPageParameters(
             final IsisAppCommonContext commonContext,
             final PageParameters pageParameters) {
-        val bookmark = Bookmark.parse(oidStr(pageParameters))
-                .orElseThrow();
+        val bookmark = Bookmark.parseElseFail(oidStr(pageParameters));
         return ofBookmark(commonContext, bookmark);
     }
 

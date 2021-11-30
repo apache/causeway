@@ -18,10 +18,20 @@
  */
 package org.apache.isis.core.runtimeservices.jaxb;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import lombok.val;
+import java.util.Map;
+
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.applib.jaxb.PersistentEntitiesAdapter;
@@ -32,18 +42,11 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.resources._Xml;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.util.Map;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.val;
 
 @Service
 @Named("isis.runtimeservices.JaxbServiceDefault")
@@ -53,7 +56,7 @@ import java.util.Map;
 public class JaxbServiceDefault extends Simple {
 
     private final ServiceInjector serviceInjector;
-    private final SpecificationLoader specificationLoader;
+    private final SpecificationLoader specLoader;
 
     @Override @SneakyThrows
     protected JAXBContext jaxbContextForObject(final @NonNull Object domainObject) {
@@ -61,7 +64,7 @@ public class JaxbServiceDefault extends Simple {
             val domainClass = domainObject.getClass();
             val domainObjectList = (DomainObjectList) domainObject;
             try {
-                val elementType = specificationLoader
+                val elementType = specLoader
                         .specForType(_Context.loadClass(domainObjectList.getElementTypeFqcn()))
                         .map(ObjectSpecification::getCorrespondingClass)
                         .orElse(null);
@@ -106,6 +109,15 @@ public class JaxbServiceDefault extends Simple {
 
     @Override
     protected void configure(final Marshaller marshaller) {
+
+//debug
+//        marshaller.setListener(new Marshaller.Listener() {
+//            @Override
+//            public void beforeMarshal(final Object source) {
+//                System.err.printf("beforeMarshal %s%n", source);
+//            }
+//        });
+
         marshaller.setAdapter(PersistentEntityAdapter.class,
                 serviceInjector.injectServicesInto(new PersistentEntityAdapter()));
         marshaller.setAdapter(PersistentEntitiesAdapter.class,

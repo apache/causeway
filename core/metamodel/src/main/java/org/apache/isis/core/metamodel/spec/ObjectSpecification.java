@@ -586,6 +586,4 @@ extends
                         objFeature.getFeatureIdentifier()));
     }
 
-
-
 }

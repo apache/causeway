@@ -64,18 +64,8 @@ implements ImperativeFacet {
         val method = methods.getFirstOrFail();
         val elementSpec = specForTypeElseFail(((FacetedMethod) getFacetHolder()).getType());
         val optionPojos = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
-
-//XXX[ISIS-2383] debugging
-//        if(elementSpec.isEntity()) {
-//            _NullSafe.streamAutodetect(optionPojos)
-//            .map(pojo->ManagedObject.of(elementSpec, pojo))
-//            .filter(adapter->!ManagedObjects.EntityUtil.isAttached(adapter))
-//            .forEach(detached->_Probe.errOut("non attached entity from choices method %s detected", method));
-//        }
-
         val visibleChoices = ManagedObjects
                 .adaptMultipleOfTypeThenAttachThenFilterByVisibility(elementSpec, optionPojos, interactionInitiatedBy);
-
         return visibleChoices;
     }
 

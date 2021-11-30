@@ -26,7 +26,33 @@ import org.apache.isis.core.metamodel.interactions.InteractionContext;
  */
 public enum InteractionInitiatedBy {
 
+    /**
+     * must be authorized, with transactions, with publishing, with domain events
+     */
     USER,
-    FRAMEWORK;
+
+    /**
+     * always authorized, with transactions, with publishing, with domain events
+     */
+    FRAMEWORK,
+
+    /**
+     * always authorized, no transactions, no publishing, no domain events
+     */
+    PASS_THROUGH;
+
+    /**
+     * @see #USER
+     */
+    public boolean isUser() {
+        return this==USER;
+    }
+
+    /**
+     * @see #PASS_THROUGH
+     */
+    public boolean isPassThrough() {
+        return this==PASS_THROUGH;
+    }
 
 }

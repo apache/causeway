@@ -342,8 +342,6 @@ public final class ManagedObjects {
         .collect(Can.toCan());
     }
 
-
-
     /**
      * eg. in order to prevent wrapping an object that is already wrapped
      */
@@ -625,19 +623,6 @@ public final class ManagedObjects {
             }
 
             val spec = managedObject.getSpecification();
-
-            // identification (on JDO) fails, when detached object, where oid was not previously memoized
-            if(EntityUtil.getPersistenceStandard(managedObject)
-                        .map(PersistenceStandard::isJdo)
-                        .orElse(false)
-                    && !managedObject.isBookmarkMemoized()) {
-                val msg = String.format("entity %s is required to have a memoized ID, "
-                        + "otherwise cannot re-attach",
-                        spec.getLogicalTypeName());
-                log.error(msg); // in case exception gets swallowed
-                throw _Exceptions.illegalState(msg);
-            }
-
             val objectManager = managedObject.getObjectManager();
 
             return bookmark(managedObject)

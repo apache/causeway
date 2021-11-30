@@ -24,12 +24,12 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
+import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
@@ -39,6 +39,7 @@ import lombok.val;
 public class BookmarkValueSemantics
 extends ValueSemanticsAbstract<Bookmark>
 implements
+    OrderRelation<Bookmark, Void>,
     EncoderDecoder<Bookmark>,
     Parser<Bookmark>,
     Renderer<Bookmark> {
@@ -50,7 +51,32 @@ implements
 
     @Override
     public ValueType getSchemaValueType() {
-        return UNREPRESENTED;
+        return ValueType.STRING; // in this context not a ValueType.REFERENCE
+    }
+
+    // -- ORDER RELATION
+
+    @Override
+    public Void epsilon() {
+        return null; // not used
+    }
+
+    @Override
+    public int compare(final Bookmark a, final Bookmark b, final Void epsilon) {
+        int c = _Strings.compareNullsFirst(a.getLogicalTypeName(), b.getLogicalTypeName());
+        if(c!=0) {
+            return c;
+        }
+        c = _Strings.compareNullsFirst(a.getIdentifier(), b.getIdentifier());
+        if(c!=0) {
+            return c;
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean equals(final Bookmark a, final Bookmark b, final Void epsilon) {
+        return compare(a, b, epsilon) == 0;
     }
 
     // -- ENCODER DECODER
@@ -62,7 +88,7 @@ implements
 
     @Override
     public Bookmark fromEncodedString(final String data) {
-        return Bookmark.parse(data).orElseThrow(()->_Exceptions.illegalArgument("%s", data));
+        return Bookmark.parseElseFail(data);
     }
 
     // -- RENDERER
@@ -76,14 +102,14 @@ implements
 
     @Override
     public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final Bookmark value) {
-        return value == null ? null : value.toString();
+        return value == null ? null : value.stringify();
     }
 
     @Override
     public Bookmark parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
         val input = _Strings.blankToNullOrTrim(text);
         return input!=null
-                ? Bookmark.parse(input).orElseThrow(()->_Exceptions.illegalArgument("%s", input))
+                ? Bookmark.parseElseFail(input)
                 : null;
     }
 

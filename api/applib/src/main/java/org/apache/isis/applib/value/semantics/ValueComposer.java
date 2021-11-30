@@ -16,21 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.config.valuetypes;
+package org.apache.isis.applib.value.semantics;
 
-import java.util.stream.Stream;
+/**
+ * Provides construction and extraction for a given value-type
+ * from and into its constituent parts.
+ *
+ * @param <T> - value-type
+ *
+ * @see DefaultsProvider
+ * @see Parser
+ * @see OrderRelation
+ * @see ValueSemanticsProvider
+ *
+ * @since 2.x {@index}
+ */
+public interface ValueComposer<T> {
 
-import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
-import org.apache.isis.commons.collections.Can;
-
-public interface ValueSemanticsRegistry {
-
-    boolean hasValueSemantics(Class<?> valueType);
-
-    <T> Stream<ValueSemanticsProvider<T>> streamValueSemantics(Class<T> valueType);
-
-    <T> Can<ValueSemanticsProvider<T>> selectValueSemantics(Class<T> valueType);
-
-    Stream<Class<?>> streamClassesWithValueSemantics();
+    default Object getValueMixin(final T value) {
+        return null;
+    }
 
 }

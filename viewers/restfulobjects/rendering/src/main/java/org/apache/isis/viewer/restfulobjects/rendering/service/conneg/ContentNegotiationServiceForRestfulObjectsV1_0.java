@@ -212,9 +212,11 @@ implements ContentNegotiationService {
                 final ObjectSpecification actionOwnerSpec = actionOwnerSpecFrom(objectAndActionInvocation);
                 final String actionId = actionIdFrom(objectAndActionInvocation);
                 final String actionArguments = actionArgumentsFrom(objectAndActionInvocation);
-                final DomainObjectList list = domainObjectListFrom(collectionAdapters, elementSpec, actionOwnerSpec, actionId, actionArguments);
+                final DomainObjectList list = domainObjectListFrom(
+                        collectionAdapters, elementSpec, actionOwnerSpec, actionId, actionArguments);
 
-                val listAdapter = ManagedObject.lazy(resourceContext.getMetaModelContext().getSpecificationLoader(), list);
+                val listAdapter = ManagedObject.lazy(
+                        resourceContext.getMetaModelContext().getSpecificationLoader(), list);
                 return responseBuilder(
                         buildResponse(
                                 resourceContext,

@@ -83,7 +83,7 @@ import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaSqlDate
 import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaSqlTimeStampValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaSqlTimeValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaUtilDateValueSemantics;
-import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsRegistryDefault;
+import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
 import org.apache.isis.core.security.IsisModuleCoreSecurity;
 
 @Configuration
@@ -103,7 +103,7 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         ClassSubstitutorForCollections.class,
         ClassSubstitutorForDomainObjects.class,
         ClassSubstitutorRegistry.class,
-        ValueSemanticsRegistryDefault.class,
+        ValueSemanticsResolverDefault.class,
 
         // Value Semantics (built-in defaults)
         BooleanValueSemantics.class,
@@ -124,8 +124,8 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         MarkupValueSemantics.class,
         URLValueSemantics.class,
         LocalResourcePathValueSemantics.class,
-        OidDtoValueSemantics.class,
         BookmarkValueSemantics.class,
+        OidDtoValueSemantics.class,
         UUIDValueSemantics.class,
         TreeNodeValueSemantics.class,
         ChangesDtoValueSemantics.class,

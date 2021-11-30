@@ -25,9 +25,7 @@
            xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
            xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
            jaxb:extensionBindingPrefixes="xjc"
-           jaxb:version="1.0"
-           
-           >
+           jaxb:version="1.0">
            
 	<xs:annotation>
 	   <xs:appinfo>
@@ -50,27 +48,21 @@
             <xs:element name="char" type="xs:string"/>
             <xs:element name="bigInteger" type="xs:integer"/>
             <xs:element name="bigDecimal" type="xs:decimal"/>
-            <!-- java.time -->
+
+            <!-- temporal types -->
             <xs:element name="localDate" type="xs:date"/>
             <xs:element name="localDateTime" type="xs:dateTime"/>
             <xs:element name="localTime" type="xs:time"/>
             <xs:element name="offsetTime" type="xs:time"/>
             <xs:element name="offsetDateTime" type="xs:dateTime"/>
             <xs:element name="zonedDateTime" type="xs:dateTime"/>
-            <!-- joda -->
-            <xs:element name="jodaDateTime" type="xs:dateTime"/>
-            <xs:element name="jodaLocalDate" type="xs:date"/>
-            <xs:element name="jodaLocalTime" type="xs:time"/>
-            <xs:element name="jodaLocalDateTime" type="xs:dateTime"/>
-            <!--  -->
-            <xs:element name="timestamp" type="xs:dateTime"/>
-            <xs:element name="enum" type="enumDto"/>
+            
+            <!-- complex types -->            <xs:element name="enum" type="enumDto"/>
             <xs:element name="reference" type="oidDto"/>
             <xs:element name="collection" type="collectionDto"/>
+            <xs:element name="composite" type="typedTupleDto"/>
             <xs:element name="blob" type="blobDto"/>
             <xs:element name="clob" type="clobDto"/>
-            
-            <xs:element name="composite" type="typedTupleDto"/>
         </xs:choice>
     </xs:complexType>
 
@@ -144,9 +136,14 @@
         </xs:sequence>
     </xs:complexType>
 
-
     <xs:simpleType name="valueType">
         <xs:restriction base="xs:string">
+        	<xs:enumeration value="void">
+                <xs:annotation>
+                    <xs:documentation>Not valid to be used as the parameter type of an action; can be used as its return type.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
             <xs:enumeration value="string"/>
             <xs:enumeration value="byte"/>
             <xs:enumeration value="short"/>
@@ -158,32 +155,20 @@
             <xs:enumeration value="char"/>
             <xs:enumeration value="bigInteger"/>
             <xs:enumeration value="bigDecimal"/>
-            <xs:enumeration value="javaSqlTimestamp"/>
-            <!-- java.time -->
+            <!-- temporal types -->
             <xs:enumeration value="localDateTime"/>
             <xs:enumeration value="localDate"/>
             <xs:enumeration value="localTime"/>
             <xs:enumeration value="offsetDateTime"/>
             <xs:enumeration value="offsetTime"/>
             <xs:enumeration value="zonedDateTime"/>
-            <!-- joda -->
-            <xs:enumeration value="jodaDateTime"/>
-            <xs:enumeration value="jodaLocalDate"/>
-            <xs:enumeration value="jodaLocalTime"/>
-            <xs:enumeration value="jodaLocalDateTime"/>
-            <!--  -->
+            <!-- complex types -->
             <xs:enumeration value="enum"/>
             <xs:enumeration value="reference"/>
             <xs:enumeration value="collection"/>
+            <xs:enumeration value="composite"/>
             <xs:enumeration value="blob"/>
             <xs:enumeration value="clob"/>
-            <xs:enumeration value="void">
-                <xs:annotation>
-                    <xs:documentation>Not valid to be used as the parameter type of an action; can be used as its return type.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="composite"/>
         </xs:restriction>
     </xs:simpleType>
 

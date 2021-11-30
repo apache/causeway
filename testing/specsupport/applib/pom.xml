@@ -27,7 +27,7 @@
 		<jar-plugin.automaticModuleName>org.apache.isis.testing.specsupport.applib</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/testing/specsupport.applib</git-plugin.propertiesDir>
 
- 		<cucumber.impl>io.cucumber</cucumber.impl>
+		<cucumber.impl>io.cucumber</cucumber.impl>
 
 	</properties>
 
@@ -40,41 +40,61 @@
 
 		<!-- CUCUMBER -->
 		<dependency>
-		    <groupId>io.cucumber</groupId>
-		    <artifactId>cucumber-java</artifactId>
-		    <exclusions>
-		    	<exclusion>
-		    		<!-- version clash, already provided by org.junit.jupiter:junit-jupiter-api -->
-		    		<groupId>org.apiguardian</groupId>
-		    		<artifactId>apiguardian-api</artifactId>
-		    	</exclusion>
-		    </exclusions>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<exclusions>
+				<exclusion>
+					<!-- version clash, already provided by org.junit.jupiter:junit-jupiter-api -->
+					<groupId>org.apiguardian</groupId>
+					<artifactId>apiguardian-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<!-- version clash, explicitly import below -->
+					<groupId>io.cucumber</groupId>
+					<artifactId>messages</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
-		    <groupId>io.cucumber</groupId>
-		    <artifactId>cucumber-spring</artifactId>
-		    <exclusions>
-		    	<exclusion>
-		    		<!-- version clash, already provided by org.junit.jupiter:junit-jupiter-api -->
-		    		<groupId>org.apiguardian</groupId>
-		    		<artifactId>apiguardian-api</artifactId>
-		    	</exclusion>
-		    </exclusions>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-spring</artifactId>
+			<exclusions>
+				<exclusion>
+					<!-- version clash, already provided by org.junit.jupiter:junit-jupiter-api -->
+					<groupId>org.apiguardian</groupId>
+					<artifactId>apiguardian-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<!-- version clash, explicitly import below -->
+					<groupId>io.cucumber</groupId>
+					<artifactId>messages</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-junit-platform-engine</artifactId>
 			<exclusions>
-		    	<exclusion>
-		    		<!-- version clash, already provided by org.junit.jupiter:junit-jupiter-api -->
-		    		<groupId>org.apiguardian</groupId>
-		    		<artifactId>apiguardian-api</artifactId>
-		    	</exclusion>
-		    </exclusions>
+				<exclusion>
+					<!-- version clash, already provided by org.junit.jupiter:junit-jupiter-api -->
+					<groupId>org.apiguardian</groupId>
+					<artifactId>apiguardian-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<!-- version clash, explicitly import below -->
+					<groupId>io.cucumber</groupId>
+					<artifactId>messages</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>messages</artifactId>
+			<version>17.1.1</version>
 		</dependency>
 
 		<!-- convenience -->

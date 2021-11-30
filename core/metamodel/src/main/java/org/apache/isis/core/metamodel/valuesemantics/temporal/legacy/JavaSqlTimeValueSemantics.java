@@ -28,8 +28,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalTimeValueSemantics;
-import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsAdapter;
-import org.apache.isis.schema.common.v2.ValueType;
+import org.apache.isis.core.metamodel.valuetypes.TemporalSemanticsAdapter;
 
 /**
  * Treats {@link java.sql.Time} as a time-only value type.
@@ -38,18 +37,13 @@ import org.apache.isis.schema.common.v2.ValueType;
 @Component
 @Named("isis.val.JavaSqlTimeValueSemantics")
 public class JavaSqlTimeValueSemantics
-extends ValueSemanticsAdapter<Time, LocalTime>  {
+extends TemporalSemanticsAdapter<Time, LocalTime>  {
 
     @Inject LocalTimeValueSemantics localTimeValueSemantics;
 
     @Override
     public Class<Time> getCorrespondingClass() {
         return java.sql.Time.class;
-    }
-
-    @Override
-    public ValueType getSchemaValueType() {
-        return UNREPRESENTED;
     }
 
     @Override

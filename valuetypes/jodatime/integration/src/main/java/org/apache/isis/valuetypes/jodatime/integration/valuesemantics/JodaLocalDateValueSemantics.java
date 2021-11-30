@@ -25,14 +25,13 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalDateValueSemantics;
-import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsAdapter;
-import org.apache.isis.schema.common.v2.ValueType;
-import org.apache.isis.valuetypes.jodatime.applib.value.JodatimeConverters;
+import org.apache.isis.core.metamodel.valuetypes.TemporalSemanticsAdapter;
+import org.apache.isis.valuetypes.jodatime.applib.value.JodaTimeConverters;
 
 @Component
 @Named("isis.val.JodaLocalDateValueSemantics")
 public class JodaLocalDateValueSemantics
-extends ValueSemanticsAdapter<org.joda.time.LocalDate, java.time.LocalDate>  {
+extends TemporalSemanticsAdapter<org.joda.time.LocalDate, java.time.LocalDate>  {
 
     @Inject LocalDateValueSemantics localDateValueSemantics;
 
@@ -42,23 +41,18 @@ extends ValueSemanticsAdapter<org.joda.time.LocalDate, java.time.LocalDate>  {
     }
 
     @Override
-    public ValueType getSchemaValueType() {
-        return ValueType.JODA_LOCAL_DATE;
-    }
-
-    @Override
     public ValueSemanticsAbstract<java.time.LocalDate> getDelegate() {
         return localDateValueSemantics;
     }
 
     @Override
     public org.joda.time.LocalDate fromDelegateValue(final java.time.LocalDate delegateValue) {
-        return JodatimeConverters.toJoda(delegateValue);
+        return JodaTimeConverters.toJoda(delegateValue);
     }
 
     @Override
     public java.time.LocalDate toDelegateValue(final org.joda.time.LocalDate value) {
-        return JodatimeConverters.fromJoda(value);
+        return JodaTimeConverters.fromJoda(value);
     }
 
 

@@ -18,12 +18,15 @@
  */
 package org.apache.isis.testdomain.value;
 
-import java.io.Serializable;
 import java.util.Locale;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -36,23 +39,31 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.applib.util.schema.CommonDtoUtils;
+import org.apache.isis.applib.services.schema.SchemaValueMarshaller;
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.commons.internal.base._Refs;
-import org.apache.isis.commons.internal.resources._Xml;
-import org.apache.isis.commons.internal.resources._Xml.WriteOptions;
+import org.apache.isis.applib.value.semantics.EncoderDecoder;
+import org.apache.isis.applib.value.semantics.Parser;
+import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
-import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.valuetypes.Configuration_usingValueTypes;
 import org.apache.isis.testdomain.model.valuetypes.ValueTypeExample;
 import org.apache.isis.testdomain.model.valuetypes.ValueTypeExampleService;
+import org.apache.isis.testdomain.model.valuetypes.ValueTypeExampleService.Scenario;
+import org.apache.isis.testdomain.value.ValueSemanticsTester.PropertyInteractionProbe;
 
 import lombok.val;
 
@@ -71,9 +82,31 @@ import lombok.val;
 @TestInstance(Lifecycle.PER_CLASS)
 class ValueSemanticsTest {
 
+    @Test @Disabled
+    void fullTypeCoverage() {
+
+        valueSemanticsResolver.streamClassesWithValueSemantics()
+        .forEach(valueType->System.err.printf("%s%n", valueType.getName()));
+
+        final Set<Class<?>> valueTypesCovered = valueTypeExampleProvider.streamExamples()
+        .map(ValueTypeExample::getValueType)
+        .collect(Collectors.toSet());
+
+        final Set<Class<?>> valueTypesKnown = valueSemanticsResolver.streamClassesWithValueSemantics()
+        .collect(Collectors.toSet());
+
+        val valueTypesNotCovered = _Sets.minus(valueTypesKnown, valueTypesCovered);
+
+        assertTrue(valueTypesNotCovered.isEmpty(), ()->
+            String.format("value-types not covered by tests:\n\t%s",
+                    valueTypesNotCovered.stream()
+                    .map(Class::getName)
+                    .collect(Collectors.joining("\n\t"))));
+    }
+
     @ParameterizedTest(name = "{index} {0}")
     @MethodSource("provideValueTypeExamples")
-    <T extends Serializable> void valueTypes(
+    <T> void valueTypes(
             final String name,
             final Class<T> valueType,
             final ValueTypeExample<T> example) {
@@ -85,83 +118,107 @@ class ValueSemanticsTest {
         tester.propertyInteraction("value",
                 interactionContext(),
                 managedProp->example.getUpdateValue(),
-                (context, codec)->{
+                new PropertyInteractionProbe<T>() {
 
-                    // TODO skip tests, because some value-types are not serializable
-                    if(!(example.getValue() instanceof Serializable)) {
-                        return;
+                    @Override
+                    public void testEncoderDecoder(
+                            final ValueSemanticsProvider.Context context,
+                            final EncoderDecoder<T> composer) {
+                        val valueMixin = composer.getValueMixin(example.getValue());
+                        if(valueMixin!=null) {
+
+                            val spec = specLoader.specForTypeElseFail(valueMixin.getClass());
+                            val interaction = ActionInteraction
+                                    .start(ManagedObject.of(spec,  valueMixin), "act", Where.ANYWHERE);
+
+                            val pendingParams = interaction
+                                    .startParameterNegotiation()
+                                    .get();
+
+                            val managedAction = interaction.getManagedActionElseFail();
+                            val typedTuple = pendingParams.getParamValues();
+
+                            val recoveredValue = managedAction
+                                    .invoke(typedTuple, InteractionInitiatedBy.PASS_THROUGH)
+                                    .leftIfAny()
+                                    .getPojo();
+
+                            tester.assertValueEquals(
+                                    example.getValue(),
+                                    recoveredValue,
+                                    "serialization roundtrip failed");
+
+                            return;
+                        }
+
+                        // CoderDecoder round-trip test
+                        val serialized = composer.toEncodedString(example.getValue());
+
+                        tester.assertValueEquals(
+                                example.getValue(),
+                                composer.fromEncodedString(serialized),
+                                "serialization roundtrip failed");
                     }
 
-                    // CoderDecoder round-trip test
-                    val serialized = codec.toEncodedString(example.getValue());
-                    assertEquals(example.getValue(), codec.fromEncodedString(serialized));
+                    @Override
+                    public void testParser(
+                            final ValueSemanticsProvider.Context context,
+                            final Parser<T> parser) {
+                        // Parser round-trip test
+                        val stringified = parser.parseableTextRepresentation(context, example.getValue());
 
-                },
-                (context, parser)->{
+                        if(valueType.equals(Password.class)) {
+                            val recoveredValue = (Password)parser.parseTextRepresentation(context, stringified);
+                            assertTrue(recoveredValue.checkPassword("*"));
 
-                    // Parser round-trip test
-                    val stringified = parser.parseableTextRepresentation(context, example.getValue());
+                        } else {
 
-                    if(valueType.equals(Password.class)) {
+                            System.err.printf("using %s trying to parse '%s'%n", valueType.getName(), stringified);
 
-                        val recoveredValue = (Password)parser.parseTextRepresentation(context, stringified);
-                        assertTrue(recoveredValue.checkPassword("*"));
-
-                    } else {
-
-                        assertEquals(example.getValue(), parser.parseTextRepresentation(context, stringified));
+                            tester.assertValueEquals(
+                                    example.getValue(),
+                                    parser.parseTextRepresentation(context, stringified),
+                                    "parser roundtrip failed");
+                        }
                     }
+                    @Override
+                    public void testRenderer(
+                            final ValueSemanticsProvider.Context context,
+                            final Renderer<T> renderer) {
 
-                },
-                (context, renderer)->{
-
-                },
-                command->{
-
-                    val propertyDto = (PropertyDto)command.getCommandDto().getMember();
-                    val newValueRecordedDto = propertyDto.getNewValue();
-
-                    val newValueRecorded = CommonDtoUtils.getValue(newValueRecordedDto);
-
-                    // TODO skip tests, because some value-types are not represented by the schema yet
-                    if(newValueRecorded==null) {
-                        return;
                     }
+                    @Override
+                    public void testCommand(
+                            final ValueSemanticsProvider.Context context,
+                            final Command command,
+                            final EncoderDecoder<T> codec) {
 
-                    assertEquals(example.getUpdateValue(), newValueRecorded);
+                        val propertyDto = (PropertyDto)command.getCommandDto().getMember();
+                        val newValueRecordedDto = propertyDto.getNewValue();
 
-//                    //debug
-//                    System.err.printf("Value %s %s%n", name,
-//                            valueToXml(newValueRecordedDto));
-//
-//                    //debug
-//                    System.err.printf("CommandDto %s %s%n", name,
-//                            CommandDtoUtils.toXml(
-//                                    command.getCommandDto()));
+                        val newValueRecorded = valueMarshaller.recoverValueFrom(propertyDto);
+                        assertNotNull(newValueRecorded);
+
+                        assertEquals(valueType, newValueRecorded.getClass(), ()->
+                            String.format("command value parsing type mismatch '%s'",
+                                    ValueSemanticsTester.valueDtoToXml(newValueRecordedDto)));
+
+                        tester.assertValueEquals(example.getUpdateValue(), newValueRecorded, "command failed");
+
+//                        //debug
+//                        System.err.printf("Value %s %s%n", name,
+//                                valueToXml(newValueRecordedDto));
+    //
+//                        //debug
+//                        System.err.printf("CommandDto %s %s%n", name,
+//                                CommandDtoUtils.toXml(
+//                                        command.getCommandDto()));
+                    }
                 });
 
     }
 
-//    @Test
-//    void list() {
-//        valueSemanticsRegistry.streamClassesWithValueSemantics()
-//        .forEach(valueType->System.err.printf("%s%n", valueType.getSimpleName()));
-//    }
-
     // -- HELPER
-
-    // eg.. <ValueWithTypeDto type="string"><com:string>anotherString</com:string></ValueWithTypeDto>
-    private static String valueToXml(final ValueWithTypeDto valueWithTypeDto) {
-        val xmlResult = _Xml.writeXml(valueWithTypeDto,
-                WriteOptions.builder().allowMissingRootElement(true).useContextCache(true).build());
-        val rawXml = xmlResult.presentElseFail();
-        val xmlRef = _Refs.stringRef(rawXml);
-        xmlRef.cutAtIndexOf("<ValueWithTypeDto");
-        return xmlRef.cutAtLastIndexOf("</ValueWithTypeDto>")
-                .replace(" null=\"false\" xmlns:com=\"http://isis.apache.org/schema/common\" xmlns:cmd=\"http://isis.apache.org/schema/cmd\"", "")
-                + "</ValueWithTypeDto>";
-
-    }
 
     private InteractionContext interactionContext() {
         return InteractionContext.builder().locale(Locale.ENGLISH).build();
@@ -173,11 +230,12 @@ class ValueSemanticsTest {
     @Inject SpecificationLoader specLoader;
     @Inject InteractionService interactionService;
     @Inject ServiceInjector serviceInjector;
-    @Inject ValueSemanticsRegistry valueSemanticsRegistry;
+    @Inject ValueSemanticsResolver valueSemanticsResolver;
+    @Inject SchemaValueMarshaller valueMarshaller;
 
     Stream<Arguments> provideValueTypeExamples() {
-        return valueTypeExampleProvider.streamExamples()
-                .map(x->Arguments.of(x.getValueType().getSimpleName(), x.getValueType(), x));
+        return valueTypeExampleProvider.streamScenarios()
+                .map(Scenario::getArguments);
     }
 
 }

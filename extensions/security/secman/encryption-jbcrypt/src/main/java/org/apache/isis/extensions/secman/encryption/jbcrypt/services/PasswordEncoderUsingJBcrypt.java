@@ -20,21 +20,22 @@ package org.apache.isis.extensions.secman.encryption.jbcrypt.services;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.extensions.secman.applib.user.spi.PasswordEncryptionService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 
 /**
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.ext.secman.PasswordEncryptionServiceUsingJBcrypt")
+@Named("isis.ext.secman.PasswordEncoderUsingJBcrypt")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Qualifier("JBCrypt")
-public class PasswordEncryptionServiceUsingJBcrypt implements PasswordEncryptionService {
+@Qualifier("secman")
+public class PasswordEncoderUsingJBcrypt
+implements PasswordEncoder {
 
     private String salt;
 
@@ -46,18 +47,18 @@ public class PasswordEncryptionServiceUsingJBcrypt implements PasswordEncryption
     }
 
     @Override
-    public String encrypt(String password) {
-        return password == null ? null : BCrypt.hashpw(password, getSalt());
+    public String encode(final CharSequence rawPassword) {
+        return rawPassword == null ? null : BCrypt.hashpw(rawPassword.toString(), getSalt());
     }
 
     @Override
-    public boolean matches(String candidate, String encrypted) {
-        if (candidate == null && encrypted == null) {
+    public boolean matches(final CharSequence rawPassword, final String encodedPassword) {
+        if (rawPassword == null && encodedPassword == null) {
             return true;
         }
-        if (candidate == null || encrypted == null) {
+        if (rawPassword == null || encodedPassword == null) {
             return false;
         }
-        return BCrypt.checkpw(candidate, encrypted);
+        return BCrypt.checkpw(rawPassword.toString(), encodedPassword);
     }
 }

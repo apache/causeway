@@ -31,6 +31,7 @@ import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.core.runtimeservices.bookmarks.BookmarkServiceDefault;
 import org.apache.isis.core.runtimeservices.command.CommandDtoFactoryDefault;
 import org.apache.isis.core.runtimeservices.command.CommandExecutorServiceDefault;
+import org.apache.isis.core.runtimeservices.command.SchemaValueMarshallerDefault;
 import org.apache.isis.core.runtimeservices.email.EmailServiceDefault;
 import org.apache.isis.core.runtimeservices.eventbus.EventBusServiceSpring;
 import org.apache.isis.core.runtimeservices.executor.MemberExecutorServiceDefault;
@@ -106,6 +107,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         XmlServiceDefault.class,
         XmlSnapshotServiceDefault.class,
         ObjectLifecyclePublisherDefault.class,
+        SchemaValueMarshallerDefault.class,
 
         // @Controller
         RoutingServiceDefault.class,

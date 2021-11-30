@@ -81,10 +81,11 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.proxy._ProxyFactoryService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
@@ -495,10 +496,10 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
     private ManagedObject[] adaptersFor(final Object[] args) {
         final ObjectManager objectManager = currentObjectManager();
-        return CommandUtil.adaptersFor(args, objectManager);
+        return _NullSafe.stream(args)
+                .map(objectManager::adapt)
+                .collect(_Arrays.toArray(ManagedObject.class, _NullSafe.size(args)));
     }
-
-
 
     // -- LISTENERS
 

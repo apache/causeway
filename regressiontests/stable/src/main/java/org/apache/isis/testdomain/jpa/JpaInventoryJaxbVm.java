@@ -1,0 +1,77 @@
+package org.apache.isis.testdomain.jpa;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.jaxb.PersistentEntitiesAdapter;
+import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
+import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.testdomain.jpa.entities.JpaBook;
+import org.apache.isis.testdomain.jpa.entities.JpaProduct;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@XmlRootElement(name = "root")
+@XmlType(
+        propOrder = {"name", "favoriteBook", "books"}
+)
+@XmlAccessorType(XmlAccessType.FIELD)
+@DomainObject(
+        nature=Nature.VIEW_MODEL
+        , logicalTypeName = "testdomain.jdo.JpaInventoryJaxbVm"
+)
+public class JpaInventoryJaxbVm {
+
+    @XmlTransient @Inject
+    private RepositoryService repository;
+
+    @ObjectSupport public String title() {
+        return String.format("JpaInventoryJaxbVm; %d products", listProducts().size());
+    }
+
+    @Property(editing = Editing.ENABLED)
+    @Getter @Setter
+    @XmlElement
+    private String name;
+
+    @Action
+    public List<JpaProduct> listProducts() {
+        return repository.allInstances(JpaProduct.class);
+    }
+
+    @Action
+    public List<JpaBook> listBooks() {
+        return repository.allInstances(JpaBook.class);
+    }
+
+    @Getter @Setter
+    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
+    @XmlElement(required = false)
+    @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
+    private JpaBook favoriteBook = null;
+
+    @Getter @Setter
+    @Collection
+    @XmlElement(name = "book")
+    @XmlJavaTypeAdapter(PersistentEntitiesAdapter.class)
+    private java.util.Collection<JpaBook> books = new ArrayList<>();
+
+}

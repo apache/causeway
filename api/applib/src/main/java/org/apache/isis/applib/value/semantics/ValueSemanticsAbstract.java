@@ -54,6 +54,18 @@ implements
 
     @SuppressWarnings("unchecked")
     @Override
+    public OrderRelation<T, ?> getOrderRelation() {
+        return this instanceof OrderRelation ? (OrderRelation<T, ?>)this : null;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Converter<T, ?> getConverter() {
+        return this instanceof Converter ? (Converter<T, ?>)this : null;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
     public Renderer<T> getRenderer() {
         return this instanceof Renderer ? (Renderer<T>)this : null;
     }
@@ -97,6 +109,7 @@ implements
      * this is typically overruled later by implementations of
      * {@link #configureDecimalFormat(org.apache.isis.applib.adapters.ValueSemanticsProvider.Context, DecimalFormat) configureDecimalFormat}
      */
+    @SuppressWarnings("javadoc")
     protected DecimalFormat getNumberFormat(final @Nullable ValueSemanticsProvider.Context context) {
         val format = (DecimalFormat)NumberFormat.getNumberInstance(getLocale(context));
         // prime w/ 16 (64 bit IEEE 754 double has 15 decimal digits of precision)

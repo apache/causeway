@@ -121,16 +121,23 @@ public final class ManagedAction extends ManagedMember {
 
     // -- INTERACTION
 
-    public _Either<ManagedObject, InteractionVeto> invoke(@NonNull final Can<ManagedObject> actionParameters) {
+    public _Either<ManagedObject, InteractionVeto> invoke(
+            final @NonNull Can<ManagedObject> actionParameters,
+            final @NonNull InteractionInitiatedBy interactionInitiatedBy) {
 
         if(isValueTypeMixin()) {
             return _Either.left(invokeValueTypeMixin(actionParameters));
         }
 
         final ManagedObject actionResult = getAction()
-                .execute(interactionHead(), actionParameters, InteractionInitiatedBy.USER);
+                .execute(interactionHead(), actionParameters, interactionInitiatedBy);
 
         return _Either.left(route(actionResult));
+    }
+
+    public _Either<ManagedObject, InteractionVeto> invoke(
+            final @NonNull Can<ManagedObject> actionParameters) {
+        return invoke(actionParameters, InteractionInitiatedBy.USER);
     }
 
     @SneakyThrows

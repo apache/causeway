@@ -29,8 +29,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
-import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsAdapter;
-import org.apache.isis.schema.common.v2.ValueType;
+import org.apache.isis.core.metamodel.valuetypes.TemporalSemanticsAdapter;
 
 /**
  * An adapter that handles {@link java.util.Date} as both a date AND time
@@ -42,18 +41,13 @@ import org.apache.isis.schema.common.v2.ValueType;
 @Component
 @Named("isis.val.JavaUtilDateValueSemantics")
 public class JavaUtilDateValueSemantics
-extends ValueSemanticsAdapter<Date, LocalDateTime>  {
+extends TemporalSemanticsAdapter<Date, LocalDateTime>  {
 
     @Inject LocalDateTimeValueSemantics localDateTimeValueSemantics;
 
     @Override
     public Class<Date> getCorrespondingClass() {
         return java.util.Date.class;
-    }
-
-    @Override
-    public ValueType getSchemaValueType() {
-        return UNREPRESENTED;
     }
 
     @Override

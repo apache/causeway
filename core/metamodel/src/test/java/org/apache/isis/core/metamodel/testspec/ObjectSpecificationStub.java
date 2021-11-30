@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
-import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -116,7 +116,7 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Optional<ObjectAssociation> getDeclaredAssociation(final String name) {
+    public Optional<ObjectAssociation> getDeclaredAssociation(final String name, final MixedIn mixedIn) {
         for (int i = 0; i < fields.size(); i++) {
             if (fields.get(i).getId().equals(name)) {
                 return Optional.ofNullable(fields.get(i));
@@ -126,7 +126,7 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn contributed) {
+    public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn mixedIn) {
         return fields.stream();
     }
 
@@ -172,16 +172,17 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Optional<ObjectAction> getDeclaredAction(final String id, final ActionType type) {
+    public Optional<ObjectAction> getDeclaredAction(
+            final String id, final ImmutableEnumSet<ActionScope> scopes, final MixedIn mixedIn) {
         val nameParmsIdentityString = id.substring(0, id.indexOf('('));
         val action = lookupObjectAction(nameParmsIdentityString);
 
-        if(type==null) {
+        if(scopes==null) {
             return action;
         }
 
         if (action.isPresent()
-                && action.get().getType() == type) {
+                && scopes.contains(action.get().getScope())) {
             return action;
         }
         return Optional.empty();
@@ -306,7 +307,7 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Stream<ObjectAction> streamDeclaredActions(final ImmutableEnumSet<ActionType> types, final MixedIn contributed) {
+    public Stream<ObjectAction> streamDeclaredActions(final ImmutableEnumSet<ActionScope> types, final MixedIn contributed) {
         return null;
     }
 
@@ -346,14 +347,15 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Optional<ObjectAction> getAction(final String id, final ActionType type) {
+    public Optional<ObjectAction> getAction(
+            final String id, final ImmutableEnumSet<ActionScope> scopes, final MixedIn mixedIn) {
         // poorly implemented, inheritance not supported
-        return getDeclaredAction(id, type);
+        return getDeclaredAction(id, scopes, mixedIn);
     }
 
     @Override
     public Stream<ObjectAction> streamActions(
-            final ImmutableEnumSet<ActionType> types,
+            final ImmutableEnumSet<ActionScope> types,
             final MixedIn contributed,
             final Consumer<ObjectAction> onActionOverloaded) {
         // poorly implemented, inheritance not supported
@@ -361,9 +363,9 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Optional<ObjectAssociation> getAssociation(final String id) {
+    public Optional<ObjectAssociation> getAssociation(final String id, final MixedIn mixedIn) {
         // poorly implemented, inheritance not supported
-        return getDeclaredAssociation(id);
+        return getDeclaredAssociation(id, mixedIn);
     }
 
     @Override
@@ -374,10 +376,8 @@ implements ObjectSpecification {
 
     @Override
     public Stream<ObjectAction> streamRuntimeActions(final MixedIn mixedIn) {
-        val actionTypes = getMetaModelContext().getSystemEnvironment().isPrototyping()
-                ? ActionType.USER_AND_PROTOTYPE
-                : ActionType.USER_ONLY;
-        return streamActions(actionTypes, mixedIn);
+        val actionScopes = ActionScope.forEnvironment(getMetaModelContext().getSystemEnvironment());
+        return streamActions(actionScopes, mixedIn);
     }
 
     @Override

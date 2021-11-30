@@ -28,25 +28,27 @@ import javax.inject.Named;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.config.valuetypes.ValueSemanticsRegistry;
 import org.apache.isis.core.metamodel.valuesemantics.EnumValueSemanticsAbstract;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@Named("isis.metamodel.ValueSemanticsRegistryDefault")
+@Named("isis.metamodel.ValueSemanticsResolverDefault")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class ValueSemanticsRegistryDefault
-implements ValueSemanticsRegistry {
+public class ValueSemanticsResolverDefault
+implements ValueSemanticsResolver {
 
     // managed by Spring
     private final List<ValueSemanticsProvider<?>> valueSemanticsProviders;
@@ -77,7 +79,10 @@ implements ValueSemanticsRegistry {
     }
 
     @Override
-    public <T> Can<ValueSemanticsProvider<T>> selectValueSemantics(final Class<T> valueType) {
+    public <T> Can<ValueSemanticsProvider<T>> selectValueSemantics(
+            final @NonNull Identifier featureIdentifier,
+            final Class<T> valueType) {
+        //FIXME[ISIS-2877] honor customizations
         return streamValueSemantics(valueType)
                 .collect(Can.toCan());
     }
@@ -104,6 +109,5 @@ implements ValueSemanticsRegistry {
                           IntrospectionPolicy.ENCAPSULATION_ENABLED,
                   enumType));
     }
-
 
 }

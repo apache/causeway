@@ -49,7 +49,7 @@ import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetForStatic
 import org.apache.isis.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
-import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -263,22 +263,19 @@ implements FacetHolder {
     @Override
     public Optional<ObjectAction> getDeclaredAction(
             final @Nullable String id,
-            final @Nullable ActionType type) {
+            final ImmutableEnumSet<ActionScope> actionScopes,
+            final MixedIn mixedIn) {
 
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
         return id == null
-                ? Optional.empty()
-                : streamDeclaredActions(
-                        type==null
-                            ? ActionType.ANY
-                            : ImmutableEnumSet.of(type),
-                        MixedIn.INCLUDED)
-                    .filter(action->
-                        id.equals(action.getFeatureIdentifier().getMemberNameAndParameterClassNamesIdentityString())
-                                || id.equals(action.getFeatureIdentifier().getMemberLogicalName())
-                    )
-                    .findFirst();
+            ? Optional.empty()
+            : streamDeclaredActions(actionScopes, mixedIn)
+                .filter(action->
+                    id.equals(action.getFeatureIdentifier().getMemberNameAndParameterClassNamesIdentityString())
+                            || id.equals(action.getFeatureIdentifier().getMemberLogicalName())
+                )
+                .findFirst();
     }
 
     @Override

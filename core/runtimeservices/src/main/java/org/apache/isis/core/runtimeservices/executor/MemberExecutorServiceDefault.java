@@ -44,12 +44,14 @@ import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.commons.CanonicalParameterUtil;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.execution.InteractionInternal;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterOrClearFacetForDomainEventAbstract.EditingVariant;
@@ -68,6 +70,7 @@ import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -109,6 +112,16 @@ implements MemberExecutorService {
         _Assert.assertEquals(owningAction.getParameterCount(), argumentAdapters.size(),
                 "action's parameter count and provided argument count must match");
 
+        // guard against malformed initialArgs
+        argumentAdapters.forEach(arg->{if(!ManagedObjects.isSpecified(arg)) {
+            throw _Exceptions.illegalArgument("arguments must be specified for action %s", owningAction);
+        }});
+
+        if(interactionInitiatedBy.isPassThrough()) {
+            val resultPojo = invokeMethodPassThrough(method, head, argumentAdapters);
+            return facetHolder.getObjectManager().adapt(resultPojo);
+        }
+
         val interaction = getInteractionElseFail();
         val command = interaction.getCommand();
 
@@ -127,18 +140,16 @@ implements MemberExecutorService {
                 .collect(_Lists.toUnmodifiable());
 
         val targetMemberName = ObjectAction.Util.friendlyNameFor(owningAction, head);
-        val targetClass = CommandUtil.targetClassNameFor(targetAdapter);
+        val targetClass = IdentifierUtil.targetClassNameFor(targetAdapter);
 
         val actionInvocation =
                 new ActionInvocation(
                         interaction, actionId, targetPojo, argumentPojos, targetMemberName,
                         targetClass);
-        final InteractionInternal.MemberExecutor<ActionInvocation> memberExecution =
-                actionExecutorFactory.createExecutor(
-                        owningAction, head, argumentAdapters);
+        val memberExecutor = actionExecutorFactory.createExecutor(owningAction, head, argumentAdapters);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        interaction.execute(memberExecution, actionInvocation, clockService, metricsService.get(), command);
+        interaction.execute(memberExecutor, actionInvocation, clockService, metricsService.get(), command);
 
         // handle any exceptions
         final Execution<ActionInvocationDto, ?> priorExecution =
@@ -200,7 +211,7 @@ implements MemberExecutorService {
         val argValue = UnwrapUtil.single(newValueAdapter);
 
         val targetMemberName = owningProperty.getFriendlyName(head::getTarget);
-        val targetClass = CommandUtil.targetClassNameFor(targetManagedObject);
+        val targetClass = IdentifierUtil.targetClassNameFor(targetManagedObject);
 
         val propertyEdit = new PropertyEdit(interaction, propertyId, target, argValue, targetMemberName, targetClass);
         val executor = propertyExecutorFactory
@@ -235,6 +246,17 @@ implements MemberExecutorService {
     }
 
     // -- HELPER
+
+    @SneakyThrows
+    private Object invokeMethodPassThrough(
+            final Method method,
+            final InteractionHead head,
+            final Can<ManagedObject> arguments) {
+
+        final Object[] executionParameters = UnwrapUtil.multipleAsArray(arguments);
+        final Object targetPojo = UnwrapUtil.single(head.getTarget());
+        return CanonicalParameterUtil.invoke(method, targetPojo, executionParameters);
+    }
 
     private void setCommandResultIfEntity(
             final Command command,

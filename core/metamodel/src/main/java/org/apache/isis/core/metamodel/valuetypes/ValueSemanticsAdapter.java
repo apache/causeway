@@ -18,25 +18,58 @@
  */
 package org.apache.isis.core.metamodel.valuetypes;
 
+import org.apache.isis.applib.value.semantics.Converter;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
+import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
 
-public abstract class ValueSemanticsAdapter<T, D>
+public abstract class ValueSemanticsAdapter<T, D, E>
 extends ValueSemanticsAbstract<T>
 implements
+    OrderRelation<T, E>,
     EncoderDecoder<T>,
     Parser<T>,
-    Renderer<T> {
+    Renderer<T>,
+    Converter<T, D>{
 
     public abstract ValueSemanticsAbstract<D> getDelegate();
 
-    public abstract T fromDelegateValue(D value);
-    public abstract D toDelegateValue(T value);
+    /**
+     * By design, adapters always share their <i>SchemaValueType</i> with their delegate.
+     * @see ValueSemanticsProvider#getSchemaValueType()
+     */
+    @Override
+    public final ValueType getSchemaValueType() {
+        return getDelegate().getSchemaValueType();
+    }
+
+    // -- ORDER RELATION
+
+    @Override
+    public final E epsilon() {
+        return delegateOrderRelation().epsilon();
+    }
+
+    @Override
+    public final int compare(final T a, final T b, final E epsilon) {
+        return delegateOrderRelation()
+                .compare(toDelegateValue(a), toDelegateValue(b), epsilon);
+    }
+
+    @Override
+    public final boolean equals(final T a, final T b, final E epsilon) {
+        return delegateOrderRelation()
+                .equals(toDelegateValue(a), toDelegateValue(b), epsilon);
+    }
+
+    // -- CONVERTER
+
 
     // -- ENCODER DECODER
 
@@ -90,7 +123,17 @@ implements
         return delegateParser().maxLength();
     }
 
+    @Override
+    public String getPattern(final Context context) {
+        return delegateParser().getPattern(context);
+    }
+
     // -- HELPER
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private OrderRelation<D, E> delegateOrderRelation() {
+        return ((OrderRelation)getDelegate());
+    }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private Parser<D> delegateParser() {

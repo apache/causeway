@@ -26,17 +26,21 @@ import java.util.UUID;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
+import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.objectmanager.identify.ObjectBookmarker.Handler;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 
 import lombok.SneakyThrows;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 class ObjectBookmarker_builtinHandlers {
 
@@ -75,6 +79,7 @@ class ObjectBookmarker_builtinHandlers {
 
     }
 
+    @Log4j2
     static class BookmarkForEntities implements Handler {
 
         @Override
@@ -95,6 +100,29 @@ class ObjectBookmarker_builtinHandlers {
                 val msg = String.format("entity '%s' has no EntityFacet associated", managedObject);
                 throw _Exceptions.unrecoverable(msg);
             }
+
+            // special code path (on JDO), when detached entity with its OID not previously memoized
+            if(!managedObject.isBookmarkMemoized()
+                    && EntityUtil.getPersistenceStandard(managedObject)
+                        .map(PersistenceStandard::isJdo)
+                        .orElse(false)
+                    && !entityFacet.getEntityState(managedObject.getPojo()).isAttached()) {
+
+                // re-attach
+                entityFacet.persist(spec, managedObject.getPojo());
+
+                // fail early, if re-attach failed
+                _Assert.assertTrue(
+                        entityFacet.getEntityState(managedObject.getPojo()).isAttached(),
+                        ()->{
+                            val msg = String.format("failed to re-attach (persist) JDO entity %s, "
+                                    + "while creating a Bookmark",
+                                    spec.getLogicalTypeName());
+                            log.error(msg); // in case exception gets swallowed
+                            return msg;
+                        });
+            }
+
             val identifier = entityFacet.identifierFor(spec, pojo);
             return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), identifier);
         }

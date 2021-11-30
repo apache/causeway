@@ -16,18 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.applib.user.spi;
+package org.apache.isis.core.metamodel.valuetypes;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import java.time.Duration;
+import java.time.temporal.Temporal;
 
-/**
- * @since 2.0 {@index}
- */
-public interface PasswordEncryptionService {
+public abstract class TemporalSemanticsAdapter<T, D extends Temporal>
+extends ValueSemanticsAdapter<T, D, Duration> {
 
-    @Programmatic
-    public String encrypt(final String password);
+    // -- ORDER RELATION
 
-    @Programmatic
-    public boolean matches(final String candidate, final String encrypted);
+    protected final static Duration ALMOST_A_SECOND = Duration.ofNanos(999_999_999);
+    protected final static Duration ALMOST_A_MILLI_SECOND = Duration.ofNanos(999_999);
+
 }

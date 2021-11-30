@@ -30,6 +30,7 @@ import org.apache.isis.applib.services.iactn.ActionInvocation;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.metamodel.commons.CanonicalParameterUtil;
@@ -91,8 +92,10 @@ implements ImperativeFacet {
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val executionResult =
-                getTransactionService().callWithinCurrentTransactionElseCreateNew(()->
+        val executionResult = interactionInitiatedBy.isPassThrough()
+                ? Result.of(()->
+                    doInvoke(owningAction, head, argumentAdapters, interactionInitiatedBy))
+                : getTransactionService().callWithinCurrentTransactionElseCreateNew(()->
                     doInvoke(owningAction, head, argumentAdapters, interactionInitiatedBy));
 
         //PersistableTypeGuard.instate(executionResult);
@@ -172,73 +175,46 @@ implements ImperativeFacet {
 
         private final ObjectAction owningAction;
         private final InteractionHead head;
-        private final Can<ManagedObject> argumentAdapters;
+        private final Can<ManagedObject> initialArgs;
 
         @SneakyThrows
         @Override
         public Object execute(final ActionInvocation currentExecution) {
 
-//            try {
-                // it's possible that an event handler changes these en-route
-                // so we take a non-final copy
-                Can<ManagedObject> argumentAdapters = this.argumentAdapters;
+            // update the current execution with the DTO (memento)
+            val invocationDto = getInteractionDtoServiceInternal()
+            .asActionInvocationDto(owningAction, head, initialArgs);
 
-                // update the current execution with the DTO (memento)
-                val invocationDto = getInteractionDtoServiceInternal()
-                .asActionInvocationDto(owningAction, head, argumentAdapters);
+            currentExecution.setDto(invocationDto);
 
-                currentExecution.setDto(invocationDto);
+            // ... post the executing event
+            final ActionDomainEvent<?> actionDomainEvent = domainEventHelper.postEventForAction(
+                    AbstractDomainEvent.Phase.EXECUTING,
+                    getEventType(),
+                    owningAction, owningAction,
+                    head, initialArgs,
+                    null);
 
-                // ... post the executing event
-                //compiler: cannot use val here, because initializer expression does not have a representable type
-                final ActionDomainEvent<?> actionDomainEvent = domainEventHelper.postEventForAction(
-                        AbstractDomainEvent.Phase.EXECUTING,
-                        getEventType(),
-                        owningAction, owningAction,
-                        head, argumentAdapters,
-                        null);
+            // the event handlers may have updated the argument themselves
+            val argsAfterEventPolling = updateArguments(initialArgs, actionDomainEvent.getArguments());
 
-                // the event handlers may have updated the argument themselves
-                argumentAdapters = updateArguments(argumentAdapters, actionDomainEvent.getArguments());
+            // set event onto the execution
+            currentExecution.setEvent(actionDomainEvent);
 
-                // set event onto the execution
-                currentExecution.setEvent(actionDomainEvent);
+            // invoke method
+            val resultPojo = invokeMethodElseFromCache(head, argsAfterEventPolling);
 
-                // invoke method
-                val resultPojo = invokeMethodElseFromCache(head, argumentAdapters);
+            // ... post the executed event
 
-                // ... post the executed event
+            domainEventHelper.postEventForAction(
+                    AbstractDomainEvent.Phase.EXECUTED,
+                    actionDomainEvent,
+                    owningAction, owningAction, head, argsAfterEventPolling,
+                    resultPojo);
 
-                domainEventHelper.postEventForAction(
-                        AbstractDomainEvent.Phase.EXECUTED,
-                        actionDomainEvent,
-                        owningAction, owningAction, head, argumentAdapters,
-                        resultPojo);
-
-                return actionDomainEvent.getReturnValue();
-
-//            } catch (Exception e) {
-//
-//                final Consumer<RecoverableException> recovery = recoverableException->{
-//
-//                    if (!getTransactionState().canCommit()) {
-//                        // something severe has happened to the underlying transaction;
-//                        // so escalate this exception to be non-recoverable
-//                        final Throwable recoverableExceptionCause = recoverableException.getCause();
-//                        Throwable nonRecoverableCause = recoverableExceptionCause != null
-//                                ? recoverableExceptionCause
-//                                        : recoverableException;
-//
-//                        // trim to first 300 chars
-//                        final String message = trim(nonRecoverableCause.getMessage(), 300);
-//
-//                        throw new NonRecoverableException(message, nonRecoverableCause);
-//                    }
-//                };
-//
-//                return ThrowableExtensions.handleInvocationException(e, method.toString(), recovery);
-//            }
+            return actionDomainEvent.getReturnValue();
         }
+
     }
 
     private static Can<ManagedObject> updateArguments(

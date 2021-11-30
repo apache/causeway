@@ -85,7 +85,7 @@
 		<!-- LIBRARY DEPENDENCIES -->
 		<archunit.version>0.22.0</archunit.version>
 		<asm.version>9.1</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
-		<approvaltests.version>12.1.1</approvaltests.version>
+		<approvaltests.version>12.3.1</approvaltests.version>
 
 		<assertj-guava.version>3.4.0</assertj-guava.version>
 
@@ -147,7 +147,7 @@
 
 		<jsr305.version>3.0.2</jsr305.version>
 		<junit-jupiter.version>5.8.1</junit-jupiter.version> <!-- overrides spring -->
-		<junit-platform.version>1.8.1</junit-platform.version>
+		<junit-platform.version>1.8.2</junit-platform.version>
 
 		<log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
 
@@ -160,7 +160,7 @@
 		<npm.version>8.1.0</npm.version>
 
 		<objenesis.version>3.2</objenesis.version>
-		<ognl.version>3.2.21</ognl.version>
+		<ognl.version>3.3.0</ognl.version>
 
 		<pdfbox.version>2.0.24</pdfbox.version>
 		<picocontainer.version>2.15</picocontainer.version>
@@ -181,7 +181,7 @@
 
 		<togglz.version>3.0.0</togglz.version>
 
-		<vaadin.version>21.0.4</vaadin.version>
+		<vaadin.version>21.0.8</vaadin.version>
 
 		<wicket.version>8.13.0</wicket.version>
 		<wicket-bootstrap.version>3.0.0-M18</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->

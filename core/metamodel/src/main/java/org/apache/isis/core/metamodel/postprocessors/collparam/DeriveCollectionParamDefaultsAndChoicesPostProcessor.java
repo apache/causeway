@@ -66,8 +66,6 @@ extends ObjectSpecificationPostProcessorAbstract {
     @Override
     protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation collection) {
 
-        val actionTypes = inferActionTypes();
-
         // ... see if any of its actions has a collection parameter of the same type
         //
         // eg Order#getItems() and Order#removeItems(List<OrderItem>)
@@ -80,7 +78,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         final ObjectActionParameter.Predicates.ScalarParameter whetherScalarParamOfType =
                 new ObjectActionParameter.Predicates.ScalarParameter(specification);
 
-        objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED)
+        objectSpecification.streamRuntimeActions(MixedIn.INCLUDED)
         .filter(ObjectAction.Predicates.choicesFromAndHavingCollectionParameterFor(collection))
         .forEach(action->{
 

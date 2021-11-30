@@ -22,7 +22,6 @@ import java.io.Serializable;
 import java.util.function.Supplier;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -49,15 +48,11 @@ public class ActionMemento implements Serializable {
     @EqualsAndHashCode.Include
     @Getter private final @NonNull Identifier identifier;
 
-    @EqualsAndHashCode.Exclude
-    private final @NonNull ActionType actionType; // not strictly required, but helps with load/unmarshal
-
     // -- FACTORY
 
     public static ActionMemento forAction(final @NonNull ObjectAction action) {
         return new ActionMemento(
                 action.getFeatureIdentifier(),
-                action.getType(),
                 action);
     }
 
@@ -72,8 +67,7 @@ public class ActionMemento implements Serializable {
             action = specLoader.get()
                     .specForLogicalTypeElseFail(getIdentifier().getLogicalType())
                     .getActionElseFail(
-                            getIdentifier().getMemberNameAndParameterClassNamesIdentityString(),
-                            actionType);
+                            getIdentifier().getMemberNameAndParameterClassNamesIdentityString());
         }
         return action;
     }
