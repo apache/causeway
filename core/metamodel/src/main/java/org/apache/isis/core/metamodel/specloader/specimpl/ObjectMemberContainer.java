@@ -28,7 +28,7 @@ import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
-import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.Hierarchical;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -62,7 +62,7 @@ implements
     // -- ACTIONS
 
     @Override
-    public Optional<ObjectAction> getAction(final String id, @Nullable final ActionType type) {
+    public Optional<ObjectAction> getAction(final String id, @Nullable final ActionScope type) {
 
         val declaredAction = getDeclaredAction(id); // no inheritance nor type considered
 
@@ -82,7 +82,7 @@ implements
 
     @Override
     public Stream<ObjectAction> streamActions(
-            final ImmutableEnumSet<ActionType> actionTypes,
+            final ImmutableEnumSet<ActionScope> actionTypes,
             final MixedIn mixedIn,
             final Consumer<ObjectAction> onActionOverloaded) {
 

@@ -19,24 +19,30 @@
 package org.apache.isis.core.metamodel.spec;
 
 import org.apache.isis.commons.collections.ImmutableEnumSet;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 
-public enum ActionType {
-    USER,
+public enum ActionScope {
+    PRODUCTION,
     PROTOTYPE;
 
     public String getName() {
         return name();
     }
 
+    public boolean isProduction() {
+        return this == PRODUCTION;
+    }
+
     public boolean isPrototype() {
         return this == PROTOTYPE;
     }
 
-    public boolean isUser() {
-        return this == USER;
-    }
+    public static final ImmutableEnumSet<ActionScope> PRODUCTION_ONLY = ImmutableEnumSet.of(ActionScope.PRODUCTION);
+    public static final ImmutableEnumSet<ActionScope> ANY = ImmutableEnumSet.allOf(ActionScope.class);
 
-    public static final ImmutableEnumSet<ActionType> USER_ONLY = ImmutableEnumSet.of(ActionType.USER);
-    public static final ImmutableEnumSet<ActionType> USER_AND_PROTOTYPE = ImmutableEnumSet.of(ActionType.USER, ActionType.PROTOTYPE);
-    public static final ImmutableEnumSet<ActionType> ANY = ImmutableEnumSet.allOf(ActionType.class);
+    public static ImmutableEnumSet<ActionScope> forEnvironment(final IsisSystemEnvironment systemEnvironment) {
+        return systemEnvironment.isPrototyping()
+            ? ActionScope.ANY
+            : ActionScope.PRODUCTION_ONLY;
+    }
 }

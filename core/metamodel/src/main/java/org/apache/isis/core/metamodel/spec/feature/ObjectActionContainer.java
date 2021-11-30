@@ -27,25 +27,25 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ActionScope;
 
 public interface ObjectActionContainer {
 
     // -- ACTION LOOKUP (INHERITANCE CONSIDERED)
 
     /**
-     * Similar to {@link #getDeclaredAction(String, ActionType)},
+     * Similar to {@link #getDeclaredAction(String, ActionScope)},
      * but also considering any inherited object members. (mixed-in included)
      * @param id
      * @param type
      *
      * @implSpec If not found on the current 'type' search for the 'nearest' match in super-types,
      * and if nothing found there, search the interfaces. Special care needs to be taken, as the
-     * {@link ActionType} might be redeclared when inheriting from a super-type or interface.
+     * {@link ActionScope} might be redeclared when inheriting from a super-type or interface.
      */
-    Optional<ObjectAction> getAction(String id, @Nullable ActionType type);
+    Optional<ObjectAction> getAction(String id, @Nullable ActionScope type);
 
-    default ObjectAction getActionElseFail(String id, @Nullable ActionType type) {
+    default ObjectAction getActionElseFail(String id, @Nullable ActionScope type) {
         return getAction(id, type)
                 .orElseThrow(()->_Exceptions.noSuchElement("id=%s type=%s",
                         id,
@@ -72,12 +72,12 @@ public interface ObjectActionContainer {
      *
      * @see #getDeclaredAction(String)
      */
-    Optional<ObjectAction> getDeclaredAction(String id, @Nullable ActionType type);
+    Optional<ObjectAction> getDeclaredAction(String id, @Nullable ActionScope type);
 
     /**
-     * Shortcut to {@link #getDeclaredAction(String, ActionType)} with {@code ActionType = null},
+     * Shortcut to {@link #getDeclaredAction(String, ActionScope)} with {@code ActionType = null},
      * meaning where action type is <i>any</i>.
-     * @see #getDeclaredAction(String, ActionType)
+     * @see #getDeclaredAction(String, ActionScope)
      */
     default Optional<ObjectAction> getDeclaredAction(String id) {
         return getDeclaredAction(id, null);
@@ -92,7 +92,7 @@ public interface ObjectActionContainer {
      * @param onActionOverloaded - callback on overloaded action detected
      */
     Stream<ObjectAction> streamActions(
-            ImmutableEnumSet<ActionType> actionTypes,
+            ImmutableEnumSet<ActionScope> actionTypes,
             MixedIn mixedIn,
             Consumer<ObjectAction> onActionOverloaded);
 
@@ -102,7 +102,7 @@ public interface ObjectActionContainer {
      * @param mixedIn - whether to include mixed in actions
      */
     default Stream<ObjectAction> streamActions(
-            ImmutableEnumSet<ActionType> actionTypes,
+            ImmutableEnumSet<ActionScope> actionTypes,
             MixedIn mixedIn) {
         return streamActions(actionTypes, mixedIn, __->{});
     }
@@ -112,7 +112,7 @@ public interface ObjectActionContainer {
      * @param actionType
      * @param mixedIn - whether to include mixed in actions
      */
-    default Stream<ObjectAction> streamActions(ActionType actionType, MixedIn mixedIn) {
+    default Stream<ObjectAction> streamActions(ActionScope actionType, MixedIn mixedIn) {
         return streamActions(ImmutableEnumSet.of(actionType), mixedIn);
     }
 
@@ -121,7 +121,7 @@ public interface ObjectActionContainer {
      * @param mixedIn - whether to include mixed in actions
      */
     default Stream<ObjectAction> streamAnyActions(MixedIn mixedIn) {
-        return streamActions(ActionType.ANY, mixedIn);
+        return streamActions(ActionScope.ANY, mixedIn);
     }
 
     /**
@@ -137,14 +137,14 @@ public interface ObjectActionContainer {
      * Returns an array of actions of the specified type, including or excluding
      * contributed actions as required.
      */
-    Stream<ObjectAction> streamDeclaredActions(ImmutableEnumSet<ActionType> actionTypes, MixedIn mixedIn);
+    Stream<ObjectAction> streamDeclaredActions(ImmutableEnumSet<ActionScope> actionTypes, MixedIn mixedIn);
 
-    default Stream<ObjectAction> streamDeclaredActions(ActionType type, MixedIn mixedIn) {
+    default Stream<ObjectAction> streamDeclaredActions(ActionScope type, MixedIn mixedIn) {
         return streamDeclaredActions(ImmutableEnumSet.of(type), mixedIn);
     }
 
     default Stream<ObjectAction> streamDeclaredActions(MixedIn mixedIn) {
-        return streamDeclaredActions(ActionType.ANY, mixedIn);
+        return streamDeclaredActions(ActionScope.ANY, mixedIn);
     }
 
 

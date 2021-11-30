@@ -39,7 +39,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.primitives._Ints;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -221,7 +221,7 @@ public class PageParameterUtils {
         val owningLogicalTypeName = PageParameterNames.ACTION_OWNING_SPEC.getStringFrom(pageParameters);
         val owningLogicalType = specLoader.lookupLogicalTypeElseFail(owningLogicalTypeName);
 
-        final ActionType actionType = PageParameterNames.ACTION_TYPE.getEnumFrom(pageParameters, ActionType.class);
+        final ActionScope actionType = PageParameterNames.ACTION_TYPE.getEnumFrom(pageParameters, ActionScope.class);
         final String actionNameParms = PageParameterNames.ACTION_ID.getStringFrom(pageParameters);
 
         val action = specLoader

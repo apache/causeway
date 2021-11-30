@@ -18,12 +18,10 @@
  */
 package org.apache.isis.core.metamodel.postprocessors;
 
-import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -53,14 +51,13 @@ implements ObjectSpecificationPostProcessor {
 
         doPostProcess(objectSpecification);
 
-        val actionTypes = inferActionTypes();
-        objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED)
+        objectSpecification.streamRuntimeActions(MixedIn.INCLUDED)
                 .forEach(objectAction -> {
                     objectAction.streamParameters()
                     .forEach(param -> doPostProcess(objectSpecification, objectAction, param));
                 });
 
-        objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED)
+        objectSpecification.streamRuntimeActions(MixedIn.INCLUDED)
                 .forEach(act -> doPostProcess(objectSpecification, act));
 
         objectSpecification.streamProperties(MixedIn.INCLUDED).
@@ -76,12 +73,6 @@ implements ObjectSpecificationPostProcessor {
     protected abstract void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, ObjectActionParameter param);
     protected abstract void doPostProcess(ObjectSpecification objectSpecification, OneToOneAssociation prop);
     protected abstract void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll);
-
-    protected final ImmutableEnumSet<ActionType> inferActionTypes() {
-        return getMetaModelContext().getSystemEnvironment().isPrototyping()
-                ? ActionType.USER_AND_PROTOTYPE
-                : ActionType.USER_ONLY;
-    }
 
     protected static FacetedMethod facetedMethodFor(final ObjectMember objectMember) {
         // TODO: hacky, need to copy facet onto underlying peer, not to the action/association itself.

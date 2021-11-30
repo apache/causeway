@@ -69,7 +69,7 @@ import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFac
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
 import org.apache.isis.core.metamodel.services.grid.GridServiceDefault;
-import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -324,8 +324,8 @@ implements MenuBarsService {
         .filter(with(menuBarPos))
         .forEach(serviceAdapter->{
 
-            streamServiceActions(serviceAdapter, ActionType.USER).forEach(serviceActions::add);
-            streamServiceActions(serviceAdapter, ActionType.PROTOTYPE).forEach(serviceActions::add);
+            streamServiceActions(serviceAdapter, ActionScope.PRODUCTION).forEach(serviceActions::add);
+            streamServiceActions(serviceAdapter, ActionScope.PROTOTYPE).forEach(serviceActions::add);
 
         });
 
@@ -446,7 +446,7 @@ implements MenuBarsService {
 
     private Stream<ServiceAndAction> streamServiceActions(
             final ManagedObject serviceAdapter,
-            final ActionType actionType) {
+            final ActionScope actionType) {
         final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
 
         // skip if annotated to not be included in repository menu using @DomainService

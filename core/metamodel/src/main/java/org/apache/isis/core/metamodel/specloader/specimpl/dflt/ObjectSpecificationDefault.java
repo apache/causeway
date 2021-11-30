@@ -49,7 +49,7 @@ import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetForStatic
 import org.apache.isis.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
-import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -263,7 +263,7 @@ implements FacetHolder {
     @Override
     public Optional<ObjectAction> getDeclaredAction(
             final @Nullable String id,
-            final @Nullable ActionType type) {
+            final @Nullable ActionScope type) {
 
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
@@ -271,7 +271,7 @@ implements FacetHolder {
                 ? Optional.empty()
                 : streamDeclaredActions(
                         type==null
-                            ? ActionType.ANY
+                            ? ActionScope.ANY
                             : ImmutableEnumSet.of(type),
                         MixedIn.INCLUDED)
                     .filter(action->

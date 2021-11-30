@@ -54,7 +54,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
-import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -71,8 +71,8 @@ public class ObjectActionDefault
 extends ObjectMemberAbstract
 implements ObjectAction {
 
-    public static ActionType getType(final String typeStr) {
-        final ActionType type = ActionType.valueOf(typeStr);
+    public static ActionScope getType(final String typeStr) {
+        final ActionScope type = ActionScope.valueOf(typeStr);
         if (type == null) {
             throw new IllegalArgumentException();
         }
@@ -147,14 +147,14 @@ implements ObjectAction {
     // -- TYPE
 
     @Override
-    public ActionType getType() {
+    public ActionScope getType() {
         return getType(this);
     }
 
-    private static ActionType getType(final FacetHolder facetHolder) {
+    private static ActionScope getType(final FacetHolder facetHolder) {
         return facetHolder.containsFacet(PrototypeFacet.class)
-            ? ActionType.PROTOTYPE
-            : ActionType.USER;
+            ? ActionScope.PROTOTYPE
+            : ActionScope.PRODUCTION;
     }
 
     @Override

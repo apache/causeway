@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
-import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -172,7 +172,7 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Optional<ObjectAction> getDeclaredAction(final String id, final ActionType type) {
+    public Optional<ObjectAction> getDeclaredAction(final String id, final ActionScope type) {
         val nameParmsIdentityString = id.substring(0, id.indexOf('('));
         val action = lookupObjectAction(nameParmsIdentityString);
 
@@ -306,7 +306,7 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Stream<ObjectAction> streamDeclaredActions(final ImmutableEnumSet<ActionType> types, final MixedIn contributed) {
+    public Stream<ObjectAction> streamDeclaredActions(final ImmutableEnumSet<ActionScope> types, final MixedIn contributed) {
         return null;
     }
 
@@ -346,14 +346,14 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Optional<ObjectAction> getAction(final String id, final ActionType type) {
+    public Optional<ObjectAction> getAction(final String id, final ActionScope type) {
         // poorly implemented, inheritance not supported
         return getDeclaredAction(id, type);
     }
 
     @Override
     public Stream<ObjectAction> streamActions(
-            final ImmutableEnumSet<ActionType> types,
+            final ImmutableEnumSet<ActionScope> types,
             final MixedIn contributed,
             final Consumer<ObjectAction> onActionOverloaded) {
         // poorly implemented, inheritance not supported
@@ -374,10 +374,8 @@ implements ObjectSpecification {
 
     @Override
     public Stream<ObjectAction> streamRuntimeActions(final MixedIn mixedIn) {
-        val actionTypes = getMetaModelContext().getSystemEnvironment().isPrototyping()
-                ? ActionType.USER_AND_PROTOTYPE
-                : ActionType.USER_ONLY;
-        return streamActions(actionTypes, mixedIn);
+        val actionScopes = ActionScope.forEnvironment(getMetaModelContext().getSystemEnvironment());
+        return streamActions(actionScopes, mixedIn);
     }
 
     @Override

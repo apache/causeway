@@ -29,7 +29,7 @@ import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -140,7 +140,7 @@ public final class Util {
             final ObjectSpecification objectSpec,
             final Visibility visibility,
             final ClassExcluder classExcluder) {
-        val actionTypes = actionTypesFor(visibility);
+        val actionTypes = actionScopesFor(visibility);
 
         return objectSpec.streamActions(actionTypes, MixedIn.INCLUDED)
                 .filter(objectAction->
@@ -160,14 +160,13 @@ public final class Util {
         return response;
     }
 
-    static ImmutableEnumSet<ActionType> actionTypesFor(final Visibility visibility) {
+    static ImmutableEnumSet<ActionScope> actionScopesFor(final Visibility visibility) {
         switch (visibility) {
         case PUBLIC:
-            return ActionType.USER_ONLY;
         case PRIVATE:
-            return ActionType.USER_ONLY;
+            return ActionScope.PRODUCTION_ONLY;
         case PRIVATE_WITH_PROTOTYPING:
-            return ActionType.USER_AND_PROTOTYPE;
+            return ActionScope.ANY;
         }
         throw _Exceptions.unmatchedCase(visibility);
     }

@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.function.Supplier;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -50,7 +50,7 @@ public class ActionMemento implements Serializable {
     @Getter private final @NonNull Identifier identifier;
 
     @EqualsAndHashCode.Exclude
-    private final @NonNull ActionType actionType; // not strictly required, but helps with load/unmarshal
+    private final @NonNull ActionScope actionType; // not strictly required, but helps with load/unmarshal
 
     // -- FACTORY
 
