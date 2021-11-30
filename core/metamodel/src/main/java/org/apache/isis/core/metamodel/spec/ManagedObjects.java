@@ -337,6 +337,7 @@ public final class ManagedObjects {
 
         return _NullSafe.streamAutodetect(collectionOrArray)
         .map(pojo->ManagedObject.of(elementSpec, pojo)) // pojo is nullable here
+//TODO cannot reattach if id is not memoized
         .map(ManagedObjects.EntityUtil::reattach)
         .filter(ManagedObjects.VisibilityUtil.filterOn(interactionInitiatedBy))
         .collect(Can.toCan());
@@ -635,7 +636,16 @@ public final class ManagedObjects {
                         + "otherwise cannot re-attach",
                         spec.getLogicalTypeName());
                 log.error(msg); // in case exception gets swallowed
-                throw _Exceptions.illegalState(msg);
+                //throw _Exceptions.illegalState(msg);
+
+                val entityFacet = spec.getFacet(EntityFacet.class);
+
+                entityFacet.persist(spec, managedObject.getPojo());
+
+                _Assert.assertTrue(
+                        entityFacet.getEntityState(managedObject.getPojo()).isAttached());
+                managedObject.getBookmark();
+                return managedObject;
             }
 
             val objectManager = managedObject.getObjectManager();

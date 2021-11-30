@@ -55,14 +55,14 @@ implements
     ObjectAssociationContainer,
     Hierarchical {
 
-    protected ObjectMemberContainer(MetaModelContext metaModelContext) {
+    protected ObjectMemberContainer(final MetaModelContext metaModelContext) {
         super(metaModelContext);
     }
 
     // -- ACTIONS
 
     @Override
-    public Optional<ObjectAction> getAction(String id, @Nullable ActionType type) {
+    public Optional<ObjectAction> getAction(final String id, @Nullable final ActionType type) {
 
         val declaredAction = getDeclaredAction(id); // no inheritance nor type considered
 
@@ -120,9 +120,9 @@ implements
     // -- ASSOCIATIONS
 
     @Override
-    public Optional<ObjectAssociation> getAssociation(String id) {
+    public Optional<ObjectAssociation> getAssociation(final String id, final MixedIn mixedIn) {
 
-        val declaredAssociation = getDeclaredAssociation(id); // no inheritance considered
+        val declaredAssociation = getDeclaredAssociation(id, mixedIn); // no inheritance considered
 
         if(declaredAssociation.isPresent()) {
             return declaredAssociation;
@@ -130,11 +130,11 @@ implements
 
         return isTypeHierarchyRoot()
                ? Optional.empty() // stop searching
-               : superclass().getAssociation(id);
+               : superclass().getAssociation(id, mixedIn);
     }
 
     @Override
-    public Stream<ObjectAssociation> streamAssociations(MixedIn mixedIn) {
+    public Stream<ObjectAssociation> streamAssociations(final MixedIn mixedIn) {
 
         if(isTypeHierarchyRoot()) {
             return streamDeclaredAssociations(mixedIn); // stop going deeper

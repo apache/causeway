@@ -116,7 +116,7 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Optional<ObjectAssociation> getDeclaredAssociation(final String name) {
+    public Optional<ObjectAssociation> getDeclaredAssociation(final String name, final MixedIn mixedIn) {
         for (int i = 0; i < fields.size(); i++) {
             if (fields.get(i).getId().equals(name)) {
                 return Optional.ofNullable(fields.get(i));
@@ -126,7 +126,7 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn contributed) {
+    public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn mixedIn) {
         return fields.stream();
     }
 
@@ -361,9 +361,9 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Optional<ObjectAssociation> getAssociation(final String id) {
+    public Optional<ObjectAssociation> getAssociation(final String id, final MixedIn mixedIn) {
         // poorly implemented, inheritance not supported
-        return getDeclaredAssociation(id);
+        return getDeclaredAssociation(id, mixedIn);
     }
 
     @Override

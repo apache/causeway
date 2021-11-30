@@ -50,12 +50,10 @@ implements ManagedFeature {
     @RequiredArgsConstructor
     public static enum MemberType {
         PROPERTY(OneToOneAssociation.class, (spec, propertyId)->
-            spec.getAssociation(propertyId)
-            .map(property->property.isOneToOneAssociation()?property:null)),
+            spec.getProperty(propertyId)),
 
         COLLECTION(OneToManyAssociation.class, (spec, collectionId)->
-            spec.getAssociation(collectionId)
-            .map(collection->collection.isOneToManyAssociation()?collection:null)),
+            spec.getCollection(collectionId)),
 
         ACTION(ObjectAction.class, (spec, actionId)->
             spec.getAction(actionId));

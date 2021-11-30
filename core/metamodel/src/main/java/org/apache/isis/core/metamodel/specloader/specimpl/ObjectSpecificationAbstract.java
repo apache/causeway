@@ -654,10 +654,10 @@ implements ObjectSpecification {
     // -- ASSOCIATIONS
 
     @Override
-    public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn contributed) {
+    public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn mixedIn) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
-        if(contributed.isIncluded()) {
+        if(mixedIn.isIncluded()) {
             createMixedInAssociations(); // only if not already
             synchronized(unmodifiableAssociations) {
                 return stream(unmodifiableAssociations.get());
@@ -687,9 +687,9 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Optional<ObjectAssociation> getDeclaredAssociation(final String id) {
+    public Optional<ObjectAssociation> getDeclaredAssociation(final String id, final MixedIn mixedIn) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
-        return streamDeclaredAssociations(MixedIn.INCLUDED)
+        return streamDeclaredAssociations(mixedIn)
                 .filter(objectAssociation->objectAssociation.getId().equals(id))
                 .findFirst();
     }
