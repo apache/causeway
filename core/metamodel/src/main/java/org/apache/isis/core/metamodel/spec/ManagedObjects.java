@@ -337,7 +337,6 @@ public final class ManagedObjects {
 
         return _NullSafe.streamAutodetect(collectionOrArray)
         .map(pojo->ManagedObject.of(elementSpec, pojo)) // pojo is nullable here
-//TODO cannot reattach if id is not memoized
         .map(ManagedObjects.EntityUtil::reattach)
         .filter(ManagedObjects.VisibilityUtil.filterOn(interactionInitiatedBy))
         .collect(Can.toCan());
@@ -626,28 +625,6 @@ public final class ManagedObjects {
             }
 
             val spec = managedObject.getSpecification();
-
-            // identification (on JDO) fails, when detached object, where oid was not previously memoized
-            if(EntityUtil.getPersistenceStandard(managedObject)
-                        .map(PersistenceStandard::isJdo)
-                        .orElse(false)
-                    && !managedObject.isBookmarkMemoized()) {
-                val msg = String.format("entity %s is required to have a memoized ID, "
-                        + "otherwise cannot re-attach",
-                        spec.getLogicalTypeName());
-                log.error(msg); // in case exception gets swallowed
-                //throw _Exceptions.illegalState(msg);
-
-                val entityFacet = spec.getFacet(EntityFacet.class);
-
-                entityFacet.persist(spec, managedObject.getPojo());
-
-                _Assert.assertTrue(
-                        entityFacet.getEntityState(managedObject.getPojo()).isAttached());
-                managedObject.getBookmark();
-                return managedObject;
-            }
-
             val objectManager = managedObject.getObjectManager();
 
             return bookmark(managedObject)

@@ -43,8 +43,9 @@ final class _Lazy_ThreadSafe<T> implements _Lazy<T> {
 
     @Override @Synchronized
     public boolean isMemoized() {
-        guardAgainstRecursiveCall();
-        return memoized;
+        return getting
+                ? false // while getting always false
+                : memoized;
     }
 
     @Override @Synchronized
