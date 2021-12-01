@@ -42,8 +42,6 @@ import org.apache.isis.viewer.wicket.model.modelhelpers.WhereAmIHelper;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
@@ -200,19 +198,13 @@ public class EntityPage extends PageAbstract {
     // -- HELPER
 
     private void addBreadcrumbIfShown(final EntityModel entityModel) {
-        if(!isShowBreadcrumbs()) {
-            return;
-        }
-
-        final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
-        final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
-        breadcrumbModel.visited(entityModel);
+        getBreadcrumbModel()
+        .ifPresent(breadcrumbModel->breadcrumbModel.visited(entityModel));
     }
 
     private void removeAnyBreadcrumb(final EntityModel entityModel) {
-        final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
-        final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
-        breadcrumbModel.remove(entityModel);
+        getBreadcrumbModel()
+        .ifPresent(breadcrumbModel->breadcrumbModel.remove(entityModel));
     }
 
 }

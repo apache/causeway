@@ -55,9 +55,10 @@ import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import static org.apache.isis.commons.internal.base._Casts.castTo;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import lombok.NonNull;
 import lombok.val;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 /**
  *
@@ -207,7 +208,7 @@ extends IndicatingAjaxLink<ManagedObject> {
         actionPrompt.setPanel(actionParametersPanel, target);
         actionPrompt.showPrompt(target);
 
-        castTo(actionPrompt, ActionPromptWithExtraContent.class)
+        castTo(ActionPromptWithExtraContent.class, actionPrompt)
         .ifPresent(promptWithExtraContent->{
             BS3GridPanel.extraContentForMixin(promptWithExtraContent.getExtraContentId(), actionModel)
             .ifPresent(gridPanel->promptWithExtraContent.setExtraContentPanel(gridPanel, target));

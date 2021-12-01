@@ -31,7 +31,12 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.functional.ThrowingRunnable;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 
+/**
+ * Manage interactions yourself, by either wrapping your code blocks
+ * with {@link #run(ThrowingRunnable)} or {@link #call(Callable)}.
+ */
 public abstract class RegressionTestAbstract {
 
     protected void run(final ThrowingRunnable runnable) {
@@ -48,8 +53,6 @@ public abstract class RegressionTestAbstract {
 
     // -- ASSERTIONS
 
-
-
     // -- DEPENDENCIES
 
     @Inject protected BookmarkService bookmarkService;
@@ -58,5 +61,7 @@ public abstract class RegressionTestAbstract {
     @Inject protected FactoryService factoryService;
     @Inject protected ServiceInjector serviceInjector;
     @Inject protected InteractionService interactionService;
+    @Inject protected ObjectManager objectManager;
+
 
 }

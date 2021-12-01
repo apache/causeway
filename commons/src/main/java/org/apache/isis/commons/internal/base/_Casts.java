@@ -55,7 +55,7 @@ public final class _Casts {
      * @param cls
      * @return non-null
      */
-    public static <T> Optional<T> castTo(final @Nullable Object value, final @NonNull Class<T> cls) {
+    public static <T> Optional<T> castTo(final @NonNull Class<T> cls, final @Nullable Object value) {
         if(value==null) {
             return Optional.empty();
         }

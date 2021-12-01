@@ -260,7 +260,6 @@ final class ObjectLoader_builtinHandlers {
 
             val identifier = objectLoadRequest.getObjectIdentifier();
             val entity = entityFacet.fetchByIdentifier(spec, identifier);
-
             return entity;
         }
 

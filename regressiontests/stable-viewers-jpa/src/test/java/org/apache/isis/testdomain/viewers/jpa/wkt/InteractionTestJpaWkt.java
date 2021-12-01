@@ -29,7 +29,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.conf.Configuration_usingWicket;
 import org.apache.isis.testdomain.conf.Configuration_usingWicket.RequestCycleFactory;
@@ -40,7 +39,6 @@ import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
 @SpringBootTest(
         classes = {
-                Configuration_headless.class,
                 Configuration_usingJpa.class,
                 Configuration_usingWicket.class
         },

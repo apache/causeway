@@ -90,8 +90,8 @@ class ObjectBookmarker_builtinHandlers {
         @Override
         public Bookmark handle(final ManagedObject managedObject) {
             val spec = managedObject.getSpecification();
-            val pojo = managedObject.getPojo();
-            if(pojo==null) {
+            val entityPojo = managedObject.getPojo();
+            if(entityPojo==null) {
                 val msg = String.format("entity '%s' is null, cannot identify", managedObject);
                 throw _Exceptions.unrecoverable(msg);
             }
@@ -106,14 +106,14 @@ class ObjectBookmarker_builtinHandlers {
                     && EntityUtil.getPersistenceStandard(managedObject)
                         .map(PersistenceStandard::isJdo)
                         .orElse(false)
-                    && !entityFacet.getEntityState(managedObject.getPojo()).isAttached()) {
+                    && !entityFacet.getEntityState(entityPojo).isAttached()) {
 
                 // re-attach
-                entityFacet.persist(spec, managedObject.getPojo());
+                entityFacet.persist(spec, entityPojo);
 
                 // fail early, if re-attach failed
                 _Assert.assertTrue(
-                        entityFacet.getEntityState(managedObject.getPojo()).isAttached(),
+                        entityFacet.getEntityState(entityPojo).isAttached(),
                         ()->{
                             val msg = String.format("failed to re-attach (persist) JDO entity %s, "
                                     + "while creating a Bookmark",
@@ -123,7 +123,7 @@ class ObjectBookmarker_builtinHandlers {
                         });
             }
 
-            val identifier = entityFacet.identifierFor(spec, pojo);
+            val identifier = entityFacet.identifierFor(spec, entityPojo);
             return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), identifier);
         }
 

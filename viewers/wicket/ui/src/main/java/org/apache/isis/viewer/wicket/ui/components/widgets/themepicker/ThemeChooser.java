@@ -22,13 +22,12 @@ import javax.inject.Inject;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.cookies.CookieUtils;
 import org.apache.wicket.util.string.Strings;
 
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
@@ -48,9 +47,12 @@ import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvid
 /**
  * A panel used as a Navbar item to change the application theme/skin
  */
-public class ThemeChooser extends Panel {
+public class ThemeChooser
+extends PanelAbstract<Void, IModel<Void>> {
 
     private static final long serialVersionUID = 1L;
+
+    @Inject @Getter transient private IsisWicketThemeSupport themeSupport;
 
     /**
      * The name of the cookie that stores the last user selection
@@ -64,6 +66,15 @@ public class ThemeChooser extends Panel {
      */
     public ThemeChooser(final String id) {
         super(id);
+    }
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+
+        if(getThemeSupport()==null) {
+            super.getCommonContext().injectServicesInto(this);
+        }
 
         final ActiveThemeProvider activeThemeProvider = getActiveThemeProvider();
         if(activeThemeProvider.getClass() == SessionThemeProvider.class) {
@@ -140,7 +151,6 @@ public class ThemeChooser extends Panel {
         Attributes.addClass(tag, "dropdown");
     }
 
-
     @Override
     protected void onConfigure() {
         super.onConfigure();
@@ -149,7 +159,4 @@ public class ThemeChooser extends Panel {
         setVisible(shouldShow);
     }
 
-    @Inject @Getter private IsisWicketThemeSupport themeSupport;
-    @Inject @Getter private IsisConfiguration configuration;
-    @Inject @Getter private InteractionService interactionService;
 }
