@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.viewers.jpa.wkt;
+package org.apache.isis.testdomain.viewers.common.wkt;
 
 import org.apache.wicket.page.PartialPageUpdate;
 import org.junit.jupiter.api.Test;
@@ -33,12 +33,12 @@ import lombok.val;
 
 @SpringBootTest(
         classes = {
-                LoggerSetupTestJpaWkt.Config.class,
+                LoggerSetupTestWkt.Config.class,
         },
         properties = {
         })
 @TestPropertySource(IsisPresets.SilenceWicket)
-public class LoggerSetupTestJpaWkt {
+public class LoggerSetupTestWkt {
 
     @Configuration
     static class Config {
