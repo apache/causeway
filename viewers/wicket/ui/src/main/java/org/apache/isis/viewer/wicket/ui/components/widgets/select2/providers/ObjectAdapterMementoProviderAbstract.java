@@ -28,10 +28,8 @@ import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoForEmpty;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -68,16 +66,6 @@ extends ChoiceProvider<ObjectMemento> {
         val choice = getCommonContext().reconstructObject(choiceMemento);
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(choice)) {
             return "Internal error: broken memento " + choiceMemento;
-        }
-        //FIXME[ISIS-2903] just debugging here
-        {
-            val state = ManagedObjects.EntityUtil.getEntityState(choice);
-
-            if(state.isPersistable()) {
-                _Assert.assertTrue(state.isAttached());
-                val entityFacet = choice.getSpecification().getFacet(EntityFacet.class);
-                entityFacet.persist(choice.getSpecification(), choice.getPojo());
-            }
         }
         return choice.titleString();
     }
