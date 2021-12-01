@@ -30,6 +30,7 @@ import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclip
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.testdomain.jpa.JpaTestDomainModule;
 import org.apache.isis.testdomain.model.stereotypes.MyService;
+import org.apache.isis.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
@@ -49,6 +50,7 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
     ,IsisModulePersistenceJpaEclipselink.class
     ,IsisModuleTestingFixturesApplib.class
     ,KVStoreForTesting.class, // Helper for JUnit Tests
+    DomainObjectTesterFactory.class // Helper for JUnit Tests
 })
 @PropertySources({
     @PropertySource(IsisPresets.NoTranslations),

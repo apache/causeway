@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.viewers.jpa.wkt;
 
 import javax.inject.Inject;
 
+import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,13 +30,15 @@ import org.springframework.test.context.TestPropertySource;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.testdomain.RegressionTestAbstract;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.conf.Configuration_usingWicket;
-import org.apache.isis.testdomain.conf.Configuration_usingWicket.RequestCycleFactory;
-import org.apache.isis.testdomain.model.interaction.InteractionDemo;
-import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
+import org.apache.isis.testdomain.conf.Configuration_usingWicket.WicketTesterFactory;
+import org.apache.isis.testdomain.jpa.JpaTestFixtures;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
+
+import lombok.val;
 
 @SpringBootTest(
         classes = {
@@ -48,28 +51,45 @@ import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel
 })
-class InteractionTestJpaWkt extends InteractionTestAbstract {
+class InteractionTestJpaWkt extends RegressionTestAbstract {
 
-    @Inject IsisAppCommonContext commonContext;
-    @Inject RequestCycleFactory requestCycleFactory;
-
-    private ManagedObject domainObject;
+    @Inject private IsisAppCommonContext commonContext;
+    @Inject private WicketTesterFactory wicketTesterFactory;
+    @Inject private JpaTestFixtures testFixtures;
+    private WicketTester wktTester;
 
     @BeforeEach
-    void setUp() {
-        domainObject = newViewmodel(InteractionDemo.class);
-        requestCycleFactory.newRequestCycle(
-                EntityPage.class,
-                PageParameterUtils.createPageParametersForObject(domainObject));
+    void setUp() throws InterruptedException {
+
+        wktTester = wicketTesterFactory.createTester();
+
+        run(()->{
+            testFixtures.setUp3Books();
+        });
     }
 
     @AfterEach
     void cleanUp() {
-        requestCycleFactory.clearRequestCycle();
+        wktTester.destroy();
     }
 
     @Test
     void viewmodel_with_referenced_entities() {
+
+        val pageParameters = call(()->{
+            val inventoryJaxbVm = testFixtures.setUpViewmodelWith3Books();
+            final ManagedObject domainObject = objectManager.adapt(inventoryJaxbVm);
+            return PageParameterUtils.createPageParametersForObject(domainObject);
+        });
+
+        System.err.printf("pageParameters %s%n", pageParameters);
+
+        run(()->{
+            val entityPage = EntityPage.ofPageParameters(commonContext, pageParameters);
+            wktTester.startPage(entityPage);
+            wktTester.assertRenderedPage(EntityPage.class);
+        });
+
         //TODO populate VM with entities
         //TODO simulate change of a String property -> should yield a new Title and serialized URL link
         //TODO simulate interaction with choice provider, where entries are entities -> should be attached, eg. test whether we can generate a title for these
