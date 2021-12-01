@@ -44,8 +44,8 @@ import org.apache.isis.testdomain.jpa.entities.JpaInventory;
 import org.apache.isis.testdomain.jpa.entities.JpaProduct;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
-import static org.apache.isis.testdomain.persistence.jpa._TestFixtures.assertInventoryHasBooks;
-import static org.apache.isis.testdomain.persistence.jpa._TestFixtures.setUp3Books;
+import static org.apache.isis.testdomain.jpa.JpaTestFixtures.assertInventoryHasBooks;
+import static org.apache.isis.testdomain.jpa.JpaTestFixtures.setUp3Books;
 
 import lombok.val;
 

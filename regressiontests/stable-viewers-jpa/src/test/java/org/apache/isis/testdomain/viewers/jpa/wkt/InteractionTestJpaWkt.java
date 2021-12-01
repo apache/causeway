@@ -33,7 +33,6 @@ import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.conf.Configuration_usingWicket;
 import org.apache.isis.testdomain.conf.Configuration_usingWicket.RequestCycleFactory;
-import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo;
 import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
@@ -43,7 +42,6 @@ import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
         classes = {
                 Configuration_headless.class,
                 Configuration_usingJpa.class,
-                Configuration_usingInteractionDomain.class,
                 Configuration_usingWicket.class
         },
         properties = {

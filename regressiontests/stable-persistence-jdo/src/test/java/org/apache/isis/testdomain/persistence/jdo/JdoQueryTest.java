@@ -41,8 +41,8 @@ import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
-import static org.apache.isis.testdomain.persistence.jdo._TestFixtures.assertInventoryHasBooks;
-import static org.apache.isis.testdomain.persistence.jdo._TestFixtures.setUp3Books;
+import static org.apache.isis.testdomain.jdo.JdoTestFixtures.assertInventoryHasBooks;
+import static org.apache.isis.testdomain.jdo.JdoTestFixtures.setUp3Books;
 
 import lombok.val;
 

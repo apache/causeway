@@ -18,8 +18,6 @@
  */
 package org.apache.isis.testdomain.persistence.jpa;
 
-import java.sql.SQLException;
-
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,16 +26,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.JpaInventoryJaxbVm;
+import org.apache.isis.testdomain.jpa.JpaTestFixtures;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
-
-import static org.apache.isis.testdomain.persistence.jpa._TestFixtures.setUp3Books;
 
 import lombok.val;
 
@@ -55,40 +50,25 @@ class JpaJaxbTest extends IsisIntegrationTestAbstract {
     private JpaInventoryJaxbVm inventoryJaxbVm;
 
     @BeforeEach
-    void setUp() throws SQLException {
-        setUp3Books(repositoryService);
-        inventoryJaxbVm = factoryService.viewModel(new JpaInventoryJaxbVm());
+    void setUp() {
+        JpaTestFixtures.setUp3Books(repositoryService);
+        inventoryJaxbVm = JpaTestFixtures.setUpViewmodelWith3Books(factoryService);
     }
 
     @Test
     void inventoryJaxbVm_shouldRoundtripProperly() {
 
-        // assert injection worked initially
-        assertEquals("JpaInventoryJaxbVm; 3 products", inventoryJaxbVm.title());
-
-        val books = inventoryJaxbVm.listBooks();
-        val favoriteBook = books.get(0);
-        assertEquals(3, books.size());
-        inventoryJaxbVm.setName("bookstore");
-        inventoryJaxbVm.setBooks(books);
-        inventoryJaxbVm.setFavoriteBook(favoriteBook);
+        // assert initial reference is populated as expected
+        JpaTestFixtures.assertPopulatedWithDefaults(inventoryJaxbVm, bookmarkService);
 
         // round-trip
         val xml = jaxbService.toXml(inventoryJaxbVm);
-        System.err.printf("%s%n", xml);
+        //debug System.err.printf("%s%n", xml);
         val recoveredVm =
                 serviceInjector.injectServicesInto(
                 jaxbService.fromXml(JpaInventoryJaxbVm.class, xml));
 
-        assertEquals("JpaInventoryJaxbVm; 3 products", recoveredVm.title());
-        assertEquals("bookstore", recoveredVm.getName());
-        assertEquals(3, recoveredVm.getBooks().size());
-        assertEquals(favoriteBook.getName(), recoveredVm.getFavoriteBook().getName());
-
-        assertEquals(
-                bookmarkService.bookmarkFor(favoriteBook),
-                bookmarkService.bookmarkFor(recoveredVm.getFavoriteBook()));
-
+        JpaTestFixtures.assertPopulatedWithDefaults(recoveredVm, bookmarkService);
     }
 
 }

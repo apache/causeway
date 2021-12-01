@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.persistence.jdo;
+package org.apache.isis.testdomain.jdo;
 
 import java.util.Collection;
 import java.util.SortedSet;
@@ -25,6 +25,8 @@ import java.util.TreeSet;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.primitives._Ints;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
@@ -32,20 +34,22 @@ import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
-final class _TestFixtures {
+@UtilityClass
+public final class JdoTestFixtures {
 
-    static void cleanUp(RepositoryService repository) {
+    public void cleanUp(final RepositoryService repository) {
         repository.allInstances(JdoInventory.class).forEach(repository::remove);
         repository.allInstances(JdoProduct.class).forEach(repository::remove);
     }
 
-    static void setUp3Books(RepositoryService repository) {
+    public void setUp3Books(final RepositoryService repository) {
 
         cleanUp(repository);
         // given - expected pre condition: no inventories
         assertEquals(0, repository.allInstances(JdoInventory.class).size());
-        
+
         // setup sample Inventory with 3 Books
         SortedSet<JdoProduct> products = new TreeSet<>();
 
@@ -54,24 +58,37 @@ final class _TestFixtures {
 
         products.add(JdoBook.of("Sample Book-2", "A sample book for testing.", 29., "Sample Author", "ISBN-B",
                 "Sample Publisher"));
-        
+
         products.add(JdoBook.of("Sample Book-3", "A sample book for testing.", 99., "Sample Author", "ISBN-C",
                 "Sample Publisher"));
-        
+
         val inventory = JdoInventory.of("Sample Inventory", products);
         repository.persistAndFlush(inventory);
 
     }
-    
-    static void addABookTo(JdoInventory inventory) {
+
+    public void addABookTo(final JdoInventory inventory) {
         inventory.getProducts()
         .add(JdoBook.of("Sample Book-1", "A sample book for testing.", 39., "Sample Author", "ISBN-A",
                 "Sample Publisher"));
     }
-    
+
+    public JdoInventoryJaxbVm setUpViewmodelWith3Books(
+            final FactoryService factoryService) {
+        val inventoryJaxbVm = factoryService.viewModel(new JdoInventoryJaxbVm());
+        val books = inventoryJaxbVm.listBooks();
+        val favoriteBook = books.get(0);
+        inventoryJaxbVm.setName("Bookstore");
+        inventoryJaxbVm.setBooks(books);
+        inventoryJaxbVm.setFavoriteBook(favoriteBook);
+        return inventoryJaxbVm;
+    }
+
     // -- ASSERTIONS
-    
-    static void assertInventoryHasBooks(Collection<? extends JdoProduct> products, int...expectedBookIndices) {
+
+    public void assertInventoryHasBooks(
+            final Collection<? extends JdoProduct> products,
+            final int...expectedBookIndices) {
         val actualBookIndices = products.stream()
                 .map(JdoProduct::getName)
                 .map(name->name.substring(name.length()-1))
@@ -80,5 +97,20 @@ final class _TestFixtures {
                 .toArray();
         assertArrayEquals(expectedBookIndices, actualBookIndices);
     }
-    
+
+    public void assertPopulatedWithDefaults(
+            final JdoInventoryJaxbVm inventoryJaxbVm,
+            final BookmarkService bookmarkService) {
+        assertEquals("JdoInventoryJaxbVm; 3 products", inventoryJaxbVm.title());
+        assertEquals("Bookstore", inventoryJaxbVm.getName());
+        val books = inventoryJaxbVm.listBooks();
+        assertEquals(3, books.size());
+        val favoriteBook = inventoryJaxbVm.getFavoriteBook();
+        assertEquals("Sample Book-1", favoriteBook.getName());
+        val bookmark = bookmarkService.bookmarkForElseFail(favoriteBook);
+        final int id = Integer.parseInt(bookmark.getIdentifier());
+        //FIXME[ISIS-2903] id is -1
+        //assertTrue(id>0, ()->String.format("expected positive id; got %d", id));
+    }
+
 }

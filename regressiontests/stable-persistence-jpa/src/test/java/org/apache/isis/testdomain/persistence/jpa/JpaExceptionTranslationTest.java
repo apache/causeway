@@ -46,6 +46,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
+import org.apache.isis.testdomain.jpa.JpaTestFixtures;
 import org.apache.isis.testdomain.jpa.entities.JpaInventory;
 
 import lombok.val;
@@ -88,7 +89,7 @@ class JpaExceptionTranslationTest
 
                     interactionService.runAnonymous(()->{
 
-                        _TestFixtures.setUp3Books(repositoryService);
+                        JpaTestFixtures.setUp3Books(repositoryService);
 
                     });
 
@@ -114,7 +115,7 @@ class JpaExceptionTranslationTest
 
 
                             // add a conflicting book (unique ISBN violation)
-                            _TestFixtures.addABookTo(inventory);
+                            JpaTestFixtures.addABookTo(inventory);
 
                         });
 
@@ -142,7 +143,7 @@ class JpaExceptionTranslationTest
                         assertNotNull(inventory.getProducts());
                         assertEquals(3, inventory.getProducts().size());
 
-                        _TestFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
+                        JpaTestFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
 
                     });
 

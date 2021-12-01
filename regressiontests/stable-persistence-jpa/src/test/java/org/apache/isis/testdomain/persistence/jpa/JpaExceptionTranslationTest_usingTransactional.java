@@ -49,6 +49,7 @@ import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.JpaInventoryDao;
+import org.apache.isis.testdomain.jpa.JpaTestFixtures;
 import org.apache.isis.testdomain.jpa.entities.JpaInventory;
 import org.apache.isis.testing.integtestsupport.applib.IsisInteractionHandler;
 
@@ -86,7 +87,7 @@ class JpaExceptionTranslationTest_usingTransactional
     void booksUniqueByIsbn_setupPhase() {
         interactionService.runAnonymous(()->{
 
-            _TestFixtures.setUp3Books(repositoryService);
+            JpaTestFixtures.setUp3Books(repositoryService);
 
         });
     }
@@ -134,7 +135,7 @@ class JpaExceptionTranslationTest_usingTransactional
             assertNotNull(inventory.getProducts());
             assertEquals(3, inventory.getProducts().size());
 
-            _TestFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
+            JpaTestFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
 
         });
 
@@ -146,7 +147,7 @@ class JpaExceptionTranslationTest_usingTransactional
 
         interactionService.runAnonymous(()->{
 
-            _TestFixtures.cleanUp(repositoryService);
+            JpaTestFixtures.cleanUp(repositoryService);
 
         });
 

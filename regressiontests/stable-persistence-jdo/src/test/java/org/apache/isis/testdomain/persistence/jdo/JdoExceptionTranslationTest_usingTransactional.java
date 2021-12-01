@@ -45,9 +45,9 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoInventoryDao;
+import org.apache.isis.testdomain.jdo.JdoTestFixtures;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 
 import lombok.val;
@@ -69,7 +69,7 @@ class JdoExceptionTranslationTest_usingTransactional
     @Inject private RepositoryService repositoryService;
     @Inject private InteractionService interactionService;
     @Inject private Provider<JdoInventoryDao> inventoryDao;
-    @Inject private JdoTransactionManager txManager;
+    //@Inject private JdoTransactionManager txManager;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -82,7 +82,7 @@ class JdoExceptionTranslationTest_usingTransactional
     void booksUniqueByIsbn_setupPhase() {
         interactionService.runAnonymous(()->{
 
-            _TestFixtures.setUp3Books(repositoryService);
+            JdoTestFixtures.setUp3Books(repositoryService);
 
         });
     }
@@ -130,7 +130,7 @@ class JdoExceptionTranslationTest_usingTransactional
             assertNotNull(inventory.getProducts());
             assertEquals(3, inventory.getProducts().size());
 
-            _TestFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
+            JdoTestFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
 
         });
 
@@ -142,7 +142,7 @@ class JdoExceptionTranslationTest_usingTransactional
 
         interactionService.runAnonymous(()->{
 
-            _TestFixtures.cleanUp(repositoryService);
+            JdoTestFixtures.cleanUp(repositoryService);
 
         });
 
