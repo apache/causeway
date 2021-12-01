@@ -64,7 +64,7 @@ public abstract class XrayDataModel extends HasIdAndLabel {
         private final String iconResource = "/xray/key-value.png";
 
         @Override
-        public void render(JScrollPane panel) {
+        public void render(final JScrollPane panel) {
             String[] columnNames = {"Key", "Value"};
             Object[][] tableData = new Object[data.size()][columnNames.length];
 
@@ -72,7 +72,7 @@ public abstract class XrayDataModel extends HasIdAndLabel {
 
             data.forEach((k, v)->{
                 val row = tableData[rowIndex.getValue()];
-                rowIndex.inc();
+                rowIndex.incAndGet();
                 row[0] = k;
                 row[1] = v;
             });
@@ -102,12 +102,12 @@ public abstract class XrayDataModel extends HasIdAndLabel {
         private final static Color BACKGROUND_COLOR = COLOR_SILVER;
         private final static Color BORDER_COLOR = Color.GRAY;
 
-        public Sequence(String label) {
+        public Sequence(final String label) {
             this(UUID.randomUUID().toString(), label);
         }
 
         @Override
-        public void render(JScrollPane panel) {
+        public void render(final JScrollPane panel) {
 
             val dim = data.layout((Graphics2D)panel.getGraphics());
 
@@ -115,7 +115,7 @@ public abstract class XrayDataModel extends HasIdAndLabel {
                 private static final long serialVersionUID = 1L;
 
                 @Override
-                public void paintComponent(Graphics _g) {
+                public void paintComponent(final Graphics _g) {
 
                     val g = (Graphics2D)_g;
 

@@ -182,7 +182,7 @@ implements
             val dsInfos = datasourceInfoService.getDataSourceInfos();
 
             dsInfos.forEach(dataSourceInfo->{
-                index.inc();
+                index.incAndGet();
                 add(String.format("Data Source (%d/%d)", index.getValue(), dsInfos.size()),
                         dataSourceInfo.getJdbcUrl(),
                         map);
@@ -197,12 +197,12 @@ implements
         return map;
     }
 
-    private static void add(String key, String value, Map<String, ConfigurationProperty> map) {
+    private static void add(final String key, String value, final Map<String, ConfigurationProperty> map) {
         value = ValueMaskingUtil.maskIfProtected(key, value);
         map.put(key, new ConfigurationProperty(key, value));
     }
 
-    private static void addSystemProperty(String key, Map<String, ConfigurationProperty> map) {
+    private static void addSystemProperty(final String key, final Map<String, ConfigurationProperty> map) {
         add(key, System.getProperty(key, "<empty>"), map);
     }
 

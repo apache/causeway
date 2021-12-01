@@ -43,22 +43,6 @@ public final class _Functions {
         return t->{};
     }
 
-    // -- INDEX AWARE
-
-    @FunctionalInterface
-    public interface IndexedFunction<T, R> {
-        public R apply(int index, T t);
-    }
-
-    /**
-     * Converts an {@link IndexedFunction} into a {@link Function}, having its index start at 0,
-     * and incremented after each function call.
-     * @param indexed
-     */
-    public static <T, R> Function<T, R> indexedZeroBase(final IndexedFunction<T, R> indexed){
-        return new _Functions_IndexedZeroBase<T, R>(indexed);
-    }
-
     // -- CHECKED EXCEPTION ADAPTERS (FUNCTION)
 
     /**

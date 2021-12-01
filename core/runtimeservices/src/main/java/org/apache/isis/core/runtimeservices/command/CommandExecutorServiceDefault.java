@@ -48,10 +48,10 @@ import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.IndexedFunction;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.functions._Functions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
@@ -368,7 +368,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         final Identifier actionIdentifier = valueMarshaller.actionIdentifier(actionDto);
 
         return streamParamDtosFrom(actionDto)
-                .map(_Functions.indexedZeroBase((i, paramDto)->
+                .map(IndexedFunction.zeroBased((i, paramDto)->
                         recoverValueFrom(actionIdentifier.withParameterIndex(i), paramDto)))
                 .collect(Can.toCan());
     }

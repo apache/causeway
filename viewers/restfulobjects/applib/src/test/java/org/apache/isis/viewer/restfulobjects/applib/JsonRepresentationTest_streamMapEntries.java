@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -31,20 +31,24 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import static org.apache.isis.viewer.restfulobjects.applib.JsonFixture.readJson;
 
-public class JsonRepresentationTest_streamMapEntries {
+import lombok.val;
+
+class JsonRepresentationTest_streamMapEntries {
 
     private JsonRepresentation jsonRepresentation;
 
     @Test
-    public void forJsonRepresentation() throws IOException {
+    void forJsonRepresentation() throws IOException {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
-        final Iterator<Entry<String, JsonRepresentation>> mapIterator = 
+        final Iterator<Entry<String, JsonRepresentation>> mapIterator =
                 jsonRepresentation.streamMapEntries()
                 .iterator();
 
         for (int i = 0; i < jsonRepresentation.asJsonNode().size(); i++) {
             assertThat(mapIterator.hasNext(), is(true));
-            assertThat(mapIterator.next().getKey(), is(not(nullValue())));
+
+            val next = mapIterator.next();
+            assertThat(next.getKey(), is(not(nullValue())));
         }
         assertThat(mapIterator.hasNext(), is(false));
     }
