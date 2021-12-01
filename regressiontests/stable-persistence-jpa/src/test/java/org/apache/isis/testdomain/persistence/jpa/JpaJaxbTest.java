@@ -24,15 +24,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.transaction.annotation.Transactional;
 
-import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.testdomain.RegressionTestAbstract;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.JpaInventoryJaxbVm;
 import org.apache.isis.testdomain.jpa.JpaTestFixtures;
-import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.val;
 
@@ -41,34 +39,35 @@ import lombok.val;
                 Configuration_usingJpa.class,
         })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
-@Transactional
-class JpaJaxbTest extends IsisIntegrationTestAbstract {
+//@Transactional
+class JpaJaxbTest extends RegressionTestAbstract {
 
+    @Inject private JpaTestFixtures testFixtures;
     @Inject private JaxbService jaxbService;
-    @Inject private BookmarkService bookmarkService;
-
-    private JpaInventoryJaxbVm inventoryJaxbVm;
 
     @BeforeEach
     void setUp() {
-        JpaTestFixtures.setUp3Books(repositoryService);
-        inventoryJaxbVm = JpaTestFixtures.setUpViewmodelWith3Books(factoryService);
+        run(()->testFixtures.setUp3Books());
     }
 
     @Test
     void inventoryJaxbVm_shouldRoundtripProperly() {
 
-        // assert initial reference is populated as expected
-        JpaTestFixtures.assertPopulatedWithDefaults(inventoryJaxbVm, bookmarkService);
+        val xml = call(()->{
+            val inventoryJaxbVm = testFixtures.setUpViewmodelWith3Books();
+            // assert initial reference is populated as expected
+            testFixtures.assertPopulatedWithDefaults(inventoryJaxbVm);
+            // start round-trip
+            return jaxbService.toXml(inventoryJaxbVm);
+        });
 
-        // round-trip
-        val xml = jaxbService.toXml(inventoryJaxbVm);
-        //debug System.err.printf("%s%n", xml);
-        val recoveredVm =
-                serviceInjector.injectServicesInto(
-                jaxbService.fromXml(JpaInventoryJaxbVm.class, xml));
-
-        JpaTestFixtures.assertPopulatedWithDefaults(recoveredVm, bookmarkService);
+        run(()->{
+            //debug System.err.printf("%s%n", xml);
+            val recoveredVm =
+                    serviceInjector.injectServicesInto(
+                            jaxbService.fromXml(JpaInventoryJaxbVm.class, xml));
+            testFixtures.assertPopulatedWithDefaults(recoveredVm);
+        });
     }
 
 }

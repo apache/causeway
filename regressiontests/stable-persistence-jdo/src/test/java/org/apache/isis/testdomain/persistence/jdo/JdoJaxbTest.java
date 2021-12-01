@@ -24,52 +24,50 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.transaction.annotation.Transactional;
 
-import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.testdomain.RegressionTestAbstract;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoInventoryJaxbVm;
 import org.apache.isis.testdomain.jdo.JdoTestFixtures;
-import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.val;
 
 @SpringBootTest(
         classes = {
-                Configuration_usingJdo.class,
+                Configuration_usingJdo.class
         })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
-@Transactional
-class JdoJaxbTest extends IsisIntegrationTestAbstract {
+//@Transactional
+class JdoJaxbTest extends RegressionTestAbstract {
 
+    @Inject private JdoTestFixtures testFixtures;
     @Inject private JaxbService jaxbService;
-    @Inject private BookmarkService bookmarkService;
-
-    private JdoInventoryJaxbVm inventoryJaxbVm;
 
     @BeforeEach
-    void setUp() {
-        JdoTestFixtures.setUp3Books(repositoryService);
-        inventoryJaxbVm = JdoTestFixtures.setUpViewmodelWith3Books(factoryService);
+    void setUp() throws InterruptedException {
+        run(()->testFixtures.setUp3Books());
     }
 
     @Test
     void inventoryJaxbVm_shouldRoundtripProperly() {
 
-        // assert initial reference is populated as expected
-        JdoTestFixtures.assertPopulatedWithDefaults(inventoryJaxbVm, bookmarkService);
+        val xml = call(()->{
+            val inventoryJaxbVm = testFixtures.setUpViewmodelWith3Books();
+            // assert initial reference is populated as expected
+            testFixtures.assertPopulatedWithDefaults(inventoryJaxbVm);
+            // start round-trip
+            return jaxbService.toXml(inventoryJaxbVm);
+        });
 
-        // round-trip
-        val xml = jaxbService.toXml(inventoryJaxbVm);
-        //debug System.err.printf("%s%n", xml);
-        val recoveredVm =
-                serviceInjector.injectServicesInto(
-                jaxbService.fromXml(JdoInventoryJaxbVm.class, xml));
-
-        JdoTestFixtures.assertPopulatedWithDefaults(recoveredVm, bookmarkService);
-
+        run(()->{
+            //debug System.err.printf("%s%n", xml);
+            val recoveredVm =
+                    serviceInjector.injectServicesInto(
+                            jaxbService.fromXml(JdoInventoryJaxbVm.class, xml));
+            testFixtures.assertPopulatedWithDefaults(recoveredVm);
+        });
     }
 
 }

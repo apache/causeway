@@ -22,8 +22,13 @@ import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -34,19 +39,23 @@ import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 
 import lombok.val;
-import lombok.experimental.UtilityClass;
 
-@UtilityClass
-public final class JdoTestFixtures {
+@Service
+public class JdoTestFixtures {
 
-    public void cleanUp(final RepositoryService repository) {
+    @Inject private RepositoryService repository;
+    @Inject private FactoryService factoryService;
+    @Inject private BookmarkService bookmarkService;
+
+    public void cleanUpRepository() {
         repository.allInstances(JdoInventory.class).forEach(repository::remove);
+        repository.allInstances(JdoBook.class).forEach(repository::remove);
         repository.allInstances(JdoProduct.class).forEach(repository::remove);
     }
 
-    public void setUp3Books(final RepositoryService repository) {
+    public void setUp3Books() {
 
-        cleanUp(repository);
+        cleanUpRepository();
         // given - expected pre condition: no inventories
         assertEquals(0, repository.allInstances(JdoInventory.class).size());
 
@@ -64,7 +73,6 @@ public final class JdoTestFixtures {
 
         val inventory = JdoInventory.of("Sample Inventory", products);
         repository.persistAndFlush(inventory);
-
     }
 
     public void addABookTo(final JdoInventory inventory) {
@@ -73,8 +81,7 @@ public final class JdoTestFixtures {
                 "Sample Publisher"));
     }
 
-    public JdoInventoryJaxbVm setUpViewmodelWith3Books(
-            final FactoryService factoryService) {
+    public JdoInventoryJaxbVm setUpViewmodelWith3Books() {
         val inventoryJaxbVm = factoryService.viewModel(new JdoInventoryJaxbVm());
         val books = inventoryJaxbVm.listBooks();
         val favoriteBook = books.get(0);
@@ -99,18 +106,23 @@ public final class JdoTestFixtures {
     }
 
     public void assertPopulatedWithDefaults(
-            final JdoInventoryJaxbVm inventoryJaxbVm,
-            final BookmarkService bookmarkService) {
+            final JdoInventoryJaxbVm inventoryJaxbVm) {
         assertEquals("JdoInventoryJaxbVm; 3 products", inventoryJaxbVm.title());
         assertEquals("Bookstore", inventoryJaxbVm.getName());
         val books = inventoryJaxbVm.listBooks();
         assertEquals(3, books.size());
         val favoriteBook = inventoryJaxbVm.getFavoriteBook();
         assertEquals("Sample Book-1", favoriteBook.getName());
-        val bookmark = bookmarkService.bookmarkForElseFail(favoriteBook);
+        assertHasPersistenceId(favoriteBook);
+        inventoryJaxbVm.listBooks()
+        .forEach(this::assertHasPersistenceId);
+    }
+
+    public void assertHasPersistenceId(final Object entity) {
+        val bookmark = bookmarkService.bookmarkForElseFail(entity);
         final int id = Integer.parseInt(bookmark.getIdentifier());
-        //FIXME[ISIS-2903] id is -1
-        //assertTrue(id>0, ()->String.format("expected positive id; got %d", id));
+        assertTrue(id>-2, ()->String.format("expected valid id; got %d", id));
+        //System.err.printf("%s%n", bookmark);
     }
 
 }

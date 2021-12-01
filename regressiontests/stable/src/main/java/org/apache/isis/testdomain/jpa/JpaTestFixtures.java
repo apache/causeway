@@ -22,6 +22,10 @@ import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -35,19 +39,23 @@ import org.apache.isis.testdomain.jpa.entities.JpaInventory;
 import org.apache.isis.testdomain.jpa.entities.JpaProduct;
 
 import lombok.val;
-import lombok.experimental.UtilityClass;
 
-@UtilityClass
-public final class JpaTestFixtures {
+@Service
+public class JpaTestFixtures {
 
-    public void cleanUp(final RepositoryService repository) {
+    @Inject private RepositoryService repository;
+    @Inject private FactoryService factoryService;
+    @Inject private BookmarkService bookmarkService;
+
+    public void cleanUpRepository() {
         repository.allInstances(JpaInventory.class).forEach(repository::remove);
+        repository.allInstances(JpaBook.class).forEach(repository::remove);
         repository.allInstances(JpaProduct.class).forEach(repository::remove);
     }
 
-    public void setUp3Books(final RepositoryService repository) {
+    public void setUp3Books() {
 
-        cleanUp(repository);
+        cleanUpRepository();
         // given - expected pre condition: no inventories
         assertEquals(0, repository.allInstances(JpaInventory.class).size());
 
@@ -73,8 +81,7 @@ public final class JpaTestFixtures {
                 "Sample Publisher"));
     }
 
-    public JpaInventoryJaxbVm setUpViewmodelWith3Books(
-            final FactoryService factoryService) {
+    public JpaInventoryJaxbVm setUpViewmodelWith3Books() {
         val inventoryJaxbVm = factoryService.viewModel(new JpaInventoryJaxbVm());
         val books = inventoryJaxbVm.listBooks();
         val favoriteBook = books.get(0);
@@ -99,17 +106,23 @@ public final class JpaTestFixtures {
     }
 
     public void assertPopulatedWithDefaults(
-            final JpaInventoryJaxbVm inventoryJaxbVm,
-            final BookmarkService bookmarkService) {
+            final JpaInventoryJaxbVm inventoryJaxbVm) {
         assertEquals("JpaInventoryJaxbVm; 3 products", inventoryJaxbVm.title());
         assertEquals("Bookstore", inventoryJaxbVm.getName());
         val books = inventoryJaxbVm.listBooks();
         assertEquals(3, books.size());
         val favoriteBook = inventoryJaxbVm.getFavoriteBook();
         assertEquals("Sample Book-1", favoriteBook.getName());
-        val bookmark = bookmarkService.bookmarkForElseFail(favoriteBook);
+        assertHasPersistenceId(favoriteBook);
+        inventoryJaxbVm.listBooks()
+        .forEach(this::assertHasPersistenceId);
+    }
+
+    public void assertHasPersistenceId(final Object entity) {
+        val bookmark = bookmarkService.bookmarkForElseFail(entity);
         final int id = Integer.parseInt(bookmark.getIdentifier());
-        assertTrue(id>0, ()->String.format("expected positive id; got %d", id));
+        assertTrue(id>0, ()->String.format("expected valid id; got %d", id));
+        //System.err.printf("%s%n", bookmark);
     }
 
 

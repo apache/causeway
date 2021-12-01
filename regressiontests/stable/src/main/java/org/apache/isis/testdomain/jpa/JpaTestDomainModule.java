@@ -27,7 +27,8 @@ import org.apache.isis.testdomain.jpa.entities.JpaBook;
 @Configuration
 @Import({
     JpaInventoryManager.class,
-    JpaInventoryResource.class
+    JpaInventoryResource.class,
+    JpaTestFixtures.class
 })
 @EntityScan(basePackageClasses = JpaBook.class)
 public class JpaTestDomainModule {

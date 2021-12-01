@@ -28,10 +28,10 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
+import org.apache.isis.testdomain.jdo.JdoTestFixtures;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
@@ -39,26 +39,25 @@ import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstra
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 IsisBeanFactoryPostProcessorForSpring.class,
-                Configuration_usingJdo.class, 
-        }, 
+                Configuration_usingJdo.class,
+        },
         properties = {
                 "logging.config=log4j2-debug-persistence.xml",
                 //IsisPresets.DebugPersistence,
         })
 @Transactional
-class JdoBootstrappingTest_usingFixtures extends IsisIntegrationTestAbstract {
+class JdoBootstrappingTest_usingFixtures
+extends IsisIntegrationTestAbstract {
 
-    @Inject private FixtureScripts fixtureScripts;
-    @Inject private RepositoryService repository;
+    @Inject private JdoTestFixtures testFixtures;
+    @Inject protected FixtureScripts fixtureScripts;
 
     @BeforeEach
     void setUp() {
-
         // cleanup
         fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
-
         // given
         fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
     }
@@ -66,7 +65,7 @@ class JdoBootstrappingTest_usingFixtures extends IsisIntegrationTestAbstract {
     @Test
     void sampleInventoryShouldBeSetUp() {
 
-        val inventories = repository.allInstances(JdoInventory.class);
+        val inventories = repositoryService.allInstances(JdoInventory.class);
         assertEquals(1, inventories.size());
 
         val inventory = inventories.get(0);
@@ -76,6 +75,8 @@ class JdoBootstrappingTest_usingFixtures extends IsisIntegrationTestAbstract {
 
         val product = inventory.getProducts().iterator().next();
         assertEquals("Sample Book", product.getName());
+
+        testFixtures.assertHasPersistenceId(product);
 
     }
 

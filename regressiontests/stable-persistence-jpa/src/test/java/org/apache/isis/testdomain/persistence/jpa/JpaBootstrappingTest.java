@@ -25,14 +25,12 @@ import java.util.TreeSet;
 
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -48,6 +46,7 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
+import org.apache.isis.testdomain.jpa.JpaTestFixtures;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
 import org.apache.isis.testdomain.jpa.entities.JpaInventory;
 import org.apache.isis.testdomain.jpa.entities.JpaProduct;
@@ -61,11 +60,12 @@ import lombok.val;
         })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@DirtiesContext
+//@DirtiesContext
 class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
 
     @Inject private Optional<PlatformTransactionManager> platformTransactionManager;
     @Inject private SpecificationLoader specLoader;
+    @Inject private JpaTestFixtures testFixtures;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -73,14 +73,8 @@ class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
         // Util_H2Console.main(null);
     }
 
-    @AfterAll
-    static void afterAll() throws SQLException {
-    }
-
     void cleanUp() {
-        repositoryService.allInstances(JpaInventory.class).forEach(repositoryService::remove);
-        repositoryService.allInstances(JpaBook.class).forEach(repositoryService::remove);
-        repositoryService.allInstances(JpaProduct.class).forEach(repositoryService::remove);
+        testFixtures.cleanUpRepository();
     }
 
     void setUp() {
@@ -155,6 +149,7 @@ class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
         val product = inventory.getProducts().iterator().next();
         assertEquals("Sample Book", product.getName());
 
+        testFixtures.assertHasPersistenceId(product);
     }
 
     @Test @Order(2) @Rollback(false)
