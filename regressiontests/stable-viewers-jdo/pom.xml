@@ -21,9 +21,9 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-regressiontests-stable-viewers</artifactId>
+	<artifactId>isis-regressiontests-stable-viewers-jdo</artifactId>
 
-	<name>Apache Isis - Regression Tests (stable) - Viewers</name>
+	<name>Apache Isis - Regression Tests (stable) - Viewers JDO</name>
 
 	<dependencies>
 
@@ -34,12 +34,22 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.apache.isis.persistence</groupId>
+			<artifactId>isis-persistence-jdo-datanucleus</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>org.apache.isis.regressiontests</groupId>
 			<artifactId>isis-regressiontests-stable</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-
+		
+		<dependency>
+			<groupId>org.apache.isis.testing</groupId>
+			<artifactId>isis-testing-fixtures-applib</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 	</dependencies>
 </project>

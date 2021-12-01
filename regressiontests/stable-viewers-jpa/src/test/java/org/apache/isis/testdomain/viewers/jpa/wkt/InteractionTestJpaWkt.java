@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.viewers;
+package org.apache.isis.testdomain.viewers.jpa.wkt;
 
 import javax.inject.Inject;
 
@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.testdomain.conf.Configuration_headless;
+import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.conf.Configuration_usingWicket;
 import org.apache.isis.testdomain.conf.Configuration_usingWicket.RequestCycleFactory;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
@@ -56,6 +57,7 @@ import lombok.val;
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,
+                Configuration_usingJpa.class,
                 Configuration_usingInteractionDomain.class,
                 Configuration_usingWicket.class
         },
@@ -71,7 +73,7 @@ import lombok.val;
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel
 })
-class InteractionTestWkt extends InteractionTestAbstract {
+class InteractionTestJpaWkt extends InteractionTestAbstract {
 
     @Inject IsisAppCommonContext commonContext;
     @Inject RequestCycleFactory requestCycleFactory;

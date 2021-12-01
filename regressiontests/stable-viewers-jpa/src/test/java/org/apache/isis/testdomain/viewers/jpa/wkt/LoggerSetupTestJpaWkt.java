@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.viewers;
+package org.apache.isis.testdomain.viewers.jpa.wkt;
 
 import org.apache.wicket.page.PartialPageUpdate;
 import org.junit.jupiter.api.Test;
@@ -32,25 +32,25 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
-                LoggerSetupTest.Config.class, 
+        classes = {
+                LoggerSetupTestJpaWkt.Config.class,
         },
         properties = {
         })
 @TestPropertySource(IsisPresets.SilenceWicket)
-public class LoggerSetupTest {
+public class LoggerSetupTestJpaWkt {
 
     @Configuration
     static class Config {
-        
+
     }
-    
+
     @Test
     void slf4jLoggers_shouldBeBridgedToWorkWithLog4j2() {
-        
+
         val logger = LoggerFactory.getLogger(PartialPageUpdate.class);
         assertFalse(logger.isWarnEnabled());
-        
+
     }
-    
+
 }
