@@ -9,8 +9,6 @@ import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.stream.Stream;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -25,23 +23,26 @@ import org.apache.isis.applib.Identifier.Type;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.schema.SchemaValueMarshaller;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.semantics.Converter;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
+import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
+import org.apache.isis.core.metamodel.services.schema.SchemaValueMarshaller;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -70,9 +71,9 @@ import lombok.val;
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor
-public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
+public class SchemaValueMarshallerDefault
+implements SchemaValueMarshaller {
 
-    @Inject private BookmarkService bookmarkService;
     @Inject private ValueSemanticsResolver valueSemanticsResolver;
     @Inject private SpecificationLoader specLoader;
 
@@ -102,37 +103,56 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
     // -- RECOVER VALUES FROM DTO
 
     @Override
-    public Object recoverValueFrom(final PropertyDto propertyDto) {
+    public ManagedObject recoverReferenceFrom(final @NonNull OidDto oidDto) {
+        val bookmark = Bookmark.forOidDto(oidDto);
+        val spec = specLoader.specForLogicalTypeName(bookmark.getLogicalTypeName()).orElse(null);
+        val loadRequest = ObjectLoader.Request.of(spec, bookmark);
+        return spec.getMetaModelContext().getObjectManager().loadObject(loadRequest);
+    }
+
+    @Override
+    public ManagedObject recoverValueFrom(final @NonNull PropertyDto propertyDto) {
         val identifier = propertyIdentifier(propertyDto);
         val valueWithTypeDto = propertyDto.getNewValue();
         return recoverValue(identifier, valueWithTypeDto);
     }
 
     @Override
-    public Object recoverValueFrom(
-            final Identifier paramIdentifier,
-            final ParamDto paramDto) {
+    public ManagedObject recoverValuesFrom(
+            final @NonNull Identifier paramIdentifier,
+            final @NonNull ParamDto paramDto) {
         return recoverValue(paramIdentifier, paramDto);
     }
 
     // -- RECORD VALUES INTO DTO
 
     @Override
-    public <T> ActionInvocationDto recordActionResult(
-            final ActionInvocationDto invocationDto,
-            final Class<T> returnType,
-            final T result) {
-        final ValueTypeWrapper<T> valueWrapper = wrap(actionIdentifier(invocationDto), returnType);
+    public ActionInvocationDto recordActionResultScalar(
+            final @NonNull ActionInvocationDto invocationDto,
+            final @NonNull ObjectSpecification returnType,
+            final @NonNull ManagedObject value) {
+        final ValueTypeWrapper<?> valueWrapper = wrap(actionIdentifier(invocationDto), returnType);
         invocationDto.setReturned(
-                recordValue(new ValueWithTypeDto(), valueWrapper, result));
+                recordValue(new ValueWithTypeDto(), valueWrapper, value));
         return invocationDto;
     }
 
     @Override
-    public <T> PropertyDto recordPropertyValue(
-            final PropertyDto propertyDto,
-            final Class<T> propertyType,
-            final T valuePojo) {
+    public ActionInvocationDto recordActionResultNonScalar(
+            final @NonNull ActionInvocationDto invocationDto,
+            final @NonNull ObjectSpecification elementType,
+            final @NonNull Can<ManagedObject> value) {
+        final ValueTypeWrapper<?> valueWrapper = wrap(actionIdentifier(invocationDto), elementType);
+        invocationDto.setReturned(
+                recordValues(new ValueWithTypeDto(), valueWrapper, value));
+        return invocationDto;
+    }
+
+    @Override
+    public PropertyDto recordPropertyValue(
+            final @NonNull PropertyDto propertyDto,
+            final @NonNull ObjectSpecification propertyType,
+            final @NonNull ManagedObject value) {
         final Identifier propertyIdentifier = propertyIdentifier(propertyDto);
 
         // guard against property not being a scalar
@@ -141,41 +161,54 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
                     (OneToOneAssociation)specLoader.loadFeatureElseFail(propertyIdentifier);
 
             val elementType = property.getElementType().getCorrespondingClass();
-            _Assert.assertEquals(elementType, propertyType);
+            _Assert.assertEquals(elementType, propertyType.getCorrespondingClass());
         }
 
-        final ValueTypeWrapper<T> valueWrapper = wrap(propertyIdentifier, propertyType);
+        final ValueTypeWrapper<?> valueWrapper = wrap(propertyIdentifier, propertyType);
         propertyDto.setNewValue(
-                recordValue(new ValueWithTypeDto(), valueWrapper, valuePojo));
+                recordValue(new ValueWithTypeDto(), valueWrapper, value));
         return propertyDto;
     }
 
     @Override
-    public <T> ParamDto recordParamValue(
-            final Identifier paramIdentifier,
-            final ParamDto paramDto,
-            final Class<T> paramType,
-            final T valuePojo) {
+    public ParamDto recordParamScalar(
+            final @NonNull Identifier paramIdentifier,
+            final @NonNull ParamDto paramDto,
+            final @NonNull ObjectSpecification paramType,
+            final @NonNull ManagedObject value) {
 
         final ObjectActionParameter actionParameter =
                 (ObjectActionParameter)specLoader.loadFeatureElseFail(paramIdentifier);
 
-        val elementType = actionParameter.getElementType().getCorrespondingClass();
+        _Assert.assertTrue(actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR);
+
+        final ValueTypeWrapper<?> valueWrapper = wrap(paramIdentifier, paramType);
+
+        //          ValueType valueType = valueWrapper.getValueType();
+        //
+        //          // this hack preserves previous behavior before we were able to serialize blobs and clobs into XML
+        //          // however, we also don't want this new behavior for parameter arguments
+        //          // (else these large objects could end up being persisted).
+        //          if(valueType == ValueType.BLOB) valueType = ValueType.REFERENCE;
+        //          if(valueType == ValueType.CLOB) valueType = ValueType.REFERENCE;
+        recordValue(paramDto, valueWrapper, value);
+        return paramDto;
+    }
+
+    @Override
+    public ParamDto recordParamNonScalar(
+            final @NonNull Identifier paramIdentifier,
+            final @NonNull ParamDto paramDto,
+            final @NonNull ObjectSpecification elementType,
+            final @NonNull Can<ManagedObject> values) {
+
+        final ObjectActionParameter actionParameter =
+                (ObjectActionParameter)specLoader.loadFeatureElseFail(paramIdentifier);
+
+        _Assert.assertTrue(actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION);
+
         final ValueTypeWrapper<?> valueWrapper = wrap(paramIdentifier, elementType);
-
-        if(actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION) {
-            recordValues(paramDto, valueWrapper, _Casts.uncheckedCast(_NullSafe.streamAutodetect(valuePojo)));
-        } else {
-
-            //          ValueType valueType = valueWrapper.getValueType();
-            //
-            //          // this hack preserves previous behaviour before we were able to serialize blobs and clobs into XML
-            //          // however, we also don't want this new behaviour for parameter arguments
-            //          // (else these large objects could end up being persisted).
-            //          if(valueType == ValueType.BLOB) valueType = ValueType.REFERENCE;
-            //          if(valueType == ValueType.CLOB) valueType = ValueType.REFERENCE;
-            recordValue(paramDto, valueWrapper, _Casts.uncheckedCast(valuePojo));
-        }
+        recordValues(paramDto, valueWrapper, values);
         return paramDto;
     }
 
@@ -184,12 +217,13 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
     @Value(staticConstructor = "of")
     private static class ValueTypeWrapper<T> {
         final @NonNull ValueType valueType;
+        final @NonNull ObjectSpecification spec;
         final @Nullable ValueSemanticsProvider<T> semantics;
 
-        private final static ValueTypeWrapper<Void> VOID = ValueTypeWrapper.of(ValueType.VOID, null);
-        public static ValueTypeWrapper<Void> empty() {
-            return VOID;
-        }
+//        private final static ValueTypeWrapper<Void> VOID = ValueTypeWrapper.of(ValueType.VOID, null, null);
+//        public static ValueTypeWrapper<Void> empty() {
+//            return VOID;
+//        }
 
         public T fromFundamentalValue(final Object fundamentalValue) {
             val valuePojo = supportsConversionViaEncoderDecoder()
@@ -239,14 +273,14 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
 
     }
 
-    private <T> ValueTypeWrapper<T> wrap(
+    private ValueTypeWrapper<?> wrap(
             final @NonNull Identifier featureIdentifier,
-            final @NonNull Class<T> desiredType) {
-        return valueSemanticsResolver.selectValueSemantics(featureIdentifier, desiredType)
+            final @NonNull ObjectSpecification elementTypeSpec) {
+        return valueSemanticsResolver.selectValueSemantics(featureIdentifier, elementTypeSpec.getCorrespondingClass())
         .getFirst()
-        .map(valueSemantics->ValueTypeWrapper.of(valueSemantics.getSchemaValueType(), valueSemantics))
+        .map(valueSemantics->ValueTypeWrapper.of(valueSemantics.getSchemaValueType(), elementTypeSpec, valueSemantics))
         // assume reference otherwise
-        .orElseGet(()->ValueTypeWrapper.of(ValueType.REFERENCE, null));
+        .orElseGet(()->ValueTypeWrapper.of(ValueType.REFERENCE, elementTypeSpec, null));
     }
 
     // -- HELPER - RECORDING
@@ -254,9 +288,15 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
     private <D extends ValueDto, T> D recordValue(
             final D valueDto,
             final ValueTypeWrapper<T> valueWrapper,
-            final T valuePojo) {
-        return recordFundamentalValue(
-                valueDto, valueWrapper, valueWrapper.toFundamentalValue(valuePojo));
+            final ManagedObject value) {
+
+        value.getBookmark()
+        .ifPresentOrElse(
+                bookmark->valueDto.setReference(bookmark.toOidDto()),
+                ()->recordFundamentalValue(
+                        valueDto, valueWrapper, valueWrapper.toFundamentalValue((T)value.getPojo())));
+
+        return valueDto;
     }
 
     private <D extends ValueDto, T> D recordFundamentalValue(
@@ -270,11 +310,16 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
             ((ValueWithTypeDto)valueDto).setType(schemaValueType);
         }
 
+        if(pojo==null) {
+            return valueDto;
+        }
+
         switch (schemaValueType) {
         case COLLECTION: {
-            valueDto.setCollection(
-                    asCollectionDto(_Casts.uncheckedCast(pojo), ValueTypeWrapper.empty()));
-            return valueDto;
+            throw _Exceptions.unexpectedCodeReach();
+//            valueDto.setCollection(
+//                    asCollectionDto(_Casts.uncheckedCast(pojo), ValueTypeWrapper.empty()));
+//            return valueDto;
         }
         case COMPOSITE: {
             valueDto.setComposite(valueWrapper.toTypedTupleDto(pojo));
@@ -377,17 +422,17 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
             return valueDto;
         }
         case REFERENCE: {
-            final Bookmark bookmark = pojo instanceof Bookmark
-                    ? (Bookmark) pojo
-                    : bookmarkService!=null
-                            ? bookmarkService.bookmarkFor(pojo).orElse(null)
-                            : null;
-
-            if (bookmark != null) {
-                OidDto argValue = bookmark.toOidDto();
-                valueDto.setReference(argValue);
-            }
-            return valueDto;
+            throw _Exceptions.unexpectedCodeReach();
+//            final Bookmark bookmark = pojo instanceof Bookmark
+//                    ? (Bookmark) pojo
+//                    : bookmarkService!=null
+//                            ? bookmarkService.bookmarkFor(pojo).orElse(null)
+//                            : null;
+//
+//            if (bookmark != null) {
+//                valueDto.setReference(bookmark.toOidDto());
+//            }
+//            return valueDto;
         }
         case BLOB: {
             final Blob blob = (Blob) pojo;
@@ -421,89 +466,69 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
 
     private <D extends ValueWithTypeDto, T> D recordValues(
             final D valueWithTypeDto,
-            final ValueTypeWrapper<T> elementValueTypeAndSemantics,
-            final Stream<T> streamOfValues) {
+            final ValueTypeWrapper<T> valueWrapper,
+            final Can<ManagedObject> values) {
 
         valueWithTypeDto.setType(ValueType.COLLECTION);
-        valueWithTypeDto.setCollection(asCollectionDto(streamOfValues, elementValueTypeAndSemantics));
+        valueWithTypeDto.setCollection(asCollectionDto(values, valueWrapper));
         valueWithTypeDto.setNull(false);
         return valueWithTypeDto;
     }
 
     private <T> CollectionDto asCollectionDto(
-            final @NonNull Stream<T> streamOfValues,
-            final @NonNull ValueTypeWrapper<T> elementValueTypeAndSemantics) {
+            final Can<ManagedObject> values,
+            final ValueTypeWrapper<T> valueWrapper) {
 
-        val elementValueType = elementValueTypeAndSemantics.getValueType();
+        val elementValueType = valueWrapper.getValueType();
         val collectionDto = new CollectionDto();
         collectionDto.setType(elementValueType);
 
-        val needsElementValueTypeAutodetect = elementValueType==ValueType.VOID;
-        val commonElementValueTypeRef = _Refs.<ValueType>objectRef(null);
-
-        streamOfValues
+        values.stream()
         .forEach(element->{
             val valueDto = new ValueDto();
             collectionDto.getValue().add(valueDto);
-
-            if(element==null) {
-                recordValue(valueDto, ValueTypeWrapper.empty(), _Casts.uncheckedCast(element));
-            } else {
-
-                recordValue(valueDto, elementValueTypeAndSemantics, _Casts.uncheckedCast(element));
-
-                if(needsElementValueTypeAutodetect) {
-                    commonElementValueTypeRef.update(acc->reduce(acc, elementValueTypeAndSemantics.getValueType()));
-                }
-            }
+            recordValue(valueDto, valueWrapper, element);
         });
-
-        if(needsElementValueTypeAutodetect) {
-            collectionDto.setType(commonElementValueTypeRef.getValueElseDefault(ValueType.VOID));
-        }
 
         return collectionDto;
     }
 
-    private static ValueType reduce(final ValueType acc, final ValueType next) {
-        if(acc==null) {
-            return next;
-        }
-        if(acc==next) {
-            return acc;
-        }
-        throw _Exceptions.unsupportedOperation("mixing types within a collection is not supported yet");
-    }
-
     // -- HELPER - RECOVERY
 
-    private <T> T recoverValue(
+    private ManagedObject recoverValue(
             final Identifier featureIdentifier,
             final ValueWithTypeDto valueWithTypeDto) {
+
+        val feature = specLoader.loadFeatureElseFail(featureIdentifier);
+        val desiredTypeSpec = feature.getElementType();
+
         if(valueWithTypeDto==null
                 || (valueWithTypeDto.isSetNull()
                     && valueWithTypeDto.isNull())) {
-            return null;
+            return ManagedObject.empty(desiredTypeSpec);
         }
-        val feature = specLoader.loadFeatureElseFail(featureIdentifier);
-        val desiredType = feature.getElementType().getCorrespondingClass();
-        return recoverValue(valueWithTypeDto, wrap(featureIdentifier, desiredType));
+
+        final ValueTypeWrapper<?> valueWrapper = wrap(featureIdentifier, desiredTypeSpec);
+        return recoverValue(valueWithTypeDto, valueWrapper);
     }
 
-    private <T> T recoverValue(
+    private ManagedObject recoverValue(
             final ValueDto valueDto,
             final @NonNull ValueTypeWrapper<?> valueWrapper) {
 
+        val elementSpec = valueWrapper.getSpec();
+
         if(valueDto.getCollection()!=null) {
-            return _Casts.uncheckedCast(recoverCollection(valueWrapper, valueDto.getCollection()));
+            return ManagedObjects.pack(elementSpec, recoverCollection(valueWrapper, valueDto.getCollection()));
         }
 
         if(valueDto.getComposite()!=null) {
-            return _Casts.uncheckedCast(valueWrapper.fromTypedTuple(valueDto.getComposite()));
+            return ManagedObject.of(elementSpec,
+                    valueWrapper.fromTypedTuple(valueDto.getComposite()));
         }
 
-        return _Casts.uncheckedCast(valueWrapper.fromFundamentalValue(
-                recoverFundamentalValue(valueDto, valueWrapper)));
+        return ManagedObject.of(elementSpec,
+                valueWrapper.fromFundamentalValue(recoverFundamentalValue(valueDto, valueWrapper)));
     }
 
     @SneakyThrows
@@ -573,14 +598,16 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
 
     }
 
-    private Object recoverCollection(final ValueTypeWrapper<?> valueWrapper, final CollectionDto collectionDto) {
+    private Can<ManagedObject> recoverCollection(
+            final ValueTypeWrapper<?> valueWrapper,
+            final CollectionDto collectionDto) {
 
         _Assert.assertEquals(valueWrapper.getValueType(), collectionDto.getType());
 
         if(_NullSafe.isEmpty(collectionDto.getValue())) {
-            return Collections.emptyList();
+            return Can.empty();
         }
-        val list = new ArrayList<Object>();
+        val list = new ArrayList<ManagedObject>();
 
         for(val elementDto : collectionDto.getValue()) {
             if(elementDto instanceof ValueWithTypeDto) {
@@ -589,8 +616,7 @@ public class SchemaValueMarshallerDefault implements SchemaValueMarshaller {
             }
             list.add(recoverValue(elementDto, valueWrapper));
         }
-        return list;
+        return Can.ofCollection(list);
     }
-
 
 }

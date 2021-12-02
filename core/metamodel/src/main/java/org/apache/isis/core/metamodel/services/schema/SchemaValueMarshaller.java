@@ -16,15 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.schema;
-
-import org.springframework.lang.Nullable;
+package org.apache.isis.core.metamodel.services.schema;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.ParamDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
+import org.apache.isis.schema.common.v2.OidDto;
 import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 
 import lombok.NonNull;
@@ -57,17 +59,21 @@ public interface SchemaValueMarshaller {
 
     // -- RECOVER VALUES FROM DTO
 
+    ManagedObject recoverReferenceFrom(@NonNull OidDto oidDto);
+
     /**
      * Recovers a property value, using {@link ValueSemanticsProvider}
      * for corresponding <i>Property</i>.
      */
-    @Nullable Object recoverValueFrom(@NonNull PropertyDto propertyDto);
+    ManagedObject recoverValueFrom(@NonNull PropertyDto propertyDto);
 
     /**
      * Recovers a parameter value, using {@link ValueSemanticsProvider}
      * for corresponding <i>Action Parameter</i>.
+     * <p>
+     * Packed up if non-scalar.
      */
-    @Nullable Object recoverValueFrom(@NonNull Identifier paramIdentifier, @NonNull ParamDto paramDto);
+    ManagedObject recoverValuesFrom(@NonNull Identifier paramIdentifier, @NonNull ParamDto paramDto);
 
     // -- RECORD VALUES INTO DTO
 
@@ -75,28 +81,47 @@ public interface SchemaValueMarshaller {
      * Records given result value into given DTO object,
      * using {@link ValueSemanticsProvider} for corresponding <i>Action</i>.
      */
-    <T> ActionInvocationDto recordActionResult(
+    ActionInvocationDto recordActionResultScalar(
             @NonNull ActionInvocationDto invocationDto,
-            @NonNull Class<T> returnType,
-            @Nullable T result);
+            @NonNull ObjectSpecification elementType,
+            @NonNull ManagedObject value);
+
+    /**
+     * Records given result values into given DTO object,
+     * using {@link ValueSemanticsProvider} for corresponding <i>Action</i>.
+     */
+    ActionInvocationDto recordActionResultNonScalar(
+            @NonNull ActionInvocationDto invocationDto,
+            @NonNull ObjectSpecification elementType,
+            @NonNull Can<ManagedObject> values);
 
     /**
      * Records given property value into given DTO object,
      * using {@link ValueSemanticsProvider} for corresponding <i>Property</i>.
      */
-    <T> PropertyDto recordPropertyValue(
+    PropertyDto recordPropertyValue(
             @NonNull PropertyDto propertyDto,
-            @NonNull Class<T> propertyType,
-            @Nullable T valuePojo);
+            @NonNull ObjectSpecification elementType,
+            @NonNull ManagedObject value);
 
     /**
      * Records given parameter value into given DTO object,
      * using {@link ValueSemanticsProvider} for corresponding <i>Action Parameter</i>.
      */
-    <T> ParamDto recordParamValue(
+    ParamDto recordParamScalar(
             @NonNull Identifier paramIdentifier,
             @NonNull ParamDto paramDto,
-            @NonNull Class<T> paramType,
-            @Nullable T valuePojo);
+            @NonNull ObjectSpecification elementType,
+            @NonNull ManagedObject value);
+
+    /**
+     * Records given parameter values into given DTO object,
+     * using {@link ValueSemanticsProvider} for corresponding <i>Action Parameter</i>.
+     */
+    ParamDto recordParamNonScalar(
+            @NonNull Identifier paramIdentifier,
+            @NonNull ParamDto paramDto,
+            @NonNull ObjectSpecification elementType,
+            @NonNull Can<ManagedObject> values);
 
 }
