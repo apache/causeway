@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.viewers.jdo.wkt;
 
 import javax.inject.Inject;
 
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,12 @@ import org.apache.isis.testdomain.conf.Configuration_usingWicket;
 import org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester;
 import org.apache.isis.testdomain.conf.Configuration_usingWicket.WicketTesterFactory;
 import org.apache.isis.testdomain.jdo.JdoTestFixtures;
+import org.apache.isis.testdomain.jdo.entities.JdoBook;
+import org.apache.isis.testdomain.util.dto.BookDto;
+
+import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.FAVORITE_BOOK_ENTITY_LINK;
+import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.FAVORITE_BOOK_ENTITY_LINK_TITLE;
+import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.FAVORITE_BOOK_SCALAR_NAME;
 
 import lombok.val;
 
@@ -85,10 +92,14 @@ class InteractionTestJdoWkt extends RegressionTestAbstract {
             wktTester.assertHeaderBrandText("Smoke Tests");
             wktTester.assertPageTitle("JdoInventoryJaxbVm; 3 products");
 
-            //wktTester.dumpComponentTree(comp->comp instanceof Label);
+            //wktTester.dumpComponentTree(comp->true);
 
-            //wktTester.assertLabel("label", "Favorite Book");
-            //wktTester.assertComponent("", null);
+            wktTester.assertLabel(FAVORITE_BOOK_SCALAR_NAME, "Favorite Book");
+            wktTester.assertComponent(FAVORITE_BOOK_ENTITY_LINK, BookmarkablePageLink.class);
+
+            val expectedLinkTitle = JdoBook.fromDto(BookDto.sample()).title();
+            wktTester.assertLabel(FAVORITE_BOOK_ENTITY_LINK_TITLE, expectedLinkTitle);
+
         });
 
         //TODO simulate change of a String property -> should yield a new Title and serialized URL link

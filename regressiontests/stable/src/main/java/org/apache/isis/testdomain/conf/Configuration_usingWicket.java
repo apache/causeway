@@ -78,6 +78,21 @@ public class Configuration_usingWicket {
 
     public static class EntityPageTester extends WicketTester {
 
+        public static final String FAVORITE_BOOK_SCALAR = "theme:entityPageContainer:entity:rows:2"
+                + ":rowContents:1"
+                + ":col:fieldSets:1"
+                + ":memberGroup:properties:1"
+                + ":property:scalarTypeContainer:scalarIfRegular";
+
+        public static final String FAVORITE_BOOK_SCALAR_NAME = FAVORITE_BOOK_SCALAR
+                + ":scalarName";
+
+        public static final String FAVORITE_BOOK_ENTITY_LINK = FAVORITE_BOOK_SCALAR
+                + ":entityIconAndTitle:entityLinkWrapper:entityLink";
+
+        public static final String FAVORITE_BOOK_ENTITY_LINK_TITLE = FAVORITE_BOOK_ENTITY_LINK
+                + ":entityTitle";
+
         @Inject private ObjectManager objectManager;
 
         private final IsisAppCommonContext commonContext;
