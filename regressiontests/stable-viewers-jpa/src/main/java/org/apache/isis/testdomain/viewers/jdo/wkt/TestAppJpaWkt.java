@@ -18,14 +18,25 @@
  */
 package org.apache.isis.testdomain.viewers.jdo.wkt;
 
+import javax.inject.Inject;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.HomePage;
+import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
+import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.conf.Configuration_usingWicket;
+import org.apache.isis.testdomain.jpa.JpaInventoryJaxbVm;
+import org.apache.isis.testdomain.jpa.JpaTestFixtures;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
 /**
@@ -52,6 +63,33 @@ public class TestAppJpaWkt extends SpringBootServletInitializer {
     public static void main(final String[] args) {
         IsisPresets.prototyping();
         SpringApplication.run(new Class[] { TestAppJpaWkt.class }, args);
+    }
+
+    @DomainObject(
+            nature=Nature.VIEW_MODEL,
+            logicalTypeName = "testdomain.jpa.TestHomePage"
+            )
+    @HomePage
+    public static class TestHomePage {
+
+        @Inject UserService userService;
+        @Inject JpaTestFixtures testFixtures;
+
+        @ObjectSupport public String title() {
+            return "Hello, " + userService.currentUserNameElseNobody();
+        }
+
+        @Action @ActionLayout(sequence = "0.1")
+        public TestHomePage setup() {
+            testFixtures.setUp3Books();
+            return this;
+        }
+
+        @Action @ActionLayout(sequence = "0.2")
+        public JpaInventoryJaxbVm openSamplePage() {
+            return testFixtures.setUpViewmodelWith3Books();
+        }
+
     }
 
 }
