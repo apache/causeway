@@ -298,20 +298,6 @@ public final class InteractionDtoUtils {
 
     // -- invocationFor, actionFor, timingsFor
 
-    private static ActionInvocationDto actionInvocationFor(final InteractionDto interactionDto) {
-        ActionInvocationDto invocation = (ActionInvocationDto) interactionDto.getExecution();
-        if(invocation == null) {
-            invocation = new ActionInvocationDto();
-            interactionDto.setExecution(invocation);
-            invocation.setInteractionType(InteractionType.ACTION_INVOCATION);
-        }
-        return invocation;
-    }
-
-    private static List<ParamDto> parameterListFor(final InteractionDto ixnDto) {
-        return parameterListFor(actionInvocationFor(ixnDto));
-    }
-
     private static ParamsDto parametersFor(final ActionInvocationDto invocationDto) {
         ParamsDto parameters = invocationDto.getParameters();
         if(parameters == null) {
@@ -324,25 +310,6 @@ public final class InteractionDtoUtils {
     private static List<ParamDto> parameterListFor(final ActionInvocationDto invocationDto) {
         return parametersFor(invocationDto).getParameter();
     }
-
-    // -- addParamArg
-
-//XXX can no longer use SchemaValueMarshaller here within applib, as this depends on meta-model classes
-//    public static <T> void addParamArg(
-//            final @NonNull SchemaValueMarshaller valueMarshaller,
-//            final @NonNull Identifier paramIdentifier,
-//            final @NonNull InteractionDto interactionDto,
-//            final @NonNull String parameterName,
-//            final @NonNull Class<T> parameterType,
-//            final @NonNull Optional<Bookmark> bookmarkIfAny,
-//            final T arg) {
-//
-//        final List<ParamDto> params = parameterListFor(interactionDto);
-//        val paramDto = new ParamDto();
-//        paramDto.setName(parameterName);
-//        valueMarshaller.recordParamValue(paramIdentifier, paramDto, parameterType, bookmarkIfAny, arg);
-//        params.add(paramDto);
-//    }
 
 
     // -- getParameters, getParameterNames, getParameterTypes
@@ -407,25 +374,11 @@ public final class InteractionDtoUtils {
         return paramDto.isNull();
     }
 
-    // -- getParameterArgValue
-
-//XXX can no longer use SchemaValueMarshaller here within applib, as this depends on meta-model classes
-//    public static <T> T getParameterArgValue(
-//            final @NonNull SchemaValueMarshaller valueMarshaller,
-//            final @NonNull ActionInvocationDto ai,
-//            final int paramNum) {
-//
-//        final Identifier actionIdentifier = valueMarshaller.actionIdentifier(ai);
-//        final ParamDto paramDto = getParameter(ai, paramNum);
-//        return (T) valueMarshaller.recoverValueFrom(actionIdentifier.withParameterIndex(paramNum), paramDto);
-//    }
-
     // -- DEBUGGING (DUMP)
 
     public static void dump(final InteractionDto ixnDto, final PrintStream out) throws JAXBException {
         out.println(toXml(ixnDto));
     }
-
 
 
 }

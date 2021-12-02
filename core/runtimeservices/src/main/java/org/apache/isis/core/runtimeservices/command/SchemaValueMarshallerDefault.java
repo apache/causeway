@@ -317,9 +317,6 @@ implements SchemaValueMarshaller {
         switch (schemaValueType) {
         case COLLECTION: {
             throw _Exceptions.unexpectedCodeReach();
-//            valueDto.setCollection(
-//                    asCollectionDto(_Casts.uncheckedCast(pojo), ValueTypeWrapper.empty()));
-//            return valueDto;
         }
         case COMPOSITE: {
             valueDto.setComposite(valueWrapper.toTypedTupleDto(pojo));
@@ -412,9 +409,6 @@ implements SchemaValueMarshaller {
         }
         case ENUM: {
             final Enum<?> argValue = (Enum<?>) pojo;
-            if(argValue == null) {
-                return null;
-            }
             final EnumDto enumDto = new EnumDto();
             valueDto.setEnum(enumDto);
             enumDto.setEnumType(argValue.getClass().getName());
@@ -423,16 +417,6 @@ implements SchemaValueMarshaller {
         }
         case REFERENCE: {
             throw _Exceptions.unexpectedCodeReach();
-//            final Bookmark bookmark = pojo instanceof Bookmark
-//                    ? (Bookmark) pojo
-//                    : bookmarkService!=null
-//                            ? bookmarkService.bookmarkFor(pojo).orElse(null)
-//                            : null;
-//
-//            if (bookmark != null) {
-//                valueDto.setReference(bookmark.toOidDto());
-//            }
-//            return valueDto;
         }
         case BLOB: {
             final Blob blob = (Blob) pojo;
