@@ -20,16 +20,17 @@ package org.apache.isis.testdomain.publishing.stubs;
 
 import javax.inject.Inject;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
 import org.apache.isis.testdomain.publishing.subscriber.EntityPropertyChangeSubscriberForTesting;
 import org.apache.isis.testdomain.util.CollectionAssertions;
+import org.apache.isis.testdomain.util.dto.BookDto;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.val;
 
@@ -61,6 +62,8 @@ extends PublishingTestAbstract {
             break;
         case POST_COMMIT:
 
+            val defaultBook = BookDto.sample();
+
             switch(changeScenario) {
             case ENTITY_CREATION:
                 return; // factory-service does not trigger property publishing
@@ -68,19 +71,19 @@ extends PublishingTestAbstract {
                 return; // not subject of change tests
             case ENTITY_PERSISTING:
                 assertContainsPropertyChangeEntries(Can.of(
-                        formatPersistenceStandardSpecificCapitalize("%s Book/name: '[NEW]' -> 'Sample Book'")));
+                        formatPersistenceStandardSpecificCapitalize("%s Book/name: '[NEW]' -> '" + defaultBook.getName() + "'")));
                 return;
             case PROPERTY_UPDATE:
                 assertHasPropertyChangeEntries(Can.of(
-                        formatPersistenceStandardSpecificCapitalize("%s Book/name: 'Sample Book' -> 'Book #2'")));
+                        formatPersistenceStandardSpecificCapitalize("%s Book/name: '" + defaultBook.getName() + "' -> 'Book #2'")));
                 return;
             case ACTION_INVOCATION:
                 assertHasPropertyChangeEntries(Can.of(
-                        formatPersistenceStandardSpecificCapitalize("%s Book/price: '99.0' -> '198.0'")));
+                        formatPersistenceStandardSpecificCapitalize("%s Book/price: '" + defaultBook.getPrice() + "' -> '" + (2.*defaultBook.getPrice()) + "'")));
                 return;
             case ENTITY_REMOVAL:
                 assertContainsPropertyChangeEntries(Can.of(
-                        formatPersistenceStandardSpecificCapitalize("%s Book/name: 'Sample Book' -> '[DELETED]'")));
+                        formatPersistenceStandardSpecificCapitalize("%s Book/name: '" + defaultBook.getName() + "' -> '[DELETED]'")));
                 return;
             default:
                 throw _Exceptions.unmatchedCase(changeScenario);

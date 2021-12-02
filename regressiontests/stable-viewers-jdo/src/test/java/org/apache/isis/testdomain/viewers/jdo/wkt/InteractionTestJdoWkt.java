@@ -83,7 +83,8 @@ class InteractionTestJdoWkt extends RegressionTestAbstract {
         run(()->{
             wktTester.startEntityPage(pageParameters);
             wktTester.assertRenderedPage(EntityPage.class);
-
+            wktTester.assertLabel("label", "Favorite Book");
+            //wktTester.assertComponent("", null);
         });
 
         //TODO simulate change of a String property -> should yield a new Title and serialized URL link
