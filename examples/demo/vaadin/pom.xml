@@ -40,7 +40,7 @@
 			npm (lts) versions -->
 		<node.version>v16.13.0</node.version>
 		<npm.version>8.1.0</npm.version>
-		<vaadin.version>21.0.8</vaadin.version>
+		<vaadin.version>22.0.0</vaadin.version>
 
 	</properties>
 
