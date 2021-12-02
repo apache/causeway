@@ -20,7 +20,6 @@ package org.apache.isis.testdomain.viewers.jpa.wkt;
 
 import javax.inject.Inject;
 
-import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,14 +27,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.testdomain.RegressionTestAbstract;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.conf.Configuration_usingWicket;
+import org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester;
 import org.apache.isis.testdomain.conf.Configuration_usingWicket.WicketTesterFactory;
 import org.apache.isis.testdomain.jpa.JpaTestFixtures;
-import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
 import lombok.val;
@@ -53,10 +50,10 @@ import lombok.val;
 })
 class InteractionTestJpaWkt extends RegressionTestAbstract {
 
-    @Inject private IsisAppCommonContext commonContext;
     @Inject private WicketTesterFactory wicketTesterFactory;
     @Inject private JpaTestFixtures testFixtures;
-    private WicketTester wktTester;
+
+    private EntityPageTester wktTester;
 
     @BeforeEach
     void setUp() throws InterruptedException {
@@ -78,15 +75,13 @@ class InteractionTestJpaWkt extends RegressionTestAbstract {
 
         val pageParameters = call(()->{
             val inventoryJaxbVm = testFixtures.setUpViewmodelWith3Books();
-            final ManagedObject domainObject = objectManager.adapt(inventoryJaxbVm);
-            return PageParameterUtils.createPageParametersForObject(domainObject);
+            return wktTester.createPageParameters(inventoryJaxbVm);
         });
 
         System.err.printf("pageParameters %s%n", pageParameters);
 
         run(()->{
-            val entityPage = EntityPage.ofPageParameters(commonContext, pageParameters);
-            wktTester.startPage(entityPage);
+            wktTester.startEntityPage(pageParameters);
             wktTester.assertRenderedPage(EntityPage.class);
         });
 

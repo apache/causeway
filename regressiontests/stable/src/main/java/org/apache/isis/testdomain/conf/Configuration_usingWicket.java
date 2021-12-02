@@ -23,23 +23,29 @@ import javax.inject.Singleton;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.ThreadContext;
+import org.apache.wicket.core.request.handler.IPageProvider;
 import org.apache.wicket.markup.head.ResourceAggregator;
 import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.WicketTester;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
+import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
 import lombok.AccessLevel;
@@ -62,13 +68,41 @@ public class Configuration_usingWicket {
         return IsisAppCommonContext.of(mmc);
     }
 
+    public static class EntityPageTester extends WicketTester {
+
+        @Inject private ObjectManager objectManager;
+
+        private final IsisAppCommonContext commonContext;
+
+        public EntityPageTester(final IsisAppCommonContext commonContext) {
+            super(newWicketApplication(commonContext));
+            commonContext.injectServicesInto(this);
+            this.commonContext = commonContext;
+        }
+
+        public PageParameters createPageParameters(final Object entityOrVm) {
+            final ManagedObject domainObject = objectManager.adapt(entityOrVm);
+            return PageParameterUtils.createPageParametersForObject(domainObject);
+        }
+
+        /**
+         * Renders the {@link EntityPage}.
+         * @see #startPage(IPageProvider)
+         */
+        public EntityPage startEntityPage(final PageParameters pageParameters) {
+            val entityPage = EntityPage.ofPageParameters(commonContext, pageParameters);
+            return startPage(entityPage);
+        }
+
+    }
+
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public static class WicketTesterFactory {
 
         private final IsisAppCommonContext commonContext;
 
-        public WicketTester createTester() {
-            return new WicketTester(newWicketApplication(commonContext));
+        public EntityPageTester createTester() {
+            return new EntityPageTester(commonContext);
         }
     }
 
@@ -76,7 +110,6 @@ public class Configuration_usingWicket {
     public WicketTesterFactory wicketTesterFactory(final IsisAppCommonContext commonContext) {
         return new WicketTesterFactory(commonContext);
     }
-
 
     // -- HELPER -- APPLICATION (WICKET)
 
