@@ -33,7 +33,6 @@ import org.apache.isis.testdomain.conf.Configuration_usingWicket;
 import org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester;
 import org.apache.isis.testdomain.conf.Configuration_usingWicket.WicketTesterFactory;
 import org.apache.isis.testdomain.jpa.JpaTestFixtures;
-import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
 import lombok.val;
 
@@ -82,10 +81,11 @@ class InteractionTestJpaWkt extends RegressionTestAbstract {
 
         run(()->{
             wktTester.startEntityPage(pageParameters);
-            wktTester.assertRenderedPage(EntityPage.class);
+
+            wktTester.assertHeaderBrandText("Smoke Tests");
+            wktTester.assertPageTitle("JpaInventoryJaxbVm; 3 products");
         });
 
-        //TODO populate VM with entities
         //TODO simulate change of a String property -> should yield a new Title and serialized URL link
         //TODO simulate interaction with choice provider, where entries are entities -> should be attached, eg. test whether we can generate a title for these
     }

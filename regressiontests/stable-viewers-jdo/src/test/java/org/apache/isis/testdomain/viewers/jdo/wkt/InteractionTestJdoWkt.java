@@ -33,7 +33,6 @@ import org.apache.isis.testdomain.conf.Configuration_usingWicket;
 import org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester;
 import org.apache.isis.testdomain.conf.Configuration_usingWicket.WicketTesterFactory;
 import org.apache.isis.testdomain.jdo.JdoTestFixtures;
-import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
 import lombok.val;
 
@@ -82,8 +81,13 @@ class InteractionTestJdoWkt extends RegressionTestAbstract {
 
         run(()->{
             wktTester.startEntityPage(pageParameters);
-            wktTester.assertRenderedPage(EntityPage.class);
-            wktTester.assertLabel("label", "Favorite Book");
+
+            wktTester.assertHeaderBrandText("Smoke Tests");
+            wktTester.assertPageTitle("JdoInventoryJaxbVm; 3 products");
+
+            //wktTester.dumpComponentTree(comp->comp instanceof Label);
+
+            //wktTester.assertLabel("label", "Favorite Book");
             //wktTester.assertComponent("", null);
         });
 

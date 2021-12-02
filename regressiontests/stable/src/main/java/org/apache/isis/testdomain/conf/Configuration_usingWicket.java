@@ -18,9 +18,14 @@
  */
 package org.apache.isis.testdomain.conf;
 
+import java.util.ArrayList;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ThreadContext;
 import org.apache.wicket.core.request.handler.IPageProvider;
@@ -29,10 +34,13 @@ import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderRe
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.WicketTester;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -85,13 +93,49 @@ public class Configuration_usingWicket {
             return PageParameterUtils.createPageParametersForObject(domainObject);
         }
 
+        public void assertPageTitle(final String expectedLabel) {
+            assertLabel("pageTitle", expectedLabel);
+        }
+
+        public void assertHeaderBrandText(final String expectedLabel) {
+            assertLabel("header:applicationName:brandText", expectedLabel);
+        }
+
+        public void dumpComponentTree(final Predicate<Component> filter) {
+            getLastRenderedPage().visitChildren(new IVisitor<Component, Object>() {
+                @Override
+                public void component(final Component component, final IVisit<Object> visit) {
+                    if(filter.test(component)) {
+
+                        val inversePath = new ArrayList<String>();
+                        var comp = component;
+
+                        while(comp!=null) {
+                            inversePath.add(comp.getId());
+                            comp = comp.getParent();
+                        }
+
+                        val path = Can.ofCollection(inversePath)
+                        .reverse()
+                        .stream()
+                        .skip(1L)
+                        .collect(Collectors.joining(":"));
+
+                        System.err.printf("comp[%s]: %s%n", path, component);
+                    }
+                }
+            });
+        }
+
         /**
          * Renders the {@link EntityPage}.
          * @see #startPage(IPageProvider)
          */
         public EntityPage startEntityPage(final PageParameters pageParameters) {
             val entityPage = EntityPage.ofPageParameters(commonContext, pageParameters);
-            return startPage(entityPage);
+            val startedPage = startPage(entityPage);
+            assertRenderedPage(EntityPage.class);
+            return startedPage;
         }
 
     }
