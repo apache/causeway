@@ -67,7 +67,7 @@ public interface MethodRemover {
      * Returns a defensive copy of the current internal state.
      * @apiNote introduced for debugging purposes
      */
-    Can<Method> snapshot();
+    Can<Method> snapshotMethodsRemaining();
 
     // -- NOOP IMPLEMENTATION
 
@@ -82,7 +82,7 @@ public interface MethodRemover {
         }
 
         @Override
-        public Can<Method> snapshot() {
+        public Can<Method> snapshotMethodsRemaining() {
             return Can.empty();
         }
 

@@ -36,19 +36,16 @@
 		<dependency>
 			<groupId>org.apache.isis.persistence</groupId>
 			<artifactId>isis-persistence-jdo-datanucleus</artifactId>
-			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.regressiontests</groupId>
 			<artifactId>isis-regressiontests-stable</artifactId>
-			<scope>test</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.apache.isis.testing</groupId>
 			<artifactId>isis-testing-fixtures-applib</artifactId>
-			<scope>test</scope>
 		</dependency>
 
 	</dependencies>

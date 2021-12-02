@@ -133,8 +133,8 @@ public interface FacetFactory {
         }
 
         @Override
-        public Can<Method> snapshot() {
-            return methodRemover.snapshot();
+        public Can<Method> snapshotMethodsRemaining() {
+            return methodRemover.snapshotMethodsRemaining();
         }
 
     }
@@ -186,8 +186,8 @@ public interface FacetFactory {
         }
 
         @Override
-        public Can<Method> snapshot() {
-            return methodRemover.snapshot();
+        public Can<Method> snapshotMethodsRemaining() {
+            return methodRemover.snapshotMethodsRemaining();
         }
 
         // -- JUNIT SUPPORT

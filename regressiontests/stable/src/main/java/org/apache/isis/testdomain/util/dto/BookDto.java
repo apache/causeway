@@ -33,8 +33,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.testdomain.jdo.entities.JdoBook;
-import org.apache.isis.testdomain.jpa.entities.JpaBook;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -54,18 +52,7 @@ public class BookDto {
     private String isbn;
     private String publisher;
 
-    public static BookDto from(final JdoBook book) {
-        return BookDto.builder()
-        .author(book.getAuthor())
-        .description(book.getDescription())
-        .isbn(book.getIsbn())
-        .name(book.getName())
-        .price(book.getPrice())
-        .publisher(book.getPublisher())
-        .build();
-    }
-
-    public static BookDto from(final JpaBook book) {
+    public static BookDto from(final IBook book) {
         return BookDto.builder()
         .author(book.getAuthor())
         .description(book.getDescription())
@@ -89,19 +76,6 @@ public class BookDto {
                 .name("Sample Book")
                 .price(99.)
                 .publisher("Sample Publisher");
-    }
-
-    @Programmatic
-    public JdoBook toJdoBook() {
-       return JdoBook.of(this.getName(), this.getDescription(), this.getPrice(),
-                this.getAuthor(), this.getIsbn(), this.getPublisher());
-    }
-
-
-    @Programmatic
-    public JpaBook toJpaBook() {
-       return JpaBook.of(this.getName(), this.getDescription(), this.getPrice(),
-                this.getAuthor(), this.getIsbn(), this.getPublisher());
     }
 
     @Programmatic

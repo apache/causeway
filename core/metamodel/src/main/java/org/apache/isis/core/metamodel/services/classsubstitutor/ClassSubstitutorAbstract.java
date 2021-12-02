@@ -23,13 +23,16 @@ import java.util.Set;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.proxy._ProxyFactoryService;
 import org.apache.isis.commons.internal.reflection._ClassCache;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
 
 import lombok.NonNull;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
 
     private final _ClassCache classCache = _ClassCache.getInstance();
@@ -81,6 +84,11 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
             // guard against cannot introspect
             classCache.add(cls);
         } catch (Throwable e) {
+
+            log.warn("cannot introspect type {}, adding it to list of ignored types;\n reason: {}",
+                    cls.getName(),
+                    _Exceptions.getMessage(e));
+
             classesToIgnore.add(cls);
             return null;
         }

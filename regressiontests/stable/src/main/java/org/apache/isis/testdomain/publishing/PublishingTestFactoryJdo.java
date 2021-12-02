@@ -133,7 +133,7 @@ extends PublishingTestFactoryAbstract {
 
             context.runGiven();
             //when
-            factoryService.detachedEntity(BookDto.sample().toJdoBook()); // should trigger an ObjectCreatedEvent
+            factoryService.detachedEntity(JdoBook.fromDto(BookDto.sample())); // should trigger an ObjectCreatedEvent
             factoryService.detachedEntity(JdoBook.class); // should trigger a second ObjectCreatedEvent
             break;
 
@@ -406,7 +406,7 @@ extends PublishingTestFactoryAbstract {
 
         val products = new HashSet<JdoProduct>();
 
-        val detachedNewBook = BookDto.sample().toJdoBook();
+        val detachedNewBook = JdoBook.fromDto(BookDto.sample());
 
         products.add(detachedNewBook);
 

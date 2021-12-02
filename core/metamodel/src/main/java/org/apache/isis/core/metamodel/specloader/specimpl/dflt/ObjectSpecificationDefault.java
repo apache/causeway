@@ -129,6 +129,7 @@ implements FacetHolder {
 
         this.facetedMethodsBuilder =
                 new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
+
     }
 
     @Override
@@ -231,9 +232,7 @@ implements FacetHolder {
 
     private List<ObjectAction> createActions() {
         val actions = _Lists.<ObjectAction>newArrayList();
-        val actionFacetedMethods =
-                facetedMethodsBuilder.getActionFacetedMethods();
-        for (val facetedMethod : actionFacetedMethods) {
+        for (val facetedMethod : facetedMethodsBuilder.getActionFacetedMethods()) {
             val action = createAction(facetedMethod);
             if(action != null) {
                 actions.add(action);

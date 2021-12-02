@@ -30,31 +30,24 @@ import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclip
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.testdomain.jpa.JpaTestDomainModule;
 import org.apache.isis.testdomain.model.stereotypes.MyService;
-import org.apache.isis.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 @SpringBootConfiguration
 @EnableAutoConfiguration
-//@EnableJpaRepositories
-
-//@Configuration
 @Import({
-
-    JpaTestDomainModule.class,
-
     MyService.class, // testing injection into entities
+    IsisModuleCoreRuntimeServices.class,
+    IsisModuleSecurityBypass.class,
+    IsisModulePersistenceJpaEclipselink.class,
+    IsisModuleTestingFixturesApplib.class,
+    KVStoreForTesting.class, // Helper for JUnit Tests
 
-    IsisModuleCoreRuntimeServices.class
-    ,IsisModuleSecurityBypass.class
-    ,IsisModulePersistenceJpaEclipselink.class
-    ,IsisModuleTestingFixturesApplib.class
-    ,KVStoreForTesting.class, // Helper for JUnit Tests
-    DomainObjectTesterFactory.class // Helper for JUnit Tests
+    JpaTestDomainModule.class
 })
 @PropertySources({
     @PropertySource(IsisPresets.NoTranslations),
-    @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate),
+    @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
 })
 public class Configuration_usingJpa {
 

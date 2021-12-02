@@ -78,7 +78,7 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
 
                     val products = new TreeSet<JpaProduct>();
 
-                    products.add(BookDto.sample().toJpaBook());
+                    products.add(JpaBook.fromDto(BookDto.sample()));
 
                     val inventory = new JpaInventory("Sample Inventory", products);
                     repository.persist(inventory);

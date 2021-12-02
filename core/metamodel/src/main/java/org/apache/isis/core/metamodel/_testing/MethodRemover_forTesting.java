@@ -78,7 +78,7 @@ implements MethodRemover {
     }
 
     @Override
-    public Can<Method> snapshot() {
+    public Can<Method> snapshotMethodsRemaining() {
         // creates a defensive copy, but as far as I know is not thread-safe
         return Can.ofStream(removedMethodMethodCalls.stream());
     }

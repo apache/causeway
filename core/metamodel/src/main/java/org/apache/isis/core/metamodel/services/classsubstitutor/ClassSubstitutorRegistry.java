@@ -21,13 +21,13 @@ package org.apache.isis.core.metamodel.services.classsubstitutor;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
@@ -76,7 +76,8 @@ public class ClassSubstitutorRegistry {
 
     }
 
-    private Substitution getSubstitutionElseWarn(ClassSubstitutor substitutor, Class<?> originalClass) {
+    private Substitution getSubstitutionElseWarn(final ClassSubstitutor substitutor, final Class<?> originalClass) {
+
         val substitution = substitutor.getSubstitution(originalClass);
         if(substitution == null) {
             log.warn("ClassSubstitutor.getSubstitution(Class) must never return null! "

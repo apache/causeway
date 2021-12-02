@@ -16,16 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.jdo;
+package org.apache.isis.testdomain.util.dto;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+public interface IBook {
 
-@Configuration
-@ComponentScan(
-        basePackageClasses= {
-                JdoTestDomainModule.class
-        })
-public class JdoTestDomainModule {
+    String getAuthor();
+
+    String getDescription();
+
+    String getIsbn();
+
+    String getName();
+
+    double getPrice();
+
+    String getPublisher();
 
 }

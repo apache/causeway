@@ -169,7 +169,7 @@ public final class _Exceptions {
 
     // -- MESSAGE
 
-    public static String getMessage(final Exception ex) {
+    public static String getMessage(final Throwable ex) {
         if(ex==null) {
             return "no exception present";
         }
