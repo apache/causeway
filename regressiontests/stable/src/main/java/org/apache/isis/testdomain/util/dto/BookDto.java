@@ -21,6 +21,7 @@ package org.apache.isis.testdomain.util.dto;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.stream.Stream;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -63,20 +64,51 @@ public class BookDto {
         .build();
     }
 
-    public static BookDto sample() {
-        return BookDto.sampleBuilder()
-                .build();
+    @Programmatic
+    public BookDtoBuilder asBuilder() {
+        return BookDto.builder()
+        .author(this.getAuthor())
+        .description(this.getDescription())
+        .isbn(this.getIsbn())
+        .name(this.getName())
+        .price(this.getPrice())
+        .publisher(this.getPublisher());
     }
 
-    public static BookDtoBuilder sampleBuilder() {
-        return BookDto.builder()
-                .author("Sample Author")
-                .description("A sample book for testing.")
-                .isbn("Sample ISBN")
-                .name("Sample Book")
+    public static Stream<BookDto> samples() {
+
+        return Stream.of(
+                BookDto.builder()
+                .author("Frank Herbert")
+                .description("A sample book for testing. (1)")
+                .isbn("ISBN-A")
+                .name("Dune")
+                .price(39.)
+                .publisher("Sample Publisher (1)")
+                .build(),
+                BookDto.builder()
+                .author("Isaac Asimov")
+                .description("A sample book for testing. (2)")
+                .isbn("ISBN-B")
+                .name("The Foundation")
+                .price(29.)
+                .publisher("Sample Publisher (2)")
+                .build(),
+                BookDto.builder()
+                .author("Herbert George Wells")
+                .description("A sample book for testing. (3)")
+                .isbn("ISBN-C")
+                .name("The Time Machine")
                 .price(99.)
-                .publisher("Sample Publisher");
+                .publisher("Sample Publisher (3)")
+                .build()
+                );
     }
+
+    public static BookDto sample() {
+        return samples().findFirst().orElseThrow();
+    }
+
 
     @Programmatic
     public String encode() throws JAXBException {
@@ -101,7 +133,6 @@ public class BookDto {
 
         return bookDto;
     }
-
 
 
 }

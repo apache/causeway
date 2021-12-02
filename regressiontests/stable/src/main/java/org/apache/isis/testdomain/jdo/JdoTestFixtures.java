@@ -21,6 +21,7 @@ package org.apache.isis.testdomain.jdo;
 import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 
@@ -33,10 +34,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.commons.internal.primitives._Ints;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
+import org.apache.isis.testdomain.util.dto.BookDto;
 
 import lombok.val;
 
@@ -62,14 +65,9 @@ public class JdoTestFixtures {
         // setup sample Inventory with 3 Books
         SortedSet<JdoProduct> products = new TreeSet<>();
 
-        products.add(JdoBook.of("Sample Book-1", "A sample book for testing.", 39., "Sample Author", "ISBN-A",
-                "Sample Publisher"));
-
-        products.add(JdoBook.of("Sample Book-2", "A sample book for testing.", 29., "Sample Author", "ISBN-B",
-                "Sample Publisher"));
-
-        products.add(JdoBook.of("Sample Book-3", "A sample book for testing.", 99., "Sample Author", "ISBN-C",
-                "Sample Publisher"));
+        BookDto.samples()
+        .map(JdoBook::fromDto)
+        .forEach(products::add);
 
         val inventory = JdoInventory.of("Sample Inventory", products);
         repository.persistAndFlush(inventory);
@@ -96,13 +94,23 @@ public class JdoTestFixtures {
     public void assertInventoryHasBooks(
             final Collection<? extends JdoProduct> products,
             final int...expectedBookIndices) {
-        val actualBookIndices = products.stream()
+
+        final int[] zeroBasedIndices = IntStream.of(expectedBookIndices)
+                .map(i->i-1)
+                .toArray();
+
+        val expectedBookNames = BookDto.samples().collect(Can.toCan())
+        .pickByIndex(zeroBasedIndices)
+        .map(BookDto::getName)
+        .sorted(_Strings::compareNullsFirst)
+        .toArray(new String[0]);
+
+        val actualBookNames = products.stream()
                 .map(JdoProduct::getName)
-                .map(name->name.substring(name.length()-1))
-                .mapToInt(index->_Ints.parseInt(index, 10).orElse(-1))
                 .sorted()
                 .toArray();
-        assertArrayEquals(expectedBookIndices, actualBookIndices);
+
+        assertArrayEquals(expectedBookNames, actualBookNames);
     }
 
     public void assertPopulatedWithDefaults(
@@ -112,7 +120,8 @@ public class JdoTestFixtures {
         val books = inventoryJaxbVm.listBooks();
         assertEquals(3, books.size());
         val favoriteBook = inventoryJaxbVm.getFavoriteBook();
-        assertEquals("Sample Book-1", favoriteBook.getName());
+        val expectedBook = BookDto.sample();
+        assertEquals(expectedBook.getName(), favoriteBook.getName());
         assertHasPersistenceId(favoriteBook);
         inventoryJaxbVm.listBooks()
         .forEach(this::assertHasPersistenceId);

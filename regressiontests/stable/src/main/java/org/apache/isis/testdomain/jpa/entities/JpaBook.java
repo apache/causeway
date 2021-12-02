@@ -105,11 +105,6 @@ implements IBook {
     }
     // --
 
-    @Override
-    public String title() {
-        return toString();
-    }
-
     public static JpaBook of(
             final String name,
             final String description,
@@ -124,7 +119,12 @@ implements IBook {
     public static JpaBook fromDto(final BookDto dto) {
         return JpaBook.of(dto.getName(), dto.getDescription(), dto.getPrice(),
                 dto.getAuthor(), dto.getIsbn(), dto.getPublisher());
-     }
+    }
+
+    @Override
+    public String title() {
+        return IBook.super.title();
+    }
 
     @Property
     @Getter @Setter @Column(nullable = true)

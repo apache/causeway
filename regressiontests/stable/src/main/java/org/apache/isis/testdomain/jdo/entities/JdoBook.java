@@ -118,11 +118,6 @@ implements IBook {
     }
     // --
 
-    @Override
-    public String title() {
-        return toString();
-    }
-
     public static JdoBook of(
             final String name,
             final String description,
@@ -137,6 +132,11 @@ implements IBook {
     public static JdoBook fromDto(final BookDto dto) {
        return JdoBook.of(dto.getName(), dto.getDescription(), dto.getPrice(),
                dto.getAuthor(), dto.getIsbn(), dto.getPublisher());
+    }
+
+    @Override
+    public String title() {
+        return IBook.super.title();
     }
 
     @Property

@@ -20,16 +20,15 @@ package org.apache.isis.testdomain.util.dto;
 
 public interface IBook {
 
+    default String title() {
+        return String.format("%s [%s]", getName(), getIsbn());
+    }
+
     String getAuthor();
-
     String getDescription();
-
     String getIsbn();
-
     String getName();
-
     double getPrice();
-
     String getPublisher();
 
 }

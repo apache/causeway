@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
@@ -80,16 +81,20 @@ public class JpaInventoryJaxbVm {
         return repository.allInstances(JpaBook.class);
     }
 
-    @Getter @Setter
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @XmlElement(required = false)
     @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
+    @Getter @Setter
     private JpaBook favoriteBook = null;
 
-    @Getter @Setter
+    @MemberSupport public List<JpaBook> choicesFavoriteBook() {
+        return listBooks();
+    }
+
     @Collection
     @XmlElement(name = "book")
     @XmlJavaTypeAdapter(PersistentEntitiesAdapter.class)
+    @Getter @Setter
     private java.util.Collection<JpaBook> books = new ArrayList<>();
 
 }
