@@ -385,18 +385,21 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             return ManagedObject.unspecified();
         }
         if(pojo instanceof OidDto) {
-            return adapterForOid(Bookmark.forOidDto((OidDto)pojo));
+            return adapterForBookmark(Bookmark.forOidDto((OidDto)pojo));
+        }
+        if(pojo instanceof Bookmark) {
+            return adapterForBookmark((Bookmark) pojo);
         }
         if(pojo instanceof Oid) {
-            return adapterForOid((Oid) pojo);
+            throw _Exceptions.unexpectedCodeReach();
         }
         // value type
         return ManagedObject.lazy(getSpecificationLoader(), pojo);
     }
 
-    private ManagedObject adapterForOid(final Oid oid) {
-        val spec = specificationLoader.specForLogicalTypeName(oid.getLogicalTypeName()).orElse(null);
-        val loadRequest = ObjectLoader.Request.of(spec, oid.getIdentifier());
+    private ManagedObject adapterForBookmark(final Bookmark bookmark) {
+        val spec = specificationLoader.specForLogicalTypeName(bookmark.getLogicalTypeName()).orElse(null);
+        val loadRequest = ObjectLoader.Request.of(spec, bookmark);
         return spec.getMetaModelContext().getObjectManager().loadObject(loadRequest);
     }
 

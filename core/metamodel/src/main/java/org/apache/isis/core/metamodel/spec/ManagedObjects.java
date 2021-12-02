@@ -629,7 +629,7 @@ public final class ManagedObjects {
             .map(bookmark->objectManager.loadObject(
                     ObjectLoader.Request.of(
                                     spec,
-                                    bookmark.getIdentifier())))
+                                    bookmark)))
             .orElse(managedObject);
         }
 

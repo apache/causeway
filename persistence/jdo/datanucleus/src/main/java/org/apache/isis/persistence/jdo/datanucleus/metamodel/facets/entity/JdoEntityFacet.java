@@ -128,11 +128,9 @@ implements EntityFacet {
     @Override
     public ManagedObject fetchByIdentifier(
             final @NonNull ObjectSpecification entitySpec,
-            final @NonNull String identifier) {
+            final @NonNull Bookmark bookmark) {
 
         _Assert.assertTrue(entitySpec.isEntity());
-
-        val bookmark = Bookmark.forLogicalTypeAndIdentifier(entitySpec.getLogicalType(), identifier);
 
         log.debug("fetchEntity; bookmark={}", bookmark);
 

@@ -47,7 +47,9 @@ extends RecreatableObjectFacetAbstract {
         final String xml = getJaxbService().toXml(vmPojo);
         final String encoded = getUrlEncodingService().encodeString(xml);
         //FIXME[ISIS-2903] gets called about 4 times per same object, why?
-        //System.err.printf("%s%n", encoded);
+//        _Debug.onCondition(true, ()->{
+//            System.err.printf("%s%n", encoded);
+//        });
         return encoded;
     }
 

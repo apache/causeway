@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.objectmanager.load;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
@@ -39,7 +40,7 @@ public interface ObjectLoader {
     @Value(staticConstructor = "of")
     public static class Request {
         ObjectSpecification objectSpecification;
-        String objectIdentifier;
+        Bookmark bookmark;
     }
 
     // -- HANDLER

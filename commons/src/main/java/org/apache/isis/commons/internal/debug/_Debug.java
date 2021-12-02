@@ -70,11 +70,14 @@ public class _Debug {
             _NullSafe.streamAutodetect(x)
             .forEach(element->dump(element, indent+1));
         } else {
-            val suffix = _Strings.padStart("", indent, '-');
-            System.err.printf("%s %s%n", suffix, x);
+            if(indent==0) {
+                System.err.printf("%s%n", x);
+            } else {
+                val suffix = _Strings.padEnd("", indent, '-');
+                System.err.printf("%s %s%n", suffix, x);
+            }
         }
     }
-
 
 
 }

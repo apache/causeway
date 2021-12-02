@@ -201,6 +201,11 @@ class ObjectBookmarker_builtinHandlers {
 
         @Override
         public Bookmark handle(final ManagedObject managedObject) {
+
+            if(managedObject.isBookmarkMemoized()) {
+                return managedObject.getBookmark().get();
+            }
+
             val spec = managedObject.getSpecification();
             val recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
             val identifier = recreatableObjectFacet.memento(managedObject.getPojo());

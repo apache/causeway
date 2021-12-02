@@ -135,9 +135,10 @@ extends ModelAbstract<ManagedObject> {
 
     public final ManagedObject getObjectAndAttachWhenEntity() {
         //EntityUtil.assertAttachedWhenEntity()//guard
+        val entityOrViewmodel = super.getObject();
 
         // even though initial loading seems attached, we need to check again
-        return EntityUtil.computeIfDetached(super.getObject(), this::reload);
+        return EntityUtil.computeIfDetached(entityOrViewmodel, this::reload);
     }
 
     @Override
