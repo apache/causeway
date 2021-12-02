@@ -41,6 +41,7 @@ import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.JpaTestDomainPersona;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
 import org.apache.isis.testdomain.jpa.entities.JpaProduct;
+import org.apache.isis.testdomain.util.dto.BookDto;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
@@ -49,14 +50,14 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_usingJpa.class
         },
         properties = {
         }
 )
 @TestPropertySource(IsisPresets.UseLog4j2Test)
-@Transactional 
+@Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Log4j2
 class JpaEntityInjectingTest extends IsisIntegrationTestAbstract {
@@ -67,80 +68,80 @@ class JpaEntityInjectingTest extends IsisIntegrationTestAbstract {
 
     @Test @Order(0) @Rollback(false)
     void init() {
-        
+
         // cleanup
         fixtureScripts.runPersona(JpaTestDomainPersona.PurgeAll);
         kvStore.clear(JpaBook.class);
-        
+
         // given
         fixtureScripts.runPersona(JpaTestDomainPersona.InventoryWith1Book);
         assertInjectCountRange(1, 2);
     }
-    
+
 
     @Test @Order(1)
     void sampleBook_shouldHave_injectionPointsResolved() {
         log.debug("TEST 1 ENTERING");
-        
+
         //assertInjectCountRange(1, 2);
-        
-        val book = getSampleBook();        
+
+        val book = getSampleBook();
         assertTrue(book.hasInjectionPointsResolved());
-        
+
         //assertInjectCountRange(1, 3);
-        
+
         log.debug("TEST 1 EXITING");
     }
-    
+
     @Test @Order(2)
     void sampleBook_shouldHave_injectionPointsResolved_whenFetchedAgain() {
-        
+
         log.debug("TEST 2 ENTERING");
-        
+
         //assertInjectCountRange(1, 2);
-        
+
         val book = getSampleBook();
         assertTrue(book.hasInjectionPointsResolved());
-        
+
         //assertInjectCountRange(1, 3);
-        
+
         log.debug("TEST 2 EXITING");
-        
+
     }
-    
+
     @Test @Order(3)
     void sampleBook_shouldHave_injectionPointsResolved_whenFetchedAgain2() {
-        
+
         log.debug("TEST 3 ENTERING");
-        
+
         //assertInjectCountRange(1, 3);
-        
+
         val book = getSampleBook();
         assertTrue(book.hasInjectionPointsResolved());
-        
+
         //assertInjectCountRange(1, 4);
-        
+
         log.debug("TEST 3 EXITING");
     }
-    
+
     // -- HELPER
-    
+
     private long getInjectCount() {
         return kvStore.getCounter(JpaBook.class, "injection-count");
     }
-    
+
     private JpaBook getSampleBook() {
         val books = repository.allInstances(JpaProduct.class);
         assertEquals(1, books.size(), "book count");
         val book = books.get(0);
-        assertEquals("Sample Book", book.getName(), "book name");
+        assertEquals(BookDto.sample().getName(), book.getName(), "book name");
         return (JpaBook)book;
     }
-    
-    private void assertInjectCountRange(long lower, long upper) {
+
+    private void assertInjectCountRange(final long lower, final long upper) {
         _Assert.assertRangeContains(
-                Range.of(Bound.inclusive(lower), Bound.inclusive(upper)), 
+                Range.of(Bound.inclusive(lower), Bound.inclusive(upper)),
                 getInjectCount(), "injection count");
     }
-    
+
 }

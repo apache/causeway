@@ -41,6 +41,7 @@ import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
+import org.apache.isis.testdomain.util.dto.BookDto;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
@@ -134,7 +135,7 @@ class JdoEntityInjectingTest extends IsisIntegrationTestAbstract {
         val books = repository.allInstances(JdoProduct.class);
         assertEquals(1, books.size(), "book count");
         val book = books.get(0);
-        assertEquals("Sample Book", book.getName(), "book name");
+        assertEquals(BookDto.sample().getName(), book.getName(), "book name");
         return (JdoBook)book;
     }
 

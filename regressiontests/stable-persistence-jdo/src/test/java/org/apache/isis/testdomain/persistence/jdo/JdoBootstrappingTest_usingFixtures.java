@@ -33,6 +33,7 @@ import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.JdoTestFixtures;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
+import org.apache.isis.testdomain.util.dto.BookDto;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
@@ -74,7 +75,7 @@ extends IsisIntegrationTestAbstract {
         assertEquals(1, inventory.getProducts().size());
 
         val product = inventory.getProducts().iterator().next();
-        assertEquals("Sample Book", product.getName());
+        assertEquals(BookDto.sample().getName(), product.getName());
 
         testFixtures.assertHasPersistenceId(product);
 

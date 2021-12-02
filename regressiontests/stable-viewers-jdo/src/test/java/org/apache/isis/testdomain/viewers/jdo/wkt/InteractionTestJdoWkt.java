@@ -83,9 +83,9 @@ class InteractionTestJdoWkt extends RegressionTestAbstract {
         run(()->{
             wktTester.startEntityPage(pageParameters);
             wktTester.assertRenderedPage(EntityPage.class);
+
         });
 
-        //TODO populate VM with entities
         //TODO simulate change of a String property -> should yield a new Title and serialized URL link
         //TODO simulate interaction with choice provider, where entries are entities -> should be attached, eg. test whether we can generate a title for these
     }

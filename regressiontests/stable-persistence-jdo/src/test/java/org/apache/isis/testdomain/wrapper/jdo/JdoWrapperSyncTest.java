@@ -44,7 +44,7 @@ import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstra
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_usingJdo.class,
         }
 )
@@ -69,12 +69,15 @@ class JdoWrapperSyncTest extends IsisIntegrationTestAbstract {
     void testWrapper_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
 
         val inventoryManager = facoryService.viewModel(JdoInventoryManager.class);
-        val product = repository.allInstances(JdoProduct.class).get(0);
+        val sumOfPrices = repository.allInstances(JdoProduct.class)
+                .stream()
+                .mapToDouble(JdoProduct::getPrice)
+                .sum();
 
-        assertEquals(99d, product.getPrice(), 1E-6);
-        
+        assertEquals(39d, sumOfPrices, 1E-6);
+
         val products = wrapper.wrap(inventoryManager).listAllProducts();
-        
+
         assertEquals(1, products.size());
         assertEquals(JdoBook.class, products.get(0).getClass());
     }
