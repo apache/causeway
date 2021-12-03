@@ -304,7 +304,7 @@ public final class _Exceptions {
      * @param maxLines
      */
     public static void dumpStackTrace(final PrintStream writer, final int skipLines, final int maxLines) {
-        _NullSafe.stream(Thread.currentThread().getStackTrace())
+        streamStackTrace()
         .map(StackTraceElement::toString)
         .skip(skipLines)
         .limit(maxLines)
@@ -328,6 +328,10 @@ public final class _Exceptions {
             t = t.getCause();
         }
         return chain;
+    }
+
+    public static Stream<StackTraceElement> streamStackTrace() {
+        return _NullSafe.stream(Thread.currentThread().getStackTrace());
     }
 
     public static Stream<Throwable> streamCausalChain(final @Nullable Throwable ex) {

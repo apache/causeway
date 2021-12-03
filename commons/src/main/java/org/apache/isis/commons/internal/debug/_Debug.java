@@ -18,8 +18,14 @@
  */
 package org.apache.isis.commons.internal.debug;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -59,8 +65,27 @@ public class _Debug {
         dump(x, 0);
     }
 
-    public static void dump(final String format, final Object...args) {
-        System.err.printf(format+"%n", args);
+    public void log(final String format, final Object...args) {
+        log(1, format, args);
+    }
+
+    public void log(final int depth, final String format, final Object...args) {
+        val stackTrace = _Exceptions.streamStackTrace()
+                .skip(3)
+                .filter(_Debug::accept)
+                .limit(depth)
+                .collect(Can.toCan())
+                //.reverse()
+                .stream()
+                .map(_Debug::stringify)
+                .collect(Collectors.joining(" <- "));
+
+        val context = String.format("%s||%s",
+                Thread.currentThread().getName(),
+                stackTrace);
+
+        System.err.println(context);
+        System.err.println("| " + String.format(format, args));
     }
 
     // -- HELPER
@@ -77,6 +102,36 @@ public class _Debug {
                 System.err.printf("%s %s%n", suffix, x);
             }
         }
+    }
+
+    private boolean accept(final StackTraceElement se) {
+        return true;
+    }
+
+    private final static Map<String, String> packageReplacements = Map.of(
+            "org.apache.isis", "",
+            "org.apache.wicket", "{wkt}");
+
+
+    private String stringify(final StackTraceElement se) {
+        val str = se.toString();
+
+        return packageReplacements.entrySet().stream()
+        .filter(entry->str.startsWith(entry.getKey()))
+        .map(entry->{
+            val replacement = entry.getValue();
+            var s = str;
+            s = s.replace(entry.getKey() + ".", replacement.isEmpty() ? "{" : replacement + ".");
+            val ref = _Refs.stringRef(s);
+            val left = ref.cutAtIndexOfAndDrop(".");
+            val right = ref.getValue();
+            s = replacement.isEmpty()
+                    ? left + "}." + right
+                    : left + "." + right;
+            return s;
+        })
+        .findFirst()
+        .orElse(str);
     }
 
 
