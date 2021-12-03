@@ -67,7 +67,7 @@ public class XrayUi extends JFrame {
     private static AtomicBoolean startRequested = new AtomicBoolean();
     private static CountDownLatch latch = null;
 
-    public static void start(int defaultCloseOperation) {
+    public static void start(final int defaultCloseOperation) {
         val alreadyRequested = startRequested.getAndSet(true);
         if(!alreadyRequested) {
             latch = new CountDownLatch(1);
@@ -75,7 +75,7 @@ public class XrayUi extends JFrame {
         }
     }
 
-    public static void updateModel(Consumer<XrayModel> consumer) {
+    public static void updateModel(final Consumer<XrayModel> consumer) {
         if(startRequested.get()) {
             SwingUtilities.invokeLater(()->{
                 consumer.accept(INSTANCE.xrayModel);
@@ -102,7 +102,7 @@ public class XrayUi extends JFrame {
         return startRequested.get();
     }
 
-    protected XrayUi(int defaultCloseOperation) {
+    protected XrayUi(final int defaultCloseOperation) {
 
         //create the root node
         root = new DefaultMutableTreeNode("X-ray");
@@ -116,7 +116,7 @@ public class XrayUi extends JFrame {
 
         val detailPanel = layoutUIAndGetDetailPanel(tree);
 
-        tree.getSelectionModel().addTreeSelectionListener((TreeSelectionEvent e) -> {
+        tree.getSelectionModel().addTreeSelectionListener((final TreeSelectionEvent e) -> {
 
             val selPath = e.getNewLeadSelectionPath();
             if(selPath==null) {
@@ -145,7 +145,7 @@ public class XrayUi extends JFrame {
         val deleteAction = popupMenu.add(new JMenuItem("Delete"));
         deleteAction.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(final ActionEvent e) {
                 removeSelectedNodes();
             }
         });
@@ -154,13 +154,13 @@ public class XrayUi extends JFrame {
 
         tree.addMouseListener(new MouseListener() {
 
-            @Override public void mouseReleased(MouseEvent e) {}
-            @Override public void mousePressed(MouseEvent e) {}
-            @Override public void mouseExited(MouseEvent e) {}
-            @Override public void mouseEntered(MouseEvent e) {}
+            @Override public void mouseReleased(final MouseEvent e) {}
+            @Override public void mousePressed(final MouseEvent e) {}
+            @Override public void mouseExited(final MouseEvent e) {}
+            @Override public void mouseEntered(final MouseEvent e) {}
 
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mouseClicked(final MouseEvent e) {
                 if (SwingUtilities.isRightMouseButton(e)) {
                     popupMenu.show(e.getComponent(), e.getX(), e.getY());
                 }
@@ -169,11 +169,11 @@ public class XrayUi extends JFrame {
 
         tree.addKeyListener(new KeyListener() {
 
-            @Override public void keyReleased(KeyEvent e) {}
-            @Override public void keyTyped(KeyEvent e) {}
+            @Override public void keyReleased(final KeyEvent e) {}
+            @Override public void keyTyped(final KeyEvent e) {}
 
             @Override
-            public void keyPressed(KeyEvent e) {
+            public void keyPressed(final KeyEvent e) {
                 if(e.getKeyCode() == KeyEvent.VK_DELETE) {
                     removeSelectedNodes();
                 }
@@ -193,7 +193,7 @@ public class XrayUi extends JFrame {
 
         addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosing(WindowEvent e) {
+            public void windowClosing(final WindowEvent e) {
                 latch.countDown();
             }
         });
@@ -210,7 +210,7 @@ public class XrayUi extends JFrame {
         });
     }
 
-    private JScrollPane layoutUIAndGetDetailPanel(JTree masterTree) {
+    private JScrollPane layoutUIAndGetDetailPanel(final JTree masterTree) {
 
         JScrollPane masterScrollPane = new JScrollPane(masterTree);
         JScrollPane detailScrollPane = new JScrollPane();
@@ -247,13 +247,13 @@ public class XrayUi extends JFrame {
 
         @Override
         public Component getTreeCellRendererComponent(
-                JTree tree,
-                Object value,
-                boolean selected,
-                boolean expanded,
-                boolean leaf,
-                int row,
-                boolean hasFocus) {
+                final JTree tree,
+                final Object value,
+                final boolean selected,
+                final boolean expanded,
+                final boolean leaf,
+                final int row,
+                final boolean hasFocus) {
 
             val label = (DefaultTreeCellRenderer)
                     delegate.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);

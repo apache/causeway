@@ -18,17 +18,22 @@
  */
 package org.apache.isis.commons.internal.debug.xray;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
 
 import javax.swing.BorderFactory;
+import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.apache.isis.commons.functional.IndexedConsumer;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.debug.xray.XrayModel.HasIdAndLabel;
 import org.apache.isis.commons.internal.debug.xray.sequence.SequenceDiagram;
@@ -83,6 +88,60 @@ public abstract class XrayDataModel extends HasIdAndLabel {
             panel.setViewportView(table);
         }
     }
+
+    @Getter
+    @EqualsAndHashCode(callSuper = false)
+    @RequiredArgsConstructor
+    public static class LogEntry extends XrayDataModel {
+
+        @EqualsAndHashCode.Exclude
+        private final List<StackTraceElement> data = new ArrayList<>();
+
+        private final String id;
+        private final String label;
+        private final String logMessage;
+
+        @EqualsAndHashCode.Exclude
+        private final String iconResource = "/xray/log.png";
+
+        @Override
+        public void render(final JScrollPane panel) {
+
+            val layout = new BorderLayout();
+            val panel2 = new JPanel(layout);
+            layout.setHgap(10);
+            layout.setVgap(10);
+
+            // log message label
+
+            val editorPane = new JEditorPane();
+            editorPane.setEditable(false);
+            editorPane.setText(logMessage);
+            panel2.add(editorPane, BorderLayout.NORTH);
+
+            // table rendering
+
+            String[] columnNames = {"", "StackTraceElement"};
+            Object[][] tableData = new Object[data.size()][columnNames.length];
+
+            val rowIndex = _Refs.intRef(0);
+
+            data.forEach(IndexedConsumer.offset(1, (index, se)->{
+                val row = tableData[rowIndex.getValue()];
+                rowIndex.incAndGet();
+                row[0] = index;
+                row[1] = se.toString();
+            }));
+
+            val table = _SwingUtil.newTable(tableData, columnNames);
+            table.setFillsViewportHeight(true);
+
+            panel2.add(table, BorderLayout.CENTER);
+
+            panel.setViewportView(panel2);
+        }
+    }
+
 
     @Getter
     @EqualsAndHashCode(callSuper = false)

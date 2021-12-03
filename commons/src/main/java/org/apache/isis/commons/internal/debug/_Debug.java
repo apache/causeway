@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
@@ -73,19 +74,22 @@ public class _Debug {
         val stackTrace = _Exceptions.streamStackTrace()
                 .skip(3)
                 .filter(_Debug::accept)
-                .limit(depth)
-                .collect(Can.toCan())
-                //.reverse()
-                .stream()
-                .map(_Debug::stringify)
-                .collect(Collectors.joining(" <- "));
+                .collect(Can.toCan());
+                //.reverse();
 
-        val context = String.format("%s||%s",
+        val logMessage = String.format(format, args);
+
+        _Xray.recordDebugLogEvent(logMessage, stackTrace);
+
+        val context = String.format("%s|| %s",
                 Thread.currentThread().getName(),
-                stackTrace);
+                stackTrace.stream()
+                .limit(depth)
+                .map(_Debug::stringify)
+                .collect(Collectors.joining(" <- ")));
 
         System.err.println(context);
-        System.err.println("| " + String.format(format, args));
+        System.err.println("| " + logMessage);
     }
 
     // -- HELPER
@@ -105,13 +109,19 @@ public class _Debug {
     }
 
     private boolean accept(final StackTraceElement se) {
-        return true;
+        return se.getLineNumber()>1
+                && !se.getClassName().equals(_Debug.class.getName())
+                && !se.getClassName().startsWith(ChainOfResponsibility.class.getName())
+                ;
     }
 
     private final static Map<String, String> packageReplacements = Map.of(
-            "org.apache.isis", "",
-            "org.apache.wicket", "{wkt}");
-
+            //"org.apache.isis", "", // unfortunately no IDE support for this (click on StackTraceElement links)
+            "org.apache.wicket", "{wkt}",
+            "org.springframework", "{spring}",
+            "org.apache.tomcat", "{tomcat}",
+            "org.apache.catalina", "{catalina}"
+            );
 
     private String stringify(final StackTraceElement se) {
         val str = se.toString();
