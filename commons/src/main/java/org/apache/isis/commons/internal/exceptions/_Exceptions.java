@@ -21,6 +21,7 @@ package org.apache.isis.commons.internal.exceptions;
 import java.io.PrintStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -31,6 +32,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 
@@ -385,6 +387,35 @@ public final class _Exceptions {
         return false;
     }
 
+    // -- STACKTRACE FORMATTING UTILITY
+
+    private final static Map<String, String> packageReplacements = Map.of(
+            //"org.apache.isis", "", // unfortunately no IDE support for this (click on StackTraceElement links)
+            "org.apache.wicket", "{wkt}",
+            "org.springframework", "{spring}",
+            "org.apache.tomcat", "{tomcat}",
+            "org.apache.catalina", "{catalina}"
+            );
+
+    public static String abbreviate(final String className) {
+        val str = className;
+        return packageReplacements.entrySet().stream()
+                .filter(entry->str.startsWith(entry.getKey()))
+                .map(entry->{
+                    val replacement = entry.getValue();
+                    var s = str;
+                    s = s.replace(entry.getKey() + ".", replacement.isEmpty() ? "{" : replacement + ".");
+                    val ref = _Refs.stringRef(s);
+                    val left = ref.cutAtIndexOfAndDrop(".");
+                    val right = ref.getValue();
+                    s = replacement.isEmpty()
+                            ? left + "}." + right
+                            : left + "." + right;
+                    return s;
+                })
+                .findFirst()
+                .orElse(str);
+    }
 
     // -- FLUENT EXCEPTION
 
@@ -444,6 +475,8 @@ public final class _Exceptions {
         }
 
     }
+
+
 
 
 }

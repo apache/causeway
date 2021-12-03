@@ -18,14 +18,13 @@
  */
 package org.apache.isis.commons.internal.debug;
 
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.val;
@@ -35,7 +34,7 @@ import lombok.experimental.UtilityClass;
  * <h1>- internal use only -</h1>
  * <p>
  * Utility for adding temporary debug code,
- * that needs to be removed later.
+ * that needs to be removed later. Also integrates with {@link XrayUi}, if enabled.
  * </p>
  * <p>
  * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
@@ -123,37 +122,12 @@ public class _Debug {
         return se.getLineNumber()>1
                 && !se.getClassName().equals(_Debug.class.getName())
                 && !se.getClassName().startsWith(ChainOfResponsibility.class.getName())
+                && !se.getClassName().startsWith("java.util.stream") // suppress Stream processing details
                 ;
     }
 
-    private final static Map<String, String> packageReplacements = Map.of(
-            //"org.apache.isis", "", // unfortunately no IDE support for this (click on StackTraceElement links)
-            "org.apache.wicket", "{wkt}",
-            "org.springframework", "{spring}",
-            "org.apache.tomcat", "{tomcat}",
-            "org.apache.catalina", "{catalina}"
-            );
-
     private String stringify(final StackTraceElement se) {
-        val str = se.toString();
-
-        return packageReplacements.entrySet().stream()
-        .filter(entry->str.startsWith(entry.getKey()))
-        .map(entry->{
-            val replacement = entry.getValue();
-            var s = str;
-            s = s.replace(entry.getKey() + ".", replacement.isEmpty() ? "{" : replacement + ".");
-            val ref = _Refs.stringRef(s);
-            val left = ref.cutAtIndexOfAndDrop(".");
-            val right = ref.getValue();
-            s = replacement.isEmpty()
-                    ? left + "}." + right
-                    : left + "." + right;
-            return s;
-        })
-        .findFirst()
-        .orElse(str);
+        return _Exceptions.abbreviate(se.toString());
     }
-
 
 }

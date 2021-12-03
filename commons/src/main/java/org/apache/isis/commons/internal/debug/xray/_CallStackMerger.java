@@ -33,6 +33,7 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.debug.xray.XrayDataModel.LogEntry;
 import org.apache.isis.commons.internal.debug.xray.graphics.CallStackDiagram;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -106,9 +107,9 @@ final class _CallStackMerger {
             for (Iterator<IntTreeNode> it = children.iterator(); it.hasNext();) {
                 IntTreeNode next = it.next();
                 if (it.hasNext()) {
-                    next.print(valueMapper, buffer, childrenPrefix + "├── ", childrenPrefix + "│   ");
+                    next.print(valueMapper, buffer, childrenPrefix + "├─ ", childrenPrefix + "│  ");
                 } else {
-                    next.print(valueMapper, buffer, childrenPrefix + "└── ", childrenPrefix + "    ");
+                    next.print(valueMapper, buffer, childrenPrefix + "└─ ", childrenPrefix + "   ");
                 }
             }
         }
@@ -148,7 +149,8 @@ final class _CallStackMerger {
 
         val root = merge(executionLanes);
         callStackDiagram = new CallStackDiagram(root.print(id->{
-            return executionNodeMap.getOrDefault(id, "root");
+            return _Exceptions.abbreviate(
+                    executionNodeMap.getOrDefault(id, "root"));
         }).toString());
     }
 
