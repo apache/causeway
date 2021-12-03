@@ -94,18 +94,29 @@ public class _Debug {
 
     // -- HELPER
 
-    private void dump(final Object x, final int indent) {
+    private void dump(Object x, final int indent) {
         if(x instanceof Iterable) {
             _NullSafe.streamAutodetect(x)
             .forEach(element->dump(element, indent+1));
-        } else {
-            if(indent==0) {
-                System.err.printf("%s%n", x);
-            } else {
-                val suffix = _Strings.padEnd("", indent, '-');
-                System.err.printf("%s %s%n", suffix, x);
-            }
+            return;
         }
+        if(x!=null
+                && x.getClass().isArray()) {
+
+            val array = _NullSafe.streamAutodetect(x)
+            .map(e->""+e)
+            .collect(Collectors.joining(", "));
+
+            x = String.format("[%s]", array);
+        }
+
+        if(indent==0) {
+            System.err.printf("%s%n", x);
+        } else {
+            val suffix = _Strings.padEnd("", indent, '-');
+            System.err.printf("%s %s%n", suffix, x);
+        }
+
     }
 
     private boolean accept(final StackTraceElement se) {

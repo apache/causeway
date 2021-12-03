@@ -18,8 +18,10 @@
  */
 package org.apache.isis.commons.internal.debug.xray;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -32,7 +34,9 @@ import java.net.URL;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -41,13 +45,14 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
 import javax.swing.JTree;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeCellRenderer;
 
 import org.apache.isis.commons.collections.Can;
@@ -142,6 +147,15 @@ public class XrayUi extends JFrame {
         });
 
         val popupMenu = new JPopupMenu();
+
+        val callStackMergeAction = popupMenu.add(new JMenuItem("Merge Logged Call-Stack"));
+        callStackMergeAction.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                mergeCallStacksOnSelectedNodes();
+            }
+        });
+
         val deleteAction = popupMenu.add(new JMenuItem("Delete"));
         deleteAction.addActionListener(new ActionListener() {
             @Override
@@ -199,15 +213,69 @@ public class XrayUi extends JFrame {
         });
     }
 
+    private Stream<DefaultMutableTreeNode> streamSelectedNodes() {
+        return Can.ofArray(tree.getSelectionModel().getSelectionPaths())
+                .stream()
+                .map(path->(DefaultMutableTreeNode)path.getLastPathComponent());
+    }
+
     private void removeSelectedNodes() {
-        Can.ofArray(tree.getSelectionModel().getSelectionPaths())
-        .forEach(path->{
-            val nodeToBeRemoved = (MutableTreeNode)path.getLastPathComponent();
+        streamSelectedNodes()
+        .forEach(nodeToBeRemoved->{
             if(nodeToBeRemoved.getParent()!=null) {
                 ((DefaultTreeModel)tree.getModel()).removeNodeFromParent(nodeToBeRemoved);
                 xrayModel.remove(nodeToBeRemoved);
             }
         });
+    }
+
+    private void mergeCallStacksOnSelectedNodes() {
+        val logEntries = streamSelectedNodes()
+        .filter(node->node.getUserObject() instanceof XrayDataModel.LogEntry)
+        .map(node->(XrayDataModel.LogEntry)node.getUserObject())
+        .collect(Can.toCan());
+
+        if(!logEntries.getCardinality().isMultiple()) {
+            System.err.println("must select at least 2 logs for merging");
+            return;
+        }
+
+        val callStackMerger = new _CallStackMerger(logEntries);
+
+        JFrame frame = new JFrame("Merged Log View");
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setOpaque(true);
+//        val canvas = _SwingUtil.canvas(g->{
+//            g.setColor(Color.GRAY);
+//            g.fill(g.getClip());
+//            callStackMerger.render(g);
+//        });
+//        JScrollPane scroller = new JScrollPane(canvas);
+
+        //Create a text area.
+        JTextArea textArea = new JTextArea(
+                "This is an editable JTextArea. " +
+                "A text area is a \"plain\" text component, " +
+                "which means that although it can display text " +
+                "in any font, all of the text is in the same font."
+        );
+        textArea.setFont(new Font("Serif", Font.PLAIN, 16));
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        JScrollPane scroller = new JScrollPane(textArea);
+        callStackMerger.render(textArea);
+
+        scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        panel.add(scroller);
+        frame.getContentPane().add(BorderLayout.CENTER, panel);
+        frame.setPreferredSize(new Dimension(800, 600));
+        frame.pack();
+        frame.setLocationByPlatform(true);
+        frame.setVisible(true);
+        frame.setResizable(true);
+        frame.setVisible(true);
     }
 
     private JScrollPane layoutUIAndGetDetailPanel(final JTree masterTree) {

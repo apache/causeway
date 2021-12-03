@@ -25,8 +25,8 @@ import java.util.function.Consumer;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.debug.xray.XrayModel.ThreadMemento;
+import org.apache.isis.commons.internal.debug.xray.graphics.SequenceDiagram;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
-import org.apache.isis.commons.internal.debug.xray.sequence.SequenceDiagram;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Builder;

@@ -20,7 +20,6 @@ package org.apache.isis.commons.internal.debug.xray;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +35,7 @@ import javax.swing.JScrollPane;
 import org.apache.isis.commons.functional.IndexedConsumer;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.debug.xray.XrayModel.HasIdAndLabel;
-import org.apache.isis.commons.internal.debug.xray.sequence.SequenceDiagram;
+import org.apache.isis.commons.internal.debug.xray.graphics.SequenceDiagram;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -140,6 +139,7 @@ public abstract class XrayDataModel extends HasIdAndLabel {
 
             panel.setViewportView(panel2);
         }
+
     }
 
 
@@ -168,22 +168,13 @@ public abstract class XrayDataModel extends HasIdAndLabel {
         @Override
         public void render(final JScrollPane panel) {
 
+            val canvas = _SwingUtil.canvas(g->{
+                g.setColor(BACKGROUND_COLOR);
+                g.fill(g.getClip());
+                data.render(g);
+            });
+
             val dim = data.layout((Graphics2D)panel.getGraphics());
-
-            val canvas = new JPanel() {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public void paintComponent(final Graphics _g) {
-
-                    val g = (Graphics2D)_g;
-
-                    g.setColor(BACKGROUND_COLOR);
-                    g.fillRect(0, 0, getWidth(), getHeight());
-
-                    data.render(g);
-                  }
-            };
 
             if(BORDER_COLOR!=null) {
                 canvas.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
@@ -193,8 +184,6 @@ public abstract class XrayDataModel extends HasIdAndLabel {
             panel.setViewportView(canvas);
 
         }
-
-
     }
 
 }

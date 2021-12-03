@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.internal.debug.xray.sequence;
+package org.apache.isis.commons.internal.debug.xray.graphics;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

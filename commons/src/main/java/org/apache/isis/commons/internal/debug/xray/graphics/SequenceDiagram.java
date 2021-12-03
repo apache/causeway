@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.internal.debug.xray.sequence;
+package org.apache.isis.commons.internal.debug.xray.graphics;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -32,7 +32,7 @@ import java.util.TreeMap;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Refs.IntReference;
-import org.apache.isis.commons.internal.debug.xray.sequence._Graphics.TextBlock;
+import org.apache.isis.commons.internal.debug.xray.graphics._Graphics.TextBlock;
 import org.apache.isis.commons.internal.primitives._Ints;
 
 import lombok.Getter;
@@ -50,38 +50,38 @@ public class SequenceDiagram {
 
     private Dimension size;
 
-    public SequenceDiagram alias(String id, String label) {
+    public SequenceDiagram alias(final String id, final String label) {
         aliases.put(id, label);
         return this;
     }
 
-    public void enter(final @NonNull String from, final @NonNull String to, String label) {
+    public void enter(final @NonNull String from, final @NonNull String to, final String label) {
         val p0 = participant(from);
         val p1 = participant(to);
         connections.add(newConnection(p0, p1, label, false));
     }
 
-    public void exit(final @NonNull String from, final @NonNull String to, String label) {
+    public void exit(final @NonNull String from, final @NonNull String to, final String label) {
         val p1 = participant(to);
         val p0 = participant(from);
         connections.add(newConnection(p0, p1, label, true));
     }
 
-    public void enter(String from, String to) {
+    public void enter(final String from, final String to) {
         enter(from, to, null);
     }
 
-    public void exit(String from, String to) {
+    public void exit(final String from, final String to) {
         exit(from, to, null);
     }
 
-    public void activate(String participantId) {
+    public void activate(final String participantId) {
         val participant = participant(participantId);
         val latestConnection = latestConnection();
         lifelines.add(new Lifeline(participant, latestConnection));
     }
 
-    public void deactivate(String participantId) {
+    public void deactivate(final String participantId) {
         val participant = participant(participantId);
         val latestConnection = latestConnection();
         Can.ofCollection(lifelines).reverse().stream()
@@ -95,11 +95,11 @@ public class SequenceDiagram {
     private Color connectionArrowColor;
     private Color connectionLabelColor;
 
-    public void setConnectionArrowColor(Color connectionArrowColor) {
+    public void setConnectionArrowColor(final Color connectionArrowColor) {
         this.connectionArrowColor = connectionArrowColor;
     }
 
-    public void setConnectionLabelColor(Color connectionLabelColor) {
+    public void setConnectionLabelColor(final Color connectionLabelColor) {
         this.connectionLabelColor = connectionLabelColor;
     }
 
@@ -120,7 +120,7 @@ public class SequenceDiagram {
                 getConnectionLabelColor());
     }
 
-    private Participant participant(String participantId) {
+    private Participant participant(final String participantId) {
         return participantsById
                 .computeIfAbsent(participantId, id->new Participant(aliases.getOrDefault(id, id)));
     }
@@ -186,7 +186,7 @@ public class SequenceDiagram {
         int y_bottom;
         int height;
 
-        void layout(Graphics2D g, IntReference y_offset, List<Lifeline> lifelines) {
+        void layout(final Graphics2D g, final IntReference y_offset, final List<Lifeline> lifelines) {
 
             x_from = from.getX_middle();
             x_to = to.getX_middle();
@@ -244,7 +244,7 @@ public class SequenceDiagram {
 
         TextBlock textBlock;
 
-        void layout(Graphics2D g, IntReference x_offset) {
+        void layout(final Graphics2D g, final IntReference x_offset) {
 
             x_left = x_offset.getValue();
             y_top = PARTICIPANT_MARGIN_V;
@@ -282,7 +282,7 @@ public class SequenceDiagram {
         int y_bottom;
         int height;
 
-        void layout(Graphics2D g, int min_y, int max_y) {
+        void layout(final Graphics2D g, final int min_y, final int max_y) {
 
             width = LIFELINE_WIDTH;
             x_left = participant.getX_middle() - LIFELINE_WIDTH / 2;
@@ -298,7 +298,7 @@ public class SequenceDiagram {
             height = y_bottom - y_top;
         }
 
-        public boolean overlaps(Connection connection) {
+        public boolean overlaps(final Connection connection) {
             val lowerBound = _Ints.Bound.inclusive(startAt != null
                     ? startAt.index
                     : -1);
@@ -310,7 +310,7 @@ public class SequenceDiagram {
     }
 
 
-    public Dimension layout(Graphics2D g) {
+    public Dimension layout(final Graphics2D g) {
 
         PARTICIPANT_FONT.ifPresent(g::setFont);
 
@@ -343,7 +343,7 @@ public class SequenceDiagram {
         return this.size;
     }
 
-    public void render(Graphics2D g) {
+    public void render(final Graphics2D g) {
 
         _Graphics.enableTextAntialiasing(g);
 
@@ -415,8 +415,5 @@ public class SequenceDiagram {
         });
 
     }
-
-
-
 
 }

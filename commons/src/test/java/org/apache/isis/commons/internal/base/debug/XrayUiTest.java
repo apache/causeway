@@ -18,8 +18,13 @@
  */
 package org.apache.isis.commons.internal.base.debug;
 
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 import javax.swing.JFrame;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
 import org.apache.isis.commons.internal.debug.xray.XrayModel;
@@ -29,12 +34,32 @@ import lombok.val;
 
 class XrayUiTest {
 
-    public static void main(final String[] args) {
+    public static void main(final String[] args) throws InterruptedException {
         XrayUi.start(JFrame.EXIT_ON_CLOSE);
 
-        _Debug.log("%s", "Hallo World!");
+        val ex = Executors.newSingleThreadExecutor();
+        ex.execute(new SampleLogs());
+        ex.shutdown();
+        ex.awaitTermination(1L, TimeUnit.SECONDS);
 
         XrayUi.updateModel(XrayUiTest::populate);
+    }
+
+    private static class SampleLogs implements Runnable {
+
+        @Override
+        public void run() {
+            Can.of("Hallo World! from Can")
+            .forEach(this::log);
+
+            List.of("Hallo World! from List")
+            .forEach(this::log);
+        }
+
+        private void log(final String x) {
+            _Debug.log(x);
+        }
+
     }
 
     private static void populate(final XrayModel model) {
