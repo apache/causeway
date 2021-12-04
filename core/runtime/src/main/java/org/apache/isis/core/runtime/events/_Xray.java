@@ -20,6 +20,7 @@ package org.apache.isis.core.runtime.events;
 
 import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
+import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
 import org.apache.isis.commons.internal.debug.xray.XrayModel.Stickiness;
 import org.apache.isis.commons.internal.debug.xray.XrayModel.ThreadMemento;
@@ -59,6 +60,8 @@ final class _Xray {
             return;
         }
 
+        _Debug.log(10, txInfo);
+
         val threadId = ThreadMemento.fromCurrentThread();
 
         val sequenceId = XrayUtil.currentSequenceId(iaTracker)
@@ -82,7 +85,7 @@ final class _Xray {
             seq.ifPresent(sequence->{
                 val sequenceData = sequence.getData();
                 sequenceData.alias("evb", "EventBus");
-                sequenceData.enter("tx", "evb", "tx: before completion");
+                sequenceData.enter("tx", "evb", txInfo);
             });
 
         });
@@ -95,6 +98,8 @@ final class _Xray {
         if(!XrayUi.isXrayEnabled()) {
             return;
         }
+
+        _Debug.log(10, txInfo);
 
         val threadId = ThreadMemento.fromCurrentThread();
 

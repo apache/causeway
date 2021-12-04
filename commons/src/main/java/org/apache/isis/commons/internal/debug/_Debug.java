@@ -121,6 +121,7 @@ public class _Debug {
     private boolean accept(final StackTraceElement se) {
         return se.getLineNumber()>1
                 && !se.getClassName().equals(_Debug.class.getName())
+                && !se.getClassName().contains("_Xray") // suppress _Xray local helpers
                 && !se.getClassName().startsWith(ChainOfResponsibility.class.getName())
                 && !se.getClassName().startsWith("java.util.stream") // suppress Stream processing details
                 ;
