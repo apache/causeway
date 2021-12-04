@@ -106,10 +106,13 @@ implements FormExecutor {
             }
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log(10, "execute %s ...", actionOrPropertyModel
-                        .fold(
-                                act->act.getFriendlyName(),
-                                prop->prop.getFriendlyName()));
+
+                final String whatIsExecuted = actionOrPropertyModel
+                .fold(
+                        act->act.getFriendlyName(),
+                        prop->prop.getFriendlyName());
+
+                _Debug.log(10, "execute %s ...", whatIsExecuted);
             });
 
             //
