@@ -78,6 +78,19 @@ public class Configuration_usingWicket {
 
     public static class EntityPageTester extends WicketTester {
 
+        // -- HOMEPAGE (TEST APP)
+
+        public static final String OPEN_SAMPLE_ACTION = "theme:entityPageContainer:entity:rows:1"
+                + ":rowContents:1"
+                + ":col:entityHeaderPanel:entityActions:additionalLinkList:additionalLinkItem:1"
+                + ":additionalLink";
+
+        public static final String OPEN_SAMPLE_ACTION_TITLE = OPEN_SAMPLE_ACTION
+                + ":additionalLinkTitle";
+
+
+        // -- INVENTORY JAXB VM
+
         public static final String FAVORITE_BOOK_SCALAR = "theme:entityPageContainer:entity:rows:2"
                 + ":rowContents:1"
                 + ":col:fieldSets:1"
@@ -92,6 +105,8 @@ public class Configuration_usingWicket {
 
         public static final String FAVORITE_BOOK_ENTITY_LINK_TITLE = FAVORITE_BOOK_ENTITY_LINK
                 + ":entityTitle";
+
+        // --
 
         @Inject private ObjectManager objectManager;
 

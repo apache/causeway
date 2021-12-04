@@ -36,10 +36,13 @@ import org.apache.isis.testdomain.conf.Configuration_usingWicket.WicketTesterFac
 import org.apache.isis.testdomain.jpa.JpaTestFixtures;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
 import org.apache.isis.testdomain.util.dto.BookDto;
+import org.apache.isis.testdomain.viewers.jdo.wkt.TestAppJpaWkt;
 
 import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.FAVORITE_BOOK_ENTITY_LINK;
 import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.FAVORITE_BOOK_ENTITY_LINK_TITLE;
 import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.FAVORITE_BOOK_SCALAR_NAME;
+import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION;
+import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION_TITLE;
 
 import lombok.val;
 
@@ -77,14 +80,14 @@ class InteractionTestJpaWkt extends RegressionTestAbstract {
     }
 
     @Test
-    void viewmodel_with_referenced_entities() {
+    void load_viewmodel_with_referenced_entities_directly() {
 
         val pageParameters = call(()->{
             val inventoryJaxbVm = testFixtures.setUpViewmodelWith3Books();
             return wktTester.createPageParameters(inventoryJaxbVm);
         });
 
-        System.err.printf("pageParameters %s%n", pageParameters);
+        //System.err.printf("pageParameters %s%n", pageParameters);
 
         run(()->{
             wktTester.startEntityPage(pageParameters);
@@ -94,15 +97,51 @@ class InteractionTestJpaWkt extends RegressionTestAbstract {
 
             //wktTester.dumpComponentTree(comp->true);
 
-            wktTester.assertLabel(FAVORITE_BOOK_SCALAR_NAME, "Favorite Book");
-            wktTester.assertComponent(FAVORITE_BOOK_ENTITY_LINK, BookmarkablePageLink.class);
-
-            val expectedLinkTitle = JpaBook.fromDto(BookDto.sample()).title();
-            wktTester.assertLabel(FAVORITE_BOOK_ENTITY_LINK_TITLE, expectedLinkTitle);
+            assertFavoriteBookIsPopulated();
 
         });
 
-        //TODO simulate change of a String property -> should yield a new Title and serialized URL link
-        //TODO simulate interaction with choice provider, where entries are entities -> should be attached, eg. test whether we can generate a title for these
     }
+
+    @Test
+    void load_viewmodel_with_referenced_entities_via_action() {
+        val pageParameters = call(()->{
+            val testHomePage = new TestAppJpaWkt.TestHomePage();
+            return wktTester.createPageParameters(testHomePage);
+        });
+
+        //System.err.printf("pageParameters %s%n", pageParameters);
+
+        run(()->{
+            wktTester.startEntityPage(pageParameters);
+
+            wktTester.assertHeaderBrandText("Smoke Tests");
+            wktTester.assertPageTitle("Hello, __system");
+
+            wktTester.assertLabel(OPEN_SAMPLE_ACTION_TITLE, "Open Sample Page");
+
+            // click action "Open Sample Page" and render resulting Viewmodel
+            wktTester.clickLink(OPEN_SAMPLE_ACTION);
+            wktTester.assertHeaderBrandText("Smoke Tests");
+            wktTester.assertPageTitle("JpaInventoryJaxbVm; 3 products");
+
+            assertFavoriteBookIsPopulated();
+
+        });
+
+    }
+
+    //TODO simulate change of a String property -> should yield a new Title and serialized URL link
+    //TODO simulate interaction with choice provider, where entries are entities -> should be attached, eg. test whether we can generate a title for these
+
+    // -- HELPER
+
+    private void assertFavoriteBookIsPopulated() {
+        wktTester.assertLabel(FAVORITE_BOOK_SCALAR_NAME, "Favorite Book");
+        wktTester.assertComponent(FAVORITE_BOOK_ENTITY_LINK, BookmarkablePageLink.class);
+
+        val expectedLinkTitle = JpaBook.fromDto(BookDto.sample()).title();
+        wktTester.assertLabel(FAVORITE_BOOK_ENTITY_LINK_TITLE, expectedLinkTitle);
+    }
+
 }
