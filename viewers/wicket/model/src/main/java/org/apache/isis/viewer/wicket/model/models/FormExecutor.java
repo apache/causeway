@@ -32,14 +32,29 @@ import org.apache.wicket.markup.html.form.Form;
 public interface FormExecutor extends Serializable {
 
     enum FormExecutionOutcome {
+
+        /**
+         * if invalid arguments or exception
+         */
         FAILURE_SO_STAY_ON_PAGE,
+
+        /**
+         * redirect to result page or re-render all UI components
+         */
         SUCCESS_SO_REDIRECT_TO_RESULT_PAGE,
+
+        /**
+         * do not trigger a full page re-render, when executing eg. a nested dialog
+         */
         SUCCESS_IN_NESTED_CONTEXT_SO_STAY_ON_PAGE;
 
         public boolean isFailure() { return this == FAILURE_SO_STAY_ON_PAGE; }
-        public boolean isSuccess() { return this != FAILURE_SO_STAY_ON_PAGE; }
+        public boolean isSuccess() { return !isFailure(); }
         public boolean isSuccessWithRedirect() { return this == SUCCESS_SO_REDIRECT_TO_RESULT_PAGE; }
         public boolean isSuccessWithinNestedContext() { return this == SUCCESS_IN_NESTED_CONTEXT_SO_STAY_ON_PAGE; }
+
+        public boolean isRedirect() { return this == SUCCESS_SO_REDIRECT_TO_RESULT_PAGE; }
+
     }
 
     FormExecutionOutcome executeAndProcessResults(

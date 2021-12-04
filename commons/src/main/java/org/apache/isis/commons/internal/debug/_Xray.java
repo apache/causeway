@@ -21,6 +21,7 @@ package org.apache.isis.commons.internal.debug;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
+import org.apache.isis.commons.internal.debug.xray.XrayModel.ThreadMemento;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 
 import lombok.val;
@@ -37,9 +38,12 @@ final class _Xray {
             return;
         }
 
+        val threadId = ThreadMemento.fromCurrentThread();
+
         XrayUi.updateModel(model->{
-            val root = model.getRootNode();
-            val logModel = model.addDataNode(root,
+            val parentNode = model.getThreadNode(threadId);
+
+            val logModel = model.addDataNode(parentNode,
                     new XrayDataModel.LogEntry(
                             "debug-log",
                             _Strings.ellipsifyAtEnd(logMessage, 80, "..."),

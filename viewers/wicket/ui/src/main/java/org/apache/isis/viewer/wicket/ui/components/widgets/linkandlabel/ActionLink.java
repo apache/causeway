@@ -28,8 +28,10 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.request.cycle.RequestCycle;
 
+import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -219,9 +221,6 @@ extends IndicatingAjaxLink<ManagedObject> {
         val actionModel = this.getActionModel();
         val page = this.getPage();
 
-        // returns true - if redirecting to new page, or repainting all components.
-        // returns false - if invalid args; if concurrency exception;
-
         val outcome = FormExecutorDefault
                 .forAction(actionModel)
                 .executeAndProcessResults(page, null, null, actionModel);
@@ -240,6 +239,10 @@ extends IndicatingAjaxLink<ManagedObject> {
                 }
             });
 
+            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+                _Debug.log(10, "nothing to do, outcome: %s", outcome);
+            });
+
             // else nothing to do
 
             //
@@ -248,6 +251,10 @@ extends IndicatingAjaxLink<ManagedObject> {
             //
 
         } else {
+
+            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+                _Debug.log(10, "render the target entity again, outcome: %s", outcome);
+            });
 
             // render the target entity again
             //

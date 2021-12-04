@@ -22,13 +22,15 @@ import java.util.Optional;
 import java.util.Stack;
 import java.util.UUID;
 
-import org.springframework.lang.Nullable;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.Value;
+import lombok.val;
 
 public interface XrayModel {
 
@@ -42,7 +44,7 @@ public interface XrayModel {
     }
 
     MutableTreeNode addContainerNode(MutableTreeNode parent, String name, String id);
-    default MutableTreeNode addContainerNode(MutableTreeNode parent, String name) {
+    default MutableTreeNode addContainerNode(final MutableTreeNode parent, final String name) {
         return addContainerNode(parent, name, UUID.randomUUID().toString());
     }
 
@@ -86,6 +88,15 @@ public interface XrayModel {
         private final String id;
         private final String label;
         private final String multilinelabel;
+
+        public static ThreadMemento fromCurrentThread() {
+            val ct = Thread.currentThread();
+            return ThreadMemento.of(
+                    String.format("thread-%d-%s", ct.getId(), ct.getName()),
+                    String.format("Thread-%d [%s]", ct.getId(), ct.getName()),
+                    String.format("Thread-%d\n%s", ct.getId(), ct.getName()));
+        }
+
     }
 
 }

@@ -32,6 +32,8 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.internal.debug._Debug;
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -103,6 +105,13 @@ implements FormExecutor {
                 return FormExecutionOutcome.FAILURE_SO_STAY_ON_PAGE; // invalid args, stay on page
             }
 
+            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+                _Debug.log(10, "execute %s ...", actionOrPropertyModel
+                        .fold(
+                                act->act.getFriendlyName(),
+                                prop->prop.getFriendlyName()));
+            });
+
             //
             // the following line will (attempt to) invoke the action, and will in turn either:
             //
@@ -134,6 +143,10 @@ implements FormExecutor {
                         EntityUtil.getEntityState(resultAdapter),
                         resultAdapter);
             }
+
+            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+                _Debug.log(10, "process result ...");
+            });
 
             val resultResponse = actionOrPropertyModel.fold(
                     act->ActionResultResponseType
