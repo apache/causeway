@@ -43,7 +43,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
-import org.apache.isis.commons.internal.debug.xray.XrayModel.Stickyness;
+import org.apache.isis.commons.internal.debug.xray.XrayModel.Stickiness;
 import org.apache.isis.commons.internal.debug.xray.XrayModel.ThreadMemento;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.transaction.events.TransactionAfterCompletionEvent;
@@ -408,7 +408,7 @@ public abstract class PublishingTestFactoryAbstract {
             model.addContainerNode(
                     model.getThreadNode(threadId),
                     String.format("Test: %s", name),
-                    Stickyness.CAN_DELETE_NODE);
+                    Stickiness.CAN_DELETE_NODE);
 
         });
 

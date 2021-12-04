@@ -60,7 +60,7 @@ import javax.swing.tree.TreeCellRenderer;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.debug.xray.XrayModel.HasIdAndLabel;
-import org.apache.isis.commons.internal.debug.xray.XrayModel.Stickyness;
+import org.apache.isis.commons.internal.debug.xray.XrayModel.Stickiness;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -217,8 +217,7 @@ public class XrayUi extends JFrame {
         {
             val root = xrayModel.getRootNode();
             val env = xrayModel.addDataNode(root,
-                    new XrayDataModel.KeyValue("isis-xray-keys", "X-ray Keybindings"),
-                        Stickyness.CANNOT_DELETE_NODE);
+                    new XrayDataModel.KeyValue("isis-xray-keys", "X-ray Keybindings", Stickiness.CANNOT_DELETE_NODE));
             env.getData().put("F5", "Clear Threads");
             env.getData().put("DELETE", "Delete Selected Nodes");
         }
@@ -258,6 +257,23 @@ public class XrayUi extends JFrame {
         return _Casts.castTo(HasIdAndLabel.class, node.getUserObject());
     }
 
+    private boolean canRemoveNode(final DefaultMutableTreeNode node) {
+        if(node.getParent()==null) {
+            return false; // don't remove root
+        }
+        return extractUserObject(node)
+        .map(HasIdAndLabel::getStickiness)
+        .map(stickiness->stickiness.isCanDeleteNode())
+        .orElse(true); // default: allow removal
+    }
+
+    private void removeNode(final DefaultMutableTreeNode nodeToBeRemoved) {
+        if(canRemoveNode(nodeToBeRemoved)) {
+            ((DefaultTreeModel)tree.getModel()).removeNodeFromParent(nodeToBeRemoved);
+            xrayModel.remove(nodeToBeRemoved);
+        }
+    }
+
     private void doClearThreads(){
         val root = (DefaultMutableTreeNode) tree.getModel().getRoot();
         val threadNodes = streamChildrenOf(root)
@@ -265,23 +281,13 @@ public class XrayUi extends JFrame {
                 .map(HasIdAndLabel::getId)
                 .map(id->id.startsWith("thread-"))
                 .orElse(false))
-        .collect(Can.toCan());
+        .collect(Can.toCan()); // collect into can, before processing (otherwise concurrent modification)
 
-        threadNodes
-        .forEach(nodeToBeRemoved->{
-            ((DefaultTreeModel)tree.getModel()).removeNodeFromParent(nodeToBeRemoved);
-            xrayModel.remove(nodeToBeRemoved);
-        });
+        threadNodes.forEach(this::removeNode);
     }
 
     private void doRemoveSelectedNodes() {
-        streamSelectedNodes()
-        .forEach(nodeToBeRemoved->{
-            if(nodeToBeRemoved.getParent()!=null) {
-                ((DefaultTreeModel)tree.getModel()).removeNodeFromParent(nodeToBeRemoved);
-                xrayModel.remove(nodeToBeRemoved);
-            }
-        });
+        streamSelectedNodes().forEach(this::removeNode);
     }
 
     private void doMergeCallStacksOnSelectedNodes() {

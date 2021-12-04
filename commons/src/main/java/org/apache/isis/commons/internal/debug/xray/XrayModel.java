@@ -34,9 +34,11 @@ import lombok.val;
 
 public interface XrayModel {
 
-    enum Stickyness {
+    enum Stickiness {
         CAN_DELETE_NODE,
-        CANNOT_DELETE_NODE
+        CANNOT_DELETE_NODE;
+
+        boolean isCanDeleteNode() { return this == CAN_DELETE_NODE; }
     }
 
     MutableTreeNode getRootNode();
@@ -46,21 +48,17 @@ public interface XrayModel {
                         getRootNode(),
                         threadMemento.getLabel(),
                         threadMemento.getId(),
-                        Stickyness.CAN_DELETE_NODE));
+                        Stickiness.CAN_DELETE_NODE));
     }
 
-    MutableTreeNode addContainerNode(MutableTreeNode parent, String name, String id, Stickyness stickyness);
+    MutableTreeNode addContainerNode(MutableTreeNode parent, String name, String id, Stickiness stickiness);
 
     default MutableTreeNode addContainerNode(
-            final MutableTreeNode parent, final String name, final Stickyness stickyness) {
-        return addContainerNode(parent, name, UUID.randomUUID().toString(), stickyness);
+            final MutableTreeNode parent, final String name, final Stickiness stickiness) {
+        return addContainerNode(parent, name, UUID.randomUUID().toString(), stickiness);
     }
 
-    <T extends XrayDataModel> T addDataNode(MutableTreeNode parent, T dataModel, Stickyness stickyness);
-
-    default <T extends XrayDataModel> T addDataNode(final MutableTreeNode parent, final T dataModel) {
-        return addDataNode(parent, dataModel, Stickyness.CAN_DELETE_NODE);
-    }
+    <T extends XrayDataModel> T addDataNode(MutableTreeNode parent, T dataModel);
 
     Optional<MutableTreeNode> lookupNode(String id);
 
@@ -85,6 +83,7 @@ public interface XrayModel {
     abstract class HasIdAndLabel {
         public abstract String getId();
         public abstract String getLabel();
+        public abstract Stickiness getStickiness();
 
         @Override
         public final String toString() {

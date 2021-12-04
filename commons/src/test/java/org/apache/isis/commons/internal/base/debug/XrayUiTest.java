@@ -28,7 +28,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
 import org.apache.isis.commons.internal.debug.xray.XrayModel;
-import org.apache.isis.commons.internal.debug.xray.XrayModel.Stickyness;
+import org.apache.isis.commons.internal.debug.xray.XrayModel.Stickiness;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 
 import lombok.val;
@@ -67,11 +67,13 @@ class XrayUiTest {
 
         val root = model.getRootNode();
 
-        val keyValueData = model.addDataNode(root, new XrayDataModel.KeyValue("id1", "KeyValue"));
+        val keyValueData = model.addDataNode(
+                root, new XrayDataModel.KeyValue("id1", "KeyValue", Stickiness.CANNOT_DELETE_NODE));
         keyValueData.getData().put("hi", "there");
         keyValueData.getData().put("how", "you");
 
-        val sequenceData = model.addDataNode(root, new XrayDataModel.Sequence("id2", "Sequence"))
+        val sequenceData = model.addDataNode(
+                root, new XrayDataModel.Sequence("id2", "Sequence", Stickiness.CANNOT_DELETE_NODE))
                 .getData();
 
         sequenceData.alias("thread", "Thread-0");
@@ -92,7 +94,7 @@ class XrayUiTest {
         sequenceData.deactivate("ix");
         sequenceData.exit("test", "thread", "exit");
 
-        model.addContainerNode(root, "Container", Stickyness.CAN_DELETE_NODE);
+        model.addContainerNode(root, "Container", Stickiness.CAN_DELETE_NODE);
 
     }
 

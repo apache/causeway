@@ -35,10 +35,12 @@ import javax.swing.JScrollPane;
 import org.apache.isis.commons.functional.IndexedConsumer;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.debug.xray.XrayModel.HasIdAndLabel;
+import org.apache.isis.commons.internal.debug.xray.XrayModel.Stickiness;
 import org.apache.isis.commons.internal.debug.xray.graphics.SequenceDiagram;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -63,6 +65,7 @@ public abstract class XrayDataModel extends HasIdAndLabel {
 
         private final String id;
         private final String label;
+        private final @NonNull Stickiness stickiness;
 
         @EqualsAndHashCode.Exclude
         private final String iconResource = "/xray/key-value.png";
@@ -99,6 +102,7 @@ public abstract class XrayDataModel extends HasIdAndLabel {
         private final String id;
         private final String label;
         private final String logMessage;
+        private final @NonNull Stickiness stickiness;
 
         @EqualsAndHashCode.Exclude
         private final String iconResource = "/xray/log.png";
@@ -153,6 +157,7 @@ public abstract class XrayDataModel extends HasIdAndLabel {
 
         private final String id;
         private final String label;
+        private final @NonNull Stickiness stickiness;
 
         @EqualsAndHashCode.Exclude
         private final String iconResource = "/xray/sequence.png";
@@ -162,7 +167,11 @@ public abstract class XrayDataModel extends HasIdAndLabel {
         private final static Color BORDER_COLOR = Color.GRAY;
 
         public Sequence(final String label) {
-            this(UUID.randomUUID().toString(), label);
+            this(UUID.randomUUID().toString(), label, Stickiness.CAN_DELETE_NODE);
+        }
+
+        public Sequence(final String id, final String label) {
+            this(id, label, Stickiness.CAN_DELETE_NODE);
         }
 
         @Override

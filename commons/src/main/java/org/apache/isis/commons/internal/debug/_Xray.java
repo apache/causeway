@@ -21,6 +21,7 @@ package org.apache.isis.commons.internal.debug;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
+import org.apache.isis.commons.internal.debug.xray.XrayModel.Stickiness;
 import org.apache.isis.commons.internal.debug.xray.XrayModel.ThreadMemento;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 
@@ -47,7 +48,8 @@ final class _Xray {
                     new XrayDataModel.LogEntry(
                             "debug-log",
                             _Strings.ellipsifyAtEnd(logMessage, 80, "..."),
-                            logMessage));
+                            logMessage,
+                            Stickiness.CAN_DELETE_NODE));
             stackTrace.forEach(logModel.getData()::add);
         });
     }

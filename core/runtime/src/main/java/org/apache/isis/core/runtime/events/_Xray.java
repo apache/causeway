@@ -21,7 +21,7 @@ package org.apache.isis.core.runtime.events;
 import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
-import org.apache.isis.commons.internal.debug.xray.XrayModel.Stickyness;
+import org.apache.isis.commons.internal.debug.xray.XrayModel.Stickiness;
 import org.apache.isis.commons.internal.debug.xray.XrayModel.ThreadMemento;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.security.util.XrayUtil;
@@ -37,13 +37,13 @@ final class _Xray {
             val root = model.getRootNode();
 
             val env = model.addDataNode(
-                    root, new XrayDataModel.KeyValue("isis-env", "Environment"), Stickyness.CANNOT_DELETE_NODE);
+                    root, new XrayDataModel.KeyValue("isis-env", "Environment", Stickiness.CANNOT_DELETE_NODE));
             configurationService.getEnvironmentProperties().forEach(item->{
                 env.getData().put(item.getKey(), item.getValue());
             });
 
             val config = model.addDataNode(
-                    root, new XrayDataModel.KeyValue("isis-conf", "Config"), Stickyness.CANNOT_DELETE_NODE);
+                    root, new XrayDataModel.KeyValue("isis-conf", "Config", Stickiness.CANNOT_DELETE_NODE));
             configurationService.getVisibleConfigurationProperties().forEach(item->{
                 config.getData().put(item.getKey(), item.getValue());
             });
@@ -75,7 +75,7 @@ final class _Xray {
                 model.addContainerNode(
                         uiThreadNode,
                         txInfo,
-                        Stickyness.CAN_DELETE_NODE);
+                        Stickiness.CAN_DELETE_NODE);
                 return;
             }
 
@@ -112,7 +112,7 @@ final class _Xray {
                 model.addContainerNode(
                         uiThreadNode,
                         txInfo,
-                        Stickyness.CAN_DELETE_NODE);
+                        Stickiness.CAN_DELETE_NODE);
                 return;
             }
 

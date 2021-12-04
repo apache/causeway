@@ -43,11 +43,12 @@ final class XrayModelSimple implements XrayModel {
             final @NonNull MutableTreeNode parent,
             final @NonNull String name,
             final @NonNull String id,
-            final @NonNull Stickyness stickyness) {
+            final @NonNull Stickiness stickiness) {
         val newNode = new DefaultMutableTreeNode();
         newNode.setUserObject(new HasIdAndLabel() {
             @Override public String getId() { return id; }
             @Override public String getLabel() { return name; }
+            @Override public Stickiness getStickiness() { return stickiness; }
         });
         ((DefaultMutableTreeNode)parent).add(newNode);
         nodesById.put(id, newNode);
@@ -57,8 +58,7 @@ final class XrayModelSimple implements XrayModel {
     @Override
     public <T extends XrayDataModel> T addDataNode(
             final @NonNull MutableTreeNode parent,
-            final @NonNull T dataModel,
-            final @NonNull Stickyness stickyness) {
+            final @NonNull T dataModel) {
         val newNode = new DefaultMutableTreeNode();
         newNode.setUserObject(dataModel);
         ((DefaultMutableTreeNode)parent).add(newNode);
