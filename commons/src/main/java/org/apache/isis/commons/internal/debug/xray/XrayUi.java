@@ -31,9 +31,11 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.URL;
+import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import javax.swing.BoxLayout;
@@ -56,6 +58,9 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeCellRenderer;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.debug.xray.XrayModel.HasIdAndLabel;
+import org.apache.isis.commons.internal.debug.xray.XrayModel.Stickyness;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -148,11 +153,19 @@ public class XrayUi extends JFrame {
 
         val popupMenu = new JPopupMenu();
 
+        val clearThreadsAction = popupMenu.add(new JMenuItem("Clear Threads"));
+        clearThreadsAction.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                doClearThreads();
+            }
+        });
+
         val callStackMergeAction = popupMenu.add(new JMenuItem("Merge Logged Call-Stack"));
         callStackMergeAction.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                mergeCallStacksOnSelectedNodes();
+                doMergeCallStacksOnSelectedNodes();
             }
         });
 
@@ -160,7 +173,7 @@ public class XrayUi extends JFrame {
         deleteAction.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                removeSelectedNodes();
+                doRemoveSelectedNodes();
             }
         });
 
@@ -189,14 +202,30 @@ public class XrayUi extends JFrame {
             @Override
             public void keyPressed(final KeyEvent e) {
                 if(e.getKeyCode() == KeyEvent.VK_DELETE) {
-                    removeSelectedNodes();
+                    doRemoveSelectedNodes();
+                    return;
+                }
+                if(e.getKeyCode() == KeyEvent.VK_F5) {
+                    doClearThreads();
+                    return;
                 }
             }
 
         });
 
+        // report key bindings to the UI
+        {
+            val root = xrayModel.getRootNode();
+            val env = xrayModel.addDataNode(root,
+                    new XrayDataModel.KeyValue("isis-xray-keys", "X-ray Keybindings"),
+                        Stickyness.CANNOT_DELETE_NODE);
+            env.getData().put("F5", "Clear Threads");
+            env.getData().put("DELETE", "Delete Selected Nodes");
+        }
+
+
         this.setDefaultCloseOperation(defaultCloseOperation);
-        this.setTitle("X-ray Viewer");
+        this.setTitle("X-ray Viewer (Apache Isis™)");
         this.pack();
         this.setSize(800, 600);
 
@@ -219,7 +248,33 @@ public class XrayUi extends JFrame {
                 .map(path->(DefaultMutableTreeNode)path.getLastPathComponent());
     }
 
-    private void removeSelectedNodes() {
+    private Stream<DefaultMutableTreeNode> streamChildrenOf(final DefaultMutableTreeNode node) {
+        return IntStream.range(0, node.getChildCount())
+        .mapToObj(root::getChildAt)
+        .map(DefaultMutableTreeNode.class::cast);
+    }
+
+    private Optional<HasIdAndLabel> extractUserObject(final DefaultMutableTreeNode node) {
+        return _Casts.castTo(HasIdAndLabel.class, node.getUserObject());
+    }
+
+    private void doClearThreads(){
+        val root = (DefaultMutableTreeNode) tree.getModel().getRoot();
+        val threadNodes = streamChildrenOf(root)
+        .filter(node->extractUserObject(node)
+                .map(HasIdAndLabel::getId)
+                .map(id->id.startsWith("thread-"))
+                .orElse(false))
+        .collect(Can.toCan());
+
+        threadNodes
+        .forEach(nodeToBeRemoved->{
+            ((DefaultTreeModel)tree.getModel()).removeNodeFromParent(nodeToBeRemoved);
+            xrayModel.remove(nodeToBeRemoved);
+        });
+    }
+
+    private void doRemoveSelectedNodes() {
         streamSelectedNodes()
         .forEach(nodeToBeRemoved->{
             if(nodeToBeRemoved.getParent()!=null) {
@@ -229,7 +284,7 @@ public class XrayUi extends JFrame {
         });
     }
 
-    private void mergeCallStacksOnSelectedNodes() {
+    private void doMergeCallStacksOnSelectedNodes() {
         val logEntries = streamSelectedNodes()
         .filter(node->node.getUserObject() instanceof XrayDataModel.LogEntry)
         .map(node->(XrayDataModel.LogEntry)node.getUserObject())
@@ -254,12 +309,7 @@ public class XrayUi extends JFrame {
 //        JScrollPane scroller = new JScrollPane(canvas);
 
         //Create a text area.
-        JTextArea textArea = new JTextArea(
-                "This is an editable JTextArea. " +
-                "A text area is a \"plain\" text component, " +
-                "which means that although it can display text " +
-                "in any font, all of the text is in the same font."
-        );
+        JTextArea textArea = new JTextArea("no content");
         textArea.setFont(new Font("Serif", Font.PLAIN, 16));
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);

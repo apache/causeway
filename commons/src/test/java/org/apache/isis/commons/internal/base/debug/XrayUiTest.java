@@ -28,6 +28,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
 import org.apache.isis.commons.internal.debug.xray.XrayModel;
+import org.apache.isis.commons.internal.debug.xray.XrayModel.Stickyness;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 
 import lombok.val;
@@ -91,7 +92,7 @@ class XrayUiTest {
         sequenceData.deactivate("ix");
         sequenceData.exit("test", "thread", "exit");
 
-        model.addContainerNode(root, "Container");
+        model.addContainerNode(root, "Container", Stickyness.CAN_DELETE_NODE);
 
     }
 

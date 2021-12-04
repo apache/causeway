@@ -34,21 +34,33 @@ import lombok.val;
 
 public interface XrayModel {
 
+    enum Stickyness {
+        CAN_DELETE_NODE,
+        CANNOT_DELETE_NODE
+    }
+
     MutableTreeNode getRootNode();
     default MutableTreeNode getThreadNode(final ThreadMemento threadMemento) {
         return lookupNode(threadMemento.getId())
                 .orElseGet(()->addContainerNode(
                         getRootNode(),
                         threadMemento.getLabel(),
-                        threadMemento.getId()));
+                        threadMemento.getId(),
+                        Stickyness.CAN_DELETE_NODE));
     }
 
-    MutableTreeNode addContainerNode(MutableTreeNode parent, String name, String id);
-    default MutableTreeNode addContainerNode(final MutableTreeNode parent, final String name) {
-        return addContainerNode(parent, name, UUID.randomUUID().toString());
+    MutableTreeNode addContainerNode(MutableTreeNode parent, String name, String id, Stickyness stickyness);
+
+    default MutableTreeNode addContainerNode(
+            final MutableTreeNode parent, final String name, final Stickyness stickyness) {
+        return addContainerNode(parent, name, UUID.randomUUID().toString(), stickyness);
     }
 
-    <T extends XrayDataModel> T addDataNode(MutableTreeNode parent, T dataModel);
+    <T extends XrayDataModel> T addDataNode(MutableTreeNode parent, T dataModel, Stickyness stickyness);
+
+    default <T extends XrayDataModel> T addDataNode(final MutableTreeNode parent, final T dataModel) {
+        return addDataNode(parent, dataModel, Stickyness.CAN_DELETE_NODE);
+    }
 
     Optional<MutableTreeNode> lookupNode(String id);
 
