@@ -21,6 +21,9 @@ package org.apache.isis.commons.internal.debug.xray;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.Collections;
 import java.util.function.Consumer;
 
@@ -85,6 +88,22 @@ final class _SwingUtil {
         };
 
         return canvas;
+    }
+
+    public static Component verticalBox(final Component ...components) {
+
+        val panel = new JPanel(new GridBagLayout());
+        val gbc = new GridBagConstraints();
+        gbc.weightx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.insets = new Insets(3, 6, 3, 6);
+
+        for(val component : components) {
+            panel.add(component, gbc);
+        }
+
+        return panel;
     }
 
 }

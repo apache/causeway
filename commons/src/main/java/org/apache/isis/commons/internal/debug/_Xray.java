@@ -18,6 +18,8 @@
  */
 package org.apache.isis.commons.internal.debug;
 
+import java.time.LocalDateTime;
+
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
@@ -40,13 +42,14 @@ final class _Xray {
         }
 
         val threadId = ThreadMemento.fromCurrentThread();
+        val timeStamp = LocalDateTime.now();
 
         XrayUi.updateModel(model->{
             val parentNode = model.getThreadNode(threadId);
 
             val logModel = model.addDataNode(parentNode,
                     new XrayDataModel.LogEntry(
-                            "debug-log",
+                            "debug-log", timeStamp,
                             _Strings.ellipsifyAtEnd(logMessage, 80, "..."),
                             logMessage,
                             Stickiness.CAN_DELETE_NODE));

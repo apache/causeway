@@ -21,6 +21,8 @@ package org.apache.isis.commons.internal.debug.xray;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +31,7 @@ import java.util.UUID;
 
 import javax.swing.BorderFactory;
 import javax.swing.JEditorPane;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -100,6 +103,7 @@ public abstract class XrayDataModel extends HasIdAndLabel {
         private final List<StackTraceElement> data = new ArrayList<>();
 
         private final String id;
+        private final LocalDateTime timestamp;
         private final String label;
         private final String logMessage;
         private final @NonNull Stickiness stickiness;
@@ -117,10 +121,19 @@ public abstract class XrayDataModel extends HasIdAndLabel {
 
             // log message label
 
-            val editorPane = new JEditorPane();
-            editorPane.setEditable(false);
-            editorPane.setText(logMessage);
-            panel2.add(editorPane, BorderLayout.NORTH);
+            val logMessagePane = new JEditorPane();
+            logMessagePane.setEditable(false);
+            logMessagePane.setText(logMessage);
+
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+
+            val timestampLabel = new JLabel(timestamp.format(formatter));
+
+            panel2.add(
+                    _SwingUtil.verticalBox(
+                            timestampLabel,
+                            logMessagePane),
+                    BorderLayout.NORTH);
 
             // table rendering
 
