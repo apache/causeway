@@ -48,8 +48,7 @@ import lombok.val;
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,
-                Configuration_usingWicket.class
-        },
+                Configuration_usingWicket.class        },
         properties = {
         })
 @TestPropertySource({

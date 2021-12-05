@@ -104,8 +104,13 @@ implements EntityFacet {
                     pojo.getClass().getName());
         }
 
-        val persistenceManager = getPersistenceManager();
-        val primaryKey = persistenceManager.getObjectId(pojo);
+        val pm = getPersistenceManager();
+        var primaryKey = pm.getObjectId(pojo);
+
+        if(primaryKey==null) {
+            pm.makePersistent(pojo);
+            primaryKey = pm.getObjectId(pojo);
+        }
 
         if(primaryKey==null) {
             throw _Exceptions.illegalArgument(
