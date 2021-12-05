@@ -55,7 +55,7 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL
-        , logicalTypeName = "testdomain.jdo.JpaInventoryJaxbVm"
+        , logicalTypeName = "testdomain.jpa.JpaInventoryJaxbVm"
 )
 public class JpaInventoryJaxbVm {
 

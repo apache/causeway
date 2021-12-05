@@ -155,7 +155,7 @@ implements FormExecutor {
                     act->ActionResultResponseType
                             .determineAndInterpretResult(act, ajaxTarget, resultAdapter, act.snapshotArgs()),
                     prop->ActionResultResponse
-                            .toPage(EntityPage.ofAdapter(prop.getCommonContext(), resultAdapter)));
+                            .toPage(EntityPage.class, resultAdapter.getBookmark().orElseThrow()));
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
                 _Debug.log(10, "handle result ...");

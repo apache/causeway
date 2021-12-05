@@ -23,7 +23,6 @@ import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
 import org.apache.isis.commons.internal.debug.xray.XrayModel.Stickiness;
-import org.apache.isis.commons.internal.debug.xray.XrayModel.ThreadMemento;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.security.util.XrayUtil;
 
@@ -62,7 +61,7 @@ final class _Xray {
 
         _Debug.log(10, txInfo);
 
-        val threadId = ThreadMemento.fromCurrentThread();
+        //val threadId = ThreadMemento.fromCurrentThread();
 
         val sequenceId = XrayUtil.currentSequenceId(iaTracker)
         .orElse(null);
@@ -73,14 +72,15 @@ final class _Xray {
 
             // if no sequence diagram available, that we can append to,
             // then at least add a node to the left tree
-            if(!seq.isPresent()) {
-                val uiThreadNode = model.getThreadNode(threadId);
-                model.addContainerNode(
-                        uiThreadNode,
-                        txInfo,
-                        Stickiness.CAN_DELETE_NODE);
-                return;
-            }
+            //XXX replaced by log above
+//            if(!seq.isPresent()) {
+//                val uiThreadNode = model.getThreadNode(threadId);
+//                model.addContainerNode(
+//                        uiThreadNode,
+//                        txInfo,
+//                        Stickiness.CAN_DELETE_NODE);
+//                return;
+//            }
 
             seq.ifPresent(sequence->{
                 val sequenceData = sequence.getData();
@@ -101,7 +101,7 @@ final class _Xray {
 
         _Debug.log(10, txInfo);
 
-        val threadId = ThreadMemento.fromCurrentThread();
+        //val threadId = ThreadMemento.fromCurrentThread();
 
         val sequenceId = XrayUtil.currentSequenceId(iaTracker)
                 .orElse(null);
@@ -112,14 +112,15 @@ final class _Xray {
 
             // if no sequence diagram available, that we can append to,
             // then at least add a node to the left tree
-            if(!seq.isPresent()) {
-                val uiThreadNode = model.getThreadNode(threadId);
-                model.addContainerNode(
-                        uiThreadNode,
-                        txInfo,
-                        Stickiness.CAN_DELETE_NODE);
-                return;
-            }
+            //XXX replaced by log above
+//            if(!seq.isPresent()) {
+//                val uiThreadNode = model.getThreadNode(threadId);
+//                model.addContainerNode(
+//                        uiThreadNode,
+//                        txInfo,
+//                        Stickiness.CAN_DELETE_NODE);
+//                return;
+//            }
 
             seq.ifPresent(sequence->{
                 val sequenceData = sequence.getData();

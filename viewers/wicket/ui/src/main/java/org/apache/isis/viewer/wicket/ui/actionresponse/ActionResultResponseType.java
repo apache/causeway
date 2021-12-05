@@ -38,6 +38,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelStandalon
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.model.models.VoidModel;
+import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
@@ -78,7 +79,8 @@ public enum ActionResultResponseType {
                 final Can<ManagedObject> args) {
             final var collectionModel = EntityCollectionModelStandalone
                     .forActionModel(resultAdapter, actionModel, args);
-            return ActionResultResponse.toPage(new StandaloneCollectionPage(collectionModel));
+            return ActionResultResponse.toPage(
+                    StandaloneCollectionPage.class, new StandaloneCollectionPage(collectionModel));
         }
     },
     /**
@@ -95,7 +97,7 @@ public enum ActionResultResponseType {
             ValueModel valueModel = ValueModel.of(commonContext, resultAdapter);
             valueModel.setActionHint(actionModel);
             final ValuePage valuePage = new ValuePage(valueModel);
-            return ActionResultResponse.toPage(valuePage);
+            return ActionResultResponse.toPage(ValuePage.class, valuePage);
         }
     },
     VALUE_CLOB {
@@ -187,7 +189,7 @@ public enum ActionResultResponseType {
             final var commonContext = actionModel.getCommonContext();
             final VoidModel voidModel = new VoidModel(commonContext);
             voidModel.setActionHint(actionModel);
-            return ActionResultResponse.toPage(new VoidReturnPage(voidModel));
+            return ActionResultResponse.toPage(VoidReturnPage.class, new VoidReturnPage(voidModel));
         }
     },
     SIGN_IN {
@@ -200,7 +202,8 @@ public enum ActionResultResponseType {
             val signInPage = actionModel.getCommonContext()
                     .lookupServiceElseFail(PageClassRegistry.class)
                     .getPageClass(PageType.SIGN_IN);
-            return ActionResultResponse.toPageClass(signInPage);
+
+            return ActionResultResponse.toPage(PageRedirectRequest.forPageClass(signInPage));
         }
     };
 
@@ -253,9 +256,13 @@ public enum ActionResultResponseType {
 
         // this will not preserve the URL (because pageParameters are not copied over)
         // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
-        final EntityPage entityPage = EntityPage.ofAdapter(model.getCommonContext(), actualAdapter);
+        //FIXME[ISIS-2903] some experiments here ...
+        //final EntityPage entityPage = EntityPage.ofAdapter(model.getCommonContext(), actualAdapter);
 
-        return ActionResultResponse.toPage(entityPage);
+        return ActionResultResponse.toPage(PageRedirectRequest.forPageClass(
+                EntityPage.class,
+                PageParameterUtils.createPageParametersForObject(actualAdapter)));
+
     }
 
     @Value(staticConstructor = "of")

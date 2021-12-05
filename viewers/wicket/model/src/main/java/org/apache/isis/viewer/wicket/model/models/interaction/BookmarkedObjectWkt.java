@@ -46,7 +46,7 @@ extends ModelAbstract<ManagedObject> {
     @Getter private final Bookmark bookmark;
 
     /**
-     * Request scoped.
+     * Request scoped. No yet activated!
      */
     public static class ManagedObjectCache {
 
@@ -133,10 +133,9 @@ extends ModelAbstract<ManagedObject> {
         throw _Exceptions.unsupportedOperation("MangedObjectWkt is immuatable");
     }
 
-    public final ManagedObject getObjectAndAttachWhenEntity() {
+    public final ManagedObject getObjectAndReAttach() {
         //EntityUtil.assertAttachedWhenEntity()//guard
         val entityOrViewmodel = super.getObject();
-
         // even though initial loading seems attached, we need to check again
         return EntityUtil.computeIfDetached(entityOrViewmodel, this::reload);
     }

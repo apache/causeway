@@ -60,9 +60,7 @@ public enum ActionResultResponseHandlingStrategy {
             commonContext.getTransactionService().flushTransaction();
 
             // "redirect-after-post"
-            resultResponse.getToPage().accept(
-                    RequestCycle.get()::setResponsePage,
-                    RequestCycle.get()::setResponsePage);
+            resultResponse.getPageRedirect().applyTo(RequestCycle.get());
         }
     },
     SCHEDULE_HANDLER {

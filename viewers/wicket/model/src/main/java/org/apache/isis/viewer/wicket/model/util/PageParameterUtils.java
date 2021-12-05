@@ -133,6 +133,12 @@ public class PageParameterUtils {
 
     // -- FACTORY METHODS FOR PAGE PARAMETERS
 
+    public static PageParameters createPageParametersForBookmark(final Bookmark bookmark) {
+        val pageParameters = PageParameterUtils.newPageParameters();
+        PageParameterNames.OBJECT_OID.addStringTo(pageParameters, bookmark.stringify());
+        return pageParameters;
+    }
+
     /**
      * Factory method for creating {@link PageParameters} to represent an
      * object.

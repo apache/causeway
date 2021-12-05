@@ -44,14 +44,14 @@ implements
 
     @Override
     public final ManagedObject getBookmarkedOwner() {
-        return bookmarkedObject.getObjectAndAttachWhenEntity();
+        return bookmarkedObject.getObjectAndReAttach();
     }
 
     public final BookmarkedObjectWkt bookmarkedObjectModel() {
         return bookmarkedObject;
     }
 
-   // -- SHORTCUTS
+    // -- SHORTCUTS
 
     public final boolean hasAsRootPolicy() {
         return hasBookmarkPolicy(BookmarkPolicy.AS_ROOT);
