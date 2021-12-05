@@ -124,6 +124,8 @@ public class _Debug {
                 && !se.getClassName().contains("_Xray") // suppress _Xray local helpers
                 && !se.getClassName().startsWith(ChainOfResponsibility.class.getName())
                 && !se.getClassName().startsWith("java.util.stream") // suppress Stream processing details
+                && !se.getClassName().startsWith("org.junit") // suppress Junit processing details
+                && !se.getClassName().startsWith("org.eclipse.jdt.internal") // suppress IDE processing details
                 ;
     }
 

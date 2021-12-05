@@ -23,6 +23,7 @@ import java.util.Optional;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.exceprecog.Category;
@@ -36,13 +37,16 @@ import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.security.authentication.logout.LogoutMenu.LoginRedirect;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
+import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
 import lombok.NonNull;
@@ -148,7 +152,7 @@ implements FormExecutor {
             }
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log(10, "process result ...");
+                _Debug.log(10, "interpret result ...");
             });
 
             val resultResponse = actionOrPropertyModel.fold(
@@ -157,12 +161,35 @@ implements FormExecutor {
                     prop->ActionResultResponse
                             .toPage(EntityPage.ofAdapter(prop.getCommonContext(), resultAdapter)));
 
+            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+                _Debug.log(10, "handle result ...");
+            });
+
             // redirect unconditionally
             resultResponse
                 .getHandlingStrategy()
                 .handleResults(getCommonContext(), resultResponse);
 
-            return FormExecutionOutcome.SUCCESS_SO_REDIRECT_TO_RESULT_PAGE; // success (valid args), allow redirect
+
+            // intercept redirect request to sign-in page, TODO should be refactored into a new HandlingStrategy
+            if(actionOrPropertyModel.isLeft()) {
+                Optional.ofNullable(resultAdapter)
+                .ifPresent(actionResultAdapter->{
+                    val actionResultObjectType = actionResultAdapter.getSpecification().getLogicalTypeName();
+                    if(LoginRedirect.LOGICAL_TYPE_NAME.equals(actionResultObjectType)) {
+                        val signInPage = getCommonContext()
+                                .lookupServiceElseFail(PageClassRegistry.class)
+                                .getPageClass(PageType.SIGN_IN);
+                        RequestCycle.get().setResponsePage(signInPage);
+                    }
+                });
+            }
+
+            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+                _Debug.log(10, "... return");
+            });
+
+            return FormExecutionOutcome.SUCCESS_AND_REDIRECED_TO_RESULT_PAGE; // success (valid args), allow redirect
 
         } catch (Throwable ex) {
 

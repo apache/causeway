@@ -394,12 +394,16 @@ public final class _Exceptions {
             "org.apache.wicket", "{wkt}",
             "org.springframework", "{spring}",
             "org.apache.tomcat", "{tomcat}",
-            "org.apache.catalina", "{catalina}"
+            "org.apache.catalina", "{catalina}",
+            "org.apache.coyote", "{coyote}"
             );
 
-    public static String abbreviate(final String className) {
+    public static String abbreviate(final String className, final String...compress) {
         val str = className;
-        return packageReplacements.entrySet().stream()
+        return Stream.concat(
+                    _NullSafe.stream(compress).map(prefix->Map.entry(prefix, "")),
+                    packageReplacements.entrySet().stream()
+                )
                 .filter(entry->str.startsWith(entry.getKey()))
                 .map(entry->{
                     val replacement = entry.getValue();

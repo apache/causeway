@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel;
 
-import java.util.Optional;
-
 import org.apache.wicket.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -35,21 +33,18 @@ import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.security.authentication.logout.LogoutMenu.LoginRedirect;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptWithExtraContent;
-import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.BS3GridPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
@@ -221,36 +216,13 @@ extends IndicatingAjaxLink<ManagedObject> {
         val actionModel = this.getActionModel();
         val page = this.getPage();
 
+        // on non-recoverable exception throws
         val outcome = FormExecutorDefault
                 .forAction(actionModel)
                 .executeAndProcessResults(page, null, null, actionModel);
 
-        if(outcome.isSuccess()) {
-
-            // intercept redirect request to sign-in page
-            Optional.ofNullable(actionModel.getObject())
-            .ifPresent(actionResultAdapter->{
-                val actionResultObjectType = actionResultAdapter.getSpecification().getLogicalTypeName();
-                if(LoginRedirect.LOGICAL_TYPE_NAME.equals(actionResultObjectType)) {
-                    val commonContext = actionModel.getCommonContext();
-                    val pageClassRegistry = commonContext.lookupServiceElseFail(PageClassRegistry.class);
-                    val signInPage = pageClassRegistry.getPageClass(PageType.SIGN_IN);
-                    RequestCycle.get().setResponsePage(signInPage);
-                }
-            });
-
-            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log(10, "nothing to do, outcome: %s", outcome);
-            });
-
-            // else nothing to do
-
-            //
-            // the formExecutor will have either redirected, or scheduled a response,
-            // or repainted components as required
-            //
-
-        } else {
+        // on recoverable exception stay on page (eg. validation failure)
+        if(outcome.isFailure()) {
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
                 _Debug.log(10, "render the target entity again, outcome: %s", outcome);

@@ -150,7 +150,8 @@ final class _CallStackMerger {
         val root = merge(executionLanes);
         callStackDiagram = new CallStackDiagram(root.print(id->{
             return _Exceptions.abbreviate(
-                    executionNodeMap.getOrDefault(id, "root"));
+                    executionNodeMap.getOrDefault(id, "root"),
+                    "org.apache.isis");
         }).toString());
     }
 
