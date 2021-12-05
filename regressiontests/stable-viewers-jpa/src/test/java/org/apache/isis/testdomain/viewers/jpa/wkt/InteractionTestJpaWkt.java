@@ -125,9 +125,8 @@ class InteractionTestJpaWkt extends RegressionTestAbstract {
                 wktTester.clickLink(OPEN_SAMPLE_ACTION);
                 wktTester.assertHeaderBrandText("Smoke Tests");
                 wktTester.assertPageTitle("JpaInventoryJaxbVm; 3 products");
+                assertFavoriteBookIsPopulated();
             }
-
-            assertFavoriteBookIsPopulated();
 
         });
 
