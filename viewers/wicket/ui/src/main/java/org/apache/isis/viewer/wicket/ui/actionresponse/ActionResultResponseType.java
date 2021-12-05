@@ -31,12 +31,14 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.security.authentication.logout.LogoutMenu.LoginRedirect;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelStandalone;
+import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.model.models.VoidModel;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 import org.apache.isis.viewer.wicket.ui.pages.value.ValuePage;
@@ -187,6 +189,19 @@ public enum ActionResultResponseType {
             voidModel.setActionHint(actionModel);
             return ActionResultResponse.toPage(new VoidReturnPage(voidModel));
         }
+    },
+    SIGN_IN {
+        @Override
+        public ActionResultResponse interpretResult(
+                final ActionModel actionModel,
+                final AjaxRequestTarget target,
+                final ManagedObject resultAdapter,
+                final Can<ManagedObject> args) {
+            val signInPage = actionModel.getCommonContext()
+                    .lookupServiceElseFail(PageClassRegistry.class)
+                    .getPageClass(PageType.SIGN_IN);
+            return ActionResultResponse.toPageClass(signInPage);
+        }
     };
 
     public abstract ActionResultResponse interpretResult(
@@ -257,8 +272,14 @@ public enum ActionResultResponseType {
             return TypeAndAdapter.of(ActionResultResponseType.VOID, resultAdapter);
         }
 
-        final ObjectSpecification resultSpec = resultAdapter.getSpecification();
+        val resultSpec = resultAdapter.getSpecification();
         if (resultSpec.isNotCollection()) {
+            // scalar ...
+
+            if(LoginRedirect.LOGICAL_TYPE_NAME.equals(resultSpec.getLogicalTypeName())) {
+                return TypeAndAdapter.of(ActionResultResponseType.SIGN_IN, resultAdapter);
+            }
+
             if (resultSpec.isValue()) {
 
                 final Object value = resultAdapter.getPojo();
@@ -284,6 +305,7 @@ public enum ActionResultResponseType {
                 return TypeAndAdapter.of(ActionResultResponseType.OBJECT, resultAdapter);
             }
         } else {
+            // non-scalar ...
 
             final int cardinality = (int)_NullSafe.streamAutodetect(resultAdapter.getPojo()).count();
             switch (cardinality) {

@@ -20,8 +20,10 @@ package org.apache.isis.viewer.wicket.ui.actionresponse;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.component.IRequestablePage;
 
 import org.apache.isis.applib.value.OpenUrlStrategy;
+import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 
 import lombok.NonNull;
@@ -36,18 +38,23 @@ public class ActionResultResponse {
 
     private final ActionResultResponseHandlingStrategy handlingStrategy;
     private final IRequestHandler handler;
-    private final PageAbstract page;
+    private final _Either<PageAbstract, Class<? extends IRequestablePage>> page;
     private final AjaxRequestTarget target;
     private final String url;
 
-    public static ActionResultResponse withHandler(IRequestHandler handler) {
+    public static ActionResultResponse withHandler(final IRequestHandler handler) {
         return new ActionResultResponse(
                 ActionResultResponseHandlingStrategy.SCHEDULE_HANDLER, handler, null, null, null);
     }
 
-    public static ActionResultResponse toPage(PageAbstract page) {
+    public static ActionResultResponse toPage(final PageAbstract page) {
         return new ActionResultResponse(
-                ActionResultResponseHandlingStrategy.REDIRECT_TO_PAGE, null, page, null, null);
+                ActionResultResponseHandlingStrategy.REDIRECT_TO_PAGE, null, _Either.left(page), null, null);
+    }
+
+    public static ActionResultResponse toPageClass(final Class<? extends IRequestablePage> pageClass) {
+        return new ActionResultResponse(
+                ActionResultResponseHandlingStrategy.REDIRECT_TO_PAGE, null, _Either.right(pageClass), null, null);
     }
 
     public static ActionResultResponse openUrlInBrowser(
@@ -64,7 +71,7 @@ public class ActionResultResponse {
     private ActionResultResponse(
             final ActionResultResponseHandlingStrategy strategy,
             final IRequestHandler handler,
-            final PageAbstract page,
+            final _Either<PageAbstract, Class<? extends IRequestablePage>> page,
             final AjaxRequestTarget target,
             final String url) {
         this.handlingStrategy = strategy;
@@ -88,7 +95,7 @@ public class ActionResultResponse {
     /**
      * Populated only if {@link #getHandlingStrategy() handling strategy} is {@link ActionResultResponseHandlingStrategy#REDIRECT_TO_PAGE}
      */
-    public PageAbstract getToPage() {
+    public _Either<PageAbstract, Class<? extends IRequestablePage>> getToPage() {
         return page;
     }
 

@@ -36,7 +36,7 @@ public interface FormExecutor extends Serializable {
         /**
          * if invalid arguments or recoverable exception
          */
-        FAILURE_SO_STAY_ON_PAGE,
+        FAILURE_RECOVERABLE_SO_STAY_ON_PAGE,
 
         /**
          * redirect to result page or re-render all UI components
@@ -48,12 +48,8 @@ public interface FormExecutor extends Serializable {
          */
         SUCCESS_IN_NESTED_CONTEXT_SO_STAY_ON_PAGE;
 
-        public boolean isFailure() { return this == FAILURE_SO_STAY_ON_PAGE; }
+        public boolean isFailure() { return this == FAILURE_RECOVERABLE_SO_STAY_ON_PAGE; }
         public boolean isSuccess() { return !isFailure(); }
-        public boolean isSuccessWithRedirect() { return this == SUCCESS_AND_REDIRECED_TO_RESULT_PAGE; }
-        public boolean isSuccessWithinNestedContext() { return this == SUCCESS_IN_NESTED_CONTEXT_SO_STAY_ON_PAGE; }
-
-        public boolean isRedirect() { return this == SUCCESS_AND_REDIRECED_TO_RESULT_PAGE; }
 
     }
 

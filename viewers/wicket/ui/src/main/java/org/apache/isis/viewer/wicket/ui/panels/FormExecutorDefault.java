@@ -23,7 +23,6 @@ import java.util.Optional;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.exceprecog.Category;
@@ -37,16 +36,13 @@ import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.security.authentication.logout.LogoutMenu.LoginRedirect;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
-import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
 import lombok.NonNull;
@@ -106,7 +102,7 @@ implements FormExecutor {
 
             if (invalidReasonIfAny.isPresent()) {
                 raiseWarning(ajaxTarget, feedbackFormIfAny, invalidReasonIfAny.get());
-                return FormExecutionOutcome.FAILURE_SO_STAY_ON_PAGE; // invalid args, stay on page
+                return FormExecutionOutcome.FAILURE_RECOVERABLE_SO_STAY_ON_PAGE; // invalid args, stay on page
             }
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
@@ -165,25 +161,10 @@ implements FormExecutor {
                 _Debug.log(10, "handle result ...");
             });
 
-            // redirect unconditionally
+            // redirect using associated strategy
             resultResponse
                 .getHandlingStrategy()
                 .handleResults(getCommonContext(), resultResponse);
-
-
-            // intercept redirect request to sign-in page, TODO should be refactored into a new HandlingStrategy
-            if(actionOrPropertyModel.isLeft()) {
-                Optional.ofNullable(resultAdapter)
-                .ifPresent(actionResultAdapter->{
-                    val actionResultObjectType = actionResultAdapter.getSpecification().getLogicalTypeName();
-                    if(LoginRedirect.LOGICAL_TYPE_NAME.equals(actionResultObjectType)) {
-                        val signInPage = getCommonContext()
-                                .lookupServiceElseFail(PageClassRegistry.class)
-                                .getPageClass(PageType.SIGN_IN);
-                        RequestCycle.get().setResponsePage(signInPage);
-                    }
-                });
-            }
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
                 _Debug.log(10, "... return");
@@ -199,7 +180,7 @@ implements FormExecutor {
             // attempt to recognize this exception using the ExceptionRecognizers (but only when not in inline prompt context!?)
             if(!formExecutorContext.isWithinInlinePrompt()
                     && recognizeExceptionThenRaise(ex, ajaxTarget, feedbackFormIfAny).isPresent()) {
-                return FormExecutionOutcome.FAILURE_SO_STAY_ON_PAGE; // invalid args, stay on page
+                return FormExecutionOutcome.FAILURE_RECOVERABLE_SO_STAY_ON_PAGE; // invalid args, stay on page
             }
 
             // throwing an exception will get caught by WebRequestCycleForIsis#onException(...)

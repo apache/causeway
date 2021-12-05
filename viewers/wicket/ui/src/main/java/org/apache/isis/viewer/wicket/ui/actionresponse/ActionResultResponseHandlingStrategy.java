@@ -40,8 +40,8 @@ public enum ActionResultResponseHandlingStrategy {
     REDIRECT_TO_VOID {
         @Override
         public void handleResults(
-                IsisAppCommonContext commonContext,
-                ActionResultResponse resultResponse) {
+                final IsisAppCommonContext commonContext,
+                final ActionResultResponse resultResponse) {
 
             final RequestCycle requestCycle = RequestCycle.get();
             requestCycle.setResponsePage(new VoidReturnPage(new VoidModel(commonContext)));
@@ -50,8 +50,8 @@ public enum ActionResultResponseHandlingStrategy {
     REDIRECT_TO_PAGE {
         @Override
         public void handleResults(
-                IsisAppCommonContext commonContext,
-                ActionResultResponse resultResponse) {
+                final IsisAppCommonContext commonContext,
+                final ActionResultResponse resultResponse) {
 
             // force any changes in state etc to happen now prior to the redirect;
             // in the case of an object being returned, this should cause our page mementos
@@ -60,15 +60,16 @@ public enum ActionResultResponseHandlingStrategy {
             commonContext.getTransactionService().flushTransaction();
 
             // "redirect-after-post"
-            final RequestCycle requestCycle = RequestCycle.get();
-            requestCycle.setResponsePage(resultResponse.getToPage());
+            resultResponse.getToPage().accept(
+                    RequestCycle.get()::setResponsePage,
+                    RequestCycle.get()::setResponsePage);
         }
     },
     SCHEDULE_HANDLER {
         @Override
         public void handleResults(
-                IsisAppCommonContext commonContext,
-                ActionResultResponse resultResponse) {
+                final IsisAppCommonContext commonContext,
+                final ActionResultResponse resultResponse) {
 
             final RequestCycle requestCycle = RequestCycle.get();
             AjaxRequestTarget target = requestCycle.find(AjaxRequestTarget.class).orElse(null);
@@ -112,8 +113,8 @@ public enum ActionResultResponseHandlingStrategy {
     OPEN_URL_IN_NEW_BROWSER_WINDOW {
         @Override
         public void handleResults(
-                IsisAppCommonContext commonContext,
-                ActionResultResponse resultResponse) {
+                final IsisAppCommonContext commonContext,
+                final ActionResultResponse resultResponse) {
 
             final AjaxRequestTarget target = resultResponse.getTarget();
             final String url = resultResponse.getUrl();
@@ -126,8 +127,8 @@ public enum ActionResultResponseHandlingStrategy {
     OPEN_URL_IN_SAME_BROWSER_WINDOW {
         @Override
         public void handleResults(
-                IsisAppCommonContext commonContext,
-                ActionResultResponse resultResponse) {
+                final IsisAppCommonContext commonContext,
+                final ActionResultResponse resultResponse) {
 
             final AjaxRequestTarget target = resultResponse.getTarget();
             final String url = resultResponse.getUrl();
@@ -145,7 +146,7 @@ public enum ActionResultResponseHandlingStrategy {
     /**
      * @see #expanded(String)
      */
-    public static String expanded(RequestCycle requestCycle, final String url) {
+    public static String expanded(final RequestCycle requestCycle, final String url) {
         String urlStr = expanded(url);
         return requestCycle.getUrlRenderer().renderFullUrl(Url.parse(urlStr));
     }
@@ -161,15 +162,15 @@ public enum ActionResultResponseHandlingStrategy {
         return urlStr;
     }
 
-    private static String javascriptFor_newWindow(CharSequence url) {
+    private static String javascriptFor_newWindow(final CharSequence url) {
         return "function(){Wicket.Event.publish(Isis.Topic.OPEN_IN_NEW_TAB, '" + url + "');}";
     }
 
-    private static String javascriptFor_sameWindow(CharSequence url) {
+    private static String javascriptFor_sameWindow(final CharSequence url) {
         return "\"window.location.href='" + url + "'\"";
     }
 
-    private static void scheduleJs(AjaxRequestTarget target, String js, int millis) {
+    private static void scheduleJs(final AjaxRequestTarget target, final String js, final int millis) {
         // the timeout is needed to let Wicket release the channel
         target.appendJavaScript(String.format("setTimeout(%s, %d);", js, millis));
     }
@@ -186,7 +187,7 @@ public enum ActionResultResponseHandlingStrategy {
         private final IResourceStream resourceStream;
         private final Duration cacheDuration;
 
-        public StreamAfterAjaxResponseBehavior(ResourceStreamRequestHandler scheduledHandler) {
+        public StreamAfterAjaxResponseBehavior(final ResourceStreamRequestHandler scheduledHandler) {
             this.fileName = scheduledHandler.getFileName();
             this.resourceStream = scheduledHandler.getResourceStream();
             this.cacheDuration = scheduledHandler.getCacheDuration();
