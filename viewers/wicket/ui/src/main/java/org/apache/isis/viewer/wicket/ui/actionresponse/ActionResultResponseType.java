@@ -254,11 +254,6 @@ public enum ActionResultResponseType {
             final ActionModel model,
             final ManagedObject actualAdapter) {
 
-        // this will not preserve the URL (because pageParameters are not copied over)
-        // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
-        //FIXME[ISIS-2903] some experiments here ...
-        //final EntityPage entityPage = EntityPage.ofAdapter(model.getCommonContext(), actualAdapter);
-
         return ActionResultResponse.toPage(PageRedirectRequest.forPageClass(
                 EntityPage.class,
                 PageParameterUtils.createPageParametersForObject(actualAdapter)));
