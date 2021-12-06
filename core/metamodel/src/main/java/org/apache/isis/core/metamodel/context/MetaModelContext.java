@@ -124,6 +124,10 @@ public interface MetaModelContext {
      */
     <T> T getSingletonElseFail(Class<T> type);
 
+    /**
+     * Recovers an object (graph) from given {@code bookmark}.
+     * Also resolves injection-points for the result.
+     */
     default Optional<ManagedObject> loadObject(final @Nullable Bookmark bookmark) {
         if(bookmark==null) {
             return Optional.empty();

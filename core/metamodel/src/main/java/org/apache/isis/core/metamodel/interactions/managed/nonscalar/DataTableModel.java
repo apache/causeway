@@ -75,10 +75,12 @@ implements MultiselectChoices {
             final ManagedObject actionResult) {
 
         val objectManager = managedAction.getMetaModel().getMetaModelContext().getObjectManager();
+        val serviceInjector = managedAction.getMetaModel().getMetaModelContext().getServiceInjector();
         return new DataTableModel(managedAction, managedAction.getWhere(), ()->
             ManagedObjects.isNullOrUnspecifiedOrEmpty(actionResult)
                 ? Can.empty()
                 : _NullSafe.streamAutodetect(actionResult.getPojo())
+                        .map(serviceInjector::injectServicesInto)
                         .map(objectManager::adapt)
                         .collect(Can.toCan()));
     }

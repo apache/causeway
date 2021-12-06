@@ -147,7 +147,6 @@ extends ModelAbstract<ManagedObject> {
                 .orElseGet(()->loadDirect(bookmark));
     }
 
-
     // -- HELPER
 
     private final ManagedObject loadDirect(final Bookmark bookmark) {

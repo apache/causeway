@@ -416,7 +416,9 @@ implements SchemaValueMarshaller {
             return valueDto;
         }
         case REFERENCE: {
-            throw _Exceptions.unexpectedCodeReach();
+            // at this point, we know the value has no bookmark
+            // so leave the DTO empty (representing a null reference)
+            return valueDto;
         }
         case BLOB: {
             final Blob blob = (Blob) pojo;
