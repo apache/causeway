@@ -115,7 +115,8 @@ public class JpaTestFixtures {
 
     public void assertPopulatedWithDefaults(
             final JpaInventoryJaxbVm inventoryJaxbVm) {
-        assertEquals("JpaInventoryJaxbVm; 3 products", inventoryJaxbVm.title());
+
+        assertEquals("JpaInventoryJaxbVm; Bookstore; 3 products", inventoryJaxbVm.title());
         assertEquals("Bookstore", inventoryJaxbVm.getName());
         val books = inventoryJaxbVm.listBooks();
         assertEquals(3, books.size());

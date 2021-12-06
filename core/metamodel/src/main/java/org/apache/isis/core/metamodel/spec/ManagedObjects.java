@@ -415,6 +415,11 @@ public final class ManagedObjects {
         }
 
         @Override
+        public Optional<Bookmark> getBookmarkRefreshed() {
+            return Optional.empty();
+        }
+
+        @Override
         public boolean isBookmarkMemoized() {
             return false;
         }

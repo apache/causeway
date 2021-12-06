@@ -38,7 +38,6 @@ import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelStandalon
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.model.models.VoidModel;
-import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
@@ -57,17 +56,15 @@ public enum ActionResultResponseType {
                 final AjaxRequestTarget target,
                 final ManagedObject resultAdapter,
                 final Can<ManagedObject> args) {
-            final var commonContext = actionModel.getCommonContext();
-            final var actualAdapter = determineScalarAdapter(commonContext, resultAdapter); // intercepts collections
-            return toEntityPage(actionModel, actualAdapter);
+            determineScalarAdapter(actionModel.getCommonContext(), resultAdapter); // intercepts collections
+            return toEntityPage(resultAdapter);
         }
 
         @Override
         public ActionResultResponse interpretResult(
                 final ActionModel actionModel,
                 final ManagedObject targetAdapter) {
-            final ActionResultResponse actionResultResponse = toEntityPage(actionModel, targetAdapter);
-            return actionResultResponse;
+            return toEntityPage(targetAdapter);
         }
     },
     COLLECTION {
@@ -230,6 +227,10 @@ public enum ActionResultResponseType {
                 .interpretResult(model, targetIfAny, typeAndAdapter.resultAdapter, args);
     }
 
+    public static ActionResultResponse toEntityPage(final ManagedObject actualAdapter) {
+        return ActionResultResponse.toPage(EntityPage.class, actualAdapter.getBookmarkRefreshed().orElseThrow());
+    }
+
     // -- HELPER
 
     private static ManagedObject determineScalarAdapter(
@@ -248,16 +249,6 @@ public enum ActionResultResponseType {
             final var scalarAdapter = commonContext.getPojoToAdapter().apply(pojo);
             return scalarAdapter;
         }
-    }
-
-    private static ActionResultResponse toEntityPage(
-            final ActionModel model,
-            final ManagedObject actualAdapter) {
-
-        return ActionResultResponse.toPage(PageRedirectRequest.forPageClass(
-                EntityPage.class,
-                PageParameterUtils.createPageParametersForObject(actualAdapter)));
-
     }
 
     @Value(staticConstructor = "of")

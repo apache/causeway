@@ -67,6 +67,16 @@ public interface ManagedObject {
      */
     Optional<Bookmark> getBookmark();
 
+    /**
+     * Similar to {@link #getBookmark()}, but invalidates any memoized {@link Bookmark}
+     * such that the {@link Bookmark} returned is recreated, reflecting the object's current state.
+     * @implNote
+     * As this is not required, in fact not recommended for entities,
+     * (but might be necessary for viewmodels, when their state has changed),
+     * we silently ignore bookmark invalidation attempts for entities.
+     */
+    Optional<Bookmark> getBookmarkRefreshed();
+
     boolean isBookmarkMemoized();
 
     default Supplier<ManagedObject> asProvider() {
@@ -233,6 +243,15 @@ public interface ManagedObject {
             return bookmarkLazy.get();
         }
 
+        @Override
+        public Optional<Bookmark> getBookmarkRefreshed() {
+            // silently ignore invalidation, when the pojo is an entity
+            if(!specification.isEntity()) {
+                bookmarkLazy.clear();
+            }
+            return getBookmark();
+        }
+
         // -- LAZY ID HANDLING
         private final _Lazy<Optional<Bookmark>> bookmarkLazy =
                 _Lazy.threadSafe(()->ManagedObjects.BookmarkUtil.bookmark(this));
@@ -256,6 +275,15 @@ public interface ManagedObject {
         @Override
         public Optional<Bookmark> getBookmark() {
             return bookmarkLazy.get();
+        }
+
+        @Override
+        public Optional<Bookmark> getBookmarkRefreshed() {
+            // silently ignore invalidation, when the pojo is an entity
+            if(!specification.get().isEntity()) {
+                bookmarkLazy.clear();
+            }
+            return getBookmark();
         }
 
         // -- LAZY ID HANDLING
@@ -298,8 +326,5 @@ public interface ManagedObject {
 
 
     }
-
-
-
 
 }

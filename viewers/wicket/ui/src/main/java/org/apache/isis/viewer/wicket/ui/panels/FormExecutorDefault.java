@@ -41,9 +41,7 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
-import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
-import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
 import lombok.NonNull;
 import lombok.val;
@@ -154,8 +152,8 @@ implements FormExecutor {
             val resultResponse = actionOrPropertyModel.fold(
                     act->ActionResultResponseType
                             .determineAndInterpretResult(act, ajaxTarget, resultAdapter, act.snapshotArgs()),
-                    prop->ActionResultResponse
-                            .toPage(EntityPage.class, resultAdapter.getBookmark().orElseThrow()));
+                    prop->ActionResultResponseType
+                            .toEntityPage(resultAdapter));
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
                 _Debug.log(10, "handle result ...");

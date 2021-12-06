@@ -115,7 +115,7 @@ public class JdoTestFixtures {
 
     public void assertPopulatedWithDefaults(
             final JdoInventoryJaxbVm inventoryJaxbVm) {
-        assertEquals("JdoInventoryJaxbVm; 3 products", inventoryJaxbVm.title());
+        assertEquals("JdoInventoryJaxbVm; Bookstore; 3 products", inventoryJaxbVm.title());
         assertEquals("Bookstore", inventoryJaxbVm.getName());
         val books = inventoryJaxbVm.listBooks();
         assertEquals(3, books.size());

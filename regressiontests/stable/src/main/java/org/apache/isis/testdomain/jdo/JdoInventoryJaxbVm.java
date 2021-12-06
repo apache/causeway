@@ -62,7 +62,8 @@ public class JdoInventoryJaxbVm {
     private RepositoryService repository;
 
     @ObjectSupport public String title() {
-        return String.format("JdoInventoryJaxbVm; %d products", listProducts().size());
+        return String.format("%s; %s; %d products",
+                this.getClass().getSimpleName(), getName(), listProducts().size());
     }
 
     @Property(editing = Editing.ENABLED)
