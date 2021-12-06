@@ -75,12 +75,10 @@ implements MultiselectChoices {
             final ManagedObject actionResult) {
 
         val objectManager = managedAction.getMetaModel().getMetaModelContext().getObjectManager();
-        val serviceInjector = managedAction.getMetaModel().getMetaModelContext().getServiceInjector();
         return new DataTableModel(managedAction, managedAction.getWhere(), ()->
             ManagedObjects.isNullOrUnspecifiedOrEmpty(actionResult)
                 ? Can.empty()
                 : _NullSafe.streamAutodetect(actionResult.getPojo())
-                        .map(serviceInjector::injectServicesInto)
                         .map(objectManager::adapt)
                         .collect(Can.toCan()));
     }
@@ -109,7 +107,9 @@ implements MultiselectChoices {
         this.managedMember = managedMember;
         this.where = where;
 
-        dataElements = _Observables.lazy(elementSupplier);
+        //dataElements = _Observables.lazy(elementSupplier);
+        dataElements = _Observables.lazy(()->elementSupplier.get().map(e->
+            e.getMetaModelContext().getServiceInjector().injectServicesInto(e)));
 
         searchArgument = _Bindables.forValue(null);
 
