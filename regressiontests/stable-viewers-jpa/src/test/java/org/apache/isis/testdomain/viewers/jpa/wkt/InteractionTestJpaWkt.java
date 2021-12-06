@@ -93,7 +93,7 @@ class InteractionTestJpaWkt extends RegressionTestAbstract {
             wktTester.startEntityPage(pageParameters);
 
             wktTester.assertHeaderBrandText("Smoke Tests");
-            wktTester.assertPageTitle("JpaInventoryJaxbVm; 3 products");
+            wktTester.assertPageTitle("JpaInventoryJaxbVm; Bookstore; 3 products");
 
             //wktTester.dumpComponentTree(comp->true);
 
@@ -124,7 +124,7 @@ class InteractionTestJpaWkt extends RegressionTestAbstract {
             if(false){ //XXX broken
                 wktTester.clickLink(OPEN_SAMPLE_ACTION);
                 wktTester.assertHeaderBrandText("Smoke Tests");
-                wktTester.assertPageTitle("JpaInventoryJaxbVm; 3 products");
+                wktTester.assertPageTitle("JpaInventoryJaxbVm; Bookstore; 3 products");
                 assertFavoriteBookIsPopulated();
             }
 

@@ -91,7 +91,7 @@ class InteractionTestJdoWkt extends RegressionTestAbstract {
             wktTester.startEntityPage(pageParameters);
 
             wktTester.assertHeaderBrandText("Smoke Tests");
-            wktTester.assertPageTitle("JdoInventoryJaxbVm; 3 products");
+            wktTester.assertPageTitle("JdoInventoryJaxbVm; Bookstore; 3 products");
 
             //wktTester.dumpComponentTree(comp->true);
 
@@ -122,7 +122,7 @@ class InteractionTestJdoWkt extends RegressionTestAbstract {
             if(false){ //XXX broken
                 wktTester.clickLink(OPEN_SAMPLE_ACTION);
                 wktTester.assertHeaderBrandText("Smoke Tests");
-                wktTester.assertPageTitle("JdoInventoryJaxbVm; 3 products");
+                wktTester.assertPageTitle("JdoInventoryJaxbVm; Bookstore; 3 products");
 
                 assertFavoriteBookIsPopulated();
             }
