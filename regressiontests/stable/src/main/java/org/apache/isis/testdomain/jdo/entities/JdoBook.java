@@ -35,6 +35,8 @@ import org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectRemovingEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
+import org.apache.isis.commons.internal.debug._Debug;
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.testdomain.model.stereotypes.MyService;
 import org.apache.isis.testdomain.util.dto.BookDto;
 import org.apache.isis.testdomain.util.dto.IBook;
@@ -165,6 +167,11 @@ implements IBook {
         this.author = author;
         this.isbn = isbn;
         this.publisher = publisher;
+
+        _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+            _Debug.log(10, "new JdoBook instance %s", this);
+        });
+
     }
 
 }
