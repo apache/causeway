@@ -18,11 +18,20 @@
  */
 package org.apache.isis.client.kroviz.utils
 
+import io.kvision.utils.obj
 import org.apache.isis.client.kroviz.ui.core.Constants
+import org.apache.isis.client.kroviz.utils.js.XmlBeautify
+import org.apache.isis.client.kroviz.utils.js.XmlToJson
 import org.w3c.dom.Document
 import org.w3c.dom.Node
 import org.w3c.dom.asList
 import org.w3c.dom.parsing.DOMParser
+import org.w3c.fetch.RequestDestination
+
+inline val RequestDestination.Companion.XSLT: RequestDestination
+    get() {
+        TODO()
+    }
 
 object XmlHelper {
 
@@ -48,29 +57,12 @@ object XmlHelper {
         return p.parseFromString(xmlStr, Constants.xmlMimeType)
     }
 
-    // Adopted from @link https://stackoverflow.com/questions/376373/pretty-printing-xml-with-javascript
-    fun format(xml: String): String {
-        var formatted = ""
-        val reg = "/(>)(<)(/*)/g"
-        var pad = 0
-        xml.split(reg).forEach { node ->
-            var indent = 0
-            when {
-                "/.+</w[^>]*>$/".toRegex().containsMatchIn(node) -> indent = 0
-                "/^</w/".toRegex().containsMatchIn(node) -> {
-                    if (pad != 0) pad -= 1
-                }
-                "/^<w[^>]*[^/]>.*$/".toRegex().containsMatchIn(node) -> indent = 1
-                else -> indent = 0
-            }
-
-            var padding = ""
-            (1..pad).forEach { padding += "  " }
-
-            formatted += padding + node + "\r\n"
-            pad += indent
+    fun format(inputXml: String): String {
+        val options = obj {
+            indent = "  "
+            useSelfClosingElement = true
         }
-        return formatted.substring(0, formatted.length - 2);
+        return XmlBeautify().beautify(inputXml, options)
     }
 
     fun xml2json(xml: String): String {

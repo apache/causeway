@@ -35,6 +35,8 @@ import kotlin.test.assertTrue
  */
 class ResponseRegressionTest {
 
+    //TODO
+    /*
     @BeforeTest
     fun setup() {
         val user = "sven"
@@ -44,7 +46,7 @@ class ResponseRegressionTest {
     }
 
     @ExperimentalCoroutinesApi
-//TODO    @Test
+    @Test
     fun testCompareSnapshotWithResponse() {
         //given
         val map = Response2Handler.map
@@ -82,5 +84,5 @@ class ResponseRegressionTest {
       //  val hc = Client("id", link.href)
         return "Why must this be so complicated?"
     }
-
+*/
 }

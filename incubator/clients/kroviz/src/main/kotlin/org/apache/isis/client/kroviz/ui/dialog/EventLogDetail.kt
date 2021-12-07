@@ -29,7 +29,7 @@ import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.ui.diagram.JsonDiagram
 import org.apache.isis.client.kroviz.ui.diagram.LayoutDiagram
 import org.apache.isis.client.kroviz.ui.diagram.LinkTreeDiagram
-import org.apache.isis.client.kroviz.utils.Flatted
+import org.apache.isis.client.kroviz.utils.js.Flatted
 import org.apache.isis.client.kroviz.utils.StringUtils
 import org.apache.isis.client.kroviz.utils.XmlHelper
 

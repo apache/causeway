@@ -35,6 +35,7 @@ import org.apache.isis.client.kroviz.ui.dialog.SvgInline
 import org.apache.isis.client.kroviz.ui.panel.*
 import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.utils.Point
+import org.apache.isis.client.kroviz.utils.TestUtils
 
 class RoMenuBar : SimplePanel() {
     lateinit var navbar: Navbar
@@ -110,6 +111,11 @@ class RoMenuBar : SimplePanel() {
         val aboutTitle = "About"
         mainMenu.add(
             buildMenuEntry(aboutTitle, "Info", { UiManager.add(aboutTitle, About().dialog) })
+        )
+
+        val testTitle = "Test"
+        mainMenu.add(
+            buildMenuEntry(testTitle, "Test", { TestUtils.execute() })
         )
 
         return mainMenu

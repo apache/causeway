@@ -84,7 +84,7 @@ IHDR�w=�sBIT|d�	pHYs��~�tEXtSoftwareAdobe Fireworks 
         assertNotEquals(blob.size, ba.size)
 
         val url = URL.createObjectURL(blob)
-        val image = Image(url)
+        Image(url)
         console.log(url)
         window.open(url)
     }

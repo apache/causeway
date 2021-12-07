@@ -16,10 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.utils
+package org.apache.isis.client.kroviz.utils.js
 
-@JsModule("flatted")
+@JsModule("xml-beautify")
 @JsNonModule
-external object Flatted {
-    fun stringify(obj: Any): String
+external class XmlBeautify {
+    fun beautify(xmlString: String, options: Any): String
 }

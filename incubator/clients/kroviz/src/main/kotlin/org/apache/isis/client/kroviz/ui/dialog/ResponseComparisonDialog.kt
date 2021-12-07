@@ -23,8 +23,8 @@ import org.apache.isis.client.kroviz.core.event.LogEntryComparison
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
-import org.apache.isis.client.kroviz.utils.Diff
-import org.apache.isis.client.kroviz.utils.Diff2Html
+import org.apache.isis.client.kroviz.utils.js.Diff
+import org.apache.isis.client.kroviz.utils.js.Diff2Html
 
 class ResponseComparisonDialog(obj: LogEntryComparison) : Command() {
 
