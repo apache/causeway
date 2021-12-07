@@ -24,19 +24,36 @@ import java.util.Set;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
+import org.apache.wicket.SystemMapper;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxRequestTarget.IListener;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.attributes.IAjaxCallListener;
+import org.apache.wicket.core.request.handler.ListenerRequestHandler;
+import org.apache.wicket.core.request.mapper.PageInstanceMapper;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.IRequestMapper;
+import org.apache.wicket.request.Request;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanel;
+import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
 import lombok.NonNull;
 import lombok.val;
@@ -165,6 +182,180 @@ final class IsisWicketApplication_experimental {
                 IsisWicketApplication.class, "isis-wicket-viewer-bundle.css",
                 references.toArray(new CssResourceReference[]{}));
     }
+
+    // -- ENTITY PAGE EXPERIMENTS
+
+    static void setRootRequestMapper(final IsisWicketApplication app) {
+        app.setRootRequestMapper(new SystemMapper(app) {
+            @Override
+            protected IRequestMapper newPageInstanceMapper() {
+                return new PageInstanceMapper() {
+                    @Override
+                    public IRequestHandler mapRequest(final Request request) {
+                        var handler = super.mapRequest(request);
+                        return reattachingHandler(app.getCommonContext(), handler);
+                    }
+                };
+            }
+        });
+
+    }
+
+    private static String keyFor(final Component component) {
+        val ref = _Refs.stringRef(component.getPath());
+        ref.cutAtIndexOfAndDrop(":theme:");
+        return ref.getValue();
+    }
+
+    private static IRequestHandler reattachingHandler(
+            final IsisAppCommonContext commonContext, final IRequestHandler handler) {
+        if(handler!=null) {
+            return handler;
+        }
+        if(handler instanceof ListenerRequestHandler) {
+            val lirqh = (ListenerRequestHandler)handler;
+            val page = lirqh.getPage();
+            if(!(page instanceof EntityPage)) {
+                return lirqh;
+            }
+
+            val entityPage = (EntityPage) page;
+            val entityModel = (EntityModel)entityPage.getUiHintContainerIfAny();
+            val spec = entityModel.getObject().getSpecification();
+
+            if(!spec.getCorrespondingClass()
+            .getSimpleName().contains("InventoryJaxb")) {
+                return lirqh;
+            };
+
+            val pageParams = entityPage.getPageParameters();
+            val pageWithAttachedEntities = EntityPage.ofPageParameters(commonContext, pageParams);
+            pageWithAttachedEntities.internalInitialize();
+
+            final Map<String, ManagedObject> entityByPath = _Maps.newHashMap();
+            final Map<String, DataTableModel> dataTableByPath = _Maps.newHashMap();
+
+            System.err.println("===================================================");
+
+            pageWithAttachedEntities.visitChildren(new IVisitor<Component, Void>() {
+
+                @Override
+                public void component(final Component component, final IVisit<Void> visit) {
+
+                    //System.err.printf("+ %s%n", component);
+
+                    if(component.getClass().equals(ReferencePanel.class)) {
+                        val scalarModel = ((ReferencePanel)component).getModel();
+                        val value = scalarModel.getObject();
+                        entityByPath.put(keyFor(component), value);
+
+                        System.err.printf("AAA-value %s%n", value.getPojo());
+                        System.err.printf("AAA-value@ %s%n", keyFor(component));
+                        return;
+                    }
+                    if(component.getClass().equals(CollectionPanel.class)) {
+                        val collectionModel = ((CollectionPanel)component).getModel();
+                        val dataTableModel = collectionModel.getDataTableModel();
+                        dataTableByPath.put(keyFor(component), dataTableModel);
+                        System.err.printf("AAA-coll %s%n", dataTableModel);
+                        System.err.printf("AAA-coll@ %s%n", keyFor(component));
+                    }
+
+//                    if(component.getClass().equals(EntityCollectionPanel.class)) {
+//                        val entityModel = ((EntityCollectionPanel)component).getModel();
+//                        val dataTableModel = EntityCollectionModelParented
+//                                .forParentObjectModel(entityModel)
+//                                .getDataTableModel();
+//                        dataTableByPath.put(keyFor(component), dataTableModel);
+//
+//                        System.err.printf("AAA-coll %s%n", dataTableModel);
+//                        System.err.printf("AAA-coll@ %s%n", keyFor(component));
+//                    }
+
+                }
+            });
+
+
+            //TODO re-attach all entities in the object graph
+
+            if(entityModel.getCommonContext().getInteractionProvider().isInInteraction()) {
+
+                System.err.println("===================================================");
+
+                entityPage.visitChildren((component, visit) -> {
+                    //System.err.printf("+ %s%n", component);
+                    if(component.getClass().getSimpleName().equals("ReferencePanel")) {
+                        var scalarModel = ((ReferencePanel)component).getModel();
+                        scalarModel.setObject(entityByPath.get(keyFor(component)));
+                        var value = scalarModel.getObject();
+                        //getObjectManager().attachObject(value);
+                        System.err.printf("BBB-value@ %s%n", keyFor(component));
+                        System.err.printf("BBB-value %s%n", value.getPojo());
+                        return;
+                    }
+
+                    if(component.getClass().equals(CollectionPanel.class)) {
+                        val collectionModel = ((CollectionPanel)component).getModel();
+                        val dataTableModel = dataTableByPath.get(keyFor(component));
+
+                        collectionModel.setDataTableModel(dataTableModel);
+
+                        System.err.printf("BBB-coll@ %s%n", keyFor(component));
+                        System.err.printf("BBB-coll %s%n", collectionModel.getDataTableModel());
+//                        System.err.printf("path %s%n", keyFor(component));
+
+//                        collectionModel.getDataTableModel().getDataElements().getValue().forEach(mo->{
+//                            System.err.printf("element %s%n", mo);
+//
+//                            mo.getPojo();
+//                        });
+
+
+                        dataTableModel.getDataElements().getValue().forEach(mo->{
+                            System.err.printf("element %s%n", mo.getBookmark());
+                        });
+
+                    }
+
+                });
+            }
+
+//            if(false) {
+//                Url url = request.getUrl();
+//                PageComponentInfo info = getPageComponentInfo(url);
+////                            Integer renderCount = info.getComponentInfo() != null ? info.getComponentInfo()
+////                                    .getRenderCount() : null;
+//                ComponentInfo componentInfo = info.getComponentInfo();
+////                            PageAndComponentProvider provider = new PageAndComponentProvider(
+////                                    info.getPageInfo().getPageId(), renderCount,
+////                                    componentInfo.getComponentPath());
+////                            provider.setPageSource(getContext());
+//
+//                val pageParams = entityPage.getPageParameters();
+//
+//                PageAndComponentProvider provider2 = new PageAndComponentProvider(
+//                        EntityPage.class, pageParams,
+//                        componentInfo.getComponentPath());
+//
+//                System.err.printf("***ComponentPath %s%n", componentInfo.getComponentPath());
+//
+//                provider2.setPageSource(getContext());
+//
+//                return new ListenerRequestHandler(provider2, componentInfo.getBehaviorId()) {
+//                    @Override
+//                    public IRequestableComponent getComponent() {
+//                        dumpComponentTree((EntityPage)getPage(), _Predicates.alwaysTrue());
+//                        return super.getComponent();
+//                    }
+//                };
+//            }
+
+            return lirqh;
+
+        }
+        return handler;
+    }
+
 
 
 
