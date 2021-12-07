@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
@@ -86,6 +87,10 @@ public class JdoInventoryJaxbVm {
     @XmlElement(required = false)
     @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
     private JdoBook favoriteBook = null;
+
+    @MemberSupport public List<JdoBook> choicesFavoriteBook() {
+        return listBooks();
+    }
 
     @Getter @Setter
     @Collection
