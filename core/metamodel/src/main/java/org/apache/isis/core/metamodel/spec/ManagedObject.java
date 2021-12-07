@@ -35,12 +35,11 @@ import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import lombok.Value;
 import lombok.val;
 
 /**
@@ -60,6 +59,13 @@ public interface ManagedObject {
      * represents with the framework.
      */
     Object getPojo();
+
+    /**
+     * Introduced, so we can re-attach detached entity pojos in place.
+     * @apiNote should be package private, and not publicly exposed
+     * (but the <i>Java</i> language is not there yet)
+     */
+    void replacePojo(UnaryOperator<Object> replacer);
 
     /**
      * Returns the object's bookmark as identified by the ObjectManager.
@@ -220,10 +226,12 @@ public interface ManagedObject {
 
     // -- SIMPLE
 
-    @Value
-    @RequiredArgsConstructor(staticName="of", access = AccessLevel.PRIVATE)
+    //@Value
+    //@RequiredArgsConstructor(staticName="of", access = AccessLevel.PRIVATE)
+    @AllArgsConstructor(staticName="of", access = AccessLevel.PRIVATE)
     @EqualsAndHashCode(of = "pojo")
     @ToString(of = {"specification", "pojo"}) //ISIS-2317 make sure toString() is without side-effects
+    @Getter
     static final class SimpleManagedObject implements ManagedObject {
 
         public static ManagedObject identified(
@@ -236,7 +244,7 @@ public interface ManagedObject {
         }
 
         @NonNull private final ObjectSpecification specification;
-        @Nullable private final Object pojo;
+        @Nullable private /*final*/ Object pojo;
 
         @Override
         public Optional<Bookmark> getBookmark() {
@@ -261,6 +269,11 @@ public interface ManagedObject {
             return bookmarkLazy.isMemoized();
         }
 
+        @Override
+        public void replacePojo(final UnaryOperator<Object> replacer) {
+            pojo = replacer.apply(pojo);
+        }
+
     }
 
     // -- LAZY
@@ -270,7 +283,7 @@ public interface ManagedObject {
 
         @NonNull private final Function<Class<?>, ObjectSpecification> specLoader;
 
-        @Getter @NonNull private final Object pojo;
+        @Getter @NonNull private /*final*/ Object pojo;
 
         @Override
         public Optional<Bookmark> getBookmark() {
@@ -323,6 +336,10 @@ public interface ManagedObject {
             return specLoader.apply(pojo.getClass());
         }
 
+        @Override
+        public void replacePojo(final UnaryOperator<Object> replacer) {
+            pojo = replacer.apply(pojo);
+        }
 
 
     }
