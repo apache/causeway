@@ -159,9 +159,7 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
     @Override
     protected void onEditable(final Optional<AjaxRequestTarget> target) {
         setEnabled(true);
-
     }
-
 
     // //////////////////////////////////////
 
@@ -197,9 +195,6 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
         setProviderAndCurrAndPending(select2);
         return true;
     }
-
-
-
 
     /**
      * Repaints just the Select2 component

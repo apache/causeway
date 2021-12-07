@@ -43,6 +43,7 @@ import lombok.val;
  * @since 2.0
  *
  */
+@Deprecated // no longer in use
 final class _Context_ThreadLocal {
 
     // -- MIXINS
