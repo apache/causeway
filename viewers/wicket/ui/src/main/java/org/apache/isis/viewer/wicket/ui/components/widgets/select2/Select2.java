@@ -19,7 +19,6 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.wicket.behavior.Behavior;
@@ -136,7 +135,7 @@ implements
 
     public void syncIfNull(final ScalarModel model) {
         if(!model.isCollection()) {
-            if(getModelObject() == null) {
+            if(memento() == null) {
                 this.mementoModel().setObject(null);
                 model.setObject(null);
             }
@@ -144,7 +143,7 @@ implements
     }
 
     public boolean isEmpty() {
-        final ObjectMemento curr = this.getModelObject();
+        final ObjectMemento curr = this.memento();
         return curr == null;
     }
 
@@ -164,53 +163,30 @@ implements
     }
 
     public IModel<String> obtainInlinePromptModel2() {
-        ObjectMemento inlinePromptMemento = this.getModelObject();
-        String inlinePrompt = inlinePromptMemento != null ? inlinePromptMemento.asString(): null;
-        return Model.of(inlinePrompt);
+        return LambdaModel.<String>of(()->{
+            final ObjectMemento inlinePromptMemento = this.memento();
+            return inlinePromptMemento != null ? inlinePromptMemento.asString(): null;
+        });
     }
 
     // -- HELPER
 
-    private ObjectMemento getModelObject() {
+    private ObjectMemento memento() {
         return select2Choice.fold(
                 single->single.getModelObject(),
-                multi->ObjectMemento.pack(multi.getModelObject(), multi.getLogicalType()));
+                multi->multi.getPackedModelObject());
     }
 
     private IModel<ObjectMemento> mementoModel() {
-
         return select2Choice.fold(
                 single->single.getModel(),
-                multi->new IModel<ObjectMemento>() {
-                    private static final long serialVersionUID = 1L;
-
-                    final ObjectMemento memento;
-                    final IModel<Collection<ObjectMemento>> model;
-                    {
-                        this.model = multi.getModel();
-                        this.memento = ObjectMemento.pack(model.getObject(), multi.getLogicalType());
-                    }
-
-                    @Override
-                    public ObjectMemento getObject() {
-                        return memento;
-                    }
-
-                    @Override
-                    public void setObject(final ObjectMemento memento) {
-                        model.setObject(ObjectMemento.unpack(memento).orElse(null));
-                    }
-
-                    @Override
-                    public void detach() {
-                    }
-                });
+                multi->multi.getPackingAdapterModel());
     }
 
     private ObjectMemento convertedInput() {
         final ObjectMemento convertedInput = select2Choice.fold(
                 single->single.getConvertedInput(),
-                multi->ObjectMemento.pack(multi.getConvertedInput(), multi.getLogicalType()));
+                multi->multi.getPackedConvertedInput());
         this.mementoModel().setObject(convertedInput);
         return convertedInput;
     }
