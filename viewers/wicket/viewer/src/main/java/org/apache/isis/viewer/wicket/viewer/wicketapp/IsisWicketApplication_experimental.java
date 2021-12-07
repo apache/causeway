@@ -298,18 +298,10 @@ final class IsisWicketApplication_experimental {
                         val collectionModel = ((CollectionPanel)component).getModel();
                         val dataTableModel = dataTableByPath.get(keyFor(component));
 
-                        collectionModel.setDataTableModel(dataTableModel);
+                        //XXX removed collectionModel.setDataTableModel(dataTableModel);
 
                         System.err.printf("BBB-coll@ %s%n", keyFor(component));
                         System.err.printf("BBB-coll %s%n", collectionModel.getDataTableModel());
-//                        System.err.printf("path %s%n", keyFor(component));
-
-//                        collectionModel.getDataTableModel().getDataElements().getValue().forEach(mo->{
-//                            System.err.printf("element %s%n", mo);
-//
-//                            mo.getPojo();
-//                        });
-
 
                         dataTableModel.getDataElements().getValue().forEach(mo->{
                             System.err.printf("element %s%n", mo.getBookmark());

@@ -20,7 +20,6 @@ package org.apache.isis.viewer.wicket.ui.panels;
 
 import java.util.Optional;
 
-import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.springframework.lang.Nullable;
@@ -84,7 +83,6 @@ implements FormExecutor {
      */
     @Override
     public FormExecutionOutcome executeAndProcessResults(
-            final Page page,
             final AjaxRequestTarget ajaxTarget,
             final Form<?> feedbackFormIfAny,
             final FormExecutorContext formExecutorContext) {

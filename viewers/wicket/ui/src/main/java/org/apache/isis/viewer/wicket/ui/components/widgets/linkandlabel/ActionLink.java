@@ -40,6 +40,7 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptWithExtraContent;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
+import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
@@ -214,12 +215,11 @@ extends IndicatingAjaxLink<ManagedObject> {
 
     private void executeWithoutParams() {
         val actionModel = this.getActionModel();
-        val page = this.getPage();
 
         // on non-recoverable exception throws
         val outcome = FormExecutorDefault
                 .forAction(actionModel)
-                .executeAndProcessResults(page, null, null, actionModel);
+                .executeAndProcessResults(null, null, actionModel);
 
         // on recoverable exception stay on page (eg. validation failure)
         if(outcome.isFailure()) {
@@ -234,11 +234,12 @@ extends IndicatingAjaxLink<ManagedObject> {
             // the EventBus' exception handler will automatically veto.  This results in a growl message rather than
             // an error page, but is probably 'good enough').
             val targetAdapter = actionModel.getParentObject();
-            val entityPage = EntityPage.ofAdapter(getCommonContext(), targetAdapter);
+            val bookmark = targetAdapter.getBookmarkRefreshed().orElseThrow();
             getCommonContext().getTransactionService().flushTransaction();
 
             // "redirect-after-post"
-            RequestCycle.get().setResponsePage(entityPage);
+            RequestCycle.get().setResponsePage(EntityPage.class,
+                    PageParameterUtils.createPageParametersForBookmark(bookmark));
         }
     }
 

@@ -227,8 +227,8 @@ public enum ActionResultResponseType {
                 .interpretResult(model, targetIfAny, typeAndAdapter.resultAdapter, args);
     }
 
-    public static ActionResultResponse toEntityPage(final ManagedObject actualAdapter) {
-        return ActionResultResponse.toPage(EntityPage.class, actualAdapter.getBookmarkRefreshed().orElseThrow());
+    public static ActionResultResponse toEntityPage(final ManagedObject entityOrViewmodel) {
+        return ActionResultResponse.toPage(EntityPage.class, entityOrViewmodel.getBookmarkRefreshed().orElseThrow());
     }
 
     // -- HELPER
