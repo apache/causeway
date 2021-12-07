@@ -18,14 +18,14 @@
  */
 package org.apache.isis.testdomain.jdo;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
-/**
- * Just an entry-point to initialize class-path scanning.
- */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class JdoTestDomainModule {
-
+@Configuration
+@ComponentScan(
+        basePackageClasses= {
+                JdoTestDomainModule.class
+        })
+public class JdoTestDomainModule {
 
 }

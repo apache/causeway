@@ -27,6 +27,7 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
@@ -109,7 +110,7 @@ public class ObjectViewVaa extends VerticalLayout {
                 val uiRow = _vaa.add(container, new FlexLayout());
 
                 uiRow.setWidthFull();
-                uiRow.setWrapMode(FlexLayout.WrapMode.WRAP); // allow line breaking
+                uiRow.setFlexWrap(FlexWrap.WRAP); // allow line breaking
 
                 // instead of a FlexLayout we need to convert to a layout where we can control
                 // the responsive steps
@@ -139,7 +140,7 @@ public class ObjectViewVaa extends VerticalLayout {
             protected HasComponents newActionPanel(final HasComponents container) {
                 val uiActionPanel = _vaa.add(container, new FlexLayout());
 
-                uiActionPanel.setWrapMode(FlexLayout.WrapMode.WRAP); // allow line breaking
+                uiActionPanel.setFlexWrap(FlexWrap.WRAP); // allow line breaking
                 uiActionPanel.setAlignItems(Alignment.BASELINE);
                 return uiActionPanel;
             }

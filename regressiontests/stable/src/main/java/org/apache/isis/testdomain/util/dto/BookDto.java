@@ -21,6 +21,7 @@ package org.apache.isis.testdomain.util.dto;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.stream.Stream;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -33,8 +34,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.testdomain.jdo.entities.JdoBook;
-import org.apache.isis.testdomain.jpa.entities.JpaBook;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -54,7 +53,7 @@ public class BookDto {
     private String isbn;
     private String publisher;
 
-    public static BookDto from(final JdoBook book) {
+    public static BookDto from(final IBook book) {
         return BookDto.builder()
         .author(book.getAuthor())
         .description(book.getDescription())
@@ -65,44 +64,51 @@ public class BookDto {
         .build();
     }
 
-    public static BookDto from(final JpaBook book) {
+    @Programmatic
+    public BookDtoBuilder asBuilder() {
         return BookDto.builder()
-        .author(book.getAuthor())
-        .description(book.getDescription())
-        .isbn(book.getIsbn())
-        .name(book.getName())
-        .price(book.getPrice())
-        .publisher(book.getPublisher())
-        .build();
+        .author(this.getAuthor())
+        .description(this.getDescription())
+        .isbn(this.getIsbn())
+        .name(this.getName())
+        .price(this.getPrice())
+        .publisher(this.getPublisher());
+    }
+
+    public static Stream<BookDto> samples() {
+
+        return Stream.of(
+                BookDto.builder()
+                .author("Frank Herbert")
+                .description("A sample book for testing. (1)")
+                .isbn("ISBN-A")
+                .name("Dune")
+                .price(39.)
+                .publisher("Sample Publisher (1)")
+                .build(),
+                BookDto.builder()
+                .author("Isaac Asimov")
+                .description("A sample book for testing. (2)")
+                .isbn("ISBN-B")
+                .name("The Foundation")
+                .price(29.)
+                .publisher("Sample Publisher (2)")
+                .build(),
+                BookDto.builder()
+                .author("Herbert George Wells")
+                .description("A sample book for testing. (3)")
+                .isbn("ISBN-C")
+                .name("The Time Machine")
+                .price(99.)
+                .publisher("Sample Publisher (3)")
+                .build()
+                );
     }
 
     public static BookDto sample() {
-        return BookDto.sampleBuilder()
-                .build();
+        return samples().findFirst().orElseThrow();
     }
 
-    public static BookDtoBuilder sampleBuilder() {
-        return BookDto.builder()
-                .author("Sample Author")
-                .description("A sample book for testing.")
-                .isbn("Sample ISBN")
-                .name("Sample Book")
-                .price(99.)
-                .publisher("Sample Publisher");
-    }
-
-    @Programmatic
-    public JdoBook toJdoBook() {
-       return JdoBook.of(this.getName(), this.getDescription(), this.getPrice(),
-                this.getAuthor(), this.getIsbn(), this.getPublisher());
-    }
-
-
-    @Programmatic
-    public JpaBook toJpaBook() {
-       return JpaBook.of(this.getName(), this.getDescription(), this.getPrice(),
-                this.getAuthor(), this.getIsbn(), this.getPublisher());
-    }
 
     @Programmatic
     public String encode() throws JAXBException {
@@ -127,7 +133,6 @@ public class BookDto {
 
         return bookDto;
     }
-
 
 
 }

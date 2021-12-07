@@ -74,8 +74,6 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
         }
     }
 
-
-
     protected void resolveIfRequired(final ManagedObject adapter) {
 
         if(!resolveObjectChangedEnabled) {
@@ -88,9 +86,9 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
             return;
         }
 
-        val oid = objectManager.bookmarkObject(adapter);
+        val bookmark = objectManager.bookmarkObject(adapter);
 
-        val loadRequest = ObjectLoader.Request.of(adapter.getSpecification(), oid.getIdentifier());
+        val loadRequest = ObjectLoader.Request.of(adapter.getSpecification(), bookmark);
 
         objectManager.loadObject(loadRequest);
     }

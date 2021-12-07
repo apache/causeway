@@ -54,7 +54,7 @@ public interface ObjectMemento extends HasLogicalType, Serializable {
 
     // -- FACTORIES
 
-    static ObjectMemento wrapMementoList(
+    static ObjectMemento pack(
             final Collection<ObjectMemento> container,
             final LogicalType logicalType) {
 
@@ -66,7 +66,7 @@ public interface ObjectMemento extends HasLogicalType, Serializable {
     }
 
     // ArrayList is serializable
-    static Optional<ArrayList<ObjectMemento>> unwrapList(final ObjectMemento memento) {
+    static Optional<ArrayList<ObjectMemento>> unpack(final ObjectMemento memento) {
         if(memento==null) {
             return Optional.empty();
         }

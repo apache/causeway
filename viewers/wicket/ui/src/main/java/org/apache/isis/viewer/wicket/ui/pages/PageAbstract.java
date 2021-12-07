@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.pages;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -51,6 +52,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.config.viewer.web.DialogMode;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
@@ -68,6 +70,8 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.components.actionpromptsb.ActionPromptSidebar;
+import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.util.FontAwesomeCssReferenceWkt;
@@ -366,23 +370,25 @@ implements ActionPromptProvider {
      * Convenience for subclasses
      */
     protected void addBookmarkedPages(final MarkupContainer container) {
-        boolean showBookmarks = isShowBookmarks();
-        Component bookmarks = showBookmarks
-                ? getComponentFactoryRegistry().createComponent(ComponentType.BOOKMARKED_PAGES, ID_BOOKMARKED_PAGES, getBookmarkedPagesModel())
-                        : new EmptyPanel(ID_BOOKMARKED_PAGES).setVisible(false);
-                container.add(bookmarks);
 
-                bookmarks.add(new Behavior() {
-                    private static final long serialVersionUID = 1L;
+        final Component bookmarks = getBookmarkedPagesModel()
+            .map(bm->getComponentFactoryRegistry()
+                            .createComponent(ComponentType.BOOKMARKED_PAGES, ID_BOOKMARKED_PAGES, bm))
+            .orElseGet(()->new EmptyPanel(ID_BOOKMARKED_PAGES).setVisible(false));
 
-                    @Override
-                    public void onConfigure(final Component component) {
-                        super.onConfigure(component);
+        container.add(bookmarks);
 
-                        PageParameters parameters = getPageParameters();
-                        component.setVisible(parameters.get(PageParameterUtils.ISIS_NO_HEADER_PARAMETER_NAME).isNull());
-                    }
-                });
+        bookmarks.add(new Behavior() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onConfigure(final Component component) {
+                super.onConfigure(component);
+
+                PageParameters parameters = getPageParameters();
+                component.setVisible(parameters.get(PageParameterUtils.ISIS_NO_HEADER_PARAMETER_NAME).isNull());
+            }
+        });
     }
 
     private boolean isShowBookmarks() {
@@ -394,20 +400,27 @@ implements ActionPromptProvider {
     }
 
     protected void bookmarkPageIfShown(final BookmarkableModel model) {
-        if(!isShowBookmarks()) {
-            // no need...
-            return;
-        }
-        getBookmarkedPagesModel().bookmarkPage(model);
+        getBookmarkedPagesModel()
+        .ifPresent(bm->bm.bookmarkPage(model));
     }
 
     protected void removeAnyBookmark(final EntityModel model) {
-        getBookmarkedPagesModel().remove(model);
+        getBookmarkedPagesModel()
+        .ifPresent(bm->bm.remove(model));
     }
 
-    private BookmarkedPagesModel getBookmarkedPagesModel() {
-        final BookmarkedPagesModelProvider session = (BookmarkedPagesModelProvider) getSession();
-        return session.getBookmarkedPagesModel();
+    private Optional<BookmarkedPagesModel> getBookmarkedPagesModel() {
+        return isShowBookmarks()
+                ? _Casts.castTo(BookmarkedPagesModelProvider.class, getSession())
+                        .map(BookmarkedPagesModelProvider::getBookmarkedPagesModel)
+                : Optional.empty();
+    }
+
+    protected Optional<BreadcrumbModel> getBreadcrumbModel() {
+        return isShowBreadcrumbs()
+                ? _Casts.castTo(BreadcrumbModelProvider.class, getSession())
+                        .map(BreadcrumbModelProvider::getBreadcrumbModel)
+                : Optional.empty();
     }
 
 

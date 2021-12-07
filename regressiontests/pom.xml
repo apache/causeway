@@ -310,7 +310,9 @@
 		<module>stable-publishing-jpa</module>
 		<module>stable-rest</module>
 		<module>stable-value</module>
-		<module>stable-viewers</module>
+		<module>stable-viewers-common</module>
+		<module>stable-viewers-jdo</module>
+		<module>stable-viewers-jpa</module>
 		<!-- <module>incubating</module> -->
 	</modules>
 

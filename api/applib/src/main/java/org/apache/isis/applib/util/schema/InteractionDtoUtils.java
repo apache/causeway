@@ -34,11 +34,9 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.schema.SchemaValueMarshaller;
 import org.apache.isis.applib.util.JaxbUtil;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -54,9 +52,6 @@ import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
 import org.apache.isis.schema.ixn.v2.PropertyEditDto;
-
-import lombok.NonNull;
-import lombok.val;
 
 /**
  * @since 1.x {@index}
@@ -303,20 +298,6 @@ public final class InteractionDtoUtils {
 
     // -- invocationFor, actionFor, timingsFor
 
-    private static ActionInvocationDto actionInvocationFor(final InteractionDto interactionDto) {
-        ActionInvocationDto invocation = (ActionInvocationDto) interactionDto.getExecution();
-        if(invocation == null) {
-            invocation = new ActionInvocationDto();
-            interactionDto.setExecution(invocation);
-            invocation.setInteractionType(InteractionType.ACTION_INVOCATION);
-        }
-        return invocation;
-    }
-
-    private static List<ParamDto> parameterListFor(final InteractionDto ixnDto) {
-        return parameterListFor(actionInvocationFor(ixnDto));
-    }
-
     private static ParamsDto parametersFor(final ActionInvocationDto invocationDto) {
         ParamsDto parameters = invocationDto.getParameters();
         if(parameters == null) {
@@ -328,41 +309,6 @@ public final class InteractionDtoUtils {
 
     private static List<ParamDto> parameterListFor(final ActionInvocationDto invocationDto) {
         return parametersFor(invocationDto).getParameter();
-    }
-
-    // -- addParamArg
-
-    public static <T> void addParamArg(
-            final @NonNull SchemaValueMarshaller valueMarshaller,
-            final Identifier paramIdentifier,
-            final InteractionDto interactionDto,
-            final String parameterName,
-            final Class<T> parameterType,
-            final T arg) {
-
-        final List<ParamDto> params = parameterListFor(interactionDto);
-        val paramDto = new ParamDto();
-        paramDto.setName(parameterName);
-        valueMarshaller.recordParamValue(paramIdentifier, paramDto, parameterType, arg);
-        params.add(paramDto);
-    }
-
-
-    // -- addReturn
-
-    /**
-     *
-     * @param returnType - to determine the value type (if any)
-     * @param result - either a value type (possibly boxed primitive), or a reference type
-     * @param valueMarshaller - used if not a fundamental value type
-     */
-    public static <T> void addReturn(
-            final @NonNull SchemaValueMarshaller valueMarshaller,
-            final ActionInvocationDto invocationDto,
-            final Class<T> returnType,
-            final T result) {
-
-        valueMarshaller.recordActionResult(invocationDto, returnType, result);
     }
 
 
@@ -428,24 +374,11 @@ public final class InteractionDtoUtils {
         return paramDto.isNull();
     }
 
-    // -- getParameterArgValue
-
-    public static <T> T getParameterArgValue(
-            final @NonNull SchemaValueMarshaller valueMarshaller,
-            final @NonNull ActionInvocationDto ai,
-            final int paramNum) {
-
-        final Identifier actionIdentifier = valueMarshaller.actionIdentifier(ai);
-        final ParamDto paramDto = getParameter(ai, paramNum);
-        return (T) valueMarshaller.recoverValueFrom(actionIdentifier.withParameterIndex(paramNum), paramDto);
-    }
-
     // -- DEBUGGING (DUMP)
 
     public static void dump(final InteractionDto ixnDto, final PrintStream out) throws JAXBException {
         out.println(toXml(ixnDto));
     }
-
 
 
 }

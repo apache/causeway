@@ -44,6 +44,8 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.debug._Debug;
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -104,10 +106,20 @@ implements EntityFacet {
                     pojo.getClass().getName());
         }
 
-        val persistenceManager = getPersistenceManager();
-        val primaryKey = persistenceManager.getObjectId(pojo);
+        val pm = getPersistenceManager();
+        var primaryKey = pm.getObjectId(pojo);
+
+//        if(primaryKey==null) {
+//            pm.makePersistent(pojo);
+//            primaryKey = pm.getObjectId(pojo);
+//        }
 
         if(primaryKey==null) {
+
+            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+                _Debug.log(10, "detached entity detected %s", pojo);
+            });
+
             throw _Exceptions.illegalArgument(
                     "The persistence layer does not recognize given object of type %s, "
                     + "meaning the object has no identifier that associates it with the persistence layer. "
@@ -128,11 +140,9 @@ implements EntityFacet {
     @Override
     public ManagedObject fetchByIdentifier(
             final @NonNull ObjectSpecification entitySpec,
-            final @NonNull String identifier) {
+            final @NonNull Bookmark bookmark) {
 
         _Assert.assertTrue(entitySpec.isEntity());
-
-        val bookmark = Bookmark.forLogicalTypeAndIdentifier(entitySpec.getLogicalType(), identifier);
 
         log.debug("fetchEntity; bookmark={}", bookmark);
 

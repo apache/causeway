@@ -19,11 +19,11 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LambdaModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidator;
 import org.wicketstuff.select2.AbstractSelect2Choice;
@@ -32,144 +32,172 @@ import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Select2MultiChoice;
 import org.wicketstuff.select2.Settings;
 
+import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithMultiChoice;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithSingleChoice;
+import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
+
+import lombok.NonNull;
+import lombok.val;
 
 /**
  * Wrapper around either a {@link Select2Choice} or a {@link Select2MultiChoice}.
  */
-public class Select2 implements Serializable {
+public class Select2
+implements
+    Serializable,
+    HasCommonContext {
 
     private static final long serialVersionUID = 1L;
 
-    final Select2ChoiceExt select2Choice;
-    final Select2MultiChoiceExt select2MultiChoice;
+    final _Either<Select2ChoiceExt, Select2MultiChoiceExt> select2Choice;
 
     public static Select2 createSelect2(final String id, final ScalarModel scalarModel) {
-        return scalarModel.isCollection()
-                ? new Select2(
-                        null,
-                        Select2MultiChoiceExt.create(id,
-                                ScalarModelWithMultiChoice.chain(scalarModel), scalarModel))
-                : new Select2(
+        return new Select2(!scalarModel.isCollection()
+                ? _Either.left(
                         Select2ChoiceExt.create(id,
-                                ScalarModelWithSingleChoice.chain(scalarModel), scalarModel),
-                        null);
+                                ScalarModelWithSingleChoice.chain(scalarModel), scalarModel))
+                : _Either.right(
+                        Select2MultiChoiceExt.create(id,
+                                ScalarModelWithMultiChoice.chain(scalarModel), scalarModel)));
     }
 
-    private Select2(
-            final Select2ChoiceExt select2Choice,
-            final Select2MultiChoiceExt select2MultiChoice) {
+    private Select2(final @NonNull _Either<Select2ChoiceExt, Select2MultiChoiceExt> select2Choice) {
         this.select2Choice = select2Choice;
-        this.select2MultiChoice = select2MultiChoice;
     }
 
-    public AbstractSelect2Choice<ObjectMemento, ?> component() {
-        return select2Choice != null
-                ? select2Choice
-                : select2MultiChoice;
+    public void setProvider(final ChoiceProvider<ObjectMemento> providerForChoices) {
+        asChoiceExt().setProvider(providerForChoices);
     }
 
-    public ChoiceExt choiceExt() {
-        return select2Choice != null
-                ? select2Choice
-                : select2MultiChoice;
+    public AbstractSelect2Choice<ObjectMemento, ?> asComponent() {
+        return select2Choice.fold(
+                single->single,
+                multi->multi);
+    }
+
+    public ChoiceExt asChoiceExt() {
+        return select2Choice.fold(
+                single->single,
+                multi->multi);
     }
 
     public void clearInput() {
-        component().clearInput();
+        asComponent().clearInput();
     }
 
     public void setEnabled(final boolean mutability) {
-        component().setEnabled(mutability);
+        asComponent().setEnabled(mutability);
     }
 
     public void setRequired(final boolean required) {
         // previously this was commented out because causing more severe issues with the select2 drop-down;
         // but recent changes (possibly that setOutputMarkupId(true) is called) now seem to have resolved the issue.
-        component().setRequired(required);
+        asComponent().setRequired(required);
     }
     public boolean checkRequired() {
-        return component().checkRequired();
+        return asComponent().checkRequired();
     }
 
     public Settings getSettings() {
-        return choiceExt().getSettings();
+        return asChoiceExt().getSettings();
     }
 
-    public void setProvider(final ChoiceProvider<ObjectMemento> providerForChoices) {
-        choiceExt().setProvider(providerForChoices);
-    }
-
-    public ObjectMemento getModelObject() {
-        if (select2Choice != null) {
-            return select2Choice.getModelObject();
-        } else {
-            final Collection<ObjectMemento> modelObject = select2MultiChoice.getModelObject();
-
-            return ObjectMemento.wrapMementoList(modelObject, select2MultiChoice.getLogicalType());
-        }
-    }
-
-    public IModel<ObjectMemento> getModel() {
-        if (select2Choice != null) {
-            return select2Choice.getModel();
-        } else {
-            final IModel<Collection<ObjectMemento>> model = select2MultiChoice.getModel();
-            final Collection<ObjectMemento> modelObject = model.getObject();
-
-            final ObjectMemento memento = ObjectMemento.wrapMementoList(modelObject, select2MultiChoice.getLogicalType());
-            return new IModel<ObjectMemento>() {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public ObjectMemento getObject() {
-                    return memento;
-                }
-
-                @Override
-                public void setObject(final ObjectMemento memento) {
-                    model.setObject(ObjectMemento.unwrapList(memento)
-                            .orElse(null));
-                }
-
-                @Override
-                public void detach() {
-                }
-            };
-        }
-    }
-
-    public ObjectMemento getConvertedInput() {
-        if (select2Choice != null) {
-            return select2Choice.getConvertedInput();
-        } else {
-            final Collection<ObjectMemento> convertedInput = select2MultiChoice.getConvertedInput();
-            return ObjectMemento.wrapMementoList(convertedInput, select2MultiChoice.getLogicalType());
-        }
+    public ManagedObject getConvertedInputValue() {
+        return getCommonContext().reconstructObject(convertedInput());
     }
 
     public void setLabel(final Model<String> model) {
-        component().setLabel(model);
+        asComponent().setLabel(model);
     }
 
     public void add(final Behavior behavior) {
-        component().add(behavior);
+        asComponent().add(behavior);
     }
 
     public final Select2 add(final IValidator<Object> validator) {
-        component().add(validator);
+        asComponent().add(validator);
         return this;
     }
 
     public <M extends Behavior> List<M> getBehaviors(final Class<M> behaviorClass) {
-        return component().getBehaviors(behaviorClass);
+        return asComponent().getBehaviors(behaviorClass);
     }
 
     public void remove(final Behavior behavior) {
-        component().remove(behavior);
+        asComponent().remove(behavior);
+    }
+
+    public void syncIfNull(final ScalarModel model) {
+        if(!model.isCollection()) {
+            if(memento() == null) {
+                this.mementoModel().setObject(null);
+                model.setObject(null);
+            }
+        }
+    }
+
+    public boolean isEmpty() {
+        final ObjectMemento curr = this.memento();
+        return curr == null;
+    }
+
+    public void clear() {
+        mementoModel().setObject(null);
+    }
+
+    public IModel<String> obtainInlinePromptModel() {
+        return LambdaModel.<String>of(()->{
+            val memento = mementoModel().getObject();
+            if(memento == null) {
+                return null;
+            }
+            val adapter = getCommonContext().reconstructObject(memento);
+            return adapter != null ? adapter.titleString() : null;
+        });
+    }
+
+    public IModel<String> obtainInlinePromptModel2() {
+        return LambdaModel.<String>of(()->{
+            final ObjectMemento inlinePromptMemento = this.memento();
+            return inlinePromptMemento != null ? inlinePromptMemento.asString(): null;
+        });
+    }
+
+    // -- HELPER
+
+    private ObjectMemento memento() {
+        return select2Choice.fold(
+                single->single.getModelObject(),
+                multi->multi.getPackedModelObject());
+    }
+
+    private IModel<ObjectMemento> mementoModel() {
+        return select2Choice.fold(
+                single->single.getModel(),
+                multi->multi.getPackingAdapterModel());
+    }
+
+    private ObjectMemento convertedInput() {
+        final ObjectMemento convertedInput = select2Choice.fold(
+                single->single.getConvertedInput(),
+                multi->multi.getPackedConvertedInput());
+        this.mementoModel().setObject(convertedInput);
+        return convertedInput;
+    }
+
+    // -- DEPENDENCIES
+
+    private transient IsisAppCommonContext commonContext;
+
+    @Override
+    public IsisAppCommonContext getCommonContext() {
+        return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
 
 

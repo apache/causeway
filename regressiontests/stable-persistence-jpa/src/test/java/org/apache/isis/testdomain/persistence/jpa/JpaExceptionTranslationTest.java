@@ -23,29 +23,20 @@ import java.sql.SQLException;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.TestPropertySources;
-import org.springframework.transaction.annotation.Propagation;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.testdomain.RegressionTestAbstract;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
+import org.apache.isis.testdomain.jpa.JpaTestFixtures;
 import org.apache.isis.testdomain.jpa.entities.JpaInventory;
 
 import lombok.val;
@@ -58,17 +49,10 @@ import lombok.val;
     @TestPropertySource(IsisPresets.UseLog4j2Test)
 })
 //@Transactional ... we manage transaction ourselves
-@DirtiesContext
-// @Disabled // ISIS-2789 revert
-class JpaExceptionTranslationTest
-{
+//@DirtiesContext
+class JpaExceptionTranslationTest extends RegressionTestAbstract {
 
-    // @Inject private JpaSupportService jpaSupport;
-
-    @Inject private TransactionService transactionService;
-    @Inject private RepositoryService repositoryService;
-    @Inject private InteractionService interactionService;
-    @Inject private JpaTransactionManager txManager;
+    @Inject private JpaTestFixtures testFixtures;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -80,75 +64,46 @@ class JpaExceptionTranslationTest
     void booksUniqueByIsbn_whenViolated_shouldThrowTranslatedException() {
 
 
-        interactionService.runAnonymous(new ThrowingRunnable() {
+        run(()->testFixtures.setUp3Books());
 
-            @Override public void run() throws Exception {
+        // when adding a book for which one with same ISBN already exists in the database,
+        // we expect to see a Spring recognized DataAccessException been thrown
 
-                transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
+        assertThrows(DataAccessException.class, ()->{
 
-                    interactionService.runAnonymous(()->{
+            run(()->{
 
-                        _TestFixtures.setUp3Books(repositoryService);
+                // given
 
-                    });
+                val inventories = repositoryService.allInstances(JpaInventory.class);
+                assertEquals(1, inventories.size());
 
-
-                });
-
-                // when adding a book for which one with same ISBN already exists in the database,
-                // we expect to see a Spring recognized DataAccessException been thrown
-
-                assertThrows(DataAccessException.class, ()->{
-
-                    transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
-
-                        interactionService.runAnonymous(()->{
-
-                            // given
-
-                            val inventories = repositoryService.allInstances(JpaInventory.class);
-                            assertEquals(1, inventories.size());
-
-                            val inventory = inventories.get(0);
-                            assertNotNull(inventory);
+                val inventory = inventories.get(0);
+                assertNotNull(inventory);
 
 
-                            // add a conflicting book (unique ISBN violation)
-                            _TestFixtures.addABookTo(inventory);
+                // add a conflicting book (unique ISBN violation)
+                testFixtures.addABookTo(inventory);
 
-                        });
+            });
 
-                    })
-                    .ifSuccess(__->fail("expected to fail, but did not"))
-                    //.mapFailure(ex->_JpaExceptionTranslator.translate(ex, txManager))
-                    .ifFailure(ex->assertTrue(ex instanceof DataIntegrityViolationException))
-                    .optionalElseFail();
+        });
 
-                });
+        // expected post condition: ONE inventory with 3 books
 
-                // expected post condition: ONE inventory with 3 books
+        run(()->{
 
-                transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
+            val inventories = repositoryService.allInstances(JpaInventory.class);
+            assertEquals(1, inventories.size());
 
-                    interactionService.runAnonymous(()->{
+            val inventory = inventories.get(0);
+            assertNotNull(inventory);
 
-                        val inventories = repositoryService.allInstances(JpaInventory.class);
-                        assertEquals(1, inventories.size());
+            assertNotNull(inventory);
+            assertNotNull(inventory.getProducts());
+            assertEquals(3, inventory.getProducts().size());
 
-                        val inventory = inventories.get(0);
-                        assertNotNull(inventory);
-
-                        assertNotNull(inventory);
-                        assertNotNull(inventory.getProducts());
-                        assertEquals(3, inventory.getProducts().size());
-
-                        _TestFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
-
-                    });
-
-
-                });
-            }
+            testFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
         });
 
 

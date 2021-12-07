@@ -18,7 +18,6 @@
  */
 package org.apache.isis.testdomain.conf;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
@@ -41,11 +40,9 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
     IsisModulePersistenceJdoDatanucleus.class,
     IsisModuleTestingFixturesApplib.class,
     KVStoreForTesting.class, // Helper for JUnit Tests
+
+    JdoTestDomainModule.class
 })
-@ComponentScan(
-        basePackageClasses= {
-                JdoTestDomainModule.class
-        })
 @PropertySources({
     @PropertySource(IsisPresets.NoTranslations),
     @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate),

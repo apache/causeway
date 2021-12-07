@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.services.bookmark.Oid;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
@@ -124,17 +124,20 @@ public interface MetaModelContext {
      */
     <T> T getSingletonElseFail(Class<T> type);
 
-    default Optional<ManagedObject> loadObject(final @Nullable Oid oid) {
-        if(oid==null) {
+    /**
+     * Recovers an object (graph) from given {@code bookmark}.
+     * Also resolves injection-points for the result.
+     */
+    default Optional<ManagedObject> loadObject(final @Nullable Bookmark bookmark) {
+        if(bookmark==null) {
             return Optional.empty();
         }
-        val objectId = oid.getIdentifier();
         val specLoader = getSpecificationLoader();
         val objManager = getObjectManager();
         return specLoader
-                .specForLogicalTypeName(oid.getLogicalTypeName())
+                .specForLogicalTypeName(bookmark.getLogicalTypeName())
                 .map(spec->objManager.loadObject(
-                        ObjectLoader.Request.of(spec, objectId)));
+                        ObjectLoader.Request.of(spec, bookmark)));
     }
 
     // -- EXTRACTORS

@@ -18,8 +18,12 @@
  */
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
+import java.util.UUID;
+
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
+import org.apache.isis.commons.internal.debug._Debug;
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
 
@@ -47,7 +51,13 @@ extends RecreatableObjectFacetAbstract {
         final String xml = getJaxbService().toXml(vmPojo);
         final String encoded = getUrlEncodingService().encodeString(xml);
         //FIXME[ISIS-2903] gets called about 4 times per same object, why?
-        //System.err.printf("%s%n", encoded);
+        _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+            _Debug.log(100, "%s => %s",
+                    super.getMetaModelContext().getInteractionProvider().getInteractionId()
+                    .map(UUID::toString)
+                    .orElse("no-interaction"),
+                    encoded);
+        });
         return encoded;
     }
 

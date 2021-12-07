@@ -210,10 +210,6 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
             return delegate.toString();
         }
 
-
-
     }
-
-
 
 }

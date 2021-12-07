@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactor
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -59,6 +60,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     private static final String ID_ENTITY_TITLE = "entityTitle";
     private static final String ID_ENTITY_ICON = "entityImage";
 
+    @SuppressWarnings("unused")
     private Label label;
     @SuppressWarnings("unused")
     private Image image;
@@ -149,14 +151,14 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         final ObjectAdapterModel redirectToModel;
 
         if(targetAdapter != null) {
-            val projectionFacet = entityModel.getTypeOfSpecification().getFacet(ProjectionFacet.class);
 
-            val redirectToAdapter =
-                    projectionFacet != null
-                        ? projectionFacet.projected(targetAdapter)
-                        : targetAdapter;
+            EntityUtil.reattach(targetAdapter);
 
-                    redirectToModel = EntityModel.ofAdapter(super.getCommonContext(), redirectToAdapter);
+            val redirectToAdapter = entityModel.getTypeOfSpecification().lookupFacet(ProjectionFacet.class)
+                    .map(projectionFacet->projectionFacet.projected(targetAdapter))
+                    .orElse(targetAdapter);
+
+            redirectToModel = EntityModel.ofAdapter(super.getCommonContext(), redirectToAdapter);
 
         } else {
             redirectToModel = entityModel;

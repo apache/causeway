@@ -18,23 +18,32 @@
  */
 package org.apache.isis.commons.internal.debug.xray;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
 
 import javax.swing.BorderFactory;
+import javax.swing.JEditorPane;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.apache.isis.commons.functional.IndexedConsumer;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.debug.xray.XrayModel.HasIdAndLabel;
-import org.apache.isis.commons.internal.debug.xray.sequence.SequenceDiagram;
+import org.apache.isis.commons.internal.debug.xray.XrayModel.Stickiness;
+import org.apache.isis.commons.internal.debug.xray.graphics.SequenceDiagram;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -59,12 +68,13 @@ public abstract class XrayDataModel extends HasIdAndLabel {
 
         private final String id;
         private final String label;
+        private final @NonNull Stickiness stickiness;
 
         @EqualsAndHashCode.Exclude
         private final String iconResource = "/xray/key-value.png";
 
         @Override
-        public void render(JScrollPane panel) {
+        public void render(final JScrollPane panel) {
             String[] columnNames = {"Key", "Value"};
             Object[][] tableData = new Object[data.size()][columnNames.length];
 
@@ -72,7 +82,7 @@ public abstract class XrayDataModel extends HasIdAndLabel {
 
             data.forEach((k, v)->{
                 val row = tableData[rowIndex.getValue()];
-                rowIndex.inc();
+                rowIndex.incAndGet();
                 row[0] = k;
                 row[1] = v;
             });
@@ -87,6 +97,72 @@ public abstract class XrayDataModel extends HasIdAndLabel {
     @Getter
     @EqualsAndHashCode(callSuper = false)
     @RequiredArgsConstructor
+    public static class LogEntry extends XrayDataModel {
+
+        @EqualsAndHashCode.Exclude
+        private final List<StackTraceElement> data = new ArrayList<>();
+
+        private final String id;
+        private final LocalDateTime timestamp;
+        private final String label;
+        private final String logMessage;
+        private final @NonNull Stickiness stickiness;
+
+        @EqualsAndHashCode.Exclude
+        private final String iconResource = "/xray/log.png";
+
+        @Override
+        public void render(final JScrollPane panel) {
+
+            val layout = new BorderLayout();
+            val panel2 = new JPanel(layout);
+            layout.setHgap(10);
+            layout.setVgap(10);
+
+            // log message label
+
+            val logMessagePane = new JEditorPane();
+            logMessagePane.setEditable(false);
+            logMessagePane.setText(logMessage);
+
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+
+            val timestampLabel = new JLabel(timestamp.format(formatter));
+
+            panel2.add(
+                    _SwingUtil.verticalBox(
+                            timestampLabel,
+                            logMessagePane),
+                    BorderLayout.NORTH);
+
+            // table rendering
+
+            String[] columnNames = {"", "StackTraceElement"};
+            Object[][] tableData = new Object[data.size()][columnNames.length];
+
+            val rowIndex = _Refs.intRef(0);
+
+            data.forEach(IndexedConsumer.offset(1, (index, se)->{
+                val row = tableData[rowIndex.getValue()];
+                rowIndex.incAndGet();
+                row[0] = index;
+                row[1] = se.toString();
+            }));
+
+            val table = _SwingUtil.newTable(tableData, columnNames);
+            table.setFillsViewportHeight(true);
+
+            panel2.add(table, BorderLayout.CENTER);
+
+            panel.setViewportView(panel2);
+        }
+
+    }
+
+
+    @Getter
+    @EqualsAndHashCode(callSuper = false)
+    @RequiredArgsConstructor
     public static class Sequence extends XrayDataModel {
 
         @EqualsAndHashCode.Exclude
@@ -94,6 +170,7 @@ public abstract class XrayDataModel extends HasIdAndLabel {
 
         private final String id;
         private final String label;
+        private final @NonNull Stickiness stickiness;
 
         @EqualsAndHashCode.Exclude
         private final String iconResource = "/xray/sequence.png";
@@ -102,29 +179,24 @@ public abstract class XrayDataModel extends HasIdAndLabel {
         private final static Color BACKGROUND_COLOR = COLOR_SILVER;
         private final static Color BORDER_COLOR = Color.GRAY;
 
-        public Sequence(String label) {
-            this(UUID.randomUUID().toString(), label);
+        public Sequence(final String label) {
+            this(UUID.randomUUID().toString(), label, Stickiness.CAN_DELETE_NODE);
+        }
+
+        public Sequence(final String id, final String label) {
+            this(id, label, Stickiness.CAN_DELETE_NODE);
         }
 
         @Override
-        public void render(JScrollPane panel) {
+        public void render(final JScrollPane panel) {
+
+            val canvas = _SwingUtil.canvas(g->{
+                g.setColor(BACKGROUND_COLOR);
+                g.fill(g.getClip());
+                data.render(g);
+            });
 
             val dim = data.layout((Graphics2D)panel.getGraphics());
-
-            val canvas = new JPanel() {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public void paintComponent(Graphics _g) {
-
-                    val g = (Graphics2D)_g;
-
-                    g.setColor(BACKGROUND_COLOR);
-                    g.fillRect(0, 0, getWidth(), getHeight());
-
-                    data.render(g);
-                  }
-            };
 
             if(BORDER_COLOR!=null) {
                 canvas.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
@@ -134,8 +206,6 @@ public abstract class XrayDataModel extends HasIdAndLabel {
             panel.setViewportView(canvas);
 
         }
-
-
     }
 
 }

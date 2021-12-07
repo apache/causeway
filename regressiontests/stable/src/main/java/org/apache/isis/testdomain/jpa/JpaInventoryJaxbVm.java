@@ -1,3 +1,21 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
 package org.apache.isis.testdomain.jpa;
 
 import java.util.ArrayList;
@@ -16,6 +34,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
@@ -36,7 +55,7 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL
-        , logicalTypeName = "testdomain.jdo.JpaInventoryJaxbVm"
+        , logicalTypeName = "testdomain.jpa.JpaInventoryJaxbVm"
 )
 public class JpaInventoryJaxbVm {
 
@@ -44,7 +63,8 @@ public class JpaInventoryJaxbVm {
     private RepositoryService repository;
 
     @ObjectSupport public String title() {
-        return String.format("JpaInventoryJaxbVm; %d products", listProducts().size());
+        return String.format("%s; %s; %d products",
+                this.getClass().getSimpleName(), getName(), listProducts().size());
     }
 
     @Property(editing = Editing.ENABLED)
@@ -62,16 +82,20 @@ public class JpaInventoryJaxbVm {
         return repository.allInstances(JpaBook.class);
     }
 
-    @Getter @Setter
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @XmlElement(required = false)
     @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
+    @Getter @Setter
     private JpaBook favoriteBook = null;
 
-    @Getter @Setter
+    @MemberSupport public List<JpaBook> choicesFavoriteBook() {
+        return listBooks();
+    }
+
     @Collection
     @XmlElement(name = "book")
     @XmlJavaTypeAdapter(PersistentEntitiesAdapter.class)
+    @Getter @Setter
     private java.util.Collection<JpaBook> books = new ArrayList<>();
 
 }

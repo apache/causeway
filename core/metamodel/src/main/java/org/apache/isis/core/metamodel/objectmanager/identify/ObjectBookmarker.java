@@ -21,10 +21,7 @@ package org.apache.isis.core.metamodel.objectmanager.identify;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-
-import lombok.val;
 
 /**
  * @since 2.0
@@ -40,24 +37,18 @@ public interface ObjectBookmarker {
     // -- FACTORY
 
     public static ObjectBookmarker createDefault() {
-
-        val chainOfHandlers = _Lists.of(
-                new ObjectBookmarker_builtinHandlers.GuardAgainstOid(),
-                new ObjectBookmarker_builtinHandlers.BookmarkForServices(),
-                new ObjectBookmarker_builtinHandlers.BookmarkForValues(),
-                new ObjectBookmarker_builtinHandlers.BookmarkForSerializable(),
-                new ObjectBookmarker_builtinHandlers.BookmarkForViewModels(),
-                new ObjectBookmarker_builtinHandlers.BookmarkForEntities(),
-                new ObjectBookmarker_builtinHandlers.BookmarkForOthers());
-
-        val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
-
-        return managedObject -> chainOfRespo
-                .handle(managedObject)
-                .orElseThrow(()->_Exceptions.unrecoverableFormatted(
-                        "Could not identify ManagedObject: %s", managedObject));
-
-
+        return managedObject ->
+            ChainOfResponsibility.named(
+                    "ObjectBookmarker",
+                    _Lists.of(
+                            new ObjectBookmarker_builtinHandlers.GuardAgainstOid(),
+                            new ObjectBookmarker_builtinHandlers.BookmarkForServices(),
+                            new ObjectBookmarker_builtinHandlers.BookmarkForValues(),
+                            new ObjectBookmarker_builtinHandlers.BookmarkForSerializable(),
+                            new ObjectBookmarker_builtinHandlers.BookmarkForViewModels(),
+                            new ObjectBookmarker_builtinHandlers.BookmarkForEntities(),
+                            new ObjectBookmarker_builtinHandlers.BookmarkForOthers()))
+            .handle(managedObject);
     }
 
 }

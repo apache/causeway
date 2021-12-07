@@ -89,7 +89,7 @@ public class JpaInventoryResource {
 
     @Action //TODO improve the REST client such that the param can be of type Book
     public JpaBook storeBook(final String newBook) throws JAXBException {
-        JpaBook book = BookDto.decode(newBook).toJpaBook();
+        val book = JpaBook.fromDto(BookDto.decode(newBook));
         return repository.persist(book);
     }
 

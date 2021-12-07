@@ -107,7 +107,9 @@ implements MultiselectChoices {
         this.managedMember = managedMember;
         this.where = where;
 
-        dataElements = _Observables.lazy(elementSupplier);
+        //dataElements = _Observables.lazy(elementSupplier);
+        dataElements = _Observables.lazy(()->elementSupplier.get().map(e->
+            e.getMetaModelContext().getServiceInjector().injectServicesInto(e)));
 
         searchArgument = _Bindables.forValue(null);
 

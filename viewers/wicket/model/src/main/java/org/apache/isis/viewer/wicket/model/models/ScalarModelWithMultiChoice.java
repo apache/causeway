@@ -84,7 +84,7 @@ implements
     public void setObject(final ArrayList<ObjectMemento> unpackedMemento) {
         log.debug("setObject() as unpackedMemento {}", unpackedMemento);
         val logicalType = scalarModel().getScalarTypeSpec().getLogicalType();
-        val packedMemento = ObjectMemento.wrapMementoList(unpackedMemento, logicalType);
+        val packedMemento = ObjectMemento.pack(unpackedMemento, logicalType);
         pendingValue().getValue().setValue(
                 getCommonContext().reconstructObject(packedMemento));
     }

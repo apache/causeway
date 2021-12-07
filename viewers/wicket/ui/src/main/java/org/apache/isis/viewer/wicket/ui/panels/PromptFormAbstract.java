@@ -118,7 +118,7 @@ implements ScalarModelSubscriber {
         val formExecutor = FormExecutorDefault.forMember(getMemberModel());
 
         val outcome = formExecutor
-                .executeAndProcessResults(target.getPage(), target, form, formExecutorContext());
+                .executeAndProcessResults(target, form, formExecutorContext());
 
         if (outcome.isSuccess()) {
             completePrompt(target);

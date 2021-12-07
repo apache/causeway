@@ -337,7 +337,7 @@ public final class ManagedObjects {
 
         return _NullSafe.streamAutodetect(collectionOrArray)
         .map(pojo->ManagedObject.of(elementSpec, pojo)) // pojo is nullable here
-        .map(ManagedObjects.EntityUtil::reattach)
+        .peek(ManagedObjects.EntityUtil::reattach)
         .filter(ManagedObjects.VisibilityUtil.filterOn(interactionInitiatedBy))
         .collect(Can.toCan());
     }
@@ -415,8 +415,17 @@ public final class ManagedObjects {
         }
 
         @Override
+        public Optional<Bookmark> getBookmarkRefreshed() {
+            return Optional.empty();
+        }
+
+        @Override
         public boolean isBookmarkMemoized() {
             return false;
+        }
+
+        @Override
+        public void replacePojo(final UnaryOperator<Object> replacer) {
         }
 
     };
@@ -609,28 +618,32 @@ public final class ManagedObjects {
             return managedObject;
         }
 
-        @Nullable
-        public static ManagedObject reattach(final @Nullable ManagedObject managedObject) {
+        public static void reattach(final @Nullable ManagedObject managedObject) {
             if(isNullOrUnspecifiedOrEmpty(managedObject)) {
-                return managedObject;
+                return;
             }
             val entityState = EntityUtil.getEntityState(managedObject);
             if(!entityState.isPersistable()) {
-                return managedObject;
+                return;
             }
             if(!entityState.isDetached()) {
-                return managedObject;
+                return;
             }
 
             val spec = managedObject.getSpecification();
             val objectManager = managedObject.getObjectManager();
 
-            return bookmark(managedObject)
+            val reattached = bookmark(managedObject)
             .map(bookmark->objectManager.loadObject(
                     ObjectLoader.Request.of(
                                     spec,
-                                    bookmark.getIdentifier())))
+                                    bookmark)))
             .orElse(managedObject);
+
+            val newState = EntityUtil.getEntityState(reattached);
+            _Assert.assertTrue(newState.isAttached());
+
+            managedObject.replacePojo(old->reattached.getPojo());
         }
 
         public static void requiresWhenFirstIsBookmarkableSecondIsAttached(

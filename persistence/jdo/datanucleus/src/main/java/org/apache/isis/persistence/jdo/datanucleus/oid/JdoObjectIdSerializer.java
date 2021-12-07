@@ -28,7 +28,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 
-import org.springframework.lang.Nullable;
 import javax.jdo.PersistenceManager;
 import javax.jdo.identity.ByteIdentity;
 import javax.jdo.identity.IntIdentity;
@@ -37,6 +36,7 @@ import javax.jdo.identity.ObjectIdentity;
 import javax.jdo.identity.StringIdentity;
 
 import org.datanucleus.identity.DatastoreId;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.commons.handler.ChainOfResponsibility;
@@ -74,36 +74,12 @@ public final class JdoObjectIdSerializer {
     }
 
     public static String toOidIdentifier(final Object jdoOid) {
-
-        return encodingChain.handle(jdoOid)
-        .orElseGet(()->
-            // the JDO spec (5.4.3) requires that OIDs are serializable toString and
-            // re-create-able through the constructor
-            jdoOid.getClass().getName() + SEPARATOR + jdoOid.toString());
+        return encodingChain.handle(jdoOid);
     }
 
-    public static Object toJdoObjectId(ObjectSpecification spec, Oid oid) {
-
+    public static Object toJdoObjectId(final ObjectSpecification spec, final Oid oid) {
         val request = JdoObjectIdDecodingRequest.parse(spec, oid.getIdentifier());
-
-        return decodingChain.handle(request)
-        .orElseGet(()->{
-
-            val clsName = request.getDistinguisher();
-            val keyStr = request.getKeyStr();
-
-            try {
-                final Class<?> cls = _Context.loadClass(clsName);
-                final Constructor<?> cons = cls.getConstructor(String.class);
-                final Object dnOid = cons.newInstance(keyStr);
-                return dnOid.toString();
-            } catch (ClassNotFoundException | IllegalArgumentException | InstantiationException | IllegalAccessException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
-                throw _Exceptions.unrecoverableFormatted(
-                        "failed to instantiate %s with arg %s", clsName, keyStr, e);
-            }
-
-        });
-
+        return decodingChain.handle(request);
     }
 
     // -- HELPER
@@ -173,6 +149,16 @@ public final class JdoObjectIdSerializer {
                             final DatastoreId dnOid = (DatastoreId) jdoOid;
                             // no separator
                             return "" + dnOid.getKeyAsObject();
+                        }),
+                // fallback
+                _JdoObjectIdEncoder.of(
+                        jdoOid->{
+                            return true; // last handler in the chain
+                        },
+                        jdoOid->{
+                            // the JDO spec (5.4.3) requires that OIDs are serializable toString and
+                            // re-create-able through the constructor
+                            return jdoOid.getClass().getName() + SEPARATOR + jdoOid.toString();
                         })
                 );
         return encoders;
@@ -213,19 +199,33 @@ public final class JdoObjectIdSerializer {
                         JdoObjectIdDecodingRequest::getKeyStr),
                 _JdoObjectIdDecoder.of(
                         request->dnPrefixes.contains(request.getDistinguisher()),
-                        request->request.getKeyStr() + "[OID]" + request.getSpec().getFullIdentifier())
+                        request->request.getKeyStr() + "[OID]" + request.getSpec().getFullIdentifier()),
+                //fallback
+                _JdoObjectIdDecoder.of(
+                        request->true, // last handler in the chain
+                        request->{
+                            val clsName = request.getDistinguisher();
+                            val keyStr = request.getKeyStr();
 
+                            try {
+                                final Class<?> cls = _Context.loadClass(clsName);
+                                final Constructor<?> cons = cls.getConstructor(String.class);
+                                final Object dnOid = cons.newInstance(keyStr);
+                                return dnOid.toString();
+                            } catch (ClassNotFoundException | IllegalArgumentException | InstantiationException | IllegalAccessException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
+                                throw _Exceptions.unrecoverableFormatted(
+                                        "failed to instantiate %s with arg %s", clsName, keyStr, e);
+                            }
+                        })
                 );
         return decoders;
     }
 
     private final static ChainOfResponsibility<Object, String>
-        encodingChain = ChainOfResponsibility.of(encoders());
+        encodingChain = ChainOfResponsibility.named("JdoObjectIdEncoder", encoders());
 
     private final static ChainOfResponsibility<JdoObjectIdDecodingRequest, Object>
-        decodingChain = ChainOfResponsibility.of(decoders());
-
-
+        decodingChain = ChainOfResponsibility.named("JdoObjectIdDecoder", decoders());
 
 
 }

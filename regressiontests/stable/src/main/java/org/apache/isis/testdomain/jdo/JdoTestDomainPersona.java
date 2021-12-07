@@ -78,7 +78,7 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
 
                     val products = new HashSet<JdoProduct>();
 
-                    products.add(BookDto.sample().toJdoBook());
+                    products.add(JdoBook.fromDto(BookDto.sample()));
 
                     val inventory = JdoInventory.of("Sample Inventory", products);
                     repository.persist(inventory);

@@ -89,7 +89,7 @@ public class JdoInventoryResource {
 
     @Action //TODO improve the REST client such that the param can be of type Book
     public JdoBook storeBook(final String newBook) throws JAXBException {
-        JdoBook book = BookDto.decode(newBook).toJdoBook();
+        val book = JdoBook.fromDto(BookDto.decode(newBook));
         return repository.persist(book);
     }
 

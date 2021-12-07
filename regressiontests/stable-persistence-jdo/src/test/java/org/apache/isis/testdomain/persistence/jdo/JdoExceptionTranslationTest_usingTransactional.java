@@ -35,19 +35,18 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.TestPropertySources;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager;
+import org.apache.isis.testdomain.RegressionTestAbstract;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoInventoryDao;
+import org.apache.isis.testdomain.jdo.JdoTestFixtures;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 
 import lombok.val;
@@ -62,14 +61,10 @@ import lombok.val;
 })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JdoExceptionTranslationTest_usingTransactional
-{
+extends RegressionTestAbstract {
 
-    //@Inject private JdoSupportService jdoSupport;
-    //@Inject private TransactionService transactionService;
-    @Inject private RepositoryService repositoryService;
-    @Inject private InteractionService interactionService;
+    @Inject private JdoTestFixtures testFixtures;
     @Inject private Provider<JdoInventoryDao> inventoryDao;
-    @Inject private JdoTransactionManager txManager;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -82,7 +77,7 @@ class JdoExceptionTranslationTest_usingTransactional
     void booksUniqueByIsbn_setupPhase() {
         interactionService.runAnonymous(()->{
 
-            _TestFixtures.setUp3Books(repositoryService);
+            testFixtures.setUp3Books();
 
         });
     }
@@ -130,7 +125,7 @@ class JdoExceptionTranslationTest_usingTransactional
             assertNotNull(inventory.getProducts());
             assertEquals(3, inventory.getProducts().size());
 
-            _TestFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
+            testFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
 
         });
 
@@ -142,7 +137,7 @@ class JdoExceptionTranslationTest_usingTransactional
 
         interactionService.runAnonymous(()->{
 
-            _TestFixtures.cleanUp(repositoryService);
+            testFixtures.cleanUpRepository();
 
         });
 

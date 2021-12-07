@@ -35,24 +35,19 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 @SpringBootConfiguration
 @EnableAutoConfiguration
-//@EnableJpaRepositories
-
-//@Configuration
 @Import({
-
-    JpaTestDomainModule.class,
-
     MyService.class, // testing injection into entities
+    IsisModuleCoreRuntimeServices.class,
+    IsisModuleSecurityBypass.class,
+    IsisModulePersistenceJpaEclipselink.class,
+    IsisModuleTestingFixturesApplib.class,
+    KVStoreForTesting.class, // Helper for JUnit Tests
 
-    IsisModuleCoreRuntimeServices.class
-    ,IsisModuleSecurityBypass.class
-    ,IsisModulePersistenceJpaEclipselink.class
-    ,IsisModuleTestingFixturesApplib.class
-    ,KVStoreForTesting.class, // Helper for JUnit Tests
+    JpaTestDomainModule.class
 })
 @PropertySources({
     @PropertySource(IsisPresets.NoTranslations),
-    @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate),
+    @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
 })
 public class Configuration_usingJpa {
 

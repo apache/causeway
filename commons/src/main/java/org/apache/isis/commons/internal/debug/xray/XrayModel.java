@@ -22,15 +22,24 @@ import java.util.Optional;
 import java.util.Stack;
 import java.util.UUID;
 
-import org.springframework.lang.Nullable;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.Value;
+import lombok.val;
 
 public interface XrayModel {
+
+    enum Stickiness {
+        CAN_DELETE_NODE,
+        CANNOT_DELETE_NODE;
+
+        boolean isCanDeleteNode() { return this == CAN_DELETE_NODE; }
+    }
 
     MutableTreeNode getRootNode();
     default MutableTreeNode getThreadNode(final ThreadMemento threadMemento) {
@@ -38,12 +47,15 @@ public interface XrayModel {
                 .orElseGet(()->addContainerNode(
                         getRootNode(),
                         threadMemento.getLabel(),
-                        threadMemento.getId()));
+                        threadMemento.getId(),
+                        Stickiness.CAN_DELETE_NODE));
     }
 
-    MutableTreeNode addContainerNode(MutableTreeNode parent, String name, String id);
-    default MutableTreeNode addContainerNode(MutableTreeNode parent, String name) {
-        return addContainerNode(parent, name, UUID.randomUUID().toString());
+    MutableTreeNode addContainerNode(MutableTreeNode parent, String name, String id, Stickiness stickiness);
+
+    default MutableTreeNode addContainerNode(
+            final MutableTreeNode parent, final String name, final Stickiness stickiness) {
+        return addContainerNode(parent, name, UUID.randomUUID().toString(), stickiness);
     }
 
     <T extends XrayDataModel> T addDataNode(MutableTreeNode parent, T dataModel);
@@ -71,6 +83,7 @@ public interface XrayModel {
     abstract class HasIdAndLabel {
         public abstract String getId();
         public abstract String getLabel();
+        public abstract Stickiness getStickiness();
 
         @Override
         public final String toString() {
@@ -86,6 +99,15 @@ public interface XrayModel {
         private final String id;
         private final String label;
         private final String multilinelabel;
+
+        public static ThreadMemento fromCurrentThread() {
+            val ct = Thread.currentThread();
+            return ThreadMemento.of(
+                    String.format("thread-%d-%s", ct.getId(), ct.getName()),
+                    String.format("Thread-%d [%s]", ct.getId(), ct.getName()),
+                    String.format("Thread-%d\n%s", ct.getId(), ct.getName()));
+        }
+
     }
 
 }

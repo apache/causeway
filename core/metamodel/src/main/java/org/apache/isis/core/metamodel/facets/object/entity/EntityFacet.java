@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.entity;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.query.Query;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -36,7 +37,7 @@ public interface EntityFacet extends Facet {
 
     String identifierFor(ObjectSpecification spec, Object pojo);
 
-    ManagedObject fetchByIdentifier(ObjectSpecification spec, String identifier);
+    ManagedObject fetchByIdentifier(ObjectSpecification spec, Bookmark bookmark);
     Can<ManagedObject> fetchByQuery(ObjectSpecification spec, Query<?> query);
 
     void persist(ObjectSpecification spec, Object pojo);

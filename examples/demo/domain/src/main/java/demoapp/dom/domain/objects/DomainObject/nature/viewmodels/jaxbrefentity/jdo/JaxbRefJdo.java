@@ -18,17 +18,16 @@
  */
 package demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.jdo;
 
+import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -42,7 +41,6 @@ import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.J
 @DomainObject(
         bounding = Bounding.BOUNDED
         , logicalTypeName = "demo.JaxbRefEntity")
-@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 public class JaxbRefJdo
         extends JaxbRefEntity {
 
@@ -50,6 +48,7 @@ public class JaxbRefJdo
         this.name = name;
     }
 
+    @Column(allowsNull = "false")
     @Getter @Setter
     private String name;
 }

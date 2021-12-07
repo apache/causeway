@@ -42,11 +42,13 @@ final class XrayModelSimple implements XrayModel {
     public MutableTreeNode addContainerNode(
             final @NonNull MutableTreeNode parent,
             final @NonNull String name,
-            final @NonNull String id) {
+            final @NonNull String id,
+            final @NonNull Stickiness stickiness) {
         val newNode = new DefaultMutableTreeNode();
         newNode.setUserObject(new HasIdAndLabel() {
             @Override public String getId() { return id; }
             @Override public String getLabel() { return name; }
+            @Override public Stickiness getStickiness() { return stickiness; }
         });
         ((DefaultMutableTreeNode)parent).add(newNode);
         nodesById.put(id, newNode);
@@ -67,12 +69,12 @@ final class XrayModelSimple implements XrayModel {
     private final Map<String, MutableTreeNode> nodesById = _Maps.newConcurrentHashMap();
 
     @Override
-    public Optional<MutableTreeNode> lookupNode(String id) {
+    public Optional<MutableTreeNode> lookupNode(final String id) {
         return Optional.ofNullable(nodesById.get(id)) ;
     }
 
     @Override
-    public void remove(MutableTreeNode node) {
+    public void remove(final MutableTreeNode node) {
         val hasId = (HasIdAndLabel) ((DefaultMutableTreeNode)node).getUserObject();
         nodesById.remove(hasId.getId());
     }
@@ -80,7 +82,7 @@ final class XrayModelSimple implements XrayModel {
     private final Map<String, Stack<MutableTreeNode>> nodeStacksById = _Maps.newConcurrentHashMap();
 
     @Override
-    public Stack<MutableTreeNode> getNodeStack(String id) {
+    public Stack<MutableTreeNode> getNodeStack(final String id) {
         return nodeStacksById.computeIfAbsent(id, __->new Stack<MutableTreeNode>());
     }
 

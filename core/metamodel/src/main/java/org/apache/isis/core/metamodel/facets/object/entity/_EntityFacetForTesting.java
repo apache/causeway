@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.query.Query;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -59,7 +60,7 @@ class _EntityFacetForTesting implements EntityFacet {
     }
 
     @Override
-    public ManagedObject fetchByIdentifier(final ObjectSpecification spec, final String identifier) {
+    public ManagedObject fetchByIdentifier(final ObjectSpecification spec, final Bookmark bookmark) {
         throw _Exceptions.unsupportedOperation();
     }
 

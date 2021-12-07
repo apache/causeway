@@ -23,6 +23,7 @@ import java.awt.Color;
 import javax.inject.Provider;
 
 import org.apache.isis.applib.services.iactn.InteractionProvider;
+import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -119,6 +120,8 @@ final class _Xray {
                     : String.format("%s:\n%s",
                             entity.getSpecification().getLogicalTypeName(),
                             "" + entity.getPojo()));
+
+        _Debug.log(10, enteringLabel);
 
         XrayUtil.createSequenceHandle(interactionProviderProvider.get(), "ec-tracker")
         .ifPresent(handle->{

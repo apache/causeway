@@ -94,7 +94,7 @@ public interface InteractionDtoFactory {
     ActionInvocationDto updateResult(
             ActionInvocationDto actionInvocationDto,
             ObjectAction objectAction,
-            Object resultPojo);
+            ManagedObject resultObject);
 
 
 }

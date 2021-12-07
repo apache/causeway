@@ -19,8 +19,15 @@
 package org.apache.isis.commons.internal.debug.xray;
 
 import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.Collections;
+import java.util.function.Consumer;
 
+import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.table.TableCellRenderer;
@@ -29,31 +36,33 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 final class _SwingUtil {
 
-    static JTable newTable(final Object[][] tableData, final String[] columnNames) {
+    JTable newTable(final Object[][] tableData, final String[] columnNames) {
         val table = new JTable(tableData, columnNames) {
             private static final long serialVersionUID = 1L;
             @Override
-               public Component prepareRenderer(final TableCellRenderer renderer, final int row, final int column) {
-                   Component component = super.prepareRenderer(renderer, row, column);
-                   int rendererWidth = component.getPreferredSize().width;
-                   TableColumn tableColumn = getColumnModel().getColumn(column);
-                   tableColumn.setPreferredWidth(Math.max(rendererWidth + getIntercellSpacing().width, tableColumn.getPreferredWidth()));
-                   return component;
-                }
-            };
+            public Component prepareRenderer(final TableCellRenderer renderer, final int row, final int column) {
+                Component component = super.prepareRenderer(renderer, row, column);
+                int rendererWidth = component.getPreferredSize().width;
+                TableColumn tableColumn = getColumnModel().getColumn(column);
+                tableColumn.setPreferredWidth(Math.max(rendererWidth + getIntercellSpacing().width, tableColumn.getPreferredWidth()));
+                return component;
+            }
+        };
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         return table;
     }
 
-    static void setTreeExpandedState(final JTree tree, final boolean expanded) {
+    void setTreeExpandedState(final JTree tree, final boolean expanded) {
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getModel().getRoot();
         setNodeExpandedState(tree, node, expanded);
     }
 
-    static void setNodeExpandedState(final JTree tree, final DefaultMutableTreeNode node, final boolean expanded) {
+    void setNodeExpandedState(final JTree tree, final DefaultMutableTreeNode node, final boolean expanded) {
         for (Object treeNode : Collections.list(node.children())) {
             setNodeExpandedState(tree, (DefaultMutableTreeNode) treeNode, expanded);
         }
@@ -66,6 +75,35 @@ final class _SwingUtil {
         } else {
             tree.collapsePath(path);
         }
+    }
+
+    JPanel canvas(final Consumer<Graphics2D> onRender) {
+
+        val canvas = new JPanel() {
+            private static final long serialVersionUID = 1L;
+            @Override
+            public void paintComponent(final Graphics g) {
+                onRender.accept((Graphics2D)g);
+            }
+        };
+
+        return canvas;
+    }
+
+    public static Component verticalBox(final Component ...components) {
+
+        val panel = new JPanel(new GridBagLayout());
+        val gbc = new GridBagConstraints();
+        gbc.weightx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.insets = new Insets(3, 6, 3, 6);
+
+        for(val component : components) {
+            panel.add(component, gbc);
+        }
+
+        return panel;
     }
 
 }

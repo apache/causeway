@@ -21,6 +21,7 @@ package org.apache.isis.commons.internal.exceptions;
 import java.io.PrintStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -31,6 +32,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 
@@ -169,7 +171,7 @@ public final class _Exceptions {
 
     // -- MESSAGE
 
-    public static String getMessage(final Exception ex) {
+    public static String getMessage(final Throwable ex) {
         if(ex==null) {
             return "no exception present";
         }
@@ -304,7 +306,7 @@ public final class _Exceptions {
      * @param maxLines
      */
     public static void dumpStackTrace(final PrintStream writer, final int skipLines, final int maxLines) {
-        _NullSafe.stream(Thread.currentThread().getStackTrace())
+        streamStackTrace()
         .map(StackTraceElement::toString)
         .skip(skipLines)
         .limit(maxLines)
@@ -328,6 +330,10 @@ public final class _Exceptions {
             t = t.getCause();
         }
         return chain;
+    }
+
+    public static Stream<StackTraceElement> streamStackTrace() {
+        return _NullSafe.stream(Thread.currentThread().getStackTrace());
     }
 
     public static Stream<Throwable> streamCausalChain(final @Nullable Throwable ex) {
@@ -381,6 +387,39 @@ public final class _Exceptions {
         return false;
     }
 
+    // -- STACKTRACE FORMATTING UTILITY
+
+    private final static Map<String, String> packageReplacements = Map.of(
+            //"org.apache.isis", "", // unfortunately no IDE support for this (click on StackTraceElement links)
+            "org.apache.wicket", "{wkt}",
+            "org.springframework", "{spring}",
+            "org.apache.tomcat", "{tomcat}",
+            "org.apache.catalina", "{catalina}",
+            "org.apache.coyote", "{coyote}"
+            );
+
+    public static String abbreviate(final String className, final String...compress) {
+        val str = className;
+        return Stream.concat(
+                    _NullSafe.stream(compress).map(prefix->Map.entry(prefix, "")),
+                    packageReplacements.entrySet().stream()
+                )
+                .filter(entry->str.startsWith(entry.getKey()))
+                .map(entry->{
+                    val replacement = entry.getValue();
+                    var s = str;
+                    s = s.replace(entry.getKey() + ".", replacement.isEmpty() ? "{" : replacement + ".");
+                    val ref = _Refs.stringRef(s);
+                    val left = ref.cutAtIndexOfAndDrop(".");
+                    val right = ref.getValue();
+                    s = replacement.isEmpty()
+                            ? left + "}." + right
+                            : left + "." + right;
+                    return s;
+                })
+                .findFirst()
+                .orElse(str);
+    }
 
     // -- FLUENT EXCEPTION
 
@@ -440,6 +479,8 @@ public final class _Exceptions {
         }
 
     }
+
+
 
 
 }

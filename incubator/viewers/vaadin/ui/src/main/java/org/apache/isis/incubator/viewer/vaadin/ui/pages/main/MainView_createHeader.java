@@ -27,6 +27,7 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -59,7 +60,7 @@ final class MainView_createHeader {
         // holds the top level left and right aligned menu parts
         // TODO does not honor small displays yet, overflow is just not visible
         val menuBarContainer = new FlexLayout(titleOrLogo, leftMenuBar, horizontalSpacer, rightMenuBar);
-        menuBarContainer.setWrapMode(FlexLayout.WrapMode.WRAP);
+        menuBarContainer.setFlexWrap(FlexWrap.WRAP);
         menuBarContainer.setAlignSelf(Alignment.CENTER, leftMenuBar);
         menuBarContainer.setAlignSelf(Alignment.CENTER, rightMenuBar);
 

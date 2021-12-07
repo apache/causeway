@@ -61,21 +61,20 @@ extends PublishingTestAbstract {
             final ChangeScenario changeScenario,
             final VerificationStage verificationStage) {
 
+        val defaultSample = BookDto.sample();
+
         val bookSamplesForCreate = Can.of(
-                BookDto.sample(),
+                defaultSample,
                 BookDto.builder().build()); // empty-defaults
         val bookSample1 = Can.of( // initial
-                BookDto
-                .sample());
+                defaultSample);
         val bookSample2 = Can.of( // after property update
-                BookDto
-                .sampleBuilder()
+                defaultSample.asBuilder()
                 .name("Book #2")
                 .build());
         val bookSample3 = Can.of( // after action invocation
-                BookDto
-                .sampleBuilder()
-                .price(198.0)
+                defaultSample.asBuilder()
+                .price(defaultSample.getPrice()*2.)
                 .build());
 
         switch(verificationStage) {

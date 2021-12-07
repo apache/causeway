@@ -69,7 +69,7 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
         final FormGroup formGroup = new FormGroup(formGroupId, component);
         formGroup.add(component);
 
-        final String labelCaption = getRendering().getLabelCaption(select2.component());
+        final String labelCaption = getRendering().getLabelCaption(select2.asComponent());
         final Label scalarName = createScalarName(nameId, labelCaption);
 
         getModel()
@@ -82,7 +82,7 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
 
     protected FormGroup createFormGroup(final FormComponent<?> formComponent) {
         setOutputMarkupId(true);
-        select2.component().setOutputMarkupId(true);
+        select2.asComponent().setOutputMarkupId(true);
 
         final String name = scalarModel.getFriendlyName();
         select2.setLabel(Model.of(name));
@@ -105,7 +105,7 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
 
     @Override
     protected Component getScalarValueComponent() {
-        return select2.component();
+        return select2.asComponent();
     }
 
 
@@ -159,9 +159,7 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
     @Override
     protected void onEditable(final Optional<AjaxRequestTarget> target) {
         setEnabled(true);
-
     }
-
 
     // //////////////////////////////////////
 
@@ -198,9 +196,6 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
         return true;
     }
 
-
-
-
     /**
      * Repaints just the Select2 component
      *
@@ -236,8 +231,7 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
                 }
                 val memento = proposedValueObjAsList.get(0);
                 val logicalType = memento.getLogicalType();
-                proposedValue = ObjectMemento
-                        .wrapMementoList(proposedValueObjAsList, logicalType);
+                proposedValue = ObjectMemento.pack(proposedValueObjAsList, logicalType);
             } else {
                 proposedValue = (ObjectMemento) proposedValueObj;
             }

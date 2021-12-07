@@ -31,12 +31,14 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.security.authentication.logout.LogoutMenu.LoginRedirect;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelStandalone;
+import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.model.models.VoidModel;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 import org.apache.isis.viewer.wicket.ui.pages.value.ValuePage;
@@ -54,17 +56,15 @@ public enum ActionResultResponseType {
                 final AjaxRequestTarget target,
                 final ManagedObject resultAdapter,
                 final Can<ManagedObject> args) {
-            final var commonContext = actionModel.getCommonContext();
-            final var actualAdapter = determineScalarAdapter(commonContext, resultAdapter); // intercepts collections
-            return toEntityPage(actionModel, actualAdapter);
+            determineScalarAdapter(actionModel.getCommonContext(), resultAdapter); // intercepts collections
+            return toEntityPage(resultAdapter);
         }
 
         @Override
         public ActionResultResponse interpretResult(
                 final ActionModel actionModel,
                 final ManagedObject targetAdapter) {
-            final ActionResultResponse actionResultResponse = toEntityPage(actionModel, targetAdapter);
-            return actionResultResponse;
+            return toEntityPage(targetAdapter);
         }
     },
     COLLECTION {
@@ -76,7 +76,8 @@ public enum ActionResultResponseType {
                 final Can<ManagedObject> args) {
             final var collectionModel = EntityCollectionModelStandalone
                     .forActionModel(resultAdapter, actionModel, args);
-            return ActionResultResponse.toPage(new StandaloneCollectionPage(collectionModel));
+            return ActionResultResponse.toPage(
+                    StandaloneCollectionPage.class, new StandaloneCollectionPage(collectionModel));
         }
     },
     /**
@@ -93,7 +94,7 @@ public enum ActionResultResponseType {
             ValueModel valueModel = ValueModel.of(commonContext, resultAdapter);
             valueModel.setActionHint(actionModel);
             final ValuePage valuePage = new ValuePage(valueModel);
-            return ActionResultResponse.toPage(valuePage);
+            return ActionResultResponse.toPage(ValuePage.class, valuePage);
         }
     },
     VALUE_CLOB {
@@ -185,7 +186,21 @@ public enum ActionResultResponseType {
             final var commonContext = actionModel.getCommonContext();
             final VoidModel voidModel = new VoidModel(commonContext);
             voidModel.setActionHint(actionModel);
-            return ActionResultResponse.toPage(new VoidReturnPage(voidModel));
+            return ActionResultResponse.toPage(VoidReturnPage.class, new VoidReturnPage(voidModel));
+        }
+    },
+    SIGN_IN {
+        @Override
+        public ActionResultResponse interpretResult(
+                final ActionModel actionModel,
+                final AjaxRequestTarget target,
+                final ManagedObject resultAdapter,
+                final Can<ManagedObject> args) {
+            val signInPage = actionModel.getCommonContext()
+                    .lookupServiceElseFail(PageClassRegistry.class)
+                    .getPageClass(PageType.SIGN_IN);
+
+            return ActionResultResponse.toPage(PageRedirectRequest.forPageClass(signInPage));
         }
     };
 
@@ -212,6 +227,10 @@ public enum ActionResultResponseType {
                 .interpretResult(model, targetIfAny, typeAndAdapter.resultAdapter, args);
     }
 
+    public static ActionResultResponse toEntityPage(final ManagedObject entityOrViewmodel) {
+        return ActionResultResponse.toPage(EntityPage.class, entityOrViewmodel.getBookmarkRefreshed().orElseThrow());
+    }
+
     // -- HELPER
 
     private static ManagedObject determineScalarAdapter(
@@ -232,17 +251,6 @@ public enum ActionResultResponseType {
         }
     }
 
-    private static ActionResultResponse toEntityPage(
-            final ActionModel model,
-            final ManagedObject actualAdapter) {
-
-        // this will not preserve the URL (because pageParameters are not copied over)
-        // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
-        final EntityPage entityPage = EntityPage.ofAdapter(model.getCommonContext(), actualAdapter);
-
-        return ActionResultResponse.toPage(entityPage);
-    }
-
     @Value(staticConstructor = "of")
     private static class TypeAndAdapter {
         final ActionResultResponseType type;
@@ -257,8 +265,14 @@ public enum ActionResultResponseType {
             return TypeAndAdapter.of(ActionResultResponseType.VOID, resultAdapter);
         }
 
-        final ObjectSpecification resultSpec = resultAdapter.getSpecification();
+        val resultSpec = resultAdapter.getSpecification();
         if (resultSpec.isNotCollection()) {
+            // scalar ...
+
+            if(LoginRedirect.LOGICAL_TYPE_NAME.equals(resultSpec.getLogicalTypeName())) {
+                return TypeAndAdapter.of(ActionResultResponseType.SIGN_IN, resultAdapter);
+            }
+
             if (resultSpec.isValue()) {
 
                 final Object value = resultAdapter.getPojo();
@@ -284,6 +298,7 @@ public enum ActionResultResponseType {
                 return TypeAndAdapter.of(ActionResultResponseType.OBJECT, resultAdapter);
             }
         } else {
+            // non-scalar ...
 
             final int cardinality = (int)_NullSafe.streamAutodetect(resultAdapter.getPojo()).count();
             switch (cardinality) {

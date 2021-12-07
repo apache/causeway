@@ -65,6 +65,53 @@ implements
         setOutputMarkupPlaceholderTag(true);
     }
 
+    public ObjectMemento getPackedModelObject() {
+        return ObjectMemento.pack(this.getModelObject(), this.getLogicalType());
+    }
+
+    public ObjectMemento getPackedConvertedInput() {
+        return ObjectMemento.pack(this.getConvertedInput(), this.getLogicalType());
+    }
+
+    public IModel<ObjectMemento> getPackingAdapterModel() {
+        if(packingAdapterModel==null) {
+            packingAdapterModel = createPackingAdapterModel();
+        }
+        return packingAdapterModel;
+    }
+
+    // -- HELPER
+
+    private transient IModel<ObjectMemento> packingAdapterModel;
+    private IModel<ObjectMemento> createPackingAdapterModel() {
+        val multi = this;
+
+        return new IModel<ObjectMemento>() {
+            private static final long serialVersionUID = 1L;
+
+            final ObjectMemento memento;
+            final IModel<Collection<ObjectMemento>> delegate;
+            {
+                this.delegate = multi.getModel();
+                this.memento = ObjectMemento.pack(delegate.getObject(), multi.getLogicalType());
+            }
+
+            @Override
+            public ObjectMemento getObject() {
+                return memento;
+            }
+
+            @Override
+            public void setObject(final ObjectMemento memento) {
+                delegate.setObject(ObjectMemento.unpack(memento).orElse(null));
+            }
+
+            @Override
+            public void detach() {
+            }
+        };
+    }
+
 
     // -- bug in wicket 8.8.0 -------------------------------------------
 
@@ -89,5 +136,7 @@ implements
     }
 
     // ------------------------------------------------------------------
+
+
 
 }

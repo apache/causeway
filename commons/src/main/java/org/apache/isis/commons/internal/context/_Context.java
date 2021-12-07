@@ -25,7 +25,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._With;
@@ -222,7 +221,7 @@ public final class _Context {
             closeAnyClosables(_Lists.newArrayList(singletonMap.values()));
 
             singletonMap.clear();
-            _Context_ThreadLocal.clear();
+            //_Context_ThreadLocal.clear();
         }
     }
 
@@ -233,50 +232,50 @@ public final class _Context {
 
     // -- THREAD LOCAL SUPPORT
 
-    /**
-     * Clear key {@code type} from current thread's map.
-     * @param type - the key into the thread-local store
-     */
-    public static void threadLocalClear(final Class<?> type) {
-        _Context_ThreadLocal.clear(type);
-    }
-
-    /**
-     * Puts {@code payload} onto the current thread's map.
-     * @param type - the key into the thread-local store
-     * @param payload
-     * @return a Runnable which, when run, removes any references to payload
-     */
-    public static <T> Runnable threadLocalPut(final Class<? super T> type, final T payload) {
-        return _Context_ThreadLocal.put(type, payload);
-    }
-
-
-    /**
-     * Looks up current thread's values for any instances that match the given type, as previously stored
-     * with {@link _Context#threadLocalPut(Class, Object)}.
-     * @param type - the key into the thread-local store
-     */
-    public static <T> Can<T> threadLocalGet(final Class<? super T> type) {
-        return _Context_ThreadLocal.get(type);
-    }
-
-    /**
-     * Looks up current thread's values for any instances that match the given type, as previously stored
-     * with {@link _Context#threadLocalPut(Class, Object)}.
-     * @param type - the key into the thread-local store
-     * @param requiredType - the required type of the elements in the returned bin
-     */
-    public static <T> Can<T> threadLocalSelect(final Class<? super T> type, final Class<? super T> requiredType) {
-        return _Context_ThreadLocal.select(type, requiredType);
-    }
-
-    /**
-     * Removes any of current thread's values as stored with {@link _Context#threadLocalPut(Class, Object)}.
-     */
-    public static <T> void threadLocalCleanup() {
-        _Context_ThreadLocal.cleanupThread();
-    }
+//    /**
+//     * Clear key {@code type} from current thread's map.
+//     * @param type - the key into the thread-local store
+//     */
+//    public static void threadLocalClear(final Class<?> type) {
+//        _Context_ThreadLocal.clear(type);
+//    }
+//
+//    /**
+//     * Puts {@code payload} onto the current thread's map.
+//     * @param type - the key into the thread-local store
+//     * @param payload
+//     * @return a Runnable which, when run, removes any references to payload
+//     */
+//    public static <T> Runnable threadLocalPut(final Class<? super T> type, final T payload) {
+//        return _Context_ThreadLocal.put(type, payload);
+//    }
+//
+//
+//    /**
+//     * Looks up current thread's values for any instances that match the given type, as previously stored
+//     * with {@link _Context#threadLocalPut(Class, Object)}.
+//     * @param type - the key into the thread-local store
+//     */
+//    public static <T> Can<T> threadLocalGet(final Class<? super T> type) {
+//        return _Context_ThreadLocal.get(type);
+//    }
+//
+//    /**
+//     * Looks up current thread's values for any instances that match the given type, as previously stored
+//     * with {@link _Context#threadLocalPut(Class, Object)}.
+//     * @param type - the key into the thread-local store
+//     * @param requiredType - the required type of the elements in the returned bin
+//     */
+//    public static <T> Can<T> threadLocalSelect(final Class<? super T> type, final Class<? super T> requiredType) {
+//        return _Context_ThreadLocal.select(type, requiredType);
+//    }
+//
+//    /**
+//     * Removes any of current thread's values as stored with {@link _Context#threadLocalPut(Class, Object)}.
+//     */
+//    public static <T> void threadLocalCleanup() {
+//        _Context_ThreadLocal.cleanupThread();
+//    }
 
 
     // -- DEFAULT CLASSLOADER

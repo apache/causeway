@@ -20,9 +20,11 @@ package org.apache.isis.core.runtimeservices.session;
 
 import java.util.Stack;
 
-import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
-import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
+import org.apache.isis.commons.internal.debug._Debug;
+import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
+import org.apache.isis.commons.internal.debug.xray.XrayModel.ThreadMemento;
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.security.util.XrayUtil;
 
 import lombok.val;
@@ -30,7 +32,7 @@ import lombok.val;
 //@Log4j2
 final class _Xray {
 
-    static void newInteractionLayer(Stack<InteractionLayer> afterEnter) {
+    static void newInteractionLayer(final Stack<InteractionLayer> afterEnter) {
 
         if(!XrayUi.isXrayEnabled()) {
             return;
@@ -41,7 +43,9 @@ final class _Xray {
         val interactionId = afterEnter.peek().getInteraction().getInteractionId();
         val executionContext = afterEnter.peek().getInteractionContext();
 
-        val threadId = XrayUtil.currentThreadAsMemento();
+        _Debug.log(10, "open interaction %s", interactionId);
+
+        val threadId = ThreadMemento.fromCurrentThread();
 
         XrayUi.updateModel(model->{
 
@@ -85,7 +89,7 @@ final class _Xray {
 
     }
 
-    public static void closeInteractionLayer(Stack<InteractionLayer> beforeClose) {
+    public static void closeInteractionLayer(final Stack<InteractionLayer> beforeClose) {
 
         if(!XrayUi.isXrayEnabled()) {
             return;
@@ -94,6 +98,8 @@ final class _Xray {
         final int authStackSize = beforeClose.size();
         val interactionId = beforeClose.peek().getInteraction().getInteractionId();
         val sequenceId = XrayUtil.sequenceId(interactionId);
+
+        _Debug.log(10, "close interaction %s", interactionId);
 
         XrayUi.updateModel(model->{
 

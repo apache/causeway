@@ -19,41 +19,60 @@
 package org.apache.isis.viewer.restfulobjects.applib;
 
 import java.io.IOException;
+import java.util.Random;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class JsonRepresentationTest_putXxx {
+import org.apache.isis.commons.functional.IndexedConsumer;
+
+class JsonRepresentationTest_putXxx {
 
     private JsonRepresentation jsonRepresentation;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         jsonRepresentation = JsonRepresentation.newMap();
     }
 
     @Test
-    public void putInt() throws IOException {
+    void putInt() throws IOException {
         jsonRepresentation.mapPut("a", 123);
         assertThat(jsonRepresentation.getInt("a"), is(123));
     }
 
     @Test
-    public void putInt_multipart() throws IOException {
+    void putInt_multipart() throws IOException {
         jsonRepresentation.mapPut("a.b", 456);
         assertThat(jsonRepresentation.getInt("a.b"), is(456));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void putInt_pathBlockedByValue() throws IOException {
-        // given
+    @Test
+    void putInt_pathBlockedByValue() throws IOException {
         jsonRepresentation.mapPut("a", 123);
+        assertThrows(IllegalArgumentException.class, ()->
+            jsonRepresentation.mapPut("a.b", 456));
+    }
 
-        // when
-        jsonRepresentation.mapPut("a.b", 456);
+    @Test
+    void preserveMapOrder() throws IOException {
+        final int[] values = new Random().ints(128, -4096, 4096).toArray();
+        {
+            int index = 0;
+            for(int value : values) {
+                jsonRepresentation.mapPut("i" + index, value);
+                ++index;
+            }
+        }
+
+        jsonRepresentation.streamMapEntries()
+        .forEach(IndexedConsumer.zeroBased((index, entry)->{
+            assertThat(entry.getKey(), is("i" + index));
+        }));
     }
 
 }

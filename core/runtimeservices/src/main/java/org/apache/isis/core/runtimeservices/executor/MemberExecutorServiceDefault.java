@@ -170,7 +170,7 @@ implements MemberExecutorService {
 
         // sync DTO with result
         interactionDtoFactory
-        .updateResult(priorExecution.getDto(), owningAction, returnedPojo);
+        .updateResult(priorExecution.getDto(), owningAction, returnedAdapter);
 
         // update Command (if required)
         setCommandResultIfEntity(command, returnedAdapter);

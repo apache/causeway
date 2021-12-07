@@ -33,6 +33,7 @@ import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
@@ -51,7 +52,7 @@ extends PanelAbstract<Void, IModel<Void>> {
 
     private static final String ID_BREADCRUMBS = "breadcrumbs";
 
-    public BreadcrumbPanel(String id) {
+    public BreadcrumbPanel(final String id) {
         super(id);
     }
 
@@ -59,8 +60,9 @@ extends PanelAbstract<Void, IModel<Void>> {
     protected void onInitialize() {
         super.onInitialize();
 
-        final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
-        final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
+        final BreadcrumbModel breadcrumbModel = _Casts.castTo(BreadcrumbModelProvider.class, getSession())
+                .map(BreadcrumbModelProvider::getBreadcrumbModel)
+                .orElseGet(()->new BreadcrumbModel(getCommonContext())); // for testing
 
         final IModel<EntityModel> entityModel = new Model<>();
         ChoiceProvider<EntityModel> choiceProvider = new ChoiceProvider<EntityModel>() {
@@ -68,7 +70,7 @@ extends PanelAbstract<Void, IModel<Void>> {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public String getDisplayValue(EntityModel choice) {
+            public String getDisplayValue(final EntityModel choice) {
                 return titleFor(choice);
             }
 
@@ -78,7 +80,7 @@ extends PanelAbstract<Void, IModel<Void>> {
 
 
             @Override
-            public String getIdValue(EntityModel choice) {
+            public String getIdValue(final EntityModel choice) {
                 try {
                     final PageParameters pageParameters = choice.getPageParametersWithoutUiHints();
                     final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
@@ -98,7 +100,7 @@ extends PanelAbstract<Void, IModel<Void>> {
 
 
             @Override
-            public void query(String term, int page, Response<EntityModel> response) {
+            public void query(final String term, final int page, final Response<EntityModel> response) {
                 final List<EntityModel> breadCrumbList = _Lists.newArrayList(breadcrumbModel.getList());
                 final List<EntityModel> checkedList = _Lists.filter(breadCrumbList,
                         new Predicate<EntityModel>() {
@@ -112,7 +114,7 @@ extends PanelAbstract<Void, IModel<Void>> {
             }
 
             @Override
-            public Collection<EntityModel> toChoices(Collection<String> ids) {
+            public Collection<EntityModel> toChoices(final Collection<String> ids) {
                 return breadcrumbModel.getList();
             }
 
@@ -127,7 +129,7 @@ extends PanelAbstract<Void, IModel<Void>> {
                     private transient IsisAppCommonContext commonContext;
 
                     @Override
-                    protected void onUpdate(AjaxRequestTarget target) {
+                    protected void onUpdate(final AjaxRequestTarget target) {
                         final String oidStr = breadcrumbChoice.getInput();
                         final EntityModel selectedModel = breadcrumbModel.lookup(oidStr);
                         if(selectedModel == null) {

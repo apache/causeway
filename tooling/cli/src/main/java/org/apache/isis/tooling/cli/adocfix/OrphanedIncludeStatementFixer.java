@@ -98,7 +98,7 @@ public final class OrphanedIncludeStatementFixer {
                     if(!includeLineShouldBe.equals(include.getMatchingLine())) {
                         log.warn("mismatch\n {}\n {}\n", includeLineShouldBe, include.getMatchingLine());
                         correctedIncludeStatement.setValue(expected);
-                        fixedCounter.inc();
+                        fixedCounter.incAndGet();
                     }
 
                 });

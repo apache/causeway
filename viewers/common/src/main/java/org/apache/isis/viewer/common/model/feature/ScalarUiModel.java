@@ -46,6 +46,10 @@ public interface ScalarUiModel {
                 || getMetaModel().getFeatureType() == FeatureType.COLLECTION;
     }
 
+    default boolean isScalar() {
+        return !isCollection();
+    }
+
     default Optional<String> getDescribedAs() {
         return getMetaModel().getDescription(this::getOwner);
     }

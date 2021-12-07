@@ -104,7 +104,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
         entityLink.setRequired(getModel().isRequired());
         this.select2 = createSelect2AndSemantics();
-        entityLink.addOrReplace(select2.component());
+        entityLink.addOrReplace(select2.asComponent());
 
         //syncWithInput();
 
@@ -151,40 +151,13 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
     @Override
     protected InlinePromptConfig getInlinePromptConfig() {
-        return InlinePromptConfig.supportedAndHide(select2.component());
+        return InlinePromptConfig.supportedAndHide(select2.asComponent());
     }
 
     @Override
     protected IModel<String> obtainInlinePromptModel() {
-        final IModel<ObjectMemento> model = select2.getModel();
-
-        return new IModel<String>() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public String getObject() {
-                val memento = model.getObject();
-                if(memento == null) {
-                    return null;
-                }
-                val adapter = ReferencePanel.super.getCommonContext().reconstructObject(memento);
-                return adapter != null ? adapter.titleString() : null;
-            }
-
-            @Override
-            public void setObject(final String s) {
-                // ignore
-            }
-
-            @Override
-            public void detach() {
-                // ignore
-            }
-        };
+        return select2.obtainInlinePromptModel();
     }
-
-
-
 
 
     // //////////////////////////////////////
@@ -338,15 +311,11 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     // called by setProviderAndCurrAndPending
     @Override
     protected void syncIfNull(final Select2 select2) {
-        final ObjectMemento curr = select2.getModelObject();
-
-        if(!getModel().isCollection()) {
-
-            if(curr == null) {
-                select2.getModel().setObject(null);
+        if(getModel().isScalar()) {
+            if(select2.isEmpty()) {
+                select2.clear(); // why?
                 getModel().setObject(null);
             }
-
         }
     }
 
@@ -367,10 +336,8 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         if(isEditableWithEitherAutoCompleteOrChoices()) {
 
             // flush changes to pending
-            ObjectMemento convertedInput = select2.getConvertedInput();
-            select2.getModel().setObject(convertedInput);
 
-            val adapter = super.getCommonContext().reconstructObject(convertedInput);
+            val adapter = select2.getConvertedInputValue();
             getModel().setObject(adapter);
             getModel().clearPending();
         }

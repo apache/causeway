@@ -23,8 +23,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-import lombok.val;
-
 /**
  *
  * @since 2.0
@@ -43,16 +41,15 @@ public interface ObjectDetacher {
 
     // -- FACTORY
 
-    public static ObjectDetacher createDefault(MetaModelContext metaModelContext) {
-
-        val chainOfHandlers = _Lists.of(
-                new ObjectDetacher_builtinHandlers.GuardAgainstNull(),
-                new ObjectDetacher_builtinHandlers.DetachEntity(metaModelContext),
-                new ObjectDetacher_builtinHandlers.DetachOther());
-
-        val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
-
-        return request -> chainOfRespo.handle(request).orElse(null);
+    public static ObjectDetacher createDefault(final MetaModelContext metaModelContext) {
+        return request ->
+        ChainOfResponsibility.named(
+                "ObjectDetacher",
+                _Lists.of(
+                        new ObjectDetacher_builtinHandlers.GuardAgainstNull(),
+                        new ObjectDetacher_builtinHandlers.DetachEntity(metaModelContext),
+                        new ObjectDetacher_builtinHandlers.DetachOther()))
+            .handle(request);
 
     }
 

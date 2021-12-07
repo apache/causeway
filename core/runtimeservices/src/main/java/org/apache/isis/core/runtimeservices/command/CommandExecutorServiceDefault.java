@@ -35,7 +35,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandExecutorService;
@@ -43,18 +42,17 @@ import org.apache.isis.applib.services.command.CommandOutcomeHandler;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.applib.services.schema.SchemaValueMarshaller;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.IndexedFunction;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.functions._Functions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
-import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
+import org.apache.isis.core.metamodel.services.schema.SchemaValueMarshaller;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -193,7 +191,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
             for (OidDto targetOidDto : targetOidDtos) {
 
-                val targetAdapter = adapterFor(targetOidDto);
+                val targetAdapter = valueMarshaller.recoverReferenceFrom(targetOidDto);
                 final ObjectAction objectAction = findObjectAction(targetAdapter, memberId);
 
                 // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
@@ -233,18 +231,16 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
             for (OidDto targetOidDto : targetOidDtos) {
 
-                final Bookmark bookmark = Bookmark.forOidDto(targetOidDto);
-                final Object targetObject = bookmarkService.lookup(bookmark).orElse(null);
-
-                val targetAdapter = adapterFor(targetObject);
+                val targetAdapter = valueMarshaller.recoverReferenceFrom(targetOidDto);
 
                 if(ManagedObjects.isNullOrUnspecifiedOrEmpty(targetAdapter)) {
-                    throw _Exceptions.unrecoverableFormatted("cannot recreate ManagedObject from bookmark %s", bookmark);
+                    throw _Exceptions.unrecoverableFormatted("cannot recreate ManagedObject from bookmark %s",
+                            Bookmark.forOidDto(targetOidDto));
                 }
 
                 final OneToOneAssociation property = findOneToOneAssociation(targetAdapter, memberId);
 
-                val newValueAdapter = recoverValueFrom(propertyDto);
+                val newValueAdapter = valueMarshaller.recoverValueFrom(propertyDto);
 
                 property.set(targetAdapter, newValueAdapter, InteractionInitiatedBy.FRAMEWORK);
 
@@ -334,18 +330,6 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 : "";
     }
 
-    private ManagedObject recoverValueFrom(final PropertyDto propertyDto) {
-        val newValue = valueMarshaller.recoverValueFrom(propertyDto);
-        return adapterFor(newValue);
-    }
-
-    private ManagedObject recoverValueFrom(
-            final Identifier paramIdentifier,
-            final ParamDto paramDto) {
-        val newValue = valueMarshaller.recoverValueFrom(paramIdentifier, paramDto);
-        return adapterFor(newValue);
-    }
-
     private static ObjectAction findActionElseNull(
             final ObjectSpecification specification,
             final String localActionId) {
@@ -368,8 +352,8 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         final Identifier actionIdentifier = valueMarshaller.actionIdentifier(actionDto);
 
         return streamParamDtosFrom(actionDto)
-                .map(_Functions.indexedZeroBase((i, paramDto)->
-                        recoverValueFrom(actionIdentifier.withParameterIndex(i), paramDto)))
+                .map(IndexedFunction.zeroBased((i, paramDto)->
+                    valueMarshaller.recoverValuesFrom(actionIdentifier.withParameterIndex(i), paramDto)))
                 .collect(Can.toCan());
     }
 
@@ -378,26 +362,6 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 .map(ParamsDto::getParameter)
                 .map(_NullSafe::stream)
                 .orElseGet(Stream::empty);
-    }
-
-    private ManagedObject adapterFor(final Object pojo) {
-        if(pojo==null) {
-            return ManagedObject.unspecified();
-        }
-        if(pojo instanceof OidDto) {
-            return adapterForOid(Bookmark.forOidDto((OidDto)pojo));
-        }
-        if(pojo instanceof Oid) {
-            return adapterForOid((Oid) pojo);
-        }
-        // value type
-        return ManagedObject.lazy(getSpecificationLoader(), pojo);
-    }
-
-    private ManagedObject adapterForOid(final Oid oid) {
-        val spec = specificationLoader.specForLogicalTypeName(oid.getLogicalTypeName()).orElse(null);
-        val loadRequest = ObjectLoader.Request.of(spec, oid.getIdentifier());
-        return spec.getMetaModelContext().getObjectManager().loadObject(loadRequest);
     }
 
 

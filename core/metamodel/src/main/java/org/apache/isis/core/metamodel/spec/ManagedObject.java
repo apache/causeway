@@ -35,12 +35,11 @@ import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import lombok.Value;
 import lombok.val;
 
 /**
@@ -62,10 +61,27 @@ public interface ManagedObject {
     Object getPojo();
 
     /**
+     * Introduced, so we can re-attach detached entity pojos in place.
+     * @apiNote should be package private, and not publicly exposed
+     * (but the <i>Java</i> language is not there yet)
+     */
+    void replacePojo(UnaryOperator<Object> replacer);
+
+    /**
      * Returns the object's bookmark as identified by the ObjectManager.
      * Bookmarks are considered immutable, hence will be memoized once fetched.
      */
     Optional<Bookmark> getBookmark();
+
+    /**
+     * Similar to {@link #getBookmark()}, but invalidates any memoized {@link Bookmark}
+     * such that the {@link Bookmark} returned is recreated, reflecting the object's current state.
+     * @implNote
+     * As this is not required, in fact not recommended for entities,
+     * (but might be necessary for viewmodels, when their state has changed),
+     * we silently ignore bookmark invalidation attempts for entities.
+     */
+    Optional<Bookmark> getBookmarkRefreshed();
 
     boolean isBookmarkMemoized();
 
@@ -210,10 +226,12 @@ public interface ManagedObject {
 
     // -- SIMPLE
 
-    @Value
-    @RequiredArgsConstructor(staticName="of", access = AccessLevel.PRIVATE)
+    //@Value
+    //@RequiredArgsConstructor(staticName="of", access = AccessLevel.PRIVATE)
+    @AllArgsConstructor(staticName="of", access = AccessLevel.PRIVATE)
     @EqualsAndHashCode(of = "pojo")
     @ToString(of = {"specification", "pojo"}) //ISIS-2317 make sure toString() is without side-effects
+    @Getter
     static final class SimpleManagedObject implements ManagedObject {
 
         public static ManagedObject identified(
@@ -226,11 +244,20 @@ public interface ManagedObject {
         }
 
         @NonNull private final ObjectSpecification specification;
-        @Nullable private final Object pojo;
+        @Nullable private /*final*/ Object pojo;
 
         @Override
         public Optional<Bookmark> getBookmark() {
             return bookmarkLazy.get();
+        }
+
+        @Override
+        public Optional<Bookmark> getBookmarkRefreshed() {
+            // silently ignore invalidation, when the pojo is an entity
+            if(!specification.isEntity()) {
+                bookmarkLazy.clear();
+            }
+            return getBookmark();
         }
 
         // -- LAZY ID HANDLING
@@ -242,6 +269,11 @@ public interface ManagedObject {
             return bookmarkLazy.isMemoized();
         }
 
+        @Override
+        public void replacePojo(final UnaryOperator<Object> replacer) {
+            pojo = replacer.apply(pojo);
+        }
+
     }
 
     // -- LAZY
@@ -251,11 +283,20 @@ public interface ManagedObject {
 
         @NonNull private final Function<Class<?>, ObjectSpecification> specLoader;
 
-        @Getter @NonNull private final Object pojo;
+        @Getter @NonNull private /*final*/ Object pojo;
 
         @Override
         public Optional<Bookmark> getBookmark() {
             return bookmarkLazy.get();
+        }
+
+        @Override
+        public Optional<Bookmark> getBookmarkRefreshed() {
+            // silently ignore invalidation, when the pojo is an entity
+            if(!specification.get().isEntity()) {
+                bookmarkLazy.clear();
+            }
+            return getBookmark();
         }
 
         // -- LAZY ID HANDLING
@@ -295,11 +336,12 @@ public interface ManagedObject {
             return specLoader.apply(pojo.getClass());
         }
 
+        @Override
+        public void replacePojo(final UnaryOperator<Object> replacer) {
+            pojo = replacer.apply(pojo);
+        }
 
 
     }
-
-
-
 
 }

@@ -28,10 +28,8 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.TestPropertySources;
@@ -43,14 +41,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.testdomain.RegressionTestAbstract;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.JpaInventoryDao;
+import org.apache.isis.testdomain.jpa.JpaTestFixtures;
 import org.apache.isis.testdomain.jpa.entities.JpaInventory;
-import org.apache.isis.testing.integtestsupport.applib.IsisInteractionHandler;
 
 import lombok.val;
 
@@ -63,17 +60,11 @@ import lombok.val;
     @TestPropertySource(IsisPresets.UseLog4j2Test)
 })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@ExtendWith({IsisInteractionHandler.class})
-@DirtiesContext
 class JpaExceptionTranslationTest_usingTransactional
-{
+extends RegressionTestAbstract {
 
-    //@Inject private JpaSupportService jpaSupport;
-    //@Inject private TransactionService transactionService;
-    @Inject private RepositoryService repositoryService;
-    @Inject private InteractionService interactionService;
+    @Inject private JpaTestFixtures testFixtures;
     @Inject private Provider<JpaInventoryDao> inventoryDao;
-    //@Inject private JpaTransactionManager txManager;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -86,7 +77,7 @@ class JpaExceptionTranslationTest_usingTransactional
     void booksUniqueByIsbn_setupPhase() {
         interactionService.runAnonymous(()->{
 
-            _TestFixtures.setUp3Books(repositoryService);
+            testFixtures.setUp3Books();
 
         });
     }
@@ -134,7 +125,7 @@ class JpaExceptionTranslationTest_usingTransactional
             assertNotNull(inventory.getProducts());
             assertEquals(3, inventory.getProducts().size());
 
-            _TestFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
+            testFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
 
         });
 
@@ -146,7 +137,7 @@ class JpaExceptionTranslationTest_usingTransactional
 
         interactionService.runAnonymous(()->{
 
-            _TestFixtures.cleanUp(repositoryService);
+            testFixtures.cleanUpRepository();
 
         });
 

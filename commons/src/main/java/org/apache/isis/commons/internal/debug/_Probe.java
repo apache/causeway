@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.base._With;
-import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.val;
@@ -69,22 +68,22 @@ public class _Probe {
     private final LongAdder counter = new LongAdder();
     private final LongAdder nanoCounter = new LongAdder();
 
-    private _Probe(long maxCalls, MaxCallsReachedAction maxAction) {
+    private _Probe(final long maxCalls, final MaxCallsReachedAction maxAction) {
         this.maxCalls = maxCalls;
         this.maxAction = maxAction;
     }
 
     // -- FACTORIES
 
-    public static _Probe maxCallsThenIgnore(long max) {
+    public static _Probe maxCallsThenIgnore(final long max) {
         return of(max, MaxCallsReachedAction.IGNORE);
     }
 
-    public static _Probe maxCallsThenExit(long max) {
+    public static _Probe maxCallsThenExit(final long max) {
         return of(max, MaxCallsReachedAction.SYSTEM_EXIT);
     }
 
-    public static _Probe maxCallsThenExitWithStacktrace(long max) {
+    public static _Probe maxCallsThenExitWithStacktrace(final long max) {
         return of(max, MaxCallsReachedAction.SYSTEM_EXIT_WITH_STACKTRACE);
     }
 
@@ -92,28 +91,28 @@ public class _Probe {
         return of(Long.MAX_VALUE-1, MaxCallsReachedAction.IGNORE);
     }
 
-    private static _Probe of(long maxCalls, MaxCallsReachedAction maxAction) {
+    private static _Probe of(final long maxCalls, final MaxCallsReachedAction maxAction) {
         return new _Probe(maxCalls, maxAction);
     }
 
     // -- WITHERS
 
-    public _Probe out(PrintStream out) {
+    public _Probe out(final PrintStream out) {
         this.out = out;
         return this;
     }
 
-    public _Probe label(String label) {
+    public _Probe label(final String label) {
         this.label = label;
         return this;
     }
 
-    public _Probe indentLiteral(String indentLiteral) {
+    public _Probe indentLiteral(final String indentLiteral) {
         this.indentLiteral = indentLiteral;
         return this;
     }
 
-    public _Probe emphasisFormat(String emphasisFormat) {
+    public _Probe emphasisFormat(final String emphasisFormat) {
         this.emphasisFormat = emphasisFormat;
         return this;
     }
@@ -129,7 +128,7 @@ public class _Probe {
 
     // -- PRINTING
 
-    public void println(int indent, CharSequence chars) {
+    public void println(final int indent, final CharSequence chars) {
         if(counter.longValue()<maxCalls) {
             counter.increment();
             if(!silenced) {
@@ -156,19 +155,19 @@ public class _Probe {
 
     }
 
-    public void println(CharSequence chars) {
+    public void println(final CharSequence chars) {
         println(currentIndent, chars);
     }
 
-    public void println(int indent, String format, Object...args) {
+    public void println(final int indent, final String format, final Object...args) {
         println(indent, String.format(format, args));
     }
 
-    public void println(String format, Object...args) {
+    public void println(final String format, final Object...args) {
         println(currentIndent, format, args);
     }
 
-    public void warnNotImplementedYet(String format, Object... args) {
+    public void warnNotImplementedYet(final String format, final Object... args) {
         val warnMsg = String.format(format, args);
         val restore_out = out;
         out=System.err;
@@ -179,7 +178,7 @@ public class _Probe {
         out=restore_out;
     }
 
-    public void run(Runnable runnable) {
+    public void run(final Runnable runnable) {
         val t0 = System.nanoTime();
         runnable.run();
         val nanos = System.nanoTime() - t0;
@@ -194,7 +193,7 @@ public class _Probe {
     }
 
     /** idea is to keep these for reuse (so these are not just for temporary troubleshooting) */
-    public static void entryPoint(EntryPoint entryPoint, String description) {
+    public static void entryPoint(final EntryPoint entryPoint, final String description) {
         if(log.isDebugEnabled()) {
             log.debug("entering {}: {}", entryPoint.name(), description);
         }
@@ -207,25 +206,24 @@ public class _Probe {
         return String.format("Thread[%s (%d)])", ct.getName(), ct.getId());
     }
 
-    public static void sysOut(String format, Object... args) {
+    public static void sysOut(final String format, final Object... args) {
         System.out.println(String.format(format, args));
     }
 
-    public static void errOut(String format, Object... args) {
+    public static void errOut(final String format, final Object... args) {
         System.err.println(String.format(format, args));
     }
 
-
     private static final Map<String, String> abbreviations =
-            _Maps.unmodifiableEntries(
-                    _Maps.entry("org.apache.isis", "~"),
-                    _Maps.entry("core", "c"),
-                    _Maps.entry("applib", "alib"),
-                    _Maps.entry("metamodel", "mm"),
-                    _Maps.entry("runtime", "rt"),
-                    _Maps.entry("viewer", "vw")
+            Map.of(
+                    "org.apache.isis", "~",
+                    "core", "c",
+                    "applib", "alib",
+                    "metamodel", "mm",
+                    "runtime", "rt",
+                    "viewer", "vw"
                     );
-    public static String compact(Class<?> cls) {
+    public static String compact(final Class<?> cls) {
         String[] name = {cls.getName()};
         // pre-process for isis
         abbreviations.forEach((k, v)->{
@@ -240,7 +238,7 @@ public class _Probe {
 
     // -- HELPER
 
-    private void print_line(int indent, CharSequence chars) {
+    private void print_line(final int indent, final CharSequence chars) {
         final long counterValue = counter.longValue();
         for(int i=0; i<indent; ++i) {
             out.print(indentLiteral);

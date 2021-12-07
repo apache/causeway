@@ -20,7 +20,6 @@ package org.apache.isis.viewer.wicket.ui.panels;
 
 import java.util.Optional;
 
-import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.springframework.lang.Nullable;
@@ -32,6 +31,8 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.internal.debug._Debug;
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -39,9 +40,7 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
-import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
-import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
 import lombok.NonNull;
 import lombok.val;
@@ -84,7 +83,6 @@ implements FormExecutor {
      */
     @Override
     public FormExecutionOutcome executeAndProcessResults(
-            final Page page,
             final AjaxRequestTarget ajaxTarget,
             final Form<?> feedbackFormIfAny,
             final FormExecutorContext formExecutorContext) {
@@ -100,8 +98,18 @@ implements FormExecutor {
 
             if (invalidReasonIfAny.isPresent()) {
                 raiseWarning(ajaxTarget, feedbackFormIfAny, invalidReasonIfAny.get());
-                return FormExecutionOutcome.FAILURE_SO_STAY_ON_PAGE; // invalid args, stay on page
+                return FormExecutionOutcome.FAILURE_RECOVERABLE_SO_STAY_ON_PAGE; // invalid args, stay on page
             }
+
+            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+
+                final String whatIsExecuted = actionOrPropertyModel
+                .fold(
+                        act->act.getFriendlyName(),
+                        prop->prop.getFriendlyName());
+
+                _Debug.log(10, "execute %s ...", whatIsExecuted);
+            });
 
             //
             // the following line will (attempt to) invoke the action, and will in turn either:
@@ -135,18 +143,30 @@ implements FormExecutor {
                         resultAdapter);
             }
 
+            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+                _Debug.log(10, "interpret result ...");
+            });
+
             val resultResponse = actionOrPropertyModel.fold(
                     act->ActionResultResponseType
                             .determineAndInterpretResult(act, ajaxTarget, resultAdapter, act.snapshotArgs()),
-                    prop->ActionResultResponse
-                            .toPage(EntityPage.ofAdapter(prop.getCommonContext(), resultAdapter)));
+                    prop->ActionResultResponseType
+                            .toEntityPage(resultAdapter));
 
-            // redirect unconditionally
+            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+                _Debug.log(10, "handle result ...");
+            });
+
+            // redirect using associated strategy
             resultResponse
                 .getHandlingStrategy()
                 .handleResults(getCommonContext(), resultResponse);
 
-            return FormExecutionOutcome.SUCCESS_SO_REDIRECT_TO_RESULT_PAGE; // success (valid args), allow redirect
+            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+                _Debug.log(10, "... return");
+            });
+
+            return FormExecutionOutcome.SUCCESS_AND_REDIRECED_TO_RESULT_PAGE; // success (valid args), allow redirect
 
         } catch (Throwable ex) {
 
@@ -156,7 +176,7 @@ implements FormExecutor {
             // attempt to recognize this exception using the ExceptionRecognizers (but only when not in inline prompt context!?)
             if(!formExecutorContext.isWithinInlinePrompt()
                     && recognizeExceptionThenRaise(ex, ajaxTarget, feedbackFormIfAny).isPresent()) {
-                return FormExecutionOutcome.FAILURE_SO_STAY_ON_PAGE; // invalid args, stay on page
+                return FormExecutionOutcome.FAILURE_RECOVERABLE_SO_STAY_ON_PAGE; // invalid args, stay on page
             }
 
             // throwing an exception will get caught by WebRequestCycleForIsis#onException(...)

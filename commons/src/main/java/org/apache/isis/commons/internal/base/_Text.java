@@ -324,12 +324,12 @@ public final class _Text {
 
         if(na.size()<=nb.size()) {
             na.zip(nb, (left, right)->{
-                final int lineNr = lineNrRef.inc();
+                final int lineNr = lineNrRef.incAndGet();
                 _Assert.assertEquals(left, right, ()->String.format("first non matching lineNr %d", lineNr));
             });
         } else {
             nb.zip(na, (right, left)->{
-                final int lineNr = lineNrRef.inc();
+                final int lineNr = lineNrRef.incAndGet();
                 _Assert.assertEquals(left, right, ()->String.format("first non matching lineNr %d", lineNr));
             });
         }
@@ -396,7 +396,7 @@ public final class _Text {
             final int nextLen = partialSum.getValue() + tokenLen;
             if(nextLen <= maxChars) {
                 partialSum.update(x->nextLen);
-                partialCount.inc();
+                partialCount.incAndGet();
             } else {
 
                 constraintLines.add(

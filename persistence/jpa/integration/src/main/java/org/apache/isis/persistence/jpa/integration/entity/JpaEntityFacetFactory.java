@@ -33,11 +33,13 @@ import org.apache.isis.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.isis.applib.query.AllInstancesQuery;
 import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Strings;
@@ -144,17 +146,21 @@ extends FacetFactoryAbstract {
         @Override
         public ManagedObject fetchByIdentifier(
                 final @NonNull ObjectSpecification entitySpec,
-                final @NonNull String identifier) {
+                final @NonNull Bookmark bookmark) {
 
-            val primaryKey = getObjectIdSerializer().parse(identifier);
+            _Assert.assertTrue(entitySpec.isEntity());
+
+            log.debug("fetchEntity; bookmark={}", bookmark);
+
+            val primaryKey = getObjectIdSerializer().parse(bookmark.getIdentifier());
             val entityManager = getEntityManager();
             val entityPojo = entityManager.find(entityClass, primaryKey);
 
             if (entityPojo == null) {
-                throw new ObjectNotFoundException(""+identifier);
+                throw new ObjectNotFoundException(""+bookmark);
             }
 
-            return ManagedObject.of(entitySpec, entityPojo);
+            return ManagedObject.bookmarked(entitySpec, entityPojo, bookmark);
         }
 
         @Override

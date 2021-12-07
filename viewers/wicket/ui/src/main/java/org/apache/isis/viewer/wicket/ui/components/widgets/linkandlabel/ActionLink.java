@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel;
 
-import java.util.Optional;
-
 import org.apache.wicket.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -28,26 +26,26 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.request.cycle.RequestCycle;
 
+import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.security.authentication.logout.LogoutMenu.LoginRedirect;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptWithExtraContent;
-import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
+import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.BS3GridPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
@@ -55,9 +53,10 @@ import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import static org.apache.isis.commons.internal.base._Casts.castTo;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import lombok.NonNull;
 import lombok.val;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 /**
  *
@@ -207,7 +206,7 @@ extends IndicatingAjaxLink<ManagedObject> {
         actionPrompt.setPanel(actionParametersPanel, target);
         actionPrompt.showPrompt(target);
 
-        castTo(actionPrompt, ActionPromptWithExtraContent.class)
+        castTo(ActionPromptWithExtraContent.class, actionPrompt)
         .ifPresent(promptWithExtraContent->{
             BS3GridPanel.extraContentForMixin(promptWithExtraContent.getExtraContentId(), actionModel)
             .ifPresent(gridPanel->promptWithExtraContent.setExtraContentPanel(gridPanel, target));
@@ -216,37 +215,18 @@ extends IndicatingAjaxLink<ManagedObject> {
 
     private void executeWithoutParams() {
         val actionModel = this.getActionModel();
-        val page = this.getPage();
 
-        // returns true - if redirecting to new page, or repainting all components.
-        // returns false - if invalid args; if concurrency exception;
-
+        // on non-recoverable exception throws
         val outcome = FormExecutorDefault
                 .forAction(actionModel)
-                .executeAndProcessResults(page, null, null, actionModel);
+                .executeAndProcessResults(null, null, actionModel);
 
-        if(outcome.isSuccess()) {
+        // on recoverable exception stay on page (eg. validation failure)
+        if(outcome.isFailure()) {
 
-            // intercept redirect request to sign-in page
-            Optional.ofNullable(actionModel.getObject())
-            .ifPresent(actionResultAdapter->{
-                val actionResultObjectType = actionResultAdapter.getSpecification().getLogicalTypeName();
-                if(LoginRedirect.LOGICAL_TYPE_NAME.equals(actionResultObjectType)) {
-                    val commonContext = actionModel.getCommonContext();
-                    val pageClassRegistry = commonContext.lookupServiceElseFail(PageClassRegistry.class);
-                    val signInPage = pageClassRegistry.getPageClass(PageType.SIGN_IN);
-                    RequestCycle.get().setResponsePage(signInPage);
-                }
+            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+                _Debug.log(10, "render the target entity again, outcome: %s", outcome);
             });
-
-            // else nothing to do
-
-            //
-            // the formExecutor will have either redirected, or scheduled a response,
-            // or repainted components as required
-            //
-
-        } else {
 
             // render the target entity again
             //
@@ -254,11 +234,12 @@ extends IndicatingAjaxLink<ManagedObject> {
             // the EventBus' exception handler will automatically veto.  This results in a growl message rather than
             // an error page, but is probably 'good enough').
             val targetAdapter = actionModel.getParentObject();
-            val entityPage = EntityPage.ofAdapter(getCommonContext(), targetAdapter);
+            val bookmark = targetAdapter.getBookmarkRefreshed().orElseThrow();
             getCommonContext().getTransactionService().flushTransaction();
 
             // "redirect-after-post"
-            RequestCycle.get().setResponsePage(entityPage);
+            RequestCycle.get().setResponsePage(EntityPage.class,
+                    PageParameterUtils.createPageParametersForBookmark(bookmark));
         }
     }
 

@@ -24,7 +24,6 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -38,9 +37,9 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.jdo.JdoTestFixtures;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
@@ -49,7 +48,7 @@ import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstra
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_usingJdo.class,
         }
 )
@@ -57,8 +56,7 @@ import lombok.val;
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JdoBootstrappingTest extends IsisIntegrationTestAbstract {
 
-    @Inject private RepositoryService repository;
-    //@Inject private TransactionService transactionService;
+    @Inject private JdoTestFixtures testFixtures;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -66,14 +64,8 @@ class JdoBootstrappingTest extends IsisIntegrationTestAbstract {
         // Util_H2Console.main(null);
     }
 
-    @AfterAll
-    static void afterAll() throws SQLException {
-    }
-
     void cleanUp() {
-        repository.allInstances(JdoInventory.class).forEach(repository::remove);
-        repository.allInstances(JdoBook.class).forEach(repository::remove);
-        repository.allInstances(JdoProduct.class).forEach(repository::remove);
+        testFixtures.cleanUpRepository();
     }
 
     void setUp() {
@@ -85,16 +77,16 @@ class JdoBootstrappingTest extends IsisIntegrationTestAbstract {
                 "Sample Publisher"));
 
         val inventory = JdoInventory.of("Sample Inventory", products);
-        repository.persist(inventory);
+        repositoryService.persist(inventory);
     }
 
-    @Test @Order(1) @Rollback(false) 
+    @Test @Order(1) @Rollback(false)
     void sampleInventoryShouldBeSetUp() {
 
         // given - expected pre condition: no inventories
 
         cleanUp();
-        assertEquals(0, repository.allInstances(JdoInventory.class).size());
+        assertEquals(0, repositoryService.allInstances(JdoInventory.class).size());
 
         // when
 
@@ -102,7 +94,7 @@ class JdoBootstrappingTest extends IsisIntegrationTestAbstract {
 
         // then - expected post condition: ONE inventory
 
-        val inventories = repository.allInstances(JdoInventory.class);
+        val inventories = repositoryService.allInstances(JdoInventory.class);
         assertEquals(1, inventories.size());
 
         val inventory = inventories.get(0);
@@ -113,6 +105,7 @@ class JdoBootstrappingTest extends IsisIntegrationTestAbstract {
         val product = inventory.getProducts().iterator().next();
         assertEquals("Sample Book", product.getName());
 
+        testFixtures.assertHasPersistenceId(product);
     }
 
     @Test @Order(2) @Rollback(false)

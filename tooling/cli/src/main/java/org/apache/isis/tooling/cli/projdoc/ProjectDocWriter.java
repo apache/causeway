@@ -88,7 +88,7 @@ final class ProjectDocWriter {
                 })
                 .stream()
                 .peek(adocFile->log.debug("deleting file: {}", adocFile.getAbsolutePath()))
-                .peek(__->deleteCount.inc())
+                .peek(__->deleteCount.incAndGet())
                 .forEach(_Files::deleteFile);
 
                 // write document index

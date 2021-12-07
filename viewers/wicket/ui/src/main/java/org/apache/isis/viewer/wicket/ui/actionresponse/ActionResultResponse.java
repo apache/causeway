@@ -20,15 +20,17 @@ package org.apache.isis.viewer.wicket.ui.actionresponse;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.component.IRequestablePage;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.value.OpenUrlStrategy;
-import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
+import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 
 import lombok.NonNull;
 
 /**
  * The response to provide as a result of interpreting the response;
- * either to show a {@link #toPage(PageAbstract) page}, or to
+ * either to show a {@link #toPage(PageRedirectRequest) page}, or to
  * {@link #withHandler(IRequestHandler) redirect} to a
  * handler (eg a download).
  */
@@ -36,18 +38,37 @@ public class ActionResultResponse {
 
     private final ActionResultResponseHandlingStrategy handlingStrategy;
     private final IRequestHandler handler;
-    private final PageAbstract page;
+    private final PageRedirectRequest<?> pageRedirect;
     private final AjaxRequestTarget target;
     private final String url;
 
-    public static ActionResultResponse withHandler(IRequestHandler handler) {
+    public static ActionResultResponse withHandler(final IRequestHandler handler) {
         return new ActionResultResponse(
                 ActionResultResponseHandlingStrategy.SCHEDULE_HANDLER, handler, null, null, null);
     }
 
-    public static ActionResultResponse toPage(PageAbstract page) {
+    public static ActionResultResponse toPage(final PageRedirectRequest<?> page) {
         return new ActionResultResponse(
                 ActionResultResponseHandlingStrategy.REDIRECT_TO_PAGE, null, page, null, null);
+    }
+
+    public static <T extends IRequestablePage> ActionResultResponse toPage(
+            final @NonNull Class<T> pageClass,
+            final @NonNull Bookmark bookmark) {
+        return toPage(PageRedirectRequest.forPageClass(
+                        pageClass,
+                        PageParameterUtils.createPageParametersForBookmark(bookmark)));
+    }
+
+    public static <T extends IRequestablePage> ActionResultResponse toPage(
+            final @NonNull Class<T> pageClass,
+            final @NonNull T pageInstance) {
+        return toPage(PageRedirectRequest.forPage(pageClass, pageInstance));
+    }
+
+    public static <T extends IRequestablePage> ActionResultResponse toPage(
+            final @NonNull Class<T> pageClass) {
+        return toPage(PageRedirectRequest.forPageClass(pageClass));
     }
 
     public static ActionResultResponse openUrlInBrowser(
@@ -64,12 +85,12 @@ public class ActionResultResponse {
     private ActionResultResponse(
             final ActionResultResponseHandlingStrategy strategy,
             final IRequestHandler handler,
-            final PageAbstract page,
+            final PageRedirectRequest<?> pageRedirect,
             final AjaxRequestTarget target,
             final String url) {
         this.handlingStrategy = strategy;
         this.handler = handler;
-        this.page = page;
+        this.pageRedirect = pageRedirect;
         this.target = target;
         this.url = url;
     }
@@ -88,8 +109,8 @@ public class ActionResultResponse {
     /**
      * Populated only if {@link #getHandlingStrategy() handling strategy} is {@link ActionResultResponseHandlingStrategy#REDIRECT_TO_PAGE}
      */
-    public PageAbstract getToPage() {
-        return page;
+    public PageRedirectRequest<?> getPageRedirect() {
+        return pageRedirect;
     }
 
     /**

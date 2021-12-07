@@ -99,7 +99,7 @@ implements HasMetaModelContext {
         }
 
         @Override
-        public Can<Method> snapshot() {
+        public Can<Method> snapshotMethodsRemaining() {
             return Can.ofCollection(methodsRemaining);
         }
 
@@ -346,7 +346,9 @@ implements HasMetaModelContext {
         }
 
         methodRemover.removeMethods(method->{
+
             val actionPeer = findActionFacetedMethod(method);
+
             if (actionPeer != null) {
                 onActionFacetedMethod.accept(actionPeer);
                 return true;
@@ -548,5 +550,11 @@ implements HasMetaModelContext {
         return str.toString();
     }
 
+    /**
+     * exposed for debugging purposes
+     */
+    public Can<Method> snapshotMethodsRemaining() {
+        return methodRemover.snapshotMethodsRemaining();
+    }
 
 }

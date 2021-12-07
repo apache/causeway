@@ -26,9 +26,10 @@ import java.util.UUID;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
-import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.debug._Debug;
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
@@ -90,8 +91,8 @@ class ObjectBookmarker_builtinHandlers {
         @Override
         public Bookmark handle(final ManagedObject managedObject) {
             val spec = managedObject.getSpecification();
-            val pojo = managedObject.getPojo();
-            if(pojo==null) {
+            val entityPojo = managedObject.getPojo();
+            if(entityPojo==null) {
                 val msg = String.format("entity '%s' is null, cannot identify", managedObject);
                 throw _Exceptions.unrecoverable(msg);
             }
@@ -106,24 +107,36 @@ class ObjectBookmarker_builtinHandlers {
                     && EntityUtil.getPersistenceStandard(managedObject)
                         .map(PersistenceStandard::isJdo)
                         .orElse(false)
-                    && !entityFacet.getEntityState(managedObject.getPojo()).isAttached()) {
+                    && !entityFacet.getEntityState(entityPojo).isAttached()) {
 
                 // re-attach
-                entityFacet.persist(spec, managedObject.getPojo());
+                //entityFacet.persist(spec, entityPojo);
 
-                // fail early, if re-attach failed
-                _Assert.assertTrue(
-                        entityFacet.getEntityState(managedObject.getPojo()).isAttached(),
-                        ()->{
-                            val msg = String.format("failed to re-attach (persist) JDO entity %s, "
-                                    + "while creating a Bookmark",
-                                    spec.getLogicalTypeName());
-                            log.error(msg); // in case exception gets swallowed
-                            return msg;
-                        });
+                _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+                    _Debug.log(10, "detached entity detected %s", entityPojo);
+                });
+
+                throw _Exceptions.illegalArgument(
+                        "The persistence layer does not recognize given object of type %s, "
+                        + "meaning the object has no identifier that associates it with the persistence layer. "
+                        + "(most likely, because the object is detached, eg. was not persisted after being new-ed up)",
+                        entityPojo.getClass().getName());
+
+
+
+//                // fail early, if re-attach failed
+//                _Assert.assertTrue(
+//                        entityFacet.getEntityState(entityPojo).isAttached(),
+//                        ()->{
+//                            val msg = String.format("failed to re-attach (persist) JDO entity %s, "
+//                                    + "while creating a Bookmark",
+//                                    spec.getLogicalTypeName());
+//                            log.error(msg); // in case exception gets swallowed
+//                            return msg;
+//                        });
             }
 
-            val identifier = entityFacet.identifierFor(spec, pojo);
+            val identifier = entityFacet.identifierFor(spec, entityPojo);
             return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), identifier);
         }
 
@@ -201,6 +214,11 @@ class ObjectBookmarker_builtinHandlers {
 
         @Override
         public Bookmark handle(final ManagedObject managedObject) {
+
+            if(managedObject.isBookmarkMemoized()) {
+                return managedObject.getBookmark().get();
+            }
+
             val spec = managedObject.getSpecification();
             val recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
             val identifier = recreatableObjectFacet.memento(managedObject.getPojo());

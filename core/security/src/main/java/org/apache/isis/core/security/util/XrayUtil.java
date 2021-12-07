@@ -24,9 +24,8 @@ import java.util.function.Consumer;
 
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.debug.xray.XrayModel.ThreadMemento;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
-import org.apache.isis.commons.internal.debug.xray.sequence.SequenceDiagram;
+import org.apache.isis.commons.internal.debug.xray.graphics.SequenceDiagram;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Builder;
@@ -49,15 +48,7 @@ public final class XrayUtil {
         return String.format("seq-%s", uuid);
     }
 
-    public static ThreadMemento currentThreadAsMemento() {
-        val ct = Thread.currentThread();
-        return ThreadMemento.of(
-                String.format("thread-%d-%s", ct.getId(), ct.getName()),
-                String.format("Thread-%d [%s]", ct.getId(), ct.getName()),
-                String.format("Thread-%d\n%s", ct.getId(), ct.getName()));
-    }
-
-    public static String nestedInteractionId(int authenticationStackSize) {
+    public static String nestedInteractionId(final int authenticationStackSize) {
         return "ia-" + (authenticationStackSize-1);
     }
 
@@ -92,7 +83,7 @@ public final class XrayUtil {
         final @NonNull String caller;
         final @NonNull Can<String> callees;
 
-        public void submit(Consumer<SequenceDiagram> onSubmission) {
+        public void submit(final Consumer<SequenceDiagram> onSubmission) {
             XrayUi.updateModel(model->{
                 model.lookupSequence(getSequenceId())
                 .ifPresent(sequence->onSubmission.accept(sequence.getData()));

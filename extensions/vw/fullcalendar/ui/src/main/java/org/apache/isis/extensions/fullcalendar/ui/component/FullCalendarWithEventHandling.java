@@ -74,8 +74,7 @@ final class FullCalendarWithEventHandling extends FullCalendar {
         final IsisAppCommonContext webAppCommonContext = IsisAppCommonContext.of(metaModelContext);
 
         val spec = specificationLoader.specForLogicalTypeName(bookmark.getLogicalTypeName()).orElse(null);
-        val objectId = bookmark.getIdentifier();
-        val managedObject = objectManager.loadObject(ObjectLoader.Request.of(spec, objectId));
+        val managedObject = objectManager.loadObject(ObjectLoader.Request.of(spec, bookmark));
 
         final EntityModel entityModel = EntityModel.ofAdapter(webAppCommonContext, managedObject);
 

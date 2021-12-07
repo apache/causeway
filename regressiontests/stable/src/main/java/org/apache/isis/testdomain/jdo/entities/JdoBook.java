@@ -35,7 +35,11 @@ import org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectRemovingEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
+import org.apache.isis.commons.internal.debug._Debug;
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.testdomain.model.stereotypes.MyService;
+import org.apache.isis.testdomain.util.dto.BookDto;
+import org.apache.isis.testdomain.util.dto.IBook;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.AccessLevel;
@@ -82,7 +86,9 @@ import lombok.extern.log4j.Log4j2;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @ToString(callSuper = true)
 @Log4j2
-public class JdoBook extends JdoProduct {
+public class JdoBook
+extends JdoProduct
+implements IBook {
 
     // -- DOMAIN EVENTS
     public static class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<JdoBook> {};
@@ -114,11 +120,6 @@ public class JdoBook extends JdoProduct {
     }
     // --
 
-    @Override
-    public String title() {
-        return toString();
-    }
-
     public static JdoBook of(
             final String name,
             final String description,
@@ -128,6 +129,16 @@ public class JdoBook extends JdoProduct {
             final String publisher) {
 
         return new JdoBook(name, description, price, author, isbn, publisher);
+    }
+
+    public static JdoBook fromDto(final BookDto dto) {
+       return JdoBook.of(dto.getName(), dto.getDescription(), dto.getPrice(),
+               dto.getAuthor(), dto.getIsbn(), dto.getPublisher());
+    }
+
+    @Override
+    public String title() {
+        return IBook.super.title();
     }
 
     @Property
@@ -156,6 +167,11 @@ public class JdoBook extends JdoProduct {
         this.author = author;
         this.isbn = isbn;
         this.publisher = publisher;
+
+        _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+            _Debug.log(10, "new JdoBook instance %s", this);
+        });
+
     }
 
 }

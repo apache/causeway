@@ -20,7 +20,6 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
 
-import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 
@@ -32,18 +31,28 @@ import org.apache.wicket.markup.html.form.Form;
 public interface FormExecutor extends Serializable {
 
     enum FormExecutionOutcome {
-        FAILURE_SO_STAY_ON_PAGE,
-        SUCCESS_SO_REDIRECT_TO_RESULT_PAGE,
+
+        /**
+         * if invalid arguments or recoverable exception
+         */
+        FAILURE_RECOVERABLE_SO_STAY_ON_PAGE,
+
+        /**
+         * redirect to result page or re-render all UI components
+         */
+        SUCCESS_AND_REDIRECED_TO_RESULT_PAGE,
+
+        /**
+         * do not trigger a full page re-render, when executing eg. a nested dialog
+         */
         SUCCESS_IN_NESTED_CONTEXT_SO_STAY_ON_PAGE;
 
-        public boolean isFailure() { return this == FAILURE_SO_STAY_ON_PAGE; }
-        public boolean isSuccess() { return this != FAILURE_SO_STAY_ON_PAGE; }
-        public boolean isSuccessWithRedirect() { return this == SUCCESS_SO_REDIRECT_TO_RESULT_PAGE; }
-        public boolean isSuccessWithinNestedContext() { return this == SUCCESS_IN_NESTED_CONTEXT_SO_STAY_ON_PAGE; }
+        public boolean isFailure() { return this == FAILURE_RECOVERABLE_SO_STAY_ON_PAGE; }
+        public boolean isSuccess() { return !isFailure(); }
+
     }
 
     FormExecutionOutcome executeAndProcessResults(
-            Page page,
             AjaxRequestTarget targetIfAny,
             Form<?> feedbackFormIfAny,
             FormExecutorContext formExecutorContext);

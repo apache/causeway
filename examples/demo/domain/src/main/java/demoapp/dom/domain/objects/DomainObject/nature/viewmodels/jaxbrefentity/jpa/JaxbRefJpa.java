@@ -18,18 +18,17 @@
  */
 package demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.jpa;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import lombok.Getter;
@@ -49,7 +48,6 @@ import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.J
 @DomainObject(
         bounding = Bounding.BOUNDED
         , logicalTypeName = "demo.JaxbRefEntity")
-@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @NoArgsConstructor
 public class JaxbRefJpa
         extends JaxbRefEntity {
@@ -62,6 +60,7 @@ public class JaxbRefJpa
     @GeneratedValue
     private Long id;
 
+    @Column(nullable = false)
     @Getter @Setter
     private String name;
 }

@@ -117,14 +117,21 @@ public final class _Refs {
             return value==other;
         }
 
-        public int inc() {
+        public int incAndGet() {
             return ++value;
         }
 
-        public int dec() {
+        public int decAndGet() {
             return --value;
         }
 
+        public int getAndInc() {
+            return value++;
+        }
+
+        public int gatAndDec() {
+            return value--;
+        }
     }
 
     /**

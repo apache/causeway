@@ -170,6 +170,7 @@ implements
         newPageFactoryMixin = new IsisWicketApplication_newPageFactory(this);
     }
 
+
     /**
      * Although there are warnings about not overriding this method, it doesn't seem possible
      * to call {@link #setResourceSettings(org.apache.wicket.settings.ResourceSettings)} in the
@@ -186,6 +187,9 @@ implements
         // experimental.addListenerToStripRemovedComponentsFromAjaxTargetResponse();
 
         super.internalInit();
+
+        // entity page experiments, kept for reference or future experiments
+        //IsisWicketApplication_experimental.setRootRequestMapper(this);
 
     }
 
@@ -280,26 +284,25 @@ implements
             //  side-effects?
             //  SharedResources sharedResources = getSharedResources();
 
-            if(systemEnvironment.isPrototyping()) {
+            if(systemEnvironment.isPrototyping()
+                    && configuration.getViewer().getWicket().getDevelopmentUtilities().isEnable()) {
+
                 DebugDiskDataStore.register(this);
                 log.debug("DebugDiskDataStore registered; access via ~/wicket/internal/debug/diskDataStore");
                 log.debug("DebugDiskDataStore: eg, http://localhost:8080/wicket/wicket/internal/debug/diskDataStore");
 
                 if(!getDebugSettings().isDevelopmentUtilitiesEnabled()) {
-                    boolean enableDevUtils = configuration.getViewer().getWicket().getDevelopmentUtilities().isEnable();
-                    if(enableDevUtils) {
-                        getDebugSettings().setDevelopmentUtilitiesEnabled(true);
+                    getDebugSettings().setDevelopmentUtilitiesEnabled(true);
 
-                        // copied from DebugBarInitializer
-                        // this is hacky, but need to do this because IInitializer#init() called before
-                        // the Application's #init() is called.
-                        // an alternative, better, design might be to move Isis' own initialization into an
-                        // implementation of IInitializer?
-                        DebugBar.registerContributor(VersionDebugContributor.DEBUG_BAR_CONTRIB, this);
-                        DebugBar.registerContributor(InspectorDebugPanel.DEBUG_BAR_CONTRIB, this);
-                        DebugBar.registerContributor(SessionSizeDebugPanel.DEBUG_BAR_CONTRIB, this);
-                        DebugBar.registerContributor(PageSizeDebugPanel.DEBUG_BAR_CONTRIB, this);
-                    }
+                    // copied from DebugBarInitializer
+                    // this is hacky, but need to do this because IInitializer#init() called before
+                    // the Application's #init() is called.
+                    // an alternative, better, design might be to move Isis' own initialization into an
+                    // implementation of IInitializer?
+                    DebugBar.registerContributor(VersionDebugContributor.DEBUG_BAR_CONTRIB, this);
+                    DebugBar.registerContributor(InspectorDebugPanel.DEBUG_BAR_CONTRIB, this);
+                    DebugBar.registerContributor(SessionSizeDebugPanel.DEBUG_BAR_CONTRIB, this);
+                    DebugBar.registerContributor(PageSizeDebugPanel.DEBUG_BAR_CONTRIB, this);
                 }
             }
 

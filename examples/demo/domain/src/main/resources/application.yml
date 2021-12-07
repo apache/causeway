@@ -151,6 +151,8 @@ resteasy:
     defaultPath: "/restful"
 
 server:
+  http2:
+    enabled: true
   max-http-header-size: 16KB
   servlet:
     session:
