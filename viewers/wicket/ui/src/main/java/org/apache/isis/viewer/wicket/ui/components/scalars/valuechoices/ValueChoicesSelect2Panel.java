@@ -25,7 +25,6 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.commons.collections.Can;
@@ -69,7 +68,7 @@ extends ScalarPanelSelectAbstract {
             select2.clearInput();
         }
 
-        FormComponent<?> formComponent = select2.component();
+        FormComponent<?> formComponent = select2.asComponent();
 
         return createFormGroup(formComponent);
     }
@@ -88,14 +87,12 @@ extends ScalarPanelSelectAbstract {
 
     @Override
     protected InlinePromptConfig getInlinePromptConfig() {
-        return InlinePromptConfig.supportedAndHide(select2.component());
+        return InlinePromptConfig.supportedAndHide(select2.asComponent());
     }
 
     @Override
     protected IModel<String> obtainInlinePromptModel() {
-        ObjectMemento inlinePromptMemento = select2.getModelObject();
-        String inlinePrompt = inlinePromptMemento != null ? inlinePromptMemento.asString(): null;
-        return Model.of(inlinePrompt);
+        return select2.obtainInlinePromptModel2();
     }
 
     // --
@@ -163,9 +160,8 @@ extends ScalarPanelSelectAbstract {
 
     @Override
     protected void syncIfNull(final Select2 select2) {
-
         if(scalarModel().isEmpty()) {
-            select2.getModel().setObject(null);
+            select2.clear();
         }
     }
 

@@ -618,19 +618,15 @@ public final class ManagedObjects {
             return managedObject;
         }
 
-        //@Nullable
         public static void reattach(final @Nullable ManagedObject managedObject) {
             if(isNullOrUnspecifiedOrEmpty(managedObject)) {
-                //return managedObject;
                 return;
             }
             val entityState = EntityUtil.getEntityState(managedObject);
             if(!entityState.isPersistable()) {
-                //return managedObject;
                 return;
             }
             if(!entityState.isDetached()) {
-                //return managedObject;
                 return;
             }
 
@@ -644,15 +640,10 @@ public final class ManagedObjects {
                                     bookmark)))
             .orElse(managedObject);
 
-
-            val state = EntityUtil.getEntityState(reattached);
-            if(state.isPersistable()) {
-                _Assert.assertTrue(state.isAttached());
-            }
+            val newState = EntityUtil.getEntityState(reattached);
+            _Assert.assertTrue(newState.isAttached());
 
             managedObject.replacePojo(old->reattached.getPojo());
-
-            //return reattached;
         }
 
         public static void requiresWhenFirstIsBookmarkableSecondIsAttached(

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.commons.internal.base;
 
+import java.io.Serializable;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -43,7 +44,9 @@ import lombok.ToString;
  */
 @RequiredArgsConstructor(access=AccessLevel.PRIVATE, staticName="of")
 @ToString @EqualsAndHashCode
-public final class _Either<L, R> {
+public final class _Either<L, R> implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private final L left;
     private final R right;
