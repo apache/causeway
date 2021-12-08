@@ -168,8 +168,8 @@
 
 		<quartz-scheduler.version>2.3.2</quartz-scheduler.version>
 
-		<resteasy-spring-boot-starter.version>4.9.1.Final</resteasy-spring-boot-starter.version>
-		<resteasy.version>4.7.2.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
+		<resteasy-spring-boot-starter.version>5.0.0.Final</resteasy-spring-boot-starter.version>
+		<resteasy.version>5.0.0.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
 
 		<select2.version>4.0.13</select2.version>
 		<shiro.version>1.8.0</shiro.version>

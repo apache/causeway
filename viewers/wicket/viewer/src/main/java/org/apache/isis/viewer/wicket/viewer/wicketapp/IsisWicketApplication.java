@@ -157,8 +157,6 @@ implements
     private IsisConfiguration configuration;
 
     private final IsisWicketApplication_experimental experimental;
-    private final IsisWicketApplication_newSession newSessionMixin;
-    private final IsisWicketApplication_newPageFactory newPageFactoryMixin;
 
     // /////////////////////////////////////////////////
     // constructor, init
@@ -166,10 +164,7 @@ implements
 
     public IsisWicketApplication() {
         experimental = new IsisWicketApplication_experimental(this);
-        newSessionMixin = new IsisWicketApplication_newSession(this);
-        newPageFactoryMixin = new IsisWicketApplication_newPageFactory(this);
     }
-
 
     /**
      * Although there are warnings about not overriding this method, it doesn't seem possible
@@ -336,7 +331,7 @@ implements
      */
     @Override
     protected IPageFactory newPageFactory() {
-        return newPageFactoryMixin.interceptPageFactory(super.newPageFactory());
+        return new _PageFactory(this, super.newPageFactory());
     }
 
     /*
@@ -344,7 +339,9 @@ implements
      */
     @Override
     public Session newSession(final Request request, final Response response) {
-        return newSessionMixin.interceptNewSession(super.newSession(request, response));
+        val newSession = (AuthenticatedWebSessionForIsis) super.newSession(request, response);
+        newSession.init(getCommonContext());
+        return newSession;
     }
 
     /**
