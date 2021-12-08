@@ -215,8 +215,7 @@ class ObjectBookmarker_builtinHandlers {
 
             val spec = managedObject.getSpecification();
             val recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
-            val identifier = recreatableObjectFacet.memento(managedObject.getPojo());
-            return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), identifier);
+            return recreatableObjectFacet.serializeToBookmark(managedObject);
         }
 
     }

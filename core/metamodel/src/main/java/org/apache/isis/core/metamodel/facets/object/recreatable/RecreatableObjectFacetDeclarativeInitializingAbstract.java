@@ -80,11 +80,9 @@ extends RecreatableObjectFacetAbstract {
     }
 
     @Override
-    public String memento(final Object viewModelPojo) {
+    public String serialize(final ManagedObject viewModel) {
 
         final _Mementos.Memento memento = newMemento();
-
-        val objectManager = super.getObjectManager();
 
         /*
          * ManagedObject that holds the ObjectSpecification used for
@@ -93,8 +91,7 @@ extends RecreatableObjectFacetAbstract {
          * Does _not_ perform dependency injection on the domain object. Also bypasses
          * caching (if any), that is each call to this method creates a new instance.
          */
-        val viewModelAdapter = objectManager.adapt(viewModelPojo);
-        val spec = viewModelAdapter.getSpecification();
+        val spec = viewModel.getSpecification();
 
         spec.streamProperties(MixedIn.EXCLUDED)
         // ignore read-only
@@ -103,7 +100,7 @@ extends RecreatableObjectFacetAbstract {
         .filter(property->!property.isNotPersisted())
         .forEach(property->{
             final ManagedObject propertyValue =
-                    property.get(viewModelAdapter, InteractionInitiatedBy.FRAMEWORK);
+                    property.get(viewModel, InteractionInitiatedBy.FRAMEWORK);
             if(propertyValue != null
                     && propertyValue.getPojo()!=null) {
                 memento.put(property.getId(), propertyValue.getPojo());

@@ -26,6 +26,7 @@ import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.Getter;
 
@@ -47,8 +48,8 @@ extends RecreatableObjectFacetAbstract {
     }
 
     @Override
-    public String memento(final Object vmPojo) {
-        final String xml = getJaxbService().toXml(vmPojo);
+    public String serialize(final ManagedObject managedObject) {
+        final String xml = getJaxbService().toXml(managedObject.getPojo());
         final String encoded = getUrlEncodingService().encodeString(xml);
         //FIXME[ISIS-2903] gets called about 4 times per same object, why?
         _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{

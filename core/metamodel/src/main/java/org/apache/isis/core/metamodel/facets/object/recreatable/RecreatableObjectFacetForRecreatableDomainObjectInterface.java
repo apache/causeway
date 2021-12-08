@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.recreatable;
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class RecreatableObjectFacetForRecreatableDomainObjectInterface
 extends RecreatableObjectFacetAbstract {
@@ -38,8 +39,8 @@ extends RecreatableObjectFacetAbstract {
     }
 
     @Override
-    public String memento(final Object pojo) {
-        final RecreatableDomainObject recreatableDomainObject = (RecreatableDomainObject)pojo;
+    public String serialize(final ManagedObject viewModel) {
+        final RecreatableDomainObject recreatableDomainObject = (RecreatableDomainObject)viewModel.getPojo();
         return recreatableDomainObject.__isis_memento();
     }
 

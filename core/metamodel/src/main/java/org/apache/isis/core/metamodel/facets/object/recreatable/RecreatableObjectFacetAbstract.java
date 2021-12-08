@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.recreatable;
 import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
@@ -29,7 +30,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
+import lombok.NonNull;
 import lombok.val;
 
 public abstract class RecreatableObjectFacetAbstract
@@ -116,6 +119,15 @@ implements ViewModelFacet {
             MethodExtensions.invoke(postConstructMethod, viewModel);
         }
     }
+
+    @Override
+    public final Bookmark serializeToBookmark(@NonNull final ManagedObject managedObject) {
+        return Bookmark.forLogicalTypeAndIdentifier(
+                managedObject.getSpecification().getLogicalType(),
+                serialize(managedObject));
+    }
+
+    protected abstract @NonNull String serialize(@NonNull ManagedObject managedObject);
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {

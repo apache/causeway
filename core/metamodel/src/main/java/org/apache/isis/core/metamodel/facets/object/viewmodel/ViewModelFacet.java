@@ -21,7 +21,9 @@ package org.apache.isis.core.metamodel.facets.object.viewmodel;
 import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
@@ -99,6 +101,6 @@ public interface ViewModelFacet extends Facet {
     /**
      * Obtain a memento of the pojo, which can then be used to reinstantiate (either by {@link #instantiate(Class, String)} or {@link #initialize(Object, String)}) subsequently.
      */
-    String memento(Object viewModelPojo);
+    Bookmark serializeToBookmark(ManagedObject managedObject);
 
 }
