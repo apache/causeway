@@ -140,15 +140,14 @@ extends ModelAbstract<ManagedObject> {
      * which results in a new request-cycle, where an EntityPage instance
      * is reused, that was already populated in the previous request-cycle.
      * However, this time, all the contained entities are detached
-     * from the persistence layer and need to be re-attached
-     * (or re-loaded from their bookmarks).
+     * from the persistence layer and need to be re-fetched using their bookmarks.
      */
-    public final ManagedObject getObjectAndReAttach() {
+    public final ManagedObject getObjectAndRefetch() {
         //EntityUtil.assertAttachedWhenEntity()//guard
         val entityOrViewmodel = super.getObject();
 
-        if(_ViewmodelEntityReattacher.appliesTo(entityOrViewmodel)) {
-            return _ViewmodelEntityReattacher.reattach(entityOrViewmodel, this::reload);
+        if(_Experiments.appliesTo(entityOrViewmodel)) {
+            return _Experiments.refetch(entityOrViewmodel, this::reload);
         }
 
         return EntityUtil.computeIfDetached(entityOrViewmodel, this::reload);

@@ -27,8 +27,9 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
+@Deprecated
 @UtilityClass
-final class _ViewmodelEntityReattacher {
+final class _Experiments {
 
     public static boolean appliesTo(final ManagedObject entityOrViewmodel) {
         val spec = entityOrViewmodel.getSpecification();
@@ -40,7 +41,7 @@ final class _ViewmodelEntityReattacher {
         return false;
     }
 
-    public static ManagedObject reattach(
+    public static ManagedObject refetch(
             final ManagedObject viewmodel,
             final UnaryOperator<ManagedObject> onDetachedEntity) {
 
@@ -53,7 +54,7 @@ final class _ViewmodelEntityReattacher {
             return viewmodel;
         }
 
-        _Debug.log("JAXB reattach for %s", currentInteractionId.toString());
+        _Debug.log("JAXB reload from bookmark (ia: %s)", currentInteractionId.toString());
 
 //        spec.streamAssociations(MixedIn.EXCLUDED)
 //        .forEach(assoc->{

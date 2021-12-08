@@ -41,7 +41,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 
 import lombok.SneakyThrows;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 class ObjectBookmarker_builtinHandlers {
 
@@ -80,7 +79,7 @@ class ObjectBookmarker_builtinHandlers {
 
     }
 
-    @Log4j2
+    //@Log4j2
     static class BookmarkForEntities implements Handler {
 
         @Override
@@ -109,9 +108,6 @@ class ObjectBookmarker_builtinHandlers {
                         .orElse(false)
                     && !entityFacet.getEntityState(entityPojo).isAttached()) {
 
-                // re-attach
-                //entityFacet.persist(spec, entityPojo);
-
                 _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
                     _Debug.log("detached entity detected %s", entityPojo);
                 });
@@ -122,9 +118,7 @@ class ObjectBookmarker_builtinHandlers {
                         + "(most likely, because the object is detached, eg. was not persisted after being new-ed up)",
                         entityPojo.getClass().getName());
 
-
-
-//                // fail early, if re-attach failed
+//                // fail early, if re-fetch failed
 //                _Assert.assertTrue(
 //                        entityFacet.getEntityState(entityPojo).isAttached(),
 //                        ()->{

@@ -147,6 +147,9 @@ public class Configuration_usingWicket {
         public static final String INLINE_PROMPT_FORM_FIELD = ""
                 + "property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:scalarValueContainer:scalarValue";
 
+        public static final String INLINE_PROMPT_FORM_OK = INVENTORY_NAME_PROPERTY_EDIT_INLINE_PROMPT_FORM
+                + ":okButton";
+
 
         //inputForm:property:scalarNameAndValue]: [StringPanel [Component id = scalarNameAndValue]] -> StringPanel: ManagedObject.SimpleManagedObject(specification=ObjectSpecificationDefault@44e816ad[class=java.lang.String,type=VALUE,superclass=Object], pojo=Bookstore)
         //inputForm:property:scalarNameAndValue:scalarTypeContainer]: [WebMarkupContainer [Component id = scalarTypeContainer]] -> WebMarkupContainer:

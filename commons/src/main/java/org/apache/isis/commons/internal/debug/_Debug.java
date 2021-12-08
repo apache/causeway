@@ -38,7 +38,12 @@ import lombok.experimental.UtilityClass;
  * These may be changed or removed without notice!
  * </p>
  * @since 2.0
+ *
+ * @deprecated not deprecated, but marked a such,
+ * to indicate that any call to this class is temporary for debugging purposes
+ * and should be removed ultimately
  */
+@Deprecated // do not remove, see java-doc
 @UtilityClass
 public class _Debug {
 
