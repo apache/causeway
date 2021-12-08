@@ -21,6 +21,7 @@ package org.apache.isis.client.kroviz.core.event
 import io.kvision.html.ButtonStyle
 import kotlinx.serialization.Serializable
 import org.apache.isis.client.kroviz.ui.core.Constants
+import org.apache.isis.client.kroviz.utils.XmlHelper
 
 enum class ChangeType(val id: String, val iconName: String, val style: ButtonStyle) {
     ADDED("ADDED", "fas fa-plus", ButtonStyle.INFO),
@@ -50,9 +51,15 @@ data class LogEntryComparison(val title: String, val expected: LogEntry?, val ac
             expectedResponse = expected?.response
             if (expected != null) {
                 expectedBaseUrl = extractBaseUrl(expected)
+                if (expected.subType == Constants.subTypeXml) {
+                    expectedResponse = XmlHelper.format(expectedResponse!!)
+                }
             }
             if (actual != null) {
                 actualBaseUrl = extractBaseUrl(actual)
+                if (actual.subType == Constants.subTypeXml) {
+                    actualResponse = XmlHelper.format(actualResponse!!)
+                }
             }
         }
     }

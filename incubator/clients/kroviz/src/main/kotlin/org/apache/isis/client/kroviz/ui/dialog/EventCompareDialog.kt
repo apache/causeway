@@ -19,13 +19,18 @@
 package org.apache.isis.client.kroviz.ui.dialog
 
 import io.kvision.core.CssSize
+import io.kvision.core.FlexDirection
 import io.kvision.core.UNIT
+import io.kvision.html.table
 import io.kvision.panel.VPanel
+import io.kvision.tabulator.tabulator
 import org.apache.isis.client.kroviz.core.event.LogEntryComparison
 import org.apache.isis.client.kroviz.ui.core.RoDialog
+import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.ui.panel.EventComparisonTable
 
 class EventCompareDialog(val data: List<LogEntryComparison>) : Command() {
+    private val title = "Event Comparison"
     private var table: EventComparisonTable
 
     private val panel = VPanel(spacing = 3) {
@@ -34,7 +39,7 @@ class EventCompareDialog(val data: List<LogEntryComparison>) : Command() {
 
     init {
         dialog = RoDialog(
-            caption = "Event Comparison",
+            caption = title,
             items = mutableListOf(),
             command = this,
             defaultAction = "Pin",
@@ -47,6 +52,16 @@ class EventCompareDialog(val data: List<LogEntryComparison>) : Command() {
         panel.add(table)
 
         dialog.formPanel!!.add(panel)
+    }
+
+    override fun execute(action: String?) {
+        pin()
+    }
+
+    private fun pin() {
+        table.tabulator.removeCssClass("tabulator-in-dialog")
+        UiManager.add(title, panel)
+        dialog.close()
     }
 
 }
