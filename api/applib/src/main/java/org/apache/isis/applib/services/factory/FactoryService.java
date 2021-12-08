@@ -120,10 +120,10 @@ public interface FactoryService {
 
     /**
      * Creates a new ViewModel instance, with injection points resolved,
-     * and initialized according to the given {@code mementoStr}
+     * and initialized according to the given {@code bookmark}
      *
      * @param viewModelClass
-     * @param mementoStr - ignored if {@code null}
+     * @param bookmark - ignored if {@code null}
      * @throws IllegalArgumentException if viewModelClass is not a viewmodel type
      * @apiNote forces the viewModelClass to be added to the meta-model if not already
      * @since 2.0
