@@ -30,7 +30,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.commons.internal.debug._Debug;
-import org.apache.isis.commons.internal.debug.xray.XrayEnable;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.RegressionTestAbstract;
@@ -56,7 +55,7 @@ import lombok.val;
         classes = {
                 Configuration_usingJdo.class,
                 Configuration_usingWicket.class,
-                XrayEnable.class
+                //XrayEnable.class
                 },
         properties = {
         })
@@ -87,7 +86,7 @@ class InteractionTestJdoWkt extends RegressionTestAbstract {
         XrayUi.waitForShutdown();
     }
 
-    @Test
+    @Test @Disabled//WIP
     void load_viewmodel_with_referenced_entities_directly() {
 
         val pageParameters = call(()->{
@@ -111,7 +110,7 @@ class InteractionTestJdoWkt extends RegressionTestAbstract {
 
     }
 
-    @Test @Disabled
+    @Test @Disabled//WIP
     void load_viewmodel_with_referenced_entities_via_action() {
         val pageParameters = call(()->{
             val testHomePage = new TestAppJdoWkt.TestHomePage();
@@ -158,7 +157,7 @@ class InteractionTestJdoWkt extends RegressionTestAbstract {
             form.submit();
         });
 
-        // simulate click on form OK button
+        // simulate click on form OK button -> expected to trigger the framework's property change execution
         run(()->{
             wktTester.assertComponent(INLINE_PROMPT_FORM_OK, IndicatingAjaxButton.class);
             wktTester.executeAjaxEvent(INLINE_PROMPT_FORM_OK, "click");
