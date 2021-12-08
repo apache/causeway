@@ -84,7 +84,7 @@ class InteractionTestWkt extends InteractionTestAbstract {
 
     @BeforeEach
     void setUp() {
-        wktTester = wicketTesterFactory.createTester();
+        wktTester = wicketTesterFactory.createTester(dto->null);
         domainObject = newViewmodel(InteractionDemo.class);
         pageParameters = PageParameterUtils.createPageParametersForObject(domainObject);
     }
