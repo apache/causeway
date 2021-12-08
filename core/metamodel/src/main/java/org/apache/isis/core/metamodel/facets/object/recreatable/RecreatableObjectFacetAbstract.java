@@ -21,6 +21,8 @@ package org.apache.isis.core.metamodel.facets.object.recreatable;
 import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
@@ -91,12 +93,12 @@ implements ViewModelFacet {
      * {@link org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet.RecreationMechanism#INSTANTIATES}
      * (ignored otherwise).
      */
-    protected Object doInstantiate(final Class<?> viewModelClass, final Bookmark bookmark) {
+    protected Object doInstantiate(final Class<?> viewModelClass, final @Nullable Bookmark bookmark) {
         throw new IllegalStateException("doInstantiate() must be overridden if RecreationMechanism is INSTANTIATES");
     }
 
     @Override
-    public final void initialize(final Object viewModelPojo, final Bookmark bookmark) {
+    public final void initialize(final Object viewModelPojo, final @Nullable Bookmark bookmark) {
         if (getRecreationMechanism() == RecreationMechanism.INSTANTIATES) {
             throw new IllegalStateException("This view model instantiates rather than initializes");
         }
@@ -110,7 +112,7 @@ implements ViewModelFacet {
      * {@link org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet.RecreationMechanism#INITIALIZES}
      * (ignored otherwise).
      */
-    protected void doInitialize(final Object viewModelPojo, final Bookmark bookmark) {
+    protected void doInitialize(final Object viewModelPojo, final @Nullable Bookmark bookmark) {
         throw new IllegalStateException("doInitialize() must be overridden if RecreationMechanism is INITIALIZE");
     }
 
