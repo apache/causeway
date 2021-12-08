@@ -26,12 +26,14 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.IPageFactory;
 import org.apache.wicket.Page;
 import org.apache.wicket.ThreadContext;
 import org.apache.wicket.core.request.handler.IPageProvider;
 import org.apache.wicket.markup.head.ResourceAggregator;
 import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.WicketTester;
 import org.apache.wicket.util.visit.IVisit;
@@ -41,6 +43,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -194,6 +198,37 @@ public class Configuration_usingWicket {
     }
 
     @RequiredArgsConstructor
+    private static class PageFactory_forTesting implements IPageFactory {
+
+        private final WicketApplication_forTesting holder;
+        private final IPageFactory delegate;
+
+        @Override
+        public <C extends IRequestablePage> C newPage(final Class<C> pageClass, final PageParameters parameters) {
+            if(EntityPage.class.equals(pageClass)) {
+                return _Casts.uncheckedCast(EntityPage.ofPageParameters(holder.getCommonContext(), parameters));
+            }
+            return delegate.newPage(pageClass, parameters);
+        }
+
+        @Override
+        public <C extends IRequestablePage> C newPage(final Class<C> pageClass) {
+            if(EntityPage.class.equals(pageClass)) {
+                throw _Exceptions.illegalArgument("cannot instantiate EntityPage without PageParameters");
+            }
+            return delegate.newPage(pageClass);
+        }
+
+        @Override
+        public <C extends IRequestablePage> boolean isBookmarkable(final Class<C> pageClass) {
+            if(EntityPage.class.equals(pageClass)) {
+                return true;
+            }
+            return delegate.isBookmarkable(pageClass);
+        }
+    }
+
+    @RequiredArgsConstructor
     static class WicketApplication_forTesting
     extends WebApplication
     implements
@@ -226,10 +261,14 @@ public class Configuration_usingWicket {
         @Getter(lazy=true)
         private final WicketViewerSettings settings =
                 getCommonContext().lookupServiceElseFail(WicketViewerSettings.class);
-
         @Override
         public Class<? extends Page> getHomePage() {
             return getPageClassRegistry().getPageClass(PageType.HOME);
+        }
+
+        @Override
+        protected IPageFactory newPageFactory() {
+            return new PageFactory_forTesting(this, super.newPageFactory());
         }
 
     }
