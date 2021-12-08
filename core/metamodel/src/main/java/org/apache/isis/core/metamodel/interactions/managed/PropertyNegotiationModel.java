@@ -26,6 +26,7 @@ import org.apache.isis.commons.internal.binding._Bindables;
 import org.apache.isis.commons.internal.binding._Observables;
 import org.apache.isis.commons.internal.binding._Observables.BooleanObservable;
 import org.apache.isis.commons.internal.binding._Observables.LazyObservable;
+import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -155,6 +156,9 @@ public class PropertyNegotiationModel implements ManagedValue {
     // -- SUBMISSION
 
     public void submit() {
+
+        _Debug.log("[PENDING MODEL] submit pending property value '%s' into owning object", getValue().getValue());
+
         managedProperty.modifyProperty(getValue().getValue());
         isCurrentValueAbsent.invalidate();
     }

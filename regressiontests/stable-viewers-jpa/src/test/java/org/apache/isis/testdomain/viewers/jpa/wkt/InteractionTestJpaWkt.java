@@ -21,12 +21,14 @@ package org.apache.isis.testdomain.viewers.jpa.wkt;
 import javax.inject.Inject;
 
 import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.RegressionTestAbstract;
@@ -41,6 +43,7 @@ import org.apache.isis.testdomain.viewers.jdo.wkt.TestAppJpaWkt;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 
 import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.INLINE_PROMPT_FORM_FIELD;
+import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.INLINE_PROMPT_FORM_OK;
 import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.INVENTORY_NAME_PROPERTY_EDIT_INLINE_PROMPT_FORM;
 import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.INVENTORY_NAME_PROPERTY_EDIT_LINK;
 import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION;
@@ -146,18 +149,25 @@ class InteractionTestJpaWkt extends RegressionTestAbstract {
             wktTester.assertInventoryNameIs("Bookstore");
         });
 
-        // simulate change of a String property and form submit
+        // simulate change of a String property Name from 'Bookstore' -> 'Bookstore2'
         run(()->{
             val form = wktTester.newFormTester(INVENTORY_NAME_PROPERTY_EDIT_INLINE_PROMPT_FORM);
             form.setValue(INLINE_PROMPT_FORM_FIELD, "Bookstore2");
             form.submit();
         });
 
+        // simulate click on form OK button -> expected to trigger the framework's property change execution
+        run(()->{
+            wktTester.assertComponent(INLINE_PROMPT_FORM_OK, IndicatingAjaxButton.class);
+            wktTester.executeAjaxEvent(INLINE_PROMPT_FORM_OK, "click");
+        });
+
+        _Debug.log("[TEST] form submitted");
+
         // ... should yield a new Title containing 'Bookstore2'
         run(()->{
             wktTester.assertHeaderBrandText("Smoke Tests");
-            //FIXME
-            //wktTester.assertPageTitle("JpaInventoryJaxbVm; Bookstore2; 3 products");
+            wktTester.assertPageTitle("JpaInventoryJaxbVm; Bookstore2; 3 products");
             wktTester.assertFavoriteBookIs(BookDto.sample());
             wktTester.assertInventoryNameIs("Bookstore2");
         });

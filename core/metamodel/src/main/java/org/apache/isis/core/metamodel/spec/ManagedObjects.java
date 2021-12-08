@@ -330,14 +330,14 @@ public final class ManagedObjects {
     /**
      * used eg. to adapt the result of supporting methods, that return choice pojos
      */
-    public static Can<ManagedObject> adaptMultipleOfTypeThenAttachThenFilterByVisibility(
+    public static Can<ManagedObject> adaptMultipleOfTypeThenRefetchThenFilterByVisibility(
             final @NonNull  ObjectSpecification elementSpec,
             final @Nullable Object collectionOrArray,
             final @NonNull  InteractionInitiatedBy interactionInitiatedBy) {
 
         return _NullSafe.streamAutodetect(collectionOrArray)
         .map(pojo->ManagedObject.of(elementSpec, pojo)) // pojo is nullable here
-        .peek(ManagedObjects.EntityUtil::reattach)
+        .peek(ManagedObjects.EntityUtil::refetch)
         .filter(ManagedObjects.VisibilityUtil.filterOn(interactionInitiatedBy))
         .collect(Can.toCan());
     }
@@ -426,6 +426,10 @@ public final class ManagedObjects {
 
         @Override
         public void replacePojo(final UnaryOperator<Object> replacer) {
+        }
+
+        @Override
+        public void reloadViewmodelFromMemoizedBookmark() {
         }
 
     };
@@ -618,7 +622,7 @@ public final class ManagedObjects {
             return managedObject;
         }
 
-        public static void reattach(final @Nullable ManagedObject managedObject) {
+        public static void refetch(final @Nullable ManagedObject managedObject) {
             if(isNullOrUnspecifiedOrEmpty(managedObject)) {
                 return;
             }

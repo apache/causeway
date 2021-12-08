@@ -98,7 +98,7 @@ implements ManagedFeature {
     public ManagedObject getOwner() {
         //XXX this is a safeguard
         // see also org.apache.isis.core.metamodel.interactions.managed.ManagedProperty.ManagedProperty(ManagedObject, OneToOneAssociation, Where)
-        EntityUtil.reattach(owner);
+        EntityUtil.refetch(owner);
         return owner;
     }
 

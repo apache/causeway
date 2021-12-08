@@ -24,7 +24,6 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -86,7 +85,7 @@ class InteractionTestJdoWkt extends RegressionTestAbstract {
         XrayUi.waitForShutdown();
     }
 
-    @Test @Disabled//WIP
+    @Test
     void load_viewmodel_with_referenced_entities_directly() {
 
         val pageParameters = call(()->{
@@ -110,7 +109,7 @@ class InteractionTestJdoWkt extends RegressionTestAbstract {
 
     }
 
-    @Test @Disabled//WIP
+    @Test
     void load_viewmodel_with_referenced_entities_via_action() {
         val pageParameters = call(()->{
             val testHomePage = new TestAppJdoWkt.TestHomePage();

@@ -61,7 +61,7 @@ public interface ManagedObject {
     Object getPojo();
 
     /**
-     * Introduced, so we can re-attach detached entity pojos in place.
+     * Introduced, so we can re-fetch detached entity pojos in place.
      * @apiNote should be package private, and not publicly exposed
      * (but the <i>Java</i> language is not there yet)
      */
@@ -82,6 +82,24 @@ public interface ManagedObject {
      * we silently ignore bookmark invalidation attempts for entities.
      */
     Optional<Bookmark> getBookmarkRefreshed();
+
+    /**
+     * Reload current viewmodel object from memoized bookmark, otherwise does nothing.
+     */
+    default void reloadViewmodelFromMemoizedBookmark() {
+        val spec = getSpecification();
+        if(isBookmarkMemoized()
+                && spec.isViewModel()) {
+
+            val bookmark = getBookmark().get();
+            val viewModelClass = spec.getCorrespondingClass();
+
+            val recreatedViewmodel =
+                    getMetaModelContext().getFactoryService().viewModel(viewModelClass, bookmark);
+
+            replacePojo(old->recreatedViewmodel);
+        }
+    }
 
     boolean isBookmarkMemoized();
 
@@ -341,7 +359,7 @@ public interface ManagedObject {
             pojo = replacer.apply(pojo);
         }
 
-
     }
+
 
 }
