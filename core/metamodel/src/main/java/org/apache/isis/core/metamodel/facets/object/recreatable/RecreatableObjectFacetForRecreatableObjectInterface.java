@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import org.apache.isis.applib.ViewModel;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -33,9 +34,9 @@ extends RecreatableObjectFacetAbstract {
     }
 
     @Override
-    protected void doInitialize(final Object pojo, final String memento) {
+    protected void doInitialize(final Object pojo, final Bookmark bookmark) {
         final ViewModel viewModel = (ViewModel) pojo;
-        viewModel.viewModelInit(memento);
+        viewModel.viewModelInit(bookmark.getIdentifier());
     }
 
     @Override

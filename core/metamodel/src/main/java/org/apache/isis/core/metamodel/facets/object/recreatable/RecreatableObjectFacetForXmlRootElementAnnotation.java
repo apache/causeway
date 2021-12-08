@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import java.util.UUID;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.commons.internal.debug._Debug;
@@ -41,14 +42,14 @@ extends RecreatableObjectFacetAbstract {
     }
 
     @Override
-    protected Object doInstantiate(final Class<?> viewModelClass, final String mementoStr) {
-        final String xmlStr = getUrlEncodingService().decodeToString(mementoStr);
+    protected Object doInstantiate(final Class<?> viewModelClass, final Bookmark bookmark) {
+        final String xmlStr = getUrlEncodingService().decodeToString(bookmark.getIdentifier());
         final Object viewModelPojo = getJaxbService().fromXml(viewModelClass, xmlStr);
         return viewModelPojo;
     }
 
     @Override
-    public String serialize(final ManagedObject managedObject) {
+    protected String serialize(final ManagedObject managedObject) {
         final String xml = getJaxbService().toXml(managedObject.getPojo());
         final String encoded = getUrlEncodingService().encodeString(xml);
         //FIXME[ISIS-2903] gets called about 4 times per same object, why?

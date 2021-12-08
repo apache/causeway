@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.commons.internal.memento._Mementos;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
@@ -49,9 +50,9 @@ extends RecreatableObjectFacetAbstract {
     @Override
     protected void doInitialize(
             final Object viewModelPojo,
-            final String mementoStr) {
+            final Bookmark bookmark) {
 
-        val memento = parseMemento(mementoStr);
+        val memento = parseMemento(bookmark.getIdentifier());
         val mementoKeys = memento.keySet();
 
         if(mementoKeys.isEmpty()) {
