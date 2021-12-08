@@ -34,6 +34,7 @@ import lombok.experimental.UtilityClass;
 final class _Xray {
 
     void recordDebugLogEvent(
+            final _IconResource icon,
             final String logMessage,
             final Can<StackTraceElement> stackTrace) {
 
@@ -49,7 +50,7 @@ final class _Xray {
 
             val logModel = model.addDataNode(parentNode,
                     new XrayDataModel.LogEntry(
-                            "debug-log", timeStamp,
+                            "debug-log", timeStamp, icon.getResourcePath(),
                             _Strings.ellipsifyAtEnd(logMessage, 80, "..."),
                             logMessage,
                             Stickiness.CAN_DELETE_NODE));

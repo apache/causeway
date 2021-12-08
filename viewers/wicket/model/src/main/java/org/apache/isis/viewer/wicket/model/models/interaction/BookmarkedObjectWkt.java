@@ -147,14 +147,9 @@ extends ModelAbstract<ManagedObject> {
         //EntityUtil.assertAttachedWhenEntity()//guard
         val entityOrViewmodel = super.getObject();
 
-        val spec = entityOrViewmodel.getSpecification();
-
-//XXX experimental
-//        if(spec.getCorrespondingClass()
-//        .getSimpleName().contains("InventoryJaxb")) {
-//            return _JaxbViewmodel.computeIfDetached(entityOrViewmodel, this::reload);
-//        };
-
+        if(_ViewmodelEntityReattacher.appliesTo(entityOrViewmodel)) {
+            return _ViewmodelEntityReattacher.reattach(entityOrViewmodel, this::reload);
+        }
 
         return EntityUtil.computeIfDetached(entityOrViewmodel, this::reload);
     }

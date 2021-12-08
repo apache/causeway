@@ -420,7 +420,7 @@ implements SchemaValueMarshaller {
         case REFERENCE: {
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log(10, "NULL reference detected %s", pojo);
+                _Debug.log("NULL reference detected %s", pojo);
             });
 
             // at this point, we know the value has no bookmark

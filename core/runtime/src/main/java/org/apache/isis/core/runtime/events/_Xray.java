@@ -20,7 +20,7 @@ package org.apache.isis.core.runtime.events;
 
 import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
-import org.apache.isis.commons.internal.debug._Debug;
+import org.apache.isis.commons.internal.debug._XrayEvent;
 import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
 import org.apache.isis.commons.internal.debug.xray.XrayModel.Stickiness;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
@@ -59,7 +59,7 @@ final class _Xray {
             return;
         }
 
-        _Debug.log(10, txInfo);
+        _XrayEvent.transaction(txInfo);
 
         //val threadId = ThreadMemento.fromCurrentThread();
 
@@ -99,7 +99,7 @@ final class _Xray {
             return;
         }
 
-        _Debug.log(10, txInfo);
+        _XrayEvent.transaction(txInfo);
 
         //val threadId = ThreadMemento.fromCurrentThread();
 

@@ -52,7 +52,7 @@ extends RecreatableObjectFacetAbstract {
         final String encoded = getUrlEncodingService().encodeString(xml);
         //FIXME[ISIS-2903] gets called about 4 times per same object, why?
         _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-            _Debug.log(100, "%s => %s",
+            _Debug.log("%s => %s",
                     super.getMetaModelContext().getInteractionProvider().getInteractionId()
                     .map(UUID::toString)
                     .orElse("no-interaction"),

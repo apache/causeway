@@ -225,7 +225,7 @@ extends IndicatingAjaxLink<ManagedObject> {
         if(outcome.isFailure()) {
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log(10, "render the target entity again, outcome: %s", outcome);
+                _Debug.log("render the target entity again, outcome: %s", outcome);
             });
 
             // render the target entity again

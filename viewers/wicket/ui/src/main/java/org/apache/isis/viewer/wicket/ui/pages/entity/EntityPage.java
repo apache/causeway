@@ -19,7 +19,6 @@
 package org.apache.isis.viewer.wicket.ui.pages.entity;
 
 import org.apache.wicket.Application;
-import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -30,9 +29,6 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.util.string.Strings;
-import org.apache.wicket.util.visit.IVisit;
-import org.apache.wicket.util.visit.IVisitor;
-import org.apache.wicket.util.visit.Visits;
 
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.debug._Debug;
@@ -49,7 +45,6 @@ import org.apache.isis.viewer.wicket.model.modelhelpers.WhereAmIHelper;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanel;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
@@ -85,7 +80,7 @@ public class EntityPage extends PageAbstract {
             final PageParameters pageParameters) {
 
         _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-            _Debug.log(10, "new EntityPage from PageParameters %s", pageParameters);
+            _Debug.log("new EntityPage from PageParameters %s", pageParameters);
         });
 
         final String oid = EntityModel.oidStr(pageParameters);
@@ -106,7 +101,7 @@ public class EntityPage extends PageAbstract {
             final ManagedObject adapter) {
 
         _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-            _Debug.log(10, "new EntityPage from Adapter %s", adapter.getSpecification());
+            _Debug.log("new EntityPage from Adapter %s", adapter.getSpecification());
         });
 
         return new EntityPage(
@@ -133,27 +128,15 @@ public class EntityPage extends PageAbstract {
 
     @Override
     public void renderPage() {
-        _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-            _Debug.log(10, "about to render EntityPage ..");
-            Visits.visitChildren(this, new IVisitor<Component, Void>(){
-                @Override
-                public void component(final Component component, final IVisit<Void> visit){
-                    if(component.getClass().getSimpleName().equals("ReferencePanel")) {
-                        val scalarModel = ((ReferencePanel)component).getModel();
-                        val value = scalarModel.getObject();
-                        _Debug.log(10, "value = %s", value.getPojo());
-                    }
-                }
-            });
-        });
-
-        val stopWatch = _Timing.now();
-        super.renderPage();
-        stopWatch.stop();
-
-        _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-            _Debug.log(10, ".. rendering took %s", stopWatch.toString());
-        });
+        if(XrayUi.isXrayEnabled()){
+            _Debug.log("about to render EntityPage ..");
+            val stopWatch = _Timing.now();
+            super.renderPage();
+            stopWatch.stop();
+            _Debug.log(".. rendering took %s", stopWatch.toString());
+        } else {
+            super.renderPage();
+        }
     }
 
 
