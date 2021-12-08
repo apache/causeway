@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
-import org.springframework.lang.Nullable;
+import java.util.Optional;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 
+import lombok.NonNull;
 import lombok.val;
 
 public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract
@@ -52,9 +53,9 @@ extends RecreatableObjectFacetAbstract {
     @Override
     protected void doInitialize(
             final Object viewModelPojo,
-            final @Nullable Bookmark bookmark) {
+            final @NonNull Optional<Bookmark> bookmark) {
 
-        val memento = parseMemento(bookmark!=null ? bookmark.getIdentifier() : null);
+        val memento = parseMemento(bookmark.map(Bookmark::getIdentifier).orElse(null));
         val mementoKeys = memento.keySet();
 
         if(mementoKeys.isEmpty()) {

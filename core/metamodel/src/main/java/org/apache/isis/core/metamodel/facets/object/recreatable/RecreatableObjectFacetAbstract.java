@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.springframework.lang.Nullable;
@@ -81,7 +82,7 @@ implements ViewModelFacet {
         val viewModelPojo = bookmark==null
                     || _Strings.isNullOrEmpty(bookmark.getIdentifier())
                 ? ClassExtensions.newInstance(viewModelClass)
-                : doInstantiate(viewModelClass, bookmark);
+                : doInstantiate(viewModelClass, Optional.ofNullable(bookmark));
 
         getServiceInjector().injectServicesInto(viewModelPojo);
         invokePostConstructMethod(viewModelPojo);
@@ -93,7 +94,7 @@ implements ViewModelFacet {
      * {@link org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet.RecreationMechanism#INSTANTIATES}
      * (ignored otherwise).
      */
-    protected Object doInstantiate(final Class<?> viewModelClass, final @Nullable Bookmark bookmark) {
+    protected Object doInstantiate(final Class<?> viewModelClass, final Optional<Bookmark> bookmark) {
         throw new IllegalStateException("doInstantiate() must be overridden if RecreationMechanism is INSTANTIATES");
     }
 
@@ -102,7 +103,7 @@ implements ViewModelFacet {
         if (getRecreationMechanism() == RecreationMechanism.INSTANTIATES) {
             throw new IllegalStateException("This view model instantiates rather than initializes");
         }
-        doInitialize(viewModelPojo, bookmark);
+        doInitialize(viewModelPojo, Optional.ofNullable(bookmark));
         getServiceInjector().injectServicesInto(viewModelPojo);
         invokePostConstructMethod(viewModelPojo);
     }
@@ -112,7 +113,7 @@ implements ViewModelFacet {
      * {@link org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet.RecreationMechanism#INITIALIZES}
      * (ignored otherwise).
      */
-    protected void doInitialize(final Object viewModelPojo, final @Nullable Bookmark bookmark) {
+    protected void doInitialize(final Object viewModelPojo, final Optional<Bookmark> bookmark) {
         throw new IllegalStateException("doInitialize() must be overridden if RecreationMechanism is INITIALIZE");
     }
 
