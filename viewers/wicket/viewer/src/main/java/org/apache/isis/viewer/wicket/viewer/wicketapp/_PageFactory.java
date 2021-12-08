@@ -42,53 +42,43 @@ import lombok.val;
  *
  */
 @RequiredArgsConstructor
-class IsisWicketApplication_newPageFactory {
+class _PageFactory implements IPageFactory {
 
     private final IsisWicketApplication holder;
+    private final IPageFactory delegate;
 
-    public IPageFactory interceptPageFactory(final IPageFactory delegate) {
-        return new WebPageBaseFactory(holder, delegate);
+    @Override
+    public <C extends IRequestablePage> C newPage(final Class<C> pageClass, final PageParameters parameters) {
+
+        if(EntityPage.class.equals(pageClass)) {
+            return _Casts.uncheckedCast(EntityPage.ofPageParameters(holder.getCommonContext(), parameters));
+        }
+
+        return delegate.newPage(pageClass, parameters);
     }
 
-    @RequiredArgsConstructor
-    static class WebPageBaseFactory implements IPageFactory {
+    @Override
+    public <C extends IRequestablePage> C newPage(final Class<C> pageClass) {
 
-        private final IsisWicketApplication holder;
-        private final IPageFactory delegate;
+        if(EntityPage.class.equals(pageClass)) {
+            //TODO whenever this happens we should redirect to home,
+            // almost certainly the session has timed out
 
-        @Override
-        public <C extends IRequestablePage> C newPage(final Class<C> pageClass, final PageParameters parameters) {
-
-            if(EntityPage.class.equals(pageClass)) {
-                return _Casts.uncheckedCast(EntityPage.ofPageParameters(holder.getCommonContext(), parameters));
-            }
-
-            return delegate.newPage(pageClass, parameters);
+            val pageTimeoutPageClass = holder.getPageClassRegistry().getPageClass(PageType.HOME_AFTER_PAGETIMEOUT);
+            return _Casts.uncheckedCast(delegate.newPage(pageTimeoutPageClass));
         }
 
-        @Override
-        public <C extends IRequestablePage> C newPage(final Class<C> pageClass) {
+        return delegate.newPage(pageClass);
+    }
 
-            if(EntityPage.class.equals(pageClass)) {
-                //TODO whenever this happens we should redirect to home,
-                // almost certainly the session has timed out
+    @Override
+    public <C extends IRequestablePage> boolean isBookmarkable(final Class<C> pageClass) {
 
-                val pageTimeoutPageClass = holder.getPageClassRegistry().getPageClass(PageType.HOME_AFTER_PAGETIMEOUT);
-                return _Casts.uncheckedCast(delegate.newPage(pageTimeoutPageClass));
-            }
-
-            return delegate.newPage(pageClass);
+        if(EntityPage.class.equals(pageClass)) {
+            return true;
         }
 
-        @Override
-        public <C extends IRequestablePage> boolean isBookmarkable(final Class<C> pageClass) {
-
-            if(EntityPage.class.equals(pageClass)) {
-                return true;
-            }
-
-            return delegate.isBookmarkable(pageClass);
-        }
+        return delegate.isBookmarkable(pageClass);
     }
 
 }
