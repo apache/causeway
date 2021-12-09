@@ -105,4 +105,10 @@ public interface ViewModelFacet extends Facet {
      */
     Bookmark serializeToBookmark(ManagedObject managedObject);
 
+    /**
+     * Governs whether on start of any AJAX request, the viewmodel needs to reload,
+     * so any contained entities end up attached.
+     */
+    default boolean containsEntities() { return false; }
+
 }

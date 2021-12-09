@@ -66,6 +66,7 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAcc
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
+import org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketAjaxRequestListenerUtil;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -347,6 +348,7 @@ public class Configuration_usingWicket {
         @Getter(lazy=true)
         private final WicketViewerSettings settings =
                 getCommonContext().lookupServiceElseFail(WicketViewerSettings.class);
+
         @Override
         public Class<? extends Page> getHomePage() {
             return getPageClassRegistry().getPageClass(PageType.HOME);
@@ -355,6 +357,13 @@ public class Configuration_usingWicket {
         @Override
         protected IPageFactory newPageFactory() {
             return new PageFactory_forTesting(this, super.newPageFactory());
+        }
+
+        @Override
+        protected void internalInit() {
+            super.internalInit();
+            // intercept AJAX requests and reloads JAXB viewmodels so any detached entities are re-fetched
+            IsisWicketAjaxRequestListenerUtil.setRootRequestMapper(this, commonContext);
         }
 
     }

@@ -28,7 +28,6 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.util.string.Strings;
 
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.debug._Debug;
@@ -83,8 +82,8 @@ public class EntityPage extends PageAbstract {
             _Debug.log("new EntityPage from PageParameters %s", pageParameters);
         });
 
-        final String oid = EntityModel.oidStr(pageParameters);
-        if (Strings.isEmpty(oid)) {
+        val bookmark = PageParameterUtils.toBookmark(pageParameters);
+        if(!bookmark.isPresent()) {
             throw new RestartResponseException(Application.get().getHomePage());
         }
 

@@ -66,6 +66,11 @@ extends RecreatableObjectFacetAbstract {
         return encoded;
     }
 
+    @Override
+    public boolean containsEntities() {
+        return true; //XXX future work might improve that for performance optimizations, such that we need to actually check at facet creation
+    }
+
     // -- DEPENDENCIES
 
     @Getter(lazy=true)

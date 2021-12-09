@@ -38,7 +38,6 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 import org.apache.isis.viewer.wicket.model.models.interaction.prop.PropertyInteractionWkt;
@@ -72,7 +71,7 @@ implements
     public static EntityModel ofPageParameters(
             final IsisAppCommonContext commonContext,
             final PageParameters pageParameters) {
-        val bookmark = Bookmark.parseElseFail(oidStr(pageParameters));
+        val bookmark = PageParameterUtils.toBookmark(pageParameters).orElse(null);
         return ofBookmark(commonContext, bookmark);
     }
 
@@ -117,10 +116,6 @@ implements
     }
 
     // -- BOOKMARKABLE MODEL
-
-    public static String oidStr(final PageParameters pageParameters) {
-        return PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
-    }
 
     @Override
     public PageParameters getPageParameters() {

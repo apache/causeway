@@ -132,7 +132,7 @@ implements ActionPromptProvider {
      */
     protected MarkupContainer themeDiv;
 
-    public PageAbstract(
+    protected PageAbstract(
             final PageParameters pageParameters,
             final String title,
             final ComponentType... childComponentIds) {

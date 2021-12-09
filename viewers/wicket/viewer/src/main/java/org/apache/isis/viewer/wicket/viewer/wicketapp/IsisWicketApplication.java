@@ -183,9 +183,8 @@ implements
 
         super.internalInit();
 
-        // entity page experiments, kept for reference or future experiments
-        //IsisWicketApplication_experimental.setRootRequestMapper(this);
-
+        // intercept AJAX requests and reloads JAXB viewmodels so any detached entities are re-fetched
+        IsisWicketAjaxRequestListenerUtil.setRootRequestMapper(this, commonContext);
     }
 
     private AjaxRequestTarget decorate(final AjaxRequestTarget ajaxRequestTarget) {

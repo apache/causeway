@@ -146,7 +146,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     public final void setObject(final ManagedObject newValue) {
 
         _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-            _Debug.log("[PENDING MODEL] about to set new value: %s", newValue.getPojo());
+            _Debug.log("[PENDING MODEL] about to set new value: %s", newValue==null?"null":newValue.getPojo());
         });
 
         proposedValue().getValue().setValue(newValue);

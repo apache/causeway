@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -42,6 +43,7 @@ import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoForEmpt
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
@@ -136,14 +138,13 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
         if(memento instanceof ObjectMementoCollection) {
             val objectMementoCollection = (ObjectMementoCollection) memento;
 
-            val listOfPojos = objectMementoCollection.unwrapList().stream()
-                    .map(this::reconstructObject)
-                    .filter(_NullSafe::isPresent)
-                    .map(ManagedObject::getPojo)
-                    .filter(_NullSafe::isPresent)
-                    .collect(Collectors.toCollection(ArrayList::new));
+            val elementSpec = specificationLoader.specForLogicalTypeNameElseFail(memento.getLogicalTypeName());
 
-            return ManagedObject.lazy(specificationLoader, listOfPojos);
+            val objects = objectMementoCollection.unwrapList().stream()
+                    .map(this::reconstructObject)
+                    .collect(Can.toCan());
+
+            return PackedManagedObject.pack(elementSpec, objects);
         }
 
         if(memento instanceof ObjectMementoAdapter) {

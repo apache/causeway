@@ -27,6 +27,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.debug._XrayEvent;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
@@ -67,6 +68,8 @@ public interface ManagedObject {
      */
     void replacePojo(UnaryOperator<Object> replacer);
 
+    void replaceBookmark(UnaryOperator<Bookmark> replacer);
+
     /**
      * Returns the object's bookmark as identified by the ObjectManager.
      * Bookmarks are considered immutable, hence will be memoized once fetched.
@@ -97,7 +100,24 @@ public interface ManagedObject {
             val recreatedViewmodel =
                     getMetaModelContext().getFactoryService().viewModel(viewModelClass, bookmark);
 
+            _XrayEvent.event("Viewmodel '%s' recreated from memoized bookmark.", viewModelClass.getName());
+
             replacePojo(old->recreatedViewmodel);
+        }
+    }
+
+    default void reloadViewmodelFromBookmark(final @NonNull Bookmark bookmark) {
+        val spec = getSpecification();
+        if(spec.isViewModel()) {
+            val viewModelClass = spec.getCorrespondingClass();
+
+            val recreatedViewmodel =
+                    getMetaModelContext().getFactoryService().viewModel(viewModelClass, bookmark);
+
+            _XrayEvent.event("Viewmodel '%s' recreated from provided bookmark.", viewModelClass.getName());
+
+            replacePojo(old->recreatedViewmodel);
+            replaceBookmark(old->bookmark);
         }
     }
 
@@ -292,6 +312,15 @@ public interface ManagedObject {
             pojo = replacer.apply(pojo);
         }
 
+        @Override
+        public void replaceBookmark(final UnaryOperator<Bookmark> replacer) {
+            final Bookmark old = bookmarkLazy.isMemoized()
+                    ? bookmarkLazy.get().orElse(null)
+                    : null;
+            bookmarkLazy.clear();
+            bookmarkLazy.set(Optional.ofNullable(replacer.apply(old)));
+        }
+
     }
 
     // -- LAZY
@@ -359,7 +388,15 @@ public interface ManagedObject {
             pojo = replacer.apply(pojo);
         }
 
-    }
+        @Override
+        public void replaceBookmark(final UnaryOperator<Bookmark> replacer) {
+            final Bookmark old = bookmarkLazy.isMemoized()
+                    ? bookmarkLazy.get().orElse(null)
+                    : null;
+            bookmarkLazy.clear();
+            bookmarkLazy.set(Optional.ofNullable(replacer.apply(old)));
+        }
 
+    }
 
 }
