@@ -23,14 +23,14 @@ import io.kvision.core.CssSize
 import io.kvision.core.FlexDirection
 import io.kvision.core.UNIT
 import io.kvision.panel.VPanel
-import org.apache.isis.client.kroviz.core.event.ReplayCommand
+import org.apache.isis.client.kroviz.core.event.ReplayController
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.ui.panel.EventLogTable
 
-class EventDialog : Command() {
+class EventDialog : Controller() {
 
     private val eventPanel = VPanel(spacing = 3) {
         width = CssSize(100, UNIT.perc)
@@ -51,7 +51,7 @@ class EventDialog : Command() {
         dialog = RoDialog(
             caption = "Event History",
             items = mutableListOf(),
-            command = this,
+            controller = this,
             defaultAction = "Pin",
             widthPerc = 60,
             heightPerc = 70,
@@ -83,7 +83,7 @@ class EventDialog : Command() {
                 dialog.close()
             }
             action == REP -> {
-                LoginPrompt(nextCommand = ReplayCommand()).open()
+                LoginPrompt(nextController = ReplayController()).open()
                 dialog.close()
             }
             else -> {

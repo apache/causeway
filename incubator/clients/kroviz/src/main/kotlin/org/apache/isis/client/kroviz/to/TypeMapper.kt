@@ -33,6 +33,7 @@ enum class ValueType(val type: String) {
     TIME("Time"),
     SIMPLE_SELECT("SimpleSelect"),
     SLIDER("Slider"),
+    SHELL("Shell"),
     SVG_MAPPED("Map"),
     SVG_INLINE("Inline"),
     IFRAME("IFrame")

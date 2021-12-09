@@ -27,7 +27,7 @@ import io.kvision.html.ButtonStyle
 import io.kvision.panel.HPanel
 import io.kvision.panel.vPanel
 import org.apache.isis.client.kroviz.to.ValueType
-import org.apache.isis.client.kroviz.ui.dialog.Command
+import org.apache.isis.client.kroviz.ui.dialog.Controller
 import org.apache.isis.client.kroviz.ui.dialog.DiagramDialog
 import org.apache.isis.client.kroviz.ui.kv.override.RoWindow
 import org.apache.isis.client.kroviz.utils.Direction
@@ -38,7 +38,7 @@ import io.kvision.html.Link as KvisionHtmlLink
 class RoDialog(
     caption: String,
     val items: List<FormItem>,
-    val command: Command,
+    val controller: Controller,
     defaultAction: String = "OK",
     widthPerc: Int = 30,
     heightPerc: Int = 100,
@@ -72,7 +72,7 @@ class RoDialog(
         ButtonStyle.OUTLINEINFO
     )
         .onClick {
-            (command as DiagramDialog).scale(Direction.UP)
+            (controller as DiagramDialog).scale(Direction.UP)
         }
 
     @Deprecated("remove once leaflet/svg is fully operational")
@@ -82,7 +82,7 @@ class RoDialog(
         ButtonStyle.OUTLINEINFO
     )
         .onClick {
-            (command as DiagramDialog).scale(Direction.DOWN)
+            (controller as DiagramDialog).scale(Direction.DOWN)
         }
 
     var formPanel: FormPanel<String>? = null
@@ -125,7 +125,7 @@ class RoDialog(
     }
 
     private fun execute() {
-        command.execute()
+        controller.execute()
         close()
     }
 
@@ -162,7 +162,7 @@ class RoDialog(
 
     private fun createButton(fi: FormItem): Button {
         val item = Button(text = fi.label, icon = IconManager.find(fi.label))
-        val obj = fi.callBack!! as Command
+        val obj = fi.callBack!! as Controller
         val action = fi.callBackAction
         item.onClick {
             obj.execute(action)

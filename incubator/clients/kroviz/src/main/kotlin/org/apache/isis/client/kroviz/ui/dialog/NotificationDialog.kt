@@ -23,7 +23,7 @@ import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
 import org.apache.isis.client.kroviz.ui.core.UiManager
 
-class NotificationDialog(val message: String) : Command() {
+class NotificationDialog(val message: String) : Controller() {
 
     override fun open() {
         val formItems = mutableListOf<FormItem>()
@@ -34,7 +34,7 @@ class NotificationDialog(val message: String) : Command() {
         RoDialog(
                 caption = label,
                 items = formItems,
-                command = this,
+                controller = this,
                 widthPerc = 80).open()
     }
 

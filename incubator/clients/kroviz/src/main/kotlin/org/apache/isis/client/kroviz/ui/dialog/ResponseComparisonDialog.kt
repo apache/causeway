@@ -26,7 +26,7 @@ import org.apache.isis.client.kroviz.ui.core.RoDialog
 import org.apache.isis.client.kroviz.utils.js.Diff
 import org.apache.isis.client.kroviz.utils.js.Diff2Html
 
-class ResponseComparisonDialog(obj: LogEntryComparison) : Command() {
+class ResponseComparisonDialog(obj: LogEntryComparison) : Controller() {
 
     init {
         val html = diff2Html(obj)
@@ -38,12 +38,12 @@ class ResponseComparisonDialog(obj: LogEntryComparison) : Command() {
         dialog = RoDialog(
             caption = title,
             items = formItems,
-            command = this,
+            controller = this,
             widthPerc = 80,
             heightPerc = 70,
             customButtons = mutableListOf()
         )
-        dialog.open()
+        super.open()
     }
 
     private fun diff2Html(obj: LogEntryComparison): String {

@@ -102,6 +102,7 @@ object IconManager {
         "Switch" to "power-off",
         "Target" to "bullseye",
         "Tab" to "folder",
+        "Terminal" to "terminal",
         "Text" to "font",
         "Times" to "clock",
         "Toast" to "bread-slice", //comment-alt-plus/minus/exclamation

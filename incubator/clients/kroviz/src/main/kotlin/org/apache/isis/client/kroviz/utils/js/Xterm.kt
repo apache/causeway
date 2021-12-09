@@ -16,26 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.ui.dialog
+package org.apache.isis.client.kroviz.utils.js
 
-import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
-import org.apache.isis.client.kroviz.core.event.ResourceProxy
-import org.apache.isis.client.kroviz.to.Link
-import org.apache.isis.client.kroviz.ui.core.RoDialog
+import org.w3c.dom.Element
 
-abstract class Command {
-    lateinit var dialog: RoDialog
-
-    open fun execute(action: String? = null) {
-        // subclass responsibility
-    }
-
-    open fun open() {
-        dialog.open()
-    }
-
-    fun invoke(link: Link) {
-        ResourceProxy().fetch(link, ActionDispatcher())
-    }
-
+@JsModule("xterm")
+@JsNonModule
+//         //https://stackoverflow.com/questions/61607823/how-to-create-interactive-ssh-terminal-and-enter-commands-from-the-browser-using/61632083#61632083
+external class Xterm {
+    fun open(element: Element)
+    fun write(output: String)
 }

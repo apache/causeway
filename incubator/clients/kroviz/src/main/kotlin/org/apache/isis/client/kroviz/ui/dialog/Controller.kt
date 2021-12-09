@@ -18,34 +18,24 @@
  */
 package org.apache.isis.client.kroviz.ui.dialog
 
-import io.kvision.panel.SimplePanel
-import org.apache.isis.client.kroviz.to.ValueType
-import org.apache.isis.client.kroviz.ui.core.FormItem
+import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
+import org.apache.isis.client.kroviz.core.event.ResourceProxy
+import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.ui.core.RoDialog
-import org.apache.isis.client.kroviz.ui.core.UiManager
 
-class BrowserWindow(val url: String) : Controller() {
+abstract class Controller {
+    lateinit var dialog: RoDialog
 
-    init {
-        val formItems = mutableListOf<FormItem>()
-        formItems.add(FormItem("URL", ValueType.IFRAME, url))
-        dialog = RoDialog(
-            caption = url,
-            items = formItems,
-            controller = this,
-            widthPerc = 70,
-            heightPerc = 70,
-            defaultAction = "Pin"
-        )
+    open fun execute(action: String? = null) {
+        // subclass responsibility
     }
 
-    fun execute() {
-        pin()
+    open fun open() {
+        dialog.open()
     }
 
-    private fun pin() {
-        UiManager.add(url, dialog.formPanel as SimplePanel)
-        dialog.close()
+    fun invoke(link: Link) {
+        ResourceProxy().fetch(link, ActionDispatcher())
     }
 
 }

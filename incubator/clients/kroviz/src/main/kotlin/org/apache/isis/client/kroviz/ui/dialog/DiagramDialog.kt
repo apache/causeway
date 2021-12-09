@@ -29,7 +29,7 @@ import io.kvision.html.Link as KvisionHtmlLink
 class DiagramDialog(
         var label: String,
         private var pumlCode: String
-) : Command() {
+) : Controller() {
 
     private var callBack: Any = UUID()
     private val formItems = mutableListOf<FormItem>()
@@ -48,7 +48,7 @@ class DiagramDialog(
                 heightPerc = 80,
                 caption = label,
                 items = formItems,
-                command = this,
+                controller = this,
                 defaultAction = "Pin",
                 menu = buildMenu()
         )

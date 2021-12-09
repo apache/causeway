@@ -33,7 +33,7 @@ import org.apache.isis.client.kroviz.utils.js.Flatted
 import org.apache.isis.client.kroviz.utils.StringUtils
 import org.apache.isis.client.kroviz.utils.XmlHelper
 
-class EventLogDetail(logEntryFromTabulator: LogEntry) : Command() {
+class EventLogDetail(logEntryFromTabulator: LogEntry) : Controller() {
     private var logEntry: LogEntry
 
     init {
@@ -68,11 +68,11 @@ class EventLogDetail(logEntryFromTabulator: LogEntry) : Command() {
         dialog = RoDialog(
                 caption = "Details :" + logEntry.title,
                 items = formItems,
-                command = this,
+                controller = this,
                 defaultAction = "Response Diagram",
                 widthPerc = 60,
                 customButtons = customButtons)
-        dialog.open()
+        super.open()
     }
 
     override fun execute(action: String?) {

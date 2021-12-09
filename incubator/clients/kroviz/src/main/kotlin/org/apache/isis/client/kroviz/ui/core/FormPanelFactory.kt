@@ -19,7 +19,6 @@
 package org.apache.isis.client.kroviz.ui.core
 
 import io.kvision.core.Component
-import io.kvision.core.Overflow
 import io.kvision.core.StringPair
 import io.kvision.core.onEvent
 import io.kvision.form.FormPanel
@@ -36,14 +35,13 @@ import io.kvision.form.time.dateTime
 import io.kvision.html.Button
 import io.kvision.html.Div
 import io.kvision.html.Iframe
-import io.kvision.html.Image
 import io.kvision.panel.VPanel
 import io.kvision.panel.vPanel
 import io.kvision.utils.auto
 import io.kvision.utils.perc
 import io.kvision.utils.px
 import org.apache.isis.client.kroviz.to.ValueType
-import org.apache.isis.client.kroviz.ui.dialog.Command
+import org.apache.isis.client.kroviz.ui.dialog.Controller
 import org.apache.isis.client.kroviz.ui.panel.SvgPanel
 import org.apache.isis.client.kroviz.utils.DateHelper
 import org.apache.isis.client.kroviz.utils.IconManager
@@ -71,7 +69,8 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                     ValueType.IMAGE -> add(createImage(fi))
                     ValueType.SLIDER -> add(createSlider(fi))
                     ValueType.IFRAME -> add(createIFrame(fi))
-                    ValueType.SVG_INLINE -> add(createSvgInline(fi))
+                    ValueType.SHELL -> add(createInline(fi))
+                    ValueType.SVG_INLINE -> add(createInline(fi))
                     ValueType.SVG_MAPPED -> add(createSvgMap(fi))
                     ValueType.BUTTON -> add(createButton(fi))
                 }
@@ -81,7 +80,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
 
     private fun createButton(fi: FormItem): Button {
         val item = Button(text = fi.label, icon = IconManager.find(fi.label))
-        val obj = fi.callBack!! as Command
+        val obj = fi.callBack!! as Controller
         val action = fi.callBackAction
         item.onClick {
             obj.execute(action)
@@ -106,9 +105,9 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
     private fun createDate(fi: FormItem): DateTime {
         val date = DateHelper.toDate(fi.content)
         return dateTime(
-                format = "YYYY-MM-DD",
-                label = fi.label,
-                value = date
+            format = "YYYY-MM-DD",
+            label = fi.label,
+            value = date
         )
     }
 
@@ -182,13 +181,12 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                 }
             }
         }
-        panel.height = auto
-        panel.width = auto
-        panel.overflow = Overflow.AUTO
+        panel.addCssClass("form-panel")
         return panel
     }
 
-    private fun createSvgInline(fi: FormItem): VPanel {
+    // used eg. for SVG placement
+    private fun createInline(fi: FormItem): VPanel {
         val panel = VPanel {
             when (val fcb = fi.callBack) {
                 is UUID -> {
@@ -201,17 +199,13 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                 }
             }
         }
-        panel.height = auto
-        panel.width = auto
-        panel.overflow = Overflow.AUTO
+        panel.addCssClass("form-panel")
         return panel
     }
 
     private fun createSvgMap(fi: FormItem): SvgPanel {
         val panel = SvgPanel()
-        panel.height = auto
-        panel.width = auto
-        panel.overflow = Overflow.AUTO
+        panel.addCssClass("form-panel")
         fi.callBack = panel
         return panel
     }
@@ -228,18 +222,15 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
         return item
     }
 
+    // https://www.w3schools.com/howto/howto_css_responsive_iframes.asp
     private fun createIFrame(fi: FormItem): VPanel {
         val item = VPanel {
             val url = fi.content as String
             val iframe = Iframe(url)
-            iframe.height = 100.perc
-            iframe.width = 100.perc
-            iframe.overflow = Overflow.INHERIT
+            iframe.addCssClass("responsive-iframe")
             add(iframe)
         }
-        item.height = 100.perc
-        item.width = 100.perc
-        item.overflow = Overflow.INHERIT
+        item.addCssClass("container")
         return item
     }
 

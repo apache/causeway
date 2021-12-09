@@ -23,7 +23,7 @@ import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
 
-class UndefinedDialog(val logEntry: LogEntry) : Command() {
+class UndefinedDialog(val logEntry: LogEntry) : Controller() {
 
     private val instruction = """1. Create a ResponseClass under test/kotlin/org.ro.urls with
     - url 
@@ -42,7 +42,7 @@ class UndefinedDialog(val logEntry: LogEntry) : Command() {
         RoDialog(
                 caption = label,
                 items = formItems,
-                command = this,
+                controller = this,
                 widthPerc = 80).open()
     }
 

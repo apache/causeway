@@ -37,7 +37,7 @@ import org.apache.isis.client.kroviz.utils.StringUtils
 class EventReplayDialog(
     private val expectedEvents: List<LogEntry>,
     title: String
-) : Command() {
+) : Controller() {
 
     private val expectedPanel = VPanel(spacing = 3) {
         width = CssSize(20, UNIT.perc)
@@ -50,7 +50,7 @@ class EventReplayDialog(
         dialog = RoDialog(
             caption = title,
             items = mutableListOf(),
-            command = this,
+            controller = this,
             defaultAction = "Compare",
             widthPerc = 60,
             heightPerc = 70,

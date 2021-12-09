@@ -28,7 +28,7 @@ import io.kvision.form.select.SimpleSelect
 import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.UiManager
 
-class EventExportDialog : Command() {
+class EventExportDialog : Controller() {
 
     private var output: String = ""
     val formItems = mutableListOf<FormItem>()
@@ -129,8 +129,8 @@ class EventExportDialog : Command() {
         filter.add(StringPair("UNFINISHED", "Unfinished"))
         formItems.add(FormItem("Filter", ValueType.SIMPLE_SELECT, filter))
 
-        dialog = RoDialog(caption = "Export", items = formItems, command = this)
-        dialog.open()
+        dialog = RoDialog(caption = "Export", items = formItems, controller = this)
+        super.open()
     }
 
     private fun asCsv(events: MutableList<ReplayEvent>): String {

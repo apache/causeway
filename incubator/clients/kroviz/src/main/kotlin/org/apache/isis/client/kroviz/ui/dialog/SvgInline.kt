@@ -27,7 +27,7 @@ import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
 import org.apache.isis.client.kroviz.utils.UUID
 
-class SvgInline : Command() {
+class SvgInline : Controller() {
     private val formItems = mutableListOf<FormItem>()
 
     init {
@@ -42,7 +42,7 @@ class SvgInline : Command() {
                 heightPerc = 50,
                 caption = "Sample SVG Inline (Non-Interactive)",
                 items = formItems,
-                command = this)
+                controller = this)
         val url = "https://upload.wikimedia.org/wikipedia/commons/6/6c/Trajans-Column-lower-animated.svg"
         val link = Link(href = url, method = Method.GET.operation)
         val agr = SvgDispatcher(callBack)

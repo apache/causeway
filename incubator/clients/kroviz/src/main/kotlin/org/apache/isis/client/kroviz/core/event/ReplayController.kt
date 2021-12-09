@@ -29,12 +29,12 @@ import org.apache.isis.client.kroviz.to.Represention
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.UiManager
-import org.apache.isis.client.kroviz.ui.dialog.Command
+import org.apache.isis.client.kroviz.ui.dialog.Controller
 import org.apache.isis.client.kroviz.ui.dialog.EventReplayDialog
 
 val AppScope = CoroutineScope(window.asCoroutineDispatcher())
 
-class ReplayCommand : Command() {
+class ReplayController : Controller() {
     private val eventStore = UiManager.getEventStore()
     private val oldBaseUrl = UiManager.getBaseUrl()
     private var urlUnderTest: String = Constants.demoUrlRemote

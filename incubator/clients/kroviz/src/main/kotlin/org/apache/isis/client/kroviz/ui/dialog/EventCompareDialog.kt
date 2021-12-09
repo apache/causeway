@@ -19,17 +19,14 @@
 package org.apache.isis.client.kroviz.ui.dialog
 
 import io.kvision.core.CssSize
-import io.kvision.core.FlexDirection
 import io.kvision.core.UNIT
-import io.kvision.html.table
 import io.kvision.panel.VPanel
-import io.kvision.tabulator.tabulator
 import org.apache.isis.client.kroviz.core.event.LogEntryComparison
 import org.apache.isis.client.kroviz.ui.core.RoDialog
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.ui.panel.EventComparisonTable
 
-class EventCompareDialog(val data: List<LogEntryComparison>) : Command() {
+class EventCompareDialog(val data: List<LogEntryComparison>) : Controller() {
     private val title = "Event Comparison"
     private var table: EventComparisonTable
 
@@ -41,7 +38,7 @@ class EventCompareDialog(val data: List<LogEntryComparison>) : Command() {
         dialog = RoDialog(
             caption = title,
             items = mutableListOf(),
-            command = this,
+            controller = this,
             defaultAction = "Pin",
             widthPerc = 60,
             heightPerc = 70,

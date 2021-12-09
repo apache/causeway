@@ -18,40 +18,45 @@
  */
 package org.apache.isis.client.kroviz.ui.dialog
 
-import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.to.HttpErrorResponse
+import io.kvision.panel.SimplePanel
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
+import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.utils.DomUtil
+import org.apache.isis.client.kroviz.utils.UUID
+import org.apache.isis.client.kroviz.utils.js.Xterm
 
-class ErrorDialog(val logEntry: LogEntry) : Controller() {
+class ShellWindow(val host: String) : Controller() {
+    val uuid = UUID()
 
-    override fun open() {
-        val error = logEntry.getTransferObject() as HttpErrorResponse
+    init {
         val formItems = mutableListOf<FormItem>()
-        formItems.add(FormItem("URL", ValueType.TEXT, logEntry.url))
-        formItems.add(FormItem("Message", ValueType.TEXT, error.getMessage()))
-        val detail = error.detail
-        if (detail != null) {
-            formItems.add(FormItem("StackTrace", ValueType.TEXT_AREA, toString(detail.element), 10))
-            formItems.add(FormItem("Caused by", ValueType.TEXT, detail.causedBy))
-        }
-        val label = "HttpError " + error.getStatusCode().toString()
-        RoDialog(
-            caption = label,
+        formItems.add(FormItem("SSH", ValueType.SHELL, host, callBack = uuid))
+        dialog = RoDialog(
+            caption = host,
             items = formItems,
             controller = this,
-            widthPerc = 80,
-            heightPerc = 70
-        ).open()
+            widthPerc = 70,
+            heightPerc = 70,
+            defaultAction = "Pin"
+        )
     }
 
-    private fun toString(stackTrace: List<String>): String {
-        var answer = ""
-        for (s in stackTrace) {
-            answer += s + "\n"
-        }
-        return answer
+    override fun open() {
+        //https://stackoverflow.com/questions/61607823/how-to-create-interactive-ssh-terminal-and-enter-commands-from-the-browser-using/61632083#61632083
+        super.open()
+        Xterm().open(DomUtil.getById(uuid.toString())!!)
+        Xterm().write("Hello from \\x1B[1;3;31mxterm.js\\x1B[0m $ ")
+    }
+
+    fun execute() {
+        pin()
+    }
+
+    private fun pin() {
+        UiManager.add(host, dialog.formPanel as SimplePanel)
+        dialog.close()
     }
 
 }

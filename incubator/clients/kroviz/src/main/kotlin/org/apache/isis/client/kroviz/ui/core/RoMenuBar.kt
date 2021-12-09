@@ -19,27 +19,34 @@
 package org.apache.isis.client.kroviz.ui.core
 
 import io.kvision.core.CssSize
+import io.kvision.core.ResString
 import io.kvision.core.UNIT
+import io.kvision.core.style
 import io.kvision.dropdown.DropDown
+import io.kvision.dropdown.separator
 import io.kvision.html.ButtonStyle
 import io.kvision.html.Link
+import io.kvision.html.image
 import io.kvision.navbar.*
 import io.kvision.panel.SimplePanel
 import io.kvision.panel.vPanel
+import io.kvision.require
+import io.kvision.utils.px
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.chart.SampleChartModel
-import org.apache.isis.client.kroviz.ui.dialog.About
-import org.apache.isis.client.kroviz.ui.dialog.EventDialog
-import org.apache.isis.client.kroviz.ui.dialog.LoginPrompt
-import org.apache.isis.client.kroviz.ui.dialog.SvgInline
-import org.apache.isis.client.kroviz.ui.panel.*
+import org.apache.isis.client.kroviz.ui.dialog.*
+import org.apache.isis.client.kroviz.ui.panel.EventChart
+import org.apache.isis.client.kroviz.ui.panel.GeoMap
+import org.apache.isis.client.kroviz.ui.panel.ImageSample
+import org.apache.isis.client.kroviz.ui.panel.SvgMap
 import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.utils.Point
-import org.apache.isis.client.kroviz.utils.TestUtils
 
 class RoMenuBar : SimplePanel() {
     lateinit var navbar: Navbar
     private lateinit var nav: Nav
+    private lateinit var mainEntry: DropDown
+    private lateinit var mainMenu: DropDown
 
     init {
         vPanel {
@@ -48,9 +55,45 @@ class RoMenuBar : SimplePanel() {
                 marginLeft = CssSize(-32, UNIT.px)
                 height = CssSize(40, UNIT.px)
                 nav = nav()
-                val mainEntry = buildMainMenu()
+                mainEntry = buildMainMenu()
                 nav.add(mainEntry)
             }
+        }
+    }
+
+    fun updateMainIcon() {
+        val resString = require("img/gift_48.png")
+        mainEntry.image = resString
+        mainEntry.icon = null
+        mainEntry.image.apply { systemIconStyle }
+        insertConnection()
+    }
+
+    fun insertConnection() {
+        mainEntry.separator()
+        val resString = require("img/gift_48.png")
+        val menuEntry = buildMenuEntryWithImage("Connection 1", image = resString, { LoginPrompt().open() })
+        mainEntry.add(menuEntry)
+    }
+
+    private fun buildMenuEntryWithImage(label: String, image: ResString?, action: dynamic): Link {
+        val link = Link(label, image = image, className = "dropdown-item").apply { appIconStyle }
+        link.onClick { e ->
+            val at = Point(e.pageX.toInt(), e.pageY.toInt())
+            UiManager.position = at
+            action()
+        }
+        return link
+    }
+
+    val systemIconStyle = style(".dropdown-toggle") {
+        style("img") {
+            height = 20.px
+        }
+    }
+    val appIconStyle = style(".dropdown-item") {
+        style("img") {
+            height = 20.px
         }
     }
 
@@ -65,7 +108,7 @@ class RoMenuBar : SimplePanel() {
     }
 
     private fun buildMainMenu(): DropDown {
-        val mainMenu = DropDown(
+        mainMenu = DropDown(
             "",
             icon = IconManager.find("Burger"),
             forNavbar = false,
@@ -115,7 +158,15 @@ class RoMenuBar : SimplePanel() {
 
         val testTitle = "Test"
         mainMenu.add(
-            buildMenuEntry(testTitle, "Test", { TestUtils.execute() })
+            buildMenuEntry(testTitle, "Test", { this.updateMainIcon() })
+        )
+
+        mainMenu.add(
+            buildMenuEntry("Browser in IFrame", "Wikipedia", { BrowserWindow("https://isis.apache.org/").open() })
+        )
+
+        mainMenu.add(
+            buildMenuEntry("SSH", "Terminal", { ShellWindow("localhost:8080").open() })
         )
 
         return mainMenu

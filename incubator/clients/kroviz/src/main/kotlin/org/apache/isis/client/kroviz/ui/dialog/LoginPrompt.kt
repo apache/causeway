@@ -22,7 +22,7 @@ import io.kvision.core.StringPair
 import io.kvision.form.select.SimpleSelect
 import io.kvision.form.text.Password
 import io.kvision.form.text.Text
-import org.apache.isis.client.kroviz.core.event.ReplayCommand
+import org.apache.isis.client.kroviz.core.event.ReplayController
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.core.Constants
@@ -30,7 +30,7 @@ import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
 import org.apache.isis.client.kroviz.ui.core.UiManager
 
-class LoginPrompt(val nextCommand: Command? = null) : Command() {
+class LoginPrompt(val nextController: Controller? = null) : Controller() {
 
     //Default values
     private var url = Constants.demoUrl
@@ -42,19 +42,20 @@ class LoginPrompt(val nextCommand: Command? = null) : Command() {
         val urlList = mutableListOf<StringPair>()
         urlList.add(StringPair(Constants.demoUrl, Constants.demoUrl))
         urlList.add(StringPair(Constants.demoUrlRemote, Constants.demoUrlRemote))
+        urlList.add(StringPair(Constants.domoxUrl, Constants.domoxUrl))
         formItems.add(FormItem("Url", ValueType.SIMPLE_SELECT, urlList))
         formItems.add(FormItem("User", ValueType.TEXT, username))
         formItems.add(FormItem("Password", ValueType.PASSWORD, password))
-        dialog = RoDialog(caption = "Connect", items = formItems, command = this, heightPerc = 27)
+        dialog = RoDialog(caption = "Connect", items = formItems, controller = this, heightPerc = 27)
         val at = UiManager.position!!
         dialog.open(at)
     }
 
     override fun execute(action: String?) {
         extractUserInput()
-        if (nextCommand is ReplayCommand) {
-            nextCommand.initUnderTest(url, username, password)
-            nextCommand.open()
+        if (nextController is ReplayController) {
+            nextController.initUnderTest(url, username, password)
+            nextController.open()
         } else {
             UiManager.login(url, username, password)
             val link = Link(href = url + Constants.restInfix)

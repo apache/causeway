@@ -30,14 +30,14 @@ import io.kvision.form.select.SimpleSelect
 import io.kvision.form.text.TextArea
 import org.apache.isis.client.kroviz.ui.core.RoDialog
 
-class ActionPrompt(val action: Action) : Command() {
+class ActionPrompt(val action: Action) : Controller() {
 
     fun open(at: Point) {
         val formItems = buildFormItems()
         dialog = RoDialog(
                 caption = buildLabel(),
                 items = formItems,
-                command = this)
+                controller = this)
         dialog.open(at)
     }
 
