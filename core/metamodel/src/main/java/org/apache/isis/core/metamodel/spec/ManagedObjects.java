@@ -181,11 +181,6 @@ public final class ManagedObjects {
             final Can<ManagedObject> nonScalar) {
 
         return PackedManagedObject.pack(elementSpec, nonScalar);
-
-//        return ManagedObject.of(elementSpec,
-//                nonScalar.stream()
-//                .map(UnwrapUtil::single)
-//                .collect(Collectors.toList()));
     }
 
     public static Can<ManagedObject> unpack(
@@ -201,12 +196,6 @@ public final class ManagedObjects {
         return isNullOrUnspecifiedOrEmpty(nonScalar)
                 ? Can.empty()
                 : ((PackedManagedObject)nonScalar).unpack();
-
-//        return isNullOrUnspecifiedOrEmpty(nonScalar)
-//                ? Can.empty()
-//                : _NullSafe.streamAutodetect(nonScalar.getPojo())
-//                    .map(pojo->ManagedObject.of(elementSpec, pojo))
-//                    .collect(Can.toCan());
     }
 
     // -- COMPARE UTILITIES
