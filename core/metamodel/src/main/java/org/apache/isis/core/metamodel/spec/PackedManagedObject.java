@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.RequiredArgsConstructor;
@@ -64,19 +65,24 @@ public final class PackedManagedObject implements ManagedObject {
         throw _Exceptions.unsupportedOperation();
     }
 
+    private final _Lazy<Optional<Bookmark>> bookmarkLazy =
+            _Lazy.threadSafe(()->{
+                return Optional.of(getSpecification().getMetaModelContext().getObjectManager().bookmarkObject(this));
+            });
+
     @Override
     public Optional<Bookmark> getBookmark() {
-        throw _Exceptions.unsupportedOperation();
+        return bookmarkLazy.get();
     }
 
     @Override
     public Optional<Bookmark> getBookmarkRefreshed() {
-        return getBookmark();
+        return getBookmark(); // no-effect
     }
 
     @Override
     public boolean isBookmarkMemoized() {
-        throw _Exceptions.unsupportedOperation();
+        return bookmarkLazy.isMemoized();
     }
 
     public Can<ManagedObject> unpack(){

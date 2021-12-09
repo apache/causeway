@@ -282,7 +282,7 @@ final class ObjectLoader_builtinHandlers {
 
             // unknown object load request
 
-            throw _Exceptions.illegalArgument(
+             throw _Exceptions.illegalArgument(
                     "None of the registered ObjectLoaders knows how to load this object. (loader: %s loading %s)",
                         this.getClass().getName(), objectLoadRequest);
 

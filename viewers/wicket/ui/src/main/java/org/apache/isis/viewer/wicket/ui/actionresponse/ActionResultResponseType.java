@@ -28,9 +28,11 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.OpenUrlStrategy;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.security.authentication.logout.LogoutMenu.LoginRedirect;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -74,8 +76,10 @@ public enum ActionResultResponseType {
                 final AjaxRequestTarget target,
                 final ManagedObject resultAdapter,
                 final Can<ManagedObject> args) {
+            _Assert.assertTrue(resultAdapter instanceof PackedManagedObject);
+
             final var collectionModel = EntityCollectionModelStandalone
-                    .forActionModel(resultAdapter, actionModel, args);
+                    .forActionModel((PackedManagedObject)resultAdapter, actionModel, args);
             return ActionResultResponse.toPage(
                     StandaloneCollectionPage.class, new StandaloneCollectionPage(collectionModel));
         }
@@ -266,8 +270,11 @@ public enum ActionResultResponseType {
         }
 
         val resultSpec = resultAdapter.getSpecification();
-        if (resultSpec.isNotCollection()) {
+        if (!(resultAdapter instanceof PackedManagedObject)) {
+
             // scalar ...
+
+            _Assert.assertTrue(resultSpec.isNotCollection());
 
             if(LoginRedirect.LOGICAL_TYPE_NAME.equals(resultSpec.getLogicalTypeName())) {
                 return TypeAndAdapter.of(ActionResultResponseType.SIGN_IN, resultAdapter);
@@ -300,15 +307,13 @@ public enum ActionResultResponseType {
         } else {
             // non-scalar ...
 
-            final int cardinality = (int)_NullSafe.streamAutodetect(resultAdapter.getPojo()).count();
+            val packedAdapter = (PackedManagedObject) resultAdapter;
+            val unpacked = packedAdapter.unpack();
+
+            final int cardinality = unpacked.size();
             switch (cardinality) {
             case 1:
-                val firstPojo = _NullSafe.streamAutodetect(resultAdapter.getPojo())
-                    .findFirst()
-                    .get();
-                val firstElement = resultAdapter.getSpecification().getMetaModelContext().getObjectManager()
-                        .adapt(firstPojo);
-
+                val firstElement = unpacked.getFirstOrFail();
                 // recursively unwrap
                 return determineFor(firstElement, targetIfAny);
             default:

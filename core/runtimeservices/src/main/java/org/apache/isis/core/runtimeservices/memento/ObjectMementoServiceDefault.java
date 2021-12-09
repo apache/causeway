@@ -33,6 +33,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -68,15 +69,13 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
 
     @Override
     public ObjectMemento mementoForBookmark(@NonNull final Bookmark bookmark) {
-//        _Probe.errOut("mementoForRootOid %s", oid);
         val mementoAdapter = _ObjectMemento.createPersistent(bookmark, specificationLoader);
         return ObjectMementoAdapter.of(mementoAdapter);
     }
 
     @Override
     public ObjectMemento mementoForObject(@Nullable final ManagedObject adapter) {
-        assertSingleton(adapter);
-//        _Probe.errOut("mementoForObject %s", adapter);
+        _Assert.assertFalse(adapter instanceof PackedManagedObject);
         val mementoAdapter = _ObjectMemento.createOrNull(adapter);
         if(mementoAdapter==null) {
             // sonar-ignore-on (fails to detect this as null guard)
@@ -88,10 +87,18 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
         return ObjectMementoAdapter.of(mementoAdapter);
     }
 
+//    @Override
+//    public ObjectMemento mementoForObjects(@Nullable final PackedManagedObject packedAdapter) {
+//        val listOfMementos = packedAdapter.unpack().stream()
+//                .map(this::mementoForObject)
+//                .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
+//        return ObjectMementoCollection.of(
+//                listOfMementos,
+//                packedAdapter.getSpecification().getLogicalType());
+//    }
+
     @Override
     public ObjectMemento mementoForParameter(@NonNull final ManagedObject paramAdapter) {
-//        _Probe.errOut("mementoForParameter %s", paramAdapter);
-        assertSingleton(paramAdapter);
         val mementoAdapter = _ObjectMemento.createOrNull(paramAdapter);
         if(mementoAdapter==null) {
             return new ObjectMementoForEmpty(paramAdapter.getSpecification().getLogicalType());
@@ -102,16 +109,12 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
 
     @Override
     public ObjectMemento mementoForPojo(final Object pojo) {
-        //_Probe.errOut("mementoForPojo %s", ""+pojo);
-        assertSingleton(pojo);
-
         val managedObject = objectManager.adapt(pojo);
         return mementoForObject(managedObject);
     }
 
     @Override
     public ObjectMemento mementoForPojos(final Iterable<Object> iterablePojos, final LogicalType logicalType) {
-//        _Probe.errOut("mementoForPojos");
         val listOfMementos = _NullSafe.stream(iterablePojos)
                 .map(pojo->mementoForPojo(pojo))
                 .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
@@ -153,26 +156,6 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
         }
 
         throw _Exceptions.unrecoverableFormatted("unsupported ObjectMemento type %s", memento.getClass());
-    }
-
-//TODO 2x remove if no longer required for debugging ...
-    private void assertSingleton(final ManagedObject adapter) {
-//        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
-//            return;
-//        }
-//        val pojo = ManagedObjects.UnwrapUtil.single(adapter);
-//        assertSingleton(pojo);
-//        val spec = adapter.getSpecification();
-//        if(!spec.isNotCollection()) {
-//            throw _Exceptions.illegalArgument("unexpected spec type %s for %s (elementSpec=%s)",
-//                    spec, spec.getFullIdentifier(), spec.getElementSpecification());
-//        }
-    }
-
-    private void assertSingleton(final Object pojo) {
-//        if(_NullSafe.streamAutodetect(pojo).limit(2).count()>1L) {
-//            throw _Exceptions.illegalArgument("cardinality 0 or 1 expect");
-//        }
     }
 
     @RequiredArgsConstructor(staticName = "of")

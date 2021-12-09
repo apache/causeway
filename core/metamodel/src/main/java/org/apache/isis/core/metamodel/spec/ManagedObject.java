@@ -26,7 +26,9 @@ import java.util.function.UnaryOperator;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.debug._XrayEvent;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -203,17 +205,14 @@ public interface ManagedObject {
         //actual type in use (during runtime) might be a sub-class of the above
         if(pojo==null
                 || pojo.getClass().equals(specification.getCorrespondingClass())
-                ) {
+                || specification.isValue()) {
             // if actual type matches spec's, we assume, that we don't need to reload,
             // so this is a shortcut for performance reasons
             return SimpleManagedObject.of(specification, pojo);
         }
 
-        //_Probe.errOut("upgrading spec %s on type %s", specification, pojo.getClass());
-        //ManagedObjects.warnIfAttachedEntity(adapter, "consider using ManagedObject.identified(...) for entity");
-
-        val specLoader = specification.getMetaModelContext().getSpecificationLoader();
-        return ManagedObject.lazy(specLoader, pojo);
+        val objManager = specification.getMetaModelContext().getObjectManager();
+        return objManager.adapt(pojo);
     }
 
     /**
@@ -223,6 +222,10 @@ public interface ManagedObject {
             final @NonNull ObjectSpecification specification,
             final @NonNull Object pojo,
             final @NonNull Bookmark bookmark) {
+
+        if(pojo!=null) {
+            _Assert.assertFalse(_Collections.isCollectionOrArrayOrCanType(pojo.getClass()));
+        }
 
         if(!specification.getCorrespondingClass().isAssignableFrom(pojo.getClass())) {
             throw _Exceptions.illegalArgument(
@@ -244,6 +247,11 @@ public interface ManagedObject {
     public static ManagedObject lazy(
             final SpecificationLoader specLoader,
             final Object pojo) {
+
+        if(pojo!=null) {
+            _Assert.assertFalse(_Collections.isCollectionOrArrayOrCanType(pojo.getClass()));
+        }
+
         ManagedObjects.assertPojoNotManaged(pojo);
         val adapter = new LazyManagedObject(cls->specLoader.specForType(cls).orElse(null), pojo);
         //ManagedObjects.warnIfAttachedEntity(adapter, "consider using ManagedObject.identified(...) for entity");
@@ -276,6 +284,11 @@ public interface ManagedObject {
                 @NonNull  final ObjectSpecification spec,
                 final @Nullable Object pojo,
                 @NonNull  final Bookmark bookmark) {
+
+            if(pojo!=null) {
+                _Assert.assertFalse(_Collections.isCollectionOrArrayOrCanType(pojo.getClass()));
+            }
+
             val managedObject = SimpleManagedObject.of(spec, pojo);
             managedObject.bookmarkLazy.set(Optional.of(bookmark));
             return managedObject;

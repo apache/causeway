@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.coll.DataTableModelWkt;
 
@@ -34,7 +35,7 @@ extends EntityCollectionModelAbstract {
     // -- FACTORIES
 
     public static EntityCollectionModelStandalone forActionModel(
-            final @NonNull ManagedObject collectionAsAdapter,
+            final @NonNull PackedManagedObject collectionAsAdapter,
             final @NonNull ActionModel actionModel,
             final @NonNull Can<ManagedObject> args) {
 

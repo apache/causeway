@@ -24,6 +24,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.objectmanager.detach.ObjectDetacher;
@@ -35,6 +36,7 @@ import org.apache.isis.core.metamodel.objectmanager.refresh.ObjectRefresher;
 import org.apache.isis.core.metamodel.objectmanager.serialize.ObjectSerializer;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 
 import lombok.val;
 
@@ -118,7 +120,13 @@ public interface ObjectManager {
         if(spec==null) {
             return ManagedObject.unspecified();
         }
-        return ManagedObject.of(spec, pojo);
+        return spec.isNotCollection()
+                ? ManagedObject.of(spec, pojo)
+                : PackedManagedObject.pack(spec.getElementSpecification().orElse(spec),
+                        _NullSafe.streamAutodetect(pojo)
+                        .map(this::adapt)
+                        .collect(Can.toCan()));
+
     }
 
 

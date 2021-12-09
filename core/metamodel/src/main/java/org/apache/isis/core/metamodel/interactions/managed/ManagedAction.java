@@ -186,12 +186,13 @@ public final class ManagedAction extends ManagedMember {
         }
 
         val resultPojo = actionResult.getPojo();
+        val objManager = mmc().getObjectManager();
 
         val resultAdapter = getRoutingServices().stream()
                 .filter(routingService->routingService.canRoute(resultPojo))
                 .map(routingService->routingService.route(resultPojo))
                 .filter(_NullSafe::isPresent)
-                .map(this::toManagedObject)
+                .map(objManager::adapt)
                 .filter(_NullSafe::isPresent)
                 .findFirst()
                 .orElse(actionResult);
@@ -199,13 +200,6 @@ public final class ManagedAction extends ManagedMember {
         // resolve injection-points for the result
         getServiceInjector().injectServicesInto(resultAdapter.getPojo());
         return resultAdapter;
-    }
-
-
-    // -- POJO WRAPPING
-
-    private ManagedObject toManagedObject(final Object pojo) {
-        return ManagedObject.lazy(mmc().getSpecificationLoader(), pojo);
     }
 
     // -- ACTION RESULT ROUTING

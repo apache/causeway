@@ -33,6 +33,8 @@ public interface ObjectMementoService {
 
     ObjectMemento mementoForObject(ManagedObject adapter);
 
+    //ObjectMemento mementoForObjects(PackedManagedObject adapter);
+
     ObjectMemento mementoForPojo(Object pojo);
 
     ObjectMemento mementoForPojos(Iterable<Object> iterablePojos, LogicalType logicalType);

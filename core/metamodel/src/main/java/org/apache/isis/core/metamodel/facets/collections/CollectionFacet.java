@@ -49,6 +49,7 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 
 import lombok.NonNull;
 import lombok.val;
@@ -111,12 +112,18 @@ public interface CollectionFacet extends Facet {
     }
 
     public static int elementCount(@Nullable final ManagedObject container) {
+        if(container instanceof PackedManagedObject) {
+            return ((PackedManagedObject)container).unpack().size();
+        }
         return lookup(container)
                 .map(collectionFacet->collectionFacet.size(container))
                 .orElse(0);
     }
 
     public static Stream<ManagedObject> streamAdapters(@Nullable final ManagedObject container) {
+        if(container instanceof PackedManagedObject) {
+            return ((PackedManagedObject)container).unpack().stream();
+        }
         return lookup(container)
                 .map(collectionFacet->collectionFacet.stream(container))
                 .orElse(Stream.empty());
