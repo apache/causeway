@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived;
 
+import java.util.Optional;
+
 import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
@@ -136,9 +138,9 @@ extends AbstractFacetFactoryJUnit4TestCase {
             allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
             will(returnValue(mockObjSpec));
 
-            allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, NatureOfService.VIEW) {
-            }));
+            allowing(mockObjSpec).lookupNonFallbackFacet(DomainServiceFacet.class);
+            will(returnValue(Optional.of(new DomainServiceFacetAbstract(mockObjSpec, NatureOfService.VIEW) {
+            })));
         }});
 
         expectNoMethodsRemoved();
@@ -151,7 +153,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 .forTesting(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
         // then
-        final Facet facet = facetedMethod.getFacet(NotInServiceMenuFacet.class);
+        final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
         assertThat(facet, is(nullValue()));
     }
 
@@ -171,9 +173,9 @@ extends AbstractFacetFactoryJUnit4TestCase {
             allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
             will(returnValue(mockObjSpec));
 
-            allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, NatureOfService.VIEW) {
-            }));
+            allowing(mockObjSpec).lookupNonFallbackFacet(DomainServiceFacet.class);
+            will(returnValue(Optional.of(new DomainServiceFacetAbstract(mockObjSpec, NatureOfService.VIEW) {
+            })));
         }});
 
         expectNoMethodsRemoved();
@@ -186,7 +188,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 .forTesting(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
         // then
-        final Facet facet = facetedMethod.getFacet(NotInServiceMenuFacet.class);
+        final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
         assertThat(facet, is(nullValue()));
     }
 
@@ -205,8 +207,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
             allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
             will(returnValue(mockObjSpec));
 
-            allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-            will(returnValue(null));
+            allowing(mockObjSpec).lookupNonFallbackFacet(DomainServiceFacet.class);
+            will(returnValue(Optional.empty()));
         }});
 
         expectNoMethodsRemoved();
@@ -219,7 +221,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 .forTesting(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
         // then
-        final Facet facet = facetedMethod.getFacet(NotInServiceMenuFacet.class);
+        final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
         assertThat(facet, is(nullValue()));
     }
 
