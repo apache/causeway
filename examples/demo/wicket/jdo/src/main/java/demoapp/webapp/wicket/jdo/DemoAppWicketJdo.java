@@ -23,6 +23,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.commons.internal.debug.xray.XrayEnable;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.ui.IsisModuleExtPdfjsUi;
 import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
@@ -63,7 +64,7 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
     IsisModuleValAsciidocPersistenceJdoDn5.class,
     IsisModuleValMarkdownPersistenceJdoDn5.class,
 
-    //XrayEnable.class // for debugging only
+    XrayEnable.class // for debugging only
 })
 //@Log4j2
 public class DemoAppWicketJdo extends SpringBootServletInitializer {
