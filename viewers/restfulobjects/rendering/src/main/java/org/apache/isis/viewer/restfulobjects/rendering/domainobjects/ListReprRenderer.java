@@ -40,7 +40,10 @@ extends ReprRendererAbstract<Stream<ManagedObject>> {
     private ObjectSpecification returnType;
     private Rel elementRel;
 
-    public ListReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
+    public ListReprRenderer(
+            final IResourceContext resourceContext,
+            final LinkFollowSpecs linkFollower,
+            final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.LIST, representation);
         usingLinkToBuilder(new DomainObjectLinkTo());
     }
