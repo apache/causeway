@@ -20,7 +20,6 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -103,11 +102,10 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
                 && renderEagerly(valueAdapter)
                 || !followHref.isTerminated();
 
-        final Stream<ManagedObject> elementAdapters = CollectionFacet.streamAdapters(valueAdapter);
-
         final List<JsonRepresentation> list = _Lists.newArrayList();
 
-        elementAdapters.forEach(elementAdapter->{
+        CollectionFacet.streamAdapters(valueAdapter)
+        .forEach(elementAdapter->{
             final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer
                     .newLinkToBuilder(resourceContext, Rel.VALUE, elementAdapter);
             if(eagerlyRender) {

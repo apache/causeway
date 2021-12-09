@@ -16,32 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.objectmanager.memento;
+package org.apache.isis.commons.internal.debug;
 
-import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-import lombok.NonNull;
+@Getter
+@RequiredArgsConstructor
+enum _IconResource {
+    EVENT               ("/xray/evnt.png"),
+    INTERACTION_OPEN    ("/xray/ia-open.png"),
+    INTERACTION_CLOSE   ("/xray/ia-close.png"),
+    LOG                 ("/xray/log.png"),
+    TRANSACTION         ("/xray/tx.png");
 
-/**
- * @since 2.0
- */
-public interface ObjectMementoService {
-
-    ObjectMemento mementoForBookmark(@NonNull Bookmark bookmark);
-
-    ObjectMemento mementoForObject(ManagedObject adapter);
-
-    //ObjectMemento mementoForObjects(PackedManagedObject adapter);
-
-    ObjectMemento mementoForPojo(Object pojo);
-
-    ObjectMemento mementoForPojos(Iterable<Object> iterablePojos, LogicalType logicalType);
-
-    ManagedObject reconstructObject(ObjectMemento memento);
-
-    ObjectMemento mementoForParameter(@NonNull ManagedObject paramAdapter);
-
+    private final String resourcePath;
 
 }

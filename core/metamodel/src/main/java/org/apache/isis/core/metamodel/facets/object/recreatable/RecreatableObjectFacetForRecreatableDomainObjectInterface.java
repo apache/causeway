@@ -18,9 +18,15 @@
  */
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.RecreatableDomainObject;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+
+import lombok.NonNull;
 
 public class RecreatableObjectFacetForRecreatableDomainObjectInterface
 extends RecreatableObjectFacetAbstract {
@@ -32,14 +38,14 @@ extends RecreatableObjectFacetAbstract {
     }
 
     @Override
-    protected void doInitialize(final Object pojo, final String memento) {
+    protected void doInitialize(final Object pojo, final @NonNull Optional<Bookmark> bookmark) {
         final RecreatableDomainObject viewModel = (RecreatableDomainObject)pojo;
-        viewModel.__isis_recreate(memento);
+        viewModel.__isis_recreate(bookmark.map(Bookmark::getIdentifier).orElse(null));
     }
 
     @Override
-    public String memento(final Object pojo) {
-        final RecreatableDomainObject recreatableDomainObject = (RecreatableDomainObject)pojo;
+    public String serialize(final ManagedObject viewModel) {
+        final RecreatableDomainObject recreatableDomainObject = (RecreatableDomainObject)viewModel.getPojo();
         return recreatableDomainObject.__isis_memento();
     }
 

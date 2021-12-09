@@ -20,15 +20,16 @@ package org.apache.isis.core.runtimeservices.factory;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.springframework.lang.Nullable;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -145,11 +146,11 @@ public class FactoryServiceDefault implements FactoryService {
     }
 
     @Override
-    public <T> T viewModel(final @NonNull Class<T> viewModelClass, final @Nullable String mementoStr) {
+    public <T> T viewModel(final @NonNull Class<T> viewModelClass, final @Nullable Bookmark bookmark) {
 
         val spec = loadSpec(viewModelClass);
         val viewModelFacet = getViewModelFacet(spec);
-        val viewModel = viewModelFacet.createViewModelPojo(spec, mementoStr, __->createObject(spec));
+        val viewModel = viewModelFacet.createViewModelPojo(spec, bookmark, __->createObject(spec));
         return _Casts.uncheckedCast(viewModel);
     }
 

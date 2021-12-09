@@ -46,6 +46,7 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.appfeatui.ApplicationFeatureViewModel;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
@@ -100,7 +101,9 @@ public class UserPermissionViewModel implements ViewModel {
         return factory
                 .viewModel(
                         UserPermissionViewModel.class,
-                        asEncodedString(featureId, user.getUsername(), viewingEvaluation, changingEvaluation));
+                        Bookmark.forLogicalTypeNameAndIdentifier(
+                                UserPermissionViewModel.LOGICAL_TYPE_NAME,
+                                asEncodedString(featureId, user.getUsername(), viewingEvaluation, changingEvaluation)));
     }
 
     public UserPermissionViewModel() {

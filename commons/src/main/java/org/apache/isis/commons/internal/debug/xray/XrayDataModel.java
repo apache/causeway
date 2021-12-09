@@ -104,12 +104,11 @@ public abstract class XrayDataModel extends HasIdAndLabel {
 
         private final String id;
         private final LocalDateTime timestamp;
+        @EqualsAndHashCode.Exclude
+        private final String iconResource;
         private final String label;
         private final String logMessage;
         private final @NonNull Stickiness stickiness;
-
-        @EqualsAndHashCode.Exclude
-        private final String iconResource = "/xray/log.png";
 
         @Override
         public void render(final JScrollPane panel) {

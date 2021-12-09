@@ -89,6 +89,9 @@ implements FormExecutor {
 
         try {
 
+            _Debug.log("[EXECUTOR] start ...");
+            //formExecutorContext.getParentObject().reloadViewmodelFromMemoizedBookmark();
+
             final Optional<Recognition> invalidReasonIfAny = Recognition.of(
                     Category.CONSTRAINT_VIOLATION,
                     actionOrPropertyModel
@@ -102,13 +105,12 @@ implements FormExecutor {
             }
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-
                 final String whatIsExecuted = actionOrPropertyModel
                 .fold(
                         act->act.getFriendlyName(),
                         prop->prop.getFriendlyName());
 
-                _Debug.log(10, "execute %s ...", whatIsExecuted);
+                _Debug.log("[EXECUTOR] execute %s ...", whatIsExecuted);
             });
 
             //
@@ -124,9 +126,21 @@ implements FormExecutor {
             //
             // (The DB exception might actually be thrown by the flush() that follows.
             //
+            //XXX triggers BookmarkedObjectWkt.getObjectAndReAttach() down the call-stack
+            //XXX applies the pending property
             val resultAdapter = actionOrPropertyModel.fold(
                     act->act.executeActionAndReturnResult(),
                     prop->prop.applyValueThenReturnOwner());
+
+            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+
+                final String whatIsExecuted = actionOrPropertyModel
+                .fold(
+                        act->act.getFriendlyName(),
+                        prop->prop.getFriendlyName());
+
+                _Debug.log("[EXECUTOR] resultAdapter created for %s", whatIsExecuted);
+            });
 
             // if we are in a nested dialog/form, that supports an action parameter,
             // the result must be fed back into the calling dialog's/form's parameter
@@ -144,9 +158,10 @@ implements FormExecutor {
             }
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log(10, "interpret result ...");
+                _Debug.log("[EXECUTOR] interpret result ...");
             });
 
+            //XXX triggers ManagedObject.getBookmarkRefreshed()
             val resultResponse = actionOrPropertyModel.fold(
                     act->ActionResultResponseType
                             .determineAndInterpretResult(act, ajaxTarget, resultAdapter, act.snapshotArgs()),
@@ -154,7 +169,7 @@ implements FormExecutor {
                             .toEntityPage(resultAdapter));
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log(10, "handle result ...");
+                _Debug.log("[EXECUTOR] handle result ...");
             });
 
             // redirect using associated strategy
@@ -163,7 +178,7 @@ implements FormExecutor {
                 .handleResults(getCommonContext(), resultResponse);
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log(10, "... return");
+                _Debug.log("[EXECUTOR] ... return");
             });
 
             return FormExecutionOutcome.SUCCESS_AND_REDIRECED_TO_RESULT_PAGE; // success (valid args), allow redirect

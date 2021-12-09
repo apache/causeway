@@ -86,7 +86,7 @@ class CommandArgumentTest extends InteractionTestAbstract {
     public static class CommandArgDemo {
 
         @Action
-        public CommandResult list(List<Long> someIds){
+        public CommandResult list(final List<Long> someIds){
             val stringified = ""+someIds;
             assertEquals("[1, 2, 3]", stringified);
             return CommandResult.of(stringified);
@@ -103,9 +103,7 @@ class CommandArgumentTest extends InteractionTestAbstract {
 
         val pendingArgs = actionInteraction.startParameterNegotiation().get();
 
-        pendingArgs.setParamValue(0, ManagedObject.lazy(
-                objectManager.getMetaModelContext().getSpecificationLoader(),
-                Arrays.asList(1L, 2L, 3L)));
+        pendingArgs.setParamValue(0, objectManager.adapt(Arrays.asList(1L, 2L, 3L)));
 
         val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
         assertTrue(resultOrVeto.isLeft());

@@ -22,7 +22,6 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -30,6 +29,9 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -42,9 +44,6 @@ import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnota
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TitleAnnotationFacetFactoryTest
 extends AbstractFacetFactoryJUnit4TestCase {
@@ -155,6 +154,9 @@ extends AbstractFacetFactoryJUnit4TestCase {
             allowing(mockStringSpec).getCorrespondingClass();
             will(returnValue(String.class));
 
+            allowing(mockStringSpec).isNotCollection();
+            will(returnValue(true));
+
             allowing(mockStringSpec).isParentedOrFreeCollection();
             will(returnValue(false));
 
@@ -221,7 +223,6 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     public void titleAnnotatedMethodsSomeOfWhichReturnNulls() throws Exception {
 
@@ -247,6 +248,9 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 allowing(mockStringSpec).isParentedOrFreeCollection();
                 will(returnValue(false));
 
+                allowing(mockStringSpec).isNotCollection();
+                will(returnValue(true));
+
                 ignoring(mockStringSpec).assertPojoCompatible(with(any(String.class)));
 
                 allowing(mockSpecificationLoader).specForType(Integer.class);
@@ -257,6 +261,9 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 allowing(mockIntegerSpec).isParentedOrFreeCollection();
                 will(returnValue(false));
+
+                allowing(mockIntegerSpec).isNotCollection();
+                will(returnValue(true));
 
                 allowing(mockIntegerSpec).getTitle(with(any(TitleRenderRequest.class)));
                 will(returnValue("3"));

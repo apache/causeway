@@ -23,6 +23,7 @@ import java.util.NoSuchElementException;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.exceptions.UnrecoverableException;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 
 import lombok.NonNull;
 
@@ -119,15 +120,15 @@ public interface FactoryService {
 
     /**
      * Creates a new ViewModel instance, with injection points resolved,
-     * and initialized according to the given {@code mementoStr}
+     * and initialized according to the given {@code bookmark}
      *
      * @param viewModelClass
-     * @param mementoStr - ignored if {@code null}
+     * @param bookmark - ignored if {@code null}
      * @throws IllegalArgumentException if viewModelClass is not a viewmodel type
      * @apiNote forces the viewModelClass to be added to the meta-model if not already
      * @since 2.0
      */
-    <T> T viewModel(@NonNull Class<T> viewModelClass, @Nullable String mementoStr);
+    <T> T viewModel(@NonNull Class<T> viewModelClass, @Nullable Bookmark bookmark);
 
     /**
      * Creates a new ViewModel instance,
@@ -139,7 +140,7 @@ public interface FactoryService {
      * @since 2.0
      */
     default <T> T viewModel(@NonNull final Class<T> viewModelClass) {
-        return viewModel(viewModelClass, /*mementoStr*/null);
+        return viewModel(viewModelClass, /*bookmark*/null);
     }
 
     /**

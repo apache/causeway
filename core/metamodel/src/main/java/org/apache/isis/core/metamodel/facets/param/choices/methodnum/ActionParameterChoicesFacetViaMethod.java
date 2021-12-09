@@ -78,7 +78,7 @@ implements ImperativeFacet {
         }
 
         val visibleChoices = ManagedObjects
-                .adaptMultipleOfTypeThenAttachThenFilterByVisibility(
+                .adaptMultipleOfTypeThenRefetchThenFilterByVisibility(
                         requiredSpec, collectionOrArray, interactionInitiatedBy);
 
         return visibleChoices;

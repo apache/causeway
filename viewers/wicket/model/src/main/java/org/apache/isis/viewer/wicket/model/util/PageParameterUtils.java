@@ -37,6 +37,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.primitives._Ints;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -180,6 +181,13 @@ public class PageParameterUtils {
         streamCurrentRequestParameters()
         .forEach(kv->pageParameters.add(kv.getKey(), kv.getValue()));
         return pageParameters;
+    }
+
+    public static Optional<Bookmark> toBookmark(final PageParameters pageParameters) {
+        val oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
+        return _Strings.isEmpty(oidStr)
+                ? Optional.empty()
+                : Optional.of(Bookmark.parseElseFail(oidStr));
     }
 
     // -- HELPERS
@@ -374,6 +382,7 @@ public class PageParameterUtils {
         val paramValue = decodeArg(mmc, actionParam.getElementType(), oidStrEncoded);
         actionModel.setParameterValue(actionParam, paramValue);
     }
+
 
 
 }

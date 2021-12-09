@@ -20,9 +20,9 @@ package org.apache.isis.core.metamodel.services.classsubstitutor;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.graph.tree.TreeAdapter;
 
 @Component
@@ -31,15 +31,12 @@ import org.apache.isis.applib.graph.tree.TreeAdapter;
 public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
 
     public ClassSubstitutorDefault() {
-
         ignoreCglib();
         ignoreJavassist();
         ignoreApacheIsisInternals();
         ignoreSpringFramework();
         ignoreJacksonAndGson();
         skipDataNucleusProxy();
-
-        ignoreClass(TreeAdapter.class.getName());
     }
 
     protected void ignoreCglib() {
@@ -59,8 +56,8 @@ public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
     }
 
     private void ignoreApacheIsisInternals() {
-        // can't ignoring this class ... will result in NPEs...
-        // ignoreClass("org.apache.isis.commons.internal.ioc.spring.BeanAdapterSpring");
+        ignoreClass("org.apache.isis.commons.internal.ioc.spring.BeanAdapterSpring");
+        ignoreClass(TreeAdapter.class.getName());
     }
 
     protected void ignoreJacksonAndGson() {

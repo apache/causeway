@@ -20,12 +20,9 @@ package org.apache.isis.commons.internal.debug;
 
 import java.util.stream.Collectors;
 
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -41,7 +38,12 @@ import lombok.experimental.UtilityClass;
  * These may be changed or removed without notice!
  * </p>
  * @since 2.0
+ *
+ * @deprecated not deprecated, but marked a such,
+ * to indicate that any call to this class is temporary for debugging purposes
+ * and should be removed ultimately
  */
+@Deprecated // do not remove, see java-doc
 @UtilityClass
 public class _Debug {
 
@@ -65,30 +67,11 @@ public class _Debug {
         dump(x, 0);
     }
 
+    /**
+     * General purpose log entry.
+     */
     public void log(final String format, final Object...args) {
-        log(1, format, args);
-    }
-
-    public void log(final int depth, final String format, final Object...args) {
-        val stackTrace = _Exceptions.streamStackTrace()
-                .skip(3)
-                .filter(_Debug::accept)
-                .collect(Can.toCan());
-                //.reverse();
-
-        val logMessage = String.format(format, args);
-
-        _Xray.recordDebugLogEvent(logMessage, stackTrace);
-
-        val context = String.format("%s|| %s",
-                Thread.currentThread().getName(),
-                stackTrace.stream()
-                .limit(depth)
-                .map(_Debug::stringify)
-                .collect(Collectors.joining(" <- ")));
-
-        System.err.println(context);
-        System.err.println("| " + logMessage);
+        _XrayEvent.record(1, _IconResource.LOG, format, args);
     }
 
     // -- HELPER
@@ -116,21 +99,6 @@ public class _Debug {
             System.err.printf("%s %s%n", suffix, x);
         }
 
-    }
-
-    private boolean accept(final StackTraceElement se) {
-        return se.getLineNumber()>1
-                && !se.getClassName().equals(_Debug.class.getName())
-                && !se.getClassName().contains("_Xray") // suppress _Xray local helpers
-                && !se.getClassName().startsWith(ChainOfResponsibility.class.getName())
-                && !se.getClassName().startsWith("java.util.stream") // suppress Stream processing details
-                && !se.getClassName().startsWith("org.junit") // suppress Junit processing details
-                && !se.getClassName().startsWith("org.eclipse.jdt.internal") // suppress IDE processing details
-                ;
-    }
-
-    private String stringify(final StackTraceElement se) {
-        return _Exceptions.abbreviate(se.toString());
     }
 
 }

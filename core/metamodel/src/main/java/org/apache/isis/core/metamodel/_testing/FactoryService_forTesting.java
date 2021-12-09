@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel._testing;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 
@@ -62,7 +63,7 @@ class FactoryService_forTesting implements FactoryService {
     }
 
     @Override
-    public <T> T viewModel(final Class<T> viewModelClass, @Nullable final String mementoStr) {
+    public <T> T viewModel(final Class<T> viewModelClass, @Nullable final Bookmark bookmark) {
         throw new IllegalArgumentException("Not yet supported");
     }
 

@@ -35,8 +35,6 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.debug._Debug;
-import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
@@ -418,11 +416,6 @@ implements SchemaValueMarshaller {
             return valueDto;
         }
         case REFERENCE: {
-
-            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log(10, "NULL reference detected %s", pojo);
-            });
-
             // at this point, we know the value has no bookmark
             // so leave the DTO empty (representing a null reference)
             return valueDto;

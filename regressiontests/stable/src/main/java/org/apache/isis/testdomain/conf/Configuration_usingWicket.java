@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.conf;
 
 import java.util.ArrayList;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -32,15 +33,19 @@ import org.apache.wicket.ThreadContext;
 import org.apache.wicket.core.request.handler.IPageProvider;
 import org.apache.wicket.markup.head.ResourceAggregator;
 import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.WicketTester;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
+import org.junit.jupiter.api.function.ThrowingConsumer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import static org.junit.Assert.assertEquals;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
@@ -50,6 +55,8 @@ import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
+import org.apache.isis.testdomain.util.dto.BookDto;
+import org.apache.isis.testdomain.util.dto.IBook;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -59,10 +66,12 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAcc
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
+import org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketAjaxRequestListenerUtil;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 
 import de.agilecoders.wicket.core.Bootstrap;
@@ -110,16 +119,71 @@ public class Configuration_usingWicket {
         public static final String FAVORITE_BOOK_ENTITY_LINK_TITLE = FAVORITE_BOOK_ENTITY_LINK
                 + ":entityTitle";
 
+        //property:scalarTypeContainer:scalarIfRegular:scalarValueContainer]: [Fragment [Component id = scalarValueContainer]] ->
+        //property:scalarTypeContainer:scalarIfRegular:scalarValueContainer:scalarValue]: [TextField [Component id = scalarValue]] -> Bookstore
+        //property:scalarTypeContainer:scalarIfRegular:scalarName]: [Component id = scalarName] -> Name
+        //property:scalarTypeContainer:scalarIfRegular:scalarValueInlinePromptLink]: [WebMarkupContainer [Component id = scalarValueInlinePromptLink]] ->
+        //property:scalarTypeContainer:scalarIfRegular:scalarValueInlinePromptLink:scalarValueInlinePromptLabel]: [Fragment [Component id = scalarValueInlinePromptLabel]] ->
+        //property:scalarTypeContainer:scalarIfRegular:scalarValueInlinePromptLink:scalarValueInlinePromptLabel:scalarValue]: [Component id = scalarValue] -> Bookstore
+        //property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:scalarValueContainer:scalarValue
+
+        public static final String INVENTORY_NAME_PROPERTY = "theme:entityPageContainer:entity:rows:2"
+                + ":rowContents:1"
+                + ":col:fieldSets:1"
+                + ":memberGroup:properties:2"
+                + ":property";
+
+        public static final String INVENTORY_NAME_PROPERTY_EDIT_LINK = INVENTORY_NAME_PROPERTY
+                + ":scalarTypeContainer:scalarIfRegular:scalarValueInlinePromptLink";
+
+        public static final String INVENTORY_NAME_PROPERTY_EDIT_INLINE_FORM = INVENTORY_NAME_PROPERTY
+                + ":scalarTypeContainer:scalarIfRegularInlinePromptForm:inputForm";
+
+        public static final String INVENTORY_NAME_PROPERTY_EDIT_INLINE_FORM_TEXTFIELD = INVENTORY_NAME_PROPERTY
+                + ":property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:scalarValueContainer:scalarValue";
+
+        public static final String INVENTORY_NAME_PROPERTY_EDIT_INLINE_PROMPT_FORM = INVENTORY_NAME_PROPERTY
+                + ":scalarTypeContainer:scalarIfRegularInlinePromptForm:inputForm";
+
+        public static final String INLINE_PROMPT_FORM_FIELD = ""
+                + "property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:scalarValueContainer:scalarValue";
+
+        public static final String INLINE_PROMPT_FORM_OK = INVENTORY_NAME_PROPERTY_EDIT_INLINE_PROMPT_FORM
+                + ":okButton";
+
+
+        //inputForm:property:scalarNameAndValue]: [StringPanel [Component id = scalarNameAndValue]] -> StringPanel: ManagedObject.SimpleManagedObject(specification=ObjectSpecificationDefault@44e816ad[class=java.lang.String,type=VALUE,superclass=Object], pojo=Bookstore)
+        //inputForm:property:scalarNameAndValue:scalarTypeContainer]: [WebMarkupContainer [Component id = scalarTypeContainer]] -> WebMarkupContainer:
+        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfCompact]: [Component id = scalarIfCompact] -> Label: Bookstore
+        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular]: [FormGroup [Component id = scalarIfRegular]] -> FormGroup:
+        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:scalarValueContainer]: [Fragment [Component id = scalarValueContainer]] -> Fragment:
+        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:scalarValueContainer:scalarValue]: [TextField [Component id = scalarValue]] -> TextField: Bookstore
+        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:scalarName]: [Component id = scalarName] -> Label: Name
+        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:scalarValueInlinePromptLink]: [WebMarkupContainer [Component id = scalarValueInlinePromptLink]] -> WebMarkupContainer:
+        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:scalarValueInlinePromptLink:scalarValueInlinePromptLabel]: [Fragment [Component id = scalarValueInlinePromptLabel]] -> :
+        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:scalarValueInlinePromptLink:scalarValueInlinePromptLabel:scalarValue]: [Component id = scalarValue] -> Label: Bookstore
+        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:associatedActionLinksBelow]: [WebMarkupContainer [Component id = associatedActionLinksBelow]] -> WebMarkupContainer:
+        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:associatedActionLinksRight]: [WebMarkupContainer [Component id = associatedActionLinksRight]] -> WebMarkupContainer:
+        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:editProperty]: [WebMarkupContainer [Component id = editProperty]] -> WebMarkupContainer:
+        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:feedback]: [NotificationPanel [Component id = feedback]] -> NotificationPanel:
+        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:feedback:feedbackul]: [WebMarkupContainer [Component id = feedbackul]] -> :
+        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:feedback:feedbackul:messages]: [MessageListView [Component id = messages]] -> MessageListView: []
+        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegularInlinePromptForm]: [WebMarkupContainer [Component id = scalarIfRegularInlinePromptForm]] -> WebMarkupContainer:
+
         // --
 
         @Inject private ObjectManager objectManager;
 
         private final IsisAppCommonContext commonContext;
+        private final Function<BookDto, IBook> bookFactory;
 
-        public EntityPageTester(final IsisAppCommonContext commonContext) {
+        public EntityPageTester(
+                final IsisAppCommonContext commonContext,
+                final Function<BookDto, IBook> bookFactory) {
             super(newWicketApplication(commonContext));
             commonContext.injectServicesInto(this);
             this.commonContext = commonContext;
+            this.bookFactory = bookFactory;
         }
 
         public PageParameters createPageParameters(final Object entityOrVm) {
@@ -133,6 +197,27 @@ public class Configuration_usingWicket {
 
         public void assertHeaderBrandText(final String expectedLabel) {
             assertLabel("header:applicationName:brandText", expectedLabel);
+        }
+
+        @SneakyThrows
+        public void assertPropertyValue(final String path, final ThrowingConsumer<ManagedObject> checker) {
+            Component component = getComponentFromLastRenderedPage(path);
+            ManagedObject adapter = (ManagedObject)component.getDefaultModelObject();
+            checker.accept(adapter);
+        }
+
+        public void assertFavoriteBookIs(final BookDto bookDto) {
+            assertLabel(FAVORITE_BOOK_SCALAR_NAME, "Favorite Book");
+            assertComponent(FAVORITE_BOOK_ENTITY_LINK, BookmarkablePageLink.class);
+
+            val expectedLinkTitle = bookFactory.apply(bookDto).title();
+            assertLabel(FAVORITE_BOOK_ENTITY_LINK_TITLE, expectedLinkTitle);
+        }
+
+        public void assertInventoryNameIs(final String expectedName) {
+            assertPropertyValue(INVENTORY_NAME_PROPERTY, adapter->{
+                assertEquals(expectedName, adapter.getPojo());
+            });
         }
 
         public void dumpComponentTree(final Predicate<Component> filter) {
@@ -155,7 +240,9 @@ public class Configuration_usingWicket {
                         .skip(1L)
                         .collect(Collectors.joining(":"));
 
-                        System.err.printf("comp[%s]: %s%n", path, component);
+                        System.err.printf("comp[%s]: %s -> %s: %s%n",
+                                path, component, component.getClass().getSimpleName(),
+                                component.getDefaultModelObjectAsString());
                     }
                 }
             });
@@ -179,8 +266,8 @@ public class Configuration_usingWicket {
 
         private final IsisAppCommonContext commonContext;
 
-        public EntityPageTester createTester() {
-            return new EntityPageTester(commonContext);
+        public EntityPageTester createTester(final Function<BookDto, IBook> bookFactory) {
+            return new EntityPageTester(commonContext, bookFactory);
         }
     }
 
@@ -261,6 +348,7 @@ public class Configuration_usingWicket {
         @Getter(lazy=true)
         private final WicketViewerSettings settings =
                 getCommonContext().lookupServiceElseFail(WicketViewerSettings.class);
+
         @Override
         public Class<? extends Page> getHomePage() {
             return getPageClassRegistry().getPageClass(PageType.HOME);
@@ -269,6 +357,13 @@ public class Configuration_usingWicket {
         @Override
         protected IPageFactory newPageFactory() {
             return new PageFactory_forTesting(this, super.newPageFactory());
+        }
+
+        @Override
+        protected void internalInit() {
+            super.internalInit();
+            // intercept AJAX requests and reloads JAXB viewmodels so any detached entities are re-fetched
+            IsisWicketAjaxRequestListenerUtil.setRootRequestMapper(this, commonContext);
         }
 
     }

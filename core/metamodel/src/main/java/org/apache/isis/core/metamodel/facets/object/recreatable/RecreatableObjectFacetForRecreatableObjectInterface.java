@@ -18,11 +18,18 @@
  */
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.ViewModel;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class RecreatableObjectFacetForRecreatableObjectInterface extends RecreatableObjectFacetAbstract {
+import lombok.NonNull;
+
+public class RecreatableObjectFacetForRecreatableObjectInterface
+extends RecreatableObjectFacetAbstract {
 
     public RecreatableObjectFacetForRecreatableObjectInterface(
             final FacetHolder holder,
@@ -31,14 +38,14 @@ public class RecreatableObjectFacetForRecreatableObjectInterface extends Recreat
     }
 
     @Override
-    protected void doInitialize(Object pojo, String memento) {
+    protected void doInitialize(final Object pojo, final @NonNull Optional<Bookmark> bookmark) {
         final ViewModel viewModel = (ViewModel) pojo;
-        viewModel.viewModelInit(memento);
+        viewModel.viewModelInit(bookmark.map(Bookmark::getIdentifier).orElse(null));
     }
 
     @Override
-    public String memento(Object pojo) {
-        final ViewModel viewModel = (ViewModel) pojo;
-        return viewModel.viewModelMemento();
+    public String serialize(final ManagedObject viewModel) {
+        final ViewModel viewModelPojo = (ViewModel) viewModel.getPojo();
+        return viewModelPojo.viewModelMemento();
     }
 }

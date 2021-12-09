@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 
 import lombok.NonNull;
@@ -84,13 +85,13 @@ extends ModelAbstract<ManagedObject> {
         super.setObject(adapter);
 
         if(_Collections.isCollectionOrArrayOrCanType(adapter.getPojo().getClass())) {
-            setObjectCollection(adapter);
+            setObjectCollection((PackedManagedObject)adapter);
         } else {
             memento = super.getMementoService().mementoForObject(adapter);
         }
     }
 
-    public void setObjectCollection(final ManagedObject adapter) {
+    public void setObjectCollection(final PackedManagedObject adapter) {
 
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
             super.setObject(null);

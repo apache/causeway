@@ -27,11 +27,11 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.binding._BindableAbstract;
 import org.apache.isis.commons.internal.binding._Bindables;
 import org.apache.isis.commons.internal.binding._Observables;
 import org.apache.isis.commons.internal.binding._Observables.LazyObservable;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -47,7 +47,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 import org.apache.isis.core.metamodel.interactions.managed.MultiselectChoices;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
 import lombok.AccessLevel;
@@ -74,13 +74,14 @@ implements MultiselectChoices {
             final Can<ManagedObject> args,
             final ManagedObject actionResult) {
 
-        val objectManager = managedAction.getMetaModel().getMetaModelContext().getObjectManager();
-        return new DataTableModel(managedAction, managedAction.getWhere(), ()->
-            ManagedObjects.isNullOrUnspecifiedOrEmpty(actionResult)
-                ? Can.empty()
-                : _NullSafe.streamAutodetect(actionResult.getPojo())
-                        .map(objectManager::adapt)
-                        .collect(Can.toCan()));
+        if(actionResult==null) {
+            new DataTableModel(managedAction, managedAction.getWhere(), Can::empty);
+        }
+        if(!(actionResult instanceof PackedManagedObject)) {
+            throw _Exceptions.unexpectedCodeReach();
+        }
+        return new DataTableModel(managedAction, managedAction.getWhere(),
+                ()->((PackedManagedObject)actionResult).unpack());
     }
 
     // -- CONSTRUCTION

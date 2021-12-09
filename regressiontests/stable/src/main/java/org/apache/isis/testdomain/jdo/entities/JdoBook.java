@@ -169,7 +169,7 @@ implements IBook {
         this.publisher = publisher;
 
         _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-            _Debug.log(10, "new JdoBook instance %s", this);
+            _Debug.log("new JdoBook instance %s", this);
         });
 
     }

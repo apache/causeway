@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived;
 
+import java.util.Optional;
+
 import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,6 +27,8 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -36,6 +40,7 @@ import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServi
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacetAbstract;
 
+@SuppressWarnings("unused")
 public class NotInServiceMenuFacetFromDomainServiceFacetFactoryTest
 extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -46,79 +51,43 @@ extends AbstractFacetFactoryJUnit4TestCase {
         facetFactory = new NotInServiceMenuFacetFromDomainServiceFacetFactory(metaModelContext);
     }
 
-    //TODO[2142] NatureOfService.VIEW_CONTRIBUTIONS_ONLY was deprecated, remove ?
-    //    @Test
-    //    public void whenContributions() throws Exception {
-    //
-    //        // given
-    //        @DomainService(nature = NatureOfService.VIEW_CONTRIBUTIONS_ONLY)
-    //        class CustomerService {
-    //
-    //            public String name() {
-    //                return "Joe";
-    //            }
-    //        }
-    //
-    //        context.checking(new Expectations() {{
-    //            allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
-    //            will(returnValue(mockObjSpec));
-    //
-    //            allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-    //            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW_CONTRIBUTIONS_ONLY) {
-    //            }));
-    //        }});
-    //
-    //        expectNoMethodsRemoved();
-    //
-    //        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
-    //
-    //        // when
-    //        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
-    //
-    //        // then
-    //        final Facet facet = facetedMethod.getFacet(NotInServiceMenuFacet.class);
-    //        assertThat(facet, is(not(nullValue())));
-    //        assertThat(facet instanceof NotInServiceMenuFacetDerivedFromDomainServiceFacet, is(true));
-    //        final NotInServiceMenuFacetDerivedFromDomainServiceFacet facetDerivedFromDomainServiceFacet = (NotInServiceMenuFacetDerivedFromDomainServiceFacet) facet;
-    //        assertThat(facetDerivedFromDomainServiceFacet.getNatureOfService(), equalTo(NatureOfService.VIEW_CONTRIBUTIONS_ONLY));
-    //    }
+    @Test
+    public void whenRest() throws Exception {
 
-//    @Test
-//    public void whenDomain() throws Exception {
-//
-//        // given
-//        @DomainService(nature = NatureOfService.DOMAIN)
-//        class CustomerService {
-//
-//            public String name() {
-//                return "Joe";
-//            }
-//        }
-//
-//        context.checking(new Expectations() {{
-//            allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
-//            will(returnValue(mockObjSpec));
-//
-//            allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-//            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.DOMAIN) {
-//            }));
-//        }});
-//
-//        expectNoMethodsRemoved();
-//
-//        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
-//        facetFactory.setMetaModelContext(super.metaModelContext);
-//
-//        // when
-//        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
-//
-//        // then
-//        final Facet facet = facetedMethod.getFacet(NotInServiceMenuFacet.class);
-//        assertThat(facet, is(not(nullValue())));
-//        assertThat(facet instanceof NotInServiceMenuFacetDerivedFromDomainServiceFacet, is(true));
-//        final NotInServiceMenuFacetDerivedFromDomainServiceFacet facetDerivedFromDomainServiceFacet = (NotInServiceMenuFacetDerivedFromDomainServiceFacet) facet;
-//        assertThat(facetDerivedFromDomainServiceFacet.getNatureOfService(), equalTo(NatureOfService.DOMAIN));
-//    }
+        // given
+        @DomainService(nature = NatureOfService.REST)
+        class CustomerService {
+
+            public String name() {
+                return "Joe";
+            }
+        }
+
+        context.checking(new Expectations() {{
+            allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
+            will(returnValue(mockObjSpec));
+
+            allowing(mockObjSpec).lookupNonFallbackFacet(DomainServiceFacet.class);
+            will(returnValue(Optional.of(new DomainServiceFacetAbstract(mockObjSpec, NatureOfService.REST) {
+            })));
+        }});
+
+        expectNoMethodsRemoved();
+
+        facetedMethod = FacetedMethod
+                .createForAction(metaModelContext, CustomerService.class, "name");
+
+        // when
+        facetFactory.process(ProcessMethodContext
+                .forTesting(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+
+        // then
+        final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
+        assertNotNull(facet);
+        assertThat(facet instanceof NotInServiceMenuFacetFromDomainServiceFacet, is(true));
+        final NotInServiceMenuFacetFromDomainServiceFacet facetDerivedFromDomainServiceFacet = (NotInServiceMenuFacetFromDomainServiceFacet) facet;
+        assertEquals(NatureOfService.REST, facetDerivedFromDomainServiceFacet.getNatureOfService());
+    }
 
     @Test
     public void whenView() throws Exception {
@@ -136,9 +105,9 @@ extends AbstractFacetFactoryJUnit4TestCase {
             allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
             will(returnValue(mockObjSpec));
 
-            allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, NatureOfService.VIEW) {
-            }));
+            allowing(mockObjSpec).lookupNonFallbackFacet(DomainServiceFacet.class);
+            will(returnValue(Optional.of(new DomainServiceFacetAbstract(mockObjSpec, NatureOfService.VIEW) {
+            })));
         }});
 
         expectNoMethodsRemoved();
@@ -151,7 +120,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 .forTesting(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
         // then
-        final Facet facet = facetedMethod.getFacet(NotInServiceMenuFacet.class);
+        final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
         assertThat(facet, is(nullValue()));
     }
 
@@ -171,9 +140,9 @@ extends AbstractFacetFactoryJUnit4TestCase {
             allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
             will(returnValue(mockObjSpec));
 
-            allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, NatureOfService.VIEW) {
-            }));
+            allowing(mockObjSpec).lookupNonFallbackFacet(DomainServiceFacet.class);
+            will(returnValue(Optional.of(new DomainServiceFacetAbstract(mockObjSpec, NatureOfService.VIEW) {
+            })));
         }});
 
         expectNoMethodsRemoved();
@@ -186,7 +155,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 .forTesting(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
         // then
-        final Facet facet = facetedMethod.getFacet(NotInServiceMenuFacet.class);
+        final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
         assertThat(facet, is(nullValue()));
     }
 
@@ -205,8 +174,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
             allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
             will(returnValue(mockObjSpec));
 
-            allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-            will(returnValue(null));
+            allowing(mockObjSpec).lookupNonFallbackFacet(DomainServiceFacet.class);
+            will(returnValue(Optional.empty()));
         }});
 
         expectNoMethodsRemoved();
@@ -219,7 +188,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 .forTesting(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
         // then
-        final Facet facet = facetedMethod.getFacet(NotInServiceMenuFacet.class);
+        final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
         assertThat(facet, is(nullValue()));
     }
 

@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.valuetypes.TemporalSemanticsAdapter;
 @Component
 @Named("isis.val.JavaUtilDateValueSemantics")
 public class JavaUtilDateValueSemantics
-extends TemporalSemanticsAdapter<Date, LocalDateTime>  {
+extends TemporalSemanticsAdapter<java.util.Date, LocalDateTime>  {
 
     @Inject LocalDateTimeValueSemantics localDateTimeValueSemantics;
 

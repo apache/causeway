@@ -46,19 +46,20 @@ extends FacetFactoryAbstract {
         final Class<?> declaringClass = method.getDeclaringClass();
         final ObjectSpecification spec = getSpecificationLoader().loadSpecification(declaringClass);
 
-        final DomainServiceFacet domainServiceFacet = spec.getFacet(DomainServiceFacet.class);
-        if(domainServiceFacet == null
-                || domainServiceFacet.getPrecedence().isFallback()) {
+        if(spec == null) {
             return;
         }
 
-        final NatureOfService natureOfService = domainServiceFacet.getNatureOfService();
-        if(natureOfService.isView()) {
-            return;
-        }
+        spec.lookupNonFallbackFacet(DomainServiceFacet.class)
+        .ifPresent(domainServiceFacet->{
+            final NatureOfService natureOfService = domainServiceFacet.getNatureOfService();
+            if(natureOfService.isView()) {
+                return;
+            }
+            final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
+            FacetUtil.addFacet(new NotInServiceMenuFacetFromDomainServiceFacet(natureOfService, facetHolder));
+        });
 
-        final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new NotInServiceMenuFacetFromDomainServiceFacet(natureOfService, facetHolder));
     }
 
 }

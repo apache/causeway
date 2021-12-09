@@ -31,6 +31,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.URL;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -59,6 +60,7 @@ import javax.swing.tree.TreeCellRenderer;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.debug.xray.XrayModel.HasIdAndLabel;
 import org.apache.isis.commons.internal.debug.xray.XrayModel.Stickiness;
 
@@ -177,7 +179,9 @@ public class XrayUi extends JFrame {
             }
         });
 
-        tree.setCellRenderer(new XrayTreeCellRenderer((DefaultTreeCellRenderer) tree.getCellRenderer()));
+        tree.setCellRenderer(new XrayTreeCellRenderer(
+                (DefaultTreeCellRenderer) tree.getCellRenderer(),
+                iconCache));
 
         tree.addMouseListener(new MouseListener() {
 
@@ -364,10 +368,13 @@ public class XrayUi extends JFrame {
 
     // -- CUSTOM TREE NODE ICONS
 
+    private final Map<String, Optional<ImageIcon>> iconCache = _Maps.newConcurrentHashMap();
+
     @RequiredArgsConstructor
     class XrayTreeCellRenderer implements TreeCellRenderer {
 
         final DefaultTreeCellRenderer delegate;
+        final Map<String, Optional<ImageIcon>> iconCache;
 
         @Override
         public Component getTreeCellRendererComponent(
@@ -385,10 +392,12 @@ public class XrayUi extends JFrame {
             Object o = ((DefaultMutableTreeNode) value).getUserObject();
             if (o instanceof XrayDataModel) {
                 XrayDataModel dataModel = (XrayDataModel) o;
-                URL imageUrl = getClass().getResource(dataModel.getIconResource());
-                if (imageUrl != null) {
-                    label.setIcon(new ImageIcon(imageUrl));
-                }
+                val imageIcon = iconCache.computeIfAbsent(dataModel.getIconResource(), iconResource->{
+                    URL imageUrl = getClass().getResource(dataModel.getIconResource());
+                    return Optional.ofNullable(imageUrl)
+                            .map(ImageIcon::new);
+                });
+                imageIcon.ifPresent(label::setIcon);
                 label.setText(dataModel.getLabel());
             }
             return label;

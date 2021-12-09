@@ -198,9 +198,9 @@ final class ObjectLoader_builtinHandlers {
             final Object viewModelPojo;
             if(viewModelFacet.getRecreationMechanism().isInitializes()) {
                 viewModelPojo = this.instantiateAndInjectServices(spec);
-                viewModelFacet.initialize(viewModelPojo, bookmark.getIdentifier());
+                viewModelFacet.initialize(viewModelPojo, bookmark);
             } else {
-                viewModelPojo = viewModelFacet.instantiate(spec.getCorrespondingClass(), bookmark.getIdentifier());
+                viewModelPojo = viewModelFacet.instantiate(spec.getCorrespondingClass(), bookmark);
             }
 
             return ManagedObject.bookmarked(spec, viewModelPojo, bookmark);
@@ -282,7 +282,7 @@ final class ObjectLoader_builtinHandlers {
 
             // unknown object load request
 
-            throw _Exceptions.illegalArgument(
+             throw _Exceptions.illegalArgument(
                     "None of the registered ObjectLoaders knows how to load this object. (loader: %s loading %s)",
                         this.getClass().getName(), objectLoadRequest);
 

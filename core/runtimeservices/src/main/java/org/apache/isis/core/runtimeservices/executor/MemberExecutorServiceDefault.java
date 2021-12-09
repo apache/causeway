@@ -19,7 +19,6 @@
 package org.apache.isis.core.runtimeservices.executor;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
 import java.util.Optional;
 
 import javax.annotation.Priority;
@@ -63,6 +62,7 @@ import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
+import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
@@ -304,28 +304,32 @@ implements MemberExecutorService {
             return resultAdapter;
         }
 
-        final Object result = resultAdapter.getPojo();
-
-        if(result instanceof Collection || result.getClass().isArray()) {
-
-            val requiredContainerType = method.getReturnType();
-
-            val autofittedObjectContainer = ManagedObjects.VisibilityUtil
-                    .visiblePojosAutofit(resultAdapter, interactionInitiatedBy, requiredContainerType);
-
-            if (autofittedObjectContainer != null) {
-                return getObjectManager().adapt(autofittedObjectContainer);
-            }
-
-            // would be null if unable to take a copy (unrecognized return type)
-            // fallback to returning the original adapter, without filtering for visibility
-
+        if(resultAdapter instanceof PackedManagedObject) {
             return resultAdapter;
+        }
 
-        } else {
+//        final Object result = resultAdapter.getPojo();
+//
+//        if(result instanceof Collection || result.getClass().isArray()) {
+//
+//            val requiredContainerType = method.getReturnType();
+//
+//            val autofittedObjectContainer = ManagedObjects.VisibilityUtil
+//                    .visiblePojosAutofit(resultAdapter, interactionInitiatedBy, requiredContainerType);
+//
+//            if (autofittedObjectContainer != null) {
+//                return getObjectManager().adapt(autofittedObjectContainer);
+//            }
+//
+//            // would be null if unable to take a copy (unrecognized return type)
+//            // fallback to returning the original adapter, without filtering for visibility
+//
+//            return resultAdapter;
+//
+//        } else {
             boolean visible = ManagedObjects.VisibilityUtil.isVisible(resultAdapter, interactionInitiatedBy);
             return visible ? resultAdapter : null;
-        }
+//        }
     }
 
 

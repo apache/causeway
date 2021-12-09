@@ -21,7 +21,7 @@ package org.apache.isis.core.runtimeservices.session;
 import java.util.Stack;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
-import org.apache.isis.commons.internal.debug._Debug;
+import org.apache.isis.commons.internal.debug._XrayEvent;
 import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
 import org.apache.isis.commons.internal.debug.xray.XrayModel.ThreadMemento;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
@@ -43,7 +43,7 @@ final class _Xray {
         val interactionId = afterEnter.peek().getInteraction().getInteractionId();
         val executionContext = afterEnter.peek().getInteractionContext();
 
-        _Debug.log(10, "open interaction %s", interactionId);
+        _XrayEvent.interactionOpen("open interaction %s", interactionId);
 
         val threadId = ThreadMemento.fromCurrentThread();
 
@@ -99,7 +99,8 @@ final class _Xray {
         val interactionId = beforeClose.peek().getInteraction().getInteractionId();
         val sequenceId = XrayUtil.sequenceId(interactionId);
 
-        _Debug.log(10, "close interaction %s", interactionId);
+
+        _XrayEvent.interactionClose("close interaction %s", interactionId);
 
         XrayUi.updateModel(model->{
 

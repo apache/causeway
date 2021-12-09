@@ -18,16 +18,19 @@
  */
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
-import java.util.UUID;
+import java.util.Optional;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.Getter;
+import lombok.NonNull;
 
 public class RecreatableObjectFacetForXmlRootElementAnnotation
 extends RecreatableObjectFacetAbstract {
@@ -40,25 +43,25 @@ extends RecreatableObjectFacetAbstract {
     }
 
     @Override
-    protected Object doInstantiate(final Class<?> viewModelClass, final String mementoStr) {
-        final String xmlStr = getUrlEncodingService().decodeToString(mementoStr);
+    protected Object doInstantiate(final Class<?> viewModelClass, final @NonNull Optional<Bookmark> bookmark) {
+        final String xmlStr = getUrlEncodingService().decodeToString(bookmark.map(Bookmark::getIdentifier).orElse(null));
         final Object viewModelPojo = getJaxbService().fromXml(viewModelClass, xmlStr);
         return viewModelPojo;
     }
 
     @Override
-    public String memento(final Object vmPojo) {
-        final String xml = getJaxbService().toXml(vmPojo);
+    protected String serialize(final ManagedObject managedObject) {
+        final String xml = getJaxbService().toXml(managedObject.getPojo());
         final String encoded = getUrlEncodingService().encodeString(xml);
-        //FIXME[ISIS-2903] gets called about 4 times per same object, why?
         _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-            _Debug.log(100, "%s => %s",
-                    super.getMetaModelContext().getInteractionProvider().getInteractionId()
-                    .map(UUID::toString)
-                    .orElse("no-interaction"),
-                    encoded);
+            _Debug.log("[JAXB] serializing viewmodel %s", managedObject.getSpecification().getLogicalTypeName());
         });
         return encoded;
+    }
+
+    @Override
+    public boolean containsEntities() {
+        return true; //XXX future work might improve that for performance optimizations, such that we need to actually check at facet creation
     }
 
     // -- DEPENDENCIES

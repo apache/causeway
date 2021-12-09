@@ -21,7 +21,9 @@ package org.apache.isis.core.metamodel.facets.object.viewmodel;
 import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
@@ -64,15 +66,15 @@ public interface ViewModelFacet extends Facet {
 
     default Object createViewModelPojo(
             final ObjectSpecification spec,
-            final String mementoStr,
-            final Function<ObjectSpecification, Object> factory) {
+            final Bookmark bookmark,
+            final Function<ObjectSpecification, Object> viewModelPojoFactory) {
 
         final Object viewModelPojo;
         if(getRecreationMechanism().isInitializes()) {
-            viewModelPojo = factory.apply(spec);
-            initialize(viewModelPojo, mementoStr);
+            viewModelPojo = viewModelPojoFactory.apply(spec);
+            initialize(viewModelPojo, bookmark);
         } else {
-            viewModelPojo = instantiate(spec.getCorrespondingClass(), mementoStr);
+            viewModelPojo = instantiate(spec.getCorrespondingClass(), bookmark);
         }
         return viewModelPojo;
     }
@@ -81,7 +83,8 @@ public interface ViewModelFacet extends Facet {
      * Whether this implementation supports the recreation of objects by {@link RecreationMechanism#INSTANTIATES instantiating} (and implicitly also initializing) a new pojo, or by {@link RecreationMechanism#INITIALIZES initializing} a pojo created and passed to it by the framework.
      *
      * <p>
-     *     Determines whether the framework then calls {@link #instantiate(Class, String)} or if it calls {@link #initialize(Object, String)}.
+     *     Determines whether the framework then calls
+     *     {@link #instantiate(Class, Bookmark)} or if it calls {@link #initialize(Object, Bookmark)}.
      * </p>
      */
     RecreationMechanism getRecreationMechanism();
@@ -89,16 +92,23 @@ public interface ViewModelFacet extends Facet {
     /**
      * Will be called if {@link #getRecreationMechanism()} is {@link RecreationMechanism#INITIALIZES}.
      */
-    void initialize(Object viewModelPojo, String viewModelMemento);
+    void initialize(Object viewModelPojo, Bookmark bookmark);
 
     /**
      * Will be called only if {@link #getRecreationMechanism()} is {@link RecreationMechanism#INSTANTIATES}.
      */
-    Object instantiate(final Class<?> viewModelClass, String viewModelMemento);
+    Object instantiate(final Class<?> viewModelClass, Bookmark bookmark);
 
     /**
-     * Obtain a memento of the pojo, which can then be used to reinstantiate (either by {@link #instantiate(Class, String)} or {@link #initialize(Object, String)}) subsequently.
+     * Obtain a memento of the pojo, which can then be used to reinstantiate
+     * (either by {@link #instantiate(Class, Bookmark)} or {@link #initialize(Object, Bookmark)}) subsequently.
      */
-    String memento(Object viewModelPojo);
+    Bookmark serializeToBookmark(ManagedObject managedObject);
+
+    /**
+     * Governs whether on start of any AJAX request, the viewmodel needs to reload,
+     * so any contained entities end up attached.
+     */
+    default boolean containsEntities() { return false; }
 
 }

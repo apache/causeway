@@ -19,8 +19,12 @@
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
@@ -29,7 +33,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
+import lombok.NonNull;
 import lombok.val;
 
 public abstract class RecreatableObjectFacetAbstract
@@ -68,14 +74,15 @@ implements ViewModelFacet {
     }
 
     @Override
-    public final Object instantiate(final Class<?> viewModelClass, final String mementoStr) {
+    public final Object instantiate(final Class<?> viewModelClass, final Bookmark bookmark) {
         if (getRecreationMechanism() == RecreationMechanism.INITIALIZES) {
             throw new IllegalStateException("This view model instantiates rather than initializes");
         }
 
-        val viewModelPojo = _Strings.isNullOrEmpty(mementoStr)
+        val viewModelPojo = bookmark==null
+                    || _Strings.isNullOrEmpty(bookmark.getIdentifier())
                 ? ClassExtensions.newInstance(viewModelClass)
-                : doInstantiate(viewModelClass, mementoStr);
+                : doInstantiate(viewModelClass, Optional.ofNullable(bookmark));
 
         getServiceInjector().injectServicesInto(viewModelPojo);
         invokePostConstructMethod(viewModelPojo);
@@ -87,16 +94,16 @@ implements ViewModelFacet {
      * {@link org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet.RecreationMechanism#INSTANTIATES}
      * (ignored otherwise).
      */
-    protected Object doInstantiate(final Class<?> viewModelClass, final String mementoStr) {
+    protected Object doInstantiate(final Class<?> viewModelClass, final Optional<Bookmark> bookmark) {
         throw new IllegalStateException("doInstantiate() must be overridden if RecreationMechanism is INSTANTIATES");
     }
 
     @Override
-    public final void initialize(final Object viewModelPojo, final String mementoStr) {
+    public final void initialize(final Object viewModelPojo, final @Nullable Bookmark bookmark) {
         if (getRecreationMechanism() == RecreationMechanism.INSTANTIATES) {
             throw new IllegalStateException("This view model instantiates rather than initializes");
         }
-        doInitialize(viewModelPojo, mementoStr);
+        doInitialize(viewModelPojo, Optional.ofNullable(bookmark));
         getServiceInjector().injectServicesInto(viewModelPojo);
         invokePostConstructMethod(viewModelPojo);
     }
@@ -106,7 +113,7 @@ implements ViewModelFacet {
      * {@link org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet.RecreationMechanism#INITIALIZES}
      * (ignored otherwise).
      */
-    protected void doInitialize(final Object viewModelPojo, final String mementoStr) {
+    protected void doInitialize(final Object viewModelPojo, final Optional<Bookmark> bookmark) {
         throw new IllegalStateException("doInitialize() must be overridden if RecreationMechanism is INITIALIZE");
     }
 
@@ -116,6 +123,15 @@ implements ViewModelFacet {
             MethodExtensions.invoke(postConstructMethod, viewModel);
         }
     }
+
+    @Override
+    public final Bookmark serializeToBookmark(@NonNull final ManagedObject managedObject) {
+        return Bookmark.forLogicalTypeAndIdentifier(
+                managedObject.getSpecification().getLogicalType(),
+                serialize(managedObject));
+    }
+
+    protected abstract @NonNull String serialize(@NonNull ManagedObject managedObject);
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {

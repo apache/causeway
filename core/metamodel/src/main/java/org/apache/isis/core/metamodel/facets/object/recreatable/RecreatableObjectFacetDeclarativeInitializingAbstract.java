@@ -18,6 +18,9 @@
  */
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
+import java.util.Optional;
+
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.commons.internal.memento._Mementos;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
@@ -29,6 +32,7 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 
+import lombok.NonNull;
 import lombok.val;
 
 public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract
@@ -49,9 +53,9 @@ extends RecreatableObjectFacetAbstract {
     @Override
     protected void doInitialize(
             final Object viewModelPojo,
-            final String mementoStr) {
+            final @NonNull Optional<Bookmark> bookmark) {
 
-        val memento = parseMemento(mementoStr);
+        val memento = parseMemento(bookmark.map(Bookmark::getIdentifier).orElse(null));
         val mementoKeys = memento.keySet();
 
         if(mementoKeys.isEmpty()) {
@@ -80,11 +84,9 @@ extends RecreatableObjectFacetAbstract {
     }
 
     @Override
-    public String memento(final Object viewModelPojo) {
+    public String serialize(final ManagedObject viewModel) {
 
         final _Mementos.Memento memento = newMemento();
-
-        val objectManager = super.getObjectManager();
 
         /*
          * ManagedObject that holds the ObjectSpecification used for
@@ -93,8 +95,7 @@ extends RecreatableObjectFacetAbstract {
          * Does _not_ perform dependency injection on the domain object. Also bypasses
          * caching (if any), that is each call to this method creates a new instance.
          */
-        val viewModelAdapter = objectManager.adapt(viewModelPojo);
-        val spec = viewModelAdapter.getSpecification();
+        val spec = viewModel.getSpecification();
 
         spec.streamProperties(MixedIn.EXCLUDED)
         // ignore read-only
@@ -103,7 +104,7 @@ extends RecreatableObjectFacetAbstract {
         .filter(property->!property.isNotPersisted())
         .forEach(property->{
             final ManagedObject propertyValue =
-                    property.get(viewModelAdapter, InteractionInitiatedBy.FRAMEWORK);
+                    property.get(viewModel, InteractionInitiatedBy.FRAMEWORK);
             if(propertyValue != null
                     && propertyValue.getPojo()!=null) {
                 memento.put(property.getId(), propertyValue.getPojo());

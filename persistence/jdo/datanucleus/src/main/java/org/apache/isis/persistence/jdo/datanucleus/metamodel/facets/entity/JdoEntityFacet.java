@@ -117,7 +117,7 @@ implements EntityFacet {
         if(primaryKey==null) {
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log(10, "detached entity detected %s", pojo);
+                _Debug.log("detached entity detected %s", pojo);
             });
 
             throw _Exceptions.illegalArgument(

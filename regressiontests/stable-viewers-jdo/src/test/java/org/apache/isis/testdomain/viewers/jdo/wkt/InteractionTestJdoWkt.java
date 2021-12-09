@@ -20,13 +20,16 @@ package org.apache.isis.testdomain.viewers.jdo.wkt;
 
 import javax.inject.Inject;
 
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import org.apache.isis.commons.internal.debug._Debug;
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.RegressionTestAbstract;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
@@ -36,10 +39,12 @@ import org.apache.isis.testdomain.conf.Configuration_usingWicket.WicketTesterFac
 import org.apache.isis.testdomain.jdo.JdoTestFixtures;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.util.dto.BookDto;
+import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 
-import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.FAVORITE_BOOK_ENTITY_LINK;
-import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.FAVORITE_BOOK_ENTITY_LINK_TITLE;
-import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.FAVORITE_BOOK_SCALAR_NAME;
+import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.INLINE_PROMPT_FORM_FIELD;
+import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.INLINE_PROMPT_FORM_OK;
+import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.INVENTORY_NAME_PROPERTY_EDIT_INLINE_PROMPT_FORM;
+import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.INVENTORY_NAME_PROPERTY_EDIT_LINK;
 import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION;
 import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION_TITLE;
 
@@ -48,7 +53,9 @@ import lombok.val;
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,
-                Configuration_usingWicket.class        },
+                Configuration_usingWicket.class,
+                //XrayEnable.class
+                },
         properties = {
         })
 @TestPropertySource({
@@ -65,7 +72,7 @@ class InteractionTestJdoWkt extends RegressionTestAbstract {
     @BeforeEach
     void setUp() throws InterruptedException {
 
-        wktTester = wicketTesterFactory.createTester();
+        wktTester = wicketTesterFactory.createTester(JdoBook::fromDto);
 
         run(()->{
             testFixtures.setUp3Books();
@@ -75,6 +82,7 @@ class InteractionTestJdoWkt extends RegressionTestAbstract {
     @AfterEach
     void cleanUp() {
         wktTester.destroy();
+        XrayUi.waitForShutdown();
     }
 
     @Test
@@ -95,7 +103,7 @@ class InteractionTestJdoWkt extends RegressionTestAbstract {
 
             //wktTester.dumpComponentTree(comp->true);
 
-            assertFavoriteBookIsPopulated();
+            wktTester.assertFavoriteBookIs(BookDto.sample());
 
         });
 
@@ -110,38 +118,66 @@ class InteractionTestJdoWkt extends RegressionTestAbstract {
 
         //System.err.printf("pageParameters %s%n", pageParameters);
 
+        // open homepage for TestHomePage
         run(()->{
             wktTester.startEntityPage(pageParameters);
 
             wktTester.assertHeaderBrandText("Smoke Tests");
             wktTester.assertPageTitle("Hello, __system");
-
             wktTester.assertLabel(OPEN_SAMPLE_ACTION_TITLE, "Open Sample Page");
-
-            // click action "Open Sample Page" and render resulting Viewmodel
-            if(false){ //XXX broken
-                wktTester.clickLink(OPEN_SAMPLE_ACTION);
-                wktTester.assertHeaderBrandText("Smoke Tests");
-                wktTester.assertPageTitle("JdoInventoryJaxbVm; Bookstore; 3 products");
-
-                assertFavoriteBookIsPopulated();
-            }
-
         });
 
-    }
+        // click action "Open Sample Page" and render resulting JdoInventoryJaxbVm
+        run(()->{
+            wktTester.clickLink(OPEN_SAMPLE_ACTION);
 
-    //TODO simulate change of a String property -> should yield a new Title and serialized URL link
-    //TODO simulate interaction with choice provider, where entries are entities -> should be attached, eg. test whether we can generate a title for these
+            wktTester.assertHeaderBrandText("Smoke Tests");
+            wktTester.assertPageTitle("JdoInventoryJaxbVm; Bookstore; 3 products");
+            wktTester.assertFavoriteBookIs(BookDto.sample());
+            wktTester.assertInventoryNameIs("Bookstore");
+        });
+
+        // simulate click on editable property -> should bring up the corresponding inline edit dialog
+        run(()->{
+            wktTester.assertBehavior(INVENTORY_NAME_PROPERTY_EDIT_LINK, AjaxEventBehavior.class);
+            wktTester.executeAjaxEvent(INVENTORY_NAME_PROPERTY_EDIT_LINK, "click");
+            wktTester.assertComponent(INVENTORY_NAME_PROPERTY_EDIT_INLINE_PROMPT_FORM, PromptFormAbstract.class);
+
+            wktTester.assertHeaderBrandText("Smoke Tests");
+            wktTester.assertPageTitle("JdoInventoryJaxbVm; Bookstore; 3 products");
+            wktTester.assertFavoriteBookIs(BookDto.sample());
+            wktTester.assertInventoryNameIs("Bookstore");
+        });
+
+        // simulate change of a String property Name from 'Bookstore' -> 'Bookstore2'
+        run(()->{
+            val form = wktTester.newFormTester(INVENTORY_NAME_PROPERTY_EDIT_INLINE_PROMPT_FORM);
+            form.setValue(INLINE_PROMPT_FORM_FIELD, "Bookstore2");
+            form.submit();
+        });
+
+        // simulate click on form OK button -> expected to trigger the framework's property change execution
+        run(()->{
+            wktTester.assertComponent(INLINE_PROMPT_FORM_OK, IndicatingAjaxButton.class);
+            wktTester.executeAjaxEvent(INLINE_PROMPT_FORM_OK, "click");
+        });
+
+        _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+            _Debug.log("[TEST] form submitted");
+        });
+
+        // ... should yield a new Title containing 'Bookstore2'
+        run(()->{
+            wktTester.assertHeaderBrandText("Smoke Tests");
+            wktTester.assertPageTitle("JdoInventoryJaxbVm; Bookstore2; 3 products");
+            wktTester.assertFavoriteBookIs(BookDto.sample());
+            wktTester.assertInventoryNameIs("Bookstore2");
+        });
+
+        //TODO simulate interaction with choice provider, where entries are entities -> should be attached, eg. test whether we can generate a title for these
+
+    }
 
     // -- HELPER
-
-    private void assertFavoriteBookIsPopulated() {
-        wktTester.assertLabel(FAVORITE_BOOK_SCALAR_NAME, "Favorite Book");
-        wktTester.assertComponent(FAVORITE_BOOK_ENTITY_LINK, BookmarkablePageLink.class);
-
-        val expectedLinkTitle = JdoBook.fromDto(BookDto.sample()).title();
-        wktTester.assertLabel(FAVORITE_BOOK_ENTITY_LINK_TITLE, expectedLinkTitle);
-    }
 
 }

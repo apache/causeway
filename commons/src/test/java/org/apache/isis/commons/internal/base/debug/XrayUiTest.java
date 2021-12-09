@@ -57,6 +57,7 @@ class XrayUiTest {
             .forEach(this::log);
         }
 
+        @SuppressWarnings("deprecation")
         private void log(final String x) {
             _Debug.log(x);
         }

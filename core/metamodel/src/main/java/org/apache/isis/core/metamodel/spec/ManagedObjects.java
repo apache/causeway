@@ -30,7 +30,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
@@ -83,10 +82,13 @@ public final class ManagedObjects {
 
     /** is null or has neither an ObjectSpecification and a value (pojo) */
     public static boolean isNullOrUnspecifiedOrEmpty(final @Nullable ManagedObject adapter) {
-        if(adapter==null || adapter==ManagedObject.unspecified()) {
+        if(adapter==null
+                || adapter==ManagedObject.unspecified()) {
             return true;
         }
-        return adapter.getPojo()==null;
+        return adapter instanceof PackedManagedObject
+                ? ((PackedManagedObject)adapter).unpack().isEmpty()
+                : adapter.getPojo()==null;
     }
 
     /** whether has at least a spec */
@@ -177,20 +179,23 @@ public final class ManagedObjects {
     public static ManagedObject pack(
             final ObjectSpecification elementSpec,
             final Can<ManagedObject> nonScalar) {
-        return ManagedObject.of(elementSpec,
-                nonScalar.stream()
-                .map(UnwrapUtil::single)
-                .collect(Collectors.toList()));
+
+        return PackedManagedObject.pack(elementSpec, nonScalar);
     }
 
     public static Can<ManagedObject> unpack(
-            final ObjectSpecification elementSpec,
+            final ObjectSpecification elementSpec, // no longer req.
             final ManagedObject nonScalar) {
+
+        if(nonScalar!=null
+                && !(nonScalar instanceof PackedManagedObject)) {
+            throw _Exceptions.illegalArgument("nonScalar must be in packed form; got %s",
+                    nonScalar.getClass().getName());
+        }
+
         return isNullOrUnspecifiedOrEmpty(nonScalar)
                 ? Can.empty()
-                : _NullSafe.streamAutodetect(nonScalar.getPojo())
-                    .map(pojo->ManagedObject.of(elementSpec, pojo))
-                    .collect(Can.toCan());
+                : ((PackedManagedObject)nonScalar).unpack();
     }
 
     // -- COMPARE UTILITIES
@@ -330,14 +335,14 @@ public final class ManagedObjects {
     /**
      * used eg. to adapt the result of supporting methods, that return choice pojos
      */
-    public static Can<ManagedObject> adaptMultipleOfTypeThenAttachThenFilterByVisibility(
+    public static Can<ManagedObject> adaptMultipleOfTypeThenRefetchThenFilterByVisibility(
             final @NonNull  ObjectSpecification elementSpec,
             final @Nullable Object collectionOrArray,
             final @NonNull  InteractionInitiatedBy interactionInitiatedBy) {
 
         return _NullSafe.streamAutodetect(collectionOrArray)
         .map(pojo->ManagedObject.of(elementSpec, pojo)) // pojo is nullable here
-        .peek(ManagedObjects.EntityUtil::reattach)
+        .peek(ManagedObjects.EntityUtil::refetch)
         .filter(ManagedObjects.VisibilityUtil.filterOn(interactionInitiatedBy))
         .collect(Can.toCan());
     }
@@ -428,6 +433,13 @@ public final class ManagedObjects {
         public void replacePojo(final UnaryOperator<Object> replacer) {
         }
 
+        @Override
+        public void replaceBookmark(final UnaryOperator<Bookmark> replacer) {
+        }
+
+        @Override
+        public void reloadViewmodelFromMemoizedBookmark() {
+        }
     };
 
     // -- TITLE UTILITIES
@@ -618,7 +630,7 @@ public final class ManagedObjects {
             return managedObject;
         }
 
-        public static void reattach(final @Nullable ManagedObject managedObject) {
+        public static void refetch(final @Nullable ManagedObject managedObject) {
             if(isNullOrUnspecifiedOrEmpty(managedObject)) {
                 return;
             }

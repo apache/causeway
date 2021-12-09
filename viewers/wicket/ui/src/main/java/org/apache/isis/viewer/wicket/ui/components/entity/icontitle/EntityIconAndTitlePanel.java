@@ -152,7 +152,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
         if(targetAdapter != null) {
 
-            EntityUtil.reattach(targetAdapter);
+            EntityUtil.refetch(targetAdapter);
 
             val redirectToAdapter = entityModel.getTypeOfSpecification().lookupFacet(ProjectionFacet.class)
                     .map(projectionFacet->projectionFacet.projected(targetAdapter))

@@ -63,7 +63,7 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
     IsisModuleValAsciidocPersistenceJdoDn5.class,
     IsisModuleValMarkdownPersistenceJdoDn5.class,
 
-    //XrayEnable.class // for debugging only
+    // XrayEnable.class // for debugging only
 })
 //@Log4j2
 public class DemoAppWicketJdo extends SpringBootServletInitializer {
@@ -83,7 +83,5 @@ public class DemoAppWicketJdo extends SpringBootServletInitializer {
         SpringApplication.run(new Class[] { DemoAppWicketJdo.class }, args);
 
     }
-
-
 
 }
