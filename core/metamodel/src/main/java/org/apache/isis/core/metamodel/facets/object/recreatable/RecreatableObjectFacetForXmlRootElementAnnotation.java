@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.jaxb.JaxbService;
@@ -43,7 +42,6 @@ extends RecreatableObjectFacetAbstract {
         super(holder, RecreationMechanism.INSTANTIATES, postConstructMethodCache, Precedence.HIGH);
     }
 
-
     @Override
     protected Object doInstantiate(final Class<?> viewModelClass, final @NonNull Optional<Bookmark> bookmark) {
         final String xmlStr = getUrlEncodingService().decodeToString(bookmark.map(Bookmark::getIdentifier).orElse(null));
@@ -55,13 +53,8 @@ extends RecreatableObjectFacetAbstract {
     protected String serialize(final ManagedObject managedObject) {
         final String xml = getJaxbService().toXml(managedObject.getPojo());
         final String encoded = getUrlEncodingService().encodeString(xml);
-        //FIXME[ISIS-2903] gets called about 4 times per same object, why?
         _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-            _Debug.log("%s => %s",
-                    super.getMetaModelContext().getInteractionProvider().getInteractionId()
-                    .map(UUID::toString)
-                    .orElse("no-interaction"),
-                    encoded);
+            _Debug.log("[JAXB] serializing viewmodel %s", managedObject.getSpecification().getLogicalTypeName());
         });
         return encoded;
     }

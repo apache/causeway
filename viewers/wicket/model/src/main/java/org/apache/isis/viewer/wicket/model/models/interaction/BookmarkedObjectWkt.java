@@ -145,11 +145,6 @@ extends ModelAbstract<ManagedObject> {
     public final ManagedObject getObjectAndRefetch() {
         //EntityUtil.assertAttachedWhenEntity()//guard
         val entityOrViewmodel = super.getObject();
-
-        if(_Experiments.appliesTo(entityOrViewmodel)) {
-            return _Experiments.refetch(entityOrViewmodel, this::reload);
-        }
-
         return EntityUtil.computeIfDetached(entityOrViewmodel, this::reload);
     }
 

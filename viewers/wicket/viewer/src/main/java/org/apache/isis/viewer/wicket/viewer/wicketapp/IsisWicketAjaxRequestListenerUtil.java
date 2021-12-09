@@ -28,6 +28,7 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.http.WebRequest;
 
 import org.apache.isis.commons.internal.debug._Debug;
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -88,7 +89,9 @@ public final class IsisWicketAjaxRequestListenerUtil {
                 return lirqh;
             }
 
-            _Debug.log("[IRequestHandler] recreate model %s", spec.getCorrespondingClass().getSimpleName());
+            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+                _Debug.log("[IRequestHandler] recreate model %s", spec.getCorrespondingClass().getSimpleName());
+            });
 
             val viewmodel = entityModel.getBookmarkedOwner();
             if(viewmodel.isBookmarkMemoized()) {

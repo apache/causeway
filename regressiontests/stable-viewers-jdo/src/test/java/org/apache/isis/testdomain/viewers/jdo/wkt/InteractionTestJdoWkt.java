@@ -162,7 +162,9 @@ class InteractionTestJdoWkt extends RegressionTestAbstract {
             wktTester.executeAjaxEvent(INLINE_PROMPT_FORM_OK, "click");
         });
 
-        _Debug.log("[TEST] form submitted");
+        _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+            _Debug.log("[TEST] form submitted");
+        });
 
         // ... should yield a new Title containing 'Bookstore2'
         run(()->{

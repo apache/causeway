@@ -32,17 +32,14 @@ import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.objectmanager.identify.ObjectBookmarker.Handler;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
-import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 
 import lombok.SneakyThrows;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 class ObjectBookmarker_builtinHandlers {
 
@@ -81,7 +78,7 @@ class ObjectBookmarker_builtinHandlers {
 
     }
 
-    //@Log4j2
+    @Log4j2
     static class BookmarkForEntities implements Handler {
 
         @Override
@@ -103,33 +100,28 @@ class ObjectBookmarker_builtinHandlers {
                 throw _Exceptions.unrecoverable(msg);
             }
 
-            // special code path (on JDO), when detached entity with its OID not previously memoized
+            // fail early when detached entities are detected
+            // should have been re-fetched at start of this request-cycle
             if(!managedObject.isBookmarkMemoized()
-                    && EntityUtil.getPersistenceStandard(managedObject)
-                        .map(PersistenceStandard::isJdo)
-                        .orElse(false)
+//                    && EntityUtil.getPersistenceStandard(managedObject)
+//                        .map(PersistenceStandard::isJdo)
+//                        .orElse(false)
                     && !entityFacet.getEntityState(entityPojo).isAttached()) {
 
                 _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
                     _Debug.log("detached entity detected %s", entityPojo);
                 });
 
-                throw _Exceptions.illegalArgument(
+                val msg = String.format(
                         "The persistence layer does not recognize given object of type %s, "
                         + "meaning the object has no identifier that associates it with the persistence layer. "
                         + "(most likely, because the object is detached, eg. was not persisted after being new-ed up)",
                         entityPojo.getClass().getName());
 
-//                // fail early, if re-fetch failed
-//                _Assert.assertTrue(
-//                        entityFacet.getEntityState(entityPojo).isAttached(),
-//                        ()->{
-//                            val msg = String.format("failed to re-attach (persist) JDO entity %s, "
-//                                    + "while creating a Bookmark",
-//                                    spec.getLogicalTypeName());
-//                            log.error(msg); // in case exception gets swallowed
-//                            return msg;
-//                        });
+                // in case of the exception getting swallowed, also write a log
+                log.error(msg);
+
+                throw _Exceptions.illegalArgument(msg);
             }
 
             val identifier = entityFacet.identifierFor(spec, entityPojo);
