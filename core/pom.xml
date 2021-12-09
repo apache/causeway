@@ -85,7 +85,7 @@
 		<!-- LIBRARY DEPENDENCIES -->
 		<archunit.version>0.22.0</archunit.version>
 		<asm.version>9.1</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
-		<approvaltests.version>12.3.1</approvaltests.version>
+		<approvaltests.version>12.3.2</approvaltests.version>
 
 		<assertj-guava.version>3.4.0</assertj-guava.version>
 
