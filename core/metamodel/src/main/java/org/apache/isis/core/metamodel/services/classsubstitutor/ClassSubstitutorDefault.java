@@ -56,7 +56,6 @@ public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
     }
 
     private void ignoreApacheIsisInternals() {
-        // can't ignoring this class ... will result in NPEs...
         ignoreClass("org.apache.isis.commons.internal.ioc.spring.BeanAdapterSpring");
         ignoreClass(TreeAdapter.class.getName());
     }
