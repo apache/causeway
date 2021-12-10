@@ -244,7 +244,9 @@ implements FacetHolder {
 
     private ObjectAction createAction(final FacetedMethod facetedMethod) {
         if (facetedMethod.getFeatureType().isAction()) {
-            return ObjectActionDefault.forMethod(facetedMethod);
+            return this.isMixin()
+                    ? ObjectActionDefault.forMixinMain(facetedMethod)
+                    : ObjectActionDefault.forMethod(facetedMethod);
         } else {
             return null;
         }

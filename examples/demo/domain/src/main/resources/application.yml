@@ -33,7 +33,8 @@ isis:
             update.*:fa-edit,
             delete.*:fa-trash,
             find.*:fa-search,
-            list.*:fa-list
+            list.*:fa-list,
+            all.*:fa-list
         css-class:
           patterns:
             delete.*:btn-danger

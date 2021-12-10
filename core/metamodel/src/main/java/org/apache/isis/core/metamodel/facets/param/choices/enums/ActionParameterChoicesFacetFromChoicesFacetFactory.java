@@ -45,7 +45,7 @@ extends FacetFactoryAbstract {
         }
 
         val facetHolder = processParameterContext.getFacetHolder();
-        addFacet(new ActionParameterChoicesFacetInferredFromChoicesFacet(facetHolder));
+        addFacet(new ActionParameterChoicesFacetFromChoicesFacet(facetHolder));
     }
 
 

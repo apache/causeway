@@ -28,7 +28,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Collection;
@@ -39,8 +38,6 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.jaxb.PersistentEntitiesAdapter;
-import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
 import org.apache.isis.testdomain.jpa.entities.JpaProduct;
@@ -84,7 +81,7 @@ public class JpaInventoryJaxbVm {
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @XmlElement(required = false)
-    @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
+    //@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
     @Getter @Setter
     private JpaBook favoriteBook = null;
 
@@ -94,7 +91,7 @@ public class JpaInventoryJaxbVm {
 
     @Collection
     @XmlElement(name = "book")
-    @XmlJavaTypeAdapter(PersistentEntitiesAdapter.class)
+    //@XmlJavaTypeAdapter(PersistentEntitiesAdapter.class)
     @Getter @Setter
     private java.util.Collection<JpaBook> books = new ArrayList<>();
 

@@ -23,6 +23,7 @@ import javax.jdo.annotations.Column;
 import javax.jdo.annotations.Discriminator;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Query;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -35,8 +36,7 @@ import org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectRemovingEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
-import org.apache.isis.commons.internal.debug._Debug;
-import org.apache.isis.commons.internal.debug.xray.XrayUi;
+import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.testdomain.model.stereotypes.MyService;
 import org.apache.isis.testdomain.util.dto.BookDto;
 import org.apache.isis.testdomain.util.dto.IBook;
@@ -82,7 +82,7 @@ import lombok.extern.log4j.Log4j2;
               + "FROM org.apache.isis.testdomain.jdo.entities.JdoBook "
               + "WHERE price <= :priceUpperBound")
 
-
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @ToString(callSuper = true)
 @Log4j2
@@ -167,11 +167,6 @@ implements IBook {
         this.author = author;
         this.isbn = isbn;
         this.publisher = publisher;
-
-        _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-            _Debug.log("new JdoBook instance %s", this);
-        });
-
     }
 
 }

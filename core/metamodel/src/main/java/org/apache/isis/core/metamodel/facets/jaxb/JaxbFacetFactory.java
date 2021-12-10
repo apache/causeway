@@ -238,10 +238,14 @@ implements MetaModelRefiner {
                 final ObjectSpecification objectSpec,
                 final ObjectAssociation propertyOrCollection) {
 
+            // when referencing an entity type, either the association or the entity type
+            // must be annotated with @XmlJavaTypeAdapter, unless the association is marked
+            // transient with @XmlTransientFacet
             val elementTypeSpec = propertyOrCollection.getElementType();
             if (elementTypeSpec.isEntity()
                     && !propertyOrCollection.containsFacet(XmlJavaTypeAdapterFacet.class)
-                    && !propertyOrCollection.containsFacet(XmlTransientFacet.class)) {
+                    && !propertyOrCollection.containsFacet(XmlTransientFacet.class)
+                    && !elementTypeSpec.containsFacet(XmlJavaTypeAdapterFacet.class)) {
 
                 val elementType = elementTypeSpec.getCorrespondingClass();
                 ValidationFailure.raiseFormatted(

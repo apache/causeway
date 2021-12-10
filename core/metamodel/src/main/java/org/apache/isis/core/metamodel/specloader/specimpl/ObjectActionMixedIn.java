@@ -79,7 +79,7 @@ implements MixedInMember {
                             mixedInType.getLogicalTypeName()),
                     _MixedInMemberNamingStrategy.determineIdFrom(mixinAction),
                     mixinAction.getFacetedMethod().getFeatureIdentifier().getMemberParameterClassNames()),
-                mixinAction.getFacetedMethod());
+                mixinAction.getFacetedMethod(), false);
 
         this.facetHolder = FacetHolderAbstract.simple(
                 mixedInType.getMetaModelContext(),

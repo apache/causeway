@@ -28,10 +28,10 @@ import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class ActionParameterChoicesFacetInferredFromChoicesFacet
+public class ActionParameterChoicesFacetFromChoicesFacet
 extends ActionParameterChoicesFacetAbstract {
 
-    public ActionParameterChoicesFacetInferredFromChoicesFacet(final FacetHolder holder) {
+    public ActionParameterChoicesFacetFromChoicesFacet(final FacetHolder holder) {
         super(holder, Precedence.INFERRED);
     }
 

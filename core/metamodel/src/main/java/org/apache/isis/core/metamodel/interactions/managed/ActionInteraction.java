@@ -35,7 +35,8 @@ import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
 
-public final class ActionInteraction extends MemberInteraction<ManagedAction, ActionInteraction> {
+public final class ActionInteraction
+extends MemberInteraction<ManagedAction, ActionInteraction> {
 
     public static enum SemanticConstraint {
         NONE,
@@ -54,7 +55,6 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
             final @NonNull ManagedObject owner,
             final @NonNull String memberId,
             final @NonNull Where where) {
-
         return startWithMultiselect(owner, memberId, where, Can::empty);
     }
 

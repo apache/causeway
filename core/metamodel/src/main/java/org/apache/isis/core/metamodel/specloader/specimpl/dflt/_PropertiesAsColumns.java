@@ -68,9 +68,7 @@ class _PropertiesAsColumns implements HasMetaModelContext {
 
         val parentSpecIfAny = parentObject.getSpecification();
 
-        val whereContext = memberIdentifier.getType().isAction()
-                ? Where.STANDALONE_TABLES
-                : Where.PARENTED_TABLES;
+        val whereContext = whereContextFor(memberIdentifier);
 
         val propertyById = _Maps.<String, OneToOneAssociation>newLinkedHashMap();
 
@@ -156,9 +154,11 @@ class _PropertiesAsColumns implements HasMetaModelContext {
             return;
         }
 
+        val whereContext = whereContextFor(memberIdentifier);
+
         tableColumnOrderServices.stream()
         .map(tableColumnOrderService->
-            memberIdentifier.getType().isAction()
+            whereContext.inStandaloneTable()
             ? tableColumnOrderService.orderStandalone(
                     elementType,
                     propertyIdsInOrder)
@@ -195,6 +195,12 @@ class _PropertiesAsColumns implements HasMetaModelContext {
                 final boolean isVisible = !propertySpecIsOfParentSpec;
                 return isVisible;
         };
+    }
+
+    static Where whereContextFor(final Identifier memberIdentifier) {
+        return memberIdentifier.getType().isAction()
+                ? Where.STANDALONE_TABLES
+                : Where.PARENTED_TABLES;
     }
 
 }

@@ -44,10 +44,13 @@ extends CssClassFaStaticFacetAbstract {
         return domainObjectLayoutIfAny
                 .map(Annot::new)
                 .filter(a -> a.cssClassFa != null )
-                .map(a -> new CssClassFaFacetForDomainObjectLayoutAnnotation(a.cssClassFa, a.cssClassFaPosition, holder));
+                .map(a -> new CssClassFaFacetForDomainObjectLayoutAnnotation(
+                        a.cssClassFa, a.cssClassFaPosition, holder));
     }
 
-    public CssClassFaFacetForDomainObjectLayoutAnnotation(final String value, final CssClassFaPosition position, //NOSONAR false positive: method IS used in create()/stream().map()
+    public CssClassFaFacetForDomainObjectLayoutAnnotation(
+            final String value,
+            final CssClassFaPosition position, //NOSONAR false positive: method IS used in create()/stream().map()
             final FacetHolder holder) {
         super(value, position, holder);
     }

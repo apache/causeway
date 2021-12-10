@@ -24,7 +24,8 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaStaticFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.CssClassFaFacetForDomainObjectLayoutAnnotation;
 
-public class CssClassFaFacetForDomainObjectLayoutFactory extends CssClassFaStaticFacetAbstract {
+public class CssClassFaFacetForDomainObjectLayoutFactory
+extends CssClassFaStaticFacetAbstract {
 
     public static CssClassFaFacet create(
             final DomainObjectLayout domainObjectLayout,

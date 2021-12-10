@@ -29,8 +29,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.logicaltype.classname.LogicalTypeFacetFromClassNameFactory;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.classname.LogicalTypeFacetFromClassName;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.classname.LogicalTypeFacetFromClassNameFactory;
 import org.apache.isis.core.metamodel.facets.value.annotation.LogicalTypeFacetForValueAnnotation;
 import org.apache.isis.core.metamodel.facets.value.annotation.ValueAnnotationFacetFactory;
 
