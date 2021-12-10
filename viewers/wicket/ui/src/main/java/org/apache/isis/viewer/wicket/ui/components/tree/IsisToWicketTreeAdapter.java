@@ -402,7 +402,7 @@ class IsisToWicketTreeAdapter {
         private final TreePath treePath;
         private final int hashCode;
 
-        private final transient IsisAppCommonContext commonContext;
+        private transient IsisAppCommonContext commonContext;
 
         public LoadableDetachableTreeModel(final TreeModel tModel) {
             super(tModel);
@@ -418,6 +418,8 @@ class IsisToWicketTreeAdapter {
          */
         @Override
         protected TreeModel load() {
+
+            commonContext = CommonContextUtils.computeIfAbsent(commonContext);
 
             val oid = bookmark;
             val objAdapter = commonContext.getMetaModelContext()
