@@ -29,6 +29,7 @@ import org.apache.isis.client.kroviz.handler.ResponseHandler
 import org.apache.isis.client.kroviz.snapshots.Response
 import org.apache.isis.client.kroviz.to.Method
 import org.apache.isis.client.kroviz.ui.core.Constants
+import org.apache.isis.client.kroviz.ui.core.SessionManager
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.utils.XmlHelper
 import org.w3c.xhr.XMLHttpRequest
@@ -41,8 +42,8 @@ open class IntegrationTest {
         val user = "sven"
         val pw = "pass"
         val url = "http://${user}:${pw}@localhost:8080/restful/"
-        UiManager.login(url, user, pw)
-        val credentials: String = UiManager.getCredentials()
+        SessionManager.login(url, user, pw)
+        val credentials: String = SessionManager.getCredentials()
         val xhr = XMLHttpRequest()
         xhr.open("GET", url, false, user, pw)
         xhr.setRequestHeader("Authorization", "Basic $credentials")

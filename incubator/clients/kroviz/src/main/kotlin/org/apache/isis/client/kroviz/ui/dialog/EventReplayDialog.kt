@@ -30,6 +30,7 @@ import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.LogEntryComparison
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.ui.core.RoDialog
+import org.apache.isis.client.kroviz.ui.core.SessionManager
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.ui.panel.EventLogTable
 import org.apache.isis.client.kroviz.utils.StringUtils
@@ -58,7 +59,7 @@ class EventReplayDialog(
         )
         val expectedTable = EventLogTable(expectedEvents)
         expectedTable.tabulator.addCssClass("tabulator-in-dialog")
-        val actualEvents: MutableList<LogEntry> = UiManager.getEventStore().log
+        val actualEvents: MutableList<LogEntry> = SessionManager.getEventStore().log
 
         val actualTable = EventLogTable(actualEvents)
         actualTable.tabulator.addCssClass("tabulator-in-dialog")
@@ -76,7 +77,7 @@ class EventReplayDialog(
     override fun execute(action: String?) {
         val comparisonMap = mutableMapOf<String, LogEntryComparison>()
         // first pass: iterate over expected
-        val actualStore = UiManager.getEventStore()
+        val actualStore = SessionManager.getEventStore()
         expectedEvents.forEach {
             val shortTitle = StringUtils.shortTitle(it.title)
             val actualEvent: LogEntry? = actualStore.findBy(shortTitle)

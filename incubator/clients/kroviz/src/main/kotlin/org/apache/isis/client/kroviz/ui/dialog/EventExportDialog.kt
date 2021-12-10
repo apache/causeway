@@ -26,6 +26,7 @@ import org.apache.isis.client.kroviz.ui.core.RoDialog
 import io.kvision.core.StringPair
 import io.kvision.form.select.SimpleSelect
 import org.apache.isis.client.kroviz.ui.core.FormItem
+import org.apache.isis.client.kroviz.ui.core.SessionManager
 import org.apache.isis.client.kroviz.ui.core.UiManager
 
 class EventExportDialog : Controller() {
@@ -35,7 +36,7 @@ class EventExportDialog : Controller() {
     val events = mutableListOf<ReplayEvent>()
 
     private fun collectReplayEvents() {
-        UiManager.getEventStore().log.forEach {
+        SessionManager.getEventStore().log.forEach {
             val re = buildExportEvent(it)
             when (it.state) {
                 EventState.SUCCESS_JS -> events.add(re)
@@ -100,7 +101,7 @@ class EventExportDialog : Controller() {
     }
 
     private fun collectUnfinishedEvents() {
-        UiManager.getEventStore().log.forEach {
+        SessionManager.getEventStore().log.forEach {
             val re = buildExportEvent(it)
             when (it.state) {
                 EventState.RUNNING -> events.add(re)
@@ -112,7 +113,7 @@ class EventExportDialog : Controller() {
     }
 
     private fun collectAllEvents() {
-        UiManager.getEventStore().log.forEach {
+        SessionManager.getEventStore().log.forEach {
             val re = buildExportEvent(it)
             events.add(re)
         }

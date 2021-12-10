@@ -25,6 +25,7 @@ import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Method
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Constants
+import org.apache.isis.client.kroviz.ui.core.SessionManager
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.utils.StringUtils
 import org.apache.isis.client.kroviz.utils.UrlUtils
@@ -49,7 +50,7 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
         if (method != Method.POST.operation) {
             url += StringUtils.argumentsAsUrlParameter(link)
         }
-        val credentials: String = UiManager.getCredentials()
+        val credentials: String = SessionManager.getCredentials()
 
         xhr.open(method, url, true)
         xhr.setRequestHeader("Authorization", "Basic $credentials")
@@ -66,14 +67,14 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
             body.isEmpty() -> xhr.send()
             else -> xhr.send(body)
         }
-        UiManager.getEventStore().start(rs, method, body, aggregator)
+        SessionManager.getEventStore().start(rs, method, body, aggregator)
     }
 
     private fun buildBody(link: Link): String {
         return when {
             link.hasArguments() -> StringUtils.argumentsAsBody(link)
             link.method == Method.PUT.operation -> {
-                val logEntry = UiManager.getEventStore().findBy(aggregator!!)
+                val logEntry = SessionManager.getEventStore().findBy(aggregator!!)
                 when (val obj = logEntry?.obj) {
                     is TObject -> StringUtils.propertiesAsBody(obj)
                     else -> ""
@@ -95,7 +96,7 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
         xhr.send(body)
         val rs = buildResourceSpecificationAndSetupHandler(url, subType, body)
 
-        UiManager.getEventStore().start(rs, method, body, aggregator)
+        SessionManager.getEventStore().start(rs, method, body, aggregator)
     }
 
     internal fun invokeKroki(pumlCode: String) {
@@ -109,7 +110,7 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
         val rs = buildResourceSpecificationAndSetupHandler(url, Constants.subTypeJson, pumlCode)
 
         xhr.send(pumlCode)
-        UiManager.getEventStore().start(rs, method, pumlCode, aggregator)
+        SessionManager.getEventStore().start(rs, method, pumlCode, aggregator)
     }
 
     private fun buildResourceSpecificationAndSetupHandler(
@@ -126,7 +127,7 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
 
     private fun handleResult(rs: ResourceSpecification, body: String) {
         val response: Any? = xhr.response
-        val le: LogEntry? = UiManager.getEventStore().end(rs, body, response)
+        val le: LogEntry? = SessionManager.getEventStore().end(rs, body, response)
         if (le != null) {
             when {
                 aggregator == null -> ResponseHandler.handle(le)
@@ -143,7 +144,7 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
             XMLHttpRequestResponseType.TEXT -> xhr.responseText
             else -> "neither text nor blob"
         }
-        UiManager.getEventStore().fault(rs, error)
+        SessionManager.getEventStore().fault(rs, error)
     }
 
 }

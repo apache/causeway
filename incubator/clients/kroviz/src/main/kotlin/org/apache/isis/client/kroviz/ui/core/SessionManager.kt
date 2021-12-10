@@ -16,36 +16,44 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.core
+package org.apache.isis.client.kroviz.ui.core
 
-import io.kvision.core.ResString
+import org.apache.isis.client.kroviz.core.Session
 import org.apache.isis.client.kroviz.core.event.EventStore
-import org.apache.isis.client.kroviz.ui.core.Constants
-import org.apache.isis.client.kroviz.utils.StringUtils
 
 /**
- * Keep track of connected server.
+ * Single point of contact for view components consisting of:
+ * @item Session
  */
-class Session {
-    private var user: String = ""
-    private var pw: String = ""
-    var baseUrl: String = ""
-    var resString: ResString? = null
-    val eventStore = EventStore()
+object SessionManager {
 
-    fun login(url: String, user: String, pw: String) {
-        this.user = user
-        this.pw = pw
-        this.baseUrl = url
-        if (url.contains("localhost")) {
-            this.resString = Constants.demoImage
-        } else {
-            this.resString = Constants.demoRemoteImage
+    private val sessions = mutableListOf<Session>()
+
+    fun getSession(): Session {
+        return sessions.first()
+    }
+
+    fun getBaseUrl(): String {
+        val s = getSession()
+        return when (s) {
+            null -> ""
+            else -> s.baseUrl
         }
     }
 
+    fun getEventStore(): EventStore {
+        return getSession().eventStore
+    }
+
+    fun login(url: String, username: String, password: String) {
+        val s = Session()
+        s.login(url, username, password)
+        sessions.add(0, s)
+        UiManager.updateUser(username)
+    }
+
     fun getCredentials(): String {
-        return StringUtils.base64encoded("$user:$pw")
+        return getSession().getCredentials()
     }
 
 }

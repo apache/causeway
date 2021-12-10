@@ -26,12 +26,12 @@ import io.kvision.dropdown.DropDown
 import io.kvision.dropdown.separator
 import io.kvision.html.ButtonStyle
 import io.kvision.html.Link
-import io.kvision.html.image
 import io.kvision.navbar.*
 import io.kvision.panel.SimplePanel
 import io.kvision.panel.vPanel
-import io.kvision.require
 import io.kvision.utils.px
+import org.apache.isis.client.kroviz.core.Session
+import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.chart.SampleChartModel
 import org.apache.isis.client.kroviz.ui.dialog.*
@@ -61,19 +61,24 @@ class RoMenuBar : SimplePanel() {
         }
     }
 
-    fun updateMainIcon() {
-        val resString = require("img/gift_48.png")
-        mainEntry.image = resString
-        mainEntry.icon = null
-        mainEntry.image.apply { systemIconStyle }
-        insertConnection()
+    private fun testFirstSession() {
+        mainEntry.separator()
+        val session = SessionManager.getSession()
+        insertSession(session)
     }
 
-    fun insertConnection() {
-        mainEntry.separator()
-        val resString = require("img/gift_48.png")
-        val menuEntry = buildMenuEntryWithImage("Connection 1", image = resString, { LoginPrompt().open() })
+    private fun insertSession(session:Session) {
+        val menuEntry = buildMenuEntryWithImage(
+            session.baseUrl,
+            image = session.resString,
+            { this.switch(session) })
         mainEntry.add(menuEntry)
+    }
+
+    private fun switch(session: Session) {
+        mainEntry.image = session.resString
+        mainEntry.icon = null
+        mainEntry.image.apply { systemIconStyle }
     }
 
     private fun buildMenuEntryWithImage(label: String, image: ResString?, action: dynamic): Link {
@@ -158,7 +163,7 @@ class RoMenuBar : SimplePanel() {
 
         val testTitle = "Test"
         mainMenu.add(
-            buildMenuEntry(testTitle, "Test", { this.updateMainIcon() })
+            buildMenuEntry(testTitle, "Test", { this.testFirstSession() })
         )
 
         mainMenu.add(

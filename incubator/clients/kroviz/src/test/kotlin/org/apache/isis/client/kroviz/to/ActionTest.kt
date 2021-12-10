@@ -24,6 +24,7 @@ import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.handler.ActionHandler
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.*
+import org.apache.isis.client.kroviz.ui.core.SessionManager
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.utils.StringUtils
 import kotlin.test.Test
@@ -64,7 +65,7 @@ class ActionTest : IntegrationTest() {
             console.log(json)
             ResourceProxy().fetch(link, ActionDispatcher())
             val urlSpec = ResourceSpecification(url)
-            val es = UiManager.getEventStore()
+            val es = SessionManager.getEventStore()
             val le = es.findBy(urlSpec)!!
             console.log(es.log)
             console.log(le)

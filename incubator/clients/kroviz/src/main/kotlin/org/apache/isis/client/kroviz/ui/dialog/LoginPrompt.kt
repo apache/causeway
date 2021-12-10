@@ -25,10 +25,7 @@ import io.kvision.form.text.Text
 import org.apache.isis.client.kroviz.core.event.ReplayController
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.ValueType
-import org.apache.isis.client.kroviz.ui.core.Constants
-import org.apache.isis.client.kroviz.ui.core.FormItem
-import org.apache.isis.client.kroviz.ui.core.RoDialog
-import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.ui.core.*
 
 class LoginPrompt(val nextController: Controller? = null) : Controller() {
 
@@ -57,7 +54,7 @@ class LoginPrompt(val nextController: Controller? = null) : Controller() {
             nextController.initUnderTest(url, username, password)
             nextController.open()
         } else {
-            UiManager.login(url, username, password)
+            SessionManager.login(url, username, password)
             val link = Link(href = url + Constants.restInfix)
             invoke(link)
             UiManager.closeDialog(dialog)

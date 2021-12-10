@@ -21,6 +21,7 @@ package org.apache.isis.client.kroviz.core.model
 import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.to.*
+import org.apache.isis.client.kroviz.ui.core.SessionManager
 import org.apache.isis.client.kroviz.ui.core.UiManager
 
 class ObjectDM(override val title: String) : DisplayModelWithLayout() {
@@ -50,7 +51,7 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
             val delegate = (data as Exposer).delegate
             val selfLink = delegate.getSelfLink()
             val rs = ResourceSpecification(selfLink.href)
-            val es = UiManager.getEventStore()
+            val es = SessionManager.getEventStore()
             val le = es.findBy(rs)!!
             val aggt = le.getAggregator()
             console.log(aggt)
@@ -94,7 +95,7 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
             val getLink = tObject.links.first()
             val href = getLink.href
             val reSpec = ResourceSpecification(href)
-            val es = UiManager.getEventStore()
+            val es = SessionManager.getEventStore()
             //WATCHOUT this is sequence dependent: GET and PUT share the same URL - if called after PUTting, it may fail
             val getLogEntry = es.findBy(reSpec)!!
             getLogEntry.setReload()

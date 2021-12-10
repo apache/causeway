@@ -22,6 +22,7 @@ package org.apache.isis.client.kroviz.ui
 import org.apache.isis.client.kroviz.handler.DomainTypeHandler
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.FILE_NODE
 import org.apache.isis.client.kroviz.to.DomainType
+import org.apache.isis.client.kroviz.ui.core.SessionManager
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.ui.diagram.ClassDiagram
 import kotlin.test.BeforeTest
@@ -35,7 +36,7 @@ class ClassDiagramTest {
         val user = "sven"
         val pw = "pass"
         val url = "http://${user}:${pw}@localhost:8080/restful/"
-        UiManager.login(url, user, pw)
+        SessionManager.login(url, user, pw)
     }
 
     @Test

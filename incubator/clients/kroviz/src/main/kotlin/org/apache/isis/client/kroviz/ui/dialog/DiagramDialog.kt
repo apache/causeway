@@ -19,10 +19,7 @@
 package org.apache.isis.client.kroviz.ui.dialog
 
 import org.apache.isis.client.kroviz.to.ValueType
-import org.apache.isis.client.kroviz.ui.core.FormItem
-import org.apache.isis.client.kroviz.ui.core.MenuFactory
-import org.apache.isis.client.kroviz.ui.core.RoDialog
-import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.ui.core.*
 import org.apache.isis.client.kroviz.utils.*
 import io.kvision.html.Link as KvisionHtmlLink
 
@@ -65,7 +62,7 @@ class DiagramDialog(
     }
 
     private fun getDiagramCode(): String {
-        val logEntry = UiManager.getEventStore().findByDispatcher(callBack as UUID)
+        val logEntry = SessionManager.getEventStore().findByDispatcher(callBack as UUID)
         return logEntry.getResponse()
     }
 

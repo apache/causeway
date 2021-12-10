@@ -27,7 +27,6 @@ import io.kvision.utils.ESC_KEY
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.apache.isis.client.kroviz.App
-import org.apache.isis.client.kroviz.core.Session
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.core.aggregator.ObjectAggregator
 import org.apache.isis.client.kroviz.core.aggregator.UndefinedDispatcher
@@ -48,12 +47,10 @@ import org.w3c.dom.events.KeyboardEvent
  * @item RoMenubar,
  * @item RoView (tabs, etc.),
  * @item RoStatusbar,
- * @item Session
  */
 object UiManager {
 
     var app: App? = null
-    private val sessions = mutableListOf<Session>()
     private val popups = mutableListOf<Widget>()
     private val settings = mutableMapOf<String, Any>()
     var position: Point? = null
@@ -196,23 +193,7 @@ object UiManager {
         pop()
     }
 
-    fun getSession(): Session {
-        return sessions.first()
-    }
-
-    fun getBaseUrl(): String {
-        val s = getSession()
-        return when (s) {
-            null -> ""
-            else -> s.baseUrl
-        }
-    }
-
-    fun getEventStore(): EventStore {
-        return getSession().eventStore
-    }
-
-    fun loadDomainTypes(): Boolean {
+     fun loadDomainTypes(): Boolean {
         val k = "loadDomainTypes"
         return when {
             settings.containsKey(k) -> settings.getValue(k) as Boolean
@@ -220,17 +201,7 @@ object UiManager {
         }
     }
 
-    fun login(url: String, username: String, password: String) {
-        val s = Session()
-        s.login(url, username, password)
-        sessions.add(0, s)
-    }
-
-    fun getCredentials(): String {
-        return getSession().getCredentials()
-    }
-
-    private fun push(widget: Widget) {
+     private fun push(widget: Widget) {
         popups.add(widget)
     }
 
@@ -256,6 +227,10 @@ object UiManager {
         setBusyCursor()
         getEventStore().addUserAction(aggregator, obj)
         setNormalCursor()
+    }
+
+    private fun getEventStore() : EventStore {
+        return SessionManager.getEventStore()
     }
 
 }

@@ -36,9 +36,11 @@ object Constants {
     // docker run -d --name kroki -p 8080:8000 yuzutech/kroki
 
     const val demoUrl = "http://localhost:8080/"
+    val demoImage = io.kvision.require("img/1200px-DEU_Hamburg_COA.svg.png")
     const val demoUser = "sven"
     const val demoPass = "pass"
     const val demoUrlRemote = "https://demo-wicket.jdo.isis.incode.work/"
+    val demoRemoteImage = io.kvision.require("img/wv-amsterdam-favicon-05.png")
     const val domoxUrl = "http://localhost:8081/"
 
     const val spacing = 10

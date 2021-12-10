@@ -21,7 +21,7 @@ package org.apache.isis.client.kroviz.core.aggregator
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.to.HttpErrorResponse
-import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.ui.core.SessionManager
 import org.apache.isis.client.kroviz.ui.dialog.ErrorDialog
 
 class ErrorDispatcher : BaseAggregator() {
@@ -31,7 +31,7 @@ class ErrorDispatcher : BaseAggregator() {
         val url = logEntry.url
         val message = error.getMessage()
         val reSpec = ResourceSpecification(url)
-        UiManager.getEventStore().fault(reSpec, message)
+        SessionManager.getEventStore().fault(reSpec, message)
         ErrorDialog(logEntry).open()
     }
 

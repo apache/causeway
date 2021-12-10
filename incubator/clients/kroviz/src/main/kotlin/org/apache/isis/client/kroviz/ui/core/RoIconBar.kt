@@ -100,7 +100,7 @@ class RoIconBar : SimplePanel() {
 
     private fun createObjectIcon(url: String): DropDown? {
         val reSpec = ResourceSpecification(url)
-        val logEntry = UiManager.getEventStore().findBy(reSpec)!!
+        val logEntry = SessionManager.getEventStore().findBy(reSpec)!!
         return when (val obj = logEntry.obj) {
             (obj == null) -> null
             is TObject -> {

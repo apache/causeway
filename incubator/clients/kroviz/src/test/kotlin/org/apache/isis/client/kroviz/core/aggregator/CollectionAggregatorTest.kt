@@ -24,6 +24,7 @@ import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.*
 import org.apache.isis.client.kroviz.to.Property
 import org.apache.isis.client.kroviz.to.Relation
+import org.apache.isis.client.kroviz.ui.core.SessionManager
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -37,7 +38,7 @@ class CollectionAggregatorTest : IntegrationTest() {
     fun testFixtureResult() {
         if (isAppAvailable()) {
             // given
-            val es = UiManager.getEventStore()
+            val es = SessionManager.getEventStore()
             es.reset()
             val obs = CollectionAggregator("test")
             // when
@@ -82,7 +83,7 @@ class CollectionAggregatorTest : IntegrationTest() {
     fun testService() {
         if (isAppAvailable()) {
             // given
-            UiManager.getEventStore().reset()
+            SessionManager.getEventStore().reset()
             val obs = CollectionAggregator("test")
             // when
             mockResponse(SO_LIST_ALL, obs)

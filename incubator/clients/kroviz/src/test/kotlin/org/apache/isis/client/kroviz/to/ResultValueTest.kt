@@ -24,6 +24,7 @@ import org.apache.isis.client.kroviz.core.aggregator.ObjectAggregator
 import org.apache.isis.client.kroviz.handler.ResultValueHandler
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.ACTIONS_DOWNLOAD_VALUE
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.ACTIONS_OPEN_SWAGGER_UI
+import org.apache.isis.client.kroviz.ui.core.SessionManager
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -48,7 +49,7 @@ class ResultValueTest : IntegrationTest() {
             // given
             val aggregator = ObjectAggregator("object test")
             // when
-            UiManager.getEventStore().reset()
+            SessionManager.getEventStore().reset()
             val logEntry = mockResponse(ACTIONS_DOWNLOAD_VALUE, aggregator)
             val ro = logEntry.getTransferObject() as ResultValue
             val type = ro.resulttype

@@ -42,7 +42,7 @@ class ResponseRegressionTest {
         val user = "sven"
         val pw = "pass"
         val url = "http://${user}:${pw}@localhost:8080/restful/"
-        UiManager.login(url, user, pw)
+        SessionManager.login(url, user, pw)
     }
 
     @ExperimentalCoroutinesApi
@@ -50,7 +50,7 @@ class ResponseRegressionTest {
     fun testCompareSnapshotWithResponse() {
         //given
         val map = Response2Handler.map
-        val credentials = UiManager.getCredentials()
+        val credentials = SessionManager.getCredentials()
         //when
         console.log("[RRT.testCompareSnapshotWithResponse]")
         map.forEach { rh ->

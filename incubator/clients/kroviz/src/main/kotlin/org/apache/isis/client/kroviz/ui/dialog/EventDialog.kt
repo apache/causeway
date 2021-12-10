@@ -27,6 +27,7 @@ import org.apache.isis.client.kroviz.core.event.ReplayController
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
+import org.apache.isis.client.kroviz.ui.core.SessionManager
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.ui.panel.EventLogTable
 
@@ -57,7 +58,7 @@ class EventDialog : Controller() {
             heightPerc = 70,
             customButtons = customButtons
         )
-        val eventTable = EventLogTable(UiManager.getEventStore().log)
+        val eventTable = EventLogTable(SessionManager.getEventStore().log)
         eventTable.tabulator.addCssClass("tabulator-in-dialog")
         eventPanel.add(eventTable)
 
@@ -71,7 +72,7 @@ class EventDialog : Controller() {
     override fun execute(action: String?) {
         when {
             action.isNullOrEmpty() -> {
-                UiManager.add("Event Log", EventLogTable(UiManager.getEventStore().log))
+                UiManager.add("Event Log", EventLogTable(SessionManager.getEventStore().log))
                 dialog.close()
             }
             action == EXP -> {

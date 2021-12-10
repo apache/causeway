@@ -23,11 +23,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.apache.isis.client.kroviz.core.Session
 import org.apache.isis.client.kroviz.main
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Represention
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Constants
+import org.apache.isis.client.kroviz.ui.core.SessionManager
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.ui.dialog.Controller
 import org.apache.isis.client.kroviz.ui.dialog.EventReplayDialog
@@ -35,8 +37,8 @@ import org.apache.isis.client.kroviz.ui.dialog.EventReplayDialog
 val AppScope = CoroutineScope(window.asCoroutineDispatcher())
 
 class ReplayController : Controller() {
-    private val eventStore = UiManager.getEventStore()
-    private val oldBaseUrl = UiManager.getBaseUrl()
+    private val eventStore = SessionManager.getEventStore()
+    private val oldBaseUrl = SessionManager.getBaseUrl()
     private var urlUnderTest: String = Constants.demoUrlRemote
     private var userUnderTest: String = Constants.demoUser
     private var passUnderTest: String = Constants.demoPass
@@ -51,7 +53,7 @@ class ReplayController : Controller() {
         val expectedEvents = copyEvents(eventStore.log)
         eventStore.reset()
         main() // re-creates the UI, but keeps the UiManager(singleton/object) and the session
-        UiManager.login(urlUnderTest, userUnderTest, passUnderTest)
+        SessionManager.login(urlUnderTest, userUnderTest, passUnderTest)
 
         val uiEvents = filterReplayEvents(expectedEvents)
         replay(uiEvents, urlUnderTest)

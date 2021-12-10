@@ -22,6 +22,7 @@ import org.apache.isis.client.kroviz.to.Argument
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Constants
+import org.apache.isis.client.kroviz.ui.core.SessionManager
 import org.apache.isis.client.kroviz.ui.core.UiManager
 
 object StringUtils {
@@ -228,7 +229,7 @@ object StringUtils {
         val signature = Constants.restInfix
         if (url.contains(signature)) {
             // strip off protocol, host, port
-            val protocolHostPort = UiManager.getBaseUrl()
+            val protocolHostPort = SessionManager.getBaseUrl()
             result = result.replace(protocolHostPort + signature, "")
             result = StringUtils.removeHexCode(result)
         }
