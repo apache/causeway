@@ -28,7 +28,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Collection;
@@ -39,8 +38,6 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.jaxb.PersistentEntitiesAdapter;
-import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
@@ -85,7 +82,7 @@ public class JdoInventoryJaxbVm {
     @Getter @Setter
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @XmlElement(required = false)
-    @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
+    //@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
     private JdoBook favoriteBook = null;
 
     @MemberSupport public List<JdoBook> choicesFavoriteBook() {
@@ -95,7 +92,7 @@ public class JdoInventoryJaxbVm {
     @Getter @Setter
     @Collection
     @XmlElement(name = "book")
-    @XmlJavaTypeAdapter(PersistentEntitiesAdapter.class)
+    //@XmlJavaTypeAdapter(PersistentEntitiesAdapter.class)
     private java.util.Collection<JdoBook> books = new ArrayList<>();
 
 }

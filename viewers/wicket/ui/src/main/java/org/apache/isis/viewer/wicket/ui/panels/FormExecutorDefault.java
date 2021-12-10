@@ -89,8 +89,10 @@ implements FormExecutor {
 
         try {
 
-            _Debug.log("[EXECUTOR] start ...");
-            //formExecutorContext.getParentObject().reloadViewmodelFromMemoizedBookmark();
+            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+                _Debug.log("[EXECUTOR] start ...");
+                //formExecutorContext.getParentObject().reloadViewmodelFromMemoizedBookmark();
+            });
 
             final Optional<Recognition> invalidReasonIfAny = Recognition.of(
                     Category.CONSTRAINT_VIOLATION,

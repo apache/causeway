@@ -24,6 +24,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -36,6 +37,7 @@ import org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectRemovingEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
+import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 import org.apache.isis.testdomain.model.stereotypes.MyService;
 import org.apache.isis.testdomain.util.dto.BookDto;
@@ -68,6 +70,7 @@ import lombok.extern.log4j.Log4j2;
         , updatingLifecycleEvent = JpaBook.UpdatingLifecycleEvent.class
         , updatedLifecycleEvent = JpaBook.UpdatedLifecycleEvent.class
         , removingLifecycleEvent = JpaBook.RemovingLifecycleEvent.class)
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @ToString(callSuper = true)
 @Log4j2
