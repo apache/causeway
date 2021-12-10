@@ -32,6 +32,7 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.security.authentication.logout.LogoutMenu.LoginRedirect;
@@ -265,7 +266,7 @@ public enum ActionResultResponseType {
             final ManagedObject resultAdapter,
             final AjaxRequestTarget targetIfAny) {
 
-        if(resultAdapter == null) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
             return TypeAndAdapter.of(ActionResultResponseType.VOID, resultAdapter);
         }
 
