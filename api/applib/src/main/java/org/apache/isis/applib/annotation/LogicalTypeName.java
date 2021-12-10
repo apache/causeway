@@ -16,24 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom._infra.fixtures;
+package org.apache.isis.applib.annotation;
 
-import javax.inject.Inject;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+/**
+ * Introduced to allow for abstract types to be mapped to a logical-type-name,
+ * for the security model to apply permission checks against.
+ *
+ * @since 2.0 {@index}
+ */
+@Inherited
+@Target({
+        ElementType.TYPE,
+        ElementType.ANNOTATION_TYPE
+})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface LogicalTypeName {
 
-import demoapp.dom._infra.seed.SeedService;
+    /**
+     * If unspecified, the fully-qualified class name is used instead.
+     * @see DomainObject#logicalTypeName()
+     */
+    String value()
+        default "";
 
-public class DemoFixtureScript extends FixtureScript {
-
-    @Override
-    protected void execute(final ExecutionContext executionContext) {
-        serviceRegistry
-                .select(SeedService.class)  // lookup rather than injection to avoid circular reference.
-                .forEach(seedService -> seedService.seed(this, executionContext));
-    }
-
-    @Inject
-    ServiceRegistry serviceRegistry;
 }

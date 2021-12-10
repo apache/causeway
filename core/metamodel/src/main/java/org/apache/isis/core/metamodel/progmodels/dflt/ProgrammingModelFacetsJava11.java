@@ -45,6 +45,7 @@ import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.choices.enums.ChoicesFacetFromEnumFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype.LogicalTypeFacetForLogicalTypeNameAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.DomainObjectLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainservice.annotation.DomainServiceFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacetFactory;
@@ -191,6 +192,8 @@ extends ProgrammingModelAbstract {
 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new RecreatableObjectFacetFactory(mmc, postConstructMethodsCache));
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new JaxbFacetFactory(mmc));
+
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new LogicalTypeFacetForLogicalTypeNameAnnotationFacetFactory(mmc, postConstructMethodsCache));
 
         // must come after RecreatableObjectFacetFactory
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new DomainObjectAnnotationFacetFactory(mmc, postConstructMethodsCache));

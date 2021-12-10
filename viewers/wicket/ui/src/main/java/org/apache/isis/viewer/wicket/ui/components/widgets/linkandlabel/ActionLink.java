@@ -26,10 +26,8 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.request.cycle.RequestCycle;
 
-import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
-import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -138,6 +136,10 @@ extends IndicatingAjaxLink<ManagedObject> {
 
     @Override
     public boolean isVisible() {
+//        _Debug.onCondition(!getActionModel().getVisibilityConsent().isAllowed(), ()->{
+//            System.err.printf("not allowed %s -> %s%n", getObjectAction().getFeatureIdentifier(),
+//                    getActionModel().getVisibilityConsent().getReason());
+//        });
         return getActionModel().getVisibilityConsent().isAllowed();
     }
 
@@ -223,10 +225,6 @@ extends IndicatingAjaxLink<ManagedObject> {
 
         // on recoverable exception stay on page (eg. validation failure)
         if(outcome.isFailure()) {
-
-            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log("render the target entity again, outcome: %s", outcome);
-            });
 
             // render the target entity again
             //

@@ -42,34 +42,35 @@ implements HiddenTypeFacet {
 
     @Override
     public String hides(final VisibilityContext vc) {
-        val specification = (ObjectSpecification) getFacetHolder();
+        val spec = (ObjectSpecification) getFacetHolder();
 
-        if(!specification.isEntityOrViewModelOrAbstract()) {
+        if(!spec.isEntityOrViewModelOrAbstract()) {
             return null;
         }
 
-        val hasVisibleProperty = specification.streamProperties(MixedIn.INCLUDED)
+        val hasVisibleProperty = spec.streamProperties(MixedIn.INCLUDED)
                 .anyMatch(prop -> !AuthorizationFacet.hidesProperty(prop, vc));
 
         if (hasVisibleProperty) {
             return null;
         }
 
-        val hasVisibleCollection = specification.streamCollections(MixedIn.INCLUDED)
+        val hasVisibleCollection = spec.streamCollections(MixedIn.INCLUDED)
                 .anyMatch(coll -> !AuthorizationFacet.hidesCollection(coll, vc));
 
         if (hasVisibleCollection) {
             return null;
         }
 
-        val hasVisibleAction = specification.streamRuntimeActions(MixedIn.INCLUDED)
+        val hasVisibleAction = spec.streamRuntimeActions(MixedIn.INCLUDED)
                 .anyMatch(act -> !AuthorizationFacet.hidesAction(act, vc));
 
         if (hasVisibleAction) {
             return null;
         }
 
-        return "All members (actions, properties and collections) are hidden";
+        return String.format("All members (actions, properties and collections) are hidden for logical-type %s",
+                spec.getLogicalTypeName());
 
     }
 

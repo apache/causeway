@@ -93,8 +93,6 @@ implements ScalarModelSubscriber {
     protected static final String ID_SCALAR_NAME = "scalarName";
     protected static final String ID_SCALAR_VALUE = "scalarValue";
 
-
-
     /**
      * as per {@link #inlinePromptLink}
      */
@@ -105,7 +103,6 @@ implements ScalarModelSubscriber {
      * as per {@link #scalarIfRegularInlinePromptForm}.
      */
     public static final String ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM = "scalarIfRegularInlinePromptForm";
-
 
     private static final String ID_EDIT_PROPERTY = "editProperty";
     private static final String ID_FEEDBACK = "feedback";
@@ -171,7 +168,7 @@ implements ScalarModelSubscriber {
         // also repaint the param if its pending arg has changed.
         return valueChanged
                 ? Repaint.PARAM_ONLY
-                        : Repaint.NOTHING;
+                : Repaint.NOTHING;
     }
 
     public static class InlinePromptConfig {
@@ -204,7 +201,7 @@ implements ScalarModelSubscriber {
         }
     }
 
-    // ///////////////////////////////////////////////////////////////////
+    // -- CONSTRUCTION
 
     protected final ScalarModel scalarModel;
 
@@ -221,14 +218,12 @@ implements ScalarModelSubscriber {
 
     WebMarkupContainer inlinePromptLink;
 
-    public ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
+    protected ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
         this.scalarModel = scalarModel;
     }
 
-
-    // ///////////////////////////////////////////////////////////////////
-
+    // -- INIT
 
     @Override
     protected void onInitialize() {
@@ -288,9 +283,6 @@ implements ScalarModelSubscriber {
      *
      */
     protected abstract InlinePromptConfig getInlinePromptConfig();
-
-
-
 
     /**
      * Builds GUI lazily prior to first render.
@@ -387,7 +379,6 @@ implements ScalarModelSubscriber {
 
         notifyOnChange(this);
         addFormComponentBehaviourToUpdateSubscribers();
-
     }
 
     /**
@@ -768,11 +759,13 @@ implements ScalarModelSubscriber {
 
         val linksBelow = linkAndLabels
                 .filter(LinkAndLabel.isPositionedAt(ActionLayout.Position.BELOW));
-        AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ASSOCIATED_ACTION_LINKS_BELOW, linksBelow, AdditionalLinksPanel.Style.INLINE_LIST);
+        AdditionalLinksPanel.addAdditionalLinks(
+                labelIfRegular, ID_ASSOCIATED_ACTION_LINKS_BELOW, linksBelow, AdditionalLinksPanel.Style.INLINE_LIST);
 
         val linksRight = linkAndLabels
                 .filter(LinkAndLabel.isPositionedAt(ActionLayout.Position.RIGHT));
-        AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ASSOCIATED_ACTION_LINKS_RIGHT, linksRight, AdditionalLinksPanel.Style.DROPDOWN);
+        AdditionalLinksPanel.addAdditionalLinks(
+                labelIfRegular, ID_ASSOCIATED_ACTION_LINKS_RIGHT, linksRight, AdditionalLinksPanel.Style.DROPDOWN);
     }
 
     /**
