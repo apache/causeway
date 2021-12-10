@@ -125,9 +125,9 @@ public class MetaModelServiceMenu {
                         describedAs="Subset of the complete meta model, only including namespaces starting with given prefix")
                 final List<String> namespaces,
 
-                @ParameterLayout(named = "Ignore Interfaces")
+                @ParameterLayout()
                 @Parameter(optionality=Optionality.MANDATORY)
-                final boolean ignoreInterfaces
+                final boolean includeInterfaces
         ) {
 
             Config config =
@@ -139,7 +139,7 @@ public class MetaModelServiceMenu {
             for (final String namespace : namespaces) {
                 config = config.withNamespacePrefix(namespace);
             }
-            if(ignoreInterfaces) {
+            if(!includeInterfaces) {
                 config = config.withIgnoreInterfaces();
             }
 
@@ -153,7 +153,7 @@ public class MetaModelServiceMenu {
         }
 
         @MemberSupport public String validateAct(
-                final String fileName, final List<String> namespacePrefixes, final boolean ignoreInterfaces) {
+                final String fileName, final List<String> namespacePrefixes, final boolean includeInterfaces) {
             if(namespacePrefixes == null || namespacePrefixes.isEmpty()) {
                 return "At least one package must be selected";
             }
@@ -162,7 +162,7 @@ public class MetaModelServiceMenu {
 
         @MemberSupport public String default0Act() { return "metamodel.xml"; }
         @MemberSupport public List<String> choices1Act() { return namespaceChoices(); }
-        @MemberSupport public boolean default2Act() { return true; }
+        @MemberSupport public boolean default2Act() { return false; }
 
     }
 
@@ -188,9 +188,9 @@ public class MetaModelServiceMenu {
                         describedAs="Subset of the complete meta model, only including namespaces starting with given prefix")
                 final List<String> namespaces,
 
-                @ParameterLayout(named = "Ignore Interfaces")
+                @ParameterLayout()
                 @Parameter(optionality=Optionality.MANDATORY)
-                final boolean ignoreInterfaces
+                final boolean includeInterfaces
         ) {
 
             Config config =
@@ -202,7 +202,7 @@ public class MetaModelServiceMenu {
             for (final String namespace : namespaces) {
                 config = config.withNamespacePrefix(namespace);
             }
-            if(ignoreInterfaces) {
+            if(!includeInterfaces) {
                 config = config.withIgnoreInterfaces();
             }
 
@@ -216,7 +216,7 @@ public class MetaModelServiceMenu {
         }
 
         @MemberSupport public String validateAct(
-                final String fileName, final List<String> namespacePrefixes, final boolean ignoreInterfaces) {
+                final String fileName, final List<String> namespacePrefixes, final boolean includeInterfaces) {
             if(namespacePrefixes == null || namespacePrefixes.isEmpty()) {
                 return "At least one package must be selected";
             }
@@ -225,7 +225,7 @@ public class MetaModelServiceMenu {
 
         @MemberSupport public String default0Act() { return "metamodel.txt"; }
         @MemberSupport public List<String> choices1Act() { return namespaceChoices(); }
-        @MemberSupport public boolean default2Act() { return true; }
+        @MemberSupport public boolean default2Act() { return false; }
 
     }
 
@@ -251,13 +251,13 @@ public class MetaModelServiceMenu {
                         describedAs="Subset of the complete meta model, only including namespaces starting with given prefix")
                 final List<String> namespaces,
 
-                @ParameterLayout(named = "Ignore Interfaces")
+                @ParameterLayout()
                 @Parameter(optionality=Optionality.MANDATORY)
-                final boolean ignoreInterfaces,
+                final boolean includeInterfaces,
 
                 @ParameterLayout(named="Metamodel (Zipped XML)",
                         describedAs="Metamodel from a previous export, to compare the current with.")
-                @Parameter(fileAccept=".zip", optionality = Optionality.MANDATORY)
+                @Parameter(fileAccept=".zip", optionality = Optionality.MANDATORY) final
                         Blob zippedMetamodelBlob
 
         ) throws IOException {
@@ -271,7 +271,7 @@ public class MetaModelServiceMenu {
             for (final String namespace : namespaces) {
                 config = config.withNamespacePrefix(namespace);
             }
-            if(ignoreInterfaces) {
+            if(!includeInterfaces) {
                 config = config.withIgnoreInterfaces();
             }
 
@@ -297,7 +297,7 @@ public class MetaModelServiceMenu {
         @MemberSupport public String validateAct(
                 final String fileName,
                 final List<String> namespacePrefixes,
-                final boolean ignoreInterfaces,
+                final boolean includeInterfaces,
                 final Blob rightMetamodelBlob) {
             if(namespacePrefixes == null || namespacePrefixes.isEmpty()) {
                 return "At least one package must be selected";
@@ -307,11 +307,11 @@ public class MetaModelServiceMenu {
 
         @MemberSupport public String default0Act() { return "metamodel-diff.txt"; }
         @MemberSupport public List<String> choices1Act() { return namespaceChoices(); }
-        @MemberSupport public boolean default2Act() { return true; }
+        @MemberSupport public boolean default2Act() { return false; }
 
     }
 
-    
+
     // -- HELPER
 
     private List<String> namespaceChoices() {
