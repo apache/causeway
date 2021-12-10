@@ -57,22 +57,29 @@ implements
 
     /**
      * What type of feature this identifies.
-     * @apiNote <i>Action Parameters</i> (for historic reasons) have {@link Type#ACTION},
-     * but other than <i>Actions</i>, have a non-negative {@link #parameterIndex}.
-     * (Future work, might introduce a new Type: eg. PARAMETER)
      */
     public static enum Type {
-        CLASS,
-        PROPERTY_OR_COLLECTION,
         /**
-         * Mixed in <i>Properties</i> and mixed in <i>Collections</i> are both categorized
-         * as {@link #ACTION};
-         * @apiNote future work might deal with this ambiguity
+         * A <i>Value-type</i> or <i>Domain Object</i>.
          */
-        ACTION;
-        public boolean isAction() { return this == ACTION; }
-        public boolean isPropertyOrCollection() { return this == PROPERTY_OR_COLLECTION; }
+        CLASS,
+        /**
+         * <i>Action</i> either declared or mixed in.
+         */
+        ACTION,
+        /**
+         * <i>Action Parameter</i>, also has a non-negative {@link #parameterIndex}.
+         */
+        ACTION_PARAMETER,
+        /**
+         * <i>Association</i> (of any cardinality), either declared or mixed in.
+         */
+        PROPERTY_OR_COLLECTION
+        ;
         public boolean isClass() { return this == CLASS; }
+        public boolean isAction() { return this == ACTION; }
+        public boolean isActionParameter() { return this == ACTION_PARAMETER; }
+        public boolean isPropertyOrCollection() { return this == PROPERTY_OR_COLLECTION;}
     }
 
     // -- FACTORY METHODS
@@ -86,6 +93,13 @@ implements
             final String propertyOrCollectionName) {
         return new Identifier(typeIdentifier, propertyOrCollectionName, Can.empty(),
                 Type.PROPERTY_OR_COLLECTION);
+    }
+
+    public static Identifier mixedInPropertyOrCollectionIdentifier(
+            final LogicalType typeIdentifier,
+            final String memberName,
+            final Can<String> singleParameterClassNames) {
+        return new Identifier(typeIdentifier, memberName, singleParameterClassNames, Type.PROPERTY_OR_COLLECTION);
     }
 
     /** for reporting orphaned methods */
@@ -182,9 +196,9 @@ implements
     // -- WITHERS
 
     public Identifier withParameterIndex(final int parameterIndex) {
-        return new Identifier(logicalType, memberLogicalName, memberParameterClassNames, type, parameterIndex);
+        return new Identifier(
+                logicalType, memberLogicalName, memberParameterClassNames, Type.ACTION_PARAMETER, parameterIndex);
     }
-
 
     // -- LOGICAL ID
 
@@ -303,6 +317,8 @@ implements
     private static Can<String> naturalNames(final Can<String> names) {
         return names.map(Identifier::naturalName);
     }
+
+
 
 
 }

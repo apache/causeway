@@ -206,11 +206,12 @@ implements MultiselectChoices {
 
     public ActionInteraction startAssociatedActionInteraction(final String actionId, final Where where) {
         val featureId = managedMember.getIdentifier();
-        if(featureId.getType().isAction()) {
-            return ActionInteraction.empty(String.format("[no such associated action %s for collection %s "
-                    + "(which is not a collection)]",
-                    actionId,
-                    featureId));
+        if(!featureId.getType().isPropertyOrCollection()) {
+            return ActionInteraction.empty(String.format("[no such collection %s; instead got %s;"
+                    + "(while searching for an associated action %s)]",
+                    featureId,
+                    featureId.getType(),
+                    actionId));
         }
         return ActionInteraction.startWithMultiselect(managedMember.getOwner(), actionId, where, this);
     }
