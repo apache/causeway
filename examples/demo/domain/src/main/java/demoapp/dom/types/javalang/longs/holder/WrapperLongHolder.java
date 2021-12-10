@@ -18,6 +18,9 @@
  */
 package demoapp.dom.types.javalang.longs.holder;
 
+import org.apache.isis.applib.annotation.LogicalTypeName;
+
+@LogicalTypeName("demo.WrapperLongHolder")
 //tag::class[]
 public interface WrapperLongHolder {
 

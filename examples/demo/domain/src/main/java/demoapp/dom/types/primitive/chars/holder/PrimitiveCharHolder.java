@@ -18,6 +18,9 @@
  */
 package demoapp.dom.types.primitive.chars.holder;
 
+import org.apache.isis.applib.annotation.LogicalTypeName;
+
+@LogicalTypeName("demo.PrimitiveCharHolder")
 //tag::class[]
 public interface PrimitiveCharHolder {
 

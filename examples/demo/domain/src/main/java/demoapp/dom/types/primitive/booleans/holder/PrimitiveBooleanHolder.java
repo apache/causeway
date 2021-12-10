@@ -18,9 +18,11 @@
  */
 package demoapp.dom.types.primitive.booleans.holder;
 
+import org.apache.isis.applib.annotation.LogicalTypeName;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
+@LogicalTypeName("demo.PrimitiveBooleanHolder")
 //tag::class[]
 public interface PrimitiveBooleanHolder {
 

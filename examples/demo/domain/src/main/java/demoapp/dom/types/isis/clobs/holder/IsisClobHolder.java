@@ -18,8 +18,10 @@
  */
 package demoapp.dom.types.isis.clobs.holder;
 
+import org.apache.isis.applib.annotation.LogicalTypeName;
 import org.apache.isis.applib.value.Clob;
 
+@LogicalTypeName("demo.IsisClobHolder")
 //tag::class[]
 public interface IsisClobHolder {
 

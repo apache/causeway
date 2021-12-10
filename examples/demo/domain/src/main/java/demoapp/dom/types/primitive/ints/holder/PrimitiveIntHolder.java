@@ -18,6 +18,9 @@
  */
 package demoapp.dom.types.primitive.ints.holder;
 
+import org.apache.isis.applib.annotation.LogicalTypeName;
+
+@LogicalTypeName("demo.PrimitiveIntHolder")
 //tag::class[]
 public interface PrimitiveIntHolder {
 

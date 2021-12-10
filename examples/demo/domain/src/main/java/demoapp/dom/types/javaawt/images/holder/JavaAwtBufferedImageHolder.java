@@ -20,6 +20,9 @@ package demoapp.dom.types.javaawt.images.holder;
 
 import java.awt.image.BufferedImage;
 
+import org.apache.isis.applib.annotation.LogicalTypeName;
+
+@LogicalTypeName("demo.JavaAwtBufferedImageHolder")
 //tag::class[]
 public interface JavaAwtBufferedImageHolder {
 

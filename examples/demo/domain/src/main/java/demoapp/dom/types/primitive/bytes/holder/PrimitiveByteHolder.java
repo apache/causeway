@@ -18,6 +18,9 @@
  */
 package demoapp.dom.types.primitive.bytes.holder;
 
+import org.apache.isis.applib.annotation.LogicalTypeName;
+
+@LogicalTypeName("demo.PrimitiveByteHolder")
 //tag::class[]
 public interface PrimitiveByteHolder {
 

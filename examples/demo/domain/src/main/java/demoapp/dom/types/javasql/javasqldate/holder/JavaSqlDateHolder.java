@@ -18,6 +18,9 @@
  */
 package demoapp.dom.types.javasql.javasqldate.holder;
 
+import org.apache.isis.applib.annotation.LogicalTypeName;
+
+@LogicalTypeName("demo.JavaSqlDateHolder")
 //tag::class[]
 public interface JavaSqlDateHolder {
 

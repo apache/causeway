@@ -18,6 +18,9 @@
  */
 package demoapp.dom.types.javalang.bytes.holder;
 
+import org.apache.isis.applib.annotation.LogicalTypeName;
+
+@LogicalTypeName("demo.WrapperByteHolder")
 //tag::class[]
 public interface WrapperByteHolder {
 

@@ -18,6 +18,9 @@
  */
 package demoapp.dom.types.javautil.javautildate.holder;
 
+import org.apache.isis.applib.annotation.LogicalTypeName;
+
+@LogicalTypeName("demo.JavaUtilDateHolder")
 //tag::class[]
 public interface JavaUtilDateHolder {
 

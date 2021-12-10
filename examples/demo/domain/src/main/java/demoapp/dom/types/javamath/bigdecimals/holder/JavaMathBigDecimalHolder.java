@@ -18,6 +18,9 @@
  */
 package demoapp.dom.types.javamath.bigdecimals.holder;
 
+import org.apache.isis.applib.annotation.LogicalTypeName;
+
+@LogicalTypeName("demo.JavaMathBigDecimalHolder")
 //tag::class[]
 public interface JavaMathBigDecimalHolder {
 

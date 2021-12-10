@@ -18,6 +18,9 @@
  */
 package demoapp.dom.types.javasql.javasqltimestamp.holder;
 
+import org.apache.isis.applib.annotation.LogicalTypeName;
+
+@LogicalTypeName("demo.JavaSqlTimestampHolder")
 //tag::class[]
 public interface JavaSqlTimestampHolder {
 

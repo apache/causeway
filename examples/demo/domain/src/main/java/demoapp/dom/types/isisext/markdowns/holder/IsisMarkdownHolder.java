@@ -18,8 +18,10 @@
  */
 package demoapp.dom.types.isisext.markdowns.holder;
 
+import org.apache.isis.applib.annotation.LogicalTypeName;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
+@LogicalTypeName("demo.IsisMarkdownHolder")
 //tag::class[]
 public interface IsisMarkdownHolder {
 
