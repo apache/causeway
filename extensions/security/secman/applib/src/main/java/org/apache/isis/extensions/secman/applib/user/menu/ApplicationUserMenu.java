@@ -59,12 +59,13 @@ public class ApplicationUserMenu {
     private final ApplicationUserRepository applicationUserRepository;
     private final FactoryService factory;
 
+    // -- ICON
 
     @ObjectSupport public String iconName() {
         return "applicationUser";
     }
 
-
+    // -- FIND USERS
 
     @Action(
             domainEvent = findUsers.ActionEvent.class,
@@ -83,8 +84,7 @@ public class ApplicationUserMenu {
 
     }
 
-
-
+    // -- USER MANAGER
 
     @Action(
             domainEvent = userManager.ActionEvent.class,

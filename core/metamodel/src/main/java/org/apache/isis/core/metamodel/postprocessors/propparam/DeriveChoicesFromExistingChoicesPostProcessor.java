@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.enums.ActionParameterChoicesFacetFromChoicesFacetFactory;
-import org.apache.isis.core.metamodel.facets.param.choices.enums.ActionParameterChoicesFacetInferredFromChoicesFacet;
+import org.apache.isis.core.metamodel.facets.param.choices.enums.ActionParameterChoicesFacetFromChoicesFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.enums.PropertyChoicesFacetFromChoicesFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.enums.PropertyChoicesFacetFromChoicesFacetFactory;
@@ -64,7 +64,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         parameter.getElementType()
         .lookupNonFallbackFacet(ChoicesFacet.class)
         .ifPresent(choicesFacet -> FacetUtil
-                .addFacet(new ActionParameterChoicesFacetInferredFromChoicesFacet(peerFor(parameter))));
+                .addFacet(new ActionParameterChoicesFacetFromChoicesFacet(peerFor(parameter))));
     }
 
     @Override

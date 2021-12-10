@@ -56,7 +56,8 @@ extends CssClassFaImperativeFacetAbstract {
     private final @NonNull MemberNamedFacet memberNamedFacet;
 
     /**
-     * if the memberNamedFacet provides static names, we can also provide a static CssClassFaFactory
+     * If the memberNamedFacet provides static names,
+     * we can also provide a static {@link CssClassFaFactory}.
      */
     private final @NonNull Optional<CssClassFaFactory> staticCssClassFaFactory;
     private ObjectSpecification objectSpecification;
@@ -65,7 +66,9 @@ extends CssClassFaImperativeFacetAbstract {
             final ObjectSpecification objectSpecification,
             final ObjectAction objectAction) {
         return objectAction.lookupFacet(MemberNamedFacet.class)
-        .map(memberNamedFacet->new CssClassFaFacetOnMemberFromConfiguredRegex(objectSpecification, memberNamedFacet, objectAction));
+        .map(memberNamedFacet->
+                new CssClassFaFacetOnMemberFromConfiguredRegex(
+                        objectSpecification, memberNamedFacet, objectAction));
     }
 
     private CssClassFaFacetOnMemberFromConfiguredRegex(
@@ -74,7 +77,8 @@ extends CssClassFaImperativeFacetAbstract {
             final FacetHolder holder) {
         super(holder);
         this.objectSpecification = objectSpecification;
-        this.faIconByPattern = getConfiguration().getApplib().getAnnotation().getActionLayout().getCssClassFa().getPatternsAsMap();
+        this.faIconByPattern = getConfiguration()
+                .getApplib().getAnnotation().getActionLayout().getCssClassFa().getPatternsAsMap();
         this.memberNamedFacet = memberNamedFacet;
 
         // an optimization, not strictly required

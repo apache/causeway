@@ -79,10 +79,15 @@ implements ObjectAction {
         return type;
     }
 
-    // -- FACTORY
+    // -- FACTORIES
 
-    public static ObjectActionDefault forMethod(final FacetedMethod facetedMethod) {
-        return new ObjectActionDefault(facetedMethod.getFeatureIdentifier(), facetedMethod);
+    public static ObjectActionDefault forMethod(
+            final FacetedMethod facetedMethod) {
+        return new ObjectActionDefault(facetedMethod.getFeatureIdentifier(), facetedMethod, false);
+    }
+
+    public static ObjectAction forMixinMain(final FacetedMethod facetedMethod) {
+        return new ObjectActionDefault(facetedMethod.getFeatureIdentifier(), facetedMethod, true);
     }
 
     // -- CONSTRUCTION
@@ -90,10 +95,16 @@ implements ObjectAction {
     @Getter(onMethod_ = @Override)
     private final ObjectSpecification elementType;
 
+    @Getter(onMethod_ = @Override)
+    private final boolean declaredOnMixin;
+
     protected ObjectActionDefault(
             final Identifier identifier,
-            final FacetedMethod facetedMethod) {
+            final FacetedMethod facetedMethod,
+            final boolean declaredOnMixin) {
         super(identifier, facetedMethod, FeatureType.ACTION);
+
+        this.declaredOnMixin = declaredOnMixin;
 
         // In support of some JUnit tests, skip
         if(getActionInvocationFacet()==null) {

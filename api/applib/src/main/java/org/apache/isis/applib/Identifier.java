@@ -66,7 +66,7 @@ implements
         PROPERTY_OR_COLLECTION,
         /**
          * Mixed in <i>Properties</i> and mixed in <i>Collections</i> are both categorized
-         * as {@link #ACTION}
+         * as {@link #ACTION};
          * @apiNote future work might deal with this ambiguity
          */
         ACTION;

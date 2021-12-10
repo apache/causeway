@@ -68,11 +68,11 @@ implements ObjectSpecificationPostProcessor {
 
     }
 
-    protected abstract void doPostProcess(ObjectSpecification objectSpecification);
-    protected abstract void doPostProcess(ObjectSpecification objectSpecification, ObjectAction act);
-    protected abstract void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, ObjectActionParameter param);
-    protected abstract void doPostProcess(ObjectSpecification objectSpecification, OneToOneAssociation prop);
-    protected abstract void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll);
+    protected abstract void doPostProcess(ObjectSpecification objSpec);
+    protected abstract void doPostProcess(ObjectSpecification objSpec, ObjectAction act);
+    protected abstract void doPostProcess(ObjectSpecification objSpec, ObjectAction act, ObjectActionParameter param);
+    protected abstract void doPostProcess(ObjectSpecification objSpec, OneToOneAssociation prop);
+    protected abstract void doPostProcess(ObjectSpecification objSpec, OneToManyAssociation coll);
 
     protected static FacetedMethod facetedMethodFor(final ObjectMember objectMember) {
         // TODO: hacky, need to copy facet onto underlying peer, not to the action/association itself.

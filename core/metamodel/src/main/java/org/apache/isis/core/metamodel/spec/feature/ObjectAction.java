@@ -51,6 +51,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.memento.ActionMemento;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
@@ -76,6 +78,14 @@ public interface ObjectAction extends ObjectMember {
     ActionScope getScope();
 
     boolean isPrototype();
+
+    /**
+     * Whether this {@link ObjectAction} instance represents a mixin main method,
+     * usually of type {@link ObjectActionDefault}, peered by an {@link ObjectActionMixedIn}.
+     * <p>
+     * Such instances are used for populating the meta-model.
+     */
+    boolean isDeclaredOnMixin();
 
     /**
      * Returns the specifications for the return type.
