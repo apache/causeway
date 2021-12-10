@@ -95,13 +95,6 @@ implements
                 Type.PROPERTY_OR_COLLECTION);
     }
 
-    public static Identifier mixedInPropertyOrCollectionIdentifier(
-            final LogicalType typeIdentifier,
-            final String memberName,
-            final Can<String> singleParameterClassNames) {
-        return new Identifier(typeIdentifier, memberName, singleParameterClassNames, Type.PROPERTY_OR_COLLECTION);
-    }
-
     /** for reporting orphaned methods */
     public static Identifier methodIdentifier(
             final LogicalType typeIdentifier,

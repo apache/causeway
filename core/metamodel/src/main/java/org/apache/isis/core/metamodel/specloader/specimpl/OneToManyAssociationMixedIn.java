@@ -90,12 +90,11 @@ implements MixedInMember {
             final Class<?> mixinType,
             final String mixinMethodName) {
 
-        super(Identifier.mixedInPropertyOrCollectionIdentifier(
+        super(Identifier.propertyOrCollectionIdentifier(
                     LogicalType.eager(
                             mixeeSpec.getCorrespondingClass(),
                             mixeeSpec.getLogicalTypeName()),
-                    _MixedInMemberNamingStrategy.determineIdFrom(mixinAction),
-                    mixinAction.getFacetedMethod().getFeatureIdentifier().getMemberParameterClassNames()),
+                    _MixedInMemberNamingStrategy.determineIdFrom(mixinAction)),
                 mixinAction.getFacetedMethod(), typeOfSpec(mixinAction));
 
         this.facetHolder = FacetHolderAbstract.simple(
