@@ -26,6 +26,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 
@@ -34,6 +35,7 @@ import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -219,6 +221,36 @@ public class EntityPage extends PageAbstract {
 
     }
 
+    // -- UTILIY
+
+    /**
+     * Re-fetch entities for JAXB viewmodels, usually required once at begin of request.
+     */
+    public static void jaxbViewmodelRefresh(final IRequestablePage iRequestablePage) {
+        if(iRequestablePage instanceof EntityPage) {
+
+            val entityPage = (EntityPage) iRequestablePage;
+            val entityModel = (EntityModel)entityPage.getUiHintContainerIfAny();
+            val spec = entityModel.getObject().getSpecification();
+            if(spec.isViewModel()) {
+
+                val viewModelFacet = spec.getFacet(ViewModelFacet.class);
+                if(viewModelFacet.containsEntities()) {
+
+                    val viewmodel = entityModel.getBookmarkedOwner();
+                    if(viewmodel.isBookmarkMemoized()) {
+                        viewmodel.reloadViewmodelFromMemoizedBookmark();
+                    } else {
+                        val bookmark = PageParameterUtils
+                                .toBookmark(entityPage.getPageParameters()).orElseThrow();
+                        viewmodel.reloadViewmodelFromBookmark(bookmark);
+                    }
+
+                }
+            }
+        }
+    }
+
     // -- HELPER
 
     private void addBreadcrumbIfShown(final EntityModel entityModel) {
@@ -230,5 +262,7 @@ public class EntityPage extends PageAbstract {
         getBreadcrumbModel()
         .ifPresent(breadcrumbModel->breadcrumbModel.remove(entityModel));
     }
+
+
 
 }

@@ -27,15 +27,9 @@ import org.apache.wicket.request.IRequestMapper;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.http.WebRequest;
 
-import org.apache.isis.commons.internal.debug._Debug;
-import org.apache.isis.commons.internal.debug.xray.XrayUi;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -56,55 +50,17 @@ public final class IsisWicketAjaxRequestListenerUtil {
                     public IRequestHandler mapRequest(final Request request) {
                         var handler = super.mapRequest(request);
                         final boolean isAjax = ((WebRequest)request).isAjax();
-                        return isAjax
-                                ? entityRefetchingHandler(commonContext, handler)
-                                : handler;
+
+                        if(isAjax
+                                && handler instanceof ListenerRequestHandler) {
+                            EntityPage.jaxbViewmodelRefresh(((ListenerRequestHandler)handler).getPage());
+                        }
+
+                        return handler;
                     }
                 };
             }
         });
-    }
-
-    // -- HELPER
-
-    private IRequestHandler entityRefetchingHandler(
-            final IsisAppCommonContext commonContext, final IRequestHandler handler) {
-        if(handler instanceof ListenerRequestHandler) {
-            val lirqh = (ListenerRequestHandler)handler;
-            val page = lirqh.getPage();
-            if(!(page instanceof EntityPage)) {
-                return lirqh;
-            }
-
-            val entityPage = (EntityPage) page;
-            val entityModel = (EntityModel)entityPage.getUiHintContainerIfAny();
-            val spec = entityModel.getObject().getSpecification();
-
-            if(!spec.isViewModel()) {
-                return lirqh;
-            };
-
-            val viewModelFacet = spec.getFacet(ViewModelFacet.class);
-            if(!viewModelFacet.containsEntities()) {
-                return lirqh;
-            }
-
-            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log("[IRequestHandler] recreate model %s", spec.getCorrespondingClass().getSimpleName());
-            });
-
-            val viewmodel = entityModel.getBookmarkedOwner();
-            if(viewmodel.isBookmarkMemoized()) {
-                viewmodel.reloadViewmodelFromMemoizedBookmark();
-            } else {
-                val bookmark = PageParameterUtils.toBookmark(entityPage.getPageParameters()).orElseThrow();
-                viewmodel.reloadViewmodelFromBookmark(bookmark);
-            }
-
-            return lirqh;
-
-        }
-        return handler;
     }
 
 }

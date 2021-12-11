@@ -31,22 +31,25 @@ import org.apache.wicket.util.file.Files;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 
+import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
+
 class ExcelFileDownloadLink extends DownloadLink {
 
     private static final long serialVersionUID = 1L;
 
     private final String xlsxFileName;
 
-    public ExcelFileDownloadLink(String id, LoadableDetachableModel<File> model, String xlsxFileName) {
+    public ExcelFileDownloadLink(
+            final String id, final LoadableDetachableModel<File> model, final String xlsxFileName) {
         super(id, model, xlsxFileName);
         this.xlsxFileName = xlsxFileName;
     }
 
-
-
     @Override
-    public void onClick()
-    {
+    public void onClick() {
+
+        EntityPage.jaxbViewmodelRefresh(getPage());
+
         final File file = getModelObject();
         if (file == null)
         {
@@ -71,7 +74,7 @@ class ExcelFileDownloadLink extends DownloadLink {
                 new ResourceStreamRequestHandler(resourceStream)
                 {
                     @Override
-                    public void respond(IRequestCycle requestCycle)
+                    public void respond(final IRequestCycle requestCycle)
                     {
                         super.respond(requestCycle);
                         Files.remove(file);
@@ -81,7 +84,7 @@ class ExcelFileDownloadLink extends DownloadLink {
     }
 
     @Override
-    protected void onComponentTag(ComponentTag tag) {
+    protected void onComponentTag(final ComponentTag tag) {
         super.onComponentTag(tag);
         tag.put("download", encodedFileName());
     }
