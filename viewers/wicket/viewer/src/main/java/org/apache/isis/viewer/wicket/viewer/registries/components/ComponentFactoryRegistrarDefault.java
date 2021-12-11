@@ -57,6 +57,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.bookmark.BookmarkPane
 import org.apache.isis.viewer.wicket.ui.components.scalars.image.JavaAwtImagePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time.Jdk8LocalDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time.Jdk8LocalDateTimePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time.Jdk8LocalTimePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time.Jdk8OffsetDateTimePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaSqlDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaSqlTimePanelFactory;
@@ -255,6 +256,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
         componentFactories.add(new Jdk8OffsetDateTimePanelFactory());
         componentFactories.add(new Jdk8LocalDatePanelFactory());
+        componentFactories.add(new Jdk8LocalTimePanelFactory());
         componentFactories.add(new Jdk8LocalDateTimePanelFactory());
 
         componentFactories.add(new ValueCompoundPanelFactory());

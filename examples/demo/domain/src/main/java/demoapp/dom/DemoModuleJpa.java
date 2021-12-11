@@ -64,6 +64,7 @@ import demoapp.dom.types.javasql.javasqldate.jpa.JavaSqlDateJpa;
 import demoapp.dom.types.javasql.javasqltimestamp.jpa.JavaSqlTimestampJpa;
 import demoapp.dom.types.javatime.javatimelocaldate.jpa.JavaTimeLocalDateJpa;
 import demoapp.dom.types.javatime.javatimelocaldatetime.jpa.JavaTimeLocalDateTimeJpa;
+import demoapp.dom.types.javatime.javatimelocaltime.jpa.JavaTimeLocalTimeJpa;
 import demoapp.dom.types.javatime.javatimeoffsetdatetime.jpa.JavaTimeOffsetDateTimeJpa;
 import demoapp.dom.types.javatime.javatimeoffsettime.jpa.JavaTimeOffsetTimeJpa;
 import demoapp.dom.types.javatime.javatimezoneddatetime.jpa.JavaTimeZonedDateTimeJpa;
@@ -105,6 +106,7 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
         JavaNetUrlJpa.class,
         JavaSqlDateJpa.class,
         JavaSqlTimestampJpa.class,
+        JavaTimeLocalTimeJpa.class,
         JavaTimeLocalDateJpa.class,
         JavaTimeLocalDateTimeJpa.class,
         JavaTimeOffsetDateTimeJpa.class,

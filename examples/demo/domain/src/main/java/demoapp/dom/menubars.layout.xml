@@ -181,6 +181,7 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
             </mb3:section>
             <mb3:section>
                 <mb3:named>java.time</mb3:named>
+                <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="localTimes"/>
                 <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="localDates"/>
                 <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="localDateTimes"/>
                 <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="offsetDateTimes"/>

@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import demoapp.dom.types.javatime.javatimelocaldate.JavaTimeLocalDates;
 import demoapp.dom.types.javatime.javatimelocaldatetime.JavaTimeLocalDateTimes;
+import demoapp.dom.types.javatime.javatimelocaltime.JavaTimeLocalTimes;
 import demoapp.dom.types.javatime.javatimeoffsetdatetime.JavaTimeOffsetDateTimes;
 import demoapp.dom.types.javatime.javatimeoffsettime.JavaTimeOffsetTimes;
 import demoapp.dom.types.javatime.javatimezoneddatetime.JavaTimeZonedDateTimes;
@@ -45,35 +46,36 @@ public class JavaTimeTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
+    public JavaTimeLocalTimes localTimes(){
+        return new JavaTimeLocalTimes();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-calendar")
     public JavaTimeLocalDates localDates(){
         return new JavaTimeLocalDates();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-clock")
+    @ActionLayout(cssClassFa="fa-calendar")
     public JavaTimeLocalDateTimes localDateTimes(){
         return new JavaTimeLocalDateTimes();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-clock")
+    @ActionLayout(cssClassFa="fa-calendar")
     public JavaTimeOffsetDateTimes offsetDateTimes(){
         return new JavaTimeOffsetDateTimes();
     }
 
-    @Action(
-            semantics = SemanticsOf.SAFE
-            //,hidden = Where.EVERYWHERE   // TODO: ISIS-2409 - NPE
-    )
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
     public JavaTimeOffsetTimes offsetTimes(){
         return new JavaTimeOffsetTimes();
     }
 
-    @Action(semantics = SemanticsOf.SAFE
-            //,hidden = Where.EVERYWHERE   // TODO: ISIS-2410 - does not render/parse correctly
-    )
-    @ActionLayout(cssClassFa="fa-clock")
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-calendar")
     public JavaTimeZonedDateTimes zonedDateTimes(){
         return new JavaTimeZonedDateTimes();
     }

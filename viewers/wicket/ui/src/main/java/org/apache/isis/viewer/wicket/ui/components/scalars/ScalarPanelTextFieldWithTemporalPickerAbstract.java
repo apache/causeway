@@ -57,35 +57,9 @@ extends ScalarPanelTextFieldWithValueSemanticsAbstract<T>  {
         return "date";
     }
 
-//    @Override
-//    protected Component createComponentForCompact() {
-//        Fragment compactFragment = getCompactFragment(CompactType.SPAN);
-//        final Label label = new Label(ID_SCALAR_IF_COMPACT, newTextFieldValueModel()) {
-//            private static final long serialVersionUID = 1L;
-//
-//            @Override
-//            public <C> IConverter<C> getConverter(final Class<C> type) {
-//                return _Casts.uncheckedCast(converter);
-//            }
-//        };
-//        label.setEnabled(false);
-//
-//        // adding an amount because seemed to truncate in tables in certain circumstances
-//        final int lengthAdjust = 1;
-//
-//        final String dateTimePattern = converter.getDateTimePattern(getLocale());
-//        final int length = dateTimePattern.length() + lengthAdjust;
-//        label.add(new AttributeModifier("size", Model.of("" + length)));
-//
-//        compactFragment.add(label);
-//
-//        return label;
-//    }
-
     @Override
     protected IModel<String> obtainInlinePromptModel() {
         return super.toStringConvertingModelOf(getConverter(scalarModel));
     }
-
 
 }
