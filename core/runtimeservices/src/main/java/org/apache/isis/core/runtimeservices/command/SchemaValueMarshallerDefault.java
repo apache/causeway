@@ -220,11 +220,6 @@ implements SchemaValueMarshaller {
         final @NonNull ObjectSpecification spec;
         final @Nullable ValueSemanticsProvider<T> semantics;
 
-//        private final static ValueTypeWrapper<Void> VOID = ValueTypeWrapper.of(ValueType.VOID, null, null);
-//        public static ValueTypeWrapper<Void> empty() {
-//            return VOID;
-//        }
-
         public T fromFundamentalValue(final Object fundamentalValue) {
             val valuePojo = supportsConversionViaEncoderDecoder()
                     ? encoderDecoder().fromEncodedString((String)fundamentalValue)

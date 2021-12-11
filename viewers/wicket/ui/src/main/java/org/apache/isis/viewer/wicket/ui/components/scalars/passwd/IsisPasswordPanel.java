@@ -18,44 +18,29 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.passwd;
 
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
-import org.apache.wicket.markup.html.form.PasswordTextField;
 
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldTextualAbstract;
-
-import de.agilecoders.wicket.core.util.Attributes;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemanticsAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 /**
  * Panel for rendering scalars of type {@link Password Isis' applib.Password}.
  */
 public class IsisPasswordPanel
-extends ScalarPanelTextFieldTextualAbstract {
+extends ScalarPanelTextFieldWithValueSemanticsAbstract<Password> {
 
     private static final long serialVersionUID = 1L;
 
     public IsisPasswordPanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel);
+        super(id, scalarModel, Password.class);
     }
 
     @Override
-    protected AbstractTextComponent<String> createTextField(final String id) {
-
-        final PasswordTextField passwordField = new PasswordTextField(id, newTextFieldValueModel()) {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void onComponentTag(final ComponentTag tag) {
-                Attributes.set(tag, "type", "password");
-                super.onComponentTag(tag);
-            }
-        };
-
-        passwordField.setResetPassword(false);
-
-        return passwordField;
+    protected AbstractTextComponent<Password> createTextField(final String id) {
+        return Wkt.passwordFieldWithConverter(
+                id, newTextFieldValueModel(), cls, getConverter(getModel()));
     }
 
 }

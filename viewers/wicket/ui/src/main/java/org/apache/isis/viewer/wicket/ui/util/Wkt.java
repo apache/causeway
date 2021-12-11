@@ -59,11 +59,12 @@ import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
-import lombok.val;
-import lombok.experimental.UtilityClass;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.core.util.Attributes;
+import lombok.NonNull;
+import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * Wicket common idioms, in alphabetical order.
@@ -510,6 +511,35 @@ public class Wkt {
                     }
                 }
             : new TextField<>(id, model, type);
+    }
+
+    public <T> TextField<T> passwordFieldWithConverter(
+            final String id, final IModel<T> model, final Class<T> type,
+            final @NonNull IConverter<T> converter) {
+        return new TextField<T>(id, model, type) {
+            private static final long serialVersionUID = 1L;
+            @SuppressWarnings("unchecked")
+            @Override public <C> IConverter<C> getConverter(final Class<C> cType) {
+                return cType == type
+                        ? (IConverter<C>) converter
+                        : super.getConverter(cType);}
+            @Override public void error(final IValidationError error) {
+                if(error instanceof ValidationError) {
+                    // use plain error message from ConversionException, circumventing resource bundles.
+                    this.error(((ValidationError)error).getMessage());
+                } else {
+                    super.error(error);
+                }
+            }
+            @Override protected void onComponentTag(final ComponentTag tag) {
+                Attributes.set(tag, "type", "password");
+                super.onComponentTag(tag);
+            }
+            @Override protected String[] getInputTypes() {
+                return new String[] {"password"};
+            }
+        };
+
     }
 
     // -- FOCUS UTILITY
