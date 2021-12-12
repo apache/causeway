@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.ui.util;
 
 import java.util.List;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -281,6 +282,11 @@ public class Wkt {
 
     public <T extends Component> T cssAppend(final T component, final Identifier identifier) {
         return cssAppend(component, cssNormalize(identifier));
+    }
+
+    public <T extends Component> T cssReplace(final T component, final @Nullable String cssClass) {
+        component.add(AttributeModifier.replace("class", _Strings.nullToEmpty(cssClass)));
+        return component;
     }
 
     public static String cssNormalize(final Identifier identifier) {
@@ -584,5 +590,7 @@ public class Wkt {
                 ? String.format("Wicket.Event.publish(Isis.Topic.%s, '%s')", topic.name(), containerId)
                 : String.format("Wicket.Event.publish(Isis.Topic.%s)", topic.name());
     }
+
+
 
 }

@@ -43,7 +43,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.Breadcrum
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.Links;
+import org.apache.isis.viewer.wicket.ui.util.WktLinks;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 public class ExceptionStackTracePanel extends Panel {
@@ -132,7 +132,7 @@ public class ExceptionStackTracePanel extends Panel {
                     pageParameters = null;
                     pageClass = HomePage.class;
                 }
-                final AbstractLink link = Links.newBookmarkablePageLink("continueButton", pageParameters, pageClass);
+                final AbstractLink link = WktLinks.newBookmarkablePageLink("continueButton", pageParameters, pageClass);
                 add(link);
 
     }

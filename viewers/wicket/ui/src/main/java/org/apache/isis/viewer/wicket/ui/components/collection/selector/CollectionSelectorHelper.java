@@ -30,6 +30,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -82,7 +83,10 @@ public class CollectionSelectorHelper implements Serializable {
         final List<ComponentFactory> ajaxFactoriesToEnd = _Lists.newArrayList();
 
         final List<ComponentFactory> componentFactories = componentFactoryRegistry
-        .streamComponentFactories(ComponentType.COLLECTION_CONTENTS, collectionModel)
+        .streamComponentFactories(ImmutableEnumSet.of(
+                ComponentType.COLLECTION_CONTENTS,
+                ComponentType.COLLECTION_CONTENTS_EXPORT),
+                collectionModel)
         .filter(componentFactory ->
             componentFactory.getClass() != CollectionContentsMultipleViewsPanelFactory.class)
         .filter(componentFactory -> {

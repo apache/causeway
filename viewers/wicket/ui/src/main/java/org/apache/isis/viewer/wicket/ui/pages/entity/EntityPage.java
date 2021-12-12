@@ -59,7 +59,7 @@ import lombok.val;
 public class EntityPage extends PageAbstract {
 
     private static final long serialVersionUID = 144368606134796079L;
-    private static final CssResourceReference WHERE_AM_I_CSS =
+    private static final CssResourceReference ENTITY_PAGE_CSS =
             new CssResourceReference(EntityPage.class, "EntityPage.css");
 
     private final EntityModel model;
@@ -124,7 +124,7 @@ public class EntityPage extends PageAbstract {
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        response.render(CssHeaderItem.forReference(WHERE_AM_I_CSS));
+        response.render(CssHeaderItem.forReference(ENTITY_PAGE_CSS));
     }
 
     @Override

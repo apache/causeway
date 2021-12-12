@@ -173,19 +173,19 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         }
         if(valueAsObj instanceof LocalDate) {
             LocalDate value = (LocalDate) valueAsObj;
-            Date date = Util_TimeConversion.toDate(value);
+            Date date = _TimeConversion.toDate(value);
             setCellValueForDate(cell, date, dateCellStyle);
             return;
         }
         if(valueAsObj instanceof LocalDateTime) {
             LocalDateTime value = (LocalDateTime) valueAsObj;
-            Date date = Util_TimeConversion.toDate(value);
+            Date date = _TimeConversion.toDate(value);
             setCellValueForDate(cell, date, dateCellStyle);
             return;
         }
         if(valueAsObj instanceof OffsetDateTime) {
             OffsetDateTime value = (OffsetDateTime) valueAsObj;
-            Date date = Util_TimeConversion.toDate(value);
+            Date date = _TimeConversion.toDate(value);
             setCellValueForDate(cell, date, dateCellStyle);
             return;
         }

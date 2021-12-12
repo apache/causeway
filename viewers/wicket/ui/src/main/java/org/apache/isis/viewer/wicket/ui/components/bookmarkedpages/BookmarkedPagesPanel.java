@@ -41,7 +41,7 @@ import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Links;
+import org.apache.isis.viewer.wicket.ui.util.WktLinks;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -127,7 +127,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
                     clearBookmarkLink.setEnabled(true);
                 }
 
-                val link = Wkt.add(item, Links.newBookmarkablePageLink(ID_BOOKMARKED_PAGE_LINK,
+                val link = Wkt.add(item, WktLinks.newBookmarkablePageLink(ID_BOOKMARKED_PAGE_LINK,
                                 bookmarkNode.getPageParameters(),
                                 pageClass));
 

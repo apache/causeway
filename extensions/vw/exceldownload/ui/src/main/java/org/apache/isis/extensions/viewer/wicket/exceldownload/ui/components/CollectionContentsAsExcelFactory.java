@@ -18,8 +18,12 @@
  */
 package org.apache.isis.extensions.viewer.wicket.exceldownload.ui.components;
 
+import java.io.File;
+
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.link.DownloadLink;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.viewer.common.model.components.ComponentType;
@@ -43,7 +47,7 @@ implements CollectionContentsAsFactory {
     private static final String NAME = "excel";
 
     public CollectionContentsAsExcelFactory() {
-        super(ComponentType.COLLECTION_CONTENTS, NAME);
+        super(ComponentType.COLLECTION_CONTENTS_EXPORT, NAME);
     }
 
     @Override
@@ -57,7 +61,7 @@ implements CollectionContentsAsFactory {
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
         final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
-        return new CollectionContentsAsExcel(id, collectionModel);
+        return createDownloadLink(id, collectionModel);
     }
 
     @Override
@@ -68,5 +72,18 @@ implements CollectionContentsAsFactory {
     @Override
     public IModel<String> getCssClass() {
         return Model.of("fa fa-file-excel");
+    }
+
+    // -EXP
+
+    private DownloadLink createDownloadLink(final String id, final EntityCollectionModel model) {
+        final LoadableDetachableModel<File> fileModel = ExcelFileModel.of(model);
+        final String xlsxFileName = xlsxFileNameFor(model);
+        final DownloadLink link = new ExcelFileDownloadLink(id, fileModel, xlsxFileName);
+        return link;
+    }
+
+    private static String xlsxFileNameFor(final EntityCollectionModel model) {
+        return model.getName().replaceAll(" ", "") + ".xlsx";
     }
 }

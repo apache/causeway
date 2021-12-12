@@ -23,18 +23,12 @@ import java.util.List;
 import org.apache.wicket.MarkupContainer;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
-import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel.Placement;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.ListOfLinksModel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.Decorators;
-import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.WktLinks;
 
 import lombok.val;
 
@@ -87,51 +81,8 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
                     ()->AdditionalLinksPanel.this.getModel().hasAnyVisibleLink()));
 
         Wkt.listViewAdd(container, ID_ADDITIONAL_LINK_ITEM, getModel(), item->{
-
             val linkAndLabel = item.getModelObject();
-            val link = linkAndLabel.getUiComponent();
-            val action = linkAndLabel.getManagedAction().getAction();
-
-            Tooltips.addTooltip(link, link instanceof ActionLink
-                        && _Strings.isNotEmpty(((ActionLink) link).getReasonDisabledIfAny())
-                    ? ((ActionLink) link).getReasonDisabledIfAny()
-                    : linkAndLabel.getDescription().orElse(null));
-
-            if(ObjectAction.Util.returnsBlobOrClob(action)) {
-                Wkt.cssAppend(link, "noVeil");
-            }
-            if(action.isPrototype()) {
-                Wkt.cssAppend(link, "prototype");
-            }
-            Wkt.cssAppend(link, linkAndLabel.getFeatureIdentifier());
-
-            if (action.getSemantics().isAreYouSure()) {
-                if(action.getParameterCount()==0) {
-                    val hasDisabledReason = link instanceof ActionLink
-                            ? _Strings.isNotEmpty(((ActionLink)link).getReasonDisabledIfAny())
-                            : false;
-                    if (!hasDisabledReason) {
-                        val confirmUiModel = ConfirmUiModel.ofAreYouSure(getTranslationService(), Placement.BOTTOM);
-                        Decorators.getConfirm().decorate(link, confirmUiModel);
-                    }
-                }
-                // ensure links receive the danger style
-                // don't care if expressed twice
-                Decorators.getDanger().decorate(link);
-            }
-
-            linkAndLabel
-            .getAdditionalCssClass()
-            .ifPresent(cssClass->Wkt.cssAppend(link, cssClass));
-
-            val viewTitleLabel = Wkt.labelAdd(link, ID_ADDITIONAL_LINK_TITLE,
-                    linkAndLabel::getFriendlyName);
-
-            val fontAwesome = linkAndLabel.getFontAwesomeUiModel();
-            Decorators.getIcon().decorate(viewTitleLabel, fontAwesome);
-            Decorators.getMissingIcon().decorate(viewTitleLabel, fontAwesome);
-
-            item.addOrReplace(link);
+            item.addOrReplace(WktLinks.asAdditionalLink(ID_ADDITIONAL_LINK_TITLE, linkAndLabel));
         });
     }
 

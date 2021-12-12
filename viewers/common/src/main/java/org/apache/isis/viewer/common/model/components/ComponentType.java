@@ -117,6 +117,10 @@ public enum ComponentType {
      */
     COLLECTION_CONTENTS,
     /**
+     * A collection of entities (the value of)
+     */
+    COLLECTION_CONTENTS_EXPORT,
+    /**
      * A link to an entity.
      */
     ENTITY_LINK,

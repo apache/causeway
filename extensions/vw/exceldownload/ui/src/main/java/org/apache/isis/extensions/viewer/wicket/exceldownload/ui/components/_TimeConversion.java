@@ -16,17 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.extensions.viewer.wicket.exceldownload.ui.components;
 
-.collectionContentsAsExcel .selector {
-	float: right;
-	margin-bottom: -25px;
-	margin-top: 10px;
-}
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
-.collectionContentsAsExcel .fc-header-title {
-	margin-top: 5px;
-}
+final class _TimeConversion {
 
-.collectionContentsAsExcel div.fc-event-inner {
-  cursor: pointer;
+    public static Date toDate(LocalDate value) {
+        return toDate(value.atStartOfDay());
+    }
+
+    public static Date toDate(LocalDateTime value) {
+        return new Date(toEpochMilli(value));
+    }
+
+    public static Date toDate(OffsetDateTime value) {
+        return toDate(value.toLocalDateTime());
+    }
+
+    // -- HELPER
+
+    private static final ZoneId zId = ZoneId.systemDefault();
+
+    private static long toEpochMilli(LocalDateTime localDateTime){
+        return localDateTime.atZone(zId).toInstant().toEpochMilli();
+    }
+
 }

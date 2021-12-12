@@ -34,6 +34,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.commons.internal.collections._Multimaps;
@@ -149,6 +150,14 @@ implements ComponentFactoryRegistry {
         return componentFactoriesByType.streamElements(componentType)
                 .filter(componentFactory->componentFactory.appliesTo(componentType, model).applies())
                 .peek(componentFactory->logComponentResolving(model, componentType, componentFactory));
+    }
+
+    @Override
+    public Stream<ComponentFactory> streamComponentFactories(
+            final ImmutableEnumSet<ComponentType> componentTypes,
+            final @Nullable IModel<?> model) {
+        return componentTypes.stream()
+                .flatMap(componentType->streamComponentFactories(componentType, model));
     }
 
     // -- DEBUG LOGGING

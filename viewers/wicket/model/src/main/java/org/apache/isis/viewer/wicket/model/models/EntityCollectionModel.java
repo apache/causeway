@@ -110,14 +110,14 @@ extends
 
     // -- PARENTED SPECIFICS
 
-    @Deprecated
+    @Deprecated // there is no reason to distinguish parented and standalone, I think
     default Optional<EntityCollectionModelParented> parented() {
         return this instanceof EntityCollectionModelParented
             ? Optional.of((EntityCollectionModelParented)this)
             : Optional.empty();
     }
 
-    @Deprecated
+    @Deprecated // there is no reason to distinguish parented and standalone, I think
     default Optional<Bookmark> parentedHintingBookmark() {
         return parented()
                 .map(EntityCollectionModelParented::asHintingBookmark);

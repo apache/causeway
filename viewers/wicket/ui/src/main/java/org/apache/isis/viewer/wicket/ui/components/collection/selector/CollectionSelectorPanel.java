@@ -20,16 +20,17 @@ package org.apache.isis.viewer.wicket.ui.components.collection.selector;
 
 import java.util.List;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.DownloadLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
@@ -37,6 +38,7 @@ import org.apache.isis.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.WktLinks;
 
 import lombok.val;
 
@@ -98,58 +100,72 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         // selector
         if (componentFactories.size() <= 1) {
             permanentlyHide(ID_VIEWS);
-        } else {
-            final Model<ComponentFactory> componentFactoryModel = new Model<>();
+            return;
+        }
 
-            this.selectedComponentFactory = selectorHelper.find(selected);
-            componentFactoryModel.setObject(this.selectedComponentFactory);
+        this.selectedComponentFactory = selectorHelper.find(selected);
 
-            final WebMarkupContainer views = new WebMarkupContainer(ID_VIEWS);
+        final WebMarkupContainer views = new WebMarkupContainer(ID_VIEWS);
+        final WebMarkupContainer container = new WebMarkupContainer(ID_VIEW_LIST);
 
-            final Label viewButtonTitle = Wkt.labelAdd(views, ID_VIEW_BUTTON_TITLE, "Hidden");
-            final Label viewButtonIcon = Wkt.labelAdd(views, ID_VIEW_BUTTON_ICON, "");
+        views.addOrReplace(container);
+        views.setOutputMarkupId(true);
 
-            final WebMarkupContainer container = new WebMarkupContainer(ID_VIEW_LIST);
+        this.setOutputMarkupId(true);
 
-            views.addOrReplace(container);
-            views.setOutputMarkupId(true);
+        final Label viewButtonTitle = Wkt.labelAdd(views, ID_VIEW_BUTTON_TITLE, "Hidden");
+        final Label viewButtonIcon = Wkt.labelAdd(views, ID_VIEW_BUTTON_ICON, "");
 
-            this.setOutputMarkupId(true);
+        Wkt.listViewAdd(container, ID_VIEW_ITEM, componentFactories, item->{
+            final ComponentFactory componentFactory = item.getModelObject();
 
-            Wkt.listViewAdd(container, ID_VIEW_ITEM, componentFactories, item->{
-                final ComponentFactory componentFactory = item.getModelObject();
+            // add direct download link instead of a panel
+            if(componentFactory.getComponentType() == ComponentType.COLLECTION_CONTENTS_EXPORT) {
 
-                val link = Wkt.linkAdd(item, ID_VIEW_LINK, target->{
-                    CollectionSelectorPanel linksSelectorPanel = CollectionSelectorPanel.this;
-                    linksSelectorPanel.setViewHintAndBroadcast(componentFactory.getName(), target);
+                DownloadLink downloadLink = (DownloadLink)
+                        componentFactory.createComponent(ID_VIEW_LINK, getModel());
 
-                    linksSelectorPanel.selectedComponentFactory = componentFactory;
+                item.addOrReplace(downloadLink);
 
-                    CollectionSelectorPanel.this.getModel().parentedHintingBookmark()
-                    .ifPresent(bookmark->componentHintKey.set(bookmark, componentFactory.getName()));
+                // add title and icon to the link
+                WktLinks.listItemAsDropdownLink(item, downloadLink,
+                        ID_VIEW_ITEM_TITLE, CollectionSelectorPanel::nameFor,
+                        ID_VIEW_ITEM_ICON, null,
+                        CollectionSelectorPanel::cssClassFor);
+                return;
+            }
 
-                    target.add(linksSelectorPanel, views);
-                });
+            // on click: make the clicked item the new selected item
+            val link = Wkt.linkAdd(item, ID_VIEW_LINK, target->{
+                final CollectionSelectorPanel linksSelectorPanel = CollectionSelectorPanel.this;
+                linksSelectorPanel.setViewHintAndBroadcast(componentFactory.getName(), target);
 
-                final IModel<String> title = nameFor(componentFactory);
-                Wkt.labelAdd(link, ID_VIEW_ITEM_TITLE, title);
-                final Label viewItemIcon = Wkt.labelAdd(link, ID_VIEW_ITEM_ICON, "");
+                linksSelectorPanel.selectedComponentFactory = componentFactory;
 
-                final boolean isSelected = componentFactory == CollectionSelectorPanel.this.selectedComponentFactory;
-                if (isSelected) {
-                    viewButtonTitle.setDefaultModel(title);
-                    IModel<String> cssClass = cssClassFor(componentFactory, viewButtonIcon);
-                    viewButtonIcon.add(AttributeModifier.replace("class", "ViewLinkItem " + cssClass.getObject()));
-                    link.setVisible(false);
-                } else {
-                    Wkt.cssAppend(viewItemIcon, cssClassFor(componentFactory, viewItemIcon));
-                }
+                CollectionSelectorPanel.this.getModel().parentedHintingBookmark()
+                .ifPresent(bookmark->componentHintKey.set(bookmark, componentFactory.getName()));
 
-                item.add(link);
+                target.add(linksSelectorPanel, views);
             });
 
-            addOrReplace(views);
-        }
+            // add title and icon to the link
+            WktLinks.listItemAsDropdownLink(item, link,
+                    ID_VIEW_ITEM_TITLE, CollectionSelectorPanel::nameFor,
+                    ID_VIEW_ITEM_ICON, null,
+                    CollectionSelectorPanel::cssClassFor);
+
+            // hide the selected item
+            val isSelected = componentFactory == CollectionSelectorPanel.this.selectedComponentFactory;
+            if (isSelected) {
+                viewButtonTitle.setDefaultModel(nameFor(componentFactory));
+                final IModel<String> cssClass = cssClassFor(componentFactory, viewButtonIcon);
+                Wkt.cssReplace(viewButtonIcon, "ViewLinkItem " + cssClass.getObject());
+                link.setVisible(false);
+            }
+
+        });
+
+        addOrReplace(views);
     }
 
     private static IModel<String> cssClassFor(final ComponentFactory componentFactory, final Label viewIcon) {
