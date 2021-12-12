@@ -109,6 +109,11 @@ implements ComponentFactoryRegistry {
 
     private void ensureAllComponentTypesRegistered() {
         for (val componentType : ComponentType.values()) {
+
+            if(componentType.getOptionality().isOptional()) {
+                continue;
+            }
+
             if (componentFactoriesByType.getOrElseEmpty(componentType).isEmpty()) {
                 throw new IllegalStateException("No component factories registered for " + componentType);
             }
