@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.valuesemantics;
 
 import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.inject.Named;
 
@@ -29,9 +30,11 @@ import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.common.v2.ValueType;
 
+import lombok.SneakyThrows;
 import lombok.val;
 
 @Component
@@ -107,6 +110,14 @@ implements
     @Override
     public int maxLength() {
         return 2083;
+    }
+
+    @SneakyThrows
+    @Override
+    public Can<URL> getExamples() {
+        return Can.of(
+                new URL("https://a.b.c"),
+                new URL("https://b.c.d"));
     }
 
 }

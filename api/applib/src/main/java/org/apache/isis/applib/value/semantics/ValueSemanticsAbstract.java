@@ -35,6 +35,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.schema.common.v2.ValueType;
@@ -87,6 +88,11 @@ implements
     public DefaultsProvider<T> getDefaultsProvider() {
         return this instanceof DefaultsProvider ? (DefaultsProvider<T>)this : null;
     }
+
+    /**
+     * JUnit support.
+     */
+    public Can<T> getExamples() { return Can.empty(); }
 
     /**
      * @param context - nullable in support of JUnit testing

@@ -18,17 +18,22 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.graph.tree.TreeAdapter;
 import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.graph.tree.TreeState;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.memento._Mementos;
 import org.apache.isis.commons.internal.memento._Mementos.Memento;
@@ -83,6 +88,25 @@ implements
                 memento.get("primaryValue", Object.class),
                 memento.get("adapterClass", Class.class),
                 memento.get("treeState", TreeState.class));
+    }
+
+    // -- EXAMPLES
+
+    @Override
+    public Can<TreeNode<?>> getExamples() {
+
+        class TreeAdapterString implements TreeAdapter<String> {
+            @Override public Optional<String> parentOf(final String value) {
+                return null; }
+            @Override public int childCountOf(final String value) {
+                return 0; }
+            @Override public Stream<String> childrenOf(final String value) {
+                return Stream.empty(); }
+        }
+
+        return Can.of(
+                TreeNode.of("TreeRoot", TreeAdapterString.class, TreeState.rootCollapsed()),
+                TreeNode.of("another TreeRoot", TreeAdapterString.class, TreeState.rootCollapsed()));
     }
 
     // -- HELPER

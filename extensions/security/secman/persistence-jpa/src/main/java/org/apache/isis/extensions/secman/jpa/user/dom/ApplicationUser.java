@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.secman.jpa.user.dom;
 
+import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -211,6 +212,20 @@ public class ApplicationUser
         this.faxNumber = faxNumber;
     }
 
+    // -- LOCALE
+
+    @Column(nullable = true)
+    private Locale locale;
+
+    @UserLocale
+    @Override
+    public Locale getLocale() {
+        return locale;
+    }
+    @Override
+    public void setLocale(final Locale locale) {
+        this.locale = locale;
+    }
 
     // -- AT PATH
 

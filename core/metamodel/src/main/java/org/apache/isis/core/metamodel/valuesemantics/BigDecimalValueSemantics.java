@@ -33,6 +33,7 @@ import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.common.v2.ValueType;
@@ -129,6 +130,11 @@ implements
         .filter(digits->digits>-1)
         .forEach(digits-> // cardinality 0 or 1
             format.setMaximumFractionDigits(digits));
+    }
+
+    @Override
+    public Can<BigDecimal> getExamples() {
+        return Can.of(new BigDecimal("-63.1"), BigDecimal.ZERO);
     }
 
 }

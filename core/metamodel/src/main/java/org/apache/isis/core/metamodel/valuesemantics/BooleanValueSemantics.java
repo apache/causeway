@@ -30,6 +30,7 @@ import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.common.v2.ValueType;
 
@@ -138,6 +139,11 @@ implements
     @Override
     public int maxLength() {
         return 6;
+    }
+
+    @Override
+    public Can<Boolean> getExamples() {
+        return Can.of(Boolean.TRUE, Boolean.FALSE);
     }
 
 }

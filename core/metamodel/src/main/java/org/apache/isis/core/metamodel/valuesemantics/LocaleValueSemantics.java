@@ -18,17 +18,18 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
-import java.nio.file.InvalidPathException;
+import java.util.Locale;
+import java.util.stream.Stream;
 
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.common.v2.ValueType;
@@ -36,17 +37,17 @@ import org.apache.isis.schema.common.v2.ValueType;
 import lombok.val;
 
 @Component
-@Named("isis.val.LocalResourcePathValueSemantics")
-public class LocalResourcePathValueSemantics
-extends ValueSemanticsAbstract<LocalResourcePath>
+@Named("isis.val.LocaleValueSemantics")
+public class LocaleValueSemantics
+extends ValueSemanticsAbstract<Locale>
 implements
-    EncoderDecoder<LocalResourcePath>,
-    Parser<LocalResourcePath>,
-    Renderer<LocalResourcePath> {
+    EncoderDecoder<Locale>,
+    Parser<Locale>,
+    Renderer<Locale> {
 
     @Override
-    public Class<LocalResourcePath> getCorrespondingClass() {
-        return LocalResourcePath.class;
+    public Class<Locale> getCorrespondingClass() {
+        return Locale.class;
     }
 
     @Override
@@ -57,66 +58,68 @@ implements
     // -- ENCODER DECODER
 
     @Override
-    public String toEncodedString(final LocalResourcePath localResourcePath) {
-        return localResourcePath != null
-                ? localResourcePath.getValue()
-                : "NULL";
+    public String toEncodedString(final Locale object) {
+        return object.toLanguageTag();
     }
 
     @Override
-    public LocalResourcePath fromEncodedString(final String data) {
-        if("NULL".equals(data)) {
-            return null;
-        }
-        try {
-            return new LocalResourcePath(data);
-        } catch (InvalidPathException e) {
-            return null;
-        }
+    public Locale fromEncodedString(final String data) {
+        return Locale.forLanguageTag(data);
     }
 
     // -- RENDERER
 
     @Override
-    public String simpleTextPresentation(final Context context, final LocalResourcePath value) {
-        return render(value, LocalResourcePath::getValue);
+    public String simpleTextPresentation(final ValueSemanticsProvider.Context context, final Locale value) {
+        return value == null ? "" : value.getDisplayLanguage(context.getInteractionContext().getLocale());
     }
 
     // -- PARSER
 
     @Override
-    public String parseableTextRepresentation(final Context context, final LocalResourcePath value) {
-        return value != null ? value.getValue() : null;
+    public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final Locale value) {
+        return value == null ? null : toEncodedString(value);
     }
 
     @Override
-    public LocalResourcePath parseTextRepresentation(final Context context, final String text) {
+    public Locale parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
         val input = _Strings.blankToNullOrTrim(text);
-        if(input==null) {
-            return null;
-        }
-        try {
-            return new LocalResourcePath(input);
-        } catch (final InvalidPathException ex) {
-            throw new IllegalArgumentException("Not parseable as a LocalResourcePath ('" + input + "')", ex);
-        }
+        return input!=null
+                ? fromEncodedString(input)
+                : null;
     }
 
     @Override
     public int typicalLength() {
-        return 100;
+        return maxLength();
     }
 
     @Override
     public int maxLength() {
-        return 2083;
+        return 80;
     }
 
+    // -- EXAMPLES
+
     @Override
-    public Can<LocalResourcePath> getExamples() {
-        return Can.of(
-                new LocalResourcePath("img/a"),
-                new LocalResourcePath("img/b"));
+    public Can<Locale> getExamples() {
+        return Can.of(Locale.US, Locale.GERMAN);
+    }
+
+    // -- UTILITY
+
+    /**
+     * Stream subset of {@link Locale#getAvailableLocales()} that supports round-tripping.
+     */
+    public static Stream<Locale> streamSupportedValues() {
+        return Stream.of(Locale.getAvailableLocales())
+                .filter(LocaleValueSemantics::isRoundtripSupported);
+    }
+
+    // -- HELPER
+
+    private static boolean isRoundtripSupported(final Locale locale) {
+        return locale.equals(Locale.forLanguageTag(locale.toLanguageTag()));
     }
 
 

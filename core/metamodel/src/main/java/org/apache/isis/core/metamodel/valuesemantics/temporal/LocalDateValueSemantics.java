@@ -26,6 +26,7 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.value.semantics.OrderRelation;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
@@ -60,6 +61,13 @@ implements OrderRelation<LocalDate, Duration> {
     @Override
     public Duration epsilon() {
         return Duration.ZERO; // not used for dates, as these are integer based
+    }
+
+    @Override
+    public Can<LocalDate> getExamples() {
+        return Can.of(
+                LocalDate.now(),
+                LocalDate.now().plusDays(2));
     }
 
 }

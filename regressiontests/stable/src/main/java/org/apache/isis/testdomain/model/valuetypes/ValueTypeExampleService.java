@@ -28,6 +28,7 @@ import javax.inject.Inject;
 import org.junit.jupiter.params.provider.Arguments;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.Value;
@@ -36,11 +37,8 @@ import lombok.val;
 @Service
 public class ValueTypeExampleService {
 
+    @Inject ValueSemanticsResolver valueSemanticsResolver;
     @Inject List<ValueTypeExample<?>> examples;
-
-    public Stream<ValueTypeExample<?>> streamExamples() {
-        return examples.stream();
-    }
 
     @Value(staticConstructor = "of")
     public static class Scenario implements Comparable<Scenario> {
@@ -56,6 +54,10 @@ public class ValueTypeExampleService {
         @Override public int compareTo(final Scenario other) {
             return _Strings.compareNullsFirst(this.name, other.name);
         }
+    }
+
+    public Stream<ValueTypeExample<?>> streamExamples() {
+        return examples.stream();
     }
 
     public Stream<Scenario> streamScenarios() {

@@ -28,6 +28,7 @@ import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.common.v2.ValueType;
 
@@ -113,6 +114,13 @@ implements
     public int maxLength() {
         //-128.0
         return 6;
+    }
+
+    @Override
+    public Can<Byte> getExamples() {
+        return Can.of(
+                Byte.MIN_VALUE,
+                Byte.MAX_VALUE);
     }
 
 }

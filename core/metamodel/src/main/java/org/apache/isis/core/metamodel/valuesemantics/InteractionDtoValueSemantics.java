@@ -26,6 +26,7 @@ import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 
@@ -64,6 +65,11 @@ implements
     @Override
     public String simpleTextPresentation(final Context context, final InteractionDto value) {
         return render(value, InteractionDtoUtils::toXml);
+    }
+
+    @Override
+    public Can<InteractionDto> getExamples() {
+        return Can.of(new InteractionDto(), new InteractionDto());
     }
 
 }

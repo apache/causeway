@@ -30,6 +30,7 @@ import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -210,6 +211,17 @@ public abstract class ValueTypeExample<T> {
         private UUID value = UUID.randomUUID();
         @Getter
         private UUID updateValue = UUID.randomUUID();
+    }
+
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleLocale",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleLocale
+    extends ValueTypeExample<Locale> {
+        @Property @Getter @Setter
+        private Locale value = Locale.US;
+        @Getter
+        private Locale updateValue = Locale.GERMAN;
     }
 
     // -- EXAMPLES - NUMBERS

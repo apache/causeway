@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.RequiredArgsConstructor;
@@ -89,6 +90,14 @@ implements
     @Override
     public String simpleTextPresentation(final Context context, final CalendarEvent value) {
         return render(value, v->v.toString());
+    }
+
+    // -- EXAMPLES
+
+    @Override
+    public Can<CalendarEvent> getExamples() {
+        //TODO provide examples
+        return Can.empty();
     }
 
     // -- EMBEDDING
@@ -176,8 +185,5 @@ implements
         }
 
     }
-
-
-
 
 }

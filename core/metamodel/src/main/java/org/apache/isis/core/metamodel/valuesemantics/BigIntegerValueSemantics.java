@@ -29,6 +29,7 @@ import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
@@ -93,6 +94,11 @@ implements
     @Override
     public int typicalLength() {
         return 10;
+    }
+
+    @Override
+    public Can<BigInteger> getExamples() {
+        return Can.of(BigInteger.valueOf(-63L), BigInteger.ZERO);
     }
 
 }
