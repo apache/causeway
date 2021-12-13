@@ -16,21 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 $(function () {
-
-	let tzid = Intl.DateTimeFormat().resolvedOptions().timeZone;
-	console.log(tzid);
-
-	let timezoneSelect = document.getElementById('timezone-select');
-	
+	var tzid = Intl.DateTimeFormat().resolvedOptions().timeZone.toLowerCase();
+	var timezoneSelect = document.getElementById("timezone-select");
 	Array.from(timezoneSelect.options).forEach(function(option_element) {
-	    let option_text = option_element.text;
-
-		if(tzid.toLowerCase() === option_text.toLowerCase()) {
+	    var option_text = option_element.text.toLowerCase();
+		if(tzid === option_text) {
 			timezoneSelect.value = option_element.value;
 			return;
 		}
-	});
-
-});
+	})
+})
