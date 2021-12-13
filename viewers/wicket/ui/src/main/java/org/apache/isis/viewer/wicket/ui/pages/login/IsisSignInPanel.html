@@ -29,6 +29,10 @@
                     <label wicket:for="password"><wicket:message key="passwordLabel"/></label>
                     <input type="password" class="form-control isis-password" wicket:id="password" placeholder="Enter password"/>
                 </div>
+                <div class="form-group">
+                    <label wicket:for="password"><wicket:message key="timezoneLabel"/></label>
+                    <select class="form-control" wicket:id="timezone" name="timezone"/>
+                </div>
                 <div class="form-check" wicket:id="rememberMeContainer">
                     <label>
                         <input type="checkbox" wicket:id="rememberMe"/> <wicket:message key="rememberMeLabel"/>
@@ -45,6 +49,7 @@
                 <div class="form-group" wicket:enclosure="signUpLink">
                     <a wicket:id="signUpLink" class="btn btn-block btn-info"><wicket:message key="signUpButtonLabel"/></a>
                 </div>
+                
             </form>
 
         </wicket:panel>
