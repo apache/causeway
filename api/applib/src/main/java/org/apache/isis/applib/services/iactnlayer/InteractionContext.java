@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.iactnlayer;
 import java.io.Serializable;
 import java.time.ZoneId;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
@@ -61,7 +62,6 @@ public class InteractionContext implements Serializable {
         return InteractionContext.builder()
                 .user(user)
                 .clock(VirtualClock.system())
-                .locale(Locale.getDefault())
                 .timeZone(ZoneId.systemDefault())
                 .build();
     }
@@ -87,8 +87,15 @@ public class InteractionContext implements Serializable {
     @With @Getter @Builder.Default
     final @NonNull VirtualClock clock = VirtualClock.system();
 
-    @With @Getter @Builder.Default
-    final @NonNull Locale locale = Locale.getDefault();
+    @With Locale locale;
+    public Locale getLocale(){
+        if(locale!=null) {
+            return locale; // if set, overrides any user preferences
+        }
+        return Optional.ofNullable(getUser())
+                .map(UserMemento::getLocale)
+                .orElseGet(Locale::getDefault);
+    }
 
     @With @Getter @Builder.Default
     final @NonNull ZoneId timeZone = ZoneId.systemDefault();

@@ -23,12 +23,12 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Stream;
-
-import org.springframework.lang.Nullable;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Collection;
@@ -69,7 +69,7 @@ public class UserMemento implements Serializable {
 
     public static class TitleUiEvent extends IsisModuleApplib.TitleUiEvent<UserMemento> {}
 
-    private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+    private void readObject(final ObjectInputStream ois) throws ClassNotFoundException, IOException {
         ois.defaultReadObject();
     }
 
@@ -147,7 +147,7 @@ public class UserMemento implements Serializable {
     public static class UiSubscriber {
         @Order(PriorityPrecedence.LATE)
         @EventListener(UserMemento.TitleUiEvent.class)
-        public void on(UserMemento.TitleUiEvent ev) {
+        public void on(final UserMemento.TitleUiEvent ev) {
             val userMemento = ev.getSource();
             assert userMemento != null;
             val title = String.format("%s %s", userMemento.getName(), userMemento.isImpersonating() ? " (impersonating)" : "");
@@ -177,6 +177,12 @@ public class UserMemento implements Serializable {
     @Getter @With(onMethod_ = {@Programmatic})
     @Nullable
     URL avatarUrl;
+
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(fieldSetId = "details", sequence = "3")
+    @Getter @With(onMethod_ = {@Programmatic})
+    @Nullable
+    Locale locale;
 
     /**
      * To support external security mechanisms such as keycloak,
@@ -253,7 +259,7 @@ public class UserMemento implements Serializable {
 
 
     @Programmatic
-    public UserMemento withRoleAdded(String role) {
+    public UserMemento withRoleAdded(final String role) {
         return asBuilder()
         .roles(roles.add(new RoleMemento(role)))
         .build();
@@ -294,6 +300,7 @@ public class UserMemento implements Serializable {
                 .authenticationCode(authenticationCode)
                 .authenticationSource(authenticationSource)
                 .avatarUrl(avatarUrl)
+                .locale(locale)
                 .impersonating(impersonating)
                 .realName(realName)
                 .multiTenancyToken(multiTenancyToken)

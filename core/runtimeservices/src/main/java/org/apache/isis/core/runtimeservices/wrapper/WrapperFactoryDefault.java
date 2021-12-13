@@ -454,7 +454,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
         return InteractionContext.builder()
             .clock(Optional.ofNullable(asyncControl.getClock()).orElseGet(interactionContext::getClock))
-            .locale(Optional.ofNullable(asyncControl.getLocale()).orElseGet(interactionContext::getLocale))
+            .locale(Optional.ofNullable(asyncControl.getLocale()).orElse(null)) // if not set in asyncControl use defaults (set override to null)
             .timeZone(Optional.ofNullable(asyncControl.getTimeZone()).orElseGet(interactionContext::getTimeZone))
             .user(Optional.ofNullable(asyncControl.getUser()).orElseGet(interactionContext::getUser))
             .build();
