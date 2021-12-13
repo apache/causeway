@@ -59,19 +59,40 @@ implements
 
     @Override
     public String toEncodedString(final Locale object) {
-        return object.toLanguageTag();
+        return object!=null
+                ? object.toLanguageTag()
+                : null;
     }
 
     @Override
     public Locale fromEncodedString(final String data) {
-        return Locale.forLanguageTag(data);
+        return data!=null
+                ? Locale.forLanguageTag(data)
+                : null;
     }
 
     // -- RENDERER
 
     @Override
     public String simpleTextPresentation(final ValueSemanticsProvider.Context context, final Locale value) {
-        return value == null ? "" : value.getDisplayLanguage(context.getInteractionContext().getLocale());
+
+        return render(value, v->{
+
+            val language = value.getDisplayLanguage(context.getInteractionContext().getLocale());
+            if(_Strings.isEmpty(language)) {
+                return toEncodedString(v);
+            }
+
+            val country = value.getDisplayCountry(context.getInteractionContext().getLocale());
+            if(_Strings.isEmpty(country)) {
+                return language;
+            }
+
+            return String.format("%s (%s)",
+                    value.getDisplayLanguage(context.getInteractionContext().getLocale()),
+                    value.getDisplayCountry(context.getInteractionContext().getLocale()));
+
+        });
     }
 
     // -- PARSER

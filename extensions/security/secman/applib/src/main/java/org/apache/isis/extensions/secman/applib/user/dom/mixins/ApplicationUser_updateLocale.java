@@ -25,12 +25,12 @@ import java.util.stream.Collectors;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.metamodel.valuesemantics.LocaleValueSemantics;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.UserLocale;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_updateLocale.DomainEvent;
 
 import lombok.RequiredArgsConstructor;
@@ -50,23 +50,32 @@ public class ApplicationUser_updateLocale {
     public static class DomainEvent
             extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_updateLocale> {}
 
-    private final ApplicationUser target;
+    private final ApplicationUser mixee;
 
     @MemberSupport public ApplicationUser act(
+            @UserLocale
             final Locale locale) {
-        target.setLocale(locale);
-        return target;
+        mixee.setLocale(locale);
+        return mixee;
     }
 
     @MemberSupport public String disableAct() {
-        return target.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
+        return mixee.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
     }
-    @MemberSupport public Locale defaultLocale() { return target.getLocale(); }
 
-    @MemberSupport public List<Locale> autoCompleteLocale(@MinLength(1) final String search) {
+    @MemberSupport public Locale defaultLocale() {
+        return mixee.getLocale();
+    }
+
+    @MemberSupport public List<Locale> choicesLocale() {
         return LocaleValueSemantics.streamSupportedValues()
-                .filter(locale->locale.toLanguageTag().toLowerCase().contains(search.toLowerCase()))
                 .collect(Collectors.toList());
     }
+
+//    @MemberSupport public List<Locale> autoCompleteLocale(@MinLength(1) final String search) {
+//        return LocaleValueSemantics.streamSupportedValues()
+//                .filter(locale->locale.toLanguageTag().toLowerCase().contains(search.toLowerCase()))
+//                .collect(Collectors.toList());
+//    }
 
 }

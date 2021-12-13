@@ -391,7 +391,7 @@ public abstract class ApplicationUser
 
     @Property(
             domainEvent = UserLocale.DomainEvent.class,
-            editing = Editing.ENABLED,
+            editing = Editing.DISABLED, //  edit via update button
             maxLength = UserLocale.MAX_LENGTH
     )
     @PropertyLayout(
