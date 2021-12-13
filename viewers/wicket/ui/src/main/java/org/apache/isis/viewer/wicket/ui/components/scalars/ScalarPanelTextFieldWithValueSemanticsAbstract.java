@@ -42,7 +42,8 @@ extends ScalarPanelTextFieldAbstract<T> {
 
     protected ScalarPanelTextFieldWithValueSemanticsAbstract(
             final String id,
-            final ScalarModel scalarModel, final Class<T> type) {
+            final ScalarModel scalarModel,
+            final Class<T> type) {
         super(id, scalarModel, type);
     }
 

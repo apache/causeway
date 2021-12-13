@@ -46,7 +46,7 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
     @Getter(onMethod_ = {@Override}) private final ComponentType componentType;
     @Getter(onMethod_ = {@Override}) private final String name;
 
-    private final Class<?> componentClass;
+    @Getter(onMethod_ = {@Override}) private final Class<?> componentTypeClass;
 
     protected ComponentFactoryAbstract(final ComponentType componentType) {
         this(componentType, null, null);
@@ -63,14 +63,16 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
     protected ComponentFactoryAbstract(
             final ComponentType componentType,
             final String name,
-            final Class<?> componentClass) {
+            final Class<?> componentTypeClass) {
 
         this.componentType = componentType;
         this.name = name != null ? name : getClass().getSimpleName();
-        if(componentClass != null && ComponentFactory.class.isAssignableFrom(componentClass)) {
-            throw new IllegalArgumentException("specified a ComponentFactory as a componentClass... you probably meant the component instead? componentClass = " + componentClass.getName());
+        if(componentTypeClass != null && ComponentFactory.class.isAssignableFrom(componentTypeClass)) {
+            throw new IllegalArgumentException("specified a ComponentFactory as a componentTypeClass... "
+                    + "you probably meant the component instead? componentClass = "
+                    + componentTypeClass.getName());
         }
-        this.componentClass = componentClass;
+        this.componentTypeClass = componentTypeClass;
         log.debug("new factory {}", this::toString);
     }
 
@@ -108,7 +110,7 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
 
     @Override
     public CssResourceReference getCssResourceReference() {
-        return PanelUtil.cssResourceReferenceFor(componentClass);
+        return PanelUtil.cssResourceReferenceFor(componentTypeClass);
     }
 
 }

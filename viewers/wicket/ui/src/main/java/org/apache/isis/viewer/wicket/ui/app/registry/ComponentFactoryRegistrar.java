@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.app.registry;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.viewer.common.model.components.ComponentType;
@@ -38,7 +39,7 @@ public interface ComponentFactoryRegistrar {
 
         private final List<ComponentFactory> componentFactories = _Lists.newArrayList();
 
-        public void add(ComponentFactory componentFactory) {
+        public void add(final ComponentFactory componentFactory) {
             if(componentFactories.contains(componentFactory)) {
                 return;
             }
@@ -82,7 +83,7 @@ public interface ComponentFactoryRegistrar {
         private static Predicate<ComponentFactory> matching(final ComponentType componentType) {
             return new Predicate<ComponentFactory>() {
                 @Override
-                public boolean test(ComponentFactory input) {
+                public boolean test(final ComponentFactory input) {
                     return input.getComponentType() == componentType;
                 }
             };
@@ -91,7 +92,7 @@ public interface ComponentFactoryRegistrar {
         private static Predicate<ComponentFactory> matching(final Class<? extends ComponentFactory> toReplace) {
             return new Predicate<ComponentFactory>() {
                 @Override
-                public boolean test(ComponentFactory input) {
+                public boolean test(final ComponentFactory input) {
                     return toReplace.isAssignableFrom(input.getClass());
                 }
             };
@@ -100,6 +101,15 @@ public interface ComponentFactoryRegistrar {
         @Override
         public Iterator<ComponentFactory> iterator() {
             return componentFactories.iterator();
+        }
+
+        public Stream<ComponentFactory> stream() {
+            return componentFactories.stream();
+        }
+
+        public Stream<Class<?>> streamComponentTypeClasses() {
+            return stream()
+                    .map(ComponentFactory::getComponentTypeClass);
         }
     }
 

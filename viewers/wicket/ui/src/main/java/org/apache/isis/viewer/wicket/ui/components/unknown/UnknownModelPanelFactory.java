@@ -31,7 +31,7 @@ public class UnknownModelPanelFactory implements ComponentFactory {
     private static final long serialVersionUID = 1L;
 
     @Override
-    public ApplicationAdvice appliesTo(ComponentType componentType, IModel<?> model) {
+    public ApplicationAdvice appliesTo(final ComponentType componentType, final IModel<?> model) {
         return ApplicationAdvice.APPLIES;
     }
 
@@ -46,7 +46,7 @@ public class UnknownModelPanelFactory implements ComponentFactory {
     }
 
     @Override
-    public Component createComponent(IModel<?> model) {
+    public Component createComponent(final IModel<?> model) {
         return createComponent("unknown", model);
     }
 
@@ -58,6 +58,11 @@ public class UnknownModelPanelFactory implements ComponentFactory {
     @Override
     public CssResourceReference getCssResourceReference() {
         return PanelUtil.cssResourceReferenceFor(UnknownModelPanel.class);
+    }
+
+    @Override
+    public Class<?> getComponentTypeClass() {
+        return null;
     }
 
 }
