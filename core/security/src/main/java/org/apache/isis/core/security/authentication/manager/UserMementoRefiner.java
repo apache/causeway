@@ -63,7 +63,7 @@ public interface UserMementoRefiner {
         UserMemento refined = userMemento;
         for (UserMementoRefiner refiner : refiners) {
             final UserMemento next = refiner.refine(refined);
-            refined = next != null ? next : userMemento;
+            refined = next != null ? next : refined;
         }
         return refined;
     }
