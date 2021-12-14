@@ -21,6 +21,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
@@ -108,21 +109,26 @@ implements HasCommonContext {
         if (isSignedIn() == false) {
             IAuthenticationStrategy authenticationStrategy = getApplication().getSecuritySettings()
                 .getAuthenticationStrategy();
-            // get username and password from persistence store
+            // get username, password and zoneID from persistence store
             String[] data = authenticationStrategy.load();
 
-            if ((data != null) && (data.length > 1))
-            {
+            if ((data != null) && (data.length > 1)) {
                 // try to sign in the user
-                if (signIn(data[0], data[1]))
-                {
+                if (signIn(data[0], data[1])) {
                     username = data[0];
                     password = data[1];
 
+                    if(data.length > 2
+                            && _Strings.isNotEmpty(data[2])) {
+                        try {
+                            timezone = ZoneId.of(data[2]);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
                     onSignInRemembered();
-                }
-                else
-                {
+                } else {
                     // the loaded credentials are wrong. erase them.
                     authenticationStrategy.remove();
                 }
@@ -225,6 +231,7 @@ implements HasCommonContext {
                         @Override
                         protected List<ZoneId> load() {
                             return ZoneId.getAvailableZoneIds().stream()
+                                    .sorted()
                                     .map(ZoneId::of)
                                     .collect(Collectors.toList());
                         }
@@ -253,7 +260,12 @@ implements HasCommonContext {
 
             if (signIn(getUsername(), getPassword())) {
                 if (rememberMe == true) {
-                    strategy.save(username, password);
+                    strategy.save(
+                            username,
+                            password,
+                            timezone!=null
+                                ? timezone.getId()
+                                : "");
                 } else {
                     strategy.remove();
                 }

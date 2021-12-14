@@ -31,7 +31,7 @@
                 </div>
                 <div class="form-group">
                     <label wicket:for="timezone"><wicket:message key="timezoneLabel"/></label>
-                    <select class="form-control" wicket:id="timezone" name="timezone"/>
+                    <select class="form-control" wicket:id="timezone" name="timezone" data-noreset="true"/>
                 </div>
                 <div class="form-check" wicket:id="rememberMeContainer">
                     <label>
@@ -40,7 +40,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary"><wicket:message key="signInButtonLabel"/></button>
-                <button type="reset" class="btn btn-secondary"><wicket:message key="resetButtonLabel"/></button>
+                <button type="button" class="btn btn-secondary" onclick="customFormReset()"><wicket:message key="resetButtonLabel"/></button>
 
                 <div class="form-group">
                     <a wicket:id="passwdResetLink" class="btn btn-block btn-link"><wicket:message key="forgotPasswordLinkLabel"/></a>
@@ -51,6 +51,15 @@
                 </div>
                 
             </form>
+            
+            <script>
+            function customFormReset() {
+                var fieldsToReset = document.querySelectorAll("input:not([data-noreset='true'])")
+              	for(var i=0;i<fieldsToReset.length;i++){
+	                fieldsToReset[i].value = null;
+              	}
+            }
+        	</script>
 
         </wicket:panel>
     </body>
