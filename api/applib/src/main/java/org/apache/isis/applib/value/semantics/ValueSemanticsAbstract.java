@@ -34,6 +34,7 @@ import java.util.function.Function;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -98,11 +99,11 @@ implements
      * @param context - nullable in support of JUnit testing
      * @return {@link Locale} from given context or else system's default
      */
-    protected Locale getLocale(final @Nullable ValueSemanticsProvider.Context context) {
+    protected UserLocale getLocale(final @Nullable ValueSemanticsProvider.Context context) {
         return Optional.ofNullable(context)
         .map(ValueSemanticsProvider.Context::getInteractionContext)
         .map(InteractionContext::getLocale)
-        .orElseGet(Locale::getDefault);
+        .orElseGet(UserLocale::getDefault);
     }
 
     /**
@@ -117,7 +118,7 @@ implements
      */
     @SuppressWarnings("javadoc")
     protected DecimalFormat getNumberFormat(final @Nullable ValueSemanticsProvider.Context context) {
-        val format = (DecimalFormat)NumberFormat.getNumberInstance(getLocale(context));
+        val format = (DecimalFormat)NumberFormat.getNumberInstance(getLocale(context).getNumberFormatLocale());
         // prime w/ 16 (64 bit IEEE 754 double has 15 decimal digits of precision)
         format.setMaximumFractionDigits(16);
         return format;
@@ -198,13 +199,13 @@ implements
         switch (temporalCharacteristic) {
         case DATE_TIME:
             return DateTimeFormatter.ofLocalizedDateTime(dateFormatStyle, timeFormatStyle)
-                    .withLocale(getLocale(context));
+                    .withLocale(getLocale(context).getNumberFormatLocale());
         case DATE_ONLY:
             return DateTimeFormatter.ofLocalizedDate(dateFormatStyle)
-                    .withLocale(getLocale(context));
+                    .withLocale(getLocale(context).getNumberFormatLocale());
         case TIME_ONLY:
             return DateTimeFormatter.ofLocalizedTime(timeFormatStyle)
-                    .withLocale(getLocale(context));
+                    .withLocale(getLocale(context).getNumberFormatLocale());
         default:
             throw _Exceptions.unmatchedCase(temporalCharacteristic);
         }
@@ -222,7 +223,7 @@ implements
                 temporalCharacteristic, offsetCharacteristic, datePattern, timePattern, zonePattern)
                 .parseLenient()
                 .parseCaseInsensitive()
-                .toFormatter(getLocale(context));
+                .toFormatter(getLocale(context).getNumberFormatLocale());
     }
 
     protected DateTimeFormatterBuilder getEditingFormatAsBuilder(

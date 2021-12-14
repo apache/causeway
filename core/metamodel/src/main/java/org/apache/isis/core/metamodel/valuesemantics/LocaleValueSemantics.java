@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.valuesemantics;
 
 import java.util.Locale;
-import java.util.stream.Stream;
 
 import javax.inject.Named;
 
@@ -78,19 +77,21 @@ implements
 
         return render(value, v->{
 
-            val language = value.getDisplayLanguage(context.getInteractionContext().getLocale());
+            val userLanguageLocale = context.getInteractionContext().getLocale().getLanguageLocale();
+
+            val language = value.getDisplayLanguage(userLanguageLocale);
             if(_Strings.isEmpty(language)) {
                 return toEncodedString(v);
             }
 
-            val country = value.getDisplayCountry(context.getInteractionContext().getLocale());
+            val country = value.getDisplayCountry(userLanguageLocale);
             if(_Strings.isEmpty(country)) {
                 return language;
             }
 
             return String.format("%s (%s)",
-                    value.getDisplayLanguage(context.getInteractionContext().getLocale()),
-                    value.getDisplayCountry(context.getInteractionContext().getLocale()));
+                    value.getDisplayLanguage(userLanguageLocale),
+                    value.getDisplayCountry(userLanguageLocale));
 
         });
     }
@@ -126,22 +127,5 @@ implements
     public Can<Locale> getExamples() {
         return Can.of(Locale.US, Locale.GERMAN);
     }
-
-    // -- UTILITY
-
-    /**
-     * Stream subset of {@link Locale#getAvailableLocales()} that supports round-tripping.
-     */
-    public static Stream<Locale> streamSupportedValues() {
-        return Stream.of(Locale.getAvailableLocales())
-                .filter(LocaleValueSemantics::isRoundtripSupported);
-    }
-
-    // -- HELPER
-
-    private static boolean isRoundtripSupported(final Locale locale) {
-        return locale.equals(Locale.forLanguageTag(locale.toLanguageTag()));
-    }
-
 
 }

@@ -47,6 +47,9 @@ import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @Table(
         schema = "isisExtensionsSecman",
@@ -212,20 +215,22 @@ public class ApplicationUser
         this.faxNumber = faxNumber;
     }
 
-    // -- LOCALE
-
-    @Column(nullable = true)
-    private Locale locale;
+    // -- REGIONAL SETTINGS
 
     @UserLocale
-    @Override
-    public Locale getLocale() {
-        return locale;
-    }
-    @Override
-    public void setLocale(final Locale locale) {
-        this.locale = locale;
-    }
+    @Column(nullable = true)
+    @Getter @Setter
+    private Locale language;
+
+    @UserLocale
+    @Column(nullable = true)
+    @Getter @Setter
+    private Locale numberFormat;
+
+    @UserLocale
+    @Column(nullable = true)
+    @Getter @Setter
+    private Locale timeFormat;
 
     // -- AT PATH
 

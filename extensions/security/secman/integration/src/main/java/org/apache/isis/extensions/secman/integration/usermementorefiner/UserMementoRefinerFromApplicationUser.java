@@ -42,7 +42,9 @@ public class UserMementoRefinerFromApplicationUser implements UserMementoRefiner
                 .map(applicationUser ->
                     userMemento.asBuilder()
                     .multiTenancyToken(applicationUser.getAtPath())
-                    .locale(applicationUser.getLocale())
+                    .languageLocale(applicationUser.getLanguage())
+                    .numberFormatLocale(applicationUser.getNumberFormat())
+                    .timeFormatLocale(applicationUser.getTimeFormat())
                     .build()
                 )
                 .orElse(userMemento);

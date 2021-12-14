@@ -25,6 +25,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider.Context;
@@ -73,13 +74,13 @@ extends ValueSemanticsProviderAbstractTestCase {
      */
     @Test
     public void testRendering() {
-        val _context = Context.of(null, InteractionContext.builder().locale(Locale.ENGLISH).build());
+        val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         assertEquals("Mar 13, 2013, 5:59:00 PM", valueSemantics.simpleTextPresentation(_context , date));
     }
 
     @Test
     public void testParse() throws Exception {
-        val _context = Context.of(null, InteractionContext.builder().locale(Locale.ENGLISH).build());
+        val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:00");
         assertEquals(date.getTime(), parsedDate.getTime());
     }

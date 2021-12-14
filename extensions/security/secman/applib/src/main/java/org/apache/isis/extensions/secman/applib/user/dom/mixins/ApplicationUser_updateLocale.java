@@ -20,27 +20,29 @@ package org.apache.isis.extensions.secman.applib.user.dom.mixins;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.core.metamodel.valuesemantics.LocaleValueSemantics;
+import org.apache.isis.applib.services.locale.LocaleChoiceProvider;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.UserLocale;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_updateLocale.DomainEvent;
 
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 
 @Action(
         domainEvent = DomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
-        associateWith = "locale",
+        associateWith = "language",
         promptStyle = PromptStyle.INLINE_AS_IF_EDIT,
         sequence = "1"
 )
@@ -50,12 +52,25 @@ public class ApplicationUser_updateLocale {
     public static class DomainEvent
             extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_updateLocale> {}
 
+    @Inject LocaleChoiceProvider localeChoiceProvider;
+
     private final ApplicationUser mixee;
 
+    // typed tuple made of all the action parameters
+    @lombok.Value @Accessors(fluent = true)
+    public static class Parameters {
+        final Locale language;
+        final Locale numberFormat;
+        final Locale timeFormat;
+    }
+
     @MemberSupport public ApplicationUser act(
-            @UserLocale
-            final Locale locale) {
-        mixee.setLocale(locale);
+            @UserLocale final Locale language,
+            @UserLocale final Locale numberFormat,
+            @UserLocale final Locale timeFormat) {
+        mixee.setLanguage(language);
+        mixee.setNumberFormat(numberFormat);
+        mixee.setTimeFormat(timeFormat);
         return mixee;
     }
 
@@ -63,19 +78,35 @@ public class ApplicationUser_updateLocale {
         return mixee.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
     }
 
-    @MemberSupport public Locale defaultLocale() {
-        return mixee.getLocale();
+    // -- LANGUAGE
+
+    @MemberSupport public Locale defaultLanguage(final Parameters p) {
+        return mixee.getLanguage();
+    }
+    @MemberSupport public List<Locale> choicesLanguage(final Parameters p) {
+        return localeChoiceProvider.getAvailableLocales();
     }
 
-    @MemberSupport public List<Locale> choicesLocale() {
-        return LocaleValueSemantics.streamSupportedValues()
-                .collect(Collectors.toList());
+    // -- NUMBER FORMAT
+
+    @MemberSupport public Locale defaultNumberFormat(final Parameters p) {
+        return mixee.getNumberFormat()!=null
+                ? mixee.getNumberFormat()
+                : p.language();
+    }
+    @MemberSupport public List<Locale> choicesNumberFormat(final Parameters p) {
+        return localeChoiceProvider.getAvailableLocales();
     }
 
-//    @MemberSupport public List<Locale> autoCompleteLocale(@MinLength(1) final String search) {
-//        return LocaleValueSemantics.streamSupportedValues()
-//                .filter(locale->locale.toLanguageTag().toLowerCase().contains(search.toLowerCase()))
-//                .collect(Collectors.toList());
-//    }
+    // -- TIME FORMAT
+
+    @MemberSupport public Locale defaultTimeFormat(final Parameters p) {
+        return mixee.getTimeFormat()!=null
+                ? mixee.getTimeFormat()
+                : p.language();
+    }
+    @MemberSupport public List<Locale> choicesTimeFormat(final Parameters p) {
+        return localeChoiceProvider.getAvailableLocales();
+    }
 
 }

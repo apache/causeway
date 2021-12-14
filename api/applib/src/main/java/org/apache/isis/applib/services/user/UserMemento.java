@@ -42,6 +42,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -179,10 +180,22 @@ public class UserMemento implements Serializable {
     URL avatarUrl;
 
     @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(fieldSetId = "regional", sequence = "1")
+    @Getter @With(onMethod_ = {@Programmatic})
+    @Nullable
+    Locale languageLocale;
+
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(fieldSetId = "details", sequence = "2")
+    @Getter @With(onMethod_ = {@Programmatic})
+    @Nullable
+    Locale numberFormatLocale;
+
+    @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "details", sequence = "3")
     @Getter @With(onMethod_ = {@Programmatic})
     @Nullable
-    Locale locale;
+    Locale timeFormatLocale;
 
     /**
      * To support external security mechanisms such as keycloak,
@@ -300,11 +313,29 @@ public class UserMemento implements Serializable {
                 .authenticationCode(authenticationCode)
                 .authenticationSource(authenticationSource)
                 .avatarUrl(avatarUrl)
-                .locale(locale)
+                .languageLocale(languageLocale)
+                .numberFormatLocale(numberFormatLocale)
+                .timeFormatLocale(timeFormatLocale)
                 .impersonating(impersonating)
                 .realName(realName)
                 .multiTenancyToken(multiTenancyToken)
                 .roles(roles);
+    }
+
+    @Programmatic
+    public UserLocale asUserLocale() {
+        val main = languageLocale!=null
+                ? languageLocale
+                : Locale.getDefault();
+        return UserLocale.builder()
+                .languageLocale(main)
+                .numberFormatLocale(numberFormatLocale!=null
+                        ? numberFormatLocale
+                        : main)
+                .timeFormatLocale(timeFormatLocale!=null
+                        ? timeFormatLocale
+                        : main)
+                .build();
     }
 
     // -- HELPER

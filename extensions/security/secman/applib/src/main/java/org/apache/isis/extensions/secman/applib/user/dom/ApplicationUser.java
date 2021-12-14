@@ -391,18 +391,13 @@ public abstract class ApplicationUser
 
     @Property(
             domainEvent = UserLocale.DomainEvent.class,
-            editing = Editing.DISABLED, //  edit via update button
-            maxLength = UserLocale.MAX_LENGTH
+            editing = Editing.DISABLED //  edit via update button
     )
     @PropertyLayout(
-            fieldSetId = "identity",
-            sequence = "2"
+            fieldSetId = "regional"
     )
     @Parameter(
             optionality = Optionality.OPTIONAL
-    )
-    @ParameterLayout(
-            named = "Locale"
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -412,8 +407,16 @@ public abstract class ApplicationUser
     }
 
     @UserLocale
-    public abstract Locale getLocale();
-    public abstract void setLocale(Locale locale);
+    public abstract Locale getLanguage();
+    public abstract void setLanguage(Locale locale);
+
+    @UserLocale
+    public abstract Locale getNumberFormat();
+    public abstract void setNumberFormat(Locale locale);
+
+    @UserLocale
+    public abstract Locale getTimeFormat();
+    public abstract void setTimeFormat(Locale locale);
 
     // -- AT PATH
 

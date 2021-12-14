@@ -41,6 +41,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
@@ -454,7 +455,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
         return InteractionContext.builder()
             .clock(Optional.ofNullable(asyncControl.getClock()).orElseGet(interactionContext::getClock))
-            .locale(Optional.ofNullable(asyncControl.getLocale()).orElse(null)) // if not set in asyncControl use defaults (set override to null)
+            .locale(Optional.ofNullable(asyncControl.getLocale()).map(UserLocale::valueOf).orElse(null)) // if not set in asyncControl use defaults (set override to null)
             .timeZone(Optional.ofNullable(asyncControl.getTimeZone()).orElseGet(interactionContext::getTimeZone))
             .user(Optional.ofNullable(asyncControl.getUser()).orElseGet(interactionContext::getUser))
             .build();

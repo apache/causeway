@@ -46,6 +46,9 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @PersistenceCapable(
         identityType = IdentityType.DATASTORE,
         schema = "isisExtensionsSecman",
@@ -213,18 +216,20 @@ public class ApplicationUser
 
     // -- LOCALE
 
+    @UserLocale
     @Column(allowsNull="true")
-    private Locale locale;
+    @Getter @Setter
+    private Locale language;
 
     @UserLocale
-    @Override
-    public Locale getLocale() {
-        return locale;
-    }
-    @Override
-    public void setLocale(final Locale locale) {
-        this.locale = locale;
-    }
+    @Column(allowsNull="true")
+    @Getter @Setter
+    private Locale numberFormat;
+
+    @UserLocale
+    @Column(allowsNull="true")
+    @Getter @Setter
+    private Locale timeFormat;
 
     // -- AT PATH
 

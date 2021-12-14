@@ -26,6 +26,7 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.clock.VirtualClock;
+import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.user.UserMemento;
 
@@ -87,14 +88,14 @@ public class InteractionContext implements Serializable {
     @With @Getter @Builder.Default
     final @NonNull VirtualClock clock = VirtualClock.system();
 
-    @With Locale locale;
-    public Locale getLocale(){
+    @With UserLocale locale;
+    public UserLocale getLocale(){
         if(locale!=null) {
             return locale; // if set, overrides any user preferences
         }
         return Optional.ofNullable(getUser())
-                .map(UserMemento::getLocale)
-                .orElseGet(Locale::getDefault);
+                .map(UserMemento::asUserLocale)
+                .orElseGet(UserLocale::getDefault);
     }
 
     @With @Getter @Builder.Default
@@ -124,7 +125,7 @@ public class InteractionContext implements Serializable {
      * {@link UnaryOperator} that will act upon the provided {@link InteractionContext} to return the same but with
      * the specified {@link Locale}.
      */
-    public static UnaryOperator<InteractionContext> switchLocale(final @NonNull Locale locale) {
+    public static UnaryOperator<InteractionContext> switchLocale(final @NonNull UserLocale locale) {
         return interactionContext -> interactionContext.withLocale(locale);
     }
 
