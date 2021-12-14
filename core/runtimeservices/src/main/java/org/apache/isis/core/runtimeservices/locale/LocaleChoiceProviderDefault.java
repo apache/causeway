@@ -42,7 +42,8 @@ import lombok.RequiredArgsConstructor;
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class LocaleChoiceProviderDefault implements LocaleChoiceProvider {
+public class LocaleChoiceProviderDefault
+implements LocaleChoiceProvider {
 
     @Override
     public List<Locale> getAvailableLocales() {

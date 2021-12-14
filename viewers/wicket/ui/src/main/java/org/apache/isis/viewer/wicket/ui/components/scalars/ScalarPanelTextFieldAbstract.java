@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.io.Serializable;
+import java.util.Locale;
 import java.util.Optional;
 
 import org.apache.wicket.AttributeModifier;
@@ -311,7 +312,9 @@ implements TextFieldValueModel.ScalarModelProvider {
             val adapter = scalarModel.getObject();
             val value = ManagedObjects.UnwrapUtil.single(adapter);
             final String str = value != null
-                    ? converter.convertToString(_Casts.uncheckedCast(value), getLocaleProvider().getLocale())
+                    ? converter.convertToString(
+                            _Casts.uncheckedCast(value),
+                            getLanguageProvider().getPreferredLanguage().orElseGet(Locale::getDefault))
                     : null;
             return str;
         }

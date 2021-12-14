@@ -25,7 +25,7 @@ import org.springframework.lang.Nullable;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.services.i18n.LocaleProvider;
+import org.apache.isis.applib.services.i18n.LanguageProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
@@ -69,7 +69,7 @@ implements HasCommonContext {
     private transient IsisAppCommonContext commonContext;
     private transient InteractionService interactionService;
     private transient TranslationService translationService;
-    private transient LocaleProvider localeProvider;
+    private transient LanguageProvider localeProvider;
     private transient TreeThemeProvider treeThemeProvider;
     private transient EmailNotificationService emailNotificationService;
     private transient EmailVerificationUrlService emailVerificationUrlService;
@@ -121,8 +121,8 @@ implements HasCommonContext {
         return translationService = computeIfAbsent(TranslationService.class, translationService);
     }
 
-    public LocaleProvider getLocaleProvider() {
-        return localeProvider = computeIfAbsent(LocaleProvider.class, localeProvider);
+    public LanguageProvider getLanguageProvider() {
+        return localeProvider = computeIfAbsent(LanguageProvider.class, localeProvider);
     }
 
     protected TreeThemeProvider getTreeThemeProvider() {

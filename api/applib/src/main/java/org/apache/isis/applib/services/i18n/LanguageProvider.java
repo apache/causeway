@@ -16,20 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtimeservices.i18n.po;
+package org.apache.isis.applib.services.i18n;
 
-class Util {
+import java.util.Locale;
+import java.util.Optional;
 
-    private Util(){}
+/**
+ * Provides the preferred language {@link Locale} of the current user.
+ * <p>
+ * One of a number of services that work together to provide support for i18n.
+ *
+ * @see TranslationService
+ * @see TranslationsResolver
+ *
+ * @since 2.x {@index}
+ */
+public interface LanguageProvider {
 
-    static String withSuffix(String fileName, String suffix) {
-        if(!suffix.startsWith(".")) {
-            suffix = "." + suffix;
-        }
-        if(!fileName.endsWith(suffix)) {
-            fileName += suffix;
-        }
-        return fileName;
-    }
+    /**
+     * Optionally returns the preferred language {@link Locale} of the current user,
+     * based on whether there is a context with a current user object.
+     */
+    Optional<Locale> getPreferredLanguage();
 
 }

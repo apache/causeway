@@ -43,6 +43,7 @@ import org.apache.isis.core.runtimeservices.icons.ObjectIconServiceDefault;
 import org.apache.isis.core.runtimeservices.interaction.InteractionDtoFactoryDefault;
 import org.apache.isis.core.runtimeservices.jaxb.JaxbServiceDefault;
 import org.apache.isis.core.runtimeservices.locale.LocaleChoiceProviderDefault;
+import org.apache.isis.core.runtimeservices.locale.LanguageProviderDefault;
 import org.apache.isis.core.runtimeservices.memento.ObjectMementoServiceDefault;
 import org.apache.isis.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
 import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
@@ -94,6 +95,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         InteractionServiceDefault.class,
         JaxbServiceDefault.class,
         LocaleChoiceProviderDefault.class,
+        LanguageProviderDefault.class,
         ObjectMementoServiceDefault.class,
         TranslationServicePo.class,
         MemberExecutorServiceDefault.class,

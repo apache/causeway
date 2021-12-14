@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.isis.applib.services.i18n.LocaleProvider;
+import org.apache.isis.applib.services.i18n.LanguageProvider;
 import org.apache.isis.applib.services.i18n.Mode;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
@@ -62,7 +62,7 @@ class PoReader extends PoAbstract {
      */
     private final String basename = "translations";
     private final Can<TranslationsResolver> translationsResolver;
-    private final Can<LocaleProvider> localeProvider;
+    private final LanguageProvider languageProvider;
 
     private List<String> fallback;
 
@@ -72,10 +72,7 @@ class PoReader extends PoAbstract {
         if(translationsResolver.isEmpty()) {
             log.warn("No TranslationsResolver available");
         }
-        localeProvider = translationServicePo.getLocaleProvider();
-        if(localeProvider.isEmpty()) {
-            log.warn("No LocaleProvider available");
-        }
+        languageProvider = translationServicePo.getLanguageProvider();
     }
 
     // -- init, shutdown
@@ -92,7 +89,7 @@ class PoReader extends PoAbstract {
     }
 
     @Override
-    public String translate(TranslationContext context, final String msgId) {
+    public String translate(final TranslationContext context, final String msgId) {
         if(translationsResolver == null) {
             // already logged as WARN (in constructor) if null.
             return msgId;
@@ -101,7 +98,7 @@ class PoReader extends PoAbstract {
     }
 
     @Override
-    String translate(TranslationContext context, final String msgId, final String msgIdPlural, final int num) {
+    String translate(final TranslationContext context, final String msgId, final String msgIdPlural, final int num) {
 
         final String msgIdToUse;
         final ContextAndMsgId.Type type;
@@ -122,12 +119,11 @@ class PoReader extends PoAbstract {
         init();
     }
 
-    private String translate(TranslationContext context, final String msgId, final ContextAndMsgId.Type type) {
+    private String translate(final TranslationContext context, final String msgId, final ContextAndMsgId.Type type) {
 
         final Locale targetLocale;
         try {
-            targetLocale = localeProvider.getFirst()
-                    .map(LocaleProvider::getLocale)
+            targetLocale = languageProvider.getPreferredLanguage()
                     .orElse(null);
             if(targetLocale == null) {
                 // eg if request from RO viewer and the (default) LocaleProviderWicket is being used.
