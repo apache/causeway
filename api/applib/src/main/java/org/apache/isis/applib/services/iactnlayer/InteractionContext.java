@@ -77,7 +77,7 @@ public class InteractionContext implements Serializable {
      *
      */
     @With @Getter @Builder.Default
-    @NonNull /*final*/ UserMemento user = UserMemento.system();
+    final @NonNull UserMemento user = UserMemento.system();
 
     /**
      * The (programmatically) simulated (or actual) clock.
@@ -161,16 +161,4 @@ public class InteractionContext implements Serializable {
         return mappers.reduce(t -> t, (a,b) -> a.andThen(b)::apply);
     }
 
-    /**
-     * For internal usage, not API.
-     *
-     * <p>
-     *     Instead, use {@link #withUser(UserMemento)}, which honours the value semantics of this class.
-     * </p>
-     *
-     * @param user
-     */
-    void replaceUser(final UserMemento user) {
-        this.user = user;
-    }
 }
