@@ -187,7 +187,7 @@ public final class ManagedObjects {
             final ObjectSpecification elementSpec, // no longer req.
             final ManagedObject nonScalar) {
 
-        if(nonScalar!=null
+        if(!ManagedObjects.isNullOrUnspecifiedOrEmpty(nonScalar)
                 && !(nonScalar instanceof PackedManagedObject)) {
             throw _Exceptions.illegalArgument("nonScalar must be in packed form; got %s",
                     nonScalar.getClass().getName());
