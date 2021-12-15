@@ -33,6 +33,13 @@ under the License.
 						</bs3:col>
 					</bs3:row>
 				</bs3:tab>
+				<bs3:tab name="Regional">
+					<bs3:row>
+						<bs3:col span="12">
+							<cpt:fieldSet name="Regional Settings" id="regional"/>
+						</bs3:col>
+					</bs3:row>
+				</bs3:tab>
 				<bs3:tab name="Other">
 					<bs3:row>
 						<bs3:col span="12">

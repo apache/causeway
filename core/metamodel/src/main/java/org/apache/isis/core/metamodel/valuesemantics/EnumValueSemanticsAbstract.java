@@ -33,6 +33,7 @@ import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
@@ -198,6 +199,13 @@ implements
             max = Math.max(max, Math.max(nameLength, toStringLength));
         }
         return max;
+    }
+
+    @Override
+    public Can<T> getExamples() {
+        return Stream.of(correspondingClass.getEnumConstants())
+                .limit(2)
+                .collect(Can.toCan());
     }
 
 }

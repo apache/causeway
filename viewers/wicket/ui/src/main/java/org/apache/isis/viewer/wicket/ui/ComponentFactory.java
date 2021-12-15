@@ -50,6 +50,7 @@ public interface ComponentFactory extends Serializable {
      * registered.
      */
     ComponentType getComponentType();
+    Class<?> getComponentTypeClass();
 
     public enum ApplicationAdvice {
         APPLIES,
@@ -89,5 +90,7 @@ public interface ComponentFactory extends Serializable {
     String getName();
 
     CssResourceReference getCssResourceReference();
+
+
 
 }

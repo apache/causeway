@@ -23,12 +23,12 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Stream;
-
-import org.springframework.lang.Nullable;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Collection;
@@ -42,6 +42,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -69,7 +70,7 @@ public class UserMemento implements Serializable {
 
     public static class TitleUiEvent extends IsisModuleApplib.TitleUiEvent<UserMemento> {}
 
-    private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+    private void readObject(final ObjectInputStream ois) throws ClassNotFoundException, IOException {
         ois.defaultReadObject();
     }
 
@@ -147,7 +148,7 @@ public class UserMemento implements Serializable {
     public static class UiSubscriber {
         @Order(PriorityPrecedence.LATE)
         @EventListener(UserMemento.TitleUiEvent.class)
-        public void on(UserMemento.TitleUiEvent ev) {
+        public void on(final UserMemento.TitleUiEvent ev) {
             val userMemento = ev.getSource();
             assert userMemento != null;
             val title = String.format("%s %s", userMemento.getName(), userMemento.isImpersonating() ? " (impersonating)" : "");
@@ -177,6 +178,24 @@ public class UserMemento implements Serializable {
     @Getter @With(onMethod_ = {@Programmatic})
     @Nullable
     URL avatarUrl;
+
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(fieldSetId = "regional", sequence = "1")
+    @Getter @With(onMethod_ = {@Programmatic})
+    @Nullable
+    Locale languageLocale;
+
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(fieldSetId = "details", sequence = "2")
+    @Getter @With(onMethod_ = {@Programmatic})
+    @Nullable
+    Locale numberFormatLocale;
+
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(fieldSetId = "details", sequence = "3")
+    @Getter @With(onMethod_ = {@Programmatic})
+    @Nullable
+    Locale timeFormatLocale;
 
     /**
      * To support external security mechanisms such as keycloak,
@@ -253,7 +272,7 @@ public class UserMemento implements Serializable {
 
 
     @Programmatic
-    public UserMemento withRoleAdded(String role) {
+    public UserMemento withRoleAdded(final String role) {
         return asBuilder()
         .roles(roles.add(new RoleMemento(role)))
         .build();
@@ -294,10 +313,29 @@ public class UserMemento implements Serializable {
                 .authenticationCode(authenticationCode)
                 .authenticationSource(authenticationSource)
                 .avatarUrl(avatarUrl)
+                .languageLocale(languageLocale)
+                .numberFormatLocale(numberFormatLocale)
+                .timeFormatLocale(timeFormatLocale)
                 .impersonating(impersonating)
                 .realName(realName)
                 .multiTenancyToken(multiTenancyToken)
                 .roles(roles);
+    }
+
+    @Programmatic
+    public UserLocale asUserLocale() {
+        val main = languageLocale!=null
+                ? languageLocale
+                : Locale.getDefault();
+        return UserLocale.builder()
+                .languageLocale(main)
+                .numberFormatLocale(numberFormatLocale!=null
+                        ? numberFormatLocale
+                        : main)
+                .timeFormatLocale(timeFormatLocale!=null
+                        ? timeFormatLocale
+                        : main)
+                .build();
     }
 
     // -- HELPER

@@ -16,28 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
+package org.apache.isis.applib.services.i18n;
 
-import org.apache.wicket.Component;
-
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
+import java.util.Locale;
+import java.util.Optional;
 
 /**
- * {@link ComponentFactory} for {@link CharacterPanel}.
+ * Provides the preferred language {@link Locale} of the current user.
+ * <p>
+ * One of a number of services that work together to provide support for i18n.
+ *
+ * @see TranslationService
+ * @see TranslationsResolver
+ *
+ * @since 2.x {@index}
  */
-public class CharacterPanelFactory extends ComponentFactoryScalarAbstract {
+public interface LanguageProvider {
 
-    private static final long serialVersionUID = 1L;
-
-    public CharacterPanelFactory() {
-        super(CharacterPanel.class, char.class, Character.class);
-    }
-
-    @Override
-    public Component createComponent(final String id, final ScalarModel scalarModel) {
-        return new CharacterPanel(id, scalarModel);
-    }
+    /**
+     * Optionally returns the preferred language {@link Locale} of the current user,
+     * based on whether there is a context with a current user object.
+     */
+    Optional<Locale> getPreferredLanguage();
 
 }

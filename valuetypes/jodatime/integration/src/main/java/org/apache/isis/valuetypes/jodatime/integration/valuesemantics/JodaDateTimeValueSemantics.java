@@ -27,6 +27,7 @@ import org.joda.time.DateTime;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.ZonedDateTimeValueSemantics;
 import org.apache.isis.core.metamodel.valuetypes.TemporalSemanticsAdapter;
 import org.apache.isis.valuetypes.jodatime.applib.value.JodaTimeConverters;
@@ -56,6 +57,13 @@ extends TemporalSemanticsAdapter<org.joda.time.DateTime, ZonedDateTime>  {
     @Override
     public ZonedDateTime toDelegateValue(final DateTime value) {
         return JodaTimeConverters.fromJoda(value);
+    }
+
+    @Override
+    public Can<DateTime> getExamples() {
+        return Can.of(
+                org.joda.time.DateTime.now(),
+                org.joda.time.DateTime.now().plusDays(2).plusSeconds(15));
     }
 
 }

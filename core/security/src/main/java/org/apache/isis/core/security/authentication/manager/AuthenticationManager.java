@@ -33,9 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.unrecoverable.NoAuthenticatorException;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
-import org.apache.isis.applib.services.iactnlayer.InteractionContextUtil;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Timing;
@@ -106,37 +104,21 @@ public class AuthenticationManager {
             for (val authenticator : compatibleAuthenticators) {
                 val interactionContext = authenticator.authenticate(request, getUnusedRandomCode());
                 if (interactionContext != null) {
-                    val userMemento = refineUserWithin(interactionContext);
+
+                    val userRefined = UserMementoRefiner.refine(
+                            interactionContext.getUser(),
+                            userMementoRefiners);
+                    val interactionContextRefined = interactionContext.withUser(userRefined);
+
                     userByValidationCode.put(
-                            userMemento.getAuthenticationCode(),
-                            userMemento.getName());
-                    return interactionContext;
+                            userRefined.getAuthenticationCode(),
+                            userRefined.getName());
+                    return interactionContextRefined;
                 }
             }
 
             return null;
         });
-    }
-
-    /**
-     * Iterates over all available {@link UserMementoRefiner}s; if at the end the {@link UserMemento} has been changed,
-     * then replaces (using a private API) the {@link UserMemento} held within {@link InteractionContext}.
-     *
-     * @param interactionContext
-     * @return
-     */
-    @NonNull
-    private UserMemento refineUserWithin(final InteractionContext interactionContext) {
-        val userMementoOrig = interactionContext.getUser();
-        UserMemento userMemento = userMementoOrig;
-        for (UserMementoRefiner refiner : userMementoRefiners) {
-            final UserMemento refined = refiner.refine(userMemento);
-            userMemento = refined != null ? refined : userMemento;
-        }
-        if(userMemento != userMementoOrig) {
-            InteractionContextUtil.replaceUserIn(interactionContext, userMemento);
-        }
-        return interactionContext.getUser();
     }
 
     private String getUnusedRandomCode() {

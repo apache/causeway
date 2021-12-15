@@ -64,6 +64,7 @@ import org.apache.isis.core.metamodel.valuesemantics.FloatValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.IntValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.InteractionDtoValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.LocalResourcePathValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.LocaleValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.LongValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.MarkupValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.OidDtoValueSemantics;
@@ -127,6 +128,7 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         BookmarkValueSemantics.class,
         OidDtoValueSemantics.class,
         UUIDValueSemantics.class,
+        LocaleValueSemantics.class,
         TreeNodeValueSemantics.class,
         ChangesDtoValueSemantics.class,
         CommandDtoValueSemantics.class,

@@ -26,15 +26,10 @@ import java.util.Objects;
 import org.apache.wicket.util.convert.ConversionException;
 import org.assertj.core.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
@@ -47,6 +42,12 @@ import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.security._testing.InteractionService_forTesting;
 import org.apache.isis.viewer.wicket.model.converter.ConverterBasedOnValueSemantics;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -119,7 +120,7 @@ public class ConverterTester<T extends Serializable> {
         Objects.requireNonNull(scenario, "must select a scenario before using this method");
 
         interactionService.run(
-                InteractionContext.builder().locale(scenario.locale).build(),
+                InteractionContext.builder().locale(UserLocale.valueOf(scenario.locale)).build(),
                 runnable);
     }
 

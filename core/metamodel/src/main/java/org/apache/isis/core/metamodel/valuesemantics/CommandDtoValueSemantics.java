@@ -26,6 +26,7 @@ import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.common.v2.ValueType;
 
@@ -64,6 +65,11 @@ implements
     @Override
     public String simpleTextPresentation(final Context context, final CommandDto value) {
         return render(value, CommandDtoUtils::toXml);
+    }
+
+    @Override
+    public Can<CommandDto> getExamples() {
+        return Can.of(new CommandDto(), new CommandDto());
     }
 
 }

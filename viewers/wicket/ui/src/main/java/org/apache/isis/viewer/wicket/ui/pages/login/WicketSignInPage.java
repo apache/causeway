@@ -21,7 +21,8 @@ package org.apache.isis.viewer.wicket.ui.pages.login;
 import javax.inject.Inject;
 
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.authroles.authentication.panel.SignInPanel;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -29,6 +30,8 @@ import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.SuccessFeedbackCookieManager;
+
+import lombok.val;
 
 /**
  * Boilerplate, pick up our HTML and CSS.
@@ -41,7 +44,7 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
         this(parameters, getAndClearExceptionModelIfAny());
     }
 
-    public WicketSignInPage(final PageParameters parameters, ExceptionModel exceptionModel) {
+    public WicketSignInPage(final PageParameters parameters, final ExceptionModel exceptionModel) {
         super(parameters, exceptionModel);
 
         if (AuthenticatedWebSession.exists() && AuthenticatedWebSession.get().isSignedIn()) {
@@ -53,14 +56,20 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
     protected void onInitialize() {
         super.onInitialize();
 
-        addSignInPanel();
+        add(createSignInPanel());
 
         SuccessFeedbackCookieManager.drainSuccessFeedback(this::success);
     }
 
+    @Override
+    public void renderHead(final IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(JavaScriptHeaderItem.forReference(
+                SignInPanelAbstract.getJsForTimezoneSelectDefault()));
+    }
 
-    protected SignInPanel addSignInPanel() {
 
+    protected IsisSignInPanel createSignInPanel() {
 
         final boolean rememberMeSuppress = getConfiguration().getViewer().getWicket().getRememberMe().isSuppress();
         final boolean suppressRememberMe = rememberMeSuppress;
@@ -72,18 +81,8 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
         final boolean signUpLink = !suppressSignUpLink;
         final boolean passwordReset = !suppressPasswordResetLink;
         final boolean continueToOriginalDestination = !clearOriginalDestination;
-        SignInPanel signInPanel = createSignInPanel("signInPanel", rememberMe, signUpLink, passwordReset, continueToOriginalDestination);
-        add(signInPanel);
-        return signInPanel;
-    }
-
-    protected SignInPanel createSignInPanel(
-            final String id,
-            final boolean rememberMe,
-            final boolean signUpLink,
-            final boolean passwordResetLink,
-            final boolean continueToOriginalDestination) {
-        final SignInPanel signInPanel = new IsisSignInPanel(id, rememberMe, signUpLink, passwordResetLink, continueToOriginalDestination);
+        val signInPanel =
+                new IsisSignInPanel("signInPanel", rememberMe, signUpLink, passwordReset, continueToOriginalDestination);
         return signInPanel;
     }
 

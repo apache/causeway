@@ -25,6 +25,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
@@ -58,6 +59,13 @@ extends TemporalValueSemanticsProvider<ZonedDateTime> {
     @Override
     public Duration epsilon() {
         return ALMOST_A_SECOND;
+    }
+
+    @Override
+    public Can<ZonedDateTime> getExamples() {
+        return Can.of(
+                ZonedDateTime.now(),
+                ZonedDateTime.now().plusDays(2).plusSeconds(15));
     }
 
 }

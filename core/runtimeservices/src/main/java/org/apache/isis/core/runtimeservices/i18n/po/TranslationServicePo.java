@@ -30,7 +30,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.i18n.LocaleProvider;
+import org.apache.isis.applib.services.i18n.LanguageProvider;
 import org.apache.isis.applib.services.i18n.Mode;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -41,6 +41,7 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 
+import lombok.Getter;
 import lombok.val;
 
 @Service
@@ -73,7 +74,7 @@ public class TranslationServicePo implements TranslationService {
             return;
         }
 
-        if(getLocaleProvider() == null || getTranslationsResolver() == null) {
+        if(getTranslationsResolver() == null) {
             // remain in write mode
             return;
         }
@@ -173,20 +174,14 @@ public class TranslationServicePo implements TranslationService {
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private IsisConfiguration configuration;
 
+    @Getter
+    @Inject private LanguageProvider languageProvider;
+
     private _Lazy<Can<TranslationsResolver>> translationsResolvers = _Lazy.threadSafe(()->
     serviceRegistry.select(TranslationsResolver.class) );
 
     Can<TranslationsResolver> getTranslationsResolver() {
         return translationsResolvers.get();
     }
-
-    private _Lazy<Can<LocaleProvider>> localeProviders = _Lazy.threadSafe(()->
-    serviceRegistry.select(LocaleProvider.class) );
-
-    Can<LocaleProvider> getLocaleProvider() {
-        return localeProviders.get();
-    }
-
-
 
 }

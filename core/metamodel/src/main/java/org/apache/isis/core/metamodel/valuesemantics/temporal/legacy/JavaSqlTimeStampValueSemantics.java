@@ -27,6 +27,7 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
 import org.apache.isis.core.metamodel.valuetypes.TemporalSemanticsAdapter;
 
@@ -55,6 +56,13 @@ extends TemporalSemanticsAdapter<Timestamp, LocalDateTime> {
     @Override
     public LocalDateTime toDelegateValue(final Timestamp value) {
         return value.toLocalDateTime();
+    }
+
+    @Override
+    public Can<Timestamp> getExamples() {
+        return Can.of(
+                new Timestamp(new java.util.Date().getTime()),
+                new Timestamp(0L));
     }
 
 }

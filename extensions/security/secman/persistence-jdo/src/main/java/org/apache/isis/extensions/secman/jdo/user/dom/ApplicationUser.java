@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.secman.jdo.user.dom;
 
+import java.util.Locale;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -44,6 +45,9 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @PersistenceCapable(
         identityType = IdentityType.DATASTORE,
@@ -112,7 +116,7 @@ public class ApplicationUser
         return username;
     }
     @Override
-    public void setUsername(String username) { this.username = username; }
+    public void setUsername(final String username) { this.username = username; }
 
 
     // -- FAMILY NAME
@@ -126,7 +130,7 @@ public class ApplicationUser
         return familyName;
     }
     @Override
-    public void setFamilyName(String familyName) {
+    public void setFamilyName(final String familyName) {
         this.familyName = familyName;
     }
 
@@ -142,7 +146,7 @@ public class ApplicationUser
         return givenName;
     }
     @Override
-    public void setGivenName(String givenName) {
+    public void setGivenName(final String givenName) {
         this.givenName = givenName;
     }
 
@@ -158,7 +162,7 @@ public class ApplicationUser
         return knownAs;
     }
     @Override
-    public void setKnownAs(String knownAs) {
+    public void setKnownAs(final String knownAs) {
         this.knownAs = knownAs;
     }
 
@@ -174,7 +178,7 @@ public class ApplicationUser
         return emailAddress;
     }
     @Override
-    public void setEmailAddress(String emailAddress) {
+    public void setEmailAddress(final String emailAddress) {
         this.emailAddress = emailAddress;
     }
 
@@ -190,7 +194,7 @@ public class ApplicationUser
         return phoneNumber;
     }
     @Override
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(final String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -206,10 +210,26 @@ public class ApplicationUser
         return faxNumber;
     }
     @Override
-    public void setFaxNumber(String faxNumber) {
+    public void setFaxNumber(final String faxNumber) {
         this.faxNumber = faxNumber;
     }
 
+    // -- LOCALE
+
+    @UserLocale
+    @Column(allowsNull="true")
+    @Getter @Setter
+    private Locale language;
+
+    @UserLocale
+    @Column(allowsNull="true")
+    @Getter @Setter
+    private Locale numberFormat;
+
+    @UserLocale
+    @Column(allowsNull="true")
+    @Getter @Setter
+    private Locale timeFormat;
 
     // -- AT PATH
 
@@ -222,7 +242,7 @@ public class ApplicationUser
         return atPath;
     }
     @Override
-    public void setAtPath(String atPath) {
+    public void setAtPath(final String atPath) {
         this.atPath = atPath;
     }
 
@@ -238,7 +258,7 @@ public class ApplicationUser
         return accountType;
     }
     @Override
-    public void setAccountType(org.apache.isis.extensions.secman.applib.user.dom.AccountType accountType) {
+    public void setAccountType(final org.apache.isis.extensions.secman.applib.user.dom.AccountType accountType) {
         this.accountType = accountType;
     }
 
@@ -254,7 +274,7 @@ public class ApplicationUser
         return status;
     }
     @Override
-    public void setStatus(ApplicationUserStatus status) {
+    public void setStatus(final ApplicationUserStatus status) {
         this.status = status;
     }
 
@@ -270,7 +290,7 @@ public class ApplicationUser
         return encryptedPassword;
     }
     @Override
-    public void setEncryptedPassword(String encryptedPassword) {
+    public void setEncryptedPassword(final String encryptedPassword) {
         this.encryptedPassword = encryptedPassword;
     }
 

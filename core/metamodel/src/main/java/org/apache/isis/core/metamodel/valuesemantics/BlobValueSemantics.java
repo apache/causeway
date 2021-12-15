@@ -28,10 +28,12 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.common.v2.ValueType;
@@ -82,6 +84,13 @@ implements
         } catch (MimeTypeParseException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Can<Blob> getExamples() {
+        return Can.of(
+                Blob.of("a Blob", CommonMimeType.BIN, new byte[] {1, 2, 3}),
+                Blob.of("another Blob", CommonMimeType.BIN, new byte[] {3, 4}));
     }
 
 }

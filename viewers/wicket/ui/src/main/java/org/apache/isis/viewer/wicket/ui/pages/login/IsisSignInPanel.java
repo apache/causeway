@@ -21,23 +21,20 @@ package org.apache.isis.viewer.wicket.ui.pages.login;
 import javax.inject.Inject;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
-import org.apache.wicket.authroles.authentication.panel.SignInPanel;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 
-import lombok.val;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import lombok.val;
 
 /**
  * An extension of Wicket's default SignInPanel that provides
@@ -45,7 +42,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
  * {@link de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel}
  * for Bootstrap styled error messages
  */
-public class IsisSignInPanel extends SignInPanel {
+public class IsisSignInPanel extends SignInPanelAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -126,8 +123,7 @@ public class IsisSignInPanel extends SignInPanel {
             link.setVisibilityAllowed(false);
         }
 
-
-        getSignInForm().addOrReplace(link);
+        getSignInFormWithTimeZone().addOrReplace(link);
         return link;
     }
 
@@ -147,13 +143,8 @@ public class IsisSignInPanel extends SignInPanel {
         }
     }
 
-    private MarkupContainer getSignInForm() {
-        return (MarkupContainer) get("signInForm");
-    }
-
     @Override
     protected void onSignInSucceeded() {
-
         if(clearOriginalDestination) {
             clearOriginalDestination();
         }
@@ -167,6 +158,5 @@ public class IsisSignInPanel extends SignInPanel {
         }
         super.onSignInRemembered();
     }
-
 
 }

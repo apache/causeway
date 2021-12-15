@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.secman.jpa.user.dom;
 
+import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -45,6 +46,9 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(
@@ -211,6 +215,22 @@ public class ApplicationUser
         this.faxNumber = faxNumber;
     }
 
+    // -- REGIONAL SETTINGS
+
+    @UserLocale
+    @Column(nullable = true)
+    @Getter @Setter
+    private Locale language;
+
+    @UserLocale
+    @Column(nullable = true)
+    @Getter @Setter
+    private Locale numberFormat;
+
+    @UserLocale
+    @Column(nullable = true)
+    @Getter @Setter
+    private Locale timeFormat;
 
     // -- AT PATH
 

@@ -29,6 +29,7 @@ import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.common.v2.ValueType;
 
@@ -95,6 +96,13 @@ implements
     @Override
     public int maxLength() {
         return 36;
+    }
+
+    @Override
+    public Can<UUID> getExamples() {
+        return Can.of(
+                UUID.randomUUID(),
+                UUID.randomUUID());
     }
 
     //    private static final Pattern pattern = Pattern.compile(

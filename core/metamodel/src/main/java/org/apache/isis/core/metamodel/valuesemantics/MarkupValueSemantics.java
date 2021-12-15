@@ -28,6 +28,7 @@ import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
@@ -89,6 +90,13 @@ implements
     @Override
     public int typicalLength() {
         return 0;
+    }
+
+    @Override
+    public Can<Markup> getExamples() {
+        return Can.of(
+                Markup.valueOf("a Markup"),
+                Markup.valueOf("another Markup"));
     }
 
 

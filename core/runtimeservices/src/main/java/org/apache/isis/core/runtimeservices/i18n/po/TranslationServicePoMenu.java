@@ -32,6 +32,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.RequiredArgsConstructor;
 
@@ -67,8 +68,9 @@ public class TranslationServicePoMenu {
             final String potFileName) {
 
         return translationService.toPot()
-                .map(chars->new Clob(Util.withSuffix(potFileName, "pot"), "text/plain", chars))
-                .orElse(null);
+            .map(chars->new Clob(
+                    _Strings.asFileNameWithExtension(potFileName, "pot"), "text/plain", chars))
+            .orElse(null);
     }
     @MemberSupport public String default0DownloadTranslations() {
         return "translations.pot";

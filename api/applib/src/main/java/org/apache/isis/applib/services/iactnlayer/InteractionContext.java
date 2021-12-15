@@ -21,10 +21,12 @@ package org.apache.isis.applib.services.iactnlayer;
 import java.io.Serializable;
 import java.time.ZoneId;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.clock.VirtualClock;
+import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.user.UserMemento;
 
@@ -61,7 +63,6 @@ public class InteractionContext implements Serializable {
         return InteractionContext.builder()
                 .user(user)
                 .clock(VirtualClock.system())
-                .locale(Locale.getDefault())
                 .timeZone(ZoneId.systemDefault())
                 .build();
     }
@@ -76,7 +77,7 @@ public class InteractionContext implements Serializable {
      *
      */
     @With @Getter @Builder.Default
-    @NonNull /*final*/ UserMemento user = UserMemento.system();
+    final @NonNull UserMemento user = UserMemento.system();
 
     /**
      * The (programmatically) simulated (or actual) clock.
@@ -87,8 +88,15 @@ public class InteractionContext implements Serializable {
     @With @Getter @Builder.Default
     final @NonNull VirtualClock clock = VirtualClock.system();
 
-    @With @Getter @Builder.Default
-    final @NonNull Locale locale = Locale.getDefault();
+    @With UserLocale locale;
+    public UserLocale getLocale(){
+        if(locale!=null) {
+            return locale; // if set, overrides any user preferences
+        }
+        return Optional.ofNullable(getUser())
+                .map(UserMemento::asUserLocale)
+                .orElseGet(UserLocale::getDefault);
+    }
 
     @With @Getter @Builder.Default
     final @NonNull ZoneId timeZone = ZoneId.systemDefault();
@@ -117,7 +125,7 @@ public class InteractionContext implements Serializable {
      * {@link UnaryOperator} that will act upon the provided {@link InteractionContext} to return the same but with
      * the specified {@link Locale}.
      */
-    public static UnaryOperator<InteractionContext> switchLocale(final @NonNull Locale locale) {
+    public static UnaryOperator<InteractionContext> switchLocale(final @NonNull UserLocale locale) {
         return interactionContext -> interactionContext.withLocale(locale);
     }
 
@@ -153,16 +161,4 @@ public class InteractionContext implements Serializable {
         return mappers.reduce(t -> t, (a,b) -> a.andThen(b)::apply);
     }
 
-    /**
-     * For internal usage, not API.
-     *
-     * <p>
-     *     Instead, use {@link #withUser(UserMemento)}, which honours the value semantics of this class.
-     * </p>
-     *
-     * @param user
-     */
-    void replaceUser(final UserMemento user) {
-        this.user = user;
-    }
 }

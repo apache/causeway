@@ -26,6 +26,7 @@ import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 import org.apache.isis.schema.common.v2.ValueType;
 
@@ -64,6 +65,11 @@ implements
     @Override
     public String simpleTextPresentation(final Context context, final ChangesDto value) {
         return render(value, ChangesDtoUtils::toXml);
+    }
+
+    @Override
+    public Can<ChangesDto> getExamples() {
+        return Can.of(new ChangesDto(), new ChangesDto());
     }
 
 }

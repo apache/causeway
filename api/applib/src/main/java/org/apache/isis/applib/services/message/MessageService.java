@@ -55,7 +55,7 @@ public interface MessageService {
      *
      * <p>
      *     More precisely, the locale is as provided by the configured
-     *     {@link org.apache.isis.applib.services.i18n.LocaleProvider} service.
+     *     {@link org.apache.isis.applib.services.i18n.LanguageProvider} service.
      *     This should be the {@link java.util.Locale} of the user making the
      *     current request.
      * </p>
@@ -105,7 +105,7 @@ public interface MessageService {
      *
      * <p>
      *     More precisely, the locale is as provided by the configured
-     *     {@link org.apache.isis.applib.services.i18n.LocaleProvider} service.
+     *     {@link org.apache.isis.applib.services.i18n.LanguageProvider} service.
      *     This should be the {@link java.util.Locale} of the user making the
      *     current request.
      * </p>
@@ -154,7 +154,7 @@ public interface MessageService {
      *
      * <p>
      *     More precisely, the locale is as provided by the configured
-     *     {@link org.apache.isis.applib.services.i18n.LocaleProvider} service.
+     *     {@link org.apache.isis.applib.services.i18n.LanguageProvider} service.
      *     This should be the {@link java.util.Locale} of the user making the
      *     current request.
      * </p>

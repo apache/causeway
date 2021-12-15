@@ -28,19 +28,25 @@ import org.apache.isis.core.security.authentication.manager.UserMementoRefiner;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 
 @Service
-@Log4j2
+//@Log4j2
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class UserMementoRefinerFromApplicationUser implements UserMementoRefiner {
 
     final Provider<ApplicationUserRepository> applicationUserRepositoryProvider;
 
     @Override
-    public UserMemento refine(UserMemento userMemento) {
+    public UserMemento refine(final UserMemento userMemento) {
         return applicationUserRepositoryProvider.get().findByUsername(userMemento.getName())
-                .map(applicationUser -> userMemento.withMultiTenancyToken(applicationUser.getAtPath()))
+                .map(applicationUser ->
+                    userMemento.asBuilder()
+                    .multiTenancyToken(applicationUser.getAtPath())
+                    .languageLocale(applicationUser.getLanguage())
+                    .numberFormatLocale(applicationUser.getNumberFormat())
+                    .timeFormatLocale(applicationUser.getTimeFormat())
+                    .build()
+                )
                 .orElse(userMemento);
     }
 }

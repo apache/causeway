@@ -32,7 +32,6 @@ import org.apache.isis.viewer.wicket.viewer.services.BookmarkUiServiceWicket;
 import org.apache.isis.viewer.wicket.viewer.services.DeepLinkServiceWicket;
 import org.apache.isis.viewer.wicket.viewer.services.HintStoreUsingWicketSession;
 import org.apache.isis.viewer.wicket.viewer.services.ImageResourceCacheClassPath;
-import org.apache.isis.viewer.wicket.viewer.services.LocaleProviderWicket;
 import org.apache.isis.viewer.wicket.viewer.services.TranslationsResolverWicket;
 import org.apache.isis.viewer.wicket.viewer.services.WicketViewerSettingsDefault;
 import org.apache.isis.viewer.wicket.viewer.webmodule.WebModuleWicket;
@@ -51,7 +50,6 @@ import org.apache.isis.viewer.wicket.viewer.webmodule.WebModuleWicket;
         ComponentFactoryRegistryDefault.class,
         DeepLinkServiceWicket.class,
         ImageResourceCacheClassPath.class,
-        LocaleProviderWicket.class,
         HintStoreUsingWicketSession.class,
         PageClassListDefault.class,
         PageClassRegistryDefault.class,

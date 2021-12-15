@@ -27,6 +27,7 @@ import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
@@ -107,6 +108,11 @@ implements
     public int maxLength() {
         //TODO research - legacy value, what motivates this number?
         return 25;
+    }
+
+    @Override
+    public Can<Double> getExamples() {
+        return Can.of(Double.MIN_VALUE, Double.MAX_VALUE);
     }
 
 

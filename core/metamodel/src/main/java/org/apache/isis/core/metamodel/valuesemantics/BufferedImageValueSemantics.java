@@ -29,6 +29,7 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.image._Images;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -119,7 +120,11 @@ implements
         /*sonar-ignore-off*/
     }
 
-
-
+    @Override
+    public Can<BufferedImage> getExamples() {
+        return Can.of(
+                new BufferedImage(4, 4, BufferedImage.TYPE_INT_RGB),
+                new BufferedImage(8, 8, BufferedImage.TYPE_INT_RGB));
+    }
 
 }

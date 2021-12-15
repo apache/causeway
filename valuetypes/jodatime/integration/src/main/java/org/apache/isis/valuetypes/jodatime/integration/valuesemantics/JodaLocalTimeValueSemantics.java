@@ -21,9 +21,11 @@ package org.apache.isis.valuetypes.jodatime.integration.valuesemantics;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.joda.time.LocalTime;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalTimeValueSemantics;
 import org.apache.isis.core.metamodel.valuetypes.TemporalSemanticsAdapter;
 import org.apache.isis.valuetypes.jodatime.applib.value.JodaTimeConverters;
@@ -53,6 +55,13 @@ extends TemporalSemanticsAdapter<org.joda.time.LocalTime, java.time.LocalTime>  
     @Override
     public java.time.LocalTime toDelegateValue(final org.joda.time.LocalTime value) {
         return JodaTimeConverters.fromJoda(value);
+    }
+
+    @Override
+    public Can<LocalTime> getExamples() {
+        return Can.of(
+                org.joda.time.LocalTime.now(),
+                org.joda.time.LocalTime.now().plusSeconds(15));
     }
 
 }

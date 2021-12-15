@@ -18,36 +18,12 @@
  */
 package org.apache.isis.core.security.authentication.manager;
 
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.lang.Nullable;
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.exceptions.unrecoverable.NoAuthenticatorException;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.applib.util.ToString;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Timing;
-import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.security.authentication.AuthenticationRequest;
-import org.apache.isis.core.security.authentication.Authenticator;
-import org.apache.isis.core.security.authentication.standard.RandomCodeGenerator;
-import org.apache.isis.core.security.authentication.standard.Registrar;
 
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * SPI provided by the internal {@link AuthenticationManager}, allowing the {@link UserMemento} representing an
@@ -73,5 +49,23 @@ public interface UserMementoRefiner {
      * @return the userMemento that is refined, or else unchanged.
      */
     UserMemento refine(final UserMemento userMemento);
+
+    // -- UTILITY
+
+    public static UserMemento refine(
+            final @NonNull UserMemento userMemento,
+            final @Nullable Iterable<UserMementoRefiner> refiners) {
+
+        if(refiners==null) {
+            return userMemento;
+        }
+
+        UserMemento refined = userMemento;
+        for (UserMementoRefiner refiner : refiners) {
+            final UserMemento next = refiner.refine(refined);
+            refined = next != null ? next : refined;
+        }
+        return refined;
+    }
 
 }

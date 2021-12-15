@@ -18,8 +18,7 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.Locale;
 
 import javax.inject.Named;
 
@@ -34,21 +33,20 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.common.v2.ValueType;
 
-import lombok.SneakyThrows;
 import lombok.val;
 
 @Component
-@Named("isis.val.URLValueSemantics")
-public class URLValueSemantics
-extends ValueSemanticsAbstract<java.net.URL>
+@Named("isis.val.LocaleValueSemantics")
+public class LocaleValueSemantics
+extends ValueSemanticsAbstract<Locale>
 implements
-    EncoderDecoder<java.net.URL>,
-    Parser<java.net.URL>,
-    Renderer<java.net.URL> {
+    EncoderDecoder<Locale>,
+    Parser<Locale>,
+    Renderer<Locale> {
 
     @Override
-    public Class<java.net.URL> getCorrespondingClass() {
-        return java.net.URL.class;
+    public Class<Locale> getCorrespondingClass() {
+        return Locale.class;
     }
 
     @Override
@@ -59,65 +57,75 @@ implements
     // -- ENCODER DECODER
 
     @Override
-    public String toEncodedString(final java.net.URL url) {
-        return url != null? url.toString(): "NULL";
+    public String toEncodedString(final Locale object) {
+        return object!=null
+                ? object.toLanguageTag()
+                : null;
     }
 
     @Override
-    public java.net.URL fromEncodedString(final String data) {
-        if("NULL".equals(data)) {
-            return null;
-        }
-        try {
-            return new java.net.URL(data);
-        } catch (MalformedURLException e) {
-            return null;
-        }
+    public Locale fromEncodedString(final String data) {
+        return data!=null
+                ? Locale.forLanguageTag(data)
+                : null;
     }
 
     // -- RENDERER
 
     @Override
-    public String simpleTextPresentation(final ValueSemanticsProvider.Context context, final java.net.URL value) {
-        return value != null ? value.toString(): "";
+    public String simpleTextPresentation(final ValueSemanticsProvider.Context context, final Locale value) {
+
+        return render(value, v->{
+
+            val userLanguageLocale = context.getInteractionContext().getLocale().getLanguageLocale();
+
+            val language = value.getDisplayLanguage(userLanguageLocale);
+            if(_Strings.isEmpty(language)) {
+                return toEncodedString(v);
+            }
+
+            val country = value.getDisplayCountry(userLanguageLocale);
+            if(_Strings.isEmpty(country)) {
+                return language;
+            }
+
+            return String.format("%s (%s)",
+                    value.getDisplayLanguage(userLanguageLocale),
+                    value.getDisplayCountry(userLanguageLocale));
+
+        });
     }
 
     // -- PARSER
 
     @Override
-    public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final java.net.URL value) {
-        return value != null ? value.toString(): null;
+    public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final Locale value) {
+        return value == null ? null : toEncodedString(value);
     }
 
     @Override
-    public java.net.URL parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
+    public Locale parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
         val input = _Strings.blankToNullOrTrim(text);
-        if(input==null) {
-            return null;
-        }
-        try {
-            return new java.net.URL(input);
-        } catch (final MalformedURLException ex) {
-            throw new IllegalArgumentException("Not parseable as an URL ('" + input + "')", ex);
-        }
+        return input!=null
+                ? fromEncodedString(input)
+                : null;
     }
 
     @Override
     public int typicalLength() {
-        return 100;
+        return maxLength();
     }
 
     @Override
     public int maxLength() {
-        return 2083;
+        return 80;
     }
 
-    @SneakyThrows
+    // -- EXAMPLES
+
     @Override
-    public Can<URL> getExamples() {
-        return Can.of(
-                new URL("https://a.b.c"),
-                new URL("https://b.c.d"));
+    public Can<Locale> getExamples() {
+        return Can.of(Locale.US, Locale.GERMAN);
     }
 
 }

@@ -66,6 +66,7 @@ import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_updateAtPath;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_updateEmailAddress;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_updateFaxNumber;
+import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_updateLocale;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_updateName;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_updatePassword;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_updatePhoneNumber;
@@ -150,6 +151,7 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
         ApplicationUser_updateAtPath.class,
         ApplicationUser_updateEmailAddress.class,
         ApplicationUser_updateFaxNumber.class,
+        ApplicationUser_updateLocale.class,
         ApplicationUser_updateName.class,
         ApplicationUser_updatePassword.class,
         ApplicationUser_updatePhoneNumber.class,

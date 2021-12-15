@@ -27,6 +27,7 @@ import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.common.v2.ValueType;
 
@@ -92,6 +93,11 @@ implements
     @Override
     public int typicalLength() {
         return 12;
+    }
+
+    @Override
+    public Can<Password> getExamples() {
+        return Can.of(Password.of("a Password"), Password.of("another Password"));
     }
 
 }

@@ -16,20 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtimeservices.i18n.po;
-
-class Util {
-
-    private Util(){}
-
-    static String withSuffix(String fileName, String suffix) {
-        if(!suffix.startsWith(".")) {
-            suffix = "." + suffix;
-        }
-        if(!fileName.endsWith(suffix)) {
-            fileName += suffix;
-        }
-        return fileName;
-    }
-
-}
+$(function () {
+	var tzid = Intl.DateTimeFormat().resolvedOptions().timeZone.toLowerCase();
+	var timezoneSelect = document.getElementById("timezone-select");
+	Array.from(timezoneSelect.options).forEach(function(option_element) {
+	    var option_text = option_element.text.toLowerCase();
+		if(tzid === option_text) {
+			timezoneSelect.value = option_element.value;
+			return;
+		}
+	})
+})

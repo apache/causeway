@@ -23,6 +23,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
@@ -386,6 +387,36 @@ public abstract class ApplicationUser
     public abstract String getFaxNumber();
     public abstract void setFaxNumber(String faxNumber);
 
+    // -- LOCALE
+
+    @Property(
+            domainEvent = UserLocale.DomainEvent.class,
+            editing = Editing.DISABLED //  edit via update button
+    )
+    @PropertyLayout(
+            fieldSetId = "regional"
+    )
+    @Parameter(
+            optionality = Optionality.OPTIONAL
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface UserLocale {
+        int MAX_LENGTH = 120;
+        class DomainEvent extends PropertyDomainEvent<Locale> {}
+    }
+
+    @UserLocale
+    public abstract Locale getLanguage();
+    public abstract void setLanguage(Locale locale);
+
+    @UserLocale
+    public abstract Locale getNumberFormat();
+    public abstract void setNumberFormat(Locale locale);
+
+    @UserLocale
+    public abstract Locale getTimeFormat();
+    public abstract void setTimeFormat(Locale locale);
 
     // -- AT PATH
 

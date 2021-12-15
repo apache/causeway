@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsAdapter;
 import org.apache.isis.schema.common.v2.OidDto;
 
@@ -53,6 +54,13 @@ extends ValueSemanticsAdapter<OidDto, Bookmark, Void> {
     @Override
     public Bookmark toDelegateValue(final OidDto value) {
         return value!=null ? Bookmark.forOidDto(value) : null;
+    }
+
+    @Override
+    public Can<OidDto> getExamples() {
+        return Can.of(
+                Bookmark.parseElseFail("a:b").toOidDto(),
+                Bookmark.parseElseFail("c:d").toOidDto());
     }
 
 }

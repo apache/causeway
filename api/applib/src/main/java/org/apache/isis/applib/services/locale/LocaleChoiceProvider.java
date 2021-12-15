@@ -16,30 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars.uuid;
+package org.apache.isis.applib.services.locale;
 
-import java.util.UUID;
-
-import org.apache.wicket.Component;
-
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
+import java.util.List;
+import java.util.Locale;
 
 /**
- * {@link ComponentFactory} for {@link UuidPanel}.
+ * Provides supported {@link Locale} choices.
+ *
+ * @since 2.0 {@index}
  */
-public class UuidPanelFactory extends ComponentFactoryScalarAbstract {
+public interface LocaleChoiceProvider {
 
-    private static final long serialVersionUID = 1L;
-
-    public UuidPanelFactory() {
-        super(UuidPanel.class, UUID.class);
-    }
-
-    @Override
-    public Component createComponent(final String id, final ScalarModel scalarModel) {
-        return new UuidPanel(id, scalarModel);
-    }
+    List<Locale> getAvailableLocales();
 
 }
