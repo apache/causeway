@@ -43,7 +43,7 @@ open class IntegrationTest {
         val pw = "pass"
         val url = "http://${user}:${pw}@localhost:8080/restful/"
         SessionManager.login(url, user, pw)
-        val credentials: String = SessionManager.getCredentials()
+        val credentials: String = SessionManager.getCredentials()!!
         val xhr = XMLHttpRequest()
         xhr.open("GET", url, false, user, pw)
         xhr.setRequestHeader("Authorization", "Basic $credentials")

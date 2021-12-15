@@ -48,6 +48,7 @@ class ActionDispatcher(private val at: Point = Point(100, 100)) : BaseAggregator
                 logEntry.aggregators.add(oa)
                 oa.update(logEntry, Constants.subTypeJson)
             }
+            to is Restful -> {}
             else -> {
                 console.log(to)
                 throw Throwable("[ActionDispatcher.update] ${to!!::class.simpleName}")

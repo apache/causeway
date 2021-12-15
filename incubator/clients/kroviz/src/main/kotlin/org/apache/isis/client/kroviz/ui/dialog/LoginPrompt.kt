@@ -62,7 +62,7 @@ class LoginPrompt(val nextController: Controller? = null) : Controller() {
     }
 
     private fun extractUserInput() {
-        //TODO function has a side effect, ie. changes variable values
+        //function has a side effect, ie. changes variable values
         var key: String?
         val formPanel = dialog.formPanel
         val kids = formPanel!!.getChildren()

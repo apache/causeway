@@ -19,7 +19,6 @@
 package org.apache.isis.client.kroviz.core
 
 import io.kvision.core.ResString
-import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.utils.StringUtils
 
@@ -31,16 +30,15 @@ class Session {
     private var pw: String = ""
     var baseUrl: String = ""
     var resString: ResString? = null
-    val eventStore = EventStore()
 
     fun login(url: String, user: String, pw: String) {
         this.user = user
         this.pw = pw
         this.baseUrl = url
-        if (url.contains("localhost")) {
-            this.resString = Constants.demoImage
+        if (url.contains("8080")) {
+            this.resString = Constants.demoImage as ResString
         } else {
-            this.resString = Constants.demoRemoteImage
+            this.resString = Constants.demoRemoteImage as ResString
         }
     }
 

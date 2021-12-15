@@ -60,7 +60,6 @@ data class LogEntry(
 ) {
     val url: String = rs.url
 
-    //    val referrer = rs.referrerUrl
     val subType = rs.subType
     var state = EventState.INITIAL
     var title: String = ""

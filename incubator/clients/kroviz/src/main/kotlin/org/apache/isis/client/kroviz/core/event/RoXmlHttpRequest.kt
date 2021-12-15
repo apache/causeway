@@ -50,7 +50,7 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
         if (method != Method.POST.operation) {
             url += StringUtils.argumentsAsUrlParameter(link)
         }
-        val credentials: String = SessionManager.getCredentials()
+        val credentials: String = SessionManager.getCredentials()!!
 
         xhr.open(method, url, true)
         xhr.setRequestHeader("Authorization", "Basic $credentials")

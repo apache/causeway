@@ -22,38 +22,38 @@ import org.apache.isis.client.kroviz.core.Session
 import org.apache.isis.client.kroviz.core.event.EventStore
 
 /**
- * Single point of contact for view components consisting of:
- * @item Session
+ * Handle multiple Sessions
  */
 object SessionManager {
 
-    private val sessions = mutableListOf<Session>()
+    private val sessions = mutableSetOf<Session>()
+    private val eventStore = EventStore()
+    private var activeSession: Session? = null
 
-    fun getSession(): Session {
-        return sessions.first()
-    }
-
-    fun getBaseUrl(): String {
-        val s = getSession()
-        return when (s) {
-            null -> ""
-            else -> s.baseUrl
-        }
+    fun getBaseUrl(): String? {
+        return activeSession?.baseUrl
     }
 
     fun getEventStore(): EventStore {
-        return getSession().eventStore
+        return eventStore
     }
 
     fun login(url: String, username: String, password: String) {
         val s = Session()
         s.login(url, username, password)
-        sessions.add(0, s)
-        UiManager.updateUser(username)
+        val isFirstSession = sessions.size == 0
+        if (sessions.contains(s)) {
+            UiManager.switchSession(s)
+        } else {
+            sessions.add(s)
+            UiManager.updateSession(username, s, isFirstSession)
+        }
+        activeSession = s
+
     }
 
-    fun getCredentials(): String {
-        return getSession().getCredentials()
+    fun getCredentials(): String? {
+        return activeSession?.getCredentials()
     }
 
 }

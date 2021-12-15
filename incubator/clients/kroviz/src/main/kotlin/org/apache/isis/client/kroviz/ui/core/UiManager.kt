@@ -27,6 +27,7 @@ import io.kvision.utils.ESC_KEY
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.apache.isis.client.kroviz.App
+import org.apache.isis.client.kroviz.core.Session
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.core.aggregator.ObjectAggregator
 import org.apache.isis.client.kroviz.core.aggregator.UndefinedDispatcher
@@ -107,7 +108,7 @@ object UiManager {
 
     /**
      * SVG code added to Tabs disappears after a refresh, therefore an SVG object (code, uuid)
-     * is added as attribute to the tab in order to being able to recreate it on refresh.
+     * is added as attribute to the tab in order to be able to recreate it on refresh.
      */
     fun addSvg(title: String, svgCode: String) {
         fun buildSvgPanel(uuid: UUID): FormPanelFactory {
@@ -147,8 +148,15 @@ object UiManager {
         getRoStatusBar().update(entry)
     }
 
-    fun updateUser(user: String) {
+    fun updateSession(user: String, session: Session, isFirstSession: Boolean) {
         getRoStatusBar().updateUser(user)
+        val menubar = getRoApp().roMenuBar
+        if (isFirstSession) menubar.addSeparatorToMainMenu()
+        menubar.add(session)
+    }
+
+    fun switchSession(session: Session) {
+        getRoApp().roMenuBar.switch(session)
     }
 
     fun setBusyCursor() {
@@ -181,7 +189,7 @@ object UiManager {
     }
 
     fun openDialog(panel: RoDialog, at: Point = Point(100, 100)) {
-        val offset = UiManager.getNumberOfPopups() * 4
+        val offset = getNumberOfPopups() * 4
         panel.left = CssSize(at.x + offset, UNIT.px)
         panel.top = CssSize(at.y + offset, UNIT.px)
         getRoApp().add(panel)
@@ -193,7 +201,7 @@ object UiManager {
         pop()
     }
 
-     fun loadDomainTypes(): Boolean {
+    fun loadDomainTypes(): Boolean {
         val k = "loadDomainTypes"
         return when {
             settings.containsKey(k) -> settings.getValue(k) as Boolean
@@ -201,7 +209,7 @@ object UiManager {
         }
     }
 
-     private fun push(widget: Widget) {
+    private fun push(widget: Widget) {
         popups.add(widget)
     }
 
@@ -219,7 +227,7 @@ object UiManager {
         }
     }
 
-    fun getNumberOfPopups(): Int {
+    private fun getNumberOfPopups(): Int {
         return popups.size
     }
 
@@ -229,7 +237,7 @@ object UiManager {
         setNormalCursor()
     }
 
-    private fun getEventStore() : EventStore {
+    private fun getEventStore(): EventStore {
         return SessionManager.getEventStore()
     }
 

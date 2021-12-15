@@ -22,7 +22,6 @@ import io.kvision.panel.SimplePanel
 import io.kvision.state.observableListOf
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.core.aggregator.SvgDispatcher
-import org.apache.isis.client.kroviz.to.HasLinks
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.core.UiManager
@@ -49,10 +48,12 @@ class EventStore {
         }
     }
 
-    fun start(rs: ResourceSpecification,
-              method: String,
-              body: String = "",
-              aggregator: BaseAggregator? = null): LogEntry {
+    fun start(
+        rs: ResourceSpecification,
+        method: String,
+        body: String = "",
+        aggregator: BaseAggregator? = null
+    ): LogEntry {
         val entry = LogEntry(rs = rs, method = method, request = body)
         if (aggregator != null) {
             entry.addAggregator(aggregator)
@@ -174,6 +175,12 @@ class EventStore {
     fun findMenuBars(): LogEntry? {
         return log.firstOrNull() {
             it.obj is Menubars
+        }
+    }
+
+    fun findMenuBarsBy(baseUrl: String): LogEntry? {
+        return log.firstOrNull() {
+            it.obj is Menubars && it.url.startsWith(baseUrl)
         }
     }
 

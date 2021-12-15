@@ -31,10 +31,12 @@ import io.kvision.panel.SimplePanel
 import io.kvision.panel.vPanel
 import io.kvision.utils.px
 import org.apache.isis.client.kroviz.core.Session
-import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.chart.SampleChartModel
-import org.apache.isis.client.kroviz.ui.dialog.*
+import org.apache.isis.client.kroviz.ui.dialog.About
+import org.apache.isis.client.kroviz.ui.dialog.EventDialog
+import org.apache.isis.client.kroviz.ui.dialog.LoginPrompt
+import org.apache.isis.client.kroviz.ui.dialog.SvgInline
 import org.apache.isis.client.kroviz.ui.panel.EventChart
 import org.apache.isis.client.kroviz.ui.panel.GeoMap
 import org.apache.isis.client.kroviz.ui.panel.ImageSample
@@ -50,7 +52,7 @@ class RoMenuBar : SimplePanel() {
 
     init {
         vPanel {
-            val label = "" //IMPROVE use for branding
+            val label = "" //eventually use for branding
             navbar = navbar(label = label, type = NavbarType.FIXEDTOP) {
                 marginLeft = CssSize(-32, UNIT.px)
                 height = CssSize(40, UNIT.px)
@@ -61,24 +63,25 @@ class RoMenuBar : SimplePanel() {
         }
     }
 
-    private fun testFirstSession() {
-        mainEntry.separator()
-        val session = SessionManager.getSession()
-        insertSession(session)
-    }
-
-    private fun insertSession(session:Session) {
+    fun add(session: Session) {
         val menuEntry = buildMenuEntryWithImage(
             session.baseUrl,
             image = session.resString,
-            { this.switch(session) })
+            { switch(session) })
         mainEntry.add(menuEntry)
+        switch(session)
     }
 
-    private fun switch(session: Session) {
+    fun switch(session: Session) {
         mainEntry.image = session.resString
         mainEntry.icon = null
         mainEntry.image.apply { systemIconStyle }
+        val logEntry = SessionManager.getEventStore().findMenuBarsBy(session.baseUrl)
+        if (logEntry != null) {
+            val menuBars = logEntry.obj as Menubars
+            amendMenu(menuBars)
+        }
+        UiManager.setNormalCursor()
     }
 
     private fun buildMenuEntryWithImage(label: String, image: ResString?, action: dynamic): Link {
@@ -91,12 +94,13 @@ class RoMenuBar : SimplePanel() {
         return link
     }
 
-    val systemIconStyle = style(".dropdown-toggle") {
+    private val systemIconStyle = style(".dropdown-toggle") {
         style("img") {
             height = 20.px
         }
     }
-    val appIconStyle = style(".dropdown-item") {
+
+    private val appIconStyle = style(".dropdown-item") {
         style("img") {
             height = 20.px
         }
@@ -158,13 +162,14 @@ class RoMenuBar : SimplePanel() {
 
         val aboutTitle = "About"
         mainMenu.add(
-            buildMenuEntry(aboutTitle, "Info", { UiManager.add(aboutTitle, About().dialog) })
+            buildMenuEntry(aboutTitle, "About", { UiManager.add(aboutTitle, About().dialog) })
         )
 
-        val testTitle = "Test"
-        mainMenu.add(
-            buildMenuEntry(testTitle, "Test", { this.testFirstSession() })
-        )
+        /*
+             val testTitle = "Test"
+               mainMenu.add(
+                   buildMenuEntry(testTitle, "Test", { this.testFirstSession() })
+               )
 
         mainMenu.add(
             buildMenuEntry("Browser in IFrame", "Wikipedia", { BrowserWindow("https://isis.apache.org/").open() })
@@ -172,18 +177,29 @@ class RoMenuBar : SimplePanel() {
 
         mainMenu.add(
             buildMenuEntry("SSH", "Terminal", { ShellWindow("localhost:8080").open() })
-        )
+        )*/
 
         return mainMenu
     }
 
+    fun addSeparatorToMainMenu() {
+        mainMenu.separator()
+    }
+
     fun amendMenu(menuBars: Menubars) {
+        resetMenuBar()
         menuBars.primary.menu.forEach { m ->
             val dd = MenuFactory.buildForMenu(m)
             if (dd.getChildren().isNotEmpty()) nav.add(dd)
         }
         nav.add(MenuFactory.buildForMenu(menuBars.secondary.menu.first()))
         nav.add(MenuFactory.buildForMenu(menuBars.tertiary.menu.first()))
+    }
+
+    // this empties out any existing menuItems (non-system)
+    private fun resetMenuBar() {
+        nav.removeAll()
+        nav.add(mainMenu)
     }
 
 }

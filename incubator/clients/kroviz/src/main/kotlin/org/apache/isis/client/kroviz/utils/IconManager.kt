@@ -30,7 +30,7 @@ object IconManager {
 
     /* Merge with configuration values*/
     private val word2Icon = mapOf(
-        "About" to "lightbulb-o",
+        "About" to "info-circle",
         "Actions" to "ellipsis-v",
         "All" to "asterisk",
         "Basic" to "minus-circle",

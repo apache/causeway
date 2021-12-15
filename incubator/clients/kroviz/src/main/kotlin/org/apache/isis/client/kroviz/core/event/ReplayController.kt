@@ -38,7 +38,7 @@ val AppScope = CoroutineScope(window.asCoroutineDispatcher())
 
 class ReplayController : Controller() {
     private val eventStore = SessionManager.getEventStore()
-    private val oldBaseUrl = SessionManager.getBaseUrl()
+    private val oldBaseUrl = SessionManager.getBaseUrl()!!
     private var urlUnderTest: String = Constants.demoUrlRemote
     private var userUnderTest: String = Constants.demoUser
     private var passUnderTest: String = Constants.demoPass
