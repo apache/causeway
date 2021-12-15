@@ -327,6 +327,7 @@ public class Configuration_usingWicket {
         @Override
         protected void init() {
             super.init();
+            getCspSettings().blocking().disabled(); // since Wicket 9, CSP is enabled by default [https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP]
             final IBootstrapSettings settings = new BootstrapSettings();
             settings.setDeferJavascript(false);
             Bootstrap.install(this, settings);
