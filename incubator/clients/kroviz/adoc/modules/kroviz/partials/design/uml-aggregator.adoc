@@ -12,12 +12,11 @@ class LogEntry {
     updatedAt:Date
     request:String
     response:String
+    blob: Blob
     object:TransferObject
-    aggregator:Aggregator
+    aggregators:List<BaseAggregator>
     cacheHits:int
 }
-LogEntry --> TransferObject
-LogEntry "n" --> "1" BaseAggregator
 
 class ResponseHandler<<Facade,ChainOfResponsibility>>{
     handle(LogEntry)
@@ -25,41 +24,95 @@ class ResponseHandler<<Facade,ChainOfResponsibility>>{
     doHandle()
     parse(json)
 }
-ResponseHandler .> TransferObject : converts JSON \n into TO (1)
-ResponseHandler .> IAggregator : create aggregator (2)
-ResponseHandler .> LogEntry  : assign aggregator (3)
 
-interface TransferObject
+package "to" {
+    interface TransferObject {}
+    TransferObject <|-- Layout
+    TransferObject <|-- TObject
+    TransferObject <|-- Icon
 
-interface IAggregator {
-    update(logEntry)
+    package "bs3" {
+        class Grid{}
+    }
+    TransferObject <|- Grid
 }
 
-abstract class BaseAggregator {
-    data:BaseDisplayable
+package "aggregator" {
+    abstract class BaseAggregator {
+        {abstract} dpm:DisplayModel
+        {abstract} update()
+    }
+
+    abstract class AggregatorWithLayout {
+        parentUrl: String
+    }
+    BaseAggregator <|-- AggregatorWithLayout
+
+    class CollectionAggregator{
+        parent: ObjectAggregator
+    }
+
+    class ObjectAggregator {
+        collectionMap: Map<String, CollectionAggregator>
+    }
+    ObjectAggregator o-- CollectionAggregator
+
+    AggregatorWithLayout <|-- CollectionAggregator
+    AggregatorWithLayout <|-- ObjectAggregator
 }
 
-IAggregator <|.. BaseAggregator
-BaseAggregator <|-- CollectionAggregator
-BaseAggregator <|-- ObjectAggregator
-BaseAggregator --> BaseDisplayable : data
+package "model" {
+    class Exposer {
+        delegate: TObject
+        iconName: String
+        + dynamise()
+        + setIcon(icon: Icon)
+    }
 
+    abstract class DisplayModel {
+        isRendered:Boolean
+        title:String
+        {abstract} canBeDisplayed():Boolean
+    }
 
-abstract class BaseDisplayable {
-    isRendered:Boolean
-    +canBeDisplayed():Boolean
-    +title()
+    abstract class DisplayModelWithLayout {
+        layout: Layout
+        grid: Grid
+        properties: CollectionProperties
+        icon: Icon
+        + canBeDisplayed()
+    }
+
+    class ObjectDM {
+        + data:Exposer
+        + collections:Map<String,CollectionDM>
+        - dirty:Boolean
+        + canBeDisplayed()
+    }
+
+    class CollectionDM {
+        data:List<Exposer>
+        - rawData:List<TransferObject>
+    }
+
+    DisplayModel <|-- DisplayModelWithLayout
+    DisplayModelWithLayout <|-- CollectionDM
+    DisplayModelWithLayout <|-- ObjectDM
+    ObjectDM o-- CollectionDM
 }
 
-class CollectionDM {
-    list:List<Exposer>
-}
+ResponseHandler .> TransferObject : (1) \n converts \n response(JSON), \n blob(Image) \n into
+ResponseHandler .> BaseAggregator : (2) \n create
+ResponseHandler .> LogEntry  : (3) \n assign \n aggregator
 
-BaseDisplayable -> Layout
-BaseDisplayable <|-- CollectionDM
-BaseDisplayable <|-- ObjectDM
+BaseAggregator -> DisplayModel
+CollectionAggregator .> CollectionDM : uses
+ObjectAggregator .> ObjectDM : uses
+ObjectAggregator .> CollectionDM : uses
 
-ObjectDM o-- CollectionDM
+LogEntry -->   TransferObject : object
+LogEntry "m" --> "n" BaseAggregator
+Exposer  -> TObject : delegate
 
 @enduml
 ----
