@@ -139,9 +139,6 @@
 		<joda-time.version>2.10.13</joda-time.version>
 		<jopt-simple.version>6.0-alpha-3</jopt-simple.version>
 
-		<!-- See org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication -->
-		<jquery.version>3.5.1</jquery.version> <!-- org.webjars:jquery, dictated by bootstrap.version -->
-
 		<jquery-ui.version>1.13.0</jquery-ui.version> <!-- org.webjars:jquery-ui -->
 
 		<jsr305.version>3.0.2</jsr305.version>
@@ -182,17 +179,12 @@
 
 		<vaadin.version>23.0.0</vaadin.version>
 
-		<wicket.version>9.6.0</wicket.version>
-		<wicket-bootstrap.version>6.0.0-M4</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
+		<wicket.version>9.7.0</wicket.version>
+		<wicket-bootstrap.version>6.0.0-M5</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
 		<wicket-fullcalendar.version>4.2</wicket-fullcalendar.version>
-		<wicket-source.version>7.0.0</wicket-source.version>
-		<wicket-webjars.version>2.0.20</wicket-webjars.version>
+		<wicket-webjars.version>3.0.4</wicket-webjars.version>
 
-		<!-- org.webjars:boostrap, NOTE: dictates popper-js.version and jquery.version -->
-		<bootstrap.version>4.6.0-1</bootstrap.version>
-		<popper-js.version>1.16.1-lts</popper-js.version> <!-- org.webjars:popper-js, dictated by bootstrap.version -->
-
-		<wicketstuff.version>9.5.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
+		<wicketstuff.version>${wicket.version}</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
 		<wicketstuff-gmap3.version>${wicket.version}</wicketstuff-gmap3.version>
 
 		<xdocreport.version>2.0.2</xdocreport.version>
@@ -962,22 +954,6 @@
 				<type>pom</type>
 			</dependency>
 
-	        <dependency>
-	            <groupId>org.webjars</groupId>
-	            <artifactId>bootstrap</artifactId>
-	            <version>${bootstrap.version}</version>
-	        </dependency>
-			<dependency>
-			    <groupId>org.webjars</groupId>
-			    <artifactId>jquery</artifactId>
-				<version>${jquery.version}</version>
-			</dependency>
-			<dependency>
-			    <groupId>org.webjars</groupId>
-			    <artifactId>popper.js</artifactId>
-				<version>${popper-js.version}</version>
-			</dependency>
-
 			<dependency>
 				<groupId>de.agilecoders.wicket</groupId>
 				<artifactId>wicket-bootstrap-core</artifactId>
@@ -1067,12 +1043,6 @@
 				<groupId>net.ftlines.wicket-fullcalendar</groupId>
 				<artifactId>wicket-fullcalendar-core</artifactId>
 				<version>${wicket-fullcalendar.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>net.ftlines.wicket-source</groupId>
-				<!-- <groupId>com.github.jennybrown8.wicket-source</groupId> -->
-				<artifactId>wicket-source</artifactId>
-				<version>${wicket-source.version}</version>
 			</dependency>
 
 			<!-- TODO: when used, move exclusions down -->
