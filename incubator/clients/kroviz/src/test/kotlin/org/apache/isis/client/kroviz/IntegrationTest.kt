@@ -30,7 +30,6 @@ import org.apache.isis.client.kroviz.snapshots.Response
 import org.apache.isis.client.kroviz.to.Method
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.SessionManager
-import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.utils.XmlHelper
 import org.w3c.xhr.XMLHttpRequest
 

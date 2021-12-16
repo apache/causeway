@@ -29,7 +29,7 @@ import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.ui.core.Constants
-import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.ui.core.ViewManager
 import org.w3c.files.Blob
 import kotlin.js.Date
 
@@ -238,7 +238,7 @@ data class LogEntry(
 
     fun addAggregator(aggregator: BaseAggregator) {
         if (aggregator is ActionDispatcher) {
-            UiManager.setBusyCursor()
+            ViewManager.setBusyCursor()
         }
         aggregators.add(aggregator)
         nOfAggregators = aggregators.size

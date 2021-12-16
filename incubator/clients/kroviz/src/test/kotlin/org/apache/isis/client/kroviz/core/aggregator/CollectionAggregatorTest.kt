@@ -25,7 +25,6 @@ import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.*
 import org.apache.isis.client.kroviz.to.Property
 import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.ui.core.SessionManager
-import org.apache.isis.client.kroviz.ui.core.UiManager
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue

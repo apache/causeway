@@ -25,7 +25,6 @@ import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.handler.ActionHandler
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.*
 import org.apache.isis.client.kroviz.ui.core.SessionManager
-import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.utils.StringUtils
 import kotlin.test.Test
 import kotlin.test.assertEquals

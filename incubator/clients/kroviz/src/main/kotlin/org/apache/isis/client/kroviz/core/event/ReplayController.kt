@@ -23,14 +23,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.apache.isis.client.kroviz.core.Session
 import org.apache.isis.client.kroviz.main
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Represention
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.SessionManager
-import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.ui.dialog.Controller
 import org.apache.isis.client.kroviz.ui.dialog.EventReplayDialog
 

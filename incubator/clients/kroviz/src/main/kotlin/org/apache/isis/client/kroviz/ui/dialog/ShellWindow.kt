@@ -22,7 +22,7 @@ import io.kvision.panel.SimplePanel
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
-import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.ui.core.ViewManager
 import org.apache.isis.client.kroviz.utils.DomUtil
 import org.apache.isis.client.kroviz.utils.UUID
 import org.apache.isis.client.kroviz.utils.js.Xterm
@@ -55,7 +55,7 @@ class ShellWindow(val host: String) : Controller() {
     }
 
     private fun pin() {
-        UiManager.add(host, dialog.formPanel as SimplePanel)
+        ViewManager.add(host, dialog.formPanel as SimplePanel)
         dialog.close()
     }
 

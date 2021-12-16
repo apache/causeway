@@ -28,7 +28,7 @@ import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
 import org.apache.isis.client.kroviz.ui.core.SessionManager
-import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.ui.core.ViewManager
 import org.apache.isis.client.kroviz.ui.panel.EventLogTable
 
 class EventDialog : Controller() {
@@ -72,7 +72,7 @@ class EventDialog : Controller() {
     override fun execute(action: String?) {
         when {
             action.isNullOrEmpty() -> {
-                UiManager.add("Event Log", EventLogTable(SessionManager.getEventStore().log))
+                ViewManager.add("Event Log", EventLogTable(SessionManager.getEventStore().log))
                 dialog.close()
             }
             action == EXP -> {

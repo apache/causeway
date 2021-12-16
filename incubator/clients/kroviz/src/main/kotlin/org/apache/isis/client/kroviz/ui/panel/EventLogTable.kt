@@ -24,13 +24,11 @@ import io.kvision.html.ButtonStyle
 import io.kvision.panel.VPanel
 import io.kvision.panel.hPanel
 import io.kvision.tabulator.*
-import io.kvision.utils.auto
 import io.kvision.utils.obj
 import io.kvision.utils.px
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Constants
-import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.ui.dialog.EventLogDetail
 import org.apache.isis.client.kroviz.utils.StringUtils
 

@@ -30,7 +30,7 @@ import io.kvision.panel.VPanel
 import io.kvision.routing.RoutingManager
 import io.kvision.utils.auto
 import io.kvision.utils.obj
-import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.ui.core.ViewManager
 
 /**
  * Tab position.
@@ -187,7 +187,7 @@ open class RoTabPanel(
      */
     open fun removeTab(index: Int): RoTabPanel {
         val tab = getTabs().get(index)
-        UiManager.remove(tab as SimplePanel)
+        ViewManager.remove(tab as SimplePanel)
 
         getTab(index)?.let {
             removeTab(it)

@@ -24,7 +24,7 @@ import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.core.aggregator.SvgDispatcher
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menubars
-import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.ui.core.ViewManager
 import org.apache.isis.client.kroviz.utils.StringUtils
 import org.apache.isis.client.kroviz.utils.UUID
 import org.w3c.files.Blob
@@ -124,7 +124,7 @@ class EventStore {
     }
 
     internal fun updateStatus(entry: LogEntry) {
-        UiManager.updateStatus(entry)
+        ViewManager.updateStatus(entry)
     }
 
     /**

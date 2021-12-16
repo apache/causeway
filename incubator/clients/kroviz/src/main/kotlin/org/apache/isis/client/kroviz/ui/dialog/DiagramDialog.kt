@@ -57,7 +57,7 @@ class DiagramDialog(
 
     private fun pin() {
         val svgCode = getDiagramCode()
-        UiManager.addSvg("Diagram", svgCode)
+        ViewManager.addSvg("Diagram", svgCode)
         dialog.close()
     }
 

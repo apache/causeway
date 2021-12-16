@@ -27,7 +27,7 @@ import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.SessionManager
-import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.ui.core.ViewManager
 import org.apache.isis.client.kroviz.ui.diagram.Node
 import org.apache.isis.client.kroviz.ui.diagram.Tree
 
@@ -51,7 +51,7 @@ class ResourceProxy {
         if (le != null) {
             le.addAggregator(aggregator)
             aggregator.update(le, le.subType)
-            UiManager.performUserAction(aggregator, tObject)
+            ViewManager.performUserAction(aggregator, tObject)
         }
     }
 

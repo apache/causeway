@@ -23,7 +23,7 @@ import io.kvision.pace.Pace
 import io.kvision.panel.VPanel
 import io.kvision.panel.root
 import org.apache.isis.client.kroviz.ui.core.RoApp
-import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.ui.core.ViewManager
 
 class App : Application() {
 
@@ -48,7 +48,7 @@ class App : Application() {
 
     fun initRoApp() {
         roApp = RoApp()
-        UiManager.app = this
+        ViewManager.app = this
     }
 
 }

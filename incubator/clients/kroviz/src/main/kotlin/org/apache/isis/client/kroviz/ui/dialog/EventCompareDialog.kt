@@ -23,7 +23,7 @@ import io.kvision.core.UNIT
 import io.kvision.panel.VPanel
 import org.apache.isis.client.kroviz.core.event.LogEntryComparison
 import org.apache.isis.client.kroviz.ui.core.RoDialog
-import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.ui.core.ViewManager
 import org.apache.isis.client.kroviz.ui.panel.EventComparisonTable
 
 class EventCompareDialog(val data: List<LogEntryComparison>) : Controller() {
@@ -57,7 +57,7 @@ class EventCompareDialog(val data: List<LogEntryComparison>) : Controller() {
 
     private fun pin() {
         table.tabulator.removeCssClass("tabulator-in-dialog")
-        UiManager.add(title, panel)
+        ViewManager.add(title, panel)
         dialog.close()
     }
 

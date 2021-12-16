@@ -22,7 +22,6 @@ import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.to.*
 import org.apache.isis.client.kroviz.ui.core.SessionManager
-import org.apache.isis.client.kroviz.ui.core.UiManager
 
 class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     var data: Exposer? = null

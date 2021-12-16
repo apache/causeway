@@ -24,7 +24,7 @@ import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.chart.ChartFactory
 import org.apache.isis.client.kroviz.ui.core.SessionManager
-import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.ui.core.ViewManager
 import org.apache.isis.client.kroviz.ui.dialog.EventExportDialog
 import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.utils.StringUtils
@@ -60,7 +60,7 @@ class DynamicMenuBuilder {
 
         val title = "Chart"
         val a4 = buildMenuEntry(title, title, {
-            UiManager.add(title, ChartFactory().build(SessionManager.getEventStore().log))
+            ViewManager.add(title, ChartFactory().build(SessionManager.getEventStore().log))
         })
         menu.add(a4)
 

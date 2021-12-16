@@ -23,7 +23,6 @@ import org.apache.isis.client.kroviz.handler.DomainTypeHandler
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.FILE_NODE
 import org.apache.isis.client.kroviz.to.DomainType
 import org.apache.isis.client.kroviz.ui.core.SessionManager
-import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.ui.diagram.ClassDiagram
 import kotlin.test.BeforeTest
 import kotlin.test.Test

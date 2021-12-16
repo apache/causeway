@@ -49,7 +49,7 @@ import org.w3c.dom.events.KeyboardEvent
  * @item RoView (tabs, etc.),
  * @item RoStatusbar,
  */
-object UiManager {
+object ViewManager {
 
     var app: App? = null
     private val popups = mutableListOf<Widget>()

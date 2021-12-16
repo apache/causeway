@@ -25,7 +25,7 @@ import org.apache.isis.client.kroviz.core.model.ObjectDM
 import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.*
 import org.apache.isis.client.kroviz.to.bs3.Grid
-import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.ui.core.ViewManager
 import org.apache.isis.client.kroviz.ui.dialog.ErrorDialog
 
 /** sequence of operations:
@@ -61,7 +61,7 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
             collectionMap.forEach {
                 (dpm as ObjectDM).addCollection(it.key, it.value.dpm as CollectionDM)
             }
-            UiManager.openObjectView(this)
+            ViewManager.openObjectView(this)
         }
     }
 

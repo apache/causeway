@@ -26,7 +26,7 @@ import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.*
 import org.apache.isis.client.kroviz.to.bs3.Grid
-import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.ui.core.ViewManager
 
 /** sequence of operations:
  * (0) list
@@ -63,7 +63,7 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
 
             if (parent == null) {
                 if (dpm.canBeDisplayed()) {
-                    UiManager.openCollectionView(this)
+                    ViewManager.openCollectionView(this)
                 }
             } else {
                 val le = LogEntry(ResourceSpecification(""))

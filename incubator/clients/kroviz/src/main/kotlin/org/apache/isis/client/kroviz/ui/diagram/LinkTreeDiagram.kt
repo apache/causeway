@@ -27,7 +27,6 @@ import org.apache.isis.client.kroviz.to.Property
 import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.to.Represention
 import org.apache.isis.client.kroviz.ui.core.SessionManager
-import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.utils.StringUtils
 
 object LinkTreeDiagram {

@@ -22,7 +22,7 @@ import io.kvision.panel.SimplePanel
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
-import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.ui.core.ViewManager
 
 class BrowserWindow(val url: String) : Controller() {
 
@@ -44,7 +44,7 @@ class BrowserWindow(val url: String) : Controller() {
     }
 
     private fun pin() {
-        UiManager.add(url, dialog.formPanel as SimplePanel)
+        ViewManager.add(url, dialog.formPanel as SimplePanel)
         dialog.close()
     }
 

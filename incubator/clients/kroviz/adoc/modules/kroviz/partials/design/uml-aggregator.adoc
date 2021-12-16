@@ -45,20 +45,34 @@ package "aggregator" {
 
     abstract class AggregatorWithLayout {
         parentUrl: String
+        + update()
     }
     BaseAggregator <|-- AggregatorWithLayout
 
     class CollectionAggregator{
         parent: ObjectAggregator
+        + update()
     }
 
     class ObjectAggregator {
         collectionMap: Map<String, CollectionAggregator>
+        + update()
     }
     ObjectAggregator o-- CollectionAggregator
 
     AggregatorWithLayout <|-- CollectionAggregator
     AggregatorWithLayout <|-- ObjectAggregator
+
+    note right of BaseAggregator::update
+    1. <b>ResponseHandlers</b> call
+        update with <b>LogEntry</b>
+    2. LogEntry.<b>object</b>
+        gets added to <b>DM</b>
+    3. if object contains a <b>Link</b> (href),
+        it gets invoked and <b>this</b>
+        (aggregator) is passed
+        as argument.
+    end note
 }
 
 package "model" {
@@ -66,8 +80,15 @@ package "model" {
         delegate: TObject
         iconName: String
         + dynamise()
+        + get(propertyName: String)
         + setIcon(icon: Icon)
     }
+    note as ExposerNote
+    dynamise() and get()
+    use <b>Kotlin/JS</b> function
+    <b>asDynamic()</b>
+    end note
+    Exposer..ExposerNote
 
     abstract class DisplayModel {
         isRendered:Boolean
@@ -99,10 +120,16 @@ package "model" {
     DisplayModelWithLayout <|-- CollectionDM
     DisplayModelWithLayout <|-- ObjectDM
     ObjectDM o-- CollectionDM
+    note left on link
+    An <b>ObjectDM</b>
+    can have zero or more
+    <b><i>parented collections</i></b>.
+    end note
+
 }
 
-ResponseHandler .> TransferObject : (1) \n converts \n response(JSON), \n blob(Image) \n into
-ResponseHandler .> BaseAggregator : (2) \n create
+ResponseHandler "(1)".> TransferObject : (1) \n converts \n response(JSON), \n blob(Image) \n into
+ResponseHandler "(2)".> BaseAggregator : (2) \n create \n if missing
 ResponseHandler .> LogEntry  : (3) \n assign \n aggregator
 
 BaseAggregator -> DisplayModel
@@ -113,6 +140,24 @@ ObjectAggregator .> CollectionDM : uses
 LogEntry -->   TransferObject : object
 LogEntry "m" --> "n" BaseAggregator
 Exposer  -> TObject : delegate
+
+note top of BaseAggregator
+Hierarchies of
+<b>Aggregators</b> and
+<b>DisplayModels</b>
+<b>parallel</b> each
+other
+end note
+
+note as N3
+As soon as all data defining the <i><u>appearance</u></i>
+(<b>Layout, Properties</b>) is available,
+<b>DM</b> is passed on to <b>ViewManager</b> for rendering.
+Note that <i><u>content</u></i> data may still come in and
+is added to the collection in the background
+(-> <b>Kotlin.mutableListOf</b>).
+end note
+DisplayModelWithLayout..N3
 
 @enduml
 ----

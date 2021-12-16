@@ -44,7 +44,7 @@ class LoginPrompt(val nextController: Controller? = null) : Controller() {
         formItems.add(FormItem("User", ValueType.TEXT, username))
         formItems.add(FormItem("Password", ValueType.PASSWORD, password))
         dialog = RoDialog(caption = "Connect", items = formItems, controller = this, heightPerc = 27)
-        val at = UiManager.position!!
+        val at = ViewManager.position!!
         dialog.open(at)
     }
 
@@ -57,7 +57,7 @@ class LoginPrompt(val nextController: Controller? = null) : Controller() {
             SessionManager.login(url, username, password)
             val link = Link(href = url + Constants.restInfix)
             invoke(link)
-            UiManager.closeDialog(dialog)
+            ViewManager.closeDialog(dialog)
         }
     }
 

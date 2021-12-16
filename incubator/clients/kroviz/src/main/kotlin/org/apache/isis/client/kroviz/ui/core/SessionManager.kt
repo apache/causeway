@@ -43,10 +43,10 @@ object SessionManager {
         s.login(url, username, password)
         val isFirstSession = sessions.size == 0
         if (sessions.contains(s)) {
-            UiManager.switchSession(s)
+            ViewManager.switchSession(s)
         } else {
             sessions.add(s)
-            UiManager.updateSession(username, s, isFirstSession)
+            ViewManager.updateSession(username, s, isFirstSession)
         }
         activeSession = s
 

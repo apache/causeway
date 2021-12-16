@@ -70,7 +70,7 @@ class RoView() {
 
     fun removeTab(tab: SimplePanel) {
         tabCount--
-        UiManager.closeView(tab)
+        ViewManager.closeView(tab)
     }
 
     fun findActive(): SimplePanel? {

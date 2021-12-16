@@ -21,7 +21,7 @@ package org.apache.isis.client.kroviz.ui.dialog
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
-import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.ui.core.ViewManager
 
 class NotificationDialog(val message: String) : Controller() {
 
@@ -39,7 +39,7 @@ class NotificationDialog(val message: String) : Controller() {
     }
 
     override fun execute(action: String?) {
-        UiManager.getRoStatusBar().acknowledge()
+        ViewManager.getRoStatusBar().acknowledge()
     }
 
 }

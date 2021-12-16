@@ -27,7 +27,6 @@ import io.kvision.core.StringPair
 import io.kvision.form.select.SimpleSelect
 import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.SessionManager
-import org.apache.isis.client.kroviz.ui.core.UiManager
 
 class EventExportDialog : Controller() {
 

@@ -18,15 +18,6 @@
  */
 package org.apache.isis.client.kroviz.snapshots
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.apache.isis.client.kroviz.snapshots.demo2_0_0.Response2Handler
-import org.apache.isis.client.kroviz.to.Link
-import org.apache.isis.client.kroviz.to.Method
-import org.apache.isis.client.kroviz.ui.core.UiManager
-import kotlin.test.BeforeTest
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
-
 /**
  * This is an integration test that requires <Demo> running on http://localhost:8080
  * automate via -> @link https://bmuschko.com/blog/docker-integration-testing/

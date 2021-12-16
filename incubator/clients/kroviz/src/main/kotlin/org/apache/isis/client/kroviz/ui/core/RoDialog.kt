@@ -130,7 +130,7 @@ class RoDialog(
     }
 
     fun open(at: Point = Point(x = 100, y = 100)): Widget {
-        UiManager.openDialog(this, at)
+        ViewManager.openDialog(this, at)
         super.show()
         okButton.focus()
         return this

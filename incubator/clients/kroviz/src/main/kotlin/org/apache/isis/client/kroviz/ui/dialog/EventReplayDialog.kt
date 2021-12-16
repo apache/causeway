@@ -31,7 +31,6 @@ import org.apache.isis.client.kroviz.core.event.LogEntryComparison
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.ui.core.RoDialog
 import org.apache.isis.client.kroviz.ui.core.SessionManager
-import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.ui.panel.EventLogTable
 import org.apache.isis.client.kroviz.utils.StringUtils
 

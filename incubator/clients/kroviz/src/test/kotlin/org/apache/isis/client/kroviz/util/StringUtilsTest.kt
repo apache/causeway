@@ -2,7 +2,6 @@ package org.apache.isis.client.kroviz.util
 
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.SessionManager
-import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.utils.StringUtils
 import kotlin.test.Test
 import kotlin.test.assertEquals

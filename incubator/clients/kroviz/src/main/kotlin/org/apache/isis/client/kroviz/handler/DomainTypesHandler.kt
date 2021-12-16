@@ -22,7 +22,7 @@ import kotlinx.serialization.json.Json
 import org.apache.isis.client.kroviz.core.aggregator.DomainTypesAggregator
 import org.apache.isis.client.kroviz.to.DomainTypes
 import org.apache.isis.client.kroviz.to.TransferObject
-import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.ui.core.ViewManager
 
 class DomainTypesHandler : BaseHandler() {
 
@@ -31,7 +31,7 @@ class DomainTypesHandler : BaseHandler() {
     }
 
     override fun doHandle() {
-        if (UiManager.loadDomainTypes()) {
+        if (ViewManager.loadDomainTypes()) {
             //setting the Aggregator leads to cascading loads of all Domaintypes (~ 1500 requests for Demo)
             val url = logEntry.url
             logEntry.addAggregator(DomainTypesAggregator(url))
