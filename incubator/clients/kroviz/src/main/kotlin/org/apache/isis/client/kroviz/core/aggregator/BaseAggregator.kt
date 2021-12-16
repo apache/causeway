@@ -20,7 +20,7 @@ package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.ResourceProxy
-import org.apache.isis.client.kroviz.core.model.DisplayModel
+import org.apache.isis.client.kroviz.core.model.BaseDisplayModel
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Constants
@@ -41,7 +41,7 @@ import org.apache.isis.client.kroviz.utils.UrlUtils
  */
 abstract class BaseAggregator {
 
-    open lateinit var dpm: DisplayModel
+    open lateinit var dpm: BaseDisplayModel
 
     open fun update(logEntry: LogEntry, subType: String) {
         /* default is do nothing - can be overridden in subclasses */

@@ -21,7 +21,7 @@ package org.apache.isis.client.kroviz.core.model
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.TransferObject
 
-abstract class DisplayModel {
+abstract class BaseDisplayModel {
 
     var isRendered = false
 

@@ -22,7 +22,7 @@ import org.apache.isis.client.kroviz.to.DomainType
 import org.apache.isis.client.kroviz.to.Property
 import org.apache.isis.client.kroviz.to.TransferObject
 
-class DiagramDM(override val title: String) : DisplayModel() {
+class DiagramDM(override val title: String) : BaseDisplayModel() {
 
     val classes = mutableSetOf<DomainType>()
     val properties = mutableSetOf<Property>()

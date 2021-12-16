@@ -20,7 +20,7 @@ package org.apache.isis.client.kroviz.core.model
 
 import org.apache.isis.client.kroviz.to.*
 
-class SystemDM(override val title: String) : DisplayModel() {
+class SystemDM(override val title: String) : BaseDisplayModel() {
     var user: User? = null
     var version: Version? = null
     private var domainTypes: DomainTypes? = null

@@ -25,7 +25,7 @@ import org.apache.isis.client.kroviz.to.Property
 import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.to.bs3.Grid
 
-abstract class DisplayModelWithLayout : DisplayModel() {
+abstract class DisplayModelWithLayout : BaseDisplayModel() {
 
     var layout: Layout? = null
     var grid: Grid? = null

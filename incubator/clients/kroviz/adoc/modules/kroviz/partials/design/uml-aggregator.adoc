@@ -90,7 +90,7 @@ package "model" {
     end note
     Exposer..ExposerNote
 
-    abstract class DisplayModel {
+    abstract class BaseDisplayModel {
         isRendered:Boolean
         title:String
         {abstract} canBeDisplayed():Boolean
@@ -116,7 +116,7 @@ package "model" {
         - rawData:List<TransferObject>
     }
 
-    DisplayModel <|-- DisplayModelWithLayout
+    BaseDisplayModel <|-- DisplayModelWithLayout
     DisplayModelWithLayout <|-- CollectionDM
     DisplayModelWithLayout <|-- ObjectDM
     ObjectDM o-- CollectionDM
@@ -132,7 +132,7 @@ ResponseHandler "(1)".> TransferObject : (1) \n converts \n response(JSON), \n b
 ResponseHandler "(2)".> BaseAggregator : (2) \n create \n if missing
 ResponseHandler .> LogEntry  : (3) \n assign \n aggregator
 
-BaseAggregator -> DisplayModel
+BaseAggregator -> BaseDisplayModel
 CollectionAggregator .> CollectionDM : uses
 ObjectAggregator .> ObjectDM : uses
 ObjectAggregator .> CollectionDM : uses
