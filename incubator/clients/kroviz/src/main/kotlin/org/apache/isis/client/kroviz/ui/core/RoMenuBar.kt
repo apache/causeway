@@ -68,8 +68,21 @@ class RoMenuBar : SimplePanel() {
             session.baseUrl,
             image = session.resString,
             { switch(session) })
-        mainEntry.add(menuEntry)
+        if (!mainEntryContains(session.baseUrl)) {
+            mainEntry.add(menuEntry)
+        }
         switch(session)
+    }
+
+    private fun mainEntryContains(baseUrl: String): Boolean {
+        mainEntry.getChildren().forEach {
+            if (it is Link) {
+                if ((it as Link).label == baseUrl) {
+                    return true
+                }
+            }
+        }
+        return false
     }
 
     fun switch(session: Session) {

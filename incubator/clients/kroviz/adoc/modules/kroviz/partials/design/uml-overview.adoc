@@ -20,7 +20,7 @@ package core {
         class XHR {
             invoke()
         }
-        class EventStore<<Cache>><<EventSourcing>><<(S,#FF7700) Singleton>> {
+        class EventStore<<Cache>><<EventSourcing>> {
             log:LogEntry[]
             start()
             end()

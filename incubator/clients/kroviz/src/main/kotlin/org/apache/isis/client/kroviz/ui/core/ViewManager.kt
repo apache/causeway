@@ -27,7 +27,6 @@ import io.kvision.utils.ESC_KEY
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.apache.isis.client.kroviz.App
-import org.apache.isis.client.kroviz.core.Session
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.core.aggregator.ObjectAggregator
 import org.apache.isis.client.kroviz.core.aggregator.UndefinedDispatcher
@@ -73,7 +72,7 @@ object ViewManager {
         })
     }
 
-    private fun getRoApp(): RoApp {
+    fun getRoApp(): RoApp {
         return app!!.roApp!!
     }
 
@@ -146,17 +145,7 @@ object ViewManager {
 
     fun updateStatus(entry: LogEntry) {
         getRoStatusBar().update(entry)
-    }
-
-    fun updateSession(user: String, session: Session, isFirstSession: Boolean) {
-        getRoStatusBar().updateUser(user)
-        val menubar = getRoApp().roMenuBar
-        if (isFirstSession) menubar.addSeparatorToMainMenu()
-        menubar.add(session)
-    }
-
-    fun switchSession(session: Session) {
-        getRoApp().roMenuBar.switch(session)
+        setNormalCursor()
     }
 
     fun setBusyCursor() {

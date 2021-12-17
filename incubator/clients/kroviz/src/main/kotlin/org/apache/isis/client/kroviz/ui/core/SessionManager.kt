@@ -39,17 +39,23 @@ object SessionManager {
     }
 
     fun login(url: String, username: String, password: String) {
+        val menuBar = ViewManager.getRoApp().roMenuBar
+        fun updateSession(user: String, session: Session, isFirstSession: Boolean) {
+            ViewManager.getRoStatusBar().updateUser(user)
+            if (isFirstSession) menuBar.addSeparatorToMainMenu()
+            menuBar.add(session)
+        }
+
         val s = Session()
         s.login(url, username, password)
         val isFirstSession = sessions.size == 0
         if (sessions.contains(s)) {
-            ViewManager.switchSession(s)
+            menuBar.switch(s)
         } else {
             sessions.add(s)
-            ViewManager.updateSession(username, s, isFirstSession)
+            updateSession(username, s, isFirstSession)
         }
         activeSession = s
-
     }
 
     fun getCredentials(): String? {
