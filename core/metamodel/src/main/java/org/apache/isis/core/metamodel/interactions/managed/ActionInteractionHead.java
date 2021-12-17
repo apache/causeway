@@ -137,7 +137,7 @@ implements HasMetaModel<ObjectAction> {
 
         if(fixedPoint.isRight()) {
             log.warn("Cannot find an initial fixed point for action "
-                    + "parameter defaults on action %s.", getMetaModel());
+                    + "parameter defaults on action {}.", getMetaModel());
         }
 
         return modelForParamValues(managedAction,

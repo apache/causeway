@@ -29,7 +29,7 @@
 
 	<properties>
 		<code-assert.version>0.9.14</code-assert.version>
-		<javaparser.version>3.23.0</javaparser.version>
+		<javaparser.version>3.23.1</javaparser.version>
 		<skipTests>true</skipTests>
 	</properties>
 
