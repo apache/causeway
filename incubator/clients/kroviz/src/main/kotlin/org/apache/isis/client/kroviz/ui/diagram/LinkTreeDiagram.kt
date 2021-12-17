@@ -22,7 +22,7 @@ import org.apache.isis.client.kroviz.core.aggregator.AggregatorWithLayout
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
-import org.apache.isis.client.kroviz.to.HasLinks
+import org.apache.isis.client.kroviz.to.WithLinks
 import org.apache.isis.client.kroviz.to.Property
 import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.to.Represention
@@ -74,7 +74,7 @@ object LinkTreeDiagram {
         if (obj != null) {
             val className = obj::class.simpleName!!
             pc.addClass(className)
-            if (obj is HasLinks) {
+            if (obj is WithLinks) {
                 obj.links.forEach {
                     if (it.relation() != Relation.SELF) {
                         val url = it.href

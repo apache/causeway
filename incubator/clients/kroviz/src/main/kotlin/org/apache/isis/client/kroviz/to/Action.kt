@@ -19,7 +19,6 @@
 package org.apache.isis.client.kroviz.to
 
 import kotlinx.serialization.Serializable
-import org.apache.isis.client.kroviz.to.mb.Extensions
 
 @Serializable
 data class Action(val id: String,
@@ -27,7 +26,7 @@ data class Action(val id: String,
                   override val links: List<Link> = emptyList(),
                   val parameters: Map<String, Parameter> = emptyMap(),
                   val extensions: Extensions
-) : TransferObject, HasLinks {
+) : TransferObject, WithLinks {
 
     fun getInvokeLink(): Link? {
         return links.firstOrNull { it.rel.indexOf(id) > 0 }

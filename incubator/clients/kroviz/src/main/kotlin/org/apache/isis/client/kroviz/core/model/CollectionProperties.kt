@@ -20,7 +20,7 @@ package org.apache.isis.client.kroviz.core.model
 
 import org.apache.isis.client.kroviz.layout.PropertyLt
 import org.apache.isis.client.kroviz.to.Property
-import org.apache.isis.client.kroviz.to.mb.Extensions
+import org.apache.isis.client.kroviz.to.Extensions
 
 class CollectionProperties() {
     val list = mutableListOf<ColumnProperties>()

@@ -16,12 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.to.mb
+package org.apache.isis.client.kroviz.to
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.apache.isis.client.kroviz.to.MenuBarPosition
-import org.apache.isis.client.kroviz.to.TransferObject
 
 @Serializable
 data class Extensions(val oid: String = "",

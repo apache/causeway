@@ -20,7 +20,6 @@
 package org.apache.isis.client.kroviz.to
 
 import kotlinx.serialization.Serializable
-import org.apache.isis.client.kroviz.to.mb.Extensions
 
 @Serializable
 data class DomainType(
@@ -29,4 +28,4 @@ data class DomainType(
         val members: Map<String, Link>,
         val typeActions: Map<String, Link>,
         val extensions: Extensions
-) : TransferObject, HasLinks
+) : TransferObject, WithLinks

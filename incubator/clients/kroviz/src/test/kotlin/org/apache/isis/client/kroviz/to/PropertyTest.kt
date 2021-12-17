@@ -24,7 +24,6 @@ import org.apache.isis.client.kroviz.snapshots.demo2_0_0.PROPERTY
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.PROPERTY_DESCRIPTION
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.FR_OBJECT_PROPERTY_
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.SO_PROPERTY
-import org.apache.isis.client.kroviz.to.mb.Extensions
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

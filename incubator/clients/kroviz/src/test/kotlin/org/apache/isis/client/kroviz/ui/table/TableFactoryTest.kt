@@ -24,7 +24,7 @@ import org.apache.isis.client.kroviz.core.model.Exposer
 import org.apache.isis.client.kroviz.to.Member
 import org.apache.isis.client.kroviz.to.MemberType
 import org.apache.isis.client.kroviz.to.TObject
-import org.apache.isis.client.kroviz.to.mb.Extensions
+import org.apache.isis.client.kroviz.to.Extensions
 
 
 class TableFactoryTest {

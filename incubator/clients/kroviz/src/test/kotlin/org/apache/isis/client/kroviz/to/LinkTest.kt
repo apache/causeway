@@ -86,7 +86,7 @@ class LinkTest {
         map.forEach { rh ->
             val jsonStr = rh.key.str
             val ro = rh.value.parse(jsonStr)
-            if (ro is HasLinks) {
+            if (ro is WithLinks) {
                 val links = ro.links
                 links.forEach { l ->
                     try {

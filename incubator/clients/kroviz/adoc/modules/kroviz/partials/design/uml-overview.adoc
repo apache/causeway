@@ -6,113 +6,91 @@
 ----
 @startuml
 
-class XHR {
-    invoke()
+package handler {
+    class ResponseHandler<<Facade>><<ChainOfResponsibility>>{
+        handle(LogEntry)
+        canHandle(json)
+        doHandle()
+        parse(json)
+    }
 }
 
-class EventStore<<(S,#FF7700) Singleton>> {
-    log:LogEntry[]
-    start()
-    end()
-    fault()
-    find(href)
+package core {
+    package event {
+        class XHR {
+            invoke()
+        }
+        class EventStore<<Cache>><<EventSourcing>><<(S,#FF7700) Singleton>> {
+            log:LogEntry[]
+            start()
+            end()
+            fault()
+            find(href)
+        }
+        class LogEntry<<EventSourcing>> {
+            url:Href
+            title:String
+            startedAt:Date
+            updatedAt:Date
+            request:String
+            response:String
+            blob:Blob
+            object:TransferObject
+            aggregators:BaseAggregator[]
+            cacheHits:int
+        }
+        class ResourceProxy<<Proxy>> {
+            + load(tObject:Tobject)
+            + fetch(...)
+            - process()
+            - processCached()
+        }
+
+        EventStore o- LogEntry
+        ResourceProxy "(1)"--> EventStore
+        ResourceProxy "(2)"--> XHR
+    }
+
+    package aggregator {
+        abstract  BaseAggregator<<Redux>><<Aggregator>> {
+            update(logEntry)
+        }
+        abstract AggregatorWithLayout {
+            layout:Layout
+        }
+        BaseAggregator <|.. AggregatorWithLayout
+    }
 }
 
-class LogEntry {
-    url:Href
-    title:String
-    startedAt:Date
-    updatedAt:Date
-    request:String
-    response:String
-    object:TransferObject
-    aggregator:Aggregator
-    cacheHits:int
+package "to" {
+    interface TransferObject<<TransferObject>>
 }
-EventStore o-- LogEntry
-LogEntry o-- TransferObject
-LogEntry o-- Aggregator
 
-class ResponseHandler<<Facade,ChainOfResponsibility>>{
-    handle(LogEntry)
-    canHandle(json)
-    doHandle()
-    parse(json)
-}
-ResponseHandler -> XHR : json <
-ResponseHandler .> TransferObject : converts JSON into TO
+XHR --> ResponseHandler : TransferObject \n is written into \n LogEntry
+LogEntry -> TransferObject
+LogEntry -->"1..n" BaseAggregator
 
-XHR -> EventStore
+ResponseHandler .> TransferObject : converts \n JSON \n into TO
 
-
+circle RestfulObjects<<RemoteFacade>>
 package remote <<Node>> {
-interface RestfulObjects
-    class ApacheIsis<<(A, #FF7700)Application>>
-    class NakedObjects<<(A, #FF7700)Application>>
+    class ApacheIsis<<(F, #FF7700)FrameWork>>
+    class NakedObjects<<(F, #FF7700)FrameWork>>
+    RestfulObjects <|- ApacheIsis
+    RestfulObjects <|-- NakedObjects
 }
-RestfulObjects <|-- ApacheIsis
-RestfulObjects <|-- NakedObjects
-XHR -> RestfulObjects : invoke
-XHR <- RestfulObjects : json
+XHR -( RestfulObjects : invoke() \njson string / blob <
 
+note right of ResourceProxy
+When ever a resource is required, the proxy is queried.
+(1) It's served from the <b>EventStore</b>, if possible. <b>LogEntry.cacheHits</b> will be incremented.
+(2) If it's not available yet, <b>XHR</b> fetches it from remote and puts it into the <b>EventStore</b>.
 
-interface TransferObject
-TransferObject <|.. to.Link
-TransferObject <|.. to.Extensions
-TransferObject <|.. to.layout.Layout
-interface to.Linked{
-    links:Link[]
-}
-TransferObject <|.. to.Linked
-to.Linked <|.. to.Result
-to.Linked <|.. to.ResultList
-to.Linked <|.. to.Extended
+In any case, a <b>LogEntry</b> containing the response (blob) will be passed on to it's aggregator(s).
 
-interface to.Extended{
-    extensions:Extensions
-}
-to.Linked o-- to.Link
-to.Extended o-- to.Extensions
-to.Extended <|.. to.Property
-to.Extended <|.. to.TObject
-to.Extended <|.. to.Service
-to.Extended <|.. to.Member
-to.Service o-- to.Member
+The aggregator to be used is either determined at the point where the resource is requested,
+or, based on the content of the response, assigned by the matching handler.
+end note
 
-interface Aggregator {
-    update(logEntry)
-}
-class CollectionAggregator {
-    -list:ObjectList
-}
-CollectionAggregator *-- ObjectList
-Aggregator <|.. CollectionAggregator
-
-class NavigationAggregator
-Aggregator <|.. NavigationAggregator
-
-class ObjectList {
-    list:ObjectAdapter
-    -limit:int
-    -layout:Layout
-}
-ObjectList *-- to.layout.Layout
-
-note "<<Pattern>>\nEventSourcing" as PES
-EventStore .. PES
-PES .. LogEntry
-
-note "<<Pattern>>\nRedux" as PR
-PR .. PES
-PR .. Aggregator
-
-note "<<Pattern>>\nRemoteFacade" as PRF
-PRF .. RestfulObjects
-
-note "<<Pattern>>\nTransferObject" as PTO
-PTO .. TransferObject
-
-note "<<Pattern>>\nAggregator" as PA
-PA .. Aggregator
 @enduml
 ----

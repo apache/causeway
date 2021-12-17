@@ -19,10 +19,10 @@
 
 package org.apache.isis.client.kroviz.to
 
-interface HasLinks {
-    val links: List<Link>
+interface WithMembers {
+    val members: List<Member>
 
-    fun getLinks(): List<Link> {
-        return links
+    fun getMembers(): List<Member> {
+        return members
     }
 }

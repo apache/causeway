@@ -20,7 +20,6 @@ package org.apache.isis.client.kroviz.to
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.apache.isis.client.kroviz.to.mb.Extensions
 
 enum class ActionSemantics(val type: String) {
     IDEMPOTENT("idempotent"),
@@ -32,7 +31,7 @@ enum class ActionSemantics(val type: String) {
 data class DomainTypes(override val links: List<Link> = emptyList(),
                        val values: List<Link> = emptyList(),
                        val extensions: Extensions? = null
-) : TransferObject, HasLinks
+) : TransferObject, WithLinks
 
 interface HttpErrorResponse {
     val detail: HttpErrorDetail?
@@ -120,19 +119,19 @@ data class Property(val id: String = "",
                     val disabledReason: String? = null,
                     val parameters: List<Parameter> = emptyList(),
                     val maxLength: Int = 0
-) : TransferObject, HasLinks
+) : TransferObject, WithLinks
 
 @Serializable
 data class Restful(override val links: List<Link> = emptyList(),
                    val extensions: Extensions
-) : TransferObject, HasLinks
+) : TransferObject, WithLinks
 
 @Serializable
 data class ResultList(
         override val links: List<Link> = emptyList(),
         val resulttype: String = ResultType.LIST.type,
         val result: ResultListResult? = null
-) : TransferObject, HasLinks
+) : TransferObject, WithLinks
 
 /*
  * Marker interface in order to group:
@@ -148,24 +147,24 @@ data class ResultListResult(
         val value: List<Link> = emptyList(),
         override val links: List<Link> = emptyList(),
         val extensions: Extensions? = null
-) : IResult, HasLinks
+) : IResult, WithLinks
 
 @Serializable
 data class ResultObject(
         override val links: List<Link> = emptyList(),
         val resulttype: String = ResultType.DOMAINOBJECT.type,
         val result: ResultObjectResult? = null
-) : IResult, HasLinks
+) : IResult, WithLinks
 
 @Serializable
 data class ResultObjectResult(
-        override val links: List<Link> = emptyList(),
-        val extensions: Extensions? = null,
-        val title: String = "",
-        val domainType: String = "",
-        val instanceId: Int,
-        val members: Map<String, Member> = emptyMap()
-) : IResult, HasLinks
+    override val links: List<Link> = emptyList(),
+    val extensions: Extensions? = null,
+    val title: String = "",
+    val domainType: String = "",
+    val instanceId: Int,
+    val members: Map<String, Member> = emptyMap()
+) : IResult, WithLinks
 
 enum class ResultType(val type: String) {
     LIST("list"),
@@ -179,14 +178,14 @@ data class ResultValue(
         override val links: List<Link> = emptyList(),
         val resulttype: String = ResultType.SCALARVALUE.type,
         val result: ResultValueResult? = null
-) : TransferObject, HasLinks
+) : TransferObject, WithLinks
 
 @Serializable
 data class ResultValueResult(
         val value: Value? = null,
         override val links: List<Link> = emptyList(),
         val extensions: Extensions? = null
-) : IResult, HasLinks
+) : IResult, WithLinks
 
 @Serializable
 data class Service(val value: List<Link> = emptyList(),
@@ -195,14 +194,14 @@ data class Service(val value: List<Link> = emptyList(),
                    val title: String = "",
                    val serviceId: String = "",
                    val members: Map<String, Member> = emptyMap()
-) : TransferObject, HasLinks
+) : TransferObject, WithLinks
 
 @Serializable
 data class User(val userName: String = "",
                 val roles: List<String> = emptyList(),
                 override val links: List<Link> = emptyList(),
                 val extensions: Extensions? = null
-) : TransferObject, HasLinks
+) : TransferObject, WithLinks
 
 @Serializable
 data class Version(override val links: List<Link> = emptyList(),
@@ -210,5 +209,5 @@ data class Version(override val links: List<Link> = emptyList(),
                    val implVersion: String = "",
                    val optionalCapabilities: Map<String, String> = emptyMap(),
                    val extensions: Extensions? = null
-) : TransferObject, HasLinks
+) : TransferObject, WithLinks
 

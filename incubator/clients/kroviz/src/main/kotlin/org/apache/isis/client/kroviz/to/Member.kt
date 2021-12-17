@@ -19,7 +19,6 @@
 package org.apache.isis.client.kroviz.to
 
 import kotlinx.serialization.Serializable
-import org.apache.isis.client.kroviz.to.mb.Extensions
 
 @Serializable
 data class Member(val id: String,
@@ -32,7 +31,7 @@ data class Member(val id: String,
                   val extensions: Extensions? = null,
                   val disabledReason: String = "",
                   val optional: Boolean = false
-) : TransferObject, HasLinks {
+) : TransferObject, WithLinks {
 
     var type: String? = ValueType.TEXT.type
 

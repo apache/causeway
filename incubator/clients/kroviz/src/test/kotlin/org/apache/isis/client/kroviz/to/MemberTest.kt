@@ -22,7 +22,6 @@ import kotlinx.serialization.json.Json
 import org.apache.isis.client.kroviz.handler.MemberHandler
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.COLLECTION_DESCRIPTION
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.FR_PROPERTY_DESCRIPTION
-import org.apache.isis.client.kroviz.to.mb.Extensions
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

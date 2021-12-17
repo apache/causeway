@@ -19,7 +19,6 @@
 package org.apache.isis.client.kroviz.to
 
 import kotlinx.serialization.Serializable
-import org.apache.isis.client.kroviz.to.mb.Extensions
 
 @Serializable
 data class TObject(override val links: List<Link> = emptyList(),
@@ -28,7 +27,7 @@ data class TObject(override val links: List<Link> = emptyList(),
                    val domainType: String = "",
                    val instanceId: String? = null,
                    val members: Map<String, Member> = emptyMap()
-) : TransferObject, HasLinks {
+) : TransferObject, WithLinks {
 
     fun getProperties(): MutableList<Member> {
         return getMembersOfType(MemberType.PROPERTY)
