@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.AccessLevel;
@@ -213,17 +212,7 @@ public interface ManagedObject {
             ? SimpleManagedObject.of(specification, pojo)
             : specification.getMetaModelContext().getObjectManager().adapt(pojo);
 
-        //TODO[ISIS-2921] experimental
-        if(adapter.getSpecification().isEntity()
-                && !adapter.isBookmarkMemoized()) {
-            if(EntityUtil.isAttached(adapter)) {
-                System.err.printf("attached but not bookmarked %s%n", adapter.getPojo());
-                //adapter.getBookmark(); // ensure, this instance's bookmark is memoized
-            }
-        }
-
         return adapter;
-
     }
 
     /**

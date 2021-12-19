@@ -49,7 +49,6 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -251,8 +250,6 @@ implements
             .map(obj->ManagedObjects.emptyToDefault(paramSpec, !isOptional(), obj));
             // pack up
             val packed = ManagedObjects.pack(paramSpec, nonScalarDefaults);
-          //TODO[ISIS-2921] experimental
-            EntityUtil.assertAttachedWhenEntity(packed);
             return packed;
         }
 

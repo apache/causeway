@@ -712,10 +712,6 @@ public final class ManagedObjects {
             if(state.isPersistable()) {
                 _Assert.assertEquals(EntityState.PERSISTABLE_ATTACHED, state,
                         ()->String.format("detached entity %s", adapter));
-              //TODO[ISIS-2921] experimental
-                if(!adapter.isBookmarkMemoized()) {
-                    adapter.getBookmark();
-                }
             }
             return adapter;
         }
