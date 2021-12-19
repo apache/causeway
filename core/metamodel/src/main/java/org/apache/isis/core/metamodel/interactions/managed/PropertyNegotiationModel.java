@@ -31,6 +31,7 @@ import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
@@ -61,6 +62,7 @@ public class PropertyNegotiationModel implements ManagedValue {
             : currentValue;
 
         proposedValue = _Bindables.forValue(defaultValue);
+        proposedValue.setValueRefiner(EntityUtil::refetch);
         proposedValue.addListener((e,o,n)->{
             invalidateChoicesAndValidation();
         });
