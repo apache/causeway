@@ -23,6 +23,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 
 import lombok.NonNull;
 
@@ -36,6 +37,11 @@ implements ObjectMementoService {
 
     @Override
     public ObjectMemento mementoForObject(final ManagedObject adapter) {
+        return null;
+    }
+
+    @Override
+    public ObjectMemento mementoForObjects(final PackedManagedObject adapter) {
         return null;
     }
 

@@ -87,15 +87,15 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
         return ObjectMementoAdapter.of(mementoAdapter);
     }
 
-//    @Override
-//    public ObjectMemento mementoForObjects(@Nullable final PackedManagedObject packedAdapter) {
-//        val listOfMementos = packedAdapter.unpack().stream()
-//                .map(this::mementoForObject)
-//                .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
-//        return ObjectMementoCollection.of(
-//                listOfMementos,
-//                packedAdapter.getSpecification().getLogicalType());
-//    }
+    @Override
+    public ObjectMemento mementoForObjects(@Nullable final PackedManagedObject packedAdapter) {
+        val listOfMementos = packedAdapter.unpack().stream()
+                .map(this::mementoForObject)
+                .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
+        return ObjectMementoCollection.of(
+                listOfMementos,
+                packedAdapter.getSpecification().getLogicalType());
+    }
 
     @Override
     public ObjectMemento mementoForParameter(@NonNull final ManagedObject paramAdapter) {

@@ -136,7 +136,7 @@ public interface ObjectManager {
         return spec.isScalar()
                 ? spec.isEntity()
                         && bookmarking.isMemoize()
-                        ? memoizeEntityBookmark(spec, pojo)//ManagedObject.of(spec, pojo).memoizeEntityBookmark()
+                        ? memoizeEntityBookmark(spec, pojo)
                         : ManagedObject.of(spec, pojo)
                 : PackedManagedObject.pack(spec.getElementSpecification().orElse(spec),
                         _NullSafe.streamAutodetect(pojo)
@@ -144,7 +144,8 @@ public interface ObjectManager {
                         .collect(Can.toCan()));
     }
 
-  //TODO[ISIS-2921] experimental / duplicated
+    // -- HELPER
+
     private static ManagedObject memoizeEntityBookmark(final ObjectSpecification spec, final Object pojo) {
         val entityFacet = spec.getFacet(EntityFacet.class);
 

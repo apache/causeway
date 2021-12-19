@@ -126,15 +126,6 @@ public interface ManagedObject {
 
     boolean isBookmarkMemoized();
 
-    //TODO[ISIS-2921] experimental
-    default ManagedObject memoizeEntityBookmark() {
-        if(!this.isBookmarkMemoized()
-                && EntityUtil.isAttached(this)) { // skip detached/transient entities, which cannot be bookmarked
-            this.getBookmark();
-        }
-        return this;
-    }
-
     default Supplier<ManagedObject> asProvider() {
         return ()->this;
     }
