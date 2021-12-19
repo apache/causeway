@@ -44,7 +44,6 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction.MementoForArgs;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 import org.apache.isis.core.metamodel.interactions.managed.MultiselectChoices;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.PackedManagedObject;
@@ -247,13 +246,11 @@ implements MultiselectChoices {
 
             return new Memento(
                     managedMember.getIdentifier(),
-                    managedMember.getMemberType(),
                     table.where,
                     argsMemento);
         }
 
         private final Identifier featureId;
-        private final MemberType memberType;
         private final Where where;
         private final MementoForArgs argsMemento;
 
@@ -261,8 +258,7 @@ implements MultiselectChoices {
 
             val memberId = featureId.getMemberLogicalName();
 
-            if(memberType.isPropertyOrCollection()) {
-            //if(featureId.getType().isPropertyOrCollection()) {
+            if(featureId.getType().isPropertyOrCollection()) {
                 // bypass domain events
                 val collInteraction = CollectionInteraction.start(owner, memberId, where);
                 val managedColl = collInteraction.getManagedCollection().orElseThrow();

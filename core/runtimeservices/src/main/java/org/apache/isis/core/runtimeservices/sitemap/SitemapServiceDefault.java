@@ -101,7 +101,7 @@ public class SitemapServiceDefault implements SitemapService {
                     if(actionElementType.getCorrespondingClass()==void.class) {
                         adoc.append("WARNING: ");
                     }
-                    if(actionReturnType.isParentedOrFreeCollection()) {
+                    if(actionReturnType.isNonScalar()) {
                         adoc.append(String.format("Returns collection of: `%s`\n\n", actionElementType.getLogicalTypeName()));
                     } else {
                         adoc.append(String.format("Returns scalar of: `%s`\n\n", actionElementType.getLogicalTypeName()));

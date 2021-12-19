@@ -27,8 +27,10 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @RequiredArgsConstructor
 public final class PackedManagedObject implements ManagedObject {
@@ -39,6 +41,12 @@ public final class PackedManagedObject implements ManagedObject {
     public static ManagedObject pack(
             final ObjectSpecification elementSpec,
             final Can<ManagedObject> nonScalar) {
+
+      //TODO[ISIS-2921] experimental
+        for(val e : nonScalar) {
+            EntityUtil.assertAttachedWhenEntity(e);
+        }
+
         return new PackedManagedObject(elementSpec, nonScalar);
     }
 

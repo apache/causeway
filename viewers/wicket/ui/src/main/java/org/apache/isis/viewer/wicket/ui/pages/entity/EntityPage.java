@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.pages.entity;
 
+import java.util.UUID;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -30,6 +32,8 @@ import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 
+import org.apache.isis.commons.internal.base._Refs;
+import org.apache.isis.commons.internal.base._Refs.ObjectReference;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
@@ -76,7 +80,7 @@ public class EntityPage extends PageAbstract {
      * @param pageParameters The page parameters with the OID
      * @return An EntityModel for the requested OID
      */
-    public static EntityPage ofPageParameters(
+    public static EntityPage forPageParameters(
             final IsisAppCommonContext commonContext,
             final PageParameters pageParameters) {
 
@@ -97,7 +101,7 @@ public class EntityPage extends PageAbstract {
     /**
      * Ensures that any exception that might have occurred already (eg from an action invocation) is shown.
      */
-    public static EntityPage ofAdapter(
+    public static EntityPage forAdapter(
             final IsisAppCommonContext commonContext,
             final ManagedObject adapter) {
 
@@ -115,10 +119,15 @@ public class EntityPage extends PageAbstract {
     private EntityPage(
             final PageParameters pageParameters,
             final EntityModel entityModel) {
-
         super(pageParameters, null/*titleString*/, ComponentType.ENTITY);
         this.model = entityModel;
+        isAlreadyRefreshedWithinThisInteraction();
+    }
+
+    @Override
+    protected void onInitialize() {
         buildPage();
+        super.onInitialize();
     }
 
     @Override
@@ -132,10 +141,12 @@ public class EntityPage extends PageAbstract {
         if(XrayUi.isXrayEnabled()){
             _Debug.log("about to render EntityPage ..");
             val stopWatch = _Timing.now();
+            jaxbViewmodelRefresh(this);
             super.renderPage();
             stopWatch.stop();
             _Debug.log(".. rendering took %s", stopWatch.toString());
         } else {
+            jaxbViewmodelRefresh(this);
             super.renderPage();
         }
     }
@@ -230,12 +241,22 @@ public class EntityPage extends PageAbstract {
         if(iRequestablePage instanceof EntityPage) {
 
             val entityPage = (EntityPage) iRequestablePage;
+
+            // optimization, not strictly required
+            if(entityPage.isAlreadyRefreshedWithinThisInteraction()) {
+                return;
+            }
+
             val entityModel = (EntityModel)entityPage.getUiHintContainerIfAny();
             val spec = entityModel.getObject().getSpecification();
             if(spec.isViewModel()) {
 
                 val viewModelFacet = spec.getFacet(ViewModelFacet.class);
                 if(viewModelFacet.containsEntities()) {
+
+                    _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+                        _Debug.log("about to refresh EntityPage ..");
+                    });
 
                     val viewmodel = entityModel.getBookmarkedOwner();
                     if(viewmodel.isBookmarkMemoized()) {
@@ -252,6 +273,25 @@ public class EntityPage extends PageAbstract {
     }
 
     // -- HELPER
+
+    private transient ObjectReference<UUID> interactionId = _Refs.objectRef(null);
+
+    private boolean isAlreadyRefreshedWithinThisInteraction() {
+        val currentInteractionId = getCommonContext()
+                .getInteractionProvider().getInteractionId().orElseThrow();
+
+        val alreadyRefreshedForThisInteraction =
+            interactionId.getValue()
+            .map(currentInteractionId::equals)
+            .orElse(false);
+
+        if(alreadyRefreshedForThisInteraction) {
+            return true;
+        }
+
+        interactionId.setValue(currentInteractionId);
+        return false;
+    }
 
     private void addBreadcrumbIfShown(final EntityModel entityModel) {
         getBreadcrumbModel()

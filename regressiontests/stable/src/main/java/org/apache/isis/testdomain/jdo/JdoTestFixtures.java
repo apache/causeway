@@ -35,6 +35,7 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
@@ -82,10 +83,12 @@ public class JdoTestFixtures {
     public JdoInventoryJaxbVm setUpViewmodelWith3Books() {
         val inventoryJaxbVm = factoryService.viewModel(new JdoInventoryJaxbVm());
         val books = inventoryJaxbVm.listBooks();
-        val favoriteBook = books.get(0);
-        inventoryJaxbVm.setName("Bookstore");
-        inventoryJaxbVm.setBooks(books);
-        inventoryJaxbVm.setFavoriteBook(favoriteBook);
+        if(_NullSafe.size(books)>0) {
+            val favoriteBook = books.get(0);
+            inventoryJaxbVm.setName("Bookstore");
+            inventoryJaxbVm.setBooks(books);
+            inventoryJaxbVm.setFavoriteBook(favoriteBook);
+        }
         return inventoryJaxbVm;
     }
 

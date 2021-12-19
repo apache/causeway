@@ -255,12 +255,12 @@ implements MetaModelRefiner {
                         + "The referenced entity types must be annotated with "
                         + "@XmlJavaTypeAdapter(org.apache.isis.applib.jaxb.%s.class) or equivalent.",
                         objectSpec.getFullIdentifier(),
-                        elementTypeSpec.isNotCollection()
+                        elementTypeSpec.isScalar()
                             ? "@Property"
                             : "@Collection",
                         propertyOrCollection.getId(),
                         elementType.getName(),
-                        elementTypeSpec.isNotCollection()
+                        elementTypeSpec.isScalar()
                             ? "PersistentEntityAdapter"
                             : "PersistentEntitiesAdapter");
             }
@@ -292,7 +292,7 @@ implements MetaModelRefiner {
                         + "or equivalent, "
                         + "or be ignored by being annotated with @XmlTransient.",
                         objectSpec.getFullIdentifier(),
-                        elementTypeSpec.isNotCollection()
+                        elementTypeSpec.isScalar()
                             ? "@Property"
                             : "@Collection",
                         propertyOrCollection.getId(),

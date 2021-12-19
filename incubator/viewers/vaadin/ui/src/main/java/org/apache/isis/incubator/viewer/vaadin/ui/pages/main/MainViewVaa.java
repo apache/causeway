@@ -121,7 +121,7 @@ implements BeforeEnterObserver {
     }
 
     private Component uiComponentForActionResult(ManagedObject actionResult) {
-        if (actionResult.getSpecification().isParentedOrFreeCollection()) {
+        if (actionResult.getSpecification().isNonScalar()) {
             return TableViewVaa.fromCollection(uiContext, actionResult, Where.STANDALONE_TABLES);
         } else {
             return ObjectViewVaa.fromObject(

@@ -154,10 +154,13 @@ extends AbstractFacetFactoryJUnit4TestCase {
             allowing(mockStringSpec).getCorrespondingClass();
             will(returnValue(String.class));
 
-            allowing(mockStringSpec).isNotCollection();
+            allowing(mockStringSpec).isScalar();
             will(returnValue(true));
 
-            allowing(mockStringSpec).isParentedOrFreeCollection();
+            allowing(mockStringSpec).isNonScalar();
+            will(returnValue(false));
+
+            allowing(mockStringSpec).isEntity();
             will(returnValue(false));
 
             ignoring(mockStringSpec).assertPojoCompatible(with(any(String.class)));
@@ -245,11 +248,14 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 allowing(mockStringSpec).getCorrespondingClass();
                 will(returnValue(String.class));
 
-                allowing(mockStringSpec).isParentedOrFreeCollection();
+                allowing(mockStringSpec).isNonScalar();
                 will(returnValue(false));
 
-                allowing(mockStringSpec).isNotCollection();
+                allowing(mockStringSpec).isScalar();
                 will(returnValue(true));
+
+                allowing(mockStringSpec).isEntity();
+                will(returnValue(false));
 
                 ignoring(mockStringSpec).assertPojoCompatible(with(any(String.class)));
 
@@ -259,11 +265,14 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 allowing(mockIntegerSpec).getCorrespondingClass();
                 will(returnValue(Integer.class));
 
-                allowing(mockIntegerSpec).isParentedOrFreeCollection();
+                allowing(mockIntegerSpec).isNonScalar();
                 will(returnValue(false));
 
-                allowing(mockIntegerSpec).isNotCollection();
+                allowing(mockIntegerSpec).isScalar();
                 will(returnValue(true));
+
+                allowing(mockIntegerSpec).isEntity();
+                will(returnValue(false));
 
                 allowing(mockIntegerSpec).getTitle(with(any(TitleRenderRequest.class)));
                 will(returnValue("3"));

@@ -112,7 +112,7 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
 
         val elementSpec = objectAction.getElementType();
 
-        if(objectAction.getReturnType().isNotCollection()) { //XXX assuming this is the right way to check for scalar
+        if(objectAction.getReturnType().isScalar()) {
             //scalar
             valueMarshaller.recordActionResultScalar(actionInvocationDto, elementSpec, resultObject);
         } else {

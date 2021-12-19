@@ -38,7 +38,7 @@ class SpecificationLoaderTest_array extends SpecificationLoaderTestAbstract {
 
     @Test
     public void testType() throws Exception {
-        assertTrue(specification.isParentedOrFreeCollection());
+        assertTrue(specification.isNonScalar());
     }
 
     @Test

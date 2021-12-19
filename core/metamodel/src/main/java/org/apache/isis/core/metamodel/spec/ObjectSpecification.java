@@ -326,12 +326,12 @@ extends
      *
      * <p>
      * In effect, means that it doesn't have the {@link CollectionFacet}, and
-     * therefore will return NOT {@link #isParentedOrFreeCollection()}
+     * therefore will return NOT {@link #isNonScalar()}
      *
-     * @see #isParentedOrFreeCollection()
+     * @see #isNonScalar()
      */
-    default boolean isNotCollection() {
-        return !isParentedOrFreeCollection();
+    default boolean isScalar() {
+        return !isNonScalar();
     }
 
     /**
@@ -339,11 +339,11 @@ extends
      *
      * <p>
      * In effect, means has got {@link CollectionFacet}, and therefore will
-     * return NOT {@link #isNotCollection()}.
+     * return NOT {@link #isScalar()}.
      *
-     * @see #isNotCollection()
+     * @see #isScalar()
      */
-    default boolean isParentedOrFreeCollection() {
+    default boolean isNonScalar() {
         return getBeanSort().isCollection();
     }
 
@@ -585,5 +585,7 @@ extends
                         getLogicalType(),
                         objFeature.getFeatureIdentifier()));
     }
+
+
 
 }

@@ -48,7 +48,7 @@ class _MixedInMemberFactory {
 
         return mixinAction -> {
             val returnType = mixinAction.getReturnType();
-            if (returnType.isNotCollection()) {
+            if (returnType.isScalar()) {
                 return new OneToOneAssociationMixedIn(
                         mixinAction, mixinTypeSpec, mixinType, mixinMethodName);
             }

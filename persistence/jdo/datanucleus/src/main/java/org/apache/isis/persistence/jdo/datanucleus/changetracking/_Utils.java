@@ -18,28 +18,31 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus.changetracking;
 
-import org.springframework.lang.Nullable;
 import javax.jdo.JDOHelper;
 import javax.jdo.ObjectState;
 import javax.jdo.listener.InstanceLifecycleEvent;
 
 import org.datanucleus.enhancement.Persistable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager.EntityAdaptingMode;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.NonNull;
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 final class _Utils {
 
-    static Persistable persistableFor(InstanceLifecycleEvent event) {
+    Persistable persistableFor(final InstanceLifecycleEvent event) {
         return (Persistable)event.getPersistentInstance();
     }
 
-    static void resolveInjectionPoints(
+    void resolveInjectionPoints(
             final @NonNull MetaModelContext mmc,
             final @NonNull InstanceLifecycleEvent event) {
         final Persistable pojo = _Utils.persistableFor(event);
@@ -48,7 +51,7 @@ final class _Utils {
         }
     }
 
-    static String debug(InstanceLifecycleEvent event) {
+    String debug(final InstanceLifecycleEvent event) {
         // try to be side-effect free here ...
         final Persistable pojo = _Utils.persistableFor(event);
         ObjectState state = JDOHelper.getObjectState(pojo);
@@ -59,38 +62,42 @@ final class _Utils {
         //}
     }
 
-    static ManagedObject adaptEntity(
+    ManagedObject adaptEntity(
             final @NonNull MetaModelContext mmc,
-            final @NonNull Object entityPojo) {
+            final @NonNull Object entityPojo,
+            final @NonNull EntityAdaptingMode bookmarking) {
 
         val objectManager = mmc.getObjectManager();
-        val entity = objectManager.adapt(entityPojo);
+        val entity = objectManager.adapt(entityPojo, bookmarking);
         _Assert.assertTrue(entity.getSpecification().isEntity());
         return entity;
     }
 
-    static ManagedObject adaptNullableEntity(
+    ManagedObject adaptNullableEntity(
             final @NonNull MetaModelContext mmc,
-            final @Nullable Object entityPojo) {
+            final @Nullable Object entityPojo,
+            final @NonNull EntityAdaptingMode bookmarking) {
 
         return entityPojo == null
                 ? ManagedObject.unspecified()
-                : adaptEntity(mmc, entityPojo);
+                : adaptEntity(mmc, entityPojo, bookmarking);
     }
 
-    static ManagedObject adaptNullableAndInjectServices(
+    ManagedObject adaptNullableAndInjectServices(
             final @NonNull MetaModelContext mmc,
-            final @Nullable Object entityPojo) {
+            final @Nullable Object entityPojo,
+            final @NonNull EntityAdaptingMode bookmarking) {
 
         return entityPojo == null
                 ? ManagedObject.unspecified()
-                : adaptEntityAndInjectServices(mmc, entityPojo);
+                : adaptEntityAndInjectServices(mmc, entityPojo, bookmarking);
     }
 
-    static ManagedObject adaptEntityAndInjectServices(
+    ManagedObject adaptEntityAndInjectServices(
             final @NonNull MetaModelContext mmc,
-            final @NonNull Object entityPojo) {
-        return injectServices(mmc, adaptEntity(mmc, entityPojo));
+            final @NonNull Object entityPojo,
+            final @NonNull EntityAdaptingMode bookmarking) {
+        return injectServices(mmc, adaptEntity(mmc, entityPojo, bookmarking));
     }
 
 

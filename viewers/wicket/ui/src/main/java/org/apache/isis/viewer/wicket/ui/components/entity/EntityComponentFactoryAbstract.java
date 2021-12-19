@@ -69,7 +69,7 @@ public abstract class EntityComponentFactoryAbstract extends ComponentFactoryAbs
             // is ok;
         }
         final ObjectSpecification specification = entityModel.getTypeOfSpecification();
-        final boolean isScalar = specification.isNotCollection();
+        final boolean isScalar = specification.isScalar();
         final boolean isValue = specification.containsFacet(ValueFacet.class);
         if (isScalar && !isValue) {
             return doAppliesTo(entityModel);

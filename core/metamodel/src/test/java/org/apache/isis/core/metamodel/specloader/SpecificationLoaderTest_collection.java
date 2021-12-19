@@ -40,7 +40,7 @@ class SpecificationLoaderTest_collection extends SpecificationLoaderTestAbstract
 
     @Test
     public void testType() throws Exception {
-        assertTrue(specification.isParentedOrFreeCollection());
+        assertTrue(specification.isNonScalar());
     }
 
     @Test

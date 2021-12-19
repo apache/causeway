@@ -47,7 +47,7 @@ class ObjectReflectorDefaultTest_object extends SpecificationLoaderTestAbstract 
 
     @Test
     void testType() throws Exception {
-        assertTrue(specification.isNotCollection());
+        assertTrue(specification.isScalar());
     }
 
     @Test

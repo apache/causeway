@@ -117,7 +117,7 @@ implements ObjectAction {
                 .map(TypeOfFacet::valueSpec)
                 .orElseGet(()->{
                     val returnType = getReturnType();
-                    if(!returnType.isNotCollection()) {
+                    if(!returnType.isScalar()) {
                         log.warn("non-scalar action return type requires a TypeOfFacet: %s", identifier);
                     }
                     return returnType;

@@ -25,7 +25,6 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.IRequestMapper;
 import org.apache.wicket.request.Request;
-import org.apache.wicket.request.http.WebRequest;
 
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
@@ -49,10 +48,9 @@ public final class IsisWicketAjaxRequestListenerUtil {
                     @Override
                     public IRequestHandler mapRequest(final Request request) {
                         var handler = super.mapRequest(request);
-                        final boolean isAjax = ((WebRequest)request).isAjax();
+                        //final boolean isAjax = ((WebRequest)request).isAjax();
 
-                        if(isAjax
-                                && handler instanceof ListenerRequestHandler) {
+                        if(handler instanceof ListenerRequestHandler) {
                             EntityPage.jaxbViewmodelRefresh(((ListenerRequestHandler)handler).getPage());
                         }
 

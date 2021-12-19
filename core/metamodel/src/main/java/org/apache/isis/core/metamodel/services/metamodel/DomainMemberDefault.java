@@ -101,7 +101,7 @@ public class DomainMemberDefault implements DomainMember {
                     ? "2 Service"
                     : spec.isValue()
                             ? "3 Value"
-                            : spec.isParentedOrFreeCollection()
+                            : spec.isNonScalar()
                                     ? "4 Collection"
                                     : "1 Object";
     }

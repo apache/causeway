@@ -34,6 +34,7 @@ import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager.EntityAdaptingMode;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.core.transaction.changetracking.events.PostStoreEvent;
@@ -90,12 +91,12 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     public void postLoad(final InstanceLifecycleEvent event) {
         log.debug("postLoad {}", ()->_Utils.debug(event));
         final Persistable pojo = _Utils.persistableFor(event);
-        val entity = adaptEntityAndInjectServices(pojo);
+        val entity = adaptEntityAndInjectServices(pojo, EntityAdaptingMode.MEMOIZE_BOOKMARK);
         getEntityChangeTracker().recognizeLoaded(entity);
     }
 
     @Override
-    public void preStore(InstanceLifecycleEvent event) {
+    public void preStore(final InstanceLifecycleEvent event) {
         log.debug("preStore {}", ()->_Utils.debug(event));
 
         final Persistable pojo = _Utils.persistableFor(event);
@@ -105,18 +106,18 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         /* Called either when an entity is initially persisted, or when an entity is updated; fires the appropriate
          * lifecycle callback. So filter for those events when initially persisting. */
         if(pojo.dnGetStateManager().isNew(pojo)) {
-            val entity = adaptEntity(pojo);
+            val entity = adaptEntity(pojo, EntityAdaptingMode.SKIP_MEMOIZATION);
             getEntityChangeTracker().recognizePersisting(entity);
         }
     }
 
     @Override
-    public void postStore(InstanceLifecycleEvent event) {
+    public void postStore(final InstanceLifecycleEvent event) {
         log.debug("postStore {}", ()->_Utils.debug(event));
 
         final Persistable pojo = _Utils.persistableFor(event);
 
-        val entity = adaptEntityAndInjectServices(pojo);
+        val entity = adaptEntityAndInjectServices(pojo, EntityAdaptingMode.MEMOIZE_BOOKMARK);
 
         eventBusService.post(PostStoreEvent.of(pojo));
 
@@ -135,30 +136,30 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
 
     @Override
-    public void preDirty(InstanceLifecycleEvent event) {
+    public void preDirty(final InstanceLifecycleEvent event) {
         log.debug("preDirty {}", ()->_Utils.debug(event));
 
         final Persistable pojo = _Utils.persistableFor(event);
-        val entity = adaptEntity(pojo);
+        val entity = adaptEntity(pojo, EntityAdaptingMode.MEMOIZE_BOOKMARK);
         getEntityChangeTracker().enlistUpdating(entity);
     }
 
     @Override
-    public void postDirty(InstanceLifecycleEvent event) {
+    public void postDirty(final InstanceLifecycleEvent event) {
         log.debug("postDirty {}", ()->_Utils.debug(event));
     }
 
     @Override
-    public void preDelete(InstanceLifecycleEvent event) {
+    public void preDelete(final InstanceLifecycleEvent event) {
         log.debug("preDelete {}", ()->_Utils.debug(event));
 
         final Persistable pojo = _Utils.persistableFor(event);
-        val entity = adaptEntity(pojo);
+        val entity = adaptEntity(pojo, EntityAdaptingMode.SKIP_MEMOIZATION);
         getEntityChangeTracker().enlistDeleting(entity);
     }
 
     @Override
-    public void postDelete(InstanceLifecycleEvent event) {
+    public void postDelete(final InstanceLifecycleEvent event) {
         log.debug("postDelete {}", ()->_Utils.debug(event));
     }
 
@@ -166,7 +167,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
      * Does nothing, not important event for Isis to track.
      */
     @Override
-    public void preClear(InstanceLifecycleEvent event) {
+    public void preClear(final InstanceLifecycleEvent event) {
         log.debug("preClear {}", ()->_Utils.debug(event));
     }
 
@@ -174,29 +175,33 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
      * Does nothing, not important event for Isis to track.
      */
     @Override
-    public void postClear(InstanceLifecycleEvent event) {
+    public void postClear(final InstanceLifecycleEvent event) {
         log.debug("postClear {}", ()->_Utils.debug(event));
     }
 
     @Override
-    public void preDetach(InstanceLifecycleEvent event) {
+    public void preDetach(final InstanceLifecycleEvent event) {
         log.debug("preDetach {}", ()->_Utils.debug(event));
     }
 
     @Override
-    public void postDetach(InstanceLifecycleEvent event) {
+    public void postDetach(final InstanceLifecycleEvent event) {
         log.debug("postDetach {}", ()->_Utils.debug(event));
         _Utils.resolveInjectionPoints(metaModelContext, event);
     }
 
     // -- HELPER
 
-    private ManagedObject adaptEntity(final @NonNull Persistable pojo) {
-        return _Utils.adaptEntity(metaModelContext, pojo);
+    private ManagedObject adaptEntity(
+            final @NonNull Persistable pojo,
+            final @NonNull EntityAdaptingMode bookmarking) {
+        return _Utils.adaptEntity(metaModelContext, pojo, bookmarking);
     }
 
-    private ManagedObject adaptEntityAndInjectServices(final @NonNull Persistable pojo) {
-        return _Utils.adaptEntityAndInjectServices(metaModelContext, pojo);
+    private ManagedObject adaptEntityAndInjectServices(
+            final @NonNull Persistable pojo,
+            final @NonNull EntityAdaptingMode bookmarking) {
+        return _Utils.adaptEntityAndInjectServices(metaModelContext, pojo, bookmarking);
     }
 
     // -- DEPENDENCIES

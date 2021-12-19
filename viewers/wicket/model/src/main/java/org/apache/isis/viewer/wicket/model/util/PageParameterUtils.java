@@ -18,9 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.model.util;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.apache.wicket.core.request.handler.IPageRequestHandler;
@@ -33,28 +31,18 @@ import org.apache.wicket.util.string.StringValue;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.primitives._Ints;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.ActionModelImpl;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
 import lombok.NonNull;
-import lombok.Value;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
@@ -115,23 +103,6 @@ public class PageParameterUtils {
         );
     }
 
-    public static ActionModel actionModelFor(
-            final IsisAppCommonContext commonContext,
-            final PageParameters pageParameters) {
-
-        val entityModel = entityModelFromPageParams(commonContext, pageParameters);
-        val action = actionFromPageParams(commonContext, pageParameters);
-        val actionModel = ActionModelImpl.forEntity(
-                entityModel,
-                action.getFeatureIdentifier(),
-                Where.OBJECT_FORMS,
-                null, null, null);
-        val mmc = commonContext.getMetaModelContext();
-        setArgumentsIfPossible(mmc, actionModel, pageParameters);
-        setContextArgumentIfPossible(mmc, actionModel, pageParameters);
-        return actionModel;
-    }
-
     // -- FACTORY METHODS FOR PAGE PARAMETERS
 
     public static PageParameters createPageParametersForBookmark(final Bookmark bookmark) {
@@ -176,13 +147,6 @@ public class PageParameterUtils {
         return pageParameters;
     }
 
-    public static PageParameters currentPageParameters() {
-        val pageParameters = new PageParameters();
-        streamCurrentRequestParameters()
-        .forEach(kv->pageParameters.add(kv.getKey(), kv.getValue()));
-        return pageParameters;
-    }
-
     public static Optional<Bookmark> toBookmark(final PageParameters pageParameters) {
         val oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
         return _Strings.isEmpty(oidStr)
@@ -214,65 +178,6 @@ public class PageParameterUtils {
         return pageParameters;
     }
 
-    @Value(staticConstructor = "of")
-    public static class ParamNumAndOidString {
-        int paramNum;
-        String oidString;
-    }
-
-    private static Optional<ParamNumAndOidString> parseParamContext(final PageParameters pageParameters) {
-        final String paramContext = PageParameterNames.ACTION_PARAM_CONTEXT.getStringFrom(pageParameters);
-        if (paramContext == null) {
-            return Optional.empty();
-        }
-        return parseParamContext(paramContext);
-    }
-
-    private static ObjectAction actionFromPageParams(
-            final IsisAppCommonContext commonContext,
-            final PageParameters pageParameters) {
-
-        val specLoader = commonContext.getSpecificationLoader();
-        val owningLogicalTypeName = PageParameterNames.ACTION_OWNING_SPEC.getStringFrom(pageParameters);
-        val owningLogicalType = specLoader.lookupLogicalTypeElseFail(owningLogicalTypeName);
-
-        final ActionScope actionScope = PageParameterNames.ACTION_TYPE.getEnumFrom(pageParameters, ActionScope.class);
-        final String actionNameParms = PageParameterNames.ACTION_ID.getStringFrom(pageParameters);
-
-        val action = specLoader
-                .specForLogicalTypeElseFail(owningLogicalType)
-                .getActionElseFail(actionNameParms, ImmutableEnumSet.of(actionScope));
-
-        return action;
-    }
-
-    private static final Pattern KEY_VALUE_PATTERN = Pattern.compile("([^=]+)=(.+)");
-
-    static Optional<ParamNumAndOidString> parseParamContext(final String paramContext) {
-        val matcher = KEY_VALUE_PATTERN.matcher(paramContext);
-        if (!matcher.matches()) {
-            return Optional.empty();
-        }
-
-        try {
-
-            val intLiteral = matcher.group(1);
-            val oidStr = matcher.group(2);
-
-            val parseResult = _Ints.parseInt(intLiteral, 10);
-            if(parseResult.isPresent()) {
-                val paramNum = parseResult.getAsInt();
-                return Optional.of(ParamNumAndOidString.of(paramNum, oidStr));
-            }
-
-        } catch (final Exception e) {
-            // ignore and fall through
-        }
-
-        return Optional.empty();
-
-    }
-
     private static String determineActionId(final ObjectAction objectAction) {
         final Identifier identifier = objectAction.getFeatureIdentifier();
         if (identifier != null) {
@@ -280,21 +185,6 @@ public class PageParameterUtils {
         }
         // fallback (used for action sets)
         return objectAction.getId();
-    }
-
-    private static EntityModel entityModelFromPageParams(
-            final IsisAppCommonContext commonContext,
-            final PageParameters pageParameters) {
-
-        val bookmark = bookmarkFor(pageParameters)
-        .orElse(null);
-
-        return EntityModel.ofBookmark(commonContext, bookmark);
-    }
-
-    private static Optional<Bookmark> bookmarkFor(final PageParameters pageParameters) {
-        final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
-        return Bookmark.parse(oidStr);
     }
 
     private static final String NULL_ARG = "$nullArg$";
@@ -333,56 +223,5 @@ public class PageParameterUtils {
             return null;
         }
     }
-
-    private static void setArgumentsIfPossible(
-            final @NonNull MetaModelContext mmc,
-            final ActionModelImpl actionModel,
-            final PageParameters pageParameters) {
-
-        final List<String> argsAsEncodedOidStrings = PageParameterNames.ACTION_ARGS.getListFrom(pageParameters);
-
-        val action = actionModel.getAction();
-        val parameters = action.getParameters();
-
-        for (int paramNum = 0; paramNum < argsAsEncodedOidStrings.size(); paramNum++) {
-            val oidStrEncoded = argsAsEncodedOidStrings.get(paramNum);
-            parameters.get(paramNum)
-            .ifPresent(param->decodeAndSetArgument(mmc, actionModel, param, oidStrEncoded));
-        }
-    }
-
-    private static boolean setContextArgumentIfPossible(
-            final @NonNull MetaModelContext mmc,
-            final ActionModelImpl actionModel,
-            final PageParameters pageParameters) {
-
-        val paramNumAndOidString = parseParamContext(pageParameters)
-                .orElse(null);
-        if(paramNumAndOidString==null) {
-            return false;
-        }
-
-        val action = actionModel.getAction();
-        val actionParamIfAny = action.getParameters().get(paramNumAndOidString.getParamNum());
-        if(!actionParamIfAny.isPresent()) {
-            return false;
-        }
-        val actionParam = actionParamIfAny.get();
-
-        val oidStrEncoded = paramNumAndOidString.getOidString();
-        decodeAndSetArgument(mmc, actionModel, actionParam, oidStrEncoded);
-        return true;
-    }
-
-    private static void decodeAndSetArgument(
-            final @NonNull MetaModelContext mmc,
-            final ActionModelImpl actionModel,
-            final ObjectActionParameter actionParam,
-            final String oidStrEncoded) {
-        val paramValue = decodeArg(mmc, actionParam.getElementType(), oidStrEncoded);
-        actionModel.setParameterValue(actionParam, paramValue);
-    }
-
-
 
 }

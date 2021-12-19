@@ -30,8 +30,6 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.interaction.act.ActionInteractionWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.act.ParameterUiModelWkt;
@@ -71,13 +69,6 @@ implements ActionModel {
                 associatedWithParameterIfAny,
                 associatedWithCollectionIfAny);
         return new ActionModelImpl(parentEntityModel, delegate);
-    }
-
-    public static ActionModel ofPageParameters(
-            final IsisAppCommonContext commonContext,
-            final PageParameters pageParameters) {
-
-        return PageParameterUtils.actionModelFor(commonContext, pageParameters);
     }
 
     // -- CONSTRUCTION
@@ -138,6 +129,10 @@ implements ActionModel {
         return result;
     }
 
+  //TODO[ISIS-2921] experimental
+    public void refetchParameters() {
+        delegate.parameterNegotiationModel().refetch();
+    }
 
     @Override
     public void setObject(final ManagedObject object) {
@@ -159,38 +154,9 @@ implements ActionModel {
         return delegate.getInlinePromptContext();
     }
 
-    public void setParameterValue(final ObjectActionParameter actionParameter, final ManagedObject newParamValue) {
-        delegate.parameterNegotiationModel().setParamValue(actionParameter.getParameterIndex(), newParamValue);
-    }
-
-    public void clearParameterValue(final ObjectActionParameter actionParameter) {
-        delegate.parameterNegotiationModel().clearParamValue(actionParameter.getParameterIndex());
-    }
-
     @Override
     public Stream<ParameterUiModelWkt> streamPendingParamUiModels() {
         return delegate.streamParameterUiModels();
-    }
-
-    @Override
-    public void reassessPendingParamUiModels(final int skipCount) {
-
-        delegate.streamParameterUiModels()
-        .skip(skipCount)
-        .forEach(paramUiModel->{
-
-            val pendingArgs = paramUiModel.getParameterNegotiationModel();
-            val actionParameter = paramUiModel.getMetaModel();
-            val paramDefaultValue = actionParameter.getDefault(pendingArgs);
-
-            if (ManagedObjects.isNullOrUnspecifiedOrEmpty(paramDefaultValue)) {
-                clearParameterValue(actionParameter);
-            } else {
-                setParameterValue(actionParameter, paramDefaultValue);
-            }
-
-        });
-
     }
 
     @Override

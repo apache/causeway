@@ -242,7 +242,7 @@ public enum ActionResultResponseType {
             final IsisAppCommonContext commonContext,
             final ManagedObject resultAdapter) {
 
-        if (resultAdapter.getSpecification().isNotCollection()) {
+        if (resultAdapter.getSpecification().isScalar()) {
             return resultAdapter;
         } else {
             // will only be a single element
@@ -275,7 +275,7 @@ public enum ActionResultResponseType {
 
             // scalar ...
 
-            _Assert.assertTrue(resultSpec.isNotCollection());
+            _Assert.assertTrue(resultSpec.isScalar());
 
             if(LoginRedirect.LOGICAL_TYPE_NAME.equals(resultSpec.getLogicalTypeName())) {
                 return TypeAndAdapter.of(ActionResultResponseType.SIGN_IN, resultAdapter);

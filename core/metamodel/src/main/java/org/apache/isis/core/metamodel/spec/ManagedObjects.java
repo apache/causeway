@@ -457,7 +457,7 @@ public final class ManagedObjects {
                 return "unspecified object";
             }
 
-            if (managedObject.getSpecification().isParentedOrFreeCollection()) {
+            if (managedObject.getSpecification().isNonScalar()) {
                 val collectionFacet = managedObject.getSpecification().getFacet(CollectionFacet.class);
                 return collectionTitleString(managedObject, collectionFacet);
             } else {
@@ -618,6 +618,10 @@ public final class ManagedObjects {
          */
         @NonNull
         public static ManagedObject requiresAttached(final @NonNull ManagedObject managedObject) {
+            if(managedObject instanceof PackedManagedObject) {
+                ((PackedManagedObject)managedObject).unpack().forEach(EntityUtil::requiresAttached);
+                return managedObject;
+            }
             val entityState = EntityUtil.getEntityState(managedObject);
             if(entityState.isPersistable()) {
                 // ensure we have an attached entity
@@ -632,6 +636,10 @@ public final class ManagedObjects {
 
         public static void refetch(final @Nullable ManagedObject managedObject) {
             if(isNullOrUnspecifiedOrEmpty(managedObject)) {
+                return;
+            }
+            if(managedObject instanceof PackedManagedObject) {
+                ((PackedManagedObject)managedObject).unpack().forEach(EntityUtil::refetch);
                 return;
             }
             val entityState = EntityUtil.getEntityState(managedObject);
@@ -694,10 +702,19 @@ public final class ManagedObjects {
         }
 
         public static ManagedObject assertAttachedWhenEntity(final @Nullable ManagedObject adapter) {
+            if(adapter instanceof PackedManagedObject) {
+                for(val element : ((PackedManagedObject)adapter).unpack()) {
+                    assertAttachedWhenEntity(element);
+                }
+            }
             val state = EntityUtil.getEntityState(adapter);
             if(state.isPersistable()) {
                 _Assert.assertEquals(EntityState.PERSISTABLE_ATTACHED, state,
                         ()->String.format("detached entity %s", adapter));
+              //TODO[ISIS-2921] experimental
+                if(!adapter.isBookmarkMemoized()) {
+                    adapter.getBookmark();
+                }
             }
             return adapter;
         }

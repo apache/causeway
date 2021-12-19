@@ -51,7 +51,7 @@ class _PageFactory implements IPageFactory {
     public <C extends IRequestablePage> C newPage(final Class<C> pageClass, final PageParameters parameters) {
 
         if(EntityPage.class.equals(pageClass)) {
-            return _Casts.uncheckedCast(EntityPage.ofPageParameters(holder.getCommonContext(), parameters));
+            return _Casts.uncheckedCast(EntityPage.forPageParameters(holder.getCommonContext(), parameters));
         }
 
         return delegate.newPage(pageClass, parameters);

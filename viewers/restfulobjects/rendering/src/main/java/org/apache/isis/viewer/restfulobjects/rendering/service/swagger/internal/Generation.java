@@ -684,7 +684,7 @@ class Generation {
             return new ObjectProperty();
         }
 
-        if(specification.isParentedOrFreeCollection()) {
+        if(specification.isNonScalar()) {
             TypeOfFacet typeOfFacet = specification.getFacet(TypeOfFacet.class);
             if(typeOfFacet != null) {
                 ObjectSpecification elementSpec = typeOfFacet.valueSpec();

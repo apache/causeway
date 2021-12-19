@@ -63,7 +63,7 @@ implements ImperativeFacet {
 
     private ManagedObject createAdapter(final Class<?> type, final Object object) {
         val specification = getSpecificationLoader().loadSpecification(type);
-        if (specification.isNotCollection()) {
+        if (specification.isScalar()) {
             return getObjectManager().adapt(object);
         } else {
             throw new UnknownTypeException("not an object, is this a collection?");

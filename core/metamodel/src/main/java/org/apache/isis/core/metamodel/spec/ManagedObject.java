@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.AccessLevel;
@@ -125,6 +126,15 @@ public interface ManagedObject {
 
     boolean isBookmarkMemoized();
 
+    //TODO[ISIS-2921] experimental
+    default ManagedObject memoizeEntityBookmark() {
+        if(!this.isBookmarkMemoized()
+                && EntityUtil.isAttached(this)) { // skip detached/transient entities, which cannot be bookmarked
+            this.getBookmark();
+        }
+        return this;
+    }
+
     default Supplier<ManagedObject> asProvider() {
         return ()->this;
     }
@@ -201,18 +211,28 @@ public interface ManagedObject {
         ManagedObjects.assertPojoNotManaged(pojo);
         specification.assertPojoCompatible(pojo);
 
+        final ManagedObject adapter =
         //ISIS-2430 Cannot assume Action Param Spec to be correct when eagerly loaded
         //actual type in use (during runtime) might be a sub-class of the above
-        if(pojo==null
+        (pojo==null
                 || pojo.getClass().equals(specification.getCorrespondingClass())
-                || specification.isValue()) {
+                || specification.isValue())
             // if actual type matches spec's, we assume, that we don't need to reload,
             // so this is a shortcut for performance reasons
-            return SimpleManagedObject.of(specification, pojo);
+            ? SimpleManagedObject.of(specification, pojo)
+            : specification.getMetaModelContext().getObjectManager().adapt(pojo);
+
+        //TODO[ISIS-2921] experimental
+        if(adapter.getSpecification().isEntity()
+                && !adapter.isBookmarkMemoized()) {
+            if(EntityUtil.isAttached(adapter)) {
+                System.err.printf("attached but not bookmarked %s%n", adapter.getPojo());
+                //adapter.getBookmark(); // ensure, this instance's bookmark is memoized
+            }
         }
 
-        val objManager = specification.getMetaModelContext().getObjectManager();
-        return objManager.adapt(pojo);
+        return adapter;
+
     }
 
     /**

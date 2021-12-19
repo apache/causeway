@@ -26,6 +26,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.objectmanager.detach.ObjectDetacher;
 import org.apache.isis.core.metamodel.objectmanager.identify.ObjectBookmarker;
@@ -111,7 +112,19 @@ public interface ObjectManager {
         return getMetaModelContext().getSpecificationLoader().specForType(domainType);
     }
 
+    // -- ADAPTING POJOS
+
+    enum EntityAdaptingMode {
+        MEMOIZE_BOOKMARK,
+        SKIP_MEMOIZATION;
+        boolean isMemoize() { return this == MEMOIZE_BOOKMARK;}
+    }
+
     public default ManagedObject adapt(final @Nullable Object pojo) {
+        return adapt(pojo, EntityAdaptingMode.MEMOIZE_BOOKMARK);
+    }
+
+    public default ManagedObject adapt(final @Nullable Object pojo, final EntityAdaptingMode bookmarking) {
         if(pojo==null) {
             return ManagedObject.unspecified();
         }
@@ -120,14 +133,27 @@ public interface ObjectManager {
         if(spec==null) {
             return ManagedObject.unspecified();
         }
-        return spec.isNotCollection()
-                ? ManagedObject.of(spec, pojo)
+        return spec.isScalar()
+                ? spec.isEntity()
+                        && bookmarking.isMemoize()
+                        ? memoizeEntityBookmark(spec, pojo)//ManagedObject.of(spec, pojo).memoizeEntityBookmark()
+                        : ManagedObject.of(spec, pojo)
                 : PackedManagedObject.pack(spec.getElementSpecification().orElse(spec),
                         _NullSafe.streamAutodetect(pojo)
-                        .map(this::adapt)
+                        .map(element->adapt(element, bookmarking))
                         .collect(Can.toCan()));
-
     }
 
+    private static ManagedObject memoizeEntityBookmark(final ObjectSpecification spec, final Object pojo) {
+        val entityFacet = spec.getFacet(EntityFacet.class);
+
+        val state = entityFacet.getEntityState(pojo);
+        if(state.isAttached()) {
+            val id = entityFacet.identifierFor(spec, pojo);
+            val bookmark = Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), id);
+            return ManagedObject.bookmarked(spec, pojo, bookmark);
+        }
+        return ManagedObject.of(spec, pojo);
+    }
 
 }

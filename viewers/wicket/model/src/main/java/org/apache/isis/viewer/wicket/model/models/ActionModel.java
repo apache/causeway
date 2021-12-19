@@ -37,9 +37,11 @@ extends ActionFormUiModel, FormExecutorContext, BookmarkableModel, IModel<Manage
      */
     void clearArguments();
 
-    void reassessPendingParamUiModels(int skipCount);
     ManagedObject executeActionAndReturnResult();
     Can<ManagedObject> snapshotArgs();
+
+  //TODO[ISIS-2921] experimental
+    void refetchParameters();
 
     @Override
     default PromptStyle getPromptStyle() {

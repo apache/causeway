@@ -77,7 +77,7 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
 
-        return spec.isNotCollection()
+        return spec.isScalar()
                 && !spec.isValue()
                         ? ApplicationAdvice.APPLIES
                         : ApplicationAdvice.DOES_NOT_APPLY;

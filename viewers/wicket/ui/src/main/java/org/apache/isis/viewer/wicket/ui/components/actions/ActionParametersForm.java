@@ -29,7 +29,10 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.internal.debug._Debug;
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel.Placement;
@@ -145,20 +148,38 @@ extends PromptFormAbstract<ActionModel> {
     @Override
     public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanelUpdated) {
 
+        _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+            _Debug.log("about to update Param Form ..");
+        });
+
         val actionModel = getActionModel();
+
+      //TODO[ISIS-2921] experimental
+        actionModel.refetchParameters();
+
         val updatedParamModel = (ParameterUiModel)scalarPanelUpdated.getModel();
         final int paramNumberUpdated = updatedParamModel.getParameterIndex();
         // only updates subsequent parameter panels starting from (paramNumberUpdated + 1)
         final int skipCount = paramNumberUpdated + 1;
 
-        actionModel.reassessPendingParamUiModels(skipCount);
-
         actionModel.streamPendingParamUiModels()
         .skip(skipCount)
         .forEach(paramModel->{
 
-            val paramNumToUpdate = paramModel.getParameterIndex();
-            val paramPanel = paramPanels.get(paramNumToUpdate);
+            val paramIndex = paramModel.getParameterIndex();
+            val pendingArgs = paramModel.getParameterNegotiationModel();
+
+            val actionParameter = paramModel.getMetaModel();
+            // reassess defaults
+            val paramDefaultValue = actionParameter.getDefault(pendingArgs);
+
+            if (ManagedObjects.isNullOrUnspecifiedOrEmpty(paramDefaultValue)) {
+                pendingArgs.clearParamValue(paramIndex);
+            } else {
+                pendingArgs.setParamValue(paramIndex, paramDefaultValue);
+            }
+
+            val paramPanel = paramPanels.get(paramIndex);
             val repaint = paramPanel.updateIfNecessary(paramModel, Optional.of(target));
 
             switch (repaint) {
