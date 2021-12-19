@@ -220,13 +220,6 @@ public class ParameterNegotiationModel {
         setParamValue(paramNr, adaptParamValuePojo(paramNr, null));
     }
 
-    //TODO[ISIS-2921] experimental
-    public void refetch() {
-        getParamValues().forEach(param->{
-            EntityUtil.refetch(param);
-        });
-    }
-
     @NonNull public ManagedObject adaptParamValuePojo(final int paramNr, final @Nullable Object newParamValuePojo) {
         val paramMeta = getParamMetamodel(paramNr);
         val paramSpec = paramMeta.getElementType();
@@ -283,6 +276,7 @@ public class ParameterNegotiationModel {
             this.negotiationModel = negotiationModel;
 
             bindableParamValue = _Bindables.forValue(initialValue);
+            bindableParamValue.setValueRefiner(EntityUtil::refetch);
             bindableParamValue.addListener((e,o,n)->{
                 if(n==null) {
                     // lift null to empty ...

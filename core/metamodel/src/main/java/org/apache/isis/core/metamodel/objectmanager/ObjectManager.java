@@ -144,6 +144,7 @@ public interface ObjectManager {
                         .collect(Can.toCan()));
     }
 
+  //TODO[ISIS-2921] experimental / duplicated
     private static ManagedObject memoizeEntityBookmark(final ObjectSpecification spec, final Object pojo) {
         val entityFacet = spec.getFacet(EntityFacet.class);
 

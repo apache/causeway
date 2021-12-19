@@ -129,11 +129,6 @@ implements ActionModel {
         return result;
     }
 
-  //TODO[ISIS-2921] experimental
-    public void refetchParameters() {
-        delegate.parameterNegotiationModel().refetch();
-    }
-
     @Override
     public void setObject(final ManagedObject object) {
         throw new UnsupportedOperationException("ActionModel is a chained model - don't mess with the chain");

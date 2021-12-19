@@ -154,9 +154,6 @@ extends PromptFormAbstract<ActionModel> {
 
         val actionModel = getActionModel();
 
-      //TODO[ISIS-2921] experimental
-        actionModel.refetchParameters();
-
         val updatedParamModel = (ParameterUiModel)scalarPanelUpdated.getModel();
         final int paramNumberUpdated = updatedParamModel.getParameterIndex();
         // only updates subsequent parameter panels starting from (paramNumberUpdated + 1)

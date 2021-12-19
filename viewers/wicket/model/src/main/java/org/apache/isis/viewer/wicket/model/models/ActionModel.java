@@ -40,9 +40,6 @@ extends ActionFormUiModel, FormExecutorContext, BookmarkableModel, IModel<Manage
     ManagedObject executeActionAndReturnResult();
     Can<ManagedObject> snapshotArgs();
 
-  //TODO[ISIS-2921] experimental
-    void refetchParameters();
-
     @Override
     default PromptStyle getPromptStyle() {
         final ObjectAction objectAction = getAction();

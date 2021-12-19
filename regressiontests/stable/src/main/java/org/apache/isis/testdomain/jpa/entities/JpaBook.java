@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.events.lifecycle.ObjectCreatedEvent;
@@ -102,6 +103,7 @@ implements IBook {
         log.debug("INJECTION " + count);
         this.myService = myService;
     }
+    @Programmatic
     public boolean hasInjectionPointsResolved() {
         getAuthor(); // seems to have the required side-effect to actually trigger injection
         return myService != null;

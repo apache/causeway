@@ -634,20 +634,20 @@ public final class ManagedObjects {
             return managedObject;
         }
 
-        public static void refetch(final @Nullable ManagedObject managedObject) {
+        public static ManagedObject refetch(final @Nullable ManagedObject managedObject) {
             if(isNullOrUnspecifiedOrEmpty(managedObject)) {
-                return;
+                return managedObject;
             }
             if(managedObject instanceof PackedManagedObject) {
                 ((PackedManagedObject)managedObject).unpack().forEach(EntityUtil::refetch);
-                return;
+                return managedObject;
             }
             val entityState = EntityUtil.getEntityState(managedObject);
             if(!entityState.isPersistable()) {
-                return;
+                return managedObject;
             }
             if(!entityState.isDetached()) {
-                return;
+                return managedObject;
             }
 
             val spec = managedObject.getSpecification();
@@ -664,6 +664,7 @@ public final class ManagedObjects {
             _Assert.assertTrue(newState.isAttached());
 
             managedObject.replacePojo(old->reattached.getPojo());
+            return managedObject;
         }
 
         public static void requiresWhenFirstIsBookmarkableSecondIsAttached(

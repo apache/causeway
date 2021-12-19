@@ -18,9 +18,6 @@
  */
 package org.apache.isis.commons.binding;
 
-/**
- *
- */
 @FunctionalInterface
 public interface InvalidationListener {
 

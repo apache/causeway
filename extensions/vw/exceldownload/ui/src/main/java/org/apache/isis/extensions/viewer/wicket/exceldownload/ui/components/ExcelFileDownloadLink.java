@@ -46,9 +46,6 @@ class ExcelFileDownloadLink extends DownloadLink {
     @Override
     public void onClick() {
 
-      //TODO[ISIS-2921] experimental
-        //EntityPage.jaxbViewmodelRefresh(getPage());
-
         final File file = getModelObject();
         if (file == null)
         {
