@@ -33,6 +33,7 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
+import org.springframework.util.ClassUtils;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -126,25 +127,39 @@ public final class ManagedObjects {
     // -- INSTANCE-OF CHECKS
 
     /**
-     * guard against incompatible type
+     * Whether given {@code object} is an instance of given {@code elementType}.
      */
-    public static @NonNull UnaryOperator<ManagedObject> assertInstanceOf(final ObjectSpecification elementType) {
-        val upperBound = elementType.getCorrespondingClass();
-        return newValue -> {
-            if(ManagedObjects.isNullOrUnspecifiedOrEmpty(newValue)) {
-                return newValue;
-            }
-            val newValueActualType = newValue.getSpecification().getCorrespondingClass();
-            if(!upperBound.isAssignableFrom(newValueActualType)) {
-                throw _Exceptions.illegalArgument("Proposed new value has incompatible type %s,"
-                        + "must be an instance of %s.",
-                        newValueActualType.getName(),
-                        upperBound.getName());
-            }
-            return newValue;
-        };
+    public static boolean isInstanceOf(
+            final @Nullable ManagedObject object,
+            final @NonNull ObjectSpecification elementType) {
+        val upperBound = ClassUtils.resolvePrimitiveIfNecessary(elementType.getCorrespondingClass());
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(object)) {
+            return true;
+        }
+        if(object instanceof PackedManagedObject) {
+            return ((PackedManagedObject)object).unpack().stream()
+            .allMatch(element->isInstanceOf(element, elementType));
+        }
+        val objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.getSpecification().getCorrespondingClass());
+        return upperBound.isAssignableFrom(objectActualType);
     }
 
+    /**
+     * Guard against incompatible type.
+     */
+    public static @NonNull UnaryOperator<ManagedObject> assertInstanceOf(final ObjectSpecification elementType) {
+        return object -> {
+            if(isInstanceOf(object, elementType)) {
+                return object;
+            }
+            val upperBound = ClassUtils.resolvePrimitiveIfNecessary(elementType.getCorrespondingClass());
+            val objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.getSpecification().getCorrespondingClass());
+            throw _Exceptions.illegalArgument("Object has incompatible type %s,"
+                    + "must be an instance of %s.",
+                    objectActualType.getName(),
+                    upperBound.getName());
+        };
+    }
 
     // -- IDENTIFICATION
 
