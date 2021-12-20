@@ -63,6 +63,7 @@ public class PropertyNegotiationModel implements ManagedValue {
 
         proposedValue = _Bindables.forValue(defaultValue);
         proposedValue.setValueRefiner(EntityUtil::refetch);
+        proposedValue.setValueGuard(ManagedObjects.assertInstanceOf(propMeta.getElementType()));
         proposedValue.addListener((e,o,n)->{
             invalidateChoicesAndValidation();
         });

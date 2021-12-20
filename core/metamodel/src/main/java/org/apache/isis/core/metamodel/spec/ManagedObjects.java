@@ -123,6 +123,29 @@ public final class ManagedObjects {
                 .map(ObjectSpecification::getLogicalTypeName);
     }
 
+    // -- INSTANCE-OF CHECKS
+
+    /**
+     * guard against incompatible type
+     */
+    public static @NonNull UnaryOperator<ManagedObject> assertInstanceOf(final ObjectSpecification elementType) {
+        val upperBound = elementType.getCorrespondingClass();
+        return newValue -> {
+            if(ManagedObjects.isNullOrUnspecifiedOrEmpty(newValue)) {
+                return newValue;
+            }
+            val newValueActualType = newValue.getSpecification().getCorrespondingClass();
+            if(!upperBound.isAssignableFrom(newValueActualType)) {
+                throw _Exceptions.illegalArgument("Proposed new value has incompatible type %s,"
+                        + "must be an instance of %s.",
+                        newValueActualType.getName(),
+                        upperBound.getName());
+            }
+            return newValue;
+        };
+    }
+
+
     // -- IDENTIFICATION
 
     public static Optional<ObjectSpecification> spec(final @Nullable ManagedObject managedObject) {
@@ -1062,8 +1085,5 @@ public final class ManagedObjects {
         }
 
     }
-
-
-
 
 }

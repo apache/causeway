@@ -19,7 +19,6 @@
 package org.apache.isis.core.runtime.context;
 
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
@@ -75,9 +74,6 @@ public class IsisAppCommonContext implements HasMetaModelContext {
 
     @Getter(lazy = true, value = AccessLevel.PRIVATE)
     private final ObjectMementoService mementoService = lookupServiceElseFail(ObjectMementoService.class);
-
-    @Getter(lazy = true)
-    private final Function<Object, ManagedObject> pojoToAdapter = metaModelContext.getObjectManager()::adapt;
 
     public Optional<MessageBroker> getMessageBroker() {
         return getMetaModelContext().getServiceRegistry().lookupService(MessageBroker.class);

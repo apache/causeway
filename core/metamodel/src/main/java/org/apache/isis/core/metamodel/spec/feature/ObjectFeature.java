@@ -155,8 +155,9 @@ public interface ObjectFeature extends Specification {
      * element the collection holds (not the type of collection).
      * <li>for an {@link ObjectAction action} will return {@link ObjectAction#getReturnType()}.
      * <li>for an {@link ObjectActionParameter action parameter}, will return the type of
-     * the parameter}.
+     * the parameter.
      * </ul>
+     * @since 2.0
      */
     ObjectSpecification getElementType();
 

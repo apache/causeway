@@ -124,8 +124,8 @@ extends ManagedMember {
             return interactionVeto;
         }
 
-        ManagedObject managedObject = property.set(getOwner(), proposedNewValue, InteractionInitiatedBy.USER);
-        setOwner(managedObject);
+        val updatedOwner = property.set(getOwner(), proposedNewValue, InteractionInitiatedBy.USER);
+        setOwner(updatedOwner);
         observablePropValue.invalidate();
         return Optional.empty();
     }

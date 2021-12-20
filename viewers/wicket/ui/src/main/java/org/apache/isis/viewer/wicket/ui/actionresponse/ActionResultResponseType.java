@@ -251,7 +251,7 @@ public enum ActionResultResponseType {
                     .findFirst()
                     .orElseThrow(_Exceptions::noSuchElement);
 
-            final var scalarAdapter = commonContext.getPojoToAdapter().apply(pojo);
+            final var scalarAdapter = commonContext.getObjectManager().adapt(pojo);
             return scalarAdapter;
         }
     }

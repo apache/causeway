@@ -139,7 +139,7 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
             @Override
             public void setObject(final Boolean object) {
-                val objectAdapter = scalarModel.getCommonContext().getPojoToAdapter().apply(object);
+                val objectAdapter = scalarModel.getCommonContext().getObjectManager().adapt(object);
                 getModel().setObject(objectAdapter);
             }
         }) {
@@ -178,7 +178,7 @@ public class BooleanPanel extends ScalarPanelAbstract {
         final ObjectSpecification objectSpecification = getModel().getScalarTypeSpec();
         if(objectSpecification.getFullIdentifier().equals("boolean")) {
             if(getModel().getObject() == null) {
-                val objectAdapter = scalarModel.getCommonContext().getPojoToAdapter().apply(Boolean.FALSE);
+                val objectAdapter = scalarModel.getCommonContext().getObjectManager().adapt(Boolean.FALSE);
                 getModel().setObject(objectAdapter);
             }
         }

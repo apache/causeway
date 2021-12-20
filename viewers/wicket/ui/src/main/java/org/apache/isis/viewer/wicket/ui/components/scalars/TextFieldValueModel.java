@@ -66,7 +66,7 @@ public class TextFieldValueModel<T extends Serializable> extends Model<T> {
         if (object == null) {
             scalarModel.setObject(null);
         } else {
-            val objectAdapter = scalarModel.getCommonContext().getPojoToAdapter().apply(object);
+            val objectAdapter = scalarModel.getCommonContext().getObjectManager().adapt(object);
             scalarModel.setObject(objectAdapter);
         }
     }

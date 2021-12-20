@@ -186,7 +186,7 @@ extends ScalarPanelAbstract {
                         }
 
                         val blob = getBlobOrClobFrom(fileUploads);
-                        val objectAdapter = scalarModel.getCommonContext().getPojoToAdapter().apply(blob);
+                        val objectAdapter = scalarModel.getCommonContext().getObjectManager().adapt(blob);
                         getModel().setObject(objectAdapter);
                     }
 

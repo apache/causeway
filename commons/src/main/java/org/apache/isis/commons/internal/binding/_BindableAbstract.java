@@ -59,6 +59,13 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
      */
     @Setter private @NonNull UnaryOperator<T> valueRefiner = UnaryOperator.identity();
 
+    /**
+     * Called within {@link #setValue()} to guard against invalid new values.
+     * <p>
+     * use-case: guard against incompatible types
+     */
+    @Setter private @NonNull UnaryOperator<T> valueGuard = UnaryOperator.identity();
+
     public _BindableAbstract() {
     }
 
@@ -106,10 +113,11 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
     }
 
     @Override
-    public void setValue(final T newValue) {
+    public void setValue(final T proposedNewValue) {
         if (isBound()) {
             throw _Exceptions.unrecoverable("Cannot set value on a bound bindable.");
         }
+        val newValue = valueGuard.apply(proposedNewValue);
         if (value != newValue) {
             value = newValue;
             markInvalid();
