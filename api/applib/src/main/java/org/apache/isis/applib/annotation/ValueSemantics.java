@@ -6,6 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.math.BigDecimal;
+import java.time.format.FormatStyle;
 import java.util.Locale;
 
 import javax.persistence.Column;
@@ -48,7 +49,6 @@ public @interface ValueSemantics {
     // -- NUMBER CONSTRAINTS
 
     /**
-     * EXPERIMENTAL - considered to be moved to a separate {@code @Digits} annotation<p>
      * If associated with a {@link Number}, the maximum number of total digits accepted for
      * this number.<br>
      * Can be omitted, if {@link Column#precision()} is used.<br>
@@ -60,7 +60,6 @@ public @interface ValueSemantics {
             default 65;
 
     /**
-     * EXPERIMENTAL - considered to be moved to a separate {@code @Digits} annotation<p>
      * If associated with a {@link Number}, the minimum number of integer digits required for
      * this number.<br>
      * default = {@code 1}
@@ -69,7 +68,6 @@ public @interface ValueSemantics {
             default 1;
 
     /**
-     * EXPERIMENTAL - considered to be moved to a separate {@code @Digits} annotation<p>
      * If associated with a {@link BigDecimal}, the maximum number of fractional digits accepted
      * for this number.<br>
      * Can be omitted, if {@link Column#scale()} is used.<br>
@@ -81,12 +79,23 @@ public @interface ValueSemantics {
             default 30;
 
     /**
-     * EXPERIMENTAL - considered to be moved to a separate {@code @Digits} annotation<p>
      * If associated with a {@link BigDecimal}, the minimum number of fractional digits
      * required for this number.<br>
      * default = {@code 0}
      */
     int minFractionalDigits()
             default 0;
+
+    /**
+     * If associated with a temporal date value, the style of a localized date.
+     */
+    FormatStyle dateFormatStyle()
+            default FormatStyle.MEDIUM;
+
+    /**
+     * If associated with a temporal time value, the style of a localized time.
+     */
+    FormatStyle timeFormatStyle()
+            default FormatStyle.MEDIUM;
 
 }
