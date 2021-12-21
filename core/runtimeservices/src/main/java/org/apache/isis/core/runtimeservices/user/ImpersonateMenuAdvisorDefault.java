@@ -35,7 +35,7 @@ import org.apache.isis.applib.services.user.ImpersonateMenuAdvisor;
  * <p>
  *  This has the effect that the
  *  {@link org.apache.isis.applib.services.user.ImpersonateMenu}'s
- *  {@link org.apache.isis.applib.services.user.ImpersonateMenu#impersonateWithRoles(String, List, String) impersonateWithRoles}
+ *  {@link org.apache.isis.applib.services.user.ImpersonateMenu.impersonateWithRoles#act(String, List, String) impersonateWithRoles}
  *  action will be hidden.
  * </p>
  */
@@ -61,7 +61,7 @@ public class ImpersonateMenuAdvisorDefault implements ImpersonateMenuAdvisor {
     }
 
     @Override
-    public String multiTenancyTokenFor(String username) {
+    public String multiTenancyTokenFor(final String username) {
         return null;
     }
 

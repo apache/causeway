@@ -21,11 +21,12 @@ package org.apache.isis.applib.services.user;
 import java.util.List;
 
 /**
- * Enables {@link ImpersonateMenu#impersonateWithRoles(String, List, String)}, to provides choices for user and roles.
+ * Enables {@link ImpersonateMenu.impersonateWithRoles#act(String, List, String)},
+ * to provides choices for user and roles.
  *
  * <p>
- *     This will result in the simpler {@link ImpersonateMenu#impersonate(String)} (which simply allows a
- *     username to be specified, with no roles) being hidden.
+ *     This will result in the simpler {@link ImpersonateMenu.impersonate#act(String)}
+ *     (which simply allows a username to be specified, with no roles) being hidden.
  * </p>
  *
  * @since 2.0 {@index}
@@ -38,7 +39,7 @@ public interface ImpersonateMenuAdvisor {
      * <p>
      *     The {@link ImpersonateMenu} uses this to provide a choices
      *     (drop-down) for the username (string) argument of
-     *     {@link ImpersonateMenu#impersonateWithRoles(String, List, String)}.
+     *     {@link ImpersonateMenu.impersonateWithRoles#act(String, List, String)}.
      * </p>
      */
     List<String> allUserNames();
@@ -49,7 +50,7 @@ public interface ImpersonateMenuAdvisor {
      * <p>
      *     The {@link ImpersonateMenu} uses this to provide a choices
      *     (drop-down) for the rolenames (list) argument of
-     *     {@link ImpersonateMenu#impersonateWithRoles(String, List, String)}.
+     *     {@link ImpersonateMenu.impersonateWithRoles#act(String, List, String)}.
      * </p>
      */
     List<String> allRoleNames();
@@ -60,7 +61,7 @@ public interface ImpersonateMenuAdvisor {
      * <p>
      *     The {@link ImpersonateMenu} uses this to select the defaults
      *     for the rolenames (list) argument of
-     *     {@link ImpersonateMenu#impersonateWithRoles(String, List, String)}.
+     *     {@link ImpersonateMenu.impersonateWithRoles#act(String, List, String)}.
      * </p>
      */
     List<String> roleNamesFor(final String username);
@@ -71,7 +72,7 @@ public interface ImpersonateMenuAdvisor {
      * <p>
      *     The {@link ImpersonateMenu} uses this to select the defaults
      *     for the rolenames (list) argument of
-     *     {@link ImpersonateMenu#impersonateWithRoles(String, List, String)}.
+     *     {@link ImpersonateMenu.impersonateWithRoles#act(String, List, String)}.
      * </p>
      */
     String multiTenancyTokenFor(final String username);
