@@ -27,7 +27,6 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.wicketstuff.select2.ChoiceProvider;
 
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -71,16 +70,6 @@ extends ScalarPanelSelectAbstract {
         FormComponent<?> formComponent = select2.asComponent();
 
         return createFormGroup(formComponent);
-    }
-
-
-    private Can<ObjectMemento> getChoiceMementos() {
-
-        val commonContext = super.getCommonContext();
-
-        val choices = scalarModel.getChoices();
-
-        return choices.map(commonContext::mementoFor);
     }
 
     // --
@@ -154,8 +143,7 @@ extends ScalarPanelSelectAbstract {
     // (choice vs autoComplete).  Here though - because values don't currently support autoComplete - no branch is required
     @Override
     protected ChoiceProvider<ObjectMemento> buildChoiceProvider() {
-        final Can<ObjectMemento> choicesMementos = getChoiceMementos();
-        return new ObjectAdapterMementoProviderForValueChoices(scalarModel, choicesMementos);
+        return new ObjectAdapterMementoProviderForValueChoices(scalarModel);
     }
 
     @Override

@@ -46,7 +46,7 @@ import lombok.val;
 
 public class ObjectAdapterMementoProviderForValueChoicesTest {
 
-    @Rule public JUnitRuleMockery2 context = 
+    @Rule public JUnitRuleMockery2 context =
             JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     private Can<ObjectMemento> mementos;
@@ -64,34 +64,36 @@ public class ObjectAdapterMementoProviderForValueChoicesTest {
     @Before
     public void setUp() throws Exception {
         final String fakeObjectType = "FAKE";
-        
+
         val fakeLocalType = LogicalType.lazy(getClass(), ()->fakeObjectType);
 
         mockMemento1 = mock(fakeLocalType, "mockMemento1");
         mockMemento2 = mock(fakeLocalType, "mockMemento2");
 
         mementos = Can.of(mockMemento1, mockMemento2);
-        
+
         context.checking(new Expectations() {        {
-            
+
             allowing(mockScalarModel).getCommonContext();
             will(returnValue(mockCommonContext));
-            
+
             allowing(mockCommonContext).lookupServiceElseFail(WicketViewerSettings.class);
             will(returnValue(mockWicketViewerSettings));
-            
+
             allowing(mockCommonContext).getSpecificationLoader();
             will(returnValue(mockSpecificationLoader));
-            
+
             allowing(mockSpecificationLoader).specForLogicalType(fakeLocalType);
             will(returnValue(Optional.of(mockSpec)));
 
             allowing(mockSpec).isEncodeable();
             will(returnValue(true));
         }});
-        
-        provider = new ObjectAdapterMementoProviderForValueChoices(mockScalarModel, mementos) {
+
+        provider = new ObjectAdapterMementoProviderForValueChoices(mockScalarModel) {
             private static final long serialVersionUID = 1L;
+            @Override public org.apache.isis.commons.collections.Can<ObjectMemento> getChoiceMementos() {
+                return mementos; };
         };
 
     }
