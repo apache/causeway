@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
-import org.apache.isis.core.metamodel.facets.object.title.parser.TitleFacetUsingValueFacet;
+import org.apache.isis.core.metamodel.facets.object.title.parser.TitleFacetFromValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ImmutableFacetViaValueSemantics;
 import org.apache.isis.core.metamodel.facets.object.value.MaxLengthFacetFromValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet;
@@ -129,7 +129,7 @@ extends FacetFactoryAbstract {
 
         addFacet(valueFacet);
         addFacet(new ImmutableFacetViaValueSemantics(holder));
-        addFacet(TitleFacetUsingValueFacet.create(valueFacet, holder));
+        addFacet(TitleFacetFromValueFacet.create(valueFacet, holder));
 
         addFacetIfPresent(EncodableFacetFromValueFacet.create(valueFacet, holder));
         addFacetIfPresent(TypicalLengthFacetFromValueFacet.create(valueFacet, holder));

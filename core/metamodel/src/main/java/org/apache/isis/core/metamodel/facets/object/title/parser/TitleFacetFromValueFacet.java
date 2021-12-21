@@ -33,17 +33,17 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import lombok.NonNull;
 import lombok.val;
 
-public final class TitleFacetUsingValueFacet
+public final class TitleFacetFromValueFacet
 extends FacetAbstract
 implements TitleFacet {
 
     private final @NonNull ValueFacet<?> valueFacet;
 
-    public static TitleFacetUsingValueFacet create(final ValueFacet<?> valueFacet, final FacetHolder holder) {
-        return new TitleFacetUsingValueFacet(valueFacet, holder);
+    public static TitleFacetFromValueFacet create(final ValueFacet<?> valueFacet, final FacetHolder holder) {
+        return new TitleFacetFromValueFacet(valueFacet, holder);
     }
 
-    private TitleFacetUsingValueFacet(final ValueFacet<?> valueFacet, final FacetHolder holder) {
+    private TitleFacetFromValueFacet(final ValueFacet<?> valueFacet, final FacetHolder holder) {
         // facets from the title() method have higher precedence
         super(TitleFacet.class, holder, Precedence.LOW);
         this.valueFacet = valueFacet;
@@ -92,7 +92,7 @@ implements TitleFacet {
 
     @Override
     public boolean semanticEquals(final @NonNull Facet other) {
-        return other instanceof TitleFacetUsingValueFacet
+        return other instanceof TitleFacetFromValueFacet
                 ? true //TODO this.valueFacet.semanticEquals(((TitleFacetUsingValueFacet)other).valueFacet)
                 : false;
     }
