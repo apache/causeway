@@ -107,9 +107,10 @@ public interface ComponentFactoryRegistrar {
             return componentFactories.stream();
         }
 
-        public Stream<Class<?>> streamComponentTypeClasses() {
+        public <T extends ComponentFactory> Stream<T> stream(final Class<T> requiredClass) {
             return stream()
-                    .map(ComponentFactory::getComponentTypeClass);
+                    .filter(requiredClass::isInstance)
+                    .map(requiredClass::cast);
         }
     }
 

@@ -47,7 +47,9 @@ public class _XrayEvent {
      * General purpose event entry.
      */
     public void event(final String format, final Object...args) {
-        record(1, _IconResource.EVENT, format, args);
+        if(XrayUi.isXrayEnabled()) {
+            record(1, _IconResource.EVENT, format, args);
+        }
     }
 
     /**

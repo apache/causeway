@@ -140,7 +140,7 @@ public final class ClassExtensions {
     }
 
     static Class<?> asWrapped(final Class<?> primitiveClassExtendee) {
-        return ClassUtil.wrapperClasses.get(primitiveClassExtendee);
+        return ClassUtil.wrapperByPrimitive.get(primitiveClassExtendee);
     }
 
     public static Class<? extends Object> asWrappedIfNecessary(final Class<?> cls) {
@@ -151,7 +151,7 @@ public final class ClassExtensions {
         if(!extendee.isPrimitive()) {
             return null;
         }
-        return ClassUtil.defaultByPrimitiveClass.get(extendee);
+        return ClassUtil.defaultByPrimitive.get(extendee);
     }
 
     /**
@@ -159,7 +159,7 @@ public final class ClassExtensions {
      * <tt>null</tt> if the class represents a non-primitive type.
      */
     public static Object getNullOrDefault(final Class<?> type) {
-        return ClassUtil.defaultByPrimitiveType.get(type);
+        return ClassUtil.defaultByPrimitive.get(type);
     }
 
     public static boolean isCompatibleAsReturnType(final Class<?> returnTypeExtendee, final CanBeVoid canBeVoid, final Class<?> type) {
@@ -173,13 +173,13 @@ public final class ClassExtensions {
         }
 
         if (type.isPrimitive()) {
-            return returnTypeExtendee.isAssignableFrom(ClassUtil.wrapperClasses.get(type));
+            return returnTypeExtendee.isAssignableFrom(ClassUtil.wrapperByPrimitive.get(type));
         }
 
         return (returnTypeExtendee.isAssignableFrom(type));
     }
 
-    public static boolean equalsWhenBoxing(Class<?> t1, Class<?> t2) {
+    public static boolean equalsWhenBoxing(final Class<?> t1, final Class<?> t2) {
         if(Objects.equals(t1, t2)) {
             return true;
         }
@@ -196,7 +196,7 @@ public final class ClassExtensions {
             return refine;
         });
 
-        public void collect(Object pojo) {
+        public void collect(final Object pojo) {
             reduction.accept(pojo.getClass());
         }
 

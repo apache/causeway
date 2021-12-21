@@ -33,7 +33,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 
 /**
- * {@link ComponentFactory} for {@link CollectionContentsAsExcel}.
+ * {@link ComponentFactory} for {@link DownloadLink}.
  *
  * @since 2.0 {@index}
  */
@@ -47,7 +47,7 @@ implements CollectionContentsAsFactory {
     private static final String NAME = "excel";
 
     public CollectionContentsAsExcelFactory() {
-        super(ComponentType.COLLECTION_CONTENTS_EXPORT, NAME);
+        super(ComponentType.COLLECTION_CONTENTS_EXPORT, NAME, DownloadLink.class);
     }
 
     @Override
@@ -74,7 +74,7 @@ implements CollectionContentsAsFactory {
         return Model.of("fa fa-file-excel");
     }
 
-    // -EXP
+    // -- HELPER
 
     private DownloadLink createDownloadLink(final String id, final EntityCollectionModel model) {
         final LoadableDetachableModel<File> fileModel = ExcelFileModel.of(model);

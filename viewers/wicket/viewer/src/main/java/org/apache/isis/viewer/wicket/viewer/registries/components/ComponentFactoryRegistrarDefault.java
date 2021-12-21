@@ -29,10 +29,12 @@ import javax.inject.Named;
 import org.apache.wicket.Component;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ClassUtils;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -269,13 +271,16 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
         componentFactories.add(new ValueCompoundPanelFactory());
 
-        val registeredComponentTypeClasses =
-            componentFactories.streamComponentTypeClasses()
+        val registeredScalarTypes =
+            componentFactories.stream(ComponentFactoryScalarAbstract.class)
+            .flatMap(f->f.getScalarTypes().stream())
             .collect(Collectors.toSet());
 
         valueSemanticsResolver.streamClassesWithValueSemantics()
-            .filter(_Predicates.not(registeredComponentTypeClasses::contains))
+            .filter(_Predicates.not(registeredScalarTypes::contains))
             .flatMap(valueSemanticsResolver::streamValueSemantics)
+            //.peek(valueSemantics->System.err.printf("%s -> %s%n", valueSemantics, valueSemantics.getCorrespondingClass().getName()))
+            //FIXME[ISIS-2882] not properly implemented yet: does not work eg. with temporal types
             .map(valueSemantics->createForValueSemantics((ValueSemanticsProvider)valueSemantics))
             .forEach(componentFactories::add);
 
@@ -328,11 +333,19 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     // -- UTILTIY
 
     public static <T extends Serializable> ComponentFactoryScalarAbstract
-    createScalarPanelUsingTextField(final Class<T> componentTypeClass) {
+    createScalarPanelUsingTextField(final Class<T> valueTypeClass) {
+
+        var valueTypeClasses = Can.<Class<?>>ofSingleton(valueTypeClass);
+
+        // if the valueType is a wrapper type, also append its unboxed variant
+        if(ClassUtils.isPrimitiveWrapper(valueTypeClass)) {
+            val unboxed = org.apache.isis.core.metamodel.commons.ClassUtil.unboxPrimitiveIfNecessary(valueTypeClass);
+            valueTypeClasses = valueTypeClasses.add(unboxed);
+        }
 
         return new ComponentFactoryScalarAbstract(
                 ScalarPanelTextFieldWithValueSemanticsAbstract.class,
-                componentTypeClass) {
+                valueTypeClasses) {
 
             private static final long serialVersionUID = 1L;
 
@@ -340,7 +353,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
             public Component createComponent(final String id, final ScalarModel scalarModel) {
 
                 return new ScalarPanelTextFieldWithValueSemanticsAbstract<T>(
-                        id, scalarModel, componentTypeClass) {
+                        id, scalarModel, valueTypeClass) {
                     private static final long serialVersionUID = 1L;
                 };
             }

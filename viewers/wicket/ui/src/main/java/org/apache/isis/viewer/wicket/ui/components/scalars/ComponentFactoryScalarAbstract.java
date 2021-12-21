@@ -21,21 +21,30 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
+
+import lombok.Getter;
 
 public abstract class ComponentFactoryScalarAbstract
 extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private final Class<?>[] scalarTypes;
+    @Getter
+    private final Can<Class<?>> scalarTypes;
 
     protected ComponentFactoryScalarAbstract(
             final Class<?> componentClass,
             final Class<?>... scalarTypes) {
+        this(componentClass, Can.ofArray(scalarTypes));
+    }
 
+    protected ComponentFactoryScalarAbstract(
+            final Class<?> componentClass,
+            final Can<Class<?>> scalarTypes) {
         super(ComponentType.SCALAR_NAME_AND_VALUE, componentClass);
         this.scalarTypes = scalarTypes;
     }

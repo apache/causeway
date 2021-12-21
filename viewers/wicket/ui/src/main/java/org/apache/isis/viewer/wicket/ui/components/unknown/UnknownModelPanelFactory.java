@@ -62,7 +62,7 @@ public class UnknownModelPanelFactory implements ComponentFactory {
 
     @Override
     public Class<?> getComponentTypeClass() {
-        return null;
+        return UnknownModelPanel.class;
     }
 
 }

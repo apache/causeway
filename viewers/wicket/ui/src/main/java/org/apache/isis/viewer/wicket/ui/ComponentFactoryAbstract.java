@@ -45,7 +45,6 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
 
     @Getter(onMethod_ = {@Override}) private final ComponentType componentType;
     @Getter(onMethod_ = {@Override}) private final String name;
-
     @Getter(onMethod_ = {@Override}) private final Class<?> componentTypeClass;
 
     protected ComponentFactoryAbstract(final ComponentType componentType) {

@@ -18,13 +18,9 @@
  */
 package org.apache.isis.core.metamodel.commons;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
@@ -32,94 +28,79 @@ import static org.apache.isis.commons.internal.base._With.requiresNotEmpty;
 
 import lombok.NonNull;
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public final class ClassUtil {
 
-    static final String JAVA_CLASS_PREFIX = "java.";
+    final String JAVA_CLASS_PREFIX = "java.";
 
-    private static final Map<String, Class<?>> builtInClasses = new HashMap<String, Class<?>>();
+    private final Map<String, Class<?>> primitiveByName = Map.of(
+            void.class.getName(), void.class,
+            boolean.class.getName(), boolean.class,
+            char.class.getName(), char.class,
+            byte.class.getName(), byte.class,
+            short.class.getName(), short.class,
+            int.class.getName(), int.class,
+            long.class.getName(), long.class,
+            float.class.getName(), float.class,
+            double.class.getName(), double.class);
 
-    static {
-        put(void.class);
-        put(boolean.class);
-        put(char.class);
-        put(byte.class);
-        put(short.class);
-        put(int.class);
-        put(long.class);
-        put(float.class);
-        put(double.class);
-    }
 
-    private static void put(final Class<?> cls) {
-        builtInClasses.put(cls.getName(), cls);
-    }
+    final Map<Class<?>, Object> defaultByPrimitive = Map.of(
+            boolean.class, false,
+            byte.class, (byte)0,
+            short.class, (short)0,
+            int.class, 0,
+            long.class, 0L,
+            float.class, 0.0f,
+            double.class, 0.0,
+            char.class, (char)0);
 
-    static final Map<Class<?>, Object> defaultByPrimitiveClass =
-            MapUtil.asMap(
-                    boolean.class, false,
-                    byte.class, (byte)0,
-                    short.class, (short)0,
-                    int.class, 0,
-                    long.class, 0L,
-                    float.class, 0.0f,
-                    double.class, 0.0,
-                    char.class, (char)0
-                    );
     //XXX supposedly use Spring's ClassUtils instead
-    static final Map<Class<?>, Class<?>> wrapperClasses =
-            MapUtil.asMap(
-                    // TODO: there is a better way of doing this in 1.6 using TypeMirror
-                    boolean.class, Boolean.class,
-                    byte.class, Byte.class,
-                    char.class, Character.class,
-                    short.class, Short.class,
-                    int.class, Integer.class,
-                    long.class, Long.class,
-                    float.class, Float.class,
-                    double.class, Double.class,
-                    void.class, Void.class
-                    );
+    final Map<Class<?>, Class<?>> wrapperByPrimitive = Map.of(
+            boolean.class, Boolean.class,
+            byte.class, Byte.class,
+            char.class, Character.class,
+            short.class, Short.class,
+            int.class, Integer.class,
+            long.class, Long.class,
+            float.class, Float.class,
+            double.class, Double.class,
+            void.class, Void.class);
 
-    static final Map<Class<?>, Object> defaultByPrimitiveType = new HashMap<Class<?>, Object>();
-
-    static {
-        defaultByPrimitiveType.put(byte.class, (byte) 0);
-        defaultByPrimitiveType.put(short.class, (short) 0);
-        defaultByPrimitiveType.put(int.class, 0);
-        defaultByPrimitiveType.put(long.class, 0L);
-        defaultByPrimitiveType.put(char.class, 0);
-        defaultByPrimitiveType.put(float.class, 0.0F);
-        defaultByPrimitiveType.put(double.class, 0.0);
-        defaultByPrimitiveType.put(boolean.class, false);
-    }
-
-    static final Map<String, Class<?>> primitives = _Maps.newHashMap();
-
-    static {
-        @SuppressWarnings({ "rawtypes" })
-        final List<Class> primitiveClasses = Arrays.<Class> asList(
-                boolean.class,
-                byte.class,
-                short.class,
-                int.class,
-                long.class,
-                float.class,
-                double.class,
-                char.class);
-        for (final Class<?> cls : primitiveClasses) {
-            primitives.put(cls.getName(), cls);
-        }
-    }
-
+    final Map<Class<?>, Class<?>> primitiveByNameWrapper = Map.of(
+            Boolean.class, boolean.class,
+            Byte.class, byte.class,
+            Character.class, char.class,
+            Short.class, short.class,
+            Integer.class, int.class,
+            Long.class, long.class,
+            Float.class, float.class,
+            Double.class, double.class,
+            Void.class, void.class);
 
     // //////////////////////////////////////
 
-    private ClassUtil() {
+    /**
+     * Unbox the given class if it is a primitive wrapper class,
+     * returning the corresponding primitive type instead.
+     * @param clazz the class to check
+     * @return the original class, or a primitive for the original primitive wrapper type
+     */
+    public Class<?> unboxPrimitiveIfNecessary(final @NonNull Class<?> clazz) {
+        // an optimization, to skip the lookup if possible
+        val firstPass = clazz.isPrimitive()
+                || !clazz.getPackageName().equals("java.lang")
+                ? clazz
+                : primitiveByNameWrapper.get(clazz);
+        return firstPass!=null
+                ? firstPass
+                : clazz;
     }
 
-    public static Class<?> getBuiltIn(final String name) {
-        return builtInClasses.get(name);
+    public Class<?> getBuiltIn(final String name) {
+        return primitiveByName.get(name);
     }
 
     /**
@@ -127,7 +108,7 @@ public final class ClassUtil {
      * the required class, and also has either a constructor accepting the
      * specified param type, or has a no-arg constructor.
      */
-    public static Class<?> implementingClassOrNull(final String classCandidateName, final Class<?> requiredClass, final Class<?> constructorParamType) {
+    public Class<?> implementingClassOrNull(final String classCandidateName, final Class<?> requiredClass, final Class<?> constructorParamType) {
         if (classCandidateName == null) {
             return null;
         }
@@ -140,7 +121,7 @@ public final class ClassUtil {
         }
     }
 
-    public static boolean directlyImplements(final Class<?> cls, final Class<?> interfaceType) {
+    public boolean directlyImplements(final Class<?> cls, final Class<?> interfaceType) {
         for (final Class<?> directlyImplementedInterface : cls.getInterfaces()) {
             if (directlyImplementedInterface == interfaceType) {
                 return true;
@@ -149,7 +130,7 @@ public final class ClassUtil {
         return false;
     }
 
-    public static Class<?> forNameElseFail(final String fullName) {
+    public Class<?> forNameElseFail(final String fullName) {
         requiresNotEmpty(fullName, "fullName");
         final Class<?> builtIn = ClassUtil.getBuiltIn(fullName);
         if (builtIn != null) {
@@ -162,11 +143,11 @@ public final class ClassUtil {
         }
     }
 
-    public static Class<?> forNameElseNull(final String fullName) {
+    public Class<?> forNameElseNull(final String fullName) {
         if (_Strings.isNullOrEmpty(fullName)) {
             return null;
         }
-        val primitiveClass = primitives.get(fullName);
+        val primitiveClass = primitiveByName.get(fullName);
         if(primitiveClass!=null) {
             return primitiveClass;
         }
@@ -183,7 +164,7 @@ public final class ClassUtil {
      * @param cls
      * @return non-null
      */
-    public static String getCanonicalName_friendlyToInnerClasses(final @NonNull Class<?> cls) {
+    public String getCanonicalName_friendlyToInnerClasses(final @NonNull Class<?> cls) {
         val name = cls.getCanonicalName();
         if(name==null) {
             return cls.getName().replace("$", ".$").replace("..", ".");

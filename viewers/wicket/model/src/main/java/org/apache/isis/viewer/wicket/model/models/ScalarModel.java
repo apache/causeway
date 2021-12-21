@@ -170,9 +170,9 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         return ManagedObjects.isNullOrUnspecifiedOrEmpty(proposedValue().getValue().getValue());
     }
 
-    public final boolean isScalarTypeAnyOf(final Class<?>... requiredClass) {
+    public final boolean isScalarTypeAnyOf(final Can<Class<?>> requiredClasses) {
         final String fullName = getScalarTypeSpec().getFullIdentifier();
-        return _NullSafe.stream(requiredClass)
+        return requiredClasses.stream()
                 .map(Class::getName)
                 .anyMatch(fullName::equals);
     }

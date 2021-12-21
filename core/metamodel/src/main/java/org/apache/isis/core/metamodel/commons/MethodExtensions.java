@@ -63,7 +63,7 @@ public class MethodExtensions {
         }
     }
 
-    private static Object[] defaultAnyPrimitive(Class<?>[] parameterTypes, Object[] arguments) {
+    private static Object[] defaultAnyPrimitive(final Class<?>[] parameterTypes, final Object[] arguments) {
         if(parameterTypes == null || arguments == null || parameterTypes.length != arguments.length) {
             return arguments;
         }
@@ -74,14 +74,14 @@ public class MethodExtensions {
         return argumentsWithPrimitivesDefaulted;
     }
 
-    private static Object valueIfPrimitiveThenDefaulted(Class<?> cls, Object argument) {
+    private static Object valueIfPrimitiveThenDefaulted(final Class<?> cls, final Object argument) {
         if(argument != null) {
             return argument;
         }
         if(!cls.isPrimitive()) {
             return argument;
         }
-        return ClassUtil.defaultByPrimitiveClass.get(cls);
+        return ClassUtil.defaultByPrimitive.get(cls);
     }
 
     public static Object invokeStatic(final Method method, final Object[] parameters) {

@@ -50,6 +50,11 @@ public interface ComponentFactory extends Serializable {
      * registered.
      */
     ComponentType getComponentType();
+
+    /**
+     * Class of the components this factory creates.
+     * eg. StringPanel, etc.
+     */
     Class<?> getComponentTypeClass();
 
     public enum ApplicationAdvice {
