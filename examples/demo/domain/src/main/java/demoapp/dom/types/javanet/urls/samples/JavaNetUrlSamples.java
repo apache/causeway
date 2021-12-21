@@ -23,14 +23,20 @@ import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
+import lombok.SneakyThrows;
+
 import demoapp.dom.types.Samples;
 
 @Service
 public class JavaNetUrlSamples implements Samples<URL> {
 
+    @SneakyThrows
     @Override
     public Stream<URL> stream() {
-        return Stream.of();
+        return Stream.of(
+                new URL("https://maps.google.com"),
+                new URL("https://en.wikipedia.org/wiki/Internet#Terminology")
+                );
     }
 
 }
