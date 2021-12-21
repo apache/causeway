@@ -18,18 +18,27 @@
  */
 package org.apache.isis.core.metamodel.facets.object.value;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacetAbstract;
 
-public class TypicalLengthFacetUsingParser
+public class TypicalLengthFacetFromValueFacet
 extends TypicalLengthFacetAbstract {
 
     private final Parser<?> parser;
 
-    public TypicalLengthFacetUsingParser(final Parser<?> parser, final FacetHolder holder) {
+    public static Optional<TypicalLengthFacet> create(final ValueFacet<?> valueFacet, final FacetHolder holder) {
+        return valueFacet.selectDefaultParser()
+                .map(parser->new TypicalLengthFacetFromValueFacet(parser, holder));
+    }
+
+    // -- CONSTRUCTION
+
+    private TypicalLengthFacetFromValueFacet(final Parser<?> parser, final FacetHolder holder) {
         super(parser.typicalLength(), holder);
         this.parser = parser;
     }

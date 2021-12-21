@@ -25,6 +25,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.applib.value.semantics.DefaultsProvider;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.Parser;
@@ -66,6 +67,11 @@ public interface ValueFacet<T> extends Facet {
 
     /** no qualifiers allowed on the default semantics provider*/
     Optional<OrderRelation<T, ?>> selectDefaultOrderRelation();
+
+    // -- DEFAULTS PROVIDER
+
+    /** no qualifiers allowed on the default semantics provider*/
+    Optional<DefaultsProvider<T>> selectDefaultDefaultsProvider();
 
     // -- ENCODER DECODER
 
@@ -125,7 +131,6 @@ public interface ValueFacet<T> extends Facet {
         return selectRendererForProperty(prop)
                 .orElseGet(()->fallbackRenderer(prop.getFeatureIdentifier()));
     }
-
 
 
 }

@@ -21,9 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.value.annotcfg;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.applib.value.semantics.DefaultsProvider;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
-import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.collections.Can;
@@ -32,7 +30,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider;
+import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetFromValueFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.encoder.EncodableFacetFromValueFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
@@ -41,8 +39,8 @@ import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionF
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.parser.TitleFacetUsingValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ImmutableFacetViaValueSemantics;
-import org.apache.isis.core.metamodel.facets.object.value.MaxLengthFacetUsingParser;
-import org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetUsingParser;
+import org.apache.isis.core.metamodel.facets.object.value.MaxLengthFacetFromValueFacet;
+import org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProvider;
 import org.apache.isis.core.metamodel.facets.value.annotation.LogicalTypeFacetForValueAnnotation;
 
@@ -134,34 +132,9 @@ extends FacetFactoryAbstract {
         addFacet(TitleFacetUsingValueFacet.create(valueFacet, holder));
 
         addFacetIfPresent(EncodableFacetFromValueFacet.create(valueFacet, holder));
-
-        semanticsProviders
-        .forEach(semanticsProvider->{
-
-            // install the ParseableFacet and other facets if we've been given a
-            // Parser
-            final Parser<?> parser = semanticsProvider.getParser();
-            if (parser != null) {
-
-                //holder.getServiceInjector().injectServicesInto(parser);
-               //FIXME[ISIS-2882] convert to using value-facet, see EncodableFacetFromValueFacet
-                holder.addFacet(new TypicalLengthFacetUsingParser(parser, holder));
-                final int maxLength = parser.maxLength();
-                if(maxLength >=0) {
-                   //FIXME convert to using value-facet
-                    addFacet(new MaxLengthFacetUsingParser(parser, holder));
-                }
-            }
-
-            // install the DefaultedFacet if we've been given a DefaultsProvider
-            final DefaultsProvider<?> defaultsProvider = semanticsProvider.getDefaultsProvider();
-            if (defaultsProvider != null) {
-                //holder.getServiceInjector().injectServicesInto(defaultsProvider);
-                //FIXME[ISIS-2882] convert to using value-facet, see EncodableFacetFromValueFacet
-                addFacet(new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder));
-            }
-
-        });
+        addFacetIfPresent(TypicalLengthFacetFromValueFacet.create(valueFacet, holder));
+        addFacetIfPresent(MaxLengthFacetFromValueFacet.create(valueFacet, holder));
+        addFacetIfPresent(DefaultedFacetFromValueFacet.create(valueFacet, holder));
 
     }
 

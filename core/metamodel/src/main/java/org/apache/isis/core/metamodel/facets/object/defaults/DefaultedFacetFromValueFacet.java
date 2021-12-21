@@ -18,19 +18,27 @@
  */
 package org.apache.isis.core.metamodel.facets.object.defaults;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 
-public class DefaultedFacetUsingDefaultsProvider
+public class DefaultedFacetFromValueFacet
 extends DefaultedFacetAbstract
 implements DefaultedFacet {
 
-    public DefaultedFacetUsingDefaultsProvider(
+    public static Optional<DefaultedFacet> create(final ValueFacet<?> valueFacet, final FacetHolder holder) {
+        return valueFacet.selectDefaultDefaultsProvider()
+                .map(defaultsProvider->new DefaultedFacetFromValueFacet(defaultsProvider, holder));
+    }
+
+    // -- CONSTRUCTION
+
+    private DefaultedFacetFromValueFacet(
             final DefaultsProvider<?> defaultsProvider,
             final FacetHolder holder) {
         super(defaultsProvider, holder);
     }
-
-   
 
 }

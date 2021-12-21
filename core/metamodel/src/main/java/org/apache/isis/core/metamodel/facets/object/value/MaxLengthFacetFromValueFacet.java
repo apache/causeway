@@ -18,25 +18,30 @@
  */
 package org.apache.isis.core.metamodel.facets.object.value;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
 
-public class MaxLengthFacetUsingParser
+public class MaxLengthFacetFromValueFacet
 extends MaxLengthFacetAbstract{
 
     private final Parser<?> parser;
 
-    public MaxLengthFacetUsingParser(final Parser<?> parser, final FacetHolder holder) {
-        super(parser.maxLength(), holder);
-        this.parser = parser;
+    public static Optional<MaxLengthFacet> create(final ValueFacet<?> valueFacet, final FacetHolder holder) {
+        return valueFacet.selectDefaultParser()
+                .filter(parser->parser.maxLength()>=0)
+                .map(parser->new MaxLengthFacetFromValueFacet(parser, holder));
     }
 
-    @Override
-    public String toString() {
-        return "maxLength=" + value();
+    // -- CONSTRUCTION
+
+    private MaxLengthFacetFromValueFacet(final Parser<?> parser, final FacetHolder holder) {
+        super(parser.maxLength(), holder);
+        this.parser = parser;
     }
 
     @Override
@@ -44,4 +49,10 @@ extends MaxLengthFacetAbstract{
         super.visitAttributes(visitor);
         visitor.accept("parser", parser.toString());
     }
+
+    @Override
+    public String toString() {
+        return "maxLength=" + value();
+    }
+
 }
