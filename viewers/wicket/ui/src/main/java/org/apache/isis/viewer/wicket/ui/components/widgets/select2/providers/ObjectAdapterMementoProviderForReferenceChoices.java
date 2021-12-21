@@ -22,7 +22,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
-import lombok.Getter;
+import lombok.val;
 
 public class ObjectAdapterMementoProviderForReferenceChoices
 extends ObjectAdapterMementoProviderAbstract
@@ -30,20 +30,22 @@ implements ObjectAdapterMementoProviderForChoices {
 
     private static final long serialVersionUID = 1L;
 
-    @Getter(onMethod = @__(@Override))
-    private final Can<ObjectMemento> choiceMementos;
-
     public ObjectAdapterMementoProviderForReferenceChoices(
-            ScalarModel model,
-            Can<ObjectMemento> choiceMementos) {
-
-        super(model);
-        this.choiceMementos = choiceMementos;
+            final ScalarModel scalarModel) {
+        super(scalarModel);
     }
 
     @Override
-    protected Can<ObjectMemento> obtainMementos(String term) {
-        return super.obtainMementos(term, choiceMementos);
+    public Can<ObjectMemento> getChoiceMementos() {
+        val commonContext = super.getCommonContext();
+        val choices = getScalarModel().getChoices(); // must not return detached entities
+        val choiceMementos = choices.map(commonContext::mementoForParameter);
+        return choiceMementos;
+    }
+
+    @Override
+    protected Can<ObjectMemento> obtainMementos(final String term) {
+        return super.obtainMementos(term, getChoiceMementos());
     }
 
 

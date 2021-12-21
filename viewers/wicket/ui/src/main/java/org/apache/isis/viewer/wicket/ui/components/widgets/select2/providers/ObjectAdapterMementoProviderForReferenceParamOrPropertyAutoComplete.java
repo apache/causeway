@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
@@ -32,47 +33,41 @@ extends ObjectAdapterMementoProviderAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private final Can<ObjectMemento> pendingArgMementos;
-
     public ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(final ScalarModel scalarModel) {
         super(scalarModel);
-        val commonContext = scalarModel.getCommonContext();
+        if(!scalarModel.hasAutoComplete()) {
+            throw _Exceptions.illegalArgument("Cannot create auto-complete provider, "
+                    + "when model has no auto-complete %s", scalarModel);
+        }
+    }
+
+    @Override
+    protected Can<ObjectMemento> obtainMementos(final String term) {
+
+        val commonContext = getCommonContext();
+        val scalarModel = getScalarModel();
         val pendingArgs = scalarModel.isParameter()
                 ? ((ParameterUiModel)scalarModel).getParameterNegotiationModel().getParamValues()
                 : Can.<ManagedObject>empty();
         val pendingArgMementos = pendingArgs
                 .map(commonContext::mementoForParameter);
 
-        this.pendingArgMementos = pendingArgMementos;
-    }
+        if(scalarModel.isParameter()) {
+            // recover any pendingArgs
+            val paramModel = (ParameterUiModel)scalarModel;
 
-    @Override
-    protected Can<ObjectMemento> obtainMementos(final String term) {
-
-        val scalarModel = getScalarModel();
-
-        if (scalarModel.hasAutoComplete()) {
-
-            if(scalarModel.isParameter()) {
-                // recover any pendingArgs
-                val paramModel = (ParameterUiModel)scalarModel;
-
-                paramModel
-                    .getParameterNegotiationModel()
-                    .setParamValues(
-                            reconstructPendingArgs(paramModel, pendingArgMementos));
-
-            }
-
-            val commonContext = super.getCommonContext();
-            return scalarModel
-                    .getAutoComplete(term)
-                    .map(commonContext::mementoFor);
+            paramModel
+                .getParameterNegotiationModel()
+                .setParamValues(
+                        reconstructPendingArgs(paramModel, pendingArgMementos));
         }
 
-        return Can.empty();
-
+        return scalarModel
+                .getAutoComplete(term)
+                .map(commonContext::mementoFor);
     }
+
+    // -- HELPER
 
     private Can<ManagedObject> reconstructPendingArgs(
             final ParameterUiModel parameterModel,
