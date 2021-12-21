@@ -25,18 +25,16 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
 
-import lombok.val;
+public class TypeOfFacetForActionAnnotation
+extends TypeOfFacetAbstract {
 
-public class TypeOfFacetForActionAnnotation extends TypeOfFacetAbstract {
-
-    public static Optional<TypeOfFacet> create(final Optional<Action> actionIfAny, final FacetHolder holder) {
-
-        val typeOf = actionIfAny.map(Action::typeOf).orElse(null);
-
-        return typeOf != null
-                && typeOf != void.class // ignore when unspecified
-                ? Optional.of(new TypeOfFacetForActionAnnotation(typeOf, holder))
-                : Optional.empty();
+    public static Optional<TypeOfFacet> create(final Optional<Action> actionIfAny, final FacetHolder facetHolder) {
+        return actionIfAny
+                .map(Action::typeOf)
+                .filter(typeOf -> typeOf!=null
+                                        && typeOf != void.class) // ignore when unspecified
+                .map(typeOf ->
+                    new TypeOfFacetForActionAnnotation(typeOf, facetHolder));
     }
 
     private TypeOfFacetForActionAnnotation(

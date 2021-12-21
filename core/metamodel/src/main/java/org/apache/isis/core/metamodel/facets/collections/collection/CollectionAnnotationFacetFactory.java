@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.facets.collections.collection.hidden.Hidde
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetAbstract;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetDefault;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetOnCollectionFromCollectionAnnotation;
+import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.CollectionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -171,7 +171,7 @@ extends FacetFactoryAbstract {
         addFacetIfPresent(_Optionals.orNullable(
 
             // check for @Collection(typeOf=...)
-            TypeOfFacetOnCollectionFromCollectionAnnotation
+            TypeOfFacetForCollectionAnnotation
             .create(collectionIfAny, facetHolder)
 
             ,

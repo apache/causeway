@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromArray
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetOnCollectionFromCollectionAnnotation;
+import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
@@ -180,7 +180,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
             // then
             final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
             Assert.assertNotNull(facet);
-            Assert.assertTrue(facet instanceof TypeOfFacetOnCollectionFromCollectionAnnotation);
+            Assert.assertTrue(facet instanceof TypeOfFacetForCollectionAnnotation);
             assertThat(facet.value(), IsisMatchers.classEqualTo(Order.class));
         }
 
