@@ -34,9 +34,10 @@ public class TypeOfFacetOnCollectionFromCollectionAnnotation extends TypeOfFacet
 
         return collectionIfAny
                 .map(Collection::typeOf)
-                .filter(typeOf -> typeOf != Object.class)
+                .filter(typeOf -> typeOf!=null
+                                        && typeOf != void.class) // ignore when unspecified
                 .map(typeOf ->
-                new TypeOfFacetOnCollectionFromCollectionAnnotation(typeOf, facetHolder));
+                    new TypeOfFacetOnCollectionFromCollectionAnnotation(typeOf, facetHolder));
     }
 
     private TypeOfFacetOnCollectionFromCollectionAnnotation(final Class<?> type, final FacetHolder holder) {

@@ -211,7 +211,7 @@ public @interface Action {
      * @see Collection#typeOf()
      */
     Class<?> typeOf()
-            default Object.class;
+            default void.class; // represents unspecified
 
     /**
      * For downloading {@link Blob} or {@link Clob}, optionally restrict the files accepted (eg <tt>.xslx</tt>).

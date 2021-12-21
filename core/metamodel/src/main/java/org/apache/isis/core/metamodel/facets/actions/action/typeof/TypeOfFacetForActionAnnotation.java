@@ -18,12 +18,28 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.action.typeof;
 
+import java.util.Optional;
+
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
+
+import lombok.val;
 
 public class TypeOfFacetForActionAnnotation extends TypeOfFacetAbstract {
 
-    public TypeOfFacetForActionAnnotation(
+    public static Optional<TypeOfFacet> create(final Optional<Action> actionIfAny, final FacetHolder holder) {
+
+        val typeOf = actionIfAny.map(Action::typeOf).orElse(null);
+
+        return typeOf != null
+                && typeOf != void.class // ignore when unspecified
+                ? Optional.of(new TypeOfFacetForActionAnnotation(typeOf, holder))
+                : Optional.empty();
+    }
+
+    private TypeOfFacetForActionAnnotation(
             final Class<?> type,
             final FacetHolder holder) {
         super(type, holder);

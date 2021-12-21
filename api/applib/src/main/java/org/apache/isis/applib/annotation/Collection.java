@@ -103,6 +103,6 @@ public @interface Collection {
      * @see Action#typeOf()
      */
     Class<?> typeOf()
-            default Object.class;
+            default void.class; // represents unspecified
 
 }

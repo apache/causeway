@@ -23,12 +23,11 @@ import javax.inject.Inject;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetDefaultToObject;
-import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
+
+import lombok.val;
 
 public class CollectionFacetFactory
 extends FacetFactoryAbstract {
@@ -49,40 +48,23 @@ extends FacetFactoryAbstract {
 
     }
 
+    // -- HELPER
+
     private void processCollectionType(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
 
-        TypeOfFacet typeOfFacet = facetHolder.getFacet(TypeOfFacet.class);
-        if (typeOfFacet == null) {
-            final Class<?> collectionElementType = collectionElementType(cls);
-            typeOfFacet =
-                    collectionElementType != Object.class
-                        ? TypeOfFacet.inferredFromGenerics(collectionElementType, facetHolder)
-                        : new TypeOfFacetDefaultToObject(facetHolder);
-                    facetHolder.addFacet(typeOfFacet);
-        }
-
-        final CollectionFacet collectionFacet = new JavaCollectionFacet(facetHolder);
-
-        facetHolder.addFacet(collectionFacet);
+        facetHolder.addFacet(new JavaCollectionFacet(facetHolder));
+        //TODO facetHolder.addFacet(TypeOfFacet.inferredFromGenerics(Object.class, facetHolder));
     }
 
     private void processAsArrayType(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
 
-        final CollectionFacet collectionFacet = new JavaArrayFacet(facetHolder);
-        facetHolder.addFacet(collectionFacet);
-
-        final TypeOfFacet typeOfFacet =
-                TypeOfFacet.inferredFromArray(cls.getComponentType(), facetHolder);
-        facetHolder.addFacet(typeOfFacet);
+        facetHolder.addFacet(new JavaArrayFacet(facetHolder));
+        facetHolder.addFacet(TypeOfFacet.inferredFromArray(cls.getComponentType(), facetHolder));
     }
 
-    // TODO
-    private Class<?> collectionElementType(final Class<?> cls) {
-        return Object.class;
-    }
 
 }
