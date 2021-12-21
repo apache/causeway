@@ -29,7 +29,7 @@ import javax.inject.Named;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.InteractionScope;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -62,7 +62,7 @@ import lombok.extern.log4j.Log4j2;
  *
  * @since 1.x {@index}
  */
-@Service
+@Component
 @Named("isis.applib.QueryResultsCache")
 @Priority(PriorityPrecedence.EARLY)
 @InteractionScope
@@ -98,10 +98,7 @@ public class QueryResultsCache implements DisposableBean {
         return executeWithCaching(callable, cacheKey);
     }
 
-
-
-
-    public <R> R execute(MethodReferences.Call0<? extends R> action, Class<?> callingClass, String methodName) {
+    public <R> R execute(final MethodReferences.Call0<? extends R> action, final Class<?> callingClass, final String methodName) {
         if(isIgnoreCache()) {
             return action.call();
         }
@@ -110,7 +107,7 @@ public class QueryResultsCache implements DisposableBean {
     }
 
 
-    public <R, A0> R execute(MethodReferences.Call1<? extends R, A0> action, Class<?> callingClass, String methodName, A0 arg0) {
+    public <R, A0> R execute(final MethodReferences.Call1<? extends R, A0> action, final Class<?> callingClass, final String methodName, final A0 arg0) {
         if(isIgnoreCache()) {
             return action.call(arg0);
         }
@@ -118,8 +115,8 @@ public class QueryResultsCache implements DisposableBean {
         return executeWithCaching(()->action.call(arg0), cacheKey);
     }
 
-    public <R, A0, A1> R execute(MethodReferences.Call2<? extends R, A0, A1> action, Class<?> callingClass, String methodName, A0 arg0,
-                                 A1 arg1) {
+    public <R, A0, A1> R execute(final MethodReferences.Call2<? extends R, A0, A1> action, final Class<?> callingClass, final String methodName, final A0 arg0,
+                                 final A1 arg1) {
         if(isIgnoreCache()) {
             return action.call(arg0, arg1);
         }
@@ -127,8 +124,8 @@ public class QueryResultsCache implements DisposableBean {
         return executeWithCaching(()->action.call(arg0, arg1), cacheKey);
     }
 
-    public <R, A0, A1, A2> R execute(MethodReferences.Call3<? extends R, A0, A1, A2> action, Class<?> callingClass, String methodName,
-                                     A0 arg0, A1 arg1, A2 arg2) {
+    public <R, A0, A1, A2> R execute(final MethodReferences.Call3<? extends R, A0, A1, A2> action, final Class<?> callingClass, final String methodName,
+                                     final A0 arg0, final A1 arg1, final A2 arg2) {
         if(isIgnoreCache()) {
             return action.call(arg0, arg1, arg2);
         }
@@ -136,8 +133,8 @@ public class QueryResultsCache implements DisposableBean {
         return executeWithCaching(()->action.call(arg0, arg1, arg2), cacheKey);
     }
 
-    public <R, A0, A1, A2, A3> R execute(MethodReferences.Call4<? extends R, A0, A1, A2, A3> action, Class<?> callingClass,
-                                         String methodName, A0 arg0, A1 arg1, A2 arg2, A3 arg3) {
+    public <R, A0, A1, A2, A3> R execute(final MethodReferences.Call4<? extends R, A0, A1, A2, A3> action, final Class<?> callingClass,
+                                         final String methodName, final A0 arg0, final A1 arg1, final A2 arg2, final A3 arg3) {
         if(isIgnoreCache()) {
             return action.call(arg0, arg1, arg2, arg3);
         }
@@ -145,8 +142,8 @@ public class QueryResultsCache implements DisposableBean {
         return executeWithCaching(()->action.call(arg0, arg1, arg2, arg3), cacheKey);
     }
 
-    public <R, A0, A1, A2, A3, A4> R execute(MethodReferences.Call5<? extends R, A0, A1, A2, A3, A4> action, Class<?> callingClass,
-                                             String methodName, A0 arg0, A1 arg1, A2 arg2, A3 arg3, A4 arg4) {
+    public <R, A0, A1, A2, A3, A4> R execute(final MethodReferences.Call5<? extends R, A0, A1, A2, A3, A4> action, final Class<?> callingClass,
+                                             final String methodName, final A0 arg0, final A1 arg1, final A2 arg2, final A3 arg3, final A4 arg4) {
         if(isIgnoreCache()) {
             return action.call(arg0, arg1, arg2, arg3, arg4);
         }
@@ -162,7 +159,7 @@ public class QueryResultsCache implements DisposableBean {
         @Getter private final Object[] keys;
 
         // not using @RequiredArgsConstructor as we have used varargs here
-        public Key(Class<?> callingClass, String methodName, Object... keys) {
+        public Key(final Class<?> callingClass, final String methodName, final Object... keys) {
             this.callingClass = callingClass;
             this.methodName = methodName;
             this.keys = keys;
@@ -178,8 +175,6 @@ public class QueryResultsCache implements DisposableBean {
     class Value<T> {
         private final T result;
     }
-
-
 
     private <T> T executeWithCaching(final Callable<T> callable, final Key cacheKey) {
         try {
