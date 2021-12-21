@@ -50,6 +50,15 @@ public interface ValueFacet<T> extends Facet {
 
     LogicalType getValueType();
     Can<ValueSemanticsProvider<T>> getValueSemantics();
+
+//    /**
+//     *  There might be multiple {@link ValueSemanticsProvider}(s) registered for
+//     *  a specific value-type. However, there should be one primary, that is not qualified.
+//     *  Used eg. to provide encoding/decoding.
+//     */
+//    ValueSemanticsProvider<T> getPrimaryValueSemantics();
+
+
     Context createValueSemanticsContext(@Nullable ObjectFeature feature);
     <X> Stream<X> streamValueSemantics(Class<X> requiredType);
 
@@ -116,6 +125,7 @@ public interface ValueFacet<T> extends Facet {
         return selectRendererForProperty(prop)
                 .orElseGet(()->fallbackRenderer(prop.getFeatureIdentifier()));
     }
+
 
 
 }

@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.facets.object.encodeable.encoder.EncodableFacetUsingEncoderDecoder;
+import org.apache.isis.core.metamodel.facets.object.encodeable.encoder.EncodableFacetFromValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics;
 
@@ -60,7 +60,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
 
     //private ValueSemanticsProviderAndFacetAbstract<?> valueSemanticsProvider;
     private ValueSemanticsProvider<?> valueSemanticsProvider;
-    private EncodableFacetUsingEncoderDecoder encodeableFacet;
+    private EncodableFacetFromValueFacet encodeableFacet;
 
     @Before
     public void setUp() throws Exception {
@@ -99,7 +99,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
 
     protected void setSemantics(final ValueSemanticsAbstract<?> valueSemantics) {
         this.valueSemanticsProvider = valueSemantics;
-        this.encodeableFacet = new EncodableFacetUsingEncoderDecoder(
+        this.encodeableFacet = EncodableFacetFromValueFacet.forTesting(
                 valueSemantics.getEncoderDecoder(),
                 mockFacetHolder);
     }
@@ -137,7 +137,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     public void testDecodeNULL() throws Exception {
         Assume.assumeThat(valueSemanticsProvider.getEncoderDecoder(), is(not(nullValue())));
 
-        final Object newValue = encodeableFacet.fromEncodedString(EncodableFacetUsingEncoderDecoder.ENCODED_NULL);
+        final Object newValue = encodeableFacet.fromEncodedString(EncodableFacetFromValueFacet.ENCODED_NULL);
         assertNull(newValue);
     }
 
@@ -145,7 +145,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     public void testEmptyEncoding() {
         Assume.assumeThat(valueSemanticsProvider.getEncoderDecoder(), is(not(nullValue())));
 
-        assertEquals(EncodableFacetUsingEncoderDecoder.ENCODED_NULL, encodeableFacet.toEncodedString(null));
+        assertEquals(EncodableFacetFromValueFacet.ENCODED_NULL, encodeableFacet.toEncodedString(null));
     }
 
     @Test

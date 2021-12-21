@@ -18,7 +18,6 @@
  */
 package demoapp.dom.types.javasql.javasqldate.samples;
 
-import java.sql.Date;
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
@@ -26,10 +25,10 @@ import org.springframework.stereotype.Service;
 import demoapp.dom.types.Samples;
 
 @Service
-public class JavaSqlDateSamples implements Samples<Date> {
+public class JavaSqlDateSamples implements Samples<java.sql.Date> {
 
     @Override
-    public Stream<Date> stream() {
+    public Stream<java.sql.Date> stream() {
         return Stream.of(1, 2, 3)
                 .map(x -> new java.sql.Date(120,x,x));  // 1900 is the epoch
     }

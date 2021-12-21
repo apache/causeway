@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.object.encodeable.encoder;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
@@ -25,28 +26,36 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class EncodableFacetUsingEncoderDecoder
+public class EncodableFacetFromValueFacet
 extends FacetAbstract
 implements EncodableFacet {
-
-    private final EncoderDecoder<?> encoderDecoder;
-
-    public EncodableFacetUsingEncoderDecoder(final EncoderDecoder<?> encoderDecoder, final FacetHolder holder) {
-        super(EncodableFacet.class, holder);
-        this.encoderDecoder = encoderDecoder;
-    }
 
     // TODO: is this safe? really?
     public static final String ENCODED_NULL = "NULL";
 
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        visitor.accept("codec", encoderDecoder.toString());
+    public static Optional<EncodableFacet> create(final ValueFacet<?> valueFacet, final FacetHolder holder) {
+        return valueFacet.selectDefaultEncoderDecoder()
+                .map(encoderDecoder->new EncodableFacetFromValueFacet(encoderDecoder, holder));
     }
 
+    /**
+     * JUnit support.
+     */
+    public static EncodableFacetFromValueFacet forTesting(final EncoderDecoder<?> encoderDecoder, final FacetHolder holder) {
+        return new EncodableFacetFromValueFacet(encoderDecoder, holder);
+    }
+
+    // -- CONSTRUCTION
+
+    private final EncoderDecoder<?> encoderDecoder;
+
+    private EncodableFacetFromValueFacet(final EncoderDecoder<?> encoderDecoder, final FacetHolder holder) {
+        super(EncodableFacet.class, holder);
+        this.encoderDecoder = encoderDecoder;
+    }
 
     @Override
     public ManagedObject fromEncodedString(final String encodedData) {
@@ -57,13 +66,22 @@ implements EncodableFacet {
             final Object decodedObject = encoderDecoder.fromEncodedString(encodedData);
             return getObjectManager().adapt(decodedObject);
         }
-
     }
 
     @Override
     public String toEncodedString(final ManagedObject adapter) {
-        return adapter == null ? ENCODED_NULL: encode(encoderDecoder, adapter.getPojo());
+        return adapter == null
+                ? ENCODED_NULL
+                : encode(encoderDecoder, adapter.getPojo());
     }
+
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("codec", encoderDecoder.toString());
+    }
+
+    // -- HELPER
 
     private static <T> String encode(final EncoderDecoder<T> encoderDecoder, final Object pojo) {
         @SuppressWarnings("unchecked")

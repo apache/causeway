@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.facets.object.encodeable.encoder.EncodableFacetUsingEncoderDecoder;
+import org.apache.isis.core.metamodel.facets.object.encodeable.encoder.EncodableFacetFromValueFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
@@ -133,16 +133,10 @@ extends FacetFactoryAbstract {
         addFacet(new ImmutableFacetViaValueSemantics(holder));
         addFacet(TitleFacetUsingValueFacet.create(valueFacet, holder));
 
+        addFacetIfPresent(EncodableFacetFromValueFacet.create(valueFacet, holder));
+
         semanticsProviders
         .forEach(semanticsProvider->{
-
-            // install the EncodeableFacet if we've been given an EncoderDecoder
-            final EncoderDecoder<?> encoderDecoder = semanticsProvider.getEncoderDecoder();
-            if (encoderDecoder != null) {
-                //getServiceInjector().injectServicesInto(encoderDecoder);
-                //FIXME convert to using value-facet
-                addFacet(new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder));
-            }
 
             // install the ParseableFacet and other facets if we've been given a
             // Parser
@@ -150,7 +144,7 @@ extends FacetFactoryAbstract {
             if (parser != null) {
 
                 //holder.getServiceInjector().injectServicesInto(parser);
-               //FIXME convert to using value-facet
+               //FIXME[ISIS-2882] convert to using value-facet, see EncodableFacetFromValueFacet
                 holder.addFacet(new TypicalLengthFacetUsingParser(parser, holder));
                 final int maxLength = parser.maxLength();
                 if(maxLength >=0) {
@@ -163,7 +157,7 @@ extends FacetFactoryAbstract {
             final DefaultsProvider<?> defaultsProvider = semanticsProvider.getDefaultsProvider();
             if (defaultsProvider != null) {
                 //holder.getServiceInjector().injectServicesInto(defaultsProvider);
-                //FIXME convert to using value-facet
+                //FIXME[ISIS-2882] convert to using value-facet, see EncodableFacetFromValueFacet
                 addFacet(new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder));
             }
 

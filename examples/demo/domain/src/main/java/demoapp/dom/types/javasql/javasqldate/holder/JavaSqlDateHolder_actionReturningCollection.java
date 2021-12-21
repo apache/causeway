@@ -18,7 +18,6 @@
  */
 package demoapp.dom.types.javasql.javasqldate.holder;
 
-import java.sql.Date;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -45,6 +44,6 @@ public class JavaSqlDateHolder_actionReturningCollection {
     }
 
     @Inject
-    Samples<Date> samples;
+    Samples<java.sql.Date> samples;
 }
 //end::class[]
