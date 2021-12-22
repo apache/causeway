@@ -120,7 +120,13 @@ implements
 
     @Override
     protected DataTableModel load() {
-        return tableMemento.getDataTableModel(getBookmarkedOwner());
+        val dataTableModel = tableMemento.getDataTableModel(getBookmarkedOwner());
+        return dataTableModel;
+    }
+
+    @Override
+    public void detach() {
+        // in support of table sorting, don't detach; instead reuse model
     }
 
 }

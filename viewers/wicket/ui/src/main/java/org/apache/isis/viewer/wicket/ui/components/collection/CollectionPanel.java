@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableMo
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
-import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
+import org.apache.isis.viewer.wicket.ui.components.collection.bulk.MultiselectToggleProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
@@ -51,7 +51,7 @@ public class CollectionPanel
 extends PanelAbstract<DataTableModel, EntityCollectionModelParented>
 implements
     CollectionSelectorProvider,
-    BulkActionsProvider {
+    MultiselectToggleProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -73,7 +73,6 @@ implements
         .collect(Can.toCan());
 
         collectionModel.setLinkAndLabels(associatedActions);
-
     }
 
     @Override
@@ -83,9 +82,11 @@ implements
     }
 
     private void buildGui() {
-        collectionContents = getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.COLLECTION_CONTENTS, getModel());
+        collectionContents = getComponentFactoryRegistry()
+                .addOrReplaceComponent(this, ComponentType.COLLECTION_CONTENTS, getModel());
 
-        addOrReplace(new NotificationPanel(ID_FEEDBACK, collectionContents, new ComponentFeedbackMessageFilter(collectionContents)));
+        addOrReplace(new NotificationPanel(ID_FEEDBACK, collectionContents,
+                new ComponentFeedbackMessageFilter(collectionContents)));
 
         setOutputMarkupId(true);
     }
@@ -96,16 +97,17 @@ implements
         return this.label;
     }
 
-    // -- BULK SELECTION SUPPORT
+    // -- MULTI SELECTION SUPPORT
 
     private transient Optional<GenericToggleboxColumn> toggleboxColumn;
 
     @Override
     public GenericToggleboxColumn getToggleboxColumn() {
         if(toggleboxColumn == null) {
-            val collMetaModel = getModel().getMetaModel();
+            val collModel = getModel();
+            val collMetaModel = collModel.getMetaModel();
             toggleboxColumn =  collMetaModel.hasAssociatedActionsWithChoicesFromThisCollection()
-                    ? Optional.of(new GenericToggleboxColumn(super.getCommonContext()))
+                    ? Optional.of(new GenericToggleboxColumn(super.getCommonContext(), collModel.delegate()))
                     : Optional.empty();
         }
         return toggleboxColumn.orElse(null);

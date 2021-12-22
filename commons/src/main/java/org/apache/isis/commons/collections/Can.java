@@ -460,6 +460,14 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
 
     // -- TRAVERSAL
 
+    /**
+     * Returns an iterator that skips the first {@code skip} elements, then returns a
+     * maximum of {@code limit} elements.
+     * @param skip - similar to {@link Stream#skip(long)}
+     * @param limit - similar to {@link Stream#limit(long)}
+     */
+    Iterator<T> iterator(int skip, int limit);
+
     Iterator<T> reverseIterator();
 
     @Override

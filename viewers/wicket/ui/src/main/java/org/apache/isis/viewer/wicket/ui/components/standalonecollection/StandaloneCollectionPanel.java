@@ -114,7 +114,7 @@ implements CollectionCountProvider, CollectionSelectorProvider {
     @Override
     public Integer getCount() {
         final EntityCollectionModel model = getModel();
-        return model.getCount();
+        return model.getElementCount();
     }
 
 }

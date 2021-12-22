@@ -18,6 +18,7 @@
  */
 package org.apache.isis.commons.internal.functions;
 
+import java.io.Serializable;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -41,6 +42,21 @@ public final class _Functions {
 
     public static <T> Consumer<T> noopConsumer() {
         return t->{};
+    }
+
+    // --
+
+    @FunctionalInterface
+    public static interface SerializableConsumer<T> extends Consumer<T>, Serializable {
+    }
+
+    @FunctionalInterface
+    public static interface SerializableSupplier<T> extends Supplier<T>, Serializable {
+    }
+
+    @FunctionalInterface
+    public static interface SerializableFunction<T, R> extends Function<T, R>, Serializable {
+
     }
 
     // -- CHECKED EXCEPTION ADAPTERS (FUNCTION)

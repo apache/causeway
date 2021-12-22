@@ -31,15 +31,15 @@ public class IsisAjaxFallbackOrderByBorder<T> extends AjaxFallbackOrderByBorder<
     private static final long serialVersionUID = 1L;
 
     private final T sortProperty;
-    private final IsisAjaxFallbackDataTable<?, ?> dataTable;
+    private final IsisAjaxDataTable dataTable;
 
     private final ISortStateLocator<T> stateLocator;
 
     public IsisAjaxFallbackOrderByBorder(
-            String id,
-            IsisAjaxFallbackDataTable<?, ?> dataTable,
-            T sortProperty,
-            ISortStateLocator<T> stateLocator
+            final String id,
+            final IsisAjaxDataTable dataTable,
+            final T sortProperty,
+            final ISortStateLocator<T> stateLocator
             /* removed in wicket 8, IAjaxCallListener ajaxCallListener*/) {
         super(id, sortProperty, stateLocator/* removed in wicket 8, ajaxCallListener*/);
         this.dataTable = dataTable;
@@ -48,8 +48,7 @@ public class IsisAjaxFallbackOrderByBorder<T> extends AjaxFallbackOrderByBorder<
     }
 
     @Override
-    protected void onAjaxClick(final AjaxRequestTarget target)
-    {
+    protected void onAjaxClick(final AjaxRequestTarget target) {
         target.add(dataTable);
 
         final UiHintContainer uiHintContainer = getUiHintContainer();
@@ -65,8 +64,7 @@ public class IsisAjaxFallbackOrderByBorder<T> extends AjaxFallbackOrderByBorder<
     }
 
     @Override
-    protected void onSortChanged()
-    {
+    protected void onSortChanged() {
         super.onSortChanged();
         // UI hint & event broadcast in onAjaxClick
         dataTable.setCurrentPage(0);

@@ -18,205 +18,75 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
+import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackHeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
-import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByBorder;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractToolbar;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolbar;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.IStyledColumn;
-import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.RefreshingView;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.util.string.Strings;
 
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericTitleColumn;
-import org.apache.isis.viewer.wicket.ui.util.Wkt;
-
-import de.agilecoders.wicket.core.util.Attributes;
-
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
 /**
- * Adapted from Wicket's own {@link HeadersToolbar}.
+ * Adapted from Wicket's own {@link AjaxFallbackHeadersToolbar}.
  */
-public class IsisAjaxHeadersToolbar<S> extends AbstractToolbar
-{
+public class IsisAjaxHeadersToolbar
+extends IsisAjaxHeadersToolbarAbstract<String> {
+
     private static final long serialVersionUID = 1L;
+    private final CollectionContentsSortableDataProvider stateLocator;
+    private IsisAjaxDataTable table;
 
-    private static final String CLASS_SORT_NONE = "fa fa-fw fa-sort";
-    private static final String CLASS_SORT_UP = "fa fa-fw fa-sort-up";
-    private static final String CLASS_SORT_DOWN = "fa fa-fw fa-sort-down";
+    public IsisAjaxHeadersToolbar(
+            final IsisAjaxDataTable table,
+            final CollectionContentsSortableDataProvider stateLocator) {
+        super(table, _Casts.uncheckedCast(stateLocator));
+        this.table = table;
+        table.setOutputMarkupId(true);
+        this.stateLocator = stateLocator;
+    }
 
-    static abstract class CssAttributeBehavior extends Behavior
-    {
-        private static final long serialVersionUID = 1L;
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+    }
 
-        protected abstract String getCssClass();
+    // //////////////////////////////////////
 
-        /**
-         * @see Behavior#onComponentTag(Component, ComponentTag)
-         */
-        @Override
-        public void onComponentTag(final Component component, final ComponentTag tag)
-        {
-            String className = getCssClass();
-            if (!Strings.isEmpty(className))
-            {
-                tag.append("class", className, " ");
+    @Override
+    protected WebMarkupContainer newSortableHeader(final String borderId, final String property,
+            final ISortStateLocator<String> locator) {
+        return new IsisAjaxFallbackOrderByBorder<String>(borderId, table, property, locator/*, getAjaxCallListener()*/);
+    }
+
+    //    /**
+    //     * Returns a decorator that will be used to decorate ajax links used in sortable headers
+    //     *
+    //     * @return decorator or null for none
+    //     */
+    //    protected IAjaxCallListener getAjaxCallListener()
+    //    {
+    //        return null;
+    //    }
+
+    // //////////////////////////////////////
+
+    void honourSortOrderHints() {
+        UiHintContainer uiHintContainer = getUiHintContainer();
+        if(uiHintContainer == null) {
+            return;
+        }
+
+        for (SortOrder sortOrder : SortOrder.values()) {
+            String property = uiHintContainer.getHint(table, sortOrder.name());
+            if(property != null) {
+                stateLocator.getSortState().setPropertySortOrder(property, sortOrder);
             }
         }
     }
 
-    /**
-     * Constructor
-     *
-     * @param <T>
-     *            the column data type
-     * @param table
-     *            data table this toolbar will be attached to
-     * @param stateLocator
-     *            locator for the ISortState implementation used by sortable headers
-     */
-    public <T> IsisAjaxHeadersToolbar(final DataTable<T, S> table, final ISortStateLocator<S> stateLocator)
-    {
-        super(table);
-
-        RefreshingView<IColumn<T, S>> headers = new RefreshingView<IColumn<T, S>>("headers")
-        {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected Iterator<IModel<IColumn<T, S>>> getItemModels()
-            {
-                List<IModel<IColumn<T, S>>> columnsModels = new LinkedList<IModel<IColumn<T, S>>>();
-
-                for (IColumn<T, S> column : table.getColumns())
-                {
-                    columnsModels.add(Model.of(column));
-                }
-
-                return columnsModels.iterator();
-            }
-
-            @Override
-            protected void populateItem(final Item<IColumn<T, S>> item)
-            {
-                final IColumn<T, S> column = item.getModelObject();
-
-                WebMarkupContainer header;
-
-                if (column.isSortable())
-                {
-                    header = newSortableHeader("header", column.getSortProperty(), stateLocator);
-
-                    if (column instanceof IStyledColumn)
-                    {
-                        CssAttributeBehavior cssAttributeBehavior = new CssAttributeBehavior()
-                        {
-                            private static final long serialVersionUID = 1L;
-
-                            @Override
-                            protected String getCssClass()
-                            {
-                                return ((IStyledColumn<?, S>)column).getCssClass();
-                            }
-                        };
-
-                        header.add(cssAttributeBehavior);
-                    }
-
-                }
-                else
-                {
-                    header = new WebMarkupContainer("header");
-                }
-
-
-                item.add(header);
-                item.setRenderBodyOnly(true);
-                Component label = column.getHeader("label");
-                Component sortIcon = newSortIcon("sortIcon", column, stateLocator);
-                header.add(label, sortIcon);
-
-                if(column instanceof GenericTitleColumn) {
-                    Wkt.cssAppend(header, "title-column");
-                }
-            }
-        };
-        add(headers);
+    private UiHintContainer getUiHintContainer() {
+        return UiHintContainer.Util.hintContainerOf(this, EntityModel.class);
     }
 
-    /**
-     * Factory method for the sort icon
-     *
-     * @param id
-     *          the component id
-     * @param column
-     *          the column for which a sort icon is needed
-     * @param stateLocator
-     *          locator for the ISortState implementation used by sortable headers
-     * @param <T>
-     *          The model object type of the data table
-     * @return A component that should be used as a sort icon
-     */
-    protected <T> Component newSortIcon(final String id, final IColumn<T, S> column, final ISortStateLocator<S> stateLocator) {
-        return new WebComponent(id) {
-            @Override
-            protected void onComponentTag(final ComponentTag tag) {
-                super.onComponentTag(tag);
-
-                if(column.isSortable()) {
-                    ISortState<S> sortState = stateLocator.getSortState();
-                    S sortProperty = column.getSortProperty();
-                    SortOrder sortOrder = sortProperty == null ? SortOrder.NONE : sortState.getPropertySortOrder(sortProperty);
-                    if (sortOrder == SortOrder.ASCENDING) {
-                        Attributes.addClass(tag, CLASS_SORT_UP);
-                    } else if (sortOrder == SortOrder.DESCENDING) {
-                        Attributes.addClass(tag, CLASS_SORT_DOWN);
-                    } else {
-                        Attributes.addClass(tag, CLASS_SORT_NONE);
-                    }
-                }
-            }
-        };
-    }
-
-    /**
-     * Factory method for sortable header components. A sortable header component must have id of
-     * <code>headerId</code> and conform to markup specified in <code>HeadersToolbar.html</code>
-     *
-     * @param headerId
-     *            header component id
-     * @param property
-     *            property this header represents
-     * @param locator
-     *            sort state locator
-     * @return created header component
-     */
-    protected WebMarkupContainer newSortableHeader(final String headerId, final S property,
-            final ISortStateLocator<S> locator)
-    {
-        return new OrderByBorder<S>(headerId, property, locator)
-        {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void onSortChanged()
-            {
-                getTable().setCurrentPage(0);
-            }
-        };
-    }
 }

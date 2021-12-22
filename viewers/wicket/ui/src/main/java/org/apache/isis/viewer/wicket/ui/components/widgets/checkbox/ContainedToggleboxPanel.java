@@ -22,6 +22,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn.BulkToggle;
@@ -42,6 +43,10 @@ extends PanelAbstract<Boolean, Model<Boolean>> {
     private final AjaxCheckBox checkbox;
 
     public ContainedToggleboxPanel(final String id) {
+        this(id, Model.of(false));
+    }
+
+    public ContainedToggleboxPanel(final String id, final IModel<Boolean> model) {
         super(id);
 
         final WebMarkupContainer markupContainer = new WebMarkupContainer(ID_CONTAINER);
@@ -50,13 +55,12 @@ extends PanelAbstract<Boolean, Model<Boolean>> {
         final Form<Object> form = new Form<Object>(ID_FORM);
         markupContainer.add(form);
 
-        checkbox = new AjaxCheckBox(ID_TOGGLEBOX, Model.of(false)) {
+        checkbox = new AjaxCheckBox(ID_TOGGLEBOX, model) {
             private static final long serialVersionUID = 1L;
 
             @Override
             protected void onUpdate(final AjaxRequestTarget target) {
-
-                ContainedToggleboxPanel.this.toggle(target);
+                ContainedToggleboxPanel.this.onUpdate(target);
             }
 
         };
@@ -67,34 +71,21 @@ extends PanelAbstract<Boolean, Model<Boolean>> {
     /**
      * Hook method for (typically anonymous) subclasses to override.
      */
-    public void onSubmit(final AjaxRequestTarget target) {
+    protected void onUpdate(final AjaxRequestTarget target) {
     }
 
-    /**
-     * Programmatic toggling.
-     * @param target
-     */
-    public void toggle(final AjaxRequestTarget target) {
-        setModel(!isChecked());
-        onSubmit(target);
-    }
-
-    public boolean isChecked() {
+    protected boolean isChecked() {
         return checkbox.getModelObject();
     }
 
-    public void setModel(final boolean isChecked) {
+    protected void setModel(final boolean isChecked) {
         checkbox.setModelObject(isChecked);
     }
 
-    public void smartSet(
+    public void set(
             final BulkToggle bulkToggle,
             final AjaxRequestTarget target) {
-        if(isChecked()==bulkToggle.isSetAll()) {
-            //smart update idiom: skip if no change of state
-            return;
-        }
-        toggle(target);
+        setModel(bulkToggle.isSetAll());
         target.add(this);
     }
 

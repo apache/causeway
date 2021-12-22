@@ -24,7 +24,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -63,12 +62,12 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
             showAllItemsOn(table);
 
             final DataTable<?, ?> dataTable = getTable();
-            final CollectionContentsSortableDataProvider dataProvider = (CollectionContentsSortableDataProvider) dataTable.getDataProvider();
-            final EntityCollectionModel collectionModel = dataProvider.getEntityCollectionModel();
+            final CollectionContentsSortableDataProvider dataProvider =
+                    (CollectionContentsSortableDataProvider) dataTable.getDataProvider();
 
             if(toggleboxColumn != null) {
                 // clear the underlying backend selection model
-                collectionModel.getDataTableModel().getSelectAllToggle().setValue(false);
+                dataProvider.getDataTableModel().getSelectAllToggle().setValue(false);
                 // remove toggle UI components
                 toggleboxColumn.removeToggles();
             }

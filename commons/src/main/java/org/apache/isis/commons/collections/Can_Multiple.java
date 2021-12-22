@@ -143,6 +143,14 @@ final class Can_Multiple<T> implements Can<T> {
     }
 
     @Override
+    public Iterator<T> iterator(final int skip, final int limit) {
+        return Collections.unmodifiableList(elements).stream()
+            .skip(skip)
+            .limit(limit)
+            .iterator();
+    }
+
+    @Override
     public Iterator<T> iterator() {
         return Collections.unmodifiableList(elements).iterator();
     }

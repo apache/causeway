@@ -32,23 +32,23 @@ public class IsisAjaxPagingNavigationIncrementLink extends AjaxPagingNavigationI
 
     private static final long serialVersionUID = 1L;
 
-    private final IsisAjaxFallbackDataTable<?, ?> dataTable;
+    private final IsisAjaxDataTable dataTable;
     private final Component component;
 
-    public IsisAjaxPagingNavigationIncrementLink(String id, IPageable pageable, int increment) {
+    public IsisAjaxPagingNavigationIncrementLink(final String id, final IPageable pageable, final int increment) {
         super(id, pageable, increment);
-        dataTable = (IsisAjaxFallbackDataTable<?, ?>) pageable;
+        dataTable = (IsisAjaxDataTable) pageable;
         component = pageable instanceof Component ? (Component) pageable : null;
     }
 
     @Override
-    public void onClick(AjaxRequestTarget target) {
+    public void onClick(final AjaxRequestTarget target) {
         super.onClick(target);
         dataTable.setPageNumberHintAndBroadcast(target);
     }
 
     @Override
-    protected AjaxPagingNavigationBehavior newAjaxPagingNavigationBehavior(IPageable pageable, String event) {
+    protected AjaxPagingNavigationBehavior newAjaxPagingNavigationBehavior(final IPageable pageable, final String event) {
         return new BootstrapAjaxPagingNavigationBehavior(this, pageable, event);
     }
 

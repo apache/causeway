@@ -32,8 +32,7 @@ public interface CollectionSelectorProvider {
     public static CollectionSelectorPanel getCollectionSelectorProvider(Component component) {
         while(component != null) {
             if(component instanceof CollectionSelectorProvider) {
-                final CollectionSelectorPanel selectorDropdownPanelIfAny = ((CollectionSelectorProvider) component).getSelectorDropdownPanel();
-                return selectorDropdownPanelIfAny;
+                return ((CollectionSelectorProvider) component).getSelectorDropdownPanel();
             }
             component = component.getParent();
         }

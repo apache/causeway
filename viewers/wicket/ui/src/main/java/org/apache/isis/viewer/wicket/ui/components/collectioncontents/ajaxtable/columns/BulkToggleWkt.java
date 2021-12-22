@@ -16,28 +16,37 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.model.models;
+package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
-import lombok.NonNull;
+import org.apache.wicket.model.ChainingModel;
+import org.apache.wicket.model.IModel;
 
-public class EntityCollectionModelHidden
-extends EntityCollectionModelAbstract {
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+
+public class BulkToggleWkt
+extends ChainingModel<Boolean> {
 
     private static final long serialVersionUID = 1L;
 
-    public static EntityCollectionModelHidden forCollectionModel(
-            final @NonNull EntityCollectionModelAbstract collectionModel) {
-        return new EntityCollectionModelHidden(collectionModel);
-    }
-
-    protected EntityCollectionModelHidden(
-            final @NonNull EntityCollectionModelAbstract collectionModel) {
-        super(collectionModel.delegate(), collectionModel.getVariant());
+    public BulkToggleWkt(final IModel<DataTableModel> dataTableModelHolder) {
+        super(dataTableModelHolder);
     }
 
     @Override
-    public int getElementCount() {
-        return 0;
+    public Boolean getObject() {
+        return dataTableModel().getSelectAllToggle().getValue();
+    }
+
+    @Override
+    public void setObject(final Boolean value) {
+        dataTableModel().getSelectAllToggle().setValue(value);
+    }
+
+    // -- HELPER
+
+    @SuppressWarnings("unchecked")
+    private DataTableModel dataTableModel() {
+        return ((IModel<DataTableModel>) super.getTarget()).getObject();
     }
 
 }

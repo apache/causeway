@@ -33,23 +33,23 @@ import de.agilecoders.wicket.core.util.Attributes;
 public class IsisAjaxPagingNavigationLink extends AjaxPagingNavigationLink {
 
     private static final long serialVersionUID = 1L;
-    private final IsisAjaxFallbackDataTable<?, ?> dataTable;
+    private final IsisAjaxDataTable dataTable;
     private final Component component;
 
-    public IsisAjaxPagingNavigationLink(String id, IPageable pageable, long pageNumber) {
+    public IsisAjaxPagingNavigationLink(final String id, final IPageable pageable, final long pageNumber) {
         super(id, pageable, pageNumber);
-        dataTable = (IsisAjaxFallbackDataTable<?, ?>) pageable;
+        dataTable = (IsisAjaxDataTable) pageable;
         component = pageable instanceof Component ? (Component) pageable : null;
     }
 
     @Override
-    public void onClick(AjaxRequestTarget target) {
+    public void onClick(final AjaxRequestTarget target) {
         super.onClick(target);
         dataTable.setPageNumberHintAndBroadcast(target);
     }
 
     @Override
-    protected AjaxPagingNavigationBehavior newAjaxPagingNavigationBehavior(IPageable pageable, String event) {
+    protected AjaxPagingNavigationBehavior newAjaxPagingNavigationBehavior(final IPageable pageable, final String event) {
         return new BootstrapAjaxPagingNavigationBehavior(this, pageable, event);
     }
 
@@ -59,7 +59,7 @@ public class IsisAjaxPagingNavigationLink extends AjaxPagingNavigationLink {
     }
 
 	@Override
-	protected void onComponentTag(ComponentTag tag) {
+	protected void onComponentTag(final ComponentTag tag) {
 		super.onComponentTag(tag);
 
 		Attributes.addClass(tag, "page-link");

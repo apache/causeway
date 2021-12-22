@@ -98,6 +98,11 @@ final class Can_Empty<T> implements Can<T> {
     }
 
     @Override
+    public Iterator<T> iterator(final int skip, final int limit) {
+        return iterator(); // empty iterator no matter what the arguments
+    }
+
+    @Override
     public Iterator<T> iterator() {
         return Collections.<T>emptyList().iterator();
     }

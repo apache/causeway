@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.interactions.managed.nonscalar;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-class _Debug {
+class _ToggleDebug {
 
     public static void onSelectRowToggle(
             final ManagedObject rowElement,
@@ -28,7 +28,7 @@ class _Debug {
             final Boolean _new,
             final boolean isToggleAllEvent) {
 
-        System.err.printf("%s %b->%b (toggle-all: %b)%n",
+        System.err.printf("onSelectRowToggle: %s %b->%b (toggle-all: %b)%n",
                 ""+rowElement.getPojo(), old, _new, isToggleAllEvent);
     }
 

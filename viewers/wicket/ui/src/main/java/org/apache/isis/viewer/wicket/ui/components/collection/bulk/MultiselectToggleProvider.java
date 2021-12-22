@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
 
-public interface BulkActionsProvider extends Serializable {
+public interface MultiselectToggleProvider extends Serializable {
 
     GenericToggleboxColumn getToggleboxColumn();
 }

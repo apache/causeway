@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel.Variant;
-import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
+import org.apache.isis.viewer.wicket.ui.components.collection.bulk.MultiselectToggleProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericColumn;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericPropertyColumn;
@@ -51,10 +51,13 @@ implements CollectionCountProvider {
     private static final long serialVersionUID = 1L;
     private static final String ID_TABLE = "table";
 
-    private IsisAjaxFallbackDataTable dataTable;
-
     public CollectionContentsAsAjaxTablePanel(final String id, final EntityCollectionModel model) {
         super(id, model);
+    }
+
+    @Override
+    public Integer getCount() {
+        return getModel().getDataTableModel().getElementCount();
     }
 
     @Override
@@ -62,6 +65,13 @@ implements CollectionCountProvider {
         super.onInitialize();
         buildGui();
     }
+
+    @Override
+    protected void onModelChanged() {
+        //buildGui();
+    }
+
+    // -- HELPER
 
     private EntityCollectionModel entityCollectionModel() {
         return getModel();
@@ -71,13 +81,13 @@ implements CollectionCountProvider {
 
         final List<GenericColumn> columns = _Lists.newArrayList();
 
-        // bulk actions
-        final BulkActionsProvider bulkActionsProvider = getBulkActionsProvider();
+        // multi select check boxes
+        final MultiselectToggleProvider multiselectToggleProvider = getMultiselectToggleProvider();
 
         GenericToggleboxColumn toggleboxColumn = null;
-        if(bulkActionsProvider != null) {
+        if(multiselectToggleProvider != null) {
 
-            toggleboxColumn = bulkActionsProvider.getToggleboxColumn();
+            toggleboxColumn = multiselectToggleProvider.getToggleboxColumn();
             if(toggleboxColumn != null) {
                 columns.add(toggleboxColumn);
             }
@@ -94,17 +104,16 @@ implements CollectionCountProvider {
         addPropertyColumnsIfRequired(columns);
 
         val dataProvider = new CollectionContentsSortableDataProvider(collectionModel);
-        dataTable = new IsisAjaxFallbackDataTable<>(
+        val dataTable = new IsisAjaxDataTable(
                 ID_TABLE, columns, dataProvider, collectionModel.getPageSize(), toggleboxColumn);
         addOrReplace(dataTable);
-
     }
 
-    private BulkActionsProvider getBulkActionsProvider() {
+    private MultiselectToggleProvider getMultiselectToggleProvider() {
         Component component = this;
         while(component != null) {
-            if(component instanceof BulkActionsProvider) {
-                return (BulkActionsProvider) component;
+            if(component instanceof MultiselectToggleProvider) {
+                return (MultiselectToggleProvider) component;
             }
             component = component.getParent();
         }
@@ -164,20 +173,5 @@ implements CollectionCountProvider {
                 parentTypeName,
                 property.getCanonicalDescription());
     }
-
-
-
-    @Override
-    protected void onModelChanged() {
-        buildGui();
-    }
-
-    @Override
-    public Integer getCount() {
-        final EntityCollectionModel model = getModel();
-        return model.getCount();
-    }
-
-
 
 }

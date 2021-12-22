@@ -18,55 +18,39 @@
  */
 package org.apache.isis.viewer.wicket.model.models.interaction.coll;
 
-import java.util.UUID;
-
 import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 
-import lombok.Getter;
-import lombok.NonNull;
-
-public class DataRowWkt
-extends ChainingModel<DataRow> {
+/**
+ * Boolean {@link IModel} to bind to the associated {@link DataTableModel}'s
+ * {@link DataRow} model to handle check-box selection.
+ */
+public class DataRowToggleWkt
+extends ChainingModel<Boolean> {
 
     private static final long serialVersionUID = 1L;
 
-    public static DataRowWkt chain(
-            final IModel<DataTableModel> dataTableModelHolder,
-            final DataRow dataRow) {
-        return new DataRowWkt(dataTableModelHolder, dataRow);
-    }
-
-    @Getter private final @NonNull UUID uuid; // in support of table sorting
-    @Getter private final @NonNull DataRowToggleWkt dataRowToggle;
-
-    private transient DataRow dataRow;
-
-    private DataRowWkt(
-            final IModel<DataTableModel> dataTableModelHolder,
-            final DataRow dataRow) {
-        super(dataTableModelHolder);
-        this.dataRow = dataRow;
-        this.uuid = dataRow.getUuid();
-        this.dataRowToggle = new DataRowToggleWkt(this);
+    public DataRowToggleWkt(final DataRowWkt dataRowWkt) {
+        super(dataRowWkt);
     }
 
     @Override
-    public DataRow getObject() {
-        if(dataRow==null) {
-            dataRow = getDataTableModel().lookupDataRow(uuid)
-                    .orElse(null);
-        }
-        return dataRow;
+    public Boolean getObject() {
+        return dataRow().getObject().getSelectToggle().getValue();
+    }
+
+    @Override
+    public void setObject(final Boolean value) {
+        dataRow().getObject().getSelectToggle().setValue(value);
     }
 
     // -- HELPER
 
-    private DataTableModel getDataTableModel() {
-        return ((DataTableModelWkt) super.getTarget()).getObject();
+    private DataRowWkt dataRow() {
+        return (DataRowWkt) super.getTarget();
     }
 
 }

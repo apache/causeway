@@ -29,7 +29,9 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
@@ -48,23 +50,25 @@ extends GenericColumnAbstract {
         public boolean isSetAll() { return this == SET_ALL; }
     }
 
+    private IModel<DataTableModel> dataTableModelHolder;
 
     public GenericToggleboxColumn(
-            final IsisAppCommonContext commonContext) {
+            final IsisAppCommonContext commonContext,
+            final IModel<DataTableModel> dataTableModelHolder
+            ) {
         super(commonContext, "");
+        this.dataTableModelHolder = dataTableModelHolder;
     }
 
     @Override
     public Component getHeader(final String componentId) {
 
-        val bulkToggle = new ContainedToggleboxPanel(componentId) {
+        val bulkToggle = new ContainedToggleboxPanel(componentId, new BulkToggleWkt(dataTableModelHolder)) {
             private static final long serialVersionUID = 1L;
-            @Override
-            public void onSubmit(final AjaxRequestTarget target) {
-                val bulkToggle = BulkToggle.valueOf(!this.isChecked());
-                //System.err.printf("bulkToggle: %s%n", bulkToggle);
+            @Override public void onUpdate(final AjaxRequestTarget target) {
+                val bulkToggle = BulkToggle.valueOf(this.isChecked());
                 for (ContainedToggleboxPanel rowToggle : rowToggles) {
-                    rowToggle.smartSet(bulkToggle, target);
+                    rowToggle.set(bulkToggle, target);
                 }
             }
         };
@@ -84,16 +88,7 @@ extends GenericColumnAbstract {
 
         final MarkupContainer row = cellItem.getParent().getParent();
         row.setOutputMarkupId(true);
-
-        val rowToggle = new ContainedToggleboxPanel(componentId) {
-            private static final long serialVersionUID = 1L;
-            @Override
-            public void onSubmit(final AjaxRequestTarget target) {
-                val isChecked = rowModel.getObject().getSelectToggle().toggleThenGet();
-                // no matter what, the underlying backend model must be reflected by the UI
-                setModel(isChecked);
-            }
-        };
+        val rowToggle = new ContainedToggleboxPanel(componentId, ((DataRowWkt)rowModel).getDataRowToggle());
         rowToggles.add(rowToggle);
         rowToggle.setOutputMarkupId(true);
         cellItem.add(rowToggle);

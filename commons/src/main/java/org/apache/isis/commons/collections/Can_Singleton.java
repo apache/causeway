@@ -99,6 +99,14 @@ final class Can_Singleton<T> implements Can<T> {
     }
 
     @Override
+    public Iterator<T> iterator(final int skip, final int limit) {
+        return skip<1
+                && limit>0
+                ? iterator()
+                : Collections.<T>emptyList().iterator();
+    }
+
+    @Override
     public Iterator<T> iterator() {
         return Collections.singletonList(element).iterator();
     }

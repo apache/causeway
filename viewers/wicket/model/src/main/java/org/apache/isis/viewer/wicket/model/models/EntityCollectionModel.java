@@ -101,10 +101,16 @@ extends
 
     // -- BASIC PROPERTIES
 
-    @Deprecated // move to DataTableModel
-    int getCount();
-    @Deprecated // move to DataTableModel
-    String getName();
+    default int getElementCount() {
+        return getDataTableModel().getElementCount();
+    }
+
+    default String getName() {
+        return getDataTableModel().getTitle().getValue();
+    }
+
+    // -- DEPRECATIONS(?)
+
     @Deprecated // move to DataTableModel
     int getPageSize();
 

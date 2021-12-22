@@ -90,7 +90,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
                 associatedWithCollectionIfAny);
     }
 
-    public ActionInteractionWkt(
+    private ActionInteractionWkt(
             final BookmarkedObjectWkt bookmarkedObject,
             final String memberId,
             final Where where,
@@ -119,10 +119,9 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
         }
 
         return associatedWithCollectionIfAny!=null
-                ? associatedWithCollectionIfAny.getDataTableModel()
-                        .startAssociatedActionInteraction(memberId, where)
+                ? ActionInteraction.startWithMultiselect(getBookmarkedOwner(), memberId, where,
+                        associatedWithCollectionIfAny.getDataTableModel())
                 : ActionInteraction.start(getBookmarkedOwner(), memberId, where);
-
     }
 
     public final ActionInteraction actionInteraction() {

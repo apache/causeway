@@ -32,9 +32,7 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.interaction.coll.DataTableModelWkt;
 
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Represents a collection (a member) of an entity.
@@ -50,9 +48,6 @@ implements EntityCollectionModel {
 
     private static final long serialVersionUID = 1L;
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Identifier identifier; //TODO don't memoize
-    @Getter private final int pageSize; //TODO don't memoize
-
     private final @NonNull Variant variant;
 
     protected EntityCollectionModelAbstract(
@@ -60,12 +55,6 @@ implements EntityCollectionModel {
             final @NonNull Variant variant) {
         super(dataTableModelWkt);
         this.variant = variant;
-
-        val memberMeta = getMetaModel();
-
-        this.identifier = memberMeta.getFeatureIdentifier();
-        this.pageSize = memberMeta.getPageSize()
-            .orElse(getVariant().getPageSizeDefault());
     }
 
     public final DataTableModelWkt delegate() {
@@ -91,6 +80,17 @@ implements EntityCollectionModel {
     public ObjectMember getMetaModel() {
         return getDataTableModel()
                 .getMetaModel();
+    }
+
+    @Override
+    public int getPageSize() {
+        return getMetaModel().getPageSize()
+                .orElse(getVariant().getPageSizeDefault());
+    }
+
+    @Override
+    public Identifier getIdentifier() {
+        return getMetaModel().getFeatureIdentifier();
     }
 
     @Override
@@ -125,18 +125,6 @@ implements EntityCollectionModel {
     @Override
     public final Can<LinkAndLabel> getLinks() {
         return Can.ofCollection(linkAndLabels);
-    }
-
-    // -- DEPRECATIONS(?)
-
-    @Override
-    public final String getName() {
-        return getDataTableModel().getTitle().getValue();
-    }
-
-    @Override
-    public int getCount() {
-        return getDataTableModel().getDataElements().getValue().size();
     }
 
 }

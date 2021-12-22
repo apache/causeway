@@ -19,6 +19,8 @@
 package org.apache.isis.core.metamodel.interactions.managed.nonscalar;
 
 import java.io.Serializable;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
@@ -46,6 +48,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.core.metamodel.interactions.managed.MultiselectChoices;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
@@ -159,8 +162,23 @@ implements MultiselectChoices {
             .getFriendlyName());
     }
 
+    public int getElementCount() {
+        return dataRowsFiltered.getValue().size();
+    }
+
     public ObjectMember getMetaModel() {
         return managedMember.getMetaModel();
+    }
+
+    public ObjectSpecification getElementType() {
+        return getMetaModel().getElementType();
+    }
+
+    public Optional<DataRow> lookupDataRow(final @NonNull UUID uuid) {
+        //TODO can be safely cached
+        return getDataRowsFiltered().getValue().stream()
+                .filter(dr->dr.getUuid().equals(uuid))
+                .findFirst();
     }
 
     // -- TOGGLE ALL
@@ -198,7 +216,7 @@ implements MultiselectChoices {
 
     @Override
     public Can<ManagedObject> getSelected() {
-        return getDataRowsSelected()
+      return getDataRowsSelected()
                 .getValue()
                 .map(DataRow::getRowElement);
     }
@@ -274,6 +292,5 @@ implements MultiselectChoices {
             return forAction(managedAction, args, actionResult);
         }
     }
-
 
 }
