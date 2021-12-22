@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.config.presets;
 
+import org.apache.isis.commons.internal.base._Strings;
+
 /**
  * Supports Spring's {@code @PropertySource} annotation.
  *
@@ -57,7 +59,8 @@ public final class IsisPresets  {
      * 'PROTOTYPING' was already set.
      */
     public static void prototyping() {
-        if(System.getProperty("PROTOTYPING")==null) {
+        if(_Strings.isEmpty(System.getProperty("PROTOTYPING"))
+                && _Strings.isEmpty(System.getenv("PROTOTYPING"))) {
             forcePrototyping();
         }
     }
@@ -70,7 +73,7 @@ public final class IsisPresets  {
         System.setProperty("PROTOTYPING", "true");
     }
 
-    public static void logging(Class<?> clazz, String loggingLevel) {
+    public static void logging(final Class<?> clazz, final String loggingLevel) {
         System.setProperty("logging.level." + clazz.getName(), loggingLevel);
     }
 
