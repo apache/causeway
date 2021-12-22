@@ -22,7 +22,6 @@ import java.util.UUID;
 
 import org.apache.isis.commons.internal.binding._Bindables;
 import org.apache.isis.commons.internal.binding._Bindables.BooleanBindable;
-import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 
@@ -39,8 +38,6 @@ public class DataRow {
 
         selectToggle = _Bindables.forBoolean(false);
         selectToggle.addListener((e,o,n)->{
-
-            _Debug.log("toggle %b [table=%d]", n, parentTable.hashCode());
 
             //_ToggleDebug.onSelectRowToggle(rowElement, o, n, parentTable.isToggleAllEvent.get());
 
