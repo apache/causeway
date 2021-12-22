@@ -615,6 +615,7 @@ Directory: /testing/specsupport/applib
 io.cucumber:cucumber-java:jar:<managed> +
 io.cucumber:cucumber-junit-platform-engine:jar:<managed> +
 io.cucumber:cucumber-spring:jar:<managed> +
+io.cucumber:messages:jar:17.1.1 +
 org.apache.isis.testing:isis-testing-fakedata-applib:jar:<managed> +
 org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
 org.apache.isis.testing:isis-testing-integtestsupport-applib:jar:<managed> +
@@ -758,16 +759,16 @@ Directory: /examples/demo
 ****
 com.h2database:h2:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-exceldownload-ui:jar:<managed> +
-org.apache.isis.extensions:isis-extensions-secman-encryption-jbcrypt:jar:<managed> +
+org.apache.isis.extensions:isis-extensions-secman-encryption-spring:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-integration:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-persistence-jdo:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-persistence-jpa:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-shiro-realm:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-asciidoc-metamodel:jar:<managed> +
-org.apache.isis.valuetypes:isis-valuetypes-asciidoc-persistence-jdo-dn5:jar:<managed> +
+org.apache.isis.valuetypes:isis-valuetypes-asciidoc-persistence-jdo:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-asciidoc-persistence-jpa:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-markdown-metamodel:jar:<managed> +
-org.apache.isis.valuetypes:isis-valuetypes-markdown-persistence-jdo-dn5:jar:<managed> +
+org.apache.isis.valuetypes:isis-valuetypes-markdown-persistence-jdo:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-markdown-persistence-jpa:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-sse-applib:jar:<managed> +
 org.projectlombok:lombok:jar:<managed> +
@@ -781,14 +782,248 @@ Artifact: demo-domain
 Type: jar
 Directory: /examples/demo/domain
 ----
-|.Dependencies
+|.Components
+****
+demoapp.dom.AppConfiguration +
+demoapp.dom._infra.DefaultTitleProvider +
+demoapp.dom._infra.LibraryPreloadingService +
+demoapp.dom._infra.resources.AsciiDocConverterService +
+demoapp.dom._infra.resources.AsciiDocReaderService +
+demoapp.dom._infra.resources.AsciiDocValueSemanticsWithPreprocessing +
+demoapp.dom._infra.resources.MarkdownReaderService +
+demoapp.dom._infra.resources.MarkupReaderService +
+demoapp.dom._infra.resources.MarkupVariableResolverService +
+demoapp.dom._infra.resources.ResourceReaderService +
+demoapp.dom._infra.samples.NameSamples +
+demoapp.dom._infra.urlencoding.UrlEncodingServiceNaiveInMemory +
+demoapp.dom.domain._changes.EntityChangesSubscriberToCaptureChangesInMemory +
+demoapp.dom.domain._commands.ExposePersistedCommands$TableColumnOrderDefault +
+demoapp.dom.domain._interactions.ExecutionListenerToCaptureInteractionsInMemory +
+demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingSeeding +
+demoapp.dom.domain.actions.Action.commandPublishing.jdo.ActionCommandPublishingJdoEntities +
+demoapp.dom.domain.actions.Action.commandPublishing.jpa.ActionCommandPublishingJpaEntities +
+demoapp.dom.domain.actions.Action.domainEvent.subscribers.ActionDomainEventControlService +
+demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingSeeding +
+demoapp.dom.domain.actions.Action.executionPublishing.jdo.ActionExecutionPublishingJdoEntities +
+demoapp.dom.domain.actions.Action.executionPublishing.jpa.ActionExecutionPublishingJpaEntities +
+demoapp.dom.domain.collections.Collection.domainEvent.subscribers.CollectionDomainEventControlService +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledSeeding +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.jdo.DomainObjectEntityChangePublishingDisabledJdoEntities +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.jpa.DomainObjectEntityChangePublishingDisabledJpaEntities +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectEntityChangePublishingEnabledSeeding +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.jdo.DomainObjectEntityChangePublishingEnabledJdoEntities +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.jpa.DomainObjectEntityChangePublishingEnabledJpaEntities +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedSeeding +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.jdo.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.jpa.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpaEntities +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenSeeding +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.jdo.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.jpa.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJpaEntities +
+demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.JaxbRefSeeding +
+demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.jdo.JaxbRefJdoEntities +
+demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.jpa.JaxbRefJpaEntities +
+demoapp.dom.domain.objects.other.embedded.jdo.ComplexNumberJdoValueSemantics +
+demoapp.dom.domain.objects.other.embedded.jdo.NumberConstantJdoRepository +
+demoapp.dom.domain.objects.other.embedded.jpa.ComplexNumberJpaValueSemantics +
+demoapp.dom.domain.objects.other.embedded.jpa.NumberConstantJpaRepository +
+demoapp.dom.domain.objects.other.embedded.persistence.NumberConstantSeeding +
+demoapp.dom.domain.objects.other.embedded.samples.ComplexNumberSamples +
+demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingSeeding +
+demoapp.dom.domain.properties.Property.commandPublishing.jdo.PropertyCommandPublishingJdoEntities +
+demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingJpaEntities +
+demoapp.dom.domain.properties.Property.domainEvent.subscribers.PropertyDomainEventControlService +
+demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingSeeding +
+demoapp.dom.domain.properties.Property.executionPublishing.jdo.PropertyExecutionPublishingJdoEntities +
+demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingJpaEntities +
+demoapp.dom.domain.properties.Property.projecting.jdo.PropertyProjectingChildJdoEntities +
+demoapp.dom.domain.properties.Property.projecting.jpa.PropertyProjectingChildJpaEntities +
+demoapp.dom.domain.properties.Property.projecting.persistence.PropertyProjectingChildSeeding +
+demoapp.dom.domain.properties.PropertyLayout.navigable.FileTreeNodeService +
+demoapp.dom.domain.properties.PropertyLayout.repainting.PdfJsViewerAdvisorFallback +
+demoapp.dom.featured.customui.geocoding.GeoapifyClient +
+demoapp.dom.services.core.errorreportingservice.ErrorReportingServiceDemoImplementation +
+demoapp.dom.services.core.eventbusservice.EventLogEntryJdoRepository +
+demoapp.dom.services.core.eventbusservice.EventLogEntryJpaRepository +
+demoapp.dom.services.core.eventbusservice.EventSubscriberDemoImplementation +
+demoapp.dom.services.core.wrapperFactory.WrapperFactorySeeding +
+demoapp.dom.services.core.wrapperFactory.jdo.WrapperFactoryJdoEntities +
+demoapp.dom.services.core.wrapperFactory.jpa.WrapperFactoryJpaEntities +
+demoapp.dom.services.extensions.secman.apptenancy.ApplicationTenancyEvaluatorForDemo +
+demoapp.dom.services.extensions.secman.apptenancy.jdo.TenantedJdoEntities +
+demoapp.dom.services.extensions.secman.apptenancy.jpa.TenantedJpaEntities +
+demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedSeeding +
+demoapp.dom.services.extensions.secman.appuser.seed.AppUserSeeding +
+demoapp.dom.types.isis.blobs.jdo.IsisBlobJdoEntities +
+demoapp.dom.types.isis.blobs.jpa.IsisBlobJpaEntities +
+demoapp.dom.types.isis.blobs.persistence.IsisBlobSeeding +
+demoapp.dom.types.isis.blobs.samples.IsisBlobsSamples +
+demoapp.dom.types.isis.clobs.jdo.IsisClobJdoEntities +
+demoapp.dom.types.isis.clobs.jpa.IsisClobJpaEntities +
+demoapp.dom.types.isis.clobs.persistence.IsisClobSeeding +
+demoapp.dom.types.isis.clobs.samples.IsisClobsSamples +
+demoapp.dom.types.isis.localresourcepaths.jdo.IsisLocalResourcePathJdoEntities +
+demoapp.dom.types.isis.localresourcepaths.jpa.IsisLocalResourcePathJpaEntities +
+demoapp.dom.types.isis.localresourcepaths.persistence.IsisLocalResourcePathSeeding +
+demoapp.dom.types.isis.localresourcepaths.samples.IsisLocalResourcePathsSamples +
+demoapp.dom.types.isis.markups.jdo.IsisMarkupJdoEntities +
+demoapp.dom.types.isis.markups.jpa.IsisMarkupJpaEntities +
+demoapp.dom.types.isis.markups.persistence.IsisMarkupSeeding +
+demoapp.dom.types.isis.markups.samples.IsisMarkupSamples +
+demoapp.dom.types.isis.passwords.jdo.IsisPasswordJdoEntities +
+demoapp.dom.types.isis.passwords.jpa.IsisPasswordJpaEntities +
+demoapp.dom.types.isis.passwords.persistence.IsisPasswordSeeding +
+demoapp.dom.types.isis.passwords.samples.IsisPasswordsSamples +
+demoapp.dom.types.isisext.asciidocs.jdo.IsisAsciiDocJdoEntities +
+demoapp.dom.types.isisext.asciidocs.jpa.IsisAsciiDocJpaEntities +
+demoapp.dom.types.isisext.asciidocs.persistence.IsisAsciiDocSeeding +
+demoapp.dom.types.isisext.asciidocs.samples.IsisAsciiDocSamples +
+demoapp.dom.types.isisext.cal.jdo.IsisCalendarEventEntities +
+demoapp.dom.types.isisext.cal.jpa.IsisCalendarEventEntities +
+demoapp.dom.types.isisext.cal.persistence.IsisCalendarEventSeeding +
+demoapp.dom.types.isisext.cal.samples.IsisCalendarEventSamples +
+demoapp.dom.types.isisext.markdowns.jdo.IsisMarkdownJdoEntities +
+demoapp.dom.types.isisext.markdowns.jpa.IsisMarkdownJpaEntities +
+demoapp.dom.types.isisext.markdowns.persistence.IsisMarkdownSeeding +
+demoapp.dom.types.isisext.markdowns.samples.IsisMarkdownSamples +
+demoapp.dom.types.javaawt.images.jdo.JavaAwtBufferedImageJdoEntities +
+demoapp.dom.types.javaawt.images.jpa.JavaAwtBufferedImageJpaEntities +
+demoapp.dom.types.javaawt.images.persistence.JavaAwtBufferedImageSeeding +
+demoapp.dom.types.javaawt.images.samples.JavaAwtBufferedImageService +
+demoapp.dom.types.javaawt.images.samples.JavaAwtBufferedImagesSamples +
+demoapp.dom.types.javalang.booleans.jdo.WrapperBooleanJdoEntities +
+demoapp.dom.types.javalang.booleans.jpa.WrapperBooleanJpaEntities +
+demoapp.dom.types.javalang.booleans.persistence.WrapperBooleanSeeding +
+demoapp.dom.types.javalang.booleans.samples.WrapperBooleanSamples +
+demoapp.dom.types.javalang.bytes.jdo.WrapperByteJdoEntities +
+demoapp.dom.types.javalang.bytes.jpa.WrapperByteJpaEntities +
+demoapp.dom.types.javalang.bytes.persistence.WrapperByteSeeding +
+demoapp.dom.types.javalang.bytes.samples.WrapperByteSamples +
+demoapp.dom.types.javalang.characters.jdo.WrapperCharacterJdoEntities +
+demoapp.dom.types.javalang.characters.jpa.WrapperCharacterJpaEntities +
+demoapp.dom.types.javalang.characters.persistence.WrapperCharacterSeeding +
+demoapp.dom.types.javalang.characters.samples.WrapperCharacterSamples +
+demoapp.dom.types.javalang.doubles.jdo.WrapperDoubleJdoEntities +
+demoapp.dom.types.javalang.doubles.jpa.WrapperDoubleJpaEntities +
+demoapp.dom.types.javalang.doubles.persistence.WrapperDoubleSeeding +
+demoapp.dom.types.javalang.doubles.samples.WrapperDoubleSamples +
+demoapp.dom.types.javalang.floats.jdo.WrapperFloatJdoEntities +
+demoapp.dom.types.javalang.floats.jpa.WrapperFloatJpaEntities +
+demoapp.dom.types.javalang.floats.persistence.WrapperFloatSeeding +
+demoapp.dom.types.javalang.floats.samples.WrapperFloatSamples +
+demoapp.dom.types.javalang.integers.jdo.WrapperIntegerJdoEntities +
+demoapp.dom.types.javalang.integers.jpa.WrapperIntegerJpaEntities +
+demoapp.dom.types.javalang.integers.persistence.WrapperIntegerSeeding +
+demoapp.dom.types.javalang.integers.samples.WrapperIntegerSamples +
+demoapp.dom.types.javalang.longs.jdo.WrapperLongJdoEntities +
+demoapp.dom.types.javalang.longs.jpa.WrapperLongJpaEntities +
+demoapp.dom.types.javalang.longs.persistence.WrapperLongSeeding +
+demoapp.dom.types.javalang.longs.samples.WrapperLongSamples +
+demoapp.dom.types.javalang.shorts.jdo.WrapperShortJdoEntities +
+demoapp.dom.types.javalang.shorts.jpa.WrapperShortJpaEntities +
+demoapp.dom.types.javalang.shorts.persistence.WrapperShortSeeding +
+demoapp.dom.types.javalang.shorts.samples.WrapperShortSamples +
+demoapp.dom.types.javalang.strings.jdo.JavaLangStringJdoEntities +
+demoapp.dom.types.javalang.strings.jpa.JavaLangStringJpaEntities +
+demoapp.dom.types.javalang.strings.persistence.JavaLangStringSeeding +
+demoapp.dom.types.javamath.bigdecimals.jdo.JavaMathBigDecimalJdoEntities +
+demoapp.dom.types.javamath.bigdecimals.jpa.JavaMathBigDecimalJpaEntities +
+demoapp.dom.types.javamath.bigdecimals.persistence.JavaMathBigDecimalSeeding +
+demoapp.dom.types.javamath.bigdecimals.samples.JavaMathBigDecimalSamples +
+demoapp.dom.types.javamath.bigintegers.jdo.JavaMathBigIntegerJdoEntities +
+demoapp.dom.types.javamath.bigintegers.jpa.JavaMathBigIntegerJpaEntities +
+demoapp.dom.types.javamath.bigintegers.persistence.JavaMathBigIntegerSeeding +
+demoapp.dom.types.javamath.bigintegers.samples.JavaMathBigIntegerSamples +
+demoapp.dom.types.javanet.urls.jdo.JavaNetUrlJdoEntities +
+demoapp.dom.types.javanet.urls.jpa.JavaNetUrlJpaEntities +
+demoapp.dom.types.javanet.urls.persistence.JavaNetUrlSeeding +
+demoapp.dom.types.javanet.urls.samples.JavaNetUrlSamples +
+demoapp.dom.types.javasql.javasqldate.jdo.JavaSqlDateJdoEntities +
+demoapp.dom.types.javasql.javasqldate.jpa.JavaSqlDateJpaEntities +
+demoapp.dom.types.javasql.javasqldate.persistence.JavaSqlDateSeeding +
+demoapp.dom.types.javasql.javasqldate.samples.JavaSqlDateSamples +
+demoapp.dom.types.javasql.javasqltimestamp.jdo.JavaSqlTimestampJdoEntities +
+demoapp.dom.types.javasql.javasqltimestamp.jpa.JavaSqlTimestampJpaEntities +
+demoapp.dom.types.javasql.javasqltimestamp.persistence.JavaSqlTimestampSeeding +
+demoapp.dom.types.javasql.javasqltimestamp.samples.JavaSqlTimestampSamples +
+demoapp.dom.types.javatime.javatimelocaldate.jdo.JavaTimeLocalDateJdoEntities +
+demoapp.dom.types.javatime.javatimelocaldate.jpa.JavaTimeLocalDateJpaEntities +
+demoapp.dom.types.javatime.javatimelocaldate.persistence.JavaTimeLocalDateSeeding +
+demoapp.dom.types.javatime.javatimelocaldate.samples.JavaTimeLocalDateSamples +
+demoapp.dom.types.javatime.javatimelocaldatetime.jdo.JavaTimeLocalDateTimeJdoEntities +
+demoapp.dom.types.javatime.javatimelocaldatetime.jpa.JavaTimeLocalDateTimeJpaEntities +
+demoapp.dom.types.javatime.javatimelocaldatetime.persistence.JavaTimeLocalDateTimeSeeding +
+demoapp.dom.types.javatime.javatimelocaldatetime.samples.JavaTimeLocalDateTimeSamples +
+demoapp.dom.types.javatime.javatimelocaltime.jdo.JavaTimeLocalTimeJdoEntities +
+demoapp.dom.types.javatime.javatimelocaltime.jpa.JavaTimeLocalTimeJpaEntities +
+demoapp.dom.types.javatime.javatimelocaltime.persistence.JavaTimeLocalTimeSeeding +
+demoapp.dom.types.javatime.javatimelocaltime.samples.JavaTimeLocalTimeSamples +
+demoapp.dom.types.javatime.javatimeoffsetdatetime.jdo.JavaTimeOffsetDateTimeJdoEntities +
+demoapp.dom.types.javatime.javatimeoffsetdatetime.jpa.JavaTimeOffsetDateTimeJpaEntities +
+demoapp.dom.types.javatime.javatimeoffsetdatetime.persistence.JavaTimeOffsetDateTimeSeeding +
+demoapp.dom.types.javatime.javatimeoffsetdatetime.samples.JavaTimeOffsetDateTimeSamples +
+demoapp.dom.types.javatime.javatimeoffsettime.jdo.JavaTimeOffsetTimeJdoEntities +
+demoapp.dom.types.javatime.javatimeoffsettime.jpa.JavaTimeOffsetTimeJpaEntities +
+demoapp.dom.types.javatime.javatimeoffsettime.persistence.JavaTimeOffsetTimeSeeding +
+demoapp.dom.types.javatime.javatimeoffsettime.samples.JavaTimeOffsetTimeSamples +
+demoapp.dom.types.javatime.javatimezoneddatetime.jdo.JavaTimeZonedDateTimeJdoEntities +
+demoapp.dom.types.javatime.javatimezoneddatetime.jpa.JavaTimeZonedDateTimeJpaEntities +
+demoapp.dom.types.javatime.javatimezoneddatetime.persistence.JavaTimeZonedDateTimeSeeding +
+demoapp.dom.types.javatime.javatimezoneddatetime.samples.JavaTimeZonedDateTimeSamples +
+demoapp.dom.types.javautil.javautildate.jdo.JavaUtilDateJdoEntities +
+demoapp.dom.types.javautil.javautildate.jpa.JavaUtilDateJpaEntities +
+demoapp.dom.types.javautil.javautildate.persistence.JavaUtilDateSeeding +
+demoapp.dom.types.javautil.javautildate.samples.JavaUtilDateSamples +
+demoapp.dom.types.javautil.uuids.jdo.JavaUtilUuidJdoEntities +
+demoapp.dom.types.javautil.uuids.jpa.JavaUtilUuidJpaEntities +
+demoapp.dom.types.javautil.uuids.persistence.JavaUtilUuidSeeding +
+demoapp.dom.types.javautil.uuids.samples.JavaUtilUuidSamples +
+demoapp.dom.types.jodatime.jodadatetime.jdo.JodaDateTimeJdoEntities +
+demoapp.dom.types.jodatime.jodadatetime.persistence.JodaDateTimeJdoSeeding +
+demoapp.dom.types.jodatime.jodadatetime.samples.JodaDateTimeSamples +
+demoapp.dom.types.jodatime.jodalocaldate.jdo.JodaLocalDateJdoEntities +
+demoapp.dom.types.jodatime.jodalocaldate.persistence.JodaLocalDateJdoSeeding +
+demoapp.dom.types.jodatime.jodalocaldate.samples.JodaLocalDateSamples +
+demoapp.dom.types.jodatime.jodalocaldatetime.jdo.JodaLocalDateTimeJdoEntities +
+demoapp.dom.types.jodatime.jodalocaldatetime.persistence.JodaLocalDateTimeSeeding +
+demoapp.dom.types.jodatime.jodalocaldatetime.samples.JodaLocalDateTimeSamples +
+demoapp.dom.types.jodatime.jodalocaltime.jdo.JodaLocalTimeJdoEntities +
+demoapp.dom.types.jodatime.jodalocaltime.persistence.JodaLocalTimeSeeding +
+demoapp.dom.types.jodatime.jodalocaltime.samples.JodaLocalTimeSamples +
+demoapp.dom.types.primitive.booleans.jdo.PrimitiveBooleanJdoEntities +
+demoapp.dom.types.primitive.booleans.jpa.PrimitiveBooleanJpaEntities +
+demoapp.dom.types.primitive.booleans.persistence.PrimitiveBooleanSeeding +
+demoapp.dom.types.primitive.bytes.jdo.PrimitiveByteJdoEntities +
+demoapp.dom.types.primitive.bytes.jpa.PrimitiveByteJpaEntities +
+demoapp.dom.types.primitive.bytes.persistence.PrimitiveByteSeeding +
+demoapp.dom.types.primitive.chars.jdo.PrimitiveCharJdoEntities +
+demoapp.dom.types.primitive.chars.jpa.PrimitiveCharJpaEntities +
+demoapp.dom.types.primitive.chars.persistence.PrimitiveCharSeeding +
+demoapp.dom.types.primitive.doubles.jdo.PrimitiveDoubleJdoEntities +
+demoapp.dom.types.primitive.doubles.jpa.PrimitiveDoubleJpaEntities +
+demoapp.dom.types.primitive.doubles.persistence.PrimitiveDoubleSeeding +
+demoapp.dom.types.primitive.floats.jdo.PrimitiveFloatJdoEntities +
+demoapp.dom.types.primitive.floats.jpa.PrimitiveFloatJpaEntities +
+demoapp.dom.types.primitive.floats.persistence.PrimitiveFloatSeeding +
+demoapp.dom.types.primitive.ints.jdo.PrimitiveIntJdoEntities +
+demoapp.dom.types.primitive.ints.jpa.PrimitiveIntJpaEntities +
+demoapp.dom.types.primitive.ints.persistence.PrimitiveIntSeeding +
+demoapp.dom.types.primitive.longs.jdo.PrimitiveLongJdoEntities +
+demoapp.dom.types.primitive.longs.jpa.PrimitiveLongJpaEntities +
+demoapp.dom.types.primitive.longs.persistence.PrimitiveLongSeeding +
+demoapp.dom.types.primitive.shorts.jdo.PrimitiveShortJdoEntities +
+demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpaEntities +
+demoapp.dom.types.primitive.shorts.persistence.PrimitiveShortSeeding +
+****
+
+.Dependencies
 ****
 com.h2database:h2:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-command-log-jdo:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-command-log-jpa:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-exceldownload-ui:jar:<managed> +
+org.apache.isis.extensions:isis-extensions-fullcalendar-applib:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-pdfjs-applib:jar:<managed> +
-org.apache.isis.extensions:isis-extensions-secman-encryption-jbcrypt:jar:<managed> +
+org.apache.isis.extensions:isis-extensions-secman-encryption-spring:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-integration:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-persistence-jdo:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-persistence-jpa:jar:<managed> +
@@ -853,7 +1088,12 @@ Artifact: demo-web
 Type: jar
 Directory: /examples/demo/web
 ----
-|.Dependencies
+|.Components
+****
+demoapp.web._infra.utils.ThereCanBeOnlyOne +
+****
+
+.Dependencies
 ****
 org.apache.isis.examples.apps:demo-domain:jar:${project.version} +
 org.apache.isis.extensions:isis-extensions-command-replay-primary:jar:<managed> +
@@ -873,9 +1113,15 @@ Artifact: demo-wicket-common
 Type: jar
 Directory: /examples/demo/wicket/common
 ----
-|.Dependencies
+|.Components
+****
+demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory +
+****
+
+.Dependencies
 ****
 org.apache.isis.examples.apps:demo-web:jar:${project.version} +
+org.apache.isis.extensions:isis-extensions-fullcalendar-ui:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-pdfjs-ui:jar:<managed> +
 org.apache.isis.mavendeps:isis-mavendeps-webapp:pom:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui-wkt:jar:<managed> +
@@ -946,18 +1192,11 @@ skinparam rectangle<<4>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<5>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
 package "Root\n[Software System]" {
-  rectangle "==Apache Isis\n<size:10>[Container: packaging: pom]</size>" <<4>> as 4
-  rectangle "==Apache Isis (Aggregator)\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
+  rectangle "==Apache Isis\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
   rectangle "==Apache Isis - Antora\n<size:10>[Container: packaging: pom]</size>" <<3>> as 3
-  rectangle "==Apache Isis Supplemental - Legal Info\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
+  rectangle "==Apache Isis Supplemental - Legal Info\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
 }
-2 .[#707070].> 4 : ""
 2 .[#707070].> 3 : ""
 @enduml
 ----
@@ -966,17 +1205,16 @@ package "Root\n[Software System]" {
 |===
 |Coordinates |Description 
 
-|Apache Isis (Aggregator)
+|Apache Isis
 [source,yaml]
 ----
 Group: org.apache.isis
-Artifact: isis-all
+Artifact: isis-parent
 Type: pom
 Directory: /
 ----
 |Convenience aggregator POM that references all modules, some explicitely,
 others via profiles, that are not activiated per default.
-The parent POM of the core framework is isis-parent/pom.xml.
 
 |Apache Isis - Antora
 [source,yaml]
@@ -987,16 +1225,6 @@ Type: pom
 Directory: /antora
 ----
 |
-
-|Apache Isis
-[source,yaml]
-----
-Group: org.apache.isis
-Artifact: isis-parent
-Type: pom
-Directory: /isis-parent
-----
-|Parent for the core framework + extensions, starter parent pom for starter apps.
 
 |Apache Isis Supplemental - Legal Info
 [source,yaml]
@@ -1073,7 +1301,7 @@ org.yaml:snakeyaml:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:commons:index/collections/Can.adoc[Can], xref:refguide:commons:index/collections/Cardinality.adoc[Cardinality], xref:refguide:commons:index/functional/Result.adoc[Result], xref:refguide:commons:index/resource/ResourceCoordinates.adoc[ResourceCoordinates]
+xref:refguide:commons:index/btree/Compound.adoc[Compound], xref:refguide:commons:index/btree/FunCompound.adoc[FunCompound], xref:refguide:commons:index/collections/Can.adoc[Can], xref:refguide:commons:index/collections/Cardinality.adoc[Cardinality], xref:refguide:commons:index/functional/Result.adoc[Result], xref:refguide:commons:index/resource/ResourceCoordinates.adoc[ResourceCoordinates]
 ****
 |===
 
@@ -1247,6 +1475,7 @@ o.a.i.applib.services.user.UserService +
 
 .Dependencies
 ****
+joda-time:joda-time:jar:<managed> +
 org.apache.isis.commons:isis-commons:jar:<managed> +
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.core:isis-jdk-supplemental:pom:<managed> +
@@ -1256,7 +1485,7 @@ org.jmock:jmock:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:applib:index/AbstractViewModel.adoc[AbstractViewModel], xref:refguide:applib:index/Identifier.adoc[Identifier], xref:refguide:applib:index/IsisModuleApplib.adoc[IsisModuleApplib], xref:refguide:applib:index/RecreatableDomainObject.adoc[RecreatableDomainObject], xref:refguide:applib:index/ViewModel.adoc[ViewModel], xref:refguide:applib:index/adapters/AbstractValueSemanticsProvider.adoc[AbstractValueSemanticsProvider], xref:refguide:applib:index/adapters/DefaultsProvider.adoc[DefaultsProvider], xref:refguide:applib:index/adapters/EncoderDecoder.adoc[EncoderDecoder], xref:refguide:applib:index/adapters/EncodingException.adoc[EncodingException], xref:refguide:applib:index/adapters/Parser.adoc[Parser], xref:refguide:applib:index/adapters/ParsingException.adoc[ParsingException], xref:refguide:applib:index/adapters/ValueSemanticsProvider.adoc[ValueSemanticsProvider], xref:refguide:applib:index/annotation/Action.adoc[Action], xref:refguide:applib:index/annotation/ActionLayout.adoc[ActionLayout], xref:refguide:applib:index/annotation/BookmarkPolicy.adoc[BookmarkPolicy], xref:refguide:applib:index/annotation/Bounding.adoc[Bounding], xref:refguide:applib:index/annotation/Collection.adoc[Collection], xref:refguide:applib:index/annotation/CollectionLayout.adoc[CollectionLayout], xref:refguide:applib:index/annotation/Defaulted.adoc[Defaulted], xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject], xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[DomainObjectLayout], xref:refguide:applib:index/annotation/DomainService.adoc[DomainService], xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[DomainServiceLayout], xref:refguide:applib:index/annotation/DomainServiceLayout~MenuBar.adoc[DomainServiceLayout.MenuBar], xref:refguide:applib:index/annotation/Editing.adoc[Editing], xref:refguide:applib:index/annotation/EntityChangeKind.adoc[EntityChangeKind], xref:refguide:applib:index/annotation/EqualByContent.adoc[EqualByContent], xref:refguide:applib:index/annotation/Facets.adoc[Facets], xref:refguide:applib:index/annotation/HomePage.adoc[HomePage], xref:refguide:applib:index/annotation/InteractionScope.adoc[InteractionScope], xref:refguide:applib:index/annotation/LabelPosition.adoc[LabelPosition], xref:refguide:applib:index/annotation/MemberSupport.adoc[MemberSupport], xref:refguide:applib:index/annotation/MinLength.adoc[MinLength], xref:refguide:applib:index/annotation/Module.adoc[Module], xref:refguide:applib:index/annotation/Nature.adoc[Nature], xref:refguide:applib:index/annotation/NatureOfService.adoc[NatureOfService], xref:refguide:applib:index/annotation/Navigable.adoc[Navigable], xref:refguide:applib:index/annotation/Optionality.adoc[Optionality], xref:refguide:applib:index/annotation/Parameter.adoc[Parameter], xref:refguide:applib:index/annotation/ParameterLayout.adoc[ParameterLayout], xref:refguide:applib:index/annotation/PriorityPrecedence.adoc[PriorityPrecedence], xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic], xref:refguide:applib:index/annotation/Projecting.adoc[Projecting], xref:refguide:applib:index/annotation/PromptStyle.adoc[PromptStyle], xref:refguide:applib:index/annotation/Property.adoc[Property], xref:refguide:applib:index/annotation/PropertyLayout.adoc[PropertyLayout], xref:refguide:applib:index/annotation/Publishing.adoc[Publishing], xref:refguide:applib:index/annotation/Redirect.adoc[Redirect], xref:refguide:applib:index/annotation/RenderDay.adoc[RenderDay], xref:refguide:applib:index/annotation/Repainting.adoc[Repainting], xref:refguide:applib:index/annotation/RestrictTo.adoc[RestrictTo], xref:refguide:applib:index/annotation/SemanticsOf.adoc[SemanticsOf], xref:refguide:applib:index/annotation/Snapshot.adoc[Snapshot], xref:refguide:applib:index/annotation/Title.adoc[Title], xref:refguide:applib:index/annotation/Value.adoc[Value], xref:refguide:applib:index/annotation/Where.adoc[Where], xref:refguide:applib:index/client/RepresentationTypeSimplifiedV2.adoc[RepresentationTypeSimplifiedV2], xref:refguide:applib:index/client/SuppressionType.adoc[SuppressionType], xref:refguide:applib:index/clock/VirtualClock.adoc[VirtualClock], xref:refguide:applib:index/domain/DomainObjectList.adoc[DomainObjectList], xref:refguide:applib:index/events/EventObjectBase.adoc[EventObjectBase], xref:refguide:applib:index/events/domain/AbstractDomainEvent.adoc[AbstractDomainEvent], xref:refguide:applib:index/events/domain/ActionDomainEvent.adoc[ActionDomainEvent], xref:refguide:applib:index/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent], xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent], xref:refguide:applib:index/events/lifecycle/AbstractLifecycleEvent.adoc[AbstractLifecycleEvent], xref:refguide:applib:index/events/lifecycle/ObjectCreatedEvent.adoc[ObjectCreatedEvent], xref:refguide:applib:index/events/lifecycle/ObjectLoadedEvent.adoc[ObjectLoadedEvent], xref:refguide:applib:index/events/lifecycle/ObjectPersistedEvent.adoc[ObjectPersistedEvent], xref:refguide:applib:index/events/lifecycle/ObjectPersistingEvent.adoc[ObjectPersistingEvent], xref:refguide:applib:index/events/lifecycle/ObjectRemovingEvent.adoc[ObjectRemovingEvent], xref:refguide:applib:index/events/lifecycle/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent], xref:refguide:applib:index/events/lifecycle/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent], xref:refguide:applib:index/events/ui/AbstractUiEvent.adoc[AbstractUiEvent], xref:refguide:applib:index/events/ui/CssClassUiEvent.adoc[CssClassUiEvent], xref:refguide:applib:index/events/ui/IconUiEvent.adoc[IconUiEvent], xref:refguide:applib:index/events/ui/LayoutUiEvent.adoc[LayoutUiEvent], xref:refguide:applib:index/events/ui/TitleUiEvent.adoc[TitleUiEvent], xref:refguide:applib:index/exceptions/RecoverableException.adoc[RecoverableException], xref:refguide:applib:index/exceptions/TranslatableException.adoc[TranslatableException], xref:refguide:applib:index/exceptions/UnrecoverableException.adoc[UnrecoverableException], xref:refguide:applib:index/exceptions/unrecoverable/DomainModelException.adoc[DomainModelException], xref:refguide:applib:index/exceptions/unrecoverable/MetaModelException.adoc[MetaModelException], xref:refguide:applib:index/exceptions/unrecoverable/NoAuthenticatorException.adoc[NoAuthenticatorException], xref:refguide:applib:index/exceptions/unrecoverable/ObjectNotFoundException.adoc[ObjectNotFoundException], xref:refguide:applib:index/exceptions/unrecoverable/ObjectPersistenceException.adoc[ObjectPersistenceException], xref:refguide:applib:index/exceptions/unrecoverable/PersistFailedException.adoc[PersistFailedException], xref:refguide:applib:index/exceptions/unrecoverable/ReflectiveActionException.adoc[ReflectiveActionException], xref:refguide:applib:index/exceptions/unrecoverable/RepositoryException.adoc[RepositoryException], xref:refguide:applib:index/exceptions/unrecoverable/UnexpectedCallException.adoc[UnexpectedCallException], xref:refguide:applib:index/exceptions/unrecoverable/UnknownTypeException.adoc[UnknownTypeException], xref:refguide:applib:index/graph/Edge.adoc[Edge], xref:refguide:applib:index/graph/SimpleEdge.adoc[SimpleEdge], xref:refguide:applib:index/graph/Vertex.adoc[Vertex], xref:refguide:applib:index/graph/tree/TreeAdapter.adoc[TreeAdapter], xref:refguide:applib:index/graph/tree/TreeNode.adoc[TreeNode], xref:refguide:applib:index/graph/tree/TreePath.adoc[TreePath], xref:refguide:applib:index/graph/tree/TreeState.adoc[TreeState], xref:refguide:applib:index/id/HasLogicalType.adoc[HasLogicalType], xref:refguide:applib:index/id/LogicalType.adoc[LogicalType], xref:refguide:applib:index/jaxb/DataTypeFactory.adoc[DataTypeFactory], xref:refguide:applib:index/jaxb/JavaSqlJaxbAdapters.adoc[JavaSqlJaxbAdapters], xref:refguide:applib:index/jaxb/JavaSqlXMLGregorianCalendarMarshalling.adoc[JavaSqlXMLGregorianCalendarMarshalling], xref:refguide:applib:index/jaxb/JavaTimeJaxbAdapters.adoc[JavaTimeJaxbAdapters], xref:refguide:applib:index/jaxb/JavaTimeXMLGregorianCalendarMarshalling.adoc[JavaTimeXMLGregorianCalendarMarshalling], xref:refguide:applib:index/jaxb/JavaUtilJaxbAdapters.adoc[JavaUtilJaxbAdapters], xref:refguide:applib:index/jaxb/JodaTimeJaxbAdapters.adoc[JodaTimeJaxbAdapters], xref:refguide:applib:index/jaxb/JodaTimeXMLGregorianCalendarMarshalling.adoc[JodaTimeXMLGregorianCalendarMarshalling], xref:refguide:applib:index/jaxb/PersistentEntitiesAdapter.adoc[PersistentEntitiesAdapter], xref:refguide:applib:index/jaxb/PersistentEntityAdapter.adoc[PersistentEntityAdapter], xref:refguide:applib:index/jaxb/PrimitiveJaxbAdapters.adoc[PrimitiveJaxbAdapters], xref:refguide:applib:index/layout/component/ActionLayoutData.adoc[ActionLayoutData], xref:refguide:applib:index/layout/component/ActionLayoutDataOwner.adoc[ActionLayoutDataOwner], xref:refguide:applib:index/layout/component/CollectionLayoutData.adoc[CollectionLayoutData], xref:refguide:applib:index/layout/component/CollectionLayoutDataOwner.adoc[CollectionLayoutDataOwner], xref:refguide:applib:index/layout/component/CssClassFaPosition.adoc[CssClassFaPosition], xref:refguide:applib:index/layout/component/DomainObjectLayoutData.adoc[DomainObjectLayoutData], xref:refguide:applib:index/layout/component/DomainObjectLayoutDataOwner.adoc[DomainObjectLayoutDataOwner], xref:refguide:applib:index/layout/component/FieldSet.adoc[FieldSet], xref:refguide:applib:index/layout/component/FieldSetOwner.adoc[FieldSetOwner], xref:refguide:applib:index/layout/component/HasBookmarking.adoc[HasBookmarking], xref:refguide:applib:index/layout/component/HasCssClass.adoc[HasCssClass], xref:refguide:applib:index/layout/component/HasCssClassFa.adoc[HasCssClassFa], xref:refguide:applib:index/layout/component/HasDescribedAs.adoc[HasDescribedAs], xref:refguide:applib:index/layout/component/HasHidden.adoc[HasHidden], xref:refguide:applib:index/layout/component/HasNamed.adoc[HasNamed], xref:refguide:applib:index/layout/component/MemberRegion.adoc[MemberRegion], xref:refguide:applib:index/layout/component/MemberRegionOwner.adoc[MemberRegionOwner], xref:refguide:applib:index/layout/component/Owned.adoc[Owned], xref:refguide:applib:index/layout/component/Owner.adoc[Owner], xref:refguide:applib:index/layout/component/PropertyLayoutData.adoc[PropertyLayoutData], xref:refguide:applib:index/layout/component/ServiceActionLayoutData.adoc[ServiceActionLayoutData], xref:refguide:applib:index/layout/component/ServiceActionLayoutDataOwner.adoc[ServiceActionLayoutDataOwner], xref:refguide:applib:index/layout/grid/Grid.adoc[Grid], xref:refguide:applib:index/layout/grid/GridAbstract.adoc[GridAbstract], xref:refguide:applib:index/layout/grid/bootstrap3/BS3ClearFix.adoc[BS3ClearFix], xref:refguide:applib:index/layout/grid/bootstrap3/BS3ClearFixHidden.adoc[BS3ClearFixHidden], xref:refguide:applib:index/layout/grid/bootstrap3/BS3ClearFixVisible.adoc[BS3ClearFixVisible], xref:refguide:applib:index/layout/grid/bootstrap3/BS3Col.adoc[BS3Col], xref:refguide:applib:index/layout/grid/bootstrap3/BS3Element.adoc[BS3Element], xref:refguide:applib:index/layout/grid/bootstrap3/BS3ElementAbstract.adoc[BS3ElementAbstract], xref:refguide:applib:index/layout/grid/bootstrap3/BS3Grid.adoc[BS3Grid], xref:refguide:applib:index/layout/grid/bootstrap3/BS3Row.adoc[BS3Row], xref:refguide:applib:index/layout/grid/bootstrap3/BS3RowContent.adoc[BS3RowContent], xref:refguide:applib:index/layout/grid/bootstrap3/BS3RowContentOwner.adoc[BS3RowContentOwner], xref:refguide:applib:index/layout/grid/bootstrap3/BS3RowOwner.adoc[BS3RowOwner], xref:refguide:applib:index/layout/grid/bootstrap3/BS3Tab.adoc[BS3Tab], xref:refguide:applib:index/layout/grid/bootstrap3/BS3TabGroup.adoc[BS3TabGroup], xref:refguide:applib:index/layout/grid/bootstrap3/BS3TabGroupOwner.adoc[BS3TabGroupOwner], xref:refguide:applib:index/layout/grid/bootstrap3/BS3TabOwner.adoc[BS3TabOwner], xref:refguide:applib:index/layout/grid/bootstrap3/HasCssId.adoc[HasCssId], xref:refguide:applib:index/layout/grid/bootstrap3/Size.adoc[Size], xref:refguide:applib:index/layout/grid/bootstrap3/SizeSpan.adoc[SizeSpan], xref:refguide:applib:index/layout/grid/bootstrap3/WithinGrid.adoc[WithinGrid], xref:refguide:applib:index/layout/links/Link.adoc[Link], xref:refguide:applib:index/layout/menubars/HasNamed.adoc[HasNamed], xref:refguide:applib:index/layout/menubars/Menu.adoc[Menu], xref:refguide:applib:index/layout/menubars/MenuBar.adoc[MenuBar], xref:refguide:applib:index/layout/menubars/MenuBars.adoc[MenuBars], xref:refguide:applib:index/layout/menubars/MenuBarsAbstract.adoc[MenuBarsAbstract], xref:refguide:applib:index/layout/menubars/MenuSection.adoc[MenuSection], xref:refguide:applib:index/layout/menubars/bootstrap3/BS3Menu.adoc[BS3Menu], xref:refguide:applib:index/layout/menubars/bootstrap3/BS3MenuBar.adoc[BS3MenuBar], xref:refguide:applib:index/layout/menubars/bootstrap3/BS3MenuBars.adoc[BS3MenuBars], xref:refguide:applib:index/layout/menubars/bootstrap3/BS3MenuSection.adoc[BS3MenuSection], xref:refguide:applib:index/mixins/dto/Dto.adoc[Dto], xref:refguide:applib:index/mixins/dto/DtoMixinConstants.adoc[DtoMixinConstants], xref:refguide:applib:index/mixins/dto/Dto_downloadXml.adoc[Dto_downloadXml], xref:refguide:applib:index/mixins/dto/Dto_downloadXsd.adoc[Dto_downloadXsd], xref:refguide:applib:index/mixins/layout/LayoutMixinConstants.adoc[LayoutMixinConstants], xref:refguide:applib:index/mixins/layout/Object_downloadLayoutXml.adoc[Object_downloadLayoutXml], xref:refguide:applib:index/mixins/metamodel/Object_downloadMetamodelXml.adoc[Object_downloadMetamodelXml], xref:refguide:applib:index/mixins/metamodel/Object_logicalTypeName.adoc[Object_logicalTypeName], xref:refguide:applib:index/mixins/metamodel/Object_objectIdentifier.adoc[Object_objectIdentifier], xref:refguide:applib:index/mixins/metamodel/Object_rebuildMetamodel.adoc[Object_rebuildMetamodel], xref:refguide:applib:index/mixins/rest/Object_openRestApi.adoc[Object_openRestApi], xref:refguide:applib:index/mixins/security/HasUsername.adoc[HasUsername], xref:refguide:applib:index/mixins/system/DomainChangeRecord.adoc[DomainChangeRecord], xref:refguide:applib:index/mixins/system/DomainChangeRecord_openTargetObject.adoc[DomainChangeRecord_openTargetObject], xref:refguide:applib:index/mixins/system/DomainChangeRecord~ChangeType.adoc[DomainChangeRecord.ChangeType], xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId], xref:refguide:applib:index/mixins/system/HasTransactionId.adoc[HasTransactionId], xref:refguide:applib:index/mixins/updates/OnUpdatedAt.adoc[OnUpdatedAt], xref:refguide:applib:index/mixins/updates/OnUpdatedBy.adoc[OnUpdatedBy], xref:refguide:applib:index/mixins/updates/OnUpdatedByAndAt.adoc[OnUpdatedByAndAt], xref:refguide:applib:index/query/AllInstancesQuery.adoc[AllInstancesQuery], xref:refguide:applib:index/query/NamedQuery.adoc[NamedQuery], xref:refguide:applib:index/query/Query.adoc[Query], xref:refguide:applib:index/query/QueryRange.adoc[QueryRange], xref:refguide:applib:index/services/acceptheader/AcceptHeaderService.adoc[AcceptHeaderService], xref:refguide:applib:index/services/appfeat/ApplicationFeature.adoc[ApplicationFeature], xref:refguide:applib:index/services/appfeat/ApplicationFeatureId.adoc[ApplicationFeatureId], xref:refguide:applib:index/services/appfeat/ApplicationFeatureRepository.adoc[ApplicationFeatureRepository], xref:refguide:applib:index/services/appfeat/ApplicationFeatureSort.adoc[ApplicationFeatureSort], xref:refguide:applib:index/services/appfeat/ApplicationMemberSort.adoc[ApplicationMemberSort], xref:refguide:applib:index/services/appfeatui/ApplicationFeatureMenu.adoc[ApplicationFeatureMenu], xref:refguide:applib:index/services/appfeatui/ApplicationFeatureViewModel.adoc[ApplicationFeatureViewModel], xref:refguide:applib:index/services/appfeatui/ApplicationNamespace.adoc[ApplicationNamespace], xref:refguide:applib:index/services/appfeatui/ApplicationType.adoc[ApplicationType], xref:refguide:applib:index/services/appfeatui/ApplicationTypeAction.adoc[ApplicationTypeAction], xref:refguide:applib:index/services/appfeatui/ApplicationTypeCollection.adoc[ApplicationTypeCollection], xref:refguide:applib:index/services/appfeatui/ApplicationTypeMember.adoc[ApplicationTypeMember], xref:refguide:applib:index/services/appfeatui/ApplicationTypeProperty.adoc[ApplicationTypeProperty], xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark], xref:refguide:applib:index/services/bookmark/BookmarkHolder.adoc[BookmarkHolder], xref:refguide:applib:index/services/bookmark/BookmarkHolder_lookup.adoc[BookmarkHolder_lookup], xref:refguide:applib:index/services/bookmark/BookmarkHolder_object.adoc[BookmarkHolder_object], xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService], xref:refguide:applib:index/services/bookmark/Oid.adoc[Oid], xref:refguide:applib:index/services/bookmarkui/BookmarkUiService.adoc[BookmarkUiService], xref:refguide:applib:index/services/clock/ClockService.adoc[ClockService], xref:refguide:applib:index/services/command/Command.adoc[Command], xref:refguide:applib:index/services/command/CommandExecutorService.adoc[CommandExecutorService], xref:refguide:applib:index/services/command/CommandExecutorService~InteractionContextPolicy.adoc[CommandExecutorService.InteractionContextPolicy], xref:refguide:applib:index/services/command/CommandOutcomeHandler.adoc[CommandOutcomeHandler], xref:refguide:applib:index/services/commanddto/HasCommandDto.adoc[HasCommandDto], xref:refguide:applib:index/services/commanddto/conmap/ContentMappingServiceForCommandDto.adoc[ContentMappingServiceForCommandDto], xref:refguide:applib:index/services/commanddto/conmap/ContentMappingServiceForCommandsDto.adoc[ContentMappingServiceForCommandsDto], xref:refguide:applib:index/services/commanddto/conmap/UserDataKeys.adoc[UserDataKeys], xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor], xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessorForActionAbstract.adoc[CommandDtoProcessorForActionAbstract], xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessorForPropertyAbstract.adoc[CommandDtoProcessorForPropertyAbstract], xref:refguide:applib:index/services/commanddto/processor/spi/CommandDtoProcessorService.adoc[CommandDtoProcessorService], xref:refguide:applib:index/services/commanddto/processor/spi/CommandDtoProcessorServiceIdentity.adoc[CommandDtoProcessorServiceIdentity], xref:refguide:applib:index/services/confview/ConfigurationMenu.adoc[ConfigurationMenu], xref:refguide:applib:index/services/confview/ConfigurationProperty.adoc[ConfigurationProperty], xref:refguide:applib:index/services/confview/ConfigurationViewService.adoc[ConfigurationViewService], xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService], xref:refguide:applib:index/services/email/EmailService.adoc[EmailService], xref:refguide:applib:index/services/error/ErrorDetails.adoc[ErrorDetails], xref:refguide:applib:index/services/error/ErrorReportingService.adoc[ErrorReportingService], xref:refguide:applib:index/services/error/SimpleTicket.adoc[SimpleTicket], xref:refguide:applib:index/services/error/Ticket.adoc[Ticket], xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService], xref:refguide:applib:index/services/exceprecog/Category.adoc[Category], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizer.adoc[ExceptionRecognizer], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizerAbstract.adoc[ExceptionRecognizerAbstract], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizerForType.adoc[ExceptionRecognizerForType], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizerService.adoc[ExceptionRecognizerService], xref:refguide:applib:index/services/exceprecog/Recognition.adoc[Recognition], xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService], xref:refguide:applib:index/services/grid/GridLoaderService.adoc[GridLoaderService], xref:refguide:applib:index/services/grid/GridService.adoc[GridService], xref:refguide:applib:index/services/grid/GridSystemService.adoc[GridSystemService], xref:refguide:applib:index/services/health/Health.adoc[Health], xref:refguide:applib:index/services/health/HealthCheckService.adoc[HealthCheckService], xref:refguide:applib:index/services/hint/HintIdProvider.adoc[HintIdProvider], xref:refguide:applib:index/services/hint/HintStore.adoc[HintStore], xref:refguide:applib:index/services/homepage/HomePageResolverService.adoc[HomePageResolverService], xref:refguide:applib:index/services/i18n/HasTranslationContext.adoc[HasTranslationContext], xref:refguide:applib:index/services/i18n/LocaleProvider.adoc[LocaleProvider], xref:refguide:applib:index/services/i18n/Mode.adoc[Mode], xref:refguide:applib:index/services/i18n/TranslatableString.adoc[TranslatableString], xref:refguide:applib:index/services/i18n/TranslationContext.adoc[TranslationContext], xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService], xref:refguide:applib:index/services/i18n/TranslationsResolver.adoc[TranslationsResolver], xref:refguide:applib:index/services/iactn/ActionInvocation.adoc[ActionInvocation], xref:refguide:applib:index/services/iactn/Execution.adoc[Execution], xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction], xref:refguide:applib:index/services/iactn/InteractionProvider.adoc[InteractionProvider], xref:refguide:applib:index/services/iactn/PropertyEdit.adoc[PropertyEdit], xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext], xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer], xref:refguide:applib:index/services/iactnlayer/InteractionLayerTracker.adoc[InteractionLayerTracker], xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc[InteractionService], xref:refguide:applib:index/services/inject/ServiceInjector.adoc[ServiceInjector], xref:refguide:applib:index/services/jaxb/JaxbService.adoc[JaxbService], xref:refguide:applib:index/services/layout/LayoutService.adoc[LayoutService], xref:refguide:applib:index/services/layout/LayoutServiceMenu.adoc[LayoutServiceMenu], xref:refguide:applib:index/services/layout/Style.adoc[Style], xref:refguide:applib:index/services/linking/DeepLinkService.adoc[DeepLinkService], xref:refguide:applib:index/services/menu/MenuBarsLoaderService.adoc[MenuBarsLoaderService], xref:refguide:applib:index/services/menu/MenuBarsService.adoc[MenuBarsService], xref:refguide:applib:index/services/message/MessageService.adoc[MessageService], xref:refguide:applib:index/services/metamodel/BeanSort.adoc[BeanSort], xref:refguide:applib:index/services/metamodel/Config.adoc[Config], xref:refguide:applib:index/services/metamodel/DomainMember.adoc[DomainMember], xref:refguide:applib:index/services/metamodel/DomainModel.adoc[DomainModel], xref:refguide:applib:index/services/metamodel/MetaModelService.adoc[MetaModelService], xref:refguide:applib:index/services/metamodel/MetaModelServiceMenu.adoc[MetaModelServiceMenu], xref:refguide:applib:index/services/metrics/MetricsService.adoc[MetricsService], xref:refguide:applib:index/services/publishing/log/CommandLogger.adoc[CommandLogger], xref:refguide:applib:index/services/publishing/log/EntityChangesLogger.adoc[EntityChangesLogger], xref:refguide:applib:index/services/publishing/log/EntityPropertyChangeLogger.adoc[EntityPropertyChangeLogger], xref:refguide:applib:index/services/publishing/log/ExecutionLogger.adoc[ExecutionLogger], xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber], xref:refguide:applib:index/services/publishing/spi/EntityChanges.adoc[EntityChanges], xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber], xref:refguide:applib:index/services/publishing/spi/EntityPropertyChange.adoc[EntityPropertyChange], xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber], xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber], xref:refguide:applib:index/services/queryresultscache/MethodReferences.adoc[MethodReferences], xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[QueryResultsCache], xref:refguide:applib:index/services/queryresultscache/QueryResultsCacheControl.adoc[QueryResultsCacheControl], xref:refguide:applib:index/services/registry/InstanceByPriorityComparator.adoc[InstanceByPriorityComparator], xref:refguide:applib:index/services/registry/ServiceRegistry.adoc[ServiceRegistry], xref:refguide:applib:index/services/repository/EntityState.adoc[EntityState], xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService], xref:refguide:applib:index/services/routing/RoutingService.adoc[RoutingService], xref:refguide:applib:index/services/scratchpad/Scratchpad.adoc[Scratchpad], xref:refguide:applib:index/services/session/SessionLoggingService.adoc[SessionLoggingService], xref:refguide:applib:index/services/session/SessionLoggingServiceLogging.adoc[SessionLoggingServiceLogging], xref:refguide:applib:index/services/sudo/SudoService.adoc[SudoService], xref:refguide:applib:index/services/swagger/Format.adoc[Format], xref:refguide:applib:index/services/swagger/SwaggerService.adoc[SwaggerService], xref:refguide:applib:index/services/swagger/Visibility.adoc[Visibility], xref:refguide:applib:index/services/tablecol/TableColumnOrderForCollectionTypeAbstract.adoc[TableColumnOrderForCollectionTypeAbstract], xref:refguide:applib:index/services/tablecol/TableColumnOrderService.adoc[TableColumnOrderService], xref:refguide:applib:index/services/tablecol/TableColumnVisibilityService.adoc[TableColumnVisibilityService], xref:refguide:applib:index/services/title/TitleService.adoc[TitleService], xref:refguide:applib:index/services/urlencoding/UrlEncodingService.adoc[UrlEncodingService], xref:refguide:applib:index/services/urlencoding/UrlEncodingServiceUsingBaseEncodingAbstract.adoc[UrlEncodingServiceUsingBaseEncodingAbstract], xref:refguide:applib:index/services/user/ImpersonateMenu.adoc[ImpersonateMenu], xref:refguide:applib:index/services/user/ImpersonateMenuAdvisor.adoc[ImpersonateMenuAdvisor], xref:refguide:applib:index/services/user/ImpersonateStopMenu.adoc[ImpersonateStopMenu], xref:refguide:applib:index/services/user/ImpersonatedUserHolder.adoc[ImpersonatedUserHolder], xref:refguide:applib:index/services/user/RoleMemento.adoc[RoleMemento], xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento], xref:refguide:applib:index/services/user/UserService.adoc[UserService], xref:refguide:applib:index/services/userreg/EmailNotificationService.adoc[EmailNotificationService], xref:refguide:applib:index/services/userreg/UserDetails.adoc[UserDetails], xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[UserRegistrationService], xref:refguide:applib:index/services/userreg/events/EmailEventAbstract.adoc[EmailEventAbstract], xref:refguide:applib:index/services/userreg/events/EmailRegistrationEvent.adoc[EmailRegistrationEvent], xref:refguide:applib:index/services/userreg/events/PasswordResetEvent.adoc[PasswordResetEvent], xref:refguide:applib:index/services/userui/UserMenu.adoc[UserMenu], xref:refguide:applib:index/services/wrapper/DisabledException.adoc[DisabledException], xref:refguide:applib:index/services/wrapper/HiddenException.adoc[HiddenException], xref:refguide:applib:index/services/wrapper/InvalidException.adoc[InvalidException], xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory], xref:refguide:applib:index/services/wrapper/WrappingObject.adoc[WrappingObject], xref:refguide:applib:index/services/wrapper/control/AsyncControl.adoc[AsyncControl], xref:refguide:applib:index/services/wrapper/control/ControlAbstract.adoc[ControlAbstract], xref:refguide:applib:index/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler], xref:refguide:applib:index/services/wrapper/control/ExceptionHandlerAbstract.adoc[ExceptionHandlerAbstract], xref:refguide:applib:index/services/wrapper/control/ExecutionMode.adoc[ExecutionMode], xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl], xref:refguide:applib:index/services/wrapper/events/AccessEvent.adoc[AccessEvent], xref:refguide:applib:index/services/wrapper/events/ActionArgumentEvent.adoc[ActionArgumentEvent], xref:refguide:applib:index/services/wrapper/events/ActionInvocationEvent.adoc[ActionInvocationEvent], xref:refguide:applib:index/services/wrapper/events/ActionUsabilityEvent.adoc[ActionUsabilityEvent], xref:refguide:applib:index/services/wrapper/events/ActionVisibilityEvent.adoc[ActionVisibilityEvent], xref:refguide:applib:index/services/wrapper/events/CollectionAccessEvent.adoc[CollectionAccessEvent], xref:refguide:applib:index/services/wrapper/events/CollectionAddToEvent.adoc[CollectionAddToEvent], xref:refguide:applib:index/services/wrapper/events/CollectionMethodEvent.adoc[CollectionMethodEvent], xref:refguide:applib:index/services/wrapper/events/CollectionRemoveFromEvent.adoc[CollectionRemoveFromEvent], xref:refguide:applib:index/services/wrapper/events/CollectionUsabilityEvent.adoc[CollectionUsabilityEvent], xref:refguide:applib:index/services/wrapper/events/InteractionEvent.adoc[InteractionEvent], xref:refguide:applib:index/services/wrapper/events/ObjectTitleEvent.adoc[ObjectTitleEvent], xref:refguide:applib:index/services/wrapper/events/ObjectValidityEvent.adoc[ObjectValidityEvent], xref:refguide:applib:index/services/wrapper/events/ObjectVisibilityEvent.adoc[ObjectVisibilityEvent], xref:refguide:applib:index/services/wrapper/events/ParseValueEvent.adoc[ParseValueEvent], xref:refguide:applib:index/services/wrapper/events/PropertyAccessEvent.adoc[PropertyAccessEvent], xref:refguide:applib:index/services/wrapper/events/PropertyModifyEvent.adoc[PropertyModifyEvent], xref:refguide:applib:index/services/wrapper/events/PropertyUsabilityEvent.adoc[PropertyUsabilityEvent], xref:refguide:applib:index/services/wrapper/events/PropertyVisibilityEvent.adoc[PropertyVisibilityEvent], xref:refguide:applib:index/services/wrapper/events/ProposedHolderEvent.adoc[ProposedHolderEvent], xref:refguide:applib:index/services/wrapper/events/UsabilityEvent.adoc[UsabilityEvent], xref:refguide:applib:index/services/wrapper/events/ValidityEvent.adoc[ValidityEvent], xref:refguide:applib:index/services/wrapper/events/VisibilityEvent.adoc[VisibilityEvent], xref:refguide:applib:index/services/wrapper/listeners/InteractionAdapter.adoc[InteractionAdapter], xref:refguide:applib:index/services/wrapper/listeners/InteractionListener.adoc[InteractionListener], xref:refguide:applib:index/services/xactn/TransactionId.adoc[TransactionId], xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService], xref:refguide:applib:index/services/xactn/TransactionState.adoc[TransactionState], xref:refguide:applib:index/services/xactn/TransactionalProcessor.adoc[TransactionalProcessor], xref:refguide:applib:index/services/xml/XmlService.adoc[XmlService], xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService.adoc[XmlSnapshotService], xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService~Snapshot.adoc[XmlSnapshotService.Snapshot], xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService~Snapshot~Builder.adoc[XmlSnapshotService.Snapshot.Builder], xref:refguide:applib:index/snapshot/SnapshottableWithInclusions.adoc[SnapshottableWithInclusions], xref:refguide:applib:index/spec/AbstractSpecification.adoc[AbstractSpecification], xref:refguide:applib:index/spec/AbstractSpecification2.adoc[AbstractSpecification2], xref:refguide:applib:index/spec/Specification.adoc[Specification], xref:refguide:applib:index/spec/Specification2.adoc[Specification2], xref:refguide:applib:index/spec/SpecificationAnd.adoc[SpecificationAnd], xref:refguide:applib:index/spec/SpecificationNot.adoc[SpecificationNot], xref:refguide:applib:index/spec/SpecificationOr.adoc[SpecificationOr], xref:refguide:applib:index/types/DescriptionType.adoc[DescriptionType], xref:refguide:applib:index/types/MemberIdentifierType.adoc[MemberIdentifierType], xref:refguide:applib:index/types/TargetActionType.adoc[TargetActionType], xref:refguide:applib:index/types/TargetClassType.adoc[TargetClassType], xref:refguide:applib:index/util/Enums.adoc[Enums], xref:refguide:applib:index/util/Equality.adoc[Equality], xref:refguide:applib:index/util/Hashing.adoc[Hashing], xref:refguide:applib:index/util/JaxbUtil.adoc[JaxbUtil], xref:refguide:applib:index/util/ObjectContracts.adoc[ObjectContracts], xref:refguide:applib:index/util/ReasonBuffer.adoc[ReasonBuffer], xref:refguide:applib:index/util/ReasonBuffer2.adoc[ReasonBuffer2], xref:refguide:applib:index/util/Reasons.adoc[Reasons], xref:refguide:applib:index/util/TitleBuffer.adoc[TitleBuffer], xref:refguide:applib:index/util/TitleBufferException.adoc[TitleBufferException], xref:refguide:applib:index/util/ToString.adoc[ToString], xref:refguide:applib:index/util/ZipReader.adoc[ZipReader], xref:refguide:applib:index/util/ZipWriter.adoc[ZipWriter], xref:refguide:applib:index/util/schema/ChangesDtoUtils.adoc[ChangesDtoUtils], xref:refguide:applib:index/util/schema/CommandDtoUtils.adoc[CommandDtoUtils], xref:refguide:applib:index/util/schema/CommonDtoUtils.adoc[CommonDtoUtils], xref:refguide:applib:index/util/schema/InteractionDtoUtils.adoc[InteractionDtoUtils], xref:refguide:applib:index/util/schema/MemberExecutionDtoUtils.adoc[MemberExecutionDtoUtils], xref:refguide:applib:index/value/Blob.adoc[Blob], xref:refguide:applib:index/value/Clob.adoc[Clob], xref:refguide:applib:index/value/HasHtml.adoc[HasHtml], xref:refguide:applib:index/value/LocalResourcePath.adoc[LocalResourcePath], xref:refguide:applib:index/value/Markup.adoc[Markup], xref:refguide:applib:index/value/NamedWithMimeType.adoc[NamedWithMimeType], xref:refguide:applib:index/value/OpenUrlStrategy.adoc[OpenUrlStrategy], xref:refguide:applib:index/value/Password.adoc[Password]
+xref:refguide:applib:index/AbstractViewModel.adoc[AbstractViewModel], xref:refguide:applib:index/Identifier.adoc[Identifier], xref:refguide:applib:index/IsisModuleApplib.adoc[IsisModuleApplib], xref:refguide:applib:index/RecreatableDomainObject.adoc[RecreatableDomainObject], xref:refguide:applib:index/ViewModel.adoc[ViewModel], xref:refguide:applib:index/annotation/Action.adoc[Action], xref:refguide:applib:index/annotation/ActionLayout.adoc[ActionLayout], xref:refguide:applib:index/annotation/BookmarkPolicy.adoc[BookmarkPolicy], xref:refguide:applib:index/annotation/Bounding.adoc[Bounding], xref:refguide:applib:index/annotation/Collection.adoc[Collection], xref:refguide:applib:index/annotation/CollectionLayout.adoc[CollectionLayout], xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject], xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[DomainObjectLayout], xref:refguide:applib:index/annotation/DomainService.adoc[DomainService], xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[DomainServiceLayout], xref:refguide:applib:index/annotation/DomainServiceLayout~MenuBar.adoc[DomainServiceLayout.MenuBar], xref:refguide:applib:index/annotation/Domain~Exclude.adoc[Domain.Exclude], xref:refguide:applib:index/annotation/Domain~Include.adoc[Domain.Include], xref:refguide:applib:index/annotation/Editing.adoc[Editing], xref:refguide:applib:index/annotation/EntityChangeKind.adoc[EntityChangeKind], xref:refguide:applib:index/annotation/HomePage.adoc[HomePage], xref:refguide:applib:index/annotation/InteractionScope.adoc[InteractionScope], xref:refguide:applib:index/annotation/Introspection.adoc[Introspection], xref:refguide:applib:index/annotation/LabelPosition.adoc[LabelPosition], xref:refguide:applib:index/annotation/LogicalTypeName.adoc[LogicalTypeName], xref:refguide:applib:index/annotation/MemberSupport.adoc[MemberSupport], xref:refguide:applib:index/annotation/MinLength.adoc[MinLength], xref:refguide:applib:index/annotation/Module.adoc[Module], xref:refguide:applib:index/annotation/Nature.adoc[Nature], xref:refguide:applib:index/annotation/NatureOfService.adoc[NatureOfService], xref:refguide:applib:index/annotation/Navigable.adoc[Navigable], xref:refguide:applib:index/annotation/ObjectLifecycle.adoc[ObjectLifecycle], xref:refguide:applib:index/annotation/ObjectSupport.adoc[ObjectSupport], xref:refguide:applib:index/annotation/Optionality.adoc[Optionality], xref:refguide:applib:index/annotation/Parameter.adoc[Parameter], xref:refguide:applib:index/annotation/ParameterLayout.adoc[ParameterLayout], xref:refguide:applib:index/annotation/PriorityPrecedence.adoc[PriorityPrecedence], xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic], xref:refguide:applib:index/annotation/Projecting.adoc[Projecting], xref:refguide:applib:index/annotation/PromptStyle.adoc[PromptStyle], xref:refguide:applib:index/annotation/Property.adoc[Property], xref:refguide:applib:index/annotation/PropertyLayout.adoc[PropertyLayout], xref:refguide:applib:index/annotation/Publishing.adoc[Publishing], xref:refguide:applib:index/annotation/Redirect.adoc[Redirect], xref:refguide:applib:index/annotation/RenderDay.adoc[RenderDay], xref:refguide:applib:index/annotation/Repainting.adoc[Repainting], xref:refguide:applib:index/annotation/RestrictTo.adoc[RestrictTo], xref:refguide:applib:index/annotation/SemanticsOf.adoc[SemanticsOf], xref:refguide:applib:index/annotation/Snapshot.adoc[Snapshot], xref:refguide:applib:index/annotation/Title.adoc[Title], xref:refguide:applib:index/annotation/Value.adoc[Value], xref:refguide:applib:index/annotation/ValueSemantics.adoc[ValueSemantics], xref:refguide:applib:index/annotation/Where.adoc[Where], xref:refguide:applib:index/client/RepresentationTypeSimplifiedV2.adoc[RepresentationTypeSimplifiedV2], xref:refguide:applib:index/client/SuppressionType.adoc[SuppressionType], xref:refguide:applib:index/clock/VirtualClock.adoc[VirtualClock], xref:refguide:applib:index/domain/DomainObjectList.adoc[DomainObjectList], xref:refguide:applib:index/events/EventObjectBase.adoc[EventObjectBase], xref:refguide:applib:index/events/domain/AbstractDomainEvent.adoc[AbstractDomainEvent], xref:refguide:applib:index/events/domain/ActionDomainEvent.adoc[ActionDomainEvent], xref:refguide:applib:index/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent], xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent], xref:refguide:applib:index/events/lifecycle/AbstractLifecycleEvent.adoc[AbstractLifecycleEvent], xref:refguide:applib:index/events/lifecycle/ObjectCreatedEvent.adoc[ObjectCreatedEvent], xref:refguide:applib:index/events/lifecycle/ObjectLoadedEvent.adoc[ObjectLoadedEvent], xref:refguide:applib:index/events/lifecycle/ObjectPersistedEvent.adoc[ObjectPersistedEvent], xref:refguide:applib:index/events/lifecycle/ObjectPersistingEvent.adoc[ObjectPersistingEvent], xref:refguide:applib:index/events/lifecycle/ObjectRemovingEvent.adoc[ObjectRemovingEvent], xref:refguide:applib:index/events/lifecycle/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent], xref:refguide:applib:index/events/lifecycle/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent], xref:refguide:applib:index/events/ui/AbstractUiEvent.adoc[AbstractUiEvent], xref:refguide:applib:index/events/ui/CssClassUiEvent.adoc[CssClassUiEvent], xref:refguide:applib:index/events/ui/IconUiEvent.adoc[IconUiEvent], xref:refguide:applib:index/events/ui/LayoutUiEvent.adoc[LayoutUiEvent], xref:refguide:applib:index/events/ui/TitleUiEvent.adoc[TitleUiEvent], xref:refguide:applib:index/exceptions/RecoverableException.adoc[RecoverableException], xref:refguide:applib:index/exceptions/TranslatableException.adoc[TranslatableException], xref:refguide:applib:index/exceptions/UnrecoverableException.adoc[UnrecoverableException], xref:refguide:applib:index/exceptions/unrecoverable/DomainModelException.adoc[DomainModelException], xref:refguide:applib:index/exceptions/unrecoverable/MetaModelException.adoc[MetaModelException], xref:refguide:applib:index/exceptions/unrecoverable/NoAuthenticatorException.adoc[NoAuthenticatorException], xref:refguide:applib:index/exceptions/unrecoverable/ObjectNotFoundException.adoc[ObjectNotFoundException], xref:refguide:applib:index/exceptions/unrecoverable/ObjectPersistenceException.adoc[ObjectPersistenceException], xref:refguide:applib:index/exceptions/unrecoverable/PersistFailedException.adoc[PersistFailedException], xref:refguide:applib:index/exceptions/unrecoverable/ReflectiveActionException.adoc[ReflectiveActionException], xref:refguide:applib:index/exceptions/unrecoverable/RepositoryException.adoc[RepositoryException], xref:refguide:applib:index/exceptions/unrecoverable/UnexpectedCallException.adoc[UnexpectedCallException], xref:refguide:applib:index/exceptions/unrecoverable/UnknownTypeException.adoc[UnknownTypeException], xref:refguide:applib:index/graph/Edge.adoc[Edge], xref:refguide:applib:index/graph/SimpleEdge.adoc[SimpleEdge], xref:refguide:applib:index/graph/Vertex.adoc[Vertex], xref:refguide:applib:index/graph/tree/TreeAdapter.adoc[TreeAdapter], xref:refguide:applib:index/graph/tree/TreeNode.adoc[TreeNode], xref:refguide:applib:index/graph/tree/TreePath.adoc[TreePath], xref:refguide:applib:index/graph/tree/TreeState.adoc[TreeState], xref:refguide:applib:index/id/HasLogicalType.adoc[HasLogicalType], xref:refguide:applib:index/id/LogicalType.adoc[LogicalType], xref:refguide:applib:index/jaxb/DataTypeFactory.adoc[DataTypeFactory], xref:refguide:applib:index/jaxb/JavaSqlJaxbAdapters.adoc[JavaSqlJaxbAdapters], xref:refguide:applib:index/jaxb/JavaSqlXMLGregorianCalendarMarshalling.adoc[JavaSqlXMLGregorianCalendarMarshalling], xref:refguide:applib:index/jaxb/JavaTimeJaxbAdapters.adoc[JavaTimeJaxbAdapters], xref:refguide:applib:index/jaxb/JavaTimeXMLGregorianCalendarMarshalling.adoc[JavaTimeXMLGregorianCalendarMarshalling], xref:refguide:applib:index/jaxb/JavaUtilJaxbAdapters.adoc[JavaUtilJaxbAdapters], xref:refguide:applib:index/jaxb/PersistentEntitiesAdapter.adoc[PersistentEntitiesAdapter], xref:refguide:applib:index/jaxb/PersistentEntityAdapter.adoc[PersistentEntityAdapter], xref:refguide:applib:index/jaxb/PrimitiveJaxbAdapters.adoc[PrimitiveJaxbAdapters], xref:refguide:applib:index/layout/component/ActionLayoutData.adoc[ActionLayoutData], xref:refguide:applib:index/layout/component/ActionLayoutDataOwner.adoc[ActionLayoutDataOwner], xref:refguide:applib:index/layout/component/CollectionLayoutData.adoc[CollectionLayoutData], xref:refguide:applib:index/layout/component/CollectionLayoutDataOwner.adoc[CollectionLayoutDataOwner], xref:refguide:applib:index/layout/component/CssClassFaPosition.adoc[CssClassFaPosition], xref:refguide:applib:index/layout/component/DomainObjectLayoutData.adoc[DomainObjectLayoutData], xref:refguide:applib:index/layout/component/DomainObjectLayoutDataOwner.adoc[DomainObjectLayoutDataOwner], xref:refguide:applib:index/layout/component/FieldSet.adoc[FieldSet], xref:refguide:applib:index/layout/component/FieldSetOwner.adoc[FieldSetOwner], xref:refguide:applib:index/layout/component/HasBookmarking.adoc[HasBookmarking], xref:refguide:applib:index/layout/component/HasCssClass.adoc[HasCssClass], xref:refguide:applib:index/layout/component/HasCssClassFa.adoc[HasCssClassFa], xref:refguide:applib:index/layout/component/HasDescribedAs.adoc[HasDescribedAs], xref:refguide:applib:index/layout/component/HasHidden.adoc[HasHidden], xref:refguide:applib:index/layout/component/HasNamed.adoc[HasNamed], xref:refguide:applib:index/layout/component/MemberRegion.adoc[MemberRegion], xref:refguide:applib:index/layout/component/MemberRegionOwner.adoc[MemberRegionOwner], xref:refguide:applib:index/layout/component/Owned.adoc[Owned], xref:refguide:applib:index/layout/component/Owner.adoc[Owner], xref:refguide:applib:index/layout/component/PropertyLayoutData.adoc[PropertyLayoutData], xref:refguide:applib:index/layout/component/ServiceActionLayoutData.adoc[ServiceActionLayoutData], xref:refguide:applib:index/layout/component/ServiceActionLayoutDataOwner.adoc[ServiceActionLayoutDataOwner], xref:refguide:applib:index/layout/grid/Grid.adoc[Grid], xref:refguide:applib:index/layout/grid/GridAbstract.adoc[GridAbstract], xref:refguide:applib:index/layout/grid/bootstrap3/BS3ClearFix.adoc[BS3ClearFix], xref:refguide:applib:index/layout/grid/bootstrap3/BS3ClearFixHidden.adoc[BS3ClearFixHidden], xref:refguide:applib:index/layout/grid/bootstrap3/BS3ClearFixVisible.adoc[BS3ClearFixVisible], xref:refguide:applib:index/layout/grid/bootstrap3/BS3Col.adoc[BS3Col], xref:refguide:applib:index/layout/grid/bootstrap3/BS3Element.adoc[BS3Element], xref:refguide:applib:index/layout/grid/bootstrap3/BS3ElementAbstract.adoc[BS3ElementAbstract], xref:refguide:applib:index/layout/grid/bootstrap3/BS3Grid.adoc[BS3Grid], xref:refguide:applib:index/layout/grid/bootstrap3/BS3Row.adoc[BS3Row], xref:refguide:applib:index/layout/grid/bootstrap3/BS3RowContent.adoc[BS3RowContent], xref:refguide:applib:index/layout/grid/bootstrap3/BS3RowContentOwner.adoc[BS3RowContentOwner], xref:refguide:applib:index/layout/grid/bootstrap3/BS3RowOwner.adoc[BS3RowOwner], xref:refguide:applib:index/layout/grid/bootstrap3/BS3Tab.adoc[BS3Tab], xref:refguide:applib:index/layout/grid/bootstrap3/BS3TabGroup.adoc[BS3TabGroup], xref:refguide:applib:index/layout/grid/bootstrap3/BS3TabGroupOwner.adoc[BS3TabGroupOwner], xref:refguide:applib:index/layout/grid/bootstrap3/BS3TabOwner.adoc[BS3TabOwner], xref:refguide:applib:index/layout/grid/bootstrap3/HasCssId.adoc[HasCssId], xref:refguide:applib:index/layout/grid/bootstrap3/Size.adoc[Size], xref:refguide:applib:index/layout/grid/bootstrap3/SizeSpan.adoc[SizeSpan], xref:refguide:applib:index/layout/grid/bootstrap3/WithinGrid.adoc[WithinGrid], xref:refguide:applib:index/layout/links/Link.adoc[Link], xref:refguide:applib:index/layout/menubars/HasNamed.adoc[HasNamed], xref:refguide:applib:index/layout/menubars/Menu.adoc[Menu], xref:refguide:applib:index/layout/menubars/MenuBar.adoc[MenuBar], xref:refguide:applib:index/layout/menubars/MenuBars.adoc[MenuBars], xref:refguide:applib:index/layout/menubars/MenuBarsAbstract.adoc[MenuBarsAbstract], xref:refguide:applib:index/layout/menubars/MenuSection.adoc[MenuSection], xref:refguide:applib:index/layout/menubars/bootstrap3/BS3Menu.adoc[BS3Menu], xref:refguide:applib:index/layout/menubars/bootstrap3/BS3MenuBar.adoc[BS3MenuBar], xref:refguide:applib:index/layout/menubars/bootstrap3/BS3MenuBars.adoc[BS3MenuBars], xref:refguide:applib:index/layout/menubars/bootstrap3/BS3MenuSection.adoc[BS3MenuSection], xref:refguide:applib:index/locale/UserLocale.adoc[UserLocale], xref:refguide:applib:index/mixins/dto/Dto.adoc[Dto], xref:refguide:applib:index/mixins/dto/DtoMixinConstants.adoc[DtoMixinConstants], xref:refguide:applib:index/mixins/dto/Dto_downloadXml.adoc[Dto_downloadXml], xref:refguide:applib:index/mixins/dto/Dto_downloadXsd.adoc[Dto_downloadXsd], xref:refguide:applib:index/mixins/layout/LayoutMixinConstants.adoc[LayoutMixinConstants], xref:refguide:applib:index/mixins/layout/Object_downloadLayoutXml.adoc[Object_downloadLayoutXml], xref:refguide:applib:index/mixins/metamodel/Object_downloadMetamodelXml.adoc[Object_downloadMetamodelXml], xref:refguide:applib:index/mixins/metamodel/Object_logicalTypeName.adoc[Object_logicalTypeName], xref:refguide:applib:index/mixins/metamodel/Object_objectIdentifier.adoc[Object_objectIdentifier], xref:refguide:applib:index/mixins/metamodel/Object_rebuildMetamodel.adoc[Object_rebuildMetamodel], xref:refguide:applib:index/mixins/rest/Object_openRestApi.adoc[Object_openRestApi], xref:refguide:applib:index/mixins/security/HasUsername.adoc[HasUsername], xref:refguide:applib:index/mixins/system/DomainChangeRecord.adoc[DomainChangeRecord], xref:refguide:applib:index/mixins/system/DomainChangeRecord_openTargetObject.adoc[DomainChangeRecord_openTargetObject], xref:refguide:applib:index/mixins/system/DomainChangeRecord~ChangeType.adoc[DomainChangeRecord.ChangeType], xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId], xref:refguide:applib:index/mixins/system/HasTransactionId.adoc[HasTransactionId], xref:refguide:applib:index/mixins/updates/OnUpdatedAt.adoc[OnUpdatedAt], xref:refguide:applib:index/mixins/updates/OnUpdatedBy.adoc[OnUpdatedBy], xref:refguide:applib:index/mixins/updates/OnUpdatedByAndAt.adoc[OnUpdatedByAndAt], xref:refguide:applib:index/query/AllInstancesQuery.adoc[AllInstancesQuery], xref:refguide:applib:index/query/NamedQuery.adoc[NamedQuery], xref:refguide:applib:index/query/Query.adoc[Query], xref:refguide:applib:index/query/QueryRange.adoc[QueryRange], xref:refguide:applib:index/services/acceptheader/AcceptHeaderService.adoc[AcceptHeaderService], xref:refguide:applib:index/services/appfeat/ApplicationFeature.adoc[ApplicationFeature], xref:refguide:applib:index/services/appfeat/ApplicationFeatureId.adoc[ApplicationFeatureId], xref:refguide:applib:index/services/appfeat/ApplicationFeatureRepository.adoc[ApplicationFeatureRepository], xref:refguide:applib:index/services/appfeat/ApplicationFeatureSort.adoc[ApplicationFeatureSort], xref:refguide:applib:index/services/appfeat/ApplicationMemberSort.adoc[ApplicationMemberSort], xref:refguide:applib:index/services/appfeatui/ApplicationFeatureMenu.adoc[ApplicationFeatureMenu], xref:refguide:applib:index/services/appfeatui/ApplicationFeatureViewModel.adoc[ApplicationFeatureViewModel], xref:refguide:applib:index/services/appfeatui/ApplicationNamespace.adoc[ApplicationNamespace], xref:refguide:applib:index/services/appfeatui/ApplicationType.adoc[ApplicationType], xref:refguide:applib:index/services/appfeatui/ApplicationTypeAction.adoc[ApplicationTypeAction], xref:refguide:applib:index/services/appfeatui/ApplicationTypeCollection.adoc[ApplicationTypeCollection], xref:refguide:applib:index/services/appfeatui/ApplicationTypeMember.adoc[ApplicationTypeMember], xref:refguide:applib:index/services/appfeatui/ApplicationTypeProperty.adoc[ApplicationTypeProperty], xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark], xref:refguide:applib:index/services/bookmark/BookmarkHolder.adoc[BookmarkHolder], xref:refguide:applib:index/services/bookmark/BookmarkHolder_lookup.adoc[BookmarkHolder_lookup], xref:refguide:applib:index/services/bookmark/BookmarkHolder_object.adoc[BookmarkHolder_object], xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService], xref:refguide:applib:index/services/bookmark/Oid.adoc[Oid], xref:refguide:applib:index/services/bookmarkui/BookmarkUiService.adoc[BookmarkUiService], xref:refguide:applib:index/services/clock/ClockService.adoc[ClockService], xref:refguide:applib:index/services/command/Command.adoc[Command], xref:refguide:applib:index/services/command/CommandExecutorService.adoc[CommandExecutorService], xref:refguide:applib:index/services/command/CommandExecutorService~InteractionContextPolicy.adoc[CommandExecutorService.InteractionContextPolicy], xref:refguide:applib:index/services/command/CommandOutcomeHandler.adoc[CommandOutcomeHandler], xref:refguide:applib:index/services/commanddto/HasCommandDto.adoc[HasCommandDto], xref:refguide:applib:index/services/commanddto/conmap/ContentMappingServiceForCommandDto.adoc[ContentMappingServiceForCommandDto], xref:refguide:applib:index/services/commanddto/conmap/ContentMappingServiceForCommandsDto.adoc[ContentMappingServiceForCommandsDto], xref:refguide:applib:index/services/commanddto/conmap/UserDataKeys.adoc[UserDataKeys], xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor], xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessorForActionAbstract.adoc[CommandDtoProcessorForActionAbstract], xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessorForPropertyAbstract.adoc[CommandDtoProcessorForPropertyAbstract], xref:refguide:applib:index/services/commanddto/processor/spi/CommandDtoProcessorService.adoc[CommandDtoProcessorService], xref:refguide:applib:index/services/commanddto/processor/spi/CommandDtoProcessorServiceIdentity.adoc[CommandDtoProcessorServiceIdentity], xref:refguide:applib:index/services/confview/ConfigurationMenu.adoc[ConfigurationMenu], xref:refguide:applib:index/services/confview/ConfigurationProperty.adoc[ConfigurationProperty], xref:refguide:applib:index/services/confview/ConfigurationViewService.adoc[ConfigurationViewService], xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService], xref:refguide:applib:index/services/email/EmailService.adoc[EmailService], xref:refguide:applib:index/services/error/ErrorDetails.adoc[ErrorDetails], xref:refguide:applib:index/services/error/ErrorReportingService.adoc[ErrorReportingService], xref:refguide:applib:index/services/error/SimpleTicket.adoc[SimpleTicket], xref:refguide:applib:index/services/error/Ticket.adoc[Ticket], xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService], xref:refguide:applib:index/services/exceprecog/Category.adoc[Category], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizer.adoc[ExceptionRecognizer], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizerAbstract.adoc[ExceptionRecognizerAbstract], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizerForType.adoc[ExceptionRecognizerForType], xref:refguide:applib:index/services/exceprecog/ExceptionRecognizerService.adoc[ExceptionRecognizerService], xref:refguide:applib:index/services/exceprecog/Recognition.adoc[Recognition], xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService], xref:refguide:applib:index/services/grid/GridLoaderService.adoc[GridLoaderService], xref:refguide:applib:index/services/grid/GridService.adoc[GridService], xref:refguide:applib:index/services/grid/GridSystemService.adoc[GridSystemService], xref:refguide:applib:index/services/health/Health.adoc[Health], xref:refguide:applib:index/services/health/HealthCheckService.adoc[HealthCheckService], xref:refguide:applib:index/services/hint/HintIdProvider.adoc[HintIdProvider], xref:refguide:applib:index/services/hint/HintStore.adoc[HintStore], xref:refguide:applib:index/services/homepage/HomePageResolverService.adoc[HomePageResolverService], xref:refguide:applib:index/services/i18n/HasTranslationContext.adoc[HasTranslationContext], xref:refguide:applib:index/services/i18n/LanguageProvider.adoc[LanguageProvider], xref:refguide:applib:index/services/i18n/Mode.adoc[Mode], xref:refguide:applib:index/services/i18n/TranslatableString.adoc[TranslatableString], xref:refguide:applib:index/services/i18n/TranslationContext.adoc[TranslationContext], xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService], xref:refguide:applib:index/services/i18n/TranslationsResolver.adoc[TranslationsResolver], xref:refguide:applib:index/services/iactn/ActionInvocation.adoc[ActionInvocation], xref:refguide:applib:index/services/iactn/Execution.adoc[Execution], xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction], xref:refguide:applib:index/services/iactn/InteractionProvider.adoc[InteractionProvider], xref:refguide:applib:index/services/iactn/PropertyEdit.adoc[PropertyEdit], xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext], xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer], xref:refguide:applib:index/services/iactnlayer/InteractionLayerTracker.adoc[InteractionLayerTracker], xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc[InteractionService], xref:refguide:applib:index/services/inject/ServiceInjector.adoc[ServiceInjector], xref:refguide:applib:index/services/jaxb/JaxbService.adoc[JaxbService], xref:refguide:applib:index/services/layout/LayoutService.adoc[LayoutService], xref:refguide:applib:index/services/layout/LayoutServiceMenu.adoc[LayoutServiceMenu], xref:refguide:applib:index/services/layout/Style.adoc[Style], xref:refguide:applib:index/services/linking/DeepLinkService.adoc[DeepLinkService], xref:refguide:applib:index/services/locale/LocaleChoiceProvider.adoc[LocaleChoiceProvider], xref:refguide:applib:index/services/menu/MenuBarsLoaderService.adoc[MenuBarsLoaderService], xref:refguide:applib:index/services/menu/MenuBarsService.adoc[MenuBarsService], xref:refguide:applib:index/services/message/MessageService.adoc[MessageService], xref:refguide:applib:index/services/metamodel/BeanSort.adoc[BeanSort], xref:refguide:applib:index/services/metamodel/Config.adoc[Config], xref:refguide:applib:index/services/metamodel/DomainMember.adoc[DomainMember], xref:refguide:applib:index/services/metamodel/DomainModel.adoc[DomainModel], xref:refguide:applib:index/services/metamodel/MetaModelService.adoc[MetaModelService], xref:refguide:applib:index/services/metamodel/MetaModelServiceMenu.adoc[MetaModelServiceMenu], xref:refguide:applib:index/services/metrics/MetricsService.adoc[MetricsService], xref:refguide:applib:index/services/publishing/log/CommandLogger.adoc[CommandLogger], xref:refguide:applib:index/services/publishing/log/EntityChangesLogger.adoc[EntityChangesLogger], xref:refguide:applib:index/services/publishing/log/EntityPropertyChangeLogger.adoc[EntityPropertyChangeLogger], xref:refguide:applib:index/services/publishing/log/ExecutionLogger.adoc[ExecutionLogger], xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber], xref:refguide:applib:index/services/publishing/spi/EntityChanges.adoc[EntityChanges], xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber], xref:refguide:applib:index/services/publishing/spi/EntityPropertyChange.adoc[EntityPropertyChange], xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber], xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber], xref:refguide:applib:index/services/queryresultscache/MethodReferences.adoc[MethodReferences], xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[QueryResultsCache], xref:refguide:applib:index/services/queryresultscache/QueryResultsCacheControl.adoc[QueryResultsCacheControl], xref:refguide:applib:index/services/registry/InstanceByPriorityComparator.adoc[InstanceByPriorityComparator], xref:refguide:applib:index/services/registry/ServiceRegistry.adoc[ServiceRegistry], xref:refguide:applib:index/services/repository/EntityState.adoc[EntityState], xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService], xref:refguide:applib:index/services/routing/RoutingService.adoc[RoutingService], xref:refguide:applib:index/services/scratchpad/Scratchpad.adoc[Scratchpad], xref:refguide:applib:index/services/session/SessionLoggingService.adoc[SessionLoggingService], xref:refguide:applib:index/services/session/SessionLoggingServiceLogging.adoc[SessionLoggingServiceLogging], xref:refguide:applib:index/services/sitemap/SitemapService.adoc[SitemapService], xref:refguide:applib:index/services/sitemap/SitemapServiceMenu.adoc[SitemapServiceMenu], xref:refguide:applib:index/services/sudo/SudoService.adoc[SudoService], xref:refguide:applib:index/services/swagger/Format.adoc[Format], xref:refguide:applib:index/services/swagger/SwaggerService.adoc[SwaggerService], xref:refguide:applib:index/services/swagger/Visibility.adoc[Visibility], xref:refguide:applib:index/services/tablecol/TableColumnOrderForCollectionTypeAbstract.adoc[TableColumnOrderForCollectionTypeAbstract], xref:refguide:applib:index/services/tablecol/TableColumnOrderService.adoc[TableColumnOrderService], xref:refguide:applib:index/services/tablecol/TableColumnVisibilityService.adoc[TableColumnVisibilityService], xref:refguide:applib:index/services/title/TitleService.adoc[TitleService], xref:refguide:applib:index/services/urlencoding/UrlEncodingService.adoc[UrlEncodingService], xref:refguide:applib:index/services/urlencoding/UrlEncodingServiceUsingBaseEncodingAbstract.adoc[UrlEncodingServiceUsingBaseEncodingAbstract], xref:refguide:applib:index/services/user/ImpersonateMenu.adoc[ImpersonateMenu], xref:refguide:applib:index/services/user/ImpersonateMenuAdvisor.adoc[ImpersonateMenuAdvisor], xref:refguide:applib:index/services/user/ImpersonateStopMenu.adoc[ImpersonateStopMenu], xref:refguide:applib:index/services/user/ImpersonatedUserHolder.adoc[ImpersonatedUserHolder], xref:refguide:applib:index/services/user/RoleMemento.adoc[RoleMemento], xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento], xref:refguide:applib:index/services/user/UserService.adoc[UserService], xref:refguide:applib:index/services/userreg/EmailNotificationService.adoc[EmailNotificationService], xref:refguide:applib:index/services/userreg/UserDetails.adoc[UserDetails], xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[UserRegistrationService], xref:refguide:applib:index/services/userreg/events/EmailEventAbstract.adoc[EmailEventAbstract], xref:refguide:applib:index/services/userreg/events/EmailRegistrationEvent.adoc[EmailRegistrationEvent], xref:refguide:applib:index/services/userreg/events/PasswordResetEvent.adoc[PasswordResetEvent], xref:refguide:applib:index/services/userui/UserMenu.adoc[UserMenu], xref:refguide:applib:index/services/wrapper/DisabledException.adoc[DisabledException], xref:refguide:applib:index/services/wrapper/HiddenException.adoc[HiddenException], xref:refguide:applib:index/services/wrapper/InvalidException.adoc[InvalidException], xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory], xref:refguide:applib:index/services/wrapper/WrappingObject.adoc[WrappingObject], xref:refguide:applib:index/services/wrapper/control/AsyncControl.adoc[AsyncControl], xref:refguide:applib:index/services/wrapper/control/ControlAbstract.adoc[ControlAbstract], xref:refguide:applib:index/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler], xref:refguide:applib:index/services/wrapper/control/ExceptionHandlerAbstract.adoc[ExceptionHandlerAbstract], xref:refguide:applib:index/services/wrapper/control/ExecutionMode.adoc[ExecutionMode], xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl], xref:refguide:applib:index/services/wrapper/events/AccessEvent.adoc[AccessEvent], xref:refguide:applib:index/services/wrapper/events/ActionArgumentEvent.adoc[ActionArgumentEvent], xref:refguide:applib:index/services/wrapper/events/ActionInvocationEvent.adoc[ActionInvocationEvent], xref:refguide:applib:index/services/wrapper/events/ActionUsabilityEvent.adoc[ActionUsabilityEvent], xref:refguide:applib:index/services/wrapper/events/ActionVisibilityEvent.adoc[ActionVisibilityEvent], xref:refguide:applib:index/services/wrapper/events/CollectionAccessEvent.adoc[CollectionAccessEvent], xref:refguide:applib:index/services/wrapper/events/CollectionAddToEvent.adoc[CollectionAddToEvent], xref:refguide:applib:index/services/wrapper/events/CollectionMethodEvent.adoc[CollectionMethodEvent], xref:refguide:applib:index/services/wrapper/events/CollectionRemoveFromEvent.adoc[CollectionRemoveFromEvent], xref:refguide:applib:index/services/wrapper/events/CollectionUsabilityEvent.adoc[CollectionUsabilityEvent], xref:refguide:applib:index/services/wrapper/events/InteractionEvent.adoc[InteractionEvent], xref:refguide:applib:index/services/wrapper/events/ObjectTitleEvent.adoc[ObjectTitleEvent], xref:refguide:applib:index/services/wrapper/events/ObjectValidityEvent.adoc[ObjectValidityEvent], xref:refguide:applib:index/services/wrapper/events/ObjectVisibilityEvent.adoc[ObjectVisibilityEvent], xref:refguide:applib:index/services/wrapper/events/ParseValueEvent.adoc[ParseValueEvent], xref:refguide:applib:index/services/wrapper/events/PropertyAccessEvent.adoc[PropertyAccessEvent], xref:refguide:applib:index/services/wrapper/events/PropertyModifyEvent.adoc[PropertyModifyEvent], xref:refguide:applib:index/services/wrapper/events/PropertyUsabilityEvent.adoc[PropertyUsabilityEvent], xref:refguide:applib:index/services/wrapper/events/PropertyVisibilityEvent.adoc[PropertyVisibilityEvent], xref:refguide:applib:index/services/wrapper/events/ProposedHolderEvent.adoc[ProposedHolderEvent], xref:refguide:applib:index/services/wrapper/events/UsabilityEvent.adoc[UsabilityEvent], xref:refguide:applib:index/services/wrapper/events/ValidityEvent.adoc[ValidityEvent], xref:refguide:applib:index/services/wrapper/events/VisibilityEvent.adoc[VisibilityEvent], xref:refguide:applib:index/services/wrapper/listeners/InteractionAdapter.adoc[InteractionAdapter], xref:refguide:applib:index/services/wrapper/listeners/InteractionListener.adoc[InteractionListener], xref:refguide:applib:index/services/xactn/TransactionId.adoc[TransactionId], xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService], xref:refguide:applib:index/services/xactn/TransactionState.adoc[TransactionState], xref:refguide:applib:index/services/xactn/TransactionalProcessor.adoc[TransactionalProcessor], xref:refguide:applib:index/services/xml/XmlService.adoc[XmlService], xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService.adoc[XmlSnapshotService], xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService~Snapshot.adoc[XmlSnapshotService.Snapshot], xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService~Snapshot~Builder.adoc[XmlSnapshotService.Snapshot.Builder], xref:refguide:applib:index/snapshot/SnapshottableWithInclusions.adoc[SnapshottableWithInclusions], xref:refguide:applib:index/spec/AbstractSpecification.adoc[AbstractSpecification], xref:refguide:applib:index/spec/AbstractSpecification2.adoc[AbstractSpecification2], xref:refguide:applib:index/spec/Specification.adoc[Specification], xref:refguide:applib:index/spec/Specification2.adoc[Specification2], xref:refguide:applib:index/spec/SpecificationAnd.adoc[SpecificationAnd], xref:refguide:applib:index/spec/SpecificationNot.adoc[SpecificationNot], xref:refguide:applib:index/spec/SpecificationOr.adoc[SpecificationOr], xref:refguide:applib:index/types/DescriptionType.adoc[DescriptionType], xref:refguide:applib:index/types/MemberIdentifierType.adoc[MemberIdentifierType], xref:refguide:applib:index/types/TargetActionType.adoc[TargetActionType], xref:refguide:applib:index/types/TargetClassType.adoc[TargetClassType], xref:refguide:applib:index/util/Enums.adoc[Enums], xref:refguide:applib:index/util/Equality.adoc[Equality], xref:refguide:applib:index/util/Hashing.adoc[Hashing], xref:refguide:applib:index/util/JaxbUtil.adoc[JaxbUtil], xref:refguide:applib:index/util/ObjectContracts.adoc[ObjectContracts], xref:refguide:applib:index/util/ReasonBuffer.adoc[ReasonBuffer], xref:refguide:applib:index/util/ReasonBuffer2.adoc[ReasonBuffer2], xref:refguide:applib:index/util/Reasons.adoc[Reasons], xref:refguide:applib:index/util/TitleBuffer.adoc[TitleBuffer], xref:refguide:applib:index/util/TitleBufferException.adoc[TitleBufferException], xref:refguide:applib:index/util/ToString.adoc[ToString], xref:refguide:applib:index/util/ZipReader.adoc[ZipReader], xref:refguide:applib:index/util/ZipWriter.adoc[ZipWriter], xref:refguide:applib:index/util/schema/ChangesDtoUtils.adoc[ChangesDtoUtils], xref:refguide:applib:index/util/schema/CommandDtoUtils.adoc[CommandDtoUtils], xref:refguide:applib:index/util/schema/CommonDtoUtils.adoc[CommonDtoUtils], xref:refguide:applib:index/util/schema/InteractionDtoUtils.adoc[InteractionDtoUtils], xref:refguide:applib:index/util/schema/MemberExecutionDtoUtils.adoc[MemberExecutionDtoUtils], xref:refguide:applib:index/value/Blob.adoc[Blob], xref:refguide:applib:index/value/Clob.adoc[Clob], xref:refguide:applib:index/value/LocalResourcePath.adoc[LocalResourcePath], xref:refguide:applib:index/value/Markup.adoc[Markup], xref:refguide:applib:index/value/NamedWithMimeType.adoc[NamedWithMimeType], xref:refguide:applib:index/value/OpenUrlStrategy.adoc[OpenUrlStrategy], xref:refguide:applib:index/value/Password.adoc[Password], xref:refguide:applib:index/value/semantics/Converter.adoc[Converter], xref:refguide:applib:index/value/semantics/DefaultsProvider.adoc[DefaultsProvider], xref:refguide:applib:index/value/semantics/EncoderDecoder.adoc[EncoderDecoder], xref:refguide:applib:index/value/semantics/EncodingException.adoc[EncodingException], xref:refguide:applib:index/value/semantics/OrderRelation.adoc[OrderRelation], xref:refguide:applib:index/value/semantics/Parser.adoc[Parser], xref:refguide:applib:index/value/semantics/ParsingException.adoc[ParsingException], xref:refguide:applib:index/value/semantics/Renderer.adoc[Renderer], xref:refguide:applib:index/value/semantics/ValueComposer.adoc[ValueComposer], xref:refguide:applib:index/value/semantics/ValueSemanticsAbstract.adoc[ValueSemanticsAbstract], xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider], xref:refguide:applib:index/value/semantics/ValueSemanticsResolver.adoc[ValueSemanticsResolver]
 ****
 
 |Apache Isis Core - Code Gen (ByteBuddy)
@@ -1302,7 +1531,7 @@ o.a.i.core.config.environment.IsisLocaleInitializer +
 o.a.i.core.config.environment.IsisSystemEnvironment +
 o.a.i.core.config.environment.IsisTimeZoneInitializer +
 o.a.i.core.config.validators.PatternOptionalStringConstraintValidator +
-o.a.i.core.config.viewer.wicket.WebAppContextPath +
+o.a.i.core.config.viewer.web.WebAppContextPath +
 ****
 
 .Dependencies
@@ -1383,8 +1612,6 @@ Directory: /core/metamodel
 ----
 |.Components
 ****
-o.a.i.core.metamodel.facets.schema.IsisSchemaMetaModelRefiner +
-o.a.i.core.metamodel.facets.schema.IsisSchemaValueTypeProvider +
 o.a.i.core.metamodel.objectmanager.ObjectManagerDefault +
 o.a.i.core.metamodel.progmodel.ProgrammingModelInitFilterDefault +
 o.a.i.core.metamodel.services.ServiceInjectorDefault +
@@ -1407,10 +1634,43 @@ o.a.i.core.metamodel.services.tablecol.TableColumnOrderServiceUsingTxtFile +
 o.a.i.core.metamodel.services.title.TitleServiceDefault +
 o.a.i.core.metamodel.specloader.ProgrammingModelServiceDefault +
 o.a.i.core.metamodel.specloader.SpecificationLoaderDefault +
-o.a.i.core.metamodel.valuetypes.ValueTypeProviderDefault +
-o.a.i.core.metamodel.valuetypes.ValueTypeProviderForBuiltin +
-o.a.i.core.metamodel.valuetypes.ValueTypeProviderForCollections +
-o.a.i.core.metamodel.valuetypes.ValueTypeRegistry +
+o.a.i.core.metamodel.valuesemantics.BigDecimalValueSemantics +
+o.a.i.core.metamodel.valuesemantics.BigIntegerValueSemantics +
+o.a.i.core.metamodel.valuesemantics.BlobValueSemantics +
+o.a.i.core.metamodel.valuesemantics.BookmarkValueSemantics +
+o.a.i.core.metamodel.valuesemantics.BooleanValueSemantics +
+o.a.i.core.metamodel.valuesemantics.BufferedImageValueSemantics +
+o.a.i.core.metamodel.valuesemantics.ByteValueSemantics +
+o.a.i.core.metamodel.valuesemantics.ChangesDtoValueSemantics +
+o.a.i.core.metamodel.valuesemantics.CharacterValueSemantics +
+o.a.i.core.metamodel.valuesemantics.ClobValueSemantics +
+o.a.i.core.metamodel.valuesemantics.CommandDtoValueSemantics +
+o.a.i.core.metamodel.valuesemantics.DoubleValueSemantics +
+o.a.i.core.metamodel.valuesemantics.FloatValueSemantics +
+o.a.i.core.metamodel.valuesemantics.IntValueSemantics +
+o.a.i.core.metamodel.valuesemantics.InteractionDtoValueSemantics +
+o.a.i.core.metamodel.valuesemantics.LocalResourcePathValueSemantics +
+o.a.i.core.metamodel.valuesemantics.LocaleValueSemantics +
+o.a.i.core.metamodel.valuesemantics.LongValueSemantics +
+o.a.i.core.metamodel.valuesemantics.MarkupValueSemantics +
+o.a.i.core.metamodel.valuesemantics.OidDtoValueSemantics +
+o.a.i.core.metamodel.valuesemantics.PasswordValueSemantics +
+o.a.i.core.metamodel.valuesemantics.ShortValueSemantics +
+o.a.i.core.metamodel.valuesemantics.StringValueSemantics +
+o.a.i.core.metamodel.valuesemantics.TreeNodeValueSemantics +
+o.a.i.core.metamodel.valuesemantics.URLValueSemantics +
+o.a.i.core.metamodel.valuesemantics.UUIDValueSemantics +
+o.a.i.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics +
+o.a.i.core.metamodel.valuesemantics.temporal.LocalDateValueSemantics +
+o.a.i.core.metamodel.valuesemantics.temporal.LocalTimeValueSemantics +
+o.a.i.core.metamodel.valuesemantics.temporal.OffsetDateTimeValueSemantics +
+o.a.i.core.metamodel.valuesemantics.temporal.OffsetTimeValueSemantics +
+o.a.i.core.metamodel.valuesemantics.temporal.ZonedDateTimeValueSemantics +
+o.a.i.core.metamodel.valuesemantics.temporal.legacy.JavaSqlDateValueSemantics +
+o.a.i.core.metamodel.valuesemantics.temporal.legacy.JavaSqlTimeStampValueSemantics +
+o.a.i.core.metamodel.valuesemantics.temporal.legacy.JavaSqlTimeValueSemantics +
+o.a.i.core.metamodel.valuesemantics.temporal.legacy.JavaUtilDateValueSemantics +
+o.a.i.core.metamodel.valuetypes.ValueSemanticsResolverDefault +
 ****
 
 .Dependencies
@@ -1426,7 +1686,7 @@ org.jmock:jmock:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:core:index/metamodel/services/command/CommandDtoFactory.adoc[CommandDtoFactory], xref:refguide:core:index/metamodel/services/ixn/InteractionDtoFactory.adoc[InteractionDtoFactory], xref:refguide:core:index/metamodel/services/publishing/CommandPublisher.adoc[CommandPublisher], xref:refguide:core:index/metamodel/services/publishing/ExecutionPublisher.adoc[ExecutionPublisher], xref:refguide:core:index/metamodel/services/tablecol/TableColumnOrderServiceDefault.adoc[TableColumnOrderServiceDefault], xref:refguide:core:index/metamodel/services/tablecol/TableColumnOrderServiceUsingTxtFile.adoc[TableColumnOrderServiceUsingTxtFile]
+xref:refguide:core:index/metamodel/services/command/CommandDtoFactory.adoc[CommandDtoFactory], xref:refguide:core:index/metamodel/services/ixn/InteractionDtoFactory.adoc[InteractionDtoFactory], xref:refguide:core:index/metamodel/services/publishing/CommandPublisher.adoc[CommandPublisher], xref:refguide:core:index/metamodel/services/publishing/ExecutionPublisher.adoc[ExecutionPublisher], xref:refguide:core:index/metamodel/services/schema/SchemaValueMarshaller.adoc[SchemaValueMarshaller], xref:refguide:core:index/metamodel/services/tablecol/TableColumnOrderServiceDefault.adoc[TableColumnOrderServiceDefault], xref:refguide:core:index/metamodel/services/tablecol/TableColumnOrderServiceUsingTxtFile.adoc[TableColumnOrderServiceUsingTxtFile]
 ****
 
 |Apache Isis Core - Runtime
@@ -1451,6 +1711,7 @@ org.apache.isis.core:isis-core-interaction:jar:<managed> +
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.core:isis-core-metamodel:jar:<managed> +
 org.apache.isis.core:isis-core-transaction:jar:<managed> +
+org.apache.isis.valuetypes:isis-valuetypes-jodatime-integration:jar:${project.version} +
 ****
 
 |Apache Isis Core - Runtime Services
@@ -1468,6 +1729,7 @@ Directory: /core/runtimeservices
 o.a.i.core.runtimeservices.bookmarks.BookmarkServiceDefault +
 o.a.i.core.runtimeservices.command.CommandDtoFactoryDefault +
 o.a.i.core.runtimeservices.command.CommandExecutorServiceDefault +
+o.a.i.core.runtimeservices.command.SchemaValueMarshallerDefault +
 o.a.i.core.runtimeservices.email.EmailServiceDefault +
 o.a.i.core.runtimeservices.eventbus.EventBusServiceSpring +
 o.a.i.core.runtimeservices.executor.MemberExecutorServiceDefault +
@@ -1477,6 +1739,9 @@ o.a.i.core.runtimeservices.i18n.po.TranslationServicePo +
 o.a.i.core.runtimeservices.icons.ObjectIconServiceDefault +
 o.a.i.core.runtimeservices.interaction.InteractionDtoFactoryDefault +
 o.a.i.core.runtimeservices.jaxb.JaxbServiceDefault +
+o.a.i.core.runtimeservices.locale.LanguageProviderDefault +
+o.a.i.core.runtimeservices.locale.LocaleChoiceProviderDefault +
+o.a.i.core.runtimeservices.memento.ObjectMementoServiceDefault +
 o.a.i.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault +
 o.a.i.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3 +
 o.a.i.core.runtimeservices.message.MessageServiceDefault +
@@ -1491,6 +1756,7 @@ o.a.i.core.runtimeservices.repository.RepositoryServiceDefault +
 o.a.i.core.runtimeservices.routing.RoutingServiceDefault +
 o.a.i.core.runtimeservices.scratchpad.ScratchpadDefault +
 o.a.i.core.runtimeservices.session.InteractionServiceDefault +
+o.a.i.core.runtimeservices.sitemap.SitemapServiceDefault +
 o.a.i.core.runtimeservices.transaction.TransactionServiceSpring +
 o.a.i.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression +
 o.a.i.core.runtimeservices.user.ImpersonateMenuAdvisorDefault +
@@ -1645,7 +1911,6 @@ Directory: /api/schema
 
 .Dependencies
 ****
-joda-time:joda-time:jar:<managed> +
 org.apache.isis.core:isis-jdk-supplemental:pom:<managed> +
 org.springframework:spring-context:jar:<managed> +
 ****
@@ -2032,7 +2297,7 @@ Directory: /persistence/jpa/integration
 .Components
 ****
 o.a.i.persistence.jpa.integration.changetracking.PersistenceMetricsServiceJpa +
-o.a.i.persistence.jpa.integration.metamodel.JpaProgrammingModel +
+o.a.i.persistence.jpa.integration.entity.JpaEntityIntegration +
 ****
 
 .Dependencies
@@ -2378,7 +2643,7 @@ o.a.i.viewer.common.model.userprofile.UserProfileUiModelProviderDefault +
 ****
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.core:isis-core-runtime:jar:<managed> +
-org.webjars:font-awesome:jar:5.15.3 +
+org.webjars:font-awesome:jar:5.15.4 +
 ****
 
 .Document Index Entries
@@ -2757,10 +3022,8 @@ o.a.i.viewer.wicket.viewer.services.BookmarkUiServiceWicket +
 o.a.i.viewer.wicket.viewer.services.DeepLinkServiceWicket +
 o.a.i.viewer.wicket.viewer.services.HintStoreUsingWicketSession +
 o.a.i.viewer.wicket.viewer.services.ImageResourceCacheClassPath +
-o.a.i.viewer.wicket.viewer.services.LocaleProviderWicket +
 o.a.i.viewer.wicket.viewer.services.TranslationsResolverWicket +
 o.a.i.viewer.wicket.viewer.services.WicketViewerSettingsDefault +
-o.a.i.viewer.wicket.viewer.services.mementos.ObjectMementoServiceWicket +
 o.a.i.viewer.wicket.viewer.webmodule.WebModuleWicket +
 ****
 
@@ -2807,9 +3070,57 @@ skinparam rectangle<<2>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
+skinparam rectangle<<3>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<4>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<5>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<6>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<7>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<8>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<9>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
 package "Valuetypes\n[Software System]" {
+  rectangle "==Apache Isis Val - Joda Time (applib)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
+  rectangle "==Apache Isis Val - Joda Time (integration)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
+  rectangle "==Apache Isis Val - Joda Time (parent)\n<size:10>[Container: packaging: pom]</size>" <<3>> as 3
+  rectangle "==Apache Isis Val - Prism (Parent)\n<size:10>[Container: packaging: pom]</size>" <<6>> as 6
+  rectangle "==Apache Isis Val - Prism (Vaadin)\n<size:10>[Container: packaging: jar]</size>" <<8>> as 8
+  rectangle "==Apache Isis Val - Prism (Wicket)\n<size:10>[Container: packaging: jar]</size>" <<9>> as 9
+  rectangle "==Apache Isis Val - Prism (resources)\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
   rectangle "==Apache Isis Value types\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
 }
+3 .[#707070].> 4 : ""
+3 .[#707070].> 5 : ""
+6 .[#707070].> 9 : ""
+6 .[#707070].> 7 : ""
+2 .[#707070].> 3 : ""
+2 .[#707070].> 6 : ""
 @enduml
 ----
 .Projects/Modules (Valuetypes)
@@ -2830,6 +3141,113 @@ Directory: /valuetypes
 .Dependencies
 ****
 org.projectlombok:lombok:jar:<managed> +
+****
+
+|Apache Isis Val - Joda Time (parent)
+[source,yaml]
+----
+Group: org.apache.isis.valuetypes
+Artifact: isis-valuetypes-jodatime
+Type: pom
+Directory: /valuetypes/jodatime
+----
+|Joda Time Library
+
+|Apache Isis Val - Joda Time (applib)
+[source,yaml]
+----
+Group: org.apache.isis.valuetypes
+Artifact: isis-valuetypes-jodatime-applib
+Type: jar
+Directory: /valuetypes/jodatime/applib
+----
+|.Dependencies
+****
+joda-time:joda-time:jar:<managed> +
+org.apache.isis.commons:isis-commons:jar:<managed> +
+org.apache.isis.core:isis-applib:jar:<managed> +
+org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:valuetypes:index/jodatime/applib/IsisModuleValJodatimeApplib.adoc[IsisModuleValJodatimeApplib], xref:refguide:valuetypes:index/jodatime/applib/jaxb/JodaTimeJaxbAdapters.adoc[JodaTimeJaxbAdapters], xref:refguide:valuetypes:index/jodatime/applib/jaxb/JodaTimeXMLGregorianCalendarMarshalling.adoc[JodaTimeXMLGregorianCalendarMarshalling], xref:refguide:valuetypes:index/jodatime/applib/value/JodaTimeConverters.adoc[JodaTimeConverters]
+****
+
+|Apache Isis Val - Joda Time (integration)
+[source,yaml]
+----
+Group: org.apache.isis.valuetypes
+Artifact: isis-valuetypes-jodatime-integration
+Type: jar
+Directory: /valuetypes/jodatime/integration
+----
+|.Components
+****
+o.a.i.valuetypes.jodatime.integration.valuesemantics.JodaDateTimeValueSemantics +
+o.a.i.valuetypes.jodatime.integration.valuesemantics.JodaLocalDateTimeValueSemantics +
+o.a.i.valuetypes.jodatime.integration.valuesemantics.JodaLocalDateValueSemantics +
+o.a.i.valuetypes.jodatime.integration.valuesemantics.JodaLocalTimeValueSemantics +
+****
+
+.Dependencies
+****
+org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
+org.apache.isis.core:isis-core-metamodel:jar:<managed> +
+org.apache.isis.valuetypes:isis-valuetypes-jodatime-applib:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:valuetypes:index/jodatime/integration/IsisModuleValJodatimeIntegration.adoc[IsisModuleValJodatimeIntegration]
+****
+
+|Apache Isis Val - Prism (Parent)
+[source,yaml]
+----
+Group: org.apache.isis.valuetypes
+Artifact: isis-valuetypes-prism
+Type: pom
+Directory: /valuetypes/prism
+----
+|Client Side Syntax Highlighting
+
+|Apache Isis Val - Prism (resources)
+[source,yaml]
+----
+Group: org.apache.isis.valuetypes
+Artifact: isis-valuetypes-prism-resources
+Type: jar
+Directory: /valuetypes/prism/resources
+----
+|
+
+|Apache Isis Val - Prism (Vaadin)
+[source,yaml]
+----
+Group: org.apache.isis.valuetypes
+Artifact: isis-valuetypes-prism-vaadin
+Type: jar
+Directory: /valuetypes/prism/vaadin
+----
+|.Dependencies
+****
+org.apache.isis.incubator.viewer:isis-viewer-vaadin-ui:jar:${project.version} +
+org.apache.isis.valuetypes:isis-valuetypes-prism-resources:jar:${project.version} +
+****
+
+|Apache Isis Val - Prism (Wicket)
+[source,yaml]
+----
+Group: org.apache.isis.valuetypes
+Artifact: isis-valuetypes-prism-wicket
+Type: jar
+Directory: /valuetypes/prism/wicket
+----
+|.Dependencies
+****
+org.apache.isis.valuetypes:isis-valuetypes-prism-resources:jar:${project.version} +
+org.apache.wicket:wicket-core:jar:<managed> +
 ****
 |===
 
@@ -2897,10 +3315,10 @@ skinparam rectangle<<10>> {
 }
 package "Asciidoc\n[Software System]" {
   rectangle "==Apache Isis Val - Asciidoctor (MetaModel)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
+  rectangle "==Apache Isis Val - Asciidoctor (Persistence JDO)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
   rectangle "==Apache Isis Val - Asciidoctor (Persistence)\n<size:10>[Container: packaging: pom]</size>" <<5>> as 5
   rectangle "==Apache Isis Val - Asciidoctor (applib)\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
   rectangle "==Apache Isis Val - Asciidoctor (parent)\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
-  rectangle "==Apache Isis Val - Asciidoctor (persistence jdo DN5)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
   rectangle "==Apache Isis Val - Asciidoctor (persistence jpa)\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
   rectangle "==Apache Isis Val - Asciidoctor (ui vaadin)\n<size:10>[Container: packaging: jar]</size>" <<9>> as 9
   rectangle "==Apache Isis Val - Asciidoctor (ui wicket)\n<size:10>[Container: packaging: jar]</size>" <<10>> as 10
@@ -2960,8 +3378,10 @@ Directory: /valuetypes/asciidoc/metamodel
 ----
 |.Components
 ****
-o.a.i.valuetypes.asciidoc.metamodel.AsciiDocMetaModelRefiner +
-o.a.i.valuetypes.asciidoc.metamodel.AsciiDocValueTypeProvider +
+o.a.i.valuetypes.asciidoc.metamodel.semantics.AsciiDocValueSemantics +
+o.a.i.valuetypes.asciidoc.metamodel.semantics.ChangesDtoValueSemanticsPrettyRender +
+o.a.i.valuetypes.asciidoc.metamodel.semantics.CommandDtoValueSemanticsPrettyRender +
+o.a.i.valuetypes.asciidoc.metamodel.semantics.InteractionDtoValueSemanticsPrettyRender +
 ****
 
 .Dependencies
@@ -2989,13 +3409,13 @@ org.apache.isis.core:isis-core-metamodel:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-asciidoc-applib:jar:<managed> +
 ****
 
-|Apache Isis Val - Asciidoctor (persistence jdo DN5)
+|Apache Isis Val - Asciidoctor (Persistence JDO)
 [source,yaml]
 ----
 Group: org.apache.isis.valuetypes
-Artifact: isis-valuetypes-asciidoc-persistence-jdo-dn5
+Artifact: isis-valuetypes-asciidoc-persistence-jdo
 Type: jar
-Directory: /valuetypes/asciidoc/persistence/jdo-dn5
+Directory: /valuetypes/asciidoc/persistence/jdo
 ----
 |.Dependencies
 ****
@@ -3030,9 +3450,9 @@ Directory: /valuetypes/asciidoc/ui
 ----
 |.Dependencies
 ****
-com.github.jnr:jnr-constants:jar:0.10.2 +
-com.github.jnr:jnr-enxio:jar:0.32.6 +
-com.github.jnr:jnr-posix:jar:3.1.7 +
+com.github.jnr:jnr-constants:jar:0.10.3 +
+com.github.jnr:jnr-enxio:jar:0.32.12 +
+com.github.jnr:jnr-posix:jar:3.1.14 +
 org.apache.isis.core:isis-core-metamodel:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-asciidoc-applib:jar:<managed> +
 org.asciidoctor:asciidoctorj:jar:${asciidoctorj.version} +
@@ -3046,9 +3466,15 @@ Artifact: isis-valuetypes-asciidoc-ui-vaa
 Type: jar
 Directory: /valuetypes/asciidoc/ui/vaadin
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.valuetypes.asciidoc.ui.vaa.components.AsciiDocFieldFactoryVaa +
+****
+
+.Dependencies
 ****
 org.apache.isis.incubator.viewer:isis-viewer-vaadin-ui:jar:${project.version} +
+org.apache.isis.valuetypes:isis-valuetypes-prism-vaadin:jar:${project.version} +
 ****
 
 |Apache Isis Val - Asciidoctor (ui wicket)
@@ -3063,16 +3489,11 @@ Directory: /valuetypes/asciidoc/ui/wicket
 ****
 o.a.i.valuetypes.asciidoc.ui.wkt.components.AsciiDocPanelFactoriesWkt$Parented +
 o.a.i.valuetypes.asciidoc.ui.wkt.components.AsciiDocPanelFactoriesWkt$Standalone +
-o.a.i.valuetypes.asciidoc.ui.wkt.components.schema.chg.v2.ChangesDtoPanelFactoriesWkt$Parented +
-o.a.i.valuetypes.asciidoc.ui.wkt.components.schema.chg.v2.ChangesDtoPanelFactoriesWkt$Standalone +
-o.a.i.valuetypes.asciidoc.ui.wkt.components.schema.cmd.v2.CommandDtoPanelFactoriesWkt$Parented +
-o.a.i.valuetypes.asciidoc.ui.wkt.components.schema.cmd.v2.CommandDtoPanelFactoriesWkt$Standalone +
-o.a.i.valuetypes.asciidoc.ui.wkt.components.schema.ixn.v2.InteractionDtoPanelFactoriesWkt$Parented +
-o.a.i.valuetypes.asciidoc.ui.wkt.components.schema.ixn.v2.InteractionDtoPanelFactoriesWkt$Standalone +
 ****
 
 .Dependencies
 ****
+org.apache.isis.valuetypes:isis-valuetypes-prism-wicket:jar:${project.version} +
 org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed> +
 ****
 
@@ -3141,10 +3562,10 @@ skinparam rectangle<<9>> {
 }
 package "Markdown\n[Software System]" {
   rectangle "==Apache Isis Val - Markdown (MetaModel)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
+  rectangle "==Apache Isis Val - Markdown (Persistence JDO)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
   rectangle "==Apache Isis Val - Markdown (Persistence)\n<size:10>[Container: packaging: pom]</size>" <<5>> as 5
   rectangle "==Apache Isis Val - Markdown (applib)\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
   rectangle "==Apache Isis Val - Markdown (parent)\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
-  rectangle "==Apache Isis Val - Markdown (persistence jdo DN5)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
   rectangle "==Apache Isis Val - Markdown (persistence jpa)\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
   rectangle "==Apache Isis Val - Markdown (ui wicket)\n<size:10>[Container: packaging: jar]</size>" <<9>> as 9
   rectangle "==Apache Isis Val - Markdown (ui)\n<size:10>[Container: packaging: pom]</size>" <<8>> as 8
@@ -3190,7 +3611,7 @@ org.apache.isis.core:isis-applib:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:valuetypes:index/markdown/applib/IsisModuleValMarkdownApplib.adoc[IsisModuleValMarkdownApplib], xref:refguide:valuetypes:index/markdown/applib/jaxb/MarkdownJaxbAdapter.adoc[MarkdownJaxbAdapter], xref:refguide:valuetypes:index/markdown/applib/value/Converter.adoc[Converter]
+xref:refguide:valuetypes:index/markdown/applib/IsisModuleValMarkdownApplib.adoc[IsisModuleValMarkdownApplib], xref:refguide:valuetypes:index/markdown/applib/jaxb/MarkdownJaxbAdapter.adoc[MarkdownJaxbAdapter], xref:refguide:valuetypes:index/markdown/applib/value/Converter.adoc[Converter], xref:refguide:valuetypes:index/markdown/applib/value/Markdown.adoc[Markdown]
 ****
 
 |Apache Isis Val - Markdown (MetaModel)
@@ -3203,8 +3624,7 @@ Directory: /valuetypes/markdown/metamodel
 ----
 |.Components
 ****
-o.a.i.valuetypes.markdown.metamodel.MarkdownMetaModelRefiner +
-o.a.i.valuetypes.markdown.metamodel.MarkdownValueTypeProvider +
+o.a.i.valuetypes.markdown.metamodel.semantics.MarkdownValueSemantics +
 ****
 
 .Dependencies
@@ -3232,13 +3652,13 @@ org.apache.isis.core:isis-core-metamodel:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-markdown-applib:jar:<managed> +
 ****
 
-|Apache Isis Val - Markdown (persistence jdo DN5)
+|Apache Isis Val - Markdown (Persistence JDO)
 [source,yaml]
 ----
 Group: org.apache.isis.valuetypes
-Artifact: isis-valuetypes-markdown-persistence-jdo-dn5
+Artifact: isis-valuetypes-markdown-persistence-jdo
 Type: jar
-Directory: /valuetypes/markdown/persistence/jdo-dn5
+Directory: /valuetypes/markdown/persistence/jdo
 ----
 |.Dependencies
 ****
@@ -3293,8 +3713,15 @@ Artifact: isis-valuetypes-markdown-ui-wkt
 Type: jar
 Directory: /valuetypes/markdown/ui/wicket
 ----
-|.Dependencies
+|.Components
 ****
+o.a.i.valuetypes.markdown.ui.wkt.components.MarkdownPanelFactoriesWkt$Parented +
+o.a.i.valuetypes.markdown.ui.wkt.components.MarkdownPanelFactoriesWkt$Standalone +
+****
+
+.Dependencies
+****
+org.apache.isis.valuetypes:isis-valuetypes-prism-wicket:jar:${project.version} +
 org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed> +
 ****
 
@@ -3701,6 +4128,11 @@ skinparam rectangle<<25>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
+skinparam rectangle<<26>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
 skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
@@ -3808,14 +4240,15 @@ package "Extensions\n[Software System]" {
   rectangle "==Apache Isis Ext - Flyway Impl\n<size:10>[Container: packaging: jar]</size>" <<8>> as 8
   rectangle "==Apache Isis Ext - Sec Man\n<size:10>[Container: packaging: pom]</size>" <<16>> as 16
   rectangle "==Apache Isis Ext - Sec Man Applib\n<size:10>[Container: packaging: jar]</size>" <<17>> as 17
+  rectangle "==Apache Isis Ext - Sec Man Encryption (Using Spring)\n<size:10>[Container: packaging: jar]</size>" <<19>> as 19
   rectangle "==Apache Isis Ext - Sec Man Encryption (Using jbcrypt)\n<size:10>[Container: packaging: jar]</size>" <<18>> as 18
-  rectangle "==Apache Isis Ext - Sec Man Integration\n<size:10>[Container: packaging: jar]</size>" <<19>> as 19
-  rectangle "==Apache Isis Ext - Sec Man Persistence (Using JDO)\n<size:10>[Container: packaging: jar]</size>" <<20>> as 20
-  rectangle "==Apache Isis Ext - Sec Man Persistence (Using JPA)\n<size:10>[Container: packaging: jar]</size>" <<21>> as 21
-  rectangle "==Apache Isis Ext - Sec Man Realm (Using Shiro)\n<size:10>[Container: packaging: jar]</size>" <<22>> as 22
-  rectangle "==Apache Isis Ext - Security - Shiro LDAP Realm (impl)\n<size:10>[Container: packaging: jar]</size>" <<24>> as 24
-  rectangle "==Apache Isis Ext - Security - Shiro LDAP Realm (parent)\n<size:10>[Container: packaging: pom]</size>" <<23>> as 23
-  rectangle "==Apache Isis Ext - Security - Spring Oauth2\n<size:10>[Container: packaging: jar]</size>" <<25>> as 25
+  rectangle "==Apache Isis Ext - Sec Man Integration\n<size:10>[Container: packaging: jar]</size>" <<20>> as 20
+  rectangle "==Apache Isis Ext - Sec Man Persistence (Using JDO)\n<size:10>[Container: packaging: jar]</size>" <<21>> as 21
+  rectangle "==Apache Isis Ext - Sec Man Persistence (Using JPA)\n<size:10>[Container: packaging: jar]</size>" <<22>> as 22
+  rectangle "==Apache Isis Ext - Sec Man Realm (Using Shiro)\n<size:10>[Container: packaging: jar]</size>" <<23>> as 23
+  rectangle "==Apache Isis Ext - Security - Shiro LDAP Realm (impl)\n<size:10>[Container: packaging: jar]</size>" <<25>> as 25
+  rectangle "==Apache Isis Ext - Security - Shiro LDAP Realm (parent)\n<size:10>[Container: packaging: pom]</size>" <<24>> as 24
+  rectangle "==Apache Isis Ext - Security - Spring Oauth2\n<size:10>[Container: packaging: jar]</size>" <<26>> as 26
   rectangle "==Apache Isis Ext - Wicket Viewer - Excel Download (parent)\n<size:10>[Container: packaging: pom]</size>" <<5>> as 5
   rectangle "==Apache Isis Ext - Wicket Viewer - Excel Download (ui)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
   rectangle "==Apache Isis Ext - Wicket Viewer - fullcalendar (applib)\n<size:10>[Container: packaging: jar]</size>" <<10>> as 10
@@ -3830,12 +4263,13 @@ package "Extensions\n[Software System]" {
 3 .[#707070].> 4 : ""
 7 .[#707070].> 8 : ""
 16 .[#707070].> 17 : ""
-16 .[#707070].> 18 : ""
 16 .[#707070].> 19 : ""
+16 .[#707070].> 18 : ""
 16 .[#707070].> 20 : ""
 16 .[#707070].> 21 : ""
 16 .[#707070].> 22 : ""
-23 .[#707070].> 24 : ""
+16 .[#707070].> 23 : ""
+24 .[#707070].> 25 : ""
 5 .[#707070].> 6 : ""
 9 .[#707070].> 10 : ""
 9 .[#707070].> 11 : ""
@@ -3845,8 +4279,8 @@ package "Extensions\n[Software System]" {
 2 .[#707070].> 3 : ""
 2 .[#707070].> 7 : ""
 2 .[#707070].> 16 : ""
-2 .[#707070].> 23 : ""
-2 .[#707070].> 25 : ""
+2 .[#707070].> 24 : ""
+2 .[#707070].> 26 : ""
 2 .[#707070].> 5 : ""
 2 .[#707070].> 9 : ""
 2 .[#707070].> 12 : ""
@@ -3929,14 +4363,13 @@ o.a.i.extensions.viewer.wicket.exceldownload.ui.components.CollectionContentsAsE
 
 .Dependencies
 ****
+org.apache.isis.subdomains:isis-subdomains-poi:pom:${project.version} +
 org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed> +
-org.apache.poi:poi-ooxml:jar:<managed> +
-org.apache.poi:poi-ooxml-schemas:jar:<managed> +
 ****
 
 .Document Index Entries
 ****
-xref:refguide:extensions:index/viewer/wicket/exceldownload/ui/IsisModuleExtExcelDownloadUi.adoc[IsisModuleExtExcelDownloadUi], xref:refguide:extensions:index/viewer/wicket/exceldownload/ui/components/CollectionContentsAsExcel.adoc[CollectionContentsAsExcel], xref:refguide:extensions:index/viewer/wicket/exceldownload/ui/components/CollectionContentsAsExcelFactory.adoc[CollectionContentsAsExcelFactory]
+xref:refguide:extensions:index/viewer/wicket/exceldownload/ui/IsisModuleExtExcelDownloadUi.adoc[IsisModuleExtExcelDownloadUi], xref:refguide:extensions:index/viewer/wicket/exceldownload/ui/components/CollectionContentsAsExcelFactory.adoc[CollectionContentsAsExcelFactory]
 ****
 
 |Apache Isis Ext - Flyway
@@ -3984,9 +4417,15 @@ Artifact: isis-extensions-fullcalendar-applib
 Type: jar
 Directory: /extensions/vw/fullcalendar/applib
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.fullcalendar.applib.value.CalendarEventSemanticsProvider +
+****
+
+.Dependencies
 ****
 de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed> +
+org.apache.isis.commons:isis-commons:jar:<managed> +
 org.apache.isis.core:isis-applib:jar:<managed> +
 ****
 
@@ -4003,10 +4442,17 @@ Artifact: isis-extensions-fullcalendar-ui
 Type: jar
 Directory: /extensions/vw/fullcalendar/ui
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.fullcalendar.ui.component.calendarable.CalendarableCollectionAsFullCalendarFactory +
+o.a.i.extensions.fullcalendar.ui.component.calendareventable.CalendarEventableCollectionAsFullCalendarFactory +
+****
+
+.Dependencies
 ****
 net.ftlines.wicket-fullcalendar:wicket-fullcalendar-core:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-fullcalendar-applib:jar:<managed> +
+org.apache.isis.valuetypes:isis-valuetypes-jodatime-applib:jar:2.0.0-SNAPSHOT +
 org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed> +
 ****
 
@@ -4122,11 +4568,12 @@ o.a.i.extensions.secman.applib.user.menu.MeService$UserMenuMeActionAdvisor +
 ****
 org.apache.isis.mavendeps:isis-mavendeps-integtests:pom:<managed> +
 org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
+org.springframework.security:spring-security-crypto:jar:<managed> +
 ****
 
 .Document Index Entries
 ****
-xref:refguide:extensions:index/secman/applib/IsisModuleExtSecmanApplib.adoc[IsisModuleExtSecmanApplib], xref:refguide:extensions:index/secman/applib/SecmanConfiguration.adoc[SecmanConfiguration], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermission.adoc[ApplicationPermission], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionMode.adoc[ApplicationPermissionMode], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionRepository.adoc[ApplicationPermissionRepository], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionRule.adoc[ApplicationPermissionRule], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionValue.adoc[ApplicationPermissionValue], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionValueSet.adoc[ApplicationPermissionValueSet], xref:refguide:extensions:index/secman/applib/permission/spi/PermissionsEvaluationService.adoc[PermissionsEvaluationService], xref:refguide:extensions:index/secman/applib/permission/spi/PermissionsEvaluationServiceAbstract.adoc[PermissionsEvaluationServiceAbstract], xref:refguide:extensions:index/secman/applib/permission/spi/PermissionsEvaluationServiceAllowBeatsVeto.adoc[PermissionsEvaluationServiceAllowBeatsVeto], xref:refguide:extensions:index/secman/applib/permission/spi/PermissionsEvaluationServiceVetoBeatsAllow.adoc[PermissionsEvaluationServiceVetoBeatsAllow], xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRole.adoc[ApplicationRole], xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRoleRepository.adoc[ApplicationRoleRepository], xref:refguide:extensions:index/secman/applib/role/fixtures/AbstractRoleAndPermissionsFixtureScript.adoc[AbstractRoleAndPermissionsFixtureScript], xref:refguide:extensions:index/secman/applib/role/seed/IsisAppFeatureRoleAndPermissions.adoc[IsisAppFeatureRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisConfigurationRoleAndPermissions.adoc[IsisConfigurationRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisExtCommandReplayPrimaryRoleAndPermissions.adoc[IsisExtCommandReplayPrimaryRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisExtCommandReplaySecondaryRoleAndPermissions.adoc[IsisExtCommandReplaySecondaryRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisExtH2ConsoleRoleAndPermissions.adoc[IsisExtH2ConsoleRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisExtSecmanAdminRoleAndPermissions.adoc[IsisExtSecmanAdminRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisExtSecmanRegularUserRoleAndPermissions.adoc[IsisExtSecmanRegularUserRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisPersistenceJdoMetaModelRoleAndPermissions.adoc[IsisPersistenceJdoMetaModelRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisSudoImpersonateRoleAndPermissions.adoc[IsisSudoImpersonateRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisViewerRestfulObjectsSwaggerRoleAndPermissions.adoc[IsisViewerRestfulObjectsSwaggerRoleAndPermissions], xref:refguide:extensions:index/secman/applib/seed/SeedSecurityModuleService.adoc[SeedSecurityModuleService], xref:refguide:extensions:index/secman/applib/seed/scripts/SeedUsersAndRolesFixtureScript.adoc[SeedUsersAndRolesFixtureScript], xref:refguide:extensions:index/secman/applib/tenancy/dom/ApplicationTenancy.adoc[ApplicationTenancy], xref:refguide:extensions:index/secman/applib/tenancy/dom/ApplicationTenancyRepository.adoc[ApplicationTenancyRepository], xref:refguide:extensions:index/secman/applib/tenancy/dom/HasAtPath.adoc[HasAtPath], xref:refguide:extensions:index/secman/applib/tenancy/seed/GlobalTenancy.adoc[GlobalTenancy], xref:refguide:extensions:index/secman/applib/tenancy/spi/ApplicationTenancyEvaluator.adoc[ApplicationTenancyEvaluator], xref:refguide:extensions:index/secman/applib/user/dom/AccountType.adoc[AccountType], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUserRepository.adoc[ApplicationUserRepository], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUserStatus.adoc[ApplicationUserStatus], xref:refguide:extensions:index/secman/applib/user/events/UserCreatedEvent.adoc[UserCreatedEvent], xref:refguide:extensions:index/secman/applib/user/fixtures/AbstractUserAndRolesFixtureScript.adoc[AbstractUserAndRolesFixtureScript], xref:refguide:extensions:index/secman/applib/user/menu/MeService.adoc[MeService], xref:refguide:extensions:index/secman/applib/user/seed/IsisExtSecmanAdminUser.adoc[IsisExtSecmanAdminUser], xref:refguide:extensions:index/secman/applib/user/spi/PasswordEncryptionService.adoc[PasswordEncryptionService]
+xref:refguide:extensions:index/secman/applib/IsisModuleExtSecmanApplib.adoc[IsisModuleExtSecmanApplib], xref:refguide:extensions:index/secman/applib/SecmanConfiguration.adoc[SecmanConfiguration], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermission.adoc[ApplicationPermission], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionMode.adoc[ApplicationPermissionMode], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionRepository.adoc[ApplicationPermissionRepository], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionRule.adoc[ApplicationPermissionRule], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionValue.adoc[ApplicationPermissionValue], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionValueSet.adoc[ApplicationPermissionValueSet], xref:refguide:extensions:index/secman/applib/permission/spi/PermissionsEvaluationService.adoc[PermissionsEvaluationService], xref:refguide:extensions:index/secman/applib/permission/spi/PermissionsEvaluationServiceAbstract.adoc[PermissionsEvaluationServiceAbstract], xref:refguide:extensions:index/secman/applib/permission/spi/PermissionsEvaluationServiceAllowBeatsVeto.adoc[PermissionsEvaluationServiceAllowBeatsVeto], xref:refguide:extensions:index/secman/applib/permission/spi/PermissionsEvaluationServiceVetoBeatsAllow.adoc[PermissionsEvaluationServiceVetoBeatsAllow], xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRole.adoc[ApplicationRole], xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRoleRepository.adoc[ApplicationRoleRepository], xref:refguide:extensions:index/secman/applib/role/fixtures/AbstractRoleAndPermissionsFixtureScript.adoc[AbstractRoleAndPermissionsFixtureScript], xref:refguide:extensions:index/secman/applib/role/seed/IsisAppFeatureRoleAndPermissions.adoc[IsisAppFeatureRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisConfigurationRoleAndPermissions.adoc[IsisConfigurationRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisExtCommandReplayPrimaryRoleAndPermissions.adoc[IsisExtCommandReplayPrimaryRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisExtCommandReplaySecondaryRoleAndPermissions.adoc[IsisExtCommandReplaySecondaryRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisExtH2ConsoleRoleAndPermissions.adoc[IsisExtH2ConsoleRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisExtSecmanAdminRoleAndPermissions.adoc[IsisExtSecmanAdminRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisExtSecmanRegularUserRoleAndPermissions.adoc[IsisExtSecmanRegularUserRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisPersistenceJdoMetaModelRoleAndPermissions.adoc[IsisPersistenceJdoMetaModelRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisSudoImpersonateRoleAndPermissions.adoc[IsisSudoImpersonateRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisViewerRestfulObjectsSwaggerRoleAndPermissions.adoc[IsisViewerRestfulObjectsSwaggerRoleAndPermissions], xref:refguide:extensions:index/secman/applib/seed/SeedSecurityModuleService.adoc[SeedSecurityModuleService], xref:refguide:extensions:index/secman/applib/seed/scripts/SeedUsersAndRolesFixtureScript.adoc[SeedUsersAndRolesFixtureScript], xref:refguide:extensions:index/secman/applib/tenancy/dom/ApplicationTenancy.adoc[ApplicationTenancy], xref:refguide:extensions:index/secman/applib/tenancy/dom/ApplicationTenancyRepository.adoc[ApplicationTenancyRepository], xref:refguide:extensions:index/secman/applib/tenancy/dom/HasAtPath.adoc[HasAtPath], xref:refguide:extensions:index/secman/applib/tenancy/seed/GlobalTenancy.adoc[GlobalTenancy], xref:refguide:extensions:index/secman/applib/tenancy/spi/ApplicationTenancyEvaluator.adoc[ApplicationTenancyEvaluator], xref:refguide:extensions:index/secman/applib/user/dom/AccountType.adoc[AccountType], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUserRepository.adoc[ApplicationUserRepository], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUserStatus.adoc[ApplicationUserStatus], xref:refguide:extensions:index/secman/applib/user/events/UserCreatedEvent.adoc[UserCreatedEvent], xref:refguide:extensions:index/secman/applib/user/fixtures/AbstractUserAndRolesFixtureScript.adoc[AbstractUserAndRolesFixtureScript], xref:refguide:extensions:index/secman/applib/user/menu/MeService.adoc[MeService], xref:refguide:extensions:index/secman/applib/user/seed/IsisExtSecmanAdminUser.adoc[IsisExtSecmanAdminUser]
 ****
 
 |Apache Isis Ext - Sec Man Encryption (Using jbcrypt)
@@ -4139,7 +4586,7 @@ Directory: /extensions/security/secman/encryption-jbcrypt
 ----
 |.Components
 ****
-o.a.i.extensions.secman.encryption.jbcrypt.services.PasswordEncryptionServiceUsingJBcrypt +
+o.a.i.extensions.secman.encryption.jbcrypt.services.PasswordEncoderUsingJBcrypt +
 ****
 
 .Dependencies
@@ -4151,7 +4598,26 @@ org.mindrot:jbcrypt:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:extensions:index/secman/encryption/jbcrypt/IsisModuleExtSecmanEncryptionJbcrypt.adoc[IsisModuleExtSecmanEncryptionJbcrypt], xref:refguide:extensions:index/secman/encryption/jbcrypt/services/PasswordEncryptionServiceUsingJBcrypt.adoc[PasswordEncryptionServiceUsingJBcrypt]
+xref:refguide:extensions:index/secman/encryption/jbcrypt/IsisModuleExtSecmanEncryptionJbcrypt.adoc[IsisModuleExtSecmanEncryptionJbcrypt], xref:refguide:extensions:index/secman/encryption/jbcrypt/services/PasswordEncoderUsingJBcrypt.adoc[PasswordEncoderUsingJBcrypt]
+****
+
+|Apache Isis Ext - Sec Man Encryption (Using Spring)
+[source,yaml]
+----
+Group: org.apache.isis.extensions
+Artifact: isis-extensions-secman-encryption-spring
+Type: jar
+Directory: /extensions/security/secman/encryption-spring
+----
+|.Dependencies
+****
+org.apache.isis.core:isis-core-runtime:jar:<managed> +
+org.apache.isis.extensions:isis-extensions-secman-applib:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:extensions:index/secman/encryption/spring/IsisModuleExtSecmanEncryptionSpring.adoc[IsisModuleExtSecmanEncryptionSpring]
 ****
 
 |Apache Isis Ext - Sec Man Integration
@@ -4165,8 +4631,10 @@ Directory: /extensions/security/secman/integration
 |.Components
 ****
 o.a.i.extensions.secman.integration.authorizor.AuthorizorSecman +
+o.a.i.extensions.secman.integration.authorizor.AuthorizorSecman$PermissionCache +
 o.a.i.extensions.secman.integration.facets.TenantedAuthorizationPostProcessor$Register +
 o.a.i.extensions.secman.integration.spiimpl.ImpersonateMenuAdvisorForSecman +
+o.a.i.extensions.secman.integration.spiimpl.ImpersonateMenuAdvisorForSecman$Cache +
 o.a.i.extensions.secman.integration.spiimpl.TableColumnVisibilityServiceForSecman +
 o.a.i.extensions.secman.integration.usermementorefiner.UserMementoRefinerFromApplicationUser +
 o.a.i.extensions.secman.integration.userreg.UserRegistrationServiceForSecman +
@@ -4699,6 +5167,11 @@ skinparam rectangle<<12>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
+skinparam rectangle<<13>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
@@ -4753,20 +5226,22 @@ package "Subdomains\n[Software System]" {
   rectangle "==Apache Isis Sub - Ognl (parent)\n<size:10>[Container: packaging: pom]</size>" <<7>> as 7
   rectangle "==Apache Isis Sub - PDF Box (applib)\n<size:10>[Container: packaging: jar]</size>" <<10>> as 10
   rectangle "==Apache Isis Sub - PDF Box (parent)\n<size:10>[Container: packaging: pom]</size>" <<9>> as 9
-  rectangle "==Apache Isis Sub - Zip (applib)\n<size:10>[Container: packaging: jar]</size>" <<12>> as 12
-  rectangle "==Apache Isis Sub - Zip (parent)\n<size:10>[Container: packaging: pom]</size>" <<11>> as 11
+  rectangle "==Apache Isis Sub - POI\n<size:10>[Container: packaging: pom]</size>" <<11>> as 11
+  rectangle "==Apache Isis Sub - Zip (applib)\n<size:10>[Container: packaging: jar]</size>" <<13>> as 13
+  rectangle "==Apache Isis Sub - Zip (parent)\n<size:10>[Container: packaging: pom]</size>" <<12>> as 12
   rectangle "==Apache Isis Subdomains\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
 }
 3 .[#707070].> 4 : ""
 5 .[#707070].> 6 : ""
 7 .[#707070].> 8 : ""
 9 .[#707070].> 10 : ""
-11 .[#707070].> 12 : ""
+12 .[#707070].> 13 : ""
 2 .[#707070].> 3 : ""
 2 .[#707070].> 5 : ""
 2 .[#707070].> 7 : ""
 2 .[#707070].> 9 : ""
 2 .[#707070].> 11 : ""
+2 .[#707070].> 12 : ""
 @enduml
 ----
 .Projects/Modules (Subdomains)
@@ -4810,7 +5285,7 @@ Directory: /subdomains/docx/applib
 ----
 |.Components
 ****
-o.a.i.subdomains.docx.applib.DocxService +
+o.a.i.subdomains.docx.applib.service.DocxServiceDefault +
 ****
 
 .Dependencies
@@ -4899,6 +5374,22 @@ Directory: /subdomains/pdfbox/applib
 org.apache.isis.core:isis-applib:jar:<managed> +
 ****
 
+|Apache Isis Sub - POI
+[source,yaml]
+----
+Group: org.apache.isis.subdomains
+Artifact: isis-subdomains-poi
+Type: pom
+Directory: /subdomains/poi
+----
+|Apache POI dependencies
+
+.Dependencies
+****
+org.apache.poi:poi-ooxml:jar:<managed> +
+org.apache.poi:poi-ooxml-lite:jar:<managed> +
+****
+
 |Apache Isis Sub - Zip (parent)
 [source,yaml]
 ----
@@ -4919,7 +5410,7 @@ Directory: /subdomains/zip/applib
 ----
 |.Components
 ****
-o.a.i.extensions.zip.dom.impl.ZipService +
+o.a.i.subdomains.zip.applib.service.ZipServiceDefault +
 ****
 
 .Dependencies
@@ -4989,7 +5480,7 @@ Directory: /subdomains/base/applib
 ----
 |.Components
 ****
-o.a.i.subdomains.base.applib.services.calendar.CalendarService +
+o.a.i.subdomains.base.applib.services.calendar.CalendarServiceDefault +
 ****
 
 .Dependencies
@@ -5089,7 +5580,7 @@ Directory: /subdomains/excel/applib
 ----
 |.Components
 ****
-o.a.i.subdomains.excel.applib.dom.ExcelService +
+o.a.i.subdomains.excel.applib.service.ExcelServiceDefault +
 ****
 
 .Dependencies
@@ -5098,14 +5589,12 @@ org.apache.isis.core:isis-applib:jar:<managed> +
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.core:isis-core-runtime:jar:<managed> +
 org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed> +
-org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
-org.apache.poi:poi-ooxml:jar:<managed> +
-org.apache.poi:poi-ooxml-schemas:jar:<managed> +
+org.apache.isis.subdomains:isis-subdomains-poi:pom:<managed> +
 ****
 
 .Document Index Entries
 ****
-xref:refguide:subdomains:index/excel/applib/IsisModuleSubdomainsExcelApplib.adoc[IsisModuleSubdomainsExcelApplib], xref:refguide:subdomains:index/excel/applib/dom/AggregationType.adoc[AggregationType], xref:refguide:subdomains:index/excel/applib/dom/ExcelMetaDataEnabled.adoc[ExcelMetaDataEnabled], xref:refguide:subdomains:index/excel/applib/dom/ExcelService.adoc[ExcelService], xref:refguide:subdomains:index/excel/applib/dom/HyperLink.adoc[HyperLink], xref:refguide:subdomains:index/excel/applib/dom/PivotColumn.adoc[PivotColumn], xref:refguide:subdomains:index/excel/applib/dom/PivotDecoration.adoc[PivotDecoration], xref:refguide:subdomains:index/excel/applib/dom/PivotRow.adoc[PivotRow], xref:refguide:subdomains:index/excel/applib/dom/PivotValue.adoc[PivotValue], xref:refguide:subdomains:index/excel/applib/dom/RowHandler.adoc[RowHandler], xref:refguide:subdomains:index/excel/applib/dom/WorksheetContent.adoc[WorksheetContent], xref:refguide:subdomains:index/excel/applib/dom/WorksheetSpec.adoc[WorksheetSpec], xref:refguide:subdomains:index/excel/applib/dom/util/AnnotationList.adoc[AnnotationList], xref:refguide:subdomains:index/excel/applib/dom/util/AnnotationTriplet.adoc[AnnotationTriplet], xref:refguide:subdomains:index/excel/applib/dom/util/ExcelFileBlobConverter.adoc[ExcelFileBlobConverter], xref:refguide:subdomains:index/excel/applib/dom/util/ExcelServiceImpl.adoc[ExcelServiceImpl], xref:refguide:subdomains:index/excel/applib/dom/util/Mode.adoc[Mode], xref:refguide:subdomains:index/excel/applib/dom/util/PivotUtils.adoc[PivotUtils], xref:refguide:subdomains:index/excel/applib/dom/util/SheetPivoter.adoc[SheetPivoter]
+xref:refguide:subdomains:index/excel/applib/IsisModuleSubdomainsExcelApplib.adoc[IsisModuleSubdomainsExcelApplib], xref:refguide:subdomains:index/excel/applib/dom/AggregationType.adoc[AggregationType], xref:refguide:subdomains:index/excel/applib/dom/ExcelMetaDataEnabled.adoc[ExcelMetaDataEnabled], xref:refguide:subdomains:index/excel/applib/dom/ExcelService.adoc[ExcelService], xref:refguide:subdomains:index/excel/applib/dom/HyperLink.adoc[HyperLink], xref:refguide:subdomains:index/excel/applib/dom/PivotColumn.adoc[PivotColumn], xref:refguide:subdomains:index/excel/applib/dom/PivotDecoration.adoc[PivotDecoration], xref:refguide:subdomains:index/excel/applib/dom/PivotRow.adoc[PivotRow], xref:refguide:subdomains:index/excel/applib/dom/PivotValue.adoc[PivotValue], xref:refguide:subdomains:index/excel/applib/dom/RowHandler.adoc[RowHandler], xref:refguide:subdomains:index/excel/applib/dom/WorksheetContent.adoc[WorksheetContent], xref:refguide:subdomains:index/excel/applib/dom/WorksheetSpec.adoc[WorksheetSpec], xref:refguide:subdomains:index/excel/applib/util/AnnotationList.adoc[AnnotationList], xref:refguide:subdomains:index/excel/applib/util/AnnotationTriplet.adoc[AnnotationTriplet], xref:refguide:subdomains:index/excel/applib/util/ExcelFileBlobConverter.adoc[ExcelFileBlobConverter], xref:refguide:subdomains:index/excel/applib/util/Mode.adoc[Mode], xref:refguide:subdomains:index/excel/applib/util/PivotUtils.adoc[PivotUtils], xref:refguide:subdomains:index/excel/applib/util/SheetPivoter.adoc[SheetPivoter]
 ****
 
 |Apache Isis Sub - Excel (Fixtures)
@@ -5155,6 +5644,7 @@ Directory: /subdomains/excel/testing
 ****
 org.apache.isis.core:isis-core-metamodel:jar:<managed> +
 org.apache.isis.subdomains:isis-subdomains-excel-applib:jar:<managed> +
+org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
 org.projectlombok:lombok:jar:<managed> +
 ****
 
@@ -5297,7 +5787,7 @@ Directory: /subdomains/xdocreport/applib
 ----
 |.Components
 ****
-o.a.i.subdomains.xdocreport.applib.service.XDocReportService +
+o.a.i.subdomains.xdocreport.applib.service.XDocReportServiceDefault +
 ****
 
 .Dependencies
@@ -5305,16 +5795,15 @@ o.a.i.subdomains.xdocreport.applib.service.XDocReportService +
 fr.opensagres.xdocreport:fr.opensagres.xdocreport.converter.docx.xwpf:jar:<managed> +
 fr.opensagres.xdocreport:fr.opensagres.xdocreport.document.docx:jar:<managed> +
 fr.opensagres.xdocreport:fr.opensagres.xdocreport.template.freemarker:jar:<managed> +
-fr.opensagres.xdocreport:org.apache.poi.xwpf.converter.core:jar:<managed> +
-fr.opensagres.xdocreport:org.apache.poi.xwpf.converter.pdf:jar:<managed> +
 org.apache.isis.core:isis-applib:jar:<managed> +
+org.apache.isis.subdomains:isis-subdomains-poi:pom:<managed> +
 org.apache.isis.testing:isis-testing-unittestsupport-applib:jar:<managed> +
 org.projectlombok:lombok:jar:<managed> +
 ****
 
 .Document Index Entries
 ****
-xref:refguide:subdomains:index/xdocreport/applib/IsisModuleSubdomainsXDocReportApplib.adoc[IsisModuleSubdomainsXDocReportApplib], xref:refguide:subdomains:index/xdocreport/applib/service/OutputType.adoc[OutputType], xref:refguide:subdomains:index/xdocreport/applib/service/XDocReportModel.adoc[XDocReportModel], xref:refguide:subdomains:index/xdocreport/applib/service/XDocReportService.adoc[XDocReportService]
+xref:refguide:subdomains:index/xdocreport/applib/IsisModuleSubdomainsXDocReportApplib.adoc[IsisModuleSubdomainsXDocReportApplib], xref:refguide:subdomains:index/xdocreport/applib/XDocReportService.adoc[XDocReportService], xref:refguide:subdomains:index/xdocreport/applib/XDocReportService~XDocReportModel.adoc[XDocReportService.XDocReportModel]
 ****
 |===
 
@@ -5370,21 +5859,28 @@ skinparam rectangle<<8>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
+skinparam rectangle<<9>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
 package "Tooling\n[Software System]" {
   rectangle "==Apache Isis - Tooling\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
   rectangle "==Apache Isis - Tooling - C4 Modeling\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
   rectangle "==Apache Isis - Tooling - CLI (Command Line Interface)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
-  rectangle "==Apache Isis - Tooling - Java Model (Code Mining)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
-  rectangle "==Apache Isis - Tooling - Java to Asciidoc (Code Mining)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
-  rectangle "==Apache Isis - Tooling - Model for AsciiDoc\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
-  rectangle "==Apache Isis - Tooling - Project Model (Code mining)\n<size:10>[Container: packaging: jar]</size>" <<8>> as 8
+  rectangle "==Apache Isis - Tooling - Java DSL (Code Gen)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
+  rectangle "==Apache Isis - Tooling - Java Model (Code Mining)\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
+  rectangle "==Apache Isis - Tooling - Java to Asciidoc (Code Mining)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
+  rectangle "==Apache Isis - Tooling - Model for AsciiDoc\n<size:10>[Container: packaging: jar]</size>" <<8>> as 8
+  rectangle "==Apache Isis - Tooling - Project Model (Code mining)\n<size:10>[Container: packaging: jar]</size>" <<9>> as 9
 }
 2 .[#707070].> 3 : ""
 2 .[#707070].> 4 : ""
-2 .[#707070].> 6 : ""
 2 .[#707070].> 5 : ""
 2 .[#707070].> 7 : ""
+2 .[#707070].> 6 : ""
 2 .[#707070].> 8 : ""
+2 .[#707070].> 9 : ""
 @enduml
 ----
 .Projects/Modules (Tooling)
@@ -5406,7 +5902,7 @@ eg. code mining, automated documentation.
 
 .Dependencies
 ****
-org.checkerframework:checker-qual:jar:3.17.0 +
+org.checkerframework:checker-qual:jar:3.21.0 +
 org.junit.jupiter:junit-jupiter-api:jar:<managed> +
 org.junit.jupiter:junit-jupiter-engine:jar:<managed> +
 org.junit.vintage:junit-vintage-engine:jar:<managed> +
@@ -5454,6 +5950,24 @@ org.apache.isis.tooling:isis-tooling-java2adoc:jar:<managed> +
 org.apache.isis.tooling:isis-tooling-javamodel:jar:<managed> +
 org.apache.isis.tooling:isis-tooling-model4adoc:jar:<managed> +
 org.apache.isis.tooling:isis-tooling-projectmodel:jar:<managed> +
+****
+
+|Apache Isis - Tooling - Java DSL (Code Gen)
+[source,yaml]
+----
+Group: org.apache.isis.tooling
+Artifact: isis-tooling-dsl
+Type: jar
+Directory: /tooling/dsl
+----
+|Tools for Java meta-programming and runtime class generaton.
+
+.Dependencies
+****
+com.graphql-java:graphql-java:jar:${graphql-java.version} +
+com.squareup:javapoet:jar:${javapoet.version} +
+org.apache.isis.commons:isis-commons:jar:<managed> +
+org.apache.logging.log4j:log4j-core:jar:<managed> +
 ****
 
 |Apache Isis - Tooling - Java to Asciidoc (Code Mining)
@@ -5579,6 +6093,16 @@ skinparam rectangle<<16>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
+skinparam rectangle<<17>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<18>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
@@ -5633,13 +6157,15 @@ package "Regression Tests\n[Software System]" {
   rectangle "==Apache Isis - Regression Tests (stable) - Domain Model\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
   rectangle "==Apache Isis - Regression Tests (stable) - Event Handling\n<size:10>[Container: packaging: jar]</size>" <<8>> as 8
   rectangle "==Apache Isis - Regression Tests (stable) - Factory\n<size:10>[Container: packaging: jar]</size>" <<9>> as 9
-  rectangle "==Apache Isis - Regression Tests (stable) - Injecting\n<size:10>[Container: packaging: jar]</size>" <<10>> as 10
-  rectangle "==Apache Isis - Regression Tests (stable) - Interact\n<size:10>[Container: packaging: jar]</size>" <<11>> as 11
-  rectangle "==Apache Isis - Regression Tests (stable) - Logging\n<size:10>[Container: packaging: jar]</size>" <<12>> as 12
-  rectangle "==Apache Isis - Regression Tests (stable) - Persistence (JDO)\n<size:10>[Container: packaging: jar]</size>" <<13>> as 13
-  rectangle "==Apache Isis - Regression Tests (stable) - Persistence (JPA)\n<size:10>[Container: packaging: jar]</size>" <<14>> as 14
-  rectangle "==Apache Isis - Regression Tests (stable) - Publishing (JPA)\n<size:10>[Container: packaging: jar]</size>" <<15>> as 15
-  rectangle "==Apache Isis - Regression Tests (stable) - Rest\n<size:10>[Container: packaging: jar]</size>" <<16>> as 16
+  rectangle "==Apache Isis - Regression Tests (stable) - Interact\n<size:10>[Container: packaging: jar]</size>" <<10>> as 10
+  rectangle "==Apache Isis - Regression Tests (stable) - Persistence (JDO)\n<size:10>[Container: packaging: jar]</size>" <<11>> as 11
+  rectangle "==Apache Isis - Regression Tests (stable) - Persistence (JPA)\n<size:10>[Container: packaging: jar]</size>" <<12>> as 12
+  rectangle "==Apache Isis - Regression Tests (stable) - Publishing (JPA)\n<size:10>[Container: packaging: jar]</size>" <<13>> as 13
+  rectangle "==Apache Isis - Regression Tests (stable) - Rest\n<size:10>[Container: packaging: jar]</size>" <<14>> as 14
+  rectangle "==Apache Isis - Regression Tests (stable) - Value Types\n<size:10>[Container: packaging: jar]</size>" <<15>> as 15
+  rectangle "==Apache Isis - Regression Tests (stable) - Viewers Common\n<size:10>[Container: packaging: jar]</size>" <<16>> as 16
+  rectangle "==Apache Isis - Regression Tests (stable) - Viewers JDO\n<size:10>[Container: packaging: jar]</size>" <<17>> as 17
+  rectangle "==Apache Isis - Regression Tests (stable) - Viewers JPA\n<size:10>[Container: packaging: jar]</size>" <<18>> as 18
 }
 2 .[#707070].> 3 : ""
 2 .[#707070].> 4 : ""
@@ -5655,6 +6181,8 @@ package "Regression Tests\n[Software System]" {
 2 .[#707070].> 14 : ""
 2 .[#707070].> 15 : ""
 2 .[#707070].> 16 : ""
+2 .[#707070].> 17 : ""
+2 .[#707070].> 18 : ""
 @enduml
 ----
 .Projects/Modules (Regression Tests)
@@ -5675,26 +6203,8 @@ Directory: /regressiontests
 
 .Dependencies
 ****
-org.apache.directory.server:apacheds-test-framework:jar:2.0.0.AM26 +
-org.apache.isis.extensions:isis-extensions-secman-encryption-jbcrypt:jar:<managed> +
-org.apache.isis.extensions:isis-extensions-secman-integration:jar:<managed> +
-org.apache.isis.extensions:isis-extensions-secman-persistence-jdo:jar:<managed> +
-org.apache.isis.extensions:isis-extensions-secman-shiro-realm:jar:<managed> +
-org.apache.isis.extensions:isis-extensions-shiro-realm-ldap-impl:jar:<managed> +
-org.apache.isis.mappings:isis-mappings-restclient-applib:jar:<managed> +
-org.apache.isis.mavendeps:isis-mavendeps-integtests:pom:<managed> +
-org.apache.isis.mavendeps:isis-mavendeps-webapp:pom:<managed> +
-org.apache.isis.persistence:isis-persistence-jdo-datanucleus:jar:<managed> +
-org.apache.isis.persistence:isis-persistence-jpa-eclipselink:jar:<managed> +
-org.apache.isis.security:isis-security-shiro:jar:<managed> +
-org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
 org.apache.isis.testing:isis-testing-integtestsupport-applib:jar:<managed> +
-org.apache.isis.testing:isis-testing-specsupport-applib:jar:<managed> +
 org.apache.isis.testing:isis-testing-unittestsupport-applib:jar:<managed> +
-org.apache.isis.tooling:isis-tooling-model4adoc:jar:${project.version} +
-org.apache.isis.viewer:isis-viewer-common:jar:<managed> +
-org.glassfish:javax.json:jar:1.1.4 +
-org.glassfish.jersey.ext:jersey-spring5:jar:<managed> +
 org.projectlombok:lombok:jar:<managed> +
 ****
 
@@ -5706,10 +6216,44 @@ Artifact: isis-regressiontests-stable
 Type: jar
 Directory: /regressiontests/stable
 ----
-|.Dependencies
+|.Components
 ****
-org.apache.isis.extensions:isis-extensions-cors-impl:jar:<managed> +
-org.glassfish.jersey.ext:jersey-spring5:jar:<managed> +
+o.a.i.testdomain.conf.Configuration_headless$HeadlessCommandSupport +
+o.a.i.testdomain.jdo.JdoInventoryDao +
+o.a.i.testdomain.jdo.JdoTestFixtures +
+o.a.i.testdomain.jpa.JpaInventoryDao +
+o.a.i.testdomain.jpa.JpaTestFixtures +
+o.a.i.testdomain.jpa.springdata.EmployeeRepository +
+o.a.i.testdomain.model.valuetypes.ValueTypeExampleService +
+o.a.i.testdomain.publishing.PublishingTestFactoryAbstract$CommitListener +
+o.a.i.testdomain.publishing.PublishingTestFactoryJdo +
+o.a.i.testdomain.publishing.PublishingTestFactoryJpa +
+o.a.i.testdomain.publishing.subscriber.CommandSubscriberForTesting +
+o.a.i.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting +
+o.a.i.testdomain.publishing.subscriber.EntityPropertyChangeSubscriberForTesting +
+o.a.i.testdomain.publishing.subscriber.ExecutionSubscriberForTesting +
+o.a.i.testdomain.util.event.LifecycleEventSubscriberJdoForTesting +
+o.a.i.testdomain.util.event.LifecycleEventSubscriberJpaForTesting +
+o.a.i.testdomain.util.interaction.DomainObjectTesterFactory +
+o.a.i.testdomain.util.interaction.InteractionBoundaryProbe +
+o.a.i.testdomain.util.kv.KVStoreForTesting +
+o.a.i.testdomain.util.rest.RestEndpointService +
+****
+
+.Dependencies
+****
+org.apache.isis.extensions:isis-extensions-secman-encryption-jbcrypt:jar:<managed> +
+org.apache.isis.extensions:isis-extensions-secman-integration:jar:<managed> +
+org.apache.isis.extensions:isis-extensions-secman-persistence-jdo:jar:<managed> +
+org.apache.isis.mappings:isis-mappings-restclient-applib:jar:<managed> +
+org.apache.isis.mavendeps:isis-mavendeps-webapp:pom:<managed> +
+org.apache.isis.persistence:isis-persistence-jdo-datanucleus:jar:<managed> +
+org.apache.isis.persistence:isis-persistence-jpa-eclipselink:jar:<managed> +
+org.apache.isis.security:isis-security-shiro:jar:<managed> +
+org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
+org.apache.isis.valuetypes:isis-valuetypes-asciidoc-metamodel:jar:<managed> +
+org.apache.isis.valuetypes:isis-valuetypes-markdown-metamodel:jar:<managed> +
+org.apache.isis.valuetypes:isis-valuetypes-sse-metamodel:jar:<managed> +
 ****
 
 |Apache Isis - Regression Tests (stable) - Bootstrapping
@@ -5749,6 +6293,8 @@ Directory: /regressiontests/stable-cucumber
 |.Dependencies
 ****
 org.apache.isis.regressiontests:isis-regressiontests-stable:jar:<managed> +
+org.apache.isis.testing:isis-testing-specsupport-applib:jar:<managed> +
+org.junit.platform:junit-platform-suite-api:jar:<managed> +
 ****
 
 |Apache Isis - Regression Tests (stable) - Domain Model
@@ -5790,19 +6336,6 @@ Directory: /regressiontests/stable-factory
 org.apache.isis.regressiontests:isis-regressiontests-stable:jar:<managed> +
 ****
 
-|Apache Isis - Regression Tests (stable) - Injecting
-[source,yaml]
-----
-Group: org.apache.isis.regressiontests
-Artifact: isis-regressiontests-stable-injecting
-Type: jar
-Directory: /regressiontests/stable-injecting
-----
-|.Dependencies
-****
-org.apache.isis.regressiontests:isis-regressiontests-stable:jar:<managed> +
-****
-
 |Apache Isis - Regression Tests (stable) - Interact
 [source,yaml]
 ----
@@ -5810,19 +6343,6 @@ Group: org.apache.isis.regressiontests
 Artifact: isis-regressiontests-stable-interact
 Type: jar
 Directory: /regressiontests/stable-interact
-----
-|.Dependencies
-****
-org.apache.isis.regressiontests:isis-regressiontests-stable:jar:<managed> +
-****
-
-|Apache Isis - Regression Tests (stable) - Logging
-[source,yaml]
-----
-Group: org.apache.isis.regressiontests
-Artifact: isis-regressiontests-stable-logging
-Type: jar
-Directory: /regressiontests/stable-logging
 ----
 |.Dependencies
 ****
@@ -5839,7 +6359,9 @@ Directory: /regressiontests/stable-persistence-jdo
 ----
 |.Dependencies
 ****
+org.apache.isis.persistence:isis-persistence-jdo-datanucleus:jar:<managed> +
 org.apache.isis.regressiontests:isis-regressiontests-stable:jar:<managed> +
+org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
 ****
 
 |Apache Isis - Regression Tests (stable) - Persistence (JPA)
@@ -5852,7 +6374,9 @@ Directory: /regressiontests/stable-persistence-jpa
 ----
 |.Dependencies
 ****
+org.apache.isis.persistence:isis-persistence-jpa-eclipselink:jar:<managed> +
 org.apache.isis.regressiontests:isis-regressiontests-stable:jar:<managed> +
+org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
 ****
 
 |Apache Isis - Regression Tests (stable) - Publishing (JPA)
@@ -5865,7 +6389,9 @@ Directory: /regressiontests/stable-publishing-jpa
 ----
 |.Dependencies
 ****
+org.apache.isis.persistence:isis-persistence-jpa-eclipselink:jar:<managed> +
 org.apache.isis.regressiontests:isis-regressiontests-stable:jar:<managed> +
+org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
 ****
 
 |Apache Isis - Regression Tests (stable) - Rest
@@ -5879,8 +6405,70 @@ Directory: /regressiontests/stable-rest
 |.Dependencies
 ****
 org.apache.isis.extensions:isis-extensions-cors-impl:jar:<managed> +
+org.apache.isis.mappings:isis-mappings-restclient-applib:jar:<managed> +
+org.apache.isis.mavendeps:isis-mavendeps-webapp:pom:<managed> +
+org.apache.isis.persistence:isis-persistence-jdo-datanucleus:jar:<managed> +
+org.apache.isis.regressiontests:isis-regressiontests-stable:jar:<managed> +
+org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
+****
+
+|Apache Isis - Regression Tests (stable) - Value Types
+[source,yaml]
+----
+Group: org.apache.isis.regressiontests
+Artifact: isis-regressiontests-stable-value
+Type: jar
+Directory: /regressiontests/stable-value
+----
+|.Dependencies
+****
+org.apache.isis.regressiontests:isis-regressiontests-stable:jar:<managed> +
+****
+
+|Apache Isis - Regression Tests (stable) - Viewers Common
+[source,yaml]
+----
+Group: org.apache.isis.regressiontests
+Artifact: isis-regressiontests-stable-viewers-common
+Type: jar
+Directory: /regressiontests/stable-viewers-common
+----
+|.Dependencies
+****
 org.apache.isis.mavendeps:isis-mavendeps-webapp:pom:<managed> +
 org.apache.isis.regressiontests:isis-regressiontests-stable:jar:<managed> +
+****
+
+|Apache Isis - Regression Tests (stable) - Viewers JDO
+[source,yaml]
+----
+Group: org.apache.isis.regressiontests
+Artifact: isis-regressiontests-stable-viewers-jdo
+Type: jar
+Directory: /regressiontests/stable-viewers-jdo
+----
+|.Dependencies
+****
+org.apache.isis.mavendeps:isis-mavendeps-webapp:pom:<managed> +
+org.apache.isis.persistence:isis-persistence-jdo-datanucleus:jar:<managed> +
+org.apache.isis.regressiontests:isis-regressiontests-stable:jar:<managed> +
+org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
+****
+
+|Apache Isis - Regression Tests (stable) - Viewers JPA
+[source,yaml]
+----
+Group: org.apache.isis.regressiontests
+Artifact: isis-regressiontests-stable-viewers-jpa
+Type: jar
+Directory: /regressiontests/stable-viewers-jpa
+----
+|.Dependencies
+****
+org.apache.isis.mavendeps:isis-mavendeps-webapp:pom:<managed> +
+org.apache.isis.persistence:isis-persistence-jpa-eclipselink:jar:<managed> +
+org.apache.isis.regressiontests:isis-regressiontests-stable:jar:<managed> +
+org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
 ****
 |===
 
@@ -6065,7 +6653,30 @@ Artifact: isis-viewer-javafx-ui
 Type: jar
 Directory: /incubator/viewers/javafx/ui
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.incubator.viewer.javafx.ui.components.UiComponentFactoryFx +
+o.a.i.incubator.viewer.javafx.ui.components.markup.MarkupFieldFactory +
+o.a.i.incubator.viewer.javafx.ui.components.number.NumberFieldFactory +
+o.a.i.incubator.viewer.javafx.ui.components.objectref.ObjectReferenceFieldFactory +
+o.a.i.incubator.viewer.javafx.ui.components.other.FallbackFieldFactory +
+o.a.i.incubator.viewer.javafx.ui.components.temporal.TemporalFieldFactory +
+o.a.i.incubator.viewer.javafx.ui.components.text.TextFieldFactory +
+o.a.i.incubator.viewer.javafx.ui.decorator.disabling.DisablingDecoratorForButton +
+o.a.i.incubator.viewer.javafx.ui.decorator.disabling.DisablingDecoratorForFormField +
+o.a.i.incubator.viewer.javafx.ui.decorator.icon.IconDecoratorForLabeled +
+o.a.i.incubator.viewer.javafx.ui.decorator.icon.IconDecoratorForMenuItem +
+o.a.i.incubator.viewer.javafx.ui.decorator.icon.IconServiceDefault +
+o.a.i.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingDecoratorForButton +
+o.a.i.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingDecoratorForFormField +
+o.a.i.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingInfoPopupProvider +
+o.a.i.incubator.viewer.javafx.ui.main.MainViewFx +
+o.a.i.incubator.viewer.javafx.ui.main.UiActionHandlerFx +
+o.a.i.incubator.viewer.javafx.ui.main.UiBuilderFx +
+o.a.i.incubator.viewer.javafx.ui.main.UiContextFxDefault +
+****
+
+.Dependencies
 ****
 org.apache.isis.core:isis-core-runtimeservices:jar:<managed> +
 org.apache.isis.incubator.viewer:isis-viewer-javafx-model:jar:<managed> +
@@ -6179,7 +6790,23 @@ Artifact: isis-viewer-vaadin-ui
 Type: jar
 Directory: /incubator/viewers/vaadin/ui
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.incubator.viewer.vaadin.ui.auth.LogoutHandlerVaa +
+o.a.i.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandler +
+o.a.i.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa +
+o.a.i.incubator.viewer.vaadin.ui.components.blob.BlobFieldFactory +
+o.a.i.incubator.viewer.vaadin.ui.components.clob.ClobFieldFactory +
+o.a.i.incubator.viewer.vaadin.ui.components.markup.MarkupFieldFactory +
+o.a.i.incubator.viewer.vaadin.ui.components.other.FallbackFieldFactory +
+o.a.i.incubator.viewer.vaadin.ui.components.temporal.TemporalFieldFactory +
+o.a.i.incubator.viewer.vaadin.ui.components.text.TextFieldFactory +
+o.a.i.incubator.viewer.vaadin.ui.components.text.uuid.UuidFieldFactory +
+o.a.i.incubator.viewer.vaadin.ui.pages.main.UiActionHandlerVaa +
+o.a.i.incubator.viewer.vaadin.ui.pages.main.UiContextVaaDefault +
+****
+
+.Dependencies
 ****
 com.vaadin:vaadin-spring:jar:<managed> +
 commons-fileupload:commons-fileupload:jar:1.4 +

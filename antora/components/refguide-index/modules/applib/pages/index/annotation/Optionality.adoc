@@ -13,6 +13,7 @@ enum Optionality {
   OPTIONAL     // <.>
   MANDATORY     // <.>
   NOT_SPECIFIED     // <.>
+  boolean isOptional()
 }
 ----
 

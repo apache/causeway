@@ -62,8 +62,6 @@ class JsonRepresentation {
   Float asFloat()     // <.>
   boolean isDecimal(final String path)
   boolean isDecimal()
-  boolean isDouble(final String path)     // <.>
-  boolean isDouble()     // <.>
   Double getDouble(final String path)     // <.>
   Double asDouble()     // <.>
   boolean isBigInteger(final String path)
@@ -77,7 +75,7 @@ class JsonRepresentation {
   BigDecimal getBigDecimal(final String path)     // <.>
   BigDecimal getBigDecimal(final String path, final String formatRequested)     // <.>
   BigDecimal asBigDecimal()     // <.>
-  BigDecimal asBigDecimal(String format)     // <.>
+  BigDecimal asBigDecimal(final String format)     // <.>
   boolean isString(final String path)
   boolean isString()
   String getString(final String path)     // <.>
@@ -132,13 +130,13 @@ class JsonRepresentation {
   JsonRepresentation mapPut(final String key, final char value)
   JsonRepresentation mapPut(final String key, final Character value)
   JsonRepresentation mapPut(final String key, final BigInteger value)
-  JsonRepresentation mapPut(Iterable<Entry<String, JsonRepresentation>> entries)
-  JsonRepresentation mapPut(Entry<String, JsonRepresentation> entry)
+  JsonRepresentation mapPut(final Iterable<Entry<String, JsonRepresentation>> entries)
+  JsonRepresentation mapPut(final Entry<String, JsonRepresentation> entry)
   JsonRepresentation mapPut(final String key, final BigDecimal value)
   Stream<Map.Entry<String, JsonRepresentation>> streamMapEntries()
   JsonRepresentation ensureArray()     // <.>
   int hashCode()
-  boolean equals(Object obj)
+  boolean equals(final Object obj)
   String toString()
 }
 ----
@@ -228,35 +226,15 @@ Use _#isDecimal(String)_ to test if a decimal value
 --
 Use _#isNumber()_ to test if number (it is not possible to check if a float, however).
 --
-<.> xref:#isDouble__String[isDouble(String)]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-- use _#isDecimal(String)_
-====
---
-<.> xref:#isDouble__[isDouble()]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-- use _#isDecimal()_
-====
---
 <.> xref:#getDouble__String[getDouble(String)]
 +
 --
-Use _#isDouble(String)_ to check first, if required.
+Use _#isDecimal(String)_ to check first, if required.
 --
 <.> xref:#asDouble__[asDouble()]
 +
 --
-Use _#isDouble()_ to check first, if required.
+Use _#isDecimal()_ to check first, if required.
 --
 <.> xref:#getBigInteger__String[getBigInteger(String)]
 +
@@ -431,35 +409,15 @@ Use _#isDecimal(String)_ to test if a decimal value
 
 Use _#isNumber()_ to test if number (it is not possible to check if a float, however).
 
-[#isDouble__String]
-=== isDouble(String)
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-- use _#isDecimal(String)_
-====
-
-[#isDouble__]
-=== isDouble()
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-- use _#isDecimal()_
-====
-
 [#getDouble__String]
 === getDouble(String)
 
-Use _#isDouble(String)_ to check first, if required.
+Use _#isDecimal(String)_ to check first, if required.
 
 [#asDouble__]
 === asDouble()
 
-Use _#isDouble()_ to check first, if required.
+Use _#isDecimal()_ to check first, if required.
 
 [#getBigInteger__String]
 === getBigInteger(String)

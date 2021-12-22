@@ -17,11 +17,12 @@ class UserMemento {
   UserMemento ofNameAndRoleNames(final String name, final List<String> roleNames)     // <.>
   UserMemento ofNameAndRoleNames(final String name, final Stream<String> roleNames)     // <.>
   List<RoleMemento> getRoles()     // <.>
-  UserMemento withRoleAdded(String role)
+  UserMemento withRoleAdded(final String role)
   boolean isCurrentUser(final String userName)     // <.>
   Stream<String> streamRoleNames()
   boolean hasRoleName(final String roleName)
   UserMementoBuilder asBuilder()
+  UserLocale asUserLocale()
 }
 ----
 

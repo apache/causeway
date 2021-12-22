@@ -10,12 +10,7 @@ Simply provides a UI to allow layouts (obtained from xref:refguide:applib:index/
 ----
 class LayoutServiceMenu {
   public static final String LOGICAL_TYPE_NAME;
-  LayoutServiceMenu()
-  Blob downloadLayouts(final Style style)
-  Style default0DownloadLayouts()
-  Clob downloadMenuBarsLayout(final String fileName, final MenuBarsService.Type type)
-  String default0DownloadMenuBarsLayout()
-  MenuBarsService.Type default1DownloadMenuBarsLayout()
+  LayoutServiceMenu(final LayoutService layoutService)
 }
 ----
 

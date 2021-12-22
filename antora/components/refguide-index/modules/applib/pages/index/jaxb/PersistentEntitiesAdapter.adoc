@@ -8,7 +8,7 @@
 ----
 class PersistentEntitiesAdapter {
   List<Object> unmarshal(final OidsDto oidsDto)
-  OidsDto marshal(final List<Object> domainObjects)
+  OidsDto marshal(final Iterable<Object> domainObjects)
 }
 ----
 

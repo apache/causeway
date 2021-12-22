@@ -10,7 +10,6 @@ interface Oid {
   static final String SEPARATOR;
   String getLogicalTypeName()     // <.>
   String getIdentifier()     // <.>
-  String getObjectType()     // <.>
   String stringify()     // <.>
 }
 ----
@@ -24,18 +23,6 @@ Logical-type-name of the domain object this Oid is representing. (aka. object-ty
 +
 --
 Stringified version of the ID of the domain object instance this Oid is representing.
---
-<.> xref:#getObjectType__[getObjectType()]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#getLogicalTypeName()_
-====
-
-Alias for _#getLogicalTypeName()_ .
 --
 <.> xref:#stringify__[stringify()]
 +
@@ -54,18 +41,6 @@ Logical-type-name of the domain object this Oid is representing. (aka. object-ty
 === getIdentifier()
 
 Stringified version of the ID of the domain object instance this Oid is representing.
-
-[#getObjectType__]
-=== getObjectType()
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#getLogicalTypeName()_
-====
-
-Alias for _#getLogicalTypeName()_ .
 
 [#stringify__]
 === stringify()

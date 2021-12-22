@@ -9,6 +9,7 @@ A library of architecture tests to ensure coding conventions are followed for cl
 .ArchitectureJdoRules.java
 ----
 class ArchitectureJdoRules {
+  ArchRule every_logicalTypeName_and_jdo_discriminator_must_be_same()
   ArchRule every_jdo_PersistenceCapable_must_be_annotated_with_DomainObject_nature_of_ENTITY()     // <.>
   ArchRule every_jdo_PersistenceCapable_must_be_annotated_with_Version()     // <.>
   ArchRule every_jdo_PersistenceCapable_must_be_annotated_as_XmlJavaAdapter_PersistentEntityAdapter()     // <.>
@@ -106,6 +107,8 @@ This is so that entities will have an alternative business key in addition to th
 This rule requires that classes annotated with the JDO _javax.jdo.annotations.PersistenceCapable_ annotation must also be annotated with the JDO _javax.jdo.annotations.Uniques_ or _javax.jdo.annotations.Unique_ constraints.
 
 This is so that entities will have an alternative business key in addition to the system-defined surrogate key.
+
+The rule does _not_ apply to any entities that are subtype entities where there is a supertype entity.
 
 [#every_jdo_PersistenceCapable_must_have_schema__]
 === every_jdo_PersistenceCapable_must_have_schema()

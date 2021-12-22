@@ -13,8 +13,9 @@ class Bookmark {
   Bookmark forLogicalTypeAndIdentifier(final LogicalType logicalType, final String identifier)
   Bookmark forOidDto(final OidDto oidDto)
   Bookmark withHintId(final String hintId)
-  Optional<Bookmark> parse(String str)     // <.>
-  Optional<Bookmark> parseUrlEncoded(String urlEncodedStr)
+  Optional<Bookmark> parse(final String str)     // <.>
+  Bookmark parseElseFail(final String input)
+  Optional<Bookmark> parseUrlEncoded(final String urlEncodedStr)
   OidDto toOidDto()
   String stringify()
   boolean equals(final Object other)

@@ -9,15 +9,15 @@ A library of architecture tests to ensure coding conventions are followed for do
 .ArchitectureDomainRules.java
 ----
 class ArchitectureDomainRules {
-  @ArchTest
-public static ArchRule every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_MIXIN;     // <.>
   ArchRule every_DomainObject_must_specify_logicalTypeName()     // <.>
   ArchRule every_DomainService_must_specify_logicalTypeName()     // <.>
+  ArchRule every_logicalTypeName_must_be_unique()     // <.>
   ArchRule every_DomainObject_must_also_be_annotated_with_DomainObjectLayout()     // <.>
   ArchRule every_DomainService_must_also_be_annotated_with_DomainServiceLayout()     // <.>
   DescribedPredicate<JavaAnnotation<?>> DomainService_logicalTypeName()
   DescribedPredicate<JavaAnnotation<?>> DomainObject_logicalTypeName()
   DescribedPredicate<JavaAnnotation<?>> DomainXxx_logicalTypeName(final Class<? extends Annotation> annotationClass)
+  ArchRule every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_VIEW_MODEL()     // <.>
   ArchRule every_Action_mixin_must_follow_naming_convention()     // <.>
   ArchRule every_Property_mixin_must_follow_naming_convention()     // <.>
   ArchRule every_Collection_mixin_must_follow_naming_convention()     // <.>
@@ -32,11 +32,6 @@ public static ArchRule every_jaxb_view_model_must_also_be_annotated_with_DomainO
 }
 ----
 
-<.> xref:#every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_MIXIN[every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_MIXIN]
-+
---
-This rule requires that classes annotated with the _XmlRootElement_ annotation must also be annotated with the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation specifying a xref:refguide:applib:index/annotation/Nature.adoc[Nature] of _Nature#MIXIN MIXIN_ .
---
 <.> xref:#every_DomainObject_must_specify_logicalTypeName__[every_DomainObject_must_specify_logicalTypeName()]
 +
 --
@@ -47,6 +42,11 @@ This rule requires that classes annotated with the xref:refguide:applib:index/an
 --
 This rule requires that classes annotated with the xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] annotation must specify their _DomainService#logicalTypeName() logicalTypeName_ .
 --
+<.> xref:#every_logicalTypeName_must_be_unique__[every_logicalTypeName_must_be_unique()]
++
+--
+This rule requires that classes annotated the `logicalTypeName` must be unique across all non-abstract xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] s and xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] s
+--
 <.> xref:#every_DomainObject_must_also_be_annotated_with_DomainObjectLayout__[every_DomainObject_must_also_be_annotated_with_DomainObjectLayout()]
 +
 --
@@ -56,6 +56,11 @@ This rule requires that classes annotated with the xref:refguide:applib:index/an
 +
 --
 This rule requires that classes annotated with the xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] annotation must also be annotated with the xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[DomainServiceLayout] annotation.
+--
+<.> xref:#every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_VIEW_MODEL__[every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_VIEW_MODEL()]
++
+--
+This rule requires that classes annotated with the _XmlRootElement_ annotation must also be annotated with the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation specifying a xref:refguide:applib:index/annotation/Nature.adoc[Nature] of _Nature#VIEW_MODEL VIEW_MODEL_ .
 --
 <.> xref:#every_Action_mixin_must_follow_naming_convention__[every_Action_mixin_must_follow_naming_convention()]
 +
@@ -110,13 +115,6 @@ This rule requires that finders of repos reutrn either _java.util.Collection_ s 
 
 == Members
 
-[#every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_MIXIN]
-=== every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_MIXIN
-
-This rule requires that classes annotated with the _XmlRootElement_ annotation must also be annotated with the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation specifying a xref:refguide:applib:index/annotation/Nature.adoc[Nature] of _Nature#MIXIN MIXIN_ .
-
-This is required because the framework uses Spring to detect entities and view models (the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation is actually a meta-annotation for Spring's _org.springframework.stereotype.Component_ annotation.
-
 [#every_DomainObject_must_specify_logicalTypeName__]
 === every_DomainObject_must_specify_logicalTypeName()
 
@@ -127,6 +125,11 @@ This rule requires that classes annotated with the xref:refguide:applib:index/an
 
 This rule requires that classes annotated with the xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] annotation must specify their _DomainService#logicalTypeName() logicalTypeName_ .
 
+[#every_logicalTypeName_must_be_unique__]
+=== every_logicalTypeName_must_be_unique()
+
+This rule requires that classes annotated the `logicalTypeName` must be unique across all non-abstract xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] s and xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] s
+
 [#every_DomainObject_must_also_be_annotated_with_DomainObjectLayout__]
 === every_DomainObject_must_also_be_annotated_with_DomainObjectLayout()
 
@@ -136,6 +139,13 @@ This rule requires that classes annotated with the xref:refguide:applib:index/an
 === every_DomainService_must_also_be_annotated_with_DomainServiceLayout()
 
 This rule requires that classes annotated with the xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] annotation must also be annotated with the xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[DomainServiceLayout] annotation.
+
+[#every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_VIEW_MODEL__]
+=== every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_VIEW_MODEL()
+
+This rule requires that classes annotated with the _XmlRootElement_ annotation must also be annotated with the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation specifying a xref:refguide:applib:index/annotation/Nature.adoc[Nature] of _Nature#VIEW_MODEL VIEW_MODEL_ .
+
+This is required because the framework uses Spring to detect entities and view models (the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation is actually a meta-annotation for Spring's _org.springframework.stereotype.Component_ annotation.
 
 [#every_Action_mixin_must_follow_naming_convention__]
 === every_Action_mixin_must_follow_naming_convention()

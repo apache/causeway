@@ -18,9 +18,9 @@ enum SemanticsOf {
   String getCamelCaseName()
   boolean isIdempotentInNature()     // <.>
   boolean isSafeInNature()     // <.>
-  boolean isSafe()     // <.>
   boolean isSafeAndRequestCacheable()
   boolean isAreYouSure()
+  boolean isIdempotentOrCachable()
 }
 ----
 
@@ -68,16 +68,6 @@ Any of _#SAFE_ , _#SAFE_AND_REQUEST_CACHEABLE_ or (obviously) _#IDEMPOTENT_ .
 +
 --
 Either of _#SAFE_ or _#SAFE_AND_REQUEST_CACHEABLE_ .
---
-<.> xref:#isSafe__[isSafe()]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-- use _#isSafeInNature()_ instead (avoid any ambiguity).
-====
 --
 
 == Members
@@ -156,13 +146,3 @@ Any of _#SAFE_ , _#SAFE_AND_REQUEST_CACHEABLE_ or (obviously) _#IDEMPOTENT_ .
 === isSafeInNature()
 
 Either of _#SAFE_ or _#SAFE_AND_REQUEST_CACHEABLE_ .
-
-[#isSafe__]
-=== isSafe()
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-- use _#isSafeInNature()_ instead (avoid any ambiguity).
-====

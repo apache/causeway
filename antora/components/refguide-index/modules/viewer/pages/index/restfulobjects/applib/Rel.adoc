@@ -45,15 +45,28 @@ enum Rel {
   OBJECT_ICON
   LAYOUT
   MENUBARS
+  BRAND_LOGO_SIGNIN
+  BRAND_LOGO_HEADER
   LOGOUT
-  String getName()
-  String andParam(String paramName, String paramValue)     // <.>
-  boolean matches(Rel otherRel)
+  String getName()     // <.>
+  String getSimpleName()     // <.>
+  String andParam(final String paramName, final String paramValue)     // <.>
+  boolean matches(final Rel otherRel)
   boolean matches(final String otherRelStr)
   Rel parse(String str)
 }
 ----
 
+<.> xref:#getName__[getName()]
++
+--
+full spec name with rel-def and suffix, eg. _urn:org.apache.isis.restfulobjects:rels/menuBars_
+--
+<.> xref:#getSimpleName__[getSimpleName()]
++
+--
+suffix only, eg. _menuBars_
+--
 <.> xref:#andParam__String_String[andParam(String, String)]
 +
 --
@@ -61,6 +74,16 @@ For those xref:refguide:viewer:index/restfulobjects/applib/Rel.adoc[Rel] s that 
 --
 
 == Members
+
+[#getName__]
+=== getName()
+
+full spec name with rel-def and suffix, eg. _urn:org.apache.isis.restfulobjects:rels/menuBars_
+
+[#getSimpleName__]
+=== getSimpleName()
+
+suffix only, eg. _menuBars_
 
 [#andParam__String_String]
 === andParam(String, String)

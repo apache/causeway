@@ -15,7 +15,7 @@ interface RepositoryService {
   T detachedEntity(T entity)     // <.>
   T persist(T domainObject)     // <.>
   T persistAndFlush(T domainObject)     // <.>
-  void persistAndFlush(Object... domainObjects)     // <.>
+  void persistAndFlush(final Object... domainObjects)     // <.>
   void remove(Object domainObject)     // <.>
   void removeAndFlush(Object domainObject)     // <.>
   void removeAll(Class<T> cls)     // <.>
@@ -30,8 +30,6 @@ interface RepositoryService {
   Optional<T> firstMatch(Query<T> query)     // <.>
   T refresh(T pojo)     // <.>
   T detach(T entity)     // <.>
-  T detachedEntity(Class<T> ofType)     // <.>
-  T instantiate(Class<T> ofType)     // <.>
 }
 ----
 
@@ -129,30 +127,6 @@ Reloads the domain entity from the database.
 +
 --
 Explicitly detaches the entity from the current persistence session.
---
-<.> xref:#detachedEntity__Class[detachedEntity(Class)]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-as it requires that the domain entity has a no-arg constructor. Use _#detachedEntity(Object)_ instead.
-====
-
-Overload of _#detachedEntity(Object)_ , but will also instantiate the domain class first.
---
-<.> xref:#instantiate__Class[instantiate(Class)]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-as it requires that the domain entity has a no-arg constructor. Use _#detachedEntity(Object)_ instead.
-====
-
-Equivalent to _#detachedEntity(Class)_ .
 --
 
 == Members
@@ -303,30 +277,6 @@ Reloads the domain entity from the database.
 Explicitly detaches the entity from the current persistence session.
 
 This allows the entity to be read from even after the PersistenceSession that obtained it has been closed.
-
-[#detachedEntity__Class]
-=== detachedEntity(Class)
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-as it requires that the domain entity has a no-arg constructor. Use _#detachedEntity(Object)_ instead.
-====
-
-Overload of _#detachedEntity(Object)_ , but will also instantiate the domain class first.
-
-[#instantiate__Class]
-=== instantiate(Class)
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-as it requires that the domain entity has a no-arg constructor. Use _#detachedEntity(Object)_ instead.
-====
-
-Equivalent to _#detachedEntity(Class)_ .
 
 include::hooks/RepositoryService_010-implementation.adoc[]
 

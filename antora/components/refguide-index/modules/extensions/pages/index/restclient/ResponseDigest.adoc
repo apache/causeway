@@ -15,8 +15,8 @@ class ResponseDigest<T> {
   Optional<T> getEntity()     // <.>
   Can<T> getEntities()     // <.>
   Exception getFailureCause()     // <.>
-  T singletonOrElseMapFailure(Function<Exception, T> failureMapper)     // <.>
-  Can<T> multipleOrElseMapFailure(Function<Exception, Can<T>> failureMapper)     // <.>
+  T singletonOrElseMapFailure(final Function<Exception, T> failureMapper)     // <.>
+  Can<T> multipleOrElseMapFailure(final Function<Exception, Can<T>> failureMapper)     // <.>
 }
 ----
 

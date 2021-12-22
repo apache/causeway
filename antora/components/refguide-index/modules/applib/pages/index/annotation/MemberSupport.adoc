@@ -7,7 +7,7 @@ For _mixins_ is also allowed to be placed on the mixin's main method.
 
 By placing the xref:refguide:applib:index/annotation/MemberSupport.adoc[MemberSupport] annotation on a method, a contract with the meta-model is enforced, such that this method must be recognized by the meta-model and cannot be ignored.
 
-In some sense acts as the semantic counterpart to xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic] .
+It is complementary to xref:refguide:applib:index/annotation/ObjectSupport.adoc[ObjectSupport] and xref:refguide:applib:index/annotation/ObjectLifecycle.adoc[ObjectLifecycle] , and in some sense acts as the semantic counterpart to xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic] .
 
 == API
 

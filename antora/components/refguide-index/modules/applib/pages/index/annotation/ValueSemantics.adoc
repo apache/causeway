@@ -1,0 +1,93 @@
+= @ValueSemantics
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Collects all the value-type specific customization attributes.
+
+== API
+
+[source,java]
+.ValueSemantics.java
+----
+@interface ValueSemantics {
+  String provider() default "";     // <.>
+  int maxTotalDigits() default 65;     // <.>
+  int minIntegerDigits() default 1;     // <.>
+  int maxFractionalDigits() default 30;     // <.>
+  int minFractionalDigits() default 0;     // <.>
+  FormatStyle dateFormatStyle() default FormatStyle.MEDIUM;     // <.>
+  FormatStyle timeFormatStyle() default FormatStyle.MEDIUM;     // <.>
+}
+----
+
+<.> xref:#provider[provider]
++
+--
+Allows to select xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider] (s) by qualifier.
+--
+<.> xref:#maxTotalDigits[maxTotalDigits]
++
+--
+If associated with a _Number_ , the maximum number of total digits accepted for this number.Can be omitted, if _Column#precision()_ is used.default = _65_
+--
+<.> xref:#minIntegerDigits[minIntegerDigits]
++
+--
+If associated with a _Number_ , the minimum number of integer digits required for this number.default = _1_
+--
+<.> xref:#maxFractionalDigits[maxFractionalDigits]
++
+--
+If associated with a _BigDecimal_ , the maximum number of fractional digits accepted for this number.Can be omitted, if _Column#scale()_ is used.default = _30_
+--
+<.> xref:#minFractionalDigits[minFractionalDigits]
++
+--
+If associated with a _BigDecimal_ , the minimum number of fractional digits required for this number.default = _0_
+--
+<.> xref:#dateFormatStyle[dateFormatStyle]
++
+--
+If associated with a temporal date value, the style of a localized date.
+--
+<.> xref:#timeFormatStyle[timeFormatStyle]
++
+--
+If associated with a temporal time value, the style of a localized time.
+--
+
+== Members
+
+[#provider]
+=== provider
+
+Allows to select xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider] (s) by qualifier.
+
+[#maxTotalDigits]
+=== maxTotalDigits
+
+If associated with a _Number_ , the maximum number of total digits accepted for this number.Can be omitted, if _Column#precision()_ is used.default = _65_
+
+[#minIntegerDigits]
+=== minIntegerDigits
+
+If associated with a _Number_ , the minimum number of integer digits required for this number.default = _1_
+
+[#maxFractionalDigits]
+=== maxFractionalDigits
+
+If associated with a _BigDecimal_ , the maximum number of fractional digits accepted for this number.Can be omitted, if _Column#scale()_ is used.default = _30_
+
+[#minFractionalDigits]
+=== minFractionalDigits
+
+If associated with a _BigDecimal_ , the minimum number of fractional digits required for this number.default = _0_
+
+[#dateFormatStyle]
+=== dateFormatStyle
+
+If associated with a temporal date value, the style of a localized date.
+
+[#timeFormatStyle]
+=== timeFormatStyle
+
+If associated with a temporal time value, the style of a localized time.

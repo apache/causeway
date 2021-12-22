@@ -16,8 +16,8 @@ class Execution<T, E> {
   void setEvent(final E event)     // <.>
   Timestamp start(final ClockService clockService, final MetricsService metricsService)
   void setCompletedAt(final Timestamp completedAt, final MetricsService metricsService)     // <.>
-  void setReturned(Object returned)     // <.>
-  void setThrew(Exception threw)     // <.>
+  void setReturned(final Object returned)     // <.>
+  void setThrew(final Exception threw)     // <.>
   void setDto(final T executionDto)     // <.>
 }
 ----

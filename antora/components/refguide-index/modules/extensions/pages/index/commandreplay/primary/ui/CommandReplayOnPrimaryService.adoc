@@ -8,45 +8,6 @@
 ----
 class CommandReplayOnPrimaryService {
   public static final String LOGICAL_TYPE_NAME;
-  List<? extends CommandModel> findCommands(final UUID interactionId, final Integer batchSize)     // <.>
-  Integer default1FindCommandsOnPrimaryFrom()
-  Clob downloadCommands(final UUID interactionId, final Integer batchSize, final String filenamePrefix)     // <.>
-  Integer default1DownloadCommands()
-  String default2DownloadCommands()
-  Clob downloadCommandById(final UUID interactionId, final String filenamePrefix)     // <.>
-  String default1DownloadCommandById()
 }
 ----
 
-<.> xref:#findCommands__UUID_Integer[findCommands(UUID, Integer)]
-+
---
-These actions should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"` 
---
-<.> xref:#downloadCommands__UUID_Integer_String[downloadCommands(UUID, Integer, String)]
-+
---
-These actions should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"` 
---
-<.> xref:#downloadCommandById__UUID_String[downloadCommandById(UUID, String)]
-+
---
-This action should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandDto"` 
---
-
-== Members
-
-[#findCommands__UUID_Integer]
-=== findCommands(UUID, Integer)
-
-These actions should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"` 
-
-[#downloadCommands__UUID_Integer_String]
-=== downloadCommands(UUID, Integer, String)
-
-These actions should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"` 
-
-[#downloadCommandById__UUID_String]
-=== downloadCommandById(UUID, String)
-
-This action should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandDto"` 

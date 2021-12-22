@@ -9,8 +9,8 @@ Vendor ( _Datanucleus_ ) specific implementation of _Spring's_ _JdoDialect_ inte
 .DnJdoDialect.java
 ----
 class DnJdoDialect {
-  DnJdoDialect(Object connectionFactory)
-  DataAccessException translateExceptionIfPossible(RuntimeException cause)
+  DnJdoDialect(final Object connectionFactory)
+  DataAccessException translateExceptionIfPossible(final RuntimeException cause)
 }
 ----
 

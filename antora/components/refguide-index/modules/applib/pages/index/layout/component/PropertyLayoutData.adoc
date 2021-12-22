@@ -48,7 +48,7 @@ class PropertyLayoutData {
 <.> xref:#getId__[getId()]
 +
 --
-Property identifier, being the getter method without "get" or "is" prefix, first letter lower cased.
+Property identifier, being the getter method without 'get' or 'is' prefix, first letter lower cased.
 --
 <.> xref:#getOwner__[getOwner()]
 +
@@ -71,7 +71,7 @@ The link to access this resource from the REST API (Restful Objects viewer).
 [#getId__]
 === getId()
 
-Property identifier, being the getter method without "get" or "is" prefix, first letter lower cased.
+Property identifier, being the getter method without 'get' or 'is' prefix, first letter lower cased.
 
 [#getOwner__]
 === getOwner()

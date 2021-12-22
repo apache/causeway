@@ -13,7 +13,6 @@ class TranslationContext {
   TranslationContext forMethod(final Method method)
   TranslationContext forEnum(final Enum<?> objectAsEnum)
   TranslationContext empty()
-  TranslationContext forTabIdentifier(Identifier identifier)
 }
 ----
 

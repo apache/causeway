@@ -25,7 +25,7 @@ class ApplicationPermission {
   public static final String NAMED_QUERY_FIND_BY_ROLE_NAMES;
   String title()
   String getSort()
-  ApplicationFeature findFeature(ApplicationFeatureId featureId)
+  ApplicationFeature findFeature(final ApplicationFeatureId featureId)
   Optional<ApplicationFeatureId> asFeatureId()
   int compareTo(final org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission other)
   boolean equals(final Object other)

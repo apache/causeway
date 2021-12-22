@@ -8,8 +8,6 @@
 ----
 class UserMenu {
   public static final String LOGICAL_TYPE_NAME;
-  UserMemento me()
-  String disableMe()
 }
 ----
 

@@ -13,8 +13,6 @@ Collects together all layout hints for action parameters in a single annotation.
   String describedAs() default "";     // <.>
   LabelPosition labelPosition() default LabelPosition.NOT_SPECIFIED;     // <.>
   String named() default "";     // <.>
-  @Deprecated
-boolean namedEscaped() default true;     // <.>
   int multiLine() default -1;     // <.>
   RenderDay renderDay() default RenderDay.NOT_SPECIFIED;     // <.>
   int typicalLength() default -1;     // <.>
@@ -40,11 +38,6 @@ In forms, positioning of the label (left, top or none) relative to the parameter
 +
 --
 Name of this action parameter.
---
-<.> xref:#namedEscaped[namedEscaped]
-+
---
-A flag indicating whether the value of _#named()_ should be HTML escaped or not.
 --
 <.> xref:#multiLine[multiLine]
 +
@@ -89,11 +82,6 @@ Name of this action parameter.
 The name of an action parameters is available to the framework provided that the code is compiled using `-parameters` (for `javac` .
 
 The only reason then to name the parameter is if the desired name is a reserved Java keyword, such as `default` or `package`.
-
-[#namedEscaped]
-=== namedEscaped
-
-A flag indicating whether the value of _#named()_ should be HTML escaped or not.
 
 [#multiLine]
 === multiLine

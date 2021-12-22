@@ -9,7 +9,7 @@ Specifically, this interface embodies three related capabilities:
 * to provide a string representation of the object, for use as its title.
 * to indicate the typical length of such a string representation.
 
-For custom-written (as opposed to third-party) value types, the ability for the xref:refguide:applib:index/adapters/Parser.adoc[Parser] to provide a title responsibilities overlap with other conventions for domain objects. Specifically, normally we write a `title()` method to return a title. In such cases a typical implementation of xref:refguide:applib:index/adapters/Parser.adoc[Parser] would just delegate to the value type itself to obtain the title (ie invoking the `title()` method directly rather than having the framework do this).
+For custom-written (as opposed to third-party) value types, the ability for the xref:refguide:applib:index/value/semantics/Parser.adoc[Parser] to provide a title responsibilities overlap with other conventions for domain objects. Specifically, normally we write a `title()` method to return a title. In such cases a typical implementation of xref:refguide:applib:index/value/semantics/Parser.adoc[Parser] would just delegate to the value type itself to obtain the title (ie invoking the `title()` method directly rather than having the framework do this).
 
 For third-party value types, eg seeTime-and-Moneythere is no ability to write `title()` methods; so this is the main reason that this interface has to deal with titles and lengths.
 
@@ -25,39 +25,28 @@ Whatever the class that implements this interface, it must also expose either a 
 .Parser.java
 ----
 interface Parser<T> {
-  T parseTextEntry(Object contextPojo, String entry)     // <.>
+  String parseableTextRepresentation(ValueSemanticsProvider.Context context, T value)     // <.>
+  T parseTextRepresentation(ValueSemanticsProvider.Context context, String text)     // <.>
   int typicalLength()     // <.>
-  String displayTitleOf(T object)     // <.>
-  String displayTitleOf(T object, String usingMask)     // <.>
-  String parseableTitleOf(T existing)     // <.>
   int maxLength()     // <.>
+  String getPattern(final ValueSemanticsProvider.Context context)
 }
 ----
 
-<.> xref:#parseTextEntry__Object_String[parseTextEntry(Object, String)]
+<.> xref:#parseableTextRepresentation__ValueSemanticsProvider.Context_T[parseableTextRepresentation(ValueSemanticsProvider.Context, T)]
 +
 --
-Parses a string to an instance of the object.
+A title for the object that is valid but which may be easier to edit than the title provided by a `TitleFacet` . (bijective)
+--
+<.> xref:#parseTextRepresentation__ValueSemanticsProvider.Context_String[parseTextRepresentation(ValueSemanticsProvider.Context, String)]
++
+--
+Parses a string to an instance of the object. (bijective)
 --
 <.> xref:#typicalLength__[typicalLength()]
 +
 --
 The typical length of objects that can be parsed.
---
-<.> xref:#displayTitleOf__T[displayTitleOf(T)]
-+
---
-The title of the object.
---
-<.> xref:#displayTitleOf__T_String[displayTitleOf(T, String)]
-+
---
-The title of the object using a mask.
---
-<.> xref:#parseableTitleOf__T[parseableTitleOf(T)]
-+
---
-A title for the object that is valid but which may be easier to edit than the title provided by a `TitleFacet` .
 --
 <.> xref:#maxLength__[maxLength()]
 +
@@ -67,34 +56,22 @@ The max length of objects that can be parsed (if any). A return type of -1 corre
 
 == Members
 
-[#parseTextEntry__Object_String]
-=== parseTextEntry(Object, String)
+[#parseableTextRepresentation__ValueSemanticsProvider.Context_T]
+=== parseableTextRepresentation(ValueSemanticsProvider.Context, T)
 
-Parses a string to an instance of the object.
+A title for the object that is valid but which may be easier to edit than the title provided by a `TitleFacet` . (bijective)
 
-Note that here the implementing class is acting as a factory for itself.
+The idea here is that the viewer can display a parseable title for an existing object when, for example, the user initially clicks in the field. So, a date might be rendered via a `TitleFacet` as `May 2, 2007` , but its editable form might be `20070502` .
+
+[#parseTextRepresentation__ValueSemanticsProvider.Context_String]
+=== parseTextRepresentation(ValueSemanticsProvider.Context, String)
+
+Parses a string to an instance of the object. (bijective)
 
 [#typicalLength__]
 === typicalLength()
 
 The typical length of objects that can be parsed.
-
-[#displayTitleOf__T]
-=== displayTitleOf(T)
-
-The title of the object.
-
-[#displayTitleOf__T_String]
-=== displayTitleOf(T, String)
-
-The title of the object using a mask.
-
-[#parseableTitleOf__T]
-=== parseableTitleOf(T)
-
-A title for the object that is valid but which may be easier to edit than the title provided by a `TitleFacet` .
-
-The idea here is that the viewer can display a parseable title for an existing object when, for example, the user initially clicks in the field. So, a date might be rendered via a `TitleFacet` as `May 2, 2007` , but its editable form might be `20070502` .
 
 [#maxLength__]
 === maxLength()

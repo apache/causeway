@@ -8,8 +8,6 @@
 ----
 class CommandReplayOnSecondaryService {
   public static final String LOGICAL_TYPE_NAME;
-  CommandModel findMostRecentReplayed()
-  void uploadCommands(final Clob commandsDtoAsXml)
 }
 ----
 

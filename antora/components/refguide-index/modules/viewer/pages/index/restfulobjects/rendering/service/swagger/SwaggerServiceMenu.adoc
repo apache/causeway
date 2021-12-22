@@ -9,14 +9,7 @@
 class SwaggerServiceMenu {
   public static final String LOGICAL_TYPE_NAME;
   SwaggerServiceMenu(final SwaggerService swaggerService, final ServiceRegistry serviceRegistry, final RestEasyConfiguration restEasyConfiguration)
-  LocalResourcePath openSwaggerUi()
-  String disableOpenSwaggerUi()
-  LocalResourcePath openRestApi()
-  String disableOpenRestApi()
-  Clob downloadSwaggerSchemaDefinition(final String fileNamePrefix, final Visibility visibility, final Format format)
-  String default0DownloadSwaggerSchemaDefinition()
-  Visibility default1DownloadSwaggerSchemaDefinition()
-  Format default2DownloadSwaggerSchemaDefinition()
+  String disableReasonWhenRequiresROViewer()
 }
 ----
 

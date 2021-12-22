@@ -10,7 +10,6 @@ Simply provides a UI in order to access the configuration properties available f
 ----
 class ConfigurationMenu {
   public static final String LOGICAL_TYPE_NAME;
-  ConfigurationViewmodel configuration()
 }
 ----
 

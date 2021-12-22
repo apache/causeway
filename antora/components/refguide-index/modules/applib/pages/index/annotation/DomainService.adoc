@@ -13,8 +13,6 @@ Also indicates whether the domain service acts as a repository for an entity, an
 @interface DomainService {
   NatureOfService nature() default NatureOfService.VIEW;     // <.>
   @AliasFor(annotation = Named.class, attribute = "value")
-String objectType() default "";     // <.>
-  @AliasFor(annotation = Named.class, attribute = "value")
 String logicalTypeName() default "";     // <.>
 }
 ----
@@ -23,18 +21,6 @@ String logicalTypeName() default "";     // <.>
 +
 --
 The nature of this service, either in the UI or REST only
---
-<.> xref:#objectType[objectType]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#logicalTypeName()_ instead
-====
-
-Synonym for _#logicalTypeName()_ .
 --
 <.> xref:#logicalTypeName[logicalTypeName]
 +
@@ -48,18 +34,6 @@ The logical name of this object's type, that uniquely and fully qualifies it. Th
 === nature
 
 The nature of this service, either in the UI or REST only
-
-[#objectType]
-=== objectType
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#logicalTypeName()_ instead
-====
-
-Synonym for _#logicalTypeName()_ .
 
 [#logicalTypeName]
 === logicalTypeName

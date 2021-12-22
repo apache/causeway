@@ -11,7 +11,8 @@ Domain semantics for domain object collection.
 @interface Collection {
   Class<? extends CollectionDomainEvent<?, ?>> domainEvent() default CollectionDomainEvent.Default.class;     // <.>
   Where hidden() default Where.NOT_SPECIFIED;     // <.>
-  Class<?> typeOf() default Object.class;     // <.>
+  Class<?> typeOf() default // represents unspecified
+void.class;     // <.>
 }
 ----
 

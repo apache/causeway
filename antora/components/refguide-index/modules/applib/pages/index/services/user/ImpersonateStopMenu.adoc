@@ -13,8 +13,6 @@ All of the actions provided here are restricted to PROTOTYPE mode only; this fea
 class ImpersonateStopMenu {
   // deliberately IS part of isis.applib
 public static final String LOGICAL_TYPE_NAME;
-  void stopImpersonating()
-  boolean hideStopImpersonating()
 }
 ----
 

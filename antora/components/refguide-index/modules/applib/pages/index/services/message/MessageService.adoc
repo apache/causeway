@@ -83,7 +83,7 @@ In the Wicket viewer this is implemented as a "toast" message that automatically
 
 As _#informUser(String)_ , but with the message translated (if possible) to user's _java.util.Locale_ .
 
-More precisely, the locale is as provided by the configured _org.apache.isis.applib.services.i18n.LocaleProvider_ service. This should be the _java.util.Locale_ of the user making the current request.
+More precisely, the locale is as provided by the configured _org.apache.isis.applib.services.i18n.LanguageProvider_ service. This should be the _java.util.Locale_ of the user making the current request.
 
 [#informUser__TranslatableString_TranslationContext]
 === informUser(TranslatableString, TranslationContext)
@@ -104,7 +104,7 @@ In the Wicket viewer this is implemented as a "toast" message that must be expli
 
 As _#warnUser(String)_ , but with the message translated (if possible) to user's _java.util.Locale_ .
 
-More precisely, the locale is as provided by the configured _org.apache.isis.applib.services.i18n.LocaleProvider_ service. This should be the _java.util.Locale_ of the user making the current request.
+More precisely, the locale is as provided by the configured _org.apache.isis.applib.services.i18n.LanguageProvider_ service. This should be the _java.util.Locale_ of the user making the current request.
 
 [#warnUser__TranslatableString_TranslationContext]
 === warnUser(TranslatableString, TranslationContext)
@@ -125,7 +125,7 @@ In the Wicket viewer this is implemented as a toast (with a different colour) th
 
 As _#raiseError(String)_ , but with the message translated (if possible) to user's _java.util.Locale_ .
 
-More precisely, the locale is as provided by the configured _org.apache.isis.applib.services.i18n.LocaleProvider_ service. This should be the _java.util.Locale_ of the user making the current request.
+More precisely, the locale is as provided by the configured _org.apache.isis.applib.services.i18n.LanguageProvider_ service. This should be the _java.util.Locale_ of the user making the current request.
 
 [#raiseError__TranslatableString_TranslationContext]
 === raiseError(TranslatableString, TranslationContext)

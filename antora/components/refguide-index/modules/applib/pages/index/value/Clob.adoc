@@ -15,13 +15,13 @@ Conceptually you can consider it as a set of characters (an RTF or XML document,
 .Clob.java
 ----
 class Clob {
-  Clob(String name, String primaryType, String subType, char[] chars)
-  Clob(String name, String mimeTypeBase, char[] chars)
-  Clob(String name, MimeType mimeType, char[] chars)
-  Clob(String name, String primaryType, String subType, CharSequence chars)
-  Clob(String name, String mimeTypeBase, CharSequence chars)
-  Clob(String name, MimeType mimeType, CharSequence chars)
-  Clob of(String name, CommonMimeType mimeType, CharSequence content)     // <.>
+  Clob(final String name, final String primaryType, final String subType, final char[] chars)
+  Clob(final String name, final String mimeTypeBase, final char[] chars)
+  Clob(final String name, final MimeType mimeType, final char[] chars)
+  Clob(final String name, final String primaryType, final String subType, final CharSequence chars)
+  Clob(final String name, final String mimeTypeBase, final CharSequence chars)
+  Clob(final String name, final MimeType mimeType, final CharSequence chars)
+  Clob of(final String name, final CommonMimeType mimeType, final CharSequence content)     // <.>
   String getName()
   MimeType getMimeType()
   CharSequence getChars()

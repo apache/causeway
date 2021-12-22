@@ -30,12 +30,12 @@ If the object has (see _#isWrapper(Object)_ already been wrapped), then should j
 interface WrapperFactory {
   T wrap(T domainObject, SyncControl syncControl)     // <.>
   T wrap(T domainObject)     // <.>
-  T wrapMixin(Class<T> mixinClass, Object mixedIn, SyncControl syncControl)     // <.>
-  T wrapMixin(Class<T> mixinClass, Object mixedIn)     // <.>
+  T wrapMixin(Class<T> mixinClass, Object mixee, SyncControl syncControl)     // <.>
+  T wrapMixin(Class<T> mixinClass, Object mixee)     // <.>
   T unwrap(T possibleWrappedDomainObject)     // <.>
   boolean isWrapper(T possibleWrappedDomainObject)     // <.>
   T asyncWrap(T domainObject, AsyncControl<R> asyncControl)     // <.>
-  T asyncWrapMixin(Class<T> mixinClass, Object mixedIn, AsyncControl<R> asyncControl)     // <.>
+  T asyncWrapMixin(Class<T> mixinClass, Object mixee, AsyncControl<R> asyncControl)     // <.>
   List<InteractionListener> getListeners()     // <.>
   boolean addInteractionListener(InteractionListener listener)     // <.>
   boolean removeInteractionListener(InteractionListener listener)     // <.>

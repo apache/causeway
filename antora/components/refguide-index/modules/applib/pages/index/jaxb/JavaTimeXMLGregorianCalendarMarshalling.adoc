@@ -7,18 +7,18 @@
 .JavaTimeXMLGregorianCalendarMarshalling.java
 ----
 class JavaTimeXMLGregorianCalendarMarshalling {
-  LocalDate toLocalDate(XMLGregorianCalendar cal)
-  LocalTime toLocalTime(XMLGregorianCalendar cal)
-  LocalDateTime toLocalDateTime(XMLGregorianCalendar cal)
-  OffsetDateTime toOffsetDateTime(XMLGregorianCalendar cal)
-  OffsetTime toOffsetTime(XMLGregorianCalendar cal)
-  ZonedDateTime toZonedDateTime(XMLGregorianCalendar cal)
-  XMLGregorianCalendar toXMLGregorianCalendar2(LocalDate localDate)
-  XMLGregorianCalendar toXMLGregorianCalendar2(LocalTime localTime)
-  XMLGregorianCalendar toXMLGregorianCalendar2(LocalDateTime localDateTime)
-  XMLGregorianCalendar toXMLGregorianCalendar2(OffsetTime offsetTime)
-  XMLGregorianCalendar toXMLGregorianCalendar2(OffsetDateTime offsetDateTime)
-  XMLGregorianCalendar toXMLGregorianCalendar2(ZonedDateTime zonedDateTime)
+  LocalDate toLocalDate(final XMLGregorianCalendar cal)
+  LocalTime toLocalTime(final XMLGregorianCalendar cal)
+  LocalDateTime toLocalDateTime(final XMLGregorianCalendar cal)
+  OffsetDateTime toOffsetDateTime(final XMLGregorianCalendar cal)
+  OffsetTime toOffsetTime(final XMLGregorianCalendar cal)
+  ZonedDateTime toZonedDateTime(final XMLGregorianCalendar cal)
+  XMLGregorianCalendar toXMLGregorianCalendar(final LocalDate localDate)
+  XMLGregorianCalendar toXMLGregorianCalendar(final LocalTime localTime)
+  XMLGregorianCalendar toXMLGregorianCalendar(final LocalDateTime localDateTime)
+  XMLGregorianCalendar toXMLGregorianCalendar(final OffsetTime offsetTime)
+  XMLGregorianCalendar toXMLGregorianCalendar(final OffsetDateTime offsetDateTime)
+  XMLGregorianCalendar toXMLGregorianCalendar(final ZonedDateTime zonedDateTime)
 }
 ----
 

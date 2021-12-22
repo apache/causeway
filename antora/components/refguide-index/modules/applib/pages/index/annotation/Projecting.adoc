@@ -20,7 +20,7 @@ The property holds the underlying domain object of which this (view model) objec
 <.> xref:#NOT_SPECIFIED[NOT_SPECIFIED]
 +
 --
-The property
+Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta annotations or superclasses/interfaces).
 --
 
 == Members
@@ -33,4 +33,4 @@ The property holds the underlying domain object of which this (view model) objec
 [#NOT_SPECIFIED]
 === NOT_SPECIFIED
 
-The property
+Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta annotations or superclasses/interfaces).

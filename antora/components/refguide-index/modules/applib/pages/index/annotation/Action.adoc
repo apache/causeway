@@ -9,7 +9,6 @@ Groups together all domain-specific metadata for an invokable action on a domain
 .Action.java
 ----
 @interface Action {
-  String associateWith() default "";     // <.>
   String choicesFrom() default "";     // <.>
   Class<? extends CommandDtoProcessor> commandDtoProcessor() default CommandDtoProcessor.class;     // <.>
   Publishing commandPublishing() default Publishing.NOT_SPECIFIED;     // <.>
@@ -18,23 +17,12 @@ Groups together all domain-specific metadata for an invokable action on a domain
   Where hidden() default Where.NOT_SPECIFIED;     // <.>
   RestrictTo restrictTo() default RestrictTo.NOT_SPECIFIED;     // <.>
   SemanticsOf semantics() default SemanticsOf.NOT_SPECIFIED;     // <.>
-  Class<?> typeOf() default Object.class;     // <.>
+  Class<?> typeOf() default // represents unspecified
+void.class;     // <.>
   String fileAccept() default "";     // <.>
 }
 ----
 
-<.> xref:#associateWith[associateWith]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use { _#choicesFrom()_ instead
-====
-
-Associates this action with a property or collection, specifying its id.
---
 <.> xref:#choicesFrom[choicesFrom]
 +
 --
@@ -87,24 +75,6 @@ For downloading xref:refguide:applib:index/value/Blob.adoc[Blob] or xref:refguid
 --
 
 == Members
-
-[#associateWith]
-=== associateWith
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use { _#choicesFrom()_ instead
-====
-
-Associates this action with a property or collection, specifying its id.
-
-To specify the layout order use _ActionLayout#sequence()_ .
-
-For example `@Action(associateWith="items") @ActionLayout(sequence="2.1")` 
-
-If an action is associated with a collection, then any matching parameters will have their choices automatically inferred from the collection (if not otherwise specified) and any collection parameter defaults can be specified using checkboxes (in the Wicket UI, at least).
 
 [#choicesFrom]
 === choicesFrom

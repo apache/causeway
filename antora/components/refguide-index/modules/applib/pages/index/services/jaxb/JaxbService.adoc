@@ -11,11 +11,11 @@ The default implementation automatically caches the JAXB marshallers by target c
 .JaxbService.java
 ----
 interface JaxbService {
-  Object fromXml(JAXBContext jaxbContext, String xml)     // <.>
+  Object fromXml(final JAXBContext jaxbContext, final String xml)     // <.>
   Object fromXml(JAXBContext jaxbContext, String xml, Map<String, Object> unmarshallerProperties)     // <.>
-  T fromXml(Class<T> domainClass, String xml)     // <.>
+  T fromXml(final Class<T> domainClass, final String xml)     // <.>
   T fromXml(Class<T> domainClass, String xml, Map<String, Object> unmarshallerProperties)     // <.>
-  String toXml(Object domainObject)     // <.>
+  String toXml(final Object domainObject)     // <.>
   String toXml(Object domainObject, Map<String, Object> marshallerProperties)     // <.>
   Map<String, String> toXsd(Object domainObject, IsisSchemas isisSchemas)     // <.>
 }

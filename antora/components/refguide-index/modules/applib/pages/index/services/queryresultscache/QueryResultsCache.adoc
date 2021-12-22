@@ -14,12 +14,12 @@ For example, code that makes a repository call many times within a loop can be p
 ----
 class QueryResultsCache {
   T execute(final Callable<T> callable, final Class<?> callingClass, final String methodName, final Object... keys)     // <.>
-  R execute(MethodReferences.Call0<? extends R> action, Class<?> callingClass, String methodName)
-  R execute(MethodReferences.Call1<? extends R, A0> action, Class<?> callingClass, String methodName, A0 arg0)
-  R execute(MethodReferences.Call2<? extends R, A0, A1> action, Class<?> callingClass, String methodName, A0 arg0, A1 arg1)
-  R execute(MethodReferences.Call3<? extends R, A0, A1, A2> action, Class<?> callingClass, String methodName, A0 arg0, A1 arg1, A2 arg2)
-  R execute(MethodReferences.Call4<? extends R, A0, A1, A2, A3> action, Class<?> callingClass, String methodName, A0 arg0, A1 arg1, A2 arg2, A3 arg3)
-  R execute(MethodReferences.Call5<? extends R, A0, A1, A2, A3, A4> action, Class<?> callingClass, String methodName, A0 arg0, A1 arg1, A2 arg2, A3 arg3, A4 arg4)
+  R execute(final MethodReferences.Call0<? extends R> action, final Class<?> callingClass, final String methodName)
+  R execute(final MethodReferences.Call1<? extends R, A0> action, final Class<?> callingClass, final String methodName, final A0 arg0)
+  R execute(final MethodReferences.Call2<? extends R, A0, A1> action, final Class<?> callingClass, final String methodName, final A0 arg0, final A1 arg1)
+  R execute(final MethodReferences.Call3<? extends R, A0, A1, A2> action, final Class<?> callingClass, final String methodName, final A0 arg0, final A1 arg1, final A2 arg2)
+  R execute(final MethodReferences.Call4<? extends R, A0, A1, A2, A3> action, final Class<?> callingClass, final String methodName, final A0 arg0, final A1 arg1, final A2 arg2, final A3 arg3)
+  R execute(final MethodReferences.Call5<? extends R, A0, A1, A2, A3, A4> action, final Class<?> callingClass, final String methodName, final A0 arg0, final A1 arg1, final A2 arg2, final A3 arg3, final A4 arg4)
   void onTransactionEnded()     // <.>
   void destroy()
 }

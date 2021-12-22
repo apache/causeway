@@ -42,7 +42,7 @@ class CollectionLayoutData {
 <.> xref:#getId__[getId()]
 +
 --
-Collection identifier, being the getter method without "get" prefix, first letter lower cased.
+Collection identifier, being the getter method without 'get' prefix, first letter lower cased.
 --
 <.> xref:#getDefaultView__[getDefaultView()]
 +
@@ -70,7 +70,7 @@ The link to access this resource from the REST API (Restful Objects viewer).
 [#getId__]
 === getId()
 
-Collection identifier, being the getter method without "get" prefix, first letter lower cased.
+Collection identifier, being the getter method without 'get' prefix, first letter lower cased.
 
 [#getDefaultView__]
 === getDefaultView()

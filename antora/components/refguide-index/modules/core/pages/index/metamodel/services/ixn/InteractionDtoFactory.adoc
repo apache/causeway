@@ -13,7 +13,7 @@ There are some similarities to _org.apache.isis.core.metamodel.services.command.
 interface InteractionDtoFactory {
   ActionInvocationDto asActionInvocationDto(ObjectAction objectAction, InteractionHead head, Can<ManagedObject> argumentAdapters)     // <.>
   PropertyEditDto asPropertyEditDto(OneToOneAssociation property, ManagedObject targetAdapter, ManagedObject newValueAdapterIfAny)     // <.>
-  ActionInvocationDto updateResult(ActionInvocationDto actionInvocationDto, ObjectAction objectAction, Object resultPojo)     // <.>
+  ActionInvocationDto updateResult(ActionInvocationDto actionInvocationDto, ObjectAction objectAction, ManagedObject resultObject)     // <.>
 }
 ----
 
@@ -27,7 +27,7 @@ Called by the framework when invoking an action, to create an _ActionInvocationD
 --
 Called by the framework when editing a property, to create an _PropertyEditDto_ capturing the details of the action invocation (target, arguments etc).
 --
-<.> xref:#updateResult__ActionInvocationDto_ObjectAction_Object[updateResult(ActionInvocationDto, ObjectAction, Object)]
+<.> xref:#updateResult__ActionInvocationDto_ObjectAction_ManagedObject[updateResult(ActionInvocationDto, ObjectAction, ManagedObject)]
 +
 --
 Called by the framework to attach the result of an action invocation to the aforementioned _ActionInvocationDto_ .
@@ -49,7 +49,7 @@ Called by the framework when editing a property, to create an _PropertyEditDto_ 
 
 _PropertyEditDto_ is a subtype of _org.apache.isis.schema.ixn.v2.MemberExecutionDto_ that is in turn a part of the overall _org.apache.isis.schema.ixn.v2.InteractionDto_ .
 
-[#updateResult__ActionInvocationDto_ObjectAction_Object]
-=== updateResult(ActionInvocationDto, ObjectAction, Object)
+[#updateResult__ActionInvocationDto_ObjectAction_ManagedObject]
+=== updateResult(ActionInvocationDto, ObjectAction, ManagedObject)
 
 Called by the framework to attach the result of an action invocation to the aforementioned _ActionInvocationDto_ .

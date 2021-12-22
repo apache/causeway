@@ -15,12 +15,12 @@ xref:refguide:applib:index/value/OpenUrlStrategy.adoc[OpenUrlStrategy] gives con
 class LocalResourcePath {
   LocalResourcePath(final String path)
   LocalResourcePath(final String path, final OpenUrlStrategy openUrlStrategy)
-  Object getValue()
-  String getPath()
+  String getValue()
+  String getEffectivePath(final UnaryOperator<String> contextPathPrepender)
   String toString()
-  boolean equals(Object obj)
+  boolean equals(final Object obj)
   int hashCode()
-  boolean isEqualTo(LocalResourcePath other)
+  boolean isEqualTo(final LocalResourcePath other)
 }
 ----
 

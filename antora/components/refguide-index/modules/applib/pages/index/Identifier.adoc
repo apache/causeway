@@ -13,10 +13,11 @@ For xref:refguide:applib:index/Identifier.adoc[Identifier] (s) of type _Identifi
 class Identifier {
   Identifier classIdentifier(final LogicalType typeIdentifier)
   Identifier propertyOrCollectionIdentifier(final LogicalType typeIdentifier, final String propertyOrCollectionName)
+  Identifier methodIdentifier(final LogicalType typeIdentifier, final Method method)     // <.>
   Identifier actionIdentifier(final LogicalType typeIdentifier, final String actionName, final Class<?>... parameterClasses)
   Identifier actionIdentifier(final LogicalType typeIdentifier, final String actionName, final Can<String> parameterClassNames)
+  Identifier withParameterIndex(final int parameterIndex)
   String getLogicalIdentityString(final String delimiter)
-  boolean matchesCommand(final Command command)
   String getClassNaturalName()
   String getMemberNaturalName()
   Can<String> getMemberParameterClassNaturalNames()
@@ -28,3 +29,15 @@ class Identifier {
 }
 ----
 
+<.> xref:#methodIdentifier__LogicalType_Method[methodIdentifier(LogicalType, Method)]
++
+--
+for reporting orphaned methods
+--
+
+== Members
+
+[#methodIdentifier__LogicalType_Method]
+=== methodIdentifier(LogicalType, Method)
+
+for reporting orphaned methods

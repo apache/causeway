@@ -21,7 +21,7 @@ enum RepresentationType {
   DOMAIN_TYPE
   LAYOUT
   OBJECT_LAYOUT
-  OBJECT_ICON
+  IMAGE
   MENUBARS
   PROPERTY_DESCRIPTION
   COLLECTION_DESCRIPTION
@@ -31,7 +31,6 @@ enum RepresentationType {
   ERROR
   GENERIC
   String getName()
-  MediaType getMediaType()     // <.>
   MediaType getJsonMediaType()
   MediaType getXmlMediaType()
   MediaType getJsonElseXmlMediaType()
@@ -51,20 +50,10 @@ enum RepresentationType {
 }
 ----
 
-<.> xref:#getMediaType__[getMediaType()]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-- use _#getJsonMediaType()_ instead.
-====
---
 <.> xref:#getMediaType__String_String[getMediaType(String, String)]
 +
 --
-Clones the (immutable) _#getMediaType() media type_ , adding in one additional parameter value.
+Clones the (immutable) _#getJsonMediaType() media type_ , adding in one additional parameter value.
 --
 <.> xref:#matchesXmlProfileWithParameter__List_String[matchesXmlProfileWithParameter(List, String)]
 +
@@ -79,20 +68,10 @@ whether any of the xref:refguide:viewer:index/restfulobjects/applib/Representati
 
 == Members
 
-[#getMediaType__]
-=== getMediaType()
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-- use _#getJsonMediaType()_ instead.
-====
-
 [#getMediaType__String_String]
 === getMediaType(String, String)
 
-Clones the (immutable) _#getMediaType() media type_ , adding in one additional parameter value.
+Clones the (immutable) _#getJsonMediaType() media type_ , adding in one additional parameter value.
 
 [#matchesXmlProfileWithParameter__List_String]
 === matchesXmlProfileWithParameter(List, String)

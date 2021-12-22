@@ -15,10 +15,9 @@ Domain semantics for domain objects (entities and view models; for services see 
   Editing editing() default Editing.NOT_SPECIFIED;     // <.>
   String editingDisabledReason() default "Disabled";     // <.>
   Publishing entityChangePublishing() default Publishing.NOT_SPECIFIED;     // <.>
+  Introspection introspection() default Introspection.NOT_SPECIFIED;     // <.>
   String mixinMethod() default "$$";     // <.>
   Nature nature() default Nature.NOT_SPECIFIED;     // <.>
-  @AliasFor(annotation = DomainObject.class, value = "logicalTypeName")
-String objectType() default "";     // <.>
   String logicalTypeName() default "";     // <.>
   Class<? extends ObjectCreatedEvent<?>> createdLifecycleEvent() default ObjectCreatedEvent.Default.class;     // <.>
   Class<? extends ObjectPersistingEvent<?>> persistingLifecycleEvent() default ObjectPersistingEvent.Default.class;     // <.>
@@ -63,6 +62,11 @@ If _#editing()_ is set to _Editing#DISABLED_ , then the reason to provide to the
 --
 Whether entity changes (persistent property updates) should be published to _org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber_ s and whether entity changes, captured as _org.apache.isis.applib.services.publishing.spi.EntityChanges_ , should be published to _org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber_ s.
 --
+<.> xref:#introspection[introspection]
++
+--
+Controls on a per class basis, how meta-model class introspection should process members, supporting methods and callback methods.
+--
 <.> xref:#mixinMethod[mixinMethod]
 +
 --
@@ -72,18 +76,6 @@ Applicable only if _#nature()_ is _Nature#MIXIN_ , indicates the name of the met
 +
 --
 The nature of this domain object.
---
-<.> xref:#objectType[objectType]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#logicalTypeName()_ instead
-====
-
-Synonym for _#logicalTypeName()_ .
 --
 <.> xref:#logicalTypeName[logicalTypeName]
 +
@@ -183,6 +175,11 @@ If _#editing()_ is set to _Editing#DISABLED_ , then the reason to provide to the
 
 Whether entity changes (persistent property updates) should be published to _org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber_ s and whether entity changes, captured as _org.apache.isis.applib.services.publishing.spi.EntityChanges_ , should be published to _org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber_ s.
 
+[#introspection]
+=== introspection
+
+Controls on a per class basis, how meta-model class introspection should process members, supporting methods and callback methods.
+
 [#mixinMethod]
 === mixinMethod
 
@@ -196,18 +193,6 @@ Typical examples are "act", "prop", "coll", "exec", "execute", "invoke", "apply"
 === nature
 
 The nature of this domain object.
-
-[#objectType]
-=== objectType
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#logicalTypeName()_ instead
-====
-
-Synonym for _#logicalTypeName()_ .
 
 [#logicalTypeName]
 === logicalTypeName

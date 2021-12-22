@@ -7,23 +7,8 @@
 .CommonDtoUtils.java
 ----
 class CommonDtoUtils {
-  public static final Function<ParamDto, String> PARAM_DTO_TO_NAME;
-  public static final Function<ParamDto, ValueType> PARAM_DTO_TO_TYPE;
-  public static final Map<Class<?>, ValueType> valueTypeByClass;
-  ValueType asValueType(final Class<?> type)
-  ValueDto newValueDto(final ValueType valueType, final Object value, final BookmarkService bookmarkService)
-  T setValueOn(final T valueWithTypeDto, final ValueType valueType, final Object value, final BookmarkService bookmarkService)
-  T setValueOnNonScalar(final T valueWithTypeDto, final ValueType elementValueType, final Object value, final BookmarkService bookmarkService)
-  T setValueOn(final T valueDto, final ValueType valueType, final Object pojo, final BookmarkService bookmarkService)
-  T getValue(final ValueDto valueDto, final ValueType valueType)
-  ValueWithTypeDto newValueWithTypeDto(final Class<?> type, final Object val, final BookmarkService bookmarkService)
-  T getValue(final ValueWithTypeDto valueWithTypeDto)
-  ParamDto newParamDto(final String parameterName, final Class<?> parameterType, final Object arg, final BookmarkService bookmarkService)
-  ParamDto newParamDtoNonScalar(final String parameterName, final Class<?> parameterElementType, final Object arg, final BookmarkService bookmarkService)
-  T getValue(final ParamDto paramDto)
   String getMapValue(final MapDto mapDto, final String key)
   void putMapKeyValue(final MapDto mapDto, final String key, final String value)
-  boolean isValueType(Class<?> type)
 }
 ----
 

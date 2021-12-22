@@ -39,11 +39,15 @@ interface Can<T> {
   Can<T> ofEnumeration(final Enumeration<T> enumeration)     // <.>
   Can<T> ofStream(final Stream<T> stream)     // <.>
   Can<T> ofInstance(final Instance<T> instance)     // <.>
-  Can<T> unique()     // <.>
+  Can<T> sorted(Comparator<? super T> comparator)     // <.>
+  Can<T> distinct()     // <.>
+  Can<T> distinct(BiPredicate<T, T> equality)     // <.>
   Can<T> reverse()     // <.>
   Can<T> filter(Predicate<? super T> predicate)     // <.>
   Can<R> map(final Function<? super T, R> mapper)     // <.>
+  Can<R> flatMap(final Function<? super T, ? extends Can<? extends R>> mapper)
   Can<T> concat(final Can<T> can, final T element)     // <.>
+  Iterator<T> iterator(int skip, int limit)     // <.>
   Iterator<T> reverseIterator()
   void forEach(Consumer<? super T> action)
   void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action)     // <.>
@@ -162,10 +166,20 @@ Returns either a _Can_ with all the elements from given _stream_ or an empty _Ca
 --
 Returns either a _Can_ with all the elements from given _instance_ or an empty _Can_ if the _instance_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
 --
-<.> xref:#unique__[unique()]
+<.> xref:#sorted__Comparator[sorted(Comparator)]
++
+--
+Returns a _Can_ with all the elements from this _Can_ , but sorted based on _Comparable#compareTo(Object)_ order.
+--
+<.> xref:#distinct__[distinct()]
 +
 --
 Returns a _Can_ with all the elements from this _Can_ , but duplicated elements removed, based on _Object#equals(Object)_ object equality.
+--
+<.> xref:#distinct__BiPredicate[distinct(BiPredicate)]
++
+--
+Returns a _Can_ with all the elements from this _Can_ , but duplicated elements removed, based on given _equality_ relation.
 --
 <.> xref:#reverse__[reverse()]
 +
@@ -186,6 +200,11 @@ Returns a _Can_ with all the elements from this _Can_ 'transformed' by the given
 +
 --
 Returns a _Can_ with all the elements from given _can_ joined by the given _element_ . If any of given _can_ or _element_ are _null_ these do not contribute any elements and are ignored.
+--
+<.> xref:#iterator__int_int[iterator(int, int)]
++
+--
+Returns an iterator that skips the first _skip_ elements, then returns a maximum of _limit_ elements.
 --
 <.> xref:#zip__Iterable_BiConsumer[zip(Iterable, BiConsumer)]
 +
@@ -352,10 +371,20 @@ As side-effect, consumes given _stream_ .
 
 Returns either a _Can_ with all the elements from given _instance_ or an empty _Can_ if the _instance_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
 
-[#unique__]
-=== unique()
+[#sorted__Comparator]
+=== sorted(Comparator)
+
+Returns a _Can_ with all the elements from this _Can_ , but sorted based on _Comparable#compareTo(Object)_ order.
+
+[#distinct__]
+=== distinct()
 
 Returns a _Can_ with all the elements from this _Can_ , but duplicated elements removed, based on _Object#equals(Object)_ object equality.
+
+[#distinct__BiPredicate]
+=== distinct(BiPredicate)
+
+Returns a _Can_ with all the elements from this _Can_ , but duplicated elements removed, based on given _equality_ relation.
 
 [#reverse__]
 === reverse()
@@ -376,6 +405,11 @@ Returns a _Can_ with all the elements from this _Can_ 'transformed' by the given
 === concat(Can, T)
 
 Returns a _Can_ with all the elements from given _can_ joined by the given _element_ . If any of given _can_ or _element_ are _null_ these do not contribute any elements and are ignored.
+
+[#iterator__int_int]
+=== iterator(int, int)
+
+Returns an iterator that skips the first _skip_ elements, then returns a maximum of _limit_ elements.
 
 [#zip__Iterable_BiConsumer]
 === zip(Iterable, BiConsumer)

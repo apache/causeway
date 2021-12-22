@@ -7,8 +7,8 @@
 .AsciiDocJaxbAdapter.java
 ----
 class AsciiDocJaxbAdapter {
-  AsciiDoc unmarshal(String v)
-  String marshal(AsciiDoc v)
+  AsciiDoc unmarshal(final String v)
+  String marshal(final AsciiDoc v)
 }
 ----
 

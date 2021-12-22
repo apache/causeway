@@ -1,4 +1,4 @@
-= ExcelService
+= ExcelService _(interface)_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 == API
@@ -6,26 +6,24 @@
 [source,java]
 .ExcelService.java
 ----
-class ExcelService {
-  public static final String XSLX_MIME_TYPE;
-  ExcelService()
-  void init()
-  Blob toExcel(final List<T> domainObjects, final Class<T> cls, final String sheetName, final String fileName)     // <.>
-  Blob toExcel(final List<T> domainObjects, final Class<T> cls, final String sheetName, final String fileName, final InputStream in)
-  Blob toExcel(final WorksheetContent worksheetContent, final String fileName)
-  Blob toExcel(final WorksheetContent worksheetContent, final String fileName, final InputStream in)
-  Blob toExcel(final List<WorksheetContent> worksheetContents, final String fileName)
-  Blob toExcel(final List<WorksheetContent> worksheetContents, final String fileName, final InputStream in)
-  Blob toExcelPivot(final List<T> domainObjects, final Class<T> cls, final String fileName)
-  Blob toExcelPivot(final List<T> domainObjects, final Class<T> cls, final String sheetName, final String fileName)
-  Blob toExcelPivot(final WorksheetContent worksheetContent, final String fileName)
-  Blob toExcelPivot(final List<WorksheetContent> worksheetContents, final String fileName)
-  List<T> fromExcel(final Blob excelBlob, final Class<T> cls, final String sheetName)     // <.>
-  List<T> fromExcel(final Blob excelBlob, final Class<T> cls, final String sheetName, final Mode mode)
-  List<T> fromExcel(final Blob excelBlob, final WorksheetSpec worksheetSpec)
-  List<List<?>> fromExcel(final Blob excelBlob, final List<WorksheetSpec> worksheetSpecs)
-  List<List<?>> fromExcel(final Blob excelBlob, final WorksheetSpec.Matcher matcher)
-  List<List<?>> fromExcel(final Blob excelBlob, final WorksheetSpec.Matcher matcher, final WorksheetSpec.Sequencer sequencer)
+interface ExcelService {
+  String XSLX_MIME_TYPE;
+  Blob toExcel(List<T> domainObjects, Class<T> cls, String sheetName, String fileName)     // <.>
+  Blob toExcel(List<T> domainObjects, Class<T> cls, String sheetName, String fileName, InputStream in)
+  Blob toExcel(WorksheetContent worksheetContent, String fileName)
+  Blob toExcel(WorksheetContent worksheetContent, String fileName, InputStream in)
+  Blob toExcel(List<WorksheetContent> worksheetContents, String fileName)
+  Blob toExcel(List<WorksheetContent> worksheetContents, String fileName, InputStream in)
+  Blob toExcelPivot(List<T> domainObjects, Class<T> cls, String fileName)
+  Blob toExcelPivot(List<T> domainObjects, Class<T> cls, String sheetName, String fileName)
+  Blob toExcelPivot(WorksheetContent worksheetContent, String fileName)
+  Blob toExcelPivot(List<WorksheetContent> worksheetContents, String fileName)
+  List<T> fromExcel(Blob excelBlob, Class<T> cls, String sheetName)     // <.>
+  List<T> fromExcel(Blob excelBlob, Class<T> cls, String sheetName, Mode mode)
+  List<T> fromExcel(Blob excelBlob, WorksheetSpec worksheetSpec)
+  List<List<?>> fromExcel(Blob excelBlob, List<WorksheetSpec> worksheetSpecs)
+  List<List<?>> fromExcel(Blob excelBlob, WorksheetSpec.Matcher matcher)
+  List<List<?>> fromExcel(Blob excelBlob, WorksheetSpec.Matcher matcher, WorksheetSpec.Sequencer sequencer)
 }
 ----
 

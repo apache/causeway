@@ -15,7 +15,7 @@ class ExceptionRecognizerAbstract {
   ExceptionRecognizerAbstract(final Predicate<Throwable> predicate, final Function<Throwable, String> rootCauseMessageFormatter)
   ExceptionRecognizerAbstract(final Category category, final Predicate<Throwable> predicate)
   ExceptionRecognizerAbstract(final Predicate<Throwable> predicate)
-  Optional<Recognition> recognize(Throwable ex)
+  Optional<Recognition> recognize(final Throwable ex)
 }
 ----
 

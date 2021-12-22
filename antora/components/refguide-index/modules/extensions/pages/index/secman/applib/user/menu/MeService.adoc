@@ -9,7 +9,6 @@
 class MeService {
   public static final String LOGICAL_TYPE_NAME;
   String iconName()
-  ApplicationUser me()
 }
 ----
 

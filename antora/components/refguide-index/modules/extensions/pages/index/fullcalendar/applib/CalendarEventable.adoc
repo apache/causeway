@@ -25,6 +25,6 @@ The name of the calendar to which this event belongs.
 
 The name of the calendar to which this event belongs.
 
-For example, an `Employee` might provide have a `employedOn` , so the calendar name would be "employedOn"
+For example, an `Employee` might provide have a `employedOn` , so the calendar name would be 'employedOn'
 
 If there is possibly more than one date associated with the entity, then use xref:refguide:extensions:index/fullcalendar/applib/Calendarable.adoc[Calendarable] instead.

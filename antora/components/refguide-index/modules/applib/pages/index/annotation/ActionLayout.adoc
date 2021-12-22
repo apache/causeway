@@ -59,12 +59,12 @@ Description of this action, eg to be rendered in a tooltip.
 <.> xref:#fieldSetId[fieldSetId]
 +
 --
-Specifies the *id* of associated _FieldSet_ .To associate an _Action_ with a _Collection_ , use _Action#associateWith()_ instead.
+Specifies the *id* of associated _FieldSet_ .To associate an _Action_ with a _Collection_ , use _Action#choicesFrom()_ instead.
 --
 <.> xref:#fieldSetName[fieldSetName]
 +
 --
-Specifies the *friendly-name* of associated _FieldSet_ or _Collection_ .To associate an _Action_ with a _Collection_ , use _Action#associateWith()_ instead.
+Specifies the *friendly-name* of associated _FieldSet_ or _Collection_ .To associate an _Action_ with a _Collection_ , use _Action#choicesFrom()_ instead.
 --
 <.> xref:#hidden[hidden]
 +
@@ -79,7 +79,7 @@ Name of this action (overriding the name derived from its name in code).
 <.> xref:#position[position]
 +
 --
-For actions that are associated with a property (using either _Action#associateWith()_ or _ActionLayout#fieldSetId()_ or _ActionLayout#fieldSetName()_ , indicates the positioning of the action's button relative to the property.
+For actions that are associated with a property (using either _Action#choicesFrom()_ or _ActionLayout#fieldSetId()_ or _ActionLayout#fieldSetName()_ , indicates the positioning of the action's button relative to the property.
 --
 <.> xref:#promptStyle[promptStyle]
 +
@@ -144,14 +144,14 @@ Description of this action, eg to be rendered in a tooltip.
 [#fieldSetId]
 === fieldSetId
 
-Specifies the *id* of associated _FieldSet_ .To associate an _Action_ with a _Collection_ , use _Action#associateWith()_ instead.
+Specifies the *id* of associated _FieldSet_ .To associate an _Action_ with a _Collection_ , use _Action#choicesFrom()_ instead.
 
 For a more in depth description see the analogous _PropertyLayout#fieldSetId()_ .
 
 [#fieldSetName]
 === fieldSetName
 
-Specifies the *friendly-name* of associated _FieldSet_ or _Collection_ .To associate an _Action_ with a _Collection_ , use _Action#associateWith()_ instead.
+Specifies the *friendly-name* of associated _FieldSet_ or _Collection_ .To associate an _Action_ with a _Collection_ , use _Action#choicesFrom()_ instead.
 
 For a more in depth description see the analogous _PropertyLayout#fieldSetId()_ ;
 
@@ -170,7 +170,7 @@ A typical use case is if the desired name is a reserved Java keyword, such as `d
 [#position]
 === position
 
-For actions that are associated with a property (using either _Action#associateWith()_ or _ActionLayout#fieldSetId()_ or _ActionLayout#fieldSetName()_ , indicates the positioning of the action's button relative to the property.
+For actions that are associated with a property (using either _Action#choicesFrom()_ or _ActionLayout#fieldSetId()_ or _ActionLayout#fieldSetName()_ , indicates the positioning of the action's button relative to the property.
 
 Ignored if the action has not been associated with a property.
 

@@ -10,14 +10,24 @@ Immutable value type holding pre-rendered HTML.
 ----
 class AsciiDoc {
   AsciiDoc()
-  AsciiDoc(String adoc)
-  AsciiDoc valueOfAdoc(String adoc)
-  String title()
+  AsciiDoc(final String adoc)
+  AsciiDoc valueOf(final String adoc)
   String asHtml()
   boolean isEqualTo(final AsciiDoc other)
-  boolean equals(final Object obj)
-  int hashCode()
   String toString()
+  void loadJRuby()     // <.>
 }
 ----
 
+<.> xref:#loadJRuby__[loadJRuby()]
++
+--
+Not strictly required, but allows for eager loading. Is a one-shot, that may take about 5 seconds.
+--
+
+== Members
+
+[#loadJRuby__]
+=== loadJRuby()
+
+Not strictly required, but allows for eager loading. Is a one-shot, that may take about 5 seconds.

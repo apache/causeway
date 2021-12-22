@@ -1,0 +1,129 @@
+= SchemaValueMarshaller _(interface)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Provides the runtime context for converting values between their XML _Schema_ and their _Java_ type representation, based on xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider] if specified.
+
+== API
+
+[source,java]
+.SchemaValueMarshaller.java
+----
+interface SchemaValueMarshaller {
+  Identifier actionIdentifier(ActionInvocationDto actionInvocationDto)     // <.>
+  Identifier actionIdentifier(ActionDto actionDto)     // <.>
+  Identifier propertyIdentifier(PropertyDto propertyDto)     // <.>
+  ManagedObject recoverReferenceFrom(OidDto oidDto)
+  ManagedObject recoverValueFrom(PropertyDto propertyDto)     // <.>
+  ManagedObject recoverValuesFrom(Identifier paramIdentifier, ParamDto paramDto)     // <.>
+  ActionInvocationDto recordActionResultScalar(ActionInvocationDto invocationDto, ObjectSpecification elementType, ManagedObject value)     // <.>
+  ActionInvocationDto recordActionResultNonScalar(ActionInvocationDto invocationDto, ObjectSpecification elementType, Can<ManagedObject> values)     // <.>
+  PropertyDto recordPropertyValue(PropertyDto propertyDto, ObjectSpecification elementType, ManagedObject value)     // <.>
+  ParamDto recordParamScalar(Identifier paramIdentifier, ParamDto paramDto, ObjectSpecification elementType, ManagedObject value)     // <.>
+  ParamDto recordParamNonScalar(Identifier paramIdentifier, ParamDto paramDto, ObjectSpecification elementType, Can<ManagedObject> values)     // <.>
+}
+----
+
+<.> xref:#actionIdentifier__ActionInvocationDto[actionIdentifier(ActionInvocationDto)]
++
+--
+Recovers an _Action's_ xref:refguide:applib:index/Identifier.adoc[Identifier] from given DTO.
+--
+<.> xref:#actionIdentifier__ActionDto[actionIdentifier(ActionDto)]
++
+--
+Recovers an _Action's_ xref:refguide:applib:index/Identifier.adoc[Identifier] from given DTO.
+--
+<.> xref:#propertyIdentifier__PropertyDto[propertyIdentifier(PropertyDto)]
++
+--
+Recovers a _Property's_ xref:refguide:applib:index/Identifier.adoc[Identifier] from given DTO.
+--
+<.> xref:#recoverValueFrom__PropertyDto[recoverValueFrom(PropertyDto)]
++
+--
+Recovers a property value, using xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider] for corresponding _Property_ .
+--
+<.> xref:#recoverValuesFrom__Identifier_ParamDto[recoverValuesFrom(Identifier, ParamDto)]
++
+--
+Recovers a parameter value, using xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider] for corresponding _Action Parameter_ .
+--
+<.> xref:#recordActionResultScalar__ActionInvocationDto_ObjectSpecification_ManagedObject[recordActionResultScalar(ActionInvocationDto, ObjectSpecification, ManagedObject)]
++
+--
+Records given result value into given DTO object, using xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider] for corresponding _Action_ .
+--
+<.> xref:#recordActionResultNonScalar__ActionInvocationDto_ObjectSpecification_Can[recordActionResultNonScalar(ActionInvocationDto, ObjectSpecification, Can)]
++
+--
+Records given result values into given DTO object, using xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider] for corresponding _Action_ .
+--
+<.> xref:#recordPropertyValue__PropertyDto_ObjectSpecification_ManagedObject[recordPropertyValue(PropertyDto, ObjectSpecification, ManagedObject)]
++
+--
+Records given property value into given DTO object, using xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider] for corresponding _Property_ .
+--
+<.> xref:#recordParamScalar__Identifier_ParamDto_ObjectSpecification_ManagedObject[recordParamScalar(Identifier, ParamDto, ObjectSpecification, ManagedObject)]
++
+--
+Records given parameter value into given DTO object, using xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider] for corresponding _Action Parameter_ .
+--
+<.> xref:#recordParamNonScalar__Identifier_ParamDto_ObjectSpecification_Can[recordParamNonScalar(Identifier, ParamDto, ObjectSpecification, Can)]
++
+--
+Records given parameter values into given DTO object, using xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider] for corresponding _Action Parameter_ .
+--
+
+== Members
+
+[#actionIdentifier__ActionInvocationDto]
+=== actionIdentifier(ActionInvocationDto)
+
+Recovers an _Action's_ xref:refguide:applib:index/Identifier.adoc[Identifier] from given DTO.
+
+[#actionIdentifier__ActionDto]
+=== actionIdentifier(ActionDto)
+
+Recovers an _Action's_ xref:refguide:applib:index/Identifier.adoc[Identifier] from given DTO.
+
+[#propertyIdentifier__PropertyDto]
+=== propertyIdentifier(PropertyDto)
+
+Recovers a _Property's_ xref:refguide:applib:index/Identifier.adoc[Identifier] from given DTO.
+
+[#recoverValueFrom__PropertyDto]
+=== recoverValueFrom(PropertyDto)
+
+Recovers a property value, using xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider] for corresponding _Property_ .
+
+[#recoverValuesFrom__Identifier_ParamDto]
+=== recoverValuesFrom(Identifier, ParamDto)
+
+Recovers a parameter value, using xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider] for corresponding _Action Parameter_ .
+
+Packed up if non-scalar.
+
+[#recordActionResultScalar__ActionInvocationDto_ObjectSpecification_ManagedObject]
+=== recordActionResultScalar(ActionInvocationDto, ObjectSpecification, ManagedObject)
+
+Records given result value into given DTO object, using xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider] for corresponding _Action_ .
+
+[#recordActionResultNonScalar__ActionInvocationDto_ObjectSpecification_Can]
+=== recordActionResultNonScalar(ActionInvocationDto, ObjectSpecification, Can)
+
+Records given result values into given DTO object, using xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider] for corresponding _Action_ .
+
+[#recordPropertyValue__PropertyDto_ObjectSpecification_ManagedObject]
+=== recordPropertyValue(PropertyDto, ObjectSpecification, ManagedObject)
+
+Records given property value into given DTO object, using xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider] for corresponding _Property_ .
+
+[#recordParamScalar__Identifier_ParamDto_ObjectSpecification_ManagedObject]
+=== recordParamScalar(Identifier, ParamDto, ObjectSpecification, ManagedObject)
+
+Records given parameter value into given DTO object, using xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider] for corresponding _Action Parameter_ .
+
+[#recordParamNonScalar__Identifier_ParamDto_ObjectSpecification_Can]
+=== recordParamNonScalar(Identifier, ParamDto, ObjectSpecification, Can)
+
+Records given parameter values into given DTO object, using xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider] for corresponding _Action Parameter_ .

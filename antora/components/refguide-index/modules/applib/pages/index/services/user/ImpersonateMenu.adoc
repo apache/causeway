@@ -13,40 +13,6 @@ All of the actions provided here are restricted to PROTOTYPE mode only; this fea
 class ImpersonateMenu {
   // deliberately not part of isis.applib
 public static final String LOGICAL_TYPE_NAME;
-  void impersonate(final String userName)     // <.>
-  boolean hideImpersonate()
-  String disableImpersonate()
-  void impersonateWithRoles(final String userName, final List<String> roleNames, final String multiTenancyToken)     // <.>
-  boolean hideImpersonateWithRoles()
-  String disableImpersonateWithRoles()
-  List<String> choices0ImpersonateWithRoles()
-  List<String> choices1ImpersonateWithRoles(final String userName)
-  List<String> default1ImpersonateWithRoles(final String userName)
-  String default2ImpersonateWithRoles(final String userName, final List<String> roleNames)
 }
 ----
 
-<.> xref:#impersonate__String[impersonate(String)]
-+
---
-Simple implementation that is surfaced if there is no advisor.
---
-<.> xref:#impersonateWithRoles__String_List_String[impersonateWithRoles(String, List, String)]
-+
---
-Impersonate a selected user, either using their current roles or with a specific set of roles.
---
-
-== Members
-
-[#impersonate__String]
-=== impersonate(String)
-
-Simple implementation that is surfaced if there is no advisor.
-
-[#impersonateWithRoles__String_List_String]
-=== impersonateWithRoles(String, List, String)
-
-Impersonate a selected user, either using their current roles or with a specific set of roles.
-
-This more sophisticated implementation is only available if there is an xref:refguide:applib:index/services/user/ImpersonateMenuAdvisor.adoc[ImpersonateMenuAdvisor] implementation to provide the choices.

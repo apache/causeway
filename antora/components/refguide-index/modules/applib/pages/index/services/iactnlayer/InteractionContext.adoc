@@ -10,13 +10,13 @@ Provides the user and scenario specific environment for an xref:refguide:applib:
 ----
 class InteractionContext {
   InteractionContext ofUserWithSystemDefaults(final UserMemento user)     // <.>
+  UserLocale getLocale()
   UnaryOperator<InteractionContext> switchUser(final UserMemento userMemento)     // <.>
   UnaryOperator<InteractionContext> switchClock(final VirtualClock clock)     // <.>
-  UnaryOperator<InteractionContext> switchLocale(final Locale locale)     // <.>
-  UnaryOperator<InteractionContext> switchTimeZone(final TimeZone timeZone)     // <.>
+  UnaryOperator<InteractionContext> switchLocale(final UserLocale locale)     // <.>
+  UnaryOperator<InteractionContext> switchTimeZone(final ZoneId timeZone)     // <.>
   UnaryOperator<T> combine(final UnaryOperator<T>... mappers)     // <.>
   UnaryOperator<T> combine(final Stream<UnaryOperator<T>> mappers)     // <.>
-  void replaceUser(final UserMemento user)     // <.>
 }
 ----
 
@@ -35,30 +35,25 @@ Convenience method for use with _org.apache.isis.applib.services.sudo.SudoServic
 --
 Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified xref:refguide:applib:index/clock/VirtualClock.adoc[VirtualClock] .
 --
-<.> xref:#switchLocale__Locale[switchLocale(Locale)]
+<.> xref:#switchLocale__UserLocale[switchLocale(UserLocale)]
 +
 --
 Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified _Locale_ .
 --
-<.> xref:#switchTimeZone__TimeZone[switchTimeZone(TimeZone)]
+<.> xref:#switchTimeZone__ZoneId[switchTimeZone(ZoneId)]
 +
 --
-Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified _TimeZone_ .
+Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified _ZoneId_ .
 --
 <.> xref:#combine__UnaryOperator[combine(UnaryOperator)]
 +
 --
-Convenience method to combine _UnaryOperator_ s, for example as per _#switchUser(UserMemento)_ and _#switchTimeZone(TimeZone)_ .
+Convenience method to combine _UnaryOperator_ s, for example as per _#switchUser(UserMemento)_ and _#switchTimeZone(ZoneId)_ .
 --
 <.> xref:#combine__Stream[combine(Stream)]
 +
 --
-Convenience method to combine _UnaryOperator_ s, for example as per _#switchUser(UserMemento)_ and _#switchTimeZone(TimeZone)_ . credit: https://stackoverflow.com/a/51065029/56880
---
-<.> xref:#replaceUser__UserMemento[replaceUser(UserMemento)]
-+
---
-For internal usage, not API.
+Convenience method to combine _UnaryOperator_ s, for example as per _#switchUser(UserMemento)_ and _#switchTimeZone(ZoneId)_ . credit: https://stackoverflow.com/a/51065029/56880
 --
 
 == Members
@@ -78,31 +73,24 @@ Convenience method for use with _org.apache.isis.applib.services.sudo.SudoServic
 
 Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified xref:refguide:applib:index/clock/VirtualClock.adoc[VirtualClock] .
 
-[#switchLocale__Locale]
-=== switchLocale(Locale)
+[#switchLocale__UserLocale]
+=== switchLocale(UserLocale)
 
 Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified _Locale_ .
 
-[#switchTimeZone__TimeZone]
-=== switchTimeZone(TimeZone)
+[#switchTimeZone__ZoneId]
+=== switchTimeZone(ZoneId)
 
-Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified _TimeZone_ .
+Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified _ZoneId_ .
 
 [#combine__UnaryOperator]
 === combine(UnaryOperator)
 
-Convenience method to combine _UnaryOperator_ s, for example as per _#switchUser(UserMemento)_ and _#switchTimeZone(TimeZone)_ .
+Convenience method to combine _UnaryOperator_ s, for example as per _#switchUser(UserMemento)_ and _#switchTimeZone(ZoneId)_ .
 
 NOTE: this implementation can result in heap pollution; better to use the _#combine(Stream) overload_ .
 
 [#combine__Stream]
 === combine(Stream)
 
-Convenience method to combine _UnaryOperator_ s, for example as per _#switchUser(UserMemento)_ and _#switchTimeZone(TimeZone)_ . credit: https://stackoverflow.com/a/51065029/56880
-
-[#replaceUser__UserMemento]
-=== replaceUser(UserMemento)
-
-For internal usage, not API.
-
-Instead, use _#withUser(UserMemento)_ , which honours the value semantics of this class.
+Convenience method to combine _UnaryOperator_ s, for example as per _#switchUser(UserMemento)_ and _#switchTimeZone(ZoneId)_ . credit: https://stackoverflow.com/a/51065029/56880

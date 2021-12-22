@@ -23,7 +23,7 @@ public static final String LOGICAL_TYPE_NAME;
   Object recreateObjectsAndReturnFirst()     // <.>
   boolean hideRecreateObjectsAndReturnFirst()
   void run(final FixtureScript... fixtureScriptList)
-  void runPersonas(PersonaWithBuilderScript<? extends BuilderScriptAbstract<?>>... personaScripts)
+  void runPersonas(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<?>>... personaScripts)
   T runPersona(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<? extends T>> persona)
   T runBuilder(final BuilderScriptAbstract<T> builderScript)     // <.>
   T runBuilderScriptNonTransactional(final BuilderScriptAbstract<T> builderScript)     // <.>
@@ -33,9 +33,6 @@ public static final String LOGICAL_TYPE_NAME;
   void initOf(final String xml, final FixtureScript fs)
   FixtureResult newFixtureResult(final FixtureScript script, final String subkey, final Object object, final boolean firstTime)
   String titleOf(final FixtureResult fixtureResult)
-  T fixtureScript(final PersonaWithBuilderScript<BuilderScriptAbstract<T>> persona)     // <.>
-  void runFixtureScript(final FixtureScript... fixtureScriptList)     // <.>
-  T runBuilderScript(final BuilderScriptAbstract<T> builderScript)     // <.>
 }
 ----
 
@@ -63,36 +60,6 @@ Runs the builderScript within its own transactional boundary.
 +
 --
 Runs the builderScript without its own transactional boundary.The caller is responsible to provide a transactional context/boundary.
---
-<.> xref:#fixtureScript__PersonaWithBuilderScript[fixtureScript(PersonaWithBuilderScript)]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-renamed to _#runPersona(PersonaWithBuilderScript)_
-====
---
-<.> xref:#runFixtureScript__FixtureScript[runFixtureScript(FixtureScript)]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-renamed to _#run(FixtureScript...)_
-====
---
-<.> xref:#runBuilderScript__BuilderScriptAbstract[runBuilderScript(BuilderScriptAbstract)]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-renamed to _#runBuilder(BuilderScriptAbstract)_
-====
 --
 
 == Members
@@ -123,35 +90,5 @@ Runs the builderScript within its own transactional boundary.
 === runBuilderScriptNonTransactional(BuilderScriptAbstract)
 
 Runs the builderScript without its own transactional boundary.The caller is responsible to provide a transactional context/boundary.
-
-[#fixtureScript__PersonaWithBuilderScript]
-=== fixtureScript(PersonaWithBuilderScript)
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-renamed to _#runPersona(PersonaWithBuilderScript)_
-====
-
-[#runFixtureScript__FixtureScript]
-=== runFixtureScript(FixtureScript)
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-renamed to _#run(FixtureScript...)_
-====
-
-[#runBuilderScript__BuilderScriptAbstract]
-=== runBuilderScript(BuilderScriptAbstract)
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-renamed to _#runBuilder(BuilderScriptAbstract)_
-====
 
 include::hooks/FixtureScripts_020-configuration-properties.adoc[]

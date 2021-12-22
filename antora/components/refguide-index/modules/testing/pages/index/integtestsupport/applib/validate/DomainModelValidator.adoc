@@ -7,14 +7,15 @@
 .DomainModelValidator.java
 ----
 class DomainModelValidator {
-  DomainModelValidator(ServiceRegistry registry)
+  DomainModelValidator(final ServiceRegistry registry)
   DomainModelValidator(final SpecificationLoader specificationLoader, final IsisConfiguration configuration, final IsisSystemEnvironment isisSystemEnvironment)
   void assertValid()     // <.>
   void throwIfInvalid()     // <.>
   Set<ValidationFailure> getFailures()
-  Stream<ValidationFailure> streamFailures(Predicate<Identifier> filter)
+  Stream<ValidationFailure> streamFailures(final Predicate<Identifier> filter)
   Stream<ValidationFailure> streamFailuresMatchingOriginatingIdentifier(final Identifier identifier)
-  boolean anyMatchesContaining(final Identifier identifier, final String messageSnippet)     // <.>
+  void assertAnyFailuresContaining(final Identifier identifier, final String messageSnippet)     // <.>
+  void assertAnyOfContainingAnyFailures(final Can<Identifier> classIdentifiers, final String messageSnippet)     // <.>
 }
 ----
 
@@ -28,10 +29,15 @@ Typical usage in integration tests.
 --
 Alternative way of checking
 --
-<.> xref:#anyMatchesContaining__Identifier_String[anyMatchesContaining(Identifier, String)]
+<.> xref:#assertAnyFailuresContaining__Identifier_String[assertAnyFailuresContaining(Identifier, String)]
 +
 --
-primarily used for testing
+JUnit support
+--
+<.> xref:#assertAnyOfContainingAnyFailures__Can_String[assertAnyOfContainingAnyFailures(Can, String)]
++
+--
+JUnit support
 --
 
 == Members
@@ -46,7 +52,12 @@ Typical usage in integration tests.
 
 Alternative way of checking
 
-[#anyMatchesContaining__Identifier_String]
-=== anyMatchesContaining(Identifier, String)
+[#assertAnyFailuresContaining__Identifier_String]
+=== assertAnyFailuresContaining(Identifier, String)
 
-primarily used for testing
+JUnit support
+
+[#assertAnyOfContainingAnyFailures__Can_String]
+=== assertAnyOfContainingAnyFailures(Can, String)
+
+JUnit support

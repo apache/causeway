@@ -10,23 +10,6 @@ Provides a UI to allow domain model metadata (obtained from xref:refguide:applib
 ----
 class MetaModelServiceMenu {
   public static final String LOGICAL_TYPE_NAME;
-  Blob downloadMetaModelCsv(final String csvFileName)
-  String default0DownloadMetaModelCsv()
-  Blob downloadMetaModelXml(final String fileName, final List<String> namespaces, final boolean ignoreInterfaces)
-  String validateDownloadMetaModelXml(final String fileName, final List<String> namespacePrefixes, final boolean ignoreInterfaces)
-  String default0DownloadMetaModelXml()
-  List<String> choices1DownloadMetaModelXml()
-  boolean default2DownloadMetaModelXml()
-  Blob downloadMetaModelAscii(final String fileName, final List<String> namespaces, final boolean ignoreInterfaces)
-  String validateDownloadMetaModelAscii(final String fileName, final List<String> namespacePrefixes, final boolean ignoreInterfaces)
-  String default0DownloadMetaModelAscii()
-  List<String> choices1DownloadMetaModelAscii()
-  boolean default2DownloadMetaModelAscii()
-  Blob downloadMetaModelDiff(final String fileName, final List<String> namespaces, final boolean ignoreInterfaces, Blob zippedMetamodelBlob)
-  String validateDownloadMetaModelDiff(final String fileName, final List<String> namespacePrefixes, final boolean ignoreInterfaces, final Blob rightMetamodelBlob)
-  String default0DownloadMetaModelDiff()
-  List<String> choices1DownloadMetaModelDiff()
-  boolean default2DownloadMetaModelDiff()
 }
 ----
 

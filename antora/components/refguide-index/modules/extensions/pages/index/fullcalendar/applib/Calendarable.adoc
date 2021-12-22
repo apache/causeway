@@ -15,7 +15,7 @@ interface Calendarable {
 <.> xref:#getCalendarNames__[getCalendarNames()]
 +
 --
-The names of unique "calendar"s provided by this object.
+The names of unique 'calendar's provided by this object.
 --
 <.> xref:#getCalendarEvents__[getCalendarEvents()]
 +
@@ -28,9 +28,9 @@ The events associated with this object, keyed by their corresponding _#getCalend
 [#getCalendarNames__]
 === getCalendarNames()
 
-The names of unique "calendar"s provided by this object.
+The names of unique 'calendar's provided by this object.
 
-The "calendar" is a string identifier that indicates the nature of this event.
+The 'calendar' is a string identifier that indicates the nature of this event.
 
 For example, an event of a lease's `FixedBreakOption` has three dates: the _break date_ , the _exercise date_ and the _reminder date_ . These therefore correspond to three different calendar names, respectively _Fixed break_ , _Fixed break exercise_ and _Fixed break exercise reminder_ .
 

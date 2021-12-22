@@ -14,8 +14,6 @@ Layout hints for collections.
   String describedAs() default "";     // <.>
   Where hidden() default Where.NOT_SPECIFIED;     // <.>
   String named() default "";     // <.>
-  @Deprecated
-boolean namedEscaped() default true;     // <.>
   int paged() default -1;     // <.>
   String sequence() default "";     // <.>
   @SuppressWarnings("rawtypes")
@@ -47,11 +45,6 @@ Indicates where in the UI the collection should _not_ not be visible.
 +
 --
 Name of this collection (overriding the name derived from its name in code).
---
-<.> xref:#namedEscaped[namedEscaped]
-+
---
-A flag indicating whether the value of _#named()_ should be HTML escaped or not.
 --
 <.> xref:#paged[paged]
 +
@@ -103,11 +96,6 @@ Only _Where#NOWHERE NOWHERE_ or _Where#EVERYWHERE EVERYWHERE_ / _Where#ANYWHERE 
 Name of this collection (overriding the name derived from its name in code).
 
 A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
-
-[#namedEscaped]
-=== namedEscaped
-
-A flag indicating whether the value of _#named()_ should be HTML escaped or not.
 
 [#paged]
 === paged

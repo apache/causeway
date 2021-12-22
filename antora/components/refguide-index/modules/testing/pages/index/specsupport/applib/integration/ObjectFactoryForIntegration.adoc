@@ -9,8 +9,8 @@
 class ObjectFactoryForIntegration {
   void start()
   void stop()
-  boolean addClass(Class<?> clazz)
-  T getInstance(Class<T> type)
+  boolean addClass(final Class<?> clazz)
+  T getInstance(final Class<T> type)
 }
 ----
 
