@@ -274,14 +274,20 @@ public class EntityPage extends PageAbstract {
 
     // -- HELPER
 
-    private transient ObjectReference<UUID> interactionId = _Refs.objectRef(null);
+    private transient ObjectReference<UUID> interactionId;
+    private ObjectReference<UUID> interactionIdRef() {
+        if(interactionId==null) {
+            interactionId = _Refs.objectRef(null);
+        }
+        return interactionId;
+    }
 
     private boolean isAlreadyRefreshedWithinThisInteraction() {
         val currentInteractionId = getCommonContext()
                 .getInteractionProvider().getInteractionId().orElseThrow();
 
         val alreadyRefreshedForThisInteraction =
-            interactionId.getValue()
+            interactionIdRef().getValue()
             .map(currentInteractionId::equals)
             .orElse(false);
 
@@ -289,7 +295,7 @@ public class EntityPage extends PageAbstract {
             return true;
         }
 
-        interactionId.setValue(currentInteractionId);
+        interactionIdRef().setValue(currentInteractionId);
         return false;
     }
 
