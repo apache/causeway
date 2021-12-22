@@ -39,7 +39,7 @@
     </description>
 
     <properties>
-        <maven.deploy.skip>true</maven.deploy.skip> <!-- don't deploy the aggregator -->
+        <maven.deploy.skip>true</maven.deploy.skip> <!-- don't deploy, comment out when doing a release -->
     	
 		<distMgmtSnapshotsName>Apache Development Snapshot Repository</distMgmtSnapshotsName>
 		<distMgmtSnapshotsUrl>https://repository.apache.org/content/repositories/snapshots</distMgmtSnapshotsUrl>
@@ -48,8 +48,8 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<sourceReleaseAssemblyDescriptor>source-release</sourceReleaseAssemblyDescriptor>
 		<gpg.useagent>true</gpg.useagent>
-		<minimalMavenBuildVersion>3.1.1</minimalMavenBuildVersion>
-		<minimalJavaBuildVersion>1.8</minimalJavaBuildVersion>
+		<minimalMavenBuildVersion>3.6.0</minimalMavenBuildVersion>
+		<minimalJavaBuildVersion>11</minimalJavaBuildVersion>
 
 		<java.version>11</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
@@ -59,6 +59,7 @@
 		<!-- historically was overriding Spring, as v3.0.0 breaks artifact retrieval of org.jruby:jruby (of any version) -->
 		<maven-enforcer-plugin.version>3.0.0</maven-enforcer-plugin.version>
 
+		<spring-boot.version>2.6.2</spring-boot.version>
 		<lombok.version>1.18.22</lombok.version> <!-- overriding Spring -->
 		<delombok.output>${project.build.directory}/delombok</delombok.output>
 		<surefire.version>2.22.2</surefire.version>
