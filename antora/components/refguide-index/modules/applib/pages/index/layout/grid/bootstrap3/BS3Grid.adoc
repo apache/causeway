@@ -12,12 +12,12 @@ The element is rendered as a <div class="...">
 ----
 class BS3Grid {
   String getCssClass()
-  void setCssClass(final String cssClass)
+  void setCssClass(String cssClass)
   List<BS3Row> getRows()
-  void setRows(final List<BS3Row> rows)
+  void setRows(List<BS3Row> rows)
   List<String> getMetadataErrors()     // <.>
-  void setMetadataErrors(final List<String> metadataErrors)
-  void visit(final Grid.Visitor visitor)
+  void setMetadataErrors(List<String> metadataErrors)
+  void visit(Grid.Visitor visitor)
   LinkedHashMap<String, BS3Tab> getAllTabsByName()
   LinkedHashMap<String, HasCssId> getAllCssId()
   BS3Grid getGrid()

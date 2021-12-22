@@ -11,8 +11,8 @@ As such, this domain service is the cornerstone of the framework's i18n support.
 .TranslationService.java
 ----
 interface TranslationService {
-  String translate(final TranslationContext context, final String text)     // <.>
-  String translate(final TranslationContext context, final String singularText, final String pluralText, int num)     // <.>
+  String translate(TranslationContext context, String text)     // <.>
+  String translate(TranslationContext context, String singularText, String pluralText, int num)     // <.>
   Mode getMode()     // <.>
 }
 ----

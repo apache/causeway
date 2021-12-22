@@ -15,11 +15,11 @@ The framework attempts to apply some heuristics; if the underlying Isis transact
 .RecoverableException.java
 ----
 class RecoverableException {
-  RecoverableException(final String msg)
-  RecoverableException(final TranslatableString translatableMessage, final Class<?> translationContextClass, final String translationContextMethod)
-  RecoverableException(final Throwable cause)
-  RecoverableException(final String msg, final Throwable cause)
-  RecoverableException(final TranslatableString translatableMessage, final Class<?> translationContextClass, final String translationContextMethod, final Throwable cause)
+  RecoverableException(String msg)
+  RecoverableException(TranslatableString translatableMessage, Class<?> translationContextClass, String translationContextMethod)
+  RecoverableException(Throwable cause)
+  RecoverableException(String msg, Throwable cause)
+  RecoverableException(TranslatableString translatableMessage, Class<?> translationContextClass, String translationContextMethod, Throwable cause)
   String getMessage()
 }
 ----

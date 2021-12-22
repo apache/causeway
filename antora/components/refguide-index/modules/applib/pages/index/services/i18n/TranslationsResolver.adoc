@@ -11,7 +11,7 @@ This is one of the supporting services that work together to implement the frame
 .TranslationsResolver.java
 ----
 interface TranslationsResolver {
-  List<String> readLines(final String file)     // <.>
+  List<String> readLines(String file)     // <.>
 }
 ----
 

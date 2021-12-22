@@ -12,27 +12,27 @@ class FixtureScripts {
   // secman seeding
 public static final String LOGICAL_TYPE_NAME;
   public static final String PACKAGE_PREFIX;     // <.>
-  FixtureScripts(final FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider, final ServiceRegistry serviceRegistry)
-  List<FixtureResult> runFixtureScript(final String fixtureScriptName, final String parameters)     // <.>
-  List<FixtureResult> runFixtureScript(final FixtureScript fixtureScript, final String parameters)
+  FixtureScripts(FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider, ServiceRegistry serviceRegistry)
+  List<FixtureResult> runFixtureScript(String fixtureScriptName, String parameters)     // <.>
+  List<FixtureResult> runFixtureScript(FixtureScript fixtureScript, String parameters)
   boolean hideRunFixtureScript()
   String disableRunFixtureScript()
   String default0RunFixtureScript()
   Set<String> choices0RunFixtureScript()
-  String validateRunFixtureScript(final String fixtureScriptName, final String parameters)
+  String validateRunFixtureScript(String fixtureScriptName, String parameters)
   Object recreateObjectsAndReturnFirst()     // <.>
   boolean hideRecreateObjectsAndReturnFirst()
-  void run(final FixtureScript... fixtureScriptList)
-  void runPersonas(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<?>>... personaScripts)
-  T runPersona(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<? extends T>> persona)
-  T runBuilder(final BuilderScriptAbstract<T> builderScript)     // <.>
-  T runBuilderScriptNonTransactional(final BuilderScriptAbstract<T> builderScript)     // <.>
-  String findFixtureScriptNameFor(final Class<? extends FixtureScript> fixtureScriptClass)
-  FixtureScript.ExecutionContext newExecutionContext(final String parameters)
-  String mementoFor(final FixtureScript fs)
-  void initOf(final String xml, final FixtureScript fs)
-  FixtureResult newFixtureResult(final FixtureScript script, final String subkey, final Object object, final boolean firstTime)
-  String titleOf(final FixtureResult fixtureResult)
+  void run(FixtureScript... fixtureScriptList)
+  void runPersonas(PersonaWithBuilderScript<? extends BuilderScriptAbstract<?>>... personaScripts)
+  T runPersona(PersonaWithBuilderScript<? extends BuilderScriptAbstract<? extends T>> persona)
+  T runBuilder(BuilderScriptAbstract<T> builderScript)     // <.>
+  T runBuilderScriptNonTransactional(BuilderScriptAbstract<T> builderScript)     // <.>
+  String findFixtureScriptNameFor(Class<? extends FixtureScript> fixtureScriptClass)
+  FixtureScript.ExecutionContext newExecutionContext(String parameters)
+  String mementoFor(FixtureScript fs)
+  void initOf(String xml, FixtureScript fs)
+  FixtureResult newFixtureResult(FixtureScript script, String subkey, Object object, boolean firstTime)
+  String titleOf(FixtureResult fixtureResult)
 }
 ----
 

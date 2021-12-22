@@ -7,7 +7,7 @@
 .ExcelFixtureWorkbookHandler.java
 ----
 interface ExcelFixtureWorkbookHandler {
-  void workbookHandled(final FixtureScript.ExecutionContext executionContext, final ExcelFixture2 excelFixture, List<List<?>> rows)
+  void workbookHandled(FixtureScript.ExecutionContext executionContext, ExcelFixture2 excelFixture, List<List<?>> rows)
 }
 ----
 

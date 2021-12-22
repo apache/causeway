@@ -14,8 +14,8 @@ The primary use case for this service is for fixture scripts and integration tes
 ----
 class SudoService {
   public static RoleMemento ACCESS_ALL_ROLE;     // <.>
-  T call(final UnaryOperator<InteractionContext> sudoMapper, final Callable<T> callable)     // <.>
-  void run(final UnaryOperator<InteractionContext> sudoMapper, final ThrowingRunnable runnable)     // <.>
+  T call(UnaryOperator<InteractionContext> sudoMapper, Callable<T> callable)     // <.>
+  void run(UnaryOperator<InteractionContext> sudoMapper, ThrowingRunnable runnable)     // <.>
 }
 ----
 

@@ -11,7 +11,7 @@ These spec files can then be used with the link:http://swagger.io/swagger-ui/[Sw
 .SwaggerService.java
 ----
 interface SwaggerService {
-  String generateSwaggerSpec(final Visibility visibility, final Format format)     // <.>
+  String generateSwaggerSpec(Visibility visibility, Format format)     // <.>
 }
 ----
 

@@ -8,7 +8,7 @@
 ----
 class Link {
   Link()
-  Link(final String rel, final String method, final String href, final String type)
+  Link(String rel, String method, String href, String type)
   String getRel()
   String getMethod()
   String getHref()

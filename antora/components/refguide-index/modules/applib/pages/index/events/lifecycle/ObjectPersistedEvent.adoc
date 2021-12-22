@@ -10,7 +10,7 @@ Broadcast when an entity is first saved (inserted) into the database either expl
 ----
 class ObjectPersistedEvent<S> {
   ObjectPersistedEvent()
-  ObjectPersistedEvent(final S source)
+  ObjectPersistedEvent(S source)
 }
 ----
 

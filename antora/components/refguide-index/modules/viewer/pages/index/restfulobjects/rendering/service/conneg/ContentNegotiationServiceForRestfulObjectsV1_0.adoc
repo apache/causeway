@@ -9,15 +9,15 @@ Returns representations according to theRestful Objectsspec.
 .ContentNegotiationServiceForRestfulObjectsV1_0.java
 ----
 class ContentNegotiationServiceForRestfulObjectsV1_0 {
-  ContentNegotiationServiceForRestfulObjectsV1_0(final IsisConfiguration configuration, final SpecificationLoader specificationLoader)
-  ResponseBuilder buildResponse(final IResourceContext resourceContext, final ManagedObject objectAdapter)
-  ResponseBuilder buildResponseTo(final IResourceContext resourceContext, final ManagedObject objectAdapter, final JsonRepresentation representationIfAnyRequired, final JsonRepresentation rootRepresentation)     // <.>
-  ResponseBuilder buildResponse(final IResourceContext resourceContext, final ManagedProperty objectAndProperty)
-  ResponseBuilder buildResponse(final IResourceContext resourceContext, final ManagedCollection objectAndCollection)
-  ResponseBuilder buildResponseTo(final IResourceContext resourceContext, final ManagedCollection objectAndCollection, final JsonRepresentation representation, final JsonRepresentation rootRepresentation)     // <.>
-  ResponseBuilder buildResponse(final IResourceContext resourceContext, final ManagedAction objectAndAction)
-  ResponseBuilder buildResponse(final IResourceContext resourceContext, final ObjectAndActionInvocation objectAndActionInvocation)
-  ResponseBuilder buildResponseTo(final IResourceContext resourceContext, final ObjectAndActionInvocation objectAndActionInvocation, final JsonRepresentation representation, final JsonRepresentation rootRepresentation)     // <.>
+  ContentNegotiationServiceForRestfulObjectsV1_0(IsisConfiguration configuration, SpecificationLoader specificationLoader)
+  ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedObject objectAdapter)
+  ResponseBuilder buildResponseTo(IResourceContext resourceContext, ManagedObject objectAdapter, JsonRepresentation representationIfAnyRequired, JsonRepresentation rootRepresentation)     // <.>
+  ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedProperty objectAndProperty)
+  ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedCollection objectAndCollection)
+  ResponseBuilder buildResponseTo(IResourceContext resourceContext, ManagedCollection objectAndCollection, JsonRepresentation representation, JsonRepresentation rootRepresentation)     // <.>
+  ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedAction objectAndAction)
+  ResponseBuilder buildResponse(IResourceContext resourceContext, ObjectAndActionInvocation objectAndActionInvocation)
+  ResponseBuilder buildResponseTo(IResourceContext resourceContext, ObjectAndActionInvocation objectAndActionInvocation, JsonRepresentation representation, JsonRepresentation rootRepresentation)     // <.>
 }
 ----
 

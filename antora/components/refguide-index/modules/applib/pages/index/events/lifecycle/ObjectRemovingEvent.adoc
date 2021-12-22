@@ -10,7 +10,7 @@ Broadcast when an entity is about to be removed (deleted) into the database eith
 ----
 class ObjectRemovingEvent<S> {
   ObjectRemovingEvent()
-  ObjectRemovingEvent(final S source)
+  ObjectRemovingEvent(S source)
 }
 ----
 

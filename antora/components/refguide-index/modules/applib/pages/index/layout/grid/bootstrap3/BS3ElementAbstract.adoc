@@ -10,7 +10,7 @@ Superclass for all layout classes, factoring out the common _#getCssClass()_ att
 ----
 class BS3ElementAbstract {
   String getCssClass()     // <.>
-  void setCssClass(final String cssClass)
+  void setCssClass(String cssClass)
 }
 ----
 

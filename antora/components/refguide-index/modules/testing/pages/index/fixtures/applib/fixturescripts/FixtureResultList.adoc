@@ -11,12 +11,12 @@ Instantiate using _FixtureScripts#newExecutionContext(String)_
 .FixtureResultList.java
 ----
 class FixtureResultList {
-  FixtureResultList(final FixtureScripts fixtureScripts, final FixtureScript.ExecutionContext executionContext)
-  T add(final FixtureScript script, final T object)
-  T add(final FixtureScript fixtureScript, final String key, final T object)     // <.>
+  FixtureResultList(FixtureScripts fixtureScripts, FixtureScript.ExecutionContext executionContext)
+  T add(FixtureScript script, T object)
+  T add(FixtureScript fixtureScript, String key, T object)     // <.>
   List<FixtureResult> getResults()
-  String nextItemFor(final FixtureScript script)
-  T lookup(final String key, Class<T> cls)
+  String nextItemFor(FixtureScript script)
+  T lookup(String key, Class<T> cls)
 }
 ----
 

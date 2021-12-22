@@ -9,8 +9,8 @@ Implementation that bypasses authentication.
 .AuthenticatorBypass.java
 ----
 class AuthenticatorBypass {
-  boolean isValid(final AuthenticationRequest request)
-  boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass)
+  boolean isValid(AuthenticationRequest request)
+  boolean canAuthenticate(Class<? extends AuthenticationRequest> authenticationRequestClass)
 }
 ----
 

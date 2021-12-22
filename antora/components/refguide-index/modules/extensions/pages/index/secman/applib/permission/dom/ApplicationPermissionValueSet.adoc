@@ -11,10 +11,10 @@ Intended for value type arithmetic and also for caching.
 .ApplicationPermissionValueSet.java
 ----
 class ApplicationPermissionValueSet {
-  ApplicationPermissionValueSet(final List<ApplicationPermissionValue> permissionValues, final PermissionsEvaluationService permissionsEvaluationService)
-  boolean grants(final ApplicationFeatureId featureId, final ApplicationPermissionMode mode)
-  Evaluation evaluate(final ApplicationFeatureId featureId, final ApplicationPermissionMode mode)
-  boolean equals(final Object o)
+  ApplicationPermissionValueSet(List<ApplicationPermissionValue> permissionValues, PermissionsEvaluationService permissionsEvaluationService)
+  boolean grants(ApplicationFeatureId featureId, ApplicationPermissionMode mode)
+  Evaluation evaluate(ApplicationFeatureId featureId, ApplicationPermissionMode mode)
+  boolean equals(Object o)
   int hashCode()
   String toString()
 }

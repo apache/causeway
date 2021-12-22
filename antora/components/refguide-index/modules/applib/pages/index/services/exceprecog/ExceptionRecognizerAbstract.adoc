@@ -11,11 +11,11 @@ If a messaging-parsing _Function_ is provided through the constructor, then the 
 .ExceptionRecognizerAbstract.java
 ----
 class ExceptionRecognizerAbstract {
-  ExceptionRecognizerAbstract(final Category category, final Predicate<Throwable> predicate, final Function<Throwable, String> rootCauseMessageFormatter)
-  ExceptionRecognizerAbstract(final Predicate<Throwable> predicate, final Function<Throwable, String> rootCauseMessageFormatter)
-  ExceptionRecognizerAbstract(final Category category, final Predicate<Throwable> predicate)
-  ExceptionRecognizerAbstract(final Predicate<Throwable> predicate)
-  Optional<Recognition> recognize(final Throwable ex)
+  ExceptionRecognizerAbstract(Category category, Predicate<Throwable> predicate, Function<Throwable, String> rootCauseMessageFormatter)
+  ExceptionRecognizerAbstract(Predicate<Throwable> predicate, Function<Throwable, String> rootCauseMessageFormatter)
+  ExceptionRecognizerAbstract(Category category, Predicate<Throwable> predicate)
+  ExceptionRecognizerAbstract(Predicate<Throwable> predicate)
+  Optional<Recognition> recognize(Throwable ex)
 }
 ----
 

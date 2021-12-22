@@ -10,8 +10,8 @@ _ComponentFactory_ for _DownloadLink_ .
 ----
 class CollectionContentsAsExcelFactory {
   CollectionContentsAsExcelFactory()
-  ApplicationAdvice appliesTo(final IModel<?> model)
-  Component createComponent(final String id, final IModel<?> model)
+  ApplicationAdvice appliesTo(IModel<?> model)
+  Component createComponent(String id, IModel<?> model)
   IModel<String> getTitleLabel()
   IModel<String> getCssClass()
 }

@@ -11,18 +11,18 @@ interface DomainServiceResource {
   Response deleteServicesNotAllowed()
   Response putServicesNotAllowed()
   Response postServicesNotAllowed()
-  Response service(final String serviceId)
-  Response deleteServiceNotAllowed(final String serviceId)
-  Response putServiceNotAllowed(final String serviceId)
-  Response postServiceNotAllowed(final String serviceId)
-  Response actionPrompt(final String serviceId, final String actionId)
-  Response deleteActionPromptNotAllowed(final String serviceId, final String actionId)
-  Response putActionPromptNotAllowed(final String serviceId, final String actionId)
-  Response postActionPromptNotAllowed(final String serviceId, final String actionId)
-  Response invokeActionQueryOnly(final String serviceId, final String actionId, final String xIsisQueryString)     // <.>
-  Response invokeActionIdempotent(final String serviceId, final String actionId, final InputStream arguments)
-  Response invokeAction(final String serviceId, final String actionId, final InputStream arguments)
-  Response deleteInvokeActionNotAllowed(final String serviceId, final String actionId)
+  Response service(String serviceId)
+  Response deleteServiceNotAllowed(String serviceId)
+  Response putServiceNotAllowed(String serviceId)
+  Response postServiceNotAllowed(String serviceId)
+  Response actionPrompt(String serviceId, String actionId)
+  Response deleteActionPromptNotAllowed(String serviceId, String actionId)
+  Response putActionPromptNotAllowed(String serviceId, String actionId)
+  Response postActionPromptNotAllowed(String serviceId, String actionId)
+  Response invokeActionQueryOnly(String serviceId, String actionId, String xIsisQueryString)     // <.>
+  Response invokeActionIdempotent(String serviceId, String actionId, InputStream arguments)
+  Response invokeAction(String serviceId, String actionId, InputStream arguments)
+  Response deleteInvokeActionNotAllowed(String serviceId, String actionId)
 }
 ----
 

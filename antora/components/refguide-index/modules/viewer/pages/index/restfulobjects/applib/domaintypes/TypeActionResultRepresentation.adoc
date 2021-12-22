@@ -7,7 +7,7 @@
 .TypeActionResultRepresentation.java
 ----
 class TypeActionResultRepresentation {
-  TypeActionResultRepresentation(final JsonNode jsonNode)
+  TypeActionResultRepresentation(JsonNode jsonNode)
 }
 ----
 

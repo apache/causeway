@@ -7,17 +7,17 @@
 .TranslatableString.java
 ----
 class TranslatableString {
-  TranslatableString tr(final String pattern, final Object... paramArgs)     // <.>
-  TranslatableString trn(final String singularPattern, final String pluralPattern, final int number, final Object... paramArgs)     // <.>
+  TranslatableString tr(String pattern, Object... paramArgs)     // <.>
+  TranslatableString trn(String singularPattern, String pluralPattern, int number, Object... paramArgs)     // <.>
   String getSingularText()     // <.>
   String getPluralText()     // <.>
   boolean isPluralForm()
   Map<String, Object> getArgumentsByParameterName()     // <.>
-  String translate(final TranslationService translationService, final TranslationContext context)     // <.>
+  String translate(TranslationService translationService, TranslationContext context)     // <.>
   String getPattern()     // <.>
-  String translated(final String translatedText)
+  String translated(String translatedText)
   String format(String format, Map<String, Object> values)
-  boolean equals(final Object o)
+  boolean equals(Object o)
   int hashCode()
   String toString()
 }

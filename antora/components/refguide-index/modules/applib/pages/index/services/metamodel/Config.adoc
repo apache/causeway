@@ -17,7 +17,7 @@ class Config {
   Config withIgnoreBuiltInValueTypes()
   Config withIgnoreMixins()
   boolean isNamespacePrefixAny()
-  Config withNamespacePrefix(final String namespacePrefix)     // <.>
+  Config withNamespacePrefix(String namespacePrefix)     // <.>
   boolean isIgnoreNoop()
   boolean isIgnoreInterfaces()
   boolean isIgnoreAbstractClasses()

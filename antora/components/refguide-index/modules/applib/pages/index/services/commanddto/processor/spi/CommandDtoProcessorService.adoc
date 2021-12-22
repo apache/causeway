@@ -11,7 +11,7 @@ The service is used as a fallback if an xref:refguide:applib:index/services/comm
 .CommandDtoProcessorService.java
 ----
 interface CommandDtoProcessorService {
-  CommandDto process(final Object domainObject, final CommandDto commandDto)     // <.>
+  CommandDto process(Object domainObject, CommandDto commandDto)     // <.>
 }
 ----
 

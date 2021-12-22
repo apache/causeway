@@ -7,10 +7,10 @@
 .AnnotationTriplet.java
 ----
 class AnnotationTriplet {
-  AnnotationTriplet(final String annotation, final Integer colNumber, final Integer order)
+  AnnotationTriplet(String annotation, Integer colNumber, Integer order)
   String getAnnotation()
   Integer getColnumber()
-  int compareTo(final AnnotationTriplet o)
+  int compareTo(AnnotationTriplet o)
 }
 ----
 

@@ -11,10 +11,10 @@ The current time ('now') is obtained from the _org.apache.isis.applib.services.c
 .JavaSqlTimestamps.java
 ----
 class JavaSqlTimestamps {
-  JavaSqlTimestamps(final FakeDataService fakeDataService)
-  java.sql.Timestamp around(final Period period)     // <.>
-  java.sql.Timestamp before(final Period period)     // <.>
-  java.sql.Timestamp after(final Period period)     // <.>
+  JavaSqlTimestamps(FakeDataService fakeDataService)
+  java.sql.Timestamp around(Period period)     // <.>
+  java.sql.Timestamp before(Period period)     // <.>
+  java.sql.Timestamp after(Period period)     // <.>
   java.sql.Timestamp any()     // <.>
 }
 ----

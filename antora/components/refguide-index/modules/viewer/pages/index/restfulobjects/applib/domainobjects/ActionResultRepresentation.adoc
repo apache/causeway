@@ -7,7 +7,7 @@
 .ActionResultRepresentation.java
 ----
 class ActionResultRepresentation {
-  ActionResultRepresentation(final JsonNode jsonNode)
+  ActionResultRepresentation(JsonNode jsonNode)
   JsonRepresentation getResult()
   ResultType getResultType()
 }

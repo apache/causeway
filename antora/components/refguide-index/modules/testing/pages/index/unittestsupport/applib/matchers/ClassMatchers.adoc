@@ -9,9 +9,9 @@ Hamcrest _Matcher_ implementations for _Class_ es.
 .ClassMatchers.java
 ----
 class ClassMatchers {
-  Matcher<T> anInstanceOf(final Class<T> expected)
-  Matcher<Class<?>> classEqualTo(final Class<?> operand)
-  Matcher<Class<X>> anySubclassOf(final Class<X> cls)
+  Matcher<T> anInstanceOf(Class<T> expected)
+  Matcher<Class<?>> classEqualTo(Class<?> operand)
+  Matcher<Class<X>> anySubclassOf(Class<X> cls)
 }
 ----
 

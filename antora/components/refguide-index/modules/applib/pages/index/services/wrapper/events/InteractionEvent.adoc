@@ -11,7 +11,7 @@ Many of the interactions are checks for xref:refguide:applib:index/services/wrap
 .InteractionEvent.java
 ----
 class InteractionEvent {
-  InteractionEvent(final Object source, final Identifier identifier)
+  InteractionEvent(Object source, Identifier identifier)
   Object getSource()     // <.>
   Identifier getIdentifier()     // <.>
   String getClassName()     // <.>
@@ -23,7 +23,7 @@ class InteractionEvent {
   String getReason()     // <.>
   String getReasonMessage()     // <.>
   Class<?> getAdvisorClass()     // <.>
-  void advised(final String reason, final Class<?> advisorClass)     // <.>
+  void advised(String reason, Class<?> advisorClass)     // <.>
   boolean isVeto()     // <.>
 }
 ----

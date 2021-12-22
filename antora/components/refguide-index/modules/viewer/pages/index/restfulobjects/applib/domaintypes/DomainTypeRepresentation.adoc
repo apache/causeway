@@ -7,7 +7,7 @@
 .DomainTypeRepresentation.java
 ----
 class DomainTypeRepresentation {
-  DomainTypeRepresentation(final JsonNode jsonNode)
+  DomainTypeRepresentation(JsonNode jsonNode)
 }
 ----
 

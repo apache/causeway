@@ -10,12 +10,12 @@ This class should be executed using _org.apache.isis.testing.fixtures.applib.fix
 ----
 class ExcelFixture {
   public final static String LOGICAL_TYPE_NAME;
-  ExcelFixture(final URL excelResource, final Class<?>... classes)
-  ExcelFixture(final URL excelResource, final List<Class<?>> classes)
-  ExcelFixture(final Blob upload, final Class<?>... classes)
-  ExcelFixture(final Blob blob, final List<Class<?>> classes)
+  ExcelFixture(URL excelResource, Class<?>... classes)
+  ExcelFixture(URL excelResource, List<Class<?>> classes)
+  ExcelFixture(Blob upload, Class<?>... classes)
+  ExcelFixture(Blob blob, List<Class<?>> classes)
   String getQualifiedName()
-  boolean equals(final Object o)
+  boolean equals(Object o)
   int hashCode()
 }
 ----

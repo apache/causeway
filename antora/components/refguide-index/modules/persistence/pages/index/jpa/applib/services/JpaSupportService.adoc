@@ -10,7 +10,7 @@ Provides access to the current interaction's _EntityManager_ (s)
 ----
 interface JpaSupportService {
   Result<EntityManager> getEntityManager(Class<?> entityType)     // <.>
-  EntityManager getEntityManagerElseFail(final Class<?> entityType)     // <.>
+  EntityManager getEntityManagerElseFail(Class<?> entityType)     // <.>
 }
 ----
 

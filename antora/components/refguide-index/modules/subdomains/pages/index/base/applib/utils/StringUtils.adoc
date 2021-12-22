@@ -7,11 +7,11 @@
 .StringUtils.java
 ----
 class StringUtils {
-  String enumTitle(final String string)
-  String enumDeTitle(final String string)
-  String wildcardToCaseInsensitiveRegex(final String pattern)
-  String wildcardToRegex(final String pattern)
-  String capitalize(final String str)
+  String enumTitle(String string)
+  String enumDeTitle(String string)
+  String wildcardToCaseInsensitiveRegex(String pattern)
+  String wildcardToRegex(String pattern)
+  String capitalize(String str)
 }
 ----
 

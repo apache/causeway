@@ -7,7 +7,7 @@
 .ContentMappingService.java
 ----
 interface ContentMappingService {
-  Object map(Object object, final List<MediaType> acceptableMediaTypes)     // <.>
+  Object map(Object object, List<MediaType> acceptableMediaTypes)     // <.>
 }
 ----
 

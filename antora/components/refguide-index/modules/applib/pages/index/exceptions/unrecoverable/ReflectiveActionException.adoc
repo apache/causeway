@@ -7,9 +7,9 @@
 .ReflectiveActionException.java
 ----
 class ReflectiveActionException {
-  ReflectiveActionException(final String msg)
-  ReflectiveActionException(final Throwable cause)
-  ReflectiveActionException(final String msg, final Throwable cause)
+  ReflectiveActionException(String msg)
+  ReflectiveActionException(Throwable cause)
+  ReflectiveActionException(String msg, Throwable cause)
 }
 ----
 

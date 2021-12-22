@@ -15,7 +15,7 @@ interface FactoryService {
   T detachedEntity(T entity)     // <.>
   T mixin(Class<T> mixinClass, Object mixedIn)     // <.>
   T viewModel(Class<T> viewModelClass, Bookmark bookmark)     // <.>
-  T viewModel(final Class<T> viewModelClass)     // <.>
+  T viewModel(Class<T> viewModelClass)     // <.>
   T viewModel(T viewModel)     // <.>
   T create(Class<T> domainClass)     // <.>
 }

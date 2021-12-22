@@ -7,15 +7,15 @@
 .FileUtils.java
 ----
 class FileUtils {
-  void deleteFilesWithPrefix(final String directoryName, final String filePrefix, Recursion recursion)     // <.>
-  void deleteFiles(final String directoryName, final String fileExtension, Recursion recursion)
-  void deleteFiles(final File directory, final String fileExtension, Recursion recursion)
-  void deleteFiles(final String directoryName, final FilenameFilter filter, Recursion recursion)
-  void deleteFiles(final File directory, final FilenameFilter filter, Recursion recursion)
-  void deleteFiles(final File directory, final FilenameFilter filter, Recursion recursion, Deleter deleter)
-  FilenameFilter and(final FilenameFilter... filters)
-  FilenameFilter filterFileNameExtension(final String fileExtension)
-  FilenameFilter filterFileNamePrefix(final String filePrefix)
+  void deleteFilesWithPrefix(String directoryName, String filePrefix, Recursion recursion)     // <.>
+  void deleteFiles(String directoryName, String fileExtension, Recursion recursion)
+  void deleteFiles(File directory, String fileExtension, Recursion recursion)
+  void deleteFiles(String directoryName, FilenameFilter filter, Recursion recursion)
+  void deleteFiles(File directory, FilenameFilter filter, Recursion recursion)
+  void deleteFiles(File directory, FilenameFilter filter, Recursion recursion, Deleter deleter)
+  FilenameFilter and(FilenameFilter... filters)
+  FilenameFilter filterFileNameExtension(String fileExtension)
+  FilenameFilter filterFileNamePrefix(String filePrefix)
   FileFilter filterDirectory()
 }
 ----

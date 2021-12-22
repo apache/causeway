@@ -10,7 +10,7 @@ Broadcast when an entity is retrieved from the database.
 ----
 class ObjectLoadedEvent<S> {
   ObjectLoadedEvent()
-  ObjectLoadedEvent(final S source)
+  ObjectLoadedEvent(S source)
 }
 ----
 

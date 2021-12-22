@@ -16,15 +16,15 @@ If there is a member name clash involving an _action_ and an _association_ , the
 ----
 class ApplicationFeatureId {
   public static final ApplicationFeatureId NAMESPACE_DEFAULT;
-  ApplicationFeatureId fromIdentifier(final Identifier identifier)
-  ApplicationFeatureId newFeature(final ApplicationFeatureSort featureSort, final String qualifiedLogicalName)
-  ApplicationFeatureId newFeature(final String namespace, final String logicalTypeSimpleName, final String memberName)
-  ApplicationFeatureId newNamespace(final String namespace)
-  ApplicationFeatureId newNamespace(final LogicalType logicalType)     // <.>
-  ApplicationFeatureId newType(final String logicalTypeName)
-  ApplicationFeatureId newType(final LogicalType logicalType)
-  ApplicationFeatureId newMember(final LogicalType logicalType, final String memberLogicalName)
-  ApplicationFeatureId newMember(final String logicalTypeName, final String memberLogicalName)
+  ApplicationFeatureId fromIdentifier(Identifier identifier)
+  ApplicationFeatureId newFeature(ApplicationFeatureSort featureSort, String qualifiedLogicalName)
+  ApplicationFeatureId newFeature(String namespace, String logicalTypeSimpleName, String memberName)
+  ApplicationFeatureId newNamespace(String namespace)
+  ApplicationFeatureId newNamespace(LogicalType logicalType)     // <.>
+  ApplicationFeatureId newType(String logicalTypeName)
+  ApplicationFeatureId newType(LogicalType logicalType)
+  ApplicationFeatureId newMember(LogicalType logicalType, String memberLogicalName)
+  ApplicationFeatureId newMember(String logicalTypeName, String memberLogicalName)
   ApplicationFeatureId newMember(String fullyQualifiedLogicalName)
   String title()     // <.>
   ApplicationFeatureId getParentTypeFeatureId()     // <.>
@@ -32,17 +32,17 @@ class ApplicationFeatureId {
   String getLogicalTypeName()
   ApplicationFeatureId getParentNamespaceFeatureId()     // <.>
   String stringify()
-  ApplicationFeatureId parse(final String stringified)     // <.>
+  ApplicationFeatureId parse(String stringified)     // <.>
   String asEncodedString()
-  ApplicationFeatureId parseEncoded(final String encodedString)     // <.>
+  ApplicationFeatureId parseEncoded(String encodedString)     // <.>
   Can<ApplicationFeatureId> getPathIds()
   Can<ApplicationFeatureId> getParentFeatureIds()
-  boolean contains(final ApplicationFeatureId otherFeatureId)
-  int compareTo(final ApplicationFeatureId other)
-  boolean equals(final Object o)
+  boolean contains(ApplicationFeatureId otherFeatureId)
+  int compareTo(ApplicationFeatureId other)
+  boolean equals(Object o)
   int hashCode()
   String toString()
-  ApplicationFeatureId withNamespace(final String namespace)     // <.>
+  ApplicationFeatureId withNamespace(String namespace)     // <.>
 }
 ----
 

@@ -7,8 +7,8 @@
 .CommonDtoUtils.java
 ----
 class CommonDtoUtils {
-  String getMapValue(final MapDto mapDto, final String key)
-  void putMapKeyValue(final MapDto mapDto, final String key, final String value)
+  String getMapValue(MapDto mapDto, String key)
+  void putMapKeyValue(MapDto mapDto, String key, String value)
 }
 ----
 

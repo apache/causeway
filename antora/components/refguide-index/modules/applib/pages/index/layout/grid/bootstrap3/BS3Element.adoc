@@ -8,7 +8,7 @@
 ----
 interface BS3Element {
   String getCssClass()     // <.>
-  void setCssClass(final String cssClass)
+  void setCssClass(String cssClass)
 }
 ----
 

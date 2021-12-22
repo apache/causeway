@@ -8,9 +8,9 @@
 ----
 class XmlServiceDefault {
   Document asDocument(String xmlStr)
-  String asString(final Document doc)
-  Element getChildElement(final Element el, final String tagname)
-  String getChildTextValue(final Element el)
+  String asString(Document doc)
+  Element getChildElement(Element el, String tagname)
+  String getChildTextValue(Element el)
 }
 ----
 

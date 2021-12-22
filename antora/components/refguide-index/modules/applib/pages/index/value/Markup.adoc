@@ -10,8 +10,8 @@ Intended to be used as a read-only property, to render plain HTML.
 ----
 class Markup {
   Markup()
-  Markup(final String html)
-  Markup valueOf(final String html)
+  Markup(String html)
+  Markup valueOf(String html)
   String asHtml()
   String toString()
 }

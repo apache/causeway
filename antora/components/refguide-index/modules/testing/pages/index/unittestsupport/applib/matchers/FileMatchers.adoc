@@ -10,7 +10,7 @@ Hamcrest _Matcher_ implementations for _File_ s.
 ----
 class FileMatchers {
   Matcher<File> existsAndNotEmpty()
-  Matcher<File> equalsFile(final File file)
+  Matcher<File> equalsFile(File file)
 }
 ----
 

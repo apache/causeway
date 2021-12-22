@@ -14,16 +14,16 @@ class ReasonBuffer2 {
   Builder builder()
   ReasonBuffer2 forAll()
   ReasonBuffer2 forSingle()
-  ReasonBuffer2 forAll(final String prefix)
-  ReasonBuffer2 forSingle(final String prefix)
-  ReasonBuffer2 append(final LazyReason lazyReason)
-  void appendIfNotPresent(final Optional<?> optional, final String reason)
-  ReasonBuffer2 append(final String reason)     // <.>
-  ReasonBuffer2 append(final boolean condition, final String reason)     // <.>
-  ReasonBuffer2 append(final Condition condition, final String reason)     // <.>
+  ReasonBuffer2 forAll(String prefix)
+  ReasonBuffer2 forSingle(String prefix)
+  ReasonBuffer2 append(LazyReason lazyReason)
+  void appendIfNotPresent(Optional<?> optional, String reason)
+  ReasonBuffer2 append(String reason)     // <.>
+  ReasonBuffer2 append(boolean condition, String reason)     // <.>
+  ReasonBuffer2 append(Condition condition, String reason)     // <.>
   String getReason()     // <.>
-  String appendReason(final StringBuilder buf)     // <.>
-  ReasonBuffer2 plus(final ReasonBuffer2 other)     // <.>
+  String appendReason(StringBuilder buf)     // <.>
+  ReasonBuffer2 plus(ReasonBuffer2 other)     // <.>
 }
 ----
 

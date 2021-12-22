@@ -7,7 +7,7 @@
 .PropertyDescriptionRepresentation.java
 ----
 class PropertyDescriptionRepresentation {
-  PropertyDescriptionRepresentation(final JsonNode jsonNode)
+  PropertyDescriptionRepresentation(JsonNode jsonNode)
 }
 ----
 

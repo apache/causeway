@@ -11,7 +11,7 @@ Do not confuse with the subclasses of xref:refguide:viewer:index/restfulobjects/
 .DomainObjectMemberRepresentation.java
 ----
 class DomainObjectMemberRepresentation {
-  DomainObjectMemberRepresentation(final JsonNode jsonNode)
+  DomainObjectMemberRepresentation(JsonNode jsonNode)
   String getMemberType()     // <.>
   String getDisabledReason()     // <.>
   String getFormat()

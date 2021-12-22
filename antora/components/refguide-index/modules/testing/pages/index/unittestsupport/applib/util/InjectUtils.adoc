@@ -8,9 +8,9 @@
 ----
 class InjectUtils {
   public static final Predicate<? super Field> persistentMappedBy;
-  Predicate<Field> withTypeAssignableFrom(final Class<T> type)
-  Predicate<Method> withReturnTypeAssignableFrom(final Class<T> type)
-  Predicate<Method> withParametersAssignableFrom(final Class<?>... types)
+  Predicate<Field> withTypeAssignableFrom(Class<T> type)
+  Predicate<Method> withReturnTypeAssignableFrom(Class<T> type)
+  Predicate<Method> withParametersAssignableFrom(Class<?>... types)
   Predicate<? super Method> withEntityParameter()
 }
 ----

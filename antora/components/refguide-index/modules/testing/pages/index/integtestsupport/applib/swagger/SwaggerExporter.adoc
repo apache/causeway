@@ -7,8 +7,8 @@
 .SwaggerExporter.java
 ----
 class SwaggerExporter {
-  SwaggerExporter(final ServiceRegistry registry)
-  SwaggerExporter(final SwaggerService swaggerService)
+  SwaggerExporter(ServiceRegistry registry)
+  SwaggerExporter(SwaggerService swaggerService)
   void export(Visibility visibility, Format format)
   void export(Visibility visibility, Format format, File outputDir)
   void export(Visibility visibility, Format format, File outputDir, String fileNamePrefix)

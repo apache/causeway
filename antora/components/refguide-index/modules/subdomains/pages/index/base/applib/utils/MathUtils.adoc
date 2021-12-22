@@ -9,12 +9,12 @@ General-purpose math utilities.
 .MathUtils.java
 ----
 class MathUtils {
-  BigDecimal round(final BigDecimal input, final int precision)
-  boolean isZeroOrNull(final BigDecimal input)
-  boolean isNotZeroOrNull(final BigDecimal input)
-  BigDecimal firstNonZero(final BigDecimal... values)
+  BigDecimal round(BigDecimal input, int precision)
+  boolean isZeroOrNull(BigDecimal input)
+  boolean isNotZeroOrNull(BigDecimal input)
+  BigDecimal firstNonZero(BigDecimal... values)
   BigDecimal max(BigDecimal... input)
-  BigDecimal maxUsingFirstSignum(final BigDecimal... values)
+  BigDecimal maxUsingFirstSignum(BigDecimal... values)
 }
 ----
 

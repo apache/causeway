@@ -9,8 +9,8 @@ Provides methods to programmatically obtain the title and icon of a domain objec
 .TitleService.java
 ----
 interface TitleService {
-  String titleOf(final Object domainObject)     // <.>
-  String iconNameOf(final Object domainObject)     // <.>
+  String titleOf(Object domainObject)     // <.>
+  String iconNameOf(Object domainObject)     // <.>
 }
 ----
 

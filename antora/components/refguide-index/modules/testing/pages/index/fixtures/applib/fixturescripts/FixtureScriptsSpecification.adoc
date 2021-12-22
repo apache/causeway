@@ -9,14 +9,14 @@ Specifies the behaviour of the _org.apache.isis.testing.fixtures.applib.fixtures
 .FixtureScriptsSpecification.java
 ----
 class FixtureScriptsSpecification {
-  FixtureScriptsSpecification(final String packagePrefix, final FixtureScripts.NonPersistedObjectsStrategy nonPersistedObjectsStrategy, final FixtureScripts.MultipleExecutionStrategy multipleExecutionStrategy, final Class<? extends FixtureScript> runScriptDefaultScriptClass, final Class<? extends FixtureScript> recreateScriptClass)     // <.>
+  FixtureScriptsSpecification(String packagePrefix, FixtureScripts.NonPersistedObjectsStrategy nonPersistedObjectsStrategy, FixtureScripts.MultipleExecutionStrategy multipleExecutionStrategy, Class<? extends FixtureScript> runScriptDefaultScriptClass, Class<? extends FixtureScript> recreateScriptClass)     // <.>
   String getPackagePrefix()
   FixtureScripts.NonPersistedObjectsStrategy getNonPersistedObjectsStrategy()
   FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy()     // <.>
   Class<? extends FixtureScript> getRunScriptDefaultScriptClass()
   Class<? extends FixtureScript> getRecreateScriptClass()
-  Builder builder(final Class<?> contextClass)
-  Builder builder(final String packagePrefix)
+  Builder builder(Class<?> contextClass)
+  Builder builder(String packagePrefix)
 }
 ----
 

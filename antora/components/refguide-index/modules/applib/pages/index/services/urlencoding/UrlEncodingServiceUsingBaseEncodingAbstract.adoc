@@ -9,8 +9,8 @@ Provided as a convenient base class for providing alternative implementations of
 .UrlEncodingServiceUsingBaseEncodingAbstract.java
 ----
 class UrlEncodingServiceUsingBaseEncodingAbstract {
-  String encode(final byte[] bytes)
-  byte[] decode(final String str)
+  String encode(byte[] bytes)
+  byte[] decode(String str)
 }
 ----
 

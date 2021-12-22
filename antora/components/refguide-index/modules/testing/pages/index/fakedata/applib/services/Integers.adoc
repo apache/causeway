@@ -9,10 +9,10 @@ Returns random `int` eger values, optionally constrained within a range,
 .Integers.java
 ----
 class Integers {
-  Integers(final FakeDataService fakeDataService)
+  Integers(FakeDataService fakeDataService)
   int any()
-  int upTo(final int upTo)
-  int between(final int min, final int max)
+  int upTo(int upTo)
+  int between(int min, int max)
 }
 ----
 

@@ -11,7 +11,7 @@ Analogous to xref:refguide:applib:index/services/wrapper/events/PropertyModifyEv
 .PropertyAccessEvent.java
 ----
 class PropertyAccessEvent {
-  PropertyAccessEvent(final Object source, final Identifier propertyIdentifier, final Object value)
+  PropertyAccessEvent(Object source, Identifier propertyIdentifier, Object value)
   Object getValue()
 }
 ----

@@ -8,7 +8,7 @@
 ----
 class AbstractUiEvent<S> {
   AbstractUiEvent()     // <.>
-  AbstractUiEvent(final S source)
+  AbstractUiEvent(S source)
   Object get(Object key)     // <.>
   void put(Object key, Object value)     // <.>
 }

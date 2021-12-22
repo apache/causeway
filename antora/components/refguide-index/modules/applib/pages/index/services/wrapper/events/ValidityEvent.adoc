@@ -19,7 +19,7 @@ If _#getReason()_ is `null` , then is usable; otherwise is disabled.
 .ValidityEvent.java
 ----
 class ValidityEvent {
-  ValidityEvent(final Object source, final Identifier identifier)
+  ValidityEvent(Object source, Identifier identifier)
   Object getSource()
   String getReasonMessage()
 }

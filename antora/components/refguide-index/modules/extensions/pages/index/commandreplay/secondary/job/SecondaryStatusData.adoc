@@ -7,10 +7,10 @@
 .SecondaryStatusData.java
 ----
 class SecondaryStatusData {
-  SecondaryStatusData(final JobExecutionContext jobExecutionContext)
+  SecondaryStatusData(JobExecutionContext jobExecutionContext)
   SecondaryStatus getSecondaryStatus()
-  SecondaryStatus getSecondaryStatus(final SecondaryStatus defaultStatus)
-  void setSecondaryStatus(final SecondaryStatus mode)
+  SecondaryStatus getSecondaryStatus(SecondaryStatus defaultStatus)
+  void setSecondaryStatus(SecondaryStatus mode)
 }
 ----
 

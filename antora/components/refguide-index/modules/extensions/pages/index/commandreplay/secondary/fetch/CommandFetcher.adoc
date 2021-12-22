@@ -7,7 +7,7 @@
 .CommandFetcher.java
 ----
 class CommandFetcher {
-  List<CommandDto> fetchCommand(final CommandModel previousHwmIfAny)     // <.>
+  List<CommandDto> fetchCommand(CommandModel previousHwmIfAny)     // <.>
 }
 ----
 

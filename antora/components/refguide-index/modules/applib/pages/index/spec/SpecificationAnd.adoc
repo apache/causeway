@@ -22,8 +22,8 @@ public class MilkAndSugarSpec extends SpecificationAnd {
 .SpecificationAnd.java
 ----
 class SpecificationAnd {
-  SpecificationAnd(final Specification... specifications)
-  String satisfies(final Object obj)
+  SpecificationAnd(Specification... specifications)
+  String satisfies(Object obj)
 }
 ----
 

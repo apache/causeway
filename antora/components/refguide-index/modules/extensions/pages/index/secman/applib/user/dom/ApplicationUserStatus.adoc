@@ -11,7 +11,7 @@ Whether the user's account is locked or unlocked.
 enum ApplicationUserStatus {
   UNLOCKED
   LOCKED
-  ApplicationUserStatus parse(final Boolean unlocked)
+  ApplicationUserStatus parse(Boolean unlocked)
   String toString()
   boolean isUnlocked()
 }

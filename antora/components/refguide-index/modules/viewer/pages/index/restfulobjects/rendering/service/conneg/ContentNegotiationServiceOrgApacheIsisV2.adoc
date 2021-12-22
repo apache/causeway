@@ -8,13 +8,13 @@
 ----
 class ContentNegotiationServiceOrgApacheIsisV2 {
   public static final String ACCEPT_PROFILE;     // <.>
-  ContentNegotiationServiceOrgApacheIsisV2(final ContentNegotiationServiceForRestfulObjectsV1_0 restfulObjectsV1_0)
-  Response.ResponseBuilder buildResponse(final IResourceContext resourceContext, final ManagedObject objectAdapter)     // <.>
-  Response.ResponseBuilder buildResponse(final IResourceContext resourceContext, final ManagedProperty objectAndProperty)     // <.>
-  Response.ResponseBuilder buildResponse(final IResourceContext resourceContext, final ManagedCollection managedCollection)     // <.>
-  Response.ResponseBuilder buildResponse(final IResourceContext resourceContext, final ManagedAction objectAndAction)     // <.>
-  Response.ResponseBuilder buildResponse(final IResourceContext resourceContext, final ObjectAndActionInvocation objectAndActionInvocation)     // <.>
-  boolean canAccept(final IResourceContext resourceContext)
+  ContentNegotiationServiceOrgApacheIsisV2(ContentNegotiationServiceForRestfulObjectsV1_0 restfulObjectsV1_0)
+  Response.ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedObject objectAdapter)     // <.>
+  Response.ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedProperty objectAndProperty)     // <.>
+  Response.ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedCollection managedCollection)     // <.>
+  Response.ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedAction objectAndAction)     // <.>
+  Response.ResponseBuilder buildResponse(IResourceContext resourceContext, ObjectAndActionInvocation objectAndActionInvocation)     // <.>
+  boolean canAccept(IResourceContext resourceContext)
 }
 ----
 

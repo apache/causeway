@@ -11,10 +11,10 @@ Can be customized via static _WebModuleShiro#setShiroEnvironmentClass(Class)_
 .WebModuleShiro.java
 ----
 class WebModuleShiro {
-  WebModuleShiro(final ServiceInjector serviceInjector)
+  WebModuleShiro(ServiceInjector serviceInjector)
   void setShiroEnvironmentClass(Class<? extends WebEnvironment> shiroEnvironmentClass)
   void setShiroIniResource(String resourcePath)
-  void prepare(final WebModuleContext ctx)
+  void prepare(WebModuleContext ctx)
   Can<ServletContextListener> init(ServletContext ctx)
 }
 ----

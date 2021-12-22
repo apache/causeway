@@ -13,8 +13,8 @@ This will result in the simpler _ImpersonateMenu.impersonate#act(String)_ (which
 interface ImpersonateMenuAdvisor {
   List<String> allUserNames()     // <.>
   List<String> allRoleNames()     // <.>
-  List<String> roleNamesFor(final String username)     // <.>
-  String multiTenancyTokenFor(final String username)     // <.>
+  List<String> roleNamesFor(String username)     // <.>
+  String multiTenancyTokenFor(String username)     // <.>
 }
 ----
 

@@ -8,7 +8,7 @@
 ----
 class SwaggerServiceMenu {
   public static final String LOGICAL_TYPE_NAME;
-  SwaggerServiceMenu(final SwaggerService swaggerService, final ServiceRegistry serviceRegistry, final RestEasyConfiguration restEasyConfiguration)
+  SwaggerServiceMenu(SwaggerService swaggerService, ServiceRegistry serviceRegistry, RestEasyConfiguration restEasyConfiguration)
   String disableReasonWhenRequiresROViewer()
 }
 ----

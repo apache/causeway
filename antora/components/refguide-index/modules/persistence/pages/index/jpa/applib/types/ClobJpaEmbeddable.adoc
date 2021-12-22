@@ -14,10 +14,10 @@ EclipseLink _does_ provide its own extension,
 ----
 class ClobJpaEmbeddable {
   ClobJpaEmbeddable fromClob(Clob clob)     // <.>
-  Clob toClob(final ClobJpaEmbeddable clobJpaEmbeddable)     // <.>
+  Clob toClob(ClobJpaEmbeddable clobJpaEmbeddable)     // <.>
   Clob asClob()
   String toString()
-  boolean equals(final Object o)
+  boolean equals(Object o)
   int hashCode()
 }
 ----

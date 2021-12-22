@@ -11,7 +11,7 @@ Factoring this out as a service potentially allows for extensions to parsing.
 .ExecutionParametersService.java
 ----
 interface ExecutionParametersService {
-  ExecutionParameters newExecutionParameters(final String parameters)
+  ExecutionParameters newExecutionParameters(String parameters)
 }
 ----
 

@@ -21,8 +21,8 @@ class ApplicationUser {
   ApplicationPermissionValueSet getPermissionSet()
   boolean isForSelfOrRunAsAdministrator()
   boolean isLocalAccount()
-  int compareTo(final org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser other)
-  boolean equals(final Object obj)
+  int compareTo(org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser other)
+  boolean equals(Object obj)
   int hashCode()
   String toString()
 }

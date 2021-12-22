@@ -7,14 +7,14 @@
 .JodaTimeXMLGregorianCalendarMarshalling.java
 ----
 class JodaTimeXMLGregorianCalendarMarshalling {
-  DateTime toDateTime(final XMLGregorianCalendar xgc)
-  LocalDate toLocalDate(final XMLGregorianCalendar xgc)
-  LocalDateTime toLocalDateTime(final XMLGregorianCalendar xgc)
-  LocalTime toLocalTime(final XMLGregorianCalendar xgc)
-  XMLGregorianCalendar toXMLGregorianCalendar(final DateTime dateTime)
-  XMLGregorianCalendar toXMLGregorianCalendar(final LocalDateTime localDateTime)
-  XMLGregorianCalendar toXMLGregorianCalendar(final LocalDate localDate)
-  XMLGregorianCalendar toXMLGregorianCalendar(final LocalTime localTime)
+  DateTime toDateTime(XMLGregorianCalendar xgc)
+  LocalDate toLocalDate(XMLGregorianCalendar xgc)
+  LocalDateTime toLocalDateTime(XMLGregorianCalendar xgc)
+  LocalTime toLocalTime(XMLGregorianCalendar xgc)
+  XMLGregorianCalendar toXMLGregorianCalendar(DateTime dateTime)
+  XMLGregorianCalendar toXMLGregorianCalendar(LocalDateTime localDateTime)
+  XMLGregorianCalendar toXMLGregorianCalendar(LocalDate localDate)
+  XMLGregorianCalendar toXMLGregorianCalendar(LocalTime localTime)
 }
 ----
 

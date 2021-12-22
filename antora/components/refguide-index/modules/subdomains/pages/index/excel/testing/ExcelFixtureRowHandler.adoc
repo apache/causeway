@@ -7,7 +7,7 @@
 .ExcelFixtureRowHandler.java
 ----
 interface ExcelFixtureRowHandler {
-  List<Object> handleRow(final FixtureScript.ExecutionContext executionContext, final ExcelFixture excelFixture, final Object previousRow)
+  List<Object> handleRow(FixtureScript.ExecutionContext executionContext, ExcelFixture excelFixture, Object previousRow)
 }
 ----
 

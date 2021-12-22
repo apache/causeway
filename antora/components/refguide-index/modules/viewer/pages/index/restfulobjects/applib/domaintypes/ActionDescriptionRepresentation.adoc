@@ -7,7 +7,7 @@
 .ActionDescriptionRepresentation.java
 ----
 class ActionDescriptionRepresentation {
-  ActionDescriptionRepresentation(final JsonNode jsonNode)
+  ActionDescriptionRepresentation(JsonNode jsonNode)
   String getId()
 }
 ----

@@ -8,21 +8,21 @@
 ----
 class LinkRepresentation {
   LinkRepresentation()
-  LinkRepresentation(final JsonNode jsonNode)
+  LinkRepresentation(JsonNode jsonNode)
   String getRel()
-  LinkRepresentation withRel(final String rel)
+  LinkRepresentation withRel(String rel)
   LinkRepresentation withRel(Rel rel)
   String getHref()
-  LinkRepresentation withHref(final String href)
+  LinkRepresentation withHref(String href)
   JsonRepresentation getValue()
   String getTitle()
-  LinkRepresentation withTitle(final String title)
+  LinkRepresentation withTitle(String title)
   RestfulHttpMethod getHttpMethod()
   MediaType getType()
-  LinkRepresentation withMethod(final RestfulHttpMethod httpMethod)
+  LinkRepresentation withMethod(RestfulHttpMethod httpMethod)
   JsonRepresentation getArguments()     // <.>
   int hashCode()
-  boolean equals(final Object obj)
+  boolean equals(Object obj)
   String toString()
 }
 ----

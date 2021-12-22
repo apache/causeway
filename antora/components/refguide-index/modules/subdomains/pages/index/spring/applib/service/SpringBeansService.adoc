@@ -9,7 +9,7 @@ Borrowed from BeansEndpoint.
 .SpringBeansService.java
 ----
 class SpringBeansService {
-  SpringBeansService(final ConfigurableApplicationContext context)
+  SpringBeansService(ConfigurableApplicationContext context)
   Map<String, ContextBeans> beans()
 }
 ----

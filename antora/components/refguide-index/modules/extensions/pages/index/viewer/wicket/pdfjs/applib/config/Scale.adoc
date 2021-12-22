@@ -19,9 +19,9 @@ enum Scale {
   _2_00
   _3_00
   _4_00
-  Scale(final String value)
+  Scale(String value)
   String getValue()
-  Scale forValue(final String scaleValue)
+  Scale forValue(String scaleValue)
 }
 ----
 

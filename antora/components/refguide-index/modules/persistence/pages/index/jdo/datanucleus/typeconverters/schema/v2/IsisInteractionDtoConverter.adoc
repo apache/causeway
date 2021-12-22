@@ -7,8 +7,8 @@
 .IsisInteractionDtoConverter.java
 ----
 class IsisInteractionDtoConverter {
-  String toDatastoreType(final InteractionDto memberValue)
-  InteractionDto toMemberType(final String datastoreValue)
+  String toDatastoreType(InteractionDto memberValue)
+  InteractionDto toMemberType(String datastoreValue)
 }
 ----
 

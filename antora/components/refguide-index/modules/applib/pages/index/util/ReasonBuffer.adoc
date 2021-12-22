@@ -13,8 +13,8 @@ An alternative is to use the (very simple) xref:refguide:applib:index/util/Reaso
 .ReasonBuffer.java
 ----
 class ReasonBuffer {
-  void append(final String reason)     // <.>
-  void appendOnCondition(final boolean condition, final String reason)     // <.>
+  void append(String reason)     // <.>
+  void appendOnCondition(boolean condition, String reason)     // <.>
   String getReason()     // <.>
 }
 ----

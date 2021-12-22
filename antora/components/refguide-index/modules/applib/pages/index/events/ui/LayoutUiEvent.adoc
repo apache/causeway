@@ -17,8 +17,8 @@ The class itself is instantiated automatically by the framework.
 ----
 class LayoutUiEvent<S> {
   LayoutUiEvent()     // <.>
-  LayoutUiEvent(final S source)
-  void setLayout(final String layout)     // <.>
+  LayoutUiEvent(S source)
+  void setLayout(String layout)     // <.>
 }
 ----
 

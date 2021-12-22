@@ -50,9 +50,9 @@ enum Rel {
   LOGOUT
   String getName()     // <.>
   String getSimpleName()     // <.>
-  String andParam(final String paramName, final String paramValue)     // <.>
-  boolean matches(final Rel otherRel)
-  boolean matches(final String otherRelStr)
+  String andParam(String paramName, String paramValue)     // <.>
+  boolean matches(Rel otherRel)
+  boolean matches(String otherRelStr)
   Rel parse(String str)
 }
 ----

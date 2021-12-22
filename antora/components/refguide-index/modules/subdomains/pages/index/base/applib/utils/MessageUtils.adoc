@@ -7,7 +7,7 @@
 .MessageUtils.java
 ----
 class MessageUtils {
-  String normalize(final Exception ex)
+  String normalize(Exception ex)
 }
 ----
 

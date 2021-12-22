@@ -11,7 +11,7 @@ For example, the `incode-module-commchannel` 's `Note` implements `CalendarEvent
 .CalendarableDereferencingService.java
 ----
 interface CalendarableDereferencingService {
-  Object dereference(final Object calendarableOrCalendarEventable)
+  Object dereference(Object calendarableOrCalendarEventable)
 }
 ----
 

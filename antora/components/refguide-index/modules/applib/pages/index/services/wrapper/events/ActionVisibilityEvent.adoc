@@ -11,7 +11,7 @@ If _#getReason()_ is not `null` then provides the reason why the action is invis
 .ActionVisibilityEvent.java
 ----
 class ActionVisibilityEvent {
-  ActionVisibilityEvent(final Object source, final Identifier actionIdentifier)
+  ActionVisibilityEvent(Object source, Identifier actionIdentifier)
 }
 ----
 

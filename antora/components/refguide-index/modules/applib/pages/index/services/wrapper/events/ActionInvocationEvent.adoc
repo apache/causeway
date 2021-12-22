@@ -13,9 +13,9 @@ Called after each of the xref:refguide:applib:index/services/wrapper/events/Acti
 .ActionInvocationEvent.java
 ----
 class ActionInvocationEvent {
-  ActionInvocationEvent(final Object source, final Identifier actionIdentifier, final Object[] args)
+  ActionInvocationEvent(Object source, Identifier actionIdentifier, Object[] args)
   Object[] getArgs()
-  void setArgs(final Object[] args)
+  void setArgs(Object[] args)
   Object getProposed()     // <.>
 }
 ----

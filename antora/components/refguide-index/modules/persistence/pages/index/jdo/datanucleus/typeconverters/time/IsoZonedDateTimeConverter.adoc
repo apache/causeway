@@ -7,8 +7,8 @@
 .IsoZonedDateTimeConverter.java
 ----
 class IsoZonedDateTimeConverter {
-  String toDatastoreType(final ZonedDateTime offsetTime)
-  ZonedDateTime toMemberType(final String datastoreValue)
+  String toDatastoreType(ZonedDateTime offsetTime)
+  ZonedDateTime toMemberType(String datastoreValue)
 }
 ----
 

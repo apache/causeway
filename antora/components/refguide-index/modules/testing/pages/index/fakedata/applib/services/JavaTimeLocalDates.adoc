@@ -11,10 +11,10 @@ The current time ('now') is obtained from the _org.apache.isis.applib.services.c
 .JavaTimeLocalDates.java
 ----
 class JavaTimeLocalDates {
-  JavaTimeLocalDates(final FakeDataService fakeDataService)
-  LocalDate around(final Period period)     // <.>
-  LocalDate before(final Period period)     // <.>
-  LocalDate after(final Period period)     // <.>
+  JavaTimeLocalDates(FakeDataService fakeDataService)
+  LocalDate around(Period period)     // <.>
+  LocalDate before(Period period)     // <.>
+  LocalDate after(Period period)     // <.>
   LocalDate any()     // <.>
 }
 ----

@@ -13,7 +13,7 @@ There can be multiple implementations of this service registered, ordered as per
 .TableColumnVisibilityService.java
 ----
 interface TableColumnVisibilityService {
-  boolean hides(final Class<?> collectionType, final String memberId)     // <.>
+  boolean hides(Class<?> collectionType, String memberId)     // <.>
 }
 ----
 

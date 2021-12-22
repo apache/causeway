@@ -17,8 +17,8 @@ The similar xref:refguide:applib:index/services/tablecol/TableColumnVisibilitySe
 .TableColumnOrderService.java
 ----
 interface TableColumnOrderService {
-  List<String> orderParented(final Object parent, final String collectionId, final Class<?> collectionType, final List<String> propertyIds)     // <.>
-  List<String> orderStandalone(final Class<?> collectionType, final List<String> propertyIds)     // <.>
+  List<String> orderParented(Object parent, String collectionId, Class<?> collectionType, List<String> propertyIds)     // <.>
+  List<String> orderStandalone(Class<?> collectionType, List<String> propertyIds)     // <.>
 }
 ----
 

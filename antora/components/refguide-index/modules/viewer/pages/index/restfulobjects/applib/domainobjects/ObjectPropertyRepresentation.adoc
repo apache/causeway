@@ -7,7 +7,7 @@
 .ObjectPropertyRepresentation.java
 ----
 class ObjectPropertyRepresentation {
-  ObjectPropertyRepresentation(final JsonNode jsonNode)
+  ObjectPropertyRepresentation(JsonNode jsonNode)
 }
 ----
 

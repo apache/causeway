@@ -8,9 +8,9 @@
 ----
 class TitleBufferException {
   TitleBufferException()
-  TitleBufferException(final String msg)
-  TitleBufferException(final Throwable cause)
-  TitleBufferException(final String msg, final Throwable cause)
+  TitleBufferException(String msg)
+  TitleBufferException(Throwable cause)
+  TitleBufferException(String msg, Throwable cause)
   Throwable getCause()
 }
 ----

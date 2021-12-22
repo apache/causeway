@@ -13,7 +13,7 @@ If the domain object's JAXB annotations reference only a single XSD schema then 
 .Dto_downloadXsd.java
 ----
 class Dto_downloadXsd {
-  Object act(final String fileName, final IsisSchemas isisSchemas)     // <.>
+  Object act(String fileName, IsisSchemas isisSchemas)     // <.>
   String default0Act()     // <.>
   IsisSchemas default1Act()     // <.>
 }

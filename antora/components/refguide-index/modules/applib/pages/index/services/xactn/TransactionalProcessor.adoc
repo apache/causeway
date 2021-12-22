@@ -10,11 +10,11 @@ Provides the mechanism to run a block of code within a transaction boundary, usi
 ----
 interface TransactionalProcessor {
   Result<T> callTransactional(TransactionDefinition def, Callable<T> callable)     // <.>
-  Result<Void> runTransactional(final TransactionDefinition def, final ThrowingRunnable runnable)     // <.>
-  Result<T> callTransactional(final Propagation propagation, final Callable<T> callable)     // <.>
-  Result<Void> runTransactional(final Propagation propagation, final ThrowingRunnable runnable)     // <.>
-  Result<T> callWithinCurrentTransactionElseCreateNew(final Callable<T> callable)     // <.>
-  Result<Void> runWithinCurrentTransactionElseCreateNew(final ThrowingRunnable runnable)     // <.>
+  Result<Void> runTransactional(TransactionDefinition def, ThrowingRunnable runnable)     // <.>
+  Result<T> callTransactional(Propagation propagation, Callable<T> callable)     // <.>
+  Result<Void> runTransactional(Propagation propagation, ThrowingRunnable runnable)     // <.>
+  Result<T> callWithinCurrentTransactionElseCreateNew(Callable<T> callable)     // <.>
+  Result<Void> runWithinCurrentTransactionElseCreateNew(ThrowingRunnable runnable)     // <.>
 }
 ----
 

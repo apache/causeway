@@ -7,8 +7,8 @@
 .PersistentEntitiesAdapter.java
 ----
 class PersistentEntitiesAdapter {
-  List<Object> unmarshal(final OidsDto oidsDto)
-  OidsDto marshal(final Iterable<Object> domainObjects)
+  List<Object> unmarshal(OidsDto oidsDto)
+  OidsDto marshal(Iterable<Object> domainObjects)
 }
 ----
 

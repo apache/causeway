@@ -7,7 +7,7 @@
 .PermissionsEvaluationServiceAbstract.java
 ----
 class PermissionsEvaluationServiceAbstract {
-  ApplicationPermissionValueSet.Evaluation evaluate(final ApplicationFeatureId targetMemberId, final ApplicationPermissionMode mode, final Collection<ApplicationPermissionValue> permissionValues)
+  ApplicationPermissionValueSet.Evaluation evaluate(ApplicationFeatureId targetMemberId, ApplicationPermissionMode mode, Collection<ApplicationPermissionValue> permissionValues)
 }
 ----
 

@@ -7,11 +7,11 @@
 .RestfulResponse.java
 ----
 class RestfulResponse<T> {
-  RestfulResponse<JsonRepresentation> of(final Response response)
-  RestfulResponse<T> ofT(final Response response)
+  RestfulResponse<JsonRepresentation> of(Response response)
+  RestfulResponse<T> ofT(Response response)
   HttpStatusCode getStatus()
   T getEntity()
-  V getHeader(final Header<V> header)
+  V getHeader(Header<V> header)
   RestfulResponse<Q> wraps(Class<Q> cls)     // <.>
   String toString()
 }

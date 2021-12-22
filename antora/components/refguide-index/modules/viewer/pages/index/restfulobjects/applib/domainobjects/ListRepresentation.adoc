@@ -7,7 +7,7 @@
 .ListRepresentation.java
 ----
 class ListRepresentation {
-  ListRepresentation(final JsonNode jsonNode)
+  ListRepresentation(JsonNode jsonNode)
   JsonRepresentation getValue()
   LinkRepresentation getUp()
 }

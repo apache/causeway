@@ -15,7 +15,7 @@ interface ApplicationRoleRepository {
   Collection<ApplicationRole> findMatching(String search)     // <.>
   Optional<ApplicationRole> findByName(String roleName)
   Optional<ApplicationRole> findByNameCached(String roleName)
-  ApplicationRole upsert(final String name, final String roleDescription)
+  ApplicationRole upsert(String name, String roleDescription)
   void addRoleToUser(ApplicationRole role, ApplicationUser user)
   void removeRoleFromUser(ApplicationRole role, ApplicationUser user)
   boolean isAdminRole(ApplicationRole role)

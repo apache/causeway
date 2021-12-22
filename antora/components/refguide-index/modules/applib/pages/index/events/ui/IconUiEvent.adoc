@@ -17,9 +17,9 @@ The class itself is instantiated automatically by the framework.
 ----
 class IconUiEvent<S> {
   IconUiEvent()     // <.>
-  IconUiEvent(final S source)
+  IconUiEvent(S source)
   String getIconName()     // <.>
-  void setIconName(final String iconName)     // <.>
+  void setIconName(String iconName)     // <.>
 }
 ----
 

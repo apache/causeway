@@ -9,7 +9,7 @@ Provides an SPI to select from multiple xref:refguide:core:index/security/author
 .AuthorizorChooser.java
 ----
 interface AuthorizorChooser {
-  Authorizor chooseFrom(final List<Authorizor> authorizors)     // <.>
+  Authorizor chooseFrom(List<Authorizor> authorizors)     // <.>
 }
 ----
 

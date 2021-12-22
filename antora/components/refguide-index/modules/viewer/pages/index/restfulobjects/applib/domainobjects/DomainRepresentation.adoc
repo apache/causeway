@@ -7,11 +7,11 @@
 .DomainRepresentation.java
 ----
 class DomainRepresentation {
-  DomainRepresentation(final JsonNode jsonNode)
+  DomainRepresentation(JsonNode jsonNode)
   LinkRepresentation getSelf()
   JsonRepresentation getLinks()
-  LinkRepresentation getLinkWithRel(final Rel rel)
-  LinkRepresentation getLinkWithRel(final String rel)
+  LinkRepresentation getLinkWithRel(Rel rel)
+  LinkRepresentation getLinkWithRel(String rel)
   JsonRepresentation getExtensions()
 }
 ----

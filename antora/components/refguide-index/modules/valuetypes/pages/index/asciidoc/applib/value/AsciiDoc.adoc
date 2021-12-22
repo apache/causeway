@@ -10,10 +10,10 @@ Immutable value type holding pre-rendered HTML.
 ----
 class AsciiDoc {
   AsciiDoc()
-  AsciiDoc(final String adoc)
-  AsciiDoc valueOf(final String adoc)
+  AsciiDoc(String adoc)
+  AsciiDoc valueOf(String adoc)
   String asHtml()
-  boolean isEqualTo(final AsciiDoc other)
+  boolean isEqualTo(AsciiDoc other)
   String toString()
   void loadJRuby()     // <.>
 }

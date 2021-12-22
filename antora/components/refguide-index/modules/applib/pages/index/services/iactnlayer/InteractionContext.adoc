@@ -9,14 +9,14 @@ Provides the user and scenario specific environment for an xref:refguide:applib:
 .InteractionContext.java
 ----
 class InteractionContext {
-  InteractionContext ofUserWithSystemDefaults(final UserMemento user)     // <.>
+  InteractionContext ofUserWithSystemDefaults(UserMemento user)     // <.>
   UserLocale getLocale()
-  UnaryOperator<InteractionContext> switchUser(final UserMemento userMemento)     // <.>
-  UnaryOperator<InteractionContext> switchClock(final VirtualClock clock)     // <.>
-  UnaryOperator<InteractionContext> switchLocale(final UserLocale locale)     // <.>
-  UnaryOperator<InteractionContext> switchTimeZone(final ZoneId timeZone)     // <.>
-  UnaryOperator<T> combine(final UnaryOperator<T>... mappers)     // <.>
-  UnaryOperator<T> combine(final Stream<UnaryOperator<T>> mappers)     // <.>
+  UnaryOperator<InteractionContext> switchUser(UserMemento userMemento)     // <.>
+  UnaryOperator<InteractionContext> switchClock(VirtualClock clock)     // <.>
+  UnaryOperator<InteractionContext> switchLocale(UserLocale locale)     // <.>
+  UnaryOperator<InteractionContext> switchTimeZone(ZoneId timeZone)     // <.>
+  UnaryOperator<T> combine(UnaryOperator<T>... mappers)     // <.>
+  UnaryOperator<T> combine(Stream<UnaryOperator<T>> mappers)     // <.>
 }
 ----
 

@@ -8,16 +8,16 @@
 ----
 class LocalDateInterval {
   LocalDateInterval()
-  LocalDateInterval(final Interval interval)
-  LocalDateInterval(final LocalDate startDate, final LocalDate endDate)
-  LocalDateInterval(final LocalDate startDate, final LocalDate endDate, final IntervalEnding ending)
-  LocalDateInterval excluding(final LocalDate startDate, final LocalDate endDate)
-  LocalDateInterval including(final LocalDate startDate, final LocalDate endDate)
-  boolean equals(final Object obj)
+  LocalDateInterval(Interval interval)
+  LocalDateInterval(LocalDate startDate, LocalDate endDate)
+  LocalDateInterval(LocalDate startDate, LocalDate endDate, IntervalEnding ending)
+  LocalDateInterval excluding(LocalDate startDate, LocalDate endDate)
+  LocalDateInterval including(LocalDate startDate, LocalDate endDate)
+  boolean equals(Object obj)
   int hashCode()
   String toString()
   String toString(String format)
-  LocalDateInterval parseString(final String input)     // <.>
+  LocalDateInterval parseString(String input)     // <.>
   LocalDate endDateFromStartDate(LocalDate date)     // <.>
 }
 ----

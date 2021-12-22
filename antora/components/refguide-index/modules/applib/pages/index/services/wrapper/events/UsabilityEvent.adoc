@@ -11,7 +11,7 @@ If _#getReason()_ is `null` , then is usable; otherwise is disabled.
 .UsabilityEvent.java
 ----
 class UsabilityEvent {
-  UsabilityEvent(final Object source, final Identifier identifier)
+  UsabilityEvent(Object source, Identifier identifier)
 }
 ----
 

@@ -9,7 +9,7 @@
 enum CssClassFaPosition {
   LEFT
   RIGHT
-  boolean isLeftOrUnspecified(final CssClassFaPosition posistion)
+  boolean isLeftOrUnspecified(CssClassFaPosition posistion)
 }
 ----
 

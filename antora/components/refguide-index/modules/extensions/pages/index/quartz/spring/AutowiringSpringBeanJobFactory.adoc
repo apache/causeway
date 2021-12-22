@@ -7,7 +7,7 @@
 .AutowiringSpringBeanJobFactory.java
 ----
 class AutowiringSpringBeanJobFactory {
-  void setApplicationContext(final ApplicationContext context)
+  void setApplicationContext(ApplicationContext context)
 }
 ----
 

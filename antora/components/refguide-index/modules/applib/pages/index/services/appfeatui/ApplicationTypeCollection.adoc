@@ -9,7 +9,7 @@
 class ApplicationTypeCollection {
   public static final String LOGICAL_TYPE_NAME;
   ApplicationTypeCollection()
-  ApplicationTypeCollection(final ApplicationFeatureId featureId)
+  ApplicationTypeCollection(ApplicationFeatureId featureId)
   String getElementType()
   boolean isDerived()
 }

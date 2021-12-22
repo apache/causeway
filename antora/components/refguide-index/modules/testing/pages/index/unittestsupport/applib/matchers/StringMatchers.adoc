@@ -11,9 +11,9 @@ Hamcrest _org.hamcrest.Matcher_ implementations.
 class StringMatchers {
   Matcher<String> nonEmptyString()
   Matcher<String> nonEmptyStringOrNull()
-  Matcher<String> matches(final String regex)
-  Matcher<String> startsWith(final String expected)
-  Matcher<String> contains(final String expected)
+  Matcher<String> matches(String regex)
+  Matcher<String> startsWith(String expected)
+  Matcher<String> contains(String expected)
 }
 ----
 

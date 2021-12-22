@@ -8,7 +8,7 @@
 ----
 class MenuBarsAbstract {
   String getTnsAndSchemaLocation()
-  void setTnsAndSchemaLocation(final String tnsAndSchemaLocation)
+  void setTnsAndSchemaLocation(String tnsAndSchemaLocation)
   LinkedHashMap<String, ServiceActionLayoutData> getAllServiceActionsByObjectTypeAndId()
 }
 ----

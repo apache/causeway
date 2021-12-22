@@ -12,7 +12,7 @@ It is rendered as a (eg) <div class="clearfix visible-xs-block ...">
 ----
 class BS3ClearFixVisible {
   CssDisplay getCssDisplay()
-  void setCssDisplay(final CssDisplay cssDisplay)
+  void setCssDisplay(CssDisplay cssDisplay)
   String toCssClass()
 }
 ----

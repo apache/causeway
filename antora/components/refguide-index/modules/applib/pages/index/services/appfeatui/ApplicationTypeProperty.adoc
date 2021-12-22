@@ -9,7 +9,7 @@
 class ApplicationTypeProperty {
   public static final String LOGICAL_TYPE_NAME;
   ApplicationTypeProperty()
-  ApplicationTypeProperty(final ApplicationFeatureId featureId)
+  ApplicationTypeProperty(ApplicationFeatureId featureId)
   String getReturnType()
   boolean isDerived()
   Integer getMaxLength()

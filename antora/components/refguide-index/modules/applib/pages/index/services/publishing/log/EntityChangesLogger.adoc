@@ -8,7 +8,7 @@
 ----
 class EntityChangesLogger {
   boolean isEnabled()
-  void onChanging(final EntityChanges changingEntities)
+  void onChanging(EntityChanges changingEntities)
 }
 ----
 

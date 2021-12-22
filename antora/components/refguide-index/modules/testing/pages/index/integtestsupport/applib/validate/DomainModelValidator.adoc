@@ -7,15 +7,15 @@
 .DomainModelValidator.java
 ----
 class DomainModelValidator {
-  DomainModelValidator(final ServiceRegistry registry)
-  DomainModelValidator(final SpecificationLoader specificationLoader, final IsisConfiguration configuration, final IsisSystemEnvironment isisSystemEnvironment)
+  DomainModelValidator(ServiceRegistry registry)
+  DomainModelValidator(SpecificationLoader specificationLoader, IsisConfiguration configuration, IsisSystemEnvironment isisSystemEnvironment)
   void assertValid()     // <.>
   void throwIfInvalid()     // <.>
   Set<ValidationFailure> getFailures()
-  Stream<ValidationFailure> streamFailures(final Predicate<Identifier> filter)
-  Stream<ValidationFailure> streamFailuresMatchingOriginatingIdentifier(final Identifier identifier)
-  void assertAnyFailuresContaining(final Identifier identifier, final String messageSnippet)     // <.>
-  void assertAnyOfContainingAnyFailures(final Can<Identifier> classIdentifiers, final String messageSnippet)     // <.>
+  Stream<ValidationFailure> streamFailures(Predicate<Identifier> filter)
+  Stream<ValidationFailure> streamFailuresMatchingOriginatingIdentifier(Identifier identifier)
+  void assertAnyFailuresContaining(Identifier identifier, String messageSnippet)     // <.>
+  void assertAnyOfContainingAnyFailures(Can<Identifier> classIdentifiers, String messageSnippet)     // <.>
 }
 ----
 

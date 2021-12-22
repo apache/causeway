@@ -7,8 +7,8 @@
 .InjectIntoJMockAction.java
 ----
 class InjectIntoJMockAction {
-  void describeTo(final Description description)
-  Object invoke(final Invocation invocation)
+  void describeTo(Description description)
+  Object invoke(Invocation invocation)
   Action injectInto()     // <.>
 }
 ----

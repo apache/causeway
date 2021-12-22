@@ -7,8 +7,8 @@
 .IsisChangesDtoConverter.java
 ----
 class IsisChangesDtoConverter {
-  String toDatastoreType(final ChangesDto memberValue)
-  ChangesDto toMemberType(final String datastoreValue)
+  String toDatastoreType(ChangesDto memberValue)
+  ChangesDto toMemberType(String datastoreValue)
 }
 ----
 

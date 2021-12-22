@@ -24,8 +24,8 @@ public class NoSugarThanksSpec extends SpecificationNot {
 .SpecificationNot.java
 ----
 class SpecificationNot {
-  SpecificationNot(final Specification specification)
-  String satisfies(final Object obj)
+  SpecificationNot(Specification specification)
+  String satisfies(Object obj)
 }
 ----
 

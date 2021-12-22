@@ -7,7 +7,7 @@
 .SessionLoggingServiceLogging.java
 ----
 class SessionLoggingServiceLogging {
-  void log(final Type type, final String username, final Date date, final CausedBy causedBy, final String sessionId)
+  void log(Type type, String username, Date date, CausedBy causedBy, String sessionId)
 }
 ----
 

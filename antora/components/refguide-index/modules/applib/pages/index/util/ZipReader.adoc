@@ -9,8 +9,8 @@ Zip utility for processing compressed input.
 .ZipReader.java
 ----
 class ZipReader {
-  void read(final InputStream inputStream, final ZipVisistor zipVisistor)
-  Optional<R> digest(final InputStream inputStream, final ZipDigester<R> zipDigester)
+  void read(InputStream inputStream, ZipVisistor zipVisistor)
+  Optional<R> digest(InputStream inputStream, ZipDigester<R> zipDigester)
 }
 ----
 

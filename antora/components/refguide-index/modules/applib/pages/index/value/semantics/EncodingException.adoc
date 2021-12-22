@@ -10,9 +10,9 @@ Indicates that encoding or decoding has failed.
 ----
 class EncodingException {
   EncodingException()
-  EncodingException(final String msg)
-  EncodingException(final String msg, final Throwable cause)
-  EncodingException(final Throwable cause)
+  EncodingException(String msg)
+  EncodingException(String msg, Throwable cause)
+  EncodingException(Throwable cause)
 }
 ----
 

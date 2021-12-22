@@ -7,8 +7,8 @@
 .IsisAsciiDocConverter.java
 ----
 class IsisAsciiDocConverter {
-  String toDatastoreType(final AsciiDoc memberValue)
-  AsciiDoc toMemberType(final String datastoreValue)
+  String toDatastoreType(AsciiDoc memberValue)
+  AsciiDoc toMemberType(String datastoreValue)
 }
 ----
 

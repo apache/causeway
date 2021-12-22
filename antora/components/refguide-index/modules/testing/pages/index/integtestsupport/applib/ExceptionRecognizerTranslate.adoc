@@ -7,7 +7,7 @@
 .ExceptionRecognizerTranslate.java
 ----
 class ExceptionRecognizerTranslate {
-  void handleTestExecutionException(final ExtensionContext extensionContext, final Throwable throwable)
+  void handleTestExecutionException(ExtensionContext extensionContext, Throwable throwable)
 }
 ----
 

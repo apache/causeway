@@ -9,7 +9,7 @@ Superclass of exceptions which indicate an attempt to interact with a class memb
 .HiddenException.java
 ----
 class HiddenException {
-  HiddenException(final InteractionEvent interactionEvent)
+  HiddenException(InteractionEvent interactionEvent)
   VisibilityEvent getInteractionEvent()
 }
 ----

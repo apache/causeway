@@ -22,8 +22,8 @@ interface Query<T> {
   Query<T> withRange(long... range)
   Query<T> withStart(long start)
   Query<T> withLimit(long limit)
-  Query<T> allInstances(final Class<T> resultType)
-  NamedQuery<T> named(final Class<T> resultType, final String queryName)
+  Query<T> allInstances(Class<T> resultType)
+  NamedQuery<T> named(Class<T> resultType, String queryName)
 }
 ----
 

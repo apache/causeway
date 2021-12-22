@@ -9,7 +9,7 @@ Returns strings representing either credit card numbers or types (visa, amex and
 .CreditCards.java
 ----
 class CreditCards {
-  CreditCards(final FakeDataService fakeDataService, final FakeValuesService fakeValuesService)
+  CreditCards(FakeDataService fakeDataService, FakeValuesService fakeValuesService)
   String number()
   String type()
 }

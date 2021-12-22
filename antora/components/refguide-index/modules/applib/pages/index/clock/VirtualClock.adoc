@@ -11,40 +11,40 @@ Works in connection with xref:refguide:applib:index/services/iactnlayer/Interact
 interface VirtualClock {
   Instant nowAsInstant()     // <.>
   VirtualClock system()     // <.>
-  VirtualClock nowAt(final Instant virtualNow)     // <.>
-  VirtualClock nowAt(final java.time.LocalDate virtualNow)     // <.>
-  VirtualClock nowAt(final java.time.LocalDateTime virtualNow)
-  VirtualClock nowAt(final java.time.OffsetDateTime virtualNow)
-  VirtualClock nowAt(final java.time.ZonedDateTime virtualNow)
-  VirtualClock nowAt(final java.util.Date virtualNow)
-  VirtualClock nowAt(final org.joda.time.LocalDate virtualNow)     // <.>
-  VirtualClock nowAt(final org.joda.time.LocalDateTime virtualNow)     // <.>
-  VirtualClock nowAt(final org.joda.time.DateTime virtualNow)     // <.>
-  VirtualClock frozenAt(final Instant frozenAt)     // <.>
-  VirtualClock frozenAt(final java.time.LocalDate frozenAt)
-  VirtualClock frozenAt(final java.time.LocalDateTime frozenAt)
-  VirtualClock frozenAt(final java.time.OffsetDateTime frozenAt)
-  VirtualClock frozenAt(final java.time.ZonedDateTime frozenAt)
-  VirtualClock frozenAt(final java.util.Date frozenAt)
-  VirtualClock frozenAt(final org.joda.time.LocalDate frozenAt)     // <.>
-  VirtualClock frozenAt(final org.joda.time.LocalDateTime frozenAt)     // <.>
-  VirtualClock frozenAt(final org.joda.time.DateTime frozenAt)     // <.>
+  VirtualClock nowAt(Instant virtualNow)     // <.>
+  VirtualClock nowAt(java.time.LocalDate virtualNow)     // <.>
+  VirtualClock nowAt(java.time.LocalDateTime virtualNow)
+  VirtualClock nowAt(java.time.OffsetDateTime virtualNow)
+  VirtualClock nowAt(java.time.ZonedDateTime virtualNow)
+  VirtualClock nowAt(java.util.Date virtualNow)
+  VirtualClock nowAt(org.joda.time.LocalDate virtualNow)     // <.>
+  VirtualClock nowAt(org.joda.time.LocalDateTime virtualNow)     // <.>
+  VirtualClock nowAt(org.joda.time.DateTime virtualNow)     // <.>
+  VirtualClock frozenAt(Instant frozenAt)     // <.>
+  VirtualClock frozenAt(java.time.LocalDate frozenAt)
+  VirtualClock frozenAt(java.time.LocalDateTime frozenAt)
+  VirtualClock frozenAt(java.time.OffsetDateTime frozenAt)
+  VirtualClock frozenAt(java.time.ZonedDateTime frozenAt)
+  VirtualClock frozenAt(java.util.Date frozenAt)
+  VirtualClock frozenAt(org.joda.time.LocalDate frozenAt)     // <.>
+  VirtualClock frozenAt(org.joda.time.LocalDateTime frozenAt)     // <.>
+  VirtualClock frozenAt(org.joda.time.DateTime frozenAt)     // <.>
   VirtualClock frozenTestClock()     // <.>
   long nowAsEpochMilli()     // <.>
-  LocalDate nowAsLocalDate(final ZoneId zoneId)     // <.>
+  LocalDate nowAsLocalDate(ZoneId zoneId)     // <.>
   LocalDate nowAsLocalDate()     // <.>
-  LocalDateTime nowAsLocalDateTime(final ZoneId zoneId)     // <.>
+  LocalDateTime nowAsLocalDateTime(ZoneId zoneId)     // <.>
   LocalDateTime nowAsLocalDateTime()     // <.>
-  OffsetDateTime nowAsOffsetDateTime(final ZoneId zoneId)     // <.>
+  OffsetDateTime nowAsOffsetDateTime(ZoneId zoneId)     // <.>
   OffsetDateTime nowAsOffsetDateTime()     // <.>
   java.util.Date nowAsJavaUtilDate()     // <.>
   java.sql.Timestamp nowAsJavaSqlTimestamp()     // <.>
   XMLGregorianCalendar nowAsXmlGregorianCalendar()     // <.>
-  org.joda.time.DateTime nowAsJodaDateTime(final ZoneId zoneId)     // <.>
+  org.joda.time.DateTime nowAsJodaDateTime(ZoneId zoneId)     // <.>
   org.joda.time.DateTime nowAsJodaDateTime()     // <.>
-  org.joda.time.LocalDateTime nowAsJodaLocalDateTime(final ZoneId zoneId)     // <.>
+  org.joda.time.LocalDateTime nowAsJodaLocalDateTime(ZoneId zoneId)     // <.>
   org.joda.time.LocalDateTime nowAsJodaLocalDateTime()     // <.>
-  org.joda.time.LocalDate nowAsJodaLocalDate(final ZoneId zoneId)     // <.>
+  org.joda.time.LocalDate nowAsJodaLocalDate(ZoneId zoneId)     // <.>
   org.joda.time.LocalDate nowAsJodaLocalDate()     // <.>
 }
 ----

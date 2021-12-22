@@ -9,7 +9,7 @@ Provides the ability to download the framework's internal metamodel for any doma
 .Object_downloadMetamodelXml.java
 ----
 class Object_downloadMetamodelXml {
-  Object act(final String fileName)
+  Object act(String fileName)
   String default0Act()     // <.>
 }
 ----

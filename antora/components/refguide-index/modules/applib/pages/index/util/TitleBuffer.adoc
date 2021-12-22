@@ -14,27 +14,27 @@ The benefits of using this class is that null references are safely ignored (rat
 ----
 class TitleBuffer {
   TitleBuffer()     // <.>
-  TitleBuffer(final Object object)     // <.>
-  TitleBuffer(final Object object, final String defaultTitle)     // <.>
-  TitleBuffer(final String text)     // <.>
-  boolean isEmpty(final Object object)     // <.>
-  boolean isEmpty(final String text)     // <.>
-  TitleBuffer append(final int number)     // <.>
-  TitleBuffer append(final Object object)     // <.>
-  TitleBuffer append(final Object object, final String defaultValue)     // <.>
-  TitleBuffer append(final String text)     // <.>
-  TitleBuffer append(final String joiner, final Object object)     // <.>
-  TitleBuffer append(final String joiner, final Object object, final String defaultTitle)     // <.>
-  TitleBuffer append(final String joiner, final String text)     // <.>
+  TitleBuffer(Object object)     // <.>
+  TitleBuffer(Object object, String defaultTitle)     // <.>
+  TitleBuffer(String text)     // <.>
+  boolean isEmpty(Object object)     // <.>
+  boolean isEmpty(String text)     // <.>
+  TitleBuffer append(int number)     // <.>
+  TitleBuffer append(Object object)     // <.>
+  TitleBuffer append(Object object, String defaultValue)     // <.>
+  TitleBuffer append(String text)     // <.>
+  TitleBuffer append(String joiner, Object object)     // <.>
+  TitleBuffer append(String joiner, Object object, String defaultTitle)     // <.>
+  TitleBuffer append(String joiner, String text)     // <.>
   TitleBuffer appendSpace()     // <.>
-  TitleBuffer concat(final Object object)     // <.>
-  TitleBuffer concat(final Object object, final String defaultValue)     // <.>
-  TitleBuffer concat(final String text)     // <.>
-  TitleBuffer concat(final String joiner, final String text)     // <.>
-  TitleBuffer concat(final String joiner, final Object object)     // <.>
-  TitleBuffer concat(final String joiner, final Object object, final String defaultValue)     // <.>
+  TitleBuffer concat(Object object)     // <.>
+  TitleBuffer concat(Object object, String defaultValue)     // <.>
+  TitleBuffer concat(String text)     // <.>
+  TitleBuffer concat(String joiner, String text)     // <.>
+  TitleBuffer concat(String joiner, Object object)     // <.>
+  TitleBuffer concat(String joiner, Object object, String defaultValue)     // <.>
   String toString()     // <.>
-  TitleBuffer truncate(final int noWords)     // <.>
+  TitleBuffer truncate(int noWords)     // <.>
 }
 ----
 

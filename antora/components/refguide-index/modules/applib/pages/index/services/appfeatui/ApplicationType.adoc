@@ -9,7 +9,7 @@
 class ApplicationType {
   public static final String LOGICAL_TYPE_NAME;
   ApplicationType()
-  ApplicationType(final ApplicationFeatureId featureId)
+  ApplicationType(ApplicationFeatureId featureId)
   List<ApplicationTypeAction> getActions()
   List<ApplicationTypeProperty> getProperties()
   List<ApplicationTypeCollection> getCollections()

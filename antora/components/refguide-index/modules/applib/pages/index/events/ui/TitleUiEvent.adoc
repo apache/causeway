@@ -17,9 +17,9 @@ The class itself is instantiated automatically by the framework.
 ----
 class TitleUiEvent<S> {
   TitleUiEvent()     // <.>
-  TitleUiEvent(final S source)
-  void setTitle(final String title)     // <.>
-  void setTranslatableTitle(final TranslatableString translatableTitle)     // <.>
+  TitleUiEvent(S source)
+  void setTitle(String title)     // <.>
+  void setTranslatableTitle(TranslatableString translatableTitle)     // <.>
 }
 ----
 

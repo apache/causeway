@@ -10,7 +10,7 @@ Implementation that supports impersonation, using the _HttpSession_ to store the
 ----
 class ImpersonatedUserHolderUsingHttpSession {
   boolean supportsImpersonation()
-  void setUserMemento(final UserMemento userMemento)
+  void setUserMemento(UserMemento userMemento)
   Optional<UserMemento> getUserMemento()
   void clearUserMemento()
 }

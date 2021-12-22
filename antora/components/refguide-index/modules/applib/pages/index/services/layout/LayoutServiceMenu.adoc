@@ -10,7 +10,7 @@ Simply provides a UI to allow layouts (obtained from xref:refguide:applib:index/
 ----
 class LayoutServiceMenu {
   public static final String LOGICAL_TYPE_NAME;
-  LayoutServiceMenu(final LayoutService layoutService)
+  LayoutServiceMenu(LayoutService layoutService)
 }
 ----
 

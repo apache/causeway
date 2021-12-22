@@ -11,14 +11,14 @@ The xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] has 
 .Execution.java
 ----
 class Execution<T, E> {
-  void setParent(final Execution<?, ?> parent)     // <.>
+  void setParent(Execution<?, ?> parent)     // <.>
   List<Execution<?, ?>> getChildren()     // <.>
-  void setEvent(final E event)     // <.>
-  Timestamp start(final ClockService clockService, final MetricsService metricsService)
-  void setCompletedAt(final Timestamp completedAt, final MetricsService metricsService)     // <.>
-  void setReturned(final Object returned)     // <.>
-  void setThrew(final Exception threw)     // <.>
-  void setDto(final T executionDto)     // <.>
+  void setEvent(E event)     // <.>
+  Timestamp start(ClockService clockService, MetricsService metricsService)
+  void setCompletedAt(Timestamp completedAt, MetricsService metricsService)     // <.>
+  void setReturned(Object returned)     // <.>
+  void setThrew(Exception threw)     // <.>
+  void setDto(T executionDto)     // <.>
 }
 ----
 

@@ -12,7 +12,7 @@ The intention is that viewers provide an implementation of this service.. Note t
 ----
 interface ImpersonatedUserHolder {
   boolean supportsImpersonation()     // <.>
-  void setUserMemento(final UserMemento userMemento)     // <.>
+  void setUserMemento(UserMemento userMemento)     // <.>
   Optional<UserMemento> getUserMemento()
   void clearUserMemento()
 }

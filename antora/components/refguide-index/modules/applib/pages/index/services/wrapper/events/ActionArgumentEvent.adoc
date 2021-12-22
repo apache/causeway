@@ -13,7 +13,7 @@ Called once per argument, and before xref:refguide:applib:index/services/wrapper
 .ActionArgumentEvent.java
 ----
 class ActionArgumentEvent {
-  ActionArgumentEvent(final Object source, final Identifier actionIdentifier, final Object[] args, final int position)
+  ActionArgumentEvent(Object source, Identifier actionIdentifier, Object[] args, int position)
   Object[] getArgs()
   int getPosition()     // <.>
   Object getProposed()

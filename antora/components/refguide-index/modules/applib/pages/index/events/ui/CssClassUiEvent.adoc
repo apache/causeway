@@ -17,8 +17,8 @@ The class itself is instantiated automatically by the framework.
 ----
 class CssClassUiEvent<S> {
   CssClassUiEvent()     // <.>
-  CssClassUiEvent(final S source)
-  void setCssClass(final String cssClass)     // <.>
+  CssClassUiEvent(S source)
+  void setCssClass(String cssClass)     // <.>
 }
 ----
 

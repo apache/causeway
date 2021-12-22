@@ -9,11 +9,11 @@ Returns random `char` values, optionally constrained within a range,
 .Chars.java
 ----
 class Chars {
-  Chars(final FakeDataService fakeDataService)
+  Chars(FakeDataService fakeDataService)
   char upper()     // <.>
   char lower()     // <.>
   char digit()     // <.>
-  char anyOf(final String s)     // <.>
+  char anyOf(String s)     // <.>
   char any()     // <.>
 }
 ----

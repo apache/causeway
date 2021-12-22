@@ -11,7 +11,7 @@ If _#getReason()_ is not `null` then provides the reason why the collection is d
 .CollectionUsabilityEvent.java
 ----
 class CollectionUsabilityEvent {
-  CollectionUsabilityEvent(final Object source, final Identifier identifier)
+  CollectionUsabilityEvent(Object source, Identifier identifier)
 }
 ----
 

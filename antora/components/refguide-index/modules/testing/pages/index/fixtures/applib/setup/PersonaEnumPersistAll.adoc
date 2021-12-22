@@ -7,9 +7,9 @@
 .PersonaEnumPersistAll.java
 ----
 class PersonaEnumPersistAll<E, T> {
-  PersonaEnumPersistAll(final Class<E> personaEnumClass)
+  PersonaEnumPersistAll(Class<E> personaEnumClass)
   Integer getNumber()
-  void setNumber(final Integer number)
+  void setNumber(Integer number)
   List<T> getObjects()
   FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy()
 }

@@ -7,7 +7,7 @@
 .VersionRepresentation.java
 ----
 class VersionRepresentation {
-  VersionRepresentation(final JsonNode jsonNode)
+  VersionRepresentation(JsonNode jsonNode)
   LinkRepresentation getUp()
   JsonRepresentation getOptionalCapabilities()
 }

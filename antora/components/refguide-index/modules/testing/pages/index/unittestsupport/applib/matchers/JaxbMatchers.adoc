@@ -9,7 +9,7 @@ Hamcrest _Matcher_ implementations for JAXB XML elements.
 .JaxbMatchers.java
 ----
 class JaxbMatchers {
-  Matcher<? super T> isEquivalentTo(final T expected)     // <.>
+  Matcher<? super T> isEquivalentTo(T expected)     // <.>
 }
 ----
 

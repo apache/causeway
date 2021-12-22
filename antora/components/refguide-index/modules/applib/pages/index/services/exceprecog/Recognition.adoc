@@ -11,7 +11,7 @@ Returned by _ExceptionRecognizer#recognize(Throwable)_ when the exception recogn
 .Recognition.java
 ----
 class Recognition {
-  Optional<Recognition> of(final Category category, final String reason)     // <.>
+  Optional<Recognition> of(Category category, String reason)     // <.>
   String toMessage(TranslationService translationService)     // <.>
   String toMessageNoCategory(TranslationService translationService)     // <.>
 }

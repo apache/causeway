@@ -8,10 +8,10 @@
 ----
 interface CalendarService {
   LocalDate beginningOfMonth()     // <.>
-  LocalDate beginningOfMonth(final LocalDate date)
+  LocalDate beginningOfMonth(LocalDate date)
   LocalDate beginningOfQuarter()     // <.>
   LocalDate beginningOfNextQuarter()     // <.>
-  LocalDate beginningOfQuarter(final LocalDate date)
+  LocalDate beginningOfQuarter(LocalDate date)
 }
 ----
 

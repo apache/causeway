@@ -81,8 +81,8 @@ class RestfulClient {
   ActionParameterListBuilder arguments()
   ResponseDigest<T> digest(Response response, Class<T> entityType)
   ResponseDigest<T> digestList(Response response, Class<T> entityType, GenericType<List<T>> genericType)
-  CompletableFuture<ResponseDigest<T>> digest(final Future<Response> asyncResponse, final Class<T> entityType)
-  CompletableFuture<ResponseDigest<T>> digestList(final Future<Response> asyncResponse, final Class<T> entityType, GenericType<List<T>> genericType)
+  CompletableFuture<ResponseDigest<T>> digest(Future<Response> asyncResponse, Class<T> entityType)
+  CompletableFuture<ResponseDigest<T>> digestList(Future<Response> asyncResponse, Class<T> entityType, GenericType<List<T>> genericType)
 }
 ----
 

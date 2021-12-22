@@ -8,7 +8,7 @@
 ----
 class ApplicationTypeMember {
   public static final String LOGICAL_TYPE_NAME;
-  ApplicationTypeMember(final ApplicationFeatureId featureId)
+  ApplicationTypeMember(ApplicationFeatureId featureId)
   String getMemberName()
 }
 ----

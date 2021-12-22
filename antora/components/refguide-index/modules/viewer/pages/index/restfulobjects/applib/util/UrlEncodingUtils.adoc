@@ -8,12 +8,12 @@
 ----
 class UrlEncodingUtils {
   public static final Function<String, String> FUNCTION;
-  String urlDecode(final String string)
-  List<String> urlDecode(final List<String> values)
-  String[] urlDecode(final String[] values)
-  String urlEncode(final JsonNode jsonNode)
-  String urlEncode(final JsonRepresentation jsonRepresentation)
-  String urlEncode(final String str)
+  String urlDecode(String string)
+  List<String> urlDecode(List<String> values)
+  String[] urlDecode(String[] values)
+  String urlEncode(JsonNode jsonNode)
+  String urlEncode(JsonRepresentation jsonRepresentation)
+  String urlEncode(String str)
 }
 ----
 

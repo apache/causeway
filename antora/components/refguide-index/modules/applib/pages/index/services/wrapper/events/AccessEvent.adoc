@@ -11,7 +11,7 @@ Analogous to xref:refguide:applib:index/services/wrapper/events/ValidityEvent.ad
 .AccessEvent.java
 ----
 class AccessEvent {
-  AccessEvent(final Object source, final Identifier identifier)
+  AccessEvent(Object source, Identifier identifier)
 }
 ----
 

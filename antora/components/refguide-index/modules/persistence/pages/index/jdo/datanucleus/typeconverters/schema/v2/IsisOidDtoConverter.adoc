@@ -7,8 +7,8 @@
 .IsisOidDtoConverter.java
 ----
 class IsisOidDtoConverter {
-  String toDatastoreType(final OidDto memberValue)
-  OidDto toMemberType(final String datastoreValue)
+  String toDatastoreType(OidDto memberValue)
+  OidDto toMemberType(String datastoreValue)
 }
 ----
 

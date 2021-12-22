@@ -9,7 +9,7 @@ Very simple alternative to xref:refguide:applib:index/util/ReasonBuffer.adoc[Rea
 .Reasons.java
 ----
 class Reasons {
-  String coalesce(final String... reasons)
+  String coalesce(String... reasons)
 }
 ----
 

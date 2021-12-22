@@ -9,9 +9,9 @@ Utilities for manipulating parsing JODA _Period_ s.
 .JodaPeriodUtils.java
 ----
 class JodaPeriodUtils {
-  Period asPeriod(final String inputStr)
-  String asString(final Period period)
-  String asSimpleString(final Period period)
+  Period asPeriod(String inputStr)
+  String asString(Period period)
+  String asSimpleString(Period period)
 }
 ----
 

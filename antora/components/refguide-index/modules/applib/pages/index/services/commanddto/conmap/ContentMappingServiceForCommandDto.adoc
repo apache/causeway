@@ -7,8 +7,8 @@
 .ContentMappingServiceForCommandDto.java
 ----
 class ContentMappingServiceForCommandDto {
-  Object map(final Object object, final List<MediaType> acceptableMediaTypes)
-  CommandDto asProcessedDto(final Object object)
+  Object map(Object object, List<MediaType> acceptableMediaTypes)
+  CommandDto asProcessedDto(Object object)
 }
 ----
 

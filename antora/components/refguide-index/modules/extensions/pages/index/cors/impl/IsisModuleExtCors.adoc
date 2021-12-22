@@ -7,7 +7,7 @@
 .IsisModuleExtCors.java
 ----
 class IsisModuleExtCors {
-  FilterRegistrationBean<Filter> createCorsFilterRegistration(final IsisConfiguration isisConfiguration, final RestEasyConfiguration restEasyConfiguration)
+  FilterRegistrationBean<Filter> createCorsFilterRegistration(IsisConfiguration isisConfiguration, RestEasyConfiguration restEasyConfiguration)
 }
 ----
 

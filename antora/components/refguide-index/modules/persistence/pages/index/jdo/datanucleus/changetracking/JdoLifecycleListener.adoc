@@ -14,20 +14,20 @@
 .JdoLifecycleListener.java
 ----
 class JdoLifecycleListener {
-  void postCreate(final InstanceLifecycleEvent event)
-  void preAttach(final InstanceLifecycleEvent event)
-  void postAttach(final InstanceLifecycleEvent event)
-  void postLoad(final InstanceLifecycleEvent event)
-  void preStore(final InstanceLifecycleEvent event)
-  void postStore(final InstanceLifecycleEvent event)
-  void preDirty(final InstanceLifecycleEvent event)
-  void postDirty(final InstanceLifecycleEvent event)
-  void preDelete(final InstanceLifecycleEvent event)
-  void postDelete(final InstanceLifecycleEvent event)
-  void preClear(final InstanceLifecycleEvent event)     // <.>
-  void postClear(final InstanceLifecycleEvent event)     // <.>
-  void preDetach(final InstanceLifecycleEvent event)
-  void postDetach(final InstanceLifecycleEvent event)
+  void postCreate(InstanceLifecycleEvent event)
+  void preAttach(InstanceLifecycleEvent event)
+  void postAttach(InstanceLifecycleEvent event)
+  void postLoad(InstanceLifecycleEvent event)
+  void preStore(InstanceLifecycleEvent event)
+  void postStore(InstanceLifecycleEvent event)
+  void preDirty(InstanceLifecycleEvent event)
+  void postDirty(InstanceLifecycleEvent event)
+  void preDelete(InstanceLifecycleEvent event)
+  void postDelete(InstanceLifecycleEvent event)
+  void preClear(InstanceLifecycleEvent event)     // <.>
+  void postClear(InstanceLifecycleEvent event)     // <.>
+  void preDetach(InstanceLifecycleEvent event)
+  void postDetach(InstanceLifecycleEvent event)
 }
 ----
 

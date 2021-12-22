@@ -8,8 +8,8 @@
 ----
 class IsisActions {
   Action injectInto()
-  Action returnEach(final T... values)
-  Action returnArgument(final int i)
+  Action returnEach(T... values)
+  Action returnArgument(int i)
   Action returnNewTransientInstance()
 }
 ----

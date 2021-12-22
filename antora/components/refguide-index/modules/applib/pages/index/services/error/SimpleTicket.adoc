@@ -16,10 +16,10 @@ so that it can be stored by the Wicket viewer as a Wicket model.
 .SimpleTicket.java
 ----
 class SimpleTicket {
-  SimpleTicket(final String reference, final String userMessage, final String details)
-  SimpleTicket(final String reference, final String userMessage, final String details, final StackTracePolicy stackTracePolicy)
-  SimpleTicket(final String reference, final String userMessage, final String details, final String kittenUrl)
-  SimpleTicket(final String reference, final String userMessage, final String details, final StackTracePolicy stackTracePolicy, final String kittenUrl)
+  SimpleTicket(String reference, String userMessage, String details)
+  SimpleTicket(String reference, String userMessage, String details, StackTracePolicy stackTracePolicy)
+  SimpleTicket(String reference, String userMessage, String details, String kittenUrl)
+  SimpleTicket(String reference, String userMessage, String details, StackTracePolicy stackTracePolicy, String kittenUrl)
   String getReference()
   String getUserMessage()
   String getDetails()

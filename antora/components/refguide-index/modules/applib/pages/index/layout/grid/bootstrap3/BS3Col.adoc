@@ -14,29 +14,29 @@ It is rendered as a (eg) <div class="col-md-4 ...">
 ----
 class BS3Col {
   String getId()     // <.>
-  void setId(final String id)
+  void setId(String id)
   int getSpan()
-  void setSpan(final int span)
+  void setSpan(int span)
   Boolean isUnreferencedActions()     // <.>
-  void setUnreferencedActions(final Boolean unreferencedActions)
+  void setUnreferencedActions(Boolean unreferencedActions)
   Boolean isUnreferencedCollections()     // <.>
-  void setUnreferencedCollections(final Boolean unreferencedCollections)
+  void setUnreferencedCollections(Boolean unreferencedCollections)
   DomainObjectLayoutData getDomainObject()     // <.>
-  void setDomainObject(final DomainObjectLayoutData domainObjectLayoutData)
+  void setDomainObject(DomainObjectLayoutData domainObjectLayoutData)
   List<SizeSpan> getSizeSpans()
-  void setSizeSpans(final List<SizeSpan> sizeSpans)
+  void setSizeSpans(List<SizeSpan> sizeSpans)
   List<ActionLayoutData> getActions()
-  void setActions(final List<ActionLayoutData> actions)
+  void setActions(List<ActionLayoutData> actions)
   List<BS3Row> getRows()
-  void setRows(final List<BS3Row> rows)
+  void setRows(List<BS3Row> rows)
   List<BS3TabGroup> getTabGroups()
-  void setTabGroups(final List<BS3TabGroup> tabGroups)
+  void setTabGroups(List<BS3TabGroup> tabGroups)
   List<FieldSet> getFieldSets()
-  void setFieldSets(final List<FieldSet> fieldSets)
+  void setFieldSets(List<FieldSet> fieldSets)
   List<CollectionLayoutData> getCollections()
-  void setCollections(final List<CollectionLayoutData> collections)
+  void setCollections(List<CollectionLayoutData> collections)
   String getMetadataError()     // <.>
-  void setMetadataError(final String metadataError)
+  void setMetadataError(String metadataError)
   String toCssClass()
   String toString()
 }

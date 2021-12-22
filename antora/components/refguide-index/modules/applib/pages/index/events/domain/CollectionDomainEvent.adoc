@@ -14,7 +14,7 @@ The class itself is instantiated automatically by the framework using a no-arg c
 ----
 class CollectionDomainEvent<S, T> {
   CollectionDomainEvent()     // <.>
-  CollectionDomainEvent(final S source)     // <.>
+  CollectionDomainEvent(S source)     // <.>
   String toString()
 }
 ----

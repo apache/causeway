@@ -9,7 +9,7 @@ Returns random but well-formed _URL_ s.
 .Urls.java
 ----
 class Urls {
-  Urls(final FakeDataService fakeDataService)
+  Urls(FakeDataService fakeDataService)
   URL any()
 }
 ----

@@ -11,7 +11,7 @@ Requires that the view model is a JAXB view model, and implements the xref:refgu
 .Dto_downloadXml.java
 ----
 class Dto_downloadXml {
-  Object act(final String fileName)
+  Object act(String fileName)
   String default0Act()
 }
 ----

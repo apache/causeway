@@ -9,7 +9,7 @@ Returns random xref:refguide:applib:index/value/Blob.adoc[Blob] values, optional
 .IsisBlobs.java
 ----
 class IsisBlobs {
-  IsisBlobs(final FakeDataService fakeDataService)
+  IsisBlobs(FakeDataService fakeDataService)
   Blob any()
   Blob anyJpg()
   Blob anyPdf()

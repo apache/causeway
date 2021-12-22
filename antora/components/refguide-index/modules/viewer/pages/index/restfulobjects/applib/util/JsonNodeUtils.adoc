@@ -7,9 +7,9 @@
 .JsonNodeUtils.java
 ----
 class JsonNodeUtils {
-  InputStream asInputStream(final JsonNode jsonNode)
-  InputStream asInputStream(final JsonRepresentation jsonRepresentation)
-  ObjectNode walkNodeUpTo(ObjectNode node, final List<String> keys)     // <.>
+  InputStream asInputStream(JsonNode jsonNode)
+  InputStream asInputStream(JsonRepresentation jsonRepresentation)
+  ObjectNode walkNodeUpTo(ObjectNode node, List<String> keys)     // <.>
 }
 ----
 

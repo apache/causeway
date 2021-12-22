@@ -7,7 +7,7 @@
 .SheetPivoter.java
 ----
 class SheetPivoter {
-  void pivot(final Sheet pivotSourceSheet, final Sheet pivotTargetSheet)     // <.>
+  void pivot(Sheet pivotSourceSheet, Sheet pivotTargetSheet)     // <.>
   List<Cell> getDistinctValuesInSourceSheetColumn(Sheet sourceSheet, Integer columnNumber)
 }
 ----

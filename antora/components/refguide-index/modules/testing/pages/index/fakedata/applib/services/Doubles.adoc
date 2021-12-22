@@ -9,9 +9,9 @@ Returns random `double` values, optionally constrained within a range,
 .Doubles.java
 ----
 class Doubles {
-  Doubles(final FakeDataService fakeDataService)
+  Doubles(FakeDataService fakeDataService)
   double any()
-  double upTo(final double max)
+  double upTo(double max)
 }
 ----
 

@@ -11,10 +11,10 @@ The current time ('now') is obtained from the _org.apache.isis.applib.services.c
 .JodaLocalDates.java
 ----
 class JodaLocalDates {
-  JodaLocalDates(final FakeDataService fakeDataService)
-  LocalDate around(final Period period)     // <.>
-  org.joda.time.LocalDate before(final Period period)     // <.>
-  org.joda.time.LocalDate after(final Period period)     // <.>
+  JodaLocalDates(FakeDataService fakeDataService)
+  LocalDate around(Period period)     // <.>
+  org.joda.time.LocalDate before(Period period)     // <.>
+  org.joda.time.LocalDate after(Period period)     // <.>
   LocalDate any()     // <.>
 }
 ----

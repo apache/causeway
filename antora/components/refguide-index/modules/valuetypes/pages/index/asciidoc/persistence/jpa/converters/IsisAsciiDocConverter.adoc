@@ -7,8 +7,8 @@
 .IsisAsciiDocConverter.java
 ----
 class IsisAsciiDocConverter {
-  String convertToDatabaseColumn(final AsciiDoc memberValue)
-  AsciiDoc convertToEntityAttribute(final String datastoreValue)
+  String convertToDatabaseColumn(AsciiDoc memberValue)
+  AsciiDoc convertToEntityAttribute(String datastoreValue)
 }
 ----
 

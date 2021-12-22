@@ -9,11 +9,11 @@
 class PathNode {
   public static final PathNode NULL;
   List<String> split(String path)
-  PathNode parse(final String path)
+  PathNode parse(String path)
   String getKey()
   Map<String, String> getCriteria()
   boolean hasCriteria()
-  boolean matches(final JsonRepresentation repr)
+  boolean matches(JsonRepresentation repr)
   int hashCode()
   boolean equals(Object obj)
   String toString()

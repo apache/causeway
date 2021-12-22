@@ -7,8 +7,8 @@
 .ExcelMetaDataEnabled.java
 ----
 interface ExcelMetaDataEnabled {
-  void setExcelSheetName(final String sheetName)
-  void setExcelRowNumber(final Integer rowNumber)
+  void setExcelSheetName(String sheetName)
+  void setExcelRowNumber(Integer rowNumber)
 }
 ----
 

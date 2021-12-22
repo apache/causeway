@@ -9,10 +9,10 @@ SPI service interface.
 .PdfJsViewerAdvisor.java
 ----
 interface PdfJsViewerAdvisor {
-  Advice advise(final InstanceKey instanceKey)
-  void pageNumChangedTo(final InstanceKey instanceKey, final int pageNum)
-  void scaleChangedTo(final InstanceKey instanceKey, final Scale scale)
-  void heightChangedTo(final InstanceKey instanceKey, final int height)
+  Advice advise(InstanceKey instanceKey)
+  void pageNumChangedTo(InstanceKey instanceKey, int pageNum)
+  void scaleChangedTo(InstanceKey instanceKey, Scale scale)
+  void heightChangedTo(InstanceKey instanceKey, int height)
 }
 ----
 

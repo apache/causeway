@@ -17,9 +17,9 @@ Does supports an _epsilon_ parameter (measure of accuracy), which has different 
 interface OrderRelation<T, D> {
   D epsilon()     // <.>
   int compare(T a, T b, D epsilon)     // <.>
-  int compare(final T a, final T b)
+  int compare(T a, T b)
   boolean equals(T a, T b, D epsilon)     // <.>
-  boolean equals(final T a, final T b)
+  boolean equals(T a, T b)
 }
 ----
 

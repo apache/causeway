@@ -11,7 +11,7 @@ If _#getReason()_ is `null` , then is usable; otherwise is invisible.
 .VisibilityEvent.java
 ----
 class VisibilityEvent {
-  VisibilityEvent(final Object source, final Identifier identifier)
+  VisibilityEvent(Object source, Identifier identifier)
 }
 ----
 

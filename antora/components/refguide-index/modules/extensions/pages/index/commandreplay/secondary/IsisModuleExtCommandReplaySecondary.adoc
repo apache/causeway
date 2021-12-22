@@ -11,8 +11,8 @@ class IsisModuleExtCommandReplaySecondary {
   JobDetailFactoryBean replicateAndReplayJobDetailFactory()
   SimpleTriggerFactoryBean replicateAndReplayTriggerFactory(JobDetail job)
   SpringBeanJobFactory springBeanJobFactory()
-  SchedulerFactoryBean scheduler(final Trigger trigger, final JobDetail jobDetail, final SpringBeanJobFactory sbjf)
-  Scheduler scheduler(final Trigger trigger, final JobDetail job, final SchedulerFactoryBean factory)
+  SchedulerFactoryBean scheduler(Trigger trigger, JobDetail jobDetail, SpringBeanJobFactory sbjf)
+  Scheduler scheduler(Trigger trigger, JobDetail job, SchedulerFactoryBean factory)
 }
 ----
 

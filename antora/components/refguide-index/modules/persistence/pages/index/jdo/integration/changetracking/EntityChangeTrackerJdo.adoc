@@ -7,21 +7,21 @@
 .EntityChangeTrackerJdo.java
 ----
 class EntityChangeTrackerJdo {
-  EntityChangeTrackerJdo(final EntityPropertyChangePublisher entityPropertyChangePublisher, final EntityChangesPublisher entityChangesPublisher, final EventBusService eventBusService, final Provider<InteractionProvider> interactionProviderProvider)
+  EntityChangeTrackerJdo(EntityPropertyChangePublisher entityPropertyChangePublisher, EntityChangesPublisher entityChangesPublisher, EventBusService eventBusService, Provider<InteractionProvider> interactionProviderProvider)
   Set<PropertyChangeRecord> snapshotPropertyChangeRecords()
-  void onTransactionCompleting(final TransactionBeforeCompletionEvent event)     // <.>
-  Optional<EntityChanges> getEntityChanges(final java.sql.Timestamp timestamp, final String userName)
-  Can<EntityPropertyChange> getPropertyChanges(final java.sql.Timestamp timestamp, final String userName, final TransactionId txId)
+  void onTransactionCompleting(TransactionBeforeCompletionEvent event)     // <.>
+  Optional<EntityChanges> getEntityChanges(java.sql.Timestamp timestamp, String userName)
+  Can<EntityPropertyChange> getPropertyChanges(java.sql.Timestamp timestamp, String userName, TransactionId txId)
   Interaction currentInteraction()
   long countPotentialPropertyChangeRecords()
   int numberEntitiesLoaded()
   int numberEntitiesDirtied()
-  void enlistCreated(final ManagedObject entity)
-  void enlistDeleting(final ManagedObject entity)
-  void enlistUpdating(final ManagedObject entity)
-  void recognizeLoaded(final ManagedObject entity)
-  void recognizePersisting(final ManagedObject entity)
-  void recognizeUpdating(final ManagedObject entity)
+  void enlistCreated(ManagedObject entity)
+  void enlistDeleting(ManagedObject entity)
+  void enlistUpdating(ManagedObject entity)
+  void recognizeLoaded(ManagedObject entity)
+  void recognizePersisting(ManagedObject entity)
+  void recognizeUpdating(ManagedObject entity)
 }
 ----
 

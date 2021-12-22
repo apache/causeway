@@ -7,10 +7,10 @@
 .WithIntervalMutable.java
 ----
 interface WithIntervalMutable<T> {
-  T changeDates(final LocalDate startDate, final LocalDate endDate)
+  T changeDates(LocalDate startDate, LocalDate endDate)
   LocalDate default0ChangeDates()
   LocalDate default1ChangeDates()
-  String validateChangeDates(final LocalDate startDate, final LocalDate endDate)
+  String validateChangeDates(LocalDate startDate, LocalDate endDate)
 }
 ----
 

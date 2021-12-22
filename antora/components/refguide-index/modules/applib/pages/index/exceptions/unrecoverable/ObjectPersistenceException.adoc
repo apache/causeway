@@ -7,9 +7,9 @@
 .ObjectPersistenceException.java
 ----
 class ObjectPersistenceException {
-  ObjectPersistenceException(final String message)
-  ObjectPersistenceException(final String message, final Throwable cause)
-  ObjectPersistenceException(final Throwable cause)
+  ObjectPersistenceException(String message)
+  ObjectPersistenceException(String message, Throwable cause)
+  ObjectPersistenceException(Throwable cause)
 }
 ----
 

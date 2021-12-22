@@ -9,7 +9,7 @@ Provides construction and extraction for a given value-type from and into its co
 .ValueComposer.java
 ----
 interface ValueComposer<T> {
-  Object getValueMixin(final T value)
+  Object getValueMixin(T value)
 }
 ----
 

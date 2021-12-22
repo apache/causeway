@@ -7,7 +7,7 @@
 .BeanDescriptor.java
 ----
 class BeanDescriptor {
-  BeanDescriptor(final String beanName, final ConfigurableApplicationContext context)
+  BeanDescriptor(String beanName, ConfigurableApplicationContext context)
   List<T> dependencies(Class<T> cls)
 }
 ----

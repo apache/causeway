@@ -10,13 +10,13 @@ A xref:refguide:applib:index/layout/component/MemberRegion.adoc[MemberRegion] of
 ----
 class FieldSet {
   FieldSet()
-  FieldSet(final String name)
+  FieldSet(String name)
   String getId()     // <.>
-  void setId(final String id)
+  void setId(String id)
   Boolean isUnreferencedActions()     // <.>
-  void setUnreferencedActions(final Boolean unreferencedActions)
+  void setUnreferencedActions(Boolean unreferencedActions)
   Boolean isUnreferencedProperties()     // <.>
-  void setUnreferencedProperties(final Boolean unreferencedProperties)
+  void setUnreferencedProperties(Boolean unreferencedProperties)
   String getName()     // <.>
   void setName(String name)
   List<ActionLayoutData> getActions()
@@ -24,9 +24,9 @@ class FieldSet {
   List<PropertyLayoutData> getProperties()
   void setProperties(List<PropertyLayoutData> properties)
   FieldSetOwner getOwner()     // <.>
-  void setOwner(final FieldSetOwner owner)
+  void setOwner(FieldSetOwner owner)
   String getMetadataError()     // <.>
-  void setMetadataError(final String metadataError)
+  void setMetadataError(String metadataError)
   String toString()
 }
 ----

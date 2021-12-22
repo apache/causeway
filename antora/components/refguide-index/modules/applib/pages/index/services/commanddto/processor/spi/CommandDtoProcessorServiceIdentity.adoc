@@ -9,7 +9,7 @@ At least one implementation is required.
 .CommandDtoProcessorServiceIdentity.java
 ----
 class CommandDtoProcessorServiceIdentity {
-  CommandDto process(final Object domainObject, final CommandDto commandDto)
+  CommandDto process(Object domainObject, CommandDto commandDto)
 }
 ----
 

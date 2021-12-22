@@ -9,7 +9,7 @@ Superclass of exceptions which indicate an attempt to interact with a class memb
 .DisabledException.java
 ----
 class DisabledException {
-  DisabledException(final InteractionEvent interactionEvent)
+  DisabledException(InteractionEvent interactionEvent)
   UsabilityEvent getInteractionEvent()
 }
 ----

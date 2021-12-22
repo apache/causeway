@@ -9,22 +9,22 @@ Provides no-op implementations of each of the methods within xref:refguide:appli
 .InteractionAdapter.java
 ----
 class InteractionAdapter {
-  void propertyVisible(final PropertyVisibilityEvent ev)
-  void propertyUsable(final PropertyUsabilityEvent ev)
-  void propertyAccessed(final PropertyAccessEvent ev)
-  void propertyModified(final PropertyModifyEvent ev)
-  void collectionVisible(final CollectionVisibilityEvent ev)
-  void collectionUsable(final CollectionUsabilityEvent ev)
-  void collectionAccessed(final CollectionAccessEvent ev)
-  void collectionAddedTo(final CollectionAddToEvent ev)
-  void collectionRemovedFrom(final CollectionRemoveFromEvent ev)
-  void collectionMethodInvoked(final CollectionMethodEvent interactionEvent)
-  void actionVisible(final ActionVisibilityEvent interactionEvent)
-  void actionUsable(final ActionUsabilityEvent ev)
-  void actionArgument(final ActionArgumentEvent ev)
-  void actionInvoked(final ActionInvocationEvent ev)
-  void objectPersisted(final ObjectValidityEvent ev)
-  void objectTitleRead(final ObjectTitleEvent ev)
+  void propertyVisible(PropertyVisibilityEvent ev)
+  void propertyUsable(PropertyUsabilityEvent ev)
+  void propertyAccessed(PropertyAccessEvent ev)
+  void propertyModified(PropertyModifyEvent ev)
+  void collectionVisible(CollectionVisibilityEvent ev)
+  void collectionUsable(CollectionUsabilityEvent ev)
+  void collectionAccessed(CollectionAccessEvent ev)
+  void collectionAddedTo(CollectionAddToEvent ev)
+  void collectionRemovedFrom(CollectionRemoveFromEvent ev)
+  void collectionMethodInvoked(CollectionMethodEvent interactionEvent)
+  void actionVisible(ActionVisibilityEvent interactionEvent)
+  void actionUsable(ActionUsabilityEvent ev)
+  void actionArgument(ActionArgumentEvent ev)
+  void actionInvoked(ActionInvocationEvent ev)
+  void objectPersisted(ObjectValidityEvent ev)
+  void objectTitleRead(ObjectTitleEvent ev)
 }
 ----
 

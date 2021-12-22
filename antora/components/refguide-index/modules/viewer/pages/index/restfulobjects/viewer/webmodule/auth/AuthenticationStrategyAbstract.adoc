@@ -10,7 +10,7 @@ Convenience abstract implementation.
 ----
 class AuthenticationStrategyAbstract {
   public static final int STATUS_UNAUTHORIZED;
-  void invalidate(final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse)
+  void invalidate(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
 }
 ----
 

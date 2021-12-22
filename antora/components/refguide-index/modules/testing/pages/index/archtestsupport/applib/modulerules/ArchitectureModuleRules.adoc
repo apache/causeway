@@ -12,7 +12,7 @@ class ArchitectureModuleRules {
   List<Class<?>> analyzeClasses_packagesOf(Class<?> clazz)     // <.>
   Architectures.LayeredArchitecture code_dependencies_follow_module_Imports(List<Class<?>> moduleClasses)     // <.>
   Architectures.LayeredArchitecture code_dependencies_follow_module_Imports_and_subpackage_rules(List<Class<?>> moduleClasses, List<Subpackage> subpackages)     // <.>
-  String nameOf(Class<?> moduleClass, final String subpackageName)
+  String nameOf(Class<?> moduleClass, String subpackageName)
   String[] namesOf(Class<?> moduleClass, String... subpackageNames)
   String[] namesOf(Set<Class<?>> importingClasses, String... subpackageNames)
   String packageIdentifierFor(Class<?> moduleClass)
@@ -20,7 +20,7 @@ class ArchitectureModuleRules {
   String[] both(String str, String[] arr)
   String[] both(String[] arr1, String[] arr2)
   Map<T, Set<T>> invert(Map<T, Set<T>> valueSetByKey)
-  void accumulateTransitiveDependencies(final Class<?> referringClass, final Map<Class<?>, Set<Class<?>>> directDependenciesByReferringClass, final Set<Class<?>> transitiveDependenciesOfReferringClass)
+  void accumulateTransitiveDependencies(Class<?> referringClass, Map<Class<?>, Set<Class<?>>> directDependenciesByReferringClass, Set<Class<?>> transitiveDependenciesOfReferringClass)
 }
 ----
 

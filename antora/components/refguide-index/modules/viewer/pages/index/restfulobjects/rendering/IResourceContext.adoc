@@ -9,8 +9,8 @@ Provides access to request-specific context (eg HTTP headers), session-specific 
 .IResourceContext.java
 ----
 interface IResourceContext {
-  String restfulUrlFor(final String url)     // <.>
-  String applicationUrlFor(final String url)     // <.>
+  String restfulUrlFor(String url)     // <.>
+  String applicationUrlFor(String url)     // <.>
   List<MediaType> getAcceptableMediaTypes()     // <.>
   InteractionInitiatedBy getInteractionInitiatedBy()     // <.>
   Where getWhere()
@@ -29,7 +29,7 @@ interface IResourceContext {
   RepresentationService.Intent getIntent()     // <.>
   InteractionProvider getInteractionProvider()
   MetaModelContext getMetaModelContext()
-  Optional<ManagedObject> getObjectAdapterForOidFromHref(final String oidFromHref)
+  Optional<ManagedObject> getObjectAdapterForOidFromHref(String oidFromHref)
 }
 ----
 

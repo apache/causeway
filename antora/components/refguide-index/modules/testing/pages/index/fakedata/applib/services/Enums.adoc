@@ -9,7 +9,7 @@ Returns a random instance of an enum class.
 .Enums.java
 ----
 class Enums {
-  Enums(final FakeDataService fakeDataService)
+  Enums(FakeDataService fakeDataService)
   T anyOf(Class<T> cls)
 }
 ----

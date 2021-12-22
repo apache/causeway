@@ -7,7 +7,7 @@
 .CollectUtils.java
 ----
 class CollectUtils {
-  T firstIn(final Set<T> set)
+  T firstIn(Set<T> set)
 }
 ----
 

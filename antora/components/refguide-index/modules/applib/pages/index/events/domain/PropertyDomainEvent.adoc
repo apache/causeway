@@ -18,7 +18,7 @@ The class itself is instantiated automatically by the framework using a no-arg c
 ----
 class PropertyDomainEvent<S, T> {
   PropertyDomainEvent()     // <.>
-  PropertyDomainEvent(final S source)     // <.>
+  PropertyDomainEvent(S source)     // <.>
   String toString()
 }
 ----

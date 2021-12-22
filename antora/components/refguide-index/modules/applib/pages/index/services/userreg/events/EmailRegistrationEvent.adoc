@@ -9,7 +9,7 @@ An event send to all services interested in user registration
 .EmailRegistrationEvent.java
 ----
 class EmailRegistrationEvent {
-  EmailRegistrationEvent(final String email, final String confirmationUrl, final String applicationName)
+  EmailRegistrationEvent(String email, String confirmationUrl, String applicationName)
 }
 ----
 

@@ -11,7 +11,7 @@ The _#getReason()_ will always be `null` ; access is always allowed.
 .ObjectTitleEvent.java
 ----
 class ObjectTitleEvent {
-  ObjectTitleEvent(final Object source, final Identifier classIdentifier, final String title)
+  ObjectTitleEvent(Object source, Identifier classIdentifier, String title)
   String getTitle()
 }
 ----

@@ -9,7 +9,7 @@ Requires that the job is annotated with the _org.quartz.PersistJobDataAfterExecu
 .JobExecutionData.java
 ----
 class JobExecutionData {
-  String getString(String key, final String defaultValue)     // <.>
+  String getString(String key, String defaultValue)     // <.>
   void setString(String key, String value)     // <.>
 }
 ----

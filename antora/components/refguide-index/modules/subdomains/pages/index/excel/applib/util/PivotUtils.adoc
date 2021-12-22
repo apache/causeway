@@ -7,9 +7,9 @@
 .PivotUtils.java
 ----
 class PivotUtils {
-  void createAnnotationRow(final Row annotationRow, final List<String> annotationList)
-  void createOrderRow(final Row orderRow, final List<Integer> orderList)
-  void createTypeRow(final Row typeRow, final List<AggregationType> typeList)
+  void createAnnotationRow(Row annotationRow, List<String> annotationList)
+  void createOrderRow(Row orderRow, List<Integer> orderList)
+  void createTypeRow(Row typeRow, List<AggregationType> typeList)
   boolean cellValueEquals(Cell cell, Cell other)
   Cell addCellValueTo(Cell source, Cell target)
   void copyCell(Cell source, Cell target)

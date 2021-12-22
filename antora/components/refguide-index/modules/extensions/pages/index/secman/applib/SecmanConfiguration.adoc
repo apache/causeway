@@ -30,7 +30,7 @@ This class is implemented as a builder (courtesy of Lombok) but it provides reas
 ----
 class SecmanConfiguration {
   Stream<String> streamAdminNamespacePermissions()
-  boolean isStickyAdminNamespace(final String featureFqn)
+  boolean isStickyAdminNamespace(String featureFqn)
 }
 ----
 

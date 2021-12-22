@@ -11,7 +11,7 @@ If _#getReason()_ is not `null` then provides the reason why the object is invis
 .ObjectVisibilityEvent.java
 ----
 class ObjectVisibilityEvent {
-  ObjectVisibilityEvent(final Object source, final Identifier classIdentifier)
+  ObjectVisibilityEvent(Object source, Identifier classIdentifier)
 }
 ----
 

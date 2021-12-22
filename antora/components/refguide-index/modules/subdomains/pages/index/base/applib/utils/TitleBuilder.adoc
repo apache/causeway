@@ -10,11 +10,11 @@ class TitleBuilder {
   public static final Class[] NO_PARAMETER_TYPES;
   public static final Object[] NO_ARGUMENTS;
   TitleBuilder start()
-  TitleBuilder withParent(final Object object)
-  TitleBuilder withName(final String name)
-  TitleBuilder withReference(final String reference)
+  TitleBuilder withParent(Object object)
+  TitleBuilder withName(String name)
+  TitleBuilder withReference(String reference)
   String toString()
-  TitleBuilder withName(final Object object)
+  TitleBuilder withName(Object object)
   TitleBuilder withTupleElement(Object object)     // <.>
 }
 ----

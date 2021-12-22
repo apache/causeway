@@ -7,7 +7,7 @@
 .HomePageRepresentation.java
 ----
 class HomePageRepresentation {
-  HomePageRepresentation(final JsonNode jsonNode)
+  HomePageRepresentation(JsonNode jsonNode)
   LinkRepresentation getUser()
   LinkRepresentation getServices()
   LinkRepresentation getVersion()

@@ -7,7 +7,7 @@
 .ErrorRepresentation.java
 ----
 class ErrorRepresentation {
-  ErrorRepresentation(final JsonNode jsonNode)
+  ErrorRepresentation(JsonNode jsonNode)
 }
 ----
 

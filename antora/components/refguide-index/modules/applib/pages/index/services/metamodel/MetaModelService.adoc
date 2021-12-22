@@ -9,14 +9,14 @@ This service provides a formal API into the framework's metamodel.
 .MetaModelService.java
 ----
 interface MetaModelService {
-  Optional<LogicalType> lookupLogicalTypeByName(final String logicalTypeName)     // <.>
-  Optional<LogicalType> lookupLogicalTypeByClass(final Class<?> domainType)     // <.>
-  void rebuild(final Class<?> domainType)     // <.>
+  Optional<LogicalType> lookupLogicalTypeByName(String logicalTypeName)     // <.>
+  Optional<LogicalType> lookupLogicalTypeByClass(Class<?> domainType)     // <.>
+  void rebuild(Class<?> domainType)     // <.>
   DomainModel getDomainModel()     // <.>
   BeanSort sortOf(Class<?> domainType, Mode mode)     // <.>
   BeanSort sortOf(Bookmark bookmark, Mode mode)     // <.>
   CommandDtoProcessor commandDtoProcessorFor(String logicalMemberIdentifier)     // <.>
-  MetamodelDto exportMetaModel(final Config config)     // <.>
+  MetamodelDto exportMetaModel(Config config)     // <.>
 }
 ----
 

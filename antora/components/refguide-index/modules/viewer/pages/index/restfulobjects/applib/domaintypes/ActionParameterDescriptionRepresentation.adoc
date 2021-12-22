@@ -7,7 +7,7 @@
 .ActionParameterDescriptionRepresentation.java
 ----
 class ActionParameterDescriptionRepresentation {
-  ActionParameterDescriptionRepresentation(final JsonNode jsonNode)
+  ActionParameterDescriptionRepresentation(JsonNode jsonNode)
 }
 ----
 

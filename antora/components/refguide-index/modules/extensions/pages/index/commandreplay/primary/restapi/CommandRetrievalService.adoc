@@ -8,7 +8,7 @@
 ----
 class CommandRetrievalService {
   public static final String LOGICAL_TYPE_NAME;
-  List<? extends CommandModel> findCommandsOnPrimaryFrom(final UUID interactionId, final Integer batchSize)     // <.>
+  List<? extends CommandModel> findCommandsOnPrimaryFrom(UUID interactionId, Integer batchSize)     // <.>
   Integer default1FindCommandsOnPrimaryFrom()
 }
 ----

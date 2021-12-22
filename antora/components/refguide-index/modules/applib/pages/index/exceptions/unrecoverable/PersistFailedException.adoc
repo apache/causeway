@@ -11,9 +11,9 @@ This exception is intended to represent an unexpected and non-recoverable condit
 .PersistFailedException.java
 ----
 class PersistFailedException {
-  PersistFailedException(final String msg)
-  PersistFailedException(final Throwable cause)
-  PersistFailedException(final String msg, final Throwable cause)
+  PersistFailedException(String msg)
+  PersistFailedException(Throwable cause)
+  PersistFailedException(String msg, Throwable cause)
 }
 ----
 

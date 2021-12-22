@@ -7,7 +7,7 @@
 .CommandReplayAnalysisService.java
 ----
 class CommandReplayAnalysisService {
-  void analyse(final CommandModel commandModel)     // <.>
+  void analyse(CommandModel commandModel)     // <.>
 }
 ----
 

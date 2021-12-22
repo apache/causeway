@@ -10,7 +10,7 @@ Simply provides a UI to allow a site-map (obtained from xref:refguide:applib:ind
 ----
 class SitemapServiceMenu {
   public static final String LOGICAL_TYPE_NAME;
-  SitemapServiceMenu(final SitemapService sitemapService)
+  SitemapServiceMenu(SitemapService sitemapService)
 }
 ----
 

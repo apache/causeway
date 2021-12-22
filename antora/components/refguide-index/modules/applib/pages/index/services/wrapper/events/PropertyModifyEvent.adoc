@@ -11,7 +11,7 @@ If _#getReason()_ is not `null` then provides the reason why the value is invali
 .PropertyModifyEvent.java
 ----
 class PropertyModifyEvent {
-  PropertyModifyEvent(final Object source, final Identifier propertyIdentifier, final Object proposed)
+  PropertyModifyEvent(Object source, Identifier propertyIdentifier, Object proposed)
   Object getProposed()     // <.>
 }
 ----

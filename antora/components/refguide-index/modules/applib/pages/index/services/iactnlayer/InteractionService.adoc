@@ -23,10 +23,10 @@ interface InteractionService {
   void run(InteractionContext interactionContext, ThrowingRunnable runnable)     // <.>
   R callAnonymous(Callable<R> callable)     // <.>
   void runAnonymous(ThrowingRunnable runnable)     // <.>
-  Result<R> callAndCatch(final InteractionContext interactionContext, final Callable<R> callable)     // <.>
-  Result<Void> runAndCatch(final InteractionContext interactionContext, final ThrowingRunnable runnable)     // <.>
-  Result<R> callAnonymousAndCatch(final Callable<R> callable)     // <.>
-  Result<Void> runAnonymousAndCatch(final ThrowingRunnable runnable)     // <.>
+  Result<R> callAndCatch(InteractionContext interactionContext, Callable<R> callable)     // <.>
+  Result<Void> runAndCatch(InteractionContext interactionContext, ThrowingRunnable runnable)     // <.>
+  Result<R> callAnonymousAndCatch(Callable<R> callable)     // <.>
+  Result<Void> runAnonymousAndCatch(ThrowingRunnable runnable)     // <.>
 }
 ----
 

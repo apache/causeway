@@ -19,12 +19,12 @@ The class itself is instantiated automatically by the framework using a no-arg c
 ----
 class ActionDomainEvent<S> {
   ActionDomainEvent()     // <.>
-  ActionDomainEvent(final S source)     // <.>
-  void setReturnValue(final Object returnValue)     // <.>
+  ActionDomainEvent(S source)     // <.>
+  void setReturnValue(Object returnValue)     // <.>
   void setSemantics(SemanticsOf semantics)     // <.>
-  void setParameterNames(final List<String> parameterNames)     // <.>
-  void setParameterTypes(final List<Class<?>> parameterTypes)     // <.>
-  void setMixedIn(final Object mixedIn)     // <.>
+  void setParameterNames(List<String> parameterNames)     // <.>
+  void setParameterTypes(List<Class<?>> parameterTypes)     // <.>
+  void setMixedIn(Object mixedIn)     // <.>
   String toString()
 }
 ----

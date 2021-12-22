@@ -9,17 +9,17 @@ Represents a binary tree data structure of function elements.
 .FunCompound.java
 ----
 class FunCompound<T, R> {
-  FunCompound<T, R> of(final Function<T, R> left)
-  FunCompound<T, R> of(final Function<T, R> left, final Function<T, R> right)
-  FunCompound<T, R> of(final Function<T, R> left, final FunCompound<T, R> right)
-  FunCompound<T, R> of(final FunCompound<T, R> left, final Function<T, R> right)
-  FunCompound<T, R> of(final FunCompound<T, R> left, final FunCompound<T, R> right)
+  FunCompound<T, R> of(Function<T, R> left)
+  FunCompound<T, R> of(Function<T, R> left, Function<T, R> right)
+  FunCompound<T, R> of(Function<T, R> left, FunCompound<T, R> right)
+  FunCompound<T, R> of(FunCompound<T, R> left, Function<T, R> right)
+  FunCompound<T, R> of(FunCompound<T, R> left, FunCompound<T, R> right)
   int size()     // <.>
   Stream<Function<T, R>> streamDepthFirstPostorder()
   List<Function<T, R>> flatten()
-  Compound<R> apply(final T value)
-  FunCompound<T, X> map(final Function<R, X> mapper)
-  FunCompound<T, X> compose(final FunCompound<R, X> other)
+  Compound<R> apply(T value)
+  FunCompound<T, X> map(Function<R, X> mapper)
+  FunCompound<T, X> compose(FunCompound<R, X> other)
   FunCompound<T, R> nil()
 }
 ----

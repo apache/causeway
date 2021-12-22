@@ -11,10 +11,10 @@ This Authenticator is a fallback and is only used if there is no other implement
 .AuthenticatorSecman.java
 ----
 class AuthenticatorSecman {
-  AuthenticatorSecman(final ApplicationUserRepository applicationUserRepository, final PasswordEncoder passwordEncoder)
-  boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass)
-  InteractionContext authenticate(final AuthenticationRequest request, final String code)
-  void logout(final InteractionContext context)
+  AuthenticatorSecman(ApplicationUserRepository applicationUserRepository, PasswordEncoder passwordEncoder)
+  boolean canAuthenticate(Class<? extends AuthenticationRequest> authenticationRequestClass)
+  InteractionContext authenticate(AuthenticationRequest request, String code)
+  void logout(InteractionContext context)
 }
 ----
 

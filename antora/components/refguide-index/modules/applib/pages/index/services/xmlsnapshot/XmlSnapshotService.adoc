@@ -15,9 +15,9 @@ The service offers a basic API to create a snapshot of a single object, and a mo
 .XmlSnapshotService.java
 ----
 interface XmlSnapshotService {
-  XmlSnapshotService.Snapshot snapshotFor(final Object domainObject)     // <.>
-  XmlSnapshotService.Snapshot.Builder builderFor(final Object domainObject)     // <.>
-  T getChildElementValue(final Element el, final String tagname, final Class<T> expectedCls)     // <.>
+  XmlSnapshotService.Snapshot snapshotFor(Object domainObject)     // <.>
+  XmlSnapshotService.Snapshot.Builder builderFor(Object domainObject)     // <.>
+  T getChildElementValue(Element el, String tagname, Class<T> expectedCls)     // <.>
 }
 ----
 

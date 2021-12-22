@@ -12,14 +12,14 @@ These messages can either be simple strings, or can be translated.
 ----
 interface MessageService {
   void informUser(String message)     // <.>
-  String informUser(TranslatableString message, final Class<?> contextClass, final String contextMethod)     // <.>
-  String informUser(TranslatableString message, final TranslationContext translationContext)     // <.>
+  String informUser(TranslatableString message, Class<?> contextClass, String contextMethod)     // <.>
+  String informUser(TranslatableString message, TranslationContext translationContext)     // <.>
   void warnUser(String message)     // <.>
-  String warnUser(TranslatableString message, final Class<?> contextClass, final String contextMethod)     // <.>
-  String warnUser(TranslatableString message, final TranslationContext translationContext)     // <.>
+  String warnUser(TranslatableString message, Class<?> contextClass, String contextMethod)     // <.>
+  String warnUser(TranslatableString message, TranslationContext translationContext)     // <.>
   void raiseError(String message)     // <.>
-  String raiseError(TranslatableString message, final Class<?> contextClass, final String contextMethod)     // <.>
-  String raiseError(TranslatableString message, final TranslationContext translationContext)     // <.>
+  String raiseError(TranslatableString message, Class<?> contextClass, String contextMethod)     // <.>
+  String raiseError(TranslatableString message, TranslationContext translationContext)     // <.>
 }
 ----
 

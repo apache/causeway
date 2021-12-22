@@ -17,12 +17,12 @@ Thus, the RO client then only ever needs to know how to render an object, in all
 class DomainObjectList {
   public static final String LOGICAL_TYPE_NAME;
   DomainObjectList()
-  DomainObjectList(final String title, final String elementTypeFqcn, final String actionOwningFqcn, final String actionId, final String actionArguments)
+  DomainObjectList(String title, String elementTypeFqcn, String actionOwningFqcn, String actionId, String actionArguments)
   String title()
   String getActionId()
   String getActionArguments()
   List<Object> getObjects()
-  void setObjects(final List<Object> objects)
+  void setObjects(List<Object> objects)
 }
 ----
 

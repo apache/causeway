@@ -7,18 +7,18 @@
 .JodaTimeConverters.java
 ----
 class JodaTimeConverters {
-  Instant toJoda(final java.time.Instant input)
-  java.time.Instant fromJoda(final Instant input)
-  LocalTime toJoda(final java.time.LocalTime input)
-  java.time.LocalTime fromJoda(final LocalTime input)
-  LocalDate toJoda(final java.time.LocalDate input)
-  java.time.LocalDate fromJoda(final LocalDate input)
-  LocalDateTime toJoda(final java.time.LocalDateTime input)
-  java.time.LocalDateTime fromJoda(final LocalDateTime input)
-  DateTime toJoda(final java.time.ZonedDateTime input)
-  java.time.ZonedDateTime fromJoda(final DateTime input)
-  DateTimeZone toJoda(final java.time.ZoneId input)
-  java.time.ZoneId fromJoda(final DateTimeZone input)
+  Instant toJoda(java.time.Instant input)
+  java.time.Instant fromJoda(Instant input)
+  LocalTime toJoda(java.time.LocalTime input)
+  java.time.LocalTime fromJoda(LocalTime input)
+  LocalDate toJoda(java.time.LocalDate input)
+  java.time.LocalDate fromJoda(LocalDate input)
+  LocalDateTime toJoda(java.time.LocalDateTime input)
+  java.time.LocalDateTime fromJoda(LocalDateTime input)
+  DateTime toJoda(java.time.ZonedDateTime input)
+  java.time.ZonedDateTime fromJoda(DateTime input)
+  DateTimeZone toJoda(java.time.ZoneId input)
+  java.time.ZoneId fromJoda(DateTimeZone input)
 }
 ----
 

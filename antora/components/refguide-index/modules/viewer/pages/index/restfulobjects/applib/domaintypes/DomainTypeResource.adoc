@@ -8,14 +8,14 @@
 ----
 interface DomainTypeResource {
   Response domainTypes()
-  Response domainType(final String domainType)
-  Response layout(final String domainType)
-  Response typeProperty(final String domainType, final String propertyId)
-  Response typeCollection(final String domainType, final String collectionId)
-  Response typeAction(final String domainType, final String actionId)
-  Response typeActionParam(final String domainType, final String actionId, final String paramName)
-  Response domainTypeIsSubtypeOf(final String domainType, String superType, final String argumentsQueryString)
-  Response domainTypeIsSupertypeOf(final String domainType, String superType, final String argumentsQueryString)
+  Response domainType(String domainType)
+  Response layout(String domainType)
+  Response typeProperty(String domainType, String propertyId)
+  Response typeCollection(String domainType, String collectionId)
+  Response typeAction(String domainType, String actionId)
+  Response typeActionParam(String domainType, String actionId, String paramName)
+  Response domainTypeIsSubtypeOf(String domainType, String superType, String argumentsQueryString)
+  Response domainTypeIsSupertypeOf(String domainType, String superType, String argumentsQueryString)
 }
 ----
 

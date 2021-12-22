@@ -7,8 +7,8 @@
 .IsoOffsetTimeConverter.java
 ----
 class IsoOffsetTimeConverter {
-  String toDatastoreType(final OffsetTime offsetTime)
-  OffsetTime toMemberType(final String datastoreValue)
+  String toDatastoreType(OffsetTime offsetTime)
+  OffsetTime toMemberType(String datastoreValue)
 }
 ----
 

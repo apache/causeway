@@ -15,20 +15,20 @@ Conceptually you can consider it as a set of bytes (a picture, a video etc), tho
 .Blob.java
 ----
 class Blob {
-  Blob(final String name, final String primaryType, final String subtype, final byte[] bytes)
-  Blob(final String name, final String mimeTypeBase, final byte[] bytes)
-  Blob(final String name, final MimeType mimeType, final byte[] bytes)
-  Blob of(final String name, final CommonMimeType mimeType, final byte[] content)     // <.>
+  Blob(String name, String primaryType, String subtype, byte[] bytes)
+  Blob(String name, String mimeTypeBase, byte[] bytes)
+  Blob(String name, MimeType mimeType, byte[] bytes)
+  Blob of(String name, CommonMimeType mimeType, byte[] content)     // <.>
   String getName()
   MimeType getMimeType()
   byte[] getBytes()
-  Clob toClob(final Charset charset)
-  void writeBytesTo(final OutputStream os)     // <.>
-  void consume(final Consumer<InputStream> consumer)     // <.>
-  R digest(final Function<InputStream, R> digester)     // <.>
+  Clob toClob(Charset charset)
+  void writeBytesTo(OutputStream os)     // <.>
+  void consume(Consumer<InputStream> consumer)     // <.>
+  R digest(Function<InputStream, R> digester)     // <.>
   Blob zip()
-  Blob unZip(final CommonMimeType resultingMimeType)
-  boolean equals(final Object o)
+  Blob unZip(CommonMimeType resultingMimeType)
+  boolean equals(Object o)
   int hashCode()
   String toString()
   Optional<BufferedImage> asImage()     // <.>

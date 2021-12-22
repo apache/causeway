@@ -8,7 +8,7 @@
 ----
 class EntityPropertyChangeLogger {
   boolean isEnabled()
-  void onChanging(final EntityPropertyChange entityPropertyChange)
+  void onChanging(EntityPropertyChange entityPropertyChange)
 }
 ----
 

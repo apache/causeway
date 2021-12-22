@@ -13,9 +13,9 @@ As getters and setters are so simple, the intention of automating their testing 
 class PojoTester {
   PojoTester create()     // <.>
   PojoTester usingData(DatumFactory<T> factory)     // <.>
-  PojoTester usingData(final Class<?> type, DatumFactory<T> factory)
-  PojoTester usingData(Class<T> c, final T... data)     // <.>
-  PojoTester usingData(Class<T> c, final List<T> data)
+  PojoTester usingData(Class<?> type, DatumFactory<T> factory)
+  PojoTester usingData(Class<T> c, T... data)     // <.>
+  PojoTester usingData(Class<T> c, List<T> data)
   PojoTester usingData(Class<T> compileTimeType, Class<? extends T> runtimeType)     // <.>
   void exercise(Object bean)     // <.>
   void exercise(Object bean, FilterSet filterSet)     // <.>

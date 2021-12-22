@@ -10,7 +10,7 @@ Superclass for all lifecycle events that are raised by the framework when loadin
 ----
 class AbstractLifecycleEvent<S> {
   AbstractLifecycleEvent()
-  AbstractLifecycleEvent(final S source)
+  AbstractLifecycleEvent(S source)
 }
 ----
 

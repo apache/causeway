@@ -10,8 +10,8 @@ Provides the ability to obtain the XML layout for a single domain object or for 
 ----
 interface LayoutService {
   String toXml(Class<?> domainClass, Style style)     // <.>
-  byte[] toZip(final Style style)     // <.>
-  String toMenuBarsXml(final MenuBarsService.Type type)     // <.>
+  byte[] toZip(Style style)     // <.>
+  String toMenuBarsXml(MenuBarsService.Type type)     // <.>
 }
 ----
 

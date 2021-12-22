@@ -11,10 +11,10 @@ The service is used by the framework to map mementos (derived from the state of 
 .UrlEncodingService.java
 ----
 interface UrlEncodingService {
-  String encode(final byte[] bytes)     // <.>
+  String encode(byte[] bytes)     // <.>
   byte[] decode(String str)     // <.>
-  String encodeString(final String str)
-  String decodeToString(final String str)
+  String encodeString(String str)
+  String decodeToString(String str)
 }
 ----
 

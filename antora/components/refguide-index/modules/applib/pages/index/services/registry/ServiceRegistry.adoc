@@ -10,15 +10,15 @@ Collects together methods for injecting or looking up domain services (either pr
 ----
 interface ServiceRegistry {
   Can<T> select(Class<T> type, Annotation[] qualifiers)     // <.>
-  Can<T> select(final Class<T> type)     // <.>
+  Can<T> select(Class<T> type)     // <.>
   Stream<_ManagedBeanAdapter> streamRegisteredBeansOfType(Class<?> requiredType)     // <.>
   Stream<_ManagedBeanAdapter> streamRegisteredBeans()     // <.>
   Optional<_ManagedBeanAdapter> lookupRegisteredBeanById(String id)     // <.>
   _ManagedBeanAdapter lookupRegisteredBeanByIdElseFail(String id)     // <.>
-  Optional<?> lookupBeanById(final String id)
-  Optional<T> lookupService(final Class<T> serviceClass)     // <.>
+  Optional<?> lookupBeanById(String id)
+  Optional<T> lookupService(Class<T> serviceClass)     // <.>
   Optional<T> lookupService(Class<T> serviceClass, Comparator<Object> comparator)     // <.>
-  T lookupServiceElseFail(final Class<T> serviceClass)     // <.>
+  T lookupServiceElseFail(Class<T> serviceClass)     // <.>
   void clearRegisteredBeans()     // <.>
 }
 ----

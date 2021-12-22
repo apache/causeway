@@ -14,8 +14,8 @@ The session is looked-up as follows:
 ----
 class AuthenticationStrategyDefault {
   public static final String HTTP_SESSION_AUTHENTICATION_SESSION_KEY;
-  InteractionContext lookupValid(final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse)
-  void bind(final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse, final InteractionContext authentication)
+  InteractionContext lookupValid(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
+  void bind(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, InteractionContext authentication)
 }
 ----
 

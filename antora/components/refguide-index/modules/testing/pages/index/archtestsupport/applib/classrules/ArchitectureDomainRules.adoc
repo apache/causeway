@@ -16,7 +16,7 @@ class ArchitectureDomainRules {
   ArchRule every_DomainService_must_also_be_annotated_with_DomainServiceLayout()     // <.>
   DescribedPredicate<JavaAnnotation<?>> DomainService_logicalTypeName()
   DescribedPredicate<JavaAnnotation<?>> DomainObject_logicalTypeName()
-  DescribedPredicate<JavaAnnotation<?>> DomainXxx_logicalTypeName(final Class<? extends Annotation> annotationClass)
+  DescribedPredicate<JavaAnnotation<?>> DomainXxx_logicalTypeName(Class<? extends Annotation> annotationClass)
   ArchRule every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_VIEW_MODEL()     // <.>
   ArchRule every_Action_mixin_must_follow_naming_convention()     // <.>
   ArchRule every_Property_mixin_must_follow_naming_convention()     // <.>

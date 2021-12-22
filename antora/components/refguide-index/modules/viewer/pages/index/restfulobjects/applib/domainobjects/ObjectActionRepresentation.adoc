@@ -7,7 +7,7 @@
 .ObjectActionRepresentation.java
 ----
 class ObjectActionRepresentation {
-  ObjectActionRepresentation(final JsonNode jsonNode)
+  ObjectActionRepresentation(JsonNode jsonNode)
   LinkRepresentation getInvoke()
 }
 ----

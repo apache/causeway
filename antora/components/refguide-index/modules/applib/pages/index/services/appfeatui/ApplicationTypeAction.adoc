@@ -9,7 +9,7 @@
 class ApplicationTypeAction {
   public static final String LOGICAL_TYPE_NAME;
   ApplicationTypeAction()
-  ApplicationTypeAction(final ApplicationFeatureId featureId)
+  ApplicationTypeAction(ApplicationFeatureId featureId)
   String getReturnType()
   SemanticsOf getActionSemantics()
 }

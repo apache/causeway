@@ -9,7 +9,7 @@ Provides the ability to download the layout XML for any domain entity or view mo
 .Object_downloadLayoutXml.java
 ----
 class Object_downloadLayoutXml {
-  Object act(final String fileName, final Style style)
+  Object act(String fileName, Style style)
   String default0Act()     // <.>
   Style default1Act()     // <.>
 }

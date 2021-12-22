@@ -9,7 +9,7 @@ Provides a fallback implementation of _FixtureScriptsSpecificationProvider_ if n
 .FixtureScriptsSpecificationProviderAutoConfiguration.java
 ----
 class FixtureScriptsSpecificationProviderAutoConfiguration {
-  FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider(final IsisConfiguration isisConfiguration)     // <.>
+  FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider(IsisConfiguration isisConfiguration)     // <.>
 }
 ----
 

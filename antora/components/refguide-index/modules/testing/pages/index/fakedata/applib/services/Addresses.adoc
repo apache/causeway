@@ -9,7 +9,7 @@ Returns random components of an address.
 .Addresses.java
 ----
 class Addresses {
-  Addresses(final FakeDataService fakeDataService)
+  Addresses(FakeDataService fakeDataService)
   String streetName()
   String streetAddressNumber()
   String streetAddress()

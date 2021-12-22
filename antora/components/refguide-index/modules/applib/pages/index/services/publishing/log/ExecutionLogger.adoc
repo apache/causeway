@@ -8,7 +8,7 @@
 ----
 class ExecutionLogger {
   boolean isEnabled()
-  void onExecution(final Execution<?, ?> execution)
+  void onExecution(Execution<?, ?> execution)
 }
 ----
 

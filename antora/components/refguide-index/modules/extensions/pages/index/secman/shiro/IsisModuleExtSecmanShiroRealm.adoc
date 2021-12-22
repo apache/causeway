@@ -8,8 +8,8 @@
 ----
 class IsisModuleExtSecmanShiroRealm {
   IsisModuleExtSecmanShiroRealm()     // <.>
-  V execute(final Supplier<V> closure)
-  V doExecute(final Supplier<V> closure)
+  V execute(Supplier<V> closure)
+  V doExecute(Supplier<V> closure)
 }
 ----
 

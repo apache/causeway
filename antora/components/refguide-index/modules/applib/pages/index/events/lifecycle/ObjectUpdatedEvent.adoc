@@ -10,7 +10,7 @@ Broadcast when an entity has just been updated in the database, usually as the r
 ----
 class ObjectUpdatedEvent<S> {
   ObjectUpdatedEvent()
-  ObjectUpdatedEvent(final S source)
+  ObjectUpdatedEvent(S source)
 }
 ----
 

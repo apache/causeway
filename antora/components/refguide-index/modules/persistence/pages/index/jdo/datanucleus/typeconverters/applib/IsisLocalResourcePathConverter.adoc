@@ -7,8 +7,8 @@
 .IsisLocalResourcePathConverter.java
 ----
 class IsisLocalResourcePathConverter {
-  String toDatastoreType(final LocalResourcePath memberValue)
-  LocalResourcePath toMemberType(final String datastoreValue)
+  String toDatastoreType(LocalResourcePath memberValue)
+  LocalResourcePath toMemberType(String datastoreValue)
 }
 ----
 

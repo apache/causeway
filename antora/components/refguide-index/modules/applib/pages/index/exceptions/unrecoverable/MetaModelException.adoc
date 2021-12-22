@@ -7,9 +7,9 @@
 .MetaModelException.java
 ----
 class MetaModelException {
-  MetaModelException(final String message)
-  MetaModelException(final Throwable cause)
-  MetaModelException(final String message, final Throwable cause)
+  MetaModelException(String message)
+  MetaModelException(Throwable cause)
+  MetaModelException(String message, Throwable cause)
 }
 ----
 

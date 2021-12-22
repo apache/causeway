@@ -7,8 +7,8 @@
 .ExcelFileBlobConverter.java
 ----
 class ExcelFileBlobConverter {
-  Blob toBlob(final String name, final File file)
-  Blob toBlob(final String name, final URL resource)
+  Blob toBlob(String name, File file)
+  Blob toBlob(String name, URL resource)
 }
 ----
 

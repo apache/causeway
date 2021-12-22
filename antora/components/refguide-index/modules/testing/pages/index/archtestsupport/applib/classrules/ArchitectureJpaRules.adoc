@@ -20,7 +20,7 @@ class ArchitectureJpaRules {
   ArchRule every_injected_field_of_jpa_Entity_must_be_annotated_with_Transient()     // <.>
   ArchRule every_jpa_Entity_must_have_an_id_field()     // <.>
   ArchRule every_jpa_Entity_must_have_a_version_field()     // <.>
-  ClassesShouldConjunction everyJpa_Entity_must_have_a_field_named_and_annotated(final String fieldName, final Class<? extends Annotation> annotationClass)
+  ClassesShouldConjunction everyJpa_Entity_must_have_a_field_named_and_annotated(String fieldName, Class<? extends Annotation> annotationClass)
   DescribedPredicate<JavaAnnotation<?>> Table_schema()
   DescribedPredicate<JavaClass> areEntities()
   DescribedPredicate<JavaAnnotation<?>> Table_uniqueConstraints()

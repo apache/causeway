@@ -7,8 +7,8 @@
 .ResourceCoordinates.java
 ----
 class ResourceCoordinates {
-  ResourceCoordinates fromFile(final File file)
-  int compareTo(final ResourceCoordinates other)
+  ResourceCoordinates fromFile(File file)
+  int compareTo(ResourceCoordinates other)
 }
 ----
 

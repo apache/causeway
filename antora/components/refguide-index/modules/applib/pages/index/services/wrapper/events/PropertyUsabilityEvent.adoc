@@ -11,7 +11,7 @@ If _#getReason()_ is not `null` then provides the reason why the property is dis
 .PropertyUsabilityEvent.java
 ----
 class PropertyUsabilityEvent {
-  PropertyUsabilityEvent(final Object source, final Identifier propertyIdentifier)
+  PropertyUsabilityEvent(Object source, Identifier propertyIdentifier)
 }
 ----
 

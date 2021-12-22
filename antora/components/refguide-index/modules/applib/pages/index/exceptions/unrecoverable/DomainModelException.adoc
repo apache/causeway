@@ -9,9 +9,9 @@ Thrown when a problem is found with the domain model, and Isis cannot proceed.
 .DomainModelException.java
 ----
 class DomainModelException {
-  DomainModelException(final String message)
-  DomainModelException(final Throwable cause)
-  DomainModelException(final String message, final Throwable cause)
+  DomainModelException(String message)
+  DomainModelException(Throwable cause)
+  DomainModelException(String message, Throwable cause)
 }
 ----
 

@@ -12,9 +12,9 @@ Most commonly the content of a row is xref:refguide:applib:index/layout/grid/boo
 ----
 class BS3RowContent {
   Size getSize()     // <.>
-  void setSize(final Size size)
+  void setSize(Size size)
   BS3RowContentOwner getOwner()     // <.>
-  void setOwner(final BS3RowContentOwner owner)
+  void setOwner(BS3RowContentOwner owner)
   BS3Grid getGrid()
 }
 ----

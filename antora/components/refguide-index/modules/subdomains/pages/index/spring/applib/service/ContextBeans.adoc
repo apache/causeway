@@ -7,7 +7,7 @@
 .ContextBeans.java
 ----
 class ContextBeans {
-  ContextBeans describing(final ConfigurableApplicationContext context)
+  ContextBeans describing(ConfigurableApplicationContext context)
 }
 ----
 

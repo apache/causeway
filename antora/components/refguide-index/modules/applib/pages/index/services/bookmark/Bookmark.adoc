@@ -9,17 +9,17 @@ String representation of any persistable or re-creatable object managed by the f
 .Bookmark.java
 ----
 class Bookmark {
-  Bookmark forLogicalTypeNameAndIdentifier(final String logicalTypeName, final String identifier)
-  Bookmark forLogicalTypeAndIdentifier(final LogicalType logicalType, final String identifier)
-  Bookmark forOidDto(final OidDto oidDto)
-  Bookmark withHintId(final String hintId)
-  Optional<Bookmark> parse(final String str)     // <.>
-  Bookmark parseElseFail(final String input)
-  Optional<Bookmark> parseUrlEncoded(final String urlEncodedStr)
+  Bookmark forLogicalTypeNameAndIdentifier(String logicalTypeName, String identifier)
+  Bookmark forLogicalTypeAndIdentifier(LogicalType logicalType, String identifier)
+  Bookmark forOidDto(OidDto oidDto)
+  Bookmark withHintId(String hintId)
+  Optional<Bookmark> parse(String str)     // <.>
+  Bookmark parseElseFail(String input)
+  Optional<Bookmark> parseUrlEncoded(String urlEncodedStr)
   OidDto toOidDto()
   String stringify()
-  boolean equals(final Object other)
-  boolean equals(final Bookmark other)
+  boolean equals(Object other)
+  boolean equals(Bookmark other)
   int hashCode()
   String toString()
   String stringifyHonoringHintIfAny()     // <.>

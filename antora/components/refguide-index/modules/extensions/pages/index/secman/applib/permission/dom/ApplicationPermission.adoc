@@ -25,10 +25,10 @@ class ApplicationPermission {
   public static final String NAMED_QUERY_FIND_BY_ROLE_NAMES;
   String title()
   String getSort()
-  ApplicationFeature findFeature(final ApplicationFeatureId featureId)
+  ApplicationFeature findFeature(ApplicationFeatureId featureId)
   Optional<ApplicationFeatureId> asFeatureId()
-  int compareTo(final org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission other)
-  boolean equals(final Object other)
+  int compareTo(org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission other)
+  boolean equals(Object other)
   int hashCode()
   String toString()
 }

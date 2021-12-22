@@ -14,12 +14,12 @@ This interface is EXPERIMENTAL and may change in the future.
 ----
 class RepresentationService {
   RepresentationService(List<ContentNegotiationService> contentNegotiationServices)
-  Response objectRepresentation(final IResourceContext resourceContext, final ManagedObject objectAdapter)     // <.>
-  Response propertyDetails(final IResourceContext resourceContext, final ManagedProperty objectAndProperty)     // <.>
-  Response collectionDetails(final IResourceContext resourceContext, final ManagedCollection objectAndCollection)     // <.>
-  Response actionPrompt(final IResourceContext resourceContext, final ManagedAction objectAndAction)     // <.>
-  Response actionResult(final IResourceContext resourceContext, final ObjectAndActionInvocation objectAndActionInvocation)     // <.>
-  void assertContentNegotiationServiceHandled(final Response.ResponseBuilder responseBuilder)
+  Response objectRepresentation(IResourceContext resourceContext, ManagedObject objectAdapter)     // <.>
+  Response propertyDetails(IResourceContext resourceContext, ManagedProperty objectAndProperty)     // <.>
+  Response collectionDetails(IResourceContext resourceContext, ManagedCollection objectAndCollection)     // <.>
+  Response actionPrompt(IResourceContext resourceContext, ManagedAction objectAndAction)     // <.>
+  Response actionResult(IResourceContext resourceContext, ObjectAndActionInvocation objectAndActionInvocation)     // <.>
+  void assertContentNegotiationServiceHandled(Response.ResponseBuilder responseBuilder)
   Response.ResponseBuilder buildResponse(Function<ContentNegotiationService, Response.ResponseBuilder> connegServiceBuildResponse)     // <.>
 }
 ----

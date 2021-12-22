@@ -9,10 +9,10 @@ Convenience fixture script intended to be easily subclassed in order to set up a
 .AbstractUserAndRolesFixtureScript.java
 ----
 class AbstractUserAndRolesFixtureScript {
-  AbstractUserAndRolesFixtureScript(final String username, final String password, final AccountType accountType, final Can<String> roleNames)
-  AbstractUserAndRolesFixtureScript(final Supplier<String> usernameSupplier, final Supplier<String> passwordSupplier, final Supplier<AccountType> accountTypeSupplier, final Supplier<Can<String>> roleNamesSupplier)
-  AbstractUserAndRolesFixtureScript(final String username, final String password, final String emailAddress, final String tenancyPath, final AccountType accountType, final Can<String> roleNames)
-  AbstractUserAndRolesFixtureScript(final Supplier<String> usernameSupplier, final Supplier<String> passwordSupplier, final Supplier<String> emailAddressSupplier, final Supplier<String> tenancyPathSupplier, final Supplier<AccountType> accountTypeSupplier, final Supplier<Can<String>> roleNamesSupplier)
+  AbstractUserAndRolesFixtureScript(String username, String password, AccountType accountType, Can<String> roleNames)
+  AbstractUserAndRolesFixtureScript(Supplier<String> usernameSupplier, Supplier<String> passwordSupplier, Supplier<AccountType> accountTypeSupplier, Supplier<Can<String>> roleNamesSupplier)
+  AbstractUserAndRolesFixtureScript(String username, String password, String emailAddress, String tenancyPath, AccountType accountType, Can<String> roleNames)
+  AbstractUserAndRolesFixtureScript(Supplier<String> usernameSupplier, Supplier<String> passwordSupplier, Supplier<String> emailAddressSupplier, Supplier<String> tenancyPathSupplier, Supplier<AccountType> accountTypeSupplier, Supplier<Can<String>> roleNamesSupplier)
 }
 ----
 

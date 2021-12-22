@@ -7,16 +7,16 @@
 .ResponseDigest.java
 ----
 class ResponseDigest<T> {
-  ResponseDigest<T> of(final Response response, final Class<T> entityType)     // <.>
-  ResponseDigest<T> ofList(final Response response, final Class<T> entityType, final GenericType<List<T>> genericType)     // <.>
-  ResponseDigest<T> ofAsyncFailure(final Future<Response> asyncResponse, final Class<T> entityType, final Exception failure)     // <.>
+  ResponseDigest<T> of(Response response, Class<T> entityType)     // <.>
+  ResponseDigest<T> ofList(Response response, Class<T> entityType, GenericType<List<T>> genericType)     // <.>
+  ResponseDigest<T> ofAsyncFailure(Future<Response> asyncResponse, Class<T> entityType, Exception failure)     // <.>
   boolean isSuccess()     // <.>
   boolean isFailure()     // <.>
   Optional<T> getEntity()     // <.>
   Can<T> getEntities()     // <.>
   Exception getFailureCause()     // <.>
-  T singletonOrElseMapFailure(final Function<Exception, T> failureMapper)     // <.>
-  Can<T> multipleOrElseMapFailure(final Function<Exception, Can<T>> failureMapper)     // <.>
+  T singletonOrElseMapFailure(Function<Exception, T> failureMapper)     // <.>
+  Can<T> multipleOrElseMapFailure(Function<Exception, Can<T>> failureMapper)     // <.>
 }
 ----
 

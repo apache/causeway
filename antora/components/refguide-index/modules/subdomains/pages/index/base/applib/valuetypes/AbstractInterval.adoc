@@ -8,22 +8,22 @@
 ----
 class AbstractInterval<T> {
   AbstractInterval()
-  AbstractInterval(final Interval interval)
-  AbstractInterval(final LocalDate startDate, final LocalDate endDate)
-  AbstractInterval(final LocalDate startDate, final LocalDate endDate, final IntervalEnding ending)
+  AbstractInterval(Interval interval)
+  AbstractInterval(LocalDate startDate, LocalDate endDate)
+  AbstractInterval(LocalDate startDate, LocalDate endDate, IntervalEnding ending)
   Interval asInterval()
-  boolean contains(final LocalDate date)     // <.>
-  boolean contains(final T localDateInterval)     // <.>
+  boolean contains(LocalDate date)     // <.>
+  boolean contains(T localDateInterval)     // <.>
   int days()     // <.>
   LocalDate endDate()
-  LocalDate endDate(final IntervalEnding ending)
+  LocalDate endDate(IntervalEnding ending)
   LocalDate endDateExcluding()
   LocalDate endDateFromStartDate()
   boolean isValid()
-  T overlap(final T otherInterval)     // <.>
-  boolean overlaps(final T interval)     // <.>
+  T overlap(T otherInterval)     // <.>
+  boolean overlaps(T interval)     // <.>
   LocalDate startDate()
-  boolean within(final T interval)     // <.>
+  boolean within(T interval)     // <.>
   boolean isInfinite()
   boolean isOpenEnded()
 }

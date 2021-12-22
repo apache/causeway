@@ -11,7 +11,7 @@ Implements the HTTP Basic Auth protocol; does not bind the xref:refguide:applib:
 class AuthenticationStrategyBasicAuth {
   public static final String HEADER_AUTHORIZATION;
   public static final String BASIC_AUTH_PREFIX;
-  InteractionContext lookupValid(final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse)
+  InteractionContext lookupValid(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
   void bind(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, InteractionContext auth)
 }
 ----

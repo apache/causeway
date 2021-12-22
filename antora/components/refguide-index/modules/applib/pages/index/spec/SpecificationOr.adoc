@@ -22,8 +22,8 @@ public class TeaOrCoffeeSpec extends SpecificationOr {
 .SpecificationOr.java
 ----
 class SpecificationOr {
-  SpecificationOr(final Specification... specifications)
-  String satisfies(final Object obj)
+  SpecificationOr(Specification... specifications)
+  String satisfies(Object obj)
 }
 ----
 

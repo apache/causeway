@@ -9,7 +9,7 @@ Returns random _UUID_ s.
 .Uuids.java
 ----
 class Uuids {
-  Uuids(final FakeDataService fakeDataService)
+  Uuids(FakeDataService fakeDataService)
   UUID any()
 }
 ----

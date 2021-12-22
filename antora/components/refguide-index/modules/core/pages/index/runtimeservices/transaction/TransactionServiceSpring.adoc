@@ -7,14 +7,14 @@
 .TransactionServiceSpring.java
 ----
 class TransactionServiceSpring {
-  TransactionServiceSpring(final List<PlatformTransactionManager> platformTransactionManagers, final List<PersistenceExceptionTranslator> persistenceExceptionTranslators, final InteractionLayerTracker interactionLayerTracker)
-  Result<T> callTransactional(final TransactionDefinition def, final Callable<T> callable)
+  TransactionServiceSpring(List<PlatformTransactionManager> platformTransactionManagers, List<PersistenceExceptionTranslator> persistenceExceptionTranslators, InteractionLayerTracker interactionLayerTracker)
+  Result<T> callTransactional(TransactionDefinition def, Callable<T> callable)
   void flushTransaction()
   Optional<TransactionId> currentTransactionId()
   TransactionState currentTransactionState()
-  void beforeEnteringTransactionalBoundary(final Interaction interaction)     // <.>
-  void onTransactionEnded(final TransactionAfterCompletionEvent event)     // <.>
-  void afterLeavingTransactionalBoundary(final Interaction interaction)     // <.>
+  void beforeEnteringTransactionalBoundary(Interaction interaction)     // <.>
+  void onTransactionEnded(TransactionAfterCompletionEvent event)     // <.>
+  void afterLeavingTransactionalBoundary(Interaction interaction)     // <.>
 }
 ----
 

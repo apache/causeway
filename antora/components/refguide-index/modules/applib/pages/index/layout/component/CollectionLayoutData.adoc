@@ -10,31 +10,31 @@ Describes the layout of a single collection, broadly corresponds to the _org.apa
 ----
 class CollectionLayoutData {
   CollectionLayoutData()
-  CollectionLayoutData(final String id)
+  CollectionLayoutData(String id)
   String getId()     // <.>
-  void setId(final String id)
+  void setId(String id)
   String getCssClass()
-  void setCssClass(final String cssClass)
+  void setCssClass(String cssClass)
   String getDescribedAs()
-  void setDescribedAs(final String describedAs)
+  void setDescribedAs(String describedAs)
   String getDefaultView()     // <.>
-  void setDefaultView(final String defaultView)
+  void setDefaultView(String defaultView)
   Where getHidden()
-  void setHidden(final Where hidden)
+  void setHidden(Where hidden)
   String getNamed()
-  void setNamed(final String named)
+  void setNamed(String named)
   Integer getPaged()
-  void setPaged(final Integer paged)
+  void setPaged(Integer paged)
   String getSortedBy()
-  void setSortedBy(final String sortedBy)
+  void setSortedBy(String sortedBy)
   List<ActionLayoutData> getActions()
-  void setActions(final List<ActionLayoutData> actionLayoutDatas)
+  void setActions(List<ActionLayoutData> actionLayoutDatas)
   CollectionLayoutDataOwner getOwner()     // <.>
-  void setOwner(final CollectionLayoutDataOwner owner)
+  void setOwner(CollectionLayoutDataOwner owner)
   String getMetadataError()     // <.>
-  void setMetadataError(final String metadataError)
+  void setMetadataError(String metadataError)
   Link getLink()     // <.>
-  void setLink(final Link link)
+  void setLink(Link link)
   String toString()
 }
 ----

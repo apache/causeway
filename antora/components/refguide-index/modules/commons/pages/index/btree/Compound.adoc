@@ -9,15 +9,15 @@ Represents a binary tree data structure.
 .Compound.java
 ----
 class Compound<T> {
-  Compound<T> of(final T left)
-  Compound<T> of(final T left, final T right)
-  Compound<T> of(final T left, final Compound<T> right)
-  Compound<T> of(final Compound<T> left, final T right)
-  Compound<T> of(final Compound<T> left, final Compound<T> right)
+  Compound<T> of(T left)
+  Compound<T> of(T left, T right)
+  Compound<T> of(T left, Compound<T> right)
+  Compound<T> of(Compound<T> left, T right)
+  Compound<T> of(Compound<T> left, Compound<T> right)
   int size()     // <.>
   Stream<T> streamDepthFirstPostorder()
   List<T> flatten()
-  Compound<X> map(final Function<T, X> mapper)
+  Compound<X> map(Function<T, X> mapper)
   Compound<T> nil()
 }
 ----

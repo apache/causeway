@@ -11,7 +11,7 @@ If _#getReason()_ is not `null` then provides the reason why the object is inval
 .ObjectValidityEvent.java
 ----
 class ObjectValidityEvent {
-  ObjectValidityEvent(final Object source, final Identifier classIdentifier)
+  ObjectValidityEvent(Object source, Identifier classIdentifier)
   Object getProposed()
 }
 ----

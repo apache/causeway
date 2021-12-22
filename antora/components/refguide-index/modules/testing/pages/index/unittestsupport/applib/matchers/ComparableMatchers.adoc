@@ -9,7 +9,7 @@ Hamcrest _Matcher_ implementations for _Comparable_ s.
 .ComparableMatchers.java
 ----
 class ComparableMatchers {
-  Matcher<T> greaterThan(final T c)
+  Matcher<T> greaterThan(T c)
 }
 ----
 

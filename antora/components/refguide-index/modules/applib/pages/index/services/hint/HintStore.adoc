@@ -11,9 +11,9 @@ This store _is_ used by the Wicket viewer. For example, the viewer remembers whi
 .HintStore.java
 ----
 interface HintStore {
-  String get(final Bookmark bookmark, String hintKey)     // <.>
-  void set(final Bookmark bookmark, String hintKey, String value)     // <.>
-  void remove(final Bookmark bookmark, String hintKey)     // <.>
+  String get(Bookmark bookmark, String hintKey)     // <.>
+  void set(Bookmark bookmark, String hintKey, String value)     // <.>
+  void remove(Bookmark bookmark, String hintKey)     // <.>
   void removeAll(Bookmark bookmark)     // <.>
   Set<String> findHintKeys(Bookmark bookmark)     // <.>
 }

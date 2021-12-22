@@ -14,30 +14,30 @@ The class also provides a simple mechanism to allow adhoc sharing of user data b
 ----
 class AbstractDomainEvent<S> {
   AbstractDomainEvent()     // <.>
-  AbstractDomainEvent(final S source)     // <.>
-  AbstractDomainEvent(final S source, final Identifier identifier)
+  AbstractDomainEvent(S source)     // <.>
+  AbstractDomainEvent(S source, Identifier identifier)
   S getSource()     // <.>
-  void setMixedIn(final Object mixedIn)     // <.>
+  void setMixedIn(Object mixedIn)     // <.>
   T getSubject()     // <.>
-  void setEventPhase(final Phase phase)     // <.>
-  void setIdentifier(final Identifier identifier)     // <.>
+  void setEventPhase(Phase phase)     // <.>
+  void setIdentifier(Identifier identifier)     // <.>
   void hide()     // <.>
-  void hideIf(final boolean condition)     // <.>
-  void hideIf(final BooleanSupplier shouldHide)     // <.>
+  void hideIf(boolean condition)     // <.>
+  void hideIf(BooleanSupplier shouldHide)     // <.>
   boolean isDisabled()
-  void disable(final String reason)     // <.>
-  void disable(final TranslatableString reason)     // <.>
-  void disableIfReason(final Supplier<String> reasonSupplier)     // <.>
-  void disableIfTranslatableReason(final Supplier<TranslatableString> reasonSupplier)     // <.>
+  void disable(String reason)     // <.>
+  void disable(TranslatableString reason)     // <.>
+  void disableIfReason(Supplier<String> reasonSupplier)     // <.>
+  void disableIfTranslatableReason(Supplier<TranslatableString> reasonSupplier)     // <.>
   boolean isInvalid()
-  void invalidate(final String reason)     // <.>
-  void invalidate(final TranslatableString reason)     // <.>
-  void invalidateIfReason(final Supplier<String> reasonSupplier)     // <.>
-  void invalidateIfTranslatableReason(final Supplier<TranslatableString> reasonSupplier)     // <.>
-  void veto(final String reason, final Object... args)     // <.>
-  void veto(final TranslatableString translatableReason)     // <.>
-  Object get(final Object key)     // <.>
-  void put(final Object key, final Object value)     // <.>
+  void invalidate(String reason)     // <.>
+  void invalidate(TranslatableString reason)     // <.>
+  void invalidateIfReason(Supplier<String> reasonSupplier)     // <.>
+  void invalidateIfTranslatableReason(Supplier<TranslatableString> reasonSupplier)     // <.>
+  void veto(String reason, Object... args)     // <.>
+  void veto(TranslatableString translatableReason)     // <.>
+  Object get(Object key)     // <.>
+  void put(Object key, Object value)     // <.>
   String toString()
 }
 ----

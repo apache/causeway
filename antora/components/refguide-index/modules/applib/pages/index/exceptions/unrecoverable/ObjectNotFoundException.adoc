@@ -9,8 +9,8 @@ Indicates that the persistence context was unable to get an instantiate for the 
 .ObjectNotFoundException.java
 ----
 class ObjectNotFoundException {
-  ObjectNotFoundException(final String oid)
-  ObjectNotFoundException(final String oid, final Throwable cause)
+  ObjectNotFoundException(String oid)
+  ObjectNotFoundException(String oid, Throwable cause)
 }
 ----
 

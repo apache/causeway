@@ -11,8 +11,8 @@ However, although there are two objects, they are set up to share the same _Secu
 .AuthorizorShiro.java
 ----
 class AuthorizorShiro {
-  boolean isVisible(final InteractionContext authentication, final Identifier identifier)
-  boolean isUsable(final InteractionContext authentication, final Identifier identifier)
+  boolean isVisible(InteractionContext authentication, Identifier identifier)
+  boolean isUsable(InteractionContext authentication, Identifier identifier)
 }
 ----
 

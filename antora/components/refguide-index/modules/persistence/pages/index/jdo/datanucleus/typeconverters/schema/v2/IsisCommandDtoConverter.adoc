@@ -7,8 +7,8 @@
 .IsisCommandDtoConverter.java
 ----
 class IsisCommandDtoConverter {
-  String toDatastoreType(final CommandDto memberValue)
-  CommandDto toMemberType(final String datastoreValue)
+  String toDatastoreType(CommandDto memberValue)
+  CommandDto toMemberType(String datastoreValue)
 }
 ----
 

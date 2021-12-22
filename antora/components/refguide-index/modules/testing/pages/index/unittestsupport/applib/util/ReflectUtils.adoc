@@ -7,8 +7,8 @@
 .ReflectUtils.java
 ----
 class ReflectUtils {
-  void inject(final Object target, final String fieldName, final Object toInject)
-  void inject(final Object target, final Object toInject)
+  void inject(Object target, String fieldName, Object toInject)
+  void inject(Object target, Object toInject)
 }
 ----
 

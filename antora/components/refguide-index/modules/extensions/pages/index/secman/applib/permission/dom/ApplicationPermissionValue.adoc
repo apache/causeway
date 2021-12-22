@@ -11,14 +11,14 @@ Intended for value type arithmetic and also for caching. No user/role informatio
 .ApplicationPermissionValue.java
 ----
 class ApplicationPermissionValue {
-  ApplicationPermissionValue(final ApplicationFeatureId featureId, final ApplicationPermissionRule rule, final ApplicationPermissionMode mode)
+  ApplicationPermissionValue(ApplicationFeatureId featureId, ApplicationPermissionRule rule, ApplicationPermissionMode mode)
   ApplicationFeatureId getFeatureId()
   ApplicationPermissionRule getRule()
   ApplicationPermissionMode getMode()
-  boolean implies(final ApplicationFeatureId featureId, final ApplicationPermissionMode mode)
-  boolean refutes(final ApplicationFeatureId featureId, final ApplicationPermissionMode mode)
-  int compareTo(final ApplicationPermissionValue o)
-  boolean equals(final Object o)
+  boolean implies(ApplicationFeatureId featureId, ApplicationPermissionMode mode)
+  boolean refutes(ApplicationFeatureId featureId, ApplicationPermissionMode mode)
+  int compareTo(ApplicationPermissionValue o)
+  boolean equals(Object o)
   int hashCode()
   String toString()
 }

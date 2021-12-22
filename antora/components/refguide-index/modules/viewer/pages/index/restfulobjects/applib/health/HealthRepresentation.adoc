@@ -7,7 +7,7 @@
 .HealthRepresentation.java
 ----
 class HealthRepresentation {
-  HealthRepresentation(final JsonNode jsonNode)
+  HealthRepresentation(JsonNode jsonNode)
   LinkRepresentation getUp()
 }
 ----

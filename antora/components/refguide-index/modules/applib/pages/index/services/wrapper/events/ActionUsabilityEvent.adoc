@@ -11,7 +11,7 @@ If _#getReason()_ is not `null` then provides the reason why the action is disab
 .ActionUsabilityEvent.java
 ----
 class ActionUsabilityEvent {
-  ActionUsabilityEvent(final Object source, final Identifier actionIdentifier)
+  ActionUsabilityEvent(Object source, Identifier actionIdentifier)
 }
 ----
 

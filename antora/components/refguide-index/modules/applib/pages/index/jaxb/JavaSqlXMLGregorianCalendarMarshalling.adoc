@@ -7,8 +7,8 @@
 .JavaSqlXMLGregorianCalendarMarshalling.java
 ----
 class JavaSqlXMLGregorianCalendarMarshalling {
-  Timestamp toTimestamp(final XMLGregorianCalendar calendar)
-  XMLGregorianCalendar toXMLGregorianCalendar(final Timestamp timestamp)
+  Timestamp toTimestamp(XMLGregorianCalendar calendar)
+  XMLGregorianCalendar toXMLGregorianCalendar(Timestamp timestamp)
 }
 ----
 

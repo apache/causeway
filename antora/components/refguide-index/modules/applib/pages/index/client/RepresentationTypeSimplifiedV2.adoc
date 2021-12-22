@@ -21,9 +21,9 @@ final String typeLiteral;
   boolean isValue()
   boolean isValues()
   boolean isVoid()
-  String getContentTypeHeaderValue(final String profileName)
-  Optional<RepresentationTypeSimplifiedV2> parse(final String typeLiteral)
-  Optional<RepresentationTypeSimplifiedV2> parseContentTypeHeaderString(final String contentTypeHeaderString)
+  String getContentTypeHeaderValue(String profileName)
+  Optional<RepresentationTypeSimplifiedV2> parse(String typeLiteral)
+  Optional<RepresentationTypeSimplifiedV2> parseContentTypeHeaderString(String contentTypeHeaderString)
 }
 ----
 

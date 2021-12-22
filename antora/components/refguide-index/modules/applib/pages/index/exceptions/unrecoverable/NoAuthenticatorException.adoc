@@ -9,9 +9,9 @@ Indicates that there is no Authenticator available to authenticate a user based 
 .NoAuthenticatorException.java
 ----
 class NoAuthenticatorException {
-  NoAuthenticatorException(final String msg)
-  NoAuthenticatorException(final String msg, final Throwable cause)
-  NoAuthenticatorException(final Throwable cause)
+  NoAuthenticatorException(String msg)
+  NoAuthenticatorException(String msg, Throwable cause)
+  NoAuthenticatorException(Throwable cause)
 }
 ----
 

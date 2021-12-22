@@ -11,7 +11,7 @@ If _#getReason()_ is not `null` then provides the reason why the proposed value 
 .ParseValueEvent.java
 ----
 class ParseValueEvent {
-  ParseValueEvent(final Object source, final Identifier classIdentifier, final String proposed)
+  ParseValueEvent(Object source, Identifier classIdentifier, String proposed)
   Object getSource()     // <.>
   String getProposed()
 }

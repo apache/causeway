@@ -12,13 +12,13 @@ It is rendered as a <div class="row ...">
 ----
 class BS3Row {
   String getId()     // <.>
-  void setId(final String id)
+  void setId(String id)
   List<BS3RowContent> getCols()
-  void setCols(final List<BS3RowContent> cols)
+  void setCols(List<BS3RowContent> cols)
   String getMetadataError()     // <.>
-  void setMetadataError(final String metadataError)
+  void setMetadataError(String metadataError)
   BS3RowOwner getOwner()     // <.>
-  void setOwner(final BS3RowOwner owner)
+  void setOwner(BS3RowOwner owner)
   BS3Grid getGrid()
   String toString()
 }

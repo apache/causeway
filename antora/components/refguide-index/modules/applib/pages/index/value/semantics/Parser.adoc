@@ -29,7 +29,7 @@ interface Parser<T> {
   T parseTextRepresentation(ValueSemanticsProvider.Context context, String text)     // <.>
   int typicalLength()     // <.>
   int maxLength()     // <.>
-  String getPattern(final ValueSemanticsProvider.Context context)
+  String getPattern(ValueSemanticsProvider.Context context)
 }
 ----
 

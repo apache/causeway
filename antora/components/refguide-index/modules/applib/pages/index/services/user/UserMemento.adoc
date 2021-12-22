@@ -11,16 +11,16 @@ Immutable serializable value holding details about a user and its roles.
 class UserMemento {
   public static final String LOGICAL_TYPE_NAME;
   UserMemento system()     // <.>
-  UserMemento ofName(final String name)     // <.>
-  UserMemento ofNameAndRoles(final String name, final RoleMemento... roles)     // <.>
-  UserMemento ofNameAndRoleNames(final String name, final String... roleNames)     // <.>
-  UserMemento ofNameAndRoleNames(final String name, final List<String> roleNames)     // <.>
-  UserMemento ofNameAndRoleNames(final String name, final Stream<String> roleNames)     // <.>
+  UserMemento ofName(String name)     // <.>
+  UserMemento ofNameAndRoles(String name, RoleMemento... roles)     // <.>
+  UserMemento ofNameAndRoleNames(String name, String... roleNames)     // <.>
+  UserMemento ofNameAndRoleNames(String name, List<String> roleNames)     // <.>
+  UserMemento ofNameAndRoleNames(String name, Stream<String> roleNames)     // <.>
   List<RoleMemento> getRoles()     // <.>
-  UserMemento withRoleAdded(final String role)
-  boolean isCurrentUser(final String userName)     // <.>
+  UserMemento withRoleAdded(String role)
+  boolean isCurrentUser(String userName)     // <.>
   Stream<String> streamRoleNames()
-  boolean hasRoleName(final String roleName)
+  boolean hasRoleName(String roleName)
   UserMementoBuilder asBuilder()
   UserLocale asUserLocale()
 }

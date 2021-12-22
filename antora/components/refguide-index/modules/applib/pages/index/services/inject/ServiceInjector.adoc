@@ -9,7 +9,7 @@ Resolves injection points using the _org.apache.isis.applib.services.registry.Se
 .ServiceInjector.java
 ----
 interface ServiceInjector {
-  T injectServicesInto(final T domainObject)     // <.>
+  T injectServicesInto(T domainObject)     // <.>
 }
 ----
 

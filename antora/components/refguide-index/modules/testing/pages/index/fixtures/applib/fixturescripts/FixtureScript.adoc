@@ -11,10 +11,10 @@ Responsible for setting up the system (or more likely a part of the system) for 
 class FixtureScript {
   public static final FixtureScript NOOP;
   FixtureScript()     // <.>
-  FixtureScript(final String friendlyName, final String localName)     // <.>
+  FixtureScript(String friendlyName, String localName)     // <.>
   String getQualifiedName()
-  String validateRun(final String parameters)     // <.>
-  String pathWith(final String subkey)
+  String validateRun(String parameters)     // <.>
+  String pathWith(String subkey)
 }
 ----
 

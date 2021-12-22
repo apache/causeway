@@ -7,8 +7,8 @@
 .IsisMarkdownConverter.java
 ----
 class IsisMarkdownConverter {
-  String toDatastoreType(final Markdown memberValue)
-  Markdown toMemberType(final String datastoreValue)
+  String toDatastoreType(Markdown memberValue)
+  Markdown toMemberType(String datastoreValue)
 }
 ----
 

@@ -9,9 +9,9 @@ Returns random `float` values, optionally constrained within a range,
 .Floats.java
 ----
 class Floats {
-  Floats(final FakeDataService fakeDataService)
+  Floats(FakeDataService fakeDataService)
   float any()
-  float upTo(final float max)
+  float upTo(float max)
 }
 ----
 

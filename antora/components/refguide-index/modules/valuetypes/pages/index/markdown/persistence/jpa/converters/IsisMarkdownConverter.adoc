@@ -7,8 +7,8 @@
 .IsisMarkdownConverter.java
 ----
 class IsisMarkdownConverter {
-  String convertToDatabaseColumn(final Markdown memberValue)
-  Markdown convertToEntityAttribute(final String datastoreValue)
+  String convertToDatabaseColumn(Markdown memberValue)
+  Markdown convertToEntityAttribute(String datastoreValue)
 }
 ----
 

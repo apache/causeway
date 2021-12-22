@@ -7,10 +7,10 @@
 .Parser.java
 ----
 class Parser<T> {
-  T valueOf(final List<String> str)
-  T valueOf(final String[] str)
-  T valueOf(final JsonRepresentation jsonRepresentation)
-  JsonRepresentation asJsonRepresentation(final T t)
+  T valueOf(List<String> str)
+  T valueOf(String[] str)
+  T valueOf(JsonRepresentation jsonRepresentation)
+  JsonRepresentation asJsonRepresentation(T t)
   Parser<String> forString()
   Parser<Date> forDate()
   Parser<CacheControl> forCacheControl()

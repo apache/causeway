@@ -9,10 +9,10 @@ Returns random `short` values, optionally constrained within a range,
 .Shorts.java
 ----
 class Shorts {
-  Shorts(final FakeDataService fakeDataService)
+  Shorts(FakeDataService fakeDataService)
   short any()
-  short upTo(final short upTo)
-  short between(final short min, final short max)
+  short upTo(short upTo)
+  short between(short min, short max)
 }
 ----
 

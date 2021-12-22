@@ -10,9 +10,9 @@ Indicates that parsing has failed, ie the entry is illegal (rather than invalid)
 ----
 class ParsingException {
   ParsingException()
-  ParsingException(final String msg)
-  ParsingException(final String msg, final Throwable cause)
-  ParsingException(final Throwable cause)
+  ParsingException(String msg)
+  ParsingException(String msg, Throwable cause)
+  ParsingException(Throwable cause)
 }
 ----
 

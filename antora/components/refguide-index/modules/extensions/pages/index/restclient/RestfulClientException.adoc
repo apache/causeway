@@ -8,9 +8,9 @@
 ----
 class RestfulClientException {
   RestfulClientException()
-  RestfulClientException(final String message)
-  RestfulClientException(final Throwable cause)
-  RestfulClientException(final String message, final Throwable cause)
+  RestfulClientException(String message)
+  RestfulClientException(Throwable cause)
+  RestfulClientException(String message, Throwable cause)
 }
 ----
 

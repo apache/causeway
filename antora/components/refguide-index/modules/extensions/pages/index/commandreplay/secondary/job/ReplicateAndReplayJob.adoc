@@ -7,7 +7,7 @@
 .ReplicateAndReplayJob.java
 ----
 class ReplicateAndReplayJob {
-  void execute(final JobExecutionContext quartzContext)
+  void execute(JobExecutionContext quartzContext)
 }
 ----
 

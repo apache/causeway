@@ -10,7 +10,7 @@ This class should be executed using _org.apache.isis.testing.fixtures.applib.fix
 ----
 class ExcelFixture2 {
   public final static String LOGICAL_TYPE_NAME;
-  boolean equals(final Object o)
+  boolean equals(Object o)
   int hashCode()
 }
 ----

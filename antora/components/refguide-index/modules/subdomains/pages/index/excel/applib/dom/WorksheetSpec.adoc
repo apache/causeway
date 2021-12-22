@@ -7,16 +7,16 @@
 .WorksheetSpec.java
 ----
 class WorksheetSpec {
-  WorksheetSpec(final Class<T> viewModelClass, String sheetName)     // <.>
-  WorksheetSpec(final Class<T> viewModelClass, String sheetName, final Mode mode)
-  WorksheetSpec(final RowFactory<T> factory, String sheetName, final Mode mode)
-  String prefix(final String sheetName)
+  WorksheetSpec(Class<T> viewModelClass, String sheetName)     // <.>
+  WorksheetSpec(Class<T> viewModelClass, String sheetName, Mode mode)
+  WorksheetSpec(RowFactory<T> factory, String sheetName, Mode mode)
+  String prefix(String sheetName)
   RowFactory<T> getFactory()
   String getSheetName()
   Mode getMode()
-  boolean isTooLong(final String sheetName)
-  String trim(final String sheetName)
-  boolean hasSuffix(final String sheetName)
+  boolean isTooLong(String sheetName)
+  String trim(String sheetName)
+  boolean hasSuffix(String sheetName)
 }
 ----
 

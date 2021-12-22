@@ -9,17 +9,17 @@
 class PdfJsConfig {
   PdfJsConfig withInitialPage(int initialPage)
   int getInitialPage()
-  PdfJsConfig withInitialHeight(final int initialHeight)
+  PdfJsConfig withInitialHeight(int initialHeight)
   int getInitialHeight()
-  PdfJsConfig withInitialScale(final Scale initialScale)
+  PdfJsConfig withInitialScale(Scale initialScale)
   String getInitialScale()
-  PdfJsConfig disableWorker(final boolean disable)
+  PdfJsConfig disableWorker(boolean disable)
   boolean isWorkerDisabled()
-  PdfJsConfig withDocumentUrl(final CharSequence url)
+  PdfJsConfig withDocumentUrl(CharSequence url)
   CharSequence getDocumentUrl()
-  PdfJsConfig withWorkerUrl(final String url)
+  PdfJsConfig withWorkerUrl(String url)
   CharSequence getWorkerUrl()
-  PdfJsConfig withCanvasId(final String url)
+  PdfJsConfig withCanvasId(String url)
   CharSequence getCanvasId()
 }
 ----

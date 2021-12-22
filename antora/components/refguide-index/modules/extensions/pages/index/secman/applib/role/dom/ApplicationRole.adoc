@@ -12,8 +12,8 @@ class ApplicationRole {
   public static final String NAMED_QUERY_FIND_BY_NAME_CONTAINING;
   String title()
   List<org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission> getPermissions()
-  int compareTo(final org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole other)
-  boolean equals(final Object obj)
+  int compareTo(org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole other)
+  boolean equals(Object obj)
   int hashCode()
   String toString()
 }

@@ -9,15 +9,15 @@ Provides fluent composition for Objects' equals, hashCode and toString.
 .ObjectContracts.java
 ----
 class ObjectContracts {
-  ToString<T> toString(final String name, final Function<T, ?> getter)
-  Equality<T> checkEquals(final Function<T, ?> getter)
-  Hashing<T> hashing(final Function<T, ?> getter)
-  ObjectContract<T> contract(final Class<T> objectClass)
-  ObjectContract<T> parse(final Class<T> target, final String propertyNames)
-  String toString(final T obj, final String propertyNames)
-  boolean equals(final T obj, final Object other, final String propertyNames)
-  int hashCode(final Object obj, final String propertyNames)
-  int compare(final T obj, final T other, final String propertyNames)
+  ToString<T> toString(String name, Function<T, ?> getter)
+  Equality<T> checkEquals(Function<T, ?> getter)
+  Hashing<T> hashing(Function<T, ?> getter)
+  ObjectContract<T> contract(Class<T> objectClass)
+  ObjectContract<T> parse(Class<T> target, String propertyNames)
+  String toString(T obj, String propertyNames)
+  boolean equals(T obj, Object other, String propertyNames)
+  int hashCode(Object obj, String propertyNames)
+  int compare(T obj, T other, String propertyNames)
 }
 ----
 

@@ -7,7 +7,7 @@
 .AuthenticatorSecmanAutoConfiguration.java
 ----
 class AuthenticatorSecmanAutoConfiguration {
-  Authenticator authenticatorSecman(final ApplicationUserRepository applicationUserRepository, final PasswordEncoder passwordEncoder)
+  Authenticator authenticatorSecman(ApplicationUserRepository applicationUserRepository, PasswordEncoder passwordEncoder)
 }
 ----
 

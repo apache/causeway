@@ -9,12 +9,12 @@
 class ChangesDtoUtils {
   void init()
   JAXBContext getJaxbContext()
-  ChangesDto fromXml(final Reader reader)
-  ChangesDto fromXml(final String xml)
-  ChangesDto fromXml(final Class<?> contextClass, final String resourceName, final Charset charset)
-  String toXml(final ChangesDto changesDto)
-  void toXml(final ChangesDto changesDto, final Writer writer)
-  void dump(final ChangesDto changesDto, final PrintStream out)
+  ChangesDto fromXml(Reader reader)
+  ChangesDto fromXml(String xml)
+  ChangesDto fromXml(Class<?> contextClass, String resourceName, Charset charset)
+  String toXml(ChangesDto changesDto)
+  void toXml(ChangesDto changesDto, Writer writer)
+  void dump(ChangesDto changesDto, PrintStream out)
 }
 ----
 

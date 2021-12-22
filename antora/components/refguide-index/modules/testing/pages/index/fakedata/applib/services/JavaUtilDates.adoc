@@ -11,10 +11,10 @@ The current time ('now') is obtained from the _org.apache.isis.applib.services.c
 .JavaUtilDates.java
 ----
 class JavaUtilDates {
-  JavaUtilDates(final FakeDataService fakeDataService)
-  Date around(final Period period)     // <.>
-  Date before(final Period period)     // <.>
-  Date after(final Period period)     // <.>
+  JavaUtilDates(FakeDataService fakeDataService)
+  Date around(Period period)     // <.>
+  Date before(Period period)     // <.>
+  Date after(Period period)     // <.>
   java.util.Date any()     // <.>
 }
 ----

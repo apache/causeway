@@ -7,14 +7,14 @@
 .MemberExecutionDtoUtils.java
 ----
 class MemberExecutionDtoUtils {
-  T clone(final T dto)
-  MetricsDto metricsFor(final MemberExecutionDto executionDto)
-  PeriodDto timingsFor(final MetricsDto metricsDto)
-  ObjectCountsDto objectCountsFor(final MetricsDto metricsDto)
-  DifferenceDto numberObjectsLoadedFor(final ObjectCountsDto objectCountsDto)
-  DifferenceDto numberObjectsDirtiedFor(final ObjectCountsDto objectCountsDto)
-  String toXml(final T dto)
-  void toXml(final T dto, final Writer writer)
+  T clone(T dto)
+  MetricsDto metricsFor(MemberExecutionDto executionDto)
+  PeriodDto timingsFor(MetricsDto metricsDto)
+  ObjectCountsDto objectCountsFor(MetricsDto metricsDto)
+  DifferenceDto numberObjectsLoadedFor(ObjectCountsDto objectCountsDto)
+  DifferenceDto numberObjectsDirtiedFor(ObjectCountsDto objectCountsDto)
+  String toXml(T dto)
+  void toXml(T dto, Writer writer)
 }
 ----
 

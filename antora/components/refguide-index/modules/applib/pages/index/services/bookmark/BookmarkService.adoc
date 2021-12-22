@@ -13,7 +13,7 @@ interface BookmarkService {
   Optional<Bookmark> bookmarkFor(Class<?> type, String identifier)     // <.>
   Optional<Object> lookup(BookmarkHolder bookmarkHolder)     // <.>
   Optional<Object> lookup(Bookmark bookmark)     // <.>
-  Optional<T> lookup(final Bookmark bookmark, final Class<T> cls)     // <.>
+  Optional<T> lookup(Bookmark bookmark, Class<T> cls)     // <.>
   Bookmark bookmarkForElseFail(Object domainObject)     // <.>
 }
 ----

@@ -7,7 +7,7 @@
 .CollectionDescriptionRepresentation.java
 ----
 class CollectionDescriptionRepresentation {
-  CollectionDescriptionRepresentation(final JsonNode jsonNode)
+  CollectionDescriptionRepresentation(JsonNode jsonNode)
 }
 ----
 

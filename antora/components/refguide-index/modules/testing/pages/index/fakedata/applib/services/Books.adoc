@@ -9,7 +9,7 @@ Returns random ISBN codes, either 10 or 13 character forms.
 .Books.java
 ----
 class Books {
-  Books(final FakeDataService fakeDataService)
+  Books(FakeDataService fakeDataService)
   String isbn10()
   String isbn13()
 }

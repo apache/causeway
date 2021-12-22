@@ -7,7 +7,7 @@
 .UserRepresentation.java
 ----
 class UserRepresentation {
-  UserRepresentation(final JsonNode jsonNode)
+  UserRepresentation(JsonNode jsonNode)
   LinkRepresentation getUp()
   String getUserName()
   String getFriendlyName()

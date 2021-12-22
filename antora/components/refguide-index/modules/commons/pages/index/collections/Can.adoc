@@ -18,8 +18,8 @@ interface Can<T> {
   Cardinality getCardinality()     // <.>
   int size()     // <.>
   Optional<T> get(int elementIndex)     // <.>
-  T getElseFail(final int elementIndex)     // <.>
-  int compareTo(final Can<T> o)     // <.>
+  T getElseFail(int elementIndex)     // <.>
+  int compareTo(Can<T> o)     // <.>
   Stream<T> stream()     // <.>
   Stream<T> parallelStream()     // <.>
   Optional<T> getFirst()     // <.>
@@ -30,30 +30,30 @@ interface Can<T> {
   T getSingletonOrFail()     // <.>
   boolean contains(T element)     // <.>
   Can<T> empty()     // <.>
-  Can<T> ofNullable(final T element)     // <.>
-  Can<T> ofSingleton(final T element)     // <.>
-  Can<T> of(final T... array)     // <.>
-  Can<T> ofArray(final T[] array)     // <.>
-  Can<T> ofCollection(final Collection<T> collection)     // <.>
-  Can<T> ofIterable(final Iterable<T> iterable)     // <.>
-  Can<T> ofEnumeration(final Enumeration<T> enumeration)     // <.>
-  Can<T> ofStream(final Stream<T> stream)     // <.>
-  Can<T> ofInstance(final Instance<T> instance)     // <.>
+  Can<T> ofNullable(T element)     // <.>
+  Can<T> ofSingleton(T element)     // <.>
+  Can<T> of(T... array)     // <.>
+  Can<T> ofArray(T[] array)     // <.>
+  Can<T> ofCollection(Collection<T> collection)     // <.>
+  Can<T> ofIterable(Iterable<T> iterable)     // <.>
+  Can<T> ofEnumeration(Enumeration<T> enumeration)     // <.>
+  Can<T> ofStream(Stream<T> stream)     // <.>
+  Can<T> ofInstance(Instance<T> instance)     // <.>
   Can<T> sorted(Comparator<? super T> comparator)     // <.>
   Can<T> distinct()     // <.>
   Can<T> distinct(BiPredicate<T, T> equality)     // <.>
   Can<T> reverse()     // <.>
   Can<T> filter(Predicate<? super T> predicate)     // <.>
-  Can<R> map(final Function<? super T, R> mapper)     // <.>
-  Can<R> flatMap(final Function<? super T, ? extends Can<? extends R>> mapper)
-  Can<T> concat(final Can<T> can, final T element)     // <.>
+  Can<R> map(Function<? super T, R> mapper)     // <.>
+  Can<R> flatMap(Function<? super T, ? extends Can<? extends R>> mapper)
+  Can<T> concat(Can<T> can, T element)     // <.>
   Iterator<T> iterator(int skip, int limit)     // <.>
   Iterator<T> reverseIterator()
   void forEach(Consumer<? super T> action)
   void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action)     // <.>
   Can<R> zipMap(Iterable<Z> zippedIn, BiFunction<? super T, ? super Z, R> mapper)     // <.>
   Can<T> add(T element)
-  Can<T> addUnique(final T element)     // <.>
+  Can<T> addUnique(T element)     // <.>
   Can<T> addAll(Can<T> other)
   Can<T> add(int index, T element)     // <.>
   Can<T> replace(int index, T element)
@@ -61,9 +61,9 @@ interface Can<T> {
   Can<T> remove(T element)
   Can<T> pickByIndex(int... indices)     // <.>
   int indexOf(T element)     // <.>
-  boolean isEqualTo(final Can<?> other)     // <.>
-  boolean startsWith(final Can<?> other)     // <.>
-  boolean endsWith(final Can<?> other)     // <.>
+  boolean isEqualTo(Can<?> other)     // <.>
+  boolean startsWith(Can<?> other)     // <.>
+  boolean endsWith(Can<?> other)     // <.>
   boolean isEmpty()
   boolean isNotEmpty()
   boolean isCardinalityOne()
@@ -73,7 +73,7 @@ interface Can<T> {
   Set<T> toSet()     // <.>
   Set<T> toSet(Consumer<T> onDuplicated)     // <.>
   C toCollection(Supplier<C> collectionFactory)     // <.>
-  T[] toArray(final T[] a)     // <.>
+  T[] toArray(T[] a)     // <.>
   T[] toArray(Class<T> elementType)     // <.>
 }
 ----

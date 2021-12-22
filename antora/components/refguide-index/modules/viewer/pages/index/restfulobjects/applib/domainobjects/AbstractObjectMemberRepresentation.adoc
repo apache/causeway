@@ -7,7 +7,7 @@
 .AbstractObjectMemberRepresentation.java
 ----
 class AbstractObjectMemberRepresentation {
-  AbstractObjectMemberRepresentation(final JsonNode jsonNode)
+  AbstractObjectMemberRepresentation(JsonNode jsonNode)
   String getId()
   String getMemberType()
   String getDisabledReason()

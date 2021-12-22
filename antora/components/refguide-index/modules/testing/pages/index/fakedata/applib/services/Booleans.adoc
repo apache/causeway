@@ -9,7 +9,7 @@ Returns random `boolean` values with different probabilities.
 .Booleans.java
 ----
 class Booleans {
-  Booleans(final FakeDataService fakeDataService)
+  Booleans(FakeDataService fakeDataService)
   boolean coinFlip()     // <.>
   boolean either()     // <.>
   boolean diceRollOf6()     // <.>

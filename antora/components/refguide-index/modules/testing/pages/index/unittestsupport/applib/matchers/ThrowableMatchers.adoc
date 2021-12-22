@@ -8,8 +8,8 @@
 ----
 class ThrowableMatchers {
   ThrowableMatchers()
-  TypeSafeMatcher<Throwable> causedBy(final Class<? extends Throwable> type)     // <.>
-  Matcher<Throwable> causalChainHasMessageWith(final String messageFragment)
+  TypeSafeMatcher<Throwable> causedBy(Class<? extends Throwable> type)     // <.>
+  Matcher<Throwable> causalChainHasMessageWith(String messageFragment)
 }
 ----
 

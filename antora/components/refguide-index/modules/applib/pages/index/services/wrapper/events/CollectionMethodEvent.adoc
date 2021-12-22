@@ -9,7 +9,7 @@
 .CollectionMethodEvent.java
 ----
 class CollectionMethodEvent {
-  CollectionMethodEvent(final Object source, final Identifier collectionIdentifier, final Object domainObject, final String methodName, final Object[] args, final Object returnValue)
+  CollectionMethodEvent(Object source, Identifier collectionIdentifier, Object domainObject, String methodName, Object[] args, Object returnValue)
   Object getSource()     // <.>
   Object getDomainObject()     // <.>
   String getMethodName()     // <.>

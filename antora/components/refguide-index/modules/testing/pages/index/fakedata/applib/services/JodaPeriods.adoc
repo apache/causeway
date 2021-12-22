@@ -9,13 +9,13 @@ Returns random _Period_ s constrained to last a certain number number of days, m
 .JodaPeriods.java
 ----
 class JodaPeriods {
-  JodaPeriods(final FakeDataService fakeDataService)
-  Period daysBetween(final int minDays, final int maxDays)
-  Period daysUpTo(final int maxDays)
-  Period monthsBetween(final int minMonths, final int maxMonths)
-  Period monthsUpTo(final int months)
-  Period yearsBetween(final int minYears, final int maxYears)
-  Period yearsUpTo(final int years)
+  JodaPeriods(FakeDataService fakeDataService)
+  Period daysBetween(int minDays, int maxDays)
+  Period daysUpTo(int maxDays)
+  Period monthsBetween(int minMonths, int maxMonths)
+  Period monthsUpTo(int months)
+  Period yearsBetween(int minYears, int maxYears)
+  Period yearsUpTo(int years)
   Period within(Period period)
 }
 ----

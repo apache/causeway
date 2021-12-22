@@ -7,7 +7,7 @@
 .CommandReplayAnalyser.java
 ----
 interface CommandReplayAnalyser {
-  String analyzeReplay(final CommandModel commandJdo)     // <.>
+  String analyzeReplay(CommandModel commandJdo)     // <.>
 }
 ----
 

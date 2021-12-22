@@ -9,9 +9,9 @@ Returns random _BigDecimal_ s, optionally constrained by precision and scale.
 .BigDecimals.java
 ----
 class BigDecimals {
-  BigDecimals(final FakeDataService fakeDataService)
+  BigDecimals(FakeDataService fakeDataService)
   BigDecimal any()
-  BigDecimal any(final int precision, final int scale)
+  BigDecimal any(int precision, int scale)
 }
 ----
 

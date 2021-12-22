@@ -11,11 +11,11 @@ If a messaging-parsing _Function_ is provided through the constructor, then the 
 .ExceptionRecognizerForType.java
 ----
 class ExceptionRecognizerForType {
-  ExceptionRecognizerForType(final Category category, final Class<? extends Exception> exceptionType, final Function<Throwable, String> rootCauseMessageFormatter)
-  ExceptionRecognizerForType(final Category category, final Predicate<Throwable> predicate, final Function<Throwable, String> rootCauseMessageFormatter)
-  ExceptionRecognizerForType(final Category category, final Class<? extends Exception> exceptionType)
-  ExceptionRecognizerForType(final Class<? extends Exception> exceptionType, final Function<Throwable, String> rootCauseMessageFormatter)
-  ExceptionRecognizerForType(final Predicate<Throwable> predicate, final Function<Throwable, String> rootCauseMessageFormatter)
+  ExceptionRecognizerForType(Category category, Class<? extends Exception> exceptionType, Function<Throwable, String> rootCauseMessageFormatter)
+  ExceptionRecognizerForType(Category category, Predicate<Throwable> predicate, Function<Throwable, String> rootCauseMessageFormatter)
+  ExceptionRecognizerForType(Category category, Class<? extends Exception> exceptionType)
+  ExceptionRecognizerForType(Class<? extends Exception> exceptionType, Function<Throwable, String> rootCauseMessageFormatter)
+  ExceptionRecognizerForType(Predicate<Throwable> predicate, Function<Throwable, String> rootCauseMessageFormatter)
   ExceptionRecognizerForType(Class<? extends Exception> exceptionType)
 }
 ----

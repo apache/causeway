@@ -9,7 +9,7 @@ Intended for persona enums to implement, to obtain an instance of the correspond
 .PersonaWithFinder.java
 ----
 interface PersonaWithFinder<T> {
-  T findUsing(final ServiceRegistry serviceRegistry)     // <.>
+  T findUsing(ServiceRegistry serviceRegistry)     // <.>
 }
 ----
 

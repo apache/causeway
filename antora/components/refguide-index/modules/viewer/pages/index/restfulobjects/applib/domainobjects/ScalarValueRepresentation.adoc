@@ -7,7 +7,7 @@
 .ScalarValueRepresentation.java
 ----
 class ScalarValueRepresentation {
-  ScalarValueRepresentation(final JsonNode jsonNode)
+  ScalarValueRepresentation(JsonNode jsonNode)
   JsonRepresentation getValue()
 }
 ----

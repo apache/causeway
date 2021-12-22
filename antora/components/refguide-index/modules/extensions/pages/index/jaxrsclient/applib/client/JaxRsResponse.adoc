@@ -8,7 +8,7 @@
 ----
 interface JaxRsResponse {
   int getStatus()
-  T readEntity(final Class<T> entityType)
+  T readEntity(Class<T> entityType)
 }
 ----
 

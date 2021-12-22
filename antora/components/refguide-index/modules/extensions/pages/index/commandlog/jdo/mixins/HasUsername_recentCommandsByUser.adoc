@@ -7,7 +7,7 @@
 .HasUsername_recentCommandsByUser.java
 ----
 class HasUsername_recentCommandsByUser {
-  HasUsername_recentCommandsByUser(final HasUsername hasUsername)
+  HasUsername_recentCommandsByUser(HasUsername hasUsername)
   List<CommandJdo> coll()
   boolean hideColl()
 }

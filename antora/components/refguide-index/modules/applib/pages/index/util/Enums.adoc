@@ -7,13 +7,13 @@
 .Enums.java
 ----
 class Enums {
-  String getFriendlyNameOf(final Enum<?> anEnum)
-  String getFriendlyNameOf(final String anEnumName)
-  String getEnumNameFromFriendly(final String anEnumFriendlyName)
-  String enumToHttpHeader(final Enum<?> anEnum)
-  String enumNameToHttpHeader(final String name)
-  String enumToCamelCase(final Enum<?> anEnum)
-  Optional<T> parseFriendlyName(final Class<T> correspondingClass, final String text)
+  String getFriendlyNameOf(Enum<?> anEnum)
+  String getFriendlyNameOf(String anEnumName)
+  String getEnumNameFromFriendly(String anEnumFriendlyName)
+  String enumToHttpHeader(Enum<?> anEnum)
+  String enumNameToHttpHeader(String name)
+  String enumToCamelCase(Enum<?> anEnum)
+  Optional<T> parseFriendlyName(Class<T> correspondingClass, String text)
 }
 ----
 

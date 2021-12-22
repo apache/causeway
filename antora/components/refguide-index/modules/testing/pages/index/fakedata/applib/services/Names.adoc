@@ -9,7 +9,7 @@ Returns random strings representing names.
 .Names.java
 ----
 class Names {
-  Names(final FakeDataService fakeDataService)
+  Names(FakeDataService fakeDataService)
   String fullName()
   String firstName()
   String lastName()

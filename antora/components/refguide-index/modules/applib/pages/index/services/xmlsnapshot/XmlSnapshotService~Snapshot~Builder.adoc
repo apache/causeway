@@ -7,8 +7,8 @@
 .XmlSnapshotService~Snapshot~Builder.java
 ----
 interface Builder {
-  void includePath(final String path)     // <.>
-  void includePathAndAnnotation(final String path, final String annotation)     // <.>
+  void includePath(String path)     // <.>
+  void includePathAndAnnotation(String path, String annotation)     // <.>
   XmlSnapshotService.Snapshot build()     // <.>
 }
 ----

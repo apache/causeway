@@ -9,7 +9,7 @@ Fundamental building block of Tree structures.
 .TreeNode.java
 ----
 class TreeNode<T> {
-  TreeNode<T> of(final T value, final Class<? extends TreeAdapter<T>> treeAdapterClass, final TreeState sharedState)
+  TreeNode<T> of(T value, Class<? extends TreeAdapter<T>> treeAdapterClass, TreeState sharedState)
   T getValue()
   int getIncomingCount()
   int getOutgoingCount()
@@ -22,11 +22,11 @@ class TreeNode<T> {
   boolean isLeaf()
   TreePath getPositionAsPath()
   TreeState getTreeState()     // <.>
-  boolean isExpanded(final TreePath treePath)
-  void expand(final TreePath... treePaths)     // <.>
+  boolean isExpanded(TreePath treePath)
+  void expand(TreePath... treePaths)     // <.>
   void expand()     // <.>
-  void collapse(final TreePath... treePaths)     // <.>
-  TreeNode<T> lazy(final T node, final Class<? extends TreeAdapter<T>> treeAdapterClass)     // <.>
+  void collapse(TreePath... treePaths)     // <.>
+  TreeNode<T> lazy(T node, Class<? extends TreeAdapter<T>> treeAdapterClass)     // <.>
   Iterator<TreeNode<T>> iteratorHierarchyUp()
   Stream<TreeNode<T>> streamHierarchyUp()
   Iterator<TreeNode<T>> iteratorDepthFirst()

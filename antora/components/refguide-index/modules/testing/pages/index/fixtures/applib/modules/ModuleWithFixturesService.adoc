@@ -7,15 +7,15 @@
 .ModuleWithFixturesService.java
 ----
 class ModuleWithFixturesService {
-  ModuleWithFixturesService(final SpringBeansService springBeansService)
+  ModuleWithFixturesService(SpringBeansService springBeansService)
   FixtureScript getRefDataSetupFixture()
   FixtureScript getTeardownFixture()
   List<ModuleWithFixturesDescriptor> modules()
-  List<ModuleWithFixturesDescriptor> modulesWithin(final Map<String, ContextBeans> beans)
-  List<ModuleWithFixturesDescriptor> sequenced(final List<ModuleWithFixturesDescriptor> modules)
-  List<String> beanNamesOf(final ArrayList<ModuleWithFixturesDescriptor> result)
-  ModuleWithFixturesDescriptor addNextModule(final List<ModuleWithFixturesDescriptor> result, final List<ModuleWithFixturesDescriptor> remaining, final LinkedHashMap<String, ModuleWithFixturesDescriptor> moduleByName)
-  void onContextRefreshed(final ContextRefreshedEvent event)
+  List<ModuleWithFixturesDescriptor> modulesWithin(Map<String, ContextBeans> beans)
+  List<ModuleWithFixturesDescriptor> sequenced(List<ModuleWithFixturesDescriptor> modules)
+  List<String> beanNamesOf(ArrayList<ModuleWithFixturesDescriptor> result)
+  ModuleWithFixturesDescriptor addNextModule(List<ModuleWithFixturesDescriptor> result, List<ModuleWithFixturesDescriptor> remaining, LinkedHashMap<String, ModuleWithFixturesDescriptor> moduleByName)
+  void onContextRefreshed(ContextRefreshedEvent event)
 }
 ----
 

@@ -7,14 +7,14 @@
 .ObjectLifecyclePublisherDefault.java
 ----
 class ObjectLifecyclePublisherDefault {
-  ObjectLifecyclePublisherDefault(final EventBusService eventBusService, final EntityPropertyChangePublisher entityPropertyChangePublisher)
-  void onPostCreate(final ManagedObject domainObject)
-  void onPrePersist(final ManagedObject entity)
-  void onPreUpdate(final ManagedObject entity, final Can<PropertyChangeRecord> changeRecords)
-  void onPreRemove(final ManagedObject entity)
-  void onPostPersist(final ManagedObject entity)
-  void onPostUpdate(final ManagedObject entity)
-  void onPostLoad(final ManagedObject entity)
+  ObjectLifecyclePublisherDefault(EventBusService eventBusService, EntityPropertyChangePublisher entityPropertyChangePublisher)
+  void onPostCreate(ManagedObject domainObject)
+  void onPrePersist(ManagedObject entity)
+  void onPreUpdate(ManagedObject entity, Can<PropertyChangeRecord> changeRecords)
+  void onPreRemove(ManagedObject entity)
+  void onPostPersist(ManagedObject entity)
+  void onPostUpdate(ManagedObject entity)
+  void onPostLoad(ManagedObject entity)
 }
 ----
 

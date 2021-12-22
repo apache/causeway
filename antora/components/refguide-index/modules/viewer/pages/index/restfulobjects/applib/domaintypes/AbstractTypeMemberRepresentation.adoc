@@ -7,7 +7,7 @@
 .AbstractTypeMemberRepresentation.java
 ----
 class AbstractTypeMemberRepresentation {
-  AbstractTypeMemberRepresentation(final JsonNode jsonNode)
+  AbstractTypeMemberRepresentation(JsonNode jsonNode)
 }
 ----
 

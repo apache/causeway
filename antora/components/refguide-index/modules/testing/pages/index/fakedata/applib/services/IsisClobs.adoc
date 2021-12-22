@@ -9,7 +9,7 @@ Returns random xref:refguide:applib:index/value/Clob.adoc[Clob] values, optional
 .IsisClobs.java
 ----
 class IsisClobs {
-  IsisClobs(final FakeDataService fakeDataService)
+  IsisClobs(FakeDataService fakeDataService)
   Clob any()
   Clob anyXml()
   Clob anyRtf()

@@ -10,8 +10,8 @@ Immutable serializable value held by xref:refguide:applib:index/services/user/Us
 ----
 class RoleMemento {
   public static final String LOGICAL_TYPE_NAME;
-  RoleMemento(final String name)     // <.>
-  RoleMemento(final String name, final String description)     // <.>
+  RoleMemento(String name)     // <.>
+  RoleMemento(String name, String description)     // <.>
 }
 ----
 

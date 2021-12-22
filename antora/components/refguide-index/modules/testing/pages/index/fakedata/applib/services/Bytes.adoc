@@ -9,9 +9,9 @@ Returns random `byte` values, optionally constrained within a range,
 .Bytes.java
 ----
 class Bytes {
-  Bytes(final FakeDataService fakeDataService)
-  byte upTo(final byte upTo)
-  byte between(final byte min, final byte max)
+  Bytes(FakeDataService fakeDataService)
+  byte upTo(byte upTo)
+  byte between(byte min, byte max)
   byte any()
 }
 ----

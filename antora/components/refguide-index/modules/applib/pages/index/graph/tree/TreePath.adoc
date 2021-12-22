@@ -16,7 +16,7 @@ interface TreePath {
   TreePath append(int indexWithinSiblings)     // <.>
   TreePath getParentIfAny()     // <.>
   boolean isRoot()
-  TreePath of(final int... canonicalPath)
+  TreePath of(int... canonicalPath)
   TreePath root()
 }
 ----

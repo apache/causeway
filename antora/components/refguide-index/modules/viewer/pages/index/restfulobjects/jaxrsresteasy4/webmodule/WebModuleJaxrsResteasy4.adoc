@@ -9,7 +9,7 @@ WebModule that provides the RestfulObjects Viewer.
 .WebModuleJaxrsResteasy4.java
 ----
 class WebModuleJaxrsResteasy4 {
-  WebModuleJaxrsResteasy4(final IsisConfiguration isisConfiguration, final RestEasyConfiguration restEasyConfiguration, final ServiceInjector serviceInjector)
+  WebModuleJaxrsResteasy4(IsisConfiguration isisConfiguration, RestEasyConfiguration restEasyConfiguration, ServiceInjector serviceInjector)
   void prepare(WebModuleContext ctx)
   Can<ServletContextListener> init(ServletContext ctx)
 }

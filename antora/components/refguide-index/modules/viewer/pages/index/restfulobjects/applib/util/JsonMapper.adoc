@@ -9,11 +9,11 @@
 class JsonMapper {
   String getEntityAsStringFrom(Response response)
   JsonMapper instance()     // <.>
-  JsonMapper instance(final PrettyPrinting prettyPrinting)
-  JsonRepresentation read(final String json)
-  T read(final String json, final Class<T> requiredType)
-  T read(final Response response, final Class<T> requiredType)
-  String write(final Object object)
+  JsonMapper instance(PrettyPrinting prettyPrinting)
+  JsonRepresentation read(String json)
+  T read(String json, Class<T> requiredType)
+  T read(Response response, Class<T> requiredType)
+  String write(Object object)
 }
 ----
 

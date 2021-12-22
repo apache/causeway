@@ -21,14 +21,14 @@ The class also adds some convenience methods, and uses a factory method to make 
 .JUnitRuleMockery2.java
 ----
 class JUnitRuleMockery2 {
-  JUnitRuleMockery2 createFor(final Mode mode)     // <.>
-  Statement apply(final Statement base, final FrameworkMethod method, final Object target)
+  JUnitRuleMockery2 createFor(Mode mode)     // <.>
+  Statement apply(Statement base, FrameworkMethod method, Object target)
   T getClassUnderTest()
-  T ignoring(final T mock)     // <.>
-  T allowing(final T mock)     // <.>
-  T never(final T mock)     // <.>
+  T ignoring(T mock)     // <.>
+  T allowing(T mock)     // <.>
+  T never(T mock)     // <.>
   void ignoring(Object... mocks)     // <.>
-  Object oneOf(final Object mock)     // <.>
+  Object oneOf(Object mock)     // <.>
   T checking(T mock, Class<? extends ExpectationsOn> expectationsClass)
   Expectations expectationsWith(Consumer<Expectations> initializer)
 }

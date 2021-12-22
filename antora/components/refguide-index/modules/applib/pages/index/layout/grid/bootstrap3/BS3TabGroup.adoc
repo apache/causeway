@@ -10,15 +10,15 @@ Represents a tab group containing one or more xref:refguide:applib:index/layout/
 ----
 class BS3TabGroup {
   Boolean isUnreferencedCollections()     // <.>
-  void setUnreferencedCollections(final Boolean unreferencedCollections)
+  void setUnreferencedCollections(Boolean unreferencedCollections)
   Boolean isCollapseIfOne()     // <.>
-  void setCollapseIfOne(final Boolean collapseIfOne)
+  void setCollapseIfOne(Boolean collapseIfOne)
   List<BS3Tab> getTabs()
-  void setTabs(final List<BS3Tab> tabs)
+  void setTabs(List<BS3Tab> tabs)
   BS3TabGroupOwner getOwner()     // <.>
-  void setOwner(final BS3TabGroupOwner owner)
+  void setOwner(BS3TabGroupOwner owner)
   String getMetadataError()     // <.>
-  void setMetadataError(final String metadataError)
+  void setMetadataError(String metadataError)
   BS3Grid getGrid()
 }
 ----

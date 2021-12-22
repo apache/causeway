@@ -9,7 +9,7 @@ Returns a random string representing for communications channel of some sort (em
 .Comms.java
 ----
 class Comms {
-  Comms(final FakeDataService fakeDataService)
+  Comms(FakeDataService fakeDataService)
   String emailAddress()
   String url()
   String phoneNumber()

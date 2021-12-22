@@ -9,7 +9,7 @@ Same as _ImpersonateMenu.impersonate#act(String)_ , but implemented as a mixin s
 .Object_impersonate.java
 ----
 class Object_impersonate {
-  Object act(final String userName)
+  Object act(String userName)
   boolean hideAct()
   String disableAct()
   String default0Act()

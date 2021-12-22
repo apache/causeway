@@ -12,11 +12,11 @@ They simply contain one or more xref:refguide:applib:index/layout/grid/bootstrap
 ----
 class BS3Tab {
   String getName()
-  void setName(final String name)
+  void setName(String name)
   List<BS3Row> getRows()
-  void setRows(final List<BS3Row> rows)
+  void setRows(List<BS3Row> rows)
   BS3TabOwner getOwner()     // <.>
-  void setOwner(final BS3TabOwner owner)
+  void setOwner(BS3TabOwner owner)
   BS3Grid getGrid()
   String toString()
 }

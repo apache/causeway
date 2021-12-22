@@ -15,7 +15,7 @@ All known converters are checked one by one, but checking stops once one convert
 .AuthenticationConverter.java
 ----
 interface AuthenticationConverter {
-  UserMemento convert(final Authentication authentication)     // <.>
+  UserMemento convert(Authentication authentication)     // <.>
 }
 ----
 

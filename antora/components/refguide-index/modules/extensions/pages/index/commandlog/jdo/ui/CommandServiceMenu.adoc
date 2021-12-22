@@ -10,11 +10,11 @@ class CommandServiceMenu {
   public final static String LOGICAL_TYPE_NAME;
   List<CommandJdo> activeCommands()
   boolean hideActiveCommands()
-  List<CommandJdo> findCommands(final LocalDate from, final LocalDate to)
+  List<CommandJdo> findCommands(LocalDate from, LocalDate to)
   boolean hideFindCommands()
   LocalDate default0FindCommands()
   LocalDate default1FindCommands()
-  CommandJdo findCommandById(final UUID transactionId)
+  CommandJdo findCommandById(UUID transactionId)
   boolean hideFindCommandById()
   void truncateLog()
 }

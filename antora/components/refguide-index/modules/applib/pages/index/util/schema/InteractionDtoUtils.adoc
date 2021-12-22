@@ -9,25 +9,25 @@
 class InteractionDtoUtils {
   void init()
   JAXBContext getJaxbContext()
-  InteractionDto fromXml(final Reader reader)
-  InteractionDto fromXml(final String xml)
-  InteractionDto fromXml(final Class<?> contextClass, final String resourceName, final Charset charset)
-  String toXml(final InteractionDto interactionDto)
-  void toXml(final InteractionDto interactionDto, final Writer writer)
-  InteractionDto newInteractionDto(final Execution<?, ?> execution)     // <.>
-  InteractionDto newInteractionDto(final Execution<?, ?> execution, final Strategy strategy)     // <.>
-  ActionInvocationDto newActionInvocation(final int sequence, final Bookmark targetBookmark, final String targetTitle, final String actionIdentifier, final List<ParamDto> parameterDtos, final String user)
-  PropertyEditDto newPropertyEdit(final int sequence, final Bookmark targetBookmark, final String targetTitle, final String propertyIdentifier, final ValueWithTypeDto newValueDto, final String user)
-  String deriveLogicalMemberId(final Bookmark bookmark, final String memberId)
-  List<ParamDto> getParameters(final ActionInvocationDto ai)
-  List<String> getParameterNames(final ActionInvocationDto ai)
-  List<ValueType> getParameterTypes(final ActionInvocationDto ai)
-  ParamDto getParameter(final ActionInvocationDto ai, final int paramNum)
-  ValueDto getParameterArgument(final ActionInvocationDto ai, final int paramNum)
-  String getParameterName(final ActionInvocationDto ai, final int paramNum)
-  ValueType getParameterType(final ActionInvocationDto ai, final int paramNum)
-  boolean isNull(final ActionInvocationDto ai, final int paramNum)
-  void dump(final InteractionDto ixnDto, final PrintStream out)
+  InteractionDto fromXml(Reader reader)
+  InteractionDto fromXml(String xml)
+  InteractionDto fromXml(Class<?> contextClass, String resourceName, Charset charset)
+  String toXml(InteractionDto interactionDto)
+  void toXml(InteractionDto interactionDto, Writer writer)
+  InteractionDto newInteractionDto(Execution<?, ?> execution)     // <.>
+  InteractionDto newInteractionDto(Execution<?, ?> execution, Strategy strategy)     // <.>
+  ActionInvocationDto newActionInvocation(int sequence, Bookmark targetBookmark, String targetTitle, String actionIdentifier, List<ParamDto> parameterDtos, String user)
+  PropertyEditDto newPropertyEdit(int sequence, Bookmark targetBookmark, String targetTitle, String propertyIdentifier, ValueWithTypeDto newValueDto, String user)
+  String deriveLogicalMemberId(Bookmark bookmark, String memberId)
+  List<ParamDto> getParameters(ActionInvocationDto ai)
+  List<String> getParameterNames(ActionInvocationDto ai)
+  List<ValueType> getParameterTypes(ActionInvocationDto ai)
+  ParamDto getParameter(ActionInvocationDto ai, int paramNum)
+  ValueDto getParameterArgument(ActionInvocationDto ai, int paramNum)
+  String getParameterName(ActionInvocationDto ai, int paramNum)
+  ValueType getParameterType(ActionInvocationDto ai, int paramNum)
+  boolean isNull(ActionInvocationDto ai, int paramNum)
+  void dump(InteractionDto ixnDto, PrintStream out)
 }
 ----
 

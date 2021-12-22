@@ -11,7 +11,7 @@ Analogous to xref:refguide:applib:index/services/wrapper/events/CollectionAddToE
 .CollectionAccessEvent.java
 ----
 class CollectionAccessEvent {
-  CollectionAccessEvent(final Object source, final Identifier collectionIdentifier)
+  CollectionAccessEvent(Object source, Identifier collectionIdentifier)
 }
 ----
 

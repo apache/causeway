@@ -11,19 +11,19 @@ For xref:refguide:applib:index/Identifier.adoc[Identifier] (s) of type _Identifi
 .Identifier.java
 ----
 class Identifier {
-  Identifier classIdentifier(final LogicalType typeIdentifier)
-  Identifier propertyOrCollectionIdentifier(final LogicalType typeIdentifier, final String propertyOrCollectionName)
-  Identifier methodIdentifier(final LogicalType typeIdentifier, final Method method)     // <.>
-  Identifier actionIdentifier(final LogicalType typeIdentifier, final String actionName, final Class<?>... parameterClasses)
-  Identifier actionIdentifier(final LogicalType typeIdentifier, final String actionName, final Can<String> parameterClassNames)
-  Identifier withParameterIndex(final int parameterIndex)
-  String getLogicalIdentityString(final String delimiter)
+  Identifier classIdentifier(LogicalType typeIdentifier)
+  Identifier propertyOrCollectionIdentifier(LogicalType typeIdentifier, String propertyOrCollectionName)
+  Identifier methodIdentifier(LogicalType typeIdentifier, Method method)     // <.>
+  Identifier actionIdentifier(LogicalType typeIdentifier, String actionName, Class<?>... parameterClasses)
+  Identifier actionIdentifier(LogicalType typeIdentifier, String actionName, Can<String> parameterClassNames)
+  Identifier withParameterIndex(int parameterIndex)
+  String getLogicalIdentityString(String delimiter)
   String getClassNaturalName()
   String getMemberNaturalName()
   Can<String> getMemberParameterClassNaturalNames()
-  int compareTo(final Identifier other)
-  boolean equals(final Object obj)
-  boolean isEqualTo(final Identifier other)
+  int compareTo(Identifier other)
+  boolean equals(Object obj)
+  boolean isEqualTo(Identifier other)
   int hashCode()
   String toString()
 }

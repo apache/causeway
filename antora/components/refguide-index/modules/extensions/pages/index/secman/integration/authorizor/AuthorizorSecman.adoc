@@ -7,8 +7,8 @@
 .AuthorizorSecman.java
 ----
 class AuthorizorSecman {
-  boolean isVisible(final InteractionContext authentication, final Identifier identifier)
-  boolean isUsable(final InteractionContext authentication, final Identifier identifier)
+  boolean isVisible(InteractionContext authentication, Identifier identifier)
+  boolean isUsable(InteractionContext authentication, Identifier identifier)
 }
 ----
 

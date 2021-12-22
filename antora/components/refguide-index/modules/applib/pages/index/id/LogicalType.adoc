@@ -13,18 +13,18 @@ Meta-model validators will take care, that there is no logical name ambiguity: T
 .LogicalType.java
 ----
 class LogicalType {
-  LogicalType lazy(final Class<?> correspondingClass, final Supplier<String> logicalNameProvider)     // <.>
-  LogicalType eager(final Class<?> correspondingClass, final String logicalName)     // <.>
-  LogicalType fqcn(final Class<?> correspondingClass)     // <.>
+  LogicalType lazy(Class<?> correspondingClass, Supplier<String> logicalNameProvider)     // <.>
+  LogicalType eager(Class<?> correspondingClass, String logicalName)     // <.>
+  LogicalType fqcn(Class<?> correspondingClass)     // <.>
   String getClassName()     // <.>
   String getLogicalTypeName()     // <.>
   String getLogicalTypeSimpleName()     // <.>
   String getNamespace()     // <.>
-  String getLogicalTypeNameFormatted(final String root, final String delimiter)     // <.>
-  boolean equals(final Object obj)
-  boolean isEqualTo(final LogicalType other)
+  String getLogicalTypeNameFormatted(String root, String delimiter)     // <.>
+  boolean equals(Object obj)
+  boolean isEqualTo(LogicalType other)
   int hashCode()
-  int compareTo(final LogicalType other)
+  int compareTo(LogicalType other)
 }
 ----
 

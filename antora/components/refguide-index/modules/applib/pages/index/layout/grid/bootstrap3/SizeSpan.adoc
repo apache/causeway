@@ -7,16 +7,16 @@
 .SizeSpan.java
 ----
 class SizeSpan {
-  SizeSpan with(final Size size, final int span)
-  SizeSpan offset(final Size size, final int span)
+  SizeSpan with(Size size, int span)
+  SizeSpan offset(Size size, int span)
   Size getSize()
-  void setSize(final Size size)
+  void setSize(Size size)
   int getSpan()
-  void setSpan(final int span)
+  void setSpan(int span)
   Boolean isOffset()
-  void setOffset(final Boolean offset)
+  void setOffset(Boolean offset)
   String toCssClassFragment()
-  StringBuilder appendCssClassFragment(final StringBuilder buf)
+  StringBuilder appendCssClassFragment(StringBuilder buf)
 }
 ----
 

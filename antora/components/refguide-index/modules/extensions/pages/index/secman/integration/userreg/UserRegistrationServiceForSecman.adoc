@@ -9,10 +9,10 @@ An implementation of xref:refguide:applib:index/services/userreg/UserRegistratio
 .UserRegistrationServiceForSecman.java
 ----
 class UserRegistrationServiceForSecman {
-  boolean usernameExists(final String username)
-  void registerUser(final UserDetails userDetails)
-  boolean emailExists(final String emailAddress)
-  boolean updatePasswordByEmail(final String emailAddress, final String password)
+  boolean usernameExists(String username)
+  void registerUser(UserDetails userDetails)
+  boolean emailExists(String emailAddress)
+  boolean updatePasswordByEmail(String emailAddress, String password)
 }
 ----
 

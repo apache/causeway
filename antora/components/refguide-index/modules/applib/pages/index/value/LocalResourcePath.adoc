@@ -13,14 +13,14 @@ xref:refguide:applib:index/value/OpenUrlStrategy.adoc[OpenUrlStrategy] gives con
 .LocalResourcePath.java
 ----
 class LocalResourcePath {
-  LocalResourcePath(final String path)
-  LocalResourcePath(final String path, final OpenUrlStrategy openUrlStrategy)
+  LocalResourcePath(String path)
+  LocalResourcePath(String path, OpenUrlStrategy openUrlStrategy)
   String getValue()
-  String getEffectivePath(final UnaryOperator<String> contextPathPrepender)
+  String getEffectivePath(UnaryOperator<String> contextPathPrepender)
   String toString()
-  boolean equals(final Object obj)
+  boolean equals(Object obj)
   int hashCode()
-  boolean isEqualTo(final LocalResourcePath other)
+  boolean isEqualTo(LocalResourcePath other)
 }
 ----
 

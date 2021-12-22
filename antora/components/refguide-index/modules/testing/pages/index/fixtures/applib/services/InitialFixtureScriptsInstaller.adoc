@@ -7,8 +7,8 @@
 .InitialFixtureScriptsInstaller.java
 ----
 class InitialFixtureScriptsInstaller {
-  InitialFixtureScriptsInstaller(final IsisConfiguration isisConfiguration, final FixtureScripts fixtureScripts)
-  void onMetamodelEvent(final MetamodelEvent event)
+  InitialFixtureScriptsInstaller(IsisConfiguration isisConfiguration, FixtureScripts fixtureScripts)
+  void onMetamodelEvent(MetamodelEvent event)
 }
 ----
 

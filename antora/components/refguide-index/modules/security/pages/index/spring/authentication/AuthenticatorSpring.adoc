@@ -7,9 +7,9 @@
 .AuthenticatorSpring.java
 ----
 class AuthenticatorSpring {
-  boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass)
-  InteractionContext authenticate(final AuthenticationRequest request, final String code)
-  void logout(final InteractionContext session)
+  boolean canAuthenticate(Class<? extends AuthenticationRequest> authenticationRequestClass)
+  InteractionContext authenticate(AuthenticationRequest request, String code)
+  void logout(InteractionContext session)
 }
 ----
 

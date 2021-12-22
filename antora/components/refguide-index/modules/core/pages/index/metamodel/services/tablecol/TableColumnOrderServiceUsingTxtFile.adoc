@@ -15,8 +15,8 @@ Also note that properties that have been explicitly hidden from tables using _Pr
 .TableColumnOrderServiceUsingTxtFile.java
 ----
 class TableColumnOrderServiceUsingTxtFile {
-  List<String> orderParented(final Object domainObject, final String collectionId, final Class<?> collectionType, final List<String> propertyIds)     // <.>
-  List<String> orderStandalone(final Class<?> domainClass, final List<String> propertyIds)     // <.>
+  List<String> orderParented(Object domainObject, String collectionId, Class<?> collectionType, List<String> propertyIds)     // <.>
+  List<String> orderStandalone(Class<?> domainClass, List<String> propertyIds)     // <.>
 }
 ----
 

@@ -9,10 +9,10 @@ Returns random strings, specifying the number of characters.
 .Strings.java
 ----
 class Strings {
-  Strings(final FakeDataService fakeDataService)
-  String upper(final int numChars)
-  String fixed(final int numChars)
-  String digits(final int numDigits)
+  Strings(FakeDataService fakeDataService)
+  String upper(int numChars)
+  String fixed(int numChars)
+  String digits(int numDigits)
 }
 ----
 

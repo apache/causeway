@@ -11,9 +11,9 @@ This exception is intended to represent an unexpected and non-recoverable condit
 .RepositoryException.java
 ----
 class RepositoryException {
-  RepositoryException(final String msg)
-  RepositoryException(final Throwable cause)
-  RepositoryException(final String msg, final Throwable cause)
+  RepositoryException(String msg)
+  RepositoryException(Throwable cause)
+  RepositoryException(String msg, Throwable cause)
 }
 ----
 

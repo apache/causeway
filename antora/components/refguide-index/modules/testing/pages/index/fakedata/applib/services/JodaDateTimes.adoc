@@ -11,10 +11,10 @@ The current time ('now') is obtained from the _org.apache.isis.applib.services.c
 .JodaDateTimes.java
 ----
 class JodaDateTimes {
-  JodaDateTimes(final FakeDataService fakeDataService)
-  DateTime around(final Period period)     // <.>
-  DateTime before(final Period period)     // <.>
-  DateTime after(final Period period)     // <.>
+  JodaDateTimes(FakeDataService fakeDataService)
+  DateTime around(Period period)     // <.>
+  DateTime before(Period period)     // <.>
+  DateTime after(Period period)     // <.>
   DateTime any()     // <.>
 }
 ----

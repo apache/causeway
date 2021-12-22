@@ -7,7 +7,7 @@
 .ObjectCollectionRepresentation.java
 ----
 class ObjectCollectionRepresentation {
-  ObjectCollectionRepresentation(final JsonNode jsonNode)
+  ObjectCollectionRepresentation(JsonNode jsonNode)
   JsonRepresentation getValue()
 }
 ----

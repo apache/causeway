@@ -7,7 +7,7 @@
 .Dflt.java
 ----
 class Dflt {
-  T of(final Collection<T> choices)
+  T of(Collection<T> choices)
 }
 ----
 

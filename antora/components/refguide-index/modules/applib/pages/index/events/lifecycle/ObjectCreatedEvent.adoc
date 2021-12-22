@@ -10,7 +10,7 @@ Broadcast when an object (entiy or view model) is first instantiated using the _
 ----
 class ObjectCreatedEvent<S> {
   ObjectCreatedEvent()
-  ObjectCreatedEvent(final S source)
+  ObjectCreatedEvent(S source)
 }
 ----
 

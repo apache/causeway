@@ -11,12 +11,12 @@ View model identified by xref:refguide:applib:index/services/appfeat/Application
 class ApplicationFeatureViewModel {
   public static final String LOGICAL_TYPE_NAME;
   ApplicationFeatureViewModel()
-  ApplicationFeatureViewModel(final ApplicationFeatureId featureId)
-  ApplicationFeatureViewModel newViewModel(final ApplicationFeatureId featureId, final ApplicationFeatureRepository applicationFeatureRepository, final FactoryService factoryService)
+  ApplicationFeatureViewModel(ApplicationFeatureId featureId)
+  ApplicationFeatureViewModel newViewModel(ApplicationFeatureId featureId, ApplicationFeatureRepository applicationFeatureRepository, FactoryService factoryService)
   String title()     // <.>
   String iconName()
   String viewModelMemento()
-  void viewModelInit(final String encodedMemento)
+  void viewModelInit(String encodedMemento)
   ApplicationFeature getFeature()
   String getFullyQualifiedName()
   ApplicationFeatureSort getSort()
@@ -27,10 +27,10 @@ class ApplicationFeatureViewModel {
   boolean hideMemberName()
   ApplicationFeatureViewModel getParent()
   ApplicationFeatureViewModel getParentNamespace()     // <.>
-  boolean equals(final Object obj)
+  boolean equals(Object obj)
   int hashCode()
   String toString()
-  Function<ApplicationFeatureId, T> factory(final ApplicationFeatureRepository featureRepository, final FactoryService factory, final Class<T> viewModelType)
+  Function<ApplicationFeatureId, T> factory(ApplicationFeatureRepository featureRepository, FactoryService factory, Class<T> viewModelType)
 }
 ----
 

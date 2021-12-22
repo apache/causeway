@@ -11,25 +11,25 @@ Describes the layout of the title and icon of a domain object, broadly correspon
 class DomainObjectLayoutData {
   DomainObjectLayoutData()
   BookmarkPolicy getBookmarking()
-  void setBookmarking(final BookmarkPolicy bookmarking)
+  void setBookmarking(BookmarkPolicy bookmarking)
   String getCssClass()
-  void setCssClass(final String cssClass)
+  void setCssClass(String cssClass)
   String getCssClassFa()
-  void setCssClassFa(final String cssClassFa)
+  void setCssClassFa(String cssClassFa)
   CssClassFaPosition getCssClassFaPosition()
-  void setCssClassFaPosition(final CssClassFaPosition cssClassFaPosition)
+  void setCssClassFaPosition(CssClassFaPosition cssClassFaPosition)
   String getDescribedAs()
-  void setDescribedAs(final String describedAs)
+  void setDescribedAs(String describedAs)
   String getNamed()
-  void setNamed(final String named)
+  void setNamed(String named)
   String getPlural()
-  void setPlural(final String plural)
+  void setPlural(String plural)
   String getMetadataError()     // <.>
-  void setMetadataError(final String metadataError)
+  void setMetadataError(String metadataError)
   DomainObjectLayoutDataOwner getOwner()     // <.>
-  void setOwner(final DomainObjectLayoutDataOwner owner)
+  void setOwner(DomainObjectLayoutDataOwner owner)
   Link getLink()     // <.>
-  void setLink(final Link link)
+  void setLink(Link link)
 }
 ----
 

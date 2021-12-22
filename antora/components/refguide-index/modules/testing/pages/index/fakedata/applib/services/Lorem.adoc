@@ -9,7 +9,7 @@ Returns random text, either words or sentences or paragraphs.
 .Lorem.java
 ----
 class Lorem {
-  Lorem(final FakeDataService fakeDataService)
+  Lorem(FakeDataService fakeDataService)
   List<String> words(int num)
   List<String> words()
   String sentence(int wordCount)

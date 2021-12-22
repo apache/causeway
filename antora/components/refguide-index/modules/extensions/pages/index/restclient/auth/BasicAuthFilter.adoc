@@ -7,10 +7,10 @@
 .BasicAuthFilter.java
 ----
 class BasicAuthFilter {
-  BasicAuthFilter of(final Credentials credentials)
+  BasicAuthFilter of(Credentials credentials)
   Credentials getCredentials()
-  void setCredentials(final Credentials credentials)
-  void filter(final ClientRequestContext requestContext)
+  void setCredentials(Credentials credentials)
+  void filter(ClientRequestContext requestContext)
 }
 ----
 

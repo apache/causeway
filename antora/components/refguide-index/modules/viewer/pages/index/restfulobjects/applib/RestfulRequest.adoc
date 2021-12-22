@@ -7,8 +7,8 @@
 .RestfulRequest.java
 ----
 class RestfulRequest {
-  RestfulRequest withArg(final RestfulRequest.RequestParameter<Q> queryParam, final String argStrFormat, final Object... args)
-  RestfulRequest withArg(final RestfulRequest.RequestParameter<Q> queryParam, final Q arg)
+  RestfulRequest withArg(RestfulRequest.RequestParameter<Q> queryParam, String argStrFormat, Object... args)
+  RestfulRequest withArg(RestfulRequest.RequestParameter<Q> queryParam, Q arg)
 }
 ----
 

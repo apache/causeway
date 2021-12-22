@@ -12,15 +12,15 @@ Executing in a separate thread means that the target and arguments are used in a
 ----
 class AsyncControl<R> {
   AsyncControl<Void> returningVoid()     // <.>
-  AsyncControl<X> returning(final Class<X> cls)     // <.>
+  AsyncControl<X> returning(Class<X> cls)     // <.>
   AsyncControl<R> withSkipRules()     // <.>
-  AsyncControl with(final ExceptionHandler exceptionHandler)     // <.>
-  AsyncControl<R> with(final ExecutorService executorService)     // <.>
-  AsyncControl<R> withClock(final VirtualClock clock)
-  AsyncControl<R> withLocale(final Locale locale)
-  AsyncControl<R> withTimeZone(final ZoneId timeZone)
-  AsyncControl<R> withUser(final UserMemento user)     // <.>
-  void setFuture(final Future<R> future)     // <.>
+  AsyncControl with(ExceptionHandler exceptionHandler)     // <.>
+  AsyncControl<R> with(ExecutorService executorService)     // <.>
+  AsyncControl<R> withClock(VirtualClock clock)
+  AsyncControl<R> withLocale(Locale locale)
+  AsyncControl<R> withTimeZone(ZoneId timeZone)
+  AsyncControl<R> withUser(UserMemento user)     // <.>
+  void setFuture(Future<R> future)     // <.>
 }
 ----
 

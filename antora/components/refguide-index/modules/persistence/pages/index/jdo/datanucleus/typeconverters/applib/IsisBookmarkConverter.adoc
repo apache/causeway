@@ -7,8 +7,8 @@
 .IsisBookmarkConverter.java
 ----
 class IsisBookmarkConverter {
-  String toDatastoreType(final Bookmark memberValue)
-  Bookmark toMemberType(final String datastoreValue)
+  String toDatastoreType(Bookmark memberValue)
+  Bookmark toMemberType(String datastoreValue)
 }
 ----
 

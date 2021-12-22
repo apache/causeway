@@ -15,10 +15,10 @@ interface JdoSupportService {
   List<Map<String, Object>> executeSql(String sql)
   Integer executeUpdate(String sql)
   void deleteAll(Class<?>... pcClasses)     // <.>
-  List<T> executeQuery(final Class<T> cls, final BooleanExpression filter)     // <.>
-  List<T> executeQuery(final Class<T> cls)
-  T executeQueryUnique(final Class<T> cls, final BooleanExpression filter)     // <.>
-  T executeQueryUnique(final Class<T> cls)
+  List<T> executeQuery(Class<T> cls, BooleanExpression filter)     // <.>
+  List<T> executeQuery(Class<T> cls)
+  T executeQueryUnique(Class<T> cls, BooleanExpression filter)     // <.>
+  T executeQueryUnique(Class<T> cls)
   JDOQLTypedQuery<T> newTypesafeQuery(Class<T> cls)     // <.>
   void disableMultivaluedFetch(JDOQLTypedQuery<?> query)     // <.>
   void disableMultivaluedFetch(Query<?> query)     // <.>

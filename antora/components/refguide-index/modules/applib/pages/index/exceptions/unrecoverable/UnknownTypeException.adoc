@@ -7,8 +7,8 @@
 .UnknownTypeException.java
 ----
 class UnknownTypeException {
-  UnknownTypeException(final String message)
-  UnknownTypeException(final Object object)
+  UnknownTypeException(String message)
+  UnknownTypeException(Object object)
 }
 ----
 

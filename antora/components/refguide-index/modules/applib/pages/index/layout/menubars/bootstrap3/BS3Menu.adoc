@@ -14,10 +14,10 @@ class BS3Menu {
   String getNamed()
   void setNamed(String named)
   String getCssClassFa()
-  void setCssClassFa(final String cssClassFa)
+  void setCssClassFa(String cssClassFa)
   List<BS3MenuSection> getSections()
   Boolean isUnreferencedActions()     // <.>
-  void setUnreferencedActions(final Boolean unreferencedActions)
+  void setUnreferencedActions(Boolean unreferencedActions)
 }
 ----
 

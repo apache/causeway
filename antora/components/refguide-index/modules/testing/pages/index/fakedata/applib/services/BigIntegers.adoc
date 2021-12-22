@@ -9,7 +9,7 @@ Returns random _BigInteger_ s.
 .BigIntegers.java
 ----
 class BigIntegers {
-  BigIntegers(final FakeDataService fakeDataService)
+  BigIntegers(FakeDataService fakeDataService)
   BigInteger any()
 }
 ----

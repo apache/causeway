@@ -7,7 +7,7 @@
 .FixturesInstallingEvent.java
 ----
 class FixturesInstallingEvent {
-  FixturesInstallingEvent(final Object source)
+  FixturesInstallingEvent(Object source)
 }
 ----
 

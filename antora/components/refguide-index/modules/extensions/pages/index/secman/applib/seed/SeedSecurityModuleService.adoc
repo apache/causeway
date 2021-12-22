@@ -11,7 +11,7 @@ The service just runs the xref:refguide:extensions:index/secman/applib/seed/scri
 .SeedSecurityModuleService.java
 ----
 class SeedSecurityModuleService {
-  void onMetamodelEvent(final MetamodelEvent event)
+  void onMetamodelEvent(MetamodelEvent event)
 }
 ----
 

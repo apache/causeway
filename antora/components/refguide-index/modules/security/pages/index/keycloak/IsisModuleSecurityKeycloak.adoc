@@ -9,7 +9,7 @@ Configuration Bean to support Isis Security using Keycloak.
 .IsisModuleSecurityKeycloak.java
 ----
 class IsisModuleSecurityKeycloak {
-  WebSecurityConfigurerAdapter webSecurityConfigurer(final IsisConfiguration isisConfiguration, final KeycloakOauth2UserService keycloakOidcUserService, final List<LoginSuccessHandlerUNUSED> loginSuccessHandlersUNUSED, final List<LogoutHandler> logoutHandlers)
+  WebSecurityConfigurerAdapter webSecurityConfigurer(IsisConfiguration isisConfiguration, KeycloakOauth2UserService keycloakOidcUserService, List<LoginSuccessHandlerUNUSED> loginSuccessHandlersUNUSED, List<LogoutHandler> logoutHandlers)
   KeycloakOauth2UserService keycloakOidcUserService(OAuth2ClientProperties oauth2ClientProperties)
 }
 ----

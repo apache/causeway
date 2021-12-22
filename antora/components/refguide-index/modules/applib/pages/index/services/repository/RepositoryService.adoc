@@ -15,7 +15,7 @@ interface RepositoryService {
   T detachedEntity(T entity)     // <.>
   T persist(T domainObject)     // <.>
   T persistAndFlush(T domainObject)     // <.>
-  void persistAndFlush(final Object... domainObjects)     // <.>
+  void persistAndFlush(Object... domainObjects)     // <.>
   void remove(Object domainObject)     // <.>
   void removeAndFlush(Object domainObject)     // <.>
   void removeAll(Class<T> cls)     // <.>

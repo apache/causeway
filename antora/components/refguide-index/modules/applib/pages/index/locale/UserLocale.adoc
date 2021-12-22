@@ -10,7 +10,7 @@ User specific regional preferred settings.
 ----
 class UserLocale {
   UserLocale getDefault()
-  UserLocale valueOf(final Locale mainLocale)
+  UserLocale valueOf(Locale mainLocale)
   UserLocaleBuilder asBuilder()
 }
 ----

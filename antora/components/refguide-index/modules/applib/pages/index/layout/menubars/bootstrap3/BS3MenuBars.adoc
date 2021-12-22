@@ -11,15 +11,15 @@ Describes the collection of domain services into menubars, broadly corresponding
 class BS3MenuBars {
   BS3MenuBars()
   BS3MenuBar getPrimary()
-  void setPrimary(final BS3MenuBar primary)
+  void setPrimary(BS3MenuBar primary)
   BS3MenuBar getSecondary()
-  void setSecondary(final BS3MenuBar secondary)
+  void setSecondary(BS3MenuBar secondary)
   BS3MenuBar getTertiary()
-  void setTertiary(final BS3MenuBar tertiary)
-  BS3MenuBar menuBarFor(final DomainServiceLayout.MenuBar menuBar)
-  void visit(final Consumer<ServiceActionLayoutData> visitor)
+  void setTertiary(BS3MenuBar tertiary)
+  BS3MenuBar menuBarFor(DomainServiceLayout.MenuBar menuBar)
+  void visit(Consumer<ServiceActionLayoutData> visitor)
   String getMetadataError()     // <.>
-  void setMetadataError(final String metadataError)
+  void setMetadataError(String metadataError)
 }
 ----
 

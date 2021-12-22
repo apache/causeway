@@ -9,7 +9,7 @@ Superclass of exceptions which indicate an attempt to interact with an object or
 .InvalidException.java
 ----
 class InvalidException {
-  InvalidException(final InteractionEvent interactionEvent)
+  InvalidException(InteractionEvent interactionEvent)
   ValidityEvent getInteractionEvent()
 }
 ----

@@ -11,7 +11,7 @@ Also provides _#javaFaker() access_ to the _Faker_ class which provides many mor
 .FakeDataService.java
 ----
 class FakeDataService {
-  FakeDataService(final ClockService clockService, final RepositoryService repositoryService)
+  FakeDataService(ClockService clockService, RepositoryService repositoryService)
   void init()
   Faker javaFaker()     // <.>
   Names name()

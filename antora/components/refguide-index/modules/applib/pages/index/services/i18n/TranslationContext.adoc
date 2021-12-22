@@ -7,11 +7,11 @@
 .TranslationContext.java
 ----
 class TranslationContext {
-  TranslationContext forTranslationContextHolder(final HasTranslationContext hasTranslationContext)
-  TranslationContext forClassName(final Class<?> contextClass)
-  TranslationContext forMethod(final Class<?> contextClass, final String contextMethodName)
-  TranslationContext forMethod(final Method method)
-  TranslationContext forEnum(final Enum<?> objectAsEnum)
+  TranslationContext forTranslationContextHolder(HasTranslationContext hasTranslationContext)
+  TranslationContext forClassName(Class<?> contextClass)
+  TranslationContext forMethod(Class<?> contextClass, String contextMethodName)
+  TranslationContext forMethod(Method method)
+  TranslationContext forEnum(Enum<?> objectAsEnum)
   TranslationContext empty()
 }
 ----

@@ -10,10 +10,10 @@ Immutable value type holding pre-rendered HTML.
 ----
 class Markdown {
   Markdown()
-  Markdown(final String markdown)
-  Markdown valueOf(final String markdown)
+  Markdown(String markdown)
+  Markdown valueOf(String markdown)
   String asHtml()
-  boolean isEqualTo(final Markdown other)
+  boolean isEqualTo(Markdown other)
   String toString()
 }
 ----

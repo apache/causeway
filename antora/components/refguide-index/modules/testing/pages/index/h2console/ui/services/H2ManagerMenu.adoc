@@ -8,7 +8,7 @@
 ----
 class H2ManagerMenu {
   public static final String LOGICAL_TYPE_NAME;
-  H2ManagerMenu(final WebModuleH2Console webModule)
+  H2ManagerMenu(WebModuleH2Console webModule)
   LocalResourcePath openH2Console()
   boolean hideOpenH2Console()
 }

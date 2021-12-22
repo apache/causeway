@@ -7,17 +7,17 @@
 .DomainObjectRepresentation.java
 ----
 class DomainObjectRepresentation {
-  DomainObjectRepresentation(final JsonNode jsonNode)
+  DomainObjectRepresentation(JsonNode jsonNode)
   String getTitle()
   String getDomainType()     // <.>
   String getInstanceId()     // <.>
   String getServiceId()     // <.>
   JsonRepresentation getMembers()
-  DomainObjectMemberRepresentation getProperty(final String id)
+  DomainObjectMemberRepresentation getProperty(String id)
   JsonRepresentation getProperties()
-  DomainObjectMemberRepresentation getCollection(final String id)
+  DomainObjectMemberRepresentation getCollection(String id)
   JsonRepresentation getCollections()
-  DomainObjectMemberRepresentation getAction(final String id)
+  DomainObjectMemberRepresentation getAction(String id)
   JsonRepresentation getActions()
   LinkRepresentation getPersistLink()     // <.>
   String getOid()     // <.>

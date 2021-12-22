@@ -8,7 +8,7 @@
 ----
 interface MenuBars {
   String getTnsAndSchemaLocation()
-  void setTnsAndSchemaLocation(final String tnsAndSchemaLocation)
+  void setTnsAndSchemaLocation(String tnsAndSchemaLocation)
   MenuBar menuBarFor(DomainServiceLayout.MenuBar menuBar)
   void visit(Consumer<ServiceActionLayoutData> visitor)
   Map<String, ServiceActionLayoutData> getAllServiceActionsByObjectTypeAndId()

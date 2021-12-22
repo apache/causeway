@@ -19,7 +19,7 @@ The information this object can then be sed by the configured viewer, rendered w
 .ErrorReportingService.java
 ----
 interface ErrorReportingService {
-  Ticket reportError(final ErrorDetails errorDetails)
+  Ticket reportError(ErrorDetails errorDetails)
 }
 ----
 

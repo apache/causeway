@@ -7,7 +7,7 @@
 .TypeListRepresentation.java
 ----
 class TypeListRepresentation {
-  TypeListRepresentation(final JsonNode jsonNode)
+  TypeListRepresentation(JsonNode jsonNode)
 }
 ----
 

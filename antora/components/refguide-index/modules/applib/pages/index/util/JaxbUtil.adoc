@@ -11,11 +11,11 @@ For example usage, seeIsis addons' publishmq module(non-ASF)
 .JaxbUtil.java
 ----
 class JaxbUtil {
-  Result<T> fromXml(final Reader reader, final Class<T> dtoClass)
-  Result<T> fromXml(final Class<?> contextClass, final String resourceName, final Class<T> dtoClass)
-  Result<String> toXml(final Object dto)
-  void toXml(final T dto, final Writer writer)
-  JAXBContext jaxbContextFor(final Class<?> dtoClass)
+  Result<T> fromXml(Reader reader, Class<T> dtoClass)
+  Result<T> fromXml(Class<?> contextClass, String resourceName, Class<T> dtoClass)
+  Result<String> toXml(Object dto)
+  void toXml(T dto, Writer writer)
+  JAXBContext jaxbContextFor(Class<?> dtoClass)
 }
 ----
 

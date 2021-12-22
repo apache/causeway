@@ -9,7 +9,7 @@ Provides the ability to download the JDOclass metadataas XML.
 .Persistable_downloadJdoMetadata.java
 ----
 class Persistable_downloadJdoMetadata {
-  Clob act(final String fileName)
+  Clob act(String fileName)
   String default0Act()
 }
 ----

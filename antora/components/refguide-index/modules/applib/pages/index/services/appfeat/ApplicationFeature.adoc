@@ -10,7 +10,7 @@ interface ApplicationFeature {
   ApplicationFeatureId getFeatureId()
   String getFullyQualifiedName()
   Optional<ApplicationMemberSort> getMemberSort()     // <.>
-  SortedSet<ApplicationFeatureId> getMembersOfSort(final ApplicationMemberSort memberSort)
+  SortedSet<ApplicationFeatureId> getMembersOfSort(ApplicationMemberSort memberSort)
   Optional<Class<?>> getActionReturnType()     // <.>
   Optional<SemanticsOf> getActionSemantics()     // <.>
   boolean isPropertyOrCollectionDerived()     // <.>

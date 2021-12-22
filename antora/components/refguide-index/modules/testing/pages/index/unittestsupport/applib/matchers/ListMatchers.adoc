@@ -9,11 +9,11 @@ Hamcrest _Matcher_ implementations.
 .ListMatchers.java
 ----
 class ListMatchers {
-  Matcher<List<?>> containsElementThat(final Matcher<?> elementMatcher)
-  Matcher<List<T>> sameContentsAs(final List<T> expected)
-  Matcher<List<T>> listContaining(final T t)
-  Matcher<List<T>> listContainingAll(final T... items)
-  Matcher<List<Object>> containsObjectOfType(final Class<?> cls)
+  Matcher<List<?>> containsElementThat(Matcher<?> elementMatcher)
+  Matcher<List<T>> sameContentsAs(List<T> expected)
+  Matcher<List<T>> listContaining(T t)
+  Matcher<List<T>> listContainingAll(T... items)
+  Matcher<List<Object>> containsObjectOfType(Class<?> cls)
 }
 ----
 

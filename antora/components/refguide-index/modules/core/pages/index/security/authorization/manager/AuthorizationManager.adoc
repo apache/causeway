@@ -9,9 +9,9 @@ Authorizes the user in the current session view and use members of an object.
 .AuthorizationManager.java
 ----
 class AuthorizationManager {
-  AuthorizationManager(final List<Authorizor> authorizors, final AuthorizorChooser authorizorChooser)
-  boolean isUsable(final InteractionContext authentication, final Identifier identifier)     // <.>
-  boolean isVisible(final InteractionContext authentication, final Identifier identifier)     // <.>
+  AuthorizationManager(List<Authorizor> authorizors, AuthorizorChooser authorizorChooser)
+  boolean isUsable(InteractionContext authentication, Identifier identifier)     // <.>
+  boolean isVisible(InteractionContext authentication, Identifier identifier)     // <.>
 }
 ----
 

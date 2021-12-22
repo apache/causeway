@@ -9,10 +9,10 @@ Returns random `long` values, optionally constrained within a range,
 .Longs.java
 ----
 class Longs {
-  Longs(final FakeDataService fakeDataService)
+  Longs(FakeDataService fakeDataService)
   long any()
-  long upTo(final long upTo)
-  long between(final long min, final long max)
+  long upTo(long upTo)
+  long between(long min, long max)
 }
 ----
 

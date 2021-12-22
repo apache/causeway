@@ -12,11 +12,11 @@ It is used by the xref:refguide:applib:index/services/layout/LayoutService.adoc[
 ----
 class GridAbstract {
   Class<?> getDomainClass()
-  void setDomainClass(final Class<?> domainClass)
+  void setDomainClass(Class<?> domainClass)
   String getTnsAndSchemaLocation()
-  void setTnsAndSchemaLocation(final String tnsAndSchemaLocation)
+  void setTnsAndSchemaLocation(String tnsAndSchemaLocation)
   boolean isNormalized()
-  void setNormalized(final boolean normalized)
+  void setNormalized(boolean normalized)
   LinkedHashMap<String, PropertyLayoutData> getAllPropertiesById()
   LinkedHashMap<String, CollectionLayoutData> getAllCollectionsById()
   LinkedHashMap<String, ActionLayoutData> getAllActionsById()

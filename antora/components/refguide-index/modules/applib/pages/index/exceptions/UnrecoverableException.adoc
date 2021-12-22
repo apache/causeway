@@ -11,11 +11,11 @@ Throwing this exception will (dependent on the viewer) result in some sort of an
 .UnrecoverableException.java
 ----
 class UnrecoverableException {
-  UnrecoverableException(final String msg)
-  UnrecoverableException(final TranslatableString translatableMessage, final Class<?> translationContextClass, final String translationContextMethod)
-  UnrecoverableException(final Throwable cause)
-  UnrecoverableException(final String msg, final Throwable cause)
-  UnrecoverableException(final TranslatableString translatableMessage, final Class<?> translationContextClass, final String translationContextMethod, final Throwable cause)
+  UnrecoverableException(String msg)
+  UnrecoverableException(TranslatableString translatableMessage, Class<?> translationContextClass, String translationContextMethod)
+  UnrecoverableException(Throwable cause)
+  UnrecoverableException(String msg, Throwable cause)
+  UnrecoverableException(TranslatableString translatableMessage, Class<?> translationContextClass, String translationContextMethod, Throwable cause)
   String getMessage()
 }
 ----

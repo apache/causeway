@@ -7,8 +7,8 @@
 .PersistentEntityAdapter.java
 ----
 class PersistentEntityAdapter {
-  Object unmarshal(final OidDto oidDto)
-  OidDto marshal(final Object domainObject)
+  Object unmarshal(OidDto oidDto)
+  OidDto marshal(Object domainObject)
 }
 ----
 

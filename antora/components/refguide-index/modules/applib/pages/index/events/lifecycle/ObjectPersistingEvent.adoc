@@ -10,7 +10,7 @@ Broadcast when an entity is about to be saved (inserted) into the database eithe
 ----
 class ObjectPersistingEvent<S> {
   ObjectPersistingEvent()
-  ObjectPersistingEvent(final S source)
+  ObjectPersistingEvent(S source)
 }
 ----
 
