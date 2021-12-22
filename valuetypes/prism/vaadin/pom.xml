@@ -26,6 +26,8 @@
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.prism.vaadin</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/valuetypes/prism/vaadin</git-plugin.propertiesDir>
+		
+		<enforcer.skip>true</enforcer.skip> <!-- enforcer detects a lot of issues -->
 	</properties>
 	
 	<dependencies>

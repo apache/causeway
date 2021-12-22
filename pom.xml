@@ -14,23 +14,91 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.apache.isis</groupId>
-	<artifactId>isis-all</artifactId>
-	<version>2.0.0-SNAPSHOT</version>
+	<!--
+	This pom is a copy of org.apache:apache, the idea being to also inherit
+	from org.springframework.boot:spring-boot-starter-parent.
+	For more information, see the documentation of this POM: http://maven.apache.org/pom/asf/ 
+	-->
 
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.6.2</version>
+		<relativePath/>
+	</parent>
+
+	<groupId>org.apache.isis</groupId>
+	<artifactId>isis-parent</artifactId>
+	<version>2.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>Apache Isis (Aggregator)</name>
+	<name>Apache Isis</name>
 	<description>
         Convenience aggregator POM that references all modules, some explicitely,
         others via profiles, that are not activiated per default.
-        The parent POM of the core framework is isis-parent/pom.xml.
     </description>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.deploy.skip>true</maven.deploy.skip> <!-- don't deploy the aggregator -->
+    	
+		<distMgmtSnapshotsName>Apache Development Snapshot Repository</distMgmtSnapshotsName>
+		<distMgmtSnapshotsUrl>https://repository.apache.org/content/repositories/snapshots</distMgmtSnapshotsUrl>
+		<organization.logo>https://www.apache.org/images/asf_logo_wide_2016.png</organization.logo>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<sourceReleaseAssemblyDescriptor>source-release</sourceReleaseAssemblyDescriptor>
+		<gpg.useagent>true</gpg.useagent>
+		<minimalMavenBuildVersion>3.1.1</minimalMavenBuildVersion>
+		<minimalJavaBuildVersion>1.8</minimalJavaBuildVersion>
+
+		<java.version>11</java.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<maven.compiler.release>11</maven.compiler.release>
+
+		<!-- historically was overriding Spring, as v3.0.0 breaks artifact retrieval of org.jruby:jruby (of any version) -->
+		<maven-enforcer-plugin.version>3.0.0</maven-enforcer-plugin.version>
+
+		<lombok.version>1.18.22</lombok.version> <!-- overriding Spring -->
+		<delombok.output>${project.build.directory}/delombok</delombok.output>
+		<surefire.version>2.22.2</surefire.version>
+		<assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
+		
+		<!-- set this property for all derived projects: -->
+        <project.build.outputTimestamp>2021-08-22T15:43:00Z</project.build.outputTimestamp>
     </properties>
+    
+    <url>https://isis.apache.org</url>
+	<inceptionYear>2010</inceptionYear>
+
+	<organization>
+		<name>The Apache Software Foundation</name>
+		<url>https://www.apache.org/</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<mailingLists>
+		<mailingList>
+			<name>developers</name>
+			<archive>http://mail-archives.apache.org/mod_mbox/isis-dev/</archive>
+			<post>dev@isis.apache.org</post>
+			<subscribe>dev-subscribe@isis.apache.org</subscribe>
+			<unsubscribe>dev-unsubscribe@isis.apache.org</unsubscribe>
+		</mailingList>
+		<mailingList>
+			<name>users</name>
+			<archive>http://mail-archives.apache.org/mod_mbox/isis-users/</archive>
+			<post>users@isis.apache.org</post>
+			<subscribe>users-subscribe@isis.apache.org</subscribe>
+			<unsubscribe>users-unsubscribe@isis.apache.org</unsubscribe>
+		</mailingList>
+	</mailingLists>
 
 	<scm>
 		<connection>scm:git:https://github.com/apache/isis.git</connection>
@@ -39,6 +107,668 @@
 		<tag>HEAD</tag>
 	</scm>
 
+	<issueManagement>
+		<system>Jira</system>
+		<url>https://issues.apache.org/jira/browse/ISIS</url>
+	</issueManagement>
+
+	<ciManagement>
+		<system>CI</system>
+		<url>https://github.com/apache-isis-committers/isis-nightly</url>
+	</ciManagement>
+
+	<developers>
+		<developer>
+			<id>ahuber</id>
+			<name>Andi Huber</name>
+			<email>ahuber@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>bibryam</id>
+			<name>Bilgin Ibryam</name>
+			<email>bibryam@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+0</timezone>
+		</developer>
+		<developer>
+			<id>danhaywood</id>
+			<name>Dan Haywood</name>
+			<email>danhaywood@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+0</timezone>
+		</developer>
+		<developer>
+			<id>dslaughter</id>
+			<name>Dave Slaughter</name>
+			<email>dslaughter@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>-6</timezone>
+		</developer>
+		<developer>
+			<id>jcvanderwal</id>
+			<name>Jeroen van der Wal</name>
+			<email>jcvanderwal@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>jdoornenbal</id>
+			<name>Johan Doornenbal</name>
+			<email>jdoornenbal@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>joergrade</id>
+			<name>Joerg Rade</name>
+			<email>joergrade@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>kevin</id>
+			<name>Kevin Meyer</name>
+			<email>kevin@apache.org</email>
+			<roles>
+				<role>pmc chair</role>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+2</timezone>
+		</developer>
+		<developer>
+			<id>madytyoo</id>
+			<name>Maurizio Taverna</name>
+			<email>madytyoo@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>mgrigorov</id>
+			<name>Martin Grigorov</name>
+			<email>mgrigorov@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+2</timezone>
+		</developer>
+		<developer>
+			<id>mnour</id>
+			<name>Mohammad Nour El-Din</name>
+			<email>mnour@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>mentor while incubating</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>oscarbou</id>
+			<name>Oscar Bou</name>
+			<email>oscarbou@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>rmatthews</id>
+			<name>Robert Matthews</name>
+			<email>rmatthews@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+0</timezone>
+		</developer>
+		<developer>
+			<id>struberg</id>
+			<name>Mark Struberg</name>
+			<email>struberg@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>mentor while incubating</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>themalkolm</id>
+			<name>Alexander Krasnuhkin</name>
+			<email>themalkolm@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+3</timezone>
+		</developer>
+	</developers>
+
+	<distributionManagement>
+		<repository>
+			<id>apache.releases.https</id>
+			<name>Apache Release Distribution Repository</name>
+			<url>https://repository.apache.org/service/local/staging/deploy/maven2</url>
+		</repository>
+		<snapshotRepository>
+			<id>apache.snapshots.https</id>
+			<name>${distMgmtSnapshotsName}</name>
+			<url>${distMgmtSnapshotsUrl}</url>
+		</snapshotRepository>
+	</distributionManagement>
+	
+	<!-- breaks dependabot run: timeout due to repo not accessible
+	<repositories>
+		<repository>
+			<id>apache.snapshots</id>
+			<name>Apache Snapshot Repository</name>
+			<url>https://repository.apache.org/snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>apache.snapshots</id>
+			<name>Apache Snapshot Repository</name>
+			<url>https://repository.apache.org/snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</pluginRepository>
+	</pluginRepositories>
+	 -->
+	 
+	 	<build>
+		<pluginManagement>
+			<plugins>
+            <!-- set versions of common plugins for reproducibility, ordered alphabetically -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>3.0.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>3.3.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>3.2.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.8.2</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-docck-plugin</artifactId>
+					<version>1.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-ear-plugin</artifactId>
+					<version>3.2.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-enforcer-plugin</artifactId>
+ 					<version>${maven-enforcer-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-failsafe-plugin</artifactId>
+					<version>${surefire.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-gpg-plugin</artifactId>
+					<version>3.0.1</version>
+					<configuration>
+						<gpgArguments>
+							<arg>--digest-algo=SHA512</arg>
+						</gpgArguments>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-help-plugin</artifactId>
+					<version>3.2.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>2.5.2</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-invoker-plugin</artifactId>
+					<version>3.2.2</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.2.0</version>
+					<configuration>
+						<archive>
+							<manifest>
+								<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							</manifest>
+						</archive>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.3.0</version>
+                    <configuration>
+                        <notimestamp>true</notimestamp><!-- avoid noise for svn/gitpubsub -->
+                    </configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-plugin-plugin</artifactId>
+					<version>3.6.2</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>3.1.2</version>
+                    <configuration>
+                        <pluginManagementExcludes>
+                            <exclude>org.eclipse.m2e:lifecycle-mapping</exclude>
+                        </pluginManagementExcludes>
+                    </configuration>
+				</plugin>
+				<!-- START SNIPPET: release-plugin-configuration -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+                    <version>3.0.0-M4</version>
+					<configuration>
+						<useReleaseProfile>false</useReleaseProfile>
+						<goals>deploy</goals>
+                        <releaseProfiles>apache-release</releaseProfiles>
+					</configuration>
+				</plugin>
+				<!-- END SNIPPET: release-plugin-configuration -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-remote-resources-plugin</artifactId>
+					<version>1.7.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.2.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-scm-plugin</artifactId>
+					<version>1.12.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-scm-publish-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.9.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>3.2.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${surefire.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-report-plugin</artifactId>
+					<version>${surefire.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>3.3.2</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-shade-plugin</artifactId>
+					<version>3.2.4</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.rat</groupId>
+					<artifactId>apache-rat-plugin</artifactId>
+					<version>0.13</version>
+
+					<configuration>
+						<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
+						<excludeSubProjects>true</excludeSubProjects>
+						<excludes>
+							<exclude>**/target/**</exclude>
+							<exclude>**/target-ide/**</exclude>
+
+							<exclude>**/node_modules/**</exclude>
+							<exclude>**/node/npm</exclude>
+							<exclude>**/node/npm.cmd</exclude>
+
+							<exclude>**/*.project</exclude>
+							<exclude>**/.classpath</exclude>
+							<exclude>**/.settings/**</exclude>
+							<exclude>**/*.launch</exclude>
+							<exclude>**/*.columnOrder.txt</exclude>
+							<exclude>**/*.drawio.svg</exclude>
+							<exclude>**/META-INF/spring.factories</exclude>
+
+							<exclude>**/incubator/clients/kroviz/package.json.d/project.info</exclude>
+
+							<exclude>**/isis/tooling/model4adoc/src/test/resources/org/apache/isis/tooling/adocmodel/test/**</exclude>
+
+							<exclude>**/*.iml</exclude>
+							<exclude>**/webpack.config.js</exclude>
+							<exclude>**/webpack.generated.js</exclude>
+							<exclude>**/pnpm-lock.yaml</exclude>
+							<exclude>**/pnpmfile.js</exclude>
+
+							<exclude>**/*.pdn</exclude>
+							<exclude>**/*.svg</exclude>
+							<exclude>**/*.rtf</exclude>
+							<exclude>**/*.json</exclude>
+							<exclude>**/.gitkeep</exclude>
+							<exclude>**/*.min.js</exclude>
+							<exclude>**/fakedata/applib/services/clobs/*.dtd</exclude>
+							<exclude>**/fakedata/applib/services/clobs/*.dcl</exclude>
+							<exclude>**/fakedata/applib/services/clobs/*.soc</exclude>
+							<exclude>**/fakedata/applib/services/clobs/vs</exclude>
+							<exclude>**/fakedata/applib/services/clobs/vx</exclude>
+
+							<exclude>**/MANIFEST.MF</exclude>
+							<exclude>**/*.ucd</exclude>
+							<exclude>**/*.ucls</exclude>
+							<exclude>**/*.puml</exclude>
+							<exclude>**/antora/supplemental-ui/**</exclude>
+
+							<exclude>**/xml/objects/**</exclude>
+							<exclude>**/test.data</exclude>
+							<exclude>**/fixture-data/**</exclude>
+							<exclude>**/partials/module-nav.adoc</exclude>
+							<exclude>**/partials/extensions.adoc</exclude>
+							<exclude>**/partials/component-nav.adoc</exclude>
+							<exclude>**/_nav.adoc</exclude>
+							<exclude>**/_overview/nav.adoc</exclude>
+
+							<exclude>**/src/test/resources/org/apache/isis/subdomains/docx/applib/*.html</exclude>
+							<exclude>**/adoc/modules/docx/examples/*.html</exclude>
+
+							<exclude>**/application.js</exclude>
+
+							<exclude>**/jquery.zclip.js</exclude>
+							<exclude>**/simple-sidebar.css</exclude>
+							<exclude>**/bootstrap-growl.js</exclude>
+							<exclude>**/moment.js</exclude>
+							<exclude>**/prism*.js</exclude>
+							<exclude>**/prism*.css</exclude>
+							<exclude>**/kroviz/webpack.config.d/**</exclude>
+
+							<exclude>**/viewer/wicket/ui/components/**/*.css</exclude>
+							<exclude>**/viewer/wicket/ui/components/**/*.js</exclude>
+							<exclude>**/bootstrap-datetimepicker.min.css</exclude>
+							<exclude>**/bootstrap-datetimepicker.css</exclude>
+							<exclude>**/select2-bootstrap.css</exclude>
+
+							<exclude>**/wicket-xhtml1.4-strict.dtd</exclude>
+
+							<exclude>**/src/main/resources/supplemental-models.xml</exclude>
+							<exclude>**/datanucleus.log</exclude>
+							<exclude>**/gradle/wrapper/gradle-wrapper.properties</exclude>
+							<exclude>**/gradlew</exclude>
+							<exclude>**/gradlew.bat</exclude>
+							<exclude>**/rebel.xml</exclude>
+							<exclude>**/translations**.po</exclude>
+							<exclude>**/translations.pot</exclude>
+							<exclude>**/intellij/launch/*.xml</exclude>
+
+							<exclude>**/css/home/scss-files.txt</exclude>
+							<exclude>**/css/home/styles.css</exclude>
+							<exclude>**/css/site-custom.css</exclude>
+
+							<exclude>**/swagger-ui/**</exclude>
+
+							<exclude>**/META-INF/services/**</exclude>
+						</excludes>
+						<licenses>
+							<license
+									implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+								<licenseFamilyCategory>AL2  </licenseFamilyCategory>
+								<licenseFamilyName>Apache License 2.0</licenseFamilyName>
+								<notes />
+								<patterns>
+									<pattern>Licensed to the Apache Software Foundation (ASF) under
+										one</pattern>
+								</patterns>
+							</license>
+							<license
+									implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+								<licenseFamilyCategory>MIT</licenseFamilyCategory>
+								<licenseFamilyName>MIT Licensed</licenseFamilyName>
+								<notes />
+								<patterns>
+									<pattern>The MIT License (MIT)</pattern>
+									<pattern>Dual licensed under the MIT</pattern>
+									<pattern>http://prismjs.com/download.html</pattern>
+								</patterns>
+							</license>
+							<license
+									implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+								<licenseFamilyCategory>CC3</licenseFamilyCategory>
+								<licenseFamilyName>Creative Commons 3.0</licenseFamilyName>
+								<notes />
+								<patterns>
+									<pattern>ASCII text placed in the public domain by Moby Lexical Tools, 1992.</pattern>
+								</patterns>
+							</license>
+							<license
+									implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+								<licenseFamilyCategory>JMOCK</licenseFamilyCategory>
+								<licenseFamilyName>JMock</licenseFamilyName>
+								<notes />
+								<patterns>
+									<pattern>Copyright (c) 2000-2007, jMock.org</pattern>
+								</patterns>
+							</license>
+						</licenses>
+						<licenseFamilies>
+							<licenseFamily
+									implementation="org.apache.rat.license.SimpleLicenseFamily">
+								<familyName>Apache License 2.0</familyName>
+							</licenseFamily>
+							<licenseFamily
+									implementation="org.apache.rat.license.SimpleLicenseFamily">
+								<familyName>MIT</familyName>
+							</licenseFamily>
+							<licenseFamily
+									implementation="org.apache.rat.license.SimpleLicenseFamily">
+								<familyName>JMock</familyName>
+							</licenseFamily>
+							<licenseFamily
+									implementation="org.apache.rat.license.SimpleLicenseFamily">
+								<familyName>XHTML</familyName>
+							</licenseFamily>
+						</licenseFamilies>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>clirr-maven-plugin</artifactId>
+					<version>2.8</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<!-- We want to package up license resources in the JARs produced -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-remote-resources-plugin</artifactId>
+				<executions>
+					<execution>
+                        <id>process-resource-bundles</id>
+						<goals>
+							<goal>process</goal>
+						</goals>
+						<configuration>
+							<resourceBundles>
+								<resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
+							</resourceBundles>
+
+						    <!-- Reference the supplemental-model artifact from module supplemental-model -->
+				            <supplementalModelArtifacts>
+				            	<supplementalModelArtifact>org.apache.isis:supplemental-model:1.0</supplementalModelArtifact>
+				            </supplementalModelArtifacts>
+
+							<runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
+
+							 <!-- Specify the path, relative to the JAR root, where the supplemental model file is located -->
+							<supplementalModels>
+								<supplementalModel>supplemental-models.xml</supplementalModel>
+							</supplementalModels>
+							<properties>
+								<projectTimespan>2010~2021</projectTimespan>
+								<postDepListText>
+									The above (auto-generated) list aggregates the
+									dependencies
+									(either directly
+									or transitively) of all the modules
+									that make up ${project.name}.
+									You can use
+									mvn dependency:list or
+									mvn dependency:tree to view dependencies by
+									submodule.
+
+									${license.additional-notes}
+								</postDepListText>
+							</properties>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>enforce-maven-version</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+                                    <version>${minimalMavenBuildVersion}</version>
+								</requireMavenVersion>
+							</rules>
+						</configuration>
+					</execution>
+                    <execution>
+                        <id>enforce-java-version</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>${minimalJavaBuildVersion}</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-descriptor</id>
+						<goals>
+							<goal>attach-descriptor</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.7</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <!-- stopped working with GitHub CI on 2021-03-18,
+				         could not find a way to disable
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    -->
+                </executions>
+            </plugin>
+		</plugins>
+	</build>
+	
 	<profiles>
 
 		<!-- ESSENTIAL MODULES -->
@@ -63,7 +793,6 @@
                     -->
 				<module>core</module>
 				<module>extensions</module>
-				<module>isis-parent</module>
 				<module>mappings</module>
 				<module>mavendeps</module>
 				<module>starters</module>
@@ -175,7 +904,6 @@
 			</modules>
 		</profile>
 
-
 		<profile>
 			<id>module-examples-demo-vaadin</id>
 			<activation>
@@ -268,6 +996,244 @@
 			</activation>
 			<modules>
 				<module>tooling</module>
+			</modules>
+		</profile>
+		
+		<!-- RELEASE SPECIFIC PROFILES -->
+		
+		<profile>
+			<id>sources</id>
+			<activation>
+				<property>
+					<name>sources</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<phase>deploy</phase>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		
+		<profile>
+			<id>apache-release</id>
+			<activation>
+				<property>
+					<name>apache-release</name>
+				</property>
+			</activation>
+			<properties>
+				<skipTests>true</skipTests>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.projectlombok</groupId>
+						<artifactId>lombok-maven-plugin</artifactId>
+						<version>1.18.20.0</version>
+						<configuration>
+							<sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+							<outputDirectory>${delombok.output}</outputDirectory>
+							<addOutputDirectory>false</addOutputDirectory>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>delombok</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+					<!-- Create a source-release artifact that contains the fully buildable
+                         project directory source structure. This is the artifact which is
+                         the official subject of any release vote. -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<dependencies>
+							<dependency>
+								<groupId>org.apache.apache.resources</groupId>
+								<artifactId>apache-source-release-assembly-descriptor</artifactId>
+								<version>1.0.6</version>
+							</dependency>
+						</dependencies>
+						<executions>
+							<execution>
+								<id>source-release-assembly</id>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+								<configuration>
+									<archiveBaseDirectory>.</archiveBaseDirectory>
+                                    <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
+									<descriptorRefs>
+										<descriptorRef>${sourceReleaseAssemblyDescriptor}</descriptorRef>
+									</descriptorRefs>
+									<tarLongFileMode>posix</tarLongFileMode>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- We want to deploy the artifact to a staging location for perusal -->
+					<plugin>
+						<inherited>true</inherited>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-deploy-plugin</artifactId>
+						<configuration>
+							<updateReleaseInfo>true</updateReleaseInfo>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+								<configuration>
+									<sourcepath>${delombok.output}</sourcepath>
+									<doclint>none</doclint>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- calculate checksums of source release for Apache dist area -->
+					<plugin>
+						<groupId>net.nicoulaj.maven.plugins</groupId>
+						<artifactId>checksum-maven-plugin</artifactId>
+						<version>1.11</version>
+						<executions>
+							<execution>
+								<id>source-release-checksum</id>
+								<goals>
+                                    <goal>artifacts</goal>
+								</goals>
+								<!-- execute prior to maven-gpg-plugin:sign due to https://github.com/nicoulaj/checksum-maven-plugin/issues/112 -->
+								<phase>post-integration-test</phase>
+								<configuration>
+									<algorithms>
+										<algorithm>SHA-512</algorithm>
+									</algorithms>
+									<!-- https://maven.apache.org/apache-resource-bundles/#source-release-assembly-descriptor -->
+									<includeClassifiers>source-release</includeClassifiers>
+									<excludeMainArtifact>true</excludeMainArtifact>
+									<csvSummary>false</csvSummary>
+									<!-- attach SHA-512 checksum as well to upload to Maven Staging Repo,
+                                         as this eases uploading from stage to dist and doesn't do harm in Maven Central -->
+									<attachChecksums>true</attachChecksums>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- We want to sign the artifact, the POM, and all attached artifacts (except for SHA-512 checksum) -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>sign-release-artifacts</id>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+			<modules>
+				<module>core</module>
+				<module>extensions</module>
+				<module>mappings</module>
+				<module>mavendeps</module>
+				<module>starters</module>
+				<module>subdomains</module>
+				<module>testing</module>
+				<module>valuetypes</module>
+			</modules>
+		</profile>
+
+		<profile>
+			<id>enforce-output-timestamp-property</id>
+			<activation>
+				<!-- multiple profile activation conditions have AND logic ... -->
+				<property>
+					<name>apache-release</name>
+				</property>
+				<file>
+					<missing>${basedir}/.maven-apache-parent.marker</missing>
+				</file>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-enforcer-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>enforce-output-timestamp-property</id>
+								<goals>
+									<goal>enforce</goal>
+								</goals>
+								<configuration>
+									<rules>
+										<requireProperty>
+											<property>project.build.outputTimestamp</property>
+											<message>The property "project.build.outputTimestamp" must be set on the reactor's root pom.xml to make the build reproducible. Further information at "https://maven.apache.org/guides/mini/guide-reproducible-builds.html".</message>
+										</requireProperty>
+									</rules>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		
+		<profile>
+			<id>released</id>
+			<activation>
+				<property>
+					<name>released</name>
+				</property>
+			</activation>
+			<modules>
+				<module>core</module>
+				<module>extensions</module>
+				<module>mappings</module>
+				<module>mavendeps</module>
+				<module>starters</module>
+				<module>subdomains</module>
+				<module>testing</module>
+				<module>valuetypes</module>
 			</modules>
 		</profile>
 

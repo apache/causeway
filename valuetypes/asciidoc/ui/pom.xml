@@ -27,6 +27,8 @@
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.asciidoc.ui</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/valuetypes/asciidoc/ui</git-plugin.propertiesDir>
+		
+		<enforcer.skip>true</enforcer.skip> <!-- enforcer fails with 'Could not transfer artifact rubygems:cmath:pom:1.0.0 from/to mavengems' -->
 	</properties>
 
 	<dependencies>

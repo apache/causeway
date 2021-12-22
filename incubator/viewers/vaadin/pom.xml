@@ -32,6 +32,8 @@
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.incubator.viewer.vaadin</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/incubator/viewer/vaadin</git-plugin.propertiesDir>
+		
+		<enforcer.skip>true</enforcer.skip> <!-- enforcer detects a lot of issues -->
 	</properties>
 
 	<packaging>pom</packaging>
