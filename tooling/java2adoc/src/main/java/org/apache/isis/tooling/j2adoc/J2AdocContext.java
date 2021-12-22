@@ -57,6 +57,9 @@ public class J2AdocContext {
     private final boolean skipTitleHeader = false;
 
     @Builder.Default
+    private final boolean suppressFinalKeyword = true;
+
+    @Builder.Default
     private final @NonNull String memberNameFormat = "[teal]#*%s*#";
 
     @Builder.Default
@@ -162,16 +165,16 @@ public class J2AdocContext {
         // for performance reasons we only search the units that are hash mapped
         // by the typeSimpleNameCandidates using the unitsByTypeSimpleName map
         val searchResult = typeSimpleNameCandidates.stream()
-        .map((Can<String> typeSimpleNameParts)->typeSimpleNameParts.stream()
+        .map((final Can<String> typeSimpleNameParts)->typeSimpleNameParts.stream()
                 .collect(Collectors.joining(".")))
-        .flatMap((String typeSimpleNameCandidate)->unitsByTypeSimpleName
+        .flatMap((final String typeSimpleNameCandidate)->unitsByTypeSimpleName
                 .getOrElseEmpty(typeSimpleNameCandidate)
                 .stream())
         // we have a match if either the candidate unit's namespace matches the one of the potentialFqns
         // or otherwise if candidate unit and originating unit share the same Java package;
         // that is, in Java sources, types may refer to other types within the same package without the
         // need for declaring an import statement, hence the second option is a fallback
-        .filter((J2AdocUnit referredUnit)->potentialFqns.stream()
+        .filter((final J2AdocUnit referredUnit)->potentialFqns.stream()
                 .anyMatch(potentialFqn->potentialFqn.isEqualTo(referredUnit.getFqnParts()))
                 || unit.getNamespace().equals(referredUnit.getNamespace()) //same package
         )
@@ -264,7 +267,7 @@ public class J2AdocContext {
 
     // -- LOG
 
-    private static void logIfEmptyOrAmbiguous(Can<J2AdocUnit> units, String doingWhat) {
+    private static void logIfEmptyOrAmbiguous(final Can<J2AdocUnit> units, final String doingWhat) {
         if(units.isEmpty()) {
             log.warn("{} yielded no match %n", doingWhat);
         } else if(units.isCardinalityMultiple()) {

@@ -126,8 +126,7 @@ final class ProjectDocWriter {
     // generate output file based on unit's namespace and unit's name
     private static File adocDestinationFileForUnit(
             final @NonNull J2AdocUnit unit,
-            final @NonNull CliConfig.Commands.Index index
-    ) {
+            final @NonNull CliConfig.Commands.Index index) {
 
 
         // eg: antora/components/refguide-index

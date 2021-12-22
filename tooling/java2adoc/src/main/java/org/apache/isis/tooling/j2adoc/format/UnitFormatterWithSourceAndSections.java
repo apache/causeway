@@ -52,7 +52,7 @@ extends UnitFormatterAbstract {
     @Override
     protected Optional<String> javaSource(final J2AdocUnit unit) {
 
-        final String javaSource = Snippets.javaSourceFor(unit);
+        final String javaSource = Snippets.javaSourceFor(unit, j2aContext);
         return Optional.of(
                 AsciiDocFactory.toString(doc->
                     AsciiDocFactory.SourceFactory.java(doc, javaSource, unit.getCanonicalName() + ".java")));
@@ -66,7 +66,7 @@ extends UnitFormatterAbstract {
         var converter = J2AdocConverterDefault.of(j2aContext);
         val firstParaOnly = new BiFunction<Javadoc, J2AdocUnit, Document>() {
             @Override
-            public Document apply(Javadoc javadoc, J2AdocUnit j2Unit) {
+            public Document apply(final Javadoc javadoc, final J2AdocUnit j2Unit) {
                 return converter.javadoc(javadoc, unit, J2AdocConverter.Mode.FIRST_PARA_ONLY);
             }
         };
@@ -115,7 +115,7 @@ extends UnitFormatterAbstract {
 
         val allJavadocStrategy = new BiFunction<Javadoc, J2AdocUnit, Document>() {
             @Override
-            public Document apply(Javadoc javadoc, J2AdocUnit j2Unit) {
+            public Document apply(final Javadoc javadoc, final J2AdocUnit j2Unit) {
                 return converter.javadoc(javadoc, unit, J2AdocConverter.Mode.ALL);
             }
         };

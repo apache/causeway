@@ -41,7 +41,7 @@ extends UnitFormatterAbstract {
     @Override
     protected Optional<String> javaSource(final J2AdocUnit unit) {
 
-        final String javaSource = Snippets.javaSourceFor(unit);
+        final String javaSource = Snippets.javaSourceFor(unit, j2aContext);
         return Optional.of(
                 AsciiDocFactory.toString(doc->
                     AsciiDocFactory.SourceFactory.java(doc, javaSource, unit.getCanonicalName() + ".java")));

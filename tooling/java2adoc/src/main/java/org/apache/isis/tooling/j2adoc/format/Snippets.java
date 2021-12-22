@@ -19,10 +19,12 @@
 package org.apache.isis.tooling.j2adoc.format;
 
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import com.github.javaparser.ast.nodeTypes.NodeWithJavadoc;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.tooling.j2adoc.J2AdocContext;
 import org.apache.isis.tooling.j2adoc.J2AdocUnit;
 import org.apache.isis.tooling.javamodel.ast.AnnotationMemberDeclarations;
 import org.apache.isis.tooling.javamodel.ast.ConstructorDeclarations;
@@ -43,7 +45,7 @@ public class Snippets {
                         unit.getFriendlyName());
     }
 
-    private static String formatFor(J2AdocUnit unit) {
+    private static String formatFor(final J2AdocUnit unit) {
         switch (unit.getTypeDeclaration().getKind()) {
             case ANNOTATION: return "@%s";
             case CLASS: return "%s";
@@ -55,7 +57,14 @@ public class Snippets {
         }
     }
 
-    public static String javaSourceFor(J2AdocUnit unit) {
+    public static String javaSourceFor(final J2AdocUnit unit, final J2AdocContext j2aContext) {
+
+        final UnaryOperator<String> methodPostProcessor = j2aContext.isSuppressFinalKeyword()
+                ? s->s
+                        .replace("(final ", "(")
+                        .replace(" final ", " ")
+                : UnaryOperator.identity();
+
         val buf = new StringBuilder();
 
         buf.append(String.format("%s %s%s {\n",
@@ -77,11 +86,11 @@ public class Snippets {
 
         appendJavaSourceMemberFormat(buf,
                 unit.getTypeDeclaration().getPublicConstructorDeclarations(),
-                ConstructorDeclarations::asNormalized);
+                decl->methodPostProcessor.apply(ConstructorDeclarations.asNormalized(decl)));
 
         appendJavaSourceMemberFormat(buf,
                 unit.getTypeDeclaration().getPublicMethodDeclarations(),
-                MethodDeclarations::asNormalized);
+                decl->methodPostProcessor.apply(MethodDeclarations.asNormalized(decl)));
 
         buf.append("}\n");
 
@@ -101,7 +110,7 @@ public class Snippets {
     }
 
     enum Callout { INCLUDE, EXCLUDE;
-        public static Callout when(boolean javadocPresent) {
+        public static Callout when(final boolean javadocPresent) {
             return javadocPresent ? INCLUDE : EXCLUDE;
         }
     }

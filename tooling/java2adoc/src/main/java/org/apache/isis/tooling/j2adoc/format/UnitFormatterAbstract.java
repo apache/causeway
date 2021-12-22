@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.nodeTypes.NodeWithJavadoc;
 import com.github.javaparser.javadoc.Javadoc;
 
@@ -210,7 +211,7 @@ implements UnitFormatter {
         }
     }
 
-    static String determineBaseName(String fileName) {
+    static String determineBaseName(final String fileName) {
         return fileName.split("\\.adoc")[0];
     }
 

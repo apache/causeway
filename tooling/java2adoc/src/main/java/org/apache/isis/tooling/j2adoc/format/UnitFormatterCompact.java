@@ -77,6 +77,4 @@ extends UnitFormatterAbstract {
 
     }
 
-
-
 }
