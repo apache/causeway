@@ -35,7 +35,7 @@ http://localhost:3000
 
 TIP: Originally Apache Isis SimpleApp 1.16.0 was used as the reference RO backend.
 This required some extra steps in order to deal with CORS setup, see sections on pre 2.0.0-M3 and CORS.
-
+Currently (2.0.0-M6) Demo is used as reference - at the moment  it's the only CORS enabled application.
 === Frontend
 
 ==== Requirements
@@ -57,7 +57,9 @@ gradle can be run under Windows with git-bash:
 
 Internally gradle uses npm for the JS part.
 
-Alternatively you can eg. in IntelliJ a Run/Debug Configuration:
+In IntelliJ import the gradle project residing in ~/isis/incubator/clients/kroviz/.
+TIP: In case the project isn't working as expected, you may try File -> Invalidate Caches ...
+Alternatively you can e.g. in IntelliJ a Run/Debug Configuration:
 
 image::kroviz_Run_Debug_Configuration.png[Preview]
 
@@ -71,7 +73,7 @@ If task npm-install hangs, try
  ./gradlew.bat npm-install --info --debug --stacktrace
 ----
 
-Helps in identifying thing that may go wrong (eg. due to proxy settings).
+Helps in identifying thing that may go wrong (e.g. due to proxy settings).
 
 ==== Run
 
@@ -351,7 +353,7 @@ CORS stands for 'Cross Origin Resource Sharing' aka: 'Same Origin Policy' was de
 
 ==== Solution 1 (Q&amp;D):
 
- Disable CORS in your browser, eg. for Chrome with the MOESIF plugin.
+ Disable CORS in your browser, e.g. for Chrome with the MOESIF plugin.
 
 Nicely done introduction:
 
@@ -401,7 +403,7 @@ Put into webapp/src/main/webapp/WEB-INF/lib:
 
 ==== Solution 3:
 
- Incorporate kroviz.js eg. in the WAR containing your Apache Isis backend.
+ Incorporate kroviz.js e.g. in the WAR containing your Apache Isis backend.
 
 == Extensions
 

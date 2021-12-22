@@ -16,6 +16,7 @@
 //  specific language governing permissions and limitations
 //  under the License.
 //
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
@@ -112,4 +113,26 @@ kotlin {
         implementation("io.kvision:kvision-testutils:$kvisionVersion")
     }
     sourceSets["main"].resources.srcDir(webDir)
+}
+
+afterEvaluate {
+    tasks {
+        create("jar", Zip::class) {
+            dependsOn("browserProductionWebpack")
+            group = "package"
+            destinationDirectory.set(file("$buildDir/libs"))
+            val distribution =
+                project.tasks.getByName(
+                    "browserProductionWebpack",
+                    KotlinWebpack::class
+                ).destinationDirectory
+            from(distribution) {
+                include("*.*")
+            }
+            from(webDir)
+            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+            inputs.files(distribution, webDir)
+            outputs.file(archiveFile)
+        }
+    }
 }
