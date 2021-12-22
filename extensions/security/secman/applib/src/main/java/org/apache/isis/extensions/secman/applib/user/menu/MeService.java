@@ -91,15 +91,15 @@ public class MeService {
 
         @MemberSupport public ApplicationUser act() {
             return queryResultsCacheProvider.get().execute(
-                    (Callable<ApplicationUser>) this::doMe, MeService.class, "me");
+                    (Callable<ApplicationUser>) this::fetchMe, MeService.class, "me");
         }
 
-        @Domain.Exclude protected ApplicationUser doMe() {
+        @Domain.Exclude protected ApplicationUser fetchMe() {
             final String myName = userService.currentUserNameElseNobody();
-            return applicationUserRepository.findOrCreateUserByUsername(myName);
+            return fetchMe(myName);
         }
 
-        @Domain.Exclude protected ApplicationUser doMe(final String myName) {
+        @Domain.Exclude protected ApplicationUser fetchMe(final String myName) {
             return applicationUserRepository.findOrCreateUserByUsername(myName);
         }
 

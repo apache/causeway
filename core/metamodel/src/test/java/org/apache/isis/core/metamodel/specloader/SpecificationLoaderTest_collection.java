@@ -22,14 +22,15 @@ import java.util.Vector;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SpecificationLoaderTest_collection extends SpecificationLoaderTestAbstract {
 
@@ -39,12 +40,12 @@ class SpecificationLoaderTest_collection extends SpecificationLoaderTestAbstract
     }
 
     @Test
-    public void testType() throws Exception {
+    void testType() throws Exception {
         assertTrue(specification.isNonScalar());
     }
 
     @Test
-    public void testName() throws Exception {
+    void testName() throws Exception {
         assertEquals(Vector.class.getName(), specification.getFullIdentifier());
     }
 
@@ -59,8 +60,7 @@ class SpecificationLoaderTest_collection extends SpecificationLoaderTestAbstract
     @Override
     public void testTypeOfFacet() throws Exception {
         final TypeOfFacet facet = specification.getFacet(TypeOfFacet.class);
-        assertNotNull(facet);
-        assertEquals(Object.class, facet.value());
+        assertNull(facet); // expected unspecified
     }
 
 }

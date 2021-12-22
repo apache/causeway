@@ -85,7 +85,7 @@
 		<!-- LIBRARY DEPENDENCIES -->
 		<archunit.version>0.22.0</archunit.version>
 		<asm.version>9.1</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
-		<approvaltests.version>12.3.2</approvaltests.version>
+		<approvaltests.version>12.4.1</approvaltests.version>
 
 		<assertj-guava.version>3.4.0</assertj-guava.version>
 
@@ -97,7 +97,7 @@
 
 		<cucumber.version>7.1.0</cucumber.version>
 
-		<cxf-rt-rs-client.version>3.4.5</cxf-rt-rs-client.version>
+		<cxf-rt-rs-client.version>3.5.0</cxf-rt-rs-client.version>
 
 		<danhaywood-java-assertjext.version>0.1.0</danhaywood-java-assertjext.version>
 		<danhaywood-java-testsupport.version>1.0.0</danhaywood-java-testsupport.version>
@@ -175,13 +175,13 @@
 		<shiro.version>1.8.0</shiro.version>
 		<simpleslackapi.version>1.3.0</simpleslackapi.version>
 		<slf4j-api.version>1.7.32</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
-		<spring-boot.version>2.6.1</spring-boot.version> <!-- has no effect here, needs to be set in isis-parent/pom.xml -->
+		<spring-boot.version>2.6.2</spring-boot.version> <!-- has no effect here, needs to be set in isis-parent/pom.xml -->
 		<summernote.version>0.8.11</summernote.version>
 		<swagger-core.version>1.6.3</swagger-core.version>
 
 		<togglz.version>3.0.0</togglz.version>
 
-		<vaadin.version>22.0.1</vaadin.version>
+		<vaadin.version>22.0.2</vaadin.version>
 
 		<wicket.version>8.13.0</wicket.version>
 		<wicket-bootstrap.version>3.0.0-M18</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->

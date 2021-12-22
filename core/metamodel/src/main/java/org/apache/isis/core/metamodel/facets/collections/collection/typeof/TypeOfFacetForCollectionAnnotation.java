@@ -26,7 +26,8 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
 
-public class TypeOfFacetOnCollectionFromCollectionAnnotation extends TypeOfFacetAbstract {
+public class TypeOfFacetForCollectionAnnotation
+extends TypeOfFacetAbstract {
 
     public static Optional<TypeOfFacet> create(
             final Optional<Collection> collectionIfAny,
@@ -34,12 +35,13 @@ public class TypeOfFacetOnCollectionFromCollectionAnnotation extends TypeOfFacet
 
         return collectionIfAny
                 .map(Collection::typeOf)
-                .filter(typeOf -> typeOf != Object.class)
+                .filter(typeOf -> typeOf!=null
+                                        && typeOf != void.class) // ignore when unspecified
                 .map(typeOf ->
-                new TypeOfFacetOnCollectionFromCollectionAnnotation(typeOf, facetHolder));
+                    new TypeOfFacetForCollectionAnnotation(typeOf, facetHolder));
     }
 
-    private TypeOfFacetOnCollectionFromCollectionAnnotation(final Class<?> type, final FacetHolder holder) {
+    private TypeOfFacetForCollectionAnnotation(final Class<?> type, final FacetHolder holder) {
         super(type, holder);
     }
 

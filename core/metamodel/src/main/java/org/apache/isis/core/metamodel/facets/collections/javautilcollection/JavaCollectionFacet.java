@@ -39,10 +39,10 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
 
     @Override
     public Object populatePojo(
-            Supplier<Object> emptyCollectionPojoFactory,
-            ObjectSpecification collectionSpec,
-            Stream<ManagedObject> initData,
-            int elementCount) {
+            final Supplier<Object> emptyCollectionPojoFactory,
+            final ObjectSpecification collectionSpec,
+            final Stream<ManagedObject> initData,
+            final int elementCount) {
 
         final Collection<? super Object> pojoCollection = _Casts.uncheckedCast(emptyCollectionPojoFactory.get());
         pojoCollection.clear(); // just in case
@@ -76,8 +76,5 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
                 ? (Collection<?>) null
                 : (Collection<?>) collectionAdapter.getPojo();
     }
-
-
-
 
 }

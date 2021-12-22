@@ -291,21 +291,17 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     @Override
     protected ChoiceProvider<ObjectMemento> buildChoiceProvider() {
 
-        val commonContext = super.getCommonContext();
-
         val scalarModel = getModel();
 
         if (scalarModel.hasChoices()) {
-            val choices = scalarModel.getChoices(); // must not return detached entities
-            val choiceMementos = choices.map(commonContext::mementoForParameter);
-            return new ObjectAdapterMementoProviderForReferenceChoices(scalarModel, choiceMementos);
+            return new ObjectAdapterMementoProviderForReferenceChoices(scalarModel);
         }
 
         if(scalarModel.hasAutoComplete()) {
             return new ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(scalarModel);
         }
 
-        return new ObjectAdapterMementoProviderForReferenceObjectAutoComplete(getModel());
+        return new ObjectAdapterMementoProviderForReferenceObjectAutoComplete(scalarModel);
     }
 
     // called by setProviderAndCurrAndPending

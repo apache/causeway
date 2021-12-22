@@ -20,14 +20,19 @@ package org.apache.isis.extensions.secman.integration.spiimpl;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.InteractionScope;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.user.ImpersonateMenuAdvisor;
@@ -54,21 +59,23 @@ public class ImpersonateMenuAdvisorForSecman implements ImpersonateMenuAdvisor {
     final UserService userService;
     final MessageService messageService;
 
+    final Provider<Cache> cache;
+
     @Override
     public List<String> allUserNames() {
-        return this.applicationUserRepository.allUsers()
+        return cache.get().allUserNamesComputeIfAbsent(()->this.applicationUserRepository.allUsers()
                 .stream()
                 .filter(x -> x.getStatus() == ApplicationUserStatus.UNLOCKED)
                 .map(ApplicationUser::getName)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     @Override
     public List<String> allRoleNames() {
-        return this.applicationRoleRepository.allRoles()
+        return cache.get().allRoleNamesComputeIfAbsent(()->this.applicationRoleRepository.allRoles()
                 .stream()
                 .map(ApplicationRole::getName)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     @Override
@@ -87,7 +94,7 @@ public class ImpersonateMenuAdvisorForSecman implements ImpersonateMenuAdvisor {
     }
 
     @Override
-    public String multiTenancyTokenFor(String username) {
+    public String multiTenancyTokenFor(final String username) {
         if(username == null) {
             return null;
         }
@@ -95,6 +102,38 @@ public class ImpersonateMenuAdvisorForSecman implements ImpersonateMenuAdvisor {
                 applicationUserRepository.findByUsername(username)
                         .orElseThrow(RuntimeException::new);
         return applicationUser.getAtPath();
+    }
+
+    // -- CACHE
+
+    @Component
+    @Named("isis.ext.secman.ImpersonateMenuAdvisorForSecman.Cache")
+    @InteractionScope
+    static class Cache implements DisposableBean {
+
+        private List<String> allUserNames;
+        private List<String> allRoleNames;
+
+        @Override
+        public void destroy() throws Exception {
+            allUserNames = null;
+            allRoleNames = null;
+        }
+
+        List<String> allUserNamesComputeIfAbsent(final Supplier<List<String>> lookup) {
+            if(allUserNames!=null) {
+                return allUserNames;
+            }
+            return allUserNames = lookup.get();
+        }
+
+        List<String> allRoleNamesComputeIfAbsent(final Supplier<List<String>> lookup) {
+            if(allRoleNames!=null) {
+                return allRoleNames;
+            }
+            return allRoleNames = lookup.get();
+        }
+
     }
 
 }
