@@ -38,33 +38,19 @@ extends FacetFactoryAbstract {
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContaxt) {
+    public void process(final ProcessClassContext processClassContext) {
 
-        if (_Collections.isCollectionType(processClassContaxt.getCls())) {
-            processCollectionType(processClassContaxt);
-        } else if (_Arrays.isArrayType(processClassContaxt.getCls())) {
-            processAsArrayType(processClassContaxt);
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
+
+        if (_Collections.isCollectionType(cls)) {
+            addFacet(new JavaCollectionFacet(facetHolder));
+        } else if (_Arrays.isArrayType(cls)) {
+            addFacet(new JavaArrayFacet(facetHolder));
         }
 
+        addFacetIfPresent(TypeOfFacet.inferFromObjectType(cls, facetHolder));
+
     }
-
-    // -- HELPER
-
-    private void processCollectionType(final ProcessClassContext processClassContext) {
-        val cls = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
-
-        facetHolder.addFacet(new JavaCollectionFacet(facetHolder));
-        //TODO facetHolder.addFacet(TypeOfFacet.inferredFromGenerics(Object.class, facetHolder));
-    }
-
-    private void processAsArrayType(final ProcessClassContext processClassContext) {
-        val cls = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
-
-        facetHolder.addFacet(new JavaArrayFacet(facetHolder));
-        facetHolder.addFacet(TypeOfFacet.inferredFromArray(cls.getComponentType(), facetHolder));
-    }
-
 
 }

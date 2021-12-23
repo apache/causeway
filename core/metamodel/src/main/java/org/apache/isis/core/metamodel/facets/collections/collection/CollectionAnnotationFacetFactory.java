@@ -25,9 +25,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
-import org.apache.isis.commons.internal.base._Optionals;
 import org.apache.isis.commons.internal.collections._Collections;
-import org.apache.isis.commons.internal.reflection._Generics;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -163,45 +161,27 @@ extends FacetFactoryAbstract {
         val facetHolder = processMethodContext.getFacetHolder();
         val method = processMethodContext.getMethod();
 
+//        _Debug.onCondition(method.getName().equals("getRoles"), ()->{
+//            System.err.printf("!!!!!!!!!! %s%n", method.getName());
+//        });
+
         val methodReturnType = method.getReturnType();
         if (!_Collections.isCollectionOrArrayType(methodReturnType)) {
             return;
         }
 
-        addFacetIfPresent(_Optionals.orNullable(
-
+        addFacetIfPresent(
             // check for @Collection(typeOf=...)
             TypeOfFacetForCollectionAnnotation
             .create(collectionIfAny, facetHolder)
-
-            ,
-
-            // else infer from return type
-            ()-> method.getReturnType().isArray()
-                        ? TypeOfFacet.inferredFromArray(
-                                method.getReturnType().getComponentType(),
-                                facetHolder)
-                        : null
-            ,
-
-            // else infer from generic return type
-            ()->inferFromGenericReturnType(processMethodContext)
-                    .orElse(null)
-
-        ));
+            .or(
+                // else infer from return type
+                ()-> TypeOfFacet.inferFromMethodReturnType(
+                                    method,
+                                    facetHolder))
+        );
 
     }
-
-    private Optional<TypeOfFacet> inferFromGenericReturnType(final ProcessMethodContext processMethodContext) {
-
-        val facetHolder = processMethodContext.getFacetHolder();
-        val method = processMethodContext.getMethod();
-
-        return _Generics.streamGenericTypeArgumentsOfMethodReturnType(method)
-                .findFirst()
-                .map(elementType->TypeOfFacet.inferredFromGenerics(elementType, facetHolder));
-    }
-
 
 
 }

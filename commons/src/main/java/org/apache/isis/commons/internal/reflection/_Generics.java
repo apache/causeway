@@ -79,6 +79,16 @@ public final class _Generics {
     // -- SHORTCUTS
 
     /**
+     * Returns a Stream of the actual type arguments for given type {@code cls}.
+     * @implNote always returns {@link Stream#empty()}, as we don't know how to do this
+     */
+    public static Stream<Class<?>> streamGenericTypeArgumentsOfType(
+            final @NonNull Class<?> cls) {
+        // maybe the best one could do is to extract any bounds on the type argument
+        return Stream.empty();
+    }
+
+    /**
      * Returns a Stream of the actual type arguments for given {@code field}.
      */
     public static Stream<Class<?>> streamGenericTypeArgumentsOfField(

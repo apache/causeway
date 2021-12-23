@@ -42,16 +42,15 @@ public interface TypeOfFacet extends SingleClassValueFacet {
 
     // -- FACTORIES
 
-    static TypeOfFacet inferredFromArray(
-            final Class<?> elementType,
+    static Optional<TypeOfFacet> inferFromObjectType(
+            final Class<?> cls,
             final FacetHolder holder) {
-        return new TypeOfFacetFromArray(elementType, holder);
-    }
 
-    static TypeOfFacet inferredFromGenerics(
-            final Class<?> elementType,
-            final FacetHolder holder) {
-        return new TypeOfFacetFromGenerics(elementType, holder);
+        return _Arrays.isArrayType(cls)
+                ? _Arrays.inferComponentType(cls)
+                        .map(elementType->inferredFromArray(elementType, holder))
+                : _Collections.inferElementType(cls)
+                        .map(elementType->inferredFromGenerics(elementType, holder));
     }
 
     static Optional<TypeOfFacet> inferFromParameterType(
@@ -60,13 +59,11 @@ public interface TypeOfFacet extends SingleClassValueFacet {
 
         val paramType = param.getType();
 
-        if (_Arrays.isArrayType(paramType)) {
-            return _Arrays.inferComponentType(paramType)
-                    .map(elementType->inferredFromArray(elementType, holder));
-        }
-
-        return _Collections.inferElementType(param)
-                .map(elementType->inferredFromGenerics(elementType, holder));
+        return _Arrays.isArrayType(paramType)
+                ? _Arrays.inferComponentType(paramType)
+                        .map(elementType->inferredFromArray(elementType, holder))
+                : _Collections.inferElementType(paramType)
+                        .map(elementType->inferredFromGenerics(elementType, holder));
     }
 
     static Optional<TypeOfFacet> inferFromMethodReturnType(
@@ -75,13 +72,25 @@ public interface TypeOfFacet extends SingleClassValueFacet {
 
         val returnType = method.getReturnType();
 
-        if (_Arrays.isArrayType(returnType)) {
-            return _Arrays.inferComponentType(returnType)
-                    .map(elementType->inferredFromArray(elementType, holder));
-        }
+        return _Arrays.isArrayType(returnType)
+                ? _Arrays.inferComponentType(returnType)
+                        .map(elementType->inferredFromArray(elementType, holder))
+                : _Collections.inferElementType(returnType)
+                        .map(elementType->inferredFromGenerics(elementType, holder));
+    }
 
-        return _Collections.inferElementType(method)
-                .map(elementType->inferredFromGenerics(elementType, holder));
+    // -- INTERNAL
+
+    private static TypeOfFacet inferredFromArray(
+            final Class<?> elementType,
+            final FacetHolder holder) {
+        return new TypeOfFacetFromArray(elementType, holder);
+    }
+
+    private static TypeOfFacet inferredFromGenerics(
+            final Class<?> elementType,
+            final FacetHolder holder) {
+        return new TypeOfFacetFromGenerics(elementType, holder);
     }
 
 
