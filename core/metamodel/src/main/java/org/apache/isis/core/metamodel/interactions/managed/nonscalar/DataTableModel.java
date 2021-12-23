@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.interactions.managed.nonscalar;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -33,6 +34,7 @@ import org.apache.isis.commons.internal.binding._BindableAbstract;
 import org.apache.isis.commons.internal.binding._Bindables;
 import org.apache.isis.commons.internal.binding._Observables;
 import org.apache.isis.commons.internal.binding._Observables.LazyObservable;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -174,11 +176,12 @@ implements MultiselectChoices {
         return getMetaModel().getElementType();
     }
 
+    private final Map<UUID, Optional<DataRow>> dataRowByUuidLookupCache = _Maps.newConcurrentHashMap();
     public Optional<DataRow> lookupDataRow(final @NonNull UUID uuid) {
-        //TODO can be safely cached
-        return getDataRowsFiltered().getValue().stream()
+        // lookup can be safely cached
+        return dataRowByUuidLookupCache.computeIfAbsent(uuid, __->getDataRowsFiltered().getValue().stream()
                 .filter(dr->dr.getUuid().equals(uuid))
-                .findFirst();
+                .findFirst());
     }
 
     // -- TOGGLE ALL
