@@ -161,12 +161,8 @@ extends FacetFactoryAbstract {
         val facetHolder = processMethodContext.getFacetHolder();
         val method = processMethodContext.getMethod();
 
-//        _Debug.onCondition(method.getName().equals("getRoles"), ()->{
-//            System.err.printf("!!!!!!!!!! %s%n", method.getName());
-//        });
-
         val methodReturnType = method.getReturnType();
-        if (!_Collections.isCollectionOrArrayType(methodReturnType)) {
+        if (!_Collections.isCollectionOrArrayOrCanType(methodReturnType)) {
             return;
         }
 
