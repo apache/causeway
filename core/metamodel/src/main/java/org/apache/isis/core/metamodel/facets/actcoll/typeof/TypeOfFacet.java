@@ -62,7 +62,7 @@ public interface TypeOfFacet extends SingleClassValueFacet {
         return _Arrays.isArrayType(paramType)
                 ? _Arrays.inferComponentType(paramType)
                         .map(elementType->inferredFromArray(elementType, holder))
-                : _Collections.inferElementType(paramType)
+                : _Collections.inferElementType(param)
                         .map(elementType->inferredFromGenerics(elementType, holder));
     }
 
@@ -75,7 +75,7 @@ public interface TypeOfFacet extends SingleClassValueFacet {
         return _Arrays.isArrayType(returnType)
                 ? _Arrays.inferComponentType(returnType)
                         .map(elementType->inferredFromArray(elementType, holder))
-                : _Collections.inferElementType(returnType)
+                : _Collections.inferElementType(method)
                         .map(elementType->inferredFromGenerics(elementType, holder));
     }
 
