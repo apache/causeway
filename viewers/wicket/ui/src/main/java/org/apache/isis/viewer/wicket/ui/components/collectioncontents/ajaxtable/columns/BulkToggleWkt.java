@@ -18,13 +18,18 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
-import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.commons.internal.binding._BindableAbstract;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.isis.viewer.wicket.model.models.binding.BooleanBinding;
 
+/**
+ * Boolean {@link IModel} to bind to the associated {@link DataTableModel}'s
+ * select-all-toggle model to handle bulk check-box selection.
+ */
 public class BulkToggleWkt
-extends ChainingModel<Boolean> {
+extends BooleanBinding<DataTableModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,20 +38,8 @@ extends ChainingModel<Boolean> {
     }
 
     @Override
-    public Boolean getObject() {
-        return dataTableModel().getSelectAllToggle().getValue();
-    }
-
-    @Override
-    public void setObject(final Boolean value) {
-        dataTableModel().getSelectAllToggle().setValue(value);
-    }
-
-    // -- HELPER
-
-    @SuppressWarnings("unchecked")
-    private DataTableModel dataTableModel() {
-        return ((IModel<DataTableModel>) super.getTarget()).getObject();
+    protected _BindableAbstract<Boolean> getBindable(final DataTableModel dataTable) {
+        return dataTable.getSelectAllToggle();
     }
 
 }

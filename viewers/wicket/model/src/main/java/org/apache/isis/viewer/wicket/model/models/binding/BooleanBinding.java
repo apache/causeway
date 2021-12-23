@@ -16,31 +16,42 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.model.models.interaction.coll;
+package org.apache.isis.viewer.wicket.model.models.binding;
 
+import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.commons.internal.binding._BindableAbstract;
-import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
-import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
-import org.apache.isis.viewer.wicket.model.models.binding.BooleanBinding;
 
 /**
- * Boolean {@link IModel} to bind to the associated {@link DataTableModel}'s
- * {@link DataRow} model to handle check-box selection.
+ * Boolean {@link IModel} to bind to the associated {@code T} model`s
+ * bindable boolean value.
  */
-public class DataRowToggleWkt
-extends BooleanBinding<DataRow> {
+public abstract class BooleanBinding<T>
+extends ChainingModel<Boolean> {
 
     private static final long serialVersionUID = 1L;
 
-    public DataRowToggleWkt(final DataRowWkt dataRowWkt) {
-        super(dataRowWkt);
+    protected BooleanBinding(final IModel<T> model) {
+        super(model);
     }
 
     @Override
-    protected _BindableAbstract<Boolean> getBindable(final DataRow dataRow) {
-        return dataRow.getSelectToggle();
+    public final Boolean getObject() {
+        return getBindable(model()).getValue();
+    }
+
+    @Override
+    public final void setObject(final Boolean value) {
+        getBindable(model()).setValue(value);
+    }
+
+    protected abstract _BindableAbstract<Boolean> getBindable(T model);
+
+    @SuppressWarnings("unchecked")
+    protected T model() {
+        return ((IModel<T>) super.getTarget()).getObject();
     }
 
 }
+
