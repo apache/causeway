@@ -82,6 +82,7 @@ class JodaTimeConvertersTest {
         return ZoneId.getAvailableZoneIds().stream()
                 .filter(zoneIdName->!zoneIdName.startsWith("SystemV/"))
                 .filter(zoneIdName->!zoneIdName.equals("Pacific/Enderbury"))
+                .filter(zoneIdName->!zoneIdName.equals("Australia/Currie"))
                 .map(ZoneId::of)
                 .map(zoneId->Arguments.of(
                         zoneId.getId(), zoneId));

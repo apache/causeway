@@ -39,6 +39,7 @@ import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.IndexedFunction;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -460,7 +461,17 @@ extends DelegatingInvocationHandlerDefault<T> {
             final ObjectAction objectAction) {
 
         val head = objectAction.interactionHead(targetAdapter);
-        val argAdapters = asObjectAdaptersUnderlying(args);
+        val objectManager = getObjectManager();
+        val arguments = Can.ofArray(args);
+
+        // adapt argument pojos to managed objects
+        val argAdapters = objectAction.getParameterTypes().map(IndexedFunction.zeroBased((paramIndex, paramSpec)->{
+            //guard against index out of bounds
+            val argPojo = arguments.get(paramIndex).orElse(null);
+            return argPojo!=null
+                    ? objectManager.adapt(argPojo)
+                    : ManagedObject.empty(paramSpec);
+        }));
 
         runValidationTask(()->{
             checkVisibility(targetAdapter, objectAction);
@@ -489,14 +500,6 @@ extends DelegatingInvocationHandlerDefault<T> {
                 .isArgumentSetValid(head, argAdapters,getInteractionInitiatedBy())
                 .getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
-    }
-
-    private Can<ManagedObject> asObjectAdaptersUnderlying(final Object[] args) {
-        val argAdapters = _NullSafe.stream(args)
-        .map(getObjectManager()::adapt)
-        .collect(Can.toCan());
-
-        return argAdapters;
     }
 
     private Object underlying(final Object arg) {
