@@ -18,7 +18,7 @@
 		<groupId>org.apache.isis</groupId>
 		<artifactId>isis-parent</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
+		<relativePath>../isis-parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.isis.core</groupId>
@@ -528,7 +528,7 @@
 					<configuration>
 						<rules>
 							<requireMavenVersion>
-								<version>[3.6.0,)</version>
+								<version>[3.5.0,)</version>
 							</requireMavenVersion>
 							<requireJavaVersion>
 								<version>[11,)</version>
