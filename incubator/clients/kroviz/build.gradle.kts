@@ -127,10 +127,10 @@ afterEvaluate {
                     KotlinWebpack::class
                 ).destinationDirectory
             from(distribution) {
-                include("*.*")
-                into("/resources/static/")
+                include("**/*.*")
+                into("/static/kroviz/")
             }
-            from(webDir) { into("/resources/static/") }
+            from(webDir) { into("/static/kroviz/") }
             duplicatesStrategy = DuplicatesStrategy.EXCLUDE
             inputs.files(distribution, webDir)
             outputs.file(archiveFile)

@@ -184,7 +184,7 @@
 	</dependencies>
 
 	<modules>
-<!-- 		<module>clients/kroviz</module> -->
+ 		<module>clients/kroviz</module>
 		<module>viewers/vaadin</module>
 		<module>viewers/javafx</module>
 		<module>../valuetypes/prism/vaadin</module>

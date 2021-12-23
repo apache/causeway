@@ -114,6 +114,7 @@
                             <arguments>
                                 <argument>clean</argument>
                                 <argument>build</argument>
+                                <argument>jar</argument>
                                 <argument>-Pgroup=${project.groupId}</argument>
                                 <argument>-Pversion=${project.version}</argument>
                                 <argument>-S</argument>
