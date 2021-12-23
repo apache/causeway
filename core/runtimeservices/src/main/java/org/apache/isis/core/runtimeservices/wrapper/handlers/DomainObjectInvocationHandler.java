@@ -43,6 +43,7 @@ import org.apache.isis.commons.functional.IndexedFunction;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -462,12 +463,11 @@ extends DelegatingInvocationHandlerDefault<T> {
 
         val head = objectAction.interactionHead(targetAdapter);
         val objectManager = getObjectManager();
-        val arguments = Can.ofArray(args);
 
         // adapt argument pojos to managed objects
         val argAdapters = objectAction.getParameterTypes().map(IndexedFunction.zeroBased((paramIndex, paramSpec)->{
-            //guard against index out of bounds
-            val argPojo = arguments.get(paramIndex).orElse(null);
+            // guard against index out of bounds
+            val argPojo = _Arrays.get(args, paramIndex).orElse(null);
             return argPojo!=null
                     ? objectManager.adapt(argPojo)
                     : ManagedObject.empty(paramSpec);
@@ -497,7 +497,7 @@ extends DelegatingInvocationHandlerDefault<T> {
             final Can<ManagedObject> argAdapters) {
 
         val interactionResult = objectAction
-                .isArgumentSetValid(head, argAdapters,getInteractionInitiatedBy())
+                .isArgumentSetValid(head, argAdapters, getInteractionInitiatedBy())
                 .getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
     }
