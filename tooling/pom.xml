@@ -28,7 +28,6 @@
 	<description>
         Libraries and tools not depending on the _Apache Isis Core_ ecosystem,
         eg. code mining, automated documentation.
-        (Targeted for JVM 11+)
     </description>
 
 	<packaging>pom</packaging>
@@ -89,7 +88,6 @@
 				<groupId>org.apache.rat</groupId>
 				<artifactId>apache-rat-plugin</artifactId>
 
-				<!-- APACHE ISIS customisation 4/7: start -->
 				<configuration>
 					<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
 					<excludeSubProjects>true</excludeSubProjects>
