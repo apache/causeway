@@ -14,8 +14,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<!-- This pom is a descendant of org.apache:apache, the idea being to also inherit 
-		from org.springframework.boot:spring-boot-starter-parent. For more information, 
+	<!-- This pom is a descendant of  
+		[https://mvnrepository.com/artifact/org.apache.maven/maven-parent/34], 
+		the idea being to also inherit from org.springframework.boot:spring-boot-starter-parent. 
+		For more information, 
 		see the documentation of this POM: http://maven.apache.org/pom/asf/ -->
 
 	<parent>
@@ -61,6 +63,7 @@
 
 		<spring-boot.version>2.6.2</spring-boot.version>
 		<lombok.version>1.18.22</lombok.version> <!-- overriding Spring -->
+		<lombok-maven-plugin.version>1.18.20.0</lombok-maven-plugin.version>
 		<delombok.output>${project.build.directory}/delombok</delombok.output>
 		<surefire.version>2.22.2</surefire.version>
 		<surefire-plugin.argLine>-Xms1024m -Xmx1024m</surefire-plugin.argLine>
@@ -1885,7 +1888,7 @@
 					<plugin>
 						<groupId>org.projectlombok</groupId>
 						<artifactId>lombok-maven-plugin</artifactId>
-						<version>1.18.20.0</version>
+						<version>${lombok-maven-plugin.version}</version>
 						<configuration>
 							<sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
 							<outputDirectory>${delombok.output}</outputDirectory>
