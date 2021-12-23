@@ -432,7 +432,7 @@
 	
 	
 	<pluginRepositories>
-		<!-- potentially breaks dependabot run: timeout due to repo not accessible 
+		<!-- potentially breaks dependabot run: timeout due to repo not accessible -->
 		<pluginRepository>
 			<id>apache.snapshots</id>
 			<name>Apache Snapshot Repository</name>
@@ -440,7 +440,7 @@
 			<releases>
 				<enabled>false</enabled>
 			</releases>
-		</pluginRepository> -->
+		</pluginRepository>
 		<pluginRepository>
 			<id>DataNucleus_2</id>
 			<url>http://www.datanucleus.org/downloads/maven2/</url> <!--TODO not yet supports SSL, even required? -->
@@ -451,7 +451,7 @@
 	</pluginRepositories>
 	
 	<repositories>
-		<!-- potentially breaks dependabot run: timeout due to repo not accessible 
+		<!-- potentially breaks dependabot run: timeout due to repo not accessible -->
 		<repository>
 			<id>apache.snapshots</id>
 			<name>Apache Snapshot Repository</name>
@@ -459,7 +459,7 @@
 			<releases>
 				<enabled>false</enabled>
 			</releases>
-		</repository> -->
+		</repository>
 		<repository>
 			<id>central</id>
 			<name>Central Repository</name>
