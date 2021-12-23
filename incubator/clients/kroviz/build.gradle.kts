@@ -117,7 +117,7 @@ kotlin {
 
 afterEvaluate {
     tasks {
-        create("jar", Zip::class) {
+        create("jar", Jar::class) {
             dependsOn("browserProductionWebpack")
             group = "package"
             destinationDirectory.set(file("$buildDir/libs"))
@@ -128,8 +128,9 @@ afterEvaluate {
                 ).destinationDirectory
             from(distribution) {
                 include("*.*")
+                into("/resources/static/")
             }
-            from(webDir)
+            from(webDir) { into("/resources/static/") }
             duplicatesStrategy = DuplicatesStrategy.EXCLUDE
             inputs.files(distribution, webDir)
             outputs.file(archiveFile)
