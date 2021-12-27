@@ -128,9 +128,9 @@ afterEvaluate {
                 ).destinationDirectory
             from(distribution) {
                 include("**/*.*")
-                into("/static/kroviz/")
+                into("/public/kroviz/")
             }
-            from(webDir) { into("/static/kroviz/") }
+            from(webDir) { into("/public/kroviz/") }
             duplicatesStrategy = DuplicatesStrategy.EXCLUDE
             inputs.files(distribution, webDir)
             outputs.file(archiveFile)

@@ -27,29 +27,63 @@
 	<properties>
 	</properties>
 
-	<build>
-		<resources>
-			<resource>
-				<filtering>true</filtering>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>application.yml</include>
-				</includes>
-			</resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/java</directory>
-				<includes>
-					<!-- we include all .java too, so that we can reference it from the descriptions -->
-					<include>**</include>
-				</includes>
-			</resource>
-		</resources>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>unpack-jar-features</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <echo>Copy jar to source project</echo>
+                                <copy todir="${project.build.directory}/classes">
+                                    <fileset dir="${project.basedir}/../../../incubator/clients/kroviz/build/libs/">
+                                        <include name="*.jar"/>
+                                        <exclude name="*sources.jar"/>
+                                    </fileset>
+                                </copy>
+                                <echo>Unpack jar</echo>echo>
+                                <unzip dest="${project.build.directory}/classes">
+                                    <fileset dir="${project.build.directory}/classes">
+                                        <include name="*.jar"/>
+                                    </fileset>
+                                </unzip>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>application.yml</include>
+                </includes>
+            </resource>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/java</directory>
+                <includes>
+                    <!-- we include all .java too, so that we can reference it from the descriptions -->
+                    <include>**</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
 
 	<dependencies>
 
@@ -106,7 +140,7 @@
             <groupId>org.apache.isis.valuetypes</groupId>
             <artifactId>isis-valuetypes-markdown-applib</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.apache.isis.extensions</groupId>
             <artifactId>isis-extensions-fullcalendar-applib</artifactId>
