@@ -40,18 +40,112 @@ for non-public class member introspection.
 == Configuration
 
 Following configuration options changed:
-[source,java]
-----
-// removed:
-isis.core.meta-model.annotation.action.explicit=true/false
+[cols="2a,3a", options="header"]
 
-// semantic equivalent replacement for i.c.m.a.action.explicit=false 
-isis.core.meta-model.introspector.policy=ANNOTATION_OPTIONAL
+|===
 
-// semantic equivalent replacement for i.c.m.a.action.explicit=true 
-isis.core.meta-model.introspector.policy=ANNOTATION_REQUIRED
+| previously
+| new
 
-----
+| `isis.core.meta-model.annotation.action.explicit`=`false`/`true` (removed)
+| (semantic equivalent) replacement for `false`:
+ 
+`isis.core.meta-model.introspector.policy=ANNOTATION_OPTIONAL`
+
+(semantic equivalent) replacement for `true`:
+
+`isis.core.meta-model.introspector.policy=ANNOTATION_REQUIRED`
+
+| `isis.value-types.primitives.int` (removed)
+| using localized NumberFormat instead, customize via `ValueSemanticsProvider<Integer>`
+
+| `isis.value-types.java-lang.byte` (removed)
+| using localized NumberFormat instead, customize via `ValueSemanticsProvider<Byte>`
+
+| `isis.value-types.java-lang.double` (removed)
+| using localized NumberFormat instead, customize via `ValueSemanticsProvider<Double>`
+
+| `isis.value-types.java-lang.float` (removed)
+| using localized NumberFormat instead, customize via `ValueSemanticsProvider<Float>`
+
+| `isis.value-types.java-lang.long` (removed)
+| using localized NumberFormat instead, customize via `ValueSemanticsProvider<Long>`
+
+| `isis.value-types.java-lang.short` (removed)
+| using localized NumberFormat instead, customize via `ValueSemanticsProvider<Short>`
+
+| `isis.value-types.java-math.big-integer` (removed)
+| using localized NumberFormat instead, customize via `ValueSemanticsProvider<BigInteger>`
+
+| `isis.value-types.java-math.big-decimal` (removed)
+| using localized NumberFormat instead, customize via `ValueSemanticsProvider<BigDecimal>`
+
+| `isis.value-types.java-time.local-date-time` (removed)
+| defaults to `FormatStyle.MEDIUM`, customize via feature specific 
+`@ValueSemantics(dateFormatStyle=..., timeFormatStyle=...)` 
+or globally via `ValueSemanticsProvider<LocalDateTime>`
+
+| `isis.value-types.java-time.offset-date-time` (removed)
+| defaults to `FormatStyle.MEDIUM`, customize via feature specific
+`@ValueSemantics(dateFormatStyle=..., timeFormatStyle=...)` 
+or globally via `ValueSemanticsProvider<OffsetDateTime>`
+
+| `isis.value-types.java-time.offset-time` (removed)
+| defaults to `FormatStyle.MEDIUM`, customize via feature specific
+`@ValueSemantics(timeFormatStyle=...)` 
+or globally via `ValueSemanticsProvider<OffsetTime>`
+
+| `isis.value-types.java-time.local-date` (removed)
+| defaults to `FormatStyle.MEDIUM`, customize via feature specific
+`@ValueSemantics(dateFormatStyle=...)` 
+or globally via `ValueSemanticsProvider<LocalDate>`
+
+| `isis.value-types.java-time.local-time` (removed)
+| defaults to `FormatStyle.MEDIUM`, customize via feature specific
+`@ValueSemantics(timeFormatStyle=...)` 
+or globally via `ValueSemanticsProvider<LocalTime>`
+
+| `isis.value-types.java-time.zoned-date-time` (removed)
+| defaults to `FormatStyle.MEDIUM`, customize via feature specific
+`@ValueSemantics(dateFormatStyle=..., timeFormatStyle=...)` 
+or globally via `ValueSemanticsProvider<ZonedDateTime>`
+
+| `isis.value-types.java-util.date` (removed)
+| defaults to `FormatStyle.MEDIUM`, customize via feature specific
+`@ValueSemantics(dateFormatStyle=..., timeFormatStyle=...)` 
+or globally via `ValueSemanticsProvider<java.util.Date>`
+
+| `isis.value-types.java-sql.date` (removed)
+| defaults to `FormatStyle.MEDIUM`, customize via feature specific
+`@ValueSemantics(dateFormatStyle=...)` 
+or globally via `ValueSemanticsProvider<java.sql.Date>`
+
+| `isis.value-types.java-sql.time` (removed)
+| defaults to `FormatStyle.MEDIUM`, customize via feature specific
+`@ValueSemantics(timeFormatStyle=...)` 
+or globally via `ValueSemanticsProvider<java.sql.Time>`
+
+| `isis.value-types.java-sql.timestamp` (removed)
+| defaults to `FormatStyle.MEDIUM`, customize via feature specific
+`@ValueSemantics(dateFormatStyle=..., timeFormatStyle=...)` 
+or globally via `ValueSemanticsProvider<java.sql.Timestamp>`
+
+| `isis.value-types.joda.local-date-time` (removed)
+| defaults to `FormatStyle.MEDIUM`, customize via feature specific
+`@ValueSemantics(dateFormatStyle=..., timeFormatStyle=...)` 
+or globally via `ValueSemanticsProvider<org.joda.time.LocalDateTime>`
+
+| `isis.value-types.joda.local-date` (removed)
+| defaults to `FormatStyle.MEDIUM`, customize via feature specific
+`@ValueSemantics(dateFormatStyle=...)` 
+or globally via `ValueSemanticsProvider<org.joda.time.LocalDate>`
+
+| `isis.value-types.joda.date-time` (removed)
+| defaults to `FormatStyle.MEDIUM`, customize via feature specific
+`@ValueSemantics(timeFormatStyle=...)` 
+or globally via `ValueSemanticsProvider<org.joda.time.DateTime>`
+
+|===
 
 === Password Hashing
 
