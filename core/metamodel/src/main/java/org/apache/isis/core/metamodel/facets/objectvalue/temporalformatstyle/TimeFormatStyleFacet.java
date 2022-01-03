@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.ValueSemantics;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
- * If associated with a temporal date value, the style of a localized time.
+ * If associated with a temporal time value, the style of a localized time.
  */
 public interface TimeFormatStyleFacet
 extends Facet {
