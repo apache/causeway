@@ -25,12 +25,13 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * If associated with a temporal time value, the style of a localized time.
+ * @see ValueSemantics#timeFormatStyle()
  */
 public interface TimeFormatStyleFacet
 extends Facet {
 
     /**
-     * As provided by {@link ValueSemantics#timeFormatStyle()}
+     * As provided by {@link ValueSemantics#timeFormatStyle()}.
      */
     FormatStyle getTimeFormatStyle();
 

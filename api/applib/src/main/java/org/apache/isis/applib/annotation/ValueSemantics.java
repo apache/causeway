@@ -90,12 +90,14 @@ public @interface ValueSemantics {
 
     /**
      * If associated with a temporal date value, the style of a localized date.
+     * @see FormatStyle
      */
     FormatStyle dateFormatStyle()
             default FormatStyle.MEDIUM;
 
     /**
      * If associated with a temporal time value, the style of a localized time.
+     * @see FormatStyle
      */
     FormatStyle timeFormatStyle()
             default FormatStyle.MEDIUM;

@@ -26,12 +26,17 @@ import java.time.temporal.Temporal;
 import java.time.temporal.TemporalQuery;
 import java.util.function.BiFunction;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.value.semantics.EncodingException;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.facets.objectvalue.temporalformatstyle.DateFormatStyleFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.temporalformatstyle.TimeFormatStyleFacet;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -49,6 +54,8 @@ import lombok.experimental.Accessors;
 public abstract class TemporalValueSemanticsProvider<T extends Temporal>
 extends ValueSemanticsAbstract<T>
 implements TemporalValueSemantics<T> {
+
+    @Inject protected SpecificationLoader specLoader;
 
     @Getter(onMethod_ = {@Override}) protected final TemporalCharacteristic temporalCharacteristic;
     @Getter(onMethod_ = {@Override}) protected final OffsetCharacteristic offsetCharacteristic;
@@ -177,8 +184,21 @@ implements TemporalValueSemantics<T> {
      * Format for pretty rendering, not used for parsing/editing.
      */
     protected DateTimeFormatter getRenderingFormat(final ValueSemanticsProvider.Context context) {
+
+        val featureIfAny = specLoader.loadFeature(context.getFeatureIdentifier());
+
+        val dateFormatStyle = featureIfAny
+                .flatMap(feature->feature.lookupFacet(DateFormatStyleFacet.class))
+                .map(DateFormatStyleFacet::getDateFormatStyle)
+                .orElse(FormatStyle.MEDIUM);
+
+        val timeFormatStyle = featureIfAny
+                .flatMap(feature->feature.lookupFacet(TimeFormatStyleFacet.class))
+                .map(TimeFormatStyleFacet::getTimeFormatStyle)
+                .orElse(FormatStyle.MEDIUM);
+
         return getTemporalRenderingFormat(
-                context, temporalCharacteristic, offsetCharacteristic, FormatStyle.MEDIUM, FormatStyle.MEDIUM);
+                context, temporalCharacteristic, offsetCharacteristic, dateFormatStyle, timeFormatStyle);
     }
 
     /**

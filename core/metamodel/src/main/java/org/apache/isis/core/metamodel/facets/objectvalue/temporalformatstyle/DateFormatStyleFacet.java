@@ -25,12 +25,13 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * If associated with a temporal date value, the style of a localized date.
+ * @see ValueSemantics#dateFormatStyle()
  */
 public interface DateFormatStyleFacet
 extends Facet {
 
     /**
-     * As provided by {@link ValueSemantics#dateFormatStyle()}
+     * As provided by {@link ValueSemantics#dateFormatStyle()}.
      */
     FormatStyle getDateFormatStyle();
 
