@@ -56,6 +56,12 @@ Following configuration options changed:
 
 `isis.core.meta-model.introspector.policy=ANNOTATION_REQUIRED`
 
+| `isis.legacy.value-types.percentage` (removed)
+| no replacement
+
+| `isis.legacy.value-types.money` (removed)
+| no replacement
+
 | `isis.value-types.primitives.int` (removed)
 | using localized NumberFormat instead, customize via `ValueSemanticsProvider<Integer>`
 
@@ -144,6 +150,16 @@ or globally via `ValueSemanticsProvider<org.joda.time.LocalDate>`
 | defaults to `FormatStyle.MEDIUM`, customize via feature specific
 `@ValueSemantics(timeFormatStyle=...)` 
 or globally via `ValueSemanticsProvider<org.joda.time.DateTime>`
+
+| `isis.viewer.wicket.date-pattern` (removed)
+| defaults to (canonical) `yyyy-MM-dd` editing format,
+use `isis.value-types.temporal.date-pattern` instead or
+customize via `ValueSemanticsProvider<T>`
+
+| `isis.viewer.wicket.date-time-pattern` (removed)
+| defaults to concatenation of `date-pattern` with a blank `" "` and with a `time-pattern` editing format,
+use `isis.value-types.temporal.*-pattern` instead or
+customize via `ValueSemanticsProvider<T>`
 
 |===
 
