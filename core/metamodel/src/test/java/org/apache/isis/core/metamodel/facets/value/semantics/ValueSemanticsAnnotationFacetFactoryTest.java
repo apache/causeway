@@ -1,6 +1,8 @@
 package org.apache.isis.core.metamodel.facets.value.semantics;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.FormatStyle;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -9,10 +11,13 @@ import org.apache.isis.applib.annotation.ValueSemantics;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MinIntegerDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.temporalformatstyle.DateFormatStyleFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.temporalformatstyle.TimeFormatStyleFacet;
 
 @SuppressWarnings("unused")
 public class ValueSemanticsAnnotationFacetFactoryTest
@@ -222,6 +227,32 @@ extends AbstractFacetFactoryTest {
         assertMaxFractionalDigits(facetedMethod, 4);
     }
 
+    // -- TEMPORAL FORMAT STYLE
+
+    public void testDateFormatStylePickedUpOnProperty() {
+        // given
+        class Order {
+            @ValueSemantics(dateFormatStyle = FormatStyle.FULL)
+            public LocalDateTime getDateTime() { return null; }
+        }
+        // when
+        processMethod(newFacetFactory(), Order.class, "getDateTime", _Constants.emptyClasses);
+        // then
+        assertDateFormatStyle(facetedMethod, FormatStyle.FULL);
+    }
+
+    public void testTimeFormatStylePickedUpOnProperty() {
+        // given
+        class Order {
+            @ValueSemantics(timeFormatStyle = FormatStyle.FULL)
+            public LocalDateTime getDateTime() { return null; }
+        }
+        // when
+        processMethod(newFacetFactory(), Order.class, "getDateTime", _Constants.emptyClasses);
+        // then
+        assertTimeFormatStyle(facetedMethod, FormatStyle.FULL);
+    }
+
     // -- HELPER
 
     ValueSemanticsAnnotationFacetFactory newFacetFactory() {
@@ -287,6 +318,20 @@ extends AbstractFacetFactoryTest {
             assertTrue(facet instanceof MaxFractionalDigitsFacetFromJavaxValidationDigitsAnnotation);
             assertThat(facet.getMaxFractionalDigits(), is(maxFractionalDigits));
         }
+    }
+
+    private void assertDateFormatStyle(
+            final FacetedMethod facetedMethod, final FormatStyle formatStyle) {
+        final DateFormatStyleFacet facet = facetedMethod.getFacet(DateFormatStyleFacet.class);
+        assertNotNull(facet);
+        assertThat(facet.getDateFormatStyle(), is(formatStyle));
+    }
+
+    private void assertTimeFormatStyle(
+            final FacetedMethod facetedMethod, final FormatStyle formatStyle) {
+        final TimeFormatStyleFacet facet = facetedMethod.getFacet(TimeFormatStyleFacet.class);
+        assertNotNull(facet);
+        assertThat(facet.getTimeFormatStyle(), is(formatStyle));
     }
 
 }

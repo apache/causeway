@@ -18,30 +18,30 @@
  */
 package org.apache.isis.core.metamodel.facets.value.semantics;
 
+import java.time.format.FormatStyle;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ValueSemantics;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.temporalformatstyle.DateFormatStyleFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.temporalformatstyle.DateFormatStyleFacetAbstract;
 
-public class MaxTotalDigitsFacetFromValueSemanticsAnnotation
-extends MaxTotalDigitsFacetAbstract {
+public class DateFormatStyleFacetFromValueSemanticsAnnotation
+extends DateFormatStyleFacetAbstract {
 
-    public static Optional<MaxTotalDigitsFacet> create(
-            final Optional<ValueSemantics> digitsIfAny,
+    public static Optional<DateFormatStyleFacet> create(
+            final Optional<ValueSemantics> valueSemanticsIfAny,
             final FacetHolder holder) {
 
-        return digitsIfAny
-        .map(digits->{
-            return new MaxTotalDigitsFacetFromValueSemanticsAnnotation(
-                    digits.maxTotalDigits(), holder);
-        });
+        return valueSemanticsIfAny
+        .map(ValueSemantics::dateFormatStyle)
+        .map(dateFormatStyle->
+            new DateFormatStyleFacetFromValueSemanticsAnnotation(dateFormatStyle, holder));
    }
 
-   private MaxTotalDigitsFacetFromValueSemanticsAnnotation(
-           final int maxTotalDigits, final FacetHolder holder) {
-       super(maxTotalDigits, holder);
+   private DateFormatStyleFacetFromValueSemanticsAnnotation(
+           final FormatStyle dateFormatStyle, final FacetHolder holder) {
+       super(dateFormatStyle, holder);
    }
 
 }

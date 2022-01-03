@@ -76,14 +76,14 @@ extends FacetFactoryAbstract {
             final TypedHolderAbstract facetHolder,
             final Optional<ValueSemantics> valueSemanticsIfAny,
             final Optional<Digits> digitsIfAny) {
-        processProvider(facetHolder, valueSemanticsIfAny, digitsIfAny);
+        processProvider(facetHolder, valueSemanticsIfAny);
         processDigits(facetHolder, valueSemanticsIfAny, digitsIfAny);
+        processTemporalFormat(facetHolder, valueSemanticsIfAny);
     }
 
     private void processProvider(
             final TypedHolderAbstract facetHolder,
-            final Optional<ValueSemantics> valueSemanticsIfAny,
-            final Optional<Digits> digitsIfAny) {
+            final Optional<ValueSemantics> valueSemanticsIfAny) {
 
         // check for @ValueSemantics(provider=...)
         addFacetIfPresent(
@@ -120,6 +120,20 @@ extends FacetFactoryAbstract {
 
         addFacetIfPresent(
                 MinFractionalDigitsFacetFromValueSemanticsAnnotation
+                .create(valueSemanticsIfAny, facetHolder));
+
+    }
+
+    private void processTemporalFormat(
+            final TypedHolderAbstract facetHolder,
+            final Optional<ValueSemantics> valueSemanticsIfAny){
+
+        addFacetIfPresent(
+                DateFormatStyleFacetFromValueSemanticsAnnotation
+                .create(valueSemanticsIfAny, facetHolder));
+
+        addFacetIfPresent(
+                TimeFormatStyleFacetFromValueSemanticsAnnotation
                 .create(valueSemanticsIfAny, facetHolder));
 
     }
