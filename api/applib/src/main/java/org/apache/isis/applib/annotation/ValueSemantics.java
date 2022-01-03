@@ -40,8 +40,8 @@ public @interface ValueSemantics {
     /**
      * Allows to select {@link ValueSemanticsProvider}(s) by qualifier.
      *
-     * @apiNote the selection (qualifier inclusion/exclusion) mechanics could be improved,
-     * yet a single qualifier declared here must exactly match that of the targeted bean
+     * @apiNote a single qualifier declared here must exactly match that of the
+     * targeted {@link ValueSemanticsProvider} bean
      */
     String provider()
             default "";
@@ -85,6 +85,8 @@ public @interface ValueSemantics {
      */
     int minFractionalDigits()
             default 0;
+
+    // -- TEMPORAL FORMAT STYLE
 
     /**
      * If associated with a temporal date value, the style of a localized date.
