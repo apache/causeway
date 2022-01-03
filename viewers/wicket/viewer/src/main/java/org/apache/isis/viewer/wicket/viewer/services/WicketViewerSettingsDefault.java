@@ -52,16 +52,6 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
     }
 
     @Override
-    public String getDatePattern() {
-        return getConfiguration().getViewer().getWicket().getDatePattern();
-    }
-
-    @Override
-    public String getDateTimePattern() {
-        return getConfiguration().getViewer().getWicket().getDateTimePattern();
-    }
-
-    @Override
     public boolean isReplaceDisabledTagWithReadonlyTag() {
         return getConfiguration().getViewer().getWicket().isReplaceDisabledTagWithReadonlyTag();
     }

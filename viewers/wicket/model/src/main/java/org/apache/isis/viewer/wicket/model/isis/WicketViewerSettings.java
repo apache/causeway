@@ -35,16 +35,6 @@ public interface WicketViewerSettings extends Serializable {
     int getMaxTitleLengthInParentedTables();
 
     /**
-     * As per {@link org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket#setDatePattern(String)}
-     */
-    String getDatePattern();
-
-    /**
-     * As per {@link org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket#setDateTimePattern(String)}
-     */
-    String getDateTimePattern();
-
-    /**
      * As per {@link org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket#setReplaceDisabledTagWithReadonlyTag(boolean)}
      */
     boolean isReplaceDisabledTagWithReadonlyTag();

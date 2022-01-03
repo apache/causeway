@@ -66,9 +66,10 @@ import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscr
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.applib.services.userui.UserMenu;
+import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.config.IsisConfiguration.Viewer;
+import org.apache.isis.core.config.IsisConfiguration.Core;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
@@ -77,12 +78,6 @@ import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.PropertyP
 import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.viewer.web.DialogMode;
-
-import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import lombok.Data;
 import lombok.Getter;
@@ -1936,34 +1931,6 @@ public class IsisConfiguration {
             private boolean clearOriginalDestination = false;
 
             /**
-             * The pattern used for rendering and parsing dates.
-             *
-             * <p>
-             * Each Date scalar panel will use {@link #getDatePattern()} or {@link #getDateTimePattern()} depending on its
-             * date type.  In the case of panels with a date picker, the pattern will be dynamically adjusted so that it can be
-             * used by the <a href="https://github.com/Eonasdan/bootstrap-datetimepicker">Bootstrap Datetime Picker</a>
-             * component (which uses <a href="http://momentjs.com/docs/#/parsing/string-format/">Moment.js formats</a>, rather
-             * than those of regular Java code).
-             */
-            @NotNull @NotEmpty
-            private String datePattern = "dd-MM-yyyy";
-
-            /**
-             * The pattern used for rendering and parsing date/times.
-             *
-             * <p>
-             * Each Date scalar panel will use {@link #getDatePattern()} or {@link #getDateTimePattern()}
-             * depending on its date type.  In the case of panels with a date time picker, the pattern will be
-             * dynamically adjusted so that it can be
-             * used by the <a href="https://github.com/Eonasdan/bootstrap-datetimepicker">Bootstrap Datetime Picker</a>
-             * component (which uses <a href="http://momentjs.com/docs/#/parsing/string-format/">Moment.js formats</a>, rather
-             * than those of regular Java code).
-             * </p>
-             */
-            @NotNull @NotEmpty
-            private String dateTimePattern = "dd-MM-yyyy HH:mm";
-
-            /**
              * Whether the dialog mode rendered when invoking actions on domain objects should be to use
              * the sidebar (the default) or to use a modal dialog.
              *
@@ -2573,295 +2540,14 @@ public class IsisConfiguration {
     @Data
     public static class ValueTypes {
 
-        private final Primitives primitives = new Primitives();
+        private final Temporal temporal = new Temporal();
         @Data
-        public static class Primitives {
+        public static class Temporal {
 
-            // capitalized to avoid clash with keyword
-            private final Int Int = new Int();
-            @Data
-            public static class Int {
-                /**
-                 * Configures the number format understood by <code>IntValueSemanticsProviderAbstract</code>.
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private String format;
-            }
-        }
-
-        private final JavaLang javaLang = new JavaLang();
-        @Data
-        public static class JavaLang {
-
-            // capitalized to avoid clash with keyword
-            private final Byte Byte = new Byte();
-            @Data
-            public static class Byte {
-                /**
-                 * Configures the number format understood by <code>ByteValueSemanticsProviderAbstract</code>.
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private String format;
-            }
-
-            // capitalized to avoid clash with keyword
-            private final Double Double = new Double();
-            @Data
-            public static class Double {
-                /**
-                 * Configures the number format understood by <code>DoubleValueSemanticsProviderAbstract</code>.
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private String format;
-            }
-
-            // capitalized to avoid clash with keyword
-            private final Float Float = new Float();
-            @Data
-            public static class Float {
-                /**
-                 * Configures the number format understood by <code>FloatValueSemanticsProviderAbstract</code>.
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private String format;
-            }
-
-            // capitalized to avoid clash with keyword
-            private final Long Long = new Long();
-            @Data
-            public static class Long {
-                /**
-                 * Configures the number format understood by <code>LongValueSemanticsProviderAbstract</code>.
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private String format;
-            }
-
-            // capitalized to avoid clash with keyword
-            private final Short Short = new Short();
-            @Data
-            public static class Short {
-                /**
-                 * Configures the number format understood by <code>ShortValueSemanticsProviderAbstract</code>.
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private String format;
-            }
-        }
-
-        private final JavaMath javaMath = new JavaMath();
-        @Data
-        public static class JavaMath {
-            private final BigInteger bigInteger = new BigInteger();
-            @Data
-            public static class BigInteger {
-                /**
-                 * Configures the number format understood by <code>BigIntegerValueSemanticsProvider</code>.
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private String format;
-            }
-
-            private final BigDecimal bigDecimal = new BigDecimal();
-            @Data
-            public static class BigDecimal {
-                /**
-                 * Configures the number format understood by <code>BigDecimalValueSemanticsProvider</code>.
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private String format;
-            }
-        }
-
-        private final JavaTime javaTime = new JavaTime();
-        @Data
-        public static class JavaTime {
-            private final LocalDateTime localDateTime = new LocalDateTime();
-            @Data
-            public static class LocalDateTime {
-                /**
-                 * Configures the formats understood by <code>LocalDateTimeValueSemanticsProvider</code>.
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private String format = "medium";
-            }
-
-            private final OffsetDateTime offsetDateTime = new OffsetDateTime();
-            @Data
-            public static class OffsetDateTime {
-                /**
-                 * Configures the formats understood by <code>OffsetDateTimeValueSemanticsProvider</code>.
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private String format = "medium";
-            }
-
-            private final OffsetTime offsetTime = new OffsetTime();
-            @Data
-            public static class OffsetTime {
-                /**
-                 * Configures the formats understood by <code>OffsetTimeValueSemanticsProvider</code>.
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private String format = "medium";
-            }
-
-            private final LocalDate localDate = new LocalDate();
-            @Data
-            public static class LocalDate {
-                /**
-                 * Configures the formats understood by <code>LocalDateValueSemanticsProvider</code>.
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private String format = "medium";
-            }
-
-            private final LocalTime localTime = new LocalTime();
-            @Data
-            public static class LocalTime {
-                /**
-                 * Configures the formats understood by <code>LocalTimeValueSemanticsProvider</code>.
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private String format = "medium";
-            }
-
-            private final ZonedDateTime zonedDateTime = new ZonedDateTime();
-            @Data
-            public static class ZonedDateTime {
-                /**
-                 * Configures the formats understood by <code>ZonedDateTimeValueSemanticsProvider</code>.
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private String format = "medium";
-            }
-        }
-
-        private final JavaUtil javaUtil = new JavaUtil();
-        @Data
-        public static class JavaUtil {
-
-            private final Date date = new Date();
-            @Data
-            public static class Date {
-                /**
-                 * Configures the formats understood by <code>JavaUtilDateValueSemanticsProvider</code>.
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private String format = "medium";
-            }
+            private final TemporalEditingPattern editing = new TemporalEditingPattern();
 
         }
 
-        private final JavaSql javaSql = new JavaSql();
-        @Data
-        public static class JavaSql {
-            private final Date date = new Date();
-            @Data
-            public static class Date {
-                /**
-                 * Configures the formats understood by <code>JavaSqlDateValueSemanticsProvider</code>.
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private String format = "medium";
-            }
-            private final Time time = new Time();
-            @Data
-            public static class Time {
-                /**
-                 * Configures the formats understood by <code>JavaSqlTimeValueSemanticsProvider</code>.
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private String format = "short";
-            }
-
-            private final Timestamp timestamp = new Timestamp();
-            @Data
-            public static class Timestamp {
-                /**
-                 * Configures the formats understood by <code>JavaSqlTimeStampValueSemanticsProvider</code>.
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private String format = "short";
-            }
-
-        }
-
-        private final Joda joda = new Joda();
-        @Data
-        public static class Joda {
-            private final LocalDateTime localDateTime = new LocalDateTime();
-            @Data
-            public static class LocalDateTime {
-                /**
-                 * Configures the formats understood by <code>JodaLocalDateTimeValueSemanticsProvider</code>.
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private String format = "medium";
-            }
-
-            private final LocalDate localDate = new LocalDate();
-            @Data
-            public static class LocalDate {
-                /**
-                 * Configures the formats understood by <code>JodaLocalDateValueSemanticsProvider</code>.
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private String format = "medium";
-            }
-
-            private final DateTime dateTime = new DateTime();
-            @Data
-            public static class DateTime {
-                /**
-                 * Configures the formats understood by <code>JodaDateTimeValueSemanticsProvider</code>.
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private String format = "medium";
-            }
-        }
     }
 
     private final Testing testing = new Testing();
@@ -3022,40 +2708,6 @@ public class IsisConfiguration {
 
         }
     }
-
-    private final Legacy legacy = new Legacy();
-    @Data
-    public static class Legacy {
-
-        private final ValueTypes valueTypes = new ValueTypes();
-        @Data
-        public static class ValueTypes {
-            private final Percentage percentage = new Percentage();
-            @Data
-            public static class Percentage {
-                /**
-                 * Configures the formats understood by <code>PercentageValueSemanticsProvider</code>.
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private String format;
-            }
-
-            private final Money money = new Money();
-            @Data
-            public static class Money {
-                /**
-                 * Configures the default currency code used by <code>MoneyValueSemanticsProvider</code>.
-                 *
-                 * @deprecated
-                 */
-                @Deprecated
-                private Optional<String> currency = Optional.empty();
-            }
-        }
-    }
-
 
     private final Extensions extensions = new Extensions();
     @Data

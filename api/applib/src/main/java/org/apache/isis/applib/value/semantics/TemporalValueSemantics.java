@@ -21,6 +21,15 @@ package org.apache.isis.applib.value.semantics;
 import java.time.Duration;
 import java.time.temporal.Temporal;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+
+import lombok.Data;
+import lombok.NonNull;
+import lombok.val;
+
 /**
  * Common base for {@link java.time.temporal.Temporal} value types.
  *
@@ -70,5 +79,75 @@ extends
 
     TemporalCharacteristic getTemporalCharacteristic();
     OffsetCharacteristic getOffsetCharacteristic();
+
+    @Data
+    public static class TemporalEditingPattern {
+
+        /**
+         * The locale-independent (canonical) pattern used for editing dates in the UI.
+         */
+        @NotNull @NotEmpty
+        private String datePattern = "yyyy-MM-dd";
+
+        /**
+         * The locale-independent (canonical) pattern used for editing time in the UI.
+         * <p>
+         * When editing, omitting nano-seconds, seconds or minutes will use zeros instead.
+         */
+        @NotNull @NotEmpty
+        private String timePattern = "HH:mm:ss"; //FIXME[ISIS-2882] support omitted parts on input "HH[:mm[:ss[.SSSSSSSSS]]]"
+
+        /**
+         * The locale-independent (canonical) pattern used for editing time-zone in the UI.
+         */
+        @NotNull @NotEmpty
+        private String zonePattern = "x";
+
+        /**
+         * The locale-independent (canonical) pattern used for editing date and time in the UI.
+         * <p>
+         * Uses {@code String.format(dateTimeJoiningPattern, datePattern, timePattern)}
+         * to interpolate the effective date-time format.
+         * @see String#format(String, Object...)
+         */
+        @NotNull @NotEmpty
+        private String dateTimeJoiningPattern = "%1$s %2$s";
+
+        /**
+         * The locale-independent (canonical) pattern used for editing zoned temporals
+         * (date, time or date-time) in the UI.
+         * <p>
+         * Uses {@code String.format(zoneJoiningPattern, temporalPattern, zonePattern)}
+         * to interpolate the effective zoned temporal format.
+         * @see String#format(String, Object...)
+         */
+        @NotNull @NotEmpty
+        private String zoneJoiningPattern = "%1$s %2$s";
+
+        public String getEditingFormatAsPattern(
+                final @NonNull TemporalCharacteristic temporalCharacteristic,
+                final @NonNull OffsetCharacteristic offsetCharacteristic) {
+
+            switch (temporalCharacteristic) {
+            case DATE_TIME:
+                val dateTimePattern =
+                    String.format(getDateTimeJoiningPattern(), getDatePattern(), getTimePattern());
+                return offsetCharacteristic.isLocal()
+                        ? dateTimePattern
+                        : String.format(getZoneJoiningPattern(), dateTimePattern, getZonePattern());
+            case DATE_ONLY:
+                return offsetCharacteristic.isLocal()
+                        ? getDatePattern()
+                        : String.format(getZoneJoiningPattern(), getDatePattern(), getZonePattern());
+            case TIME_ONLY:
+                return offsetCharacteristic.isLocal()
+                        ? getTimePattern()
+                        : String.format(getZoneJoiningPattern(), getTimePattern(), getZonePattern());
+            default:
+                throw _Exceptions.unmatchedCase(temporalCharacteristic);
+            }
+        }
+
+    }
 
 }

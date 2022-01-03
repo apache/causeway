@@ -36,6 +36,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -214,12 +215,10 @@ implements
             final @Nullable ValueSemanticsProvider.Context context,
             final @NonNull TemporalValueSemantics.TemporalCharacteristic temporalCharacteristic,
             final @NonNull TemporalValueSemantics.OffsetCharacteristic offsetCharacteristic,
-            final @NonNull String datePattern,
-            final @NonNull String timePattern,
-            final @NonNull String zonePattern) {
+            final @NonNull TemporalEditingPattern editingPattern) {
 
         return getEditingFormatAsBuilder(
-                temporalCharacteristic, offsetCharacteristic, datePattern, timePattern, zonePattern)
+                temporalCharacteristic, offsetCharacteristic, editingPattern)
                 .parseLenient()
                 .parseCaseInsensitive()
                 .toFormatter(getUserLocale(context).getTimeFormatLocale());
@@ -228,34 +227,33 @@ implements
     protected DateTimeFormatterBuilder getEditingFormatAsBuilder(
             final @NonNull TemporalValueSemantics.TemporalCharacteristic temporalCharacteristic,
             final @NonNull TemporalValueSemantics.OffsetCharacteristic offsetCharacteristic,
-            final @NonNull String datePattern,
-            final @NonNull String timePattern,
-            final @NonNull String zonePattern) {
+            final @NonNull TemporalEditingPattern editingPattern) {
 
         return new DateTimeFormatterBuilder()
-            .appendPattern(getEditingFormatAsPattern(temporalCharacteristic, offsetCharacteristic, datePattern, timePattern, zonePattern));
+            .appendPattern(getEditingFormatAsPattern(
+                    temporalCharacteristic, offsetCharacteristic, editingPattern));
     }
 
     protected String getEditingFormatAsPattern(
             final @NonNull TemporalValueSemantics.TemporalCharacteristic temporalCharacteristic,
             final @NonNull TemporalValueSemantics.OffsetCharacteristic offsetCharacteristic,
-            final @NonNull String datePattern,
-            final @NonNull String timePattern,
-            final @NonNull String zonePattern) {
+            final @NonNull TemporalEditingPattern editingPattern) {
 
         switch (temporalCharacteristic) {
         case DATE_TIME:
+            val dateTimePattern =
+                String.format(editingPattern.getDateTimeJoiningPattern(), editingPattern.getDatePattern(), editingPattern.getTimePattern());
             return offsetCharacteristic.isLocal()
-                    ? datePattern + " " + timePattern
-                    : datePattern + " " + timePattern + " " + zonePattern;
+                    ? dateTimePattern
+                    : String.format(editingPattern.getZoneJoiningPattern(), dateTimePattern, editingPattern.getZonePattern());
         case DATE_ONLY:
             return offsetCharacteristic.isLocal()
-                    ? datePattern
-                    : datePattern + " " + zonePattern;
+                    ? editingPattern.getDatePattern()
+                    : String.format(editingPattern.getZoneJoiningPattern(), editingPattern.getDatePattern(), editingPattern.getZonePattern());
         case TIME_ONLY:
             return offsetCharacteristic.isLocal()
-                    ? timePattern
-                    : timePattern + " " + zonePattern;
+                    ? editingPattern.getTimePattern()
+                    : String.format(editingPattern.getZoneJoiningPattern(), editingPattern.getTimePattern(), editingPattern.getZonePattern());
         default:
             throw _Exceptions.unmatchedCase(temporalCharacteristic);
         }

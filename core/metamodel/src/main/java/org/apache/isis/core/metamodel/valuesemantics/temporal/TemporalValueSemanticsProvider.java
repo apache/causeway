@@ -29,18 +29,22 @@ import java.util.function.BiFunction;
 
 import javax.inject.Inject;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.value.semantics.EncodingException;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.objectvalue.temporalformatstyle.DateFormatStyleFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.temporalformatstyle.TimeFormatStyleFacet;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Value;
 import lombok.val;
 import lombok.experimental.Accessors;
 
@@ -56,7 +60,7 @@ public abstract class TemporalValueSemanticsProvider<T extends Temporal>
 extends ValueSemanticsAbstract<T>
 implements TemporalValueSemantics<T> {
 
-    @Inject protected SpecificationLoader specLoader;
+    @Inject protected MetaModelContext mmc;
 
     @Getter(onMethod_ = {@Override}) protected final TemporalCharacteristic temporalCharacteristic;
     @Getter(onMethod_ = {@Override}) protected final OffsetCharacteristic offsetCharacteristic;
@@ -186,21 +190,12 @@ implements TemporalValueSemantics<T> {
      */
     protected DateTimeFormatter getRenderingFormat(final ValueSemanticsProvider.Context context) {
 
-        val featureIfAny = Optional.ofNullable(specLoader) //JUnit support
-                .flatMap(specLdr->specLdr.loadFeature(context.getFeatureIdentifier()));
-
-        val dateFormatStyle = featureIfAny
-                .flatMap(feature->feature.lookupFacet(DateFormatStyleFacet.class))
-                .map(DateFormatStyleFacet::getDateFormatStyle)
-                .orElse(FormatStyle.MEDIUM);
-
-        val timeFormatStyle = featureIfAny
-                .flatMap(feature->feature.lookupFacet(TimeFormatStyleFacet.class))
-                .map(TimeFormatStyleFacet::getTimeFormatStyle)
-                .orElse(FormatStyle.MEDIUM);
+        val dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
 
         return getTemporalRenderingFormat(
-                context, temporalCharacteristic, offsetCharacteristic, dateFormatStyle, timeFormatStyle);
+                context, temporalCharacteristic, offsetCharacteristic,
+                dateAndTimeFormatStyle.getDateFormatStyle(),
+                dateAndTimeFormatStyle.getTimeFormatStyle());
     }
 
     /**
@@ -208,13 +203,13 @@ implements TemporalValueSemantics<T> {
      */
     protected DateTimeFormatter getEditingFormat(final ValueSemanticsProvider.Context context) {
         return getEditingFormat(context, temporalCharacteristic, offsetCharacteristic,
-                "yyyy-MM-dd", "HH:mm:ss", "x");
+                temporalEditingPattern());
     }
 
     @Override
     public String getPattern(final ValueSemanticsProvider.Context context) {
         return getEditingFormatAsPattern(temporalCharacteristic, offsetCharacteristic,
-                "yyyy-MM-dd", "HH:mm:ss", "x");
+                temporalEditingPattern());
     }
 
     /**
@@ -224,5 +219,48 @@ implements TemporalValueSemantics<T> {
         return getTemporalIsoFormat(temporalCharacteristic, offsetCharacteristic);
     }
 
+    // -- HELPER
+
+    @Value(staticConstructor = "of")
+    static class DateAndTimeFormatStyle {
+        @Nullable FormatStyle dateFormatStyle;
+        @Nullable FormatStyle timeFormatStyle;
+
+        static DateAndTimeFormatStyle forContext(
+                final @Nullable MetaModelContext mmc, // nullable .. JUnit support
+                final @Nullable ValueSemanticsProvider.Context context) {
+
+            val featureIfAny = Optional.ofNullable(mmc)
+                    .map(MetaModelContext::getSpecificationLoader)
+                    .flatMap(specLoader->specLoader.loadFeature(
+                            Optional.ofNullable(context)
+                            .map(ValueSemanticsProvider.Context::getFeatureIdentifier)
+                            .orElse(null)));
+
+            val dateFormatStyle = featureIfAny
+                    .flatMap(feature->feature.lookupFacet(DateFormatStyleFacet.class))
+                    .map(DateFormatStyleFacet::getDateFormatStyle)
+                    .orElse(FormatStyle.MEDIUM);
+
+            val timeFormatStyle = featureIfAny
+                    .flatMap(feature->feature.lookupFacet(TimeFormatStyleFacet.class))
+                    .map(TimeFormatStyleFacet::getTimeFormatStyle)
+                    .orElse(FormatStyle.MEDIUM);
+
+            return of(dateFormatStyle, timeFormatStyle);
+        }
+
+    }
+
+    private org.apache.isis.core.config.IsisConfiguration.ValueTypes.Temporal temporalConfig() {
+        return Optional.ofNullable(mmc) // nullable .. JUnit support
+                .map(MetaModelContext::getConfiguration)
+                .map(conf->conf.getValueTypes().getTemporal())
+                .orElseGet(IsisConfiguration.ValueTypes.Temporal::new);
+    }
+
+    private TemporalEditingPattern temporalEditingPattern() {
+        return temporalConfig().getEditing();
+    }
 
 }

@@ -22,7 +22,11 @@ import java.time.LocalDateTime;
 import java.util.Locale;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.locale.UserLocale;
@@ -32,16 +36,13 @@ import org.apache.isis.applib.value.semantics.ValueSemanticsProvider.Context;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaUtilDateValueSemantics;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import lombok.val;
 
 class JavaUtilDateValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {
 
     @SuppressWarnings("deprecation")
-    private final java.util.Date date = new java.util.Date(2013-1900, 03-1, 13, 17, 59);
+    private final java.util.Date date = new java.util.Date(2013-1900, 03-1, 13, 17, 59, 03);
     private JavaUtilDateValueSemantics valueSemantics;
 
     @BeforeEach
@@ -75,14 +76,49 @@ extends ValueSemanticsProviderAbstractTestCase {
     @Test
     public void testRendering() {
         val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
-        assertEquals("Mar 13, 2013, 5:59:00 PM", valueSemantics.simpleTextPresentation(_context , date));
+        assertEquals("Mar 13, 2013, 5:59:03 PM", valueSemantics.simpleTextPresentation(_context , date));
+    }
+
+    //FIXME[ISIS-2882] support omitted parts on input
+    @Test @Disabled
+    public void testParseNoMinutes() throws Exception {
+        val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
+        val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17");
+        assertEquals(date.getTime() - 3540_000L - 3000L, parsedDate.getTime());
+    }
+
+    //FIXME[ISIS-2882] support omitted parts on input
+    @Test @Disabled
+    public void testParseNoSeconds() throws Exception {
+        val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
+        val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59");
+        assertEquals(date.getTime() - 3000L, parsedDate.getTime());
     }
 
     @Test
-    public void testParse() throws Exception {
+    public void testParseSeconds() throws Exception {
         val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
-        val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:00");
+        val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03");
         assertEquals(date.getTime(), parsedDate.getTime());
+    }
+
+    //FIXME[ISIS-2882] support omitted parts on input
+    /**
+     * @see https://stackoverflow.com/questions/30103167/jsr-310-parsing-seconds-fraction-with-variable-length
+     */
+    @Test @Disabled("cannot find a format pattern that can handle both millis and nanos")
+    public void testParseMillis() throws Exception {
+        val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
+        val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03.123");
+        assertEquals(date.getTime() + 123L, parsedDate.getTime());
+    }
+
+    //FIXME[ISIS-2882] support omitted parts on input
+    @Test @Disabled
+    public void testParseNanos() throws Exception {
+        val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
+        val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03.123456789");
+        assertEquals(date.getTime() + 123L, parsedDate.getTime());
     }
 
 }

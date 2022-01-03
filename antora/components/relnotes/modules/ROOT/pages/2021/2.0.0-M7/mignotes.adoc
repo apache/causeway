@@ -153,12 +153,12 @@ or globally via `ValueSemanticsProvider<org.joda.time.DateTime>`
 
 | `isis.viewer.wicket.date-pattern` (removed)
 | defaults to (canonical) `yyyy-MM-dd` editing format,
-use `isis.value-types.temporal.date-pattern` instead or
+use `isis.value-types.temporal.editing.date-pattern` instead or
 customize via `ValueSemanticsProvider<T>`
 
 | `isis.viewer.wicket.date-time-pattern` (removed)
 | defaults to concatenation of `date-pattern` with a blank `" "` and with a `time-pattern` editing format,
-use `isis.value-types.temporal.*-pattern` instead or
+use `isis.value-types.temporal.editing.*-pattern` instead or
 customize via `ValueSemanticsProvider<T>`
 
 |===
