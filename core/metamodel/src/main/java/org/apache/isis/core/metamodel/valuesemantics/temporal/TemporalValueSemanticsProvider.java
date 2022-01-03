@@ -24,6 +24,7 @@ import java.time.format.FormatStyle;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalQuery;
+import java.util.Optional;
 import java.util.function.BiFunction;
 
 import javax.inject.Inject;
@@ -185,7 +186,8 @@ implements TemporalValueSemantics<T> {
      */
     protected DateTimeFormatter getRenderingFormat(final ValueSemanticsProvider.Context context) {
 
-        val featureIfAny = specLoader.loadFeature(context.getFeatureIdentifier());
+        val featureIfAny = Optional.ofNullable(specLoader) //JUnit support
+                .flatMap(specLdr->specLdr.loadFeature(context.getFeatureIdentifier()));
 
         val dateFormatStyle = featureIfAny
                 .flatMap(feature->feature.lookupFacet(DateFormatStyleFacet.class))
