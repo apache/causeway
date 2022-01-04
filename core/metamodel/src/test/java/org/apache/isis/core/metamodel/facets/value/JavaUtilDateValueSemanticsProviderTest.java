@@ -19,25 +19,31 @@
 package org.apache.isis.core.metamodel.facets.value;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.apache.isis.applib.annotation.TimePrecision;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.value.semantics.TemporalValueSemantics;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider.Context;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaUtilDateValueSemantics;
 
+import lombok.NonNull;
 import lombok.val;
 
+/**
+ * Actually testing the LocalDateTimeValueSemantics under the hood.
+ * XXX Maybe move/rename this class.
+ */
 class JavaUtilDateValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {
 
@@ -45,46 +51,33 @@ extends ValueSemanticsProviderAbstractTestCase {
     private final java.util.Date date = new java.util.Date(2013-1900, 03-1, 13, 17, 59, 03);
     private JavaUtilDateValueSemantics valueSemantics;
 
-    @BeforeEach
-    public void setUpObjects() throws Exception {
+    @Test
+    void testInvalidParse() {
+        setSemantics(valueSemantics = createValueSemantics(TimePrecision.SECOND));
 
-        ValueSemanticsAbstract<LocalDateTime> delegate =
-                new LocalDateTimeValueSemantics();
-
-        setSemantics(valueSemantics = new JavaUtilDateValueSemantics() {
-            @Override
-            public ValueSemanticsAbstract<LocalDateTime> getDelegate() {
-                return delegate;
-            }
+        assertThrows(TextEntryParseException.class, ()->{
+            valueSemantics.parseTextRepresentation(null, "invalid entry");
         });
     }
 
     @Test
-    void testInvalidParse() {
-        try {
-            valueSemantics.parseTextRepresentation(null, "invalid entry");
-            fail();
-        } catch (final TextEntryParseException expected) {
-        }
-    }
-
-    @Test
     void testRendering() {
+        setSemantics(valueSemantics = createValueSemantics(TimePrecision.SECOND));
         val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         assertEquals("Mar 13, 2013, 5:59:03 PM", valueSemantics.simpleTextPresentation(_context , date));
     }
 
-    //FIXME[ISIS-2882] support omitted parts on input
-    @Test @Disabled
+    @Test // support omitted parts on input
     void testParseNoMinutes() {
+        setSemantics(valueSemantics = createValueSemantics(TimePrecision.SECOND));
         val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17");
         assertEquals(date.getTime() - 3540_000L - 3000L, parsedDate.getTime());
     }
 
-    //FIXME[ISIS-2882] support omitted parts on input
-    @Test @Disabled
+    @Test // support omitted parts on input
     void testParseNoSeconds() {
+        setSemantics(valueSemantics = createValueSemantics(TimePrecision.SECOND));
         val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59");
         assertEquals(date.getTime() - 3000L, parsedDate.getTime());
@@ -92,28 +85,60 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     void testParseSeconds() {
+        setSemantics(valueSemantics = createValueSemantics(TimePrecision.SECOND));
         val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03");
         assertEquals(date.getTime(), parsedDate.getTime());
     }
 
-    //FIXME[ISIS-2882] support omitted parts on input
-    /**
-     * @see https://stackoverflow.com/questions/30103167/jsr-310-parsing-seconds-fraction-with-variable-length
-     */
-    @Test @Disabled("cannot find a format pattern that can handle both millis and nanos")
+    @Test
     void testParseMillis() {
+        setSemantics(valueSemantics = createValueSemantics(TimePrecision.MILLI_SECOND));
         val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03.123");
         assertEquals(date.getTime() + 123L, parsedDate.getTime());
     }
 
-    //FIXME[ISIS-2882] support omitted parts on input
-    @Test @Disabled
+    @Test
+    void testParseMicros() {
+        setSemantics(valueSemantics = createValueSemantics(TimePrecision.MICRO_SECOND));
+        val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
+        val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03.123456");
+        assertEquals(date.getTime() + 123L, parsedDate.getTime());
+    }
+
+    @Test
     void testParseNanos() {
+        setSemantics(valueSemantics = createValueSemantics(TimePrecision.NANO_SECOND));
         val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03.123456789");
         assertEquals(date.getTime() + 123L, parsedDate.getTime());
+    }
+
+    // -- HELPER
+
+    /**
+     * Overrides the delegate LocalDateTimeValueSemantics,
+     * such that we can inject a custom TimePrecision for testing.
+     */
+    private JavaUtilDateValueSemantics createValueSemantics(final TimePrecision timePrecision) {
+
+        final ValueSemanticsAbstract<LocalDateTime> delegate =
+                new LocalDateTimeValueSemantics() {
+            @Override protected DateTimeFormatter getTemporalEditingFormat(final Context context,
+                    @NonNull final TemporalValueSemantics.TemporalCharacteristic temporalCharacteristic,
+                    @NonNull final TemporalValueSemantics.OffsetCharacteristic offsetCharacteristic,
+                    @NonNull final TimePrecision _timePrecision,
+                    @NonNull final EditingFormatDirection direction,
+                    @NonNull final TemporalEditingPattern editingPattern) {
+                return super.getTemporalEditingFormat(context,
+                        temporalCharacteristic, offsetCharacteristic, timePrecision, direction, editingPattern);}
+        };
+
+        return new JavaUtilDateValueSemantics() {
+            @Override public ValueSemanticsAbstract<LocalDateTime> getDelegate() {
+                return delegate; }
+        };
     }
 
 }
