@@ -37,6 +37,7 @@ import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.functions._Predicates;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.TemporalValueSemanticsProvider;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
@@ -62,24 +63,13 @@ import org.apache.isis.viewer.wicket.ui.components.layout.bs3.Bs3GridPanelFactor
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithTemporalPickerAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemanticsAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisBlobPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisClobPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.image.JavaAwtImagePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time.Jdk8LocalDatePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time.Jdk8LocalDateTimePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time.Jdk8LocalTimePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time.Jdk8OffsetDateTimePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaSqlDatePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaSqlTimePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaSqlTimestampPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaUtilDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.JavaMathBigDecimalPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.JavaMathBigIntegerPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaDateTimePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaLocalDatePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaLocalDateTimePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaLocalTimePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
 import org.apache.isis.viewer.wicket.ui.components.scalars.passwd.IsisPasswordPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanelFactory;
@@ -244,12 +234,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
         componentFactories.add(new JavaAwtImagePanelFactory());
 
-        //TODO all 4 obsolete (converted to java.time)
-        componentFactories.add(new JavaUtilDatePanelFactory());
-        componentFactories.add(new JavaSqlTimestampPanelFactory());
-        componentFactories.add(new JavaSqlDatePanelFactory());
-        componentFactories.add(new JavaSqlTimePanelFactory());
-
         componentFactories.add(new IsisPasswordPanelFactory());
 
         componentFactories.add(new IsisBlobPanelFactory());
@@ -257,17 +241,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
         componentFactories.add(new JavaMathBigIntegerPanelFactory());
         componentFactories.add(new JavaMathBigDecimalPanelFactory());
-
-        componentFactories.add(new Jdk8OffsetDateTimePanelFactory());
-        componentFactories.add(new Jdk8LocalDatePanelFactory());
-        componentFactories.add(new Jdk8LocalTimePanelFactory());
-        componentFactories.add(new Jdk8LocalDateTimePanelFactory());
-
-        //TODO all 4 obsolete (converted to java.time)
-        componentFactories.add(new JodaLocalDatePanelFactory());
-        componentFactories.add(new JodaLocalDateTimePanelFactory());
-        componentFactories.add(new JodaLocalTimePanelFactory());
-        componentFactories.add(new JodaDateTimePanelFactory());
 
         componentFactories.add(new ValueCompoundPanelFactory());
 
@@ -280,7 +253,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
             .filter(_Predicates.not(registeredScalarTypes::contains))
             .flatMap(valueSemanticsResolver::streamValueSemantics)
             //.peek(valueSemantics->System.err.printf("%s -> %s%n", valueSemantics, valueSemantics.getCorrespondingClass().getName()))
-            //FIXME[ISIS-2882] not properly implemented yet: does not work eg. with temporal types
             .map(valueSemantics->createForValueSemantics((ValueSemanticsProvider)valueSemantics))
             .forEach(componentFactories::add);
 
@@ -333,6 +305,16 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     // -- UTILTIY
 
     public static <T extends Serializable> ComponentFactoryScalarAbstract
+    createForValueSemantics(final ValueSemanticsProvider<T> valueSemantics) {
+
+        if(valueSemantics instanceof TemporalValueSemanticsProvider) {
+            return createScalarPanelUsingDateTimePicker(valueSemantics.getCorrespondingClass());
+        }
+
+        return createScalarPanelUsingTextField(valueSemantics.getCorrespondingClass());
+    }
+
+    public static <T extends Serializable> ComponentFactoryScalarAbstract
     createScalarPanelUsingTextField(final Class<T> valueTypeClass) {
 
         var valueTypeClasses = Can.<Class<?>>ofSingleton(valueTypeClass);
@@ -362,8 +344,28 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     }
 
     public static <T extends Serializable> ComponentFactoryScalarAbstract
-    createForValueSemantics(final ValueSemanticsProvider<T> valueSemantics) {
-        return createScalarPanelUsingTextField(valueSemantics.getCorrespondingClass());
+    createScalarPanelUsingDateTimePicker(final Class<T> valueTypeClass) {
+
+        val valueTypeClasses = Can.<Class<?>>ofSingleton(valueTypeClass);
+
+        return new ComponentFactoryScalarAbstract(
+                ScalarPanelTextFieldWithTemporalPickerAbstract.class,
+                valueTypeClasses) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Component createComponent(final String id, final ScalarModel scalarModel) {
+
+                return new ScalarPanelTextFieldWithTemporalPickerAbstract<T>(
+                        id, scalarModel, valueTypeClass) {
+                    private static final long serialVersionUID = 1L;
+                };
+            }
+
+        };
     }
+
+
 
 }
