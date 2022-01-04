@@ -63,22 +63,15 @@ import org.apache.isis.viewer.wicket.ui.components.layout.bs3.Bs3GridPanelFactor
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumericAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithTemporalPickerAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemanticsAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisBlobPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisClobPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.image.JavaAwtImagePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.JavaMathBigDecimalPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.JavaMathBigIntegerPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
 import org.apache.isis.viewer.wicket.ui.components.scalars.passwd.IsisPasswordPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BytePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.DoublePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.FloatPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.IntegerPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.LongPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.ShortPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.StringPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.value.compound.ValueCompoundPanelFactory;
@@ -222,13 +215,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(MarkupPanelFactories.parented());
 
         componentFactories.add(new BooleanPanelFactory());
-        componentFactories.add(new BytePanelFactory());
-        componentFactories.add(new ShortPanelFactory());
-        componentFactories.add(new IntegerPanelFactory());
-        componentFactories.add(new LongPanelFactory());
-
-        componentFactories.add(new FloatPanelFactory());
-        componentFactories.add(new DoublePanelFactory());
 
         componentFactories.add(new StringPanelFactory());
 
@@ -238,9 +224,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
         componentFactories.add(new IsisBlobPanelFactory());
         componentFactories.add(new IsisClobPanelFactory());
-
-        componentFactories.add(new JavaMathBigIntegerPanelFactory());
-        componentFactories.add(new JavaMathBigDecimalPanelFactory());
 
         componentFactories.add(new ValueCompoundPanelFactory());
 
@@ -307,8 +290,12 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     public static <T extends Serializable> ComponentFactoryScalarAbstract
     createForValueSemantics(final ValueSemanticsProvider<T> valueSemantics) {
 
+        if(Number.class.isAssignableFrom(valueSemantics.getCorrespondingClass())) {
+            return createScalarPanelUsingNumberField(valueSemantics.getCorrespondingClass());
+        }
+
         if(valueSemantics instanceof TemporalValueSemanticsProvider) {
-            return createScalarPanelUsingDateTimePicker(valueSemantics.getCorrespondingClass());
+            return createScalarPanelUsingTemporalPicker(valueSemantics.getCorrespondingClass());
         }
 
         return createScalarPanelUsingTextField(valueSemantics.getCorrespondingClass());
@@ -344,7 +331,30 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     }
 
     public static <T extends Serializable> ComponentFactoryScalarAbstract
-    createScalarPanelUsingDateTimePicker(final Class<T> valueTypeClass) {
+    createScalarPanelUsingNumberField(final Class<T> valueTypeClass) {
+
+        val valueTypeClasses = Can.<Class<?>>ofSingleton(valueTypeClass);
+
+        return new ComponentFactoryScalarAbstract(
+                ScalarPanelTextFieldNumericAbstract.class,
+                valueTypeClasses) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Component createComponent(final String id, final ScalarModel scalarModel) {
+
+                return new ScalarPanelTextFieldNumericAbstract<T>(
+                        id, scalarModel, valueTypeClass) {
+                    private static final long serialVersionUID = 1L;
+                };
+            }
+
+        };
+    }
+
+    public static <T extends Serializable> ComponentFactoryScalarAbstract
+    createScalarPanelUsingTemporalPicker(final Class<T> valueTypeClass) {
 
         val valueTypeClasses = Can.<Class<?>>ofSingleton(valueTypeClass);
 
@@ -365,7 +375,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
         };
     }
-
 
 
 }
