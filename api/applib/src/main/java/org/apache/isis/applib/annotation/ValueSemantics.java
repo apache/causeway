@@ -86,20 +86,29 @@ public @interface ValueSemantics {
     int minFractionalDigits()
             default 0;
 
-    // -- TEMPORAL FORMAT STYLE
+    // -- TEMPORAL FORMATTING
 
     /**
-     * If associated with a temporal date value, the style of a localized date.
+     * If associated with a temporal date value, the rendering style of a localized date.
      * @see FormatStyle
      */
     FormatStyle dateFormatStyle()
             default FormatStyle.MEDIUM;
 
     /**
-     * If associated with a temporal time value, the style of a localized time.
+     * If associated with a temporal time value, the rendering style of a localized time.
      * @see FormatStyle
      */
     FormatStyle timeFormatStyle()
             default FormatStyle.MEDIUM;
+
+    /**
+     * If associated with a temporal time value, the time of day precision,
+     * used for editing a time field in the UI.<br>
+     * default = {@link TimePrecision#SECOND}
+     * @see TimePrecision
+     */
+    TimePrecision timePrecision()
+            default TimePrecision.SECOND;
 
 }

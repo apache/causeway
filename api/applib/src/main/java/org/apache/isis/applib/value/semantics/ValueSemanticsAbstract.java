@@ -33,9 +33,11 @@ import java.util.function.Function;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.applib.annotation.TimePrecision;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.value.semantics.TemporalValueSemantics.EditingFormatDirection;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -107,6 +109,14 @@ implements
         .orElseGet(UserLocale::getDefault);
     }
 
+    protected String render(final T value, final Function<T, String> toString) {
+        return Optional.ofNullable(value)
+                .map(toString)
+                .orElse(NULL_REPRESENTATION);
+    }
+
+    // -- NUMBER FORMATTING/PARSING
+
     /**
      * @param context - nullable in support of JUnit testing
      * @return {@link NumberFormat} the default from from given context's locale
@@ -123,14 +133,6 @@ implements
         format.setMaximumFractionDigits(16);
         return format;
     }
-
-    protected String render(final T value, final Function<T, String> toString) {
-        return Optional.ofNullable(value)
-                .map(toString)
-                .orElse(NULL_REPRESENTATION);
-    }
-
-    // -- NUMBER FORMATTING/PARSING
 
     protected @Nullable BigInteger parseInteger(
             final @Nullable ValueSemanticsProvider.Context context,
@@ -211,54 +213,21 @@ implements
         }
     }
 
-    protected DateTimeFormatter getEditingFormat(
+    protected DateTimeFormatter getTemporalEditingFormat(
             final @Nullable ValueSemanticsProvider.Context context,
             final @NonNull TemporalValueSemantics.TemporalCharacteristic temporalCharacteristic,
             final @NonNull TemporalValueSemantics.OffsetCharacteristic offsetCharacteristic,
+            final @NonNull TimePrecision timePrecision,
+            final @NonNull EditingFormatDirection direction,
             final @NonNull TemporalEditingPattern editingPattern) {
 
-        return getEditingFormatAsBuilder(
-                temporalCharacteristic, offsetCharacteristic, editingPattern)
+        return new DateTimeFormatterBuilder()
+                .appendPattern(editingPattern.getEditingFormatAsPattern(
+                        temporalCharacteristic, offsetCharacteristic, timePrecision, direction))
                 .parseLenient()
                 .parseCaseInsensitive()
                 .toFormatter(getUserLocale(context).getTimeFormatLocale());
     }
-
-    protected DateTimeFormatterBuilder getEditingFormatAsBuilder(
-            final @NonNull TemporalValueSemantics.TemporalCharacteristic temporalCharacteristic,
-            final @NonNull TemporalValueSemantics.OffsetCharacteristic offsetCharacteristic,
-            final @NonNull TemporalEditingPattern editingPattern) {
-
-        return new DateTimeFormatterBuilder()
-            .appendPattern(getEditingFormatAsPattern(
-                    temporalCharacteristic, offsetCharacteristic, editingPattern));
-    }
-
-    protected String getEditingFormatAsPattern(
-            final @NonNull TemporalValueSemantics.TemporalCharacteristic temporalCharacteristic,
-            final @NonNull TemporalValueSemantics.OffsetCharacteristic offsetCharacteristic,
-            final @NonNull TemporalEditingPattern editingPattern) {
-
-        switch (temporalCharacteristic) {
-        case DATE_TIME:
-            val dateTimePattern =
-                String.format(editingPattern.getDateTimeJoiningPattern(), editingPattern.getDatePattern(), editingPattern.getTimePattern());
-            return offsetCharacteristic.isLocal()
-                    ? dateTimePattern
-                    : String.format(editingPattern.getZoneJoiningPattern(), dateTimePattern, editingPattern.getZonePattern());
-        case DATE_ONLY:
-            return offsetCharacteristic.isLocal()
-                    ? editingPattern.getDatePattern()
-                    : String.format(editingPattern.getZoneJoiningPattern(), editingPattern.getDatePattern(), editingPattern.getZonePattern());
-        case TIME_ONLY:
-            return offsetCharacteristic.isLocal()
-                    ? editingPattern.getTimePattern()
-                    : String.format(editingPattern.getZoneJoiningPattern(), editingPattern.getTimePattern(), editingPattern.getZonePattern());
-        default:
-            throw _Exceptions.unmatchedCase(temporalCharacteristic);
-        }
-    }
-
 
     protected DateTimeFormatter getTemporalIsoFormat(
             final @NonNull TemporalValueSemantics.TemporalCharacteristic temporalCharacteristic,

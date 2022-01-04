@@ -60,7 +60,7 @@ extends ValueSemanticsProviderAbstractTestCase {
     }
 
     @Test
-    public void testInvalidParse() throws Exception {
+    void testInvalidParse() {
         try {
             valueSemantics.parseTextRepresentation(null, "invalid entry");
             fail();
@@ -68,20 +68,15 @@ extends ValueSemanticsProviderAbstractTestCase {
         }
     }
 
-    /**
-     * Something rather bizarre here, that the epoch formats as 01:00 rather
-     * than 00:00. It's obviously because of some sort of timezone issue, but I
-     * don't know where that dependency is coming from.
-     */
     @Test
-    public void testRendering() {
+    void testRendering() {
         val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         assertEquals("Mar 13, 2013, 5:59:03 PM", valueSemantics.simpleTextPresentation(_context , date));
     }
 
     //FIXME[ISIS-2882] support omitted parts on input
     @Test @Disabled
-    public void testParseNoMinutes() throws Exception {
+    void testParseNoMinutes() {
         val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17");
         assertEquals(date.getTime() - 3540_000L - 3000L, parsedDate.getTime());
@@ -89,14 +84,14 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     //FIXME[ISIS-2882] support omitted parts on input
     @Test @Disabled
-    public void testParseNoSeconds() throws Exception {
+    void testParseNoSeconds() {
         val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59");
         assertEquals(date.getTime() - 3000L, parsedDate.getTime());
     }
 
     @Test
-    public void testParseSeconds() throws Exception {
+    void testParseSeconds() {
         val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03");
         assertEquals(date.getTime(), parsedDate.getTime());
@@ -107,7 +102,7 @@ extends ValueSemanticsProviderAbstractTestCase {
      * @see https://stackoverflow.com/questions/30103167/jsr-310-parsing-seconds-fraction-with-variable-length
      */
     @Test @Disabled("cannot find a format pattern that can handle both millis and nanos")
-    public void testParseMillis() throws Exception {
+    void testParseMillis() {
         val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03.123");
         assertEquals(date.getTime() + 123L, parsedDate.getTime());
@@ -115,7 +110,7 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     //FIXME[ISIS-2882] support omitted parts on input
     @Test @Disabled
-    public void testParseNanos() throws Exception {
+    void testParseNanos() {
         val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03.123456789");
         assertEquals(date.getTime() + 123L, parsedDate.getTime());

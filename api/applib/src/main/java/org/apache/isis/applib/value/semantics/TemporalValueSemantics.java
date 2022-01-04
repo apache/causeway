@@ -24,6 +24,7 @@ import java.time.temporal.Temporal;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.apache.isis.applib.annotation.TimePrecision;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Data;
@@ -80,6 +81,23 @@ extends
     TemporalCharacteristic getTemporalCharacteristic();
     OffsetCharacteristic getOffsetCharacteristic();
 
+    static enum EditingFormatDirection {
+
+        /**
+         * Input parsable text.
+         */
+        INPUT,
+
+        /**
+         * Output parsable text.
+         */
+        OUTPUT;
+
+        public boolean isInput() {return this == INPUT;}
+        public boolean isOutput() {return this == OUTPUT;}
+    }
+
+
     @Data
     public static class TemporalEditingPattern {
 
@@ -89,19 +107,71 @@ extends
         @NotNull @NotEmpty
         private String datePattern = "yyyy-MM-dd";
 
+        // -- TIME PATTERNS - SECOND
+
         /**
-         * The locale-independent (canonical) pattern used for editing time in the UI.
+         * The locale-independent (canonical) input pattern used for editing time in the UI.
+         * Yielding {@link TimeFormatPrecision#NANO_SECOND}.
          * <p>
-         * When editing, omitting nano-seconds, seconds or minutes will use zeros instead.
+         * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
          */
         @NotNull @NotEmpty
-        private String timePattern = "HH:mm:ss"; //FIXME[ISIS-2882] support omitted parts on input "HH[:mm[:ss[.SSSSSSSSS]]]"
+        private String timePatternNanoSecond = "HH[:mm[:ss][.SSSSSSSSS]]";
+
+        /**
+         * The locale-independent (canonical) input pattern used for editing time in the UI.
+         * Yielding {@link TimeFormatPrecision#MICRO_SECOND}.
+         * <p>
+         * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
+         */
+        @NotNull @NotEmpty
+        private String timePatternMicroSecond = "HH[:mm[:ss][.SSSSSS]]";
+
+        /**
+         * The locale-independent (canonical) input pattern used for editing time in the UI.
+         * Yielding {@link TimeFormatPrecision#MILLI_SECOND}.
+         * <p>
+         * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
+         */
+        @NotNull @NotEmpty
+        private String timePatternMilliSecond = "HH[:mm[:ss][.SSS]]";
+
+        /**
+         * The locale-independent (canonical) input pattern used for editing time in the UI.
+         * Yielding {@link TimeFormatPrecision#SECOND}.
+         * <p>
+         * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
+         */
+        @NotNull @NotEmpty
+        private String timePatternSecond = "HH[:mm[:ss]]";
+
+        /**
+         * The locale-independent (canonical) input pattern used for editing time in the UI.
+         * Yielding {@link TimeFormatPrecision#MINUTE}.
+         * <p>
+         * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
+         */
+        @NotNull @NotEmpty
+        private String timePatternMinute = "HH[:mm]";
+
+        /**
+         * The locale-independent (canonical) input pattern used for editing time in the UI.
+         * Yielding {@link TimeFormatPrecision#HOUR}.
+         * <p>
+         * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
+         */
+        @NotNull @NotEmpty
+        private String timePatternHour = "HH";
+
+        // -- ZONE PATTERN
 
         /**
          * The locale-independent (canonical) pattern used for editing time-zone in the UI.
          */
         @NotNull @NotEmpty
         private String zonePattern = "x";
+
+        // -- JOINING PATTERNS
 
         /**
          * The locale-independent (canonical) pattern used for editing date and time in the UI.
@@ -126,12 +196,14 @@ extends
 
         public String getEditingFormatAsPattern(
                 final @NonNull TemporalCharacteristic temporalCharacteristic,
-                final @NonNull OffsetCharacteristic offsetCharacteristic) {
+                final @NonNull OffsetCharacteristic offsetCharacteristic,
+                final @NonNull TimePrecision timePrecision,
+                final @NonNull EditingFormatDirection direction) {
 
             switch (temporalCharacteristic) {
             case DATE_TIME:
                 val dateTimePattern =
-                    String.format(getDateTimeJoiningPattern(), getDatePattern(), getTimePattern());
+                    String.format(getDateTimeJoiningPattern(), getDatePattern(), timePattern(timePrecision, direction));
                 return offsetCharacteristic.isLocal()
                         ? dateTimePattern
                         : String.format(getZoneJoiningPattern(), dateTimePattern, getZonePattern());
@@ -141,11 +213,45 @@ extends
                         : String.format(getZoneJoiningPattern(), getDatePattern(), getZonePattern());
             case TIME_ONLY:
                 return offsetCharacteristic.isLocal()
-                        ? getTimePattern()
-                        : String.format(getZoneJoiningPattern(), getTimePattern(), getZonePattern());
+                        ? timePattern(timePrecision, direction)
+                        : String.format(getZoneJoiningPattern(), timePattern(timePrecision, direction), getZonePattern());
             default:
                 throw _Exceptions.unmatchedCase(temporalCharacteristic);
             }
+        }
+
+        // -- HELPER
+
+        private String timePattern(
+                final @NonNull TimePrecision timePrecision,
+                final @NonNull EditingFormatDirection direction) {
+            switch (direction) {
+            case INPUT:
+                return timePattern(timePrecision);
+            case OUTPUT:
+                return timePattern(timePrecision)
+                        .replace("[", "").replace("]", ""); // remove brackets for optional temporal parts
+            }
+            throw _Exceptions.unmatchedCase(direction);
+        }
+
+        private String timePattern(final @NonNull TimePrecision timePrecision) {
+            switch (timePrecision) {
+            case NANO_SECOND:
+                return getTimePatternNanoSecond();
+            case MICRO_SECOND:
+                return getTimePatternMicroSecond();
+            case MILLI_SECOND:
+                return getTimePatternMilliSecond();
+            case UNSPECIFIED:
+            case SECOND:
+                return getTimePatternSecond();
+            case MINUTE:
+                return getTimePatternMinute();
+            case HOUR:
+                return getTimePatternHour();
+            }
+            throw _Exceptions.unmatchedCase(timePrecision);
         }
 
     }

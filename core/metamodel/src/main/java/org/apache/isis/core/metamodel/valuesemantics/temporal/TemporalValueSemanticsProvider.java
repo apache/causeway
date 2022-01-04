@@ -31,6 +31,7 @@ import javax.inject.Inject;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.applib.annotation.TimePrecision;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.value.semantics.EncodingException;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics;
@@ -154,7 +155,7 @@ implements TemporalValueSemantics<T> {
 
     @Override
     public final String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final T value) {
-        return value==null ? "" : getEditingFormat(context).format(value);
+        return value==null ? "" : getEditingOutputFormat(context).format(value);
     }
 
     @Override
@@ -173,7 +174,7 @@ implements TemporalValueSemantics<T> {
             }
         }
 
-        val format = getEditingFormat(context);
+        val format = getEditingInputFormat(context);
 
         try {
             return format.parse(temporalString, query);
@@ -199,17 +200,38 @@ implements TemporalValueSemantics<T> {
     }
 
     /**
-     * Format used for editing.
+     * Format used for rendering editable text representation.
      */
-    protected DateTimeFormatter getEditingFormat(final ValueSemanticsProvider.Context context) {
-        return getEditingFormat(context, temporalCharacteristic, offsetCharacteristic,
+    protected DateTimeFormatter getEditingOutputFormat(final ValueSemanticsProvider.Context context) {
+
+        val dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
+
+        return getTemporalEditingFormat(context, temporalCharacteristic, offsetCharacteristic,
+                dateAndTimeFormatStyle.getTimePrecision(),
+                EditingFormatDirection.OUTPUT,
+                temporalEditingPattern());
+    }
+
+    /**
+     * Format used for parsing editable text representation.
+     */
+    protected DateTimeFormatter getEditingInputFormat(final ValueSemanticsProvider.Context context) {
+
+        val dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
+
+        return getTemporalEditingFormat(context, temporalCharacteristic, offsetCharacteristic,
+                dateAndTimeFormatStyle.getTimePrecision(),
+                EditingFormatDirection.INPUT,
                 temporalEditingPattern());
     }
 
     @Override
     public String getPattern(final ValueSemanticsProvider.Context context) {
-        return getEditingFormatAsPattern(temporalCharacteristic, offsetCharacteristic,
-                temporalEditingPattern());
+
+        val dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
+
+        return temporalEditingPattern().getEditingFormatAsPattern(temporalCharacteristic, offsetCharacteristic,
+                dateAndTimeFormatStyle.getTimePrecision(), EditingFormatDirection.INPUT);
     }
 
     /**
@@ -225,6 +247,7 @@ implements TemporalValueSemantics<T> {
     static class DateAndTimeFormatStyle {
         @Nullable FormatStyle dateFormatStyle;
         @Nullable FormatStyle timeFormatStyle;
+        @Nullable TimePrecision timePrecision;
 
         static DateAndTimeFormatStyle forContext(
                 final @Nullable MetaModelContext mmc, // nullable .. JUnit support
@@ -247,7 +270,10 @@ implements TemporalValueSemantics<T> {
                     .map(TimeFormatStyleFacet::getTimeFormatStyle)
                     .orElse(FormatStyle.MEDIUM);
 
-            return of(dateFormatStyle, timeFormatStyle);
+            //FIXME[ISIS-2882] honor facets
+            val timePrecision = TimePrecision.SECOND;
+
+            return of(dateFormatStyle, timeFormatStyle, timePrecision);
         }
 
     }
