@@ -16,8 +16,8 @@ import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDig
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MinIntegerDigitsFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.temporalformatstyle.DateFormatStyleFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.temporalformatstyle.TimeFormatStyleFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.DateFormatStyleFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.TimeFormatStyleFacet;
 
 @SuppressWarnings("unused")
 public class ValueSemanticsAnnotationFacetFactoryTest

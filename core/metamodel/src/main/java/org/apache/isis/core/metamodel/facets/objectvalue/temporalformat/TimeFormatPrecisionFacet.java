@@ -16,23 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.objectvalue.temporalformatstyle;
+package org.apache.isis.core.metamodel.facets.objectvalue.temporalformat;
 
-import java.time.format.FormatStyle;
-
+import org.apache.isis.applib.annotation.TimePrecision;
 import org.apache.isis.applib.annotation.ValueSemantics;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
- * If associated with a temporal time value, the style of a localized time.
- * @see ValueSemantics#timeFormatStyle()
+ * If associated with a temporal time value, the time of day precision,
+ * used for editing a time field in the UI.
+ *
+ * @see ValueSemantics#timePrecision()
  */
-public interface TimeFormatStyleFacet
+public interface TimeFormatPrecisionFacet
 extends Facet {
 
     /**
-     * As provided by {@link ValueSemantics#timeFormatStyle()}.
+     * As provided by {@link ValueSemantics#timePrecision()}.
      */
-    FormatStyle getTimeFormatStyle();
+    TimePrecision getTimePrecision();
 
 }

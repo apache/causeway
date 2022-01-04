@@ -136,6 +136,10 @@ extends FacetFactoryAbstract {
                 TimeFormatStyleFacetFromValueSemanticsAnnotation
                 .create(valueSemanticsIfAny, facetHolder));
 
+        addFacetIfPresent(
+                TimeFormatPrecisionFacetFromValueSemanticsAnnotation
+                .create(valueSemanticsIfAny, facetHolder));
+
     }
 
 }

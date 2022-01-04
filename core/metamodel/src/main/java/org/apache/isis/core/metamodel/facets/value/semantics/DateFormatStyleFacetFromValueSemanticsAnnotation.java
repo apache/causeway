@@ -23,8 +23,8 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ValueSemantics;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.temporalformatstyle.DateFormatStyleFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.temporalformatstyle.DateFormatStyleFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.DateFormatStyleFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.DateFormatStyleFacetAbstract;
 
 public class DateFormatStyleFacetFromValueSemanticsAnnotation
 extends DateFormatStyleFacetAbstract {

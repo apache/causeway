@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.objectvalue.temporalformatstyle;
+package org.apache.isis.core.metamodel.facets.objectvalue.temporalformat;
 
 import java.time.format.FormatStyle;
 import java.util.Objects;
@@ -29,45 +29,45 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import lombok.Getter;
 import lombok.NonNull;
 
-public abstract class DateFormatStyleFacetAbstract
+public abstract class TimeFormatStyleFacetAbstract
 extends FacetAbstract
-implements DateFormatStyleFacet {
+implements TimeFormatStyleFacet {
 
     private static final Class<? extends Facet> type() {
-        return DateFormatStyleFacet.class;
+        return TimeFormatStyleFacet.class;
     }
 
     @Getter(onMethod_ = {@Override})
-    private final @NonNull FormatStyle dateFormatStyle;
+    private final @NonNull FormatStyle timeFormatStyle;
 
-    protected DateFormatStyleFacetAbstract(
-            final FormatStyle dateFormatStyle,
+    protected TimeFormatStyleFacetAbstract(
+            final FormatStyle timeFormatStyle,
             final FacetHolder holder) {
         super(type(), holder);
-        this.dateFormatStyle = dateFormatStyle;
+        this.timeFormatStyle = timeFormatStyle;
     }
 
-    protected DateFormatStyleFacetAbstract(
-            final FormatStyle dateFormatStyle,
+    protected TimeFormatStyleFacetAbstract(
+            final FormatStyle timeFormatStyle,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
         super(type(), holder, precedence);
-        this.dateFormatStyle = dateFormatStyle;
+        this.timeFormatStyle = timeFormatStyle;
     }
 
     @Override
     public boolean semanticEquals(@NonNull final Facet other) {
-        return other instanceof DateFormatStyleFacet
+        return other instanceof TimeFormatStyleFacet
                 ? Objects.equals(
-                        this.getDateFormatStyle(),
-                        ((DateFormatStyleFacet)other).getDateFormatStyle())
+                        this.getTimeFormatStyle(),
+                        ((TimeFormatStyleFacet)other).getTimeFormatStyle())
                 : false;
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("dateFormatStyle", dateFormatStyle.name());
+        visitor.accept("timeFormatStyle", timeFormatStyle.name());
     }
 
 }

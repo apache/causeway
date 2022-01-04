@@ -40,8 +40,9 @@ import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.objectvalue.temporalformatstyle.DateFormatStyleFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.temporalformatstyle.TimeFormatStyleFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.DateFormatStyleFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.TimeFormatPrecisionFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.TimeFormatStyleFacet;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -270,8 +271,10 @@ implements TemporalValueSemantics<T> {
                     .map(TimeFormatStyleFacet::getTimeFormatStyle)
                     .orElse(FormatStyle.MEDIUM);
 
-            //FIXME[ISIS-2882] honor facets
-            val timePrecision = TimePrecision.SECOND;
+            val timePrecision = featureIfAny
+                    .flatMap(feature->feature.lookupFacet(TimeFormatPrecisionFacet.class))
+                    .map(TimeFormatPrecisionFacet::getTimePrecision)
+                    .orElse(TimePrecision.SECOND);
 
             return of(dateFormatStyle, timeFormatStyle, timePrecision);
         }

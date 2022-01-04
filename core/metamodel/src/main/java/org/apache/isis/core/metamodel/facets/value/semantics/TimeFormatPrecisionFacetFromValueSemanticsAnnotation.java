@@ -18,30 +18,30 @@
  */
 package org.apache.isis.core.metamodel.facets.value.semantics;
 
-import java.time.format.FormatStyle;
 import java.util.Optional;
 
+import org.apache.isis.applib.annotation.TimePrecision;
 import org.apache.isis.applib.annotation.ValueSemantics;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.TimeFormatStyleFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.TimeFormatStyleFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.TimeFormatPrecisionFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.TimeFormatPrecisionFacetAbstract;
 
-public class TimeFormatStyleFacetFromValueSemanticsAnnotation
-extends TimeFormatStyleFacetAbstract {
+public class TimeFormatPrecisionFacetFromValueSemanticsAnnotation
+extends TimeFormatPrecisionFacetAbstract {
 
-    public static Optional<TimeFormatStyleFacet> create(
+    public static Optional<TimeFormatPrecisionFacet> create(
             final Optional<ValueSemantics> valueSemanticsIfAny,
             final FacetHolder holder) {
 
         return valueSemanticsIfAny
-        .map(ValueSemantics::timeFormatStyle)
-        .map(timeFormatStyle->
-            new TimeFormatStyleFacetFromValueSemanticsAnnotation(timeFormatStyle, holder));
+        .map(ValueSemantics::timePrecision)
+        .map(timePrecision->
+            new TimeFormatPrecisionFacetFromValueSemanticsAnnotation(timePrecision, holder));
    }
 
-   private TimeFormatStyleFacetFromValueSemanticsAnnotation(
-           final FormatStyle timeFormatStyle, final FacetHolder holder) {
-       super(timeFormatStyle, holder);
+   private TimeFormatPrecisionFacetFromValueSemanticsAnnotation(
+           final TimePrecision timePrecision, final FacetHolder holder) {
+       super(timePrecision, holder);
    }
 
 }

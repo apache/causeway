@@ -16,12 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.objectvalue.temporalformatstyle;
+package org.apache.isis.core.metamodel.facets.objectvalue.temporalformat;
 
-import java.time.format.FormatStyle;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
+import org.apache.isis.applib.annotation.TimePrecision;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -29,45 +29,45 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import lombok.Getter;
 import lombok.NonNull;
 
-public abstract class TimeFormatStyleFacetAbstract
+public abstract class TimeFormatPrecisionFacetAbstract
 extends FacetAbstract
-implements TimeFormatStyleFacet {
+implements TimeFormatPrecisionFacet {
 
     private static final Class<? extends Facet> type() {
-        return TimeFormatStyleFacet.class;
+        return TimeFormatPrecisionFacet.class;
     }
 
     @Getter(onMethod_ = {@Override})
-    private final @NonNull FormatStyle timeFormatStyle;
+    private final @NonNull TimePrecision timePrecision;
 
-    protected TimeFormatStyleFacetAbstract(
-            final FormatStyle timeFormatStyle,
+    protected TimeFormatPrecisionFacetAbstract(
+            final TimePrecision timePrecision,
             final FacetHolder holder) {
         super(type(), holder);
-        this.timeFormatStyle = timeFormatStyle;
+        this.timePrecision = timePrecision;
     }
 
-    protected TimeFormatStyleFacetAbstract(
-            final FormatStyle timeFormatStyle,
+    protected TimeFormatPrecisionFacetAbstract(
+            final TimePrecision timePrecision,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
         super(type(), holder, precedence);
-        this.timeFormatStyle = timeFormatStyle;
+        this.timePrecision = timePrecision;
     }
 
     @Override
     public boolean semanticEquals(@NonNull final Facet other) {
-        return other instanceof TimeFormatStyleFacet
+        return other instanceof TimeFormatPrecisionFacet
                 ? Objects.equals(
-                        this.getTimeFormatStyle(),
-                        ((TimeFormatStyleFacet)other).getTimeFormatStyle())
+                        this.getTimePrecision(),
+                        ((TimeFormatPrecisionFacet)other).getTimePrecision())
                 : false;
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("timeFormatStyle", timeFormatStyle.name());
+        visitor.accept("timePrecision", timePrecision.name());
     }
 
 }

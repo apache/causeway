@@ -197,7 +197,6 @@ implements
             final @NonNull FormatStyle dateFormatStyle,
             final @NonNull FormatStyle timeFormatStyle) {
 
-        //FIXME[ISIS-2882] honor OffsetCharacteristic
         switch (temporalCharacteristic) {
         case DATE_TIME:
             return DateTimeFormatter.ofLocalizedDateTime(dateFormatStyle, timeFormatStyle)
