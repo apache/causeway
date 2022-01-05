@@ -60,7 +60,7 @@ public class JavaTimeLocalDates implements HasAsciiDocDescription {
         return new JavaTimeLocalDateVm(initialValue);
     }
     @MemberSupport public java.time.LocalDate default0OpenViewModel() {
-        return java.time.LocalDate.of(2020,1,1);
+        return java.time.LocalDate.of(2022,1,1);
     }
 
     @Collection
