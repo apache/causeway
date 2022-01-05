@@ -231,8 +231,10 @@ implements TemporalValueSemantics<T> {
 
         val dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
 
-        return temporalEditingPattern().getEditingFormatAsPattern(temporalCharacteristic, offsetCharacteristic,
-                dateAndTimeFormatStyle.getTimePrecision(), EditingFormatDirection.INPUT);
+        return temporalEditingPattern()
+                .getEditingFormatAsPattern(temporalCharacteristic, offsetCharacteristic,
+                        dateAndTimeFormatStyle.getTimePrecision(),
+                        EditingFormatDirection.OUTPUT);
     }
 
     /**

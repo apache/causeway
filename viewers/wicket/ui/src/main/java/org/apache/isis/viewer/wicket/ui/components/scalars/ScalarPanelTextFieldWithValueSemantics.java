@@ -35,12 +35,12 @@ import lombok.NonNull;
  * where the scalar (parameter or property) is a value-type,
  * using conversion that is backed by a {@link ValueSemanticsProvider}.
  */
-public abstract class ScalarPanelTextFieldWithValueSemanticsAbstract<T extends Serializable>
+public class ScalarPanelTextFieldWithValueSemantics<T extends Serializable>
 extends ScalarPanelTextFieldAbstract<T> {
 
     private static final long serialVersionUID = 1L;
 
-    protected ScalarPanelTextFieldWithValueSemanticsAbstract(
+    public ScalarPanelTextFieldWithValueSemantics(
             final String id,
             final ScalarModel scalarModel,
             final Class<T> type) {

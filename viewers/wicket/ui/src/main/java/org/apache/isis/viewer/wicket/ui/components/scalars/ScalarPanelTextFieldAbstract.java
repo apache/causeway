@@ -127,7 +127,7 @@ implements TextFieldValueModel.ScalarModelProvider {
 
         // even though only one of textField and scalarValueEditInlineContainer will ever be visible,
         // am instantiating both to avoid NPEs
-        // elsewhere can use Component#isVisibilityAllowed or ScalarModel.getEditStyle() to check whichis visible.
+        // elsewhere can use Component#isVisibilityAllowed or ScalarModel.getEditStyle() to check which is visible.
 
         textField = createTextField(ID_SCALAR_VALUE);
         textField.setOutputMarkupId(true);
@@ -262,7 +262,10 @@ implements TextFieldValueModel.ScalarModelProvider {
         //FIXME[ISIS-2882] wire-up with value semantics to use Renderer instead of Parser here
         return Wkt.labelAdd(
                 getCompactFragment(CompactType.SPAN), ID_SCALAR_IF_COMPACT,
-                ()->getModel().getObjectAsString());
+                ()->{
+                    val asText = getModel().getObjectAsString();
+                    //System.err.printf("!!!! asText ... %s%n", asText);
+                    return asText;});
     }
 
     public enum CompactType {

@@ -22,14 +22,14 @@ import org.apache.wicket.markup.html.form.AbstractTextComponent;
 
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemanticsAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 /**
  * Panel for rendering scalars of type {@link Password Isis' applib.Password}.
  */
 public class IsisPasswordPanel
-extends ScalarPanelTextFieldWithValueSemanticsAbstract<Password> {
+extends ScalarPanelTextFieldWithValueSemantics<Password> {
 
     private static final long serialVersionUID = 1L;
 

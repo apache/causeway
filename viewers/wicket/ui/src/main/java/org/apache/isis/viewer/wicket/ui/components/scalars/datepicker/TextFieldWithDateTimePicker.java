@@ -36,9 +36,9 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.converter.ConverterBasedOnValueSemantics;
 
-import static de.agilecoders.wicket.jquery.JQuery.$;
-
 import de.agilecoders.wicket.core.util.Attributes;
+
+import static de.agilecoders.wicket.jquery.JQuery.$;
 
 /**
  * A text input field that is used as a date or date/time picker.
@@ -72,7 +72,7 @@ implements IConverter<T> {
 
         this.converter = converter;
 
-        // if this text field is for a LocalDate, then note that pattern obtained will just be a simple date format
+        // if this text field is for a LocalDate, then the pattern obtained will just be a simple date format
         // (with no hour/minute components).
         final String dateTimePattern = ((ConverterBasedOnValueSemantics<T>)this.converter).getEditingPattern();
         final String pattern = convertToMomentJsFormat(dateTimePattern);

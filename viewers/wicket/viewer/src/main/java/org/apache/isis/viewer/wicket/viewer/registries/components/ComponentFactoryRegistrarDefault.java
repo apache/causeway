@@ -63,9 +63,9 @@ import org.apache.isis.viewer.wicket.ui.components.layout.bs3.Bs3GridPanelFactor
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumericAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithTemporalPickerAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemanticsAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithTemporalPicker;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
 import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisBlobPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisClobPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.image.JavaAwtImagePanelFactory;
@@ -308,23 +308,20 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
         // if the valueType is a wrapper type, also append its unboxed variant
         if(ClassUtils.isPrimitiveWrapper(valueTypeClass)) {
-            val unboxed = org.apache.isis.core.metamodel.commons.ClassUtil.unboxPrimitiveIfNecessary(valueTypeClass);
+            val unboxed = org.apache.isis.core.metamodel.commons.ClassUtil
+                    .unboxPrimitiveIfNecessary(valueTypeClass);
             valueTypeClasses = valueTypeClasses.add(unboxed);
         }
 
         return new ComponentFactoryScalarAbstract(
-                ScalarPanelTextFieldWithValueSemanticsAbstract.class,
+                ScalarPanelTextFieldWithValueSemantics.class,
                 valueTypeClasses) {
 
             private static final long serialVersionUID = 1L;
 
             @Override
             public Component createComponent(final String id, final ScalarModel scalarModel) {
-
-                return new ScalarPanelTextFieldWithValueSemanticsAbstract<T>(
-                        id, scalarModel, valueTypeClass) {
-                    private static final long serialVersionUID = 1L;
-                };
+                return new ScalarPanelTextFieldWithValueSemantics<T>(id, scalarModel, valueTypeClass);
             }
 
         };
@@ -336,18 +333,14 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         val valueTypeClasses = Can.<Class<?>>ofSingleton(valueTypeClass);
 
         return new ComponentFactoryScalarAbstract(
-                ScalarPanelTextFieldNumericAbstract.class,
+                ScalarPanelTextFieldNumeric.class,
                 valueTypeClasses) {
 
             private static final long serialVersionUID = 1L;
 
             @Override
             public Component createComponent(final String id, final ScalarModel scalarModel) {
-
-                return new ScalarPanelTextFieldNumericAbstract<T>(
-                        id, scalarModel, valueTypeClass) {
-                    private static final long serialVersionUID = 1L;
-                };
+                return new ScalarPanelTextFieldNumeric<T>(id, scalarModel, valueTypeClass);
             }
 
         };
@@ -359,18 +352,14 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         val valueTypeClasses = Can.<Class<?>>ofSingleton(valueTypeClass);
 
         return new ComponentFactoryScalarAbstract(
-                ScalarPanelTextFieldWithTemporalPickerAbstract.class,
+                ScalarPanelTextFieldWithTemporalPicker.class,
                 valueTypeClasses) {
 
             private static final long serialVersionUID = 1L;
 
             @Override
             public Component createComponent(final String id, final ScalarModel scalarModel) {
-
-                return new ScalarPanelTextFieldWithTemporalPickerAbstract<T>(
-                        id, scalarModel, valueTypeClass) {
-                    private static final long serialVersionUID = 1L;
-                };
+                return new ScalarPanelTextFieldWithTemporalPicker<T>(id, scalarModel, valueTypeClass);
             }
 
         };

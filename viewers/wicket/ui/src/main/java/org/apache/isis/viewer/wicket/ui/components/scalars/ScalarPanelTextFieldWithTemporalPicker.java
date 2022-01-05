@@ -30,12 +30,12 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldW
 /**
  * Panel for rendering scalars representing dates, along with a date picker.
  */
-public abstract class ScalarPanelTextFieldWithTemporalPickerAbstract<T extends Serializable>
-extends ScalarPanelTextFieldWithValueSemanticsAbstract<T>  {
+public class ScalarPanelTextFieldWithTemporalPicker<T extends Serializable>
+extends ScalarPanelTextFieldWithValueSemantics<T>  {
 
     private static final long serialVersionUID = 1L;
 
-    public ScalarPanelTextFieldWithTemporalPickerAbstract(
+    public ScalarPanelTextFieldWithTemporalPicker(
             final String id, final ScalarModel scalarModel, final Class<T> cls) {
         super(id, scalarModel, cls);
     }
