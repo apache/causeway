@@ -89,6 +89,7 @@ public @interface CollectionLayout {
     /**
      * A flag indicating whether the value of {@linkplain #named()} should be HTML escaped or not.
      */
+    @Deprecated
     boolean namedEscaped() default true;
 
     /**
@@ -126,11 +127,25 @@ public @interface CollectionLayout {
      * 
      * @deprecated - use {@link #defaultView()} set to &quot;table&quot; instead.
      */
-    @Deprecated
+    @Deprecated // In preparation for v2
     RenderType render() default RenderType.LAZILY;
 
 
     // //////////////////////////////////////
+
+    /**
+     * The order of this member relative to other members in the same (layout) group,
+     * given in <i>Dewey-decimal</i> notation.
+     * <p>
+     *     An alternative is to use the <code>Xxx.layout.xml</code> file,
+     *     where <code>Xxx</code> is the domain object name.
+     * </p>
+     * @see ActionLayout#sequence()
+     * @see PropertyLayout#sequence()
+     */
+    String sequence() // In preparation for v2
+            default "";
+
 
     /**
      * Indicates that the elements in a ({@link java.util.SortedSet}) collection should be sorted according to a different order than the

@@ -41,6 +41,24 @@ public @interface PropertyLayout {
      */
     String describedAs() default "";
 
+    /**
+     * Specifies the <b>friendly-name</b> of associated <i>FieldSet</i>.
+     * <p>
+     * Explicitly specifying an empty "" <b>friendly-name</b> will suppress the <i>FieldSet</i>'s label
+     * from being rendered.
+     * </p>
+     * <p>
+     * For a more in depth description see {@link PropertyLayout#fieldSetId()}.
+     * </p>
+     *
+     * @see Action#choicesFrom()
+     * @see ActionLayout#fieldSetId()
+     * @see ActionLayout#fieldSetName()
+     * @see PropertyLayout#fieldSetId()
+     * @see PropertyLayout#sequence()
+     */
+    String fieldSetName()
+            default "__infer";
 
     /**
      * Indicates where in the UI the property should <i>not</i>not be visible.
@@ -101,8 +119,22 @@ public @interface PropertyLayout {
      * In the domain object, itself, however, the value stored is 1-jun-2013.
      * </p>
      */
+    @Deprecated // In preparation for v2
     boolean renderedAsDayBefore() default false;
 
+
+    /**
+     * The order of this member relative to other members in the same (layout) group,
+     * given in <i>Dewey-decimal</i> notation.
+     * <p>
+     *     An alternative is to use the <code>Xxx.layout.xml</code> file,
+     *     where <code>Xxx</code> is the domain object name.
+     * </p>
+     * @see ActionLayout#sequence()
+     * @see CollectionLayout#sequence()
+     */
+    String sequence() // In preparation for v2
+            default "";
 
     /**
      * The typical entry length of a field, use to determine the optimum width for display
@@ -131,6 +163,7 @@ public @interface PropertyLayout {
      *     within the framework than simply a hint for rendering.
      * </p>
      */
+    @Deprecated // In preparation for v2
     boolean unchanging() default false;
 
 }

@@ -22,6 +22,7 @@ import java.util.Properties;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -38,11 +39,13 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.datanucleus.util.StringUtils;
 
 public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
 
@@ -147,6 +150,17 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
                 notContributedFacet = NotContributedFacetForActionLayoutAnnotation.create(actionLayout, holder);
             }
             FacetUtil.addFacet(notContributedFacet);
+        }
+
+        // In preparation for v2 adding support for sequence in @ActionLayout
+        if (actionLayout!=null
+                && StringUtils.notEmpty(actionLayout.sequence())
+                && holder.getFacet(MemberOrderFacetAnnotation.class)==null) {
+            FacetUtil.addFacet( new MemberOrderFacetAnnotation(
+                    "__infer".equals( actionLayout.fieldSetName()) ? "" : actionLayout.fieldSetName(),
+                    actionLayout.sequence(),
+                    servicesInjector.lookupService(TranslationService.class),
+                    holder));
         }
     }
 
