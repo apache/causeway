@@ -114,17 +114,17 @@ extends ManagedMember {
 
 
     /**
-     * @param proposedNewValue
+     * @param newValue
      * @return non-empty if the interaction is not valid for given {@code proposedNewValue}
      */
-    public Optional<InteractionVeto> modifyProperty(final @Nullable ManagedObject proposedNewValue) {
+    public Optional<InteractionVeto> modifyProperty(final @Nullable ManagedObject newValue) {
 
-        val interactionVeto = checkValidity(proposedNewValue);
+        val interactionVeto = checkValidity(newValue);
         if(interactionVeto.isPresent()) {
             return interactionVeto;
         }
 
-        val updatedOwner = property.set(getOwner(), proposedNewValue, InteractionInitiatedBy.USER);
+        val updatedOwner = property.set(getOwner(), newValue, InteractionInitiatedBy.USER);
         setOwner(updatedOwner);
         observablePropValue.invalidate();
         return Optional.empty();

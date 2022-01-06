@@ -92,7 +92,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
             final UUID interactionId,
             final Can<InteractionHead> targets,
             final OneToOneAssociation property,
-            final ManagedObject valueAdapterOrNull) {
+            final ManagedObject valueAdapter) {
 
         final CommandDto dto = asCommandDto(interactionId, targets);
 
@@ -100,7 +100,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
         propertyDto.setInteractionType(InteractionType.PROPERTY_EDIT);
         dto.setMember(propertyDto);
 
-        addPropertyValue(property, propertyDto, valueAdapterOrNull);
+        addPropertyValue(property, propertyDto, valueAdapter);
 
         return dto;
     }

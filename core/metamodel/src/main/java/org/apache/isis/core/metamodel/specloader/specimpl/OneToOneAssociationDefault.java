@@ -51,6 +51,7 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -181,15 +182,20 @@ implements OneToOneAssociation {
     @Override
     public ManagedObject set(
             final ManagedObject ownerAdapter,
-            final ManagedObject newReferencedAdapter,
+            final ManagedObject _newValue,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        setupCommand(InteractionHead.regular(ownerAdapter), newReferencedAdapter);
+        // null to empty
+        val newValue = _newValue==null
+                ? ManagedObject.empty(getElementType())
+                : _newValue;
 
-        if (newReferencedAdapter != null) {
-            return setValue(ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
-        } else {
+        setupCommand(InteractionHead.regular(ownerAdapter), newValue);
+
+        if (ManagedObjects.isNullOrUnspecifiedOrEmpty(newValue)) {
             return clearValue(ownerAdapter, interactionInitiatedBy);
+        } else {
+            return setValue(ownerAdapter, newValue, interactionInitiatedBy);
         }
     }
 
@@ -308,11 +314,11 @@ implements OneToOneAssociation {
      */
     public void setupCommand(
             final InteractionHead head,
-            final ManagedObject valueAdapterOrNull) {
+            final ManagedObject valueAdapter) {
 
         setupCommand(head, interactionId ->
             getCommandDtoFactory()
-                .asCommandDto(interactionId, Can.ofSingleton(head), this, valueAdapterOrNull));
+                .asCommandDto(interactionId, Can.ofSingleton(head), this, valueAdapter));
     }
 
     @Getter(lazy=true, onMethod_ = {@Override})
