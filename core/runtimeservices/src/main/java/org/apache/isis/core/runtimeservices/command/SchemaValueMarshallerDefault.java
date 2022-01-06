@@ -221,9 +221,6 @@ implements SchemaValueMarshaller {
         final @Nullable ValueSemanticsProvider<T> semantics;
 
         public T fromFundamentalValue(final Object fundamentalValue) {
-            if(fundamentalValue==null) {
-                return null;
-            }
             val valuePojo = supportsConversionViaEncoderDecoder()
                     ? encoderDecoder().fromEncodedString((String)fundamentalValue)
                     : converter()!=null
@@ -233,9 +230,6 @@ implements SchemaValueMarshaller {
         }
 
         public Object toFundamentalValue(final T valuePojo) {
-            if(valuePojo==null) {
-                return null;
-            }
             return supportsConversionViaEncoderDecoder()
                     ? encoderDecoder().toEncodedString(valuePojo)
                     : converter()!=null
