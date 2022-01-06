@@ -37,7 +37,6 @@ import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.functions._Predicates;
-import org.apache.isis.core.metamodel.valuesemantics.temporal.TemporalValueSemanticsProvider;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
@@ -290,11 +289,11 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     public static <T extends Serializable> ComponentFactoryScalarAbstract
     createForValueSemantics(final ValueSemanticsProvider<T> valueSemantics) {
 
-        if(Number.class.isAssignableFrom(valueSemantics.getCorrespondingClass())) {
+        if(valueSemantics.isNumberType()) {
             return createScalarPanelUsingNumberField(valueSemantics.getCorrespondingClass());
         }
 
-        if(valueSemantics instanceof TemporalValueSemanticsProvider) {
+        if(valueSemantics.isTemporalType()) {
             return createScalarPanelUsingTemporalPicker(valueSemantics.getCorrespondingClass());
         }
 

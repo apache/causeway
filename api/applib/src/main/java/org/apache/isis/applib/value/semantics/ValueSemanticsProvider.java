@@ -98,4 +98,22 @@ public interface ValueSemanticsProvider<T> {
      */
     DefaultsProvider<T> getDefaultsProvider();
 
+    // -- CATEGORIZATION
+
+    default boolean isNumberType() {
+        return getSchemaValueType()==ValueType.BIG_DECIMAL
+                || getSchemaValueType()==ValueType.BIG_INTEGER
+                || getSchemaValueType()==ValueType.LONG
+                || getSchemaValueType()==ValueType.INT
+                || getSchemaValueType()==ValueType.SHORT
+                || getSchemaValueType()==ValueType.BYTE
+                || getSchemaValueType()==ValueType.DOUBLE
+                || getSchemaValueType()==ValueType.FLOAT;
+    }
+
+    default boolean isTemporalType() {
+        return getSchemaValueType().name().contains("DATE")
+                || getSchemaValueType().name().contains("TIME");
+    }
+
 }
