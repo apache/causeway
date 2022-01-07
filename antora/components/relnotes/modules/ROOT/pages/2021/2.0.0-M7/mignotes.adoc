@@ -5,6 +5,10 @@
 
 (This page will be added to as development progresses).
 
+WARNING: `org.apache.isis.applib.annotation` was renamed to `org.apache.isis.applib.annotations` (plural), 
+which unfortunately affects all early adopters! This has come up as a requirement to ease migration for existing projects 
+from v1 to v2 using Spring's `@AliasFor` annotation. 
+
 == Programming Model
 
 [cols="2a,3a", options="header"]
@@ -13,6 +17,12 @@
 
 | previously
 | new
+
+| `org.apache.isis.applib.annotation.*`
+| renamed to `org.apache.isis.applib.annotations.*` (plural) 
+- this unfortunately affects all early adopters, 
+but it has come up as a requirement to ease migration for existing projects 
+from v1 to v2 using Spring's `@AliasFor` annotation 
 
 | We provided introspection control via global config option 
 `isis.core.meta-model.annotation.action.explicit=true/false`.
