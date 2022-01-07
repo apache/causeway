@@ -1007,7 +1007,7 @@ object RESTFUL_DOMAIN_TYPES : Response() {
         },
         {
             "rel": "urn:org.restfulobjects:rels/domain-type",
-            "href": "http://localhost:8080/restful/domain-types/org.apache.isis.applib.annotation.SemanticsOf",
+            "href": "http://localhost:8080/restful/domain-types/org.apache.isis.applib.annotations.SemanticsOf",
             "method": "GET",
             "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
         },

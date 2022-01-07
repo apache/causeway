@@ -27,19 +27,19 @@ import javax.jdo.annotations.VersionStrategy;
 
 import org.wicketstuff.pdfjs.Scale;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.BookmarkPolicy;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.DomainObjectLayout;
+import org.apache.isis.applib.annotations.Editing;
+import org.apache.isis.applib.annotations.MemberOrder;
+import org.apache.isis.applib.annotations.MemberSupport;
+import org.apache.isis.applib.annotations.Optionality;
+import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotations.PropertyLayout;
+import org.apache.isis.applib.annotations.SemanticsOf;
+import org.apache.isis.applib.annotations.Title;
+import org.apache.isis.applib.annotations.Where;
 import org.apache.isis.applib.value.Blob;
 
 import org.isisaddons.wicket.pdfjs.cpt.applib.PdfJsViewer;

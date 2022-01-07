@@ -115,7 +115,7 @@ Note that it is also possible to associate an action with a collection using _Ac
 
 Whether (and how) this action can be bookmarked in the UI.
 
-For bookmarkable actions, either _org.apache.isis.applib.annotation.BookmarkPolicy#AS_ROOT_ and _org.apache.isis.applib.annotation.BookmarkPolicy#AS_CHILD_ can be used (they are treated identically).
+For bookmarkable actions, either _org.apache.isis.applib.annotations.BookmarkPolicy#AS_ROOT_ and _org.apache.isis.applib.annotations.BookmarkPolicy#AS_CHILD_ can be used (they are treated identically).
 
 [#cssClass]
 === cssClass
@@ -194,23 +194,3 @@ Supported by the Wicket viewer.
 The order of this member relative to other members in the same (layout) group, given in _Dewey-decimal_ notation.
 
 An alternative is to use the `Xxx.layout.xml` file, where `Xxx` is the domain object name.
-
-include::hooks/ActionLayout_010-examples-and-usage.adoc[]
-
-include::hooks/ActionLayout_021-promptStyle.adoc[]
-
-include::hooks/ActionLayout_022-position.adoc[]
-
-include::hooks/ActionLayout_023-describedAs.adoc[]
-
-include::hooks/ActionLayout_024-cssClass.adoc[]
-
-include::hooks/ActionLayout_025-cssClassFa.adoc[]
-
-include::hooks/ActionLayout_026-bookmarking.adoc[]
-
-include::hooks/ActionLayout_027-hidden.adoc[]
-
-include::hooks/ActionLayout_028-named.adoc[]
-
-include::hooks/ActionLayout_029-redirect.adoc[]

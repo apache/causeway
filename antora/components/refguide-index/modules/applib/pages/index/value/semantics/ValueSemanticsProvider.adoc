@@ -3,7 +3,7 @@
 
 Provides a mechanism for providing a set of value semantics.
 
-This interface is used by xref:refguide:applib:index/annotation/Value.adoc[Value] to allow these semantics to be provided through a single point. Alternatively, xref:refguide:applib:index/annotation/Value.adoc[Value] supports this information being provided via the configuration files.
+This interface is used by xref:refguide:applib:index/annotations/Value.adoc[Value] to allow these semantics to be provided through a single point. Alternatively, xref:refguide:applib:index/annotations/Value.adoc[Value] supports this information being provided via the configuration files.
 
 Whatever the class that implements this interface, it must also expose either a `public` no-arg constructor, or (for implementations that also are `Facet` s) a `public` constructor that accepts a `FacetHolder` , and `IsisConfiguration` and a `ValueSemanticsProviderContext` . This constructor is then used by the framework to instantiate the object reflectively.
 
@@ -21,6 +21,8 @@ interface ValueSemanticsProvider<T> {
   Parser<T> getParser()     // <.>
   EncoderDecoder<T> getEncoderDecoder()     // <.>
   DefaultsProvider<T> getDefaultsProvider()     // <.>
+  boolean isNumberType()
+  boolean isTemporalType()
 }
 ----
 

@@ -1,7 +1,7 @@
 = ArchitectureDomainRules
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-A library of architecture tests to ensure coding conventions are followed for domain classes, for example as annotated with xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] or xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] but also more generally, for example repositories that are not necessarily part of the framework's metamodel.
+A library of architecture tests to ensure coding conventions are followed for domain classes, for example as annotated with xref:refguide:applib:index/annotations/DomainObject.adoc[DomainObject] or xref:refguide:applib:index/annotations/DomainService.adoc[DomainService] but also more generally, for example repositories that are not necessarily part of the framework's metamodel.
 
 == API
 
@@ -35,32 +35,32 @@ class ArchitectureDomainRules {
 <.> xref:#every_DomainObject_must_specify_logicalTypeName__[every_DomainObject_must_specify_logicalTypeName()]
 +
 --
-This rule requires that classes annotated with the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation must specify their _DomainObject#logicalTypeName() logicalTypeName_ .
+This rule requires that classes annotated with the xref:refguide:applib:index/annotations/DomainObject.adoc[DomainObject] annotation must specify their _DomainObject#logicalTypeName() logicalTypeName_ .
 --
 <.> xref:#every_DomainService_must_specify_logicalTypeName__[every_DomainService_must_specify_logicalTypeName()]
 +
 --
-This rule requires that classes annotated with the xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] annotation must specify their _DomainService#logicalTypeName() logicalTypeName_ .
+This rule requires that classes annotated with the xref:refguide:applib:index/annotations/DomainService.adoc[DomainService] annotation must specify their _DomainService#logicalTypeName() logicalTypeName_ .
 --
 <.> xref:#every_logicalTypeName_must_be_unique__[every_logicalTypeName_must_be_unique()]
 +
 --
-This rule requires that classes annotated the `logicalTypeName` must be unique across all non-abstract xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] s and xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] s
+This rule requires that classes annotated the `logicalTypeName` must be unique across all non-abstract xref:refguide:applib:index/annotations/DomainObject.adoc[DomainObject] s and xref:refguide:applib:index/annotations/DomainService.adoc[DomainService] s
 --
 <.> xref:#every_DomainObject_must_also_be_annotated_with_DomainObjectLayout__[every_DomainObject_must_also_be_annotated_with_DomainObjectLayout()]
 +
 --
-This rule requires that classes annotated with the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation must also be annotated with the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[DomainObjectLayout] annotation.
+This rule requires that classes annotated with the xref:refguide:applib:index/annotations/DomainObject.adoc[DomainObject] annotation must also be annotated with the xref:refguide:applib:index/annotations/DomainObjectLayout.adoc[DomainObjectLayout] annotation.
 --
 <.> xref:#every_DomainService_must_also_be_annotated_with_DomainServiceLayout__[every_DomainService_must_also_be_annotated_with_DomainServiceLayout()]
 +
 --
-This rule requires that classes annotated with the xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] annotation must also be annotated with the xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[DomainServiceLayout] annotation.
+This rule requires that classes annotated with the xref:refguide:applib:index/annotations/DomainService.adoc[DomainService] annotation must also be annotated with the xref:refguide:applib:index/annotations/DomainServiceLayout.adoc[DomainServiceLayout] annotation.
 --
 <.> xref:#every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_VIEW_MODEL__[every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_VIEW_MODEL()]
 +
 --
-This rule requires that classes annotated with the _XmlRootElement_ annotation must also be annotated with the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation specifying a xref:refguide:applib:index/annotation/Nature.adoc[Nature] of _Nature#VIEW_MODEL VIEW_MODEL_ .
+This rule requires that classes annotated with the _XmlRootElement_ annotation must also be annotated with the xref:refguide:applib:index/annotations/DomainObject.adoc[DomainObject] annotation specifying a xref:refguide:applib:index/annotations/Nature.adoc[Nature] of _Nature#VIEW_MODEL VIEW_MODEL_ .
 --
 <.> xref:#every_Action_mixin_must_follow_naming_convention__[every_Action_mixin_must_follow_naming_convention()]
 +
@@ -118,34 +118,34 @@ This rule requires that finders of repos reutrn either _java.util.Collection_ s 
 [#every_DomainObject_must_specify_logicalTypeName__]
 === every_DomainObject_must_specify_logicalTypeName()
 
-This rule requires that classes annotated with the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation must specify their _DomainObject#logicalTypeName() logicalTypeName_ .
+This rule requires that classes annotated with the xref:refguide:applib:index/annotations/DomainObject.adoc[DomainObject] annotation must specify their _DomainObject#logicalTypeName() logicalTypeName_ .
 
 [#every_DomainService_must_specify_logicalTypeName__]
 === every_DomainService_must_specify_logicalTypeName()
 
-This rule requires that classes annotated with the xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] annotation must specify their _DomainService#logicalTypeName() logicalTypeName_ .
+This rule requires that classes annotated with the xref:refguide:applib:index/annotations/DomainService.adoc[DomainService] annotation must specify their _DomainService#logicalTypeName() logicalTypeName_ .
 
 [#every_logicalTypeName_must_be_unique__]
 === every_logicalTypeName_must_be_unique()
 
-This rule requires that classes annotated the `logicalTypeName` must be unique across all non-abstract xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] s and xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] s
+This rule requires that classes annotated the `logicalTypeName` must be unique across all non-abstract xref:refguide:applib:index/annotations/DomainObject.adoc[DomainObject] s and xref:refguide:applib:index/annotations/DomainService.adoc[DomainService] s
 
 [#every_DomainObject_must_also_be_annotated_with_DomainObjectLayout__]
 === every_DomainObject_must_also_be_annotated_with_DomainObjectLayout()
 
-This rule requires that classes annotated with the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation must also be annotated with the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[DomainObjectLayout] annotation.
+This rule requires that classes annotated with the xref:refguide:applib:index/annotations/DomainObject.adoc[DomainObject] annotation must also be annotated with the xref:refguide:applib:index/annotations/DomainObjectLayout.adoc[DomainObjectLayout] annotation.
 
 [#every_DomainService_must_also_be_annotated_with_DomainServiceLayout__]
 === every_DomainService_must_also_be_annotated_with_DomainServiceLayout()
 
-This rule requires that classes annotated with the xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] annotation must also be annotated with the xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[DomainServiceLayout] annotation.
+This rule requires that classes annotated with the xref:refguide:applib:index/annotations/DomainService.adoc[DomainService] annotation must also be annotated with the xref:refguide:applib:index/annotations/DomainServiceLayout.adoc[DomainServiceLayout] annotation.
 
 [#every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_VIEW_MODEL__]
 === every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_VIEW_MODEL()
 
-This rule requires that classes annotated with the _XmlRootElement_ annotation must also be annotated with the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation specifying a xref:refguide:applib:index/annotation/Nature.adoc[Nature] of _Nature#VIEW_MODEL VIEW_MODEL_ .
+This rule requires that classes annotated with the _XmlRootElement_ annotation must also be annotated with the xref:refguide:applib:index/annotations/DomainObject.adoc[DomainObject] annotation specifying a xref:refguide:applib:index/annotations/Nature.adoc[Nature] of _Nature#VIEW_MODEL VIEW_MODEL_ .
 
-This is required because the framework uses Spring to detect entities and view models (the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation is actually a meta-annotation for Spring's _org.springframework.stereotype.Component_ annotation.
+This is required because the framework uses Spring to detect entities and view models (the xref:refguide:applib:index/annotations/DomainObject.adoc[DomainObject] annotation is actually a meta-annotation for Spring's _org.springframework.stereotype.Component_ annotation.
 
 [#every_Action_mixin_must_follow_naming_convention__]
 === every_Action_mixin_must_follow_naming_convention()

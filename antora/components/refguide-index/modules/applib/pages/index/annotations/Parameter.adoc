@@ -85,7 +85,7 @@ If more than one is provided, then all must be satisfied (in effect "AND"ed toge
 
 Whether this parameter is optional or is mandatory (ie required).
 
-For parameters the default value, _org.apache.isis.applib.annotation.Optionality#DEFAULT_ , is taken to mean that the parameter is required.
+For parameters the default value, _org.apache.isis.applib.annotations.Optionality#DEFAULT_ , is taken to mean that the parameter is required.
 
 [#regexPattern]
 === regexPattern
@@ -103,15 +103,3 @@ The default value, `0` , means that no flags have been specified.
 === regexPatternReplacement
 
 Replacement text for the pattern in generated error message.
-
-include::hooks/Parameter_010-examples-and-usage.adoc[]
-
-include::hooks/Parameter_021-optionality.adoc[]
-
-include::hooks/Parameter_022-maxLength.adoc[]
-
-include::hooks/Parameter_023-mustSatisfy.adoc[]
-
-include::hooks/Parameter_024-regexPattern.adoc[]
-
-include::hooks/Parameter_025-fileAccept.adoc[]

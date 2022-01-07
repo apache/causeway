@@ -201,7 +201,7 @@ Setting this attribute to `RepaintPolicy.NO_REPAINT` is used as a hint to the vi
 
 Note that for this to work, the viewer will also ensure that none of the property's parent component (such as a tab group panel) are re-rendered.
 
-Design note: we considered implementing this an "immutable" flag on the xref:refguide:applib:index/annotation/Property.adoc[Property] annotation (because this flag is typically appropriate for immutable/unchanging properties of a domain object). However, we decided not to do that, on the basis that it might be interpreted as having a deeper impact within the framework than simply a hint for rendering.
+Design note: we considered implementing this an "immutable" flag on the xref:refguide:applib:index/annotations/Property.adoc[Property] annotation (because this flag is typically appropriate for immutable/unchanging properties of a domain object). However, we decided not to do that, on the basis that it might be interpreted as having a deeper impact within the framework than simply a hint for rendering.
 
 [#sequence]
 === sequence
@@ -216,27 +216,3 @@ An alternative is to use the `Xxx.layout.xml` file, where `Xxx` is the domain ob
 The typical entry length of a field, use to determine the optimum width for display.
 
 Note: the Wicket viewer does not use this information.
-
-include::hooks/PropertyLayout_010-examples-and-usage.adoc[]
-
-include::hooks/PropertyLayout_021_labelPosition.adoc[]
-
-include::hooks/PropertyLayout_022_promptStyle.adoc[]
-
-include::hooks/PropertyLayout_023_multiLine.adoc[]
-
-include::hooks/PropertyLayout_024_navigable.adoc[]
-
-include::hooks/PropertyLayout_025_describedAs.adoc[]
-
-include::hooks/PropertyLayout_026_cssClass.adoc[]
-
-include::hooks/PropertyLayout_027_renderDay.adoc[]
-
-include::hooks/PropertyLayout_028_repainting.adoc[]
-
-include::hooks/PropertyLayout_029_named.adoc[]
-
-include::hooks/PropertyLayout_030_hidden.adoc[]
-
-include::hooks/PropertyLayout_31_typicalLength.adoc[]

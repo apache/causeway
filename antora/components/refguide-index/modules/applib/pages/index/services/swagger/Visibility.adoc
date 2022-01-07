@@ -41,7 +41,7 @@ As _#PRIVATE_ , also including any prototype actions (where _Action#restrictTo()
 
 Specification for use by third-party clients, ie public use and not under the control of the authors of the backend Apache Isis application.
 
-The generated swagger spec is therefore restricted only to include only view models ( _DomainObject#nature()_ of _org.apache.isis.applib.annotation.Nature#VIEW_MODEL_ ) and to REST domain services ( _DomainService#nature()_ of _NatureOfService#REST_ ). Exposing entities also would couple the REST client too deeply to the backend implementation.
+The generated swagger spec is therefore restricted only to include only view models ( _DomainObject#nature()_ of _org.apache.isis.applib.annotations.Nature#VIEW_MODEL_ ) and to REST domain services ( _DomainService#nature()_ of _NatureOfService#REST_ ). Exposing entities also would couple the REST client too deeply to the backend implementation.
 
 [#PRIVATE]
 === PRIVATE

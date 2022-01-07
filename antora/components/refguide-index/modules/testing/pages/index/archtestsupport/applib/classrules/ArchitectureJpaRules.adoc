@@ -32,7 +32,7 @@ class ArchitectureJpaRules {
 <.> xref:#every_jpa_Entity_must_be_annotated_with_DomainObject_nature_of_ENTITY__[every_jpa_Entity_must_be_annotated_with_DomainObject_nature_of_ENTITY()]
 +
 --
-This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the Apache Isis xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation specifying that its _DomainObject#nature() nature_ is an _org.apache.isis.applib.annotation.Nature#ENTITY entity_ .
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the Apache Isis xref:refguide:applib:index/annotations/DomainObject.adoc[DomainObject] annotation specifying that its _DomainObject#nature() nature_ is an _org.apache.isis.applib.annotations.Nature#ENTITY entity_ .
 --
 <.> xref:#every_jpa_Entity_must_be_annotated_with_XmlJavaAdapter_of_PersistentEntityAdapter__[every_jpa_Entity_must_be_annotated_with_XmlJavaAdapter_of_PersistentEntityAdapter()]
 +
@@ -90,7 +90,7 @@ This rule requires that concrete classes annotated with the JPA _Entity_ annotat
 [#every_jpa_Entity_must_be_annotated_with_DomainObject_nature_of_ENTITY__]
 === every_jpa_Entity_must_be_annotated_with_DomainObject_nature_of_ENTITY()
 
-This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the Apache Isis xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation specifying that its _DomainObject#nature() nature_ is an _org.apache.isis.applib.annotation.Nature#ENTITY entity_ .
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the Apache Isis xref:refguide:applib:index/annotations/DomainObject.adoc[DomainObject] annotation specifying that its _DomainObject#nature() nature_ is an _org.apache.isis.applib.annotations.Nature#ENTITY entity_ .
 
 [#every_jpa_Entity_must_be_annotated_with_XmlJavaAdapter_of_PersistentEntityAdapter__]
 === every_jpa_Entity_must_be_annotated_with_XmlJavaAdapter_of_PersistentEntityAdapter()

@@ -41,9 +41,3 @@ The nature of this service, either in the UI or REST only
 The logical name of this object's type, that uniquely and fully qualifies it. The logical name is analogous to - but independent of - the actual fully qualified class name. eg. _sales.CustomerService_ for a class 'org.mycompany.services.CustomerService'
 
 This value, if specified, is used in the serialized form of the object's xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] . A xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] is used by the framework to uniquely identify an object over time (same concept as a URN). Otherwise, if not specified, the fully qualified class name is used instead.
-
-include::hooks/DomainService_010-examples-and-usage.adoc[]
-
-include::hooks/DomainService_021-objectType.adoc[]
-
-include::hooks/DomainService_022-nature.adoc[]

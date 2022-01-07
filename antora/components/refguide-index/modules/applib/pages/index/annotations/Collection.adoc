@@ -66,11 +66,3 @@ Indicates when the collection is not visible to the user.
 The type-of the elements held within the collection.
 
 This is only provided as a fallback; usually the framework can infer the element type of the collection from the collection method's generic type.
-
-include::hooks/Collection_010-examples-and-usage.adoc[]
-
-include::hooks/Collection_021_domainEvent.adoc[]
-
-include::hooks/Collection_022_hidden.adoc[]
-
-include::hooks/Collection_023_typeOf.adoc[]

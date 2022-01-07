@@ -92,21 +92,21 @@ For example, this layout could define two columns in ratio 4:8.
 
 Validates and normalizes a grid, modifying the grid so that all of the domain object's members (properties, collections, actions) are bound to regions of the grid.
 
-This is done using existing metadata, most notably that of the _org.apache.isis.applib.annotation.MemberOrder_ annotation. Such a grid, if persisted as the layout XML file for the domain class, allows the _org.apache.isis.applib.annotation.MemberOrder_ annotation to be removed from the source code of the domain class (but other annotations must be retained).
+This is done using existing metadata, most notably that of the _org.apache.isis.applib.annotations.MemberOrder_ annotation. Such a grid, if persisted as the layout XML file for the domain class, allows the _org.apache.isis.applib.annotations.MemberOrder_ annotation to be removed from the source code of the domain class (but other annotations must be retained).
 
 [#complete__G_Class]
 === complete(G, Class)
 
 Takes a normalized grid and enriches it with all the available metadata (taken from Apache Isis' internal metadata) that can be represented in the layout XML.
 
-Such a grid, if persisted as the layout XML file for the domain class, allows all layout annotations ( _org.apache.isis.applib.annotation.ActionLayout_ , _org.apache.isis.applib.annotation.PropertyLayout_ , _org.apache.isis.applib.annotation.CollectionLayout_ ) to be removed from the source code of the domain class.
+Such a grid, if persisted as the layout XML file for the domain class, allows all layout annotations ( _org.apache.isis.applib.annotations.ActionLayout_ , _org.apache.isis.applib.annotations.PropertyLayout_ , _org.apache.isis.applib.annotations.CollectionLayout_ ) to be removed from the source code of the domain class.
 
 [#minimal__G_Class]
 === minimal(G, Class)
 
 Takes a normalized grid and strips out removes all members, leaving only the grid structure.
 
-Such a grid, if persisted as the layout XML file for the domain class, requires that the _org.apache.isis.applib.annotation.MemberOrder_ annotation is retained in the source code of said class in order to bind members to the regions of the grid.
+Such a grid, if persisted as the layout XML file for the domain class, requires that the _org.apache.isis.applib.annotations.MemberOrder_ annotation is retained in the source code of said class in order to bind members to the regions of the grid.
 
 include::hooks/GridSystemService_010-implementation.adoc[]
 
