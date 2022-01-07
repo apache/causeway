@@ -27,12 +27,12 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.Collection;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.Nature;
+import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotations.Value;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.object.objectvalidprops.impl;
 
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotations.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;

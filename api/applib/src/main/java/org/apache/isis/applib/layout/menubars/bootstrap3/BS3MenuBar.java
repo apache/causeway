@@ -25,12 +25,12 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotations.DomainServiceLayout;
 import org.apache.isis.applib.layout.menubars.MenuBar;
 
 
 /**
- * Describes the collection of domain services into menubars, broadly corresponding to the aggregation of information of {@link org.apache.isis.applib.annotation.DomainServiceLayout} that have the same value of {@link DomainServiceLayout#named()}.
+ * Describes the collection of domain services into menubars, broadly corresponding to the aggregation of information of {@link org.apache.isis.applib.annotations.DomainServiceLayout} that have the same value of {@link DomainServiceLayout#named()}.
  *
  * @since 1.x {@index}
  */

@@ -23,10 +23,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotations.Publishing;
+import org.apache.isis.applib.annotations.Title;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

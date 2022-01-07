@@ -29,7 +29,7 @@ import org.springframework.test.context.TestPropertySource;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotations.Where;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.commons.internal.base._Refs;

@@ -18,7 +18,7 @@
  */
 package demoapp.dom.types.isis.localresourcepaths.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import org.apache.isis.applib.annotations.LogicalTypeName;
 import org.apache.isis.applib.value.LocalResourcePath;
 
 @LogicalTypeName("demo.IsisLocalResourcePathHolder")

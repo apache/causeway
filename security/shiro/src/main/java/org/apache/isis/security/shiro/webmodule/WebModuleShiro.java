@@ -42,7 +42,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotations.PriorityPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal._Constants;

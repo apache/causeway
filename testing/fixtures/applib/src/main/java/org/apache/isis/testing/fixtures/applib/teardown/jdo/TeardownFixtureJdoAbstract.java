@@ -26,7 +26,7 @@ import javax.jdo.metadata.DiscriminatorMetadata;
 import javax.jdo.metadata.InheritanceMetadata;
 import javax.jdo.metadata.TypeMetadata;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotations.Programmatic;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;

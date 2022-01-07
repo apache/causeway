@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepu
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotations.Publishing;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;

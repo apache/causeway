@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.domainobject.recreatable;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotations.DomainObject;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;

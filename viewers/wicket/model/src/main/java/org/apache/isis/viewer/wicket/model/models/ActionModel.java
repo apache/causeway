@@ -20,7 +20,7 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotations.PromptStyle;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;

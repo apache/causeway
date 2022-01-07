@@ -19,7 +19,7 @@
 package org.apache.isis.applib.services.swagger;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.*;
+import org.apache.isis.applib.annotations.*;
 
 /**
  * Specifies which elements of the metamodel are included within the generated
@@ -37,7 +37,7 @@ public enum Visibility {
      * <p>
      * The generated swagger spec is therefore restricted only to include only
      * view models ({@link DomainObject#nature()} of
-     * {@link org.apache.isis.applib.annotation.Nature#VIEW_MODEL})
+     * {@link org.apache.isis.applib.annotations.Nature#VIEW_MODEL})
      * and to REST domain services ({@link DomainService#nature()} of
      * {@link NatureOfService#REST}). Exposing entities also would couple the
      * REST client too deeply to the backend implementation.

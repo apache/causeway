@@ -38,7 +38,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotations.PriorityPrecedence;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.xactn.TransactionId;

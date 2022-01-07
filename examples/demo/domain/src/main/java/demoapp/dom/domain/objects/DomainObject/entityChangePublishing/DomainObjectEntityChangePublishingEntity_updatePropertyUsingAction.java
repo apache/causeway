@@ -18,10 +18,10 @@
  */
 package demoapp.dom.domain.objects.DomainObject.entityChangePublishing;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.ActionLayout;
+import org.apache.isis.applib.annotations.MemberSupport;
+import org.apache.isis.applib.annotations.SemanticsOf;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 

@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.actions.redirect;
 
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.annotation.Redirect;
+import org.apache.isis.applib.annotations.Redirect;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

@@ -25,7 +25,7 @@ import org.jmock.Expectations;
 import org.junit.Rule;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
+import org.apache.isis.applib.annotations.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactn.InteractionProvider;

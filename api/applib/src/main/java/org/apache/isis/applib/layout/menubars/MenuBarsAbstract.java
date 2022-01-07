@@ -23,7 +23,7 @@ import java.util.LinkedHashMap;
 
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotations.Programmatic;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 
 import lombok.val;

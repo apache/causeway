@@ -35,17 +35,17 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MinLength;
-import org.apache.isis.applib.annotation.ObjectSupport;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.BookmarkPolicy;
+import org.apache.isis.applib.annotations.CollectionLayout;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.DomainObjectLayout;
+import org.apache.isis.applib.annotations.Editing;
+import org.apache.isis.applib.annotations.MinLength;
+import org.apache.isis.applib.annotations.ObjectSupport;
+import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotations.SemanticsOf;
+import org.apache.isis.applib.annotations.Title;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.message.MessageService;

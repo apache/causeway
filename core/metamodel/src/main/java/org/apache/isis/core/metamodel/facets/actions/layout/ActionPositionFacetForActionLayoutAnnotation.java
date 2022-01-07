@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotations.ActionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacetAbstract;

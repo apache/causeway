@@ -22,8 +22,8 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotations.ActionLayout;
+import org.apache.isis.applib.annotations.BookmarkPolicy;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;

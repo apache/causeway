@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib.layout.menubars;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotations.Programmatic;
 
 /**
  * @since 1.x {@index}

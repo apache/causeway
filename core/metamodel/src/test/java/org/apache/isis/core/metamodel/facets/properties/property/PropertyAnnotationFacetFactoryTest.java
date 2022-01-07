@@ -35,11 +35,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.applib.annotation.Snapshot;
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotations.Optionality;
+import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotations.Publishing;
+import org.apache.isis.applib.annotations.Snapshot;
+import org.apache.isis.applib.annotations.Where;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.metamodel.commons.matchers.IsisMatchers;
@@ -472,7 +472,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
             class Customer {
                 @Property(
-                        editing = org.apache.isis.applib.annotation.Editing.DISABLED,
+                        editing = org.apache.isis.applib.annotations.Editing.DISABLED,
                         editingDisabledReason = "you cannot edit the name property"
                         )
                 public String getName() {

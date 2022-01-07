@@ -31,8 +31,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.annotation.InteractionScope;
-import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotations.InteractionScope;
+import org.apache.isis.applib.annotations.PriorityPrecedence;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;

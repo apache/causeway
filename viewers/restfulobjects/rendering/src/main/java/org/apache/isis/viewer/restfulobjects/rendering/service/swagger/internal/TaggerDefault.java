@@ -27,7 +27,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotations.Programmatic;
 import org.apache.isis.commons.internal.base._Strings;
 
 @Component

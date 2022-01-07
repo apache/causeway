@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityC
 
 /**
  * If the domain object has not been annotated with
- * {@link org.apache.isis.applib.annotation.DomainObject} but entity-change-publishing
+ * {@link org.apache.isis.applib.annotations.DomainObject} but entity-change-publishing
  * has been configured in <tt>application.properties</tt>.
  */
 public class EntityChangePublishingFacetFromConfiguration

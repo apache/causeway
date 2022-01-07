@@ -24,8 +24,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.*;
-import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotations.*;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;

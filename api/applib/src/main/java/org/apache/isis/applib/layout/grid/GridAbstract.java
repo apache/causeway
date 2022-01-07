@@ -24,7 +24,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotations.Programmatic;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.ActionLayoutDataOwner;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;

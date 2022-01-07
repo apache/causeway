@@ -22,8 +22,8 @@ import java.lang.reflect.Method;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotations.Collection;
+import org.apache.isis.applib.annotations.Property;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;

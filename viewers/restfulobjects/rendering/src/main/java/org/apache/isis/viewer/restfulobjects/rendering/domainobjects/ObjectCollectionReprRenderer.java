@@ -21,7 +21,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotations.Where;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;

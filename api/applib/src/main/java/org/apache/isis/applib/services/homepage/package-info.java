@@ -19,6 +19,6 @@
 
 /**
  * The {@link org.apache.isis.applib.services.homepage.HomePageResolverService} returns the view model, if any
- * annotated with {@link org.apache.isis.applib.annotation.HomePage}.
+ * annotated with {@link org.apache.isis.applib.annotations.HomePage}.
  */
 package org.apache.isis.applib.services.homepage;

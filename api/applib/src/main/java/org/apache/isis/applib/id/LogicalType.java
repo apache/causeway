@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotations.DomainObject;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 

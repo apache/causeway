@@ -18,7 +18,7 @@
  */
 package org.apache.isis.subdomains.excel.applib.dom;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotations.Programmatic;
 
 /**
  * @since 2.0 {@index}

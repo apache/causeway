@@ -22,9 +22,9 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.ObjectSupport;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.Nature;
+import org.apache.isis.applib.annotations.ObjectSupport;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
@@ -51,7 +51,7 @@ public class ApplicationOrphanedPermissionManager {
 
     public static class OrphanedPermissionsEvent extends CollectionDomainEvent<ApplicationPermission>{}
 
-    @org.apache.isis.applib.annotation.Collection(
+    @org.apache.isis.applib.annotations.Collection(
             domainEvent = OrphanedPermissionsEvent.class,
             typeOf = ApplicationPermission.class
     )

@@ -30,7 +30,7 @@ import javax.inject.Inject;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotations.Programmatic;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.Password;

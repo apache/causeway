@@ -18,8 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainobject;
 
-import org.apache.isis.applib.annotation.Bounding;
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotations.Bounding;
+import org.apache.isis.applib.annotations.DomainObject;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;

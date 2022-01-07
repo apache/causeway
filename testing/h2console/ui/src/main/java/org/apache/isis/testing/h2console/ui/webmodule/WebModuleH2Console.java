@@ -24,7 +24,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.h2.server.web.ConnectionInfo;
 import org.h2.server.web.WebServer;
 import org.h2.server.web.WebServlet;
@@ -32,6 +31,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotations.PriorityPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.collections.Can;

@@ -53,12 +53,12 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.validation.annotation.Validated;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
-import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotations.ActionLayout;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.DomainService;
+import org.apache.isis.applib.annotations.LabelPosition;
+import org.apache.isis.applib.annotations.PromptStyle;
+import org.apache.isis.applib.annotations.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.services.i18n.Mode;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
@@ -210,7 +210,7 @@ public class IsisConfiguration {
                  * sent through to {@link EntityPropertyChangeSubscriber}.
                  *
                  * <p>
-                 * This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.DomainObject#entityChangePublishing()}
+                 * This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotations.DomainObject#entityChangePublishing()}
                  * </p>
                  *
                  * <p>
@@ -239,7 +239,7 @@ public class IsisConfiguration {
                      *
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.isis.applib.annotation.DomainObject#createdLifecycleEvent() @DomainObject(createdLifecycleEvent=...)} for the
+                     *     {@link org.apache.isis.applib.annotations.DomainObject#createdLifecycleEvent() @DomainObject(createdLifecycleEvent=...)} for the
                      *     domain object in question.
                      * </p>
                      *
@@ -272,7 +272,7 @@ public class IsisConfiguration {
                      *
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.isis.applib.annotation.DomainObject#loadedLifecycleEvent() @DomainObject(loadedLifecycleEvent=...)} for the
+                     *     {@link org.apache.isis.applib.annotations.DomainObject#loadedLifecycleEvent() @DomainObject(loadedLifecycleEvent=...)} for the
                      *     domain object in question.
                      * </p>
                      *
@@ -309,7 +309,7 @@ public class IsisConfiguration {
                      *
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.isis.applib.annotation.DomainObject#persistingLifecycleEvent() @DomainObject(persistingLifecycleEvent=...)} for the
+                     *     {@link org.apache.isis.applib.annotations.DomainObject#persistingLifecycleEvent() @DomainObject(persistingLifecycleEvent=...)} for the
                      *     domain object in question.
                      * </p>
                      *
@@ -346,7 +346,7 @@ public class IsisConfiguration {
                      *
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.isis.applib.annotation.DomainObject#persistedLifecycleEvent() @DomainObject(persistedLifecycleEvent=...)} for the
+                     *     {@link org.apache.isis.applib.annotations.DomainObject#persistedLifecycleEvent() @DomainObject(persistedLifecycleEvent=...)} for the
                      *     domain object in question.
                      * </p>
                      *
@@ -384,7 +384,7 @@ public class IsisConfiguration {
                      *
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.isis.applib.annotation.DomainObject#removingLifecycleEvent() @DomainObject(removingLifecycleEvent=...)} for the
+                     *     {@link org.apache.isis.applib.annotations.DomainObject#removingLifecycleEvent() @DomainObject(removingLifecycleEvent=...)} for the
                      *     domain object in question.
                      * </p>
                      *
@@ -426,7 +426,7 @@ public class IsisConfiguration {
                      *
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.isis.applib.annotation.DomainObject#updatedLifecycleEvent() @DomainObject(updatedLifecycleEvent=...)} for the
+                     *     {@link org.apache.isis.applib.annotations.DomainObject#updatedLifecycleEvent() @DomainObject(updatedLifecycleEvent=...)} for the
                      *     domain object in question.
                      * </p>
                      *
@@ -463,7 +463,7 @@ public class IsisConfiguration {
                      *
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.isis.applib.annotation.DomainObject#updatingLifecycleEvent() @DomainObject(updatingLifecycleEvent=...)} for the
+                     *     {@link org.apache.isis.applib.annotations.DomainObject#updatingLifecycleEvent() @DomainObject(updatingLifecycleEvent=...)} for the
                      *     domain object in question.
                      * </p>
                      *
@@ -501,7 +501,7 @@ public class IsisConfiguration {
                  * result of invoking an action.
                  *
                  * <p>
-                 *     This can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.DomainObjectLayout#paged()}.
+                 *     This can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotations.DomainObjectLayout#paged()}.
                  * </p>
                  */
                 private int paged = 25;
@@ -518,7 +518,7 @@ public class IsisConfiguration {
                      *
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.isis.applib.annotation.DomainObjectLayout#cssClassUiEvent()}  @DomainObjectLayout(cssClassEvent=...)} for the
+                     *     {@link org.apache.isis.applib.annotations.DomainObjectLayout#cssClassUiEvent()}  @DomainObjectLayout(cssClassEvent=...)} for the
                      *     domain object in question.
                      * </p>
                      *
@@ -559,7 +559,7 @@ public class IsisConfiguration {
                      *
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.isis.applib.annotation.DomainObjectLayout#iconUiEvent()}  @DomainObjectLayout(iconEvent=...)} for the
+                     *     {@link org.apache.isis.applib.annotations.DomainObjectLayout#iconUiEvent()}  @DomainObjectLayout(iconEvent=...)} for the
                      *     domain object in question.
                      * </p>
                      *
@@ -605,7 +605,7 @@ public class IsisConfiguration {
                      *
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.isis.applib.annotation.DomainObjectLayout#layoutUiEvent()}  @DomainObjectLayout(layoutEvent=...)} for the
+                     *     {@link org.apache.isis.applib.annotations.DomainObjectLayout#layoutUiEvent()}  @DomainObjectLayout(layoutEvent=...)} for the
                      *     domain object in question.
                      * </p>
                      *
@@ -646,7 +646,7 @@ public class IsisConfiguration {
                      *
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.isis.applib.annotation.DomainObjectLayout#titleUiEvent()}  @DomainObjectLayout(titleEvent=...)} for the
+                     *     {@link org.apache.isis.applib.annotations.DomainObjectLayout#titleUiEvent()}  @DomainObjectLayout(titleEvent=...)} for the
                      *     domain object in question.
                      * </p>
                      *
@@ -691,7 +691,7 @@ public class IsisConfiguration {
                  *
                  * <p>
                  *  This setting can be overridden on a case-by-case basis using
-                 *  {@link org.apache.isis.applib.annotation.Action#commandPublishing()}.
+                 *  {@link org.apache.isis.applib.annotations.Action#commandPublishing()}.
                  * </p>
                  */
                 private ActionPublishingPolicy commandPublishing = ActionPublishingPolicy.NONE;
@@ -710,7 +710,7 @@ public class IsisConfiguration {
                  * </p>
                  *
                  * <p>
-                 *  This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.Action#executionDispatch()}.
+                 *  This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotations.Action#executionDispatch()}.
                  * </p>
                  */
                 private ActionPublishingPolicy executionPublishing = ActionPublishingPolicy.NONE;
@@ -732,7 +732,7 @@ public class IsisConfiguration {
                      *
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is actually sent depends
-                     *     on the value of the {@link org.apache.isis.applib.annotation.Action#domainEvent()} for the
+                     *     on the value of the {@link org.apache.isis.applib.annotations.Action#domainEvent()} for the
                      *     action in question:
                      * </p>
                      *
@@ -778,7 +778,7 @@ public class IsisConfiguration {
                      *
                      * <p>
                      *     The CSS class for individual actions can be overridden using
-                     *     {@link org.apache.isis.applib.annotation.ActionLayout#cssClass()}.
+                     *     {@link org.apache.isis.applib.annotations.ActionLayout#cssClass()}.
                      * </p>
                      */
                     private String[] patterns = {
@@ -805,7 +805,7 @@ public class IsisConfiguration {
                      *
                      * <p>
                      *     The font awesome class for individual actions can be overridden using
-                     *     {@link org.apache.isis.applib.annotation.ActionLayout#cssClassFa()}.
+                     *     {@link org.apache.isis.applib.annotations.ActionLayout#cssClassFa()}.
                      * </p>
                      */
                     private String[] patterns = {
@@ -877,7 +877,7 @@ public class IsisConfiguration {
                  *
                  * <p>
                  *  This setting can be overridden on a case-by-case basis using
-                 *  {@link org.apache.isis.applib.annotation.Property#commandDispatch()}.
+                 *  {@link org.apache.isis.applib.annotations.Property#commandDispatch()}.
                  * </p>
                  */
                 private PropertyPublishingPolicy commandPublishing = PropertyPublishingPolicy.NONE;
@@ -896,7 +896,7 @@ public class IsisConfiguration {
                  *
                  * <p>
                  * This setting can be overridden on a case-by-case basis using
-                 * {@link org.apache.isis.applib.annotation.Property#publishing()}.
+                 * {@link org.apache.isis.applib.annotations.Property#publishing()}.
                  * </p>
                  */
                 private PropertyPublishingPolicy executionPublishing = PropertyPublishingPolicy.NONE;
@@ -918,7 +918,7 @@ public class IsisConfiguration {
                      *
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is actually sent depends
-                     *     on the value of the {@link org.apache.isis.applib.annotation.Property#domainEvent()} for the
+                     *     on the value of the {@link org.apache.isis.applib.annotations.Property#domainEvent()} for the
                      *     property in question:
                      * </p>
                      *
@@ -951,7 +951,7 @@ public class IsisConfiguration {
                  *
                  * <p>
                  *     Can be overridden on a case-by-case basis using
-                 *     {@link org.apache.isis.applib.annotation.ParameterLayout#labelPosition()}.
+                 *     {@link org.apache.isis.applib.annotations.ParameterLayout#labelPosition()}.
                  * </p>
                  *
                  * <p>
@@ -983,7 +983,7 @@ public class IsisConfiguration {
                      *
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is actually sent depends
-                     *     on the value of the {@link org.apache.isis.applib.annotation.Collection#domainEvent()} for the
+                     *     on the value of the {@link org.apache.isis.applib.annotations.Collection#domainEvent()} for the
                      *     collection action in question:
                      * </p>
                      *
@@ -1016,7 +1016,7 @@ public class IsisConfiguration {
                  *
                  * <p>
                  *     The value of this can be overridden on a case-by-case basis using
-                 *     {@link org.apache.isis.applib.annotation.CollectionLayout#defaultView()}.
+                 *     {@link org.apache.isis.applib.annotations.CollectionLayout#defaultView()}.
                  *     Note that this default configuration property is an enum and so defines only a fixed number of
                  *     values, whereas the annotation returns a string; this is to allow for flexibility that
                  *     individual viewers might support their own additional types.  For example, the Wicket viewer
@@ -1033,7 +1033,7 @@ public class IsisConfiguration {
                  *
                  * <p>
                  *     This can be overridden on a case-by-case basis using
-                 *     {@link org.apache.isis.applib.annotation.CollectionLayout#paged()}.
+                 *     {@link org.apache.isis.applib.annotations.CollectionLayout#paged()}.
                  * </p>
                  */
                 private int paged = 12;
@@ -1050,10 +1050,10 @@ public class IsisConfiguration {
                     public static class SemanticChecking {
                         /**
                          * Whether to check for inconsistencies between the usage of
-                         * {@link org.apache.isis.applib.annotation.DomainObject},
-                         * {@link org.apache.isis.applib.annotation.ViewModel},
-                         * {@link org.apache.isis.applib.annotation.DomainObjectLayout} and
-                         * {@link org.apache.isis.applib.annotation.ViewModelLayout}.
+                         * {@link org.apache.isis.applib.annotations.DomainObject},
+                         * {@link org.apache.isis.applib.annotations.ViewModel},
+                         * {@link org.apache.isis.applib.annotations.DomainObjectLayout} and
+                         * {@link org.apache.isis.applib.annotations.ViewModelLayout}.
                           */
                         private boolean enable = false;
                     }
@@ -1071,14 +1071,14 @@ public class IsisConfiguration {
                      * Influences whether an {@link org.apache.isis.applib.events.ui.CssClassUiEvent} should
                      * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
                      * whenever a view model (annotated with
-                     * {@link org.apache.isis.applib.annotation.ViewModel @ViewModel}) is about to be rendered in the
+                     * {@link org.apache.isis.applib.annotations.ViewModel @ViewModel}) is about to be rendered in the
                      * UI - thereby allowing subscribers to optionally
                      * {@link org.apache.isis.applib.events.ui.CssClassUiEvent#setCssClass(String)} change) the CSS
                      * classes that are used.
                      *
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.isis.applib.annotation.ViewModelLayout#cssClassUiEvent()}  @ViewModelLayout(cssClassEvent=...)} for the
+                     *     {@link org.apache.isis.applib.annotations.ViewModelLayout#cssClassUiEvent()}  @ViewModelLayout(cssClassEvent=...)} for the
                      *     domain object in question:
                      * </p>
                      *
@@ -1108,14 +1108,14 @@ public class IsisConfiguration {
                      * Influences whether an {@link org.apache.isis.applib.events.ui.IconUiEvent} should
                      * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
                      * whenever a view model (annotated with
-                     * {@link org.apache.isis.applib.annotation.ViewModel @ViewModel}) is about to be rendered in the
+                     * {@link org.apache.isis.applib.annotations.ViewModel @ViewModel}) is about to be rendered in the
                      * UI - thereby allowing subscribers to optionally
                      * {@link org.apache.isis.applib.events.ui.IconUiEvent#setIconName(String)} change) the icon that
                      * is used.
                      *
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.isis.applib.annotation.ViewModelLayout#iconUiEvent()}  @ViewModelLayout(iconEvent=...)} for the
+                     *     {@link org.apache.isis.applib.annotations.ViewModelLayout#iconUiEvent()}  @ViewModelLayout(iconEvent=...)} for the
                      *     domain object in question:
                      * </p>
                      *
@@ -1145,7 +1145,7 @@ public class IsisConfiguration {
                      * Influences whether an {@link org.apache.isis.applib.events.ui.LayoutUiEvent} should
                      * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
                      * whenever a view model (annotated with
-                     * {@link org.apache.isis.applib.annotation.ViewModel @ViewModel}) is about to be rendered in the
+                     * {@link org.apache.isis.applib.annotations.ViewModel @ViewModel}) is about to be rendered in the
                      * UI - thereby allowing subscribers to optionally
                      * {@link org.apache.isis.applib.events.ui.LayoutUiEvent#setLayout(String)} change) the layout that is used.
                      *
@@ -1156,7 +1156,7 @@ public class IsisConfiguration {
                      *
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.isis.applib.annotation.ViewModelLayout#layoutUiEvent()}  @ViewModelLayout(layoutEvent=...)} for the
+                     *     {@link org.apache.isis.applib.annotations.ViewModelLayout#layoutUiEvent()}  @ViewModelLayout(layoutEvent=...)} for the
                      *     domain object in question:
                      * </p>
                      *
@@ -1186,14 +1186,14 @@ public class IsisConfiguration {
                      * Influences whether an {@link org.apache.isis.applib.events.ui.TitleUiEvent} should
                      * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
                      * whenever a view model (annotated with
-                     * {@link org.apache.isis.applib.annotation.ViewModel @ViewModel}) is about to be rendered in the
+                     * {@link org.apache.isis.applib.annotations.ViewModel @ViewModel}) is about to be rendered in the
                      * UI - thereby allowing subscribers to
                      * optionally {@link org.apache.isis.applib.events.ui.TitleUiEvent#setTitle(String)} change)
                      * the title that is used.
                      *
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.isis.applib.annotation.ViewModelLayout#titleUiEvent()}  @ViewModelLayout(titleEvent=...)} for the
+                     *     {@link org.apache.isis.applib.annotations.ViewModelLayout#titleUiEvent()}  @ViewModelLayout(titleEvent=...)} for the
                      *     domain object in question:
                      * </p>
                      *
@@ -1225,7 +1225,7 @@ public class IsisConfiguration {
                  *
                  * <p>
                  *     Can be overridden on a case-by-case basis using
-                 *     {@link org.apache.isis.applib.annotation.ParameterLayout#labelPosition()}.
+                 *     {@link org.apache.isis.applib.annotations.ParameterLayout#labelPosition()}.
                  * </p>
                  *
                  * <p>

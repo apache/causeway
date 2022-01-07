@@ -27,9 +27,9 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.Programmatic;
+import org.apache.isis.applib.annotations.PropertyLayout;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.repository.RepositoryService;

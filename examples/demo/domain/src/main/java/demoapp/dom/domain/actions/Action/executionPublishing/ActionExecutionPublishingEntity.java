@@ -18,7 +18,7 @@
  */
 package demoapp.dom.domain.actions.Action.executionPublishing;
 
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotations.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;

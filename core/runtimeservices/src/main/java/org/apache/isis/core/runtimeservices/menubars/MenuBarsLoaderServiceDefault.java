@@ -32,7 +32,7 @@ import org.springframework.core.io.AbstractResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotations.PriorityPrecedence;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.menu.MenuBarsLoaderService;

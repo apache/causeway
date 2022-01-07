@@ -20,7 +20,7 @@ package org.apache.isis.viewer.common.model.components;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotations.Optionality;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 
 import lombok.Getter;

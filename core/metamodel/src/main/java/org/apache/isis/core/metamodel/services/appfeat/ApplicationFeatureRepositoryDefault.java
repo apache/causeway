@@ -21,8 +21,9 @@ package org.apache.isis.core.metamodel.services.appfeat;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.annotation.SemanticsOf;
+
+import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotations.SemanticsOf;
 import org.apache.isis.applib.services.appfeat.*;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;

@@ -23,7 +23,7 @@ import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotations.BookmarkPolicy;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._Casts;

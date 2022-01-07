@@ -23,7 +23,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.annotation.Repainting;
+import org.apache.isis.applib.annotations.Repainting;
 
 public class PropertyLayoutData_repaint_Test {
 

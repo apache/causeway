@@ -20,8 +20,8 @@ package org.apache.isis.core.metamodel.facets.members.publish.execution;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotations.Publishing;
 import org.apache.isis.commons.internal.base._Optionals;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;

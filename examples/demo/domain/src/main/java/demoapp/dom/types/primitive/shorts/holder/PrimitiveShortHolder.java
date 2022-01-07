@@ -18,7 +18,7 @@
  */
 package demoapp.dom.types.primitive.shorts.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import org.apache.isis.applib.annotations.LogicalTypeName;
 
 @LogicalTypeName("demo.PrimitiveShortHolder")
 //tag::class[]

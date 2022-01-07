@@ -20,10 +20,10 @@ package org.apache.isis.testdomain.model.good;
 
 import java.util.Set;
 
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.MinLength;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotations.MemberSupport;
+import org.apache.isis.applib.annotations.MinLength;
+import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotations.PropertyLayout;
 
 import lombok.RequiredArgsConstructor;
 

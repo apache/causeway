@@ -18,7 +18,7 @@
  */
 package org.apache.isis.testing.fakedata.applib.services;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotations.Programmatic;
 
 /**
  * Returns random strings, specifying the number of characters.

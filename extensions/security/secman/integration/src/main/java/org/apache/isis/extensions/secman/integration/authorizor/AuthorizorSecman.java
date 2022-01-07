@@ -32,8 +32,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.InteractionScope;
-import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotations.InteractionScope;
+import org.apache.isis.applib.annotations.PriorityPrecedence;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.internal.collections._Maps;

@@ -21,9 +21,9 @@ package org.apache.isis.extensions.secman.applib.feature.contributions;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.Collection;
+import org.apache.isis.applib.annotations.CollectionLayout;
 import org.apache.isis.applib.services.appfeatui.ApplicationFeatureViewModel;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;

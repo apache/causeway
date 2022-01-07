@@ -19,9 +19,9 @@
 package org.apache.isis.core.metamodel.facets.object.bookmarkpolicy;
 
 
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotations.ActionLayout;
+import org.apache.isis.applib.annotations.BookmarkPolicy;
+import org.apache.isis.applib.annotations.DomainObjectLayout;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
 

@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotations.DomainServiceLayout;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;

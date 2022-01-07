@@ -23,12 +23,12 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.ActionLayout;
+import org.apache.isis.applib.annotations.MemberSupport;
+import org.apache.isis.applib.annotations.Optionality;
+import org.apache.isis.applib.annotations.Parameter;
+import org.apache.isis.applib.annotations.PromptStyle;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;

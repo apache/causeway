@@ -24,7 +24,7 @@ import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotations.ActionLayout;
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

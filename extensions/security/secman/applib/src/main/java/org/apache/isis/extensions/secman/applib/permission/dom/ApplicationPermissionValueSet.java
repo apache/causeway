@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotations.Programmatic;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Multimaps;

@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.LongAdder;
 
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotations.SemanticsOf;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;

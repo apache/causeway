@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.model.models.interaction;
 
-import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotations.BookmarkPolicy;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;

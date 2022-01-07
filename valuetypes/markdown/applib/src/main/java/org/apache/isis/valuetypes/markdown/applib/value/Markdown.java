@@ -36,7 +36,7 @@ import lombok.experimental.Accessors;
  *
  * @since 2.0 {@index}
  */
-@org.apache.isis.applib.annotation.Value(
+@org.apache.isis.applib.annotations.Value(
         logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.Markdown")
 @EqualsAndHashCode
 @XmlJavaTypeAdapter(MarkdownJaxbAdapter.class)  // for JAXB view model support

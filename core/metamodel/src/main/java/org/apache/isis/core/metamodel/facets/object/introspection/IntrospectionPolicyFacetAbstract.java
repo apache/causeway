@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.introspection;
 
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.annotation.Introspection;
+import org.apache.isis.applib.annotations.Introspection;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

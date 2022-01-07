@@ -19,7 +19,8 @@
 package org.apache.isis.viewer.restfulobjects.rendering.service.swagger;
 
 import lombok.val;
-import org.apache.isis.applib.annotation.PriorityPrecedence;
+
+import org.apache.isis.applib.annotations.PriorityPrecedence;
 import org.apache.isis.applib.services.swagger.Format;
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.applib.services.swagger.Visibility;

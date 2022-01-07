@@ -22,7 +22,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotations.Action;
 
 import lombok.RequiredArgsConstructor;
 

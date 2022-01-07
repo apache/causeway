@@ -20,8 +20,8 @@ package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotations.PropertyLayout;
+import org.apache.isis.applib.annotations.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;

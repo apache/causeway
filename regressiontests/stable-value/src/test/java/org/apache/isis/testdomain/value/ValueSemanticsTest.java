@@ -35,7 +35,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotations.Where;
 import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;

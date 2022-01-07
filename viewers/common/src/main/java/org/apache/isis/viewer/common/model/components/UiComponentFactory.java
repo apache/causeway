@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.applib.annotations.LabelPosition;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.handler.ChainOfResponsibility;

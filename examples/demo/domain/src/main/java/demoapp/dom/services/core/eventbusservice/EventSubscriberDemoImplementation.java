@@ -25,9 +25,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.Nature;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;

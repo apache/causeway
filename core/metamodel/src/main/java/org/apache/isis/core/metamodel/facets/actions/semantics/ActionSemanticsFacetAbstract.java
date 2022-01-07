@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.semantics;
 
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotations.SemanticsOf;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;

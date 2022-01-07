@@ -26,8 +26,8 @@ import java.lang.annotation.Target;
 
 import org.junit.Test;
 
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotations.Publishing;
 import org.apache.isis.commons.internal.reflection._Annotations;
 
 import static org.hamcrest.CoreMatchers.is;

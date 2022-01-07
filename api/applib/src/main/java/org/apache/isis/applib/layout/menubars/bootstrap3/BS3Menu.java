@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotations.DomainServiceLayout;
 import org.apache.isis.applib.layout.menubars.Menu;
 
 import lombok.ToString;

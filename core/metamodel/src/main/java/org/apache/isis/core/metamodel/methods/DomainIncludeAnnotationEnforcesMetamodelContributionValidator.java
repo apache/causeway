@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Domain;
+import org.apache.isis.applib.annotations.Domain;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -50,7 +50,7 @@ import lombok.val;
 
 /**
  * @since 2.0
- * @see org.apache.isis.applib.annotation.Domain.Include
+ * @see org.apache.isis.applib.annotations.Domain.Include
  */
 public class DomainIncludeAnnotationEnforcesMetamodelContributionValidator
 extends MetaModelVisitingValidatorAbstract {

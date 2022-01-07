@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.domainservicelayout;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotations.DomainServiceLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.i8n.noun.NounForms;

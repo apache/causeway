@@ -20,8 +20,8 @@ package org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.fixturehand
 
 import java.math.BigDecimal;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.Nature;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelMetaDataEnabled;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Category;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Subcategory;

@@ -29,9 +29,9 @@ import org.springframework.test.context.TestPropertySource;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.Nature;
+import org.apache.isis.applib.annotations.Property;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.config.presets.IsisPresets;
@@ -71,7 +71,7 @@ class DomainModelTest_forEditing extends IsisIntegrationTestAbstract {
     @XmlRootElement(name = "CustomerEna")
     @DomainObject(
             nature=Nature.VIEW_MODEL, 
-            editing=org.apache.isis.applib.annotation.Editing.ENABLED)
+            editing=org.apache.isis.applib.annotations.Editing.ENABLED)
     public static class CustomerEna {
         @Property
         @Getter @Setter private String name;
@@ -96,7 +96,7 @@ class DomainModelTest_forEditing extends IsisIntegrationTestAbstract {
     @XmlRootElement(name = "CustomerDis")
     @DomainObject(
             nature=Nature.VIEW_MODEL, 
-            editing=org.apache.isis.applib.annotation.Editing.DISABLED,
+            editing=org.apache.isis.applib.annotations.Editing.DISABLED,
             editingDisabledReason = "you cannot edit this object")
     public static class CustomerDis {
         @Property
@@ -125,11 +125,11 @@ class DomainModelTest_forEditing extends IsisIntegrationTestAbstract {
     @XmlRootElement(name = "CustomerEnaDis")
     @DomainObject(
             nature=Nature.VIEW_MODEL, 
-            editing=org.apache.isis.applib.annotation.Editing.ENABLED)
+            editing=org.apache.isis.applib.annotations.Editing.ENABLED)
     public static class CustomerEnaDis {
         @Property(
                 // should disable editing regardless of class-level
-                editing = org.apache.isis.applib.annotation.Editing.DISABLED, 
+                editing = org.apache.isis.applib.annotations.Editing.DISABLED, 
                 editingDisabledReason = "you cannot edit the name property"
                 )
         @Getter @Setter private String name;
@@ -157,12 +157,12 @@ class DomainModelTest_forEditing extends IsisIntegrationTestAbstract {
     @XmlRootElement(name = "CustomerDisEna")
     @DomainObject(
             nature=Nature.VIEW_MODEL,
-            editing=org.apache.isis.applib.annotation.Editing.DISABLED,
+            editing=org.apache.isis.applib.annotations.Editing.DISABLED,
             editingDisabledReason = "you cannot edit this object")
     public static class CustomerDisEna {
         @Property(
                 // should enable editing regardless of class-level
-                editing = org.apache.isis.applib.annotation.Editing.ENABLED)
+                editing = org.apache.isis.applib.annotations.Editing.ENABLED)
         @Getter @Setter private String name;
     }
 

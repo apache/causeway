@@ -18,9 +18,9 @@
  */
 package org.apache.isis.extensions.secman.applib.user.app;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.ObjectSupport;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.Nature;
+import org.apache.isis.applib.annotations.ObjectSupport;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 
 @DomainObject(

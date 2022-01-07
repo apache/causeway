@@ -35,9 +35,9 @@ import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.EntityChangeKind;
-import org.apache.isis.applib.annotation.InteractionScope;
-import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotations.EntityChangeKind;
+import org.apache.isis.applib.annotations.InteractionScope;
+import org.apache.isis.applib.annotations.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.iactn.Interaction;

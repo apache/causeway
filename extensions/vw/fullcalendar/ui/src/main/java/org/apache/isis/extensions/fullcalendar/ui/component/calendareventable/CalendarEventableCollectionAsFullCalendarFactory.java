@@ -20,7 +20,7 @@ package org.apache.isis.extensions.fullcalendar.ui.component.calendareventable;
 
 import org.apache.wicket.Component;
 
-import org.apache.isis.applib.annotation.Domain;
+import org.apache.isis.applib.annotations.Domain;
 import org.apache.isis.extensions.fullcalendar.applib.CalendarEventable;
 import org.apache.isis.extensions.fullcalendar.ui.component.CalendaredCollectionFactoryAbstract;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;

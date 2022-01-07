@@ -20,13 +20,13 @@ package org.apache.isis.testdomain.model.good;
 
 import java.util.List;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.applib.annotation.ObjectSupport;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.ActionLayout;
+import org.apache.isis.applib.annotations.Collection;
+import org.apache.isis.applib.annotations.CollectionLayout;
+import org.apache.isis.applib.annotations.ObjectSupport;
+import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotations.PropertyLayout;
 
 public interface ProperMemberInheritanceInterface {
 

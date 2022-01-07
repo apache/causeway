@@ -18,7 +18,7 @@ package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotations.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;

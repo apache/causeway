@@ -18,7 +18,7 @@
  */
 package demoapp.dom.types.isis.markups.persistence;
 
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotations.DomainObject;
 import org.apache.isis.applib.value.Markup;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;

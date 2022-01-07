@@ -18,7 +18,7 @@
  */
 package org.apache.isis.testdomain.model.good;
 
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotations.DomainObject;
 
 @DomainObject(logicalTypeName = "isis.testdomain.ElementTypeConcrete")
 public class ElementTypeConcrete

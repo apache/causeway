@@ -18,8 +18,8 @@
  */
 package org.apache.isis.applib.services.publishing.spi;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.Property;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.commons.having.HasEnabling;

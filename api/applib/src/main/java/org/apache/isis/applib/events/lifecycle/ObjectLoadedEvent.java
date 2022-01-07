@@ -27,7 +27,7 @@ public abstract class ObjectLoadedEvent<S> extends AbstractLifecycleEvent<S> {
 
     /**
      * This class is the default for the
-     * {@link org.apache.isis.applib.annotation.DomainObject#loadedLifecycleEvent()}
+     * {@link org.apache.isis.applib.annotations.DomainObject#loadedLifecycleEvent()}
      * annotation element.
      *
      * <p>

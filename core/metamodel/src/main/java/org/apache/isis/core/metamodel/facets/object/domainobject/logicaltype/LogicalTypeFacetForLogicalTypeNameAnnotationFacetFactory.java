@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import org.apache.isis.applib.annotations.LogicalTypeName;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;

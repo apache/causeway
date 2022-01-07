@@ -19,8 +19,8 @@
 package org.apache.isis.applib.services.appfeat;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.annotations.SemanticsOf;
+import org.apache.isis.applib.annotations.Value;
 
 import java.util.Collections;
 import java.util.Optional;

@@ -30,10 +30,10 @@
  * parameters (in the <tt>validateXxx()</tt> methods to be factored out.
  *
  * <p>
- * That said, there is still some repetition in that the {@link org.apache.isis.applib.annotation.MustSatisfy}
+ * That said, there is still some repetition in that the {@link org.apache.isis.applib.annotations.MustSatisfy}
  * annotation must be applied in all appropriate cases.  If it is the case that
  * the validation rules would apply <i>every</i> case, then it is generally
- * preferable to implement a {@link org.apache.isis.applib.annotation.Value} type
+ * preferable to implement a {@link org.apache.isis.applib.annotations.Value} type
  * through the {@link org.apache.isis.applib.value.semantics.ValueSemanticsProvider}
  * interface.
  */

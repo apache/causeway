@@ -18,8 +18,8 @@
  */
 package org.apache.isis.testing.archtestsupport.applib.domain.dom;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.DomainObjectLayout;
 
 @DomainObject(logicalTypeName = "foo")
 @DomainObjectLayout()

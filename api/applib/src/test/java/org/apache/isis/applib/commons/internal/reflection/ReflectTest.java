@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotations.Programmatic;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
 

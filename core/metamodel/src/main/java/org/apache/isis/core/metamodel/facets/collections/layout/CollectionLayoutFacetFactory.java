@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotations.CollectionLayout;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;

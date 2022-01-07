@@ -31,8 +31,8 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertFalse;
 
-import org.apache.isis.applib.annotation.Bounding;
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotations.Bounding;
+import org.apache.isis.applib.annotations.DomainObject;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
@@ -110,15 +110,15 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
     public static class EntityChangePublishing extends DomainObjectAnnotationFacetFactoryTest {
 
-        @DomainObject(entityChangePublishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED)
+        @DomainObject(entityChangePublishing = org.apache.isis.applib.annotations.Publishing.AS_CONFIGURED)
         class CustomerWithDomainObjectAndAuditingSetToAsConfigured {
         }
 
-        @DomainObject(entityChangePublishing = org.apache.isis.applib.annotation.Publishing.DISABLED)
+        @DomainObject(entityChangePublishing = org.apache.isis.applib.annotations.Publishing.DISABLED)
         class CustomerWithDomainObjectAndAuditingSetToDisabled {
         }
 
-        @DomainObject(entityChangePublishing = org.apache.isis.applib.annotation.Publishing.ENABLED)
+        @DomainObject(entityChangePublishing = org.apache.isis.applib.annotations.Publishing.ENABLED)
         class CustomerWithDomainObjectAndAuditingSetToEnabled {
         }
 
@@ -412,15 +412,15 @@ extends AbstractFacetFactoryJUnit4TestCase {
         class CustomerWithImmutableAnnotation {
         }
 
-        @DomainObject(editing = org.apache.isis.applib.annotation.Editing.AS_CONFIGURED)
+        @DomainObject(editing = org.apache.isis.applib.annotations.Editing.AS_CONFIGURED)
         class CustomerWithDomainObjectAndEditingSetToAsConfigured {
         }
 
-        @DomainObject(editing = org.apache.isis.applib.annotation.Editing.DISABLED)
+        @DomainObject(editing = org.apache.isis.applib.annotations.Editing.DISABLED)
         class CustomerWithDomainObjectAndEditingSetToDisabled {
         }
 
-        @DomainObject(editing = org.apache.isis.applib.annotation.Editing.ENABLED)
+        @DomainObject(editing = org.apache.isis.applib.annotations.Editing.ENABLED)
         class CustomerWithDomainObjectAndEditingSetToEnabled {
         }
 
@@ -616,15 +616,15 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
     public static class Nature extends DomainObjectAnnotationFacetFactoryTest {
 
-        @DomainObject(nature = org.apache.isis.applib.annotation.Nature.ENTITY)
+        @DomainObject(nature = org.apache.isis.applib.annotations.Nature.ENTITY)
         class CustomerWithDomainObjectAndNatureSetToJdoEntity {
         }
 
-        @DomainObject(nature = org.apache.isis.applib.annotation.Nature.NOT_SPECIFIED)
+        @DomainObject(nature = org.apache.isis.applib.annotations.Nature.NOT_SPECIFIED)
         class CustomerWithDomainObjectAndNatureSetToNotSpecified {
         }
 
-        @DomainObject(nature = org.apache.isis.applib.annotation.Nature.VIEW_MODEL)
+        @DomainObject(nature = org.apache.isis.applib.annotations.Nature.VIEW_MODEL)
         class CustomerWithDomainObjectAndNatureSetToViewModel {
         }
 

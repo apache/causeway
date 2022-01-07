@@ -24,11 +24,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotations.BookmarkPolicy;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.DomainObjectLayout;
+import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotations.PropertyLayout;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 
 import lombok.NoArgsConstructor;

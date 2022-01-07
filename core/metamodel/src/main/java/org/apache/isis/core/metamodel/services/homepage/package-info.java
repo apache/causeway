@@ -19,7 +19,7 @@
 
 /**
  * The {@link org.apache.isis.applib.services.homepage.HomePageResolverService} service simply provides access
- * to the home page object (if any) annotated with {@link org.apache.isis.applib.annotation.HomePage @HomePage}.
+ * to the home page object (if any) annotated with {@link org.apache.isis.applib.annotations.HomePage @HomePage}.
  *
  * p/rgsvc.html#_rgsvc_application-layer-spi_HomePageProviderService">Reference guide</a>
  */

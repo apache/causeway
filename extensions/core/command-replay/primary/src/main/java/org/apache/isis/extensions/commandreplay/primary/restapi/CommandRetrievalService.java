@@ -25,8 +25,7 @@ import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.*;
-import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotations.*;
 import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 import org.apache.isis.extensions.commandlog.model.command.CommandModelRepository;

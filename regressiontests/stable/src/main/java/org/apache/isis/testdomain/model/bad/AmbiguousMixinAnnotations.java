@@ -18,14 +18,14 @@
  */
 package org.apache.isis.testdomain.model.bad;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.ActionLayout;
+import org.apache.isis.applib.annotations.Collection;
+import org.apache.isis.applib.annotations.CollectionLayout;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.Nature;
+import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotations.PropertyLayout;
 
 import lombok.RequiredArgsConstructor;
 

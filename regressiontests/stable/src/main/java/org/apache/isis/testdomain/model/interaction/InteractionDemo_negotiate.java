@@ -20,8 +20,8 @@ package org.apache.isis.testdomain.model.interaction;
 
 import java.util.stream.IntStream;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.MemberSupport;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_negotiate.Params.NumberRange;

@@ -20,7 +20,7 @@ package org.apache.isis.valuetypes.asciidoc.ui.vaa.components;
 
 import com.vaadin.flow.component.Component;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotations.PriorityPrecedence;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;

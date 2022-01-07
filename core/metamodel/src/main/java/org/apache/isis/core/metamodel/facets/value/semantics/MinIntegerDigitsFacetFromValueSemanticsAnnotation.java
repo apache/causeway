@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.value.semantics;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.ValueSemantics;
+import org.apache.isis.applib.annotations.ValueSemantics;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MinIntegerDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MinIntegerDigitsFacetAbstract;

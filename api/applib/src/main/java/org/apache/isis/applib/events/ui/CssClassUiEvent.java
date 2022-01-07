@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib.events.ui;
 
-import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotations.DomainObjectLayout;
 
 import lombok.Getter;
 
@@ -50,7 +50,7 @@ public abstract class CssClassUiEvent<S> extends AbstractUiEvent<S> {
 
     /**
      * This class is the default for the
-     * {@link org.apache.isis.applib.annotation.DomainObjectLayout#cssClassUiEvent()}
+     * {@link org.apache.isis.applib.annotations.DomainObjectLayout#cssClassUiEvent()}
      * annotation element.
      *
      * <p>

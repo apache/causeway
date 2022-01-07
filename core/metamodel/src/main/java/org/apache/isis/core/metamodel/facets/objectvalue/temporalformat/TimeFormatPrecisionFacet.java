@@ -18,8 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.objectvalue.temporalformat;
 
-import org.apache.isis.applib.annotation.TimePrecision;
-import org.apache.isis.applib.annotation.ValueSemantics;
+import org.apache.isis.applib.annotations.TimePrecision;
+import org.apache.isis.applib.annotations.ValueSemantics;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**

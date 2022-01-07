@@ -33,7 +33,7 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotations.PriorityPrecedence;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.commons.internal.collections._Lists;

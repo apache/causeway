@@ -22,15 +22,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Property;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.Collection;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.Property;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

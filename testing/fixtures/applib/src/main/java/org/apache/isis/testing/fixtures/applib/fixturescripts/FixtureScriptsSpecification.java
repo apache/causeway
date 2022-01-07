@@ -20,7 +20,7 @@ package org.apache.isis.testing.fixtures.applib.fixturescripts;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotations.Programmatic;
 
 /**
  * Specifies the behaviour of the

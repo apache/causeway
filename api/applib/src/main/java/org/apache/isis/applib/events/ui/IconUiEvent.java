@@ -72,7 +72,7 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
 
     /**
      * This class is the default for the
-     * {@link org.apache.isis.applib.annotation.DomainObjectLayout#iconUiEvent()}
+     * {@link org.apache.isis.applib.annotations.DomainObjectLayout#iconUiEvent()}
      * annotation element.
      *
      * <p>

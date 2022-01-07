@@ -18,7 +18,7 @@
  */
 package demoapp.dom.types.isisext.cal.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import org.apache.isis.applib.annotations.LogicalTypeName;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
 
 @LogicalTypeName("demo.IsisCalendarEventHolder")

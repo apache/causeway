@@ -21,9 +21,9 @@ package org.apache.isis.extensions.commandreplay.primary.config;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotations.PriorityPrecedence;
 import org.apache.isis.core.config.IsisConfiguration;
 
 import lombok.Getter;

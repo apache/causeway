@@ -18,7 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.facets.prop.primarykey;
 
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotations.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 

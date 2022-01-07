@@ -24,9 +24,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotations.LabelPosition;
+import org.apache.isis.applib.annotations.ParameterLayout;
+import org.apache.isis.applib.annotations.PropertyLayout;
 
 //tag::class[]
 @PropertyLayout(labelPosition = LabelPosition.TOP)      // <.>

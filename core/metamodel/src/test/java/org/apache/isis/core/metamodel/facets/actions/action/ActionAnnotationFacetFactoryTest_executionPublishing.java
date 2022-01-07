@@ -26,8 +26,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.SemanticsOf;
 import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -155,7 +155,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
     public void given_asConfigured_and_configurationSetToIgnoreQueryOnly_andSafeSemantics_thenNone() {
 
         class Customer {
-            @Action(executionPublishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED)
+            @Action(executionPublishing = org.apache.isis.applib.annotations.Publishing.AS_CONFIGURED)
             public void someAction() {
             }
         }
@@ -179,7 +179,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
         // given
         class Customer {
             @Action(
-                    executionPublishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED
+                    executionPublishing = org.apache.isis.applib.annotations.Publishing.AS_CONFIGURED
                     )
             public void someAction() {
             }
@@ -207,7 +207,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
     public void given_asConfigured_and_configurationSetToIgnoreQueryOnly_andNoSemantics_thenException() {
 
         class Customer {
-            @Action(executionPublishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED)
+            @Action(executionPublishing = org.apache.isis.applib.annotations.Publishing.AS_CONFIGURED)
             public void someAction() {
             }
         }
@@ -223,7 +223,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
     public void given_asConfigured_and_configurationSetToNone_thenNone() {
 
         class Customer {
-            @Action(executionPublishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED)
+            @Action(executionPublishing = org.apache.isis.applib.annotations.Publishing.AS_CONFIGURED)
             public void someAction() {
             }
         }
@@ -246,7 +246,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
         // given
         class Customer {
             @Action(
-                    executionPublishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED
+                    executionPublishing = org.apache.isis.applib.annotations.Publishing.AS_CONFIGURED
                     )
             public void someAction() {
             }
@@ -273,7 +273,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
         // given
         class Customer {
             @Action(
-                    executionPublishing = org.apache.isis.applib.annotation.Publishing.ENABLED
+                    executionPublishing = org.apache.isis.applib.annotations.Publishing.ENABLED
                     )
             public void someAction() {
             }
@@ -299,7 +299,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
         // given
         class Customer {
             @Action(
-                    executionPublishing = org.apache.isis.applib.annotation.Publishing.DISABLED
+                    executionPublishing = org.apache.isis.applib.annotations.Publishing.DISABLED
                     )
             public void someAction() {
             }

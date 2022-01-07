@@ -23,7 +23,7 @@ import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotations.Action;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;

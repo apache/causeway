@@ -26,8 +26,8 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotations.ActionLayout;
+import org.apache.isis.applib.annotations.Where;
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;

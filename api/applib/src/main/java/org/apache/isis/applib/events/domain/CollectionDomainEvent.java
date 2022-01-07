@@ -40,7 +40,7 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
 
     /**
      * This class is the default for the
-     * {@link org.apache.isis.applib.annotation.Collection#domainEvent()}
+     * {@link org.apache.isis.applib.annotations.Collection#domainEvent()}
      * annotation attribute.
      *
      * <p>

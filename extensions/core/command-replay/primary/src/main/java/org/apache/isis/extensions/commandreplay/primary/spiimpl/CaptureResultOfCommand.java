@@ -20,9 +20,9 @@ package org.apache.isis.extensions.commandreplay.primary.spiimpl;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotations.PriorityPrecedence;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;

@@ -26,11 +26,11 @@ import java.util.List;
 import java.util.SortedSet;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotations.Collection;
+import org.apache.isis.applib.annotations.CollectionLayout;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.DomainObjectLayout;
+import org.apache.isis.applib.annotations.MemberSupport;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 

@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 
 import org.apache.wicket.model.ChainingModel;
 
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotations.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;

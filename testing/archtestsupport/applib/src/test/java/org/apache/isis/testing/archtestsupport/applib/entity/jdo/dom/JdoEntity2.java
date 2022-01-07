@@ -23,8 +23,8 @@ import java.util.Comparator;
 import javax.jdo.annotations.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.Nature;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 
 @PersistenceCapable(schema = "jdo", identityType = IdentityType.DATASTORE)

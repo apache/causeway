@@ -24,7 +24,7 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.databind.node.NullNode;
 
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotations.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facetapi.Facet;

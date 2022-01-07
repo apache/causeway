@@ -25,7 +25,7 @@ import java.util.function.Predicate;
 
 import javax.enterprise.inject.Vetoed;
 
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotations.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;

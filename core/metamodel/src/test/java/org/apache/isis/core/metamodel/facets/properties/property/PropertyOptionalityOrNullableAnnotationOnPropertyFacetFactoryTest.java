@@ -22,8 +22,8 @@ import java.lang.reflect.Method;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotations.Optionality;
+import org.apache.isis.applib.annotations.Property;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;

@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to annotating the
- * member with <tt>{@literal @}{@link org.apache.isis.applib.annotation.ActionLayout#cssClassFa()  ActionLayout}</tt>#cssClassFa().
+ * member with <tt>{@literal @}{@link org.apache.isis.applib.annotations.ActionLayout#cssClassFa()  ActionLayout}</tt>#cssClassFa().
  */
 public interface CssClassFaFacet extends Facet {
 

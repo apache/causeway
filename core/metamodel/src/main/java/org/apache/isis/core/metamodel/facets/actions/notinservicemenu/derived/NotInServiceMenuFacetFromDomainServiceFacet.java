@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived;
 
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotations.NatureOfService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;

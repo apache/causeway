@@ -23,11 +23,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotations.Optionality;
+import org.apache.isis.applib.annotations.Parameter;
+import org.apache.isis.applib.annotations.ParameterLayout;
+import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotations.PropertyLayout;
 
 @javax.jdo.annotations.Column(length = ChamberOfCommerceCode.MAX_LEN, allowsNull = "true")
 @Property(maxLength = ChamberOfCommerceCode.MAX_LEN, optionality = Optionality.OPTIONAL)

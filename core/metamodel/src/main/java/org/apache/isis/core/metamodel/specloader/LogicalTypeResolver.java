@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.specloader;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotations.DomainObject;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 

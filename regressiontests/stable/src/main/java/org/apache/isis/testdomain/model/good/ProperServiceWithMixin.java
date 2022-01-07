@@ -20,10 +20,10 @@ package org.apache.isis.testdomain.model.good;
 
 import org.joda.time.LocalDateTime;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.DomainService;
+import org.apache.isis.applib.annotations.MemberSupport;
+import org.apache.isis.applib.annotations.NatureOfService;
 
 @DomainService(
         nature = NatureOfService.VIEW,

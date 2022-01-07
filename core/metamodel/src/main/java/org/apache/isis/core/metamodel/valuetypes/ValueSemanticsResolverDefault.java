@@ -29,8 +29,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
-import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotations.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;

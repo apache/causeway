@@ -24,8 +24,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.SemanticsOf;
 
 //tag::class[]
 @Action(semantics = SemanticsOf.SAFE)           // <.>

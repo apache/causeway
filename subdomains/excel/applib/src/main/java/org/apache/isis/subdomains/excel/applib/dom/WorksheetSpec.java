@@ -22,7 +22,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotations.Programmatic;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.subdomains.excel.applib.util.Mode;
 

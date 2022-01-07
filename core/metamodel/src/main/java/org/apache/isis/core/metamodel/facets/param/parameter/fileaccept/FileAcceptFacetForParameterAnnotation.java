@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.param.parameter.fileaccept;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotations.Parameter;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;

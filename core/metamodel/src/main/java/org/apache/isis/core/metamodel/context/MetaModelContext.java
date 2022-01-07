@@ -115,7 +115,7 @@ public interface MetaModelContext {
      * <p>
      *     If there is more than one implementation, then the one with the &quot;highest&quot;
      *     priority (either annotated with {@link org.springframework.context.annotation.Primary},
-     *     else with encountered with earliest {@link org.apache.isis.applib.annotation.PriorityPrecedence precedence})
+     *     else with encountered with earliest {@link org.apache.isis.applib.annotations.PriorityPrecedence precedence})
      *     is used instead.
      * </p>
      *

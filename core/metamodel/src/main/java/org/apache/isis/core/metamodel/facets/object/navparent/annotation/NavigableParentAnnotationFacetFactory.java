@@ -24,7 +24,7 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotations.PropertyLayout;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;

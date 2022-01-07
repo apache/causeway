@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.objectvalue.temporalformat;
 
 import java.time.format.FormatStyle;
 
-import org.apache.isis.applib.annotation.ValueSemantics;
+import org.apache.isis.applib.annotations.ValueSemantics;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**

@@ -20,9 +20,9 @@ package demoapp.dom.domain.properties.Property.snapshot;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.MemberSupport;
+import org.apache.isis.applib.annotations.SemanticsOf;
 import org.apache.isis.applib.services.xml.XmlService;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
 import org.apache.isis.applib.value.Clob;

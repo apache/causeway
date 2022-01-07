@@ -32,7 +32,7 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotations.PriorityPrecedence;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.core.config.presets.IsisPresets;

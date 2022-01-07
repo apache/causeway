@@ -24,9 +24,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotations.Optionality;
+import org.apache.isis.applib.annotations.Parameter;
+import org.apache.isis.applib.annotations.Property;
 
 //tag::class[]
 @Property(optionality = Optionality.OPTIONAL)       // <.>

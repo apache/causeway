@@ -25,7 +25,7 @@ import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotations.Action;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromArray;

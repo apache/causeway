@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.value.fallback;
 
-import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.annotations.Value;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;

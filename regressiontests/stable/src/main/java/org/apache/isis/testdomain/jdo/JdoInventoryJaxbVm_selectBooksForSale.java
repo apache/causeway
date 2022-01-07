@@ -21,11 +21,11 @@ package org.apache.isis.testdomain.jdo;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.ActionLayout;
+import org.apache.isis.applib.annotations.MemberSupport;
+import org.apache.isis.applib.annotations.Parameter;
+import org.apache.isis.applib.annotations.PromptStyle;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 
 import lombok.RequiredArgsConstructor;

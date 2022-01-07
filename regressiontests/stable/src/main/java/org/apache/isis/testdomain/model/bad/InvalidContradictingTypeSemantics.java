@@ -18,8 +18,8 @@
  */
 package org.apache.isis.testdomain.model.bad;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.Value;
 
 // mix of semantics not allowed: should fail validation
 @Value

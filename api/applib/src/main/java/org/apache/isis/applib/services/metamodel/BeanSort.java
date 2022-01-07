@@ -22,7 +22,7 @@ import javax.enterprise.inject.Vetoed;
 
 import org.springframework.context.annotation.Profile;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotations.Programmatic;
 
 /**
  * Top level object classification.

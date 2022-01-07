@@ -24,7 +24,7 @@ import java.time.temporal.Temporal;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.apache.isis.applib.annotation.TimePrecision;
+import org.apache.isis.applib.annotations.TimePrecision;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Data;

@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotations.Parameter;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.commons.collections.Can;

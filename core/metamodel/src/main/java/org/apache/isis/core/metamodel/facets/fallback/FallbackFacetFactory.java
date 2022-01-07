@@ -23,7 +23,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.applib.annotations.LabelPosition;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;

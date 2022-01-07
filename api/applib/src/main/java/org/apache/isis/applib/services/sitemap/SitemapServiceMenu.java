@@ -21,16 +21,16 @@ package org.apache.isis.applib.services.sitemap;
 import javax.inject.Named;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.annotation.RestrictTo;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.ActionLayout;
+import org.apache.isis.applib.annotations.DomainService;
+import org.apache.isis.applib.annotations.DomainServiceLayout;
+import org.apache.isis.applib.annotations.MemberSupport;
+import org.apache.isis.applib.annotations.Optionality;
+import org.apache.isis.applib.annotations.Parameter;
+import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotations.RestrictTo;
+import org.apache.isis.applib.annotations.SemanticsOf;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Strings;
 

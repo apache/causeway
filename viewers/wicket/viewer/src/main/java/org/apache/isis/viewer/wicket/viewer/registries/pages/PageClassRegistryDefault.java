@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.viewer.registries.pages;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotations.PriorityPrecedence;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;

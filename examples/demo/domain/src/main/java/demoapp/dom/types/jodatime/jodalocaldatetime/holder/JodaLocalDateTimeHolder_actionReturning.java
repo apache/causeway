@@ -18,8 +18,8 @@
  */
 package demoapp.dom.types.jodatime.jodalocaldatetime.holder;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 

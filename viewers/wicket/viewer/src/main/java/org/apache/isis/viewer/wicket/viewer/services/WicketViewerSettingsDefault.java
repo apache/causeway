@@ -25,8 +25,8 @@ import javax.inject.Named;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotations.PromptStyle;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;

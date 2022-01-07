@@ -23,8 +23,8 @@ import java.lang.reflect.Method;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotations.Editing;
+import org.apache.isis.applib.annotations.Property;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;

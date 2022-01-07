@@ -18,7 +18,7 @@
  */
 package demoapp.dom.types.isis.passwords.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import org.apache.isis.applib.annotations.LogicalTypeName;
 import org.apache.isis.applib.value.Password;
 
 @LogicalTypeName("demo.IsisPasswordHolder")

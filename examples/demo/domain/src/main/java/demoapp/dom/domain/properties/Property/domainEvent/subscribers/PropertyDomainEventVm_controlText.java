@@ -20,8 +20,8 @@ package demoapp.dom.domain.properties.Property.domainEvent.subscribers;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotations.PropertyLayout;
 
 import lombok.RequiredArgsConstructor;
 

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.testdomain.model.stereotypes;
 
-import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotations.Action;
 
 import lombok.RequiredArgsConstructor;
 

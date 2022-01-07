@@ -26,11 +26,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotations.BookmarkPolicy;
 import org.apache.isis.applib.layout.links.Link;
 
 /**
- * Describes the layout of the title and icon of a domain object, broadly corresponding to {@link org.apache.isis.applib.annotation.DomainObjectLayout}.
+ * Describes the layout of the title and icon of a domain object, broadly corresponding to {@link org.apache.isis.applib.annotations.DomainObjectLayout}.
  *
  * @since 1.x {@index}
  */

@@ -33,13 +33,13 @@ public class ActionPositionFacetForActionXml extends ActionPositionFacetAbstract
         if(actionLayout == null) {
             return Optional.empty();
         }
-        final org.apache.isis.applib.annotation.ActionLayout.Position position = actionLayout.getPosition();
+        final org.apache.isis.applib.annotations.ActionLayout.Position position = actionLayout.getPosition();
 
         return Optional.ofNullable(position)
         .map(pos->new ActionPositionFacetForActionXml(pos, holder));
     }
 
-    private ActionPositionFacetForActionXml(final org.apache.isis.applib.annotation.ActionLayout.Position position, final FacetHolder holder) {
+    private ActionPositionFacetForActionXml(final org.apache.isis.applib.annotations.ActionLayout.Position position, final FacetHolder holder) {
         super(position, holder);
     }
 

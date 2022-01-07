@@ -24,7 +24,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.converter.StringToUuidConverter;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotations.PriorityPrecedence;
 import org.apache.isis.incubator.viewer.vaadin.ui.binding.BindingsVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;

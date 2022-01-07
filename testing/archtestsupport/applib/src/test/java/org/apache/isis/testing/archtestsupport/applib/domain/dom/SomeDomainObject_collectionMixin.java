@@ -18,7 +18,7 @@
  */
 package org.apache.isis.testing.archtestsupport.applib.domain.dom;
 
-import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotations.Collection;
 
 import lombok.RequiredArgsConstructor;
 

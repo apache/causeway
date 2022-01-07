@@ -18,10 +18,10 @@
  */
 package org.apache.isis.testdomain.model.interaction;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.MemberSupport;
+import org.apache.isis.applib.annotations.Parameter;
+import org.apache.isis.applib.annotations.ParameterLayout;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;

@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotations.Collection;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

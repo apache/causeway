@@ -31,7 +31,7 @@ import lombok.Value;
  * @apiNote thread-safe and serializable
  * @since 2.0 {@index}
  */
-@org.apache.isis.applib.annotation.Value
+@org.apache.isis.applib.annotations.Value
 @Value
 @Builder
 public class UserLocale

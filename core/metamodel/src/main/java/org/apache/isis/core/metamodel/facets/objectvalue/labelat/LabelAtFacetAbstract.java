@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.objectvalue.labelat;
 
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.applib.annotations.LabelPosition;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

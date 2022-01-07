@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.logicaltype;
 
 
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotations.DomainObject;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 

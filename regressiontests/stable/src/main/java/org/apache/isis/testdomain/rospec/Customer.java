@@ -20,8 +20,8 @@ package org.apache.isis.testdomain.rospec;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.Nature;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

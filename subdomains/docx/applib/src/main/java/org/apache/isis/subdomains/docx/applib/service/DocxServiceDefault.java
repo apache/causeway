@@ -55,7 +55,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotations.PriorityPrecedence;
 import org.apache.isis.subdomains.docx.applib.DocxService;
 import org.apache.isis.subdomains.docx.applib.exceptions.LoadInputException;
 import org.apache.isis.subdomains.docx.applib.exceptions.LoadTemplateException;

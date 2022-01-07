@@ -30,8 +30,8 @@ import java.util.stream.StreamSupport;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.annotations.Programmatic;
+import org.apache.isis.applib.annotations.Value;
 import org.apache.isis.applib.graph.Edge;
 import org.apache.isis.applib.graph.SimpleEdge;
 import org.apache.isis.applib.graph.Vertex;

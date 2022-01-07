@@ -20,7 +20,7 @@ package org.apache.isis.applib.layout.component;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotations.Where;
 
 /**
  * @since 2.0 {@index}

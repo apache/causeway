@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.annotations.Value;
 
 import lombok.Getter;
 import lombok.NonNull;

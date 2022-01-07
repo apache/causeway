@@ -27,7 +27,7 @@ import java.util.function.Predicate;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
+import org.apache.isis.applib.annotations.Introspection.IntrospectionPolicy;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.reflection._Annotations;

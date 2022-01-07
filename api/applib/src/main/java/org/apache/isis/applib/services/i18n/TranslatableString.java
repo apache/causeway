@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.annotations.Value;
 import org.apache.isis.commons.internal.collections._Lists;
 
 /**

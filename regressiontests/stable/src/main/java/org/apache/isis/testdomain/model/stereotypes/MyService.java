@@ -18,7 +18,7 @@
  */
 package org.apache.isis.testdomain.model.stereotypes;
 
-import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotations.DomainService;
 
 @DomainService
 public class MyService {

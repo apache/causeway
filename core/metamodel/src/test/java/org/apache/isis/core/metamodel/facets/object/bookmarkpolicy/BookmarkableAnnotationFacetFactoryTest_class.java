@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.bookmarkpolicy;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotations.BookmarkPolicy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;

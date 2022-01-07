@@ -49,7 +49,7 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.PackageResource;
 import org.apache.wicket.request.resource.ResourceReference;
 
-import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotations.PromptStyle;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.internal.base._Casts;

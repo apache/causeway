@@ -28,9 +28,9 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Version;
 import javax.jdo.annotations.VersionStrategy;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotations.Publishing;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

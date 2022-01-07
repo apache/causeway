@@ -20,8 +20,8 @@ package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotations.ActionLayout;
+import org.apache.isis.applib.annotations.BookmarkPolicy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetAbstract;

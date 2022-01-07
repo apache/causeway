@@ -18,8 +18,8 @@
  */
 package org.apache.isis.extensions.secman.applib.mmm.dom;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.DomainService;
 
 @DomainService(logicalTypeName = "mmm.EatsCheeseService")
 public class EatCheeseService {

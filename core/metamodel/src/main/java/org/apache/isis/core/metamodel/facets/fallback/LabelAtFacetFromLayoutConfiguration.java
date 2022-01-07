@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.fallback;
 
-import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.applib.annotations.LabelPosition;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacetAbstract;
 

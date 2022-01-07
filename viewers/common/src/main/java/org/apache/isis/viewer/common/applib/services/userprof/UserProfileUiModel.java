@@ -48,7 +48,7 @@ public class UserProfileUiModel implements Serializable {
      *
      * <p>
      * For example, In the Wicket viewer, used as the menu name of the
-     * {@link org.apache.isis.applib.annotation.DomainServiceLayout.MenuBar#TERTIARY tertiary}
+     * {@link org.apache.isis.applib.annotations.DomainServiceLayout.MenuBar#TERTIARY tertiary}
      * &quot;Me&quot; menu bar.
      * </p>
      *

@@ -20,7 +20,7 @@ package org.apache.isis.applib.events.ui;
 
 import java.util.EventObject;
 
-import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotations.DomainObjectLayout;
 
 import lombok.Getter;
 

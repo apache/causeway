@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotations.DomainServiceLayout;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 

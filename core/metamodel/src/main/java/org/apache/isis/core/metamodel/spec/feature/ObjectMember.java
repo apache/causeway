@@ -24,7 +24,7 @@ import java.util.Objects;
 import java.util.OptionalInt;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotations.Where;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;

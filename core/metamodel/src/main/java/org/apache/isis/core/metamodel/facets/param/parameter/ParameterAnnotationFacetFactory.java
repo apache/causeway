@@ -23,7 +23,7 @@ import javax.validation.constraints.Pattern;
 
 import org.springframework.core.MethodParameter;
 
-import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotations.Parameter;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;

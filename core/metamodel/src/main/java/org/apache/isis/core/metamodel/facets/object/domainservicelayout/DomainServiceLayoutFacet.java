@@ -19,17 +19,17 @@
 package org.apache.isis.core.metamodel.facets.object.domainservicelayout;
 
 
-import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotations.DomainServiceLayout;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 
 /**
- * Corresponds to annotating the class with the {@link org.apache.isis.applib.annotation.DomainServiceLayout} annotation.
+ * Corresponds to annotating the class with the {@link org.apache.isis.applib.annotations.DomainServiceLayout} annotation.
  */
 public interface DomainServiceLayoutFacet extends Facet {
 
     /**
-     * Corresponds to {@link org.apache.isis.applib.annotation.DomainServiceLayout#menuBar()}.
+     * Corresponds to {@link org.apache.isis.applib.annotations.DomainServiceLayout#menuBar()}.
      */
     public DomainServiceLayout.MenuBar getMenuBar();
 

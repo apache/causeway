@@ -20,7 +20,7 @@ package org.apache.isis.extensions.viewer.wicket.pdfjs.applib.spi;
 
 import java.io.Serializable;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotations.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.Scale;

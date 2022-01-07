@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotations.Where;
 import org.apache.isis.applib.services.wrapper.events.AccessEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;

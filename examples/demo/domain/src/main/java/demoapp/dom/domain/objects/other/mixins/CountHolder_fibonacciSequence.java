@@ -21,8 +21,8 @@ package demoapp.dom.domain.objects.other.mixins;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotations.Collection;
+import org.apache.isis.applib.annotations.CollectionLayout;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.properties.property.regex;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotations.Property;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;

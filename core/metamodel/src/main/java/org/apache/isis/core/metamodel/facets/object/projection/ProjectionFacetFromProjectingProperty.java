@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.object.projection;
 
-import org.apache.isis.applib.annotation.Projecting;
+import org.apache.isis.applib.annotations.Projecting;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.projection.ProjectingFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;

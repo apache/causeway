@@ -18,7 +18,7 @@
  */
 package demoapp.dom.types.javalang.shorts.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import org.apache.isis.applib.annotations.LogicalTypeName;
 
 @LogicalTypeName("demo.WrapperShortHolder")
 //tag::class[]

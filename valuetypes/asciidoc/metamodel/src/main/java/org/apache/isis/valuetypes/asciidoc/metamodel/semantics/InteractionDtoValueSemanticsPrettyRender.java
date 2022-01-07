@@ -23,7 +23,7 @@ import javax.inject.Named;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotations.PriorityPrecedence;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 

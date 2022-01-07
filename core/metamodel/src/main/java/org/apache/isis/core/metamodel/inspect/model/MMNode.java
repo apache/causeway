@@ -26,11 +26,11 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.Navigable;
-import org.apache.isis.applib.annotation.ObjectSupport;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotations.Collection;
+import org.apache.isis.applib.annotations.Navigable;
+import org.apache.isis.applib.annotations.ObjectSupport;
+import org.apache.isis.applib.annotations.PropertyLayout;
+import org.apache.isis.applib.annotations.Where;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
 

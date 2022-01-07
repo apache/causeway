@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import org.apache.isis.applib.annotations.LogicalTypeName;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

@@ -27,9 +27,9 @@ import org.jmock.api.Action;
 import org.jmock.api.Invocation;
 import org.junit.Rule;
 
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotations.ActionLayout;
+import org.apache.isis.applib.annotations.CollectionLayout;
+import org.apache.isis.applib.annotations.PropertyLayout;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;

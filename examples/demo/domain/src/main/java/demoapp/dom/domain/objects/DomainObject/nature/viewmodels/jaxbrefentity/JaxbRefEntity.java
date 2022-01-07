@@ -20,9 +20,9 @@ package demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity;
 
 import java.util.Objects;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.ObjectSupport;
-import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.ObjectSupport;
+import org.apache.isis.applib.annotations.Property;
 
 import demoapp.dom._infra.values.ValueHolder;
 

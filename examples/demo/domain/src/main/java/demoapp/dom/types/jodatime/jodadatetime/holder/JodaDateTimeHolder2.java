@@ -18,10 +18,10 @@
  */
 package demoapp.dom.types.jodatime.jodadatetime.holder;
 
-import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotations.LabelPosition;
+import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotations.PropertyLayout;
+import org.apache.isis.applib.annotations.Where;
 
 //tag::class[]
 public interface JodaDateTimeHolder2 extends JodaDateTimeHolder {

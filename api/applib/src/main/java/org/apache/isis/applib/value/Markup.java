@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.annotations.Value;
 import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.EqualsAndHashCode;

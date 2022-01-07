@@ -47,7 +47,7 @@ import lombok.val;
  *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to annotating the
- * member with {@link org.apache.isis.applib.annotation.Bounding Bounding} annotation.
+ * member with {@link org.apache.isis.applib.annotations.Bounding Bounding} annotation.
  */
 public abstract class ChoicesFacetFromBoundedAbstract
 extends FacetAbstract

@@ -33,7 +33,7 @@ public abstract class ObjectRemovingEvent<S> extends AbstractLifecycleEvent<S> {
 
     /**
      * This class is the default for the
-     * {@link org.apache.isis.applib.annotation.DomainObject#removingLifecycleEvent()} annotation attribute.  Whether this
+     * {@link org.apache.isis.applib.annotations.DomainObject#removingLifecycleEvent()} annotation attribute.  Whether this
      * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.domain-object.removing-lifecycle-event.post-for-default</tt>
      * configuration property.
      */

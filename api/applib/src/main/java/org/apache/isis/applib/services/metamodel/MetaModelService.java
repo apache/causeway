@@ -22,9 +22,9 @@ import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.Property;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;

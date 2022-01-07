@@ -33,7 +33,7 @@ public abstract class ObjectPersistingEvent<S> extends AbstractLifecycleEvent<S>
 
     /**
      * This class is the default for the
-     * {@link org.apache.isis.applib.annotation.DomainObject#persistingLifecycleEvent()} annotation attribute.  Whether this
+     * {@link org.apache.isis.applib.annotations.DomainObject#persistingLifecycleEvent()} annotation attribute.  Whether this
      * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.domain-object.persisting-lifecycle-event.post-for-default</tt>
      * configuration property.
      */

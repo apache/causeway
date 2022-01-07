@@ -18,7 +18,7 @@
  */
 package demoapp.dom.types.javalang.strings.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import org.apache.isis.applib.annotations.LogicalTypeName;
 
 @LogicalTypeName("demo.JavaLangStringHolder")
 //tag::class[]

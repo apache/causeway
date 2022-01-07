@@ -20,7 +20,7 @@ package org.apache.isis.incubator.viewer.javafx.ui.components.other;
 
 import org.springframework.core.annotation.Order;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotations.PriorityPrecedence;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 

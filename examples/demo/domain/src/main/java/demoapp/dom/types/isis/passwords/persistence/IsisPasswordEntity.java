@@ -20,11 +20,11 @@ package demoapp.dom.types.isis.passwords.persistence;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.ActionLayout.Position;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.ActionLayout;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.PromptStyle;
+import org.apache.isis.applib.annotations.ActionLayout.Position;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.value.Password;
 

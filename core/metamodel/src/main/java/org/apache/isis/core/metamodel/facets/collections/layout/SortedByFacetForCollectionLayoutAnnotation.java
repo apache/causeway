@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.collections.layout;
 import java.util.Comparator;
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotations.CollectionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacetAbstract;
 

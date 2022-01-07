@@ -20,8 +20,8 @@ package org.apache.isis.core.metamodel.facets.object.domainobject.choices;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.Bounding;
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotations.Bounding;
+import org.apache.isis.applib.annotations.DomainObject;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
 

@@ -20,8 +20,8 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.RestrictTo;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.RestrictTo;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;

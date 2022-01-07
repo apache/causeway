@@ -22,7 +22,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
-import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotations.PromptStyle;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 
 public interface ActionPromptProvider {

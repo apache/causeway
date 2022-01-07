@@ -20,8 +20,8 @@ package org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.dom.pivot;
 
 import java.math.BigDecimal;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.Nature;
 import org.apache.isis.subdomains.excel.applib.dom.AggregationType;
 import org.apache.isis.subdomains.excel.applib.dom.PivotColumn;
 import org.apache.isis.subdomains.excel.applib.dom.PivotRow;

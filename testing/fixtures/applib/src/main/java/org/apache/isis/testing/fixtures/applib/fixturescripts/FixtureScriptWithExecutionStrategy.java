@@ -18,7 +18,7 @@
  */
 package org.apache.isis.testing.fixtures.applib.fixturescripts;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotations.Programmatic;
 
 /**
  * Interface for {@link org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript}s to optionally implement,

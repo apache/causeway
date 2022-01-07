@@ -19,7 +19,7 @@
 package org.apache.isis.applib.services.menu;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.annotations.Value;
 import org.apache.isis.applib.layout.menubars.MenuBars;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 

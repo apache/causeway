@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib.services.homepage;
 
-import org.apache.isis.applib.annotation.HomePage;
+import org.apache.isis.applib.annotations.HomePage;
 
 /**
  * This service simply provides access to the home page object (if any)

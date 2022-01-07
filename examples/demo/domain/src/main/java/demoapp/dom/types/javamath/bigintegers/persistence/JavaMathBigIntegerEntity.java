@@ -20,7 +20,7 @@ package demoapp.dom.types.javamath.bigintegers.persistence;
 
 import java.math.BigInteger;
 
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotations.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;

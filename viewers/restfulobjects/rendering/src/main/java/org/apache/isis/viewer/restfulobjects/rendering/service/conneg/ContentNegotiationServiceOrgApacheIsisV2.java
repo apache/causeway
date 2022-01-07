@@ -31,7 +31,7 @@ import com.fasterxml.jackson.databind.node.POJONode;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotations.PriorityPrecedence;
 import org.apache.isis.applib.client.RepresentationTypeSimplifiedV2;
 import org.apache.isis.applib.client.SuppressionType;
 import org.apache.isis.commons.internal.exceptions._Exceptions;

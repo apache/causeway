@@ -30,8 +30,8 @@ import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotations.ActionLayout;
+import org.apache.isis.applib.annotations.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
@@ -304,8 +304,8 @@ implements ScalarModelProvider {
 
     /**
      * Applies the {@literal @}{@link LabelAtFacet} and also CSS based on
-     * whether any of the associated actions have {@literal @}{@link org.apache.isis.applib.annotation.ActionLayout layout} positioned to
-     * the {@link org.apache.isis.applib.annotation.ActionLayout.Position#RIGHT right}.
+     * whether any of the associated actions have {@literal @}{@link org.apache.isis.applib.annotations.ActionLayout layout} positioned to
+     * the {@link org.apache.isis.applib.annotations.ActionLayout.Position#RIGHT right}.
      *
      * @param markupContainer The form group element
      * @param entityActionLinks

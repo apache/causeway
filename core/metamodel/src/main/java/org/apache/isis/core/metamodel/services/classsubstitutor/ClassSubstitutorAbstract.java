@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.services.classsubstitutor;
 import java.util.Objects;
 import java.util.Set;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotations.Programmatic;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.proxy._ProxyFactoryService;

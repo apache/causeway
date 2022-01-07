@@ -30,7 +30,7 @@ public abstract class ObjectUpdatingEvent<S> extends AbstractLifecycleEvent<S> {
 
     /**
      * This class is the default for the
-     * {@link org.apache.isis.applib.annotation.DomainObject#updatingLifecycleEvent()} annotation attribute.  Whether this
+     * {@link org.apache.isis.applib.annotations.DomainObject#updatingLifecycleEvent()} annotation attribute.  Whether this
      * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.domain-object.updating-lifecycle-event.post-for-default</tt>
      * configuration property.
      */

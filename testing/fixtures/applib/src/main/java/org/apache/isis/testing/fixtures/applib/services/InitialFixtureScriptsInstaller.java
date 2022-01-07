@@ -29,7 +29,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotations.PriorityPrecedence;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.events.MetamodelEvent;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;

@@ -23,7 +23,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertNull;
 
-import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotations.Action;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 
@@ -41,7 +41,7 @@ public class ActionAnnotationFacetFactoryTest_RestrictTo extends ActionAnnotatio
     public void whenRestrictedToPrototyping() {
 
         class Customer {
-            @Action(restrictTo = org.apache.isis.applib.annotation.RestrictTo.PROTOTYPING)
+            @Action(restrictTo = org.apache.isis.applib.annotations.RestrictTo.PROTOTYPING)
             public void someAction() {
             }
         }
@@ -64,7 +64,7 @@ public class ActionAnnotationFacetFactoryTest_RestrictTo extends ActionAnnotatio
     public void whenRestrictedToNoRestriction() {
 
         class Customer {
-            @Action(restrictTo = org.apache.isis.applib.annotation.RestrictTo.NO_RESTRICTIONS)
+            @Action(restrictTo = org.apache.isis.applib.annotations.RestrictTo.NO_RESTRICTIONS)
             public void someAction() {
             }
         }

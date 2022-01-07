@@ -20,10 +20,10 @@ package org.apache.isis.extensions.secman.applib.user.contributions;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.ActionLayout;
+import org.apache.isis.applib.annotations.MemberSupport;
+import org.apache.isis.applib.annotations.SemanticsOf;
 import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;

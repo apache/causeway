@@ -20,9 +20,9 @@ package demoapp.dom.types.javaawt.images.holder;
 
 import java.awt.image.BufferedImage;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotations.SemanticsOf;
+import org.apache.isis.applib.annotations.Where;
 
 import lombok.RequiredArgsConstructor;
 

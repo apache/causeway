@@ -22,7 +22,7 @@ import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotations.Where;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.commons.collections.Can;

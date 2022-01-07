@@ -28,15 +28,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.RenderDay;
-import org.apache.isis.applib.annotation.Repainting;
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotations.LabelPosition;
+import org.apache.isis.applib.annotations.PromptStyle;
+import org.apache.isis.applib.annotations.RenderDay;
+import org.apache.isis.applib.annotations.Repainting;
+import org.apache.isis.applib.annotations.Where;
 import org.apache.isis.applib.layout.links.Link;
 
 /**
- * Describes the layout of a single property, broadly corresponds to the {@link org.apache.isis.applib.annotation.PropertyLayout} annotation.
+ * Describes the layout of a single property, broadly corresponds to the {@link org.apache.isis.applib.annotations.PropertyLayout} annotation.
  *
  * @since 1.x {@index}
  */

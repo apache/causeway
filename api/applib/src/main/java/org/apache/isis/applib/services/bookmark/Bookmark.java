@@ -42,7 +42,7 @@ import lombok.val;
  *
  * @since 1.x revised for 2.0 {@index}
  */
-@org.apache.isis.applib.annotation.Value(
+@org.apache.isis.applib.annotations.Value(
         logicalTypeName = IsisModuleApplib.NAMESPACE + ".Bookmark")
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Bookmark implements Oid {

@@ -24,8 +24,8 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.Property;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ConverterTester;

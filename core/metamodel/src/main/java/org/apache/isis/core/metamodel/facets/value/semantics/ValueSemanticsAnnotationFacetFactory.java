@@ -23,7 +23,7 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.validation.constraints.Digits;
 
-import org.apache.isis.applib.annotation.ValueSemantics;
+import org.apache.isis.applib.annotations.ValueSemantics;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;

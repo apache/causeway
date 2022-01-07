@@ -23,9 +23,9 @@ import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotations.PriorityPrecedence;
 import org.apache.isis.applib.services.commanddto.conmap.UserDataKeys;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.core.config.IsisConfiguration;
