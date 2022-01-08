@@ -18,18 +18,11 @@
  */
 package org.apache.isis.testdomain.model.bad;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.Nature;
 
-@Configuration
-@Import({
-    InvalidDomainObjectOnInterface.class // explicitly import interface
-})
-@ComponentScan(
-        basePackageClasses= {
-                Configuration_usingInvalidDomain.class
-        })
-public class Configuration_usingInvalidDomain {
+// not allowed, should fail MM validation ISIS-2938
+@DomainObject(nature = Nature.VIEW_MODEL)
+public interface InvalidDomainObjectOnInterface {
 
 }

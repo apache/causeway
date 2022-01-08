@@ -58,6 +58,7 @@ import org.apache.isis.testdomain.model.bad.AmbiguousTitle;
 import org.apache.isis.testdomain.model.bad.Configuration_usingInvalidDomain;
 import org.apache.isis.testdomain.model.bad.InvalidActionOverloading;
 import org.apache.isis.testdomain.model.bad.InvalidContradictingTypeSemantics;
+import org.apache.isis.testdomain.model.bad.InvalidDomainObjectOnInterface;
 import org.apache.isis.testdomain.model.bad.InvalidLogicalTypeNameClash;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedActionSupport;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedCollectionSupport;
@@ -215,6 +216,13 @@ class DomainModelTest_usingBadDomain {
           Arguments.of(AmbiguousMixinAnnotations.InvalidMixinC.class, Collection.class, "coll"),
           Arguments.of(AmbiguousMixinAnnotations.InvalidMixinCL.class, CollectionLayout.class, "coll")
         );
+    }
+
+    @Test
+    void invalidDomainObjectOnInterface_shouldFail() {
+        validator.assertAnyFailuresContaining(
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidDomainObjectOnInterface.class)),
+                "Cannot use @DomainObject on interface:");
     }
 
     // -- INCUBATING

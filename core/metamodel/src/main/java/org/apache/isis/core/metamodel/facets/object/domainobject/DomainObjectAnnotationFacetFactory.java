@@ -138,6 +138,11 @@ implements
         val facetHolder = processClassContext.getFacetHolder();
         val cls = processClassContext.getCls();
 
+        if(cls.isInterface()) {
+            ValidationFailure.raiseFormatted(facetHolder,
+                    "Cannot use @DomainObject on interface: %s", cls.getName());
+        }
+
         if(processClassContext.synthesizeOnType(Value.class).isPresent()) {
             ValidationFailure.raiseFormatted(facetHolder,
                     "Cannot use @DomainObject and @Value on the same type: %s", cls.getName());
