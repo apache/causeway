@@ -18,24 +18,23 @@
  */
 package org.apache.isis.testdomain.model.good;
 
-import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotations.LogicalTypeName;
 import org.apache.isis.applib.annotations.Property;
 
-@DomainObject(logicalTypeName = "isis.testdomain.ProperInterface2")
-public interface ProperInterface2 
+@LogicalTypeName("isis.testdomain.ProperInterface2")
+public interface ProperInterface2
 extends ProperInterface {
 
     @Property
     default String getE() {
         return "e";
     }
-    default void setE(String prop) {
+    default void setE(final String prop) {
         // no-op, just testing meta-data
     }
-    
+
     @Property
     String getF();
     void setF(String prop);
-    
-    
+
 }
