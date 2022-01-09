@@ -27,6 +27,9 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
@@ -41,9 +44,6 @@ import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 
 public class ObjectActionParameterAbstractTest_getId_and_getName {
@@ -78,14 +78,6 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
         @Override
         public FeatureType getFeatureType() {
-            return null;
-        }
-
-        @Override
-        public String isValid(
-                final InteractionHead head,
-                final ManagedObject proposedValue,
-                final InteractionInitiatedBy interactionInitiatedBy) {
             return null;
         }
 

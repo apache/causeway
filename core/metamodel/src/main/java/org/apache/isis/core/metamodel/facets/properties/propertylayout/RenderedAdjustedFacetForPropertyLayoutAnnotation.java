@@ -23,10 +23,11 @@ import java.util.Optional;
 import org.apache.isis.applib.annotations.PropertyLayout;
 import org.apache.isis.applib.annotations.RenderDay;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacetAbstract;
 
+@Deprecated(forRemoval = true, since = "2.0.0-M7")
 public class RenderedAdjustedFacetForPropertyLayoutAnnotation
-extends RenderedAdjustedFacetAbstract {
+extends DateRenderAdjustFacetAbstract {
 
     public static Optional<RenderedAdjustedFacetForPropertyLayoutAnnotation> create(
             final Optional<PropertyLayout> propertyLayoutIfAny,

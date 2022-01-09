@@ -23,7 +23,6 @@ import java.util.Comparator;
 import org.apache.isis.applib.annotations.ActionLayout;
 import org.apache.isis.applib.annotations.BookmarkPolicy;
 import org.apache.isis.applib.annotations.LabelPosition;
-import org.apache.isis.applib.annotations.RenderDay;
 import org.apache.isis.applib.annotations.Where;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
@@ -53,9 +52,9 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -270,11 +269,9 @@ public class LayoutFacetUtil {
             final PropertyLayoutData propertyLayoutData,
             final FacetHolder facetHolder) {
 
-        val renderedAdjustedFacet = facetHolder.getFacet(RenderedAdjustedFacet.class);
-        if(isDoOp(renderedAdjustedFacet)) {
-            final int adjusted = renderedAdjustedFacet.value();
-            propertyLayoutData.setRenderDay(adjusted != 0 ? RenderDay.AS_DAY_BEFORE : RenderDay.AS_DAY);
-        }
+        facetHolder.lookupNonFallbackFacet(DateRenderAdjustFacet.class)
+        .ifPresent(dateRenderAdjustFacet->
+            propertyLayoutData.setDateRenderAdjustDays(dateRenderAdjustFacet.getDateRenderAdjustDays()));
     }
 
     public void setSortedByIfAny(

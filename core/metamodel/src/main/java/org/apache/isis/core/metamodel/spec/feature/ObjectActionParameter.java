@@ -174,21 +174,6 @@ extends ObjectFeature, CurrentHolder {
             Can<ManagedObject> pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);
 
-    /**
-     * Whether proposed value for this parameter is valid.
-     *
-     * @param adapter
-     * @param proposedValue
-     * @param interactionInitiatedBy
-     * @deprecated use variant with all pendingArgs instead
-     */
-    @Deprecated
-    String isValid(
-            InteractionHead head,
-            ManagedObject proposedValue,
-            InteractionInitiatedBy interactionInitiatedBy);
-
-
     @Vetoed
     public static class Predicates {
         private Predicates(){}

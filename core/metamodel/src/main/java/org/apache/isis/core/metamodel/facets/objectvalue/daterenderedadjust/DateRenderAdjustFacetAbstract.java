@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted;
+package org.apache.isis.core.metamodel.facets.objectvalue.daterenderedadjust;
 
 import java.util.function.BiConsumer;
 
@@ -26,38 +26,36 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 import lombok.NonNull;
 
-public abstract class RenderedAdjustedFacetAbstract
+public abstract class DateRenderAdjustFacetAbstract
 extends FacetAbstract
-implements RenderedAdjustedFacet {
+implements DateRenderAdjustFacet {
 
-    public static final Class<RenderedAdjustedFacet> type() {
-        return RenderedAdjustedFacet.class;
+    public static final Class<DateRenderAdjustFacet> type() {
+        return DateRenderAdjustFacet.class;
     }
 
-    private final int adjustBy;
+    private final int dateRenderAdjustDays;
 
-    public RenderedAdjustedFacetAbstract(final int adjustBy, final FacetHolder holder) {
+    protected DateRenderAdjustFacetAbstract(final int adjustByDays, final FacetHolder holder) {
         super(type(), holder);
-        this.adjustBy = adjustBy;
+        this.dateRenderAdjustDays = adjustByDays;
     }
 
     @Override
-    public int value() {
-        return adjustBy;
+    public int getDateRenderAdjustDays() {
+        return dateRenderAdjustDays;
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("adjustBy", adjustBy == -1
-                ? "default"
-                : String.valueOf(adjustBy));
+        visitor.accept("dateRenderAdjustDays", String.valueOf(dateRenderAdjustDays));
     }
 
     @Override
     public boolean semanticEquals(final @NonNull Facet other) {
-        return other instanceof RenderedAdjustedFacet
-                ? this.value() == ((RenderedAdjustedFacet)other).value()
+        return other instanceof DateRenderAdjustFacet
+                ? this.getDateRenderAdjustDays() == ((DateRenderAdjustFacet)other).getDateRenderAdjustDays()
                 : false;
     }
 

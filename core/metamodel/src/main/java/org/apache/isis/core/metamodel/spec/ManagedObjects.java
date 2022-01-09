@@ -495,13 +495,12 @@ public final class ManagedObjects {
                 return "unspecified object";
             }
 
-            if (managedObject.getSpecification().isNonScalar()) {
-                val collectionFacet = managedObject.getSpecification().getFacet(CollectionFacet.class);
-                return collectionTitleString(managedObject, collectionFacet);
-            } else {
-                return objectTitleString(titleRenderRequest)
-                        .trim();
-            }
+            return managedObject.getSpecification().isNonScalar()
+                ? collectionTitleString(
+                        managedObject,
+                        managedObject.getSpecification().getFacet(CollectionFacet.class))
+                : objectTitleString(titleRenderRequest)
+                    .trim();
         }
 
         // -- HELPER

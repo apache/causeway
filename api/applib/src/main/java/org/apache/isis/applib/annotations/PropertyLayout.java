@@ -228,8 +228,10 @@ public @interface PropertyLayout {
      * In the domain object, itself, however, the value stored is 1-jun-2013.
      * </p>
      *
+     * @deprecated instead use {@link ValueSemantics#dateRenderAdjustDays()}
      * @see ParameterLayout#renderDay()
      */
+    @Deprecated(forRemoval = true, since = "2.0.0-M7")
     RenderDay renderDay()
             default RenderDay.NOT_SPECIFIED;
 

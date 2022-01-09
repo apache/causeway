@@ -238,7 +238,7 @@ class DomainModelTest_usingGoodDomain {
             assertEquals("inherited icon", titleService.iconNameOf(instance));
 
             val domainObject = ManagedObject.of(spec, instance);
-            assertEquals("inherited title", titleFacet.title(domainObject));
+            assertEquals("inherited title", domainObject.titleString());
             assertEquals("inherited icon", iconFacet.iconName(domainObject));
         }
 

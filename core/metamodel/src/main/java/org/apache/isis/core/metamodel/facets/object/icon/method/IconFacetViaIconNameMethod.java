@@ -60,7 +60,7 @@ implements HasImperativeAspect {
 
     @Override
     public String iconName(final ManagedObject domainObject) {
-        return  imperativeAspect.eval(domainObject, (String)null);
+        return imperativeAspect.eval(domainObject, (String)null);
     }
 
     @Override

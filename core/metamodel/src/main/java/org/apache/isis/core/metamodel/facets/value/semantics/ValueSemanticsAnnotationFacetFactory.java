@@ -140,6 +140,9 @@ extends FacetFactoryAbstract {
                 TimeFormatPrecisionFacetFromValueSemanticsAnnotation
                 .create(valueSemanticsIfAny, facetHolder));
 
+        addFacetIfPresent(
+                DateRenderAdjustFacetFromValueSemanticsAnnotation
+                .create(valueSemanticsIfAny, facetHolder));
     }
 
 }

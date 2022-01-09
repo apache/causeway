@@ -16,18 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.paged.annotation;
+package org.apache.isis.core.metamodel.facets.object.ident.title;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.paged.PagedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-/**
- * @deprecated
- */
-@Deprecated
-public class PagedFacetForPagedAnnotationOnType extends PagedFacetAbstract {
+final class _TitleFacetUtil {
 
-    public PagedFacetForPagedAnnotationOnType(FacetHolder holder, int value) {
-        super(value, holder);
+    static String title(final TitleFacet titleFacet, final ManagedObject targetAdapter) {
+        return titleFacet.title(TitleRenderRequest.builder()
+                .object(targetAdapter)
+                .build());
     }
+
 }

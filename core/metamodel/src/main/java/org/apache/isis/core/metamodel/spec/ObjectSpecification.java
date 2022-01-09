@@ -95,7 +95,6 @@ extends
     ObjectActionContainer,
     ObjectAssociationContainer,
     Hierarchical,
-    DefaultProvider,
     HasLogicalType {
 
     final class Comparators{

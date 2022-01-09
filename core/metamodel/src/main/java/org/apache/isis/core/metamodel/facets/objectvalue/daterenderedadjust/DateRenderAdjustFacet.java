@@ -16,15 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.spec;
+package org.apache.isis.core.metamodel.facets.objectvalue.daterenderedadjust;
 
-public interface DefaultProvider {
+import org.apache.isis.applib.annotations.ValueSemantics;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+
+/**
+ * The amount of days to adjust a date by when rendered.
+ *
+ * <p>
+ * Intended to be used by the viewer as a rendering hint.
+ *
+ * <p>
+ * In the standard Apache Isis Programming Model, corresponds to the
+ * {@link ValueSemantics#dateRenderAdjustDays()} annotation.
+ *
+ * @since 2.0 - replacing RenderedAdjustedFacet from 1.x and 2.0.0-M6
+ *
+ */
+public interface DateRenderAdjustFacet extends Facet {
 
     /**
-     * Default value to be provided for properties or parameters that are not
-     * declared as <tt>@Optional</tt> but where the UI has not (yet) provided a
-     * value.
+     * The amount of days to adjust a date by when rendered.
      */
-    Object getDefaultValue();
+    int getDateRenderAdjustDays();
 
 }

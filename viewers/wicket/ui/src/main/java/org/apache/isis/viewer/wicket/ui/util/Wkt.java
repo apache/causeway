@@ -330,7 +330,7 @@ public class Wkt {
 
     // -- IMAGE
 
-    private Image imageCachable(final String id, final ResourceReference imageResource) {
+    public Image imageCachable(final String id, final ResourceReference imageResource) {
         return new Image(id, imageResource) {
             private static final long serialVersionUID = 1L;
             @Override protected boolean shouldAddAntiCacheParameter() { return false; }

@@ -23,11 +23,9 @@ import java.util.Optional;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.ResourceReference;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
@@ -59,11 +57,6 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     private static final String ID_ENTITY_LINK = "entityLink";
     private static final String ID_ENTITY_TITLE = "entityTitle";
     private static final String ID_ENTITY_ICON = "entityImage";
-
-    @SuppressWarnings("unused")
-    private Label label;
-    @SuppressWarnings("unused")
-    private Image image;
 
     public EntityIconAndTitlePanel(
             final String id,
@@ -124,7 +117,8 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             final String iconName = spec.getIconName(adapterIfAny);
             final CssClassFaFactory cssClassFaFactory = spec.getCssClassFaFactory().orElse(null);
             if (iconName != null || cssClassFaFactory == null) {
-                link.addOrReplace(this.image = newImage(ID_ENTITY_ICON, adapterIfAny));
+                Wkt.imageAddCachable(link, ID_ENTITY_ICON,
+                                getImageResourceCache().resourceReferenceFor(adapterIfAny));
                 Components.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
             } else {
                 Label dummy = Wkt.labelAdd(link, ID_ENTITY_FONT_AWESOME, "");
@@ -133,7 +127,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             }
 
             final String title = determineTitle();
-            this.label = Wkt.labelAdd(link, ID_ENTITY_TITLE, titleAbbreviated(title));
+            Wkt.labelAdd(link, ID_ENTITY_TITLE, titleAbbreviated(title));
 
             String entityTypeName = determineFriendlyType() // from actual underlying model
                     .orElseGet(adapterIfAny.getSpecification()::getSingularName); // not sure if this code path is ever reached
@@ -212,22 +206,8 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         return titleString.length();
     }
 
-    protected Image newImage(final String id, final ManagedObject adapter) {
-        final ResourceReference imageResource = getImageResourceCache().resourceReferenceFor(adapter);
-
-        final Image image = new Image(id, imageResource) {
-            private static final long serialVersionUID = 1L;
-            @Override
-            protected boolean shouldAddAntiCacheParameter() {
-                return false;
-            }
-        };
-        return image;
-    }
-
     private boolean isContextAdapter(final ManagedObject other) {
-        final ObjectAdapterModel model = getModel();
-        return model.isContextAdapter(other);
+        return getModel().isContextAdapter(other);
     }
 
     static String abbreviated(final String str, final int maxLength) {

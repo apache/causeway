@@ -55,7 +55,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacet;
-import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
@@ -172,9 +171,7 @@ public class DomainObjectTesterFactory {
             assertEquals(expectedResult,
                     super.objectSpecification.getTitleService().titleOf(vm.getPojo()));
             assertEquals(expectedResult,
-                    super.objectSpecification.lookupFacet(TitleFacet.class)
-                    .map(titleFacet->titleFacet.title(vm))
-                    .orElse(null));
+                    vm.titleString());
         }
 
         public void assertIcon(final @Nullable String expectedResult) {

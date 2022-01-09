@@ -20,10 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-
-import org.apache.isis.applib.annotations.RenderDay;
 
 public class PropertyLayoutData_renderedAsDayBefore_Test {
 
@@ -32,27 +29,27 @@ public class PropertyLayoutData_renderedAsDayBefore_Test {
     public void setUp() throws Exception {
         data = new PropertyLayoutData();
 
-        assertThat(data.getRenderDay(), is(nullValue()));
+        assertThat(data.getDateRenderAdjustDays(), is(0));
     }
 
     @Test
     public void ignore_from_setRenderedAsDayBefore_once_set_to_DAY_BEFORE() throws Exception {
 
         // given
-        data.setRenderDay(RenderDay.AS_DAY_BEFORE);
+        data.setDateRenderAdjustDays(-1);
 
         // then (ignored)
-        assertThat(data.getRenderDay(), is(RenderDay.AS_DAY_BEFORE));
+        assertThat(data.getDateRenderAdjustDays(), is(-1));
     }
 
     @Test
     public void ignore_from_setRenderedAsDayBefore_once_set_to_DAY() throws Exception {
 
         // given
-        data.setRenderDay(RenderDay.AS_DAY);
+        data.setDateRenderAdjustDays(0);
 
         // then (ignored)
-        assertThat(data.getRenderDay(), is(RenderDay.AS_DAY));
+        assertThat(data.getDateRenderAdjustDays(), is(0));
     }
 
 }

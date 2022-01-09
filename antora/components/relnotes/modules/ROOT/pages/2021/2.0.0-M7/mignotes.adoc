@@ -24,6 +24,12 @@ from v1 to v2 using Spring's `@AliasFor` annotation.
 but it has come up as a requirement to ease migration for existing projects 
 from v1 to v2 using Spring's `@AliasFor` annotation 
 
+| `@ParameterLayout(renderDay=...)` deprecated for removal
+| use `@ValueSemantics(dateRenderAdjustDays=...)` instead
+
+| `@PropertyLayout(renderDay=...)` deprecated for removal
+| use `@ValueSemantics(dateRenderAdjustDays=...)` instead
+
 | We provided introspection control via global config option 
 `isis.core.meta-model.annotation.action.explicit=true/false`.
 | Use `@DomainObject(introspection=...)` instead ... 

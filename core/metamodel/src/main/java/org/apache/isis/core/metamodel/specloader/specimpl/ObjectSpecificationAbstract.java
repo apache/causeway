@@ -575,18 +575,6 @@ implements ObjectSpecification {
         }
     }
 
-
-    // -- DefaultValue - unused
-    /**
-     * @deprecated  - never called.
-     * @return - always returns <tt>null</tt>
-     */
-    @Deprecated
-    @Override
-    public Object getDefaultValue() {
-        return null;
-    }
-
     @Override
     public ObjectTitleContext createTitleInteractionContext(
             final ManagedObject targetObjectAdapter,

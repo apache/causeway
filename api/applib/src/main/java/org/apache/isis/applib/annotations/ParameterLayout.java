@@ -139,10 +139,13 @@ public @interface ParameterLayout {
      * In the domain object, itself, however, the value stored is 1-jun-2013.
      * </p>
      *
+     * @deprecated instead use {@link ValueSemantics#dateRenderAdjustDays()}
      * @see PropertyLayout#renderDay()
      */
-    RenderDay renderDay()
-            default RenderDay.NOT_SPECIFIED;
+   @Deprecated(forRemoval = true, since = "2.0.0-M7")
+   RenderDay renderDay()
+           default RenderDay.NOT_SPECIFIED;
+
 
     /**
      * The typical entry length of a field, use to determine the optimum width for display

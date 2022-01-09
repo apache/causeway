@@ -30,7 +30,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotations.LabelPosition;
 import org.apache.isis.applib.annotations.PromptStyle;
-import org.apache.isis.applib.annotations.RenderDay;
 import org.apache.isis.applib.annotations.Repainting;
 import org.apache.isis.applib.annotations.Where;
 import org.apache.isis.applib.layout.links.Link;
@@ -175,15 +174,15 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
         this.promptStyle = promptStyle;
     }
 
-    private RenderDay renderDay;
+    private int dateRenderAdjustDays;
 
     @XmlAttribute(required = false)
-    public RenderDay getRenderDay() {
-        return renderDay;
+    public int getDateRenderAdjustDays() {
+        return dateRenderAdjustDays;
     }
 
-    public void setRenderDay(final RenderDay renderDay) {
-        this.renderDay = renderDay;
+    public void setDateRenderAdjustDays(final int dateRenderAdjustDays) {
+        this.dateRenderAdjustDays = dateRenderAdjustDays;
     }
 
 

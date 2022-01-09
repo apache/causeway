@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.ident.title.annotation;
+package org.apache.isis.core.metamodel.facets.object.ident.title;
 
 import org.jmock.Expectations;
 import org.jmock.Sequence;
@@ -115,7 +115,7 @@ public class TitleFacetViaTitleAnnotationTest {
             }
         });
 
-        final String title = facet.title(mockManagedObject);
+        final String title = _TitleFacetUtil.title(facet, mockManagedObject);
         assertThat(title, is("Normal Domain Object"));
     }
 
@@ -140,7 +140,7 @@ public class TitleFacetViaTitleAnnotationTest {
             }
         });
 
-        final String title = facet.title(mockManagedObject);
+        final String title = _TitleFacetUtil.title(facet, mockManagedObject);
         assertThat(title, is("Failed Title"));
     }
 

@@ -23,10 +23,12 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * How to render days.
  * @since 1.x {@index}
+ * @deprecated
  */
 @XmlType(
         namespace = "http://isis.apache.org/applib/layout/component"
         )
+@Deprecated(forRemoval = true, since = "2.0.0-M7")
 public enum RenderDay {
 
     AS_DAY,

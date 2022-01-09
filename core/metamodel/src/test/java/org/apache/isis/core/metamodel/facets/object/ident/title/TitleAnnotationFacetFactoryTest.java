@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.ident.title.annotation;
+package org.apache.isis.core.metamodel.facets.object.ident.title;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -166,7 +166,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
             ignoring(mockStringSpec).assertPojoCompatible(with(any(String.class)));
 
         }});
-        final String title = titleFacetViaTitleAnnotation.title(mockObjectAdapter);
+        final String title = _TitleFacetUtil.title(titleFacetViaTitleAnnotation, mockObjectAdapter);
         assertThat(title, is("titleElement1. titleElement3,titleElement2"));
     }
 

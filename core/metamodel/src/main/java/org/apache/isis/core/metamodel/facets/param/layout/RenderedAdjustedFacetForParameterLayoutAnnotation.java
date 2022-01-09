@@ -23,13 +23,14 @@ import java.util.Optional;
 import org.apache.isis.applib.annotations.ParameterLayout;
 import org.apache.isis.applib.annotations.RenderDay;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacetAbstract;
 
+@Deprecated(forRemoval = true, since = "2.0.0-M7")
 public class RenderedAdjustedFacetForParameterLayoutAnnotation
-extends RenderedAdjustedFacetAbstract {
+extends DateRenderAdjustFacetAbstract {
 
-    public static Optional<RenderedAdjustedFacet> create(
+    public static Optional<DateRenderAdjustFacet> create(
             final Optional<ParameterLayout> parameterLayoutIfAny,
             final FacetHolder holder) {
 

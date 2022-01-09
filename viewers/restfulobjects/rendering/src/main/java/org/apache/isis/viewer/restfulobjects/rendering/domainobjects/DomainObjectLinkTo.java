@@ -50,7 +50,12 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
 
     @Override
     public LinkBuilder builder(final Rel rel) {
-        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(resourceContext, relElseDefault(rel).getName(), RepresentationType.DOMAIN_OBJECT, linkRef(new StringBuilder()).toString());
+        final LinkBuilder linkBuilder = LinkBuilder
+                .newBuilder(
+                        resourceContext,
+                        relElseDefault(rel).getName(),
+                        RepresentationType.DOMAIN_OBJECT,
+                        linkRef(new StringBuilder()).toString());
         linkBuilder.withTitle(objectAdapter.titleString());
         return linkBuilder;
     }
@@ -58,7 +63,7 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
     /**
      * hook method
      */
-    protected StringBuilder linkRef(StringBuilder buf) {
+    protected StringBuilder linkRef(final StringBuilder buf) {
         String objectRef = ManagedObjects.stringifyElseFail(objectAdapter, "/");
         return buf.append("objects/").append(objectRef);
     }
@@ -92,8 +97,5 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
         final String url = buf.toString();
         return LinkBuilder.newBuilder(resourceContext, rel.andParam(memberType.getName(), objectMember.getId()), representationType, url);
     }
-
-
-
 
 }

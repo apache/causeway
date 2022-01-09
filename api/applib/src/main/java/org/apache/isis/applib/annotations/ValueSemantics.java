@@ -27,11 +27,11 @@ import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
  */
 @Inherited
 @Target({
-        ElementType.METHOD,
-        ElementType.FIELD,
-        ElementType.TYPE,
-        ElementType.PARAMETER,
-        ElementType.ANNOTATION_TYPE,
+    ElementType.METHOD,
+    ElementType.FIELD,
+    ElementType.TYPE,
+    ElementType.PARAMETER,
+    ElementType.ANNOTATION_TYPE,
 })
 @Retention(RetentionPolicy.RUNTIME)
 @Domain.Include // meta annotation, in support of meta-model validation
@@ -44,7 +44,7 @@ public @interface ValueSemantics {
      * targeted {@link ValueSemanticsProvider} bean
      */
     String provider()
-            default "";
+        default "";
 
     // -- NUMBER CONSTRAINTS
 
@@ -57,7 +57,7 @@ public @interface ValueSemantics {
      * @see Column#precision()
      */
     int maxTotalDigits()
-            default 65;
+        default 65;
 
     /**
      * If associated with a {@link Number}, the minimum number of integer digits required for
@@ -65,7 +65,7 @@ public @interface ValueSemantics {
      * default = {@code 1}
      */
     int minIntegerDigits()
-            default 1;
+        default 1;
 
     /**
      * If associated with a {@link BigDecimal}, the maximum number of fractional digits accepted
@@ -76,7 +76,7 @@ public @interface ValueSemantics {
      * @see Column#scale()
      */
     int maxFractionalDigits()
-            default 30;
+        default 30;
 
     /**
      * If associated with a {@link BigDecimal}, the minimum number of fractional digits
@@ -84,7 +84,7 @@ public @interface ValueSemantics {
      * default = {@code 0}
      */
     int minFractionalDigits()
-            default 0;
+        default 0;
 
     // -- TEMPORAL FORMATTING
 
@@ -93,14 +93,14 @@ public @interface ValueSemantics {
      * @see FormatStyle
      */
     FormatStyle dateFormatStyle()
-            default FormatStyle.MEDIUM;
+        default FormatStyle.MEDIUM;
 
     /**
      * If associated with a temporal time value, the rendering style of a localized time.
      * @see FormatStyle
      */
     FormatStyle timeFormatStyle()
-            default FormatStyle.MEDIUM;
+        default FormatStyle.MEDIUM;
 
     /**
      * If associated with a temporal time value, the time of day precision,
@@ -109,6 +109,35 @@ public @interface ValueSemantics {
      * @see TimePrecision
      */
     TimePrecision timePrecision()
-            default TimePrecision.SECOND;
+        default TimePrecision.SECOND;
 
+    /**
+     * If associated with a date or date-time value,
+     * instructs whether the date should be rendered as <i>n</i> days
+     * after the actually stored date.
+     * For negative <i>n</i> its days before respectively.
+     *
+     * <p>
+     * This is intended to be used so that an exclusive end date of an interval
+     * can be rendered as 1 day before the actual value stored.
+     * </p>
+     *
+     * <p>
+     * For example:
+     * </p>
+     * <pre>
+     * public LocalDate getStartDate() { ... }
+     *
+     * &#64;ValueSemantics(dateRenderAdjustDays = -1)
+     * public LocalDate getEndDate() { ... }
+     * </pre>
+     *
+     * <p>
+     * Here, the interval of the [1-may-2013,1-jun-2013) would be rendered as the dates
+     * 1-may-2013 for the start date but using 31-may-2013 (the day before) for the end date.  What is stored
+     * In the domain object, itself, however, the value stored is 1-jun-2013.
+     * </p>
+     */
+    int dateRenderAdjustDays()
+        default 0;
 }

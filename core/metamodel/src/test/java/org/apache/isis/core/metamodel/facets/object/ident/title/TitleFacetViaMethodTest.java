@@ -21,35 +21,27 @@ package org.apache.isis.core.metamodel.facets.object.ident.title;
 import java.lang.reflect.Method;
 
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.After;
+import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-@RunWith(JMock.class)
-public class TitleFacetViaMethodTest {
-
-    private final Mockery mockery = new JUnit4Mockery();
+public class TitleFacetViaMethodTest
+extends AbstractFacetFactoryJUnit4TestCase {
 
     private TitleFacetViaTitleMethod facet;
-    private FacetHolder mockFacetHolder;
 
-    private ManagedObject mockOwningAdapter;
+    @Mock private ManagedObject mockOwningAdapter;
 
     private DomainObjectWithProblemInItsTitleMethod pojo;
-
     private MetaModelContext metaModelContext;
 
     public static class DomainObjectWithProblemInItsTitleMethod {
@@ -65,34 +57,28 @@ public class TitleFacetViaMethodTest {
                 .build();
 
         pojo = new DomainObjectWithProblemInItsTitleMethod();
-        mockFacetHolder = mockery.mock(FacetHolder.class);
-        mockOwningAdapter = mockery.mock(ManagedObject.class);
+        //mockFacetHolder = mockery.mock(FacetHolder.class);
+        //mockOwningAdapter = mockery.mock(ManagedObject.class);
         final Method iconNameMethod = DomainObjectWithProblemInItsTitleMethod.class.getMethod("title");
         facet = (TitleFacetViaTitleMethod) TitleFacetViaTitleMethod
                 .create(iconNameMethod, mockFacetHolder)
                 .orElse(null);
 
 
-        mockery.checking(new Expectations() {
-            {
+        context.checking(new Expectations() {{
 
-                allowing(mockFacetHolder).getMetaModelContext();
-                will(returnValue(metaModelContext));
+            allowing(mockFacetHolder).getMetaModelContext();
+            will(returnValue(metaModelContext));
 
-                allowing(mockOwningAdapter).getPojo();
-                will(returnValue(pojo));
-            }
-        });
-    }
+            allowing(mockOwningAdapter).getPojo();
+            will(returnValue(pojo));
 
-    @After
-    public void tearDown() throws Exception {
-        facet = null;
+        }});
     }
 
     @Test
     public void testTitleThrowsException() {
-        final String title = facet.title(mockOwningAdapter);
+        final String title = _TitleFacetUtil.title(facet, mockOwningAdapter);
         assertThat(title, is("Failed Title"));
     }
 

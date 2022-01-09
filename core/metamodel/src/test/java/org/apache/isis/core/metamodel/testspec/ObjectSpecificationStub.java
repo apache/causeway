@@ -260,11 +260,6 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Object getDefaultValue() {
-        return null;
-    }
-
-    @Override
     public Identifier getFeatureIdentifier() {
         return Identifier.classIdentifier(LogicalType.fqcn(correspondingClass));
     }

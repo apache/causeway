@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.facets.object.title;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * Mechanism for obtaining the title of an instance of a class, used to label
@@ -38,12 +37,5 @@ public interface TitleFacet extends Facet {
      * Provide a title for the target object.
      */
     String title(TitleRenderRequest titleRenderRequest);
-
-    @Deprecated
-    default String title(final ManagedObject targetAdapter) {
-        return title(TitleRenderRequest.builder()
-                .object(targetAdapter)
-                .build());
-    }
 
 }

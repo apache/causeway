@@ -115,7 +115,6 @@ extends TitleFacetAbstract {
             }
         }
 
-
         final TranslatableString translatedTitle = titleUiEvent.getTranslatableTitle();
         if(translatedTitle != null) {
             return translatedTitle.translate(translationService, translationContext);

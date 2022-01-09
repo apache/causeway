@@ -16,32 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.properties.propertylayout;
+package org.apache.isis.core.metamodel.facets.value.semantics;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.layout.component.PropertyLayoutData;
+import org.apache.isis.applib.annotations.ValueSemantics;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacetAbstract;
 
-public class RenderedAdjustedFacetForPropertyXml
+public class DateRenderAdjustFacetFromValueSemanticsAnnotation
 extends DateRenderAdjustFacetAbstract {
 
     public static Optional<DateRenderAdjustFacet> create(
-            final PropertyLayoutData propertyLayout,
+            final Optional<ValueSemantics> valueSemanticsIfAny,
             final FacetHolder holder) {
-        if(propertyLayout == null) {
-            return Optional.empty();
-        }
-        final int adjustByDays = propertyLayout.getDateRenderAdjustDays();
-        return adjustByDays != 0
-                        ? Optional.of(new RenderedAdjustedFacetForPropertyXml(adjustByDays, holder))
-                        : Optional.empty();
+
+        return valueSemanticsIfAny
+        .map(ValueSemantics::dateRenderAdjustDays)
+        .filter(adjustBy -> adjustBy != 0)
+        .map(adjustBy -> new DateRenderAdjustFacetFromValueSemanticsAnnotation(adjustBy, holder));
     }
 
-    private RenderedAdjustedFacetForPropertyXml(final int adjustByDays, final FacetHolder holder) {
-        super(adjustByDays, holder);
+    private DateRenderAdjustFacetFromValueSemanticsAnnotation(final int adjustBy, final FacetHolder holder) {
+        super(adjustBy, holder);
     }
 
 }

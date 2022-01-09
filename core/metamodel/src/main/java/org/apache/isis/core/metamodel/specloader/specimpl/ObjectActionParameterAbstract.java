@@ -30,7 +30,6 @@ import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -377,29 +376,6 @@ implements
 
         val validResult = InteractionUtils.isValidResult(this, validityContext);
         return validResult.createConsent();
-    }
-
-    @Override @Deprecated
-    public String isValid(
-            final InteractionHead head,
-            final ManagedObject proposedValue,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(proposedValue)) {
-            return null;
-        }
-
-        val argumentAdapters = arguments(proposedValue);
-        val validityContext = createProposedArgumentInteractionContext(
-                head, argumentAdapters, getParameterIndex(), interactionInitiatedBy);
-
-        final InteractionResultSet buf = new InteractionResultSet();
-        InteractionUtils.isValidResultSet(this, validityContext, buf);
-        if (buf.isVetoed()) {
-            return buf.getInteractionResult().getReason();
-        }
-        return null;
-
     }
 
     /**
