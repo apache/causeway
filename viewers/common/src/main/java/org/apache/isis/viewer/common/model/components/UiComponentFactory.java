@@ -31,7 +31,6 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedFeature;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
@@ -140,7 +139,7 @@ public interface UiComponentFactory<B, C> {
             return ((ManagedProperty)managedFeature).checkUsability().isPresent();
         }
 
-        @Deprecated
+        @Deprecated // used by Vaadin Viewer - however, we have bindable models to use instead
         public <T> Optional<T> getFeatureValue(final @Nullable Class<T> type) {
             val managedProperty = (ManagedProperty)managedFeature;
             //TODO do a type check before the cast, so we can throw a more detailed exception
@@ -149,13 +148,6 @@ public interface UiComponentFactory<B, C> {
                     .filter(_Predicates.not(ManagedObjects::isNullOrUnspecifiedOrEmpty))
                     .map(ManagedObject::getPojo)
                     .map(type::cast);
-        }
-
-        @Deprecated
-        public Optional<InteractionVeto> setFeatureValue(final Object proposedNewValuePojo) {
-            //TODO we are loosing any fields that are cached within ManagedObject
-            val proposedNewValue = ManagedObject.of(getFeatureTypeSpec(), proposedNewValuePojo);
-            return ((ManagedProperty)managedFeature).modifyProperty(proposedNewValue);
         }
 
     }
