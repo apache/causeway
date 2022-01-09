@@ -112,6 +112,11 @@ public @interface ValueSemantics {
         default TimePrecision.SECOND;
 
     /**
+     * eg. &#64;ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)
+     */
+    public final static int AS_DAY_BEFORE = -1;
+
+    /**
      * If associated with a date or date-time value,
      * instructs whether the date should be rendered as <i>n</i> days
      * after the actually stored date.
@@ -128,7 +133,7 @@ public @interface ValueSemantics {
      * <pre>
      * public LocalDate getStartDate() { ... }
      *
-     * &#64;ValueSemantics(dateRenderAdjustDays = -1)
+     * &#64;ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)
      * public LocalDate getEndDate() { ... }
      * </pre>
      *

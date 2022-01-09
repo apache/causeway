@@ -12,6 +12,7 @@ import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
@@ -229,6 +230,18 @@ extends AbstractFacetFactoryTest {
 
     // -- TEMPORAL FORMAT STYLE
 
+    public void testDateAdjustPickedUpOnProperty() {
+        // given
+        class Order {
+            @ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)
+            public LocalDateTime getDateTime() { return null; }
+        }
+        // when
+        processMethod(newFacetFactory(), Order.class, "getDateTime", _Constants.emptyClasses);
+        // then
+        assertDateRenderAdjustDays(facetedMethod, -1);
+    }
+
     public void testDateFormatStylePickedUpOnProperty() {
         // given
         class Order {
@@ -318,6 +331,13 @@ extends AbstractFacetFactoryTest {
             assertTrue(facet instanceof MaxFractionalDigitsFacetFromJavaxValidationDigitsAnnotation);
             assertThat(facet.getMaxFractionalDigits(), is(maxFractionalDigits));
         }
+    }
+
+    private void assertDateRenderAdjustDays(
+            final FacetedMethod facetedMethod, final int adjustDays) {
+        final DateRenderAdjustFacet facet = facetedMethod.getFacet(DateRenderAdjustFacet.class);
+        assertNotNull(facet);
+        assertThat(facet.getDateRenderAdjustDays(), is(adjustDays));
     }
 
     private void assertDateFormatStyle(
