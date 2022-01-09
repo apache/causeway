@@ -22,17 +22,12 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> 
- * represents a check as to whether a particular argument for an action is disabled
+ * Represents a check as to whether a particular argument for an action is disabled
  * or not.
- * 
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
  * argument's parameter should be disabled; otherwise the parameter can be entered.
- * 
- * @deprecated
  */
-@Deprecated
 public class ActionArgumentUsabilityEvent extends UsabilityEvent {
 
     private final Object[] args;
@@ -59,7 +54,8 @@ public class ActionArgumentUsabilityEvent extends UsabilityEvent {
 
     @Override
     public String getReasonMessage() {
-        return String.format("Invalid action argument. Position: %s. Reason: %s", this.getPosition(), super.getReasonMessage());
+        return String.format("Invalid action argument. Position: %s. Reason: %s",
+                this.getPosition(), super.getReasonMessage());
     }
 
 }

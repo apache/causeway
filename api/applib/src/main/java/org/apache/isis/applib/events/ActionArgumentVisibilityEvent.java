@@ -22,16 +22,12 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a particular parameter for an action is visible
+ * Check as to whether a particular parameter for an action is visible
  * or not.
- * 
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
  * argument's parameter should be hidden; otherwise the parameter is shown.
- * 
- * @deprecated
  */
-@Deprecated
 public class ActionArgumentVisibilityEvent extends VisibilityEvent {
 
     private final Object[] args;
@@ -58,7 +54,8 @@ public class ActionArgumentVisibilityEvent extends VisibilityEvent {
 
     @Override
     public String getReasonMessage() {
-        return String.format("Invalid action argument. Position: %s. Reason: %s", this.getPosition(), super.getReasonMessage());
+        return String.format("Invalid action argument. Position: %s. Reason: %s",
+                this.getPosition(), super.getReasonMessage());
     }
 
 }

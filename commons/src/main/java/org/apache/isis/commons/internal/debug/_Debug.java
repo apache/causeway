@@ -43,7 +43,7 @@ import lombok.experimental.UtilityClass;
  * to indicate that any call to this class is temporary for debugging purposes
  * and should be removed ultimately
  */
-@Deprecated // do not remove, see java-doc
+@Deprecated(forRemoval = false) // do not remove, see java-doc
 @UtilityClass
 public class _Debug {
 

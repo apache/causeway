@@ -108,7 +108,7 @@ public interface VirtualClock extends Serializable {
     /**
      * @deprecated convert use java.time variant instead (Joda Time is deprecated)
      */
-    @Deprecated
+    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
     static VirtualClock nowAt(@NonNull final org.joda.time.LocalDate virtualNow) {
         return nowAt(virtualNow.toDate());
     }
@@ -116,7 +116,7 @@ public interface VirtualClock extends Serializable {
     /**
      * @deprecated convert use java.time variant instead (Joda Time is deprecated)
      */
-    @Deprecated
+    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
     static VirtualClock nowAt(@NonNull final org.joda.time.LocalDateTime virtualNow) {
         return nowAt(virtualNow.toDate());
     }
@@ -124,7 +124,7 @@ public interface VirtualClock extends Serializable {
     /**
      * @deprecated convert use java.time variant instead (Joda Time is deprecated)
      */
-    @Deprecated
+    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
     static VirtualClock nowAt(@NonNull final org.joda.time.DateTime virtualNow) {
         return nowAt(virtualNow.toDate());
     }
@@ -160,7 +160,7 @@ public interface VirtualClock extends Serializable {
     /**
      * @deprecated use java.time variant instead (Joda Time is deprecated)
      */
-    @Deprecated
+    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
     static VirtualClock frozenAt(@NonNull final org.joda.time.LocalDate frozenAt) {
         return frozenAt(frozenAt.toDate());
     }
@@ -168,7 +168,7 @@ public interface VirtualClock extends Serializable {
     /**
      * @deprecated use java.time variant instead (Joda Time is deprecated)
      */
-    @Deprecated
+    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
     static VirtualClock frozenAt(@NonNull final org.joda.time.LocalDateTime frozenAt) {
         return frozenAt(frozenAt.toDate());
     }
@@ -176,7 +176,7 @@ public interface VirtualClock extends Serializable {
     /**
      * @deprecated use java.time variant instead (Joda Time is deprecated)
      */
-    @Deprecated
+    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
     static VirtualClock frozenAt(@NonNull final org.joda.time.DateTime frozenAt) {
         return frozenAt(frozenAt.toDate());
     }
@@ -295,7 +295,7 @@ public interface VirtualClock extends Serializable {
      * @see #nowAsJodaDateTime()
      * @deprecated use java.time variant instead (Joda Time is deprecated)
      */
-    @Deprecated
+    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
     default org.joda.time.DateTime nowAsJodaDateTime(final @NonNull ZoneId zoneId) {
         return new org.joda.time.DateTime(nowAsEpochMilli(), DateTimeZone.forID(zoneId.getId()));
     }
@@ -308,7 +308,7 @@ public interface VirtualClock extends Serializable {
      * @see #nowAsJodaDateTime(ZoneId)
      * @deprecated use java.time variant instead (Joda Time is deprecated)
      */
-    @Deprecated
+    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
     default org.joda.time.DateTime nowAsJodaDateTime() {
         return nowAsJodaDateTime(ZoneId.systemDefault());
     }
@@ -322,7 +322,7 @@ public interface VirtualClock extends Serializable {
      *//**
      * @deprecated use java.time variant instead (Joda Time is deprecated)
      */
-    @Deprecated
+    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
     default org.joda.time.LocalDateTime nowAsJodaLocalDateTime(final @NonNull ZoneId zoneId) {
         return nowAsJodaDateTime(zoneId).toLocalDateTime();
     }
@@ -335,7 +335,7 @@ public interface VirtualClock extends Serializable {
      * @see #nowAsJodaDateTime(ZoneId)
      * @deprecated use java.time variant instead (Joda Time is deprecated)
      */
-    @Deprecated
+    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
     default org.joda.time.LocalDateTime nowAsJodaLocalDateTime() {
         return nowAsJodaDateTime().toLocalDateTime();
     }
@@ -348,7 +348,7 @@ public interface VirtualClock extends Serializable {
      * @see #nowAsJodaDateTime()
      * @deprecated use java.time variant instead (Joda Time is deprecated)
      */
-    @Deprecated
+    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
     default org.joda.time.LocalDate nowAsJodaLocalDate(final @NonNull ZoneId zoneId) {
         return new org.joda.time.LocalDate(nowAsEpochMilli(), DateTimeZone.forID(zoneId.getId()));
     }
@@ -361,7 +361,7 @@ public interface VirtualClock extends Serializable {
      * @see #nowAsJodaLocalDate(ZoneId)
      * @deprecated use java.time variant instead (Joda Time is deprecated)
      */
-    @Deprecated
+    @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
     default org.joda.time.LocalDate nowAsJodaLocalDate() {
         val zoneId = ZoneId.systemDefault();
         return nowAsJodaLocalDate(zoneId);
