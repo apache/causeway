@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.objectmanager;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
 
@@ -39,6 +40,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -120,11 +122,27 @@ public interface ObjectManager {
         boolean isMemoize() { return this == MEMOIZE_BOOKMARK;}
     }
 
+    /**
+     * Not suitable for adapting a non-scalar. Auto-memoizes the ManagedObject's bookmark, if applicable.
+     */
     public default ManagedObject adapt(final @Nullable Object pojo) {
-        return adapt(pojo, EntityAdaptingMode.MEMOIZE_BOOKMARK);
+        return adapt(pojo, ()->specForType(Object.class).orElseThrow(), EntityAdaptingMode.MEMOIZE_BOOKMARK);
     }
 
+    /**
+     * Not suitable for adapting a non-scalar.
+     */
     public default ManagedObject adapt(final @Nullable Object pojo, final EntityAdaptingMode bookmarking) {
+        return adapt(pojo, ()->specForType(Object.class).orElseThrow(), bookmarking);
+    }
+
+    /**
+     * Suitable for adapting a non-scalar.
+     */
+    public default ManagedObject adapt(
+            final @Nullable Object pojo,
+            final @NonNull Supplier<ObjectSpecification> fallbackElementType,
+            final EntityAdaptingMode bookmarking) {
         if(pojo==null) {
             return ManagedObject.unspecified();
         }
@@ -138,7 +156,8 @@ public interface ObjectManager {
                         && bookmarking.isMemoize()
                         ? memoizeEntityBookmark(spec, pojo)
                         : ManagedObject.of(spec, pojo)
-                : PackedManagedObject.pack(spec.getElementSpecification().orElse(spec),
+                : PackedManagedObject.pack(
+                        spec.getElementSpecification().orElseGet(fallbackElementType),
                         _NullSafe.streamAutodetect(pojo)
                         .map(element->adapt(element, bookmarking))
                         .collect(Can.toCan()));

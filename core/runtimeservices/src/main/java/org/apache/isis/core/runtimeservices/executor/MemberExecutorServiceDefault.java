@@ -56,6 +56,7 @@ import org.apache.isis.core.metamodel.facets.members.publish.execution.Execution
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterOrClearFacetForDomainEventAbstract.EditingVariant;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager.EntityAdaptingMode;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
@@ -166,7 +167,8 @@ implements MemberExecutorService {
         }
 
         val returnedPojo = priorExecution.getReturned();
-        val returnedAdapter = objectManager.adapt(returnedPojo);
+        val returnedAdapter = objectManager.adapt(
+                returnedPojo, owningAction::getElementType, EntityAdaptingMode.MEMOIZE_BOOKMARK);
 
         // sync DTO with result
         interactionDtoFactory
@@ -296,42 +298,19 @@ implements MemberExecutorService {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
-            return null;
-        }
-
-        final boolean filterForVisibility = getConfiguration().getCore().getMetaModel().isFilterVisibility();
-        if (!filterForVisibility) {
             return resultAdapter;
         }
 
-        if(resultAdapter instanceof PackedManagedObject) {
+        val isFilterForVisibility = getConfiguration().getCore().getMetaModel().isFilterVisibility();
+        if (!isFilterForVisibility
+                || resultAdapter instanceof PackedManagedObject) {
             return resultAdapter;
         }
 
-//        final Object result = resultAdapter.getPojo();
-//
-//        if(result instanceof Collection || result.getClass().isArray()) {
-//
-//            val requiredContainerType = method.getReturnType();
-//
-//            val autofittedObjectContainer = ManagedObjects.VisibilityUtil
-//                    .visiblePojosAutofit(resultAdapter, interactionInitiatedBy, requiredContainerType);
-//
-//            if (autofittedObjectContainer != null) {
-//                return getObjectManager().adapt(autofittedObjectContainer);
-//            }
-//
-//            // would be null if unable to take a copy (unrecognized return type)
-//            // fallback to returning the original adapter, without filtering for visibility
-//
-//            return resultAdapter;
-//
-//        } else {
-            boolean visible = ManagedObjects.VisibilityUtil.isVisible(resultAdapter, interactionInitiatedBy);
-            return visible ? resultAdapter : null;
-//        }
+        val isVisible = ManagedObjects.VisibilityUtil.isVisible(resultAdapter, interactionInitiatedBy);
+        return isVisible
+                ? resultAdapter
+                : null;
     }
-
-
 
 }

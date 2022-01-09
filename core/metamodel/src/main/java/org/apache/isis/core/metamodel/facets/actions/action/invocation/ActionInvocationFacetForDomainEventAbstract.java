@@ -127,14 +127,16 @@ implements ImperativeFacet {
 
         val method = methods.getFirstOrFail();
 
-        return getMemberExecutor().invokeAction(
-                owningAction,
-                head,
-                argumentAdapters,
-                interactionInitiatedBy,
-                method,
-                DomainEventMemberExecutor::new,
-                getFacetHolder());
+        val resultAdapter = getMemberExecutor()
+                .invokeAction(
+                    owningAction,
+                    head,
+                    argumentAdapters,
+                    interactionInitiatedBy,
+                    method,
+                    DomainEventMemberExecutor::new,
+                    getFacetHolder());
+        return resultAdapter;
     }
 
     private Object invokeMethodElseFromCache(

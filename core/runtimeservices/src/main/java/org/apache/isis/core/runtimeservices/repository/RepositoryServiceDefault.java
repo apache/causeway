@@ -25,12 +25,12 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import org.springframework.lang.Nullable;
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotations.PriorityPrecedence;
@@ -140,19 +140,19 @@ public class RepositoryServiceDefault implements RepositoryService {
     }
 
     @Override
-    public <T> List<T> allInstances(final Class<T> type, long start, long count) {
+    public <T> List<T> allInstances(final Class<T> type, final long start, final long count) {
         return allMatches(Query.<T>allInstances(type)
                 .withRange(QueryRange.of(start, count)));
     }
 
     @Override
-    public <T> List<T> allMatches(Class<T> ofType, Predicate<? super T> predicate) {
+    public <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate) {
         return allMatches(ofType, predicate, 0L, Long.MAX_VALUE);
     }
 
 
     @Override
-    public <T> List<T> allMatches(Class<T> ofType, final Predicate<? super T> predicate, long start, long count) {
+    public <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate, final long start, final long count) {
         return _NullSafe.stream(allInstances(ofType, start, count))
                 .filter(predicate)
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -178,7 +178,8 @@ public class RepositoryServiceDefault implements RepositoryService {
 
         val queryRequest = ObjectBulkLoader.Request.of(resultTypeSpec, query);
         val allMatching = objectManager.queryObjects(queryRequest);
-        return _Casts.uncheckedCast(UnwrapUtil.multipleAsList(allMatching));
+        final List<T> resultList = _Casts.uncheckedCast(UnwrapUtil.multipleAsList(allMatching));
+        return resultList;
     }
 
     @Override
@@ -214,21 +215,21 @@ public class RepositoryServiceDefault implements RepositoryService {
     }
 
     @Override
-    public <T> T refresh(T pojo) {
+    public <T> T refresh(final T pojo) {
         val managedObject = objectManager.adapt(pojo);
         objectManager.getObjectRefresher().refreshObject(managedObject);
         return _Casts.uncheckedCast(managedObject.getPojo());
     }
 
     @Override
-    public <T> T detach(T entity) {
+    public <T> T detach(final T entity) {
         val managedObject = objectManager.adapt(entity);
         val managedDetachedObject = objectManager.getObjectDetacher().detachObject(managedObject);
         return _Casts.uncheckedCast(managedDetachedObject.getPojo());
     }
 
     @Override
-    public <T> void removeAll(Class<T> cls) {
+    public <T> void removeAll(final Class<T> cls) {
         allInstances(cls).forEach(this::remove);
 
     }
@@ -241,7 +242,7 @@ public class RepositoryServiceDefault implements RepositoryService {
                 : Optional.of(instances.get(0));
     }
 
-    private Object unwrapped(Object domainObject) {
+    private Object unwrapped(final Object domainObject) {
         return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
     }
 
