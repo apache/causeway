@@ -73,7 +73,7 @@ Following configuration options changed:
 `isis.core.meta-model.introspector.policy=ANNOTATION_REQUIRED`
 
 | `isis.viewer.wicket.themes.provider` (removed)
-| implement custom `IsisWicketThemeSupport` instead
+| register custom `IsisWicketThemeSupport` with _Spring_ instead
 
 | `isis.legacy.value-types.percentage` (removed)
 | no replacement
