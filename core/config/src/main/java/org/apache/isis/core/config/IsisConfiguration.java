@@ -56,9 +56,9 @@ import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotations.ActionLayout;
 import org.apache.isis.applib.annotations.DomainObject;
 import org.apache.isis.applib.annotations.DomainService;
+import org.apache.isis.applib.annotations.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.annotations.LabelPosition;
 import org.apache.isis.applib.annotations.PromptStyle;
-import org.apache.isis.applib.annotations.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.services.i18n.Mode;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
@@ -69,7 +69,7 @@ import org.apache.isis.applib.services.userui.UserMenu;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.config.IsisConfiguration.Core;
+import org.apache.isis.core.config.IsisConfiguration.Viewer;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
@@ -2439,13 +2439,6 @@ public class IsisConfiguration {
                  */
                 @NotEmpty @NotNull
                 private String initial = "Flatly";
-
-                /**
-                 * Specifies an implementation of <code>org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupport</code>
-                 *
-                 */
-                @NotEmpty @NotNull
-                private String provider = "org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupportDefault";
 
                 /**
                  * Whether the theme chooser widget should be available in the footer.

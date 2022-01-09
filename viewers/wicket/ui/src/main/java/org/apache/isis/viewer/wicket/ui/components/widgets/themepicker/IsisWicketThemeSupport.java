@@ -20,11 +20,6 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.themepicker;
 
 import java.util.List;
 
-import org.apache.isis.commons.internal.factory._InstanceUtil;
-import org.apache.isis.core.config.IsisConfiguration;
-
-import lombok.val;
-
 import de.agilecoders.wicket.core.settings.ThemeProvider;
 
 /**
@@ -36,29 +31,5 @@ public interface IsisWicketThemeSupport {
 
     ThemeProvider getThemeProvider();
     List<String> getEnabledThemeNames();
-
-    // -- FACTORY
-
-    @Deprecated
-    static IsisWicketThemeSupport createInstanceFromConfig(IsisConfiguration configuration) {
-
-        val themeSupportClassName = configuration.getViewer().getWicket().getThemes().getProvider();
-
-        try {
-
-            val themeSupport = (IsisWicketThemeSupport) _InstanceUtil.createInstance(themeSupportClassName);
-            return themeSupport;
-
-        } catch (Exception e) {
-
-            val log = org.apache.logging.log4j.LogManager.getLogger(IsisWicketThemeSupport.class);
-            log.warn("Could not instantiate configured theme support class '{}', defaulting to '{}'",
-                    themeSupportClassName,
-                    IsisWicketThemeSupportDefault.class.getName());
-        }
-
-        return (IsisWicketThemeSupport) _InstanceUtil.createInstance(IsisWicketThemeSupportDefault.class);
-    }
-
 
 }
