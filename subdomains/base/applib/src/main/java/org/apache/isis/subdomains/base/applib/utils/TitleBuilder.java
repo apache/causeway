@@ -39,7 +39,7 @@ public class TitleBuilder {
     private final StringBuilder nameString;
     private final StringBuilder referenceString;
 
-    private static String titleFor(Object object) {
+    private static String titleFor(final Object object) {
         if (object == null) {
             return null;
         } else if (object instanceof String) {
@@ -97,7 +97,7 @@ public class TitleBuilder {
                 .toString().trim();
     }
 
-    private StringBuilder delimited(StringBuilder stringBuilder){
+    private StringBuilder delimited(final StringBuilder stringBuilder){
         return stringBuilder.length()>0 ? stringBuilder.insert(0,DELIMITER.charAt(0)).append(DELIMITER.charAt(1)) : stringBuilder;
     }
 
@@ -109,11 +109,4 @@ public class TitleBuilder {
         return this;
     }
 
-    /**
-     * @deprecated  - this method does nothing...
-     */
-    @Deprecated
-    public TitleBuilder withTupleElement(Object object) {
-        return this;
-    }
 }

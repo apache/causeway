@@ -28,7 +28,6 @@ import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFa
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.facets.properties.validating.PropertyValidateFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -37,6 +36,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
+
+import lombok.Getter;
 
 public enum MemberType {
 
@@ -59,30 +60,16 @@ public enum MemberType {
                     "invokeIdempotent", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, RestfulHttpMethod.PUT, BodyArgs.MANY, "invoke"),
                     "invoke", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, RestfulHttpMethod.POST, BodyArgs.MANY, "invoke")));
 
-    private final String urlPart;
-    private final String name;
-    private final RepresentationType representationType;
-
-    private final Map<String, MutatorSpec> mutators;
+    @Getter private final String urlPart;
+    @Getter private final String name;
+    @Getter private final RepresentationType representationType;
+    @Getter private final Map<String, MutatorSpec> mutators;
 
     private MemberType(final String urlPart, final RepresentationType representationType, final Map<String, MutatorSpec> mutators) {
         this.urlPart = urlPart;
         this.representationType = representationType;
         this.mutators = mutators;
         name = Enums.enumToCamelCase(this);
-    }
-
-    public String getUrlPart() {
-        return urlPart;
-    }
-
-    public Map<String, MutatorSpec> getMutators() {
-        return mutators;
-    }
-
-    @Deprecated //inline
-    public final ObjectSpecification specFor(final ObjectMember objectMember) {
-        return objectMember.getElementType();
     }
 
     public boolean isProperty() {
@@ -108,14 +95,6 @@ public enum MemberType {
 
     public static MemberType of(final ObjectMember objectMember) {
         return objectMember.isAction() ? ACTION : objectMember.isOneToOneAssociation() ? PROPERTY : COLLECTION;
-    }
-
-    public RepresentationType getRepresentationType() {
-        return representationType;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public static MemberType determineFrom(final ObjectFeature objectFeature) {
