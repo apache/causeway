@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -376,23 +375,6 @@ implements
 
         val validResult = InteractionUtils.isValidResult(this, validityContext);
         return validResult.createConsent();
-    }
-
-    /**
-     * TODO: this is not ideal, because we can only populate the array for
-     * single argument, rather than the entire argument set. Instead, we ought
-     * to do this in two passes, one to build up the argument set as a single
-     * unit, and then validate each in turn.
-     */
-    @Deprecated
-    private Can<ManagedObject> arguments(final ManagedObject proposedValue) {
-        final int paramCount = getAction().getParameterCount();
-        final int paramIndex = getParameterIndex();
-        val arguments = new ArrayList<ManagedObject>(paramCount);
-        for(int i=0; i<paramCount; ++i) {
-            arguments.add(i==paramIndex ? proposedValue : ManagedObject.empty(getAction().getParameterTypes().getElseFail(paramIndex)));
-        }
-        return Can.ofCollection(arguments);
     }
 
 }

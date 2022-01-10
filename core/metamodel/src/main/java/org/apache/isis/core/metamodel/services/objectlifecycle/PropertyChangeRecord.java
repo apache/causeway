@@ -28,7 +28,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 import lombok.EqualsAndHashCode;
@@ -88,11 +87,12 @@ public final class PropertyChangeRecord {
         setPreValue(getPropertyValue());
     }
 
-    @Deprecated // unreliable logic, instead the caller should know if this originates from a delete event
-    public void updatePostValue() {
-        preAndPostValue = EntityUtil.isDetachedOrRemoved(entity) //TODO[ISIS-2573] when detached, logic is wrong
-                ? preAndPostValue.withPost(PropertyValuePlaceholder.DELETED)
-                : preAndPostValue.withPost(getPropertyValue());
+    public void updatePostValueAsNonDeleted() {
+        preAndPostValue.withPost(getPropertyValue());
+    }
+
+    public void updatePostValueAsDeleted() {
+        preAndPostValue.withPost(PropertyValuePlaceholder.DELETED);
     }
 
     // -- UTILITY

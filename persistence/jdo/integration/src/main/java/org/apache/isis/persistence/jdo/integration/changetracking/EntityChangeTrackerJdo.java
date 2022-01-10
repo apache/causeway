@@ -67,10 +67,11 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleE
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
 import org.apache.isis.core.metamodel.services.objectlifecycle.HasEnlistedEntityPropertyChanges;
-import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyValuePlaceholder;
 import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
+import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyValuePlaceholder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.core.transaction.changetracking.EntityChangesPublisher;
@@ -105,7 +106,7 @@ implements
     /**
      * Contains initial change records having set the pre-values of every property of every object that was enlisted.
      */
-    private final Map<String,PropertyChangeRecord> propertyChangeRecordsById = _Maps.newLinkedHashMap();
+    private final Map<String, PropertyChangeRecord> propertyChangeRecordsById = _Maps.newLinkedHashMap();
 
     /**
      * Contains pre- and post- values of every property of every object that actually changed. A lazy snapshot,
@@ -314,7 +315,13 @@ implements
 
         val records = propertyChangeRecordsById.values().stream()
                 // set post values, which have been left empty up to now
-                .peek(PropertyChangeRecord::updatePostValue)
+                .peek(rec->{
+                    if(EntityUtil.isDetachedOrRemoved(rec.getEntity())) {
+                        rec.updatePostValueAsDeleted();
+                    } else {
+                        rec.updatePostValueAsNonDeleted();
+                    }
+                })
                 .filter(managedProperty->managedProperty.getPreAndPostValue().shouldPublish())
                 .collect(_Sets.toUnmodifiable());
 
