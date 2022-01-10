@@ -67,7 +67,7 @@ public class WrapperLongJpa
     @GeneratedValue
     private Long id;
 
-    @Title(prepend = "Long (wrapper) JDO entity: ")
+    @Title(prepend = "Long (wrapper) JPA entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Column(nullable = false)                                                   // <.>
     @Getter @Setter

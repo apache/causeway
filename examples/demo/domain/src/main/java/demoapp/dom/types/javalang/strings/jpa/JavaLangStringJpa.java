@@ -67,7 +67,7 @@ public class JavaLangStringJpa
     @GeneratedValue
     private Long id;
 
-    @Title(prepend = "StringJDO entity: ")
+    @Title(prepend = "StringJPA entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Column(nullable = false)                                                   // <.>
     @Getter @Setter

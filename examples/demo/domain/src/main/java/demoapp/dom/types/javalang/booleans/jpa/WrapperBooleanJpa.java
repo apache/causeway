@@ -67,7 +67,7 @@ public class WrapperBooleanJpa
     @GeneratedValue
     private Long id;
 
-    @Title(prepend = "Boolean (wrapper) JDO entity: ")
+    @Title(prepend = "Boolean (wrapper) JPA entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Column(nullable = false)                                                   // <.>
     @Getter @Setter

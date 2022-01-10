@@ -67,7 +67,7 @@ public class JavaSqlTimestampJpa
     @GeneratedValue
     private Long id;
 
-    @Title(prepend = "java.sql.Timestamp JDO entity: ")
+    @Title(prepend = "java.sql.Timestamp JPA entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Column(nullable = false)                                                   // <.>
     @Getter @Setter
