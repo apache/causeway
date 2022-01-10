@@ -131,7 +131,7 @@ Indicates where (in the UI) the action is not visible to the user.
 
 It is also possible to suppress an action's visibility using _ActionLayout#hidden()_ .
 
-For xref:refguide:applib:index/annotations/DomainService.adoc[DomainService] actions, the action's visibility is dependent upon its _DomainService#nature() nature_ .
+For xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] actions, the action's visibility is dependent upon its _DomainService#nature() nature_ .
 
 [#restrictTo]
 === restrictTo
@@ -162,3 +162,21 @@ This is only provided as a fallback; usually the framework can infer the element
 For downloading xref:refguide:applib:index/value/Blob.adoc[Blob] or xref:refguide:applib:index/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
 
 The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
+
+include::hooks/Action_010-examples-and-usage.adoc[]
+
+include::hooks/Action_021-associating.adoc[]
+
+include::hooks/Action_022-action-semantics.adoc[]
+
+include::hooks/Action_023-deployment-modes.adoc[]
+
+include::hooks/Action_024-domain-events.adoc[]
+
+include::hooks/Action_025-execution-publishing.adoc[]
+
+include::hooks/Action_026-command-processing.adoc[]
+
+include::hooks/Action_027-collection-types.adoc[]
+
+include::hooks/Action_030-see-also.adoc[]

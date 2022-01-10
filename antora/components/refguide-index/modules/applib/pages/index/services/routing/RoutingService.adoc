@@ -13,7 +13,7 @@ For example, an action returning `OrderItem` might instead render the owning `Or
 * if an action returns `null` or is `void`, then return some other "useful" object.
 +
 --
-For example, return the home page (eg as defined by the _org.apache.isis.applib.annotations.HomePage_ annotation).
+For example, return the home page (eg as defined by the _org.apache.isis.applib.annotation.HomePage_ annotation).
 --
 
 Currently this service is used only by the Wicket viewer; it is ignored by the Restful Objects viewer.

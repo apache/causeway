@@ -14,7 +14,8 @@ Collects together all layout hints for action parameters in a single annotation.
   LabelPosition labelPosition() default LabelPosition.NOT_SPECIFIED;     // <.>
   String named() default "";     // <.>
   int multiLine() default -1;     // <.>
-  RenderDay renderDay() default RenderDay.NOT_SPECIFIED;     // <.>
+  @Deprecated(forRemoval = true, since = "2.0.0-M7")
+RenderDay renderDay() default RenderDay.NOT_SPECIFIED;     // <.>
   int typicalLength() default -1;     // <.>
 }
 ----
@@ -47,6 +48,13 @@ For string parameters (and properties), whether to render as a text area over mu
 <.> xref:#renderDay[renderDay]
 +
 --
+[WARNING]
+====
+[red]#_deprecated:_#
+
+instead use _ValueSemantics#dateRenderAdjustDays()_
+====
+
 For date parameters (and properties) only, instructs the viewer that the date should be rendered as one day prior to the actually stored date.
 --
 <.> xref:#typicalLength[typicalLength]
@@ -93,6 +101,13 @@ If set to > 1, then _#labelPosition()_ defaults to _LabelPosition#TOP top_ .
 [#renderDay]
 === renderDay
 
+[WARNING]
+====
+[red]#_deprecated:_#
+
+instead use _ValueSemantics#dateRenderAdjustDays()_
+====
+
 For date parameters (and properties) only, instructs the viewer that the date should be rendered as one day prior to the actually stored date.
 
 This is intended to be used so that an exclusive end date of an interval can be rendered as 1 day before the actual value stored.
@@ -114,3 +129,19 @@ Here, the interval of the [1-may-2013,1-jun-2013) would be rendered as the dates
 The typical entry length of a field, use to determine the optimum width for display
 
 Note: the Wicket viewer does not use this information.
+
+include::hooks/ParameterLayout_010-examples-and-usage.adoc[]
+
+include::hooks/ParameterLayout_021-labelPosition.adoc[]
+
+include::hooks/ParameterLayout_022-multiLine.adoc[]
+
+include::hooks/ParameterLayout_023-describedAs.adoc[]
+
+include::hooks/ParameterLayout_024-cssClass.adoc[]
+
+include::hooks/ParameterLayout_025-renderDay.adoc[]
+
+include::hooks/ParameterLayout_026-named.adoc[]
+
+include::hooks/ParameterLayout_027-typicalLength.adoc[]

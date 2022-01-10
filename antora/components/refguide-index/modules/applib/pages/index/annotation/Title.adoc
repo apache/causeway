@@ -21,7 +21,7 @@ If more than one property is used, the order can be specified (using the same De
 <.> xref:#sequence[sequence]
 +
 --
-The order (in Dewey decimal notation) that the property annotated with xref:refguide:applib:index/annotations/Title.adoc[Title] appears with respect to other properties also annotated with xref:refguide:applib:index/annotations/Title.adoc[Title] .
+The order (in Dewey decimal notation) that the property annotated with xref:refguide:applib:index/annotation/Title.adoc[Title] appears with respect to other properties also annotated with xref:refguide:applib:index/annotation/Title.adoc[Title] .
 --
 <.> xref:#prepend[prepend]
 +
@@ -44,7 +44,7 @@ The length to abbreviate this title element to.
 [#sequence]
 === sequence
 
-The order (in Dewey decimal notation) that the property annotated with xref:refguide:applib:index/annotations/Title.adoc[Title] appears with respect to other properties also annotated with xref:refguide:applib:index/annotations/Title.adoc[Title] .
+The order (in Dewey decimal notation) that the property annotated with xref:refguide:applib:index/annotation/Title.adoc[Title] appears with respect to other properties also annotated with xref:refguide:applib:index/annotation/Title.adoc[Title] .
 
 [#prepend]
 === prepend
@@ -60,3 +60,5 @@ The string to append to this property if non-empty.
 === abbreviatedTo
 
 The length to abbreviate this title element to.
+
+include::hooks/Title_010-examples-and-usage.adoc[]

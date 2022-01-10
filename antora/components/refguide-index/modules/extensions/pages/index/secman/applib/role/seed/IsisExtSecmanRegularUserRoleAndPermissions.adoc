@@ -15,7 +15,7 @@ The permissions also provide the ability to lookup their user account using the 
 .IsisExtSecmanRegularUserRoleAndPermissions.java
 ----
 class IsisExtSecmanRegularUserRoleAndPermissions {
-  IsisExtSecmanRegularUserRoleAndPermissions(SecmanConfiguration configBean)
+  IsisExtSecmanRegularUserRoleAndPermissions(Secman config)
 }
 ----
 

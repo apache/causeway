@@ -9,6 +9,7 @@ Collects all the value-type specific customization attributes.
 .ValueSemantics.java
 ----
 @interface ValueSemantics {
+  public final static int AS_DAY_BEFORE;     // <.>
   String provider() default "";     // <.>
   int maxTotalDigits() default 65;     // <.>
   int minIntegerDigits() default 1;     // <.>
@@ -17,9 +18,15 @@ Collects all the value-type specific customization attributes.
   FormatStyle dateFormatStyle() default FormatStyle.MEDIUM;     // <.>
   FormatStyle timeFormatStyle() default FormatStyle.MEDIUM;     // <.>
   TimePrecision timePrecision() default TimePrecision.SECOND;     // <.>
+  int dateRenderAdjustDays() default 0;     // <.>
 }
 ----
 
+<.> xref:#AS_DAY_BEFORE[AS_DAY_BEFORE]
++
+--
+eg. @ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)
+--
 <.> xref:#provider[provider]
 +
 --
@@ -60,8 +67,18 @@ If associated with a temporal time value, the rendering style of a localized tim
 --
 If associated with a temporal time value, the time of day precision, used for editing a time field in the UI.default = _TimePrecision#SECOND_
 --
+<.> xref:#dateRenderAdjustDays[dateRenderAdjustDays]
++
+--
+If associated with a date or date-time value, instructs whether the date should be rendered as _n_ days after the actually stored date. For negative _n_ its days before respectively.
+--
 
 == Members
+
+[#AS_DAY_BEFORE]
+=== AS_DAY_BEFORE
+
+eg. @ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)
 
 [#provider]
 === provider
@@ -102,3 +119,22 @@ If associated with a temporal time value, the rendering style of a localized tim
 === timePrecision
 
 If associated with a temporal time value, the time of day precision, used for editing a time field in the UI.default = _TimePrecision#SECOND_
+
+[#dateRenderAdjustDays]
+=== dateRenderAdjustDays
+
+If associated with a date or date-time value, instructs whether the date should be rendered as _n_ days after the actually stored date. For negative _n_ its days before respectively.
+
+This is intended to be used so that an exclusive end date of an interval can be rendered as 1 day before the actual value stored.
+
+For example:
+
+----
+
+public LocalDate getStartDate() { ... }
+
+@ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)
+public LocalDate getEndDate() { ... }
+----
+
+Here, the interval of the [1-may-2013,1-jun-2013) would be rendered as the dates 1-may-2013 for the start date but using 31-may-2013 (the day before) for the end date. What is stored In the domain object, itself, however, the value stored is 1-jun-2013.

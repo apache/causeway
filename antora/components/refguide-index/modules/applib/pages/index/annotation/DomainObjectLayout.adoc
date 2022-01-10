@@ -162,3 +162,19 @@ This subclass must provide a no-arg constructor; the fields are set reflectively
 Which subclass of xref:refguide:applib:index/events/ui/TitleUiEvent.adoc[TitleUiEvent] should be used to obtain a title.
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
+
+include::hooks/DomainObjectLayout_010-examples-and-usage.adoc[]
+
+include::hooks/DomainObjectLayout_021-describedAs.adoc[]
+
+include::hooks/DomainObjectLayout_022-cssClass.adoc[]
+
+include::hooks/DomainObjectLayout_023-cssClassFa.adoc[]
+
+include::hooks/DomainObjectLayout_024-named.adoc[]
+
+include::hooks/DomainObjectLayout_025-bookmarking.adoc[]
+
+include::hooks/DomainObjectLayout_026-paged.adoc[]
+
+include::hooks/DomainObjectLayout_027-ui-events.adoc[]

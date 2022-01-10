@@ -157,14 +157,14 @@ Creates a new, empty, xref:refguide:applib:index/util/TitleBuffer.adoc[TitleBuff
 
 Creates a new xref:refguide:applib:index/util/TitleBuffer.adoc[TitleBuffer] , containing the title of the specified object.
 
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotations.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 
 [#TitleBuffer__Object_String]
 === TitleBuffer(Object, String)
 
 Creates a new title object, containing the title of the specified object.
 
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotations.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 
 [#TitleBuffer__String]
 === TitleBuffer(String)
@@ -176,7 +176,7 @@ Creates a new title object, containing the specified text.
 
 Determines if the specified object's title is empty (or null).
 
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotations.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 
 [#isEmpty__String]
 === isEmpty(String)
@@ -191,14 +191,14 @@ Determines if the specified text is empty. Will return true if either: the speci
 
 Append the title of the specified object to this xref:refguide:applib:index/util/TitleBuffer.adoc[TitleBuffer] .
 
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotations.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 
 [#append__Object_String]
 === append(Object, String)
 
 Appends the title of the specified object, or the specified text if the objects title is null or empty. Prepends a space if there is already some text in this title object.
 
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotations.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 
 [#append__String]
 === append(String)
@@ -210,14 +210,14 @@ Appends a space (if there is already some text in this title object) and then th
 
 Appends the joining string and the title of the specified object. If the object is empty then nothing will be appended.
 
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotations.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 
 [#append__String_Object_String]
 === append(String, Object, String)
 
 Append the `joiner` text, a space, and the title of the specified object to the text of this xref:refguide:applib:index/util/TitleBuffer.adoc[TitleBuffer] . If the title of the specified object is null then use the `defaultValue` text. If both the objects title and the default value are null or equate to a zero-length string then no text will be appended ; not even the joiner text.
 
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotations.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 
 [#append__String_String]
 === append(String, String)
@@ -239,7 +239,7 @@ Concatenate the the title value (the result of calling an objects label() method
 
 Concatenate the title of the object value or the specified default value if the title is equal to null or is empty, to this xref:refguide:applib:index/util/TitleBuffer.adoc[TitleBuffer] .
 
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotations.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 
 [#concat__String]
 === concat(String)
@@ -256,14 +256,14 @@ Concatenate the joiner text and the text to the text of this xref:refguide:appli
 
 Concatenate the joiner text and the title of the object to the text of this xref:refguide:applib:index/util/TitleBuffer.adoc[TitleBuffer] . If no object yet exists in the object then the joiner text is omitted.
 
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotations.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 
 [#concat__String_Object_String]
 === concat(String, Object, String)
 
 Concatenate the joiner text and the title of the object to the text of this xref:refguide:applib:index/util/TitleBuffer.adoc[TitleBuffer] object. If no object yet exists in the object then defaultValue is used instead.
 
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotations.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 
 [#toString__]
 === toString()

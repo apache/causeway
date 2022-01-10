@@ -9,7 +9,7 @@ Sets up a user, as defined in
 .IsisExtSecmanAdminUser.java
 ----
 class IsisExtSecmanAdminUser {
-  IsisExtSecmanAdminUser(SecmanConfiguration configBean)
+  IsisExtSecmanAdminUser(Secman config)
 }
 ----
 

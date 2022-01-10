@@ -78,7 +78,7 @@ A non concrete type, that is a placeholder for a its concrete implementer.
 <.> xref:#VETOED[VETOED]
 +
 --
-Type must not be added to the meta-model, eg. by means of _Vetoed_ , _Profile_ or xref:refguide:applib:index/annotations/Programmatic.adoc[Programmatic]
+Type must not be added to the meta-model, eg. by means of _Vetoed_ , _Profile_ or xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic]
 --
 
 == Members
@@ -138,4 +138,4 @@ A non concrete type, that is a placeholder for a its concrete implementer.
 [#VETOED]
 === VETOED
 
-Type must not be added to the meta-model, eg. by means of _Vetoed_ , _Profile_ or xref:refguide:applib:index/annotations/Programmatic.adoc[Programmatic]
+Type must not be added to the meta-model, eg. by means of _Vetoed_ , _Profile_ or xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic]

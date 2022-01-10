@@ -60,17 +60,6 @@ admin_role = *
 
 This 'ini' file can then be referenced by other realms (if multiple realm are configured with the Shiro security manager).
 
-Alternatively, permissions can be set directly using _#setPermissionsByRole(String)_ , where the string is the same information, formatted thus:
-
-----
-
-ldapRealm.permissionsByRole=\
-   user_role = *:ToDoItemsJdo:*:*,\
-               *:ToDoItem:*:*; \
-   self-install_role = *:ToDoItemsFixturesService:install:* ; \
-   admin_role = *
-----
-
 Alternatively, permissions can be extracted from the base itself with the parameter searchUserBase, the attribute list as userExtractedAttribute and the permission url as permissionByUserAttribute. The idea is to extract attribute from the user or the group of the user and map directly to permission rule in replacing the string {attribute} by the extracted attribute (can me multiple). See the sample for group and user attribute and mapping.
 
 == API
@@ -86,7 +75,6 @@ class IsisLdapRealm {
   void setUniqueMemberAttributeValueTemplate(String template)
   void setRolesByGroup(Map<String, String> rolesByGroup)
   void setResourcePath(String resourcePath)     // <.>
-  void setPermissionsByRole(String permissionsByRoleStr)     // <.>
   void setPermissionByUserAttribute(String permissionByUserAttr)
   void setPermissionByGroupAttribute(String permissionByGroupAttribute)
   void setUserExtractedAttribute(String userExtractedAttribute)
@@ -101,11 +89,6 @@ class IsisLdapRealm {
 +
 --
 
---
-<.> xref:#setPermissionsByRole__String[setPermissionsByRole(String)]
-+
---
-Specify permissions for each role using a formatted string.
 --
 
 == Members
@@ -129,16 +112,3 @@ self-install_role = *:ToDoItemsFixturesService:install:*
 admin_role = *
 ----
 
-[#setPermissionsByRole__String]
-=== setPermissionsByRole(String)
-
-Specify permissions for each role using a formatted string.
-
-----
-
-ldapRealm.permissionsByRole=\
-   user_role = *:ToDoItemsJdo:*:*,\
-               *:ToDoItem:*:*; \
-   self-install_role = *:ToDoItemsFixturesService:install:* ; \
-   admin_role = *
-----

@@ -5,9 +5,9 @@ Indicates that a method is an _Object_ lifecycle callback method, one of (create
 
 May only be placed on _domain object_ methods, not _mixins_ nor _domain services_ .
 
-By placing the xref:refguide:applib:index/annotations/ObjectLifecycle.adoc[ObjectLifecycle] annotation on a method, a contract with the meta-model is enforced, such that this method must be recognized by the meta-model and cannot be ignored.
+By placing the xref:refguide:applib:index/annotation/ObjectLifecycle.adoc[ObjectLifecycle] annotation on a method, a contract with the meta-model is enforced, such that this method must be recognized by the meta-model and cannot be ignored.
 
-It is complementary to xref:refguide:applib:index/annotations/MemberSupport.adoc[MemberSupport] and xref:refguide:applib:index/annotations/ObjectSupport.adoc[ObjectSupport] , and in some sense acts as the semantic counterpart to xref:refguide:applib:index/annotations/Programmatic.adoc[Programmatic] .
+It is complementary to xref:refguide:applib:index/annotation/MemberSupport.adoc[MemberSupport] and xref:refguide:applib:index/annotation/ObjectSupport.adoc[ObjectSupport] , and in some sense acts as the semantic counterpart to xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic] .
 
 == API
 

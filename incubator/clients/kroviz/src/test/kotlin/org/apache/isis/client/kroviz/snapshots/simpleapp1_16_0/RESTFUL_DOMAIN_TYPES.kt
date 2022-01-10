@@ -637,7 +637,7 @@ object RESTFUL_DOMAIN_TYPES : Response() {
     "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
   }, {
     "rel" : "urn:org.restfulobjects:rels/domain-type",
-    "href" : "http://localhost:8080/restful/domain-types/org.apache.isis.applib.annotations.Bulk.InteractionContext",
+    "href" : "http://localhost:8080/restful/domain-types/org.apache.isis.applib.annotation.Bulk.InteractionContext",
     "method" : "GET",
     "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
   }, {
@@ -1277,7 +1277,7 @@ object RESTFUL_DOMAIN_TYPES : Response() {
     "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
   }, {
     "rel" : "urn:org.restfulobjects:rels/domain-type",
-    "href" : "http://localhost:8080/restful/domain-types/org.apache.isis.applib.annotations.SemanticsOf",
+    "href" : "http://localhost:8080/restful/domain-types/org.apache.isis.applib.annotation.SemanticsOf",
     "method" : "GET",
     "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
   }, {

@@ -59,7 +59,7 @@ Returns a normalized grid for the domain class obtained previously using _#load(
 <.> xref:#complete__Grid[complete(Grid)]
 +
 --
-Modifies the provided xref:refguide:applib:index/layout/grid/Grid.adoc[Grid] with additional metadata, broadly speaking corresponding to the xref:refguide:applib:index/annotations/DomainObjectLayout.adoc[DomainObjectLayout] , xref:refguide:applib:index/annotations/ActionLayout.adoc[ActionLayout] , xref:refguide:applib:index/annotations/PropertyLayout.adoc[PropertyLayout] and xref:refguide:applib:index/annotations/CollectionLayout.adoc[CollectionLayout] .
+Modifies the provided xref:refguide:applib:index/layout/grid/Grid.adoc[Grid] with additional metadata, broadly speaking corresponding to the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[DomainObjectLayout] , xref:refguide:applib:index/annotation/ActionLayout.adoc[ActionLayout] , xref:refguide:applib:index/annotation/PropertyLayout.adoc[PropertyLayout] and xref:refguide:applib:index/annotation/CollectionLayout.adoc[CollectionLayout] .
 --
 <.> xref:#minimal__Grid[minimal(Grid)]
 +
@@ -122,12 +122,12 @@ The default implementation searches through all available xref:refguide:applib:i
 
 Returns a normalized grid for the domain class obtained previously using _#load(Class)_ .
 
-If a "normalized" grid is persisted as the `layout.xml` , then the expectation is that the _MemberOrder_ annotation can be removed from the domain class because the binding of properties/collections/actions will be within the XML. However, the layout annotations ( xref:refguide:applib:index/annotations/DomainObjectLayout.adoc[DomainObjectLayout] , xref:refguide:applib:index/annotations/ActionLayout.adoc[ActionLayout] , xref:refguide:applib:index/annotations/PropertyLayout.adoc[PropertyLayout] and xref:refguide:applib:index/annotations/CollectionLayout.adoc[CollectionLayout] ) (if present) will continue to be used to provide additional layout metadata. Of course, there is nothing to prevent the developer from extending the layout XML to also include the layout XML (in other words moving towards a _#complete(Grid) complete_ grid. Metadata within the `layout.xml` file takes precedence over any annotations.
+If a "normalized" grid is persisted as the `layout.xml` , then the expectation is that the _MemberOrder_ annotation can be removed from the domain class because the binding of properties/collections/actions will be within the XML. However, the layout annotations ( xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[DomainObjectLayout] , xref:refguide:applib:index/annotation/ActionLayout.adoc[ActionLayout] , xref:refguide:applib:index/annotation/PropertyLayout.adoc[PropertyLayout] and xref:refguide:applib:index/annotation/CollectionLayout.adoc[CollectionLayout] ) (if present) will continue to be used to provide additional layout metadata. Of course, there is nothing to prevent the developer from extending the layout XML to also include the layout XML (in other words moving towards a _#complete(Grid) complete_ grid. Metadata within the `layout.xml` file takes precedence over any annotations.
 
 [#complete__Grid]
 === complete(Grid)
 
-Modifies the provided xref:refguide:applib:index/layout/grid/Grid.adoc[Grid] with additional metadata, broadly speaking corresponding to the xref:refguide:applib:index/annotations/DomainObjectLayout.adoc[DomainObjectLayout] , xref:refguide:applib:index/annotations/ActionLayout.adoc[ActionLayout] , xref:refguide:applib:index/annotations/PropertyLayout.adoc[PropertyLayout] and xref:refguide:applib:index/annotations/CollectionLayout.adoc[CollectionLayout] .
+Modifies the provided xref:refguide:applib:index/layout/grid/Grid.adoc[Grid] with additional metadata, broadly speaking corresponding to the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[DomainObjectLayout] , xref:refguide:applib:index/annotation/ActionLayout.adoc[ActionLayout] , xref:refguide:applib:index/annotation/PropertyLayout.adoc[PropertyLayout] and xref:refguide:applib:index/annotation/CollectionLayout.adoc[CollectionLayout] .
 
 If a "completed" grid is persisted as the `layout.xml` , then there should be no need for any of the layout annotations, nor the _MemberOrder_ annotations, to be required in the domain class itself.
 
@@ -136,7 +136,7 @@ If a "completed" grid is persisted as the `layout.xml` , then there should be no
 
 Modifies the provided xref:refguide:applib:index/layout/grid/Grid.adoc[Grid] , removing all metadata except the basic grid structure.
 
-If a "minimal" grid is persisted as the `layout.xml` , then the expectation is that most of the layout annotations ( xref:refguide:applib:index/annotations/DomainObjectLayout.adoc[DomainObjectLayout] , xref:refguide:applib:index/annotations/ActionLayout.adoc[ActionLayout] , xref:refguide:applib:index/annotations/PropertyLayout.adoc[PropertyLayout] , xref:refguide:applib:index/annotations/CollectionLayout.adoc[CollectionLayout] , but also _MemberOrder_ ) will still be retained in the domain class code.
+If a "minimal" grid is persisted as the `layout.xml` , then the expectation is that most of the layout annotations ( xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[DomainObjectLayout] , xref:refguide:applib:index/annotation/ActionLayout.adoc[ActionLayout] , xref:refguide:applib:index/annotation/PropertyLayout.adoc[PropertyLayout] , xref:refguide:applib:index/annotation/CollectionLayout.adoc[CollectionLayout] , but also _MemberOrder_ ) will still be retained in the domain class code.
 
 include::hooks/GridService_010-implementation.adoc[]
 

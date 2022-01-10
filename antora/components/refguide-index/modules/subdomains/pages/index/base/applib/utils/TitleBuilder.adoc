@@ -15,29 +15,6 @@ class TitleBuilder {
   TitleBuilder withReference(String reference)
   String toString()
   TitleBuilder withName(Object object)
-  TitleBuilder withTupleElement(Object object)     // <.>
 }
 ----
 
-<.> xref:#withTupleElement__Object[withTupleElement(Object)]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-- this method does nothing...
-====
---
-
-== Members
-
-[#withTupleElement__Object]
-=== withTupleElement(Object)
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-- this method does nothing...
-====

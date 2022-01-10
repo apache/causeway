@@ -108,7 +108,7 @@ The above example could therefore be rewritten as:
 ----
 package com.mycompany.modules.customer;
 ...
-import org.apache.isis.applib.annotations.Module;
+import org.apache.isis.applib.annotation.Module;
 
 @Module
 @Import({

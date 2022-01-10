@@ -28,7 +28,7 @@ class ArchitectureJdoRules {
 <.> xref:#every_jdo_PersistenceCapable_must_be_annotated_with_DomainObject_nature_of_ENTITY__[every_jdo_PersistenceCapable_must_be_annotated_with_DomainObject_nature_of_ENTITY()]
 +
 --
-This rule requires that classes annotated with the JDO _javax.jdo.annotations.PersistenceCapable_ annotation must also be annotated with the Apache Isis xref:refguide:applib:index/annotations/DomainObject.adoc[DomainObject] annotation specifying that its _DomainObject#nature() nature_ is an _org.apache.isis.applib.annotations.Nature#ENTITY entity_ .
+This rule requires that classes annotated with the JDO _javax.jdo.annotations.PersistenceCapable_ annotation must also be annotated with the Apache Isis xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation specifying that its _DomainObject#nature() nature_ is an _org.apache.isis.applib.annotation.Nature#ENTITY entity_ .
 --
 <.> xref:#every_jdo_PersistenceCapable_must_be_annotated_with_Version__[every_jdo_PersistenceCapable_must_be_annotated_with_Version()]
 +
@@ -71,7 +71,7 @@ This rule requires that injected fields in classes annotated with the JDO _Persi
 [#every_jdo_PersistenceCapable_must_be_annotated_with_DomainObject_nature_of_ENTITY__]
 === every_jdo_PersistenceCapable_must_be_annotated_with_DomainObject_nature_of_ENTITY()
 
-This rule requires that classes annotated with the JDO _javax.jdo.annotations.PersistenceCapable_ annotation must also be annotated with the Apache Isis xref:refguide:applib:index/annotations/DomainObject.adoc[DomainObject] annotation specifying that its _DomainObject#nature() nature_ is an _org.apache.isis.applib.annotations.Nature#ENTITY entity_ .
+This rule requires that classes annotated with the JDO _javax.jdo.annotations.PersistenceCapable_ annotation must also be annotated with the Apache Isis xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation specifying that its _DomainObject#nature() nature_ is an _org.apache.isis.applib.annotation.Nature#ENTITY entity_ .
 
 [#every_jdo_PersistenceCapable_must_be_annotated_with_Version__]
 === every_jdo_PersistenceCapable_must_be_annotated_with_Version()
