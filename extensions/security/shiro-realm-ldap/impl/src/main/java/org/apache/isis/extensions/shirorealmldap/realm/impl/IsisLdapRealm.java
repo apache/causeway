@@ -113,18 +113,6 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
  * with the Shiro security manager).
  * <p/>
  * <p>
- * Alternatively, permissions can be set directly using {@link #setPermissionsByRole(String)},
- * where the string is the same information, formatted thus:
- * <p/>
- * <pre>
- * ldapRealm.permissionsByRole=\
- *    user_role = *:ToDoItemsJdo:*:*,\
- *                *:ToDoItem:*:*; \
- *    self-install_role = *:ToDoItemsFixturesService:install:* ; \
- *    admin_role = *
- * </pre>
- * <p/>
- * <p>
  * Alternatively, permissions can be extracted from the base itself with the parameter searchUserBase,
  * the attribute list as userExtractedAttribute and the permission url as permissionByUserAttribute.
  * The idea is to extract attribute from the user or the group of the user and map directly to permission rule in
