@@ -84,6 +84,7 @@ import org.apache.isis.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFac
 import org.apache.isis.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanelFactory;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -303,14 +304,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     public static <T extends Serializable> ComponentFactoryScalarAbstract
     createScalarPanelUsingTextField(final Class<T> valueTypeClass) {
 
-        var valueTypeClasses = Can.<Class<?>>ofSingleton(valueTypeClass);
-
-        // if the valueType is a wrapper type, also append its unboxed variant
-        if(ClassUtils.isPrimitiveWrapper(valueTypeClass)) {
-            val unboxed = org.apache.isis.core.metamodel.commons.ClassUtil
-                    .unboxPrimitiveIfNecessary(valueTypeClass);
-            valueTypeClasses = valueTypeClasses.add(unboxed);
-        }
+        var valueTypeClasses = withPrimitiveVariant(valueTypeClass);
 
         return new ComponentFactoryScalarAbstract(
                 ScalarPanelTextFieldWithValueSemantics.class,
@@ -329,7 +323,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     public static <T extends Serializable> ComponentFactoryScalarAbstract
     createScalarPanelUsingNumberField(final Class<T> valueTypeClass) {
 
-        val valueTypeClasses = Can.<Class<?>>ofSingleton(valueTypeClass);
+        var valueTypeClasses = withPrimitiveVariant(valueTypeClass);
 
         return new ComponentFactoryScalarAbstract(
                 ScalarPanelTextFieldNumeric.class,
@@ -348,6 +342,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     public static <T extends Serializable> ComponentFactoryScalarAbstract
     createScalarPanelUsingTemporalPicker(final Class<T> valueTypeClass) {
 
+        // assuming there is no primitive temporal type
         val valueTypeClasses = Can.<Class<?>>ofSingleton(valueTypeClass);
 
         return new ComponentFactoryScalarAbstract(
@@ -364,5 +359,19 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         };
     }
 
+    // -- HELPER
+
+    private static Can<Class<?>> withPrimitiveVariant(final @NonNull Class<?> valueTypeClass) {
+        var valueTypeClasses = Can.<Class<?>>ofSingleton(valueTypeClass);
+
+        // if the valueType is a wrapper type, also append its unboxed variant
+        if(ClassUtils.isPrimitiveWrapper(valueTypeClass)) {
+            val unboxed = org.apache.isis.core.metamodel.commons.ClassUtil
+                    .unboxPrimitiveIfNecessary(valueTypeClass);
+            valueTypeClasses = valueTypeClasses.add(unboxed);
+        }
+
+        return valueTypeClasses;
+    }
 
 }

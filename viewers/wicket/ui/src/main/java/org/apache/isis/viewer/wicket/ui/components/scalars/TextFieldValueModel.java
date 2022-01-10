@@ -24,6 +24,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.val;
@@ -50,12 +51,7 @@ public class TextFieldValueModel<T extends Serializable> extends Model<T> {
     public T getObject() {
         final ScalarModel model = scalarModelProvider.getModel();
         val objectAdapter = model.getObject();
-        return asT(objectAdapter);
-    }
-
-    @SuppressWarnings("unchecked")
-    private T asT(final ManagedObject objectAdapter) {
-        return (T) (objectAdapter != null? objectAdapter.getPojo(): null);
+        return unwrap(objectAdapter);
     }
 
     @Override
@@ -69,6 +65,13 @@ public class TextFieldValueModel<T extends Serializable> extends Model<T> {
             val objectAdapter = scalarModel.getCommonContext().getObjectManager().adapt(object);
             scalarModel.setObject(objectAdapter);
         }
+    }
+
+    // -- HELPER
+
+    @SuppressWarnings("unchecked")
+    private T unwrap(final ManagedObject objectAdapter) {
+        return (T) ManagedObjects.UnwrapUtil.single(objectAdapter);
     }
 
 
