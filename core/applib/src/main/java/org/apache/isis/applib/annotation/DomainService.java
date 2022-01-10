@@ -19,6 +19,7 @@
 
 package org.apache.isis.applib.annotation;
 
+import javax.inject.Named;
 import java.lang.annotation.*;
 
 /**
@@ -41,12 +42,14 @@ public @interface DomainService {
      * <p>
      * If not specified then either the optional &quot;getId()&quot is used, otherwise the class' name.
      */
+    @Deprecated
     String objectType() default "";
 
 
     /**
      * If this domain service acts as a repository for an entity type, specify that entity type.
      */
+    @Deprecated
     Class<?> repositoryFor() default Object.class;
 
     /**
@@ -76,7 +79,23 @@ public @interface DomainService {
      *     default order greater than Integer.MAX_VALUE - 50).
      * </p>
      */
+    @Deprecated
     String menuOrder() default Constants.MENU_ORDER_DEFAULT  ;
 
 
+    /**
+     * The logical name of this object's type, that uniquely and fully qualifies it.
+     * The logical name is analogous to - but independent of - the actual fully qualified class name.
+     * eg. {@code sales.CustomerService} for a class 'org.mycompany.services.CustomerService'
+     * <p>
+     * This value, if specified, is used in the serialized form of the object's {@link Bookmark}.
+     * A {@link Bookmark} is used by the framework to uniquely identify an object over time
+     * (same concept as a URN).
+     * Otherwise, if not specified, the fully qualified class name is used instead.
+     * </p>
+     *
+     * @see DomainObject#logicalTypeName()
+     */
+    String logicalTypeName()
+            default "";
 }

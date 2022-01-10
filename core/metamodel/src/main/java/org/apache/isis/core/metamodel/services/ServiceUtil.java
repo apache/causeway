@@ -61,10 +61,13 @@ public final class ServiceUtil {
     }
 
     private static String serviceTypeOf(final Class<?> serviceClass) {
-        final String serviceType;
         final DomainService domainService = serviceClass.getAnnotation(DomainService.class);
         if(domainService != null) {
-            serviceType = domainService.objectType();
+            // First look at the annotation for v2.
+            String serviceType = domainService.logicalTypeName();
+            if(Strings.isNullOrEmpty(serviceType)) {
+                serviceType = domainService.objectType();
+            }
             if(!Strings.isNullOrEmpty(serviceType)) {
                 return serviceType;
             }
