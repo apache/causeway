@@ -35,9 +35,14 @@ public class ObjectSpecIdFacetForDomainObjectAnnotation extends ObjectSpecIdFace
             return null;
         }
 
-        final String objectType = domainObject.objectType();
+        // Check first for the new v2 attribute
+        String objectType = domainObject.logicalTypeName();
         if(Strings.isNullOrEmpty(objectType)) {
-            return null;
+            // Fall back to old.
+            objectType = domainObject.objectType();
+            if(Strings.isNullOrEmpty(objectType)) {
+                return null;
+            }
         }
         return new ObjectSpecIdFacetForDomainObjectAnnotation(objectType, holder);
     }

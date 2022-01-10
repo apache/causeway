@@ -147,6 +147,7 @@ public @interface DomainObject {
      * used by the framework to unique identify an object over time (same concept as a URN).
      * </p>
      */
+    @Deprecated
     String objectType() default "";
 
 
@@ -215,6 +216,22 @@ public @interface DomainObject {
      * </p>
      */
     Class<? extends ObjectLoadedEvent<?>> loadedLifecycleEvent() default ObjectLoadedEvent.Default.class;
+
+    /**
+     * The logical name of this object's type, that uniquely and fully qualifies it.
+     * The logical name is analogous to - but independent of - the actual fully qualified class name.
+     * eg. {@code sales.Customer} for a class 'org.mycompany.dom.Customer'
+     * <p>
+     * This value, if specified, is used in the serialized form of the object's {@link Bookmark}.
+     * A {@link Bookmark} is used by the framework to uniquely identify an object over time
+     * (same concept as a URN).
+     * Otherwise, if not specified, the fully qualified class name is used instead.
+     * </p>
+     *
+     * @see DomainService#logicalTypeName()
+     */
+    String logicalTypeName()
+            default "";
 
     /**
      * Indicates that the loading of the domain object should be posted to the
