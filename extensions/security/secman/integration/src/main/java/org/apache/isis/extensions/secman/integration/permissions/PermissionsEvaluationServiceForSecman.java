@@ -16,23 +16,56 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.applib.permission.spi;
+package org.apache.isis.extensions.secman.integration.permissions;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Optional;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotations.PriorityPrecedence;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.IsisConfiguration.Extensions.Secman;
+import org.apache.isis.core.config.IsisConfiguration.Extensions.Secman.PermissionsEvaluationPolicy;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionValue;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionValueSet;
+import org.apache.isis.extensions.secman.applib.permission.spi.PermissionsEvaluationService;
+
+import lombok.NonNull;
+import lombok.val;
 
 /**
  * @since 2.0 {@index}
  */
-public abstract class PermissionsEvaluationServiceAbstract
+@Service
+@Named("isis.ext.secman.PermissionsEvaluationServiceForSecman")
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@Qualifier("Secman")
+public class PermissionsEvaluationServiceForSecman
 implements PermissionsEvaluationService {
 
     private static final long serialVersionUID = 1L;
+
+    private final @NonNull PermissionsEvaluationPolicy policy; // serializable
+
+    @Inject
+    public PermissionsEvaluationServiceForSecman(final IsisConfiguration isisConfiguration) {
+        this.policy = Optional.ofNullable(
+                isisConfiguration.getExtensions().getSecman().getPermissionsEvaluationPolicy())
+                .orElseGet(()->new Secman().getPermissionsEvaluationPolicy()); // use config defaults as fallback
+        _Assert.assertNotNull(policy);
+    }
 
     @Override
     public ApplicationPermissionValueSet.Evaluation evaluate(
@@ -56,7 +89,17 @@ implements PermissionsEvaluationService {
         return null;
     }
 
-    protected abstract Collection<ApplicationPermissionValue> ordered(
-            Collection<ApplicationPermissionValue> permissionValues);
+    protected Collection<ApplicationPermissionValue> ordered(
+            final Collection<ApplicationPermissionValue> permissionValues) {
+        switch (policy) {
+        case ALLOW_BEATS_VETO:
+            return permissionValues;
+        case VETO_BEATS_ALLOW:
+            val reversed = _Lists.<ApplicationPermissionValue>newArrayList(permissionValues);
+            Collections.reverse(reversed);
+            return reversed;
+        }
+        throw _Exceptions.illegalArgument("PermissionsEvaluationPolicy '%s' not recognised", policy);
+    }
 
 }

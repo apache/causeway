@@ -258,9 +258,7 @@ implements
     private @Nullable Bookmark contextBookmarkIfAny;
 
     @Override @Synchronized
-    @Deprecated // for viewmodels might not handle change of state very well
-    //I believe this works by accident not by design
-    //TODO this check should be made available with 'core' models - and not modeled here
+    @Deprecated // this check should be made available with 'core' models - and not modeled here
     public boolean isContextAdapter(final ManagedObject other) {
         return contextBookmarkIfAny==null
                 ? false
