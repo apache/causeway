@@ -19,7 +19,7 @@
 package org.apache.isis.extensions.secman.applib.user.seed;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
+import org.apache.isis.core.config.IsisConfiguration.Extensions.Secman;
 import org.apache.isis.extensions.secman.applib.tenancy.seed.GlobalTenancy;
 import org.apache.isis.extensions.secman.applib.user.dom.AccountType;
 import org.apache.isis.extensions.secman.applib.user.fixtures.AbstractUserAndRolesFixtureScript;
@@ -30,13 +30,13 @@ import org.apache.isis.extensions.secman.applib.user.fixtures.AbstractUserAndRol
  */
 public class IsisExtSecmanAdminUser extends AbstractUserAndRolesFixtureScript {
 
-    public IsisExtSecmanAdminUser(SecmanConfiguration configBean) {
+    public IsisExtSecmanAdminUser(final Secman config) {
         super(
-                configBean.getAdminUserName(),
-                configBean.getAdminPassword(),
+                config.getSeed().getAdmin().getUserName(),
+                config.getSeed().getAdmin().getPassword(),
                 null,
                 GlobalTenancy.TENANCY_PATH,
                 AccountType.LOCAL,
-                Can.of(configBean.getAdminRoleName()));
+                Can.of(config.getSeed().getAdmin().getRoleName()));
     }
 }

@@ -20,6 +20,7 @@ package org.apache.isis.extensions.secman.applib.user.dom;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -39,7 +40,6 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_lock;
@@ -55,8 +55,7 @@ implements ApplicationUserRepository {
 
     @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;
-    @Inject private SecmanConfiguration configBean;
-	@Inject protected IsisConfiguration isisConfiguration;
+	@Inject protected IsisConfiguration config;
     @Inject private EventBusService eventBusService;
     @Inject RegexReplacer regexReplacer;
 
@@ -199,7 +198,9 @@ implements ApplicationUserRepository {
 
     @Override
     public boolean isAdminUser(final ApplicationUser user) {
-        return configBean.getAdminUserName().equals(user.getName());
+        return Objects.equals(
+                config.getExtensions().getSecman().getSeed().getAdmin().getUserName(),
+                user.getName());
     }
 
     @Override

@@ -31,8 +31,8 @@ import org.apache.isis.applib.annotations.ParameterLayout;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Password;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
-import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.applib.user.app.ApplicationUserManager;
@@ -43,6 +43,7 @@ import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_updateEmailAddress;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Action(
         domainEvent = DomainEvent.class
@@ -60,7 +61,7 @@ extends ApplicationUserManager_newLocalUserAbstract {
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationUserRepository applicationUserRepository;
-    @Inject private SecmanConfiguration configBean;
+    @Inject private IsisConfiguration config;
     @Inject private FactoryService factory;
     @Inject private RepositoryService repository;
 
@@ -123,8 +124,9 @@ extends ApplicationUserManager_newLocalUserAbstract {
     }
 
     @MemberSupport public ApplicationRole default3Act() {
+        val regularUserRoleName = config.getExtensions().getSecman().getSeed().getRegularUser().getRoleName();
         return applicationRoleRepository
-                .findByNameCached(configBean.getRegularUserRoleName())
+                .findByNameCached(regularUserRoleName)
                 .orElse(null);
     }
 

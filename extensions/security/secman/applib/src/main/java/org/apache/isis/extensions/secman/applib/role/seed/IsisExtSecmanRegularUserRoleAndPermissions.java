@@ -21,9 +21,9 @@ package org.apache.isis.extensions.secman.applib.role.seed;
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.IsisConfiguration.Extensions.Secman;
 import org.apache.isis.core.security.IsisModuleCoreSecurity;
 import org.apache.isis.core.security.authentication.logout.LogoutMenu;
-import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
@@ -66,12 +66,12 @@ import lombok.val;
  */
 public class IsisExtSecmanRegularUserRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 
-    public IsisExtSecmanRegularUserRoleAndPermissions(SecmanConfiguration configBean) {
-        super(configBean.getRegularUserRoleName(), "Regular user of the security module");
+    public IsisExtSecmanRegularUserRoleAndPermissions(final Secman config) {
+        super(config.getSeed().getRegularUser().getRoleName(), "Regular user of the security module");
     }
 
     @Override
-    protected void execute(ExecutionContext executionContext) {
+    protected void execute(final ExecutionContext executionContext) {
 
         val allowChanging = Can.of(
                 // everything under "isis.applib" is granted.

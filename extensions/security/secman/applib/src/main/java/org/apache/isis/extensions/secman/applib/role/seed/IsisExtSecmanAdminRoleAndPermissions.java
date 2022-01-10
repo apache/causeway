@@ -18,43 +18,59 @@
  */
 package org.apache.isis.extensions.secman.applib.role.seed;
 
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.core.config.IsisConfiguration.Extensions.Secman;
+import org.apache.isis.core.config.IsisConfiguration.Extensions.Secman.Seed.Admin;
+import org.apache.isis.core.config.IsisConfiguration.Extensions.Secman.Seed.Admin.NamespacePermissions;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 
+import lombok.val;
+
 /**
- * Sets up the {@link SecmanConfiguration#getAdminRoleName() secman admin role}
+ * Sets up the {@link Admin#getRoleName() secman admin role}
  * with its initial set of permissions (the union of
- * {@link SecmanConfiguration#getAdminStickyNamespacePermissions()}
- * and {@link SecmanConfiguration#getAdminAdditionalNamespacePermissions()}).
+ * {@link NamespacePermissions#getSticky()}
+ * and {@link NamespacePermissions#getAdditional()}).
  *
- * @see SecmanConfiguration
+ * @see Secman
  *
  * @since 2.0 {@index}
  */
 public class IsisExtSecmanAdminRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 
-    private final List<String> adminInitialPackagePermissions;
+    private final Set<String> adminInitialPackagePermissions;
 
-    public IsisExtSecmanAdminRoleAndPermissions(SecmanConfiguration configBean) {
-        super(configBean.getAdminRoleName(), "Administer security");
-        this.adminInitialPackagePermissions = configBean.streamAdminNamespacePermissions()
-                .collect(Collectors.toList());
+    public IsisExtSecmanAdminRoleAndPermissions(final Secman config) {
+        super(config.getSeed().getAdmin().getRoleName(), "Administer security");
+        this.adminInitialPackagePermissions = streamAdminNamespacePermissions(config)
+                .collect(Collectors.toCollection(LinkedHashSet::new)); // preserve order, discard duplicates
     }
 
     @Override
-    protected void execute(ExecutionContext executionContext) {
+    protected void execute(final ExecutionContext executionContext) {
         newPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
                 Can.ofCollection(adminInitialPackagePermissions)
                         .map(ApplicationFeatureId::newNamespace));
+    }
+
+    // -- HELPER
+
+    private static Stream<String> streamAdminNamespacePermissions(final Secman secman) {
+        val adminNamespacePermissions = secman.getSeed().getAdmin().getNamespacePermissions();
+        return Stream.concat(
+                _NullSafe.stream(adminNamespacePermissions.getSticky()),
+                _NullSafe.stream(adminNamespacePermissions.getAdditional()));
     }
 
 }

@@ -51,8 +51,9 @@ import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.IsisConfiguration.Extensions.Secman;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
-import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
@@ -78,7 +79,7 @@ public abstract class ApplicationUser
     @Inject private transient ApplicationPermissionRepository applicationPermissionRepository;
     @Inject private transient UserService userService;
     @Inject private transient PermissionsEvaluationService permissionsEvaluationService;
-    @Inject private transient SecmanConfiguration configBean;
+    @Inject private transient IsisConfiguration config;
 
     protected ApplicationUserRepository getApplicationUserRepository() {
         return applicationUserRepository;
@@ -101,8 +102,8 @@ public abstract class ApplicationUser
         return permissionsEvaluationService;
     }
 
-    protected SecmanConfiguration getConfigBean() {
-        return configBean;
+    protected Secman getSecmanConfig() {
+        return config.getExtensions().getSecman();
     }
 
     // -- CONSTANTS
@@ -614,7 +615,7 @@ public abstract class ApplicationUser
 
     @Programmatic
     private String getAdminRoleName() {
-        return getConfigBean().getAdminRoleName();
+        return getSecmanConfig().getSeed().getAdmin().getRoleName();
     }
 
     @Programmatic

@@ -27,8 +27,8 @@ import org.apache.isis.applib.annotations.Optionality;
 import org.apache.isis.applib.annotations.Parameter;
 import org.apache.isis.applib.annotations.ParameterLayout;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
-import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.applib.user.app.ApplicationUserManager;
@@ -38,6 +38,7 @@ import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserReposito
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Action(
         domainEvent = DomainEvent.class
@@ -54,7 +55,7 @@ public class ApplicationUserManager_newDelegateUser {
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationUserRepository applicationUserRepository;
-    @Inject private SecmanConfiguration configBean;
+    @Inject private IsisConfiguration config;
     @Inject private RepositoryService repository;
 
     private final ApplicationUserManager target;
@@ -86,8 +87,9 @@ public class ApplicationUserManager_newDelegateUser {
     }
 
     @MemberSupport public ApplicationRole default1Act() {
+        val regularUserRoleName = config.getExtensions().getSecman().getSeed().getRegularUser().getRoleName();
         return applicationRoleRepository
-                .findByNameCached(configBean.getRegularUserRoleName())
+                .findByNameCached(regularUserRoleName)
                 .orElse(null);
     }
 

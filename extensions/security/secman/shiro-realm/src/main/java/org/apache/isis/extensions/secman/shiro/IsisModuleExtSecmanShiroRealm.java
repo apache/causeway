@@ -46,8 +46,8 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.IsisConfiguration.Extensions.Secman.DelegatedUsers.AutoCreatePolicy;
 import org.apache.isis.core.security.authorization.Authorizor;
-import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
 import org.apache.isis.extensions.secman.applib.user.dom.AccountType;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.shiro.util.ShiroUtils;
@@ -65,8 +65,7 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm {
 	@Inject protected ServiceInjector serviceInjector;
     @Inject protected InteractionService interactionService;
     @Inject protected PlatformTransactionManager txMan;
-    @Inject private SecmanConfiguration configBean;
-	@Inject protected IsisConfiguration isisConfiguration;
+	@Inject protected IsisConfiguration config;
 
     @Getter @Setter private AuthenticatingRealm delegateAuthenticationRealm;
     @Getter @Setter private boolean autoCreateUser = true;
@@ -121,7 +120,11 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm {
 
             _Assert.assertNotNull(newPrincipal);
 
-            if(configBean.isAutoUnlockIfDelegatedAndAuthenticated()) {
+            val isAutoUnlockIfDelegatedAndAuthenticated =
+                    config.getExtensions().getSecman().getDelegatedUsers().getAutoCreatePolicy()
+                        == AutoCreatePolicy.AUTO_CREATE_AS_UNLOCKED;
+
+            if(isAutoUnlockIfDelegatedAndAuthenticated) {
                 principal = newPrincipal;
             } else {
                 _Assert.assertTrue(newPrincipal.isLocked(), "As configured in " + SECMAN_UNLOCK_DELEGATED_USERS + ", auto-created user accounts are initially locked!");

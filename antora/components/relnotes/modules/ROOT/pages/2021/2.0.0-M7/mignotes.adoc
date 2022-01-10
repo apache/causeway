@@ -180,6 +180,9 @@ customize via `ValueSemanticsProvider<T>`
 use `isis.value-types.temporal.editing.*-pattern` instead or
 customize via `ValueSemanticsProvider<T>`
 
+| _SecMan's_ `SecmanConfiguration` bean was removed
+| use `org.apache.isis.core.config.IsisConfiguration.Extensions.Secman` (immutable) instead.
+
 |===
 
 === Password Hashing

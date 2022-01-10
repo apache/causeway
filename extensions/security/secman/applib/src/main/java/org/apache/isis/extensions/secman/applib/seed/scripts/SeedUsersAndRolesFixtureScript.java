@@ -20,7 +20,7 @@ package org.apache.isis.extensions.secman.applib.seed.scripts;
 
 import javax.inject.Inject;
 
-import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.secman.applib.role.seed.IsisAppFeatureRoleAndPermissions;
 import org.apache.isis.extensions.secman.applib.role.seed.IsisConfigurationRoleAndPermissions;
 import org.apache.isis.extensions.secman.applib.role.seed.IsisExtCommandReplayPrimaryRoleAndPermissions;
@@ -36,6 +36,8 @@ import org.apache.isis.extensions.secman.applib.tenancy.seed.GlobalTenancy;
 import org.apache.isis.extensions.secman.applib.user.seed.IsisExtSecmanAdminUser;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
+import lombok.val;
+
 /**
  * Sets up roles and permissions for both Secman itself and also for all other modules that expose UI features
  * for use by end-users.
@@ -50,19 +52,21 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
  */
 public class SeedUsersAndRolesFixtureScript extends FixtureScript {
 
-    @Inject private SecmanConfiguration configBean;
+    @Inject private IsisConfiguration config;
 
     @Override
-    protected void execute(ExecutionContext executionContext) {
+    protected void execute(final ExecutionContext executionContext) {
+
+        val secmanConfig = config.getExtensions().getSecman();
 
         // global tenancy
         executionContext.executeChild(this, new GlobalTenancy());
 
         // secman (admin and regular users)
         executionContext.executeChildren(this,
-                new IsisExtSecmanAdminRoleAndPermissions(configBean),
-                new IsisExtSecmanAdminUser(configBean),
-                new IsisExtSecmanRegularUserRoleAndPermissions(configBean));
+                new IsisExtSecmanAdminRoleAndPermissions(secmanConfig),
+                new IsisExtSecmanAdminUser(secmanConfig),
+                new IsisExtSecmanRegularUserRoleAndPermissions(secmanConfig));
 
         // other modules
         executionContext.executeChildren(this,

@@ -316,6 +316,7 @@ implements
         val records = propertyChangeRecordsById.values().stream()
                 // set post values, which have been left empty up to now
                 .peek(rec->{
+                    // assuming this check correctly detects deleted entities (JDO)
                     if(EntityUtil.isDetachedOrRemoved(rec.getEntity())) {
                         rec.updatePostValueAsDeleted();
                     } else {

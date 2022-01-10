@@ -35,7 +35,7 @@ import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.secman.applib.permission.dom.mixins.ApplicationPermission_delete;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.util.RegexReplacer;
@@ -49,14 +49,14 @@ implements ApplicationRoleRepository {
 
     @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;
-    @Inject private SecmanConfiguration configBean;
+    @Inject private IsisConfiguration config;
     @Inject RegexReplacer regexReplacer;
 
     @Inject private Provider<QueryResultsCache> queryResultsCacheProvider;
 
     private final Class<R> applicationRoleClass;
 
-    protected ApplicationRoleRepositoryAbstract(Class<R> applicationRoleClass) {
+    protected ApplicationRoleRepositoryAbstract(final Class<R> applicationRoleClass) {
         this.applicationRoleClass = applicationRoleClass;
     }
 
@@ -125,7 +125,7 @@ implements ApplicationRoleRepository {
     }
 
     @Override
-    public Collection<ApplicationRole> findMatching(String search) {
+    public Collection<ApplicationRole> findMatching(final String search) {
         if (search != null && search.length() > 0 ) {
             return findNameContaining(search);
         }
@@ -134,8 +134,8 @@ implements ApplicationRoleRepository {
 
     @Override
     public void addRoleToUser(
-            ApplicationRole role,
-            ApplicationUser user) {
+            final ApplicationRole role,
+            final ApplicationUser user) {
 
         user.getRoles().add(role);
         role.getUsers().add(user);
@@ -145,8 +145,8 @@ implements ApplicationRoleRepository {
 
     @Override
     public void removeRoleFromUser(
-            ApplicationRole role,
-            ApplicationUser user) {
+            final ApplicationRole role,
+            final ApplicationUser user) {
 
         user.getRoles().remove(role);
         role.getUsers().remove(user);
@@ -155,13 +155,14 @@ implements ApplicationRoleRepository {
     }
 
     @Override
-    public boolean isAdminRole(ApplicationRole genericRole) {
-        final ApplicationRole adminRole = findByNameCached(configBean.getAdminRoleName()).orElse(null);
+    public boolean isAdminRole(final ApplicationRole genericRole) {
+        val adminRoleName = config.getExtensions().getSecman().getSeed().getAdmin().getRoleName();
+        final ApplicationRole adminRole = findByNameCached(adminRoleName).orElse(null);
         return Objects.equals(adminRole, genericRole);
     }
 
     @Override
-    public void deleteRole(ApplicationRole role) {
+    public void deleteRole(final ApplicationRole role) {
 
         role.getUsers().clear();
         val permissions = role.getPermissions();
@@ -174,7 +175,7 @@ implements ApplicationRoleRepository {
 
     @Override
     public Collection<ApplicationRole> getRoles(
-            ApplicationUser user) {
+            final ApplicationUser user) {
         return user.getRoles();
     }
 

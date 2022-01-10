@@ -24,8 +24,8 @@ import org.apache.isis.applib.annotations.Action;
 import org.apache.isis.applib.annotations.ActionLayout;
 import org.apache.isis.applib.annotations.MemberSupport;
 import org.apache.isis.applib.annotations.SemanticsOf;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
-import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
@@ -49,7 +49,7 @@ public class ApplicationUser_lock {
             extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_lock> {}
 
     @Inject private ApplicationUserRepository applicationUserRepository;
-    @Inject private SecmanConfiguration configBean;
+    @Inject private IsisConfiguration config;
 
     private final ApplicationUser target;
 
@@ -60,7 +60,7 @@ public class ApplicationUser_lock {
 
     @MemberSupport public String disableAct() {
         if(applicationUserRepository.isAdminUser(target)) {
-            return String.format("Cannot lock the '%s' user.", configBean.getAdminUserName());
+            return String.format("Cannot lock the '%s' user.", config.getExtensions().getSecman().getSeed().getAdmin().getUserName());
         }
         return target.getStatus() == ApplicationUserStatus.LOCKED ? "Status is already set to LOCKED": null;
     }
