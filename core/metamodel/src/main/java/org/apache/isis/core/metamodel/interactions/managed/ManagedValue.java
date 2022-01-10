@@ -49,13 +49,4 @@ public interface ManagedValue {
         valueHolder.setValue(newValue);
     }
 
-    /**
-     * Requires specified objects, that is ManagedObjects require an ObjectSpecification.
-     * @deprecated does not preserve memoized bookmarks; use for testing only!
-     */
-    @Deprecated
-    default void updatePojo(final UnaryOperator<Object> updater) {
-        update(v->ManagedObject.of(v.getSpecification(), updater.apply(v.getPojo())));
-    }
-
 }

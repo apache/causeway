@@ -62,6 +62,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
@@ -304,7 +305,7 @@ public class DomainObjectTesterFactory {
                         .forEach(param->{
                             pojoReplacers
                                 .get(param.getParamNr())
-                                .ifPresent(param::updatePojo);
+                                .ifPresent(replacer->updatePojo(param, replacer));
                         });
 
                 //pendingArgs.validateParameterSetForParameters();
@@ -336,7 +337,7 @@ public class DomainObjectTesterFactory {
                         .forEach(param->{
                             pojoVector
                                 .get(param.getParamNr())
-                                .ifPresent(pojo->param.updatePojo(__->pojo));
+                                .ifPresent(pojo->updatePojo(param, __->pojo));
                         });
 
                 //pendingArgs.validateParameterSetForParameters();
@@ -370,7 +371,7 @@ public class DomainObjectTesterFactory {
                 .forEach(param->{
                     pojoReplacers
                         .get(param.getParamNr())
-                        .ifPresent(param::updatePojo);
+                        .ifPresent(replacer->updatePojo(param, replacer));
                 });
 
                 // spawns its own transactional boundary, or reuses an existing one if available
@@ -437,7 +438,7 @@ public class DomainObjectTesterFactory {
                         .forEach(param->{
                             pojoReplacers
                                 .get(param.getParamNr())
-                                .ifPresent(param::updatePojo);
+                                .ifPresent(replacer->updatePojo(param, replacer));
                         });
 
                 //pendingArgs.validateParameterSetForParameters();
@@ -457,6 +458,11 @@ public class DomainObjectTesterFactory {
         }
 
         // -- HELPER
+
+        @SuppressWarnings("unchecked")
+        static void updatePojo(final ManagedValue managedValue, final UnaryOperator replacer) {
+            managedValue.update(v->ManagedObject.of(v.getSpecification(), replacer.apply(v.getPojo())));
+        }
 
         @SneakyThrows
         private ParameterNegotiationModel startParameterNegotiation(final boolean checkRules) {
