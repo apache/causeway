@@ -51,7 +51,7 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
 
     /**
      * This class is the default for the
-     * {@link org.apache.isis.applib.annotations.DomainObjectLayout#titleUiEvent()}
+     * {@link org.apache.isis.applib.annotation.DomainObjectLayout#titleUiEvent()}
      * annotation element.
      *
      * <p>

@@ -39,8 +39,8 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;

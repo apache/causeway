@@ -18,8 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.param.parameter.mandatory;
 
-import org.apache.isis.applib.annotations.Optionality;
-import org.apache.isis.applib.annotations.Parameter;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;

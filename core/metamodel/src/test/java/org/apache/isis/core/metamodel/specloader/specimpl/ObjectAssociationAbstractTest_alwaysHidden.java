@@ -29,7 +29,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;

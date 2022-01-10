@@ -29,8 +29,8 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.annotations.Collection;
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;

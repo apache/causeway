@@ -18,13 +18,13 @@
  */
 package demoapp.dom.domain.properties.Property.mustSatisfy;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.ActionLayout;
-import org.apache.isis.applib.annotations.MemberSupport;
-import org.apache.isis.applib.annotations.Optionality;
-import org.apache.isis.applib.annotations.Parameter;
-import org.apache.isis.applib.annotations.ParameterLayout;
-import org.apache.isis.applib.annotations.SemanticsOf;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 

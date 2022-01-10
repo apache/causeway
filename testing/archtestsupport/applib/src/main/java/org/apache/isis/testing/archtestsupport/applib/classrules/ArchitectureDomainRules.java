@@ -49,14 +49,14 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.Collection;
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.DomainObjectLayout;
-import org.apache.isis.applib.annotations.DomainService;
-import org.apache.isis.applib.annotations.DomainServiceLayout;
-import org.apache.isis.applib.annotations.Nature;
-import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.val;

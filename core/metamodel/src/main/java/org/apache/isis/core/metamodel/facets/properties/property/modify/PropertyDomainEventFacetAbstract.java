@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.properties.property.modify;
 
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;

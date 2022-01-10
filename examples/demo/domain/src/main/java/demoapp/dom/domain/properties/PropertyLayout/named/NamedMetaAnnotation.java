@@ -24,8 +24,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotations.ParameterLayout;
-import org.apache.isis.applib.annotations.PropertyLayout;
+import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 //tag::class[]
 @PropertyLayout(named = "Named from meta-annotation")       // <.>

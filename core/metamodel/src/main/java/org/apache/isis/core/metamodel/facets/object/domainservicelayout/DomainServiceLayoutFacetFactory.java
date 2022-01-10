@@ -20,8 +20,8 @@ package org.apache.isis.core.metamodel.facets.object.domainservicelayout;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotations.DomainService;
-import org.apache.isis.applib.annotations.DomainServiceLayout;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;

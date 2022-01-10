@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.valuesemantics;
 import java.lang.reflect.Method;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.annotations.Introspection.IntrospectionPolicy;
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;

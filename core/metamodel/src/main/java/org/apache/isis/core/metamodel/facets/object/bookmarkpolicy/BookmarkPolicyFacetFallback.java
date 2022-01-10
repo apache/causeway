@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.object.bookmarkpolicy;
 
-import org.apache.isis.applib.annotations.BookmarkPolicy;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 

@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.annotations.DomainObjectLayout;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.events.ui.LayoutUiEvent;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.commons.internal.base._Casts;

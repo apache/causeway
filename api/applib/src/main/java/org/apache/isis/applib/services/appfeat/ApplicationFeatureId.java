@@ -29,8 +29,8 @@ import static java.util.Comparator.nullsFirst;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotations.Programmatic;
-import org.apache.isis.applib.annotations.Value;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;

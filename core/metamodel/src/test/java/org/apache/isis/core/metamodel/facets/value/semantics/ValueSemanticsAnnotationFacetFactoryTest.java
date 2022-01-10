@@ -7,7 +7,7 @@ import java.time.format.FormatStyle;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.annotations.ValueSemantics;
+import org.apache.isis.applib.annotation.ValueSemantics;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;

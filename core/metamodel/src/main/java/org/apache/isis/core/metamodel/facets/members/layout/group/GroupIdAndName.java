@@ -23,9 +23,9 @@ import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.ActionLayout;
-import org.apache.isis.applib.annotations.PropertyLayout;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;

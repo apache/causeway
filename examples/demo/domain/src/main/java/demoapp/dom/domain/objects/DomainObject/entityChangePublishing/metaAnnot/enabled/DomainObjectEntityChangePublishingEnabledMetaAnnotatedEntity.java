@@ -18,7 +18,7 @@
  */
 package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled;
 
-import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingEntity;
 

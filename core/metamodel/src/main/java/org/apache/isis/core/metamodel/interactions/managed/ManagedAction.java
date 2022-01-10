@@ -23,7 +23,7 @@ import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.routing.RoutingService;

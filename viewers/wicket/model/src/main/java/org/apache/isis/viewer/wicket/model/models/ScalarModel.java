@@ -23,7 +23,7 @@ import java.util.Optional;
 
 import org.apache.wicket.model.ChainingModel;
 
-import org.apache.isis.applib.annotations.PromptStyle;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;

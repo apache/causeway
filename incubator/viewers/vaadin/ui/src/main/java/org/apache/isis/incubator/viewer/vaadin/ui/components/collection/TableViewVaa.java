@@ -24,7 +24,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Multimaps;

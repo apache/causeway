@@ -23,7 +23,7 @@ import javax.inject.Named;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.standard.AuthenticatorAbstract;
 

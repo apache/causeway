@@ -22,7 +22,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotations.DomainServiceLayout.MenuBar;
+import org.apache.isis.applib.annotation.DomainServiceLayout.MenuBar;
 import org.apache.isis.viewer.common.applib.services.userprof.UserProfileUiModelProvider;
 import org.apache.isis.viewer.common.model.branding.BrandingUiModelProvider;
 import org.apache.isis.viewer.common.model.menu.MenuUiModelProvider;

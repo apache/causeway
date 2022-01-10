@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.function.Predicate;
 
-import org.apache.isis.applib.annotations.Programmatic;
+import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * Returns random instance of a provided collection, with overloads allowing instances to be excluded according to a

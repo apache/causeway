@@ -26,7 +26,7 @@ import javax.inject.Inject;
 import org.w3c.dom.events.EventTarget;
 import org.w3c.dom.html.HTMLAnchorElement;
 
-import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 

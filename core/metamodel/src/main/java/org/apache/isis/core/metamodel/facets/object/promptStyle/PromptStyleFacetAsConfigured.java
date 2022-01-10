@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.promptStyle;
 
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.annotations.PromptStyle;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class PromptStyleFacetAsConfigured

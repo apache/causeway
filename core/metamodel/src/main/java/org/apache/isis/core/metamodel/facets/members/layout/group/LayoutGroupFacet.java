@@ -18,9 +18,9 @@
  */
 package org.apache.isis.core.metamodel.facets.members.layout.group;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.ActionLayout;
-import org.apache.isis.applib.annotations.PropertyLayout;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**

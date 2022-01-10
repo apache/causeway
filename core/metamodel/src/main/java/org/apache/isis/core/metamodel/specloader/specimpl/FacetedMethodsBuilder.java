@@ -31,10 +31,10 @@ import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.Nature;
-import org.apache.isis.applib.annotations.Introspection.IntrospectionPolicy;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;

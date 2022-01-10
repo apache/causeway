@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.isis.applib.annotations.SemanticsOf;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.swagger.Visibility;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;

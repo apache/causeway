@@ -21,9 +21,9 @@ package org.apache.isis.testdomain.model.good;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.applib.annotations.Collection;
-import org.apache.isis.applib.annotations.CollectionLayout;
-import org.apache.isis.applib.annotations.MemberSupport;
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 
 import lombok.RequiredArgsConstructor;
 

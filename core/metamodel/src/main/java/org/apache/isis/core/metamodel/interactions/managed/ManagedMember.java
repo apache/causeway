@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.Veto;

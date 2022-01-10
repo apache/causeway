@@ -20,7 +20,7 @@ package org.apache.isis.applib.layout.component;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
-import org.apache.isis.applib.annotations.BookmarkPolicy;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
 
 /**
  * @since 2.0 {@index}

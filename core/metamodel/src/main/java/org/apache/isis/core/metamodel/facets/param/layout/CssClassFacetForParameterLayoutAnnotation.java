@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.param.layout;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotations.ParameterLayout;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;

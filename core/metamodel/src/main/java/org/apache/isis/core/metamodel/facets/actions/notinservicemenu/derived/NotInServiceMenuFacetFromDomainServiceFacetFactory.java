@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotations.NatureOfService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;

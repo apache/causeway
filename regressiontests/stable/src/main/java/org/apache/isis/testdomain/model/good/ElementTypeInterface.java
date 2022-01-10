@@ -18,8 +18,8 @@
  */
 package org.apache.isis.testdomain.model.good;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Property;
 
 public interface ElementTypeInterface {
 

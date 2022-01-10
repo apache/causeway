@@ -32,8 +32,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotations.InteractionScope;
-import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotation.InteractionScope;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.user.ImpersonateMenuAdvisor;
 import org.apache.isis.applib.services.user.UserService;

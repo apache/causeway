@@ -36,7 +36,7 @@
  * <p>
  * The association between {@link org.apache.isis.applib.value.semantics.ValueSemanticsProvider}
  * and its corresponding type can be done in several ways.  Most straightforward
- * is to annotate the class with the {@link org.apache.isis.applib.annotations.Value}
+ * is to annotate the class with the {@link org.apache.isis.applib.annotation.Value}
  * annotation.  However, if the value type source code cannot be modified (for
  * example, if it is a third-party type such as joda-time), then the association
  * can be made using configuration properties.

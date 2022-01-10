@@ -29,8 +29,8 @@ import javax.persistence.Table;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.DomainService;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -98,7 +98,7 @@ implements IsisBeanTypeClassifier {
 
         // handle value types ...
 
-        val aValue = findNearestAnnotation(type, org.apache.isis.applib.annotations.Value.class)
+        val aValue = findNearestAnnotation(type, org.apache.isis.applib.annotation.Value.class)
                 .orElse(null);
         if(aValue!=null) {
             return BeanClassification.delegated(BeanSort.VALUE);

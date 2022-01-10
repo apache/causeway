@@ -24,8 +24,8 @@ import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.isis.applib.annotations.LabelPosition;
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;

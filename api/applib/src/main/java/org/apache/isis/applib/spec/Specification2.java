@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib.spec;
 
-import org.apache.isis.applib.annotations.Programmatic;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 
 /**

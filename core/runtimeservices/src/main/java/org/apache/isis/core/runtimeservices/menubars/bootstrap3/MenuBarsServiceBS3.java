@@ -33,9 +33,9 @@ import javax.inject.Named;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotations.DomainServiceLayout;
-import org.apache.isis.applib.annotations.NatureOfService;
-import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;

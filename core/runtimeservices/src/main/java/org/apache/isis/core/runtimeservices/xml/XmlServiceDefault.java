@@ -40,7 +40,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
-import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.services.xml.XmlService;
 import org.apache.isis.commons.internal.codec._DocumentFactories;

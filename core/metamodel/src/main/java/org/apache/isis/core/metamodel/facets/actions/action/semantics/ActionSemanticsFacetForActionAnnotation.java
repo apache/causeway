@@ -20,8 +20,8 @@ package org.apache.isis.core.metamodel.facets.actions.action.semantics;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.SemanticsOf;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;

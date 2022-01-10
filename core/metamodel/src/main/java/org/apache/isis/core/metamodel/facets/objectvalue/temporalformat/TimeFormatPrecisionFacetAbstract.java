@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.objectvalue.temporalformat;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.annotations.TimePrecision;
+import org.apache.isis.applib.annotation.TimePrecision;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

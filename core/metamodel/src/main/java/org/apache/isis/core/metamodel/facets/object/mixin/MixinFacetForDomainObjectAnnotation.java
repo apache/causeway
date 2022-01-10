@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.facets.object.mixin;
 import java.lang.reflect.Constructor;
 import java.util.Optional;
 
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.Nature;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 

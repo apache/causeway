@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib.spec;
 
-import org.apache.isis.applib.annotations.Programmatic;
+import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * Adapter to make it easy to perform boolean algebra on {@link Specification}s.

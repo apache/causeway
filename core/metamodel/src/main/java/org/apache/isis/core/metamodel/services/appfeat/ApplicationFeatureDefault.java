@@ -24,8 +24,8 @@ import java.util.OptionalInt;
 import java.util.SortedSet;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotations.SemanticsOf;
-import org.apache.isis.applib.annotations.Value;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;

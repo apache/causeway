@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal;
 
-import org.apache.isis.applib.annotations.Programmatic;
+import org.apache.isis.applib.annotation.Programmatic;
 
 public interface Tagger {
 

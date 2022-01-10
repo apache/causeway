@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.value.annotation;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotations.Value;
+import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

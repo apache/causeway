@@ -20,7 +20,7 @@ package org.apache.isis.core.security.authorization.manager;
 
 import lombok.val;
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.core.security.authorization.Authorizor;

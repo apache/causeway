@@ -18,8 +18,8 @@
  */
 package org.apache.isis.testdomain.model.bad;
 
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.Nature;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 
 // not allowed, should fail MM validation ISIS-2938
 @DomainObject(nature = Nature.VIEW_MODEL)

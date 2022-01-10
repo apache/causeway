@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.javalang.shorts.holder;
 
-import org.apache.isis.applib.annotations.Property;
-import org.apache.isis.applib.annotations.PropertyLayout;
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 

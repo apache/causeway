@@ -18,8 +18,8 @@
  */
 package org.apache.isis.testdomain.model.badnoactenforce;
 
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.Nature;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 
 @DomainObject(nature = Nature.VIEW_MODEL)
 public class InvalidOrphanedActionSupportNoAnnotationEnforced {

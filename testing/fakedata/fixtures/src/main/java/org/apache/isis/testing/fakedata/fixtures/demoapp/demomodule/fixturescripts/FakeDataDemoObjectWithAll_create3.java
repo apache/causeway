@@ -22,7 +22,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotations.Programmatic;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.testing.fakedata.applib.services.FakeDataService;
 import org.apache.isis.testing.fakedata.fixtures.demoapp.demomodule.dom.FakeDataDemoObjectWithAll;

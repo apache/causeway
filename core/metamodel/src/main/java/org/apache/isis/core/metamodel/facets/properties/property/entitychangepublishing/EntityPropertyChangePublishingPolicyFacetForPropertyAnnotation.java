@@ -20,8 +20,8 @@ package org.apache.isis.core.metamodel.facets.properties.property.entitychangepu
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotations.Property;
-import org.apache.isis.applib.annotations.Publishing;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class EntityPropertyChangePublishingPolicyFacetForPropertyAnnotation

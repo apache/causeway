@@ -21,7 +21,7 @@ package org.apache.isis.testing.fakedata.applib.services;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.isis.applib.annotations.Programmatic;
+import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * Returns random but well-formed {@link URL}s.

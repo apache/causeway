@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib;
 
-import org.apache.isis.applib.annotations.Programmatic;
+import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * Indicates that an object belongs to the UI/application layer, and is intended to be used as a view model.

@@ -20,8 +20,8 @@ package org.apache.isis.core.metamodel.facets.properties.property.snapshot;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotations.Property;
-import org.apache.isis.applib.annotations.Snapshot;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Snapshot;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacetAbstract;

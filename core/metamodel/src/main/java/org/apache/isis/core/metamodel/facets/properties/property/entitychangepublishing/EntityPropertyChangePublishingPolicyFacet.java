@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.properties.property.entitychangepublishing;
 
-import org.apache.isis.applib.annotations.Publishing;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.metamodel.facetapi.Facet;

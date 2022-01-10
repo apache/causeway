@@ -40,7 +40,7 @@ import lombok.With;
  * @since 2.0 {@index}
  * @apiNote implements Comparable<CalendarEvent> based on epochMillis
  */
-@org.apache.isis.applib.annotations.Value(
+@org.apache.isis.applib.annotation.Value(
         logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.CalendarEvent")
 @Getter @With
 @ToString @EqualsAndHashCode

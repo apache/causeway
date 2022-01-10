@@ -26,8 +26,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.Publishing;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacet;

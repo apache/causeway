@@ -26,9 +26,9 @@ import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotations.Domain;
-import org.apache.isis.applib.annotations.Introspection.EncapsulationPolicy;
-import org.apache.isis.applib.annotations.Introspection.IntrospectionPolicy;
+import org.apache.isis.applib.annotation.Domain;
+import org.apache.isis.applib.annotation.Introspection.EncapsulationPolicy;
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.functions._Predicates;

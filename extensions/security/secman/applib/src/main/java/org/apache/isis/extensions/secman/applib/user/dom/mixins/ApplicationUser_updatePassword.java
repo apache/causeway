@@ -26,10 +26,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.ActionLayout;
-import org.apache.isis.applib.annotations.MemberSupport;
-import org.apache.isis.applib.annotations.SemanticsOf;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;

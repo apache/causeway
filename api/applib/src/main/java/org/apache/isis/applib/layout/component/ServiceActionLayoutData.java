@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotations.BookmarkPolicy;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.layout.links.Link;
 
 import lombok.Getter;
@@ -34,7 +34,7 @@ import lombok.Setter;
 
 /**
  * Describes the layout of a single action, broadly corresponding to
- * {@link org.apache.isis.applib.annotations.ActionLayout}.
+ * {@link org.apache.isis.applib.annotation.ActionLayout}.
  *
  * @since 1.x {@index}
  */

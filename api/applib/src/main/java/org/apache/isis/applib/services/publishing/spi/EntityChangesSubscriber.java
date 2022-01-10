@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib.services.publishing.spi;
 
-import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.commons.having.HasEnabling;
 
 /**

@@ -54,7 +54,7 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
 
     /**
      * This class is the default for the
-     * {@link org.apache.isis.applib.annotations.Property#domainEvent()}
+     * {@link org.apache.isis.applib.annotation.Property#domainEvent()}
      * annotation attribute.
      *
      * <p>

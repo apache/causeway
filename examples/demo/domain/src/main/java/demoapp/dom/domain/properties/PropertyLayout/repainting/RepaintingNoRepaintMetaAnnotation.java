@@ -24,8 +24,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotations.PropertyLayout;
-import org.apache.isis.applib.annotations.Repainting;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Repainting;
 
 //tag::class[]
 @PropertyLayout(repainting = Repainting.NO_REPAINT)    // <.>

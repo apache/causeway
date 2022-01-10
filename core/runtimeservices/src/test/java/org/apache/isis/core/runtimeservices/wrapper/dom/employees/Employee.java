@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.runtimeservices.wrapper.dom.employees;
 
-import org.apache.isis.applib.annotations.PropertyLayout;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.runtimeservices.wrapper.dom.claims.Approver;
 import org.apache.isis.core.runtimeservices.wrapper.dom.claims.Claimant;
 

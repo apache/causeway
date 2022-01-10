@@ -23,7 +23,7 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.springframework.beans.factory.annotation.Qualifier;

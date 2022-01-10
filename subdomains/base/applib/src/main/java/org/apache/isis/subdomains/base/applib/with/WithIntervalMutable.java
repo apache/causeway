@@ -20,10 +20,10 @@ package org.apache.isis.subdomains.base.applib.with;
 
 import org.joda.time.LocalDate;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.Optionality;
-import org.apache.isis.applib.annotations.Parameter;
-import org.apache.isis.applib.annotations.SemanticsOf;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.subdomains.base.applib.valuetypes.LocalDateInterval;
 
 /**

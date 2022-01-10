@@ -35,7 +35,7 @@ import java.util.stream.Stream;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
 
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;

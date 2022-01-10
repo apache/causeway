@@ -31,7 +31,7 @@ import javax.inject.Inject;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotations.TimePrecision;
+import org.apache.isis.applib.annotation.TimePrecision;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.value.semantics.EncodingException;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics;

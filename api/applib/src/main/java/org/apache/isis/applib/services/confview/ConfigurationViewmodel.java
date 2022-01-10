@@ -24,10 +24,10 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotations.Collection;
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.Nature;
-import org.apache.isis.applib.annotations.ObjectSupport;
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,

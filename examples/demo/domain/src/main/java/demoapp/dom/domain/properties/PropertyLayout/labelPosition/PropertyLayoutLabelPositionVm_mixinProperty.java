@@ -18,10 +18,10 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.labelPosition;
 
-import org.apache.isis.applib.annotations.LabelPosition;
-import org.apache.isis.applib.annotations.Property;
-import org.apache.isis.applib.annotations.PropertyLayout;
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 

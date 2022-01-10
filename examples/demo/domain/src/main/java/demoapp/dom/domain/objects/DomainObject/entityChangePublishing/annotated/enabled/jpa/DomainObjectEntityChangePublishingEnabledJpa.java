@@ -26,12 +26,12 @@ import javax.persistence.Table;
 
 import org.springframework.context.annotation.Profile;
 
-import org.apache.isis.applib.annotations.Bounding;
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.DomainObjectLayout;
-import org.apache.isis.applib.annotations.Nature;
-import org.apache.isis.applib.annotations.Publishing;
-import org.apache.isis.applib.annotations.Title;
+import org.apache.isis.applib.annotation.Bounding;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import lombok.Getter;

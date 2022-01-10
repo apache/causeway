@@ -26,11 +26,11 @@ import java.util.stream.Collectors;
 
 import org.joda.time.LocalDate;
 
-import org.apache.isis.applib.annotations.Editing;
-import org.apache.isis.applib.annotations.Optionality;
-import org.apache.isis.applib.annotations.Programmatic;
-import org.apache.isis.applib.annotations.Property;
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.subdomains.base.applib.Chained;
 

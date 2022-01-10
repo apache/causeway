@@ -29,7 +29,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.apache.isis.applib.annotations.TimePrecision;
+import org.apache.isis.applib.annotation.TimePrecision;
 import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.EditingFormatDirection;

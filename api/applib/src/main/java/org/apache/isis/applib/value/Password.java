@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotations.Value;
+import org.apache.isis.applib.annotation.Value;
 
 /**
  * Represents a password that will not displayed to the UI but can be persisted.

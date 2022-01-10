@@ -18,7 +18,7 @@
  */
 package org.apache.isis.testing.fixtures.applib.personas;
 
-import org.apache.isis.applib.annotations.Programmatic;
+import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * A specialization of {@link BuilderScriptAbstract} which expects there to be

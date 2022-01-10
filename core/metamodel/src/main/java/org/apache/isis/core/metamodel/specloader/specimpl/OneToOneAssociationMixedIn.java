@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotations.Domain;
+import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.reflection._Annotations;
@@ -45,7 +45,7 @@ extends OneToOneAssociationDefault
 implements MixedInMember {
 
     /**
-     * The type of the mixin (providing the action), eg annotated with {@link org.apache.isis.applib.annotations.Mixin}.
+     * The type of the mixin (providing the action), eg annotated with {@link org.apache.isis.applib.annotation.Mixin}.
      */
     private final Class<?> mixinType;
 

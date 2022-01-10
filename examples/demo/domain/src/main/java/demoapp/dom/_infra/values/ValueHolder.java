@@ -18,7 +18,7 @@
  */
 package demoapp.dom._infra.values;
 
-import org.apache.isis.applib.annotations.LogicalTypeName;
+import org.apache.isis.applib.annotation.LogicalTypeName;
 
 @LogicalTypeName("demo.ValueHolder")
 public interface ValueHolder<T> {

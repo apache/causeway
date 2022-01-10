@@ -20,8 +20,8 @@ package org.apache.isis.applib.events.domain;
 
 import java.util.List;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.SemanticsOf;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 
@@ -62,7 +62,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
 
     /**
      * This class is the default for the
-     * {@link org.apache.isis.applib.annotations.Action#domainEvent()} annotation attribute.
+     * {@link org.apache.isis.applib.annotation.Action#domainEvent()} annotation attribute.
      *
      * <p>
      * Whether this raises an event or not depends upon the

@@ -21,15 +21,15 @@ package org.apache.isis.testdomain.model.good;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.Collection;
-import org.apache.isis.applib.annotations.CollectionLayout;
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.MemberSupport;
-import org.apache.isis.applib.annotations.MinLength;
-import org.apache.isis.applib.annotations.Nature;
-import org.apache.isis.applib.annotations.Property;
-import org.apache.isis.applib.annotations.PropertyLayout;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.MinLength;
+import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 import lombok.Getter;
 import lombok.Setter;

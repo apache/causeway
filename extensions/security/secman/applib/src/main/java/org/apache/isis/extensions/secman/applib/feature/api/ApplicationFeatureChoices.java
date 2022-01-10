@@ -30,11 +30,11 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.ViewModel;
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.MinLength;
-import org.apache.isis.applib.annotations.Nature;
-import org.apache.isis.applib.annotations.Property;
-import org.apache.isis.applib.annotations.Title;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.MinLength;
+import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.commons.internal.functions._Predicates;

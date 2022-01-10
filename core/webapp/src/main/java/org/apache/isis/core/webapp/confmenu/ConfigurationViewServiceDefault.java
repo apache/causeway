@@ -36,7 +36,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.confview.ConfigurationProperty;
 import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.commons.collections.Can;

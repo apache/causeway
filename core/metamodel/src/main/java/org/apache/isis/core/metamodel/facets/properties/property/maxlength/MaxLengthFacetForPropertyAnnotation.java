@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.properties.property.maxlength;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
 

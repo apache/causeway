@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.actions.position;
 
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.annotations.ActionLayout;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 

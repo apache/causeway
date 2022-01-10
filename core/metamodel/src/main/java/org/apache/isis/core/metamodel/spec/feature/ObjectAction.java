@@ -24,10 +24,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.annotations.ActionLayout;
-import org.apache.isis.applib.annotations.PromptStyle;
-import org.apache.isis.applib.annotations.SemanticsOf;
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.collections.Can;

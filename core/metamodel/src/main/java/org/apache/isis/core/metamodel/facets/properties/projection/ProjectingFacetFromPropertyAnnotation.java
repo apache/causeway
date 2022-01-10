@@ -20,8 +20,8 @@ package org.apache.isis.core.metamodel.facets.properties.projection;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotations.Projecting;
-import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotation.Projecting;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 

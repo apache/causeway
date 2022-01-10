@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.command.Command;

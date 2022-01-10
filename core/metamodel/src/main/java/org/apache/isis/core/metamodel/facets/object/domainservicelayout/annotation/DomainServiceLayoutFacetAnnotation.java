@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.domainservicelayout.annotation;
 
 
-import org.apache.isis.applib.annotations.DomainServiceLayout;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacetAbstract;
 

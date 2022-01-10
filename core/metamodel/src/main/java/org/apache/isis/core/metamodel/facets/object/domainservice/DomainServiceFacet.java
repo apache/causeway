@@ -22,18 +22,18 @@ import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotations.NatureOfService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 /**
- * Corresponds to annotating the class with the {@link org.apache.isis.applib.annotations.DomainService} annotation.
+ * Corresponds to annotating the class with the {@link org.apache.isis.applib.annotation.DomainService} annotation.
  */
 public interface DomainServiceFacet extends Facet {
 
     /**
-     * Corresponds to {@link org.apache.isis.applib.annotations.DomainService#nature()}.
+     * Corresponds to {@link org.apache.isis.applib.annotation.DomainService#nature()}.
      *
      */
     public NatureOfService getNatureOfService();

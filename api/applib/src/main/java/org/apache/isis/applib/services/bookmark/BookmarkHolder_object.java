@@ -21,7 +21,7 @@ package org.apache.isis.applib.services.bookmark;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotation.Property;
 
 import lombok.RequiredArgsConstructor;
 

@@ -18,10 +18,10 @@
  */
 package org.apache.isis.applib.services.grid;
 
-import org.apache.isis.applib.annotations.ActionLayout;
-import org.apache.isis.applib.annotations.CollectionLayout;
-import org.apache.isis.applib.annotations.DomainObjectLayout;
-import org.apache.isis.applib.annotations.PropertyLayout;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.layout.grid.Grid;
 
 /**

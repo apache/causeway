@@ -20,10 +20,10 @@ package org.apache.isis.extensions.secman.applib.permission.dom.mixins;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotations.MemberSupport;
-import org.apache.isis.applib.annotations.Property;
-import org.apache.isis.applib.annotations.PropertyLayout;
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeatui.ApplicationFeatureViewModel;

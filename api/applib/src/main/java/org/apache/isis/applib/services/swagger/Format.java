@@ -19,7 +19,7 @@
 package org.apache.isis.applib.services.swagger;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotations.Value;
+import org.apache.isis.applib.annotation.Value;
 
 /**
  * The format to generate the representation of the swagger spec.

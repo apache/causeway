@@ -26,7 +26,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotations.DomainServiceLayout;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;

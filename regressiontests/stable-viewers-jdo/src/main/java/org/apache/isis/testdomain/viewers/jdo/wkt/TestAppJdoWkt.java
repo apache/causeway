@@ -25,12 +25,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.ActionLayout;
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.HomePage;
-import org.apache.isis.applib.annotations.Nature;
-import org.apache.isis.applib.annotations.ObjectSupport;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.HomePage;
+import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.internal.debug.xray.XrayEnable;
 import org.apache.isis.core.config.presets.IsisPresets;

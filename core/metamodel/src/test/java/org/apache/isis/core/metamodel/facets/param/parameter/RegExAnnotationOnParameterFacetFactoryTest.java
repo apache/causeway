@@ -24,7 +24,7 @@ import javax.validation.constraints.Pattern;
 
 import org.junit.Before;
 
-import org.apache.isis.applib.annotations.Introspection.IntrospectionPolicy;
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;

@@ -19,7 +19,7 @@
 
 /**
  * This package defines an additional set of
- * {@link org.apache.isis.applib.annotations.Value} types, supported in addition
+ * {@link org.apache.isis.applib.annotation.Value} types, supported in addition
  * to the usual JDK ones (of {@link java.lang.String}, {@link java.lang.Integer}, {@link java.math.BigDecimal}, {@link java.util.Date}
  * etc and the primitives).
  *

@@ -18,10 +18,10 @@
  */
 package org.apache.isis.subdomains.base.applib;
 
-import org.apache.isis.applib.annotations.Editing;
-import org.apache.isis.applib.annotations.Optionality;
-import org.apache.isis.applib.annotations.Property;
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.subdomains.base.applib.with.WithInterval;
 import org.apache.isis.subdomains.base.applib.with.WithIntervalContiguous;
 

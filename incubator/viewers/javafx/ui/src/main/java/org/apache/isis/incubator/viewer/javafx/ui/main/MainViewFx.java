@@ -22,7 +22,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;

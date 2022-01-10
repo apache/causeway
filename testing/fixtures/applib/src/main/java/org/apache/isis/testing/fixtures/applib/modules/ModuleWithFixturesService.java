@@ -39,7 +39,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.subdomains.spring.applib.service.BeanDescriptor;
 import org.apache.isis.subdomains.spring.applib.service.ContextBeans;

@@ -22,14 +22,14 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotations.MemberSupport;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.extensions.secman.applib.user.app.ApplicationUserManager;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@org.apache.isis.applib.annotations.Collection
+@org.apache.isis.applib.annotation.Collection
 @RequiredArgsConstructor
 public class ApplicationUserManager_allUsers {
 

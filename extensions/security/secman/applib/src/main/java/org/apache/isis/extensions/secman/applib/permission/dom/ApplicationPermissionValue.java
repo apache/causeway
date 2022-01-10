@@ -21,7 +21,7 @@ package org.apache.isis.extensions.secman.applib.permission.dom;
 import java.io.Serializable;
 import java.util.Comparator;
 
-import org.apache.isis.applib.annotations.Programmatic;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;

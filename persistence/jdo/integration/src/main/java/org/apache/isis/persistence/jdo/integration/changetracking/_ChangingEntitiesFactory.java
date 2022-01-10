@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.apache.isis.applib.annotations.EntityChangeKind;
+import org.apache.isis.applib.annotation.EntityChangeKind;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactn.Interaction;

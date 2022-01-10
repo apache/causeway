@@ -25,15 +25,15 @@ import java.lang.annotation.Target;
 import java.util.Collection;
 import java.util.Comparator;
 
-import org.apache.isis.applib.annotations.CollectionLayout;
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.Editing;
-import org.apache.isis.applib.annotations.ObjectSupport;
-import org.apache.isis.applib.annotations.Parameter;
-import org.apache.isis.applib.annotations.ParameterLayout;
-import org.apache.isis.applib.annotations.Property;
-import org.apache.isis.applib.annotations.PropertyLayout;
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.ObjectSupport;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
@@ -150,7 +150,7 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
 
     // -- CHILDREN
 
-    @org.apache.isis.applib.annotations.Collection(
+    @org.apache.isis.applib.annotation.Collection(
             domainEvent = Children.DomainEvent.class
     )
     @CollectionLayout(

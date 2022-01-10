@@ -19,10 +19,10 @@
 package org.apache.isis.core.metamodel.facets.object.introspection;
 
 
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.Introspection;
-import org.apache.isis.applib.annotations.Introspection.EncapsulationPolicy;
-import org.apache.isis.applib.annotations.Introspection.IntrospectionPolicy;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Introspection;
+import org.apache.isis.applib.annotation.Introspection.EncapsulationPolicy;
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.Facet;

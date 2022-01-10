@@ -27,7 +27,7 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-import org.apache.isis.applib.annotations.CollectionLayout;
+import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;

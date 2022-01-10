@@ -26,8 +26,8 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import org.springframework.context.annotation.Profile;
 
-import org.apache.isis.applib.annotations.Bounding;
-import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotation.Bounding;
+import org.apache.isis.applib.annotation.DomainObject;
 
 import lombok.Getter;
 import lombok.Setter;

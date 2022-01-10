@@ -20,7 +20,7 @@ package org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.contributio
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;

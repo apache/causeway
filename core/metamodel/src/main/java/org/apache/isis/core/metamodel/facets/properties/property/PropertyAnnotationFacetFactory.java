@@ -23,8 +23,8 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.validation.constraints.Pattern;
 
-import org.apache.isis.applib.annotations.Property;
-import org.apache.isis.applib.annotations.SemanticsOf;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.commons.internal.base._NullSafe;

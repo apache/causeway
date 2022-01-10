@@ -24,7 +24,7 @@ import java.util.function.Predicate;
 
 import org.apache.wicket.markup.html.link.AbstractLink;
 
-import org.apache.isis.applib.annotations.ActionLayout.Position;
+import org.apache.isis.applib.annotation.ActionLayout.Position;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.viewer.common.model.action.HasManagedAction;
 import org.apache.isis.viewer.common.model.mixin.HasUiComponent;

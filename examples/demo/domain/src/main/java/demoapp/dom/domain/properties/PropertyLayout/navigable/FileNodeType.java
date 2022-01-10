@@ -18,7 +18,7 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.navigable;
 
-import org.apache.isis.applib.annotations.ObjectSupport;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.util.Enums;
 
 //tag::class[]

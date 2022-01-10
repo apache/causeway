@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.collections.collection.modify;
 
-import org.apache.isis.applib.annotations.Collection;
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

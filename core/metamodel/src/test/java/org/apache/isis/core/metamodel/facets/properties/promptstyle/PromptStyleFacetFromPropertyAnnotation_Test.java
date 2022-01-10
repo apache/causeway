@@ -32,8 +32,8 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 
-import org.apache.isis.applib.annotations.PromptStyle;
-import org.apache.isis.applib.annotations.PropertyLayout;
+import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

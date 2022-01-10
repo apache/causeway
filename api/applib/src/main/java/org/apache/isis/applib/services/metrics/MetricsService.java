@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib.services.metrics;
 
-import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
 

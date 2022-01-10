@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotations.Programmatic;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
@@ -233,15 +233,15 @@ implements GridSystemService<G> {
                 // fix up the action position if required
                 if(actionLayoutDataOwner instanceof FieldSet) {
                     if(actionLayoutData.getPosition() == null ||
-                            actionLayoutData.getPosition() == org.apache.isis.applib.annotations.ActionLayout.Position.BELOW ||
-                            actionLayoutData.getPosition() == org.apache.isis.applib.annotations.ActionLayout.Position.RIGHT) {
-                        actionLayoutData.setPosition(org.apache.isis.applib.annotations.ActionLayout.Position.PANEL);
+                            actionLayoutData.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.BELOW ||
+                            actionLayoutData.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.RIGHT) {
+                        actionLayoutData.setPosition(org.apache.isis.applib.annotation.ActionLayout.Position.PANEL);
                     }
                 } else if(actionLayoutDataOwner instanceof PropertyLayoutData) {
                     if(actionLayoutData.getPosition() == null ||
-                            actionLayoutData.getPosition() == org.apache.isis.applib.annotations.ActionLayout.Position.PANEL_DROPDOWN ||
-                            actionLayoutData.getPosition() == org.apache.isis.applib.annotations.ActionLayout.Position.PANEL) {
-                        actionLayoutData.setPosition(org.apache.isis.applib.annotations.ActionLayout.Position.BELOW);
+                            actionLayoutData.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.PANEL_DROPDOWN ||
+                            actionLayoutData.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.PANEL) {
+                        actionLayoutData.setPosition(org.apache.isis.applib.annotation.ActionLayout.Position.BELOW);
                     }
                 } else {
                     // doesn't do anything for DomainObject or Collection

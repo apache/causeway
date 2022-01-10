@@ -21,14 +21,14 @@ package demoapp.dom.types.jodatime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.ActionLayout;
-import org.apache.isis.applib.annotations.DomainObjectLayout;
-import org.apache.isis.applib.annotations.DomainService;
-import org.apache.isis.applib.annotations.MemberSupport;
-import org.apache.isis.applib.annotations.NatureOfService;
-import org.apache.isis.applib.annotations.PriorityPrecedence;
-import org.apache.isis.applib.annotations.SemanticsOf;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotation.SemanticsOf;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.types.jodatime.jodadatetime.JodaDateTimes;

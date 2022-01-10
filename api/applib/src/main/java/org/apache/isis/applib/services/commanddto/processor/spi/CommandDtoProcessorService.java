@@ -20,8 +20,8 @@ package org.apache.isis.applib.services.commanddto.processor.spi;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.schema.cmd.v2.CommandDto;

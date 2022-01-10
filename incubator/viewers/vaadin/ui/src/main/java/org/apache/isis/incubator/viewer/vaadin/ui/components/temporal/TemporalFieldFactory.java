@@ -25,7 +25,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.data.converter.DateToSqlDateConverter;
 import com.vaadin.flow.data.converter.LocalDateToDateConverter;
 
-import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.OffsetCharacteristic;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalCharacteristic;

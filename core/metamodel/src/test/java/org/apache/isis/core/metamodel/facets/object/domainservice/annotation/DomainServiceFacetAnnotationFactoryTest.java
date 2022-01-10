@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainservice.annotation;
 
-import org.apache.isis.applib.annotations.DomainService;
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;

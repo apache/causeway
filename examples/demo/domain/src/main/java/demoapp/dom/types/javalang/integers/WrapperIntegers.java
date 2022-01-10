@@ -27,16 +27,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.ActionLayout;
-import org.apache.isis.applib.annotations.Collection;
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.Editing;
-import org.apache.isis.applib.annotations.MemberSupport;
-import org.apache.isis.applib.annotations.Nature;
-import org.apache.isis.applib.annotations.ObjectSupport;
-import org.apache.isis.applib.annotations.PromptStyle;
-import org.apache.isis.applib.annotations.SemanticsOf;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
+import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotation.SemanticsOf;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;

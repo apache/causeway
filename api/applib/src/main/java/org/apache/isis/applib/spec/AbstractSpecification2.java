@@ -20,7 +20,7 @@ package org.apache.isis.applib.spec;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.annotations.Programmatic;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.reflection._ClassCache;

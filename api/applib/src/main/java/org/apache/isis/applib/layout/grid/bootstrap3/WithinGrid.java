@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib.layout.grid.bootstrap3;
 
-import org.apache.isis.applib.annotations.Programmatic;
+import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * @since 1.x {@index}

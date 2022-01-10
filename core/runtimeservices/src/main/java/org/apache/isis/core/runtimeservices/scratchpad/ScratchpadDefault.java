@@ -26,8 +26,8 @@ import javax.inject.Named;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotations.InteractionScope;
-import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotation.InteractionScope;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.commons.internal.collections._Maps;
 

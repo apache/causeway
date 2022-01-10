@@ -22,8 +22,8 @@ import org.junit.Assert;
 
 import static org.hamcrest.Matchers.is;
 
-import org.apache.isis.applib.annotations.DomainService;
-import org.apache.isis.applib.annotations.DomainServiceLayout;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;

@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.members.layout.group;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class LayoutGroupFacetFromActionAnnotation

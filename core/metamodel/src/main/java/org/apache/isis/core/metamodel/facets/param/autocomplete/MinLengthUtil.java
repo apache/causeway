@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.param.autocomplete;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.annotations.MinLength;
+import org.apache.isis.applib.annotation.MinLength;
 
 import lombok.val;
 

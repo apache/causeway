@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.members.layout.order;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotations.CollectionLayout;
+import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class LayoutOrderFacetFromCollectionLayoutAnnotation

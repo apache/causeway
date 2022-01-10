@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.viewmodel;
 
 import java.util.function.Function;
 
-import org.apache.isis.applib.annotations.Nature;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to
- * applying either {@link org.apache.isis.applib.annotations.DomainObject} annotation with
+ * applying either {@link org.apache.isis.applib.annotation.DomainObject} annotation with
  * {@link Nature} = {@link Nature#VIEW_MODEL}  or
  * {@link org.apache.isis.applib.ViewModel} interface (for a view model), or by annotating
  *

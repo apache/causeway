@@ -22,9 +22,9 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.RecreatableDomainObject;
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.DomainObjectLayout;
-import org.apache.isis.applib.annotations.Nature;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;

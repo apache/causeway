@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotations.LabelPosition;
+import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;

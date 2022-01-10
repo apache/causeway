@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.MemberSupport;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.commons.internal.collections._Lists;
 
 import lombok.RequiredArgsConstructor;

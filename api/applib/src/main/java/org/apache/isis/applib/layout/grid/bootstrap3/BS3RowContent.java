@@ -21,7 +21,7 @@ package org.apache.isis.applib.layout.grid.bootstrap3;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.apache.isis.applib.annotations.Programmatic;
+import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * Common superclass for any content of a row.

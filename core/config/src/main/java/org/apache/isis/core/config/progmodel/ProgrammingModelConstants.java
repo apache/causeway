@@ -36,10 +36,10 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotations.Domain;
-import org.apache.isis.applib.annotations.MemberSupport;
-import org.apache.isis.applib.annotations.ObjectLifecycle;
-import org.apache.isis.applib.annotations.ObjectSupport;
+import org.apache.isis.applib.annotation.Domain;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.ObjectLifecycle;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Refs;

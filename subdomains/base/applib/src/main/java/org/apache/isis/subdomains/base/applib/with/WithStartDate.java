@@ -20,8 +20,8 @@ package org.apache.isis.subdomains.base.applib.with;
 
 import org.joda.time.LocalDate;
 
-import org.apache.isis.applib.annotations.Editing;
-import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Property;
 
 /**
  * @since 2.0 {@index}

@@ -22,9 +22,9 @@ import java.lang.reflect.Method;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotations.Optionality;
-import org.apache.isis.applib.annotations.Parameter;
-import org.apache.isis.applib.annotations.Introspection.IntrospectionPolicy;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;

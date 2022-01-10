@@ -23,8 +23,8 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.node.NullNode;
 
-import org.apache.isis.applib.annotations.SemanticsOf;
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;

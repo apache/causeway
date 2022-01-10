@@ -27,10 +27,10 @@ import javax.jdo.annotations.Persistent;
 
 import org.springframework.context.annotation.Profile;
 
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.Editing;
-import org.apache.isis.applib.annotations.ObjectSupport;
-import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.ObjectSupport;
+import org.apache.isis.applib.annotation.Property;
 
 import lombok.Getter;
 import lombok.Setter;

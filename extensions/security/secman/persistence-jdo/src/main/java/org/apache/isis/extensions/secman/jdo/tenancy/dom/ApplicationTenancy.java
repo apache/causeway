@@ -37,9 +37,9 @@ import javax.jdo.annotations.Uniques;
 import javax.jdo.annotations.Version;
 import javax.jdo.annotations.VersionStrategy;
 
-import org.apache.isis.applib.annotations.BookmarkPolicy;
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.DomainObjectLayout;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Casts;
 
 

@@ -47,7 +47,7 @@ package org.apache.isis.applib.services.routing;
  *          </p>
  *          <p>
  *              For example, return the home page (eg as defined by the
- *              {@link org.apache.isis.applib.annotations.HomePage} annotation).
+ *              {@link org.apache.isis.applib.annotation.HomePage} annotation).
  *          </p>
  *     </li>
  * </ul>

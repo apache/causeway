@@ -18,7 +18,7 @@
  */
 package demoapp.dom.types.isis.blobs.holder;
 
-import org.apache.isis.applib.annotations.LogicalTypeName;
+import org.apache.isis.applib.annotation.LogicalTypeName;
 import org.apache.isis.applib.value.Blob;
 
 @LogicalTypeName("demo.IsisBlobHolder")

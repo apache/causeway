@@ -20,9 +20,9 @@ package org.apache.isis.extensions.secman.applib.tenancy.dom.mixins;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotations.Collection;
-import org.apache.isis.applib.annotations.CollectionLayout;
-import org.apache.isis.applib.annotations.MemberSupport;
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.CollectionDomainEvent;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;

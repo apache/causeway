@@ -51,7 +51,7 @@ public class TitleBuffer {
      * <p>
      *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; 
      *     it doesn't honour other mechanisms for specifying the title, such as 
-     *     {@link org.apache.isis.applib.annotations.Title}
+     *     {@link org.apache.isis.applib.annotation.Title}
      *     annotation.  If that functionality is required, first call
      *     {@link TitleService#titleOf(Object)} on the object and pass in the resultant
      *     string.
@@ -106,7 +106,7 @@ public class TitleBuffer {
      *
      * <p>
      *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
-     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotations.Title}
+     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
      *     annotation.  If that functionality is required, first call
      *     {@link TitleService#titleOf(Object)} on the object and pass in the resultant
      *     string.
@@ -122,7 +122,7 @@ public class TitleBuffer {
      *
      * <p>
      *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
-     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotations.Title}
+     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
      *     annotation.  If that functionality is required, first call
      *     {@link TitleService#titleOf(Object)} on the object and pass in the resultant
      *     string.
@@ -159,7 +159,7 @@ public class TitleBuffer {
      *
      * <p>
      *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
-     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotations.Title}
+     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
      *     annotation.  If that functionality is required, first call
      *     {@link TitleService#titleOf(Object)} on the object and pass in the resultant
      *     string.
@@ -180,7 +180,7 @@ public class TitleBuffer {
      *
      * <p>
      *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
-     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotations.Title}
+     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
      *     annotation.  If that functionality is required, first call
      *     {@link TitleService#titleOf(Object)} on the object and pass in the resultant
      *     string.
@@ -222,7 +222,7 @@ public class TitleBuffer {
      *
      * <p>
      *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
-     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotations.Title}
+     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
      *     annotation.  If that functionality is required, first call
      *     {@link TitleService#titleOf(Object)} on the object and pass in the resultant
      *     string.
@@ -249,7 +249,7 @@ public class TitleBuffer {
      *
      * <p>
      *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
-     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotations.Title}
+     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
      *     annotation.  If that functionality is required, first call
      *     {@link TitleService#titleOf(Object)} on the object and pass in the resultant
      *     string.
@@ -334,7 +334,7 @@ public class TitleBuffer {
      *
      * <p>
      *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
-     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotations.Title}
+     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
      *     annotation.  If that functionality is required, first call
      *     {@link TitleService#titleOf(Object)} on the object and pass in the resultant
      *     string.
@@ -393,7 +393,7 @@ public class TitleBuffer {
      *
      * <p>
      *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
-     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotations.Title}
+     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
      *     annotation.  If that functionality is required, first call
      *     {@link TitleService#titleOf(Object)} on the object and pass in the resultant
      *     string.
@@ -417,7 +417,7 @@ public class TitleBuffer {
      *
      * <p>
      *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
-     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotations.Title}
+     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
      *     annotation.  If that functionality is required, first call
      *     {@link TitleService#titleOf(Object)} on the object and pass in the resultant
      *     string.

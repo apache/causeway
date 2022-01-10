@@ -18,7 +18,7 @@
  */
 package org.apache.isis.testing.fixtures.applib.personas;
 
-import org.apache.isis.applib.annotations.Programmatic;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;

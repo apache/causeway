@@ -22,7 +22,7 @@ import javax.inject.Inject;
 
 import org.springframework.util.ClassUtils;
 
-import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.incubator.viewer.javafx.model.binding.BindingsFx;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;

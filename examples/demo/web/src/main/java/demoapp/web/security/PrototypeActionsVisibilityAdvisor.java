@@ -20,14 +20,14 @@ package demoapp.web.security;
 
 import org.springframework.context.event.EventListener;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.ActionLayout;
-import org.apache.isis.applib.annotations.DomainService;
-import org.apache.isis.applib.annotations.DomainServiceLayout;
-import org.apache.isis.applib.annotations.MemberSupport;
-import org.apache.isis.applib.annotations.NatureOfService;
-import org.apache.isis.applib.annotations.PriorityPrecedence;
-import org.apache.isis.applib.annotations.RestrictTo;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.mixins.layout.Object_downloadLayoutXml;
 import org.apache.isis.applib.mixins.metamodel.Object_downloadMetamodelXml;
 import org.apache.isis.applib.mixins.metamodel.Object_rebuildMetamodel;

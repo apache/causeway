@@ -20,7 +20,7 @@ package org.apache.isis.testing.fakedata.applib.services;
 
 import java.math.BigInteger;
 
-import org.apache.isis.applib.annotations.Programmatic;
+import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * Returns random {@link BigInteger}s.

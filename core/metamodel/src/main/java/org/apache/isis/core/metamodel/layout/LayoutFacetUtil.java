@@ -20,10 +20,10 @@ package org.apache.isis.core.metamodel.layout;
 
 import java.util.Comparator;
 
-import org.apache.isis.applib.annotations.ActionLayout;
-import org.apache.isis.applib.annotations.BookmarkPolicy;
-import org.apache.isis.applib.annotations.LabelPosition;
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;

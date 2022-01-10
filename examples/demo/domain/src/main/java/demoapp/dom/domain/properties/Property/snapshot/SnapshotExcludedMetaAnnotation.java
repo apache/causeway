@@ -24,8 +24,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotations.Property;
-import org.apache.isis.applib.annotations.Snapshot;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Snapshot;
 
 //tag::class[]
 @Property(snapshot = Snapshot.EXCLUDED)

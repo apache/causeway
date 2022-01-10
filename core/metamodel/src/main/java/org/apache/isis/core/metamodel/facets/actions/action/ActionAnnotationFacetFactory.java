@@ -22,7 +22,7 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.commons.internal.base._Strings;

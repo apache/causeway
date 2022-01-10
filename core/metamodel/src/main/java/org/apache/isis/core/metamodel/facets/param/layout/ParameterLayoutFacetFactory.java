@@ -22,7 +22,7 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotations.ParameterLayout;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;

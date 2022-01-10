@@ -22,7 +22,7 @@ package org.apache.isis.applib.value.semantics;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotations.Value;
+import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 import org.apache.isis.schema.cmd.v2.CommandDto;

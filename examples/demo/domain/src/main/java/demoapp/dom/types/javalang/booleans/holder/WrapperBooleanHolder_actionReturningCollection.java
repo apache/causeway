@@ -23,8 +23,8 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.SemanticsOf;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 

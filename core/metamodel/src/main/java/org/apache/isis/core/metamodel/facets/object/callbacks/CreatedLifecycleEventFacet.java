@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.object.callbacks;
 
-import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacet;
 
 /**

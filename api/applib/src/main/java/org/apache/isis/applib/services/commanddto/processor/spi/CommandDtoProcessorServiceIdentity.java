@@ -22,7 +22,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 /**

@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.annotations.DomainServiceLayout;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.commons.internal.collections._Lists;
 

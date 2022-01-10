@@ -20,8 +20,8 @@ package demoapp.dom.domain.properties.Property.projecting;
 
 import java.util.List;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.SemanticsOf;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 

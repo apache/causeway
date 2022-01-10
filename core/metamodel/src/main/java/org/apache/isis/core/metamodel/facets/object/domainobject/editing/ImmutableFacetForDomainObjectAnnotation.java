@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.domainobject.editing;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;

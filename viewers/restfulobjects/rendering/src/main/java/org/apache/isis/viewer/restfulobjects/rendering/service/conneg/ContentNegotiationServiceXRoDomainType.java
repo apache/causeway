@@ -28,7 +28,7 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.conmap.ContentMappingService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;

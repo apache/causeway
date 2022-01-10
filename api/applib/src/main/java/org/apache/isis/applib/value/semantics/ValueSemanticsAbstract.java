@@ -33,7 +33,7 @@ import java.util.function.Function;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotations.TimePrecision;
+import org.apache.isis.applib.annotation.TimePrecision;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;

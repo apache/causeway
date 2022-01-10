@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.value.annotcfg;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotations.Value;
+import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;

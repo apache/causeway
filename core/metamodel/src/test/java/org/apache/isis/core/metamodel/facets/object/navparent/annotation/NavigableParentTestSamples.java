@@ -18,8 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.object.navparent.annotation;
 
-import org.apache.isis.applib.annotations.Navigable;
-import org.apache.isis.applib.annotations.PropertyLayout;
+import org.apache.isis.applib.annotation.Navigable;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 class NavigableParentTestSamples {
 

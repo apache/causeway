@@ -24,8 +24,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.PropertyLayout;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._Bytes;

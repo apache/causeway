@@ -45,7 +45,7 @@ import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
-import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import static org.apache.isis.testing.archtestsupport.applib.classrules.CommonPredicates.annotationOf;
@@ -67,7 +67,7 @@ public class ArchitectureJpaRules {
     /**
      * This rule requires that classes annotated with the JPA {@link Entity} annotation must also be
      * annotated with the Apache Isis {@link DomainObject} annotation specifying that its
-     * {@link DomainObject#nature() nature} is an {@link org.apache.isis.applib.annotations.Nature#ENTITY entity}.
+     * {@link DomainObject#nature() nature} is an {@link org.apache.isis.applib.annotation.Nature#ENTITY entity}.
      */
     public static ArchRule every_jpa_Entity_must_be_annotated_with_DomainObject_nature_of_ENTITY() {
         return classes()

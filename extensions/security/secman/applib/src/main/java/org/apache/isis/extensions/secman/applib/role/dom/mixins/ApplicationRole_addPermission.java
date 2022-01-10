@@ -20,13 +20,13 @@ package org.apache.isis.extensions.secman.applib.role.dom.mixins;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.ActionLayout;
-import org.apache.isis.applib.annotations.MemberSupport;
-import org.apache.isis.applib.annotations.MinLength;
-import org.apache.isis.applib.annotations.ParameterLayout;
-import org.apache.isis.applib.annotations.PromptStyle;
-import org.apache.isis.applib.annotations.SemanticsOf;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.MinLength;
+import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.feature.api.ApplicationFeatureChoices;

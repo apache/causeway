@@ -20,8 +20,8 @@ package demoapp.dom.domain.actions.Action.associateWith.child;
 
 import java.util.Objects;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.ActionLayout;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 
 import lombok.RequiredArgsConstructor;
 

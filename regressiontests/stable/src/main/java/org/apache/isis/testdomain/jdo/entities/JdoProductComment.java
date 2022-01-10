@@ -25,8 +25,8 @@ import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.mixins.updates.OnUpdatedByAndAt;
 
 import lombok.Getter;

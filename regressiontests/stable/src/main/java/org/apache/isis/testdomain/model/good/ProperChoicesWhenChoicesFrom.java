@@ -21,10 +21,10 @@ package org.apache.isis.testdomain.model.good;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.Collection;
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.Nature;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.commons.internal.collections._Lists;
 
 @DomainObject(nature = Nature.VIEW_MODEL)

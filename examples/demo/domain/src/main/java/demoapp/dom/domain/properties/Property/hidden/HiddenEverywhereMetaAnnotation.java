@@ -24,8 +24,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotations.Property;
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Where;
 
 //tag::class[]
 @Property(hidden = Where.EVERYWHERE)                // <.>

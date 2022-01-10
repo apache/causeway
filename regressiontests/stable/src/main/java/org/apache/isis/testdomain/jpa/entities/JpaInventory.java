@@ -29,10 +29,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
-import org.apache.isis.applib.annotations.Collection;
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.Property;
-import org.apache.isis.applib.annotations.Publishing;
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Publishing;
 
 import lombok.AccessLevel;
 import lombok.Getter;

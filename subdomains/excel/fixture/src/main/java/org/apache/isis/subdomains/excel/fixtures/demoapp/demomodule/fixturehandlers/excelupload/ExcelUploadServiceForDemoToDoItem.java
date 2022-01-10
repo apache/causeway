@@ -22,13 +22,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotations.DomainService;
-import org.apache.isis.applib.annotations.DomainServiceLayout;
-import org.apache.isis.applib.annotations.NatureOfService;
-import org.apache.isis.applib.annotations.Optionality;
-import org.apache.isis.applib.annotations.Parameter;
-import org.apache.isis.applib.annotations.ParameterLayout;
-import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.subdomains.excel.testing.ExcelFixture;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler;

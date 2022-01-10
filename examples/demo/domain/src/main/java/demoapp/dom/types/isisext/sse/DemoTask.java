@@ -20,10 +20,10 @@ package demoapp.dom.types.isisext.sse;
 
 import java.util.concurrent.atomic.LongAdder;
 
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.Editing;
-import org.apache.isis.applib.annotations.Nature;
-import org.apache.isis.applib.annotations.ObjectSupport;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.commons.internal.concurrent._ThreadSleep;
 import org.apache.isis.valuetypes.sse.applib.annotations.SseSource;
 import org.apache.isis.valuetypes.sse.applib.service.SseChannel;

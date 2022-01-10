@@ -23,7 +23,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotations.Collection;
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 
 import lombok.RequiredArgsConstructor;

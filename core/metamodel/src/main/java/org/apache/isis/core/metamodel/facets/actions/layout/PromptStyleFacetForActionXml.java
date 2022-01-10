@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.actions.layout;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.annotations.PromptStyle;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;

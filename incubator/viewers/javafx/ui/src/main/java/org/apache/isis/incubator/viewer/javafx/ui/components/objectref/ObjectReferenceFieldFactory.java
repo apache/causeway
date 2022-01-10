@@ -22,7 +22,7 @@ import javax.inject.Inject;
 
 import org.springframework.core.annotation.Order;
 
-import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;

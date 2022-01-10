@@ -22,10 +22,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.Nature;
-import org.apache.isis.applib.annotations.Publishing;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.domain.DomainObjectList.ActionDomainEvent;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;

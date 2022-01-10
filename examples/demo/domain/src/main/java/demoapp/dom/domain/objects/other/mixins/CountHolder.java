@@ -18,7 +18,7 @@
  */
 package demoapp.dom.domain.objects.other.mixins;
 
-import org.apache.isis.applib.annotations.LogicalTypeName;
+import org.apache.isis.applib.annotation.LogicalTypeName;
 
 @LogicalTypeName("demo.CountHolder")
 //tag::class[]

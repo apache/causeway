@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotations.Introspection.IntrospectionPolicy;
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;

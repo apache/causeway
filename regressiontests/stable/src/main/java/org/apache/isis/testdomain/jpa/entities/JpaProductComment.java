@@ -28,8 +28,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.mixins.updates.OnUpdatedByAndAt;
 
 import lombok.Getter;

@@ -20,8 +20,8 @@ package org.apache.isis.core.metamodel.facets.members.publish.command;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotations.Property;
-import org.apache.isis.applib.annotations.Publishing;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.base._Optionals;

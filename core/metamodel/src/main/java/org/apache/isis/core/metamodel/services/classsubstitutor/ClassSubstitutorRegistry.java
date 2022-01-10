@@ -27,7 +27,7 @@ import javax.inject.Named;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;

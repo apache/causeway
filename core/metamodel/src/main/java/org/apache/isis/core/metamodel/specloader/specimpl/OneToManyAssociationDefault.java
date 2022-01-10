@@ -19,9 +19,9 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotations.Collection;
-import org.apache.isis.applib.annotations.CollectionLayout;
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.commons.ToString;

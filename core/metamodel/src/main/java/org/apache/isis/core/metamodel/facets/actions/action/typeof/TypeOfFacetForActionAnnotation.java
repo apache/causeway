@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.actions.action.typeof;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotations.Action;
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;

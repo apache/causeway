@@ -20,7 +20,7 @@ package org.apache.isis.viewer.wicket.model.isis;
 
 import java.io.Serializable;
 
-import org.apache.isis.applib.annotations.PromptStyle;
+import org.apache.isis.applib.annotation.PromptStyle;
 
 public interface WicketViewerSettings extends Serializable {
 

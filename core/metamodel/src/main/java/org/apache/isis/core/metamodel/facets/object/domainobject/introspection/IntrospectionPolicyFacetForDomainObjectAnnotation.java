@@ -20,8 +20,8 @@ package org.apache.isis.core.metamodel.facets.object.domainobject.introspection;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.Introspection;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Introspection;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;

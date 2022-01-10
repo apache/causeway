@@ -20,7 +20,7 @@ package org.apache.isis.applib.services.commanddto.conmap;
 
 import lombok.val;
 
-import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.commanddto.HasCommandDto;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.commanddto.processor.spi.CommandDtoProcessorService;

@@ -43,7 +43,7 @@ implements
         val facetHolder = processClassContext.getFacetHolder();
 
         // @Value(logicalTypeName=...)
-        val valueIfAny = processClassContext.synthesizeOnType(org.apache.isis.applib.annotations.Value.class);
+        val valueIfAny = processClassContext.synthesizeOnType(org.apache.isis.applib.annotation.Value.class);
         addFacetIfPresent(LogicalTypeFacetForValueAnnotation.create(valueIfAny, cls, facetHolder));
 
     }

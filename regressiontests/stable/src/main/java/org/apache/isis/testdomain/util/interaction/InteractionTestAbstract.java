@@ -29,7 +29,7 @@ import javax.inject.Inject;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.commons.internal.base._NullSafe;

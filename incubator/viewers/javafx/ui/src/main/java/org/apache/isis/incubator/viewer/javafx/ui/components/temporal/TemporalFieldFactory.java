@@ -22,7 +22,7 @@ import java.time.LocalDate;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.OffsetCharacteristic;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalCharacteristic;

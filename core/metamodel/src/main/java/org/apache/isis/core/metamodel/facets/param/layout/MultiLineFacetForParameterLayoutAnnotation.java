@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.param.layout;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotations.ParameterLayout;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacetAbstract;

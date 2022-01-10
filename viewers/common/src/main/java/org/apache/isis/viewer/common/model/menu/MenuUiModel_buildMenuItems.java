@@ -20,7 +20,7 @@ package org.apache.isis.viewer.common.model.menu;
 
 import java.util.concurrent.atomic.LongAdder;
 
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;

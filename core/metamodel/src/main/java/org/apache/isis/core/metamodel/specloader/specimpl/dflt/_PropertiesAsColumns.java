@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
 import org.apache.isis.applib.services.tablecol.TableColumnVisibilityService;
 import org.apache.isis.commons.internal.base._NullSafe;

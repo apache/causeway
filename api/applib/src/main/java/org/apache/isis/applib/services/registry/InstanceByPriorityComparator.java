@@ -24,7 +24,7 @@ import javax.annotation.Priority;
 
 import org.springframework.context.annotation.Primary;
 
-import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.commons.internal.reflection._Reflect;
 
 import lombok.val;

@@ -18,14 +18,14 @@
  */
 package org.apache.isis.core.metamodel.facets.objectvalue.labelat;
 
-import org.apache.isis.applib.annotations.LabelPosition;
+import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 /**
  * If multi-line then position the label at the top.
  *
  * <p>
- *     This can still be overridden using the {@link org.apache.isis.applib.annotations.PropertyLayout} annotation / layout.json.
+ *     This can still be overridden using the {@link org.apache.isis.applib.annotation.PropertyLayout} annotation / layout.json.
  * </p>
  */
 public class LabelAtFacetFromMultiLineFacet

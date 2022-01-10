@@ -18,7 +18,7 @@
  */
 package org.apache.isis.testing.fixtures.applib.fixturescripts;
 
-import org.apache.isis.applib.annotations.Programmatic;
+import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * SPI to provide an implementation of

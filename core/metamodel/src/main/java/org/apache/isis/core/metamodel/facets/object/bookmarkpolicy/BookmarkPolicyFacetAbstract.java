@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.bookmarkpolicy;
 
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.annotations.BookmarkPolicy;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

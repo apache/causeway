@@ -18,12 +18,12 @@
  */
 package org.apache.isis.core.metamodel.facets.objectvalue.labelat;
 
-import org.apache.isis.applib.annotations.LabelPosition;
+import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
- * Corresponds to either {@literal @}{@link org.apache.isis.applib.annotations.PropertyLayout#labelPosition()} (for a property) or
- *{@literal @}{@link org.apache.isis.applib.annotations.ParameterLayout#labelPosition()} (for an action parameter).
+ * Corresponds to either {@literal @}{@link org.apache.isis.applib.annotation.PropertyLayout#labelPosition()} (for a property) or
+ *{@literal @}{@link org.apache.isis.applib.annotation.ParameterLayout#labelPosition()} (for an action parameter).
  */
 public interface LabelAtFacet extends Facet {
 

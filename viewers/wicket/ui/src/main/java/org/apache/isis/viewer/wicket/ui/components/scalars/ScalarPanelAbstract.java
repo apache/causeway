@@ -34,8 +34,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.annotations.ActionLayout;
-import org.apache.isis.applib.annotations.PromptStyle;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.collections.Can;

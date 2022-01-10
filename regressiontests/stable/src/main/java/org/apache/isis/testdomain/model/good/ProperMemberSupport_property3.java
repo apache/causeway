@@ -18,9 +18,9 @@
  */
 package org.apache.isis.testdomain.model.good;
 
-import org.apache.isis.applib.annotations.MemberSupport;
-import org.apache.isis.applib.annotations.Property;
-import org.apache.isis.applib.annotations.PropertyLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 import lombok.RequiredArgsConstructor;
 

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.members.hidden;
 
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 

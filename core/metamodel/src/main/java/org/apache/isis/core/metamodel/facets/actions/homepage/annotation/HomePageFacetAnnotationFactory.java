@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotations.HomePage;
+import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;

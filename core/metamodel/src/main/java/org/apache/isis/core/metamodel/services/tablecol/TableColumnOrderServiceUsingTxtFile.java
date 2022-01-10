@@ -28,8 +28,8 @@ import javax.inject.Named;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotations.PriorityPrecedence;
-import org.apache.isis.applib.annotations.PropertyLayout;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
 import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.commons.internal.resources._Resources;

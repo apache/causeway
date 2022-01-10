@@ -18,7 +18,7 @@
  */
 package org.apache.isis.testing.fakedata.applib.services;
 
-import org.apache.isis.applib.annotations.Programmatic;
+import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * Returns a random instance of an enum class.

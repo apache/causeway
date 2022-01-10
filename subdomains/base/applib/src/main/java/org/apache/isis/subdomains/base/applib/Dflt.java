@@ -20,7 +20,7 @@ package org.apache.isis.subdomains.base.applib;
 
 import java.util.Collection;
 
-import org.apache.isis.applib.annotations.Programmatic;
+import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * @since 2.0 {@index}

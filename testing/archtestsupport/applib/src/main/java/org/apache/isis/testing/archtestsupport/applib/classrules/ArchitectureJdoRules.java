@@ -38,7 +38,7 @@ import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
-import org.apache.isis.applib.annotations.DomainObject;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.val;
@@ -88,7 +88,7 @@ public class ArchitectureJdoRules {
     /**
      * This rule requires that classes annotated with the JDO {@link javax.jdo.annotations.PersistenceCapable} annotation
      * must also be annotated with the Apache Isis {@link DomainObject} annotation specifying that its
-     * {@link DomainObject#nature() nature} is an {@link org.apache.isis.applib.annotations.Nature#ENTITY entity}.
+     * {@link DomainObject#nature() nature} is an {@link org.apache.isis.applib.annotation.Nature#ENTITY entity}.
      */
     public static ArchRule every_jdo_PersistenceCapable_must_be_annotated_with_DomainObject_nature_of_ENTITY() {
         return classes()

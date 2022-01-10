@@ -87,9 +87,9 @@ public interface GridSystemService<G extends Grid> {
      *
      * <p>
      * This is done using existing metadata, most notably that of the
-     * {@link org.apache.isis.applib.annotations.MemberOrder} annotation.
+     * {@link org.apache.isis.applib.annotation.MemberOrder} annotation.
      * Such a grid, if persisted as the layout XML file for the domain class,
-     * allows the {@link org.apache.isis.applib.annotations.MemberOrder}
+     * allows the {@link org.apache.isis.applib.annotation.MemberOrder}
      * annotation to be removed from the source code of the domain class
      * (but other annotations must be retained).
      * </p>
@@ -104,9 +104,9 @@ public interface GridSystemService<G extends Grid> {
      * <p>
      * Such a grid, if persisted as the layout XML file for the domain class,
      * allows all layout annotations
-     * ({@link org.apache.isis.applib.annotations.ActionLayout},
-     * {@link org.apache.isis.applib.annotations.PropertyLayout},
-     * {@link org.apache.isis.applib.annotations.CollectionLayout}) to be
+     * ({@link org.apache.isis.applib.annotation.ActionLayout},
+     * {@link org.apache.isis.applib.annotation.PropertyLayout},
+     * {@link org.apache.isis.applib.annotation.CollectionLayout}) to be
      * removed from the source code of the domain class.
      *
      * </p>
@@ -122,7 +122,7 @@ public interface GridSystemService<G extends Grid> {
      * <p>
      *     Such a grid, if persisted as the layout XML file for the domain
      *     class, requires that the
-     *     {@link org.apache.isis.applib.annotations.MemberOrder} annotation
+     *     {@link org.apache.isis.applib.annotation.MemberOrder} annotation
      *     is retained in the source code of said class in order to bind
      *     members to the regions of the grid.
      * </p>

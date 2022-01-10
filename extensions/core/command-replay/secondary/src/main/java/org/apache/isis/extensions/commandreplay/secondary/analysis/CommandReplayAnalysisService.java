@@ -25,7 +25,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 import org.apache.isis.extensions.commandreplay.secondary.analyser.CommandReplayAnalyser;
 

@@ -19,8 +19,8 @@
 package org.apache.isis.applib.services.layout;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.Value;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.layout.grid.Grid;
 
 /**

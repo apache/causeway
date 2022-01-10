@@ -21,11 +21,11 @@ package org.apache.isis.testdomain.rospec;
 import java.math.BigInteger;
 import java.util.List;
 
-import org.apache.isis.applib.annotations.Action;
-import org.apache.isis.applib.annotations.DomainService;
-import org.apache.isis.applib.annotations.NatureOfService;
-import org.apache.isis.applib.annotations.PriorityPrecedence;
-import org.apache.isis.applib.annotations.SemanticsOf;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.commons.internal.collections._Lists;
 
 @DomainService(

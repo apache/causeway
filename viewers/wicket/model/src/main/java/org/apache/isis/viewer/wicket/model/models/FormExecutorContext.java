@@ -20,7 +20,7 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotations.PromptStyle;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.common.model.HasParentUiModel;
 

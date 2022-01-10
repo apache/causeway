@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.object.promptStyle;
 
-import org.apache.isis.applib.annotations.PromptStyle;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
 /**

@@ -18,8 +18,8 @@
  */
 package org.apache.isis.testdomain.model.good;
 
-import org.apache.isis.applib.annotations.DomainObject;
-import org.apache.isis.applib.annotations.Property;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Property;
 
 @DomainObject(logicalTypeName = "isis.testdomain.ProperInterface")
 public interface ProperInterface {

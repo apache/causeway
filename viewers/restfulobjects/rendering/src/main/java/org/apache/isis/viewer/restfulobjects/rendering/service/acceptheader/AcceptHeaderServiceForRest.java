@@ -18,8 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader;
 
-import org.apache.isis.applib.annotations.InteractionScope;
-import org.apache.isis.applib.annotations.PriorityPrecedence;
+import org.apache.isis.applib.annotation.InteractionScope;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.acceptheader.AcceptHeaderService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.springframework.beans.factory.annotation.Qualifier;

@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.title.annotation;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotations.Title;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;

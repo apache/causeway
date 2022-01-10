@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.apache.isis.applib.annotations.Where;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.repository.RepositoryService;

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.properties.projection;
 
-import org.apache.isis.applib.annotations.Projecting;
+import org.apache.isis.applib.annotation.Projecting;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
 public interface ProjectingFacet extends SingleValueFacet<Projecting> {
