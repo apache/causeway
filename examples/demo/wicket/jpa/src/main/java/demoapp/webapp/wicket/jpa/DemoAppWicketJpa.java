@@ -78,7 +78,7 @@ public class DemoAppWicketJpa extends SpringBootServletInitializer {
     public static void main(final String[] args) {
     	IsisPresets.prototyping();
         //IsisPresets.logging(WebRequestCycleForIsis.class, "debug");
-        IsisPresets.logging(ComponentFactoryRegistryDefault.class, "debug");
+        //IsisPresets.logging(ComponentFactoryRegistryDefault.class, "debug");
         //IsisPresets.logging(EntityModel.class, "debug");
         //IsisPresets.logging(FormExecutorDefault.class, "debug");
 
