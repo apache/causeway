@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import java.util.Properties;
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -33,8 +34,10 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
+import org.datanucleus.util.StringUtils;
 
 
 public class CollectionLayoutFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
@@ -119,6 +122,16 @@ public class CollectionLayoutFacetFactory extends FacetFactoryAbstract implement
         }
         FacetUtil.addFacet(sortedByFacet);
 
+        // In preparation for v2 adding support for sequence in @CollectionLayout
+        if (collectionLayout!=null
+                && StringUtils.notEmpty(collectionLayout.sequence())
+                && holder.getFacet(MemberOrderFacetAnnotation.class)==null) {
+            FacetUtil.addFacet( new MemberOrderFacetAnnotation(
+                    "",
+                    collectionLayout.sequence(),
+                    servicesInjector.lookupService(TranslationService.class),
+                    holder));
+        }
     }
 
     @Override

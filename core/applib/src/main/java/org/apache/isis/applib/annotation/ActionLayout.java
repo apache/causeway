@@ -37,6 +37,43 @@ public @interface ActionLayout {
 
 
     /**
+     * Associates this action with a property or collection, specifying its id.
+     *
+     * <p>
+     *     To specify the layout order use {@link ActionLayout#sequence()}.
+     * </p>
+     *
+     * <p>
+     *     For example <code>@ActionLayout(associateWith="items") @ActionLayout(sequence="2.1")</code>
+     * </p>
+     *
+     * <p>
+     *     Note that it is also possible to associate an action with a collection using {@link Action#choicesFrom()}
+     *     (which has the additional semantic of the rows of the element being used as choices for that action's
+     *     collection parameter of the same type as the elements of the collection).
+     * </p>
+     *
+     * @see ActionLayout#sequence()
+     */
+    String associateWith() // In preparation for v2
+            default "";
+
+    /**
+     * Specifies the <b>friendly-name</b> of associated <i>FieldSet</i> or <i>Collection</i>.
+     * <p>
+     * For a more in depth description see the analogous {@link PropertyLayout#fieldSetId()};
+     * </p>
+     *
+     * To associate an <i>Action</i> with a <i>Collection</i>, use {@link Action#choicesFrom()}
+     * instead.
+     *
+     * @see ActionLayout#associateWith()
+     * @see PropertyLayout#sequence()
+     */
+    String fieldSetName() // In preparation for v2
+            default "__infer";
+
+    /**
      * Whether (and how) this action can be bookmarked in the UI.
      *
      * <p>
@@ -152,5 +189,18 @@ public @interface ActionLayout {
      */
     Contributed contributed() default Contributed.AS_BOTH;
 
+
+    /**
+     * The order of this member relative to other members in the same (layout) group,
+     * given in <i>Dewey-decimal</i> notation.
+     * <p>
+     *     An alternative is to use the <code>Xxx.layout.xml</code> file,
+     *     where <code>Xxx</code> is the domain object name.
+     * </p>
+     * @see CollectionLayout#sequence()
+     * @see PropertyLayout#sequence()
+     */
+    String sequence() // In preparation for v2
+            default "";
 
 }
