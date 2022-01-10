@@ -38,6 +38,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.IsisConfiguration.Extensions.Secman;
 import org.apache.isis.core.config.IsisConfiguration.Extensions.Secman.PermissionsEvaluationPolicy;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
+import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionValue;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionValueSet;
 import org.apache.isis.extensions.secman.applib.permission.spi.PermissionsEvaluationService;
@@ -89,6 +90,14 @@ implements PermissionsEvaluationService {
         return null;
     }
 
+    /**
+     * @implSpec
+     *     This implementation relies on the fact that the {@link org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionValue}s are
+     * passed through in natural order, with the leading part based on the
+     * {@link org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionValue#getRule() rule} and with
+     * {@link ApplicationPermissionRule} in turn comparable so that {@link ApplicationPermissionRule#ALLOW allow}
+     * is ordered before {@link ApplicationPermissionRule#VETO veto}.
+     */
     protected Collection<ApplicationPermissionValue> ordered(
             final Collection<ApplicationPermissionValue> permissionValues) {
         switch (policy) {
