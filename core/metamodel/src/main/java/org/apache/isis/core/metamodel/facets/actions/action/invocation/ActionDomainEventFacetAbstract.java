@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
@@ -77,7 +76,11 @@ implements ActionDomainEventFacet {
                         AbstractDomainEvent.Phase.HIDE,
                         getEventType(),
                         actionFrom(ic), getFacetHolder(),
-                        ic.getHead(), argumentAdaptersFrom(ic),
+                        ic.getHead(),
+                        // corresponds to programming model 'hidePlaceOrder()',
+                        // which does no longer consider args
+                        Can.empty(),
+                        // result pojo n/a
                         null);
         if (event != null && event.isHidden()) {
             return "Hidden by subscriber";
@@ -86,14 +89,18 @@ implements ActionDomainEventFacet {
     }
 
     @Override
-    public String disables(UsabilityContext ic) {
+    public String disables(final UsabilityContext ic) {
 
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.DISABLE,
                         getEventType(),
                         actionFrom(ic), getFacetHolder(),
-                        ic.getHead(), argumentAdaptersFrom(ic),
+                        ic.getHead(),
+                        // corresponds to programming model 'disablePlaceOrder()',
+                        // which does no longer consider args
+                        Can.empty(),
+                        // result pojo n/a
                         null);
         if (event != null && event.isDisabled()) {
             final TranslatableString reasonTranslatable = event.getDisabledReasonTranslatable();
@@ -101,7 +108,6 @@ implements ActionDomainEventFacet {
                 return reasonTranslatable.translate(translationService, translationContext);
             }
             return event.getDisabledReason();
-
         }
         return null;
     }
@@ -139,13 +145,6 @@ implements ActionDomainEventFacet {
                     "Expecting ic to be of type ActionInteractionContext, instead was: " + ic);
         }
         return ((ActionInteractionContext) ic).getObjectAction();
-    }
-
-    @Deprecated
-    private static Can<ManagedObject> argumentAdaptersFrom(
-            final InteractionContext ic) {
-
-        return Can.empty();
     }
 
 }

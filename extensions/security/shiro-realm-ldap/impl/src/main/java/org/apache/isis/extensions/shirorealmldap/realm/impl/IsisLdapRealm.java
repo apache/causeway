@@ -45,7 +45,6 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.security.shiro.permrolemapper.PermissionToRoleMapper;
 import org.apache.isis.security.shiro.permrolemapper.PermissionToRoleMapperFromIni;
-import org.apache.isis.security.shiro.permrolemapper.PermissionToRoleMapperFromString;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
@@ -223,7 +222,7 @@ public class IsisLdapRealm extends DefaultLdapRealm {
     }
 
     private Set<String>
-    getPermissionForRole(String username, LdapContext ldapContext)
+    getPermissionForRole(final String username, final LdapContext ldapContext)
             throws NamingException {
         final Set<String> permissions = _Sets.newLinkedHashSet();
 
@@ -251,15 +250,15 @@ public class IsisLdapRealm extends DefaultLdapRealm {
         return roleNames;
     }
 
-    protected boolean memberOf(SearchResult group, Set<String> groups) throws NamingException {
+    protected boolean memberOf(final SearchResult group, final Set<String> groups) throws NamingException {
         Attribute attribute = group.getAttributes().get(cnAttribute);
         String groupName = attribute.get().toString();
         return groups.contains(groupName);
     }
 
     private Collection<String> getPermissionForUser(
-            String username,
-            LdapContext ldapContextFactory) throws NamingException {
+            final String username,
+            final LdapContext ldapContextFactory) throws NamingException {
 
         try {
             return permUser(username, ldapContextFactory);
@@ -268,7 +267,7 @@ public class IsisLdapRealm extends DefaultLdapRealm {
         }
     }
 
-    private Collection<String> permUser(String username, LdapContext systemLdapCtx)
+    private Collection<String> permUser(final String username, final LdapContext systemLdapCtx)
             throws NamingException {
         final Set<String> permissions = _Sets.newLinkedHashSet();
         final NamingEnumeration<SearchResult> searchResultEnum = systemLdapCtx.search(
@@ -281,8 +280,8 @@ public class IsisLdapRealm extends DefaultLdapRealm {
     }
 
     private void addPermIfFound(
-            SearchResult group, Set<String> permissions,
-            Set<String> extractedAttributeP, Set<String> permissionByAttributeP)
+            final SearchResult group, final Set<String> permissions,
+            final Set<String> extractedAttributeP, final Set<String> permissionByAttributeP)
                     throws NamingException {
         final NamingEnumeration<? extends Attribute> attributeEnum = group.getAttributes().getAll();
         Map<String, Set<String>> keyValues = _Maps.newHashMap();
@@ -356,11 +355,11 @@ public class IsisLdapRealm extends DefaultLdapRealm {
         }
     }
 
-    private String roleNameFor(String groupName) {
+    private String roleNameFor(final String groupName) {
         return !rolesByGroup.isEmpty() ? rolesByGroup.get(groupName) : groupName;
     }
 
-    private Set<String> permsFor(Set<String> roleNames) {
+    private Set<String> permsFor(final Set<String> roleNames) {
         Set<String> perms = _Sets.newLinkedHashSet(); // preserve order
         for (String role : roleNames) {
             Set<String> permsForRole = getPermissionsByRole().get(role);
@@ -371,19 +370,19 @@ public class IsisLdapRealm extends DefaultLdapRealm {
         return perms;
     }
 
-    public void setSearchBase(String searchBase) {
+    public void setSearchBase(final String searchBase) {
         this.searchBase = searchBase;
     }
 
-    public void setGroupObjectClass(String groupObjectClassAttribute) {
+    public void setGroupObjectClass(final String groupObjectClassAttribute) {
         this.groupObjectClass = groupObjectClassAttribute;
     }
 
-    public void setUniqueMemberAttribute(String uniqueMemberAttribute) {
+    public void setUniqueMemberAttribute(final String uniqueMemberAttribute) {
         this.uniqueMemberAttribute = uniqueMemberAttribute;
     }
 
-    public void setUniqueMemberAttributeValueTemplate(String template) {
+    public void setUniqueMemberAttributeValueTemplate(final String template) {
         if (!StringUtils.hasText(template)) {
             String msg = "User DN template cannot be null or empty.";
             throw new IllegalArgumentException(msg);
@@ -401,13 +400,12 @@ public class IsisLdapRealm extends DefaultLdapRealm {
         this.uniqueMemberAttributeValueSuffix = suffix;
     }
 
-    public void setRolesByGroup(Map<String, String> rolesByGroup) {
+    public void setRolesByGroup(final Map<String, String> rolesByGroup) {
         this.rolesByGroup.putAll(rolesByGroup);
     }
 
     /**
-     * Retrieves permissions by role set using either
-     * {@link #setPermissionsByRole(String)} or {@link #setResourcePath(String)}.
+     * Retrieves permissions by role set using {@link #setResourcePath(String)}.
      */
     private Map<String, Set<String>> getPermissionsByRole() {
         if (permissionToRoleMapper == null) {
@@ -438,7 +436,7 @@ public class IsisLdapRealm extends DefaultLdapRealm {
      *
      * @see #setResourcePath(String)
      */
-    public void setResourcePath(String resourcePath) {
+    public void setResourcePath(final String resourcePath) {
         if (permissionToRoleMapper != null) {
             throw new IllegalStateException("Permissions already set, " + permissionToRoleMapper.getClass().getName());
         }
@@ -446,56 +444,35 @@ public class IsisLdapRealm extends DefaultLdapRealm {
         this.permissionToRoleMapper = new PermissionToRoleMapperFromIni(ini);
     }
 
-    /**
-     * Specify permissions for each role using a formatted string.
-     * <p/>
-     * <pre>
-     * ldapRealm.permissionsByRole=\
-     *    user_role = *:ToDoItemsJdo:*:*,\
-     *                *:ToDoItem:*:*; \
-     *    self-install_role = *:ToDoItemsFixturesService:install:* ; \
-     *    admin_role = *
-     * </pre>
-     *
-     * @see #setResourcePath(String)
-     */
-    @Deprecated
-    public void setPermissionsByRole(String permissionsByRoleStr) {
-        if (permissionToRoleMapper != null) {
-            throw new IllegalStateException("Permissions already set, " + permissionToRoleMapper.getClass().getName());
-        }
-        this.permissionToRoleMapper = new PermissionToRoleMapperFromString(permissionsByRoleStr);
-    }
-
-    public void setPermissionByUserAttribute(String permissionByUserAttr) {
+    public void setPermissionByUserAttribute(final String permissionByUserAttr) {
         String[] list = permissionByUserAttr.split(",");
         stream(list).forEach(this.permissionByUserAttribute::add);
     }
 
-    public void setPermissionByGroupAttribute(String permissionByGroupAttribute) {
+    public void setPermissionByGroupAttribute(final String permissionByGroupAttribute) {
         String[] list = permissionByGroupAttribute.split(",");
         stream(list).forEach(this.permissionByGroupAttribute::add);
     }
 
-    public void setUserExtractedAttribute(String userExtractedAttribute) {
+    public void setUserExtractedAttribute(final String userExtractedAttribute) {
         String[] list = userExtractedAttribute.split(",");
         stream(list).forEach(this.userExtractedAttribute::add);
     }
 
-    public void setGroupExtractedAttribute(String groupExtractedAttribute) {
+    public void setGroupExtractedAttribute(final String groupExtractedAttribute) {
         String[] list = groupExtractedAttribute.split(",");
         stream(list).forEach(this.groupExtractedAttribute::add);
     }
 
-    public void setSearchUserBase(String searchUserBase) {
+    public void setSearchUserBase(final String searchUserBase) {
         this.searchUserBase = searchUserBase;
     }
 
-    public void setUserObjectClass(String userObjectClass) {
+    public void setUserObjectClass(final String userObjectClass) {
         this.userObjectClass = userObjectClass;
     }
 
-    public void setCnAttribute(String cnAttribute) {
+    public void setCnAttribute(final String cnAttribute) {
         this.cnAttribute = cnAttribute;
     }
 
