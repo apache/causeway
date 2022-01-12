@@ -140,23 +140,16 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     private AbstractLink createDynamicallyVisibleLink() {
 
         final ObjectAdapterModel entityModel = getModel();
+        val targetAdapter = EntityUtil.refetch(entityModel.getObject());
 
-        val targetAdapter = entityModel.getObject();
-        final ObjectAdapterModel redirectToModel;
-
-        if(targetAdapter != null) {
-
-            EntityUtil.refetch(targetAdapter);
-
-            val redirectToAdapter = entityModel.getTypeOfSpecification().lookupFacet(ProjectionFacet.class)
+        final ObjectAdapterModel redirectToModel =
+                ManagedObjects.isNullOrUnspecifiedOrEmpty(targetAdapter)
+                ? entityModel
+                : EntityModel.ofAdapter(
+                    super.getCommonContext(),
+                    entityModel.getTypeOfSpecification().lookupFacet(ProjectionFacet.class)
                     .map(projectionFacet->projectionFacet.projected(targetAdapter))
-                    .orElse(targetAdapter);
-
-            redirectToModel = EntityModel.ofAdapter(super.getCommonContext(), redirectToAdapter);
-
-        } else {
-            redirectToModel = entityModel;
-        }
+                    .orElse(targetAdapter));
 
         final PageParameters pageParameters = redirectToModel.getPageParametersWithoutUiHints();
 
