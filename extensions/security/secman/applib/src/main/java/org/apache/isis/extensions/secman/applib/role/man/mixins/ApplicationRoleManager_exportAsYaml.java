@@ -23,17 +23,19 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.value.Clob;
+import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
-import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.applib.role.man.ApplicationRoleManager;
+import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.applib.user.man.mixins.ApplicationUserManager_newLocalUser.DomainEvent;
+import org.apache.isis.extensions.secman.applib.util.ApplicationSecurityDto;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Action(
         domainEvent = DomainEvent.class,
@@ -41,27 +43,34 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(
         associateWith = "allRoles",
-        sequence = "2"
+        sequence = "1.1"
 )
 @RequiredArgsConstructor
-public class ApplicationRoleManager_newRole {
+public class ApplicationRoleManager_exportAsYaml {
 
     public static class DomainEvent
-            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationRoleManager_newRole> {}
+            extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationRoleManager_exportAsYaml> {}
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
+    @Inject private ApplicationUserRepository applicationUserRepository;
 
+    @SuppressWarnings("unused")
     private final ApplicationRoleManager target;
 
-    @MemberSupport public ApplicationRoleManager act (
-            @Parameter(maxLength = ApplicationRole.Name.MAX_LENGTH)
-            @ParameterLayout(named="Name", typicalLength= ApplicationRole.Name.TYPICAL_LENGTH)
-            final String name,
-            @Parameter(maxLength = ApplicationRole.Description.MAX_LENGTH, optionality = Optionality.OPTIONAL)
-            @ParameterLayout(named="Description", typicalLength= ApplicationRole.Description.TYPICAL_LENGTH)
-            final String description) {
-        applicationRoleRepository.newRole(name, description);
-        return target;
+    @MemberSupport public Clob act(
+            @Parameter
+            final String fileName) {
+
+        val yaml = ApplicationSecurityDto.create(
+                applicationRoleRepository,
+                applicationUserRepository)
+                .toYaml();
+
+        return Clob.of(fileName, CommonMimeType.YAML, yaml);
+    }
+
+    @MemberSupport public String defaultFileName() {
+        return "secman-roles.yml";
     }
 
 }

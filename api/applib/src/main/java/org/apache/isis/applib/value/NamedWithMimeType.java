@@ -107,6 +107,7 @@ public interface NamedWithMimeType extends Serializable {
         XML("application/xml"), /*alias*/ XSD("application/xml"),
 
         XUL("application/vnd.mozilla.xul+xml"),
+        YAML("text/vnd.yaml", "yml"),
         ZIP("application/zip"),
         _7Z("application/x-7z-compressed"),
 
@@ -149,10 +150,12 @@ public interface NamedWithMimeType extends Serializable {
 
         ;
 
-        private CommonMimeType(final String primaryType, final String ... additionalProposedFileExtension) {
+        private CommonMimeType(final String primaryType, final String ... proposedFileExtensions) {
             this.mimeType = newMimeType(primaryType);
-            this.proposedFileExtensions = Can.ofSingleton(name().toLowerCase())
-                    .addAll(Can.ofArray(additionalProposedFileExtension));
+            this.proposedFileExtensions =
+                    proposedFileExtensions.length>0
+                        ? Can.ofArray(proposedFileExtensions)
+                        : Can.ofSingleton(name().toLowerCase()); // default
         }
 
         @Getter final MimeType mimeType;

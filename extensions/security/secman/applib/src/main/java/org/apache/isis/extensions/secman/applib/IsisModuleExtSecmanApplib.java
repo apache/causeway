@@ -41,6 +41,7 @@ import org.apache.isis.extensions.secman.applib.role.dom.mixins.ApplicationRole_
 import org.apache.isis.extensions.secman.applib.role.dom.mixins.ApplicationRole_updateDescription;
 import org.apache.isis.extensions.secman.applib.role.dom.mixins.ApplicationRole_updateName;
 import org.apache.isis.extensions.secman.applib.role.man.mixins.ApplicationRoleManager_allRoles;
+import org.apache.isis.extensions.secman.applib.role.man.mixins.ApplicationRoleManager_exportAsYaml;
 import org.apache.isis.extensions.secman.applib.role.man.mixins.ApplicationRoleManager_newRole;
 import org.apache.isis.extensions.secman.applib.role.menu.ApplicationRoleMenu;
 import org.apache.isis.extensions.secman.applib.seed.SeedSecurityModuleService;
@@ -173,6 +174,7 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
         // ApplicationRoleManager
         ApplicationRoleManager_allRoles.class,
         ApplicationRoleManager_newRole.class,
+        ApplicationRoleManager_exportAsYaml.class,
 
         // other @Services
         SeedSecurityModuleService.class,

@@ -34,7 +34,9 @@ isis:
             delete.*:fa-trash,
             find.*:fa-search,
             list.*:fa-list,
-            all.*:fa-list
+            all.*:fa-list,
+            export.*:fa-file-export,
+            import.*:fa-file-import
         css-class:
           patterns:
             delete.*:btn-danger

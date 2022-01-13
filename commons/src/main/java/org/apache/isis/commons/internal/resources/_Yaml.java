@@ -24,12 +24,16 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.DumperOptions.LineBreak;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 import org.apache.isis.commons.functional.Result;
 
+import lombok.SneakyThrows;
 import lombok.val;
 
 /**
@@ -47,7 +51,7 @@ public class _Yaml {
 
     // -- FROM INPUT STREAM
 
-    private static <T> T _readYaml(final Class<T> clazz, InputStream content) {
+    private static <T> T _readYaml(final Class<T> clazz, final InputStream content) {
         val yaml = new Yaml(new Constructor(clazz));
         return yaml.load(content);
     }
@@ -59,13 +63,13 @@ public class _Yaml {
      * @param clazz
      * @param content
      */
-    public static <T> Result<T> readYaml(final Class<T> clazz, InputStream content) {
+    public static <T> Result<T> readYaml(final Class<T> clazz, final InputStream content) {
         return Result.of(()->_readYaml(clazz, content));
     }
 
     // -- FROM STRING
 
-    private static <T> T _readYaml(final Class<T> clazz, String content) {
+    private static <T> T _readYaml(final Class<T> clazz, final String content) {
         val yaml = new Yaml(new Constructor(clazz));
         return yaml.load(content);
     }
@@ -77,13 +81,13 @@ public class _Yaml {
      * @param clazz
      * @param content
      */
-    public static <T> Result<T> readYaml(final Class<T> clazz, String content) {
+    public static <T> Result<T> readYaml(final Class<T> clazz, final String content) {
         return Result.of(()->_readYaml(clazz, content));
     }
 
     // -- FROM FILE
 
-    private static <T> T _readYaml(final Class<T> clazz, File content) throws FileNotFoundException, IOException {
+    private static <T> T _readYaml(final Class<T> clazz, final File content) throws FileNotFoundException, IOException {
         try(val fis = new FileInputStream(content)) {
             val yaml = new Yaml(new Constructor(clazz));
             return yaml.load(fis);
@@ -97,13 +101,13 @@ public class _Yaml {
      * @param clazz
      * @param content
      */
-    public static <T> Result<T> readYaml(final Class<T> clazz, File content) {
+    public static <T> Result<T> readYaml(final Class<T> clazz, final File content) {
         return Result.of(()->_readYaml(clazz, content));
     }
 
     // -- FROM BYTE ARRAY
 
-    private static <T> T _readYaml(final Class<T> clazz, byte[] content) throws IOException {
+    private static <T> T _readYaml(final Class<T> clazz, final byte[] content) throws IOException {
         try(val bais = new ByteArrayInputStream(content)) {
             val yaml = new Yaml(new Constructor(clazz));
             return yaml.load(bais);
@@ -117,8 +121,28 @@ public class _Yaml {
      * @param clazz
      * @param content
      */
-    public static <T> Result<T> readYaml(final Class<T> clazz, byte[] content) {
+    public static <T> Result<T> readYaml(final Class<T> clazz, final byte[] content) {
         return Result.of(()->_readYaml(clazz, content));
+    }
+
+    // -- WRITING
+
+    @SneakyThrows
+    private static String _toString(final Object pojo) {
+        try(val writer = new StringWriter()){
+            val options = new DumperOptions();
+            options.setIndent(2);
+            options.setLineBreak(LineBreak.UNIX); // fixated for consistency
+            //options.setPrettyFlow(true);
+            //options.setDefaultFlowStyle(FlowStyle.BLOCK);
+            val yaml = new Yaml(options);
+            yaml.dump(pojo, writer);
+            return writer.toString();
+        }
+    }
+
+    public static Result<String> toString(final Object pojo) {
+        return Result.of(()->_toString(pojo));
     }
 
 }
