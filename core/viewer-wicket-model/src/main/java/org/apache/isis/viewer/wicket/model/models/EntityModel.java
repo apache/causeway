@@ -411,24 +411,16 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
             OneToOneAssociation otoa = pm.getProperty(getSpecificationLoader());
             final ScalarModel scalarModel = propertyScalarModels.get(pm);
             final ObjectAdapter adapter = getObject();
-            final Consent visibility = otoa.isVisible(adapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
-            if(!visibility.isAllowed()) {
-                continue;
-            }
-            try {
-                final ObjectAdapter associatedAdapter =
-                    otoa.get(adapter, InteractionInitiatedBy.USER);
-                scalarModel.setObject(associatedAdapter);
-            } catch(Throwable ex) {
-                if (otoa instanceof MixedInMember || otoa instanceof ContributeeMember) {
-                    LOG.debug(String.format(
-                            "resetPropertyModels: %s threw exception but is mixin so ignoring; ex.message = %s",
-                            otoa.getIdentifier().toFullIdentityString(),
-                            ex.getMessage()));
-                } else {
-                    throw ex;
+            if (otoa instanceof MixedInMember || otoa instanceof ContributeeMember) {
+                // it's probably also safe for regular mixins; but we choose to be conservative.
+                final Consent visibility = otoa.isVisible(adapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
+                if(!visibility.isAllowed()) {
+                    continue;
                 }
             }
+            final ObjectAdapter associatedAdapter =
+                otoa.get(adapter, InteractionInitiatedBy.USER);
+            scalarModel.setObject(associatedAdapter);
         }
     }
 
