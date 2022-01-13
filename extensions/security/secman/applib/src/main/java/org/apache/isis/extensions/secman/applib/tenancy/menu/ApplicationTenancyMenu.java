@@ -35,9 +35,11 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancyRepository;
+import org.apache.isis.extensions.secman.applib.tenancy.man.ApplicationTenancyManager;
 
 @DomainService(
         nature = NatureOfService.VIEW,
@@ -55,6 +57,7 @@ public class ApplicationTenancyMenu {
     public static abstract class ActionDomainEvent<T> extends IsisModuleExtSecmanApplib.ActionDomainEvent<T> {}
 
     @Inject private ApplicationTenancyRepository applicationTenancyRepository;
+    @Inject private FactoryService factory;
 
 
     @ObjectSupport
@@ -62,13 +65,33 @@ public class ApplicationTenancyMenu {
         return "applicationTenancy";
     }
 
+    // -- TENANCY MANAGER
 
+    @Action(
+            domainEvent = tenancyManager.ActionEvent.class,
+            semantics = SemanticsOf.IDEMPOTENT
+    )
+    @ActionLayout(
+            sequence = "100.30.1",
+            cssClassFa = "globe"
+    )
+    public class tenancyManager{
+
+        public class ActionEvent extends ActionDomainEvent<tenancyManager> { }
+
+        @MemberSupport public ApplicationTenancyManager act(){
+            return factory.viewModel(new ApplicationTenancyManager());
+        }
+
+    }
+
+    // -- FIND TENANCIES
 
     @Action(
             domainEvent = findTenancies.ActionEvent.class,
             semantics = SemanticsOf.SAFE
             )
-    @ActionLayout(sequence = "100.30.1")
+    @ActionLayout(sequence = "100.30.2")
     public class findTenancies{
 
         public class ActionEvent extends ActionDomainEvent<findTenancies> {}
@@ -79,51 +102,6 @@ public class ApplicationTenancyMenu {
                 @MinLength(1) // for auto-complete
                 final String partialNameOrPath) {
             return applicationTenancyRepository.findByNameOrPathMatchingCached(partialNameOrPath);
-        }
-    }
-
-
-
-    @Action(
-            domainEvent = newTenancy.ActionEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT
-            )
-    @ActionLayout(sequence = "100.30.3")
-    public class newTenancy{
-
-        public class ActionEvent extends ActionDomainEvent<newTenancy> {}
-
-        @MemberSupport public ApplicationTenancy act(
-                @Parameter(maxLength = ApplicationTenancy.Name.MAX_LENGTH)
-                @ParameterLayout(named = "Name", typicalLength = ApplicationTenancy.Name.TYPICAL_LENGTH)
-                final String name,
-                @Parameter(maxLength = ApplicationTenancy.Path.MAX_LENGTH)
-                @ParameterLayout(named = "Path")
-                final String path,
-                @Parameter(optionality = Optionality.OPTIONAL)
-                @ParameterLayout(named = "Parent")
-                final ApplicationTenancy parent) {
-            return applicationTenancyRepository.newTenancy(name, path, parent);
-        }
-
-        //FIXME[ISIS-2703] when not provided, MM validation should fail, but yet does not
-        @MemberSupport public Collection<ApplicationTenancy> choicesParent() {
-            return applicationTenancyRepository.allTenancies();
-        }
-
-    }
-
-
-    @Action(
-            domainEvent = allTenancies.ActionEvent.class,
-            semantics = SemanticsOf.SAFE)
-    @ActionLayout(sequence = "100.30.4")
-    public class allTenancies{
-
-        public class ActionEvent extends ActionDomainEvent<allTenancies> {}
-
-        @MemberSupport public Collection<? extends ApplicationTenancy> act() {
-            return applicationTenancyRepository.allTenancies();
         }
     }
 

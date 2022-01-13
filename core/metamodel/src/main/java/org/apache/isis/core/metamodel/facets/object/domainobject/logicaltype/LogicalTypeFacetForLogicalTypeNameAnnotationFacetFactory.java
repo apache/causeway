@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.LogicalTypeName;
+import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -44,15 +45,17 @@ extends FacetFactoryAbstract {
         val logicalTypeNameIfAny = processClassContext.synthesizeOnType(LogicalTypeName.class);
         val cls = processClassContext.getCls();
 
-        if(!cls.isInterface()) {
-            return;
+        if(cls.isInterface()
+                || ClassExtensions.isAbstract(cls)) {
+
+            val facetHolder = processClassContext.getFacetHolder();
+
+            FacetUtil.addFacetIfPresent(
+                    LogicalTypeFacetForLogicalTypeNameAnnotation
+                    .create(logicalTypeNameIfAny, cls, facetHolder));
+
         }
 
-        val facetHolder = processClassContext.getFacetHolder();
-
-        FacetUtil.addFacetIfPresent(
-                LogicalTypeFacetForLogicalTypeNameAnnotation
-                .create(logicalTypeNameIfAny, cls, facetHolder));
     }
 
 }

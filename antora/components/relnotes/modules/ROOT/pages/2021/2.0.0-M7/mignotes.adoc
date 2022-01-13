@@ -242,6 +242,9 @@ Following menu actions for roles have been removed:
 <!--
 <mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="newRole"/>
 <mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="allRoles"/>
+
+<mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="newTenancy"/>
+<mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="allTenancies"/>
 -->
 ----
 
@@ -250,5 +253,9 @@ Use the new Role Manager View Model instead:
 [source,xml]
 .menubars.layout.xml
 ----
+<!-- Roles -->
 <mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="roleManager"/>
+
+<!-- Tenancies -->
+<mb3:serviceAction objectType="isis.ext.secman.ApplicationTenancyMenu" id="tenancyManager"/>
 ----

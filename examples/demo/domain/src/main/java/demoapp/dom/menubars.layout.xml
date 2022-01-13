@@ -350,9 +350,8 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
             </mb3:section>
             <mb3:section>
                 <mb3:named>Tenancies</mb3:named>
+                <mb3:serviceAction objectType="isis.ext.secman.ApplicationTenancyMenu" id="tenancyManager"/>
                 <mb3:serviceAction objectType="isis.ext.secman.ApplicationTenancyMenu" id="findTenancies"/>
-                <mb3:serviceAction objectType="isis.ext.secman.ApplicationTenancyMenu" id="newTenancy"/>
-                <mb3:serviceAction objectType="isis.ext.secman.ApplicationTenancyMenu" id="allTenancies"/>
             </mb3:section>
         </mb3:menu>
         <mb3:menu>

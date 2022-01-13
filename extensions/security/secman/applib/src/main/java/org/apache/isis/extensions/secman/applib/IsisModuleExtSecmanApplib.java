@@ -52,6 +52,8 @@ import org.apache.isis.extensions.secman.applib.tenancy.dom.mixins.ApplicationTe
 import org.apache.isis.extensions.secman.applib.tenancy.dom.mixins.ApplicationTenancy_removeUser;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.mixins.ApplicationTenancy_updateName;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.mixins.ApplicationTenancy_users;
+import org.apache.isis.extensions.secman.applib.tenancy.man.mixins.ApplicationTenancyManager_allTenancies;
+import org.apache.isis.extensions.secman.applib.tenancy.man.mixins.ApplicationTenancyManager_newTenancy;
 import org.apache.isis.extensions.secman.applib.tenancy.menu.ApplicationTenancyMenu;
 import org.apache.isis.extensions.secman.applib.user.contributions.HasUsername_open;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_addRole;
@@ -103,14 +105,11 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 
         // -- ViewModels
-        // TODO: not sure we need to register view models?
         ApplicationUserManager.class,
         UserPermissionViewModel.class,
         ApplicationOrphanedPermissionManager.class,
 
         // -- Mixins
-        // TODO: not sure we need to register mixins?
-
         ApplicationOrphanedPermissionManager_relocateSelected.class,
 
         //ApplicationPermission
@@ -175,6 +174,10 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
         ApplicationRoleManager_allRoles.class,
         ApplicationRoleManager_newRole.class,
         ApplicationRoleManager_exportAsYaml.class,
+
+        // ApplicationRoleManager
+        ApplicationTenancyManager_allTenancies.class,
+        ApplicationTenancyManager_newTenancy.class,
 
         // other @Services
         SeedSecurityModuleService.class,

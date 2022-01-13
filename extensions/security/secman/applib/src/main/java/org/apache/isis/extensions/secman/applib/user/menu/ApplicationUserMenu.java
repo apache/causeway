@@ -65,6 +65,26 @@ public class ApplicationUserMenu {
         return "applicationUser";
     }
 
+    // -- USER MANAGER
+
+    @Action(
+            domainEvent = userManager.ActionEvent.class,
+            semantics = SemanticsOf.IDEMPOTENT
+    )
+    @ActionLayout(
+            sequence = "100.10.1",
+            cssClassFa = "user-plus"
+    )
+    public class userManager{
+
+        public class ActionEvent extends ActionDomainEvent<userManager> { }
+
+        @MemberSupport public ApplicationUserManager act(){
+            return factory.viewModel(new ApplicationUserManager());
+        }
+
+    }
+
     // -- FIND USERS
 
     @Action(
@@ -80,26 +100,6 @@ public class ApplicationUserMenu {
         @MemberSupport public Collection<? extends ApplicationUser> act(
                 final @ParameterLayout(named = "Search") String search) {
             return applicationUserRepository.find(search);
-        }
-
-    }
-
-    // -- USER MANAGER
-
-    @Action(
-            domainEvent = userManager.ActionEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT
-    )
-    @ActionLayout(
-            sequence = "100.10.3",
-            cssClassFa = "user-plus"
-    )
-    public class userManager{
-
-        public class ActionEvent extends ActionDomainEvent<userManager> { }
-
-        @MemberSupport public ApplicationUserManager act(){
-            return factory.viewModel(new ApplicationUserManager());
         }
 
     }
