@@ -133,7 +133,7 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
     )
     @PropertyLayout(
             fieldSetId = "details",
-            hidden = Where.PARENTED_TABLES,
+            hidden = Where.REFERENCES_PARENT,
             sequence = "2"
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
