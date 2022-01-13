@@ -340,9 +340,8 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
             </mb3:section>
             <mb3:section>
                 <mb3:named>Roles</mb3:named>
+                <mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="roleManager"/>
                 <mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="findRoles"/>
-                <mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="newRole"/>
-                <mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="allRoles"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>Permissions</mb3:named>

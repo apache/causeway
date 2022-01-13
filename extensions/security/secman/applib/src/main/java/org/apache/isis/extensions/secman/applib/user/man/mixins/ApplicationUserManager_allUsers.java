@@ -16,16 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.applib.user.app.mixins;
+package org.apache.isis.extensions.secman.applib.user.man.mixins;
 
 import java.util.Collection;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.extensions.secman.applib.user.app.ApplicationUserManager;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.applib.user.man.ApplicationUserManager;
 
 import lombok.RequiredArgsConstructor;
 

@@ -29,14 +29,15 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ObjectSupport;
-import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.applib.role.man.ApplicationRoleManager;
 
 import lombok.RequiredArgsConstructor;
 
@@ -57,6 +58,7 @@ public class ApplicationRoleMenu {
     public static abstract class ActionDomainEvent<T> extends IsisModuleExtSecmanApplib.ActionDomainEvent<T> {}
 
     private final ApplicationRoleRepository applicationRoleRepository;
+    private final FactoryService factory;
 
 
     @ObjectSupport public String iconName() {
@@ -64,12 +66,33 @@ public class ApplicationRoleMenu {
     }
 
 
+    // -- ROLE MANAGER
+
+    @Action(
+            domainEvent = roleManager.ActionEvent.class,
+            semantics = SemanticsOf.IDEMPOTENT
+    )
+    @ActionLayout(
+            sequence = "100.20.1",
+            cssClassFa = "user-tag"
+    )
+    public class roleManager{
+
+        public class ActionEvent extends ActionDomainEvent<roleManager> { }
+
+        @MemberSupport public ApplicationRoleManager act(){
+            return factory.viewModel(new ApplicationRoleManager());
+        }
+
+    }
+
+    // -- FIND ROLES
 
     @Action(
             domainEvent = findRoles.ActionEvent.class,
             semantics = SemanticsOf.SAFE
             )
-    @ActionLayout(sequence = "100.20.1")
+    @ActionLayout(sequence = "100.20.2")
     public class findRoles {
 
         public class ActionEvent extends ActionDomainEvent<findRoles> {}
@@ -82,44 +105,5 @@ public class ApplicationRoleMenu {
         }
 
     }
-
-
-    @Action(
-            domainEvent = newRole.ActionEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT
-            )
-    @ActionLayout(sequence = "100.20.2")
-    public class newRole{
-
-        public class ActionEvent extends ActionDomainEvent<newRole> {}
-
-        @MemberSupport public ApplicationRole act (
-                @Parameter(maxLength = ApplicationRole.Name.MAX_LENGTH)
-                @ParameterLayout(named="Name", typicalLength= ApplicationRole.Name.TYPICAL_LENGTH)
-                final String name,
-                @Parameter(maxLength = ApplicationRole.Description.MAX_LENGTH, optionality = Optionality.OPTIONAL)
-                @ParameterLayout(named="Description", typicalLength= ApplicationRole.Description.TYPICAL_LENGTH)
-                final String description) {
-            return applicationRoleRepository.newRole(name, description);
-        }
-    }
-
-
-
-    @Action(
-            domainEvent = allRoles.ActionEvent.class,
-            semantics = SemanticsOf.SAFE
-            )
-    @ActionLayout(sequence = "100.20.3")
-    public class allRoles {
-
-        public class ActionEvent extends ActionDomainEvent<allRoles> {}
-
-        @MemberSupport public Collection<? extends ApplicationRole> act() {
-            return applicationRoleRepository.allRoles();
-        }
-
-    }
-
 
 }

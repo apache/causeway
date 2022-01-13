@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.applib.user.app;
+package org.apache.isis.extensions.secman.applib.role.man;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
@@ -25,14 +25,14 @@ import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
-        logicalTypeName = ApplicationUserManager.LOGICAL_TYPE_NAME
+        logicalTypeName = ApplicationRoleManager.LOGICAL_TYPE_NAME
 )
-public class ApplicationUserManager {
+public class ApplicationRoleManager {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationUserManager";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationRoleManager";
 
     @ObjectSupport public String title() {
-        return "Application User Manager";
+        return "Application Role Manager";
     }
 
     // behaviour provided by mixins

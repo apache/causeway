@@ -16,20 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.applib.user.app.mixins;
+package org.apache.isis.extensions.secman.applib.user.man;
 
-/**
- * @apiNote This mixin requires concrete implementations associated with JPA and JDO,
- * since action's type parameters are inspected for their compile time types
- * and the ApplicationRole here is just an interface that the framework has not much
- * meta-model information to derive UI behavior from.
- *
- * @implNote due to current limitations, both the main and its supporting methods have to be
- * overridden with the concrete subclasses.
- *
- */
-public abstract class ApplicationUserManager_newLocalUserAbstract {
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 
+@DomainObject(
+        nature = Nature.VIEW_MODEL,
+        logicalTypeName = ApplicationUserManager.LOGICAL_TYPE_NAME
+)
+public class ApplicationUserManager {
 
+    public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationUserManager";
+
+    @ObjectSupport public String title() {
+        return "Application User Manager";
+    }
+
+    // behaviour provided by mixins
 
 }

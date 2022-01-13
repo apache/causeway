@@ -40,6 +40,8 @@ import org.apache.isis.extensions.secman.applib.role.dom.mixins.ApplicationRole_
 import org.apache.isis.extensions.secman.applib.role.dom.mixins.ApplicationRole_removeUsers;
 import org.apache.isis.extensions.secman.applib.role.dom.mixins.ApplicationRole_updateDescription;
 import org.apache.isis.extensions.secman.applib.role.dom.mixins.ApplicationRole_updateName;
+import org.apache.isis.extensions.secman.applib.role.man.mixins.ApplicationRoleManager_allRoles;
+import org.apache.isis.extensions.secman.applib.role.man.mixins.ApplicationRoleManager_newRole;
 import org.apache.isis.extensions.secman.applib.role.menu.ApplicationRoleMenu;
 import org.apache.isis.extensions.secman.applib.seed.SeedSecurityModuleService;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.mixins.ApplicationTenancy_addChild;
@@ -50,10 +52,6 @@ import org.apache.isis.extensions.secman.applib.tenancy.dom.mixins.ApplicationTe
 import org.apache.isis.extensions.secman.applib.tenancy.dom.mixins.ApplicationTenancy_updateName;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.mixins.ApplicationTenancy_users;
 import org.apache.isis.extensions.secman.applib.tenancy.menu.ApplicationTenancyMenu;
-import org.apache.isis.extensions.secman.applib.user.app.ApplicationUserManager;
-import org.apache.isis.extensions.secman.applib.user.app.mixins.ApplicationUserManager_allUsers;
-import org.apache.isis.extensions.secman.applib.user.app.mixins.ApplicationUserManager_newDelegateUser;
-import org.apache.isis.extensions.secman.applib.user.app.mixins.ApplicationUserManager_newLocalUser;
 import org.apache.isis.extensions.secman.applib.user.contributions.HasUsername_open;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_addRole;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_delete;
@@ -74,6 +72,10 @@ import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.perms.ApplicationUser_effectiveMemberPermissions;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.perms.ApplicationUser_filterEffectiveMemberPermissions;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.perms.UserPermissionViewModel;
+import org.apache.isis.extensions.secman.applib.user.man.ApplicationUserManager;
+import org.apache.isis.extensions.secman.applib.user.man.mixins.ApplicationUserManager_allUsers;
+import org.apache.isis.extensions.secman.applib.user.man.mixins.ApplicationUserManager_newDelegateUser;
+import org.apache.isis.extensions.secman.applib.user.man.mixins.ApplicationUserManager_newLocalUser;
 import org.apache.isis.extensions.secman.applib.user.menu.ApplicationUserMenu;
 import org.apache.isis.extensions.secman.applib.user.menu.MeService;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
@@ -167,6 +169,10 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
         ApplicationUserManager_allUsers.class,
         ApplicationUserManager_newDelegateUser.class,
         ApplicationUserManager_newLocalUser.class,
+
+        // ApplicationRoleManager
+        ApplicationRoleManager_allRoles.class,
+        ApplicationRoleManager_newRole.class,
 
         // other @Services
         SeedSecurityModuleService.class,
