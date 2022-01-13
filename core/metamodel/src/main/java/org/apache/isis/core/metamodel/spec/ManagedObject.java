@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -129,6 +130,21 @@ public interface ManagedObject {
         return ()->this;
     }
 
+    /** debug */
+    default void assertSpecIsInSyncWithPojo() {
+        val pojo = getPojo();
+        val spec = getSpecification();
+        if(pojo==null
+                || spec==null) {
+            return;
+        }
+        val actualSpec = spec.getSpecificationLoader().specForType(pojo.getClass()).orElse(null);
+        if(!Objects.equals(spec,  actualSpec)) {
+            System.err.printf("spec mismatch %s %s%n", spec, actualSpec);
+        }
+        //_Assert.assertEquals(spec, actualSpec);
+    }
+
     // -- TITLE
 
     public default String titleString(final UnaryOperator<TitleRenderRequest.TitleRenderRequestBuilder> onBuilder) {
@@ -189,29 +205,28 @@ public interface ManagedObject {
 
     // -- FACTORIES
 
+    public static ManagedObject notBookmarked(
+            final ObjectSpecification spec,
+            final Object pojo) {
+        return SimpleManagedObject.of(spec, pojo);
+    }
+
     /**
      * Optimized for cases, when the pojo's specification is already available.
-     * @param specification
-     * @param pojo - might also be a collection of pojos
+     * If {@code pojo} is an entity, automatically memoizes its bookmark.
+     * @param spec
+     * @param pojo - might also be a collection of pojos (null-able)
      */
     public static ManagedObject of(
-            final @NonNull ObjectSpecification specification,
+            final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
 
         ManagedObjects.assertPojoNotManaged(pojo);
-        specification.assertPojoCompatible(pojo);
 
-        final ManagedObject adapter =
         //ISIS-2430 Cannot assume Action Param Spec to be correct when eagerly loaded
-        //actual type in use (during runtime) might be a sub-class of the above
-        (pojo==null
-                || pojo.getClass().equals(specification.getCorrespondingClass())
-                || specification.isValue())
-            // if actual type matches spec's, we assume, that we don't need to reload,
-            // so this is a shortcut for performance reasons
-            ? SimpleManagedObject.of(specification, pojo)
-            : specification.getMetaModelContext().getObjectManager().adapt(pojo);
-
+        //actual type in use (during runtime) might be a sub-class of the above, so re-adapt with hinting spec
+        val adapter = spec.getMetaModelContext().getObjectManager().adapt(pojo, spec);
+        adapter.assertSpecIsInSyncWithPojo();
         return adapter;
     }
 
@@ -219,7 +234,7 @@ public interface ManagedObject {
      * Optimized for cases, when the pojo's specification and bookmark are already available.
      */
     public static ManagedObject bookmarked(
-            final @NonNull ObjectSpecification specification,
+            final @NonNull ObjectSpecification spec,
             final @NonNull Object pojo,
             final @NonNull Bookmark bookmark) {
 
@@ -227,16 +242,16 @@ public interface ManagedObject {
             _Assert.assertFalse(_Collections.isCollectionOrArrayOrCanType(pojo.getClass()));
         }
 
-        if(!specification.getCorrespondingClass().isAssignableFrom(pojo.getClass())) {
+        if(!spec.getCorrespondingClass().isAssignableFrom(pojo.getClass())) {
             throw _Exceptions.illegalArgument(
                     "Pojo not compatible with ObjectSpecification, " +
                     "objectSpec.correspondingClass = %s, " +
                     "pojo.getClass() = %s, " +
                     "pojo.toString() = %s",
-                    specification.getCorrespondingClass(), pojo.getClass(), pojo.toString());
+                    spec.getCorrespondingClass(), pojo.getClass(), pojo.toString());
         }
         ManagedObjects.assertPojoNotManaged(pojo);
-        return SimpleManagedObject.identified(specification, pojo, bookmark);
+        return SimpleManagedObject.identified(spec, pojo, bookmark);
     }
 
     /**
@@ -267,7 +282,7 @@ public interface ManagedObject {
 
     /** has an ObjectSpecification, but no value (pojo) */
     static ManagedObject empty(final @NonNull ObjectSpecification spec) {
-        return ManagedObject.of(spec, null);
+        return SimpleManagedObject.of(spec, null);
     }
 
     // -- SIMPLE
@@ -323,6 +338,7 @@ public interface ManagedObject {
         @Override
         public void replacePojo(final UnaryOperator<Object> replacer) {
             pojo = replacer.apply(pojo);
+            assertSpecIsInSyncWithPojo();
         }
 
         @Override
@@ -399,6 +415,9 @@ public interface ManagedObject {
         @Override
         public void replacePojo(final UnaryOperator<Object> replacer) {
             pojo = replacer.apply(pojo);
+            if(specification.isMemoized()) {
+                assertSpecIsInSyncWithPojo();
+            }
         }
 
         @Override
@@ -411,5 +430,8 @@ public interface ManagedObject {
         }
 
     }
+
+
+
 
 }

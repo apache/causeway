@@ -107,6 +107,11 @@ public class ApplicationTenancyMenu {
             return applicationTenancyRepository.newTenancy(name, path, parent);
         }
 
+        //FIXME[ISIS-2703] when not provided, MM validation should fail, but yet does not
+        @MemberSupport public Collection<ApplicationTenancy> choicesParent() {
+            return applicationTenancyRepository.allTenancies();
+        }
+
     }
 
 

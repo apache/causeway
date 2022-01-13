@@ -20,13 +20,14 @@ package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
 import java.util.Optional;
 
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
@@ -62,10 +63,27 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             final String id,
             final ObjectAdapterModel objectAdapterModel) {
         super(id, objectAdapterModel);
+
+        val model = getModel();
+        val obj = model.getObject();
+
+        val isNonEmptyAbstract = isNonEmptyAbstract(obj);
+        // GUARD against non-empty abstract
+        _Assert.assertFalse(isNonEmptyAbstract,
+                ()->"model for EntityIconAndTitlePanel, when non-empty, must not represent abstract types");
     }
 
-    public ObjectAdapterModel getEntityModel() {
-        return getModel();
+    protected ManagedObject getTargetAdapter() {
+        val targetAdapter = EntityUtil.refetch(getModel().getObject());
+        return targetAdapter;
+    }
+
+    static boolean isNonEmptyAbstract(final ManagedObject obj) {
+        if(obj==null
+                || obj.getPojo()==null) {
+            return false;
+        }
+        return obj.getSpecification().isAbstract();
     }
 
     @Override
@@ -74,8 +92,10 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         super.onBeforeRender();
     }
 
+    // -- HELPER
+
     private void buildGui() {
-        addOrReplaceLinkWrapper();
+        addLinkWrapper();
 
         if(isTitleSuppressed()) {
             // bit of a hack... allows us to suppress the title using CSS
@@ -91,34 +111,28 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
                 && !getModel().getRenderingHint().isInTable();
     }
 
-    private void addOrReplaceLinkWrapper() {
-        ObjectAdapterModel entityModel = getModel();
-        final WebMarkupContainer entityLinkWrapper = addOrReplaceLinkWrapper(entityModel);
-        addOrReplace(entityLinkWrapper);
+    protected MarkupContainer addLinkWrapper() {
+        val linkWrapper = Wkt.container(ID_ENTITY_LINK_WRAPPER);
+        linkWrapper.addOrReplace(createLinkWithIconAndTitle());
+        addOrReplace(linkWrapper);
+        return linkWrapper;
     }
 
-    protected WebMarkupContainer addOrReplaceLinkWrapper(final ObjectAdapterModel entityModel) {
-        val adapter = entityModel.getObject();
+    private AbstractLink createLinkWithIconAndTitle() {
 
-        final WebMarkupContainer entityLinkWrapper = new WebMarkupContainer(ID_ENTITY_LINK_WRAPPER);
+        final ManagedObject targetAdapter = getTargetAdapter();
 
-        entityLinkWrapper.addOrReplace(createLinkWithIconAndTitle(adapter));
+        final AbstractLink link = createDynamicallyVisibleLink(targetAdapter);
 
-        return entityLinkWrapper;
-    }
+        if(targetAdapter != null) {
 
-    private AbstractLink createLinkWithIconAndTitle(final ManagedObject adapterIfAny) {
-        final AbstractLink link = createDynamicallyVisibleLink();
+            val spec = targetAdapter.getSpecification();
 
-        if(adapterIfAny != null) {
-
-            val spec = adapterIfAny.getSpecification();
-
-            final String iconName = spec.getIconName(adapterIfAny);
+            final String iconName = spec.getIconName(targetAdapter);
             final CssClassFaFactory cssClassFaFactory = spec.getCssClassFaFactory().orElse(null);
             if (iconName != null || cssClassFaFactory == null) {
                 Wkt.imageAddCachable(link, ID_ENTITY_ICON,
-                                getImageResourceCache().resourceReferenceFor(adapterIfAny));
+                                getImageResourceCache().resourceReferenceFor(targetAdapter));
                 Components.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
             } else {
                 Label dummy = Wkt.labelAdd(link, ID_ENTITY_FONT_AWESOME, "");
@@ -130,29 +144,17 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             Wkt.labelAdd(link, ID_ENTITY_TITLE, titleAbbreviated(title));
 
             String entityTypeName = determineFriendlyType() // from actual underlying model
-                    .orElseGet(adapterIfAny.getSpecification()::getSingularName); // not sure if this code path is ever reached
+                    .orElseGet(targetAdapter.getSpecification()::getSingularName); // not sure if this code path is ever reached
             Tooltips.addTooltip(link, entityTypeName, title);
         }
 
         return link;
     }
 
-    private AbstractLink createDynamicallyVisibleLink() {
+    private AbstractLink createDynamicallyVisibleLink(final ManagedObject targetAdapter) {
 
         final ObjectAdapterModel entityModel = getModel();
-        val targetAdapter = EntityUtil.refetch(entityModel.getObject());
-
-        final ObjectAdapterModel redirectToModel =
-                ManagedObjects.isNullOrUnspecifiedOrEmpty(targetAdapter)
-                ? entityModel
-                : EntityModel.ofAdapter(
-                    super.getCommonContext(),
-                    entityModel.getTypeOfSpecification().lookupFacet(ProjectionFacet.class)
-                    .map(projectionFacet->projectionFacet.projected(targetAdapter))
-                    .orElse(targetAdapter));
-
-        final PageParameters pageParameters = redirectToModel.getPageParametersWithoutUiHints();
-
+        final PageParameters pageParameters = pageParametersFor(targetAdapter);
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
 
         final BookmarkablePageLink<Void> link = new BookmarkablePageLink<Void>(
@@ -162,12 +164,29 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
             @Override
             public boolean isVisible() {
+                // not visible if null
+                // (except its null because its a detached entity,
+                // which we can re-fetch due to memoized bookmark)
                 val targetAdapter = entityModel.getObject();
-                return targetAdapter != null;
+                return targetAdapter != null
+                        && (targetAdapter.getPojo()!=null
+                                || targetAdapter.isBookmarkMemoized());
             }
         };
 
         return link;
+    }
+
+    private PageParameters pageParametersFor(final ManagedObject targetAdapter) {
+        return
+                ManagedObjects.isNullOrUnspecifiedOrEmpty(targetAdapter)
+                ? getModel().getPageParametersWithoutUiHints()
+                : EntityModel.ofAdapter(
+                    super.getCommonContext(),
+                    targetAdapter.getSpecification().lookupFacet(ProjectionFacet.class)
+                    .map(projectionFacet->projectionFacet.projected(targetAdapter))
+                    .orElse(targetAdapter))
+                    .getPageParametersWithoutUiHints();
     }
 
     private String titleAbbreviated(final String titleString) {
@@ -210,8 +229,5 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         }
         return maxLength <= 3 ? "" : str.substring(0, maxLength - 3) + "...";
     }
-
-
-
 
 }

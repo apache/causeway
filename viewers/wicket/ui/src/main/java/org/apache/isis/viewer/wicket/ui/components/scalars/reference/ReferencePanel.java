@@ -207,14 +207,13 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     // called from onInitialize*
     // (was previous called by EntityLinkSelect2Panel in onBeforeRender, this responsibility now moved)
     private void syncWithInput() {
-        val adapter = getModel().getObject();
+        val scalarModel = getModel();
+        val adapter = scalarModel.getObject();
 
         // syncLinkWithInput
         final MarkupContainer componentForRegular = (MarkupContainer) getComponentForRegular();
 
         if(componentForRegular != null) {
-
-            val scalarModel = getModel();
 
             val componentFactory = getComponentFactoryRegistry()
                     .findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, scalarModel);

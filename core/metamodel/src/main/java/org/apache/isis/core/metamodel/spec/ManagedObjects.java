@@ -764,7 +764,6 @@ public final class ManagedObjects {
             return adapter;
         }
 
-
     }
 
     // -- VISIBILITY UTIL

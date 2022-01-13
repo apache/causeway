@@ -18,11 +18,12 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
-import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.MarkupContainer;
 
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.zclip.ZeroClipboardPanel;
+
+import lombok.val;
 
 /**
  * An extension of {@link org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel}
@@ -39,12 +40,9 @@ public class EntityIconTitleAndCopyLinkPanel extends EntityIconAndTitlePanel {
     }
 
     @Override
-    protected WebMarkupContainer addOrReplaceLinkWrapper(final ObjectAdapterModel entityModel) {
-        WebMarkupContainer linkWrapper = super.addOrReplaceLinkWrapper(entityModel);
-
-        ZeroClipboardPanel zClipCopyLink = new ZeroClipboardPanel(ID_COPY_LINK, entityModel);
-        linkWrapper.add(zClipCopyLink);
-
+    protected MarkupContainer addLinkWrapper() {
+        val linkWrapper = super.addLinkWrapper();
+        linkWrapper.add(new ZeroClipboardPanel(ID_COPY_LINK, getModel()));
         return linkWrapper;
     }
 }
