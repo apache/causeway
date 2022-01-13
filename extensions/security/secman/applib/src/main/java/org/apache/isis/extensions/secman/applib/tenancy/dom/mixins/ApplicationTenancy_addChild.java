@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.secman.applib.tenancy.dom.mixins;
 
 import java.util.Collection;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -61,10 +62,27 @@ public class ApplicationTenancy_addChild {
 
     @MemberSupport public Collection<? extends ApplicationTenancy> choicesChild() {
         val choices =_Lists.newArrayList(applicationTenancyRepository.getRootTenancies());
-        choices.remove(target);
+        choices.removeIf(this::containsTarget); // ensure tree structure (nodes cannot contain themselves)
         return choices; }
 
     @MemberSupport public String disableAct() {
         return choicesChild().isEmpty()? "No root (non-paranted) tenancies available": null; }
+
+
+    // -- HELPER
+
+    /**
+     *  For given t traverses up the tree hierarchy in search of a match.
+     */
+    private boolean containsTarget(final ApplicationTenancy t) {
+        var node = t;
+        while(node!=null) {
+            if(Objects.equals(node, target)) {
+                return true;
+            }
+            node = node.getParent();
+        }
+        return false;
+    }
 
 }
