@@ -57,9 +57,10 @@ public class ApplicationTenancy_removeChild {
         return target;
     }
 
-    @MemberSupport public Collection<? extends ApplicationTenancy> choices0Act() {
-        return applicationTenancyRepository.getChildren(target);
-    }
-    @MemberSupport public String disableAct() { return choices0Act().isEmpty()? "No children to remove": null; }
+    @MemberSupport public Collection<? extends ApplicationTenancy> choicesChild() {
+        return applicationTenancyRepository.getChildren(target); }
+
+    @MemberSupport public String disableAct() {
+        return choicesChild().isEmpty()? "No children to remove": null; }
 
 }

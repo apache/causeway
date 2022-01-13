@@ -31,6 +31,7 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -146,7 +147,10 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
     public abstract ApplicationTenancy getParent();
     public abstract void setParent(ApplicationTenancy parent);
 
-
+    @Programmatic
+    public boolean isRoot() {
+        return getParent()==null;
+    }
 
     // -- CHILDREN
 

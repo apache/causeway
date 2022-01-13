@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
@@ -62,7 +63,10 @@ public class ApplicationTenancy_addUser {
         return target;
     }
 
-    @MemberSupport public List<? extends ApplicationUser> autoComplete0Act(final String search) {
+    @MemberSupport public List<? extends ApplicationUser> autoCompleteApplicationUser(
+            @MinLength(1)
+            final String search) {
+
         final Collection<? extends ApplicationUser> matchingSearch = applicationUserRepository.find(search);
         final List<? extends ApplicationUser> list = _Lists.newArrayList(matchingSearch);
         list.removeAll(applicationUserRepository.findByTenancy(target));

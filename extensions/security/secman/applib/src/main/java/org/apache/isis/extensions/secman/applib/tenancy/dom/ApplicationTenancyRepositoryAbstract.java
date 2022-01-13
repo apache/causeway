@@ -46,7 +46,7 @@ implements ApplicationTenancyRepository {
 
     private final Class<T> applicationTenancyClass;
 
-    protected ApplicationTenancyRepositoryAbstract(Class<T> applicationTenancyClass) {
+    protected ApplicationTenancyRepositoryAbstract(final Class<T> applicationTenancyClass) {
         this.applicationTenancyClass = applicationTenancyClass;
     }
 
@@ -158,6 +158,23 @@ implements ApplicationTenancyRepository {
     }
 
     @Override
+    public Collection<ApplicationTenancy> getRootTenancies() {
+        return repository.allInstances(this.applicationTenancyClass)
+                .stream()
+                .filter(ApplicationTenancy::isRoot)
+                .map(this.applicationTenancyClass::cast)
+                .collect(_Sets.toUnmodifiableSorted());
+    }
+
+    @Override
+    public Collection<ApplicationTenancy> getChildren(
+            final @NonNull ApplicationTenancy tenancy) {
+        return tenancy.getChildren()
+                .stream()
+                .collect(_Sets.toUnmodifiableSorted());
+    }
+
+    @Override
     public void setTenancyOnUser(
             final @NonNull ApplicationTenancy tenancy,
             final @NonNull ApplicationUser user) {
@@ -188,14 +205,6 @@ implements ApplicationTenancyRepository {
             parent.getChildren().add(tenancy);
             tenancy.setParent(null);
         }
-    }
-
-    @Override
-    public Collection<ApplicationTenancy> getChildren(
-            final @NonNull ApplicationTenancy tenancy) {
-        return tenancy.getChildren()
-                .stream()
-                .collect(_Sets.toUnmodifiableSorted());
     }
 
 }

@@ -34,6 +34,8 @@ public interface ApplicationTenancyRepository {
     ApplicationTenancy newApplicationTenancy();
 
     Collection<ApplicationTenancy> allTenancies();
+    /** non-parented, not a child */
+    Collection<ApplicationTenancy> getRootTenancies();
     Collection<ApplicationTenancy> getChildren(ApplicationTenancy tenancy);
     Collection<ApplicationTenancy> findByNameOrPathMatchingCached(String partialNameOrPath);
     ApplicationTenancy findByPath(String path);
@@ -51,5 +53,7 @@ public interface ApplicationTenancyRepository {
 
     void setParentOnTenancy(ApplicationTenancy tenancy, ApplicationTenancy parent);
     void clearParentOnTenancy(ApplicationTenancy tenancy);
+
+
 
 }

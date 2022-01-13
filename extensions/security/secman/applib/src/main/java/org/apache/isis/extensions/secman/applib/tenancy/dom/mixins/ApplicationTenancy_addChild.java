@@ -18,18 +18,22 @@
  */
 package org.apache.isis.extensions.secman.applib.tenancy.dom.mixins;
 
+import java.util.Collection;
+
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancyRepository;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.mixins.ApplicationTenancy_addChild.DomainEvent;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Action(
         domainEvent = DomainEvent.class,
@@ -54,5 +58,13 @@ public class ApplicationTenancy_addChild {
         applicationTenancyRepository.setParentOnTenancy(child, target);
         return target;
     }
+
+    @MemberSupport public Collection<? extends ApplicationTenancy> choicesChild() {
+        val choices =_Lists.newArrayList(applicationTenancyRepository.getRootTenancies());
+        choices.remove(target);
+        return choices; }
+
+    @MemberSupport public String disableAct() {
+        return choicesChild().isEmpty()? "No root (non-paranted) tenancies available": null; }
 
 }
