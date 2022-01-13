@@ -229,3 +229,26 @@ not compatible with the old ones.
 	<artifactId>isis-valuetypes-markdown-persistence-jdo</artifactId>
 </dependency>
 ----
+
+== Extensions
+
+=== SecMan
+
+Following menu actions for roles have been removed:
+
+[source,xml]
+.menubars.layout.xml
+----
+<!--
+<mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="newRole"/>
+<mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="allRoles"/>
+-->
+----
+
+Use the new Role Manager View Model instead:
+
+[source,xml]
+.menubars.layout.xml
+----
+<mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="roleManager"/>
+----
