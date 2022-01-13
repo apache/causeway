@@ -408,7 +408,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     public void resetPropertyModels() {
         adapterMemento.resetVersion(getPersistenceSession(), getSpecificationLoader());
         for (final PropertyMemento pm : propertyScalarModels.keySet()) {
-            OneToOneAssociation otoa = pm.getProperty(getSpecificationLoader());
+            final OneToOneAssociation otoa = pm.getProperty(getSpecificationLoader());
             final ScalarModel scalarModel = propertyScalarModels.get(pm);
             final ObjectAdapter adapter = getObject();
             if (otoa instanceof MixedInMember || otoa instanceof ContributeeMember) {
