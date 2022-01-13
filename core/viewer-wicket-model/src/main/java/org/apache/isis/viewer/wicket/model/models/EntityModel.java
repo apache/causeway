@@ -410,9 +410,9 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
             OneToOneAssociation otoa = pm.getProperty(getSpecificationLoader());
             final ScalarModel scalarModel = propertyScalarModels.get(pm);
             final ObjectAdapter adapter = getObject();
-            final ObjectAdapter associatedAdapter =
-                    otoa.get(adapter, InteractionInitiatedBy.USER);
             try {
+                final ObjectAdapter associatedAdapter =
+                    otoa.get(adapter, InteractionInitiatedBy.USER);
                 scalarModel.setObject(associatedAdapter);
             } catch(RuntimeException ex) {
                 if (otoa instanceof MixedInMember || otoa instanceof ContributeeMember) {
