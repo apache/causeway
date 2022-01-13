@@ -202,7 +202,7 @@ implements ApplicationTenancyRepository {
             final @NonNull ApplicationTenancy tenancy) {
         val parent = tenancy.getParent();
         if(parent != null) {
-            parent.getChildren().add(tenancy);
+            parent.getChildren().remove(tenancy);
             tenancy.setParent(null);
         }
     }
