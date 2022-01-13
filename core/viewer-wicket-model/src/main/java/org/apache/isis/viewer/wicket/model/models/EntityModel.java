@@ -27,6 +27,8 @@ import com.google.common.collect.Maps;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Where;
@@ -36,12 +38,15 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChec
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
+import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -52,12 +57,14 @@ import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 
 /**
  * Backing model to represent a {@link ObjectAdapter}.
- * 
+ *
  * <p>
  * So that the model is {@link Serializable}, the {@link ObjectAdapter} is
  * stored as a {@link ObjectAdapterMemento}.
  */
 public class EntityModel extends BookmarkableModel<ObjectAdapter> implements ObjectAdapterModel, UiHintContainer {
+
+    private static final Logger LOG = LoggerFactory.getLogger(EntityModel.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -227,7 +234,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     // BookmarkableModel
     //////////////////////////////////////////////////
 
-    
+
     @Override
     public PageParameters getPageParameters() {
         PageParameters pageParameters = createPageParameters(getObject());
@@ -287,7 +294,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
         final BookmarkPolicyFacet facet = getBookmarkPolicyFacetIfAny();
         return facet != null && facet.value() == policy;
     }
-    
+
     private BookmarkPolicyFacet getBookmarkPolicyFacetIfAny() {
         final ObjectSpecId specId = getObjectAdapterMemento().getObjectSpecId();
         final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(specId);
@@ -326,13 +333,13 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     /**
      * Not Wicket API, but used by <tt>EntityPage</tt> to do eager loading
      * when rendering after post-and-redirect.
-     * @return 
+     * @return
      */
     public ObjectAdapter load(ConcurrencyChecking concurrencyChecking) {
         if (adapterMemento == null) {
             return null;
         }
-        
+
         final ObjectAdapter objectAdapter =
                 adapterMemento.getObjectAdapter(concurrencyChecking, getPersistenceSession(), getSpecificationLoader());
         return objectAdapter;
@@ -342,7 +349,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     /**
      * Callback from {@link #getObject()}, defaults to loading the object
      * using {@link ConcurrencyChecking#CHECK strict} checking.
-     * 
+     *
      * <p>
      * If non-strict checking is required, then just call {@link #load(ConcurrencyChecking)} with an
      * argument of {@link ConcurrencyChecking#NO_CHECK} first.
@@ -401,11 +408,18 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     public void resetPropertyModels() {
         adapterMemento.resetVersion(getPersistenceSession(), getSpecificationLoader());
         for (final PropertyMemento pm : propertyScalarModels.keySet()) {
-            OneToOneAssociation otoa = pm.getProperty(getSpecificationLoader());
+            final OneToOneAssociation otoa = pm.getProperty(getSpecificationLoader());
             final ScalarModel scalarModel = propertyScalarModels.get(pm);
             final ObjectAdapter adapter = getObject();
+            if (otoa instanceof MixedInMember || otoa instanceof ContributeeMember) {
+                // it's probably also safe for regular mixins; but we choose to be conservative.
+                final Consent visibility = otoa.isVisible(adapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
+                if(!visibility.isAllowed()) {
+                    continue;
+                }
+            }
             final ObjectAdapter associatedAdapter =
-                    otoa.get(adapter, InteractionInitiatedBy.USER);
+                otoa.get(adapter, InteractionInitiatedBy.USER);
             scalarModel.setObject(associatedAdapter);
         }
     }
@@ -425,7 +439,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     public ObjectAdapterMemento getContextAdapterIfAny() {
         return contextAdapterIfAny;
     }
-    
+
     /**
      * Used as a hint when the {@link #getRenderingHint()} is {@link RenderingHint#PARENTED_TITLE_COLUMN},
      * provides a context adapter to obtain the title.
@@ -433,7 +447,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     public void setContextAdapterIfAny(ObjectAdapterMemento contextAdapterIfAny) {
         this.contextAdapterIfAny = contextAdapterIfAny;
     }
-    
+
     public Mode getMode() {
         return mode;
     }
@@ -502,7 +516,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     // //////////////////////////////////////////////////////////
     // Pending
     // //////////////////////////////////////////////////////////
-    
+
     private static final class PendingModel extends Model<ObjectAdapterMemento> {
         private static final long serialVersionUID = 1L;
 
@@ -516,7 +530,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
          * The new value (could be set to null; hasPending is used to distinguish).
          */
         private ObjectAdapterMemento pending;
-        
+
 
         public PendingModel(EntityModel entityModel) {
             this.entityModel = entityModel;
@@ -557,13 +571,13 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
         public ObjectAdapterMemento getPending() {
             return pending;
         }
-        
+
         public void setPending(ObjectAdapterMemento selectedAdapterMemento) {
             this.pending = selectedAdapterMemento;
             hasPending=true;
         }
     }
-    
+
 
     public ObjectAdapter getPendingElseCurrentAdapter() {
         return pendingModel.getPendingElseCurrentAdapter();
@@ -572,7 +586,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     public ObjectAdapter getPendingAdapter() {
         return pendingModel.getPendingAdapter();
     }
-    
+
     public ObjectAdapterMemento getPending() {
         return pendingModel.getPending();
     }
@@ -618,7 +632,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     /**
      * In order that <tt>IsisAjaxFallbackDataTable</tt> can use a
      * <tt>ReuseIfModelsEqualStrategy</tt> to preserve any concurrency exception
-     * information in original model. 
+     * information in original model.
      */
     @Override
     public boolean equals(Object obj) {
@@ -637,7 +651,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
         return true;
 
     }
-    
+
 
 
 }
