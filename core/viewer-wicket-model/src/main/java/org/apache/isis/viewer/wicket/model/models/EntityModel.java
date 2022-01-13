@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChec
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -410,11 +411,15 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
             OneToOneAssociation otoa = pm.getProperty(getSpecificationLoader());
             final ScalarModel scalarModel = propertyScalarModels.get(pm);
             final ObjectAdapter adapter = getObject();
+            final Consent visibility = otoa.isVisible(adapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
+            if(!visibility.isAllowed()) {
+                continue;
+            }
             try {
                 final ObjectAdapter associatedAdapter =
                     otoa.get(adapter, InteractionInitiatedBy.USER);
                 scalarModel.setObject(associatedAdapter);
-            } catch(RuntimeException ex) {
+            } catch(Throwable ex) {
                 if (otoa instanceof MixedInMember || otoa instanceof ContributeeMember) {
                     LOG.debug(String.format(
                             "resetPropertyModels: %s threw exception but is mixin so ignoring; ex.message = %s",
