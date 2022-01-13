@@ -34,7 +34,6 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
@@ -117,9 +116,7 @@ public class ApplicationTenancyMenu {
 
     @Action(
             domainEvent = allTenancies.ActionEvent.class,
-            semantics = SemanticsOf.SAFE,
-            restrictTo = RestrictTo.PROTOTYPING
-            )
+            semantics = SemanticsOf.SAFE)
     @ActionLayout(sequence = "100.30.4")
     public class allTenancies{
 
