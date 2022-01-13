@@ -18,10 +18,17 @@
  */
 package org.apache.isis.extensions.secman.applib.role.man;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.ObjectSupport;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
@@ -34,6 +41,20 @@ public class ApplicationRoleManager {
     @ObjectSupport public String title() {
         return "Application Role Manager";
     }
+
+    // -- INFORMAL METADATA
+
+    @Inject private SpecificationLoader specLoader;
+
+    @Property @PropertyLayout(fieldSetId = "metadata")
+    public String getRoleType() {
+        return specLoader.specForLogicalTypeName(ApplicationRole.LOGICAL_TYPE_NAME)
+                .map(ObjectSpecification::getCorrespondingClass)
+                .map(Class::getName)
+                .orElse("not found");
+    }
+
+    // --
 
     // behaviour provided by mixins
 

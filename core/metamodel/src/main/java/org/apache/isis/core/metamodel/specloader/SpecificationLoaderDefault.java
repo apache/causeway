@@ -584,7 +584,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             }
 
             if(sort.isToBeIntrospected()) {
-                log.error("Introspecting class '{}' of sort {}, after the metamodel had been fully introspected and is now locked. " +
+                log.warn("Introspecting class '{}' of sort {}, after the metamodel had been fully introspected and is now locked. " +
                       "One reason this can happen is if you are attempting to invoke an action through the WrapperFactory " +
                       "on a service class incorrectly annotated with Spring's @Service annotation instead of " +
                       "@DomainService.",

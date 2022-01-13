@@ -144,7 +144,7 @@ implements ApplicationTenancyRepository {
     // --
 
     @Override
-    public final Collection<ApplicationTenancy> allTenancies() {
+    public Collection<ApplicationTenancy> allTenancies() {
         return queryResultsCacheProvider.get().execute(
                 () -> allTenanciesNoCache(),
                 ApplicationTenancyRepositoryAbstract.class, "allTenancies");

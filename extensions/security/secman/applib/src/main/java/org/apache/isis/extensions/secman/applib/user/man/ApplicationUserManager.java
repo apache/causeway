@@ -18,10 +18,17 @@
  */
 package org.apache.isis.extensions.secman.applib.user.man;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.ObjectSupport;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
@@ -34,6 +41,20 @@ public class ApplicationUserManager {
     @ObjectSupport public String title() {
         return "Application User Manager";
     }
+
+    // -- INFORMAL METADATA
+
+    @Inject private SpecificationLoader specLoader;
+
+    @Property @PropertyLayout(fieldSetId = "metadata")
+    public String getUserType() {
+        return specLoader.specForLogicalTypeName(ApplicationUser.LOGICAL_TYPE_NAME)
+                .map(ObjectSpecification::getCorrespondingClass)
+                .map(Class::getName)
+                .orElse("not found");
+    }
+
+    // --
 
     // behaviour provided by mixins
 
