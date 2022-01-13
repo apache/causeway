@@ -110,8 +110,7 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
             editing = Editing.DISABLED
     )
     @PropertyLayout(
-            fieldSetId = "identity",
-            hidden = Where.PARENTED_TABLES
+            fieldSetId = "identity"
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
