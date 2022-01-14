@@ -59,15 +59,36 @@ public interface ComponentFactory extends Serializable {
 
     public enum ApplicationAdvice {
         APPLIES,
+        /**
+         * Whether no other {@link ComponentFactory}s should apply (ie stop searching for other views).
+         * The widget author might want to "take control" and prevent other views.
+         */
+        APPLIES_EXCLUSIVELY,
         DOES_NOT_APPLY;
 
+        /**
+         * Whether applies in any way (no matter whether exclusively or not).
+         */
         public boolean applies() {
-            return this == APPLIES;
+            return this == APPLIES
+                    || this == APPLIES_EXCLUSIVELY;
+        }
+
+        /**
+         * @see #APPLIES_EXCLUSIVELY
+         */
+        public boolean appliesExclusively() {
+            return this == APPLIES_EXCLUSIVELY;
         }
 
         public static final ApplicationAdvice appliesIf(final boolean condition) {
             return condition ? ApplicationAdvice.APPLIES : ApplicationAdvice.DOES_NOT_APPLY;
         }
+
+        public static final ApplicationAdvice appliesExclusivelyIf(final boolean condition) {
+            return condition ? ApplicationAdvice.APPLIES_EXCLUSIVELY : ApplicationAdvice.DOES_NOT_APPLY;
+        }
+
     }
 
     /**

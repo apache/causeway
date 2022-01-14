@@ -94,8 +94,18 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
      */
     protected abstract ApplicationAdvice appliesTo(IModel<?> model);
 
+    /**
+     * Convenience for subclasses to call from {@link #appliesTo(IModel)}
+     */
     protected final ApplicationAdvice appliesIf(final boolean b) {
         return ApplicationAdvice.appliesIf(b);
+    }
+
+    /**
+     * Convenience for subclasses to call from {@link #appliesTo(IModel)}
+     */
+    protected final ApplicationAdvice appliesExclusivelyIf(final boolean b) {
+        return ApplicationAdvice.appliesExclusivelyIf(b);
     }
 
     @Override

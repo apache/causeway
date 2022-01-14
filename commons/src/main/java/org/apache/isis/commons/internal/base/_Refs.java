@@ -175,6 +175,14 @@ public final class _Refs {
             return value = operator.apply(value);
         }
 
+        public boolean isNull() {
+            return value==null;
+        }
+
+        public boolean isNotNull() {
+            return value!=null;
+        }
+
         public boolean isSet(final @Nullable T other) {
             return value==other;
         }

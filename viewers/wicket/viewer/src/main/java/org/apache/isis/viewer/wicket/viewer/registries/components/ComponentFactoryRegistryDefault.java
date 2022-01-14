@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.viewer.registries.components;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
@@ -36,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
@@ -152,8 +154,28 @@ implements ComponentFactoryRegistry {
     public Stream<ComponentFactory> streamComponentFactories(
             final ComponentType componentType,
             final @Nullable IModel<?> model) {
-        return componentFactoriesByType.streamElements(componentType)
-                .filter(componentFactory->componentFactory.appliesTo(componentType, model).applies())
+
+        // find all that apply, unless we find one that applies exclusively
+        // in the exclusive case, we just return the exclusive one
+
+        val exclusiveIfAny = _Refs.<ComponentFactory>objectRef(null);
+
+        val allThatApply = componentFactoriesByType.streamElements(componentType)
+                .filter(componentFactory->{
+                    val advide = componentFactory.appliesTo(componentType, model);
+                    if(advide.appliesExclusively()) {
+                        exclusiveIfAny.set(componentFactory);
+                    }
+                    return advide.applies();
+                })
+                // as an optimization, stop taking when we found an exclusive one
+                .takeWhile(__->exclusiveIfAny.isNull())
+                .collect(Collectors.toList());
+
+        return (exclusiveIfAny.isNotNull()
+                    ? Stream.of(exclusiveIfAny.getValueElseFail())
+                    : allThatApply.stream()
+                )
                 .peek(componentFactory->logComponentResolving(model, componentType, componentFactory));
     }
 
