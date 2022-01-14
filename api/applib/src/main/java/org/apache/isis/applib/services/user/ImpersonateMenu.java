@@ -99,7 +99,7 @@ public class ImpersonateMenu {
         @MemberSupport public void act(
                 final String userName) {
 
-            // TODO: should use an SPI for each configured viewer to add in its own role if necessary.
+            // adds generic authorized user role to indicate 'authorized' (as required by Wicket viewer)
             userService.impersonateUser(userName, Collections.singletonList(UserMemento.AUTHORIZED_USER_ROLE), null);
             messageService.informUser("Now impersonating " + userName);
         }
@@ -146,7 +146,7 @@ public class ImpersonateMenu {
                 final List<String> roleNames,
                 final String multiTenancyToken) {
 
-            // TODO: should use an SPI for each configured viewer to add in its own role if necessary.
+            // adds generic authorized user role to indicate 'authorized' (as required by Wicket viewer)
             val roleNamesCopy = new ArrayList<>(roleNames);
             if(!roleNamesCopy.contains(UserMemento.AUTHORIZED_USER_ROLE)) {
                 roleNamesCopy.add(UserMemento.AUTHORIZED_USER_ROLE);

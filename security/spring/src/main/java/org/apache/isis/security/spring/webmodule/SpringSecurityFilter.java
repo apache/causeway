@@ -80,7 +80,7 @@ public class SpringSecurityFilter implements Filter {
             return; // unknown principal type, not handled
         }
 
-        // TODO: this should be added by Wicket viewer
+        // adds generic authorized user role to indicate 'authorized' (as required by Wicket viewer)
         userMemento = userMemento.withRoleAdded(UserMemento.AUTHORIZED_USER_ROLE)
                 .withAuthenticationSource(AuthenticationSource.EXTERNAL);
 
