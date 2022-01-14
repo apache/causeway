@@ -23,6 +23,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
@@ -35,7 +36,7 @@ import lombok.val;
 /**
  * Web page representing the home page (showing a welcome message).
  */
-@AuthorizeInstantiation("org.apache.isis.viewer.wicket.roles.USER")
+@AuthorizeInstantiation(UserMemento.AUTHORIZED_USER_ROLE)
 public class HomePage extends PageAbstract {
 
     private static final long serialVersionUID = 1L;

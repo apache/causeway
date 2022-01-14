@@ -81,7 +81,7 @@ public class SpringSecurityFilter implements Filter {
         }
 
         // TODO: this should be added by Wicket viewer
-        userMemento = userMemento.withRoleAdded("org.apache.isis.viewer.wicket.roles.USER")
+        userMemento = userMemento.withRoleAdded(UserMemento.AUTHORIZED_USER_ROLE)
                 .withAuthenticationSource(AuthenticationSource.EXTERNAL);
 
         interactionService.run(

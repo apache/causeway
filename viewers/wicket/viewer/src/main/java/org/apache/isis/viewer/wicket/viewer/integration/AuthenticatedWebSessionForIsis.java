@@ -57,8 +57,6 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
 
     private static final long serialVersionUID = 1L;
 
-    public static final String USER_ROLE = "org.apache.isis.viewer.wicket.roles.USER";
-
     public static AuthenticatedWebSessionForIsis get() {
         return (AuthenticatedWebSessionForIsis) Session.get();
     }
@@ -73,11 +71,11 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
      */
     private InteractionContext authentication;
 
-    public AuthenticatedWebSessionForIsis(Request request) {
+    public AuthenticatedWebSessionForIsis(final Request request) {
         super(request);
     }
 
-    public void init(IsisAppCommonContext commonContext) {
+    public void init(final IsisAppCommonContext commonContext) {
         this.commonContext = commonContext;
         bookmarkedPagesModel = new BookmarkedPagesModel(commonContext);
         breadcrumbModel = new BreadcrumbModel(commonContext);
@@ -87,7 +85,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
     @Override
     public synchronized boolean authenticate(final String username, final String password) {
         val authenticationRequest = new AuthenticationRequestPassword(username, password);
-        authenticationRequest.addRole(USER_ROLE);
+        authenticationRequest.addRole(UserMemento.AUTHORIZED_USER_ROLE);
         this.authentication = getAuthenticationManager().authenticate(authenticationRequest);
         if (this.authentication != null) {
             log(SessionLoggingService.Type.LOGIN, username, null);

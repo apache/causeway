@@ -32,6 +32,7 @@ import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Refs.ObjectReference;
 import org.apache.isis.commons.internal.base._Timing;
@@ -58,7 +59,7 @@ import lombok.val;
 /**
  * Web page representing an entity.
  */
-@AuthorizeInstantiation("org.apache.isis.viewer.wicket.roles.USER")
+@AuthorizeInstantiation(UserMemento.AUTHORIZED_USER_ROLE)
 //@Log4j2
 public class EntityPage extends PageAbstract {
 

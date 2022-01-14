@@ -100,7 +100,7 @@ public class ImpersonateMenu {
                 final String userName) {
 
             // TODO: should use an SPI for each configured viewer to add in its own role if necessary.
-            userService.impersonateUser(userName, Collections.singletonList("org.apache.isis.viewer.wicket.roles.USER"), null);
+            userService.impersonateUser(userName, Collections.singletonList(UserMemento.AUTHORIZED_USER_ROLE), null);
             messageService.informUser("Now impersonating " + userName);
         }
         @MemberSupport public boolean hideAct() {
@@ -148,8 +148,8 @@ public class ImpersonateMenu {
 
             // TODO: should use an SPI for each configured viewer to add in its own role if necessary.
             val roleNamesCopy = new ArrayList<>(roleNames);
-            if(!roleNamesCopy.contains("org.apache.isis.viewer.wicket.roles.USER")) {
-                roleNamesCopy.add("org.apache.isis.viewer.wicket.roles.USER");
+            if(!roleNamesCopy.contains(UserMemento.AUTHORIZED_USER_ROLE)) {
+                roleNamesCopy.add(UserMemento.AUTHORIZED_USER_ROLE);
             }
             userService.impersonateUser(userName, roleNamesCopy, multiTenancyToken);
             messageService.informUser("Now impersonating " + userName);

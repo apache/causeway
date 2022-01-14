@@ -201,6 +201,22 @@ not compatible with the old ones.
 </dependency>
 ----
 
+== Security Integration
+
+_Wicket Viewer_ default authorized user role was renamed for generic reuse. 
+
+[cols="2a,3a", options="header"]
+
+|===
+
+| previously
+| new
+
+| `org.apache.isis.viewer.wicket.roles.USER` renamed
+| use `org.apache.isis.security.AUTHORIZED_USER_ROLE` instead
+
+|===
+
 == Maven Artifacts
 
 `-dn5` suffix was removed from artifacts, because we migrated DataNucleus 5.x to 6.x

@@ -25,6 +25,7 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.isis.applib.services.error.ErrorDetails;
 import org.apache.isis.applib.services.error.ErrorReportingService;
 import org.apache.isis.applib.services.error.Ticket;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
@@ -37,7 +38,7 @@ import lombok.val;
 /**
  * Web page representing the home page (showing a welcome message).
  */
-@AuthorizeInstantiation("org.apache.isis.viewer.wicket.roles.USER")
+@AuthorizeInstantiation(UserMemento.AUTHORIZED_USER_ROLE)
 public class ErrorPage extends PageAbstract {
 
     private static final long serialVersionUID = 1L;
@@ -45,7 +46,7 @@ public class ErrorPage extends PageAbstract {
     private static final String ID_EXCEPTION_STACK_TRACE = "exceptionStackTrace";
 
 
-    public ErrorPage(ExceptionModel exceptionModel) {
+    public ErrorPage(final ExceptionModel exceptionModel) {
         super(PageParameterUtils.newPageParameters(), null);
 
         addBookmarkedPages(themeDiv);
