@@ -18,7 +18,32 @@
  */
 package org.apache.isis.security.keycloak;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+
+import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.jose.jws.JwsAlgorithms;
+import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtValidators;
+import org.springframework.security.oauth2.jwt.MappedJwtClaimSetConverter;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.util.Assert;
 
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
@@ -27,20 +52,6 @@ import org.apache.isis.core.webapp.IsisModuleCoreWebapp;
 import org.apache.isis.security.keycloak.handler.LogoutHandlerForKeycloak;
 import org.apache.isis.security.keycloak.services.KeycloakOauth2UserService;
 import org.apache.isis.security.spring.IsisModuleSecuritySpring;
-import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoderJwkSupport;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -74,7 +85,7 @@ public class IsisModuleSecurityKeycloak {
             final List<LoginSuccessHandlerUNUSED> loginSuccessHandlersUNUSED,
             final List<LogoutHandler> logoutHandlers
             ) {
-        val realm = isisConfiguration.getSecurity().getKeycloak().getRealm();
+        //val realm = isisConfiguration.getSecurity().getKeycloak().getRealm();
         return new KeycloakWebSecurityConfigurerAdapter(keycloakOidcUserService, logoutHandlers, isisConfiguration
         );
     }
@@ -95,11 +106,11 @@ public class IsisModuleSecurityKeycloak {
 //    }
 
     @Bean
-    KeycloakOauth2UserService keycloakOidcUserService(OAuth2ClientProperties oauth2ClientProperties) {
+    KeycloakOauth2UserService keycloakOidcUserService(final OAuth2ClientProperties oauth2ClientProperties) {
 
-        // TODO use default JwtDecoder - where to grab?
-        val jwtDecoder = new NimbusJwtDecoderJwkSupport(
-                oauth2ClientProperties.getProvider().get("keycloak").getJwkSetUri());
+        val jwtDecoder = createNimbusJwtDecoder(
+                oauth2ClientProperties.getProvider().get("keycloak").getJwkSetUri(),
+                JwsAlgorithms.RS256);
 
         val authoritiesMapper = new SimpleAuthorityMapper();
         authoritiesMapper.setConvertToUpperCase(true);
@@ -115,11 +126,11 @@ public class IsisModuleSecurityKeycloak {
         private final IsisConfiguration isisConfiguration;
 
         @Override
-        public void configure(HttpSecurity http) throws Exception {
+        public void configure(final HttpSecurity http) throws Exception {
 
             val successUrl = isisConfiguration.getSecurity().getKeycloak().getLoginSuccessUrl();
             val realm = isisConfiguration.getSecurity().getKeycloak().getRealm();
-            val loginPage = OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI 
+            val loginPage = OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI
                     + "/" + realm;
 
             val httpSecurityLogoutConfigurer =
@@ -140,7 +151,7 @@ public class IsisModuleSecurityKeycloak {
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
 
             logoutHandlers.forEach(httpSecurityLogoutConfigurer::addLogoutHandler);
-            
+
             httpSecurityLogoutConfigurer
                     .and()
 
@@ -156,5 +167,26 @@ public class IsisModuleSecurityKeycloak {
                     .loginPage(loginPage);
         }
     }
+
+    // -- HELPER
+
+    private static NimbusJwtDecoder createNimbusJwtDecoder(final String jwkSetUrl, final String jwsAlgorithms) {
+        Assert.hasText(jwkSetUrl, "jwkSetUrl cannot be empty");
+
+        final OAuth2TokenValidator<Jwt> jwtValidator = JwtValidators.createDefault();
+        final Converter<Map<String, Object>, Map<String, Object>> claimSetConverter =
+                MappedJwtClaimSetConverter
+                    .withDefaults(Collections.emptyMap());
+
+        final NimbusJwtDecoder decoder = NimbusJwtDecoder
+                .withJwkSetUri(jwkSetUrl)
+                .jwsAlgorithm(SignatureAlgorithm.from(jwsAlgorithms))
+                .build();
+        decoder.setClaimSetConverter(claimSetConverter);
+        decoder.setJwtValidator(jwtValidator);
+        return decoder;
+    }
+
+
 }
 
