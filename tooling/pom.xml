@@ -40,7 +40,7 @@
 		<jar-plugin.automaticModuleName>org.apache.isis.tooling</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/tooling</git-plugin.propertiesDir>
 
-		<asciidoctorj.version>2.5.2</asciidoctorj.version>
+		<asciidoctorj.version>2.5.3</asciidoctorj.version>
 		<gradle-tooling.version>7.1.1</gradle-tooling.version>
 		<maven-model-builder.version>3.8.4</maven-model-builder.version>
 		<picocli.version>4.6.2</picocli.version>
