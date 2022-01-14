@@ -162,11 +162,11 @@ implements ComponentFactoryRegistry {
 
         val allThatApply = componentFactoriesByType.streamElements(componentType)
                 .filter(componentFactory->{
-                    val advide = componentFactory.appliesTo(componentType, model);
-                    if(advide.appliesExclusively()) {
+                    val advice = componentFactory.appliesTo(componentType, model);
+                    if(advice.appliesExclusively()) {
                         exclusiveIfAny.set(componentFactory);
                     }
-                    return advide.applies();
+                    return advice.applies();
                 })
                 // as an optimization, stop taking when we found an exclusive one
                 .takeWhile(__->exclusiveIfAny.isNull())
