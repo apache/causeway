@@ -164,7 +164,7 @@
 
 		<pdfbox.version>2.0.25</pdfbox.version>
 		<picocontainer.version>2.15</picocontainer.version>
-		<poi.version>5.1.0</poi.version>
+		<poi.version>5.2.0</poi.version>
 
 		<quartz-scheduler.version>2.3.2</quartz-scheduler.version>
 

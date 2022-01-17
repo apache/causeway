@@ -34,8 +34,6 @@ import org.junit.rules.ExpectedException;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.isis.subdomains.excel.applib.util.SheetPivoter;
-
 import lombok.val;
 
 public class SheetPivoterTest {
@@ -108,7 +106,10 @@ public class SheetPivoterTest {
         // last row is for summing
         Assertions.assertThat(targetSheet.getRow(2).getCell(0).getCellType()).isEqualTo(CellType.BLANK);
         Assertions.assertThat(targetSheet.getRow(2).getCell(1).getCellType()).isEqualTo(CellType.FORMULA);
-        Assertions.assertThat(targetSheet.getRow(2).getCell(1).getCellFormula()).isEqualTo("SUM(B3:B2)");
+
+        org.junit.jupiter.api.Assertions.assertTrue(
+                "SUM(B3:B2)".equals(targetSheet.getRow(2).getCell(1).getCellFormula())
+                || "SUM(B2:B3)".equals(targetSheet.getRow(2).getCell(1).getCellFormula()));
 
     }
 
@@ -440,7 +441,7 @@ public class SheetPivoterTest {
 
     }
 
-    void testRow(int rowNumber, Object... vals){
+    void testRow(final int rowNumber, final Object... vals){
 
         int i = 0;
         for (Object val : vals){
@@ -449,7 +450,7 @@ public class SheetPivoterTest {
 
     }
 
-    private void testCell(int x, int y, Object expectedValue){
+    private void testCell(final int x, final int y, final Object expectedValue){
 
         if (expectedValue==null){
             Row r = targetSheet.getRow(x);
@@ -474,7 +475,7 @@ public class SheetPivoterTest {
                 if (expectedValue.getClass() == Integer.class) {
                     val cellValue = targetSheet.getRow(x).getCell(y);
                     if (cellValue != null){
-                        val expectedDouble = Double.valueOf(expectedValue.toString());  
+                        val expectedDouble = Double.valueOf(expectedValue.toString());
                         Assertions.assertThat(cellValue.getNumericCellValue()).isEqualTo(expectedDouble);
                     }
                 } else {
@@ -487,7 +488,7 @@ public class SheetPivoterTest {
 
     }
 
-    void sourceSheetBuilder(List<String> annotationList, List<Integer> orderList, List<String> typeList, List<String> fieldNameList, List<?>... values){
+    void sourceSheetBuilder(final List<String> annotationList, final List<Integer> orderList, final List<String> typeList, final List<String> fieldNameList, final List<?>... values){
 
         Row r0 = sourceSheet.createRow(0);
         int i = 0;
@@ -546,4 +547,4 @@ public class SheetPivoterTest {
 
     }
 
-} 
+}
