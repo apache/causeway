@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
@@ -61,22 +62,26 @@ public class IsisCalendarEventVm
     @Title(prepend = "CalendarEvent view model: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
+    @XmlJavaTypeAdapter(CalendarEvent.JaxbAdapter.class)
     @Getter @Setter
     private CalendarEvent readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @XmlElement(required = true)
+    @XmlJavaTypeAdapter(CalendarEvent.JaxbAdapter.class)
     @Getter @Setter
     private CalendarEvent readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
+    @XmlJavaTypeAdapter(CalendarEvent.JaxbAdapter.class)
     @Getter @Setter
     private CalendarEvent readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
+    @XmlJavaTypeAdapter(CalendarEvent.JaxbAdapter.class)
     @Getter @Setter
     private CalendarEvent readWriteOptionalProperty;
 

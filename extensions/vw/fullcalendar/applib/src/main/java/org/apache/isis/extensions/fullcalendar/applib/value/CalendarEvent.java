@@ -24,9 +24,13 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.IsisModuleApplib;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.resources._Json;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -100,6 +104,27 @@ implements
     @Override
     public int compareTo(final CalendarEvent other) {
         return Long.compare(this.epochMillis, other.getEpochMillis());
+    }
+
+    // -- UTILITY
+
+    public static final class JaxbAdapter
+    extends XmlAdapter<String, CalendarEvent> {
+
+        @Override
+        public CalendarEvent unmarshal(final String v) {
+            return _Strings.isNotEmpty(v)
+                    ? _Json.readJson(CalendarEvent.class, v).presentElseFail()
+                    : null;
+        }
+
+        @Override
+        public String marshal(final CalendarEvent v) {
+            return v!=null
+                    ? _Json.toString(v).presentElseFail()
+                    : null;
+        }
+
     }
 
 }
