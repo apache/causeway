@@ -250,6 +250,16 @@ _Wicket Viewer_ default authorized user role was renamed for generic reuse.
 
 === SecMan
 
+New fields where added to the `ApplicationUser`:
+
+[source,sql]
+.SQL update script - your mileage may vary!
+----
+ALTER TABLE [isisExtensionsSecman].[ApplicationUser] ADD [language] VARCHAR(120) NULL
+ALTER TABLE [isisExtensionsSecman].[ApplicationUser] ADD [numberFormat] VARCHAR(120) NULL
+ALTER TABLE [isisExtensionsSecman].[ApplicationUser] ADD [timeFormat] VARCHAR(120) NULL
+----
+
 Following menu actions for roles have been removed:
 
 [source,xml]
