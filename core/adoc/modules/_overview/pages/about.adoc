@@ -3470,7 +3470,7 @@ Directory: /valuetypes/asciidoc/ui
 ****
 com.github.jnr:jnr-constants:jar:0.10.3 +
 com.github.jnr:jnr-enxio:jar:0.32.12 +
-com.github.jnr:jnr-posix:jar:3.1.14 +
+com.github.jnr:jnr-posix:jar:3.1.15 +
 org.apache.isis.core:isis-core-metamodel:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-asciidoc-applib:jar:<managed> +
 org.asciidoctor:asciidoctorj:jar:${asciidoctorj.version} +
