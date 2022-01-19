@@ -34,11 +34,6 @@ public class ProperMemberOverloadingWhenInherited {
             return param;
         }
 
-//        @Programmatic
-//        public boolean isActive() {
-//            return true;
-//        }
-
     }
 
     @DomainObject(
@@ -51,10 +46,6 @@ public class ProperMemberOverloadingWhenInherited {
         public String anAction() {
             return "";
         }
-
-//        // name-clash with base property
-//        @Getter @Setter
-//        private Boolean active;
 
     }
 
@@ -70,11 +61,6 @@ public class ProperMemberOverloadingWhenInherited {
             return "";
         }
 
-//        // name-clash with base property
-//        @Property
-//        @Getter @Setter
-//        private Boolean active;
-
     }
 
     @DomainObject(
@@ -88,12 +74,6 @@ public class ProperMemberOverloadingWhenInherited {
         protected String anAction() {
             return "";
         }
-
-//        // name-clash with base property
-//        @Property
-//        private Boolean active;
-//        protected Boolean getActive() { return null;}
-//        protected void setActive(final Boolean flag) { }
 
     }
 
