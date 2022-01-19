@@ -57,6 +57,7 @@ import org.apache.isis.testdomain.model.bad.AmbiguousMixinAnnotations;
 import org.apache.isis.testdomain.model.bad.AmbiguousTitle;
 import org.apache.isis.testdomain.model.bad.Configuration_usingInvalidDomain;
 import org.apache.isis.testdomain.model.bad.InvalidActionOverloading;
+import org.apache.isis.testdomain.model.bad.InvalidActionOverloadingWhenInherited;
 import org.apache.isis.testdomain.model.bad.InvalidContradictingTypeSemantics;
 import org.apache.isis.testdomain.model.bad.InvalidDomainObjectOnInterface;
 import org.apache.isis.testdomain.model.bad.InvalidLogicalTypeNameClash;
@@ -155,6 +156,10 @@ class DomainModelTest_usingBadDomain {
     void actionOverloading_shouldFail() {
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidActionOverloading.class)),
+                "Action method overloading is not allowed");
+
+        validator.assertAnyFailuresContaining(
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidActionOverloadingWhenInherited.class)),
                 "Action method overloading is not allowed");
     }
 
