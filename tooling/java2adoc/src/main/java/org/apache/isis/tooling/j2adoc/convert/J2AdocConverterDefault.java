@@ -51,10 +51,10 @@ import lombok.val;
 
 public final class J2AdocConverterDefault extends J2AdocConverterAbstract {
 
-    public static J2AdocConverter of(J2AdocContext j2AdocContext) {
+    public static J2AdocConverter of(final J2AdocContext j2AdocContext) {
         return new J2AdocConverterDefault(j2AdocContext);
     }
-    private J2AdocConverterDefault(J2AdocContext j2AdocContext) {
+    private J2AdocConverterDefault(final J2AdocContext j2AdocContext) {
         super(j2AdocContext);
     }
 
@@ -223,7 +223,7 @@ public final class J2AdocConverterDefault extends J2AdocConverterAbstract {
         return doc;
     }
 
-    private void appendBlocks(Mode mode, Document doc, List<StructuralNode> blocks) {
+    void appendBlocks(final Mode mode, final Document doc, final List<StructuralNode> blocks) {
         if (blocks.isEmpty()) {
             return;
         }
