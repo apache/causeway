@@ -9,6 +9,7 @@
 interface ApplicationTenancyRepository {
   ApplicationTenancy newApplicationTenancy()     // <.>
   Collection<ApplicationTenancy> allTenancies()
+  Collection<ApplicationTenancy> getRootTenancies()     // <.>
   Collection<ApplicationTenancy> getChildren(ApplicationTenancy tenancy)
   Collection<ApplicationTenancy> findByNameOrPathMatchingCached(String partialNameOrPath)
   ApplicationTenancy findByPath(String path)
@@ -22,6 +23,11 @@ interface ApplicationTenancyRepository {
 ----
 
 <.> xref:#newApplicationTenancy__[newApplicationTenancy()]
+<.> xref:#getRootTenancies__[getRootTenancies()]
++
+--
+non-parented, not a child
+--
 <.> xref:#findMatching__String[findMatching(String)]
 +
 --
@@ -32,6 +38,11 @@ auto-complete support
 
 [#newApplicationTenancy__]
 === newApplicationTenancy()
+
+[#getRootTenancies__]
+=== getRootTenancies()
+
+non-parented, not a child
 
 [#findMatching__String]
 === findMatching(String)

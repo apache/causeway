@@ -67,7 +67,7 @@ Uses the xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRole.a
 
 Uses the _UserMemento#getRoles() roles_ held within the provided xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] .
 
-Added to support _org.apache.isis.applib.services.user.ImpersonateMenu#impersonateWithRoles(String, List, String) impersonation by role_ .
+Added to support _org.apache.isis.applib.services.user.ImpersonateMenu.impersonateWithRoles#act(String, List, String) impersonation by role_ .
 
 [#findByRoleNames__List]
 === findByRoleNames(List)

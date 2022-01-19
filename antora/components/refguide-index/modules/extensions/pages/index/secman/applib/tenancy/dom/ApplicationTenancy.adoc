@@ -12,6 +12,7 @@ class ApplicationTenancy {
   public static final String NAMED_QUERY_FIND_BY_PATH;
   public static final String NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING;
   String title()
+  boolean isRoot()
   int compareTo(org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy other)
   boolean equals(Object other)
   int hashCode()

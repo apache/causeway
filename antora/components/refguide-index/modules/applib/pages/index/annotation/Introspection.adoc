@@ -66,12 +66,22 @@ If not configured, then encapsulation is disabled and presence of the _Domain.In
 
 Introspect public and non-public members, while presence of at least one appropriate domain annotation is enforced.
 
+All methods intended to be part of the meta-model (whether representing a member or a supporting method) must be annotated. Members using one of xref:refguide:applib:index/annotation/Action.adoc[Action] , xref:refguide:applib:index/annotation/Property.adoc[Property] , xref:refguide:applib:index/annotation/Collection.adoc[Collection] , while supporting methods with _Domain.Include_ (usually as a meta-annotation on xref:refguide:applib:index/annotation/MemberSupport.adoc[MemberSupport] ). However, the methods can have any visibility, including private.
+
 [#ANNOTATION_REQUIRED]
 === ANNOTATION_REQUIRED
 
 Introspect public members only, while presence of at least one appropriate domain annotation is enforced.
 
+All public methods intended to represent members must be annotated (or meta-annotated) with xref:refguide:applib:index/annotation/Action.adoc[Action] , xref:refguide:applib:index/annotation/Property.adoc[Property] or xref:refguide:applib:index/annotation/Collection.adoc[Collection] .
+
+Any non-excluded public methods with a supporting method prefix do not need to be annotated and are automatically associated with their corresponding member method. If no corresponding member method can be found, meta-model validation will fail with an 'orphaned member support' method violation.
+
 [#ANNOTATION_OPTIONAL]
 === ANNOTATION_OPTIONAL
 
 Introspect public members only, while presence of domain annotations is optional.
+
+All public methods are considered as part of the meta-model, unless explicitly excluded using _Domain.Exclude_ (usually as a meta-annotation on xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic] ).
+
+Any non-excluded public methods with a supporting method prefix do not need to be annotated and are automatically associated with their corresponding member method. If no corresponding member method can be found, meta-model validation will fail with an 'orphaned member support' method violation.

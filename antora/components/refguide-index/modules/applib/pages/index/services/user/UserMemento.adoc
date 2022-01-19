@@ -10,6 +10,7 @@ Immutable serializable value holding details about a user and its roles.
 ----
 class UserMemento {
   public static final String LOGICAL_TYPE_NAME;
+  public static final String AUTHORIZED_USER_ROLE;     // <.>
   UserMemento system()     // <.>
   UserMemento ofName(String name)     // <.>
   UserMemento ofNameAndRoles(String name, RoleMemento... roles)     // <.>
@@ -26,6 +27,11 @@ class UserMemento {
 }
 ----
 
+<.> xref:#AUTHORIZED_USER_ROLE[AUTHORIZED_USER_ROLE]
++
+--
+Also used by the wicket-viewer and its AuthorizeInstantiation(...) annotations; the actual value is arbitrary; however, we use namespace style to clarify the origin
+--
 <.> xref:#system__[system()]
 +
 --
@@ -68,6 +74,11 @@ Determine if the specified name is this user.
 --
 
 == Members
+
+[#AUTHORIZED_USER_ROLE]
+=== AUTHORIZED_USER_ROLE
+
+Also used by the wicket-viewer and its AuthorizeInstantiation(...) annotations; the actual value is arbitrary; however, we use namespace style to clarify the origin
 
 [#system__]
 === system()
