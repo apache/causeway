@@ -23,12 +23,8 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Introspection;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.Property;
 
-import lombok.Getter;
-import lombok.Setter;
-
-public class ProperActionOverloadingWhenInherited {
+public class ProperMemberOverloadingWhenInherited {
 
     static abstract class Base {
 
@@ -38,10 +34,10 @@ public class ProperActionOverloadingWhenInherited {
             return param;
         }
 
-        @Programmatic
-        public boolean isActive() {
-            return true;
-        }
+//        @Programmatic
+//        public boolean isActive() {
+//            return true;
+//        }
 
     }
 
@@ -56,9 +52,9 @@ public class ProperActionOverloadingWhenInherited {
             return "";
         }
 
-        // name-clash with base property
-        @Getter @Setter
-        private Boolean active;
+//        // name-clash with base property
+//        @Getter @Setter
+//        private Boolean active;
 
     }
 
@@ -74,10 +70,10 @@ public class ProperActionOverloadingWhenInherited {
             return "";
         }
 
-        // name-clash with base property
-        @Property
-        @Getter @Setter
-        private Boolean active;
+//        // name-clash with base property
+//        @Property
+//        @Getter @Setter
+//        private Boolean active;
 
     }
 
@@ -93,11 +89,11 @@ public class ProperActionOverloadingWhenInherited {
             return "";
         }
 
-        // name-clash with base property
-        @Property
-        private Boolean active;
-        protected Boolean getActive() { return null;}
-        protected void setActive(final Boolean flag) { }
+//        // name-clash with base property
+//        @Property
+//        private Boolean active;
+//        protected Boolean getActive() { return null;}
+//        protected void setActive(final Boolean flag) { }
 
     }
 

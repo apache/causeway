@@ -57,10 +57,10 @@ import org.apache.isis.testdomain.model.bad.AmbiguousMixinAnnotations;
 import org.apache.isis.testdomain.model.bad.AmbiguousTitle;
 import org.apache.isis.testdomain.model.bad.Configuration_usingInvalidDomain;
 import org.apache.isis.testdomain.model.bad.InvalidActionOverloading;
-import org.apache.isis.testdomain.model.bad.InvalidActionOverloadingWhenInherited;
 import org.apache.isis.testdomain.model.bad.InvalidContradictingTypeSemantics;
 import org.apache.isis.testdomain.model.bad.InvalidDomainObjectOnInterface;
 import org.apache.isis.testdomain.model.bad.InvalidLogicalTypeNameClash;
+import org.apache.isis.testdomain.model.bad.InvalidMemberOverloadingWhenInherited;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedActionSupport;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedCollectionSupport;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedPropertySupport;
@@ -159,8 +159,35 @@ class DomainModelTest_usingBadDomain {
                 "Action method overloading is not allowed");
 
         validator.assertAnyFailuresContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidActionOverloadingWhenInherited.class)),
+                Identifier.classIdentifier(LogicalType.fqcn(
+                        InvalidMemberOverloadingWhenInherited.WhenAnnotationOptional.class)),
                 "Action method overloading is not allowed");
+
+        validator.assertAnyFailuresContaining(
+                Identifier.classIdentifier(LogicalType.fqcn(
+                        InvalidMemberOverloadingWhenInherited.WhenAnnotationRequired.class)),
+                "Action method overloading is not allowed");
+
+        validator.assertAnyFailuresContaining(
+                Identifier.classIdentifier(LogicalType.fqcn(
+                        InvalidMemberOverloadingWhenInherited.WhenEncapsulationEnabled.class)),
+                "Action method overloading is not allowed");
+
+//TODO should fail as well, but rather difficult to implement
+//        validator.assertAnyFailuresContaining(
+//                Identifier.classIdentifier(LogicalType.fqcn(
+//                        InvalidMemberOverloadingWhenInherited.WhenAnnotationOptional.class)),
+//                "#isActive(): has annotation @Domain.Include, is assumed to support a property");
+
+        validator.assertAnyFailuresContaining(
+                Identifier.classIdentifier(LogicalType.fqcn(
+                        InvalidMemberOverloadingWhenInherited.WhenAnnotationRequired.class)),
+                "#isActive(): has annotation @Domain.Include, is assumed to support a property");
+
+        validator.assertAnyFailuresContaining(
+                Identifier.classIdentifier(LogicalType.fqcn(
+                        InvalidMemberOverloadingWhenInherited.WhenEncapsulationEnabled.class)),
+                "#isActive(): has annotation @Domain.Include, is assumed to support a property");
     }
 
     @Test
