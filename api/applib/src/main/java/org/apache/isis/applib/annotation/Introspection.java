@@ -52,18 +52,44 @@ public enum Introspection {
     /**
      * Introspect public and non-public members, while
      * presence of at least one appropriate domain annotation is enforced.
+     * <p>
+     * All methods intended to be part of the meta-model
+     * (whether representing a member or a supporting method) must be annotated.
+     * Members using one of {@link Action}, {@link Property}, {@link Collection},
+     * while supporting methods with {@link Domain.Include}
+     * (usually as a meta-annotation on {@link MemberSupport}).
+     * However, the methods can have any visibility, including private.
      */
     ENCAPSULATION_ENABLED,
 
     /**
      * Introspect public members only, while
      * presence of at least one appropriate domain annotation is enforced.
+     * <p>
+     * All public methods intended to represent members must be annotated (or meta-annotated) with
+     * {@link Action}, {@link Property} or {@link Collection}.
+     * <p>
+     * Any non-excluded public methods with a supporting method prefix
+     * do not need to be annotated and
+     * are automatically associated with their corresponding member method.
+     * If no corresponding member method can be found, meta-model validation will
+     * fail with an 'orphaned member support' method violation.
      */
     ANNOTATION_REQUIRED,
 
     /**
      * Introspect public members only, while
      * presence of domain annotations is optional.
+     * <p>
+     * All public methods are considered as part of the meta-model,
+     * unless explicitly excluded using {@link Domain.Exclude}
+     * (usually as a meta-annotation on {@link Programmatic}).
+     * <p>
+     * Any non-excluded public methods with a supporting method prefix
+     * do not need to be annotated and
+     * are automatically associated with their corresponding member method.
+     * If no corresponding member method can be found, meta-model validation will
+     * fail with an 'orphaned member support' method violation.
      */
     ANNOTATION_OPTIONAL,
 
