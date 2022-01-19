@@ -77,6 +77,7 @@ import org.apache.isis.testdomain.model.good.ProperMemberInheritanceInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingAbstract;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberSupport;
+import org.apache.isis.testdomain.model.good.ProperMemberSupportDiscovery;
 import org.apache.isis.testdomain.model.good.ProperServiceWithMixin;
 import org.apache.isis.testdomain.model.good.ViewModelWithAnnotationOptionalUsingPrivateSupport;
 import org.apache.isis.testdomain.model.good.ViewModelWithEncapsulatedMembers;
@@ -560,6 +561,23 @@ class DomainModelTest_usingGoodDomain {
         coll.assertUsabilityIsVetoedWithAll(
                 Can.of("object disabled for testing purposes", "collection disabled for testing purposes"));
         coll.assertCollectionElements(List.of("Foo"));
+    }
+
+    @Test
+    void properMemberSupportDiscovery() {
+
+        val act = testerFactory
+                .actionTester(ProperMemberSupportDiscovery.WhenAnnotationRequired.class, "placeOrder");
+        act.assertExists(true);
+
+        //FIXME act.assertFriendlyName("my name");
+        //FIXME act.assertDescription("my description");
+
+        act.assertVisibilityIsNotVetoed();
+        act.assertUsabilityIsNotVetoed();
+
+        //TODO missing asserts
+
     }
 
 

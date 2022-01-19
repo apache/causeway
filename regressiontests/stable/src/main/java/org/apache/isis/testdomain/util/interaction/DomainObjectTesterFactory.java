@@ -47,6 +47,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
@@ -809,6 +810,20 @@ public class DomainObjectTesterFactory {
             assertEquals(expectedMemberId,
                     getMetaModel()
                     .orElseThrow(_Exceptions::noSuchElement).getId());
+        }
+
+        public final void assertFriendlyName(final String expectedFriendlyName) {
+            assertTrue(managedMemberIfAny.isPresent());
+            assertEquals(expectedFriendlyName,
+                    managedMemberIfAny.get()
+                    .getFriendlyName());
+        }
+
+        public final void assertDescription(final String expectedDescription) {
+            assertTrue(managedMemberIfAny.isPresent());
+            assertEquals(_Strings.nullToEmpty(expectedDescription),
+                    managedMemberIfAny.get()
+                    .getDescription().orElse(""));
         }
 
         public final void assertVisibilityIsNotVetoed() {
