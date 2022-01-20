@@ -190,28 +190,25 @@ public final class ParameterSupport {
         val methodNames = searchRequest.getSupporingMethodNameCandidates(paramIndex);
         val paramType = paramTypes[paramIndex];
         val additionalParamTypes = searchRequest.getAdditionalParamTypes();
-        val additionalParamCount = additionalParamTypes.size();
 
-        int paramsConsideredCount = paramIndex + additionalParamCount;
-        while(paramsConsideredCount>=0) {
+        //limit: [0 .. paramIndex + 1]
+        for(int limit = paramIndex + 1; limit>=0; --limit) {
 
-            val signature = concat(paramTypes, paramsConsideredCount, additionalParamTypes);
+            val signature = concat(paramTypes, limit, additionalParamTypes);
 
             val supportingMethod =
-            MethodFinder
-            .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy())
-            .withReturnTypeAnyOf(searchRequest.getReturnTypePattern().matchingTypes(paramType))
-            .streamMethodsMatchingSignature(signature)
-            .findFirst()
-            .orElse(null);
+                    MethodFinder
+                    .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy())
+                    .withReturnTypeAnyOf(searchRequest.getReturnTypePattern().matchingTypes(paramType))
+                    .streamMethodsMatchingSignature(signature)
+                    .findFirst()
+                    .orElse(null);
 
             if(supportingMethod != null) {
                 onMethodFound.accept(toSearchResult(paramIndex, paramType, supportingMethod));
                 return;
             }
 
-            // remove last, and search again
-            paramsConsideredCount--;
         }
 
     }
@@ -227,19 +224,24 @@ public final class ParameterSupport {
                         Optional.empty());
     }
 
+    /**
+     * @param paramTypes - all available
+     * @param paramsConsidered - limit
+     * @param additionalParamTypes - append regardless
+     */
     private static Class<?>[] concat(
             final Class<?>[] paramTypes,
-            final int paramsConsidered,
+            final int limit,
             final Can<Class<?>> additionalParamTypes) {
 
-        if(paramsConsidered>paramTypes.length) {
-            val msg = String.format("paramsConsidered %d exceeds size of paramTypes %d",
-                    paramsConsidered, paramTypes.length);
+        if(limit>paramTypes.length) {
+            val msg = String.format("limit %d exceeds size of paramTypes %d",
+                    limit, paramTypes.length);
             throw new IllegalArgumentException(msg);
         }
 
-        val paramTypesConsidered = paramsConsidered<paramTypes.length
-                ? Arrays.copyOf(paramTypes, paramsConsidered)
+        val paramTypesConsidered = limit<paramTypes.length
+                ? Arrays.copyOf(paramTypes, limit)
                 : paramTypes;
 
         val withAdditional = additionalParamTypes.isNotEmpty()
