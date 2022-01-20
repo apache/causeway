@@ -389,6 +389,7 @@ public class DomainObjectTesterFactory {
         }
 
         public void assertParameterValues(
+                final boolean checkRules,
                 @SuppressWarnings("rawtypes") final Consumer ...pojoDefaultArgTests) {
 
             assertExists(true);
@@ -397,7 +398,7 @@ public class DomainObjectTesterFactory {
 
             interactionService.runAnonymous(()->{
 
-                val pendingArgs = startParameterNegotiation(true);
+                val pendingArgs = startParameterNegotiation(checkRules);
 
                 pendingArgs.getParamModels()
                 .forEach(param->{
@@ -414,6 +415,104 @@ public class DomainObjectTesterFactory {
             });
 
         }
+
+        public void assertParameterVisibility(
+                final boolean checkRules,
+                final Consumer<Boolean> ...argVisibleChecks) {
+
+            assertExists(true);
+
+            val visibilityTests = Can.ofArray(argVisibleChecks);
+
+            interactionService.runAnonymous(()->{
+
+                val pendingArgs = startParameterNegotiation(checkRules);
+                pendingArgs.getParamModels()
+                .forEach(param->{
+
+                    val consent = pendingArgs.getVisibilityConsent(param.getParamNr());
+
+                    visibilityTests
+                        .get(param.getParamNr())
+                        .ifPresent(visibilityTest->
+                            visibilityTest.accept(consent.isAllowed()));
+                });
+
+                captureCommand();
+
+            });
+
+        }
+
+        public void assertParameterUsability(
+                final boolean checkRules,
+                final Consumer<String> ...argUsableChecks) {
+
+            assertExists(true);
+
+            val usabilityTests = Can.ofArray(argUsableChecks);
+
+            interactionService.runAnonymous(()->{
+
+                val pendingArgs = startParameterNegotiation(checkRules);
+                pendingArgs.getParamModels()
+                .forEach(param->{
+
+                    val consent = pendingArgs.getUsabilityConsent(param.getParamNr());
+
+                    usabilityTests
+                        .get(param.getParamNr())
+                        .ifPresent(usabilityTest->
+                        usabilityTest.accept(consent.getReason()));
+                });
+
+                captureCommand();
+
+            });
+
+
+
+        }
+
+        public void assertValidationMessage(
+                final String expectedMessage,
+                final boolean checkRules,
+                @SuppressWarnings("rawtypes") final UnaryOperator ...pojoDefaultArgMapper) {
+
+            assertExists(true);
+
+            val pojoArgMappers = Can.ofArray(pojoDefaultArgMapper);
+
+            interactionService.runAnonymous(()->{
+
+                val pendingArgs = startParameterNegotiation(checkRules);
+
+                pendingArgs.getParamModels()
+                .forEach(param->{
+
+                    val objManager = param.getMetaModel().getObjectManager();
+
+                    pojoArgMappers
+                        .get(param.getParamNr())
+                        .ifPresent(argMapper->
+                            param.getValue().setValue(
+                                    objManager
+                                    .adapt(
+                                        argMapper
+                                        .apply(ManagedObjects.UnwrapUtil.single(param.getValue().getValue())))));
+
+                });
+
+                captureCommand();
+
+                pendingArgs.activateValidationFeedback();
+
+                assertEquals(expectedMessage, pendingArgs.getObservableActionValidation().getValue());
+
+            });
+
+        }
+
 
         public Can<Command> getCapturedCommands() {
             return Can.ofCollection(capturedCommands);
@@ -826,11 +925,15 @@ public class DomainObjectTesterFactory {
                     .getDescription().orElse(""));
         }
 
-        public final void assertVisibilityIsNotVetoed() {
-            assertVisibilityIsVetoedWith(null);
+        public final void assertVisibility(final boolean isExpectedVisible) {
+            assertVisibilityIsVetoedWith(isExpectedVisible ? null : "Hidden");
         }
 
-        public final void assertVisibilityIsVetoedWith(final @Nullable String expectedVetoReason) {
+        public final void assertVisibilityIsNotVetoed() {
+            assertVisibility(true);
+        }
+
+        private final void assertVisibilityIsVetoedWith(final @Nullable String expectedVetoReason) {
 
             final boolean isExpectedVisible = expectedVetoReason == null;
 

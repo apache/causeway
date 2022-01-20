@@ -570,13 +570,60 @@ class DomainModelTest_usingGoodDomain {
                 .actionTester(ProperMemberSupportDiscovery.WhenAnnotationRequired.class, "placeOrder");
         act.assertExists(true);
 
-        //FIXME act.assertFriendlyName("my name");
-        //FIXME act.assertDescription("my description");
+        // namedPlaceOrder(): String = "my name"
+        act.assertFriendlyName("my name");
 
+        // describedPlaceOrder(): String = "my description"
+        act.assertDescription("my description");
+
+        // hidePlaceOrder(): boolean = false
         act.assertVisibilityIsNotVetoed();
-        act.assertUsabilityIsNotVetoed();
+
+        // disablePlaceOrder(): String = "my disable reason"
+        act.assertUsabilityIsVetoedWith("my disable reason");
+
+        // default0PlaceOrder(): String = "my default-0"
+        // default1PlaceOrder(): String = "my default-1"
+        act.assertParameterValues(
+                false, // skip rule checking
+                arg0->assertEquals(
+                        "my default-0",
+                        arg0),
+                arg1->assertEquals(
+                        "my default-1",
+                        arg1));
+
+        act.assertValidationMessage("my validation",
+                false, // skip rule checking
+                arg0->"",
+                arg1->"");
+
+        // hide0PlaceOrder(x): boolean = true
+        // hide1PlaceOrder(y): boolean = false
+        act.assertParameterVisibility(
+                false, // skip rule checking
+                arg0Visible->assertFalse(arg0Visible),
+                arg1Visible->assertTrue(arg1Visible));
+
+        // disable0PlaceOrder(x): String = "my disable reason-0"
+        // disable1PlaceOrder(z): String = "my disable reason-1"
+        act.assertParameterUsability(
+                false, // skip rule checking
+                arg0->assertEquals(
+                        "my disable reason-0",
+                        arg0),
+                arg1->assertEquals(
+                        "my disable reason-1",
+                        arg1));
 
         //TODO missing asserts
+
+        // choices0PlaceOrder(x): List.of("my choice")
+        // autoComplete1PlaceOrder(y, search): List.of("my search")
+
+        // validate0PlaceOrder(String x): String = "my validation-0"
+        // validate1PlaceOrder(String y): String = "my validation-1"
+        // validatePlaceOrder(String x, final String y): String = "my validation"
 
     }
 

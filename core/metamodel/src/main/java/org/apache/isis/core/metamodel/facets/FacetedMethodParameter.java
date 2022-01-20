@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -49,17 +48,6 @@ extends TypedHolderAbstract {
                                 ()->mmc.getSpecificationLoader().loadSpecification(declaringType).getLogicalTypeName()),
                         method));
 
-        this.paramIndex = paramIndex;
-    }
-
-    public FacetedMethodParameter(
-            final MetaModelContext mmc,
-            final FeatureType featureType,
-            final Class<?> type,
-            final Identifier identifier,
-            final int paramIndex) {
-
-        super(mmc, featureType, type, identifier);
         this.paramIndex = paramIndex;
     }
 

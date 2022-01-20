@@ -82,7 +82,8 @@ extends HasTitle, HasActionInteraction {
         val buf = new StringBuilder();
 
         streamPendingParamUiModels()
-        .filter(paramModel->paramModel.getParameterNegotiationModel().getVisibilityConsent(paramModel.getParameterIndex()).isAllowed())
+        .filter(paramModel->paramModel.getParameterNegotiationModel()
+                .getVisibilityConsent(paramModel.getParameterIndex()).isAllowed())
         .map(ParameterUiModel::getValue)
         .forEach(paramValue->{
             if(buf.length() > 0) {

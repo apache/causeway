@@ -25,6 +25,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -32,8 +34,6 @@ import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo;
 import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.val;
 
@@ -135,7 +135,8 @@ class CollectionInteractionTest extends InteractionTestAbstract {
         actTester.assertUsabilityIsNotVetoed();
 
         // verify param defaults are seeded with choices from selection
-        actTester.assertParameterValues(arg0->assertEquals(
+        actTester.assertParameterValues(true,
+                arg0->assertEquals(
                 List.of(
                     choiceElements.get(1),
                     choiceElements.get(3)),

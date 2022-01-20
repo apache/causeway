@@ -226,7 +226,7 @@ public final class ParameterSupport {
 
     /**
      * @param paramTypes - all available
-     * @param paramsConsidered - limit
+     * @param limit - params considered count (without any additional)
      * @param additionalParamTypes - append regardless
      */
     private static Class<?>[] concat(

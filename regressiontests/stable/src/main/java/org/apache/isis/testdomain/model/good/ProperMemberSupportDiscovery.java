@@ -33,29 +33,35 @@ public class ProperMemberSupportDiscovery {
 
         //public abstract void placeOrder(String x, String y);
 
-        public String namedPlaceOrder() { return "my name"; }
-        public String describedPlaceOrder() { return "my description"; }
-        public boolean hidePlaceOrder() { return false; }
-        public boolean hide0PlaceOrder(final String x) { return true; }
-        public boolean hide1PlaceOrder(final String y) { return false; }
-        public String disablePlaceOrder() { return "my disable reason"; }
-        public String disable0PlaceOrder(final String x) { return "my disable reason-0";}
-        public String disable1PlaceOrder(final String z) { return "my disable reason-1";}
-        public String default0PlaceOrder() { return "my default-0";}
-        public String default1PlaceOrder() { return "my default-1";}
+        //FIXME remove all annotations ...
 
-        public java.util.Collection<String> choices0PlaceOrder(final String x) {
+        @MemberSupport public String namedPlaceOrder() { return "my name"; }
+        @MemberSupport public String describedPlaceOrder() { return "my description"; }
+        @MemberSupport public boolean hidePlaceOrder() { return false; }
+        @MemberSupport public boolean hide0PlaceOrder(final String x) {
+            System.err.printf("hide0PlaceOrder %s%n", x);
+            return true; }
+        @MemberSupport public boolean hide1PlaceOrder(final String y) {
+            System.err.printf("hide1PlaceOrder %s%n", y);
+            return false; }
+        @MemberSupport public String disablePlaceOrder() { return "my disable reason"; }
+        @MemberSupport public String disable0PlaceOrder(final String x) { return "my disable reason-0";}
+        @MemberSupport public String disable1PlaceOrder(final String z) { return "my disable reason-1";}
+        @MemberSupport public String default0PlaceOrder() { return "my default-0";}
+        @MemberSupport public String default1PlaceOrder() { return "my default-1";}
+
+        @MemberSupport public java.util.Collection<String> choices0PlaceOrder(final String x) {
             return List.of("my choice");
         }
-        public java.util.Collection<String> autoComplete1PlaceOrder(
+        @MemberSupport public java.util.Collection<String> autoComplete1PlaceOrder(
                 final String y,
                 @MinLength(3) final String search) {
             return List.of("my search");
         }
 
-        public String validate0PlaceOrder(final String x) { return "my validation-0";}
-        public String validate1PlaceOrder(final String y) { return "my validation-1";}
-        public String validatePlaceOrder(final String x, final String y) { return "my validation";}
+        @MemberSupport public String validate0PlaceOrder(final String x) { return "my validation-0";}
+        @MemberSupport public String validate1PlaceOrder(final String y) { return "my validation-1";}
+        @MemberSupport public String validatePlaceOrder(final String x, final String y) { return "my validation";}
 
     }
 
