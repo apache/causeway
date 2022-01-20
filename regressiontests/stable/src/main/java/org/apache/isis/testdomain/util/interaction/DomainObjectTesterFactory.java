@@ -420,57 +420,60 @@ public class DomainObjectTesterFactory {
                 final boolean checkRules,
                 final Consumer<Boolean> ...argVisibleChecks) {
 
-            assertExists(true);
+            assertParameterModel(checkRules,
+                // when
+                pendingArgs->{
 
-            val visibilityTests = Can.ofArray(argVisibleChecks);
 
-            interactionService.runAnonymous(()->{
 
-                val pendingArgs = startParameterNegotiation(checkRules);
-                pendingArgs.getParamModels()
-                .forEach(param->{
+                },
+                // then
+                pendingArgs->{
 
-                    val consent = pendingArgs.getVisibilityConsent(param.getParamNr());
+                    val visibilityTests = Can.ofArray(argVisibleChecks);
 
-                    visibilityTests
-                        .get(param.getParamNr())
-                        .ifPresent(visibilityTest->
-                            visibilityTest.accept(consent.isAllowed()));
+                    pendingArgs.getParamModels()
+                    .forEach(param->{
+
+                        val consent = pendingArgs.getVisibilityConsent(param.getParamNr());
+
+                        visibilityTests
+                            .get(param.getParamNr())
+                            .ifPresent(visibilityTest->
+                                visibilityTest.accept(consent.isAllowed()));
+                    });
+
                 });
-
-                captureCommand();
-
-            });
-
         }
 
         public void assertParameterUsability(
                 final boolean checkRules,
                 final Consumer<String> ...argUsableChecks) {
 
-            assertExists(true);
+            assertParameterModel(checkRules,
+                // when
+                pendingArgs->{
 
-            val usabilityTests = Can.ofArray(argUsableChecks);
 
-            interactionService.runAnonymous(()->{
 
-                val pendingArgs = startParameterNegotiation(checkRules);
-                pendingArgs.getParamModels()
-                .forEach(param->{
+                },
+                // then
+                pendingArgs->{
 
-                    val consent = pendingArgs.getUsabilityConsent(param.getParamNr());
+                    val usabilityTests = Can.ofArray(argUsableChecks);
 
-                    usabilityTests
-                        .get(param.getParamNr())
-                        .ifPresent(usabilityTest->
-                        usabilityTest.accept(consent.getReason()));
+                    pendingArgs.getParamModels()
+                    .forEach(param->{
+
+                        val consent = pendingArgs.getUsabilityConsent(param.getParamNr());
+
+                        usabilityTests
+                            .get(param.getParamNr())
+                            .ifPresent(usabilityTest->
+                            usabilityTest.accept(consent.getReason()));
+                    });
+
                 });
-
-                captureCommand();
-
-            });
-
-
 
         }
 
@@ -479,36 +482,49 @@ public class DomainObjectTesterFactory {
                 final boolean checkRules,
                 @SuppressWarnings("rawtypes") final UnaryOperator ...pojoDefaultArgMapper) {
 
-            assertExists(true);
+            assertParameterModel(checkRules,
+                // when
+                pendingArgs->{
 
-            val pojoArgMappers = Can.ofArray(pojoDefaultArgMapper);
+                    val pojoArgMappers = Can.ofArray(pojoDefaultArgMapper);
 
-            interactionService.runAnonymous(()->{
+                    pendingArgs.getParamModels()
+                    .forEach(param->{
 
-                val pendingArgs = startParameterNegotiation(checkRules);
+                        val objManager = param.getMetaModel().getObjectManager();
 
-                pendingArgs.getParamModels()
-                .forEach(param->{
-
-                    val objManager = param.getMetaModel().getObjectManager();
-
-                    pojoArgMappers
-                        .get(param.getParamNr())
-                        .ifPresent(argMapper->
-                            param.getValue().setValue(
+                        pojoArgMappers
+                            .get(param.getParamNr())
+                            .ifPresent(argMapper->
+                                param.getValue().setValue(
                                     objManager
                                     .adapt(
                                         argMapper
                                         .apply(ManagedObjects.UnwrapUtil.single(param.getValue().getValue())))));
+                    });
+
+                },
+                // then
+                pendingArgs->{
+
+                    assertEquals(expectedMessage, pendingArgs.getObservableActionValidation().getValue());
 
                 });
+        }
 
+        public void assertParameterModel(
+                final boolean checkRules,
+                final Consumer<ParameterNegotiationModel> when,
+                final Consumer<ParameterNegotiationModel> then) {
+
+            assertExists(true);
+
+            interactionService.runAnonymous(()->{
+                val pendingArgs = startParameterNegotiation(checkRules);
+                when.accept(pendingArgs);
                 captureCommand();
-
                 pendingArgs.activateValidationFeedback();
-
-                assertEquals(expectedMessage, pendingArgs.getObservableActionValidation().getValue());
-
+                then.accept(pendingArgs);
             });
 
         }

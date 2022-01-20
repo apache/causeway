@@ -563,6 +563,7 @@ class DomainModelTest_usingGoodDomain {
         coll.assertCollectionElements(List.of("Foo"));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     void properMemberSupportDiscovery() {
 
@@ -609,21 +610,60 @@ class DomainModelTest_usingGoodDomain {
         // disable1PlaceOrder(z): String = "my disable reason-1"
         act.assertParameterUsability(
                 false, // skip rule checking
-                arg0->assertEquals(
+                arg0Veto->assertEquals(
                         "my disable reason-0",
-                        arg0),
-                arg1->assertEquals(
+                        arg0Veto),
+                arg1Veto->assertEquals(
                         "my disable reason-1",
-                        arg1));
-
-        //TODO missing asserts
+                        arg1Veto));
 
         // choices0PlaceOrder(x): List.of("my choice")
-        // autoComplete1PlaceOrder(y, search): List.of("my search")
+        act.assertParameterModel(
+                false, // skip rule checking
+                pendingArgsWhen->{},
+                pendingArgsThen->{
+
+                    val actualChoices =
+                            pendingArgsThen.getObservableParamChoices(0).getValue().map(ManagedObject::getPojo);
+                    assertEquals(
+                            actualChoices,
+                            Can.of("my choice"));
+
+                });
+
+        // autoComplete1PlaceOrder(y, search): List.of("my search arg=" + search)
+        act.assertParameterModel(
+                false, // skip rule checking
+                pendingArgsWhen->{
+                    pendingArgsWhen.getBindableParamSearchArgument(1).setValue("hello");
+                },
+                pendingArgsThen->{
+
+                    val actualChoices =
+                            pendingArgsThen.getObservableParamChoices(1).getValue().map(ManagedObject::getPojo);
+                    assertEquals(
+                            actualChoices,
+                            Can.of("my search arg=hello"));
+
+                });
 
         // validate0PlaceOrder(String x): String = "my validation-0"
         // validate1PlaceOrder(String y): String = "my validation-1"
         // validatePlaceOrder(String x, final String y): String = "my validation"
+        act.assertParameterModel(
+                false, // skip rule checking
+                pendingArgsWhen->{},
+                pendingArgsThen->{
+                    assertEquals(
+                            pendingArgsThen.getObservableParamValidation(0).getValue(),
+                            "my validation-0");
+                    assertEquals(
+                            pendingArgsThen.getObservableParamValidation(1).getValue(),
+                            "my validation-1");
+                    assertEquals(
+                            pendingArgsThen.validateParameterSetForAction().getReason(),
+                            "my validation");
+                });
 
     }
 

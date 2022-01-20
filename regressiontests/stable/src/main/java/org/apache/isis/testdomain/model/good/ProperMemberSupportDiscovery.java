@@ -38,12 +38,8 @@ public class ProperMemberSupportDiscovery {
         @MemberSupport public String namedPlaceOrder() { return "my name"; }
         @MemberSupport public String describedPlaceOrder() { return "my description"; }
         @MemberSupport public boolean hidePlaceOrder() { return false; }
-        @MemberSupport public boolean hide0PlaceOrder(final String x) {
-            System.err.printf("hide0PlaceOrder %s%n", x);
-            return true; }
-        @MemberSupport public boolean hide1PlaceOrder(final String y) {
-            System.err.printf("hide1PlaceOrder %s%n", y);
-            return false; }
+        @MemberSupport public boolean hide0PlaceOrder(final String x) { return true; }
+        @MemberSupport public boolean hide1PlaceOrder(final String y) { return false; }
         @MemberSupport public String disablePlaceOrder() { return "my disable reason"; }
         @MemberSupport public String disable0PlaceOrder(final String x) { return "my disable reason-0";}
         @MemberSupport public String disable1PlaceOrder(final String z) { return "my disable reason-1";}
@@ -56,7 +52,7 @@ public class ProperMemberSupportDiscovery {
         @MemberSupport public java.util.Collection<String> autoComplete1PlaceOrder(
                 final String y,
                 @MinLength(3) final String search) {
-            return List.of("my search");
+            return List.of("my search arg=" + search);
         }
 
         @MemberSupport public String validate0PlaceOrder(final String x) { return "my validation-0";}
