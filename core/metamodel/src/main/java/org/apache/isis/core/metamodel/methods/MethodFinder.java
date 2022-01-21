@@ -222,33 +222,37 @@ public class MethodFinder {
             final Class<? extends Annotation> annotationType,
             final ConflictingAnnotations conflictingAnnotations) {
 
-        return of(
+        val finder = of(
                 correspondingClass,
                 methodNameCandidates,
                 // support methods are always allowed private
                 EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
                 havingAnnotationIfEnforcedByPolicyOrAccessibility(
-                        memberIntrospectionPolicy,
+                        memberIntrospectionPolicy.getSupportMethodAnnotationPolicy().isSupportMethodAnnotationsRequired(),
                         annotationType,
                         conflictingAnnotations.getProhibits()));
 
+        return finder;
     }
 
     private static Predicate<Method> havingAnnotationIfEnforcedByPolicyOrAccessibility(
-            final IntrospectionPolicy memberIntrospectionPolicy,
+            final boolean annotationRequired,
             final Class<? extends Annotation> annotationType,
             final Can<Class<? extends Annotation>> conflictingAnnotations) {
 
-        //MemberAnnotationPolicy
-        //  when REQUIRED -> annot. on support also required
-        //  when OPTIONAL -> annot. on support only required when support method is private
-
-        return memberIntrospectionPolicy.getMemberAnnotationPolicy().isMemberAnnotationsRequired()
+        return annotationRequired
                     ? method->havingAnnotation(method, annotationType, conflictingAnnotations)
-                    : method-> !_Reflect.isAccessible(method)
-                            ? havingAnnotation(method, annotationType, conflictingAnnotations)
-                            : true;
+                    : method->havingAnnotationOrPublic(method, annotationType, conflictingAnnotations);
+    }
 
+    private static boolean havingAnnotationOrPublic(
+            final Method method,
+            final Class<? extends Annotation> annotationType,
+            final Can<Class<? extends Annotation>> conflictingAnnotations) {
+
+        return _Reflect.isAccessible(method)
+                ? true
+                : havingAnnotation(method, annotationType, conflictingAnnotations);
     }
 
     //FIXME[ISIS-2774] if annotation appears on an abstract method that was inherited with given method,

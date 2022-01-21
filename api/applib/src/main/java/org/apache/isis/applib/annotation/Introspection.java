@@ -116,7 +116,8 @@ public enum Introspection {
          */
         ENCAPSULATION_ENABLED(
                 EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
-                MemberAnnotationPolicy.MEMBER_ANNOTATIONS_REQUIRED),
+                MemberAnnotationPolicy.MEMBER_ANNOTATIONS_REQUIRED,
+                SupportMethodAnnotationPolicy.SUPPORT_METHOD_ANNOTATIONS_REQUIRED),
 
         /**
          * Introspect public members only, while
@@ -124,7 +125,8 @@ public enum Introspection {
          */
         ANNOTATION_REQUIRED(
                 EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED,
-                MemberAnnotationPolicy.MEMBER_ANNOTATIONS_REQUIRED),
+                MemberAnnotationPolicy.MEMBER_ANNOTATIONS_REQUIRED,
+                SupportMethodAnnotationPolicy.SUPPORT_METHOD_ANNOTATIONS_OPTIONAL),
 
         /**
          * Introspect public members only, while
@@ -132,11 +134,13 @@ public enum Introspection {
          */
         ANNOTATION_OPTIONAL(
                 EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED,
-                MemberAnnotationPolicy.MEMBER_ANNOTATIONS_OPTIONAL),
+                MemberAnnotationPolicy.MEMBER_ANNOTATIONS_OPTIONAL,
+                SupportMethodAnnotationPolicy.SUPPORT_METHOD_ANNOTATIONS_OPTIONAL),
         ;
 
         private final EncapsulationPolicy encapsulationPolicy;
         private final MemberAnnotationPolicy memberAnnotationPolicy;
+        private final SupportMethodAnnotationPolicy supportMethodAnnotationPolicy;
 
     }
 
@@ -162,6 +166,18 @@ public enum Introspection {
         MEMBER_ANNOTATIONS_OPTIONAL;
         public boolean isMemberAnnotationsRequired() {
             return this == MEMBER_ANNOTATIONS_REQUIRED;
+        }
+    }
+
+    /**
+     * Effectively applies on a per class basis, when introspecting
+     * class (object- and member-) support methods for the meta-model.
+     */
+    public static enum SupportMethodAnnotationPolicy {
+        SUPPORT_METHOD_ANNOTATIONS_REQUIRED,
+        SUPPORT_METHOD_ANNOTATIONS_OPTIONAL;
+        public boolean isSupportMethodAnnotationsRequired() {
+            return this == SUPPORT_METHOD_ANNOTATIONS_REQUIRED;
         }
     }
 
