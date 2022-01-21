@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.navparent.annotation;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -27,6 +28,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.isis.commons.internal.reflection._Reflect.TypeHierarchyPolicy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -34,6 +36,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.Evaluators;
+import org.apache.isis.core.metamodel.facets.Evaluators.MethodEvaluator;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetViaGetterMethod;
@@ -135,13 +138,28 @@ implements MetaModelRefiner {
                             NavigableParentAnnotationFacetFactory::isNavigableParentFlagSet,
                             TypeHierarchyPolicy.EXCLUDE,
                             InterfacePolicy.INCLUDE)
-                    .collect(Can.toCan());
+                    .collect(Can.toCan())
+                    // guard against inherited method having identical synthesized annotations as bas method,
+                    // while not actually overriding
+                    .distinct((a, b)->{
+                        if(!Objects.equals(a.getClass(), b.getClass())) {
+                            return false; // different
+                        }
+                        if(a instanceof MethodEvaluator) {
+                            val ma = (MethodEvaluator) a;
+                            val mb = (MethodEvaluator) b;
+                            return _Reflect.methodsSame(ma.getMethod(), mb.getMethod());
+                        }
+                        return true; // equal
+                    });;
 
             if (evaluators.isEmpty()) {
                 return; // no conflict, continue validation processing
-            } else if (evaluators.isCardinalityMultiple()) {
+            }
 
-                val conflictingEvaluatorNames = evaluators.map(Evaluators.Evaluator::name).toList();
+            if (evaluators.isCardinalityMultiple()) {
+
+                val conflictingEvaluatorNames = evaluators.map(Evaluators.Evaluator::name).toSet();
 
                 ValidationFailure.raiseFormatted(
                         spec,

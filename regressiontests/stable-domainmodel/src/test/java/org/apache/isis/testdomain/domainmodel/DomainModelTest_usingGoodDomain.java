@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.domainmodel;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
@@ -36,6 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.annotation.Introspection.EncapsulationPolicy;
 import org.apache.isis.applib.annotation.Introspection.MemberAnnotationPolicy;
@@ -141,7 +143,20 @@ class DomainModelTest_usingGoodDomain {
         assertFalse(specificationLoader.snapshotSpecifications().isEmpty());
 
         val validateDomainModel = new DomainModelValidator(serviceRegistry);
-        validateDomainModel.throwIfInvalid(); // should not throw
+
+        // guard against left overs from shared context
+        val validationFailures = validateDomainModel.getFailures().stream()
+                .filter(f->!f.getOrigin().getClassName().contains("bad"))
+                .collect(Collectors.toSet());
+
+        if(!validationFailures.isEmpty()) {
+
+            fail(String.format("%d problems found:\n%s",
+                    validationFailures.size(),
+                    validationFailures.stream()
+                    .map(validationFailure->validationFailure.getMessage())
+                    .collect(Collectors.joining("\n"))));
+        }
     }
 
     @Test
@@ -565,7 +580,7 @@ class DomainModelTest_usingGoodDomain {
     @SuppressWarnings("unchecked")
     @ParameterizedTest
     @ValueSource(classes = {
-            //FIXME ProperMemberSupportDiscovery.WhenEncapsulationEnabled.class,
+          //FIXME ProperMemberSupportDiscovery.WhenEncapsulationEnabled.class,
             ProperMemberSupportDiscovery.WhenAnnotationRequired.class,
             //FIXME ProperMemberSupportDiscovery.WhenAnnotationOptional.class
             })

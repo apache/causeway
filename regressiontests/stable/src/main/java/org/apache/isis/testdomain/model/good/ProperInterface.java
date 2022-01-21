@@ -18,39 +18,39 @@
  */
 package org.apache.isis.testdomain.model.good;
 
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.LogicalTypeName;
 import org.apache.isis.applib.annotation.Property;
 
-@DomainObject(logicalTypeName = "isis.testdomain.ProperInterface")
+@LogicalTypeName("isis.testdomain.ProperInterface")
 public interface ProperInterface {
 
     // -- read/write exemplar
-    
+
     @Property
     default String getA() {
         return "a";
     }
-    default void setA(String prop) {
+    default void setA(final String prop) {
         // no-op, just testing meta-data
     }
-    
+
     // -- read only exemplar
-    
+
     @Property
     default String getB() {
         return "b";
     }
 
     // -- read/write exemplar (no implementation)
-    
+
     @Property
     String getC();
     void setC(String prop);
-    
+
     // -- read only exemplar (no implementation)
-    
+
     @Property
     String getD();
 
-    
+
 }
