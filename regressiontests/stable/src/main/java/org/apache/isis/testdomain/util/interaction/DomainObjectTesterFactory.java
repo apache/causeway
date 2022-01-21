@@ -66,6 +66,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
+import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -722,6 +723,24 @@ public class DomainObjectTesterFactory {
 
         }
 
+        public void assertValueNegotiation(
+                final Consumer<PropertyNegotiationModel> when,
+                final Consumer<PropertyNegotiationModel> then) {
+
+            assertExists(true);
+
+            managedPropertyIfAny
+            .ifPresent(managedProperty->{
+                interactionService.runAnonymous(()->{
+                    val propNeg = managedProperty.startNegotiation();
+                    when.accept(propNeg);
+                    propNeg.activateValidationFeedback();
+                    propNeg.submit();
+                    then.accept(propNeg);
+                });
+            });
+        }
+
         /**
          * Supported by all properties that reflect a value type.
          * Uses value-semantics under the hood to do the conversion.
@@ -941,8 +960,12 @@ public class DomainObjectTesterFactory {
                     .getDescription().orElse(""));
         }
 
-        public final void assertVisibility(final boolean isExpectedVisible) {
+        private final void assertVisibility(final boolean isExpectedVisible) {
             assertVisibilityIsVetoedWith(isExpectedVisible ? null : "Hidden");
+        }
+
+        public final void assertVisibilityIsVetoed() {
+            assertVisibility(false);
         }
 
         public final void assertVisibilityIsNotVetoed() {

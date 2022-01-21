@@ -47,7 +47,8 @@ public class PropertyNegotiationModel implements ManagedValue {
     private final @NonNull ManagedProperty managedProperty;
     private Bindable<String> proposedValueAsText;
 
-    PropertyNegotiationModel(final ManagedProperty managedProperty) {
+    PropertyNegotiationModel(
+            final ManagedProperty managedProperty) {
         this.managedProperty = managedProperty;
         val propMeta = managedProperty.getMetaModel();
 
@@ -150,6 +151,13 @@ public class PropertyNegotiationModel implements ManagedValue {
 
     private boolean isValidationFeedbackActive() {
         return validationFeedbackActive.getValue();
+    }
+
+    /**
+     * exposed for testing
+     */
+    public void activateValidationFeedback() {
+        validationFeedbackActive.setValue(true);
     }
 
     public void invalidateChoicesAndValidation() {

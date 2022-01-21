@@ -21,15 +21,23 @@ package org.apache.isis.testdomain.model.good;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Introspection;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Property;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 
 public class ProperMemberSupportDiscovery {
 
     public static abstract class PublicBase {
+
+        // -- ACTION
 
         public String namedPlaceOrder() { return "my name"; }
         public String describedPlaceOrder() { return "my description"; }
@@ -55,13 +63,35 @@ public class ProperMemberSupportDiscovery {
         public String validate1PlaceOrder(final String y) { return "my validation-1";}
         public String validatePlaceOrder(final String x, final String y) { return "my validation";}
 
+        // -- PROPERTY
+
+        public String namedEmail() { return "my email";}
+        public String describedEmail() { return "my email described";}
+        public boolean hideEmail() { return true;}
+        public String disableEmail() { return "my email disable";}
+        public String defaultEmail() { return "my default email";}
+        public java.util.Collection<String> choicesEmail() {
+            return List.of("my email choice");
+        }
+        public String validateEmail(final String email) { return "my email validate";}
+
+        // -- COLLECTION
+
+        public String namedOrders() { return "my orders"; }
+        public String describedOrders() { return "my orders described"; }
+        public boolean hideOrders() { return true;}
+        public String disableOrders() { return "my orders disabled"; }
+
     }
 
+    /**
+     * annotations required, otherwise not picked up
+     */
     static abstract class ProtectedBase {
 
-        protected abstract void placeOrder(String x, String y);
+        // -- ACTION
 
-        // annotations required, otherwise not picked up as action
+        protected abstract void placeOrder(String x, String y);
 
         @MemberSupport protected String namedPlaceOrder() { return "my name"; }
         @MemberSupport protected String describedPlaceOrder() { return "my description"; }
@@ -83,6 +113,24 @@ public class ProperMemberSupportDiscovery {
             return List.of("my search");
         }
 
+        // -- PROPERTY
+
+        @MemberSupport protected String namedEmail() { return "my email";}
+        @MemberSupport protected String describedEmail() { return "my email described";}
+        @MemberSupport protected boolean hideEmail() { return true;}
+        @MemberSupport protected String disableEmail() { return "my email disable";}
+        @MemberSupport protected String defaultEmail() { return "my default email";}
+        @MemberSupport protected java.util.Collection<String> choicesEmail() {
+            return List.of("my email choice");
+        }
+        @MemberSupport protected String validateEmail(final String email) { return "my email validate";}
+
+        // -- COLLECTION
+
+        @MemberSupport protected String namedOrders() { return "my oders"; }
+        @MemberSupport protected String describedOrders() { return "my orders described"; }
+        @MemberSupport protected boolean hideOrders() { return true;}
+        @MemberSupport protected String disableOrders() { return "my orders disabled"; }
     }
 
     @DomainObject(
@@ -93,6 +141,12 @@ public class ProperMemberSupportDiscovery {
         // no annotation required, should be picked up as action
         public void placeOrder(final String x, final String y) {
         }
+
+        @Getter @Setter
+        private String email;
+
+        @Getter @Setter
+        private java.util.Collection<String> orders;
 
     }
 
@@ -107,6 +161,14 @@ public class ProperMemberSupportDiscovery {
         public void placeOrder(final String x, final String y) {
         }
 
+        @Property
+        @Getter @Setter
+        private String email;
+
+        @Collection
+        @Getter @Setter
+        private java.util.Collection<String> orders;
+
     }
 
     @DomainObject(
@@ -118,8 +180,16 @@ public class ProperMemberSupportDiscovery {
         // annotation required, otherwise not picked up as action
         @Action
         @Override
-        public void placeOrder(final String x, final String y) {
+        protected void placeOrder(final String x, final String y) {
         }
+
+        @Property
+        @Getter(AccessLevel.PROTECTED) @Setter(AccessLevel.PROTECTED)
+        private String email;
+
+        @Collection
+        @Getter(AccessLevel.PROTECTED) @Setter(AccessLevel.PROTECTED)
+        private java.util.Collection<String> orders;
 
     }
 

@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
@@ -458,8 +459,6 @@ class DomainModelTest_usingGoodDomain {
 
     }
 
-
-
     @Test
     void viewmodelWithEncapsulatedMembers() {
 
@@ -564,11 +563,21 @@ class DomainModelTest_usingGoodDomain {
     }
 
     @SuppressWarnings("unchecked")
-    @Test
-    void properMemberSupportDiscovery() {
+    @ParameterizedTest
+    @ValueSource(classes = {
+            //FIXME ProperMemberSupportDiscovery.WhenEncapsulationEnabled.class,
+            ProperMemberSupportDiscovery.WhenAnnotationRequired.class,
+            //FIXME ProperMemberSupportDiscovery.WhenAnnotationOptional.class
+            })
+    void properMemberSupportDiscovery(final Class<?> classUnderTest) {
 
         val act = testerFactory
-                .actionTester(ProperMemberSupportDiscovery.WhenAnnotationRequired.class, "placeOrder");
+                .actionTester(classUnderTest, "placeOrder");
+        val prop = testerFactory
+                .propertyTester(classUnderTest, "email");
+        val coll = testerFactory
+                .collectionTester(classUnderTest, "orders");
+
         act.assertExists(true);
 
         // namedPlaceOrder(): String = "my name"
@@ -664,6 +673,61 @@ class DomainModelTest_usingGoodDomain {
                             pendingArgsThen.validateParameterSetForAction().getReason(),
                             "my validation");
                 });
+
+        // namedEmail(): String = "my email"
+        prop.assertFriendlyName("my email");
+
+        // describedEmail: String = "my email described"
+        prop.assertDescription("my email described");
+
+        // hideEmail(): boolean = true
+        prop.assertVisibilityIsVetoed();
+
+        // disableEmail(): String = "my email disable"
+        prop.assertUsabilityIsVetoedWith("my email disable");
+
+        // defaultEmail(): String = "my default email"
+        prop.assertValueNegotiation(
+                propNeg->{
+                    assertEquals(
+                            "my default email",
+                            propNeg.getValue().getValue().getPojo());
+                },
+                propNegPostCommit->{});
+
+
+        // choicesEmail(): Collection<String> = List.of("my email choice")
+        prop.assertValueNegotiation(
+                propNeg->{
+                    assertEquals(
+                            Can.of("my email choice"),
+                            propNeg.getChoices().getValue().map(ManagedObject::getPojo));
+                },
+                propNegPostCommit->{});
+
+
+        // validateEmail(final String email): String = "my email validate"
+        prop.assertValueNegotiation(
+                propNeg->{},
+                propNegPostCommit->{
+                    assertEquals(
+                            "my email validate",
+                            propNegPostCommit.getValidationMessage().getValue());
+                });
+
+        // -- COLLECTION
+
+        // namedOrders(): String = "my orders"
+        coll.assertFriendlyName("my orders");
+
+        // describedOrders: String = "my orders described"
+        coll.assertDescription("my orders described");
+
+        // hideOrders(): boolean = true
+        coll.assertVisibilityIsVetoed();
+
+        // disableOrders(): String = "my orders disabled"
+        coll.assertUsabilityIsVetoedWith("my orders disabled");
 
     }
 
