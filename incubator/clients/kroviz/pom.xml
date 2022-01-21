@@ -38,8 +38,8 @@
 
     <!-- see: http://andresalmiray.com/running-gradle-inside-maven/ -->
     <profiles>
-    
-    	<!-- GRADLE WRAPPER SCRIPT AUTO SELECT -->
+
+        <!-- GRADLE WRAPPER SCRIPT AUTO SELECT -->
         <profile>
             <id>windows</id>
             <activation>
@@ -62,58 +62,58 @@
                 <gradle.executable>./gradlew.sh</gradle.executable>
             </properties>
         </profile>
-        
+
         <!-- GRADLE BUILD TASK SELECTIVE SKIPPING -->
         <profile>
-        	<id>skipTests</id>
-			<activation>
-				<property>
-					<name>skipTests</name>
-				</property>
-			</activation>
-			<properties>
+            <id>skipTests</id>
+            <activation>
+                <property>
+                    <name>skipTests</name>
+                </property>
+            </activation>
+            <properties>
                 <gradle.skipTests>-xtest</gradle.skipTests>
                 <gradle.skipBrowserTests>-xbrowserTest</gradle.skipBrowserTests>
             </properties>
         </profile>
         <profile>
-        	<id>skipBrowserTests</id>
-			<activation>
-				<property>
-					<name>!browserTests</name>
-				</property>
-			</activation>
-			<properties>
+            <id>skipBrowserTests</id>
+            <activation>
+                <property>
+                    <name>!browserTests</name>
+                </property>
+            </activation>
+            <properties>
                 <gradle.skipBrowserTests>-xbrowserTest</gradle.skipBrowserTests>
             </properties>
         </profile>
-        
+
     </profiles>
 
     <build>
-    
-    	<resources>
-    		<resource>
-    			<filtering>false</filtering>
-    			<directory>**</directory>
-    		</resource>
-    	</resources>
-    
+
+        <resources>
+            <resource>
+                <filtering>false</filtering>
+                <directory>**</directory>
+            </resource>
+        </resources>
+
         <plugins>
-        
+
             <!-- execute Gradle command -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>gradle</id>
-                        <phase>prepare-package</phase>
+                        <id>gradle-build-jar</id>
+                        <phase>process-resources</phase>
                         <configuration>
                             <executable>${gradle.executable}</executable>
                             <arguments>
-                                <argument>clean</argument>
-                                <argument>build</argument>
+                                <!--argument>clean</argument>
+                                <argument>build</argument-->
                                 <argument>jar</argument>
                                 <argument>-Pgroup=${project.groupId}</argument>
                                 <argument>-Pversion=${project.version}</argument>
@@ -126,8 +126,23 @@
                             <goal>exec</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>copy-and-rename-jar</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <executable>cp</executable>
+                            <arguments>
+                                <argument>${project.basedir}/build/libs/*.jar</argument>
+                                <argument>${project.build.directory}/${project.artifactId}-${project.version}.jar</argument>
+                            </arguments>
+                        </configuration>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
+
         </plugins>
     </build>
 
