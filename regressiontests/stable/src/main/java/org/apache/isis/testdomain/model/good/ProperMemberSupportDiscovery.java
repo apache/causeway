@@ -91,7 +91,8 @@ public class ProperMemberSupportDiscovery {
 
         // -- ACTION
 
-        protected abstract void placeOrder(String x, String y);
+        //FIXME should be allowed without annotation ...
+        //protected abstract void placeOrder(String x, String y);
 
         @MemberSupport protected String namedPlaceOrder() { return "my name"; }
         @MemberSupport protected String describedPlaceOrder() { return "my description"; }
@@ -110,8 +111,13 @@ public class ProperMemberSupportDiscovery {
         @MemberSupport protected java.util.Collection<String> autoComplete1PlaceOrder(
                 final String y,
                 @MinLength(3) final String search) {
-            return List.of("my search");
+            return List.of("my search arg=" + search);
         }
+
+        @MemberSupport protected  String validate0PlaceOrder(final String x) { return "my validation-0";}
+        @MemberSupport protected  String validate1PlaceOrder(final String y) { return "my validation-1";}
+        @MemberSupport protected  String validatePlaceOrder(final String x, final String y) { return "my validation";}
+
 
         // -- PROPERTY
 
@@ -127,7 +133,7 @@ public class ProperMemberSupportDiscovery {
 
         // -- COLLECTION
 
-        @MemberSupport protected String namedOrders() { return "my oders"; }
+        @MemberSupport protected String namedOrders() { return "my orders"; }
         @MemberSupport protected String describedOrders() { return "my orders described"; }
         @MemberSupport protected boolean hideOrders() { return true;}
         @MemberSupport protected String disableOrders() { return "my orders disabled"; }
@@ -179,7 +185,7 @@ public class ProperMemberSupportDiscovery {
 
         // annotation required, otherwise not picked up as action
         @Action
-        @Override
+        //@Override
         protected void placeOrder(final String x, final String y) {
         }
 

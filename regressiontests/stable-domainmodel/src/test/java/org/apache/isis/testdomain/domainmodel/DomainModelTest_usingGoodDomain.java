@@ -580,7 +580,7 @@ class DomainModelTest_usingGoodDomain {
     @SuppressWarnings("unchecked")
     @ParameterizedTest
     @ValueSource(classes = {
-          //FIXME ProperMemberSupportDiscovery.WhenEncapsulationEnabled.class,
+            ProperMemberSupportDiscovery.WhenEncapsulationEnabled.class,
             ProperMemberSupportDiscovery.WhenAnnotationRequired.class,
             //FIXME ProperMemberSupportDiscovery.WhenAnnotationOptional.class
             })
@@ -650,8 +650,8 @@ class DomainModelTest_usingGoodDomain {
                     val actualChoices =
                             pendingArgsThen.getObservableParamChoices(0).getValue().map(ManagedObject::getPojo);
                     assertEquals(
-                            actualChoices,
-                            Can.of("my choice"));
+                            Can.of("my choice"),
+                            actualChoices);
 
                 });
 
@@ -666,8 +666,8 @@ class DomainModelTest_usingGoodDomain {
                     val actualChoices =
                             pendingArgsThen.getObservableParamChoices(1).getValue().map(ManagedObject::getPojo);
                     assertEquals(
-                            actualChoices,
-                            Can.of("my search arg=hello"));
+                            Can.of("my search arg=hello"),
+                            actualChoices);
 
                 });
 
@@ -679,14 +679,14 @@ class DomainModelTest_usingGoodDomain {
                 pendingArgsWhen->{},
                 pendingArgsThen->{
                     assertEquals(
-                            pendingArgsThen.getObservableParamValidation(0).getValue(),
-                            "my validation-0");
+                            "my validation-0",
+                            pendingArgsThen.getObservableParamValidation(0).getValue());
                     assertEquals(
-                            pendingArgsThen.getObservableParamValidation(1).getValue(),
-                            "my validation-1");
+                            "my validation-1",
+                            pendingArgsThen.getObservableParamValidation(1).getValue());
                     assertEquals(
-                            pendingArgsThen.validateParameterSetForAction().getReason(),
-                            "my validation");
+                            "my validation",
+                            pendingArgsThen.validateParameterSetForAction().getReason());
                 });
 
         // namedEmail(): String = "my email"

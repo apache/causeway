@@ -64,6 +64,13 @@ public final class _ClassCache implements AutoCloseable {
         return _Context.computeIfAbsent(_ClassCache.class, _ClassCache::new);
     }
 
+    /**
+     * JUnit support.
+     */
+    public static void invalidate() {
+        _Context.put(_ClassCache.class, new _ClassCache(), true);
+    }
+
     public void add(final Class<?> type) {
         inspectType(type);
     }
@@ -197,11 +204,12 @@ public final class _ClassCache implements AutoCloseable {
 
                 val publicConstr = type.getConstructors();
                 val declaredFields = type.getDeclaredFields();
-                val declaredMethods = type.getDeclaredMethods();
+                val declaredMethods = //type.getDeclaredMethods(); ... cannot detect non overridden inherited methods
+                        Can.ofStream(_Reflect.streamAllMethods(type, true));
 
                 val model = new ClassModel(
                         Can.ofArray(declaredFields),
-                        Can.ofArray(declaredMethods));
+                        declaredMethods);
 
                 for(val constr : publicConstr) {
                     model.publicConstructorsByKey.put(ConstructorKey.of(type, constr), constr);
