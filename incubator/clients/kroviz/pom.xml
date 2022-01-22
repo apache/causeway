@@ -136,7 +136,7 @@
                         <configuration>
                             <executable>cp</executable>
                             <arguments>
-                                <argument>${project.basedir}/build/libs/*.jar</argument>
+                                <argument>${project.basedir}/build/libs/kroviz-${project.version}.jar</argument>
                                 <argument>${project.build.directory}</argument>
                             </arguments>
                         </configuration>
