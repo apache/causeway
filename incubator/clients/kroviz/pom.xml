@@ -109,10 +109,14 @@
                     <execution>
                         <id>gradle-build-jar</id>
                         <phase>process-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
                         <configuration>
                             <executable>${gradle.executable}</executable>
                             <arguments>
                                 <argument>clean</argument>
+                                <argument>build</argument>
                                 <argument>jar</argument>
                                 <argument>-Pgroup=${project.groupId}</argument>
                                 <argument>-Pversion=${project.version}</argument>
@@ -121,23 +125,35 @@
                                 <argument>${gradle.skipBrowserTests}</argument>
                             </arguments>
                         </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-jar</id>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
-                    </execution>
-                    <execution>
-                        <id>copy-and-rename-jar</id>
-                        <phase>package</phase>
                         <configuration>
                             <executable>cp</executable>
                             <arguments>
                                 <argument>${project.basedir}/build/libs/*.jar</argument>
-                                <argument>${project.build.directory}/${project.artifactId}-${project.version}.jar</argument>
+                                <argument>${project.build.directory}</argument>
                             </arguments>
                         </configuration>
+                    </execution>
+                    <execution>
+                        <id>rename-jar</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
+                        <configuration>
+                            <executable>mv</executable>
+                            <arguments>
+                                <argument>${project.build.directory}/kroviz-${project.version}.jar</argument>
+                                <argument>${project.build.directory}/${project.artifactId}-${project.version}.jar
+                                </argument>
+                            </arguments>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
