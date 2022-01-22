@@ -212,6 +212,11 @@
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-secman-shiro-realm</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.incubator.clients</groupId>
+			<artifactId>isis-client-kroviz</artifactId>
+			<version>2.0.0-SNAPSHOT</version>
+		</dependency>
 
 		<!-- OTHER DEPENDENCIES -->
 

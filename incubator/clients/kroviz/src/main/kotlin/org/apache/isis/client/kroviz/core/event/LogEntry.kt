@@ -58,9 +58,10 @@ data class LogEntry(
     val request: String = "",
     @Contextual val createdAt: Date = Date()
 ) {
-    val url: String = rs.url
-
-    val subType = rs.subType
+    val url: String = rs?.url
+        //?. is required, otherwise Tabulator.js/EventLogTable shows no entries
+    val subType = rs?.subType
+    //?. is required, otherwise Tabulator.js/EventLogTable shows no entries
     var state = EventState.INITIAL
     var title: String = ""
     var requestLength: Int = 0 // must be accessible (public) for LogEntryTable

@@ -27,33 +27,39 @@
 	<properties>
 	</properties>
 
-	<build>
-		<resources>
-			<resource>
-				<filtering>true</filtering>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>application.yml</include>
-				</includes>
-			</resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/java</directory>
-				<includes>
-					<!-- we include all .java too, so that we can reference it from the descriptions -->
-					<include>**</include>
-				</includes>
-			</resource>
-		</resources>
-	</build>
+    <build>
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>application.yml</include>
+                </includes>
+            </resource>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/java</directory>
+                <includes>
+                    <!-- we include all .java too, so that we can reference it from the descriptions -->
+                    <include>**</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
 
 	<dependencies>
 
 		<!-- EXTENSIONS -->
+
+		<dependency>
+			<groupId>org.apache.isis.incubator.clients</groupId>
+			<artifactId>isis-client-kroviz</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
@@ -106,7 +112,7 @@
             <groupId>org.apache.isis.valuetypes</groupId>
             <artifactId>isis-valuetypes-markdown-applib</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.apache.isis.extensions</groupId>
             <artifactId>isis-extensions-fullcalendar-applib</artifactId>
