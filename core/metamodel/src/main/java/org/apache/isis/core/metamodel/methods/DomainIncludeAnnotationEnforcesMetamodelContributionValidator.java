@@ -129,7 +129,7 @@ extends MetaModelVisitingValidatorAbstract {
                     .collect(Collectors.joining("; "));
 
             ValidationFailure.raiseFormatted(spec,
-                    "%s#%s: has annotation @%s, is assumed to support "
+                    "%s#%s: has synthesized (effective) annotation @%s, is assumed to support "
                             + "a property, collection or action. Unmet constraint(s): %s",
                     spec.getFeatureIdentifier().getClassName(),
                     _Reflect.methodToShortString(notPickedUpMethod),

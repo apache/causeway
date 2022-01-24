@@ -33,9 +33,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -67,6 +64,9 @@ import org.apache.isis.testdomain.model.bad.InvalidOrphanedPropertySupport;
 import org.apache.isis.testdomain.model.bad.InvalidPropertyAnnotationOnAction;
 import org.apache.isis.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 
@@ -116,7 +116,7 @@ class DomainModelTest_usingBadDomain {
     void orphanedActionSupport_shouldFail() {
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupport.class)),
-                "InvalidOrphanedActionSupport#hideOrphaned(): has annotation @Domain.Include, "
+                "InvalidOrphanedActionSupport#hideOrphaned(): has synthesized (effective) annotation @Domain.Include, "
                 + "is assumed to support");
 
         val tester = testerFactory.objectTester(InvalidOrphanedActionSupport.class);
@@ -130,7 +130,7 @@ class DomainModelTest_usingBadDomain {
     void orphanedPropertySupport_shouldFail() {
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedPropertySupport.class)),
-                "InvalidOrphanedPropertySupport#hideMyProperty(): has annotation @Domain.Include, "
+                "InvalidOrphanedPropertySupport#hideMyProperty(): has synthesized (effective) annotation @Domain.Include, "
                 + "is assumed to support");
 
         val tester = testerFactory.objectTester(InvalidOrphanedPropertySupport.class);
@@ -143,7 +143,7 @@ class DomainModelTest_usingBadDomain {
     void orphanedCollectionSupport_shouldFail() {
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedCollectionSupport.class)),
-                "InvalidOrphanedCollectionSupport#hideMyCollection(): has annotation @Domain.Include, "
+                "InvalidOrphanedCollectionSupport#hideMyCollection(): has synthesized (effective) annotation @Domain.Include, "
                 + "is assumed to support");
 
         val tester = testerFactory.objectTester(InvalidOrphanedCollectionSupport.class);
@@ -177,17 +177,17 @@ class DomainModelTest_usingBadDomain {
 //        validator.assertAnyFailuresContaining(
 //                Identifier.classIdentifier(LogicalType.fqcn(
 //                        InvalidMemberOverloadingWhenInherited.WhenAnnotationOptional.class)),
-//                "#isActive(): has annotation @Domain.Include, is assumed to support a property");
+//                "#isActive(): has synthesized (effective) annotation @Domain.Include, is assumed to support a property");
 
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(
                         InvalidMemberOverloadingWhenInherited.WhenAnnotationRequired.class)),
-                "#isActive(): has annotation @Domain.Include, is assumed to support a property");
+                "#isActive(): has synthesized (effective) annotation @Domain.Include, is assumed to support a property");
 
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(
                         InvalidMemberOverloadingWhenInherited.WhenEncapsulationEnabled.class)),
-                "#isActive(): has annotation @Domain.Include, is assumed to support a property");
+                "#isActive(): has synthesized (effective) annotation @Domain.Include, is assumed to support a property");
     }
 
     @Test
