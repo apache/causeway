@@ -142,7 +142,8 @@ public class ProperMemberSupportDiscovery {
     @DomainObject(
             nature = Nature.VIEW_MODEL,
             introspection = Introspection.ANNOTATION_OPTIONAL)
-    public static class WhenAnnotationOptional {
+    public static class WhenAnnotationOptional
+    extends PublicBase {
 
         // no annotation required, should be picked up as action
         public void placeOrder(final String x, final String y) {

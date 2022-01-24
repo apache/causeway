@@ -32,13 +32,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import org.apache.isis.applib.annotation.Introspection.EncapsulationPolicy;
 import org.apache.isis.applib.annotation.Introspection.MemberAnnotationPolicy;
 import org.apache.isis.applib.services.jaxb.JaxbService;
@@ -86,6 +79,13 @@ import org.apache.isis.testdomain.model.good.ViewModelWithAnnotationOptionalUsin
 import org.apache.isis.testdomain.model.good.ViewModelWithEncapsulatedMembers;
 import org.apache.isis.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.val;
 
@@ -582,7 +582,7 @@ class DomainModelTest_usingGoodDomain {
     @ValueSource(classes = {
             ProperMemberSupportDiscovery.WhenEncapsulationEnabled.class,
             ProperMemberSupportDiscovery.WhenAnnotationRequired.class,
-            //FIXME ProperMemberSupportDiscovery.WhenAnnotationOptional.class
+            ProperMemberSupportDiscovery.WhenAnnotationOptional.class
             })
     void properMemberSupportDiscovery(final Class<?> classUnderTest) {
 
