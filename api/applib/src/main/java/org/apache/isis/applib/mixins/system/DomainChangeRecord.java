@@ -70,8 +70,9 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
      * this change occurred.
      */
     @Override
-    @Property
-    @PropertyLayout(fieldSetId="Identifiers",sequence = "50")
+//TODO marked @Programmatic in CommandJdo/Jpa, hence commented out, to avoid conflicting domain-include semantics
+//    @Property
+//    @PropertyLayout(fieldSetId="Identifiers",sequence = "50")
     UUID getInteractionId();
 
 
