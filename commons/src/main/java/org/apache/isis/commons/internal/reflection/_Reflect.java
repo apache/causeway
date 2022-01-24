@@ -245,6 +245,11 @@ public final class _Reflect {
         return _NullSafe.stream(type.getMethods());
     }
 
+    public static Stream<Method> streamInheritedMethods(final Method method) {
+        return streamAllMethods(method.getDeclaringClass(), true)
+                .filter(candidateMethod->methodsSame(candidateMethod, method));
+    }
+
     /**
      * Stream all methods of given {@code type}, up the super class hierarchy.
      * @param type (nullable)
@@ -253,8 +258,7 @@ public final class _Reflect {
      */
     public static Stream<Method> streamAllMethods(
             final @Nullable Class<?> type,
-            final boolean ignoreAccess
-            ) {
+            final boolean ignoreAccess) {
 
         return streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
                 .filter(t->!t.equals(Object.class)) // do not process Object class.

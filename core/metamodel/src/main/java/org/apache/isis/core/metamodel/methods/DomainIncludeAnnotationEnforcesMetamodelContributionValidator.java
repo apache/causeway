@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.methods;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeSet;
 import java.util.function.Predicate;
@@ -119,14 +120,14 @@ extends MetaModelVisitingValidatorAbstract {
         .forEach(methodsIntendedToBeIncludedButNotPickedUp::add);
 
         // find reasons about why these are not recognized
-        methodsIntendedToBeIncludedButNotPickedUp
+        methodsIntendedToBeIncludedButNotPickedUp.stream()
         .forEach(notPickedUpMethod->{
+
             val unmetContraints =
                     unmetContraints((ObjectSpecificationAbstract) spec, notPickedUpMethod)
                     .stream()
                     .collect(Collectors.joining("; "));
 
-            //FIXME[ISIS-2774] - update message to a more generic one
             ValidationFailure.raiseFormatted(spec,
                     "%s#%s: has annotation @%s, is assumed to support "
                             + "a property, collection or action. Unmet constraint(s): %s",
@@ -156,11 +157,24 @@ extends MetaModelVisitingValidatorAbstract {
             return unmetContraints; // don't check any further
         }
 
-        unmetContraints.add("misspelled prefix or unsupported method signature");
+        // find any inherited methods that have Domain.Include semantics
+        val inheritedMethodsWithDomainIncludeSemantics =
+            _Reflect.streamInheritedMethods(method)
+            .filter(m->!Objects.equals(method.toString(), m.toString())) // exclude self
+            .filter(m->_Annotations.synthesizeInherited(m, Domain.Include.class).isPresent())
+            .collect(Collectors.toSet());
+
+        if(!inheritedMethodsWithDomainIncludeSemantics.isEmpty()) {
+            unmetContraints.add("inherited method(s) having conflicting domain-include semantics: "
+                    + inheritedMethodsWithDomainIncludeSemantics);
+            return unmetContraints; // don't check any further
+        }
+
+        // fallback message
+        unmetContraints.add("conflicting domain-include semantics, "
+                + "misspelled prefix or unsupported method signature");
         return unmetContraints;
 
     }
-
-
 
 }
