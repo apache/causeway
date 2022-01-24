@@ -30,6 +30,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
@@ -63,6 +64,7 @@ import org.apache.isis.testdomain.model.bad.InvalidOrphanedActionSupport;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedCollectionSupport;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedPropertySupport;
 import org.apache.isis.testdomain.model.bad.InvalidPropertyAnnotationOnAction;
+import org.apache.isis.testdomain.model.bad.OrphanedMemberSupportDetection;
 import org.apache.isis.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
 
@@ -268,6 +270,95 @@ class DomainModelTest_usingBadDomain {
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidDomainObjectOnInterface.class)),
                 "Cannot use @DomainObject on interface:");
+    }
+
+    @ParameterizedTest
+    @ValueSource(classes = {
+            OrphanedMemberSupportDetection.WhenEncapsulationEnabled.class,
+            //FIXME OrphanedMemberSupportDetection.WhenAnnotationRequired.class,
+            OrphanedMemberSupportDetection.WhenAnnotationOptional.class
+            })
+    void orphanedMemberSupportDiscovery(final Class<?> classUnderTest) {
+
+        val clsIdUnderTest = Identifier.classIdentifier(LogicalType.fqcn(classUnderTest));
+
+        // namedPlaceOrder(): String = "my name"
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "namedPlaceOrder");
+
+        // describedPlaceOrder(): String = "my description"
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "describedPlaceOrder");
+
+        // hidePlaceOrder(): boolean = false
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "hidePlaceOrder");
+
+        // disablePlaceOrder(): String = "my disable reason"
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "disablePlaceOrder");
+
+        // default0PlaceOrder(): String = "my default-0"
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "default0PlaceOrder");
+        // default1PlaceOrder(): String = "my default-1"
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "default1PlaceOrder");
+
+        // hide0PlaceOrder(x): boolean = true
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "hide0PlaceOrder");
+        // hide1PlaceOrder(y): boolean = false
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "hide1PlaceOrder");
+
+        // disable0PlaceOrder(x): String = "my disable reason-0"
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "disable0PlaceOrder");
+        // disable1PlaceOrder(z): String = "my disable reason-1"
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "disable1PlaceOrder");
+
+        // choices0PlaceOrder(x): List.of("my choice")
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "choices0PlaceOrder");
+
+        // autoComplete1PlaceOrder(y, search): List.of("my search arg=" + search)
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "autoComplete1PlaceOrder");
+
+        // validate0PlaceOrder(String x): String = "my validation-0"
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "validate0PlaceOrder");
+        // validate1PlaceOrder(String y): String = "my validation-1"
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "validate1PlaceOrder");
+        // validatePlaceOrder(String x, final String y): String = "my validation"
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "validatePlaceOrder");
+
+        // -- PROPERTY
+
+        // namedEmail(): String = "my email"
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "namedEmail");
+
+        // describedEmail: String = "my email described"
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "describedEmail");
+
+        // hideEmail(): boolean = true
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "hideEmail");
+
+        // disableEmail(): String = "my email disable"
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "disableEmail");
+
+        // defaultEmail(): String = "my default email"
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "defaultEmail");
+
+        // choicesEmail(): Collection<String> = List.of("my email choice")
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "choicesEmail");
+
+        // validateEmail(final String email): String = "my email validate"
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "validateEmail");
+
+        // -- COLLECTION
+
+        // namedOrders(): String = "my orders"
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "namedOrders");
+
+        // describedOrders: String = "my orders described"
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "describedOrders");
+
+        // hideOrders(): boolean = true
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "hideOrders");
+
+        // disableOrders(): String = "my orders disabled"
+        validator.assertAnyFailuresContaining(clsIdUnderTest, "disableOrders");
+
     }
 
     // -- INCUBATING

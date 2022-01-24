@@ -16,38 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.model.good;
+package org.apache.isis.testdomain.model.bad;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Introspection;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.testdomain.model.base.MemberDetection;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+public class OrphanedMemberSupportDetection {
 
-public class ProperMemberSupportDiscovery {
 
-     @DomainObject(
+    @DomainObject(
             nature = Nature.VIEW_MODEL,
             introspection = Introspection.ANNOTATION_OPTIONAL)
     public static class WhenAnnotationOptional
     extends MemberDetection.PublicBase {
 
-        // no annotation required, should be picked up as action
-        public void placeOrder(final String x, final String y) {
-        }
+        // expected to produce orphans for ...
 
-        @Getter @Setter
-        private String email;
-
-        @Getter @Setter
-        private java.util.Collection<String> orders;
-
+        // void placeOrder(final String x, final String y) {}
+        // @Getter @Setter String email;
+        // @Getter @Setter java.util.Collection<String> orders;
     }
 
     @DomainObject(
@@ -56,19 +45,11 @@ public class ProperMemberSupportDiscovery {
     public static class WhenAnnotationRequired
     extends MemberDetection.PublicBase {
 
-        // annotation required, otherwise not picked up as action
-        @Action
-        public void placeOrder(final String x, final String y) {
-        }
+        // expected to produce orphans for ...
 
-        @Property
-        @Getter @Setter
-        private String email;
-
-        @Collection
-        @Getter @Setter
-        private java.util.Collection<String> orders;
-
+        // void placeOrder(final String x, final String y) {}
+        // @Getter @Setter String email;
+        // @Getter @Setter java.util.Collection<String> orders;
     }
 
     @DomainObject(
@@ -77,22 +58,11 @@ public class ProperMemberSupportDiscovery {
     public static class WhenEncapsulationEnabled
     extends MemberDetection.ProtectedBase {
 
-        // annotation required, otherwise not picked up as action
-        @Action
-        //@Override
-        protected void placeOrder(final String x, final String y) {
-        }
+        // expected to produce orphans for ...
 
-        @Property
-        @Getter(AccessLevel.PROTECTED) @Setter(AccessLevel.PROTECTED)
-        private String email;
-
-        @Collection
-        @Getter(AccessLevel.PROTECTED) @Setter(AccessLevel.PROTECTED)
-        private java.util.Collection<String> orders;
-
+        // void placeOrder(final String x, final String y) {}
+        // @Getter @Setter String email;
+        // @Getter @Setter java.util.Collection<String> orders;
     }
 
-
 }
-

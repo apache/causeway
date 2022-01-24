@@ -175,7 +175,7 @@ extends MetaModelVisitingValidatorAbstract {
         }
 
         // fallback message
-        unmetContraints.add("conflicting domain-include semantics, "
+        unmetContraints.add("conflicting domain-include semantics, orphaned support method, "
                 + "misspelled prefix or unsupported method signature");
         return unmetContraints;
 
