@@ -48,6 +48,7 @@ import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.isis.core.metamodel.methods.DomainIncludeAnnotationEnforcesMetamodelContributionValidator;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.bad.AmbiguousMixinAnnotations;
@@ -116,8 +117,10 @@ class DomainModelTest_usingBadDomain {
     void orphanedActionSupport_shouldFail() {
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupport.class)),
-                "InvalidOrphanedActionSupport#hideOrphaned(): has synthesized (effective) annotation @Domain.Include, "
-                + "is assumed to support");
+                validationMessage(
+                        "InvalidOrphanedActionSupport",
+                        "hideOrphaned()",
+                        "Domain.Include"));
 
         val tester = testerFactory.objectTester(InvalidOrphanedActionSupport.class);
 
@@ -130,8 +133,10 @@ class DomainModelTest_usingBadDomain {
     void orphanedPropertySupport_shouldFail() {
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedPropertySupport.class)),
-                "InvalidOrphanedPropertySupport#hideMyProperty(): has synthesized (effective) annotation @Domain.Include, "
-                + "is assumed to support");
+                validationMessage(
+                        "InvalidOrphanedPropertySupport",
+                        "hideMyProperty()",
+                        "Domain.Include"));
 
         val tester = testerFactory.objectTester(InvalidOrphanedPropertySupport.class);
 
@@ -143,8 +148,10 @@ class DomainModelTest_usingBadDomain {
     void orphanedCollectionSupport_shouldFail() {
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedCollectionSupport.class)),
-                "InvalidOrphanedCollectionSupport#hideMyCollection(): has synthesized (effective) annotation @Domain.Include, "
-                + "is assumed to support");
+                validationMessage(
+                        "InvalidOrphanedCollectionSupport",
+                        "hideMyCollection()",
+                        "Domain.Include"));
 
         val tester = testerFactory.objectTester(InvalidOrphanedCollectionSupport.class);
 
@@ -182,12 +189,18 @@ class DomainModelTest_usingBadDomain {
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(
                         InvalidMemberOverloadingWhenInherited.WhenAnnotationRequired.class)),
-                "#isActive(): has synthesized (effective) annotation @Domain.Include, is assumed to support a property");
+                validationMessage(
+                        "",
+                        "isActive()",
+                        "Domain.Include"));
 
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(
                         InvalidMemberOverloadingWhenInherited.WhenEncapsulationEnabled.class)),
-                "#isActive(): has synthesized (effective) annotation @Domain.Include, is assumed to support a property");
+                validationMessage(
+                        "",
+                        "isActive()",
+                        "Domain.Include"));
     }
 
     @Test
@@ -276,4 +289,18 @@ class DomainModelTest_usingBadDomain {
 //                OrphanedPrefixedAction.class,
 //                "is assumed to support"));
 //    }
+
+    // -- HELPER
+
+    private String validationMessage(
+            final String className,
+            final String memberName,
+            final String annotationName) {
+        return String.format(
+                DomainIncludeAnnotationEnforcesMetamodelContributionValidator.VALIDATION_MESSAGE_TEMPLATE,
+                className,
+                memberName,
+                annotationName);
+    }
+
 }

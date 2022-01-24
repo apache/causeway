@@ -58,6 +58,11 @@ extends MetaModelVisitingValidatorAbstract {
 
     private final _ClassCache classCache;
 
+    /** exposed in support of JUnit tests */
+    public static String VALIDATION_MESSAGE_TEMPLATE = "%s#%s: "
+            + "has synthesized (effective) annotation @%s, "
+            + "is assumed to represent or support a property, collection or action.";
+
     @Inject
     public DomainIncludeAnnotationEnforcesMetamodelContributionValidator(final MetaModelContext mmc) {
         super(mmc);
@@ -129,8 +134,7 @@ extends MetaModelVisitingValidatorAbstract {
                     .collect(Collectors.joining("; "));
 
             ValidationFailure.raiseFormatted(spec,
-                    "%s#%s: has synthesized (effective) annotation @%s, is assumed to support "
-                            + "a property, collection or action. Unmet constraint(s): %s",
+                    VALIDATION_MESSAGE_TEMPLATE + " Unmet constraint(s): %s",
                     spec.getFeatureIdentifier().getClassName(),
                     _Reflect.methodToShortString(notPickedUpMethod),
                     "Domain.Include",
