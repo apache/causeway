@@ -320,13 +320,21 @@ public final class ProgrammingModelConstants {
                 + "consider either removing the @Title annotation or renaming the method"),
         ORPHANED_METHOD("${type}#${member}: is public, but orphaned (was not picked up by the framework); "
                 + "reporting orphans, because the class is setup for member introspection, "
-                + "without enforcing annotations")
+                + "without enforcing annotations"),
+        UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS("${type}#${member}: "
+                + "has synthesized (effective) annotation @Domain.Include, "
+                + "is assumed to represent or support a property, collection or action.");
         ;
         private final String template;
         public String getMessage(final Identifier featureIdentifier) {
+            return getMessageForTypeAndMemberId(
+                    featureIdentifier.getLogicalType().getClassName(),
+                    featureIdentifier.getMemberLogicalName());
+        }
+        public String getMessageForTypeAndMemberId(final String type, final String memberId) {
             return getMessage(Map.of(
-                    "type", featureIdentifier.getLogicalType().getClassName(),
-                    "member", featureIdentifier.getMemberLogicalName()));
+                    "type", type,
+                    "member", memberId));
         }
         public String getMessage(final Map<String, String> templateVars) {
             return processMessageTemplate(template, templateVars);

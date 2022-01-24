@@ -49,7 +49,7 @@ import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
-import org.apache.isis.core.metamodel.methods.DomainIncludeAnnotationEnforcesMetamodelContributionValidator;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.Validation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.bad.AmbiguousMixinAnnotations;
@@ -121,8 +121,7 @@ class DomainModelTest_usingBadDomain {
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupport.class)),
                 validationMessage(
                         "InvalidOrphanedActionSupport",
-                        "hideOrphaned()",
-                        "Domain.Include"));
+                        "hideOrphaned()"));
 
         val tester = testerFactory.objectTester(InvalidOrphanedActionSupport.class);
 
@@ -137,8 +136,7 @@ class DomainModelTest_usingBadDomain {
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedPropertySupport.class)),
                 validationMessage(
                         "InvalidOrphanedPropertySupport",
-                        "hideMyProperty()",
-                        "Domain.Include"));
+                        "hideMyProperty()"));
 
         val tester = testerFactory.objectTester(InvalidOrphanedPropertySupport.class);
 
@@ -152,8 +150,7 @@ class DomainModelTest_usingBadDomain {
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedCollectionSupport.class)),
                 validationMessage(
                         "InvalidOrphanedCollectionSupport",
-                        "hideMyCollection()",
-                        "Domain.Include"));
+                        "hideMyCollection()"));
 
         val tester = testerFactory.objectTester(InvalidOrphanedCollectionSupport.class);
 
@@ -193,16 +190,14 @@ class DomainModelTest_usingBadDomain {
                         InvalidMemberOverloadingWhenInherited.WhenAnnotationRequired.class)),
                 validationMessage(
                         "",
-                        "isActive()",
-                        "Domain.Include"));
+                        "isActive()"));
 
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(
                         InvalidMemberOverloadingWhenInherited.WhenEncapsulationEnabled.class)),
                 validationMessage(
                         "",
-                        "isActive()",
-                        "Domain.Include"));
+                        "isActive()"));
     }
 
     @Test
@@ -275,7 +270,7 @@ class DomainModelTest_usingBadDomain {
     @ParameterizedTest
     @ValueSource(classes = {
             OrphanedMemberSupportDetection.WhenEncapsulationEnabled.class,
-            //FIXME OrphanedMemberSupportDetection.WhenAnnotationRequired.class,
+            OrphanedMemberSupportDetection.WhenAnnotationRequired.class,
             OrphanedMemberSupportDetection.WhenAnnotationOptional.class
             })
     void orphanedMemberSupportDiscovery(final Class<?> classUnderTest) {
@@ -385,13 +380,9 @@ class DomainModelTest_usingBadDomain {
 
     private String validationMessage(
             final String className,
-            final String memberName,
-            final String annotationName) {
-        return String.format(
-                DomainIncludeAnnotationEnforcesMetamodelContributionValidator.VALIDATION_MESSAGE_TEMPLATE,
-                className,
-                memberName,
-                annotationName);
+            final String memberName) {
+        return Validation.UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS
+                .getMessageForTypeAndMemberId(className, memberName);
     }
 
 }

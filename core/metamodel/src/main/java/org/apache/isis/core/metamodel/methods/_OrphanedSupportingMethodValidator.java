@@ -42,8 +42,8 @@ class _OrphanedSupportingMethodValidator {
                 || spec.getBeanSort().isManagedBeanNotContributing()
                 || spec.isValue()
                 || spec.getIntrospectionPolicy()
-                    .getMemberAnnotationPolicy()
-                    .isMemberAnnotationsRequired()) {
+                    .getSupportMethodAnnotationPolicy()
+                    .isSupportMethodAnnotationsRequired()) {
             return; // ignore
         }
 

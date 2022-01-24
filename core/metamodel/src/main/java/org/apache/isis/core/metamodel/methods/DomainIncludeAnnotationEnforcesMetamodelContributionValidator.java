@@ -35,6 +35,7 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.commons.internal.reflection._ClassCache;
 import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.Validation;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -57,11 +58,6 @@ public class DomainIncludeAnnotationEnforcesMetamodelContributionValidator
 extends MetaModelVisitingValidatorAbstract {
 
     private final _ClassCache classCache;
-
-    /** exposed in support of JUnit tests */
-    public static String VALIDATION_MESSAGE_TEMPLATE = "%s#%s: "
-            + "has synthesized (effective) annotation @%s, "
-            + "is assumed to represent or support a property, collection or action.";
 
     @Inject
     public DomainIncludeAnnotationEnforcesMetamodelContributionValidator(final MetaModelContext mmc) {
@@ -134,10 +130,12 @@ extends MetaModelVisitingValidatorAbstract {
                     .collect(Collectors.joining("; "));
 
             ValidationFailure.raiseFormatted(spec,
-                    VALIDATION_MESSAGE_TEMPLATE + " Unmet constraint(s): %s",
-                    spec.getFeatureIdentifier().getClassName(),
-                    _Reflect.methodToShortString(notPickedUpMethod),
-                    "Domain.Include",
+                    Validation.UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS
+                    .getMessageForTypeAndMemberId(
+                            spec.getFeatureIdentifier().getClassName(),
+                            _Reflect.methodToShortString(notPickedUpMethod)
+                            )
+                    + " Unmet constraint(s): %s",
                     unmetContraints);
         });
 

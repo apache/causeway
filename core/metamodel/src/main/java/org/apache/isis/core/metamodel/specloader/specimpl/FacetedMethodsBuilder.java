@@ -33,8 +33,8 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -491,7 +491,6 @@ implements HasMetaModelContext {
         // exclude those that have eg. reserved prefixes
         if (getFacetProcessor().recognizes(actionMethod)) {
             // this is a potential orphan candidate, collect these, than use when validating
-
             inspectedTypeSpec.getPotentialOrphans().add(actionMethod);
             return false;
         }
