@@ -119,10 +119,8 @@
                                 <argument>clean</argument>
                                 <argument>build</argument>
                                 <argument>jar</argument>
-                                <argument>-Pgroup=${project.groupId}</argument>
                                 <argument>-Pversion=${project.version}</argument>
                                 <argument>-S</argument>
-                                <argument>${gradle.skipTests}</argument>
                                 <argument>${gradle.skipBrowserTests}</argument>
                             </arguments>
                         </configuration>

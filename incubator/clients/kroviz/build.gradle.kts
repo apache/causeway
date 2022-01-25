@@ -27,8 +27,7 @@ plugins {
     id("io.kvision") version kvisionVersion
 }
 
-version = "2.0.0-SNAPSHOT"
-group = "org.apache.isis.client"
+var version = "2.0.0-SNAPSHOT"
 
 kotlin.sourceSets.all {
     languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
@@ -136,4 +135,5 @@ afterEvaluate {
             outputs.file(archiveFile)
         }
     }
+
 }
