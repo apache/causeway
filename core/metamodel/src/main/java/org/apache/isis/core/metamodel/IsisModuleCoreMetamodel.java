@@ -48,6 +48,7 @@ import org.apache.isis.core.metamodel.services.tablecol.TableColumnOrderServiceU
 import org.apache.isis.core.metamodel.services.title.TitleServiceDefault;
 import org.apache.isis.core.metamodel.specloader.ProgrammingModelServiceDefault;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
+import org.apache.isis.core.metamodel.valuesemantics.ApplicationFeatureIdValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.BigIntegerValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.BlobValueSemantics;
@@ -145,6 +146,8 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         JavaSqlTimeValueSemantics.class,
         JavaSqlTimeStampValueSemantics.class,
         JavaUtilDateValueSemantics.class,
+        // Value Semantics (meta-model)
+        ApplicationFeatureIdValueSemantics.class,
 
         // @Service's
         ObjectManagerDefault.class,
