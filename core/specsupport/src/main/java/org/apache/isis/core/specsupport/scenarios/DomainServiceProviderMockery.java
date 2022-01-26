@@ -71,7 +71,7 @@ class DomainServiceProviderMockery implements DomainServiceProvider {
                         }
                     });
                     
-                    allowing(mockContainer).persistIfNotAlready(with(anything()));
+                    allowing(mockContainer).persistIfNotAlready(anything());
                 }
             });
         }
