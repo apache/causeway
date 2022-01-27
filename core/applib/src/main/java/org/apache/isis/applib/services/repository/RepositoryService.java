@@ -20,6 +20,7 @@
 package org.apache.isis.applib.services.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.google.common.base.Predicate;
 
@@ -51,6 +52,7 @@ public interface RepositoryService {
      * convenience because instantiating and {@link #persist(Object) persisting} are often done together.
      */
     @Programmatic
+    @Deprecated
     <T> T instantiate(final Class<T> ofType);
 
     /**
@@ -58,6 +60,7 @@ public interface RepositoryService {
      * in the object store).
      */
     @Programmatic
+    @Deprecated
     boolean isPersistent(Object domainObject);
 
     /**
@@ -174,11 +177,9 @@ public interface RepositoryService {
      * instances.  Use {@link #firstMatch(Query)} for production code.
      * </p>
      *
-     * @deprecated - use {@link #uniqueMatch(Class, Predicate)} or {@link #allMatches(Class, Predicate, long...)}
      */
-    @Deprecated
     @Programmatic
-    <T> T firstMatch(final Class<T> ofType, final Predicate<T> predicate);
+    <T> Optional<T> firstMatch(final Class<T> ofType, final Predicate<T> predicate);
 
     /**
      * Returns the first instance that matches the supplied query, or <tt>null</tt> if none.
@@ -190,11 +191,9 @@ public interface RepositoryService {
      *
      * @see #uniqueMatch(Query)
      *
-     * @deprecated - use {@link #uniqueMatch(Query)} or {@link #allMatches(Query)}.
      */
-    @Deprecated
     @Programmatic
-    <T> T firstMatch(Query<T> query);
+    <T> Optional<T> firstMatch(Query<T> query);
 
     /**
      * Find the only instance of the specified type (including subtypes) that
@@ -211,7 +210,7 @@ public interface RepositoryService {
      * </p>
      */
     @Programmatic
-    <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate);
+    <T> Optional<T> uniqueMatch(final Class<T> ofType, final Predicate<T> predicate);
 
     /**
      * Find the only instance that matches the provided query.
@@ -228,7 +227,7 @@ public interface RepositoryService {
      * @see #firstMatch(Query)
      */
     @Programmatic
-    <T> T uniqueMatch(Query<T> query);
+    <T> Optional<T> uniqueMatch(Query<T> query);
 
 
 }
