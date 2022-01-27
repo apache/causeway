@@ -18,8 +18,6 @@
  */
 package org.apache.isis.testdomain.model.valuetypes.composite;
 
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -41,6 +39,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
+import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEventSemanticsProvider;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -85,20 +84,10 @@ public class CalendarEventJaxbVm {
     public static CalendarEventJaxbVm setUpViewmodelWith3CalendarEvents(final FactoryService factoryService) {
         val sampleVm = factoryService.viewModel(new CalendarEventJaxbVm());
 
-        val a = CalendarEvent.of(
-                ZonedDateTime.of(2022, 05, 13, 17, 30, 15, 0, ZoneOffset.ofHours(3)),
-                "a-name",
-                "a-title");
-
-        val b = CalendarEvent.of(
-                ZonedDateTime.of(2022, 06, 14, 18, 31, 16, 0, ZoneOffset.ofHours(4)),
-                "b-name",
-                "b-title");
-
-        val c = CalendarEvent.of(
-                ZonedDateTime.of(2022, 07, 15, 19, 32, 17, 0, ZoneOffset.ofHours(5)),
-                "c-name",
-                "c-title");
+        val eventSamples = new CalendarEventSemanticsProvider().getExamples();
+        val a = eventSamples.getElseFail(0);
+        val b = eventSamples.getElseFail(1);
+        val c = eventSamples.getElseFail(2);
 
         sampleVm.setNextEvent(a);
         sampleVm.setEvents(List.of(a, b, c));

@@ -25,6 +25,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.springframework.lang.Nullable;
 
@@ -46,6 +47,7 @@ import lombok.With;
  */
 @org.apache.isis.applib.annotation.Value(
         logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.CalendarEvent")
+@XmlJavaTypeAdapter(CalendarEvent.JaxbAdapter.class)
 @Getter @With
 @ToString @EqualsAndHashCode
 @AllArgsConstructor
