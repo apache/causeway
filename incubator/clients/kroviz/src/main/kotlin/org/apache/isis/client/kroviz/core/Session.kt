@@ -35,9 +35,7 @@ class Session {
         this.user = user
         this.pw = pw
         this.baseUrl = url
-        if (url.contains("8080")) {
-            this.resString = Constants.demoImage as ResString
-        } else {
+        if (url.contains("incode")) {
             this.resString = Constants.demoRemoteImage as ResString
         }
     }

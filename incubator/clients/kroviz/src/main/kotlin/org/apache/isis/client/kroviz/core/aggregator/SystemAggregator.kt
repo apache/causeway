@@ -23,6 +23,7 @@ import org.apache.isis.client.kroviz.core.model.SystemDM
 import org.apache.isis.client.kroviz.to.DomainTypes
 import org.apache.isis.client.kroviz.to.User
 import org.apache.isis.client.kroviz.to.Version
+import org.apache.isis.client.kroviz.ui.core.SessionManager
 import org.apache.isis.client.kroviz.utils.ImageUtils
 import org.apache.isis.client.kroviz.utils.UrlUtils
 
@@ -33,7 +34,6 @@ class SystemAggregator() : BaseAggregator() {
     }
 
     override fun update(logEntry: LogEntry, subType: String) {
-
         when (val obj = logEntry.getTransferObject()) {
             is User -> dpm.addData(obj)
             is Version -> dpm.addData(obj)
@@ -44,12 +44,16 @@ class SystemAggregator() : BaseAggregator() {
                     val url = logEntry.url
                     val isApplicationIcon = UrlUtils.isApplicationIcon(url)
                     when (isApplicationIcon) {
-                        url.contains("48") -> (dpm as SystemDM).addSmallIcon(icon)
+                        url.contains("48") -> {
+                            (dpm as SystemDM).addSmallIcon(icon)
+                            val iconUrl = icon.image.src
+                            SessionManager.setApplicationIcon(iconUrl)
+                        }
                         url.contains("256") -> (dpm as SystemDM).addLargeIcon(icon)
                         else -> log(logEntry)
                     }
                 } else {
-                    console.log("[SA.update] TODO ISIS-2768 no blob/image due to CORS")
+                    console.log("[SA.update] blob/image is null")
                 }
             }
         }

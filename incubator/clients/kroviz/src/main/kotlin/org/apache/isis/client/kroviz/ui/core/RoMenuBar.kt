@@ -75,14 +75,17 @@ class RoMenuBar : SimplePanel() {
     }
 
     private fun mainEntryContains(baseUrl: String): Boolean {
+        val link = findEntryBy(baseUrl)
+        return (link != null)
+    }
+
+    private fun findEntryBy(baseUrl: String): Link? {
         mainEntry.getChildren().forEach {
             if (it is Link) {
-                if ((it as Link).label == baseUrl) {
-                    return true
-                }
+                if (it.label == baseUrl) return it
             }
         }
-        return false
+        return null
     }
 
     fun switch(session: Session) {
@@ -95,6 +98,14 @@ class RoMenuBar : SimplePanel() {
             amendMenu(menuBars)
         }
         ViewManager.setNormalCursor()
+    }
+
+    fun updateIcon(session: Session) {
+        val resString = session.resString
+        mainEntry.image = resString
+        val baseUrl = session.baseUrl
+        val link = findEntryBy(baseUrl)
+        link?.image = resString
     }
 
     private fun buildMenuEntryWithImage(label: String, image: ResString?, action: dynamic): Link {

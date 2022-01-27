@@ -62,4 +62,11 @@ object SessionManager {
         return activeSession?.getCredentials()
     }
 
+    fun setApplicationIcon(iconUrl: String) {
+        console.log("[SM.setApplicationIcon] $iconUrl")
+        activeSession?.resString = iconUrl
+        val menuBar = ViewManager.getRoApp().roMenuBar
+        menuBar.updateIcon(activeSession!!)
+    }
+
 }

@@ -32,7 +32,7 @@ object ImageUtils {
         return Icon(image)
     }
 
-    fun Blob.toImage(): Image {
+    private fun Blob.toImage(): Image {
         val url = URL.createObjectURL(this)
         val image = Image()
         image.src = url
