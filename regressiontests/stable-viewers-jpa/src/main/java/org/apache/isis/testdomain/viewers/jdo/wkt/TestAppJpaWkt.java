@@ -31,6 +31,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.ObjectSupport;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.internal.debug.xray.XrayEnable;
 import org.apache.isis.core.config.presets.IsisPresets;
@@ -38,6 +39,7 @@ import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.conf.Configuration_usingWicket;
 import org.apache.isis.testdomain.jpa.JpaInventoryJaxbVm;
 import org.apache.isis.testdomain.jpa.JpaTestFixtures;
+import org.apache.isis.testdomain.model.valuetypes.composite.CalendarEventJaxbVm;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
 /**
@@ -75,6 +77,7 @@ public class TestAppJpaWkt extends SpringBootServletInitializer {
 
         @Inject UserService userService;
         @Inject JpaTestFixtures testFixtures;
+        @Inject FactoryService factoryService;
 
         @ObjectSupport public String title() {
             return "Hello, " + userService.currentUserNameElseNobody();
@@ -89,6 +92,11 @@ public class TestAppJpaWkt extends SpringBootServletInitializer {
         @Action @ActionLayout(sequence = "0.2")
         public JpaInventoryJaxbVm openSamplePage() {
             return testFixtures.setUpViewmodelWith3Books();
+        }
+
+        @Action @ActionLayout(sequence = "0.3")
+        public CalendarEventJaxbVm openCalendarEventSamplePage() {
+            return CalendarEventJaxbVm.setUpViewmodelWith3CalendarEvents(factoryService);
         }
 
     }
