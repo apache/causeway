@@ -94,6 +94,15 @@ public interface RepositoryService {
     void remove(Object domainObject);
 
     /**
+     * Removes all instances of the domain object.
+     *
+     * <p>
+     *     Intended primarily for testing purposes.
+     * </p>
+     */
+    <T> void removeAll(Class<T> cls);
+
+    /**
      * Deletes the domain object but only if is persistent, and flushes changes to the database.
      *
      * @param domainObject

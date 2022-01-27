@@ -114,6 +114,12 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
         removeIfNotAlready(domainObject);
     }
 
+    @Override
+    @Programmatic
+    public <T> void removeAll(final Class<T> cls) {
+        this.allInstances(cls).forEach(this::remove);
+    }
+
     private void removeIfNotAlready(final Object object) {
         if (!isPersistent(object)) {
             return;
