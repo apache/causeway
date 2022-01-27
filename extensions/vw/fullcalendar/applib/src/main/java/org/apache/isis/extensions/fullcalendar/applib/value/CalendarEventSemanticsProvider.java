@@ -21,6 +21,8 @@ package org.apache.isis.extensions.fullcalendar.applib.value;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
@@ -96,8 +98,23 @@ implements
 
     @Override
     public Can<CalendarEvent> getExamples() {
-        //TODO provide examples
-        return Can.empty();
+
+        val a = CalendarEvent.of(
+                ZonedDateTime.of(2022, 05, 13, 17, 30, 15, 0, ZoneOffset.ofHours(3)),
+                "a-name",
+                "a-title");
+
+        val b = CalendarEvent.of(
+                ZonedDateTime.of(2022, 06, 14, 18, 31, 16, 0, ZoneOffset.ofHours(4)),
+                "b-name",
+                "b-title");
+
+        val c = CalendarEvent.of(
+                ZonedDateTime.of(2022, 07, 15, 19, 32, 17, 0, ZoneOffset.ofHours(5)),
+                "c-name",
+                "c-title");
+
+        return Can.of(a, b, c);
     }
 
     // -- EMBEDDING

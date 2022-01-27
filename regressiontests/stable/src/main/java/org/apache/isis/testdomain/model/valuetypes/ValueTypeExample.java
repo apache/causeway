@@ -44,6 +44,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.graph.tree.TreeAdapter;
 import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.graph.tree.TreeState;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
@@ -51,6 +52,7 @@ import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.Markup;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.applib.value.Password;
+import org.apache.isis.core.metamodel.valuesemantics.ApplicationFeatureIdValueSemantics;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.common.v2.OidDto;
@@ -429,7 +431,6 @@ public abstract class ValueTypeExample<T> {
     }
     // -- EXAMPLES - TEMPORAL - JODA TIME
 
-  //TODO    org.joda.time.DateTime - fails because format with time-zone fails on CI
     @DomainObject(
             logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleJodaDateTime",
             nature = Nature.BEAN)
@@ -472,6 +473,19 @@ public abstract class ValueTypeExample<T> {
         private org.joda.time.LocalTime value = org.joda.time.LocalTime.now();
         @Getter
         private org.joda.time.LocalTime updateValue = org.joda.time.LocalTime.now().plusSeconds(15);
+    }
+
+    // -- EXAMPLES - META MODEL
+
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleApplicationFeatureId",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleApplicationFeatureId
+    extends ValueTypeExample<ApplicationFeatureId> {
+        @Property @Getter @Setter
+        private ApplicationFeatureId value = new ApplicationFeatureIdValueSemantics().getExamples().getElseFail(0);
+        @Getter
+        private ApplicationFeatureId updateValue = new ApplicationFeatureIdValueSemantics().getExamples().getElseFail(1);
     }
 
     // -- EXAMPLES - DATA STRUCTURE

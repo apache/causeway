@@ -73,7 +73,6 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.passwd.IsisPasswordPa
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.StringPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.value.compound.ValueCompoundPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.value.fallback.ValueFallbackPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices.ValueChoicesSelect2PanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.standalonecollection.StandaloneCollectionPanelFactory;
@@ -224,8 +223,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
         componentFactories.add(new IsisBlobPanelFactory());
         componentFactories.add(new IsisClobPanelFactory());
-
-        componentFactories.add(new ValueCompoundPanelFactory());
 
         val registeredScalarTypes =
             componentFactories.stream(ComponentFactoryScalarAbstract.class)

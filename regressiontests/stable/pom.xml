@@ -53,6 +53,11 @@
 			<groupId>org.apache.isis.valuetypes</groupId>
 			<artifactId>isis-valuetypes-sse-metamodel</artifactId>
 		</dependency>
+		
+        <dependency>
+            <groupId>org.apache.isis.extensions</groupId>
+            <artifactId>isis-extensions-fullcalendar-applib</artifactId>
+        </dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.testing</groupId>

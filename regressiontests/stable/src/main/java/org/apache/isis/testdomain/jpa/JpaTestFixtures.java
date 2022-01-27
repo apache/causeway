@@ -138,5 +138,4 @@ public class JpaTestFixtures {
         //System.err.printf("%s%n", bookmark);
     }
 
-
 }

@@ -132,5 +132,4 @@ public interface ValueFacet<T> extends Facet {
                 .orElseGet(()->fallbackRenderer(prop.getFeatureIdentifier()));
     }
 
-
 }
