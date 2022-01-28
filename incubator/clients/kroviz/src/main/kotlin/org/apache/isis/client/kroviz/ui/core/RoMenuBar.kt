@@ -31,6 +31,7 @@ import io.kvision.panel.SimplePanel
 import io.kvision.panel.vPanel
 import io.kvision.utils.px
 import org.apache.isis.client.kroviz.core.Session
+import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.chart.SampleChartModel
 import org.apache.isis.client.kroviz.ui.dialog.About
@@ -189,19 +190,24 @@ class RoMenuBar : SimplePanel() {
             buildMenuEntry(aboutTitle, "About", { ViewManager.add(aboutTitle, About().dialog) })
         )
 
-        /*
-             val testTitle = "Test"
-               mainMenu.add(
-                   buildMenuEntry(testTitle, "Test", { this.testFirstSession() })
-               )
-
+        val testTitle = "Execute All MenuBar Actions"
         mainMenu.add(
-            buildMenuEntry("Browser in IFrame", "Wikipedia", { BrowserWindow("https://isis.apache.org/").open() })
+            buildMenuEntry(testTitle, "Test", { this.executeAllMenuBarActions() })
         )
 
-        mainMenu.add(
-            buildMenuEntry("SSH", "Terminal", { ShellWindow("localhost:8080").open() })
-        )*/
+        /*
+              val testTitle = "Test"
+                mainMenu.add(
+                    buildMenuEntry(testTitle, "Test", { this.testFirstSession() })
+                )
+
+         mainMenu.add(
+             buildMenuEntry("Browser in IFrame", "Wikipedia", { BrowserWindow("https://isis.apache.org/").open() })
+         )
+
+         mainMenu.add(
+             buildMenuEntry("SSH", "Terminal", { ShellWindow("localhost:8080").open() })
+         )*/
 
         return mainMenu
     }
@@ -224,6 +230,17 @@ class RoMenuBar : SimplePanel() {
     private fun resetMenuBar() {
         nav.removeAll()
         nav.add(mainMenu)
+    }
+
+    fun executeAllMenuBarActions() {
+        val menuBars = SessionManager.getEventStore().findMenuBars()!!.obj as Menubars
+        menuBars.primary.menu.forEach { m ->
+            m.section.forEachIndexed { index, section ->
+                section.serviceAction.forEach { sa ->
+                    ResourceProxy().fetch(sa.link!!)
+                }
+            }
+        }
     }
 
 }
