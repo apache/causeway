@@ -24,6 +24,7 @@ import java.util.function.Consumer;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.LogicalTypeName;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
@@ -147,6 +148,11 @@ public interface SpecificationLoader {
 
     // -- SUPPORT FOR LOOKUP BY LOGICAL TYPE NAME
 
+    /**
+     * The lookup may also fail (result with null), when there is no concrete or abstract resolvable type,
+     * that matches given {@code logicalTypeName}. Eg. when using {@link LogicalTypeName} on an interface,
+     * while overriding with a different logical-type-name on the concrete or abstract type.
+     */
     @Nullable
     default ObjectSpecification loadSpecification(
             final @Nullable String logicalTypeName,

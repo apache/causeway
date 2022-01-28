@@ -126,6 +126,10 @@ implements DomainTypeResource {
                 RepresentationType.DOMAIN_TYPE, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         val objectSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
+        if(objectSpec==null) {
+            throw _EndpointLogging.error(log, "GET /domain-types/{}", domainType,
+                    RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
+        }
 
         val renderer = new DomainTypeReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.with(objectSpec).includesSelf();
