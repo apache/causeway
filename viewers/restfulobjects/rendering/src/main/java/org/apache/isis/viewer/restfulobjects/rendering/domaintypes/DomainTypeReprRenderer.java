@@ -36,7 +36,8 @@ import lombok.val;
 public class DomainTypeReprRenderer
 extends ReprRendererAbstract<ObjectSpecification> {
 
-    public static LinkBuilder newLinkToBuilder(final IResourceContext resourceContext, final Rel rel, final ObjectSpecification objectSpec) {
+    public static LinkBuilder newLinkToBuilder(
+            final IResourceContext resourceContext, final Rel rel, final ObjectSpecification objectSpec) {
         final String typeFullName = objectSpec.getLogicalTypeName();
         final String url = String.format("domain-types/%s", typeFullName);
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.DOMAIN_TYPE, url);
@@ -53,7 +54,10 @@ extends ReprRendererAbstract<ObjectSpecification> {
 
     private ObjectSpecification objectSpecification;
 
-    public DomainTypeReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
+    public DomainTypeReprRenderer(
+            final IResourceContext resourceContext,
+            final LinkFollowSpecs linkFollower,
+            final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.DOMAIN_TYPE, representation);
     }
 

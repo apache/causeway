@@ -27,7 +27,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacetAbstract;
 
-public class LogicalTypeFacetForLogicalTypeNameAnnotation extends LogicalTypeFacetAbstract {
+public class LogicalTypeFacetForLogicalTypeNameAnnotation
+extends LogicalTypeFacetAbstract {
 
     public static Optional<LogicalTypeFacet> create(
             final Optional<LogicalTypeName> logicalTypeIfAny,
@@ -45,6 +46,7 @@ public class LogicalTypeFacetForLogicalTypeNameAnnotation extends LogicalTypeFac
     private LogicalTypeFacetForLogicalTypeNameAnnotation(
             final LogicalType logicalType,
             final FacetHolder holder) {
-        super(logicalType, holder);
+        // Precedence.LOW ensures, to get overruled by @DomainObject(logicalTypeName=...)
+        super(logicalType, holder, Precedence.LOW);
     }
 }

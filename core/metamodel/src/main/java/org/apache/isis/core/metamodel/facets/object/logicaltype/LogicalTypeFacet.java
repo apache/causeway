@@ -18,18 +18,31 @@
  */
 package org.apache.isis.core.metamodel.facets.object.logicaltype;
 
-
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.LogicalTypeName;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
-
 /**
- *  Corresponds to the value of {@link DomainObject#logicalTypeName()},
- *  that specifies the <i>logical type name</i> of a domain object.
- *  <p>
- *  The <i>logical type name</i> must be unique among non-abstract classes,
- *  but is allowed to be shared with interfaces and abstract classes.
+ * Corresponds to the value of {@link DomainObject#logicalTypeName()} or
+ * {@link LogicalTypeName#value()}, that specifies the <i>logical type name</i>
+ * of a domain object.
+ * <p>
+ * The <i>logical type name</i> must be unique, among non-abstract classes, but
+ * is allowed to be shared with interfaces and abstract classes.
+ * <p>
+ * Given an arbitrary type hierarchy
+ * <pre>
+ * class A
+ * |__class B
+ *    |__abstract class C
+ *       |__interface D
+ *          |__interface F
+ *       |__interface E
+ * </pre>
+ * Class A and B must have different logical types. Types B, C, D, E, F are
+ * in principle allowed to share the same logical type-name. In which case reverse
+ * lookup from logical-type-name to type must always resolve the most specific one (B).
  */
 public interface LogicalTypeFacet extends Facet {
 

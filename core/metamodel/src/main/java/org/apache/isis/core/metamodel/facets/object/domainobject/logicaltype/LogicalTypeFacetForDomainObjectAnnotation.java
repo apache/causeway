@@ -27,7 +27,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacetAbstract;
 
-public class LogicalTypeFacetForDomainObjectAnnotation extends LogicalTypeFacetAbstract {
+public class LogicalTypeFacetForDomainObjectAnnotation
+extends LogicalTypeFacetAbstract {
 
     public static Optional<LogicalTypeFacet> create(
             final Optional<DomainObject> domainObjectIfAny,
