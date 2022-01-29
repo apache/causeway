@@ -112,7 +112,7 @@ public class FactoryServiceDefault implements FactoryService {
                     mixinClass.getName(), mixedIn);
         }
         val mixinConstructor = MixinConstructor.PUBLIC_SINGLE_ARG_RECEIVING_MIXEE
-                .lookupConstructor(mixinClass, mixedIn.getClass());
+                .getConstructorElseFail(mixinClass, mixedIn.getClass());
 
         try {
             val mixin = mixinConstructor.newInstance(mixedIn);

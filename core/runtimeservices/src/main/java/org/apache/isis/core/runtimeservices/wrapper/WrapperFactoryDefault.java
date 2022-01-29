@@ -312,7 +312,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val mixinAdapter = adaptAndGuardAgainstWrappingNotSupported(mixin);
 
         val mixinConstructor = MixinConstructor.PUBLIC_SINGLE_ARG_RECEIVING_MIXEE
-                .lookupConstructor(mixinClass, mixee.getClass());
+                .getConstructorElseFail(mixinClass, mixee.getClass());
 
         val proxyFactory = proxyFactoryService
                 .factory(mixinClass, new Class[]{WrappingObject.class}, mixinConstructor.getParameterTypes());

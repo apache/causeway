@@ -132,7 +132,7 @@ public final class ProgrammingModelConstants {
         PUBLIC_SINGLE_ARG_RECEIVING_MIXEE;
 
         // while this enum only has a single value, we just provide a (quasi) static method here
-        public <T> Constructor<T> lookupConstructor(
+        public <T> Constructor<T> getConstructorElseFail(
                 final @NonNull Class<T> mixinClass,
                 final @NonNull Class<?> mixeeClass) {
             return _Casts.uncheckedCast(_Reflect
