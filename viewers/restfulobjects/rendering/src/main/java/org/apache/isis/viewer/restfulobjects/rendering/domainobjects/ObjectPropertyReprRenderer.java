@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -88,7 +89,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
         val valueAdapterIfAny = objectMember.get(objectAdapter, getInteractionInitiatedBy());
 
         // use the runtime type if we have a value, otherwise the compile time type of the member
-        val spec = valueAdapterIfAny != null
+        val spec = ManagedObjects.isSpecified(valueAdapterIfAny)
                 ? valueAdapterIfAny.getSpecification()
                 : objectMember.getElementType();
 
