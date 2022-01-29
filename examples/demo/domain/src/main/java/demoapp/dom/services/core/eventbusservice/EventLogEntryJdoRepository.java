@@ -47,12 +47,12 @@ implements EventLogEntryRepository<EventLogEntryJdo> {
     }
 
     @Override
-    public void add(EventLogEntryJdo entry) {
+    public void add(final EventLogEntryJdo entry) {
         repositoryService.persist(entry);
     }
 
     @Override
-    public EventLogEntryJdo newEntityFor(UiButtonEvent event) {
+    public EventLogEntryJdo newEntityFor(final UiButtonEvent event) {
         return EventLogEntryJdo.of(event);
     }
 

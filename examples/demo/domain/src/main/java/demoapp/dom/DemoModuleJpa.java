@@ -37,6 +37,7 @@ import demoapp.dom.domain.objects.other.embedded.jpa.NumberConstantJpa;
 import demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingJpa;
 import demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingJpa;
 import demoapp.dom.domain.properties.Property.projecting.jpa.PropertyProjectingChildJpa;
+import demoapp.dom.services.core.eventbusservice.EventLogEntryJpa;
 import demoapp.dom.services.core.wrapperFactory.jpa.WrapperFactoryJpa;
 import demoapp.dom.services.extensions.secman.apptenancy.jpa.TenantedJpa;
 import demoapp.dom.types.isis.blobs.jpa.IsisBlobJpa;
@@ -96,6 +97,7 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
         IsisAsciiDocJpa.class,
         IsisMarkdownJpa.class,
         IsisCalendarEventJpa.class,
+        EventLogEntryJpa.class,
 
         JavaAwtBufferedImageJpa.class,
 

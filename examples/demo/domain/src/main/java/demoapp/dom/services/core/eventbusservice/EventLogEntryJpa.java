@@ -22,6 +22,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 import org.springframework.context.annotation.Profile;
 
@@ -29,7 +31,6 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 
 import lombok.Getter;
@@ -40,8 +41,11 @@ import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm.UiButtonE
 
 @Profile("demo-jpa")
 @Entity
-@DomainObject(logicalTypeName = "demo.EventLogEntryJpa")
-public class EventLogEntryJpa {
+@DomainObject(logicalTypeName = "demo.EventLogEntry")
+public class EventLogEntryJpa
+extends EventLogEntry {
+
+    // -- FACTORY
 
     public static EventLogEntryJpa of(final UiButtonEvent even) {
         val x = new EventLogEntryJpa();
@@ -49,27 +53,18 @@ public class EventLogEntryJpa {
         return x;
     }
 
-    @ObjectSupport public String title() {
-        return getEvent();
-    }
+    @Id
+    @GeneratedValue
+    private Long id;
 
     @javax.persistence.Column(nullable = true)
     @Property(editing = Editing.DISABLED)
-    @Getter @Setter
+    @Getter(onMethod_ = {@Override}) @Setter(onMethod_ = {@Override})
     private String event;
-
-    // demonstrating 2 methods of changing a property ...
-    // - inline edit
-    // - via action
-
-    public static enum Acknowledge {
-        IGNORE,
-        CRITICAL
-    }
 
     @javax.persistence.Column(nullable = true)
     @Property(editing = Editing.ENABLED)
-    @Getter @Setter
+    @Getter(onMethod_ = {@Override}) @Setter(onMethod_ = {@Override})
     private Acknowledge acknowledge;
 
     @Action

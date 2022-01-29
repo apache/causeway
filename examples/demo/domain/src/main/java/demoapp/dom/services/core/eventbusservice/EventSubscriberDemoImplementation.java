@@ -51,7 +51,7 @@ public class EventSubscriberDemoImplementation {
     final FactoryService factoryService;
 
     @EventListener(UiButtonEvent.class) // <-- listen on the event, triggered by button in the UI
-    public void on(UiButtonEvent event) {
+    public void on(final UiButtonEvent event) {
 
         log.info(emphasize("UiButtonEvent")); // <-- log to the console
 
@@ -66,10 +66,10 @@ public class EventSubscriberDemoImplementation {
             logicalTypeName = "demo.eventLogWriter")
     public static class EventLogWriter {
 
-        @Inject private EventLogEntryRepository<? extends Object> eventLogEntryRepository;
+        @Inject private EventLogEntryRepository<? extends EventLogEntry> eventLogEntryRepository;
 
         @Action // called asynchronously by above invocation
-        public void storeEvent(UiButtonEvent event) {
+        public void storeEvent(final UiButtonEvent event) {
 
             eventLogEntryRepository.storeEvent(event);
         }

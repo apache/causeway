@@ -24,11 +24,11 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.ActionLayout.Position;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.ObjectSupport;
-import org.apache.isis.applib.annotation.ActionLayout.Position;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
@@ -36,7 +36,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.EventBusServiceDemoVm")
 public class EventBusServiceDemoVm implements HasAsciiDocDescription {
 
-    @Inject private EventLogEntryJdoRepository repository;
+    @Inject private EventLogEntryRepository<? extends EventLogEntry> eventLogEntryRepository;
     @Inject private EventBusService eventBusService;
 
     @ObjectSupport public String title() {
@@ -44,8 +44,8 @@ public class EventBusServiceDemoVm implements HasAsciiDocDescription {
     }
 
     @Collection
-    public List<EventLogEntryJdo> getAllEvents(){
-        return repository.listAll();
+    public List<? extends EventLogEntry> getAllEvents(){
+        return eventLogEntryRepository.listAll();
     }
 
     public static class UiButtonEvent {}

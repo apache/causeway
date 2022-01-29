@@ -18,23 +18,30 @@
  */
 package demoapp.dom.services.core.eventbusservice;
 
-import java.util.List;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.ObjectSupport;
 
-import lombok.val;
+@DomainObject(logicalTypeName = "demo.EventLogEntry")
+public abstract class EventLogEntry {
 
-import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm.UiButtonEvent;
+    @ObjectSupport public String title() {
+        return getEvent();
+    }
 
-public interface EventLogEntryRepository<T extends EventLogEntry> {
+    public abstract String getEvent();
+    public abstract void setEvent(String event);
 
-    List<T> listAll();
+    public abstract Acknowledge getAcknowledge();
+    public abstract void setAcknowledge(Acknowledge acknowledge);
 
-    void add(T entry);
 
-    T newEntityFor(UiButtonEvent event);
+    // demonstrating 2 methods of changing a property ...
+    // - inline edit
+    // - via action
 
-    default void storeEvent(final UiButtonEvent event) {
-        val entry = newEntityFor(event);
-        add(entry);
+    public static enum Acknowledge {
+        IGNORE,
+        CRITICAL
     }
 
 }

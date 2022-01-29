@@ -32,7 +32,6 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 
 import lombok.Getter;
@@ -44,8 +43,11 @@ import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm.UiButtonE
 @Profile("demo-jdo")
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo" )
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject
-public class EventLogEntryJdo {
+@DomainObject(logicalTypeName = "demo.EventLogEntry")
+public class EventLogEntryJdo
+extends EventLogEntry {
+
+    // -- FACTORY
 
     public static EventLogEntryJdo of(final UiButtonEvent even) {
         val x = new EventLogEntryJdo();
@@ -53,27 +55,14 @@ public class EventLogEntryJdo {
         return x;
     }
 
-    @ObjectSupport public String title() {
-        return getEvent();
-    }
-
     @javax.jdo.annotations.Column(allowsNull = "false")
     @Property(editing = Editing.DISABLED)
-    @Getter @Setter
+    @Getter(onMethod_ = {@Override}) @Setter(onMethod_ = {@Override})
     private String event;
-
-    // demonstrating 2 methods of changing a property ...
-    // - inline edit
-    // - via action
-
-    public static enum Acknowledge {
-        IGNORE,
-        CRITICAL
-    }
 
     @javax.jdo.annotations.Column(allowsNull = "true")
     @Property(editing = Editing.ENABLED)
-    @Getter @Setter
+    @Getter(onMethod_ = {@Override}) @Setter(onMethod_ = {@Override})
     private Acknowledge acknowledge;
 
     @Action
