@@ -86,6 +86,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.proxy._ProxyFactoryService;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MixinConstructor;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
@@ -310,8 +311,11 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixee);
         val mixinAdapter = adaptAndGuardAgainstWrappingNotSupported(mixin);
 
+        val mixinConstructor = MixinConstructor.PUBLIC_SINGLE_ARG_RECEIVING_MIXEE
+                .lookupConstructor(mixinClass, mixee.getClass());
+
         val proxyFactory = proxyFactoryService
-                .factory(mixinClass, new Class[]{WrappingObject.class}, new Class[]{mixee.getClass()});
+                .factory(mixinClass, new Class[]{WrappingObject.class}, mixinConstructor.getParameterTypes());
 
         return proxyFactory.createInstance((proxy, method, args) -> {
 

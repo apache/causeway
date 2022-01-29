@@ -35,17 +35,14 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MixinConstructor;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-
-import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
-import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramCount;
 
 import lombok.NonNull;
 import lombok.val;
@@ -114,13 +111,8 @@ public class FactoryServiceDefault implements FactoryService {
             throw _Exceptions.illegalArgument("Mixin class '%s' is not a mixin for supplied object '%s'",
                     mixinClass.getName(), mixedIn);
         }
-        val mixinConstructor = _Reflect
-                .getPublicConstructors(mixinClass)
-                        .filter(paramCount(1).and(paramAssignableFrom(0, mixedIn.getClass())))
-                .getSingleton()
-                .orElseThrow(()->_Exceptions.illegalArgument(
-                        "Failed to locate constructor in '%s' to instantiate using '%s'",
-                        mixinClass.getName(), mixedIn));
+        val mixinConstructor = MixinConstructor.PUBLIC_SINGLE_ARG_RECEIVING_MIXEE
+                .lookupConstructor(mixinClass, mixedIn.getClass());
 
         try {
             val mixin = mixinConstructor.newInstance(mixedIn);

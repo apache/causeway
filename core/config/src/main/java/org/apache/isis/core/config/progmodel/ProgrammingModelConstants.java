@@ -20,6 +20,7 @@ package org.apache.isis.core.config.progmodel;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -42,8 +43,14 @@ import org.apache.isis.applib.annotation.ObjectLifecycle;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.reflection._Reflect;
+
+import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
+import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramCount;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -112,6 +119,30 @@ public final class ProgrammingModelConstants {
         public static boolean isGetter(final Method method) {
             return isBooleanGetter(method)
                     || isNonBooleanGetter(method, type->type != void.class);
+        }
+    }
+
+    // -- MIXIN CONSTRUCTION
+
+    public enum MixinConstructor {
+        /**
+         * Assuming, mixins do have a public single argument constructor,
+         * that receive an instance of the mixee's type.
+         */
+        PUBLIC_SINGLE_ARG_RECEIVING_MIXEE;
+
+        // while this enum only has a single value, we just provide a (quasi) static method here
+        public <T> Constructor<T> lookupConstructor(
+                final @NonNull Class<T> mixinClass,
+                final @NonNull Class<?> mixeeClass) {
+            return _Casts.uncheckedCast(_Reflect
+                        .getPublicConstructors(mixinClass)
+                        .filter(paramCount(1).and(paramAssignableFrom(0, mixeeClass)))
+                    .getSingleton()
+                    .orElseThrow(()->_Exceptions.illegalArgument(
+                            "Failed to locate constructor in '%s' to instantiate,"
+                            + "when using type '%s' as first argument",
+                            mixinClass.getName(), mixinClass.getName())));
         }
     }
 
