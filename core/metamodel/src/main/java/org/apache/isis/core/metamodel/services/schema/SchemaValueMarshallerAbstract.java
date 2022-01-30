@@ -21,24 +21,27 @@ package org.apache.isis.core.metamodel.services.schema;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.Identifier.Type;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
+import org.apache.isis.applib.value.semantics.Converter;
+import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.Cardinality;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.PackedManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.ParamDto;
@@ -58,17 +61,147 @@ public abstract class SchemaValueMarshallerAbstract
 implements SchemaValueMarshaller {
 
     @Value(staticConstructor = "of")
-    public static class ValueTypeHelper {
+    public static class Context<T> {
 
+        public static <T> Context<T> withoutSemantics(
+                final Class<T> correspondingClass,
+                final ObjectFeature feature) {
+            return of(correspondingClass, feature, null);
+        }
+
+        public static <T> Context<T> of(
+                final Class<T> correspondingClass,
+                final ObjectFeature feature,
+                final ValueSemanticsProvider<T> semantics) {
+
+            val supportsConversionViaEncoderDecoder = semantics!=null
+                    && semantics.getSchemaValueType() == ValueType.STRING
+                    && !semantics.getCorrespondingClass().equals(String.class);
+
+            return of(correspondingClass, feature, semantics,
+                    supportsConversionViaEncoderDecoder
+                        ? Optional.ofNullable(semantics.getEncoderDecoder())
+                        : Optional.empty(),
+                    semantics!=null
+                        ? Optional.ofNullable(semantics.getConverter())
+                        : Optional.empty());
+        }
+
+        private final @NonNull Class<T> correspondingClass;
         private final @NonNull ObjectFeature feature;
-        private final @Nullable ValueSemanticsProvider<?> semantics;
+        private final @NonNull ValueSemanticsProvider<T> semantics;
+        private final @NonNull Optional<EncoderDecoder<T>> encoderDecoder;
+        private final @NonNull Optional<Converter<T, ?>> converter;
 
         public ObjectSpecification getElementType() {
             return feature.getElementType();
         }
+
         public ValueType getSchemaValueType() {
             return semantics.getSchemaValueType();
         }
+
+    }
+
+    // -- RECORD DTOS
+
+    @Override
+    public final ActionInvocationDto recordActionResultScalar(
+            final @NonNull ActionInvocationDto invocationDto,
+            final @NonNull ObjectSpecification returnType,
+            final @NonNull ManagedObject value) {
+
+        val feature = getSpecificationLoader().loadFeatureElseFail(actionIdentifier(invocationDto));
+        val valueCls = feature.getElementType().getCorrespondingClass();
+        val context = newContext(valueCls, feature);
+        invocationDto.setReturned(
+                recordValue(context, new ValueWithTypeDto(), value));
+        return invocationDto;
+    }
+
+    @Override
+    public final ActionInvocationDto recordActionResultNonScalar(
+            final @NonNull ActionInvocationDto invocationDto,
+            final @NonNull ObjectSpecification elementType,
+            final @NonNull Can<ManagedObject> value) {
+
+        val feature = getSpecificationLoader().loadFeatureElseFail(actionIdentifier(invocationDto));
+        val valueCls = feature.getElementType().getCorrespondingClass();
+        val context = newContext(valueCls, feature);
+        invocationDto.setReturned(
+                recordValues(context, new ValueWithTypeDto(), value));
+        return invocationDto;
+    }
+
+    @Override
+    public final PropertyDto recordPropertyValue(
+            final @NonNull PropertyDto propertyDto,
+            final @NonNull ObjectSpecification propertyType,
+            final @NonNull ManagedObject value) {
+        final Identifier propertyIdentifier = propertyIdentifier(propertyDto);
+
+        // guard against property not being a scalar
+        {
+            final OneToOneAssociation property =
+                    (OneToOneAssociation)getSpecificationLoader().loadFeatureElseFail(propertyIdentifier);
+
+            val elementType = property.getElementType().getCorrespondingClass();
+            _Assert.assertEquals(elementType, propertyType.getCorrespondingClass());
+        }
+
+        val feature = getSpecificationLoader().loadFeatureElseFail(propertyIdentifier);
+        val valueCls = feature.getElementType().getCorrespondingClass();
+        val context = newContext(valueCls, feature);
+        propertyDto.setNewValue(
+                recordValue(context, new ValueWithTypeDto(), value));
+        return propertyDto;
+    }
+
+    @Override
+    public final ParamDto recordParamScalar(
+            final @NonNull Identifier paramIdentifier,
+            final @NonNull ParamDto paramDto,
+            final @NonNull ObjectSpecification paramType,
+            final @NonNull ManagedObject value) {
+
+        final ObjectActionParameter actionParameter =
+                (ObjectActionParameter)getSpecificationLoader().loadFeatureElseFail(paramIdentifier);
+
+        _Assert.assertTrue(actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR);
+
+        val feature = actionParameter;
+        val valueCls = feature.getElementType().getCorrespondingClass();
+        val context = newContext(valueCls, feature);
+
+        //          ValueType valueType = valueWrapper.getValueType();
+        //
+        //          // this hack preserves previous behavior before we were able to serialize blobs and clobs into XML
+        //          // however, we also don't want this new behavior for parameter arguments
+        //          // (else these large objects could end up being persisted).
+        //          if(valueType == ValueType.BLOB) valueType = ValueType.REFERENCE;
+        //          if(valueType == ValueType.CLOB) valueType = ValueType.REFERENCE;
+        recordValue(context, paramDto, value);
+        return paramDto;
+    }
+
+    @Override
+    public ParamDto recordParamNonScalar(
+            final @NonNull Identifier paramIdentifier,
+            final @NonNull ParamDto paramDto,
+            final @NonNull ObjectSpecification elementType,
+            final @NonNull Can<ManagedObject> values) {
+
+        final ObjectActionParameter actionParameter =
+                (ObjectActionParameter)getSpecificationLoader().loadFeatureElseFail(paramIdentifier);
+
+        _Assert.assertTrue(actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION);
+
+        val feature = actionParameter;
+        val valueCls = feature.getElementType().getCorrespondingClass();
+        val context = newContext(valueCls, feature);
+
+        recordValues(context, paramDto, values);
+        return paramDto;
     }
 
     // -- RECOVER IDENTIFIERS
@@ -126,49 +259,35 @@ implements SchemaValueMarshaller {
 
     // -- HELPER
 
-    private ManagedObject recoverValueOrReference(
-            final Identifier featureIdentifier,
-            final ValueWithTypeDto valueWithTypeDto,
-            final Cardinality cardinalityConstraint) {
-
-        val feature = getSpecificationLoader().loadFeatureElseFail(featureIdentifier);
-
-        if(valueWithTypeDto==null
-                || (valueWithTypeDto.isSetNull()
-                    && valueWithTypeDto.isNull())) {
-            return cardinalityConstraint.isMultiple()
-                    ? PackedManagedObject.pack(feature.getElementType(), Can.empty())
-                    : ManagedObject.empty(feature.getElementType());
-        }
-
-        @SuppressWarnings({ "unchecked", "rawtypes" })
-        final Optional<ValueSemanticsProvider<?>> preferredValueSemantics = getValueSemanticsResolver()
-                .selectValueSemantics(
-                        featureIdentifier,
-                        (Class)feature.getElementType().getCorrespondingClass())
-                .getFirst();
-
-        val recoveredValueOrReference = preferredValueSemantics
-            .map(valueSemantics->ValueTypeHelper.of(feature, valueSemantics))
-            .map(valueTypeHelper->recoverValue(valueTypeHelper, valueWithTypeDto, cardinalityConstraint))
-            // assume reference otherwise
-            .orElseGet(()->recoverReference(feature, valueWithTypeDto, cardinalityConstraint));
-
-        return recoveredValueOrReference;
+    private <T> Context<T> newContext(
+            final Class<T> valueCls,
+            final ObjectFeature feature){
+        return getValueSemanticsResolver()
+                .selectValueSemantics(feature.getFeatureIdentifier(), valueCls)
+                .getFirst()
+                .map(valueSemantics->Context.of(valueCls, feature, valueSemantics))
+                .orElseGet(()->Context.withoutSemantics(valueCls, feature));
     }
 
-    // -- LOW LEVEL IMPLEMENTATION
+    // -- LOW LEVEL IMPLEMENTATION - RECORDING
+
+    protected abstract <D extends ValueDto, T>
+        D recordValue(Context<T> context, D valueDto, ManagedObject value);
+    protected abstract <D extends ValueWithTypeDto, T>
+        D recordValues(Context<T> context, D valueWithTypeDto, Can<ManagedObject> values);
+
+    // -- LOW LEVEL IMPLEMENTATION - RECOVERY
 
     /**
-     * References, collections and {@code null} are already dealt with.
-     * Implementations only need to consider a non-empty scalar value-type.
+     * References and collections are already dealt with.
+     * Implementations only need to consider a scalar value-type.
      */
     protected abstract ManagedObject recoverScalarValue(
-            final @NonNull ValueTypeHelper valueTypeHelper,
+            final @NonNull Context<?> valueTypeHelper,
             final @NonNull ValueWithTypeDto valueDto);
 
     protected ManagedObject recoverValue(
-            final @NonNull ValueTypeHelper valueTypeHelper,
+            final @NonNull Context<?> valueTypeHelper,
             final @NonNull ValueWithTypeDto valueDto,
             final @NonNull Cardinality cardinalityConstraint) {
 
@@ -177,9 +296,6 @@ implements SchemaValueMarshaller {
                         valueTypeHelper.getElementType(),
                         recoverCollectionOfValues(valueTypeHelper, valueDto.getCollection()))
                 : recoverScalarValue(valueTypeHelper, valueDto);
-//                    valueDto.getReference()!=null
-//                        ? recoverScalarValue(valueTypeHelper, valueDto)
-//                        : ManagedObject.empty(valueTypeHelper.getElementType());
     }
 
     protected ManagedObject recoverReference(
@@ -195,7 +311,7 @@ implements SchemaValueMarshaller {
     }
 
     protected Can<ManagedObject> recoverCollectionOfValues(
-            final ValueTypeHelper valueTypeHelper,
+            final Context<?> valueTypeHelper,
             final CollectionDto collectionDto) {
 
         _Assert.assertEquals(valueTypeHelper.getSchemaValueType(), collectionDto.getType());
@@ -235,6 +351,30 @@ implements SchemaValueMarshaller {
         return Can.ofCollection(list);
     }
 
+    private ManagedObject recoverValueOrReference(
+            final Identifier featureIdentifier,
+            final ValueWithTypeDto valueWithTypeDto,
+            final Cardinality cardinalityConstraint) {
+
+        val feature = getSpecificationLoader().loadFeatureElseFail(featureIdentifier);
+
+        if(valueWithTypeDto==null
+                || (valueWithTypeDto.isSetNull()
+                    && valueWithTypeDto.isNull())) {
+            return cardinalityConstraint.isMultiple()
+                    ? PackedManagedObject.pack(feature.getElementType(), Can.empty())
+                    : ManagedObject.empty(feature.getElementType());
+        }
+
+        val valueCls = feature.getElementType().getCorrespondingClass();
+
+        val recoveredValueOrReference = feature.getElementType().isValue()
+                ? recoverValue(newContext(valueCls, feature), valueWithTypeDto, cardinalityConstraint)
+                // assume reference otherwise
+                : recoverReference(feature, valueWithTypeDto, cardinalityConstraint);
+
+        return recoveredValueOrReference;
+    }
 
     // -- DEPENDENCIES
 

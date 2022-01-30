@@ -18,6 +18,14 @@
  */
 package org.apache.isis.applib.util.schema;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -49,6 +57,151 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public final class CommonDtoUtils {
+
+    // -- VALUE RECORD
+
+    public <D extends ValueDto, T> D recordFundamentalValue(
+            final @NonNull  ValueType valueType,
+            final D valueDto,
+            final Object pojo) {
+
+        if(valueDto instanceof ValueWithTypeDto) {
+            ((ValueWithTypeDto)valueDto).setType(valueType);
+        }
+
+        if(pojo==null) {
+            // leave the DTO empty (representing a null value or reference)
+            return valueDto;
+        }
+
+        switch (valueType) {
+        case COLLECTION:
+        case COMPOSITE:
+        case REFERENCE:
+            throw _Exceptions.unsupportedOperation("valueType %s is not fundamental", valueType);
+
+        case STRING: {
+            final String argValue = (String) pojo;
+            valueDto.setString(argValue);
+            return valueDto;
+        }
+        case BYTE: {
+            final Byte argValue = (Byte) pojo;
+            valueDto.setByte(argValue);
+            return valueDto;
+        }
+        case SHORT: {
+            final Short argValue = (Short) pojo;
+            valueDto.setShort(argValue);
+            return valueDto;
+        }
+        case INT: {
+            final Integer argValue = (Integer) pojo;
+            valueDto.setInt(argValue);
+            return valueDto;
+        }
+        case LONG: {
+            final Long argValue = (Long) pojo;
+            valueDto.setLong(argValue);
+            return valueDto;
+        }
+        case CHAR: {
+            final Character argValue = (Character) pojo;
+            valueDto.setChar("" + argValue);
+            return valueDto;
+        }
+        case BOOLEAN: {
+            final Boolean argValue = (Boolean) pojo;
+            valueDto.setBoolean(argValue);
+            return valueDto;
+        }
+        case FLOAT: {
+            final Float argValue = (Float) pojo;
+            valueDto.setFloat(argValue);
+            return valueDto;
+        }
+        case DOUBLE: {
+            final Double argValue = (Double) pojo;
+            valueDto.setDouble(argValue);
+            return valueDto;
+        }
+        case BIG_INTEGER: {
+            final BigInteger argValue = (BigInteger) pojo;
+            valueDto.setBigInteger(argValue);
+            return valueDto;
+        }
+        case BIG_DECIMAL: {
+            final BigDecimal argValue = (BigDecimal) pojo;
+            valueDto.setBigDecimal(argValue);
+            return valueDto;
+        }
+        case LOCAL_DATE: {
+            final LocalDate argValue = (LocalDate) pojo;
+            valueDto.setLocalDate(JavaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(argValue));
+            return valueDto;
+        }
+        case LOCAL_TIME: {
+            final LocalTime argValue = (LocalTime) pojo;
+            valueDto.setLocalTime(JavaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(argValue));
+            return valueDto;
+        }
+        case LOCAL_DATE_TIME: {
+            final LocalDateTime argValue = (LocalDateTime) pojo;
+            valueDto.setLocalDateTime(JavaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(argValue));
+            return valueDto;
+        }
+        case OFFSET_DATE_TIME: {
+            final OffsetDateTime argValue = (OffsetDateTime) pojo;
+            valueDto.setOffsetDateTime(JavaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(argValue));
+            return valueDto;
+        }
+        case OFFSET_TIME: {
+            final OffsetTime argValue = (OffsetTime) pojo;
+            valueDto.setOffsetTime(JavaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(argValue));
+            return valueDto;
+        }
+        case ZONED_DATE_TIME: {
+            final ZonedDateTime argValue = (ZonedDateTime) pojo;
+            valueDto.setZonedDateTime(JavaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(argValue));
+            return valueDto;
+        }
+        case ENUM: {
+            final Enum<?> argValue = (Enum<?>) pojo;
+            final EnumDto enumDto = new EnumDto();
+            valueDto.setEnum(enumDto);
+            enumDto.setEnumType(argValue.getClass().getName());
+            enumDto.setEnumName(argValue.name());
+            return valueDto;
+        }
+        case BLOB: {
+            final Blob blob = (Blob) pojo;
+            if(blob != null) {
+                final BlobDto blobDto = new BlobDto();
+                blobDto.setName(blob.getName());
+                blobDto.setBytes(blob.getBytes());
+                blobDto.setMimeType(blob.getMimeType().toString());
+                valueDto.setBlob(blobDto);
+            }
+            return valueDto;
+        }
+        case CLOB: {
+            final Clob clob = (Clob) pojo;
+            if(clob != null) {
+                final ClobDto clobDto = new ClobDto();
+                clobDto.setName(clob.getName());
+                clobDto.setChars(clob.getChars().toString());
+                clobDto.setMimeType(clob.getMimeType().toString());
+                valueDto.setClob(clobDto);
+            }
+            return valueDto;
+        }
+        case VOID: {
+            return null;
+        }
+        default:
+            throw _Exceptions.unmatchedCase(valueType);
+        }
+    }
 
     // -- VALUE RECOVERY
 
