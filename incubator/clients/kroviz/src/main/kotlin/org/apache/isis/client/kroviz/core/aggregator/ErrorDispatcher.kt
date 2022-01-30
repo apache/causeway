@@ -32,7 +32,7 @@ class ErrorDispatcher : BaseAggregator() {
         val message = error.getMessage()
         val reSpec = ResourceSpecification(url)
         SessionManager.getEventStore().fault(reSpec, message)
-        ErrorDialog(logEntry).open()
+//        ErrorDialog(logEntry).open()
     }
 
 }

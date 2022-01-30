@@ -31,7 +31,7 @@ import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.core.aggregator.ObjectAggregator
 import org.apache.isis.client.kroviz.core.aggregator.UndefinedDispatcher
 import org.apache.isis.client.kroviz.core.event.EventStore
-import org.apache.isis.client.kroviz.core.event.LogEntry
+import org.apache.isis.client.kroviz.core.event.StatusPo
 import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.core.model.ObjectDM
 import org.apache.isis.client.kroviz.to.TObject
@@ -143,8 +143,8 @@ object ViewManager {
         setNormalCursor()
     }
 
-    fun updateStatus(entry: LogEntry) {
-        getRoStatusBar().update(entry)
+    fun updateStatus(status: StatusPo) {
+        getRoStatusBar().update(status)
         setNormalCursor()
     }
 

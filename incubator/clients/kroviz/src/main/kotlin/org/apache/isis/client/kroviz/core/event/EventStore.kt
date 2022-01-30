@@ -124,7 +124,12 @@ class EventStore {
     }
 
     internal fun updateStatus(entry: LogEntry) {
-        ViewManager.updateStatus(entry)
+        val successNo = log.count { le -> le.isSuccess() }
+        val runningNo = log.count { le -> le.isRunning() }
+        val errorNo = log.count { le -> le.isError() }
+        val viewNo = log.count { le -> le.isView() }
+        val status = StatusPo(successNo, runningNo, errorNo, viewNo)
+        ViewManager.updateStatus(status)
     }
 
     /**

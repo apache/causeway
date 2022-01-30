@@ -42,7 +42,7 @@ class ErrorDialog(val logEntry: LogEntry) : Controller() {
             items = formItems,
             controller = this,
             widthPerc = 80,
-            heightPerc = 70
+            heightPerc = 50
         ).open()
     }
 

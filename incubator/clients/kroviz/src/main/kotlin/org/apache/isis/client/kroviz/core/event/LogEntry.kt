@@ -211,6 +211,14 @@ data class LogEntry(
 
 //end region response
 
+    fun isSuccess(): Boolean {
+        return state.name.startsWith("SUCCESS")
+    }
+
+    fun isRunning(): Boolean {
+        return state == EventState.RUNNING
+    }
+
     fun isView(): Boolean {
         return isOpenView() || isClosedView()
     }

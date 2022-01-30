@@ -25,9 +25,9 @@ import io.kvision.navbar.Nav
 import io.kvision.navbar.Navbar
 import io.kvision.navbar.NavbarType
 import io.kvision.panel.SimplePanel
-import kotlinx.browser.window
 import org.apache.isis.client.kroviz.core.event.EventState
 import org.apache.isis.client.kroviz.core.event.LogEntry
+import org.apache.isis.client.kroviz.core.event.StatusPo
 import org.apache.isis.client.kroviz.core.model.DiagramDM
 import org.apache.isis.client.kroviz.ui.diagram.ClassDiagram
 import org.apache.isis.client.kroviz.ui.dialog.DiagramDialog
@@ -40,8 +40,10 @@ class RoStatusBar {
     private val nav = Nav(rightAlign = true)
     private val userBtn: Button = buildButton("", "Me", ButtonStyle.OUTLINEWARNING)
     private val classDiagram = buildButton("", "Diagram", ButtonStyle.OUTLINEWARNING)
-    private val lastError = buildButton("OK", "OK", ButtonStyle.OUTLINESUCCESS)
-    private val alert = buildButton("", "Notification", ButtonStyle.OUTLINESUCCESS)
+    private val success = buildButton("0", "OK", ButtonStyle.OUTLINESUCCESS)
+    private val running = buildButton("0", "Run", ButtonStyle.OUTLINEWARNING)
+    private val errors = buildButton("0", "Error", ButtonStyle.OUTLINEDANGER)
+    private val views = buildButton("0", "Visualize", ButtonStyle.OUTLINEINFO)
 
     private fun buildButton(text: String, iconName: String, style: ButtonStyle): Button {
         return Button(
@@ -59,10 +61,18 @@ class RoStatusBar {
         navbar.add(nav)
 //        nav.add(isisButton())
 //        nav.add(kvisionButton())
-        nav.add(lastError)
-        nav.add(classDiagram)
+        nav.add(success)
+        nav.add(running)
+        nav.add(errors)
+        nav.add(views)
         nav.add(userBtn)
-        nav.add(alert)
+    }
+
+    fun update(status: StatusPo) {
+        success.text = status.successNo.toString()
+        running.text = status.runningNo.toString()
+        errors.text = status.errorNo.toString()
+        views.text = status.viewsNo.toString()
     }
 
     fun updateDiagram(dd: DiagramDM) {
@@ -80,16 +90,16 @@ class RoStatusBar {
     }
 
     private fun notify(text: String) {
-        alert.setAttribute(name = "title", value = text)
-        alert.style = ButtonStyle.OUTLINEDANGER
-        alert.onClick {
+        views.setAttribute(name = "title", value = text)
+        views.style = ButtonStyle.OUTLINEDANGER
+        views.onClick {
             NotificationDialog(text).open()
         }
     }
 
     fun acknowledge() {
-        alert.setAttribute(name = "title", value = "no new notifications")
-        alert.style = ButtonStyle.OUTLINELIGHT
+        views.setAttribute(name = "title", value = "no new notifications")
+        views.style = ButtonStyle.OUTLINELIGHT
     }
 
     fun update(le: LogEntry?) {
@@ -110,12 +120,12 @@ class RoStatusBar {
     private fun turnRed(logEntry: LogEntry) {
         var text = logEntry.url
         if (text.length > 50) text = text.substring(0, 49)
-        lastError.text = text
-        lastError.style = ButtonStyle.OUTLINEDANGER
-        lastError.icon = IconManager.find("Error")
+        errors.text = text
+        errors.style = ButtonStyle.OUTLINEDANGER
+        errors.icon = IconManager.find("Error")
         notify(text)
     }
-
+/*
     private fun isisButton(): Button {
         val classes = "isis-logo-button-image logo-button"
         val b = Button("", style = ButtonStyle.LINK)
@@ -133,5 +143,5 @@ class RoStatusBar {
             window.open("https://kvision.io")
         }
     }
-
+*/
 }

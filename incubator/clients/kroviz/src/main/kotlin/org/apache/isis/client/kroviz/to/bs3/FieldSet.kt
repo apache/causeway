@@ -29,9 +29,12 @@ class FieldSet(node: Node) {
 
     init {
         val dyNode = node.asDynamic()
-        name = dyNode.getAttribute("name") as String
-        id = dyNode.getAttribute("id") as String
-
+        if (dyNode.hasOwnProperty("name")) {
+            name = dyNode.getAttribute("name") as String
+        }
+        if (dyNode.hasOwnProperty("id")) {
+            id = dyNode.getAttribute("id") as String
+        }
         val nl = node.childNodes.asList()
         val actList = nl.filter { it.nodeName.equals("cpt:action") }
         for (n: Node in actList) {
