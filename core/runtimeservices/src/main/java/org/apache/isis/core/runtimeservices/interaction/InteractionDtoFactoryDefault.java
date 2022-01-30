@@ -114,11 +114,11 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
 
         if(objectAction.getReturnType().isScalar()) {
             //scalar
-            valueMarshaller.recordActionResultScalar(actionInvocationDto, elementSpec, resultObject);
+            valueMarshaller.recordActionResultScalar(actionInvocationDto, objectAction, resultObject);
         } else {
             //non-scalar
             val values = ManagedObjects.unpack(elementSpec, resultObject);
-            valueMarshaller.recordActionResultNonScalar(actionInvocationDto, elementSpec, values);
+            valueMarshaller.recordActionResultNonScalar(actionInvocationDto, objectAction, values);
         }
         return actionInvocationDto;
     }

@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.common.v2.CollectionDto;
 import org.apache.isis.schema.common.v2.TypedTupleDto;
-import org.apache.isis.schema.common.v2.ValueDto;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
@@ -53,6 +52,37 @@ extends SchemaValueMarshallerAbstract {
 
     @Inject private ValueSemanticsResolver valueSemanticsResolver;
     @Inject private SpecificationLoader specLoader;
+
+    // -- RECORD VALUES INTO DTO
+
+    @Override
+    protected <T> ValueWithTypeDto recordValue(
+            final Context<T> context,
+            final ValueWithTypeDto valueDto,
+            final ManagedObject value) {
+
+        value.getBookmark()
+        .ifPresentOrElse(
+                bookmark->valueDto.setReference(bookmark.toOidDto()),
+                ()->CommonDtoUtils.recordFundamentalValue(
+                        context.getSchemaValueType(),
+                        valueDto,
+                        toFundamentalValue(context, _Casts.uncheckedCast(value.getPojo()))));
+
+        return valueDto;
+    }
+
+    @Override
+    protected <T> ValueWithTypeDto recordValues(
+            final Context<T> context,
+            final ValueWithTypeDto valueWithTypeDto,
+            final Can<ManagedObject> values) {
+
+        valueWithTypeDto.setType(ValueType.COLLECTION);
+        valueWithTypeDto.setCollection(asCollectionDto(context, values));
+        valueWithTypeDto.setNull(false);
+        return valueWithTypeDto;
+    }
 
     // -- RECOVER VALUES FROM DTO
 
@@ -77,37 +107,6 @@ extends SchemaValueMarshallerAbstract {
         return recoveredValue;
     }
 
-    // -- RECORD VALUES INTO DTO
-
-    @Override
-    protected <D extends ValueDto, T> D recordValue(
-            final Context<T> context,
-            final D valueDto,
-            final ManagedObject value) {
-
-        value.getBookmark()
-        .ifPresentOrElse(
-                bookmark->valueDto.setReference(bookmark.toOidDto()),
-                ()->CommonDtoUtils.recordFundamentalValue(
-                        context.getSchemaValueType(),
-                        valueDto,
-                        toFundamentalValue(context, (T)value.getPojo())));
-
-        return valueDto;
-    }
-
-    @Override
-    protected <D extends ValueWithTypeDto, T> D recordValues(
-            final Context<T> context,
-            final D valueWithTypeDto,
-            final Can<ManagedObject> values) {
-
-        valueWithTypeDto.setType(ValueType.COLLECTION);
-        valueWithTypeDto.setCollection(asCollectionDto(context, values));
-        valueWithTypeDto.setNull(false);
-        return valueWithTypeDto;
-    }
-
     // -- HELPER - RECORDING
 
     private <T> CollectionDto asCollectionDto(
@@ -120,7 +119,8 @@ extends SchemaValueMarshallerAbstract {
 
         values.stream()
         .forEach(element->{
-            val valueDto = new ValueDto();
+            val valueDto = new ValueWithTypeDto();
+            valueDto.setType(elementValueType);
             collectionDto.getValue().add(valueDto);
             recordValue(context, valueDto, element);
         });
@@ -128,14 +128,13 @@ extends SchemaValueMarshallerAbstract {
         return collectionDto;
     }
 
-    public <T> Object toFundamentalValue(final Context<T> context, final T valuePojo) {
+    private <T> Object toFundamentalValue(final Context<T> context, final T valuePojo) {
         return context.getEncoderDecoder().isPresent()
                 ? context.getEncoderDecoder().get().toEncodedString(valuePojo)
                 : context.getConverter()
                     .<Object>map(converter->converter.toDelegateValue(valuePojo))
                     .orElse(valuePojo);
     }
-
 
     // -- HELPER - RECOVERY
 
@@ -144,7 +143,7 @@ extends SchemaValueMarshallerAbstract {
         return null;
     }
 
-    public <T> T fromFundamentalValue(final Context<T> context, final Object fundamentalValue) {
+    private <T> T fromFundamentalValue(final Context<T> context, final Object fundamentalValue) {
         val valuePojo = context.getEncoderDecoder().isPresent()
                 ? context.getEncoderDecoder().get().fromEncodedString((String)fundamentalValue)
                 : context.getConverter()

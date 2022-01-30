@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.PackedManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -78,7 +79,7 @@ implements SchemaValueMarshaller {
                     && semantics.getSchemaValueType() == ValueType.STRING
                     && !semantics.getCorrespondingClass().equals(String.class);
 
-            return of(correspondingClass, feature, semantics,
+            return of(correspondingClass, feature, Optional.ofNullable(semantics),
                     supportsConversionViaEncoderDecoder
                         ? Optional.ofNullable(semantics.getEncoderDecoder())
                         : Optional.empty(),
@@ -89,7 +90,7 @@ implements SchemaValueMarshaller {
 
         private final @NonNull Class<T> correspondingClass;
         private final @NonNull ObjectFeature feature;
-        private final @NonNull ValueSemanticsProvider<T> semantics;
+        private final @NonNull Optional<ValueSemanticsProvider<T>> semantics;
         private final @NonNull Optional<EncoderDecoder<T>> encoderDecoder;
         private final @NonNull Optional<Converter<T, ?>> converter;
 
@@ -98,7 +99,9 @@ implements SchemaValueMarshaller {
         }
 
         public ValueType getSchemaValueType() {
-            return semantics.getSchemaValueType();
+            return semantics
+                    .map(ValueSemanticsProvider::getSchemaValueType)
+                    .orElse(ValueType.REFERENCE); // fallback
         }
 
     }
@@ -108,12 +111,12 @@ implements SchemaValueMarshaller {
     @Override
     public final ActionInvocationDto recordActionResultScalar(
             final @NonNull ActionInvocationDto invocationDto,
-            final @NonNull ObjectSpecification returnType,
+            final @NonNull ObjectAction objectAction,
             final @NonNull ManagedObject value) {
 
-        val feature = getSpecificationLoader().loadFeatureElseFail(actionIdentifier(invocationDto));
-        val valueCls = feature.getElementType().getCorrespondingClass();
-        val context = newContext(valueCls, feature);
+        val feature = objectAction;
+        val elementTypeAsClass = feature.getElementType().getCorrespondingClass();
+        val context = newContext(elementTypeAsClass, feature);
         invocationDto.setReturned(
                 recordValue(context, new ValueWithTypeDto(), value));
         return invocationDto;
@@ -122,12 +125,12 @@ implements SchemaValueMarshaller {
     @Override
     public final ActionInvocationDto recordActionResultNonScalar(
             final @NonNull ActionInvocationDto invocationDto,
-            final @NonNull ObjectSpecification elementType,
+            final @NonNull ObjectAction objectAction,
             final @NonNull Can<ManagedObject> value) {
 
-        val feature = getSpecificationLoader().loadFeatureElseFail(actionIdentifier(invocationDto));
-        val valueCls = feature.getElementType().getCorrespondingClass();
-        val context = newContext(valueCls, feature);
+        val feature = objectAction;
+        val elementTypeAsClass = feature.getElementType().getCorrespondingClass();
+        val context = newContext(elementTypeAsClass, feature);
         invocationDto.setReturned(
                 recordValues(context, new ValueWithTypeDto(), value));
         return invocationDto;
@@ -136,22 +139,16 @@ implements SchemaValueMarshaller {
     @Override
     public final PropertyDto recordPropertyValue(
             final @NonNull PropertyDto propertyDto,
-            final @NonNull ObjectSpecification propertyType,
+            final @NonNull OneToOneAssociation property,
             final @NonNull ManagedObject value) {
-        final Identifier propertyIdentifier = propertyIdentifier(propertyDto);
+
+        val feature = property;
+        val elementTypeAsClass = feature.getElementType().getCorrespondingClass();
 
         // guard against property not being a scalar
-        {
-            final OneToOneAssociation property =
-                    (OneToOneAssociation)getSpecificationLoader().loadFeatureElseFail(propertyIdentifier);
+        _Assert.assertEquals(elementTypeAsClass, property.getElementType().getCorrespondingClass());
 
-            val elementType = property.getElementType().getCorrespondingClass();
-            _Assert.assertEquals(elementType, propertyType.getCorrespondingClass());
-        }
-
-        val feature = getSpecificationLoader().loadFeatureElseFail(propertyIdentifier);
-        val valueCls = feature.getElementType().getCorrespondingClass();
-        val context = newContext(valueCls, feature);
+        val context = newContext(elementTypeAsClass, feature);
         propertyDto.setNewValue(
                 recordValue(context, new ValueWithTypeDto(), value));
         return propertyDto;
@@ -159,19 +156,15 @@ implements SchemaValueMarshaller {
 
     @Override
     public final ParamDto recordParamScalar(
-            final @NonNull Identifier paramIdentifier,
             final @NonNull ParamDto paramDto,
-            final @NonNull ObjectSpecification paramType,
+            final @NonNull ObjectActionParameter actionParameter,
             final @NonNull ManagedObject value) {
-
-        final ObjectActionParameter actionParameter =
-                (ObjectActionParameter)getSpecificationLoader().loadFeatureElseFail(paramIdentifier);
 
         _Assert.assertTrue(actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR);
 
         val feature = actionParameter;
-        val valueCls = feature.getElementType().getCorrespondingClass();
-        val context = newContext(valueCls, feature);
+        val elementTypeAsClass = feature.getElementType().getCorrespondingClass();
+        val context = newContext(elementTypeAsClass, feature);
 
         //          ValueType valueType = valueWrapper.getValueType();
         //
@@ -186,13 +179,9 @@ implements SchemaValueMarshaller {
 
     @Override
     public ParamDto recordParamNonScalar(
-            final @NonNull Identifier paramIdentifier,
             final @NonNull ParamDto paramDto,
-            final @NonNull ObjectSpecification elementType,
+            final @NonNull ObjectActionParameter actionParameter,
             final @NonNull Can<ManagedObject> values) {
-
-        final ObjectActionParameter actionParameter =
-                (ObjectActionParameter)getSpecificationLoader().loadFeatureElseFail(paramIdentifier);
 
         _Assert.assertTrue(actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION);
 
@@ -271,10 +260,11 @@ implements SchemaValueMarshaller {
 
     // -- LOW LEVEL IMPLEMENTATION - RECORDING
 
-    protected abstract <D extends ValueDto, T>
-        D recordValue(Context<T> context, D valueDto, ManagedObject value);
-    protected abstract <D extends ValueWithTypeDto, T>
-        D recordValues(Context<T> context, D valueWithTypeDto, Can<ManagedObject> values);
+    protected abstract <T> ValueWithTypeDto
+        recordValue(Context<T> context, ValueWithTypeDto valueDto, ManagedObject value);
+
+    protected abstract <T> ValueWithTypeDto
+        recordValues(Context<T> context, ValueWithTypeDto valueDto, Can<ManagedObject> values);
 
     // -- LOW LEVEL IMPLEMENTATION - RECOVERY
 

@@ -22,7 +22,9 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.ParamDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
@@ -84,7 +86,7 @@ public interface SchemaValueMarshaller {
      */
     ActionInvocationDto recordActionResultScalar(
             @NonNull ActionInvocationDto invocationDto,
-            @NonNull ObjectSpecification elementType,
+            @NonNull ObjectAction objectAction,
             @NonNull ManagedObject value);
 
     /**
@@ -93,7 +95,7 @@ public interface SchemaValueMarshaller {
      */
     ActionInvocationDto recordActionResultNonScalar(
             @NonNull ActionInvocationDto invocationDto,
-            @NonNull ObjectSpecification elementType,
+            @NonNull ObjectAction objectAction,
             @NonNull Can<ManagedObject> values);
 
     /**
@@ -102,7 +104,7 @@ public interface SchemaValueMarshaller {
      */
     PropertyDto recordPropertyValue(
             @NonNull PropertyDto propertyDto,
-            @NonNull ObjectSpecification elementType,
+            @NonNull OneToOneAssociation property,
             @NonNull ManagedObject value);
 
     /**
@@ -110,9 +112,8 @@ public interface SchemaValueMarshaller {
      * using {@link ValueSemanticsProvider} for corresponding <i>Action Parameter</i>.
      */
     ParamDto recordParamScalar(
-            @NonNull Identifier paramIdentifier,
             @NonNull ParamDto paramDto,
-            @NonNull ObjectSpecification elementType,
+            @NonNull ObjectActionParameter param,
             @NonNull ManagedObject value);
 
     /**
@@ -120,9 +121,8 @@ public interface SchemaValueMarshaller {
      * using {@link ValueSemanticsProvider} for corresponding <i>Action Parameter</i>.
      */
     ParamDto recordParamNonScalar(
-            @NonNull Identifier paramIdentifier,
             @NonNull ParamDto paramDto,
-            @NonNull ObjectSpecification elementType,
+            @NonNull ObjectActionParameter param,
             @NonNull Can<ManagedObject> values);
 
 }

@@ -131,13 +131,11 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
             if(actionParameter.getFeatureType() != FeatureType.ACTION_PARAMETER_COLLECTION) {
                 //scalar
-                valueMarshaller.recordParamScalar(
-                        actionParameter.getFeatureIdentifier(), paramDto, elementType, argAdapter);
+                valueMarshaller.recordParamScalar(paramDto, actionParameter, argAdapter);
             } else {
                 //non-scalar
                 val values = ManagedObjects.unpack(elementType, argAdapter);
-                valueMarshaller.recordParamNonScalar(
-                        actionParameter.getFeatureIdentifier(), paramDto, elementType, values);
+                valueMarshaller.recordParamNonScalar(paramDto, actionParameter, values);
             }
 
             CommandDtoUtils.parametersFor(actionDto)
@@ -155,9 +153,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
         propertyDto.setLogicalMemberIdentifier(IdentifierUtil.logicalMemberIdentifierFor(property));
         propertyDto.setMemberIdentifier(IdentifierUtil.memberIdentifierFor(property));
 
-        val valueSpec = property.getElementType();
-
-        valueMarshaller.recordPropertyValue(propertyDto, valueSpec, valueAdapter);
+        valueMarshaller.recordPropertyValue(propertyDto, property, valueAdapter);
     }
 
     // -- HELPER
