@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.ActionLayout.Position;
@@ -48,7 +49,11 @@ public class EventBusServiceDemoVm implements HasAsciiDocDescription {
         return eventLogEntryRepository.listAll();
     }
 
-    public static class UiButtonEvent {}
+    @DomainObject(nature = Nature.VIEW_MODEL, logicalTypeName = "demo.EventBusServiceDemoVm.UiButtonEvent")
+    public static class UiButtonEvent implements ViewModel {
+        @Override public String viewModelMemento() { return ""; }
+        @Override public void viewModelInit(final String memento) { }
+    }
 
     @ActionLayout(
             describedAs = "Writes a new EventLog entry to the persistent eventlog.",

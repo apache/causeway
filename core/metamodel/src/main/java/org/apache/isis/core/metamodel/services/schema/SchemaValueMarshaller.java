@@ -64,16 +64,17 @@ public interface SchemaValueMarshaller {
     /**
      * Recovers a property value, using {@link ValueSemanticsProvider}
      * for corresponding <i>Property</i>.
+     * Cardinality {@code 0..1}
      */
-    ManagedObject recoverValueFrom(@NonNull PropertyDto propertyDto);
+    ManagedObject recoverPropertyFrom(@NonNull PropertyDto propertyDto);
 
     /**
      * Recovers a parameter value, using {@link ValueSemanticsProvider}
-     * for corresponding <i>Action Parameter</i>.
+     * for corresponding <i>Action Parameter</i>. Cardinality {@code 0..n}
      * <p>
      * Packed up if non-scalar.
      */
-    ManagedObject recoverValuesFrom(@NonNull Identifier paramIdentifier, @NonNull ParamDto paramDto);
+    ManagedObject recoverParameterFrom(@NonNull Identifier paramIdentifier, @NonNull ParamDto paramDto);
 
     // -- RECORD VALUES INTO DTO
 

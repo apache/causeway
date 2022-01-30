@@ -240,7 +240,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
                 final OneToOneAssociation property = findOneToOneAssociation(targetAdapter, memberId);
 
-                val newValueAdapter = valueMarshaller.recoverValueFrom(propertyDto);
+                val newValueAdapter = valueMarshaller.recoverPropertyFrom(propertyDto);
 
                 property.set(targetAdapter, newValueAdapter, InteractionInitiatedBy.FRAMEWORK);
 
@@ -353,7 +353,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
         return streamParamDtosFrom(actionDto)
                 .map(IndexedFunction.zeroBased((i, paramDto)->
-                    valueMarshaller.recoverValuesFrom(actionIdentifier.withParameterIndex(i), paramDto)))
+                    valueMarshaller.recoverParameterFrom(actionIdentifier.withParameterIndex(i), paramDto)))
                 .collect(Can.toCan());
     }
 

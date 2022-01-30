@@ -8,7 +8,6 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -19,10 +18,9 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.Identifier.Type;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
-import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.semantics.Converter;
@@ -32,28 +30,20 @@ import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
-import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
-import org.apache.isis.core.metamodel.services.schema.SchemaValueMarshaller;
+import org.apache.isis.core.metamodel.services.schema.SchemaValueMarshallerAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.ParamDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.schema.common.v2.BlobDto;
 import org.apache.isis.schema.common.v2.ClobDto;
 import org.apache.isis.schema.common.v2.CollectionDto;
 import org.apache.isis.schema.common.v2.EnumDto;
-import org.apache.isis.schema.common.v2.OidDto;
 import org.apache.isis.schema.common.v2.TypedTupleDto;
 import org.apache.isis.schema.common.v2.ValueDto;
 import org.apache.isis.schema.common.v2.ValueType;
@@ -62,7 +52,6 @@ import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.val;
 
@@ -72,56 +61,37 @@ import lombok.val;
 @Qualifier("Default")
 @RequiredArgsConstructor
 public class SchemaValueMarshallerDefault
-implements SchemaValueMarshaller {
+extends SchemaValueMarshallerAbstract {
 
     @Inject private ValueSemanticsResolver valueSemanticsResolver;
     @Inject private SpecificationLoader specLoader;
 
-    // -- RECOVER IDENTIFIERS
-
-    @Override
-    public Identifier actionIdentifier(final @NonNull ActionDto actionDto) {
-        return IdentifierUtil.memberIdentifierFor(specLoader,
-                Type.ACTION,
-                actionDto.getLogicalMemberIdentifier());
-    }
-
-    @Override
-    public Identifier actionIdentifier(final @NonNull ActionInvocationDto actionInvocationDto) {
-        return IdentifierUtil.memberIdentifierFor(specLoader,
-                Type.ACTION,
-                actionInvocationDto.getLogicalMemberIdentifier());
-    }
-
-    @Override
-    public Identifier propertyIdentifier(final @NonNull PropertyDto propertyDto) {
-        return IdentifierUtil.memberIdentifierFor(specLoader,
-                Type.PROPERTY_OR_COLLECTION,
-                propertyDto.getLogicalMemberIdentifier());
-    }
-
     // -- RECOVER VALUES FROM DTO
 
     @Override
-    public ManagedObject recoverReferenceFrom(final @NonNull OidDto oidDto) {
-        val bookmark = Bookmark.forOidDto(oidDto);
-        val spec = specLoader.specForLogicalTypeName(bookmark.getLogicalTypeName()).orElse(null);
-        val loadRequest = ObjectLoader.Request.of(spec, bookmark);
-        return spec.getMetaModelContext().getObjectManager().loadObject(loadRequest);
-    }
+    protected ManagedObject recoverScalarValue(
+            @NonNull final ValueTypeHelper valueTypeHelper,
+            @NonNull final ValueWithTypeDto valueDto) {
 
-    @Override
-    public ManagedObject recoverValueFrom(final @NonNull PropertyDto propertyDto) {
-        val identifier = propertyIdentifier(propertyDto);
-        val valueWithTypeDto = propertyDto.getNewValue();
-        return recoverValue(identifier, valueWithTypeDto);
-    }
+        val valueAsObject = CommonDtoUtils.getValueAsObject(valueDto);
 
-    @Override
-    public ManagedObject recoverValuesFrom(
-            final @NonNull Identifier paramIdentifier,
-            final @NonNull ParamDto paramDto) {
-        return recoverValue(paramIdentifier, paramDto);
+        if(valueAsObject==null) {
+            return ManagedObject.empty(valueTypeHelper.getElementType());
+        }
+
+        val feature = valueTypeHelper.getFeature();
+        val elementSpec = valueTypeHelper.getElementType();
+
+        final ValueTypeWrapper<?> valueWrapper = wrap(feature.getFeatureIdentifier(), elementSpec);
+
+        if(valueDto.getComposite()!=null) {
+            return ManagedObject.of(elementSpec,
+                    fromTypedTuple(valueDto.getComposite()));
+        }
+
+        val recoveredValue = ManagedObject.of(elementSpec,
+                valueWrapper.fromFundamentalValue(CommonDtoUtils.getValueAsObject(valueDto)));
+        return recoveredValue;
     }
 
     // -- RECORD VALUES INTO DTO
@@ -254,11 +224,6 @@ implements SchemaValueMarshaller {
             return semantics!=null
                     ? semantics.getConverter()
                     : null;
-        }
-
-        public T fromTypedTuple(final TypedTupleDto typedTupleDto) {
-            // FIXME[ISIS-2877] implement
-            return null;
         }
 
         public TypedTupleDto toTypedTupleDto(final Object pojo) {
@@ -476,128 +441,21 @@ implements SchemaValueMarshaller {
 
     // -- HELPER - RECOVERY
 
-    private ManagedObject recoverValue(
-            final Identifier featureIdentifier,
-            final ValueWithTypeDto valueWithTypeDto) {
-
-        val feature = specLoader.loadFeatureElseFail(featureIdentifier);
-        val desiredTypeSpec = feature.getElementType();
-
-        if(valueWithTypeDto==null
-                || (valueWithTypeDto.isSetNull()
-                    && valueWithTypeDto.isNull())) {
-            return ManagedObject.empty(desiredTypeSpec);
-        }
-
-        final ValueTypeWrapper<?> valueWrapper = wrap(featureIdentifier, desiredTypeSpec);
-        return recoverValue(valueWithTypeDto, valueWrapper);
+    private Object fromTypedTuple(final TypedTupleDto typedTupleDto) {
+        // FIXME[ISIS-2877] implement
+        return null;
     }
 
-    private ManagedObject recoverValue(
-            final ValueDto valueDto,
-            final @NonNull ValueTypeWrapper<?> valueWrapper) {
+    // -- DEPENDENCIES
 
-        val elementSpec = valueWrapper.getSpec();
-
-        if(valueDto.getCollection()!=null) {
-            return ManagedObjects.pack(elementSpec, recoverCollection(valueWrapper, valueDto.getCollection()));
-        }
-
-        if(valueDto.getComposite()!=null) {
-            return ManagedObject.of(elementSpec,
-                    valueWrapper.fromTypedTuple(valueDto.getComposite()));
-        }
-
-        return ManagedObject.of(elementSpec,
-                valueWrapper.fromFundamentalValue(recoverFundamentalValue(valueDto, valueWrapper)));
+    @Override
+    protected final SpecificationLoader getSpecificationLoader() {
+        return specLoader;
     }
 
-    @SneakyThrows
-    private Object recoverFundamentalValue(
-            final ValueDto valueDto,
-            final ValueTypeWrapper<?> valueWrapper) {
-
-        val elementType = valueWrapper.getValueType();
-
-        switch(elementType) {
-        case STRING:
-            return valueDto.getString();
-        case BYTE:
-            return valueDto.getByte();
-        case SHORT:
-            return valueDto.getShort();
-        case INT:
-            return valueDto.getInt();
-        case LONG:
-            return valueDto.getLong();
-        case FLOAT:
-            return valueDto.getFloat();
-        case DOUBLE:
-            return valueDto.getDouble();
-        case BOOLEAN:
-            return valueDto.isBoolean();
-        case CHAR:
-            final String aChar = valueDto.getChar();
-            if(_Strings.isNullOrEmpty(aChar)) { return null; }
-            return aChar.charAt(0);
-        case BIG_DECIMAL:
-            return valueDto.getBigDecimal();
-        case BIG_INTEGER:
-            return valueDto.getBigInteger();
-        case LOCAL_DATE:
-            return JavaTimeXMLGregorianCalendarMarshalling.toLocalDate(valueDto.getLocalDate());
-        case LOCAL_TIME:
-            return JavaTimeXMLGregorianCalendarMarshalling.toLocalTime(valueDto.getLocalTime());
-        case LOCAL_DATE_TIME:
-            return JavaTimeXMLGregorianCalendarMarshalling.toLocalDateTime(valueDto.getLocalDateTime());
-        case OFFSET_DATE_TIME:
-            return JavaTimeXMLGregorianCalendarMarshalling.toOffsetDateTime(valueDto.getOffsetDateTime());
-        case OFFSET_TIME:
-            return JavaTimeXMLGregorianCalendarMarshalling.toOffsetTime(valueDto.getOffsetTime());
-        case ZONED_DATE_TIME:
-            return JavaTimeXMLGregorianCalendarMarshalling.toZonedDateTime(valueDto.getZonedDateTime());
-        case ENUM:
-            final EnumDto enumDto = valueDto.getEnum();
-            final String enumType = enumDto.getEnumType();
-            @SuppressWarnings("rawtypes")
-            final Class<? extends Enum> enumClass =
-                    _Casts.uncheckedCast(_Context.loadClassAndInitialize(enumType));
-            return Enum.valueOf(_Casts.uncheckedCast(enumClass), enumDto.getEnumName());
-        case REFERENCE:
-            return valueDto.getReference();
-        case BLOB:
-            final BlobDto blobDto = valueDto.getBlob();
-            return new Blob(blobDto.getName(), blobDto.getMimeType(), blobDto.getBytes());
-        case CLOB:
-            final ClobDto clobDto = valueDto.getClob();
-            return new Clob(clobDto.getName(), clobDto.getMimeType(), clobDto.getChars());
-        case VOID:
-            return null;
-        default:
-            throw _Exceptions.unmatchedCase(elementType);
-        }
-
-    }
-
-    private Can<ManagedObject> recoverCollection(
-            final ValueTypeWrapper<?> valueWrapper,
-            final CollectionDto collectionDto) {
-
-        _Assert.assertEquals(valueWrapper.getValueType(), collectionDto.getType());
-
-        if(_NullSafe.isEmpty(collectionDto.getValue())) {
-            return Can.empty();
-        }
-        val list = new ArrayList<ManagedObject>();
-
-        for(val elementDto : collectionDto.getValue()) {
-            if(elementDto instanceof ValueWithTypeDto) {
-                _Assert.assertEquals(valueWrapper, ((ValueWithTypeDto)elementDto).getType(),
-                        "mixing types not supported");
-            }
-            list.add(recoverValue(elementDto, valueWrapper));
-        }
-        return Can.ofCollection(list);
+    @Override
+    protected ValueSemanticsResolver getValueSemanticsResolver() {
+        return valueSemanticsResolver;
     }
 
 }
