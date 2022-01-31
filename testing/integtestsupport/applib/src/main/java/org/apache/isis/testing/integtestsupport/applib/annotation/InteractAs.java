@@ -38,7 +38,7 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
  * &#64;InteractAs(
  *     userName = "sven",
  *     localeName = "en",
- *     frozenDateTime = "2010-01-01 13:02:04")
+ *     frozenDateTime = "2010-01-01 13:02:04 -03")
  * void test() {
  *     // ...
  * }
@@ -71,7 +71,7 @@ public @interface InteractAs {
      * <ul>
      * <li>"2022-01-31 14:04:33.017 -03:30" (full form)</li>
      * <li>"2022-01-31 14:04:33 -03" (no millis, no offset minutes)</li>
-     * <li>"2022-01-31 14:04:33 Z -03:30" (no millis, no offset = UTC)</li>
+     * <li>"2022-01-31 14:04:33 Z" (no millis, no offset = UTC)</li>
      * </ul>
      */
     String frozenDateTime()

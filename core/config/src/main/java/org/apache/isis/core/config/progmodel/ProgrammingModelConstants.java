@@ -137,7 +137,7 @@ public final class ProgrammingModelConstants {
          * <ul>
          * <li>"2022-01-31 14:04:33.017 -03:30" (full form)</li>
          * <li>"2022-01-31 14:04:33 -03" (no millis, no offset minutes)</li>
-         * <li>"2022-01-31 14:04:33 Z -03:30" (no millis, no offset = UTC)</li>
+         * <li>"2022-01-31 14:04:33 Z" (no millis, no offset = UTC)</li>
          * </ul>
          * <p>
          * Used eg. with {@code InteractAs(frozenDateTime=...)} annotation.
