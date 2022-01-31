@@ -37,7 +37,7 @@ import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.DateTimeF
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
-import org.apache.isis.testing.integtestsupport.applib.annotation.TestWith;
+import org.apache.isis.testing.integtestsupport.applib.annotation.InteractAs;
 
 import lombok.val;
 
@@ -57,7 +57,7 @@ class CustomContextTest extends IsisIntegrationTestAbstract {
     @Inject InteractionService interactionService;
 
     @Test
-    @TestWith()
+    @InteractAs()
     void shouldRunWithDefaultContext() {
 
         val iaCtx = interactionService.currentInteractionContextElseFail();
@@ -73,7 +73,7 @@ class CustomContextTest extends IsisIntegrationTestAbstract {
 
 
     @Test
-    @TestWith(
+    @InteractAs(
             userName = "sven",
             localeName = "fr",
             frozenDateTime = "2010-01-01 13:02:04")

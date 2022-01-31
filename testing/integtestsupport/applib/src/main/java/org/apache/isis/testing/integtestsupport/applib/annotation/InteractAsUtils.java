@@ -31,9 +31,9 @@ import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class TestWithUtils {
+public class InteractAsUtils {
 
-    public InteractionContext toInteractionContext(final TestWith testWith) {
+    public InteractionContext toInteractionContext(final InteractAs testWith) {
         val user = _Strings.isNotEmpty(testWith.userName())
                 ? UserMemento.ofName(testWith.userName())
                 : UserMemento.system();

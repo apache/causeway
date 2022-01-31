@@ -27,8 +27,8 @@ import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.reflection._Annotations;
-import org.apache.isis.testing.integtestsupport.applib.annotation.TestWith;
-import org.apache.isis.testing.integtestsupport.applib.annotation.TestWithUtils;
+import org.apache.isis.testing.integtestsupport.applib.annotation.InteractAs;
+import org.apache.isis.testing.integtestsupport.applib.annotation.InteractAsUtils;
 
 class _Helper {
 
@@ -40,12 +40,12 @@ class _Helper {
     }
 
     /**
-     * Eg. as declared on test method via {@link TestWith}.
+     * Eg. as declared on test method via {@link InteractAs}.
      */
     static Optional<InteractionContext> getCustomInteractionContext(final ExtensionContext extensionContext) {
         return extensionContext.getTestMethod()
-        .flatMap(testMethod->_Annotations.synthesize(testMethod, TestWith.class))
-        .map(TestWithUtils::toInteractionContext);
+        .flatMap(testMethod->_Annotations.synthesize(testMethod, InteractAs.class))
+        .map(InteractAsUtils::toInteractionContext);
     }
 
     // -- SHORTCUTS

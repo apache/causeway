@@ -35,7 +35,7 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
  * Example:<br>
  * <pre>
  * &#64;Test
- * &#64;TestWith(
+ * &#64;InteractAs(
  *     userName = "sven",
  *     localeName = "en",
  *     frozenDateTime = "2010-01-01 13:02:04")
@@ -47,7 +47,7 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
 @Inherited
 @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface TestWith {
+public @interface InteractAs {
 
     /**
      * If empty, defaults to the system user (with elevated privileges).
