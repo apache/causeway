@@ -36,7 +36,7 @@ public class IsisInteractionHandler implements BeforeEachCallback, AfterEachCall
             _Helper
                 .getCustomInteractionContext(extensionContext)
                 .ifPresentOrElse(
-                        customInteractionContext->interactionService.openInteraction(customInteractionContext),
+                        interactionService::openInteraction,
                         interactionService::openInteraction));
     }
 

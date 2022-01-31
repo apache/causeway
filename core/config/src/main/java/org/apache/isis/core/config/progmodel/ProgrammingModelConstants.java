@@ -24,9 +24,11 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.IntFunction;
@@ -129,24 +131,37 @@ public final class ProgrammingModelConstants {
     @RequiredArgsConstructor
     public enum DateTimeFormat {
         /**
-         * Format: "yyyy-MM-dd HH:mm:ss"
-         * eg. {@literal "2010-01-01 13:02:04"}
+         * Parser-format: {@literal "yyyy-MM-dd HH:mm:ss[.SSS][' '][XXX][x]"}<br>
+         * Render-format: {@literal "yyyy-MM-dd HH:mm:ss.SSS XXX"}<br>
+         * Examples:<br>
+         * <ul>
+         * <li>"2022-01-31 14:04:33.017 -03:30" (full form)</li>
+         * <li>"2022-01-31 14:04:33 -03" (no millis, no offset minutes)</li>
+         * <li>"2022-01-31 14:04:33 Z -03:30" (no millis, no offset = UTC)</li>
+         * </ul>
+         * <p>
+         * Used eg. with {@code InteractAs(frozenDateTime=...)} annotation.
          */
-        CANONICAL(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        CANONICAL(
+                new DateTimeFormatterBuilder()
+                        .appendPattern("yyyy-MM-dd HH:mm:ss[.SSS][' '][XXX][x]")
+                        .parseLenient()
+                        .parseCaseInsensitive()
+                        .toFormatter(Locale.ROOT),
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS XXX", Locale.ROOT));
 
-        // while this enum only has a single value, we just provide a (quasi) static method here
-        public LocalDateTime parseDateTime(final String dateTimeLiteral) {
-            return LocalDateTime.parse(dateTimeLiteral, dtf);
+        public OffsetDateTime parseDateTime(final String dateTimeLiteral) {
+            return OffsetDateTime.parse(dateTimeLiteral, parser);
         }
 
-        // while this enum only has a single value, we just provide a (quasi) static method here
-        public String formatDateTime(final LocalDateTime dateTime) {
-            return dtf.format(dateTime);
+        public String formatDateTime(final OffsetDateTime dateTime) {
+            return formatter.format(dateTime);
         }
 
         // -- HELPER
 
-        private final DateTimeFormatter dtf;
+        private final DateTimeFormatter parser;
+        private final DateTimeFormatter formatter;
 
     }
 

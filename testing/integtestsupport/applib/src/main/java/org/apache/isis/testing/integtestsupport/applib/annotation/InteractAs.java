@@ -65,8 +65,14 @@ public @interface InteractAs {
 
     /**
      * If empty, defaults to current system time.
-     * Format: "yyyy-MM-dd HH:mm:ss"
-     * eg. {@literal "2010-01-01 13:02:04"}
+     * <p>
+     * Format: {@literal "yyyy-MM-dd HH:mm:ss[.SSS][' '][XXX][x]"}<br>
+     * Examples:<br>
+     * <ul>
+     * <li>"2022-01-31 14:04:33.017 -03:30" (full form)</li>
+     * <li>"2022-01-31 14:04:33 -03" (no millis, no offset minutes)</li>
+     * <li>"2022-01-31 14:04:33 Z -03:30" (no millis, no offset = UTC)</li>
+     * </ul>
      */
     String frozenDateTime()
         default ""; // unspecified

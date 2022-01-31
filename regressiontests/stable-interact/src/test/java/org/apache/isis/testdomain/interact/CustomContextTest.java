@@ -76,7 +76,7 @@ class CustomContextTest extends IsisIntegrationTestAbstract {
     @InteractAs(
             userName = "sven",
             localeName = "fr",
-            frozenDateTime = "2010-01-01 13:02:04")
+            frozenDateTime = "2022-07-13 13:02:04 Z")
     void shouldRunWithCustomContext() {
 
         val iaCtx = interactionService.currentInteractionContextElseFail();
@@ -84,8 +84,8 @@ class CustomContextTest extends IsisIntegrationTestAbstract {
         assertEquals("sven", iaCtx.getUser().getName());
         assertEquals(Locale.FRANCE.getLanguage(), iaCtx.getLocale().getLanguageLocale().getLanguage());
         assertEquals(
-                DateTimeFormat.CANONICAL.parseDateTime("2010-01-01 13:02:04"),
-                iaCtx.getClock().nowAsLocalDateTime());
+                DateTimeFormat.CANONICAL.parseDateTime("2022-07-13 13:02:04 Z").toInstant(),
+                iaCtx.getClock().nowAsInstant());
     }
 
 }
