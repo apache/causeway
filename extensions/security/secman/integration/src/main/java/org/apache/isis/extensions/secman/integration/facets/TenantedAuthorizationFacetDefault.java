@@ -19,7 +19,6 @@
 package org.apache.isis.extensions.secman.integration.facets;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import javax.inject.Provider;
 
@@ -34,7 +33,9 @@ import org.apache.isis.extensions.secman.applib.tenancy.spi.ApplicationTenancyEv
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
 
-public class TenantedAuthorizationFacetDefault extends FacetAbstract implements TenantedAuthorizationFacet {
+public class TenantedAuthorizationFacetDefault
+extends FacetAbstract
+implements TenantedAuthorizationFacet {
 
     private static final Class<? extends Facet> type() {
         return TenantedAuthorizationFacet.class;
@@ -61,7 +62,9 @@ public class TenantedAuthorizationFacetDefault extends FacetAbstract implements 
     @Override
     public String hides(final VisibilityContext ic) {
 
-        if(evaluators == null || evaluators.isEmpty()) {
+        if(evaluators == null
+                || evaluators.isEmpty()
+                || userService.isCurrentUserWithSystemPrivileges()) {
             return null;
         }
 
@@ -86,7 +89,10 @@ public class TenantedAuthorizationFacetDefault extends FacetAbstract implements 
 
     @Override
     public String disables(final UsabilityContext ic) {
-        if(evaluators == null || evaluators.isEmpty()) {
+
+        if(evaluators == null
+                || evaluators.isEmpty()
+                || userService.isCurrentUserWithSystemPrivileges()) {
             return null;
         }
 
@@ -110,15 +116,16 @@ public class TenantedAuthorizationFacetDefault extends FacetAbstract implements 
 
 
     /**
-     * Per {@link #findApplicationUserNoCache(String)}, cached for the request using the {@link QueryResultsCache}.
+     * Per {@link #findApplicationUserNoCache(String)},
+     * cached for the request using the {@link QueryResultsCache}.
      */
     protected ApplicationUser findApplicationUser(final String userName) {
-        return queryResultsCacheProvider.get().execute(new Callable<ApplicationUser>() {
-            @Override
-            public ApplicationUser call() throws Exception {
-                return findApplicationUserNoCache(userName);
-            }
-        }, TenantedAuthorizationFacetDefault.class, "findApplicationUser", userName);
+        return queryResultsCacheProvider.get()
+            .execute(
+                    ()->findApplicationUserNoCache(userName),
+                    TenantedAuthorizationFacetDefault.class,
+                    "findApplicationUser",
+                    userName);
     }
 
     protected ApplicationUser findApplicationUserNoCache(final String userName) {

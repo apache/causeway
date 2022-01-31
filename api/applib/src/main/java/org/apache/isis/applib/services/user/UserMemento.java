@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.springframework.context.event.EventListener;
@@ -304,8 +305,13 @@ public class UserMemento implements Serializable {
         return streamRoleNames().anyMatch(myRoleName->myRoleName.equals(roleName));
     }
 
-
-
+    /**
+     * Whether this {@link UserMemento} represent the <i>system user</i>.
+     */
+    @Programmatic
+    public boolean isSystem() {
+        return Objects.equals(SYSTEM_USER, this);
+    }
 
     // -- UTILITY
 

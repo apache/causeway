@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
  * Optionally hide or disable an object, property, collection or action
  * depending on the tenancy.
  */
-public interface TenantedAuthorizationFacet extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
+public interface TenantedAuthorizationFacet
+extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
 
 }
