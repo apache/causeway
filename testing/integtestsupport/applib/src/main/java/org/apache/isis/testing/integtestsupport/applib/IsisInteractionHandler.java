@@ -30,13 +30,18 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
 public class IsisInteractionHandler implements BeforeEachCallback, AfterEachCallback {
 
     @Override
-    public void beforeEach(ExtensionContext extensionContext) throws Exception {
+    public void beforeEach(final ExtensionContext extensionContext) throws Exception {
         _Helper.getInteractionFactory(extensionContext)
-        .ifPresent(InteractionService::openInteraction);
+        .ifPresent(interactionService->
+            _Helper
+                .getCustomInteractionContext(extensionContext)
+                .ifPresentOrElse(
+                        customInteractionContext->interactionService.openInteraction(customInteractionContext),
+                        interactionService::openInteraction));
     }
 
     @Override
-    public void afterEach(ExtensionContext extensionContext) throws Exception {
+    public void afterEach(final ExtensionContext extensionContext) throws Exception {
         _Helper.getInteractionFactory(extensionContext)
         .ifPresent(InteractionService::closeInteractionLayers);
     }

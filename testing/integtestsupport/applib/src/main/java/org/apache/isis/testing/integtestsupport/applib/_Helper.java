@@ -23,8 +23,12 @@ import java.util.Optional;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.testing.integtestsupport.applib.annotation.TestWith;
+import org.apache.isis.testing.integtestsupport.applib.annotation.TestWithUtils;
 
 class _Helper {
 
@@ -33,6 +37,15 @@ class _Helper {
         .filter(IsisIntegrationTestAbstract.class::isInstance)
         .map(IsisIntegrationTestAbstract.class::cast)
         .map(IsisIntegrationTestAbstract::getServiceRegistry);
+    }
+
+    /**
+     * Eg. as declared on test method via {@link TestWith}.
+     */
+    static Optional<InteractionContext> getCustomInteractionContext(final ExtensionContext extensionContext) {
+        return extensionContext.getTestMethod()
+        .flatMap(testMethod->_Annotations.synthesize(testMethod, TestWith.class))
+        .map(TestWithUtils::toInteractionContext);
     }
 
     // -- SHORTCUTS

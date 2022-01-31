@@ -142,7 +142,7 @@ public interface VirtualClock extends Serializable {
     }
 
     static VirtualClock frozenAt(@NonNull final java.time.LocalDateTime frozenAt) {
-        return frozenAt(Instant.from(frozenAt));
+        return frozenAt(Instant.from(frozenAt.atZone(ZoneId.systemDefault())));
     }
 
     static VirtualClock frozenAt(@NonNull final java.time.OffsetDateTime frozenAt) {

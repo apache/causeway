@@ -24,6 +24,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.Function;
@@ -121,6 +123,33 @@ public final class ProgrammingModelConstants {
                     || isNonBooleanGetter(method, type->type != void.class);
         }
     }
+
+    // -- CANONICAL DATE-TIME PARSING/FORMATTING
+
+    @RequiredArgsConstructor
+    public enum DateTimeFormat {
+        /**
+         * Format: "yyyy-MM-dd HH:mm:ss"
+         * eg. {@literal "2010-01-01 13:02:04"}
+         */
+        CANONICAL(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+        // while this enum only has a single value, we just provide a (quasi) static method here
+        public LocalDateTime parseDateTime(final String dateTimeLiteral) {
+            return LocalDateTime.parse(dateTimeLiteral, dtf);
+        }
+
+        // while this enum only has a single value, we just provide a (quasi) static method here
+        public String formatDateTime(final LocalDateTime dateTime) {
+            return dtf.format(dateTime);
+        }
+
+        // -- HELPER
+
+        private final DateTimeFormatter dtf;
+
+    }
+
 
     // -- MIXIN CONSTRUCTION
 
