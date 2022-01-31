@@ -1,0 +1,72 @@
+= @InteractAs
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Offers an alternative to xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc[InteractionService] 's imperative approach to switch the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] for a given block of _JUnit_ test code.
+
+Example:
+
+----
+
+@Test
+@InteractAs(
+    userName = "sven",
+    localeName = "en",
+    frozenDateTime = "2010-01-01 13:02:04 -03")
+void test() {
+    // ...
+}
+----
+
+== API
+
+[source,java]
+.InteractAs.java
+----
+@interface InteractAs {
+  String userName() default // unspecified
+"";     // <.>
+  String localeName() default // unspecified
+"";     // <.>
+  String frozenDateTime() default // unspecified
+"";     // <.>
+}
+----
+
+<.> xref:#userName[userName]
++
+--
+If empty, defaults to the system user (with elevated privileges).
+--
+<.> xref:#localeName[localeName]
++
+--
+The _Locale_ language tag. Eg. "en", "fr", "de", ... If empty, defaults to current system locale.
+--
+<.> xref:#frozenDateTime[frozenDateTime]
++
+--
+If empty, defaults to current system time.
+--
+
+== Members
+
+[#userName]
+=== userName
+
+If empty, defaults to the system user (with elevated privileges).
+
+[#localeName]
+=== localeName
+
+The _Locale_ language tag. Eg. "en", "fr", "de", ... If empty, defaults to current system locale.
+
+[#frozenDateTime]
+=== frozenDateTime
+
+If empty, defaults to current system time.
+
+Format: _"yyyy-MM-dd HH:mm:ss[.SSS][' '][XXX][x]"_Examples:
+
+* "2022-01-31 14:04:33.017 -03:30" (full form)
+* "2022-01-31 14:04:33 -03" (no millis, no offset minutes)
+* "2022-01-31 14:04:33 Z" (no millis, no offset = UTC)

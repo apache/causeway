@@ -43,6 +43,8 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
  *     // ...
  * }
  * </pre>
+ *
+ * @since 2.0 {@index}
  */
 @Inherited
 @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })

@@ -22,6 +22,7 @@ class UserMemento {
   boolean isCurrentUser(String userName)     // <.>
   Stream<String> streamRoleNames()
   boolean hasRoleName(String roleName)
+  boolean isSystem()     // <.>
   UserMementoBuilder asBuilder()
   UserLocale asUserLocale()
 }
@@ -72,6 +73,11 @@ The roles associated with this user.
 --
 Determine if the specified name is this user.
 --
+<.> xref:#isSystem__[isSystem()]
++
+--
+Whether this xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] represent the _system user_ .
+--
 
 == Members
 
@@ -120,3 +126,7 @@ The roles associated with this user.
 
 Determine if the specified name is this user.
 
+[#isSystem__]
+=== isSystem()
+
+Whether this xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] represent the _system user_ .

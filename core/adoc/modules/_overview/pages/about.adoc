@@ -589,7 +589,7 @@ org.springframework.boot:spring-boot-starter-test:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:testing:index/integtestsupport/applib/ExceptionRecognizerTranslate.adoc[ExceptionRecognizerTranslate], xref:refguide:testing:index/integtestsupport/applib/IsisIntegrationTestAbstract.adoc[IsisIntegrationTestAbstract], xref:refguide:testing:index/integtestsupport/applib/IsisInteractionHandler.adoc[IsisInteractionHandler], xref:refguide:testing:index/integtestsupport/applib/IsisModuleTestingIntegTestSupportApplib.adoc[IsisModuleTestingIntegTestSupportApplib], xref:refguide:testing:index/integtestsupport/applib/swagger/SwaggerExporter.adoc[SwaggerExporter], xref:refguide:testing:index/integtestsupport/applib/validate/DomainModelValidator.adoc[DomainModelValidator]
+xref:refguide:testing:index/integtestsupport/applib/ExceptionRecognizerTranslate.adoc[ExceptionRecognizerTranslate], xref:refguide:testing:index/integtestsupport/applib/IsisIntegrationTestAbstract.adoc[IsisIntegrationTestAbstract], xref:refguide:testing:index/integtestsupport/applib/IsisInteractionHandler.adoc[IsisInteractionHandler], xref:refguide:testing:index/integtestsupport/applib/IsisModuleTestingIntegTestSupportApplib.adoc[IsisModuleTestingIntegTestSupportApplib], xref:refguide:testing:index/integtestsupport/applib/annotation/InteractAs.adoc[InteractAs], xref:refguide:testing:index/integtestsupport/applib/swagger/SwaggerExporter.adoc[SwaggerExporter], xref:refguide:testing:index/integtestsupport/applib/validate/DomainModelValidator.adoc[DomainModelValidator]
 ****
 
 |Apache Isis Tst - Spec/Cucumber (parent)
@@ -764,6 +764,7 @@ org.apache.isis.extensions:isis-extensions-secman-integration:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-persistence-jdo:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-persistence-jpa:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-shiro-realm:jar:<managed> +
+org.apache.isis.incubator.clients:isis-client-kroviz:jar:2.0.0-SNAPSHOT +
 org.apache.isis.valuetypes:isis-valuetypes-asciidoc-metamodel:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-asciidoc-persistence-jdo:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-asciidoc-persistence-jpa:jar:<managed> +
@@ -1028,6 +1029,7 @@ org.apache.isis.extensions:isis-extensions-secman-integration:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-persistence-jdo:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-persistence-jpa:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-shiro-realm:jar:<managed> +
+org.apache.isis.incubator.clients:isis-client-kroviz:jar:${project.version} +
 org.apache.isis.testing:isis-testing-h2console-ui:jar:<managed> +
 org.apache.isis.testing:isis-testing-unittestsupport-applib:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-markdown-applib:jar:<managed> +
@@ -1652,6 +1654,7 @@ o.a.i.core.metamodel.services.tablecol.TableColumnOrderServiceUsingTxtFile +
 o.a.i.core.metamodel.services.title.TitleServiceDefault +
 o.a.i.core.metamodel.specloader.ProgrammingModelServiceDefault +
 o.a.i.core.metamodel.specloader.SpecificationLoaderDefault +
+o.a.i.core.metamodel.valuesemantics.ApplicationFeatureIdValueSemantics +
 o.a.i.core.metamodel.valuesemantics.BigDecimalValueSemantics +
 o.a.i.core.metamodel.valuesemantics.BigIntegerValueSemantics +
 o.a.i.core.metamodel.valuesemantics.BlobValueSemantics +
@@ -5921,7 +5924,7 @@ eg. code mining, automated documentation.
 
 .Dependencies
 ****
-org.checkerframework:checker-qual:jar:3.21.0 +
+org.checkerframework:checker-qual:jar:3.21.1 +
 org.junit.jupiter:junit-jupiter-api:jar:<managed> +
 org.junit.jupiter:junit-jupiter-engine:jar:<managed> +
 org.junit.vintage:junit-vintage-engine:jar:<managed> +
@@ -6261,6 +6264,7 @@ o.a.i.testdomain.util.rest.RestEndpointService +
 
 .Dependencies
 ****
+org.apache.isis.extensions:isis-extensions-fullcalendar-applib:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-encryption-jbcrypt:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-integration:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-persistence-jdo:jar:<managed> +
@@ -6562,7 +6566,7 @@ skinparam rectangle<<2>> {
   BorderColor #2E6295
 }
 package "Kroviz Client\n[Software System]" {
-  rectangle "==Apache Isis Inc - Client kroViz\n<size:10>[Container: packaging: jar]</size>" <<2>> as 2
+  rectangle "==Apache Isis Incubator - Client kroViz\n<size:10>[Container: packaging: jar]</size>" <<2>> as 2
 }
 @enduml
 ----
@@ -6571,7 +6575,7 @@ package "Kroviz Client\n[Software System]" {
 |===
 |Coordinates |Description 
 
-|Apache Isis Inc - Client kroViz
+|Apache Isis Incubator - Client kroViz
 [source,yaml]
 ----
 Group: org.apache.isis.incubator.clients
@@ -6579,7 +6583,7 @@ Artifact: isis-client-kroviz
 Type: jar
 Directory: /incubator/clients/kroviz
 ----
-|Initial sketches
+|Web client based on RESTful API
 |===
 
 === JavaFX Viewer

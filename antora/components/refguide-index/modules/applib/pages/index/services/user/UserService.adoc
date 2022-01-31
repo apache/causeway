@@ -15,6 +15,7 @@ In addition, if impersonation has been invoked through the xref:refguide:applib:
 class UserService {
   public static final String NOBODY;     // <.>
   Optional<UserMemento> currentUser()     // <.>
+  boolean isCurrentUserWithSystemPrivileges()     // <.>
   UserMemento getUser()     // <.>
   UserMemento currentUserElseFail()     // <.>
   Optional<String> currentUserName()     // <.>
@@ -35,6 +36,11 @@ Default returned from _#currentUserNameElseNobody()_ .
 +
 --
 Returns the details about the current user, either the "effective" user (if being _#impersonateUser(String, List, String) impersonated_ ) otherwise the "real" user (as obtained from the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] of the current thread).
+--
+<.> xref:#isCurrentUserWithSystemPrivileges__[isCurrentUserWithSystemPrivileges()]
++
+--
+Whether the current user is the _system user_ (as obtained from the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] of the current thread).
 --
 <.> xref:#getUser__[getUser()]
 +
@@ -88,6 +94,11 @@ Default returned from _#currentUserNameElseNobody()_ .
 === currentUser()
 
 Returns the details about the current user, either the "effective" user (if being _#impersonateUser(String, List, String) impersonated_ ) otherwise the "real" user (as obtained from the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] of the current thread).
+
+[#isCurrentUserWithSystemPrivileges__]
+=== isCurrentUserWithSystemPrivileges()
+
+Whether the current user is the _system user_ (as obtained from the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] of the current thread).
 
 [#getUser__]
 === getUser()
