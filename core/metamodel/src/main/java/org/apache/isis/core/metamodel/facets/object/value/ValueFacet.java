@@ -79,7 +79,7 @@ public interface ValueFacet<T> extends Facet {
     /** no qualifiers allowed on the default semantics provider*/
     Optional<EncoderDecoder<T>> selectDefaultEncoderDecoder();
 
-    // -- ENCODER DECODER
+    // -- COMPOSER
 
     /** no qualifiers allowed on the default semantics provider*/
     Optional<ValueComposer<T>> selectDefaultComposer();

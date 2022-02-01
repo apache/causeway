@@ -18,30 +18,19 @@
  */
 package org.apache.isis.extensions.fullcalendar.applib.value;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Objects;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.fasterxml.jackson.core.JacksonException;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.resources._Json;
-import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent.CalendarEventDeserializer;
+import org.apache.isis.schema.common.v2.TypedTupleDto;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -49,7 +38,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.With;
-import lombok.val;
 
 /**
  * Value type representing an event on a calendar.
@@ -59,7 +47,6 @@ import lombok.val;
 @org.apache.isis.applib.annotation.Value(
         logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.CalendarEvent")
 @XmlJavaTypeAdapter(CalendarEvent.JaxbAdapter.class)
-@JsonDeserialize(using = CalendarEventDeserializer.class)
 @Getter @With
 @ToString @EqualsAndHashCode
 @AllArgsConstructor
@@ -115,20 +102,6 @@ implements
 
     // -- OBJECT CONTRACT
 
-    /** FIXME[ISIS-2877] 'null' for null bug */
-    @Override
-    public boolean equals(final Object obj) {
-        if(obj instanceof CalendarEvent) {
-            val other = (CalendarEvent) obj;
-            return this.epochMillis == other.epochMillis
-                    && Objects.equals(this.getCalendarName(), other.getCalendarName())
-                    && Objects.equals(this.getTitle(), other.getTitle()
-                    //&& Objects.equals(this.getNotes(), other.getNotes()
-                            );
-        }
-        return false;
-    }
-
     @Override
     public int compareTo(final CalendarEvent other) {
         return Long.compare(this.epochMillis, other.getEpochMillis());
@@ -136,50 +109,20 @@ implements
 
     // -- UTILITY
 
-    public static class CalendarEventDeserializer
-    extends StdDeserializer<CalendarEvent> {
-        private static final long serialVersionUID = 1L;
-
-        public CalendarEventDeserializer() {
-            this(null);
-        }
-
-        protected CalendarEventDeserializer(final Class<?> vc) {
-            super(vc);
-        }
-
-        @Override
-        public CalendarEvent deserialize(final JsonParser jp, final DeserializationContext ctxt)
-                throws IOException, JacksonException {
-
-            final JsonNode node = jp.getCodec().readTree(jp);
-
-            final ZonedDateTime dateTime = ZonedDateTime.ofInstant(
-                    Instant.ofEpochMilli(node.get("epochMillis").asLong()),
-                    ZoneId.systemDefault());
-            final String calendarName = node.get("calendarName").asText();
-            final String title = node.get("title").asText();
-            final String notes = node.get("notes").asText();
-
-            return CalendarEvent.of(dateTime, calendarName, title, notes);
-        }
-
-    }
-
     public static final class JaxbAdapter
-    extends XmlAdapter<String, CalendarEvent> {
+    extends XmlAdapter<TypedTupleDto, CalendarEvent> {
 
         @Override
-        public CalendarEvent unmarshal(final String v) {
-            return _Strings.isNotEmpty(v)
-                    ? _Json.readJson(CalendarEvent.class, v).presentElseFail()
+        public CalendarEvent unmarshal(final TypedTupleDto dto) {
+            return dto!=null
+                    ? new CalendarEventSemantics().compose(dto)
                     : null;
         }
 
         @Override
-        public String marshal(final CalendarEvent v) {
+        public TypedTupleDto marshal(final CalendarEvent v) {
             return v!=null
-                    ? _Json.toString(v).presentElseFail()
+                    ? new CalendarEventSemantics().decompose(v)
                     : null;
         }
 
