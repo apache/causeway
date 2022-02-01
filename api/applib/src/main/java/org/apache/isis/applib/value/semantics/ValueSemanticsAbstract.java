@@ -71,6 +71,12 @@ implements
 
     @SuppressWarnings("unchecked")
     @Override
+    public ValueComposer<T> getComposer() {
+        return this instanceof ValueComposer ? (ValueComposer<T>)this : null;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
     public Renderer<T> getRenderer() {
         return this instanceof Renderer ? (Renderer<T>)this : null;
     }

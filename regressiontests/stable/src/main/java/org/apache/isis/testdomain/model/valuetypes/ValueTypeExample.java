@@ -53,6 +53,8 @@ import org.apache.isis.applib.value.Markup;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.core.metamodel.valuesemantics.ApplicationFeatureIdValueSemantics;
+import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
+import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEventSemantics;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.common.v2.OidDto;
@@ -530,6 +532,21 @@ public abstract class ValueTypeExample<T> {
         private ExampleEnum updateValue = ExampleEnum.WORLD;
     }
 
+    // -- EXAMPLES - COMPOSITES
+
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleCalendarEvent",
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleCalendarEvent
+    extends ValueTypeExample<CalendarEvent> {
+        @Property @Getter @Setter
+        private CalendarEvent value = new CalendarEventSemantics().getExamples().getElseFail(0);
+        @Getter
+        private CalendarEvent updateValue = new CalendarEventSemantics().getExamples().getElseFail(1);
+    }
+
+    // -- EXAMPLES - DATA STRUCTURE
+
     // -- EXAMPLES - OTHER
 
     @DomainObject(
@@ -554,7 +571,6 @@ public abstract class ValueTypeExample<T> {
         private OidDto updateValue = Bookmark.parseElseFail("c:d").toOidDto();
     }
 
-    //TODO    ChangesDto
     @DomainObject(
             logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleChangesDto",
             nature = Nature.BEAN)

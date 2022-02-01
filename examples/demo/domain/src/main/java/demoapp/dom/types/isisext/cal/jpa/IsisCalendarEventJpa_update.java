@@ -27,7 +27,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
-import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEventSemanticsProvider.Parameters;
+import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEventSemantics.Parameters;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

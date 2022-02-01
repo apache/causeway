@@ -33,10 +33,15 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
+import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.schema.common.v2.TypedTupleDto;
 import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.RequiredArgsConstructor;
@@ -46,14 +51,15 @@ import lombok.experimental.Accessors;
 
 @Component
 @Import({
-    CalendarEventSemanticsProvider.CalendarEvent_update.class
+    CalendarEventSemantics.CalendarEvent_update.class
 })
-public class CalendarEventSemanticsProvider
+public class CalendarEventSemantics
 extends ValueSemanticsAbstract<CalendarEvent>
 implements
     DefaultsProvider<CalendarEvent>,
-//    EncoderDecoder<CalendarEvent>,
-    Renderer<CalendarEvent> {
+    EncoderDecoder<CalendarEvent>,
+    Renderer<CalendarEvent>,
+    ValueComposer<CalendarEvent> {
 
     @Override
     public Class<CalendarEvent> getCorrespondingClass() {
@@ -75,17 +81,47 @@ implements
 
     // -- ENCODER/DECODER
 
-//    @Override
-//    public String toEncodedString(CalendarEvent toEncode) {
-//        // TODO Auto-generated method stub
-//        return null;
-//    }
-//
-//    @Override
-//    public CalendarEvent fromEncodedString(String encodedString) {
-//        // TODO Auto-generated method stub
-//        return null;
-//    }
+    @Override
+    public String toEncodedString(final CalendarEvent value) {
+        return value!=null
+                ? new CalendarEvent.JaxbAdapter().marshal(value)
+                : null;
+    }
+
+    @Override
+    public CalendarEvent fromEncodedString(final String encodedString) {
+        val text = _Strings.blankToNullOrTrim(encodedString);
+        return text!=null
+                ? new CalendarEvent.JaxbAdapter().unmarshal(text)
+                : null;
+    }
+
+    // -- COMPOSER
+
+    @Override
+    public TypedTupleDto decompose(final CalendarEvent value) {
+        return CommonDtoUtils.typedTupleBuilder(value)
+            .addFundamentalType(ValueType.LONG, "epochMillis", CalendarEvent::getEpochMillis)
+            .addFundamentalType(ValueType.STRING, "calendarName", CalendarEvent::getCalendarName)
+            .addFundamentalType(ValueType.STRING, "title", CalendarEvent::getTitle)
+            .addFundamentalType(ValueType.STRING, "notes", CalendarEvent::getNotes)
+            .build();
+    }
+
+    @Override
+    public CalendarEvent compose(final TypedTupleDto dto) {
+
+        val elementMap = CommonDtoUtils.typedTupleAsMap(dto);
+
+        final ZonedDateTime dateTime = ZonedDateTime.ofInstant(
+                Instant.ofEpochMilli((long)elementMap.get("epochMillis")),
+                ZoneId.systemDefault());
+        final String calendarName = (String)elementMap.get("calendarName");
+        final String title = (String)elementMap.get("title");
+        final String notes = (String)elementMap.get("notes");
+
+        return CalendarEvent.of(dateTime, calendarName, title, notes);
+    }
 
     // -- RENDERER
 
@@ -202,5 +238,7 @@ implements
         }
 
     }
+
+
 
 }

@@ -26,8 +26,11 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZonedDateTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.springframework.lang.Nullable;
 
@@ -43,11 +46,14 @@ import org.apache.isis.schema.cmd.v2.MapDto;
 import org.apache.isis.schema.common.v2.BlobDto;
 import org.apache.isis.schema.common.v2.ClobDto;
 import org.apache.isis.schema.common.v2.EnumDto;
+import org.apache.isis.schema.common.v2.NamedValueWithTypeDto;
+import org.apache.isis.schema.common.v2.TypedTupleDto;
 import org.apache.isis.schema.common.v2.ValueDto;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -411,6 +417,48 @@ public final class CommonDtoUtils {
         return mapDto.getEntry().stream()
                 .filter(entry->Objects.equals(entry.getKey(), key))
                 .findFirst();
+    }
+
+    // -- TYPED TUPLE BUILDER
+
+    @RequiredArgsConstructor
+    public static class TypedTupleBuilder<T> {
+
+        private final T value;
+        private final TypedTupleDto dto = new TypedTupleDto();
+
+        public TypedTupleDto build() {
+            dto.setType(value.getClass().getName());
+            dto.setCardinality(dto.getElement().size());
+            return dto;
+        }
+
+        public TypedTupleBuilder<T> addFundamentalType(
+                final ValueType vType, final String fieldName, final Function<T, Object> getter) {
+            val elementDto = new NamedValueWithTypeDto();
+            _Assert.assertTrue(_Strings.isNotEmpty(fieldName));
+            elementDto.setName(fieldName);
+            dto.getElement().add(
+                    recordFundamentalValue(vType, elementDto, getter.apply(value)));
+            return this;
+        }
+    }
+
+    public static <T> TypedTupleBuilder<T> typedTupleBuilder(final T value) {
+        return new TypedTupleBuilder<T>(value);
+    }
+
+    // -- TYPED TUPLE AS MAP
+
+    public static Map<String, Object> typedTupleAsMap(final TypedTupleDto dto) {
+
+        val map = new LinkedHashMap<String, Object>(dto.getCardinality()); // preserve order
+
+        dto.getElement()
+            .forEach(elementDto->
+                map.put(elementDto.getName(), getValueAsObject(elementDto)));
+
+        return map;
     }
 
 

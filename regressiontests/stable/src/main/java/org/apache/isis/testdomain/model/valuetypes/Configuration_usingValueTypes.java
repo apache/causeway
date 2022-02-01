@@ -22,6 +22,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.extensions.fullcalendar.applib.IsisModuleExtFullCalendarApplib;
 import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
 import org.apache.isis.valuetypes.markdown.metamodel.IsisModuleValMarkdownMetaModel;
 import org.apache.isis.valuetypes.sse.metamodel.IsisModuleValSseMetaModel;
@@ -31,6 +32,7 @@ import org.apache.isis.valuetypes.sse.metamodel.IsisModuleValSseMetaModel;
     IsisModuleValAsciidocMetaModel.class,
     IsisModuleValMarkdownMetaModel.class,
     IsisModuleValSseMetaModel.class,
+    IsisModuleExtFullCalendarApplib.class,
 })
 @ComponentScan(
         basePackageClasses= {

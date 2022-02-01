@@ -27,6 +27,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.semantics.Converter;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.collections.Can;
@@ -85,6 +86,9 @@ implements SchemaValueMarshaller {
                         : Optional.empty(),
                     semantics!=null
                         ? Optional.ofNullable(semantics.getConverter())
+                        : Optional.empty(),
+                    semantics!=null
+                        ? Optional.ofNullable(semantics.getComposer())
                         : Optional.empty());
         }
 
@@ -93,6 +97,7 @@ implements SchemaValueMarshaller {
         private final @NonNull Optional<ValueSemanticsProvider<T>> semantics;
         private final @NonNull Optional<EncoderDecoder<T>> encoderDecoder;
         private final @NonNull Optional<Converter<T, ?>> converter;
+        private final @NonNull Optional<ValueComposer<T>> composer;
 
         public ObjectSpecification getElementType() {
             return feature.getElementType();

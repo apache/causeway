@@ -76,6 +76,11 @@ public interface ValueSemanticsProvider<T> {
     Converter<T, ?> getConverter();
 
     /**
+     * The {@link ValueComposer}, if any.
+     */
+    ValueComposer<T> getComposer();
+
+    /**
      * The {@link Renderer}, if any.
      */
     Renderer<T> getRenderer();

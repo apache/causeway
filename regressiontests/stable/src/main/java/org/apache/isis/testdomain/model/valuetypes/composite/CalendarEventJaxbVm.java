@@ -39,7 +39,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
-import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEventSemanticsProvider;
+import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEventSemantics;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -84,7 +84,7 @@ public class CalendarEventJaxbVm {
     public static CalendarEventJaxbVm setUpViewmodelWith3CalendarEvents(final FactoryService factoryService) {
         val sampleVm = factoryService.viewModel(new CalendarEventJaxbVm());
 
-        val eventSamples = new CalendarEventSemanticsProvider().getExamples();
+        val eventSamples = new CalendarEventSemantics().getExamples();
         val a = eventSamples.getElseFail(0);
         val b = eventSamples.getElseFail(1);
         val c = eventSamples.getElseFail(2);

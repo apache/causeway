@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.value.semantics;
 
+import org.apache.isis.schema.common.v2.TypedTupleDto;
+
 /**
  * Provides construction and extraction for a given value-type
  * from and into its constituent parts.
@@ -32,6 +34,21 @@ package org.apache.isis.applib.value.semantics;
  * @since 2.x {@index}
  */
 public interface ValueComposer<T> {
+
+    /**
+     * Converts a value object into a {@link TypedTupleDto}.
+     */
+    TypedTupleDto decompose(T value);
+
+    /**
+     * Converts an {@link TypedTupleDto} to an instance of the object.
+     *
+     * @see #decompose(Object)
+     */
+    T compose(TypedTupleDto dto);
+
+
+    // -- EXPERIMENTAL
 
     default Object getValueMixin(final T value) {
         return null;

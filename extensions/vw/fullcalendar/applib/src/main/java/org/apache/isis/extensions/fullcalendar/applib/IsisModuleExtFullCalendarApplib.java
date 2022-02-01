@@ -21,14 +21,14 @@ package org.apache.isis.extensions.fullcalendar.applib;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEventSemanticsProvider;
+import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEventSemantics;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
 @Import({
-    CalendarEventSemanticsProvider.class
+    CalendarEventSemantics.class
 })
 public class IsisModuleExtFullCalendarApplib {
 }

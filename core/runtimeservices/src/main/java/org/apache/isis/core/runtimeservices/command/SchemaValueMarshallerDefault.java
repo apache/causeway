@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -32,6 +33,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.services.schema.SchemaValueMarshallerAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.common.v2.CollectionDto;
 import org.apache.isis.schema.common.v2.TypedTupleDto;
@@ -61,13 +63,33 @@ extends SchemaValueMarshallerAbstract {
             final ValueWithTypeDto valueDto,
             final ManagedObject value) {
 
-        value.getBookmark()
-        .ifPresentOrElse(
-                bookmark->valueDto.setReference(bookmark.toOidDto()),
-                ()->CommonDtoUtils.recordFundamentalValue(
-                        context.getSchemaValueType(),
-                        valueDto,
-                        toFundamentalValue(context, _Casts.uncheckedCast(value.getPojo()))));
+        valueDto.setType(context.getSchemaValueType());
+
+        val bookmark = value.getBookmark().orElse(null);
+        if(bookmark!=null) {
+            valueDto.setReference(bookmark.toOidDto());
+            return valueDto;
+        }
+
+        switch (context.getSchemaValueType()) {
+        case COMPOSITE:
+            valueDto.setComposite(toTypedTuple(context, (T)value.getPojo()));
+            return valueDto;
+        case COLLECTION:
+            recordValues(context, valueDto, ((PackedManagedObject)value).unpack());
+            return valueDto;
+        case REFERENCE:
+            // null reference
+            return valueDto;
+
+        default:
+            break;
+        }
+
+        CommonDtoUtils.recordFundamentalValue(
+                context.getSchemaValueType(),
+                valueDto,
+                toFundamentalValue(context, _Casts.uncheckedCast(value.getPojo())));
 
         return valueDto;
     }
@@ -91,19 +113,19 @@ extends SchemaValueMarshallerAbstract {
             @NonNull final Context<?> context,
             @NonNull final ValueWithTypeDto valueDto) {
 
-        val valueAsObject = CommonDtoUtils.getValueAsObject(valueDto);
-
-        if(valueAsObject==null) {
-            return ManagedObject.empty(context.getElementType());
-        }
-
         val elementSpec = context.getElementType();
 
-        val recoveredValueAsPojo = valueDto.getComposite()!=null
+        val recoveredValueAsPojo = valueDto.getType()==ValueType.COMPOSITE
                 ? fromTypedTuple(context, valueDto.getComposite())
                 : fromFundamentalValue(context, CommonDtoUtils.getValueAsObject(valueDto));
 
-        val recoveredValue = ManagedObject.of(elementSpec, recoveredValueAsPojo);
+        if(recoveredValueAsPojo==null) {
+            return ManagedObject.empty(context.getElementType());
+        }
+
+        val recoveredValue = recoveredValueAsPojo!=null
+                ? ManagedObject.of(elementSpec, recoveredValueAsPojo)
+                : ManagedObject.empty(context.getElementType());
         return recoveredValue;
     }
 
@@ -128,6 +150,12 @@ extends SchemaValueMarshallerAbstract {
         return collectionDto;
     }
 
+    private <T> TypedTupleDto toTypedTuple(final Context<T> context, final T valuePojo) {
+        return context.getComposer()
+                .orElseThrow()
+                .decompose(valuePojo);
+    }
+
     private <T> Object toFundamentalValue(final Context<T> context, final T valuePojo) {
         return context.getEncoderDecoder().isPresent()
                 ? context.getEncoderDecoder().get().toEncodedString(valuePojo)
@@ -139,11 +167,18 @@ extends SchemaValueMarshallerAbstract {
     // -- HELPER - RECOVERY
 
     private <T> T fromTypedTuple(final Context<T> context, final TypedTupleDto typedTupleDto) {
-        // FIXME[ISIS-2877] implement
-        return null;
+        if(typedTupleDto==null) {
+            return null;
+        }
+        return context.getComposer()
+                .orElseThrow()
+                .compose(typedTupleDto);
     }
 
-    private <T> T fromFundamentalValue(final Context<T> context, final Object fundamentalValue) {
+    private <T> T fromFundamentalValue(final Context<T> context, final @Nullable Object fundamentalValue) {
+        if(fundamentalValue==null) {
+            return null;
+        }
         val valuePojo = context.getEncoderDecoder().isPresent()
                 ? context.getEncoderDecoder().get().fromEncodedString((String)fundamentalValue)
                 : context.getConverter()

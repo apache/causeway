@@ -25,7 +25,6 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -39,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
@@ -53,10 +52,7 @@ import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.services.schema.SchemaValueMarshaller;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.testdomain.conf.Configuration_headless;
@@ -65,6 +61,8 @@ import org.apache.isis.testdomain.model.valuetypes.ValueTypeExample;
 import org.apache.isis.testdomain.model.valuetypes.ValueTypeExampleService;
 import org.apache.isis.testdomain.model.valuetypes.ValueTypeExampleService.Scenario;
 import org.apache.isis.testdomain.value.ValueSemanticsTester.PropertyInteractionProbe;
+import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
+import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
 import lombok.val;
 
@@ -83,7 +81,7 @@ import lombok.val;
 @TestInstance(Lifecycle.PER_CLASS)
 class ValueSemanticsTest {
 
-    @Test @Disabled
+    @Test
     void fullTypeCoverage() {
 
         valueSemanticsResolver.streamClassesWithValueSemantics()
@@ -95,6 +93,11 @@ class ValueSemanticsTest {
 
         final Set<Class<?>> valueTypesKnown = valueSemanticsResolver.streamClassesWithValueSemantics()
         .collect(Collectors.toSet());
+
+        //TODO[ISIS-2877] yet excluded from coverage ...
+        valueTypesKnown.remove(TreeNode.class);
+        valueTypesKnown.remove(Markdown.class);
+        valueTypesKnown.remove(AsciiDoc.class);
 
         val valueTypesNotCovered = _Sets.minus(valueTypesKnown, valueTypesCovered);
 
@@ -124,40 +127,41 @@ class ValueSemanticsTest {
                     @Override
                     public void testEncoderDecoder(
                             final ValueSemanticsProvider.Context context,
-                            final EncoderDecoder<T> composer) {
-                        val valueMixin = composer.getValueMixin(example.getValue());
-                        if(valueMixin!=null) {
+                            final EncoderDecoder<T> codec) {
 
-                            val spec = specLoader.specForTypeElseFail(valueMixin.getClass());
-                            val interaction = ActionInteraction
-                                    .start(ManagedObject.of(spec,  valueMixin), "act", Where.ANYWHERE);
-
-                            val pendingParams = interaction
-                                    .startParameterNegotiation()
-                                    .get();
-
-                            val managedAction = interaction.getManagedActionElseFail();
-                            val typedTuple = pendingParams.getParamValues();
-
-                            val recoveredValue = managedAction
-                                    .invoke(typedTuple, InteractionInitiatedBy.PASS_THROUGH)
-                                    .leftIfAny()
-                                    .getPojo();
-
-                            tester.assertValueEquals(
-                                    example.getValue(),
-                                    recoveredValue,
-                                    "serialization roundtrip failed");
-
-                            return;
-                        }
+//                        val valueMixin = composer.getValueMixin(example.getValue());
+//                        if(valueMixin!=null) {
+//
+//                            val spec = specLoader.specForTypeElseFail(valueMixin.getClass());
+//                            val interaction = ActionInteraction
+//                                    .start(ManagedObject.of(spec,  valueMixin), "act", Where.ANYWHERE);
+//
+//                            val pendingParams = interaction
+//                                    .startParameterNegotiation()
+//                                    .get();
+//
+//                            val managedAction = interaction.getManagedActionElseFail();
+//                            val typedTuple = pendingParams.getParamValues();
+//
+//                            val recoveredValue = managedAction
+//                                    .invoke(typedTuple, InteractionInitiatedBy.PASS_THROUGH)
+//                                    .leftIfAny()
+//                                    .getPojo();
+//
+//                            tester.assertValueEquals(
+//                                    example.getValue(),
+//                                    recoveredValue,
+//                                    "serialization roundtrip failed");
+//
+//                            return;
+//                        }
 
                         // CoderDecoder round-trip test
-                        val serialized = composer.toEncodedString(example.getValue());
+                        val serialized = codec.toEncodedString(example.getValue());
 
                         tester.assertValueEquals(
                                 example.getValue(),
-                                composer.fromEncodedString(serialized),
+                                codec.fromEncodedString(serialized),
                                 "serialization roundtrip failed");
                     }
 
