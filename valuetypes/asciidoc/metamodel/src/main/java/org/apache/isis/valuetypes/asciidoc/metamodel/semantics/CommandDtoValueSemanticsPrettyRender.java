@@ -24,8 +24,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.schema.cmd.v2.CommandDto;
+import org.apache.isis.core.metamodel.valuesemantics.CommandDtoValueSemantics;
 
 import lombok.NonNull;
 
@@ -33,16 +32,11 @@ import lombok.NonNull;
 @Named("isis.val.CommandDtoValueSemanticsPrettyRender")
 @Order(PriorityPrecedence.EARLY)
 public class CommandDtoValueSemanticsPrettyRender
-extends XmlValueSemanticsAbstract<CommandDto> {
+extends CommandDtoValueSemantics {
 
     @Override
-    public Class<CommandDto> getCorrespondingClass() {
-        return CommandDto.class;
-    }
-
-    @Override
-    protected String asXml(final Context context, @NonNull final CommandDto value) {
-        return CommandDtoUtils.toXml(value);
+    protected String renderXml(@NonNull final Context context, @NonNull final String xml) {
+        return _XmlToHtml.toHtml(xml);
     }
 
 }

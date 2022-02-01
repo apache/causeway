@@ -23,49 +23,32 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
-import org.apache.isis.applib.value.semantics.Renderer;
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.cmd.v2.CommandDto;
-import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.val.CommandDtoValueSemantics")
 public class CommandDtoValueSemantics
-extends ValueSemanticsAbstract<CommandDto>
-implements
-    EncoderDecoder<CommandDto>,
-    Renderer<CommandDto> {
+extends XmlValueSemanticsAbstract<CommandDto> {
 
     @Override
-    public Class<CommandDto> getCorrespondingClass() {
+    public final Class<CommandDto> getCorrespondingClass() {
         return CommandDto.class;
-    }
-
-    @Override
-    public ValueType getSchemaValueType() {
-        return UNREPRESENTED;
     }
 
     // -- ENCODER DECODER
 
     @Override
-    public String toEncodedString(final CommandDto commandDto) {
+    public final String toEncodedString(final CommandDto commandDto) {
         return CommandDtoUtils.toXml(commandDto);
     }
 
     @Override
-    public CommandDto fromEncodedString(final String xml) {
+    public final CommandDto fromEncodedString(final String xml) {
         return CommandDtoUtils.fromXml(xml);
     }
 
-    // -- RENDERER
-
-    @Override
-    public String simpleTextPresentation(final Context context, final CommandDto value) {
-        return render(value, CommandDtoUtils::toXml);
-    }
+    // -- EXAMPLES
 
     @Override
     public Can<CommandDto> getExamples() {

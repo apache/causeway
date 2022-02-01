@@ -23,49 +23,32 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
-import org.apache.isis.applib.value.semantics.Renderer;
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 
 @Component
 @Named("isis.val.InteractionDtoValueSemantics")
 public class InteractionDtoValueSemantics
-extends ValueSemanticsAbstract<InteractionDto>
-implements
-    EncoderDecoder<InteractionDto>,
-    Renderer<InteractionDto> {
+extends XmlValueSemanticsAbstract<InteractionDto> {
 
     @Override
-    public Class<InteractionDto> getCorrespondingClass() {
+    public final Class<InteractionDto> getCorrespondingClass() {
         return InteractionDto.class;
-    }
-
-    @Override
-    public ValueType getSchemaValueType() {
-        return UNREPRESENTED;
     }
 
     // -- ENCODER DECODER
 
     @Override
-    public String toEncodedString(final InteractionDto interactionDto) {
+    public final String toEncodedString(final InteractionDto interactionDto) {
         return InteractionDtoUtils.toXml(interactionDto);
     }
 
     @Override
-    public InteractionDto fromEncodedString(final String xml) {
+    public final InteractionDto fromEncodedString(final String xml) {
         return InteractionDtoUtils.fromXml(xml);
     }
 
-    // -- RENDERER
-
-    @Override
-    public String simpleTextPresentation(final Context context, final InteractionDto value) {
-        return render(value, InteractionDtoUtils::toXml);
-    }
+    // -- EXAMPLES
 
     @Override
     public Can<InteractionDto> getExamples() {

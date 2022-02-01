@@ -18,41 +18,17 @@
  */
 package org.apache.isis.valuetypes.asciidoc.metamodel.semantics;
 
-import org.apache.isis.applib.value.semantics.Renderer;
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
-import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
-import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
-import lombok.NonNull;
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
-/**
- *  Provides a {@link Renderer} that generates syntax highlighted XML.
- *  @implNote using ascii-doctor under the hoods
- */
-abstract class XmlValueSemanticsAbstract<T>
-extends ValueSemanticsAbstract<T>
-implements
-    Renderer<T> {
+@UtilityClass
+class _XmlToHtml {
 
-    @Override
-    public ValueType getSchemaValueType() {
-        return ValueType.STRING;
+    public String toHtml(final String xml) {
+        return asAdoc(xml).asHtml();
     }
-
-    // -- RENDERER
-
-    @Override
-    public String simpleTextPresentation(final ValueSemanticsProvider.Context context, final T value) {
-        return render(value, xmlContainer->presentationValue(context, value).asHtml());
-    }
-
-    private AsciiDoc presentationValue(final Context context, final T value) {
-        return asAdoc(asXml(context, value));
-    }
-
-    protected abstract String asXml(Context context, @NonNull T value);
 
     private AsciiDoc asAdoc(final String xml) {
         val adoc = "[source,xml]\n----\n" + xml + "\n----";

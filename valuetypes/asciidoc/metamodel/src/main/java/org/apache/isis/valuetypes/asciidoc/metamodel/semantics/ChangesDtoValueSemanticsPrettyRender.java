@@ -24,8 +24,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.util.schema.ChangesDtoUtils;
-import org.apache.isis.schema.chg.v2.ChangesDto;
+import org.apache.isis.core.metamodel.valuesemantics.ChangesDtoValueSemantics;
 
 import lombok.NonNull;
 
@@ -33,16 +32,11 @@ import lombok.NonNull;
 @Named("isis.val.ChangesDtoValueSemanticsPrettyRender")
 @Order(PriorityPrecedence.EARLY)
 public class ChangesDtoValueSemanticsPrettyRender
-extends XmlValueSemanticsAbstract<ChangesDto> {
+extends ChangesDtoValueSemantics {
 
     @Override
-    public Class<ChangesDto> getCorrespondingClass() {
-        return ChangesDto.class;
-    }
-
-    @Override
-    protected String asXml(final Context context, @NonNull final ChangesDto value) {
-        return ChangesDtoUtils.toXml(value);
+    protected String renderXml(@NonNull final Context context, @NonNull final String xml) {
+        return _XmlToHtml.toHtml(xml);
     }
 
 }

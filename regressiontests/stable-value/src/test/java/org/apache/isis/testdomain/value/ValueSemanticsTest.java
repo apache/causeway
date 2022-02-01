@@ -89,7 +89,7 @@ class ValueSemanticsTest {
         valueSemanticsResolver.streamClassesWithValueSemantics()
         .forEach(valueType->System.err.printf("%s%n", valueType.getName()));
 
-        final Set<Class<?>> valueTypesCovered = valueTypeExampleProvider.streamExamples()
+        final Set<Class<?>> valueTypesCovered = valueTypeExampleService.streamExamples()
         .map(ValueTypeExample::getValueType)
         .collect(Collectors.toSet());
 
@@ -227,7 +227,7 @@ class ValueSemanticsTest {
 
     // -- DEPENDENCIES
 
-    @Inject ValueTypeExampleService valueTypeExampleProvider;
+    @Inject ValueTypeExampleService valueTypeExampleService;
     @Inject SpecificationLoader specLoader;
     @Inject InteractionService interactionService;
     @Inject ServiceInjector serviceInjector;
@@ -235,7 +235,7 @@ class ValueSemanticsTest {
     @Inject SchemaValueMarshaller valueMarshaller;
 
     Stream<Arguments> provideValueTypeExamples() {
-        return valueTypeExampleProvider.streamScenarios()
+        return valueTypeExampleService.streamScenarios()
                 .map(Scenario::getArguments);
     }
 

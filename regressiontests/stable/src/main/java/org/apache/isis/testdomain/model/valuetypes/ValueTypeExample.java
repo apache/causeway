@@ -429,6 +429,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private ZonedDateTime updateValue = ZonedDateTime.now().plusDays(2).plusSeconds(15);
     }
+
     // -- EXAMPLES - TEMPORAL - JODA TIME
 
     @DomainObject(
@@ -542,7 +543,6 @@ public abstract class ValueTypeExample<T> {
         private Bookmark updateValue = Bookmark.parseElseFail("c:d");
     }
 
-  //TODO    OidDto
     @DomainObject(
             logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleOidDto",
             nature = Nature.BEAN)
@@ -555,9 +555,9 @@ public abstract class ValueTypeExample<T> {
     }
 
     //TODO    ChangesDto
-//    @DomainObject(
-//            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleChangesDto",
-//            nature = Nature.BEAN)
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleChangesDto",
+            nature = Nature.BEAN)
     public static class ValueTypeExampleChangesDto
     extends ValueTypeExample<ChangesDto> {
         @Property @Getter @Setter
@@ -566,10 +566,9 @@ public abstract class ValueTypeExample<T> {
         private ChangesDto updateValue = new ChangesDto();
     }
 
-    //TODO    CommandDto
-//    @DomainObject(
-//            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleCommandDto",
-//            nature = Nature.BEAN)
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleCommandDto",
+            nature = Nature.BEAN)
     public static class ValueTypeExampleCommandDto
     extends ValueTypeExample<CommandDto> {
         @Property @Getter @Setter
@@ -578,10 +577,9 @@ public abstract class ValueTypeExample<T> {
         private CommandDto updateValue = new CommandDto();
     }
 
-    //TODO    InteractionDto
-//    @DomainObject(
-//            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleInteractionDto",
-//            nature = Nature.BEAN)
+    @DomainObject(
+            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleInteractionDto",
+            nature = Nature.BEAN)
     public static class ValueTypeExampleInteractionDto
     extends ValueTypeExample<InteractionDto> {
         @Property @Getter @Setter

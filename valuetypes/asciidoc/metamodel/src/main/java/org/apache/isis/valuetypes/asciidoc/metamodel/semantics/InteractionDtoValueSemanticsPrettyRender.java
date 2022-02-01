@@ -24,8 +24,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.util.schema.InteractionDtoUtils;
-import org.apache.isis.schema.ixn.v2.InteractionDto;
+import org.apache.isis.core.metamodel.valuesemantics.InteractionDtoValueSemantics;
 
 import lombok.NonNull;
 
@@ -33,16 +32,11 @@ import lombok.NonNull;
 @Named("isis.val.InteractionDtoValueSemanticsPrettyRender")
 @Order(PriorityPrecedence.EARLY)
 public class InteractionDtoValueSemanticsPrettyRender
-extends XmlValueSemanticsAbstract<InteractionDto> {
+extends InteractionDtoValueSemantics {
 
     @Override
-    public Class<InteractionDto> getCorrespondingClass() {
-        return InteractionDto.class;
-    }
-
-    @Override
-    protected String asXml(final Context context, @NonNull final InteractionDto value) {
-        return InteractionDtoUtils.toXml(value);
+    protected String renderXml(@NonNull final Context context, @NonNull final String xml) {
+        return _XmlToHtml.toHtml(xml);
     }
 
 }
