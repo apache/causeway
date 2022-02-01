@@ -32,6 +32,7 @@ import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider.Context;
 import org.apache.isis.commons.collections.Can;
@@ -141,6 +142,18 @@ implements ValueFacet<T> {
                 .stream()
                 .filter(isMatchingAnyOf(Can.empty()))
                 .map(ValueSemanticsProvider::getEncoderDecoder)
+                .filter(_NullSafe::isPresent)
+                .findFirst();
+    }
+
+    // -- COMPOSER
+
+    @Override
+    public Optional<ValueComposer<T>> selectDefaultComposer() {
+        return getValueSemantics()
+                .stream()
+                .filter(isMatchingAnyOf(Can.empty()))
+                .map(ValueSemanticsProvider::getComposer)
                 .filter(_NullSafe::isPresent)
                 .findFirst();
     }

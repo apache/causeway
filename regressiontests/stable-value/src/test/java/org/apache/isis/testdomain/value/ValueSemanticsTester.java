@@ -34,6 +34,7 @@ import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Refs;
@@ -73,10 +74,11 @@ public class ValueSemanticsTester<T> {
     }
 
     public static interface PropertyInteractionProbe<T> {
+        void testComposer(ValueSemanticsProvider.Context context, ValueComposer<T> composer);
         void testEncoderDecoder(ValueSemanticsProvider.Context context, EncoderDecoder<T> codec);
         void testParser(ValueSemanticsProvider.Context context, Parser<T> parser);
         void testRenderer(ValueSemanticsProvider.Context context, Renderer<T> renderer);
-        void testCommand(ValueSemanticsProvider.Context context, Command command, EncoderDecoder<T> codec);
+        void testCommand(ValueSemanticsProvider.Context context, Command command);
     }
 
     @SneakyThrows
@@ -92,9 +94,20 @@ public class ValueSemanticsTester<T> {
         val context = valueFacet(prop)
                 .createValueSemanticsContext(prop);
 
-        val codec = codec(prop);
+        val composerIfAny = composer(prop);
+        if(composerIfAny.isPresent()) {
+            probe.testComposer(context, composerIfAny.get());
+        }
 
-        probe.testEncoderDecoder(context, codec);
+        val codecIfAny = codec(prop);
+        if(codecIfAny.isPresent()) {
+            probe.testEncoderDecoder(context, codecIfAny.get());
+        }
+
+        assertTrue(composerIfAny.isPresent()
+                || codecIfAny.isPresent(), ()->
+                        "either codec or composer must be available for "
+                            + context.getFeatureIdentifier());
 
         val parserIfAny = parser(prop);
         if(parserIfAny.isPresent()) {
@@ -116,7 +129,7 @@ public class ValueSemanticsTester<T> {
             propInteraction.modifyProperty(managedProp->
                 ManagedObject.of(managedProp.getElementType(), newProperyValueProvider.apply(managedProp)));
 
-            probe.testCommand(context, command, codec);
+            probe.testCommand(context, command);
         });
     }
 
@@ -171,11 +184,16 @@ public class ValueSemanticsTester<T> {
         return _Casts.uncheckedCast(valueFacet);
     }
 
-    private EncoderDecoder<T> codec(
+    private Optional<ValueComposer<T>> composer(
             final ObjectFeature feature) {
         val valueFacet = valueFacet(feature);
-        return valueFacet.selectDefaultEncoderDecoder()
-                .orElseThrow(()->_Exceptions.noSuchElement());
+        return valueFacet.selectDefaultComposer();
+    }
+
+    private Optional<EncoderDecoder<T>> codec(
+            final ObjectFeature feature) {
+        val valueFacet = valueFacet(feature);
+        return valueFacet.selectDefaultEncoderDecoder();
     }
 
     private Optional<Parser<T>> parser(

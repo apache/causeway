@@ -30,6 +30,7 @@ import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider.Context;
 import org.apache.isis.commons.collections.Can;
@@ -77,6 +78,11 @@ public interface ValueFacet<T> extends Facet {
 
     /** no qualifiers allowed on the default semantics provider*/
     Optional<EncoderDecoder<T>> selectDefaultEncoderDecoder();
+
+    // -- ENCODER DECODER
+
+    /** no qualifiers allowed on the default semantics provider*/
+    Optional<ValueComposer<T>> selectDefaultComposer();
 
     // -- PARSER
 

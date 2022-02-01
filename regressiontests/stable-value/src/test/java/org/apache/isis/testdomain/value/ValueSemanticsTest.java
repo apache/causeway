@@ -38,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.applib.services.command.Command;
@@ -48,11 +49,15 @@ import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.services.schema.SchemaValueMarshaller;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.testdomain.conf.Configuration_headless;
@@ -125,36 +130,50 @@ class ValueSemanticsTest {
                 new PropertyInteractionProbe<T>() {
 
                     @Override
+                    public void testComposer(
+                            final ValueSemanticsProvider.Context context,
+                            final ValueComposer<T> composer) {
+
+                        // composer round-trip test
+                        val dto = composer.decompose(example.getValue());
+
+                        tester.assertValueEquals(
+                                example.getValue(),
+                                composer.compose(dto),
+                                "decompose/compose roundtrip failed");
+
+
+                      val valueMixin = composer.getValueMixin(example.getValue());
+                      if(valueMixin!=null) {
+
+                          val spec = specLoader.specForTypeElseFail(valueMixin.getClass());
+                          val interaction = ActionInteraction
+                                  .start(ManagedObject.of(spec,  valueMixin), "act", Where.ANYWHERE);
+
+                          val pendingParams = interaction
+                                  .startParameterNegotiation()
+                                  .get();
+
+                          val managedAction = interaction.getManagedActionElseFail();
+                          val typedTuple = pendingParams.getParamValues();
+
+                          val recoveredValue = managedAction
+                                  .invoke(typedTuple, InteractionInitiatedBy.PASS_THROUGH)
+                                  .leftIfAny()
+                                  .getPojo();
+
+                          tester.assertValueEquals(
+                                  example.getValue(),
+                                  recoveredValue,
+                                  "serialization roundtrip failed");
+                      }
+
+                    }
+
+                    @Override
                     public void testEncoderDecoder(
                             final ValueSemanticsProvider.Context context,
                             final EncoderDecoder<T> codec) {
-
-//                        val valueMixin = composer.getValueMixin(example.getValue());
-//                        if(valueMixin!=null) {
-//
-//                            val spec = specLoader.specForTypeElseFail(valueMixin.getClass());
-//                            val interaction = ActionInteraction
-//                                    .start(ManagedObject.of(spec,  valueMixin), "act", Where.ANYWHERE);
-//
-//                            val pendingParams = interaction
-//                                    .startParameterNegotiation()
-//                                    .get();
-//
-//                            val managedAction = interaction.getManagedActionElseFail();
-//                            val typedTuple = pendingParams.getParamValues();
-//
-//                            val recoveredValue = managedAction
-//                                    .invoke(typedTuple, InteractionInitiatedBy.PASS_THROUGH)
-//                                    .leftIfAny()
-//                                    .getPojo();
-//
-//                            tester.assertValueEquals(
-//                                    example.getValue(),
-//                                    recoveredValue,
-//                                    "serialization roundtrip failed");
-//
-//                            return;
-//                        }
 
                         // CoderDecoder round-trip test
                         val serialized = codec.toEncodedString(example.getValue());
@@ -195,8 +214,7 @@ class ValueSemanticsTest {
                     @Override
                     public void testCommand(
                             final ValueSemanticsProvider.Context context,
-                            final Command command,
-                            final EncoderDecoder<T> codec) {
+                            final Command command) {
 
                         val propertyDto = (PropertyDto)command.getCommandDto().getMember();
                         val newValueRecordedDto = propertyDto.getNewValue();

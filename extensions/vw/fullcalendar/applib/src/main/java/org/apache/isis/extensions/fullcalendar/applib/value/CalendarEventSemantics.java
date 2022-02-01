@@ -35,12 +35,10 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.common.v2.TypedTupleDto;
 import org.apache.isis.schema.common.v2.ValueType;
 
@@ -57,7 +55,6 @@ public class CalendarEventSemantics
 extends ValueSemanticsAbstract<CalendarEvent>
 implements
     DefaultsProvider<CalendarEvent>,
-    EncoderDecoder<CalendarEvent>,
     Renderer<CalendarEvent>,
     ValueComposer<CalendarEvent> {
 
@@ -77,23 +74,6 @@ implements
     public CalendarEvent getDefaultValue() {
         return new CalendarEvent(
                 Instant.now().toEpochMilli(), "Default Calendar", "New Event", "empty");
-    }
-
-    // -- ENCODER/DECODER
-
-    @Override
-    public String toEncodedString(final CalendarEvent value) {
-        return value!=null
-                ? new CalendarEvent.JaxbAdapter().marshal(value)
-                : null;
-    }
-
-    @Override
-    public CalendarEvent fromEncodedString(final String encodedString) {
-        val text = _Strings.blankToNullOrTrim(encodedString);
-        return text!=null
-                ? new CalendarEvent.JaxbAdapter().unmarshal(text)
-                : null;
     }
 
     // -- COMPOSER
