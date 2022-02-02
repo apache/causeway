@@ -32,6 +32,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
@@ -68,7 +70,120 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class CommonDtoUtils {
 
-    // -- VALUE EXTRACT
+    // -- VALUE FROM/TO JSON
+
+    public static ValueWithTypeDto getFundamentalValueFromJson(
+            final @NonNull ValueType valueType,
+            final @Nullable String json) {
+        val valueDto = new ValueWithTypeDto();
+        valueDto.setType(valueType);
+
+        if(_Strings.isNullOrEmpty(json)) {
+            return valueDto;
+        }
+
+        switch(valueType) {
+        case REFERENCE:
+        case COMPOSITE:
+        case COLLECTION:
+            throw _Exceptions.unsupportedOperation("valueType %s is not fundamental", valueType);
+
+        case STRING: {
+            valueDto.setString(json);
+            return valueDto;
+        }
+        case BYTE: {
+            valueDto.setByte(Byte.valueOf(json));
+            return valueDto;
+        }
+        case SHORT: {
+            valueDto.setShort(Short.valueOf(json));
+            return valueDto;
+        }
+        case INT: {
+            valueDto.setInt(Integer.valueOf(json));
+            return valueDto;
+        }
+        case LONG: {
+            valueDto.setLong(Long.valueOf(json));
+            return valueDto;
+        }
+        case CHAR: {
+            valueDto.setChar(json);
+            return valueDto;
+        }
+        case BOOLEAN: {
+            valueDto.setBoolean(Boolean.valueOf(json));
+            return valueDto;
+        }
+        case FLOAT: {
+            valueDto.setFloat(Float.valueOf(json));
+            return valueDto;
+        }
+        case DOUBLE: {
+            valueDto.setDouble(Double.valueOf(json));
+            return valueDto;
+        }
+        case BIG_INTEGER: {
+            valueDto.setBigInteger(new BigInteger(json));
+            return valueDto;
+        }
+        case BIG_DECIMAL: {
+            valueDto.setBigDecimal(new BigDecimal(json));
+            return valueDto;
+        }
+        case LOCAL_DATE: {
+            final LocalDate argValue = LocalDate.parse(json);
+            valueDto.setLocalDate(JavaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(argValue));
+            return valueDto;
+        }
+        case LOCAL_TIME: {
+            final LocalTime argValue = LocalTime.parse(json);
+            valueDto.setLocalTime(JavaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(argValue));
+            return valueDto;
+        }
+        case LOCAL_DATE_TIME: {
+            final LocalDateTime argValue = LocalDateTime.parse(json);
+            valueDto.setLocalDateTime(JavaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(argValue));
+            return valueDto;
+        }
+        case OFFSET_DATE_TIME: {
+            final OffsetDateTime argValue = OffsetDateTime.parse(json);
+            valueDto.setOffsetDateTime(JavaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(argValue));
+            return valueDto;
+        }
+        case OFFSET_TIME: {
+            final OffsetTime argValue = OffsetTime.parse(json);
+            valueDto.setOffsetTime(JavaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(argValue));
+            return valueDto;
+        }
+        case ZONED_DATE_TIME: {
+            final ZonedDateTime argValue = ZonedDateTime.parse(json);
+            valueDto.setZonedDateTime(JavaTimeXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(argValue));
+            return valueDto;
+        }
+        case ENUM: {
+            final EnumDto enumDto = _Json.readJson(EnumDto.class, json).presentElseFail();
+            valueDto.setEnum(enumDto);
+            return valueDto;
+        }
+        case BLOB: {
+            final BlobDto blobDto = _Json.readJson(BlobDto.class, json).presentElseFail();
+            valueDto.setBlob(blobDto);
+            return valueDto;
+        }
+        case CLOB: {
+            final ClobDto clobDto = _Json.readJson(ClobDto.class, json).presentElseFail();
+            valueDto.setClob(clobDto);
+            return valueDto;
+        }
+        case VOID:
+            return valueDto;
+        }
+
+        throw _Exceptions.unmatchedCase(valueType);
+
+    }
 
     public String getFundamentalValueAsJson(
             final @Nullable ValueWithTypeDto valueDto) {
@@ -82,8 +197,6 @@ public final class CommonDtoUtils {
     public String getFundamentalValueAsJson(
             final @NonNull ValueType valueType,
             final @Nullable ValueDto valueDto) {
-
-        _NullSafe.toString(7);
 
         if(valueDto==null) {
             return null;
@@ -132,26 +245,50 @@ public final class CommonDtoUtils {
             return _NullSafe.toString(valueDto.getZonedDateTime());
         case ENUM:
             final EnumDto enumDto = valueDto.getEnum();
-            final String enumType = enumDto.getEnumType();
-            @SuppressWarnings("rawtypes")
-            final Class<? extends Enum> enumClass =
-                    _Casts.uncheckedCast(_Context.loadClassAndInitialize(enumType));
-            return Enum.valueOf(_Casts.uncheckedCast(enumClass), enumDto.getEnumName()).name();
+            return enumDto!=null
+                    ? enumDtoToJson(enumDto)
+                    : null;
         case BLOB:
             final BlobDto blobDto = valueDto.getBlob();
             return blobDto!=null
-                    ? _Json.toString(blobDto).presentElseFail()
+                    ? blobDtoToJson(blobDto)
                     : null;
         case CLOB:
             final ClobDto clobDto = valueDto.getClob();
             return clobDto!=null
-                    ? _Json.toString(clobDto).presentElseFail()
+                    ? clobDtoToJson(clobDto)
                     : null;
         case VOID:
             return null;
         default:
             throw _Exceptions.unmatchedCase(valueType);
         }
+    }
+
+    @SneakyThrows
+    static String enumDtoToJson(final EnumDto dto) {
+        val map = Map.<String, String>of(
+                "enumType", dto.getEnumType(),
+                "enumName", dto.getEnumName());
+        return new ObjectMapper().writer().writeValueAsString(map);
+    }
+
+    @SneakyThrows
+    static String blobDtoToJson(final BlobDto dto) {
+        val map = Map.<String, Object>of(
+                "name", dto.getName(),
+                "mimeType", dto.getMimeType(),
+                "bytes", dto.getBytes());
+        return new ObjectMapper().writer().writeValueAsString(map);
+    }
+
+    @SneakyThrows
+    static String clobDtoToJson(final ClobDto dto) {
+        val map = Map.<String, Object>of(
+                "name", dto.getName(),
+                "mimeType", dto.getMimeType(),
+                "chars", dto.getChars());
+        return new ObjectMapper().writer().writeValueAsString(map);
     }
 
     // -- VALUE RECORD

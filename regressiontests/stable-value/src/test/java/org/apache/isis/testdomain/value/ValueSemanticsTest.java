@@ -35,6 +35,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -50,6 +51,7 @@ import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueComposer;
+import org.apache.isis.applib.value.semantics.ValueComposer.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -60,6 +62,7 @@ import org.apache.isis.core.metamodel.services.schema.SchemaValueMarshaller;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
+import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.valuetypes.Configuration_usingValueTypes;
 import org.apache.isis.testdomain.model.valuetypes.ValueTypeExample;
@@ -135,38 +138,51 @@ class ValueSemanticsTest {
                             final ValueComposer<T> composer) {
 
                         // composer round-trip test
-                        val dto = composer.decompose(example.getValue());
+                        val decomposition = composer.decompose(example.getValue());
 
                         tester.assertValueEquals(
                                 example.getValue(),
-                                composer.compose(dto),
+                                composer.compose(decomposition),
                                 "decompose/compose roundtrip failed");
 
+                        // json roundtrip test on non-composites
+                        if(composer.getSchemaValueType()!=ValueType.COMPOSITE) {
+                            val json = decomposition.toJson();
+                            assertNotNull(json);
+                            assertFalse(json.isBlank());
 
-                      val valueMixin = composer.getValueMixin(example.getValue());
-                      if(valueMixin!=null) {
+                            val reconstructed = ValueDecomposition
+                                    .fromJson(composer.getSchemaValueType(), json);
 
-                          val spec = specLoader.specForTypeElseFail(valueMixin.getClass());
-                          val interaction = ActionInteraction
-                                  .start(ManagedObject.of(spec,  valueMixin), "act", Where.ANYWHERE);
+                            assertEquals(json, reconstructed.toJson());
 
-                          val pendingParams = interaction
-                                  .startParameterNegotiation()
-                                  .get();
+                        }
 
-                          val managedAction = interaction.getManagedActionElseFail();
-                          val typedTuple = pendingParams.getParamValues();
 
-                          val recoveredValue = managedAction
-                                  .invoke(typedTuple, InteractionInitiatedBy.PASS_THROUGH)
-                                  .leftIfAny()
-                                  .getPojo();
+                        val valueMixin = composer.getValueMixin(example.getValue());
+                        if(valueMixin!=null) {
 
-                          tester.assertValueEquals(
-                                  example.getValue(),
-                                  recoveredValue,
-                                  "serialization roundtrip failed");
-                      }
+                            val spec = specLoader.specForTypeElseFail(valueMixin.getClass());
+                            val interaction = ActionInteraction
+                                    .start(ManagedObject.of(spec,  valueMixin), "act", Where.ANYWHERE);
+
+                            val pendingParams = interaction
+                                    .startParameterNegotiation()
+                                    .get();
+
+                            val managedAction = interaction.getManagedActionElseFail();
+                            val typedTuple = pendingParams.getParamValues();
+
+                            val recoveredValue = managedAction
+                                    .invoke(typedTuple, InteractionInitiatedBy.PASS_THROUGH)
+                                    .leftIfAny()
+                                    .getPojo();
+
+                            tester.assertValueEquals(
+                                    example.getValue(),
+                                    recoveredValue,
+                                    "serialization roundtrip failed");
+                        }
 
                     }
 

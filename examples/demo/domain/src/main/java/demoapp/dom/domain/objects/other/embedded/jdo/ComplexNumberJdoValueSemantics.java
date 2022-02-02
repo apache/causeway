@@ -43,7 +43,7 @@ public class ComplexNumberJdoValueSemantics
 
     @Override
     public ValueType getSchemaValueType() {
-        return ValueType.STRING;
+        return ValueType.COMPOSITE;
     }
 
  // tag::getRenderer[]
@@ -90,6 +90,11 @@ public class ComplexNumberJdoValueSemantics
         // ...
 // tag::getEncoderDecoder[]
         return new ValueComposer<ComplexNumberJdo>() {
+
+            @Override
+            public ValueType getSchemaValueType() {
+                return ValueType.COMPOSITE;
+            }
 
             @Override
             public ValueDecomposition decompose(final ComplexNumberJdo value) {

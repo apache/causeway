@@ -68,7 +68,8 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testDecode() throws Exception {
-        final Object restore = valueSemantics.compose(ValueDecomposition.fromJson("Y"));
+        final Object restore = valueSemantics.compose(
+                ValueDecomposition.fromJson(valueSemantics.getSchemaValueType(), "Y"));
         assertEquals(Character.valueOf('Y'), restore);
     }
 }

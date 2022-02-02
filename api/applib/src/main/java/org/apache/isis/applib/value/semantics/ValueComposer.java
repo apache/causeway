@@ -21,8 +21,12 @@ package org.apache.isis.applib.value.semantics;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.resources._Json;
+import org.apache.isis.schema.chg.v2.ChangesDto;
+import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.common.v2.TypedTupleDto;
+import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
+import org.apache.isis.schema.ixn.v2.InteractionDto;
 
 /**
  * Provides composition and decomposition for a given value-type
@@ -64,12 +68,22 @@ public interface ValueComposer<T> {
         }
 
         // used by EncodableFacet
-        public static ValueDecomposition fromJson(final String encodedData) {
-            // TODO Auto-generated method stub
-            return null;
+        public static ValueDecomposition fromJson(final ValueType vType, final String json) {
+            if(vType==ValueType.COMPOSITE) {
+                return _Json.readJson(ValueDecomposition.class, json).presentElseFail();
+            }
+            return ofFundamental(
+                    CommonDtoUtils.getFundamentalValueFromJson(vType, json));
         }
 
     }
+
+    /**
+     * Values might appear within {@link CommandDto}, {@link InteractionDto} and
+     * {@link ChangesDto}, where a mapping onto one of {@link ValueType}(s) as provided by the
+     * XML schema is required.
+     */
+    ValueType getSchemaValueType();
 
     /**
      * Converts a value object into either a {@link ValueWithTypeDto}

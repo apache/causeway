@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
 
@@ -39,7 +40,9 @@ implements EncodableFacet {
     // TODO: is this safe? really?
     public static final String ENCODED_NULL = "NULL";
 
-    public static Optional<EncodableFacet> create(final ValueFacet<?> valueFacet, final FacetHolder holder) {
+    public static Optional<EncodableFacet> create(
+            final ValueFacet<?> valueFacet,
+            final FacetHolder holder) {
         return valueFacet.selectDefaultComposer()
                 .map(composer->new EncodableFacetFromValueFacet(composer, holder));
     }
@@ -48,17 +51,22 @@ implements EncodableFacet {
      * JUnit support.
      */
     public static EncodableFacetFromValueFacet forTesting(
-            final ValueComposer<?> composer, final FacetHolder holder) {
+            final ValueComposer<?> composer,
+            final FacetHolder holder) {
         return new EncodableFacetFromValueFacet(composer, holder);
     }
 
     // -- CONSTRUCTION
 
     private final ValueComposer<?> composer;
+    private final ValueType schemaValueType;
 
-    private EncodableFacetFromValueFacet(final ValueComposer<?> encoderDecoder, final FacetHolder holder) {
+    private EncodableFacetFromValueFacet(
+            final ValueComposer<?> composer,
+            final FacetHolder holder) {
         super(EncodableFacet.class, holder);
-        this.composer = encoderDecoder;
+        this.composer = composer;
+        this.schemaValueType = composer.getSchemaValueType();
     }
 
     @Override
@@ -67,7 +75,8 @@ implements EncodableFacet {
         if (ENCODED_NULL.equals(encodedData)) {
             return null;
         } else {
-            final Object decodedObject = composer.compose(ValueDecomposition.fromJson(encodedData));
+            final Object decodedObject = composer.compose(
+                    ValueDecomposition.fromJson(schemaValueType, encodedData));
             return getObjectManager().adapt(decodedObject);
         }
     }

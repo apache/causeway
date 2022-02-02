@@ -45,7 +45,7 @@ public class ComplexNumberJpaValueSemantics
 
     @Override
     public ValueType getSchemaValueType() {
-        return ValueType.STRING;
+        return ValueType.COMPOSITE;
     }
 
 // tag::getRenderer[]
@@ -92,6 +92,11 @@ public class ComplexNumberJpaValueSemantics
         // ...
 // tag::getEncoderDecoder[]
         return new ValueComposer<ComplexNumberJpa>() {
+
+            @Override
+            public ValueType getSchemaValueType() {
+                return ValueType.COMPOSITE;
+            }
 
             @Override
             public ValueDecomposition decompose(final ComplexNumberJpa value) {
