@@ -21,8 +21,6 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
 import org.apache.isis.applib.value.Clob;
@@ -45,17 +43,6 @@ extends ValueSemanticsProviderAbstractTestCase {
     @Test
     public void testTitleOf() {
         assertEquals("myfile1.xml", value.simpleTextPresentation(null, clob));
-    }
-
-    @Test
-    public void testEncode_and_decode() {
-        String encoded = value.toEncodedString(clob);
-        assertEquals("myfile1.xml:application/xml:abcdef", encoded);
-        Clob decoded = value.fromEncodedString(encoded);
-        assertThat(decoded.getName(), is("myfile1.xml"));
-        assertThat(decoded.getMimeType().getPrimaryType(), is("application"));
-        assertThat(decoded.getMimeType().getSubType(), is("xml"));
-        assertThat(decoded.getChars(), is((CharSequence)"abcdef"));
     }
 
 }

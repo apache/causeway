@@ -18,16 +18,19 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
+import java.util.function.UnaryOperator;
+
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
@@ -38,7 +41,7 @@ import org.apache.isis.schema.common.v2.ValueType;
 public class ClobValueSemantics
 extends ValueSemanticsAbstract<Clob>
 implements
-    EncoderDecoder<Clob>,
+    ValueComposer<Clob>,
     Renderer<Clob> {
 
     @Override
@@ -51,6 +54,19 @@ implements
         return ValueType.CLOB;
     }
 
+    // -- COMPOSER
+
+    @Override
+    public ValueDecomposition decompose(final Clob value) {
+        return decomposeAsNullable(value, UnaryOperator.identity(), ()->null);
+    }
+
+    @Override
+    public Clob compose(final ValueDecomposition decomposition) {
+        return composeFromNullable(
+                decomposition, dto->(Clob)CommonDtoUtils.getValueAsObject(dto), UnaryOperator.identity(), ()->null);
+    }
+
     // RENDERER
 
     @Override
@@ -60,13 +76,11 @@ implements
 
     // -- ENCODER DECODER
 
-    @Override
-    public String toEncodedString(final Clob clob) {
+    private String toEncodedString(final Clob clob) {
         return clob.getName() + ":" + clob.getMimeType().getBaseType() + ":" + clob.getChars();
     }
 
-    @Override
-    public Clob fromEncodedString(final String data) {
+    private Clob fromEncodedString(final String data) {
         final int colonIdx = data.indexOf(':');
         final String name  = data.substring(0, colonIdx);
         final int colon2Idx  = data.indexOf(":", colonIdx+1);
@@ -78,6 +92,8 @@ implements
             throw new RuntimeException(e);
         }
     }
+
+    // -- EXAMPLES
 
     @Override
     public Can<Clob> getExamples() {

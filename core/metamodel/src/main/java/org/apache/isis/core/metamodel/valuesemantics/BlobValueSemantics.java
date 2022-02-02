@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.valuesemantics;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.function.UnaryOperator;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
@@ -27,10 +28,11 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
@@ -43,7 +45,7 @@ import org.apache.isis.schema.common.v2.ValueType;
 public class BlobValueSemantics
 extends ValueSemanticsAbstract<Blob>
 implements
-    EncoderDecoder<Blob>,
+    ValueComposer<Blob>,
     Renderer<Blob> {
 
     @Override
@@ -56,6 +58,19 @@ implements
         return ValueType.BLOB;
     }
 
+    // -- COMPOSER
+
+    @Override
+    public ValueDecomposition decompose(final Blob value) {
+        return decomposeAsNullable(value, UnaryOperator.identity(), ()->null);
+    }
+
+    @Override
+    public Blob compose(final ValueDecomposition decomposition) {
+        return composeFromNullable(
+                decomposition, dto->(Blob)CommonDtoUtils.getValueAsObject(dto), UnaryOperator.identity(), ()->null);
+    }
+
     // RENDERER
 
     @Override
@@ -65,13 +80,11 @@ implements
 
     // -- ENCODER DECODER
 
-    @Override
     public String toEncodedString(final Blob blob) {
         return blob.getName() + ":" + blob.getMimeType().getBaseType() + ":" +
         _Strings.ofBytes(_Bytes.encodeToBase64(Base64.getEncoder(), blob.getBytes()), StandardCharsets.UTF_8);
     }
 
-    @Override
     public Blob fromEncodedString(final String data) {
         final int colonIdx = data.indexOf(':');
         final String name  = data.substring(0, colonIdx);
@@ -85,6 +98,8 @@ implements
             throw new RuntimeException(e);
         }
     }
+
+    // -- EXAMPLES
 
     @Override
     public Can<Blob> getExamples() {
