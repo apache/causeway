@@ -18,11 +18,13 @@
  */
 package org.apache.isis.applib.value.semantics;
 
+import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.schema.common.v2.TypedTupleDto;
+import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
 /**
- * Provides construction and extraction for a given value-type
- * from and into its constituent parts.
+ * Provides composition and decomposition for a given value-type
+ * from and into its constituent fundamental parts.
  *
  * @param <T> - value-type
  *
@@ -35,17 +37,36 @@ import org.apache.isis.schema.common.v2.TypedTupleDto;
  */
 public interface ValueComposer<T> {
 
-    /**
-     * Converts a value object into a {@link TypedTupleDto}.
-     */
-    TypedTupleDto decompose(T value);
+    public static final class ValueDecomposition extends _Either<ValueWithTypeDto, TypedTupleDto> {
+        private static final long serialVersionUID = 1L;
+
+        public static ValueDecomposition ofFundamental(final ValueWithTypeDto valueWithTypeDto) {
+            return new ValueDecomposition(valueWithTypeDto, null);
+        }
+
+        public static ValueDecomposition ofComposite(final TypedTupleDto typedTupleDto) {
+            return new ValueDecomposition(null, typedTupleDto);
+        }
+
+        private ValueDecomposition(final ValueWithTypeDto left, final TypedTupleDto right) {
+            super(left, right);
+        }
+    }
 
     /**
-     * Converts an {@link TypedTupleDto} to an instance of the object.
+     * Converts a value object into either a {@link ValueWithTypeDto}
+     * or {@link TypedTupleDto}.
+     */
+    ValueDecomposition decompose(T value);
+
+    /**
+     * Converts either a {@link ValueWithTypeDto} or
+     * a {@link TypedTupleDto}
+     * to an instance of the object.
      *
      * @see #decompose(Object)
      */
-    T compose(TypedTupleDto dto);
+    T compose(ValueDecomposition decomposition);
 
 
     // -- EXPERIMENTAL

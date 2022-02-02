@@ -79,17 +79,20 @@ implements
     // -- COMPOSER
 
     @Override
-    public TypedTupleDto decompose(final CalendarEvent value) {
-        return CommonDtoUtils.typedTupleBuilder(value)
-            .addFundamentalType(ValueType.LONG, "epochMillis", CalendarEvent::getEpochMillis)
-            .addFundamentalType(ValueType.STRING, "calendarName", CalendarEvent::getCalendarName)
-            .addFundamentalType(ValueType.STRING, "title", CalendarEvent::getTitle)
-            .addFundamentalType(ValueType.STRING, "notes", CalendarEvent::getNotes)
-            .build();
+    public ValueDecomposition decompose(final CalendarEvent value) {
+        return ValueDecomposition.ofComposite(
+                CommonDtoUtils.typedTupleBuilder(value)
+                .addFundamentalType(ValueType.LONG, "epochMillis", CalendarEvent::getEpochMillis)
+                .addFundamentalType(ValueType.STRING, "calendarName", CalendarEvent::getCalendarName)
+                .addFundamentalType(ValueType.STRING, "title", CalendarEvent::getTitle)
+                .addFundamentalType(ValueType.STRING, "notes", CalendarEvent::getNotes)
+                .build());
     }
 
     @Override
-    public CalendarEvent compose(final TypedTupleDto dto) {
+    public CalendarEvent compose(final ValueDecomposition decomposition) {
+
+        final TypedTupleDto dto = decomposition.rightIfAny();
 
         val elementMap = CommonDtoUtils.typedTupleAsMap(dto);
 

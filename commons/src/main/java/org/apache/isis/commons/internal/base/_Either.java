@@ -42,9 +42,9 @@ import lombok.ToString;
  *
  * @since 2.0
  */
-@RequiredArgsConstructor(access=AccessLevel.PRIVATE, staticName="of")
+@RequiredArgsConstructor(access=AccessLevel.PROTECTED)
 @ToString @EqualsAndHashCode
-public final class _Either<L, R> implements Serializable {
+public class _Either<L, R> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -54,56 +54,56 @@ public final class _Either<L, R> implements Serializable {
     // -- FACTORIES
 
     public static <L, R> _Either<L, R> left(final @NonNull L left) {
-        return of(left, null);
+        return new _Either<>(left, null);
     }
 
     public static <L, R> _Either<L, R> right(final @NonNull R right) {
-        return of(null, right);
+        return new _Either<>(null, right);
     }
 
     // -- ACCESSORS
 
-    public Optional<L> left() {
+    public final Optional<L> left() {
         return Optional.ofNullable(left);
     }
 
-    public Optional<R> right() {
+    public final Optional<R> right() {
         return Optional.ofNullable(right);
     }
 
-    public L leftIfAny() {
+    public final L leftIfAny() {
         return left;
     }
 
-    public R rightIfAny() {
+    public final R rightIfAny() {
         return right;
     }
 
     // -- PREDICATES
 
-    public boolean isLeft() {
+    public final boolean isLeft() {
         return left!=null;
     }
 
-    public boolean isRight() {
+    public final  boolean isRight() {
         return right!=null;
     }
 
     // -- MAPPING
 
-    public <T> _Either<T, R> mapLeft(final @NonNull Function<L, T> leftMapper){
+    public final <T> _Either<T, R> mapLeft(final @NonNull Function<L, T> leftMapper){
         return isLeft()
                 ? _Either.left(leftMapper.apply(left))
                 : _Either.right(right);
     }
 
-    public <T> _Either<L, T> mapRight(final @NonNull Function<R, T> rightMapper){
+    public final <T> _Either<L, T> mapRight(final @NonNull Function<R, T> rightMapper){
         return isLeft()
                 ? _Either.left(left)
                 : _Either.right(rightMapper.apply(right));
     }
 
-    public <X, Y> _Either<X, Y> map(
+    public final <X, Y> _Either<X, Y> map(
             final @NonNull Function<L, X> leftMapper,
             final @NonNull Function<R, Y> rightMapper){
         return isLeft()
@@ -111,13 +111,13 @@ public final class _Either<L, R> implements Serializable {
                 : right(rightMapper.apply(right));
     }
 
-    public _Either<L, R> mapIfLeft(final @NonNull Function<L, _Either<L, R>> leftRemapper){
+    public final _Either<L, R> mapIfLeft(final @NonNull Function<L, _Either<L, R>> leftRemapper){
         return isLeft()
                 ? leftRemapper.apply(left)
                 : this;
     }
 
-    public _Either<L, R> mapIfRight(final @NonNull Function<R, _Either<L, R>> rightRemapper){
+    public final _Either<L, R> mapIfRight(final @NonNull Function<R, _Either<L, R>> rightRemapper){
         return isLeft()
                 ? this
                 : rightRemapper.apply(right);
@@ -125,11 +125,11 @@ public final class _Either<L, R> implements Serializable {
 
     // -- FOLDING
 
-    public <T> T fold(final @NonNull BiFunction<L, R, T> biMapper){
+    public final <T> T fold(final @NonNull BiFunction<L, R, T> biMapper){
         return biMapper.apply(left, right);
     }
 
-    public <T> T fold(
+    public final <T> T fold(
             final @NonNull Function<L, T> leftMapper,
             final @NonNull Function<R, T> rightMapper){
         return isLeft()
@@ -139,7 +139,7 @@ public final class _Either<L, R> implements Serializable {
 
     // -- TERMINALS
 
-    public void accept(final Consumer<L> leftConsumer, final Consumer<R> rightConsumer) {
+    public final void accept(final Consumer<L> leftConsumer, final Consumer<R> rightConsumer) {
         if(isLeft()) {
             leftConsumer.accept(left);
         } else {

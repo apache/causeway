@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.schema.common.v2.TypedTupleDto;
+import org.apache.isis.applib.value.semantics.ValueComposer.ValueDecomposition;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -110,17 +110,17 @@ implements
     // -- UTILITY
 
     public static final class JaxbAdapter
-    extends XmlAdapter<TypedTupleDto, CalendarEvent> {
+    extends XmlAdapter<ValueDecomposition, CalendarEvent> {
 
         @Override
-        public CalendarEvent unmarshal(final TypedTupleDto dto) {
+        public CalendarEvent unmarshal(final ValueDecomposition dto) {
             return dto!=null
                     ? new CalendarEventSemantics().compose(dto)
                     : null;
         }
 
         @Override
-        public TypedTupleDto marshal(final CalendarEvent v) {
+        public ValueDecomposition marshal(final CalendarEvent v) {
             return v!=null
                     ? new CalendarEventSemantics().decompose(v)
                     : null;

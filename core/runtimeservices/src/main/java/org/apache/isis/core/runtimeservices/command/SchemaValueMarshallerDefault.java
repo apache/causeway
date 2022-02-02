@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
+import org.apache.isis.applib.value.semantics.ValueComposer.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
@@ -153,7 +154,8 @@ extends SchemaValueMarshallerAbstract {
     private <T> TypedTupleDto toTypedTuple(final Context<T> context, final T valuePojo) {
         return context.getComposer()
                 .orElseThrow()
-                .decompose(valuePojo);
+                .decompose(valuePojo)
+                .rightIfAny();
     }
 
     private <T> Object toFundamentalValue(final Context<T> context, final T valuePojo) {
@@ -172,7 +174,7 @@ extends SchemaValueMarshallerAbstract {
         }
         return context.getComposer()
                 .orElseThrow()
-                .compose(typedTupleDto);
+                .compose(ValueDecomposition.ofComposite(typedTupleDto));
     }
 
     private <T> T fromFundamentalValue(final Context<T> context, final @Nullable Object fundamentalValue) {
