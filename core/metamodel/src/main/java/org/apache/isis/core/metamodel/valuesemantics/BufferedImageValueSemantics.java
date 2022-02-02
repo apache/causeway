@@ -26,15 +26,18 @@ import javax.inject.Named;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
+import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.applib.value.semantics.OrderRelation;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.image._Images;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.schema.common.v2.BlobDto;
 import org.apache.isis.schema.common.v2.ValueType;
+import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
 @Component
 @Named("isis.val.BufferedImageValueSemantics")
@@ -43,7 +46,7 @@ extends ValueSemanticsAbstract<BufferedImage>
 implements
     ImageValueSemantics,
     OrderRelation<BufferedImage, Void>,
-    EncoderDecoder<BufferedImage> {
+    ValueComposer<BufferedImage> {
 
     @Override
     public Class<BufferedImage> getCorrespondingClass() {
@@ -52,7 +55,7 @@ implements
 
     @Override
     public ValueType getSchemaValueType() {
-        return UNREPRESENTED;
+        return ValueType.BLOB;
     }
 
     // -- ORDER RELATION
@@ -72,25 +75,52 @@ implements
         return compare(a, b, epsilon) == 0;
     }
 
+    // -- COMPOSER
+
+    @Override
+    public ValueDecomposition decompose(final BufferedImage value) {
+        return decomposeAsNullable(value, this::toBlob, ()->null);
+    }
+
+    @Override
+    public BufferedImage compose(final ValueDecomposition decomposition) {
+        return composeFromNullable(
+                decomposition, ValueWithTypeDto::getBlob, this::fromBlobDto, ()->null);
+    }
+
+    private BufferedImage fromBlobDto(final BlobDto blobDto) {
+        return blobDto!=null
+                    && blobDto.getBytes()!=null
+                            ? _Images.fromBytes(blobDto.getBytes())
+                            : null;
+    }
+
+    private Blob toBlob(final BufferedImage img) {
+        return img!=null
+                // arbitrary name and mimetype - not used when recovering the image
+                ? new Blob("image", CommonMimeType.PNG.getBaseType(), _Images.toBytes(img))
+                : null;
+    }
+
     // -- ENCODER DECODER
 
-    @Override
-    public String toEncodedString(final @Nullable BufferedImage image) {
-        if(image==null) {
-            return null;
-        }
-        return _Images.toBase64(image);
-    }
-
-    @Override
-    public BufferedImage fromEncodedString(final @Nullable String base64ImageData) {
-        if(_Strings.isNullOrEmpty(base64ImageData)) {
-            return null;
-        }
-        /*sonar-ignore-on*/
-        return _Images.fromBase64(base64ImageData);
-        /*sonar-ignore-off*/
-    }
+//    @Override
+//    public String toEncodedString(final @Nullable BufferedImage image) {
+//        if(image==null) {
+//            return null;
+//        }
+//        return _Images.toBase64(image);
+//    }
+//
+//    @Override
+//    public BufferedImage fromEncodedString(final @Nullable String base64ImageData) {
+//        if(_Strings.isNullOrEmpty(base64ImageData)) {
+//            return null;
+//        }
+//        /*sonar-ignore-on*/
+//        return _Images.fromBase64(base64ImageData);
+//        /*sonar-ignore-off*/
+//    }
 
     // -- FACET
 

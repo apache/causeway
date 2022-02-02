@@ -81,9 +81,7 @@ implements SchemaValueMarshaller {
                     && !semantics.getCorrespondingClass().equals(String.class);
 
             return of(correspondingClass, feature, Optional.ofNullable(semantics),
-                    supportsConversionViaEncoderDecoder
-                        ? Optional.ofNullable(semantics.getEncoderDecoder())
-                        : Optional.empty(),
+                    Optional.empty(),
                     semantics!=null
                         ? Optional.ofNullable(semantics.getConverter())
                         : Optional.empty(),

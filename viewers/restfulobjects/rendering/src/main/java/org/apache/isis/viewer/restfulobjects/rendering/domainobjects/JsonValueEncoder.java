@@ -35,7 +35,8 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
+import org.apache.isis.applib.value.semantics.ValueComposer;
+import org.apache.isis.applib.value.semantics.ValueComposer.ValueDecomposition;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -146,13 +147,13 @@ public class JsonValueEncoder {
 
             final Object value = ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)
                     ? NullNode.getInstance()
-                    : toEncodedString(objectSpecification, objectAdapter.getPojo())
+                    : decomposeToJson(objectSpecification, objectAdapter.getPojo())
                         .map(Object.class::cast)
                         .orElseGet(()->{
-                            log.warn("{Could not resolve an EncoderDecoder for {}, "
+                            log.warn("{Could not resolve a ValueComposer for {}, "
                                     + "falling back to rendering as 'null'. "
                                     + "Make sure the framework has access to a ValueSemanticsProvider<{}> "
-                                    + "that implements EncoderDecoder<{}>}",
+                                    + "that implements ValueComposer<{}>}",
                                     objectSpecification.getLogicalTypeName(),
                                     objectSpecification.getCorrespondingClass().getSimpleName(),
                                     objectSpecification.getCorrespondingClass().getSimpleName());
@@ -165,11 +166,17 @@ public class JsonValueEncoder {
         }
     }
 
-    private static <T> Optional<String> toEncodedString(final ObjectSpecification spec, final T pojo) {
+    @SuppressWarnings("unchecked")
+    private static <T> Optional<ValueDecomposition> decompose(final ObjectSpecification spec, final T pojo) {
         return spec.lookupFacet(ValueFacet.class)
-            .flatMap(ValueFacet::selectDefaultEncoderDecoder)
-            .map(EncoderDecoder.class::cast)
-            .map(codec->((EncoderDecoder<T>)codec).toEncodedString(pojo));
+            .flatMap(ValueFacet::selectDefaultComposer)
+            .map(ValueComposer.class::cast)
+            .<ValueDecomposition>map(composer->((ValueComposer<T>)composer).decompose(pojo));
+    }
+
+    private static <T> Optional<String> decomposeToJson(final ObjectSpecification spec, final T pojo) {
+        return decompose(spec, pojo)
+                .map(ValueDecomposition::toJson);
     }
 
     @Nullable

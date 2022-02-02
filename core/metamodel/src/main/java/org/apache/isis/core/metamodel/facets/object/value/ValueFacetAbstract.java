@@ -28,7 +28,6 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
@@ -130,18 +129,6 @@ implements ValueFacet<T> {
                 .stream()
                 .filter(isMatchingAnyOf(Can.empty()))
                 .map(ValueSemanticsProvider::getDefaultsProvider)
-                .filter(_NullSafe::isPresent)
-                .findFirst();
-    }
-
-    // -- ENCODER DECODER
-
-    @Override
-    public Optional<EncoderDecoder<T>> selectDefaultEncoderDecoder() {
-        return getValueSemantics()
-                .stream()
-                .filter(isMatchingAnyOf(Can.empty()))
-                .map(ValueSemanticsProvider::getEncoderDecoder)
                 .filter(_NullSafe::isPresent)
                 .findFirst();
     }

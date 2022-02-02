@@ -18,18 +18,21 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
+import java.util.function.UnaryOperator;
+
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.exceptions.recoverable.InvalidEntryException;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.schema.common.v2.ValueDto;
 import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
@@ -43,7 +46,7 @@ public class CharacterValueSemantics
 extends ValueSemanticsAbstract<Character>
 implements
     DefaultsProvider<Character>,
-    EncoderDecoder<Character>,
+    ValueComposer<Character>,
     Parser<Character>,
     Renderer<Character> {
 
@@ -62,16 +65,24 @@ implements
         return (char) 0;
     }
 
-    // -- ENCODER DECODER
+    // -- COMPOSER
 
     @Override
-    public String toEncodedString(final Character object) {
-        return object.toString();
+    public ValueDecomposition decompose(final Character value) {
+        return decomposeAsNullable(value, UnaryOperator.identity(), ()->null);
     }
 
     @Override
-    public Character fromEncodedString(final String data) {
-        return Character.valueOf(data.charAt(0));
+    public Character compose(final ValueDecomposition decomposition) {
+        return composeFromNullable(
+                decomposition, ValueDto::getChar, this::fromString, ()->null);
+    }
+
+    private Character fromString(final String data) {
+        return data!=null
+                && data.length()>0
+                ? Character.valueOf(data.charAt(0))
+                : null;
     }
 
     // -- RENDERER

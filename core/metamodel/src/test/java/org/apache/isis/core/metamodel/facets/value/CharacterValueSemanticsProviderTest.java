@@ -25,25 +25,26 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.apache.isis.applib.exceptions.recoverable.InvalidEntryException;
+import org.apache.isis.applib.value.semantics.ValueComposer.ValueDecomposition;
 import org.apache.isis.core.metamodel.valuesemantics.CharacterValueSemantics;
 
 public class CharacterValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {
 
-    private CharacterValueSemantics value;
+    private CharacterValueSemantics valueSemantics;
 
     private Character character;
 
     @Before
     public void setUpObjects() throws Exception {
         character = Character.valueOf('r');
-        setSemantics(value = new CharacterValueSemantics());
+        setSemantics(valueSemantics = new CharacterValueSemantics());
     }
 
     @Test
     public void testParseLongString() throws Exception {
         try {
-            value.parseTextRepresentation(null, "one");
+            valueSemantics.parseTextRepresentation(null, "one");
             fail();
         } catch (final InvalidEntryException expected) {
         }
@@ -51,23 +52,23 @@ extends ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testTitleOf() {
-        assertEquals("r", value.simpleTextPresentation(null, character));
+        assertEquals("r", valueSemantics.simpleTextPresentation(null, character));
     }
 
     @Test
     public void testValidParse() throws Exception {
-        final Object parse = value.parseTextRepresentation(null, "t");
+        final Object parse = valueSemantics.parseTextRepresentation(null, "t");
         assertEquals(Character.valueOf('t'), parse);
     }
 
     @Test
     public void testEncode() throws Exception {
-        assertEquals("r", value.toEncodedString(character));
+        assertEquals("r", valueSemantics.decompose(character).toJson());
     }
 
     @Test
     public void testDecode() throws Exception {
-        final Object restore = value.fromEncodedString("Y");
+        final Object restore = valueSemantics.compose(ValueDecomposition.fromJson("Y"));
         assertEquals(Character.valueOf('Y'), restore);
     }
 }

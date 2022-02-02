@@ -91,11 +91,6 @@ public interface ValueSemanticsProvider<T> {
     Parser<T> getParser();
 
     /**
-     * The {@link EncoderDecoder}, if any.
-     */
-    EncoderDecoder<T> getEncoderDecoder();
-
-    /**
      * The {@link DefaultsProvider}, if any.
      *
      * <p>

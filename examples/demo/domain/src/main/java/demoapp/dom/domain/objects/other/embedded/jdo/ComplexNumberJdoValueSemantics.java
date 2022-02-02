@@ -18,21 +18,16 @@
  */
 package demoapp.dom.domain.objects.other.embedded.jdo;
 
-import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.common.v2.ValueType;
-
-import lombok.val;
 
 // tag::class[]
 @Component
@@ -90,36 +85,55 @@ public class ComplexNumberJdoValueSemantics
 
 // tag::getEncoderDecoder[]
     @Override
-    public EncoderDecoder<ComplexNumberJdo> getEncoderDecoder() {
+    public ValueComposer<ComplexNumberJdo> getComposer() {
 // end::getEncoderDecoder[]
         // ...
 // tag::getEncoderDecoder[]
-        return new EncoderDecoder<ComplexNumberJdo>() {
+        return new ValueComposer<ComplexNumberJdo>() {
+
             @Override
-            public String toEncodedString(final ComplexNumberJdo cn) {
-                if(cn==null) {
-                    return null;
-                }
-                val re = Double.doubleToLongBits(cn.getRe());
-                val im = Double.doubleToLongBits(cn.getIm());
-                return String.format("%s:%s",
-                        Long.toHexString(re), Long.toHexString(im));
+            public ValueDecomposition decompose(final ComplexNumberJdo value) {
+                return CommonDtoUtils.typedTupleBuilder(value)
+                        .addFundamentalType(ValueType.DOUBLE, "re", ComplexNumberJdo::getRe)
+                        .addFundamentalType(ValueType.DOUBLE, "im", ComplexNumberJdo::getIm)
+                        .buildAsDecomposition();
             }
+
             @Override
-            public ComplexNumberJdo fromEncodedString(final String str) {
-                if(_NullSafe.isEmpty(str)) {
-                    return null;
-                }
-                val chunks = _Strings.splitThenStream(str, ":")
-                    .limit(2)
-                    .collect(Collectors.toList());
-                if(chunks.size()<2) {
-                    throw new IllegalArgumentException("Invalid format " + str);
-                }
-                val re = Double.longBitsToDouble(Long.parseLong(chunks.get(0), 16));
-                val im = Double.longBitsToDouble(Long.parseLong(chunks.get(1), 16));
-                return ComplexNumberJdo.of(re, im);
+            public ComplexNumberJdo compose(final ValueDecomposition decomposition) {
+                return decomposition.right()
+                        .map(CommonDtoUtils::typedTupleAsMap)
+                        .map(map->ComplexNumberJdo.of(
+                                (Double)map.get("re"),
+                                (Double)map.get("im")))
+                        .orElse(null);
             }
+
+//            @Override
+//            public String toEncodedString(final ComplexNumberJdo cn) {
+//                if(cn==null) {
+//                    return null;
+//                }
+//                val re = Double.doubleToLongBits(cn.getRe());
+//                val im = Double.doubleToLongBits(cn.getIm());
+//                return String.format("%s:%s",
+//                        Long.toHexString(re), Long.toHexString(im));
+//            }
+//            @Override
+//            public ComplexNumberJdo fromEncodedString(final String str) {
+//                if(_NullSafe.isEmpty(str)) {
+//                    return null;
+//                }
+//                val chunks = _Strings.splitThenStream(str, ":")
+//                    .limit(2)
+//                    .collect(Collectors.toList());
+//                if(chunks.size()<2) {
+//                    throw new IllegalArgumentException("Invalid format " + str);
+//                }
+//                val re = Double.longBitsToDouble(Long.parseLong(chunks.get(0), 16));
+//                val im = Double.longBitsToDouble(Long.parseLong(chunks.get(1), 16));
+//                return ComplexNumberJdo.of(re, im);
+//            }
         };
     }
 // end::getEncoderDecoder[]

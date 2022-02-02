@@ -86,11 +86,11 @@ implements
         return this instanceof Renderer ? (Renderer<T>)this : null;
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public EncoderDecoder<T> getEncoderDecoder() {
-        return this instanceof EncoderDecoder ? (EncoderDecoder<T>)this : null;
-    }
+//    @SuppressWarnings("unchecked")
+//    @Override
+//    public EncoderDecoder<T> getEncoderDecoder() {
+//        return this instanceof EncoderDecoder ? (EncoderDecoder<T>)this : null;
+//    }
 
     @SuppressWarnings("unchecked")
     @Override

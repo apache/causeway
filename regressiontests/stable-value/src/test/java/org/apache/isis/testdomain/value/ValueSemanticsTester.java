@@ -99,14 +99,8 @@ public class ValueSemanticsTester<T> {
             probe.testComposer(context, composerIfAny.get());
         }
 
-        val codecIfAny = codec(prop);
-        if(codecIfAny.isPresent()) {
-            probe.testEncoderDecoder(context, codecIfAny.get());
-        }
-
-        assertTrue(composerIfAny.isPresent()
-                || codecIfAny.isPresent(), ()->
-                        "either codec or composer must be available for "
+        assertTrue(composerIfAny.isPresent(), ()->
+                        "composer must be available for "
                             + context.getFeatureIdentifier());
 
         val parserIfAny = parser(prop);
@@ -188,12 +182,6 @@ public class ValueSemanticsTester<T> {
             final ObjectFeature feature) {
         val valueFacet = valueFacet(feature);
         return valueFacet.selectDefaultComposer();
-    }
-
-    private Optional<EncoderDecoder<T>> codec(
-            final ObjectFeature feature) {
-        val valueFacet = valueFacet(feature);
-        return valueFacet.selectDefaultEncoderDecoder();
     }
 
     private Optional<Parser<T>> parser(

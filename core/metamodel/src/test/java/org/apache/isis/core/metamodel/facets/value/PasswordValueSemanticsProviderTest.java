@@ -24,22 +24,30 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 import org.apache.isis.applib.value.Password;
+import org.apache.isis.applib.value.semantics.ValueComposer.ValueDecomposition;
 import org.apache.isis.core.metamodel.valuesemantics.PasswordValueSemantics;
 
 public class PasswordValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {
 
-    private PasswordValueSemantics adapter;
+    private PasswordValueSemantics valueSemantics;
     private Password password;
 
     @Before
     public void setUpObjects() throws Exception {
-        setSemantics(adapter = new PasswordValueSemantics());
+        setSemantics(valueSemantics = new PasswordValueSemantics());
         password = new Password("secret");
     }
 
     @Test
-    public void testEncoding() {
-        assertEquals("secret", adapter.toEncodedString(password));
+    public void testEncode() throws Exception {
+        assertEquals("secret", valueSemantics.decompose(password).toJson());
     }
+
+    @Test
+    public void testDecode() throws Exception {
+        final Object restore = valueSemantics.compose(ValueDecomposition.fromJson("secret"));
+        assertEquals(password, restore);
+    }
+
 }

@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.facets.object.value.vsp;
 
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -56,11 +55,6 @@ implements ValueSemanticsProvider<T> {
     @Override
     public final Parser<T> getParser() {
         return valueSemantics.getParser();
-    }
-
-    @Override
-    public final EncoderDecoder<T> getEncoderDecoder() {
-        return valueSemantics.getEncoderDecoder();
     }
 
     @Override

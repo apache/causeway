@@ -25,7 +25,7 @@ import java.util.UUID;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.Oid;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.debug._Debug;
@@ -151,16 +151,17 @@ class ObjectBookmarker_builtinHandlers {
             }
 
             val valueFacet = spec.getFacet(ValueFacet.class);
-            EncoderDecoder<Object> codec = (EncoderDecoder) valueFacet.selectDefaultEncoderDecoder()
+            ValueComposer<Object> composer = (ValueComposer) valueFacet.selectDefaultComposer()
                     .orElseThrow(()->_Exceptions.illegalArgument(
                             "Cannot create a bookmark for the value type %s, "
-                          + "as no appropriate EncoderDecoder could be found.",
+                          + "as no appropriate ValueComposer could be found.",
                           managedObject.getSpecification().getCorrespondingClass().getName()));
 
-            val encoded = codec.toEncodedString(managedObject.getPojo()).getBytes();
+            val valueAsJson = composer.decompose(managedObject.getPojo())
+                    .toJson();
 
             val identifier = _Strings.ofBytes(
-                    _Bytes.asUrlBase64.apply(encoded),
+                    _Bytes.asUrlBase64.apply(valueAsJson.getBytes()),
                     StandardCharsets.UTF_8);
 
             return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), identifier);

@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.valuesemantics;
 
 import java.lang.reflect.Method;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
@@ -28,9 +29,9 @@ import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.util.Enums;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
@@ -39,7 +40,9 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
+import org.apache.isis.schema.common.v2.EnumDto;
 import org.apache.isis.schema.common.v2.ValueType;
+import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
 import lombok.Getter;
 import lombok.val;
@@ -49,7 +52,7 @@ public class EnumValueSemanticsAbstract<T extends Enum<T>>
 extends ValueSemanticsAbstract<T>
 implements
     DefaultsProvider<T>,
-    EncoderDecoder<T>,
+    ValueComposer<T>,
     Parser<T>,
     Renderer<T> {
 
@@ -108,23 +111,31 @@ implements
         return correspondingClass.getEnumConstants()[0];
     }
 
-    // -- ENCODER/DECODER
+    // -- COMPOSER
 
     @Override
-    public String toEncodedString(final T object) {
-        return object!=null ? object.name() : null;
+    public ValueDecomposition decompose(final T value) {
+        return decomposeAsNullable(value, UnaryOperator.identity(), ()->null);
     }
 
     @Override
-    public T fromEncodedString(final String data) {
-        return data!=null
+    public T compose(final ValueDecomposition decomposition) {
+        return composeFromNullable(
+                decomposition, ValueWithTypeDto::getEnum, this::fromEnumName, ()->null);
+    }
+
+    private T fromEnumName(final EnumDto enumDto) {
+
+        val enumName = enumDto.getEnumName();
+
+        return enumName!=null
                 ? Stream.of(correspondingClass.getEnumConstants())
-                        .filter(e->e.name().equals(data))
+                        .filter(e->e.name().equals(enumName))
                         .findFirst()
                         .orElseThrow(()->_Exceptions
                                 .noSuchElement("enum %s has no matching %s",
                                         correspondingClass.getName(),
-                                        data))
+                                        enumName))
                 : null;
     }
 

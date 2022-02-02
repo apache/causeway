@@ -21,13 +21,16 @@ package org.apache.isis.core.metamodel.facets.object.encodeable.encoder;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
+import org.apache.isis.applib.value.semantics.ValueComposer;
+import org.apache.isis.applib.value.semantics.ValueComposer.ValueDecomposition;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+
+import lombok.val;
 
 public class EncodableFacetFromValueFacet
 extends FacetAbstract
@@ -37,24 +40,25 @@ implements EncodableFacet {
     public static final String ENCODED_NULL = "NULL";
 
     public static Optional<EncodableFacet> create(final ValueFacet<?> valueFacet, final FacetHolder holder) {
-        return valueFacet.selectDefaultEncoderDecoder()
-                .map(encoderDecoder->new EncodableFacetFromValueFacet(encoderDecoder, holder));
+        return valueFacet.selectDefaultComposer()
+                .map(composer->new EncodableFacetFromValueFacet(composer, holder));
     }
 
     /**
      * JUnit support.
      */
-    public static EncodableFacetFromValueFacet forTesting(final EncoderDecoder<?> encoderDecoder, final FacetHolder holder) {
-        return new EncodableFacetFromValueFacet(encoderDecoder, holder);
+    public static EncodableFacetFromValueFacet forTesting(
+            final ValueComposer<?> composer, final FacetHolder holder) {
+        return new EncodableFacetFromValueFacet(composer, holder);
     }
 
     // -- CONSTRUCTION
 
-    private final EncoderDecoder<?> encoderDecoder;
+    private final ValueComposer<?> composer;
 
-    private EncodableFacetFromValueFacet(final EncoderDecoder<?> encoderDecoder, final FacetHolder holder) {
+    private EncodableFacetFromValueFacet(final ValueComposer<?> encoderDecoder, final FacetHolder holder) {
         super(EncodableFacet.class, holder);
-        this.encoderDecoder = encoderDecoder;
+        this.composer = encoderDecoder;
     }
 
     @Override
@@ -63,7 +67,7 @@ implements EncodableFacet {
         if (ENCODED_NULL.equals(encodedData)) {
             return null;
         } else {
-            final Object decodedObject = encoderDecoder.fromEncodedString(encodedData);
+            final Object decodedObject = composer.compose(ValueDecomposition.fromJson(encodedData));
             return getObjectManager().adapt(decodedObject);
         }
     }
@@ -72,21 +76,23 @@ implements EncodableFacet {
     public String toEncodedString(final ManagedObject adapter) {
         return adapter == null
                 ? ENCODED_NULL
-                : encode(encoderDecoder, adapter.getPojo());
+                : encode(composer, adapter.getPojo());
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("codec", encoderDecoder.toString());
+        visitor.accept("composer", composer.toString());
     }
 
     // -- HELPER
 
-    private static <T> String encode(final EncoderDecoder<T> encoderDecoder, final Object pojo) {
+    private static <T> String encode(final ValueComposer<T> composer, final Object pojo) {
         @SuppressWarnings("unchecked")
         T pojoAsT = (T) pojo;
-        return encoderDecoder.toEncodedString(pojoAsT);
+        val valueAsJson = composer.decompose(pojoAsT)
+                .toJson();
+        return valueAsJson;
     }
 
 

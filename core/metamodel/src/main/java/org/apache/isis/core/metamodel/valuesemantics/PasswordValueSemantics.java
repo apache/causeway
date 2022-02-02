@@ -23,20 +23,21 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.common.v2.ValueType;
+import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
 @Component
 @Named("isis.val.PasswordValueSemantics")
 public class PasswordValueSemantics
 extends ValueSemanticsAbstract<Password>
 implements
-    EncoderDecoder<Password>,
+    ValueComposer<Password>,
     Parser<Password>,
     Renderer<Password> {
 
@@ -50,22 +51,17 @@ implements
         return ValueType.STRING;
     }
 
-    // -- ENCODER DECODER
+    // -- COMPOSER
 
     @Override
-    public String toEncodedString(final Password value) {
-        if(value==null) {
-            return null;
-        }
-        return value.getPassword();
+    public ValueDecomposition decompose(final Password value) {
+        return decomposeAsNullable(value, Password::getPassword, ()->null);
     }
 
     @Override
-    public Password fromEncodedString(final String data) {
-        if(data==null) {
-            return null;
-        }
-        return new Password(data);
+    public Password compose(final ValueDecomposition decomposition) {
+        return composeFromNullable(
+                decomposition, ValueWithTypeDto::getString, Password::new, ()->null);
     }
 
     // -- RENDERER

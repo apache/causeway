@@ -302,6 +302,13 @@ public final class _NullSafe {
     public static int size(final @Nullable short[] array){ return array!=null ? array.length : 0; }
     public static <T> int size(final @Nullable T[] array){ return array!=null ? array.length : 0; }
 
+    // -- TO STRING
+
+    public static String toString(final @Nullable Object obj) {
+        return obj!=null
+                ? obj.toString()
+                : null;
+    }
 
     // -- MAP
 
@@ -335,5 +342,7 @@ public final class _NullSafe {
                 ? Collections.emptySet()
                 : map.entrySet();
     }
+
+
 
 }

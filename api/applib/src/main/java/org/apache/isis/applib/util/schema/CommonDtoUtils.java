@@ -40,9 +40,11 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.semantics.ValueComposer.ValueDecomposition;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.resources._Json;
 import org.apache.isis.schema.cmd.v2.MapDto;
 import org.apache.isis.schema.cmd.v2.ParamDto;
 import org.apache.isis.schema.common.v2.BlobDto;
@@ -66,10 +68,96 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class CommonDtoUtils {
 
+    // -- VALUE EXTRACT
+
+    public String getFundamentalValueAsJson(
+            final @Nullable ValueWithTypeDto valueDto) {
+        if(valueDto==null) {
+            return null;
+        }
+        return getFundamentalValueAsJson(valueDto.getType(),valueDto);
+    }
+
+    @SneakyThrows
+    public String getFundamentalValueAsJson(
+            final @NonNull ValueType valueType,
+            final @Nullable ValueDto valueDto) {
+
+        _NullSafe.toString(7);
+
+        if(valueDto==null) {
+            return null;
+        }
+        switch(valueType) {
+        case REFERENCE:
+        case COMPOSITE:
+        case COLLECTION:
+            throw _Exceptions.unsupportedOperation("valueType %s is not fundamental", valueType);
+
+        case STRING:
+            return valueDto.getString();
+        case BYTE:
+            return _NullSafe.toString(valueDto.getByte());
+        case SHORT:
+            return _NullSafe.toString(valueDto.getShort());
+        case INT:
+            return _NullSafe.toString(valueDto.getInt());
+        case LONG:
+            return _NullSafe.toString(valueDto.getLong());
+        case FLOAT:
+            return _NullSafe.toString(valueDto.getFloat());
+        case DOUBLE:
+            return _NullSafe.toString(valueDto.getDouble());
+        case BOOLEAN:
+            return _NullSafe.toString(valueDto.isBoolean());
+        case CHAR:
+            final String aChar = valueDto.getChar();
+            if(_Strings.isNullOrEmpty(aChar)) { return null; }
+            return ""+aChar.charAt(0);
+        case BIG_DECIMAL:
+            return _NullSafe.toString(valueDto.getBigDecimal());
+        case BIG_INTEGER:
+            return _NullSafe.toString(valueDto.getBigInteger());
+        case LOCAL_DATE:
+            return _NullSafe.toString(valueDto.getLocalDate());
+        case LOCAL_TIME:
+            return _NullSafe.toString(valueDto.getLocalTime());
+        case LOCAL_DATE_TIME:
+            return _NullSafe.toString(valueDto.getLocalDateTime());
+        case OFFSET_DATE_TIME:
+            return _NullSafe.toString(valueDto.getOffsetDateTime());
+        case OFFSET_TIME:
+            return _NullSafe.toString(valueDto.getOffsetTime());
+        case ZONED_DATE_TIME:
+            return _NullSafe.toString(valueDto.getZonedDateTime());
+        case ENUM:
+            final EnumDto enumDto = valueDto.getEnum();
+            final String enumType = enumDto.getEnumType();
+            @SuppressWarnings("rawtypes")
+            final Class<? extends Enum> enumClass =
+                    _Casts.uncheckedCast(_Context.loadClassAndInitialize(enumType));
+            return Enum.valueOf(_Casts.uncheckedCast(enumClass), enumDto.getEnumName()).name();
+        case BLOB:
+            final BlobDto blobDto = valueDto.getBlob();
+            return blobDto!=null
+                    ? _Json.toString(blobDto).presentElseFail()
+                    : null;
+        case CLOB:
+            final ClobDto clobDto = valueDto.getClob();
+            return clobDto!=null
+                    ? _Json.toString(clobDto).presentElseFail()
+                    : null;
+        case VOID:
+            return null;
+        default:
+            throw _Exceptions.unmatchedCase(valueType);
+        }
+    }
+
     // -- VALUE RECORD
 
-    public <D extends ValueDto, T> D recordFundamentalValue(
-            final @NonNull  ValueType valueType,
+    public <D extends ValueDto> D recordFundamentalValue(
+            final @NonNull ValueType valueType,
             final D valueDto,
             final Object pojo) {
 

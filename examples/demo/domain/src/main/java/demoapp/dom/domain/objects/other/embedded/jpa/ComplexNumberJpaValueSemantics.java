@@ -18,22 +18,17 @@
  */
 package demoapp.dom.domain.objects.other.embedded.jpa;
 
-import java.util.stream.Collectors;
-
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.common.v2.ValueType;
-
-import lombok.val;
 
 @Profile("demo-jpa")
 // tag::class[]
@@ -92,36 +87,55 @@ public class ComplexNumberJpaValueSemantics
 
 // tag::getEncoderDecoder[]
     @Override
-    public EncoderDecoder<ComplexNumberJpa> getEncoderDecoder() {
+    public ValueComposer<ComplexNumberJpa> getComposer() {
 // end::getEncoderDecoder[]
         // ...
 // tag::getEncoderDecoder[]
-        return new EncoderDecoder<ComplexNumberJpa>() {
+        return new ValueComposer<ComplexNumberJpa>() {
+
             @Override
-            public String toEncodedString(final ComplexNumberJpa cn) {
-                if(cn==null) {
-                    return null;
-                }
-                val re = Double.doubleToLongBits(cn.getRe());
-                val im = Double.doubleToLongBits(cn.getIm());
-                return String.format("%s:%s",
-                        Long.toHexString(re), Long.toHexString(im));
+            public ValueDecomposition decompose(final ComplexNumberJpa value) {
+                return CommonDtoUtils.typedTupleBuilder(value)
+                        .addFundamentalType(ValueType.DOUBLE, "re", ComplexNumberJpa::getRe)
+                        .addFundamentalType(ValueType.DOUBLE, "im", ComplexNumberJpa::getIm)
+                        .buildAsDecomposition();
             }
+
             @Override
-            public ComplexNumberJpa fromEncodedString(final String str) {
-                if(_NullSafe.isEmpty(str)) {
-                    return null;
-                }
-                val chunks = _Strings.splitThenStream(str, ":")
-                    .limit(2)
-                    .collect(Collectors.toList());
-                if(chunks.size()<2) {
-                    throw new IllegalArgumentException("Invalid format " + str);
-                }
-                val re = Double.longBitsToDouble(Long.parseLong(chunks.get(0), 16));
-                val im = Double.longBitsToDouble(Long.parseLong(chunks.get(1), 16));
-                return ComplexNumberJpa.of(re, im);
+            public ComplexNumberJpa compose(final ValueDecomposition decomposition) {
+                return decomposition.right()
+                        .map(CommonDtoUtils::typedTupleAsMap)
+                        .map(map->ComplexNumberJpa.of(
+                                (Double)map.get("re"),
+                                (Double)map.get("im")))
+                        .orElse(null);
             }
+
+//            @Override
+//            public String toEncodedString(final ComplexNumberJpa cn) {
+//                if(cn==null) {
+//                    return null;
+//                }
+//                val re = Double.doubleToLongBits(cn.getRe());
+//                val im = Double.doubleToLongBits(cn.getIm());
+//                return String.format("%s:%s",
+//                        Long.toHexString(re), Long.toHexString(im));
+//            }
+//            @Override
+//            public ComplexNumberJpa fromEncodedString(final String str) {
+//                if(_NullSafe.isEmpty(str)) {
+//                    return null;
+//                }
+//                val chunks = _Strings.splitThenStream(str, ":")
+//                    .limit(2)
+//                    .collect(Collectors.toList());
+//                if(chunks.size()<2) {
+//                    throw new IllegalArgumentException("Invalid format " + str);
+//                }
+//                val re = Double.longBitsToDouble(Long.parseLong(chunks.get(0), 16));
+//                val im = Double.longBitsToDouble(Long.parseLong(chunks.get(1), 16));
+//                return ComplexNumberJpa.of(re, im);
+//            }
         };
     }
 // end::getEncoderDecoder[]
