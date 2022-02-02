@@ -22,11 +22,12 @@ import java.util.Locale;
 
 import javax.inject.Named;
 
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
@@ -40,7 +41,7 @@ import lombok.val;
 public class LocaleValueSemantics
 extends ValueSemanticsAbstract<Locale>
 implements
-    EncoderDecoder<Locale>,
+    ValueComposer<Locale>,
     Parser<Locale>,
     Renderer<Locale> {
 
@@ -54,20 +55,16 @@ implements
         return ValueType.STRING; // this type can be easily converted to string and back
     }
 
-    // -- ENCODER DECODER
+    // -- COMPOSER
 
     @Override
-    public String toEncodedString(final Locale object) {
-        return object!=null
-                ? object.toLanguageTag()
-                : null;
+    public ValueDecomposition decompose(final Locale value) {
+        return decomposeAsString(value, Locale::toLanguageTag, ()->null);
     }
 
     @Override
-    public Locale fromEncodedString(final String data) {
-        return data!=null
-                ? Locale.forLanguageTag(data)
-                : null;
+    public Locale compose(final ValueDecomposition decomposition) {
+        return composeFromString(decomposition, Locale::forLanguageTag, ()->null);
     }
 
     // -- RENDERER
@@ -81,7 +78,7 @@ implements
 
             val language = value.getDisplayLanguage(userLanguageLocale);
             if(_Strings.isEmpty(language)) {
-                return toEncodedString(v);
+                return stringify(v);
             }
 
             val country = value.getDisplayCountry(userLanguageLocale);
@@ -100,14 +97,14 @@ implements
 
     @Override
     public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final Locale value) {
-        return value == null ? null : toEncodedString(value);
+        return stringify(value);
     }
 
     @Override
     public Locale parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
         val input = _Strings.blankToNullOrTrim(text);
         return input!=null
-                ? fromEncodedString(input)
+                ? fromString(input)
                 : null;
     }
 
@@ -127,5 +124,20 @@ implements
     public Can<Locale> getExamples() {
         return Can.of(Locale.US, Locale.GERMAN);
     }
+
+    // -- HELPER - CONVERSION
+
+    private String stringify(final @Nullable Locale object) {
+        return object!=null
+                ? object.toLanguageTag()
+                : null;
+    }
+
+    private Locale fromString(final @Nullable String data) {
+        return data!=null
+                ? Locale.forLanguageTag(data)
+                : null;
+    }
+
 
 }

@@ -24,9 +24,9 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
@@ -40,7 +40,7 @@ import lombok.val;
 public class UUIDValueSemantics
 extends ValueSemanticsAbstract<UUID>
 implements
-    EncoderDecoder<UUID>,
+    ValueComposer<UUID>,
     Parser<UUID>,
     Renderer<UUID> {
 
@@ -54,16 +54,16 @@ implements
         return ValueType.STRING; // this type can be easily converted to string and back
     }
 
-    // -- ENCODER DECODER
+    // -- COMPOSER
 
     @Override
-    public String toEncodedString(final UUID object) {
-        return object.toString();
+    public ValueDecomposition decompose(final UUID value) {
+        return decomposeAsString(value, UUID::toString, ()->null);
     }
 
     @Override
-    public UUID fromEncodedString(final String data) {
-        return UUID.fromString(data);
+    public UUID compose(final ValueDecomposition decomposition) {
+        return composeFromString(decomposition, UUID::fromString, ()->null);
     }
 
     // -- RENDERER

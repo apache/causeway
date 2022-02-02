@@ -25,9 +25,9 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
@@ -42,7 +42,7 @@ import lombok.val;
 public class URLValueSemantics
 extends ValueSemanticsAbstract<java.net.URL>
 implements
-    EncoderDecoder<java.net.URL>,
+    ValueComposer<java.net.URL>,
     Parser<java.net.URL>,
     Renderer<java.net.URL> {
 
@@ -56,22 +56,23 @@ implements
         return ValueType.STRING; // this type can be easily converted to string and back
     }
 
-    // -- ENCODER DECODER
+    // -- COMPOSER
 
     @Override
-    public String toEncodedString(final java.net.URL url) {
-        return url != null? url.toString(): "NULL";
+    public ValueDecomposition decompose(final java.net.URL value) {
+        return decomposeAsString(value, java.net.URL::toString, ()->null);
     }
 
     @Override
-    public java.net.URL fromEncodedString(final String data) {
-        if("NULL".equals(data)) {
-            return null;
-        }
+    public java.net.URL compose(final ValueDecomposition decomposition) {
+        return composeFromString(decomposition, this::parseUrlElseNull, ()->null);
+    }
+
+    private java.net.URL parseUrlElseNull(final String url) {
         try {
-            return new java.net.URL(data);
+            return new java.net.URL(url);
         } catch (MalformedURLException e) {
-            return null;
+            return null; // ignore
         }
     }
 

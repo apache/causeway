@@ -23,9 +23,9 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.value.Markup;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
@@ -36,7 +36,7 @@ import org.apache.isis.schema.common.v2.ValueType;
 public class MarkupValueSemantics
 extends ValueSemanticsAbstract<Markup>
 implements
-    EncoderDecoder<Markup>,
+    ValueComposer<Markup>,
     Parser<Markup>,
     Renderer<Markup> {
 
@@ -50,22 +50,16 @@ implements
         return ValueType.STRING; // this type can be easily converted to string and back;
     }
 
-    // -- ENCODER DECODER
+    // -- COMPOSER
 
     @Override
-    public String toEncodedString(final Markup markup) {
-        if(markup==null) {
-            return null;
-        }
-        return markup.asHtml();
+    public ValueDecomposition decompose(final Markup value) {
+        return decomposeAsString(value, Markup::asHtml, ()->null);
     }
 
     @Override
-    public Markup fromEncodedString(final String html) {
-        if(html==null) {
-            return null;
-        }
-        return new Markup(html);
+    public Markup compose(final ValueDecomposition decomposition) {
+        return composeFromString(decomposition, Markup::new, ()->null);
     }
 
     // -- RENDERER
@@ -79,12 +73,14 @@ implements
 
     @Override
     public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final Markup value) {
-        return toEncodedString(value);
+        return value != null? value.asHtml(): null;
     }
 
     @Override
     public Markup parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        return fromEncodedString(text);
+        return text!=null
+                ? new Markup(text)
+                : null;
     }
 
     @Override

@@ -18,13 +18,15 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
+import java.util.function.UnaryOperator;
+
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.common.v2.ValueType;
@@ -34,7 +36,7 @@ import org.apache.isis.schema.common.v2.ValueType;
 public class StringValueSemantics
 extends ValueSemanticsAbstract<String>
 implements
-    EncoderDecoder<String>,
+    ValueComposer<String>,
     Parser<String>,
     Renderer<String> {
 
@@ -48,16 +50,16 @@ implements
         return ValueType.STRING;
     }
 
-    // -- ENCODER DECODER
+    // -- COMPOSER
 
     @Override
-    public String toEncodedString(final String text) {
-        return text;
+    public ValueDecomposition decompose(final String text) {
+        return decomposeAsString(text, UnaryOperator.identity(), ()->null);
     }
 
     @Override
-    public String fromEncodedString(final String data) {
-        return data;
+    public String compose(final ValueDecomposition decomposition) {
+        return composeFromString(decomposition, UnaryOperator.identity(), ()->null);
     }
 
     // -- RENDERER

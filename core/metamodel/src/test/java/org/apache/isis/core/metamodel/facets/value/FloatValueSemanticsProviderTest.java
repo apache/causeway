@@ -68,9 +68,4 @@ extends ValueSemanticsProviderAbstractTestCase {
         assertEquals(120.0f, ((Float) parsed).floatValue(), 0.0);
     }
 
-    @Test
-    public void testEncode() throws Exception {
-        assertEquals("32.5", getEncodeableFacet().toEncodedString(createAdapter(float1)));
-    }
-
 }

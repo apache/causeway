@@ -25,9 +25,9 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -40,7 +40,7 @@ import lombok.val;
 public class LocalResourcePathValueSemantics
 extends ValueSemanticsAbstract<LocalResourcePath>
 implements
-    EncoderDecoder<LocalResourcePath>,
+    ValueComposer<LocalResourcePath>,
     Parser<LocalResourcePath>,
     Renderer<LocalResourcePath> {
 
@@ -54,25 +54,16 @@ implements
         return ValueType.STRING; // this type can be easily converted to string and back
     }
 
-    // -- ENCODER DECODER
+    // -- COMPOSER
 
     @Override
-    public String toEncodedString(final LocalResourcePath localResourcePath) {
-        return localResourcePath != null
-                ? localResourcePath.getValue()
-                : "NULL";
+    public ValueDecomposition decompose(final LocalResourcePath value) {
+        return decomposeAsString(value, LocalResourcePath::getValue, ()->null);
     }
 
     @Override
-    public LocalResourcePath fromEncodedString(final String data) {
-        if("NULL".equals(data)) {
-            return null;
-        }
-        try {
-            return new LocalResourcePath(data);
-        } catch (InvalidPathException e) {
-            return null;
-        }
+    public LocalResourcePath compose(final ValueDecomposition decomposition) {
+        return composeFromString(decomposition, LocalResourcePath::new, ()->null);
     }
 
     // -- RENDERER
