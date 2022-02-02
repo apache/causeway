@@ -18,21 +18,23 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
+import java.util.function.UnaryOperator;
+
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.common.v2.ValueType;
+import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
 import lombok.val;
 
@@ -45,7 +47,7 @@ public class BooleanValueSemantics
 extends ValueSemanticsAbstract<Boolean>
 implements
     DefaultsProvider<Boolean>,
-    EncoderDecoder<Boolean>,
+    ValueComposer<Boolean>,
     Parser<Boolean>,
     Renderer<Boolean> {
 
@@ -64,42 +66,17 @@ implements
         return Boolean.FALSE;
     }
 
-    // -- ENCODER DECODER
+    // -- COMPOSER
 
     @Override
-    public String toEncodedString(final Boolean value) {
-        if(value==null) {
-            return null;
-        }
-        return value.booleanValue() ? "T" : "F";
+    public ValueDecomposition decompose(final Boolean value) {
+        return decomposeAsNullable(value, UnaryOperator.identity(), ()->null);
     }
 
     @Override
-    public Boolean fromEncodedString(final String data) {
-        if(data==null) {
-            return null;
-        }
-        final int dataLength = data.length();
-        if (dataLength == 1) {
-            switch (data.charAt(0)) {
-            case 'T':
-                return Boolean.TRUE;
-            case 'F':
-                return Boolean.FALSE;
-            default:
-                throw new UnrecoverableException("Invalid data for logical, expected 'T', 'F' or 'N, but got " + data.charAt(0));
-            }
-        } else if (dataLength == 4 || dataLength == 5) {
-            switch (data.charAt(0)) {
-            case 't':
-                return Boolean.TRUE;
-            case 'f':
-                return Boolean.FALSE;
-            default:
-                throw new UnrecoverableException("Invalid data for logical, expected 't' or 'f', but got " + data.charAt(0));
-            }
-        }
-        throw new UnrecoverableException("Invalid data for logical, expected 1, 4 or 5 bytes, got " + dataLength + ": " + data);
+    public Boolean compose(final ValueDecomposition decomposition) {
+        return composeFromNullable(
+                decomposition, ValueWithTypeDto::isBoolean, UnaryOperator.identity(), ()->null);
     }
 
     // -- RENDERER

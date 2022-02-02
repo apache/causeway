@@ -85,15 +85,4 @@ extends ValueSemanticsProviderAbstractTestCase {
                 value.simpleTextPresentation(null, null));
     }
 
-    @Test
-    public void testEncode() throws Exception {
-        assertEquals("T", value.toEncodedString(booleanObj));
-    }
-
-    @Test
-    public void testDecode() throws Exception {
-        final Object parsed = value.fromEncodedString("T");
-        assertEquals(Boolean.valueOf(true), parsed);
-    }
-
 }
