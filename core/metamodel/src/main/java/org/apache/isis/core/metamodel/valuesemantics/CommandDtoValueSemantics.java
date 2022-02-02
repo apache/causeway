@@ -39,12 +39,12 @@ extends XmlValueSemanticsAbstract<CommandDto> {
     // -- ENCODER DECODER
 
     @Override
-    public final String toEncodedString(final CommandDto commandDto) {
+    public final String toXml(final CommandDto commandDto) {
         return CommandDtoUtils.toXml(commandDto);
     }
 
     @Override
-    public final CommandDto fromEncodedString(final String xml) {
+    public final CommandDto fromXml(final String xml) {
         return CommandDtoUtils.fromXml(xml);
     }
 

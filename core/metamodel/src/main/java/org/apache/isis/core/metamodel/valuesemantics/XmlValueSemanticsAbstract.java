@@ -20,9 +20,9 @@ package org.apache.isis.core.metamodel.valuesemantics;
 
 import java.util.Objects;
 
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.schema.common.v2.ValueType;
 
@@ -33,7 +33,7 @@ public abstract class XmlValueSemanticsAbstract<T>
 extends ValueSemanticsAbstract<T>
 implements
     OrderRelation<T, Void>,
-    EncoderDecoder<T>,
+    ValueComposer<T>,
     Renderer<T> {
 
     @Override
@@ -58,8 +58,8 @@ implements
                         ? -1
                         : 1;
         }
-        val _a = toEncodedString(a);
-        val _b = toEncodedString(b);
+        val _a = toXml(a);
+        val _b = toXml(b);
         return _a.compareTo(_b);
     }
 
@@ -69,20 +69,37 @@ implements
                 || b==null) {
             return Objects.equals(a, b);
         }
-        val _a = toEncodedString(a);
-        val _b = toEncodedString(b);
+        val _a = toXml(a);
+        val _b = toXml(b);
         return _a.equals(_b);
+    }
+
+    // -- COMPOSER
+
+    @Override
+    public ValueDecomposition decompose(final T value) {
+        return decomposeAsString(value, this::toXml, ()->null);
+    }
+
+    @Override
+    public T compose(final ValueDecomposition decomposition) {
+        return composeFromString(decomposition, this::fromXml, ()->null);
     }
 
     // -- RENDERER
 
     @Override
     public String simpleTextPresentation(final Context context, final T value) {
-        return render(value, v->renderXml(context, toEncodedString(v)));
+        return render(value, v->renderXml(context, toXml(v)));
     }
 
     protected String renderXml(final @NonNull Context context, final @NonNull String xml) {
         return xml;
     }
+
+    // -- TO AND FROM XML
+
+    protected abstract String toXml(final T dto);
+    protected abstract T fromXml(final String xml);
 
 }

@@ -39,12 +39,12 @@ extends XmlValueSemanticsAbstract<ChangesDto> {
     // -- ENCODER DECODER
 
     @Override
-    public final String toEncodedString(final ChangesDto changesDto) {
+    public final String toXml(final ChangesDto changesDto) {
         return ChangesDtoUtils.toXml(changesDto);
     }
 
     @Override
-    public final ChangesDto fromEncodedString(final String xml) {
+    public final ChangesDto fromXml(final String xml) {
         return ChangesDtoUtils.fromXml(xml);
     }
 

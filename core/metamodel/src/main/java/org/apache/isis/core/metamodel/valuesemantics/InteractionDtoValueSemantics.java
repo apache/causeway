@@ -39,12 +39,12 @@ extends XmlValueSemanticsAbstract<InteractionDto> {
     // -- ENCODER DECODER
 
     @Override
-    public final String toEncodedString(final InteractionDto interactionDto) {
+    public final String toXml(final InteractionDto interactionDto) {
         return InteractionDtoUtils.toXml(interactionDto);
     }
 
     @Override
-    public final InteractionDto fromEncodedString(final String xml) {
+    public final InteractionDto fromXml(final String xml) {
         return InteractionDtoUtils.fromXml(xml);
     }
 
