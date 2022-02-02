@@ -43,6 +43,7 @@ import org.apache.isis.applib.value.semantics.TemporalValueSemantics.EditingForm
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.isis.applib.value.semantics.ValueComposer.ValueDecomposition;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.schema.common.v2.ValueType;
@@ -131,20 +132,10 @@ implements
             final @Nullable T value,
             final @NonNull Function<T, String> toString,
             final @NonNull Supplier<String> onNull) {
+        _Assert.assertEquals(getSchemaValueType(), ValueType.STRING);
         return CommonDtoUtils.fundamentalTypeAsDecomposition(ValueType.STRING,
                 value!=null
                     ? toString.apply(value)
-                    : onNull.get());
-    }
-
-    protected <V> ValueDecomposition decomposeNullable(
-            final @Nullable ValueType vType,
-            final @Nullable T value,
-            final @NonNull Function<T, V> onNonNull,
-            final @NonNull Supplier<V> onNull) {
-        return CommonDtoUtils.fundamentalTypeAsDecomposition(vType,
-                value!=null
-                    ? onNonNull.apply(value)
                     : onNull.get());
     }
 
@@ -152,18 +143,44 @@ implements
             final @Nullable ValueDecomposition decomposition,
             final @NonNull Function<String, T> fromString,
             final @NonNull Supplier<T> onNullOrEmpty) {
-        val string = decomposition.left().map(ValueWithTypeDto::getString).orElse(null);
+        val string = decomposition!=null
+                ? decomposition.left().map(ValueWithTypeDto::getString).orElse(null)
+                : null;
         return _Strings.isNotEmpty(string)
                 ? fromString.apply(string)
                 : onNullOrEmpty.get();
     }
 
-    protected T composeNullable(
+
+    /**
+     * @param <F> - the underlying fundamental value-type
+     */
+    protected <F> ValueDecomposition decomposeAsNullable(
+            final @Nullable T value,
+            final @NonNull Function<T, F> onNonNull,
+            final @NonNull Supplier<F> onNull) {
+        return CommonDtoUtils.fundamentalTypeAsDecomposition(getSchemaValueType(),
+                value!=null
+                    ? onNonNull.apply(value)
+                    : onNull.get());
+    }
+
+    /**
+     * @param <F> - the underlying fundamental value-type
+     */
+    protected <F> T composeFromNullable(
             final @Nullable ValueDecomposition decomposition,
-            final @NonNull Function<ValueDecomposition, T> onNonNull) {
-        return decomposition!=null
-                ? onNonNull.apply(decomposition)
+            final @NonNull Function<ValueWithTypeDto, F> fundamentalValueExtractor,
+            final @NonNull Function<F, T> onNonNull,
+            final @NonNull Supplier<T> onNull) {
+
+        val valuePojo = decomposition!=null
+                ? decomposition.left().map(fundamentalValueExtractor).orElse(null)
                 : null;
+
+        return valuePojo!=null
+                ? onNonNull.apply(valuePojo)
+                : onNull.get();
     }
 
     // -- NUMBER FORMATTING/PARSING

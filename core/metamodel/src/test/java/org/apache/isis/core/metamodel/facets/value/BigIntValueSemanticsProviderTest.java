@@ -64,15 +64,4 @@ extends ValueSemanticsProviderAbstractTestCase {
         assertEquals("132,199", value.simpleTextPresentation(null, bigInt));
     }
 
-    @Test
-    public void testEncode() throws Exception {
-        assertEquals("132199", value.toEncodedString(bigInt));
-    }
-
-    @Test
-    public void testDecode() throws Exception {
-        final Object newValue = value.fromEncodedString("432289991");
-        assertEquals(new BigInteger("432289991"), newValue);
-    }
-
 }

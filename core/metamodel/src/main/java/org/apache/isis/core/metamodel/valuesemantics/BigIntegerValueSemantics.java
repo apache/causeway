@@ -19,18 +19,20 @@
 package org.apache.isis.core.metamodel.valuesemantics;
 
 import java.math.BigInteger;
+import java.util.function.UnaryOperator;
 
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.common.v2.ValueType;
+import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
 @Component
 @Named("isis.val.BigIntegerValueSemantics")
@@ -38,7 +40,7 @@ public class BigIntegerValueSemantics
 extends ValueSemanticsAbstract<BigInteger>
 implements
     DefaultsProvider<BigInteger>,
-    EncoderDecoder<BigInteger>,
+    ValueComposer<BigInteger>,
     Parser<BigInteger>,
     Renderer<BigInteger> {
 
@@ -57,16 +59,17 @@ implements
         return BigInteger.ZERO;
     }
 
-    // -- ENCODER DECODER
+    // -- COMPOSER
 
     @Override
-    public String toEncodedString(final BigInteger bigInt) {
-        return bigInt.toString();
+    public ValueDecomposition decompose(final BigInteger value) {
+        return decomposeAsNullable(value, UnaryOperator.identity(), ()->null);
     }
 
     @Override
-    public BigInteger fromEncodedString(final String data) {
-        return new BigInteger(data);
+    public BigInteger compose(final ValueDecomposition decomposition) {
+        return composeFromNullable(
+                decomposition, ValueWithTypeDto::getBigInteger, UnaryOperator.identity(), ()->null);
     }
 
     // -- RENDERER

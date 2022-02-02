@@ -26,6 +26,7 @@ import java.time.temporal.Temporal;
 import java.time.temporal.TemporalQuery;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.UnaryOperator;
 
 import javax.inject.Inject;
 
@@ -33,6 +34,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.TimePrecision;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
@@ -124,14 +126,14 @@ implements TemporalValueSemantics<T> {
 
     @Override
     public ValueDecomposition decompose(final T temporal) {
-        //TODO[ISIS-2877] instead of STRING, use proper fundamental type
-        return decomposeAsString(temporal, getIsoFormat()::format, ()->null);
+        return decomposeAsNullable(temporal, UnaryOperator.identity(), ()->null);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public T compose(final ValueDecomposition decomposition) {
-        //TODO[ISIS-2877] instead of STRING, use proper fundamental type
-        return composeFromString(decomposition, data->getIsoFormat().parse(data, query), ()->null);
+        return composeFromNullable(
+                decomposition, dto->(T)CommonDtoUtils.getValueAsObject(dto), UnaryOperator.identity(), ()->null);
     }
 
     // -- RENDERER

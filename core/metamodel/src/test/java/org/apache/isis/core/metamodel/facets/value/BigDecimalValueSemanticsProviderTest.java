@@ -66,15 +66,4 @@ extends ValueSemanticsProviderAbstractTestCase {
         assertEquals("34,132.199", value.simpleTextPresentation(null, bigDecimal));
     }
 
-    @Test
-    public void testEncode() {
-        assertEquals("34132.199", value.toEncodedString(bigDecimal));
-    }
-
-    @Test
-    public void testDecode() throws Exception {
-        final Object newValue = value.fromEncodedString("4322.89991");
-        assertEquals(new BigDecimal("4322.89991"), newValue);
-    }
-
 }

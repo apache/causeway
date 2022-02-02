@@ -20,23 +20,24 @@ package org.apache.isis.core.metamodel.valuesemantics;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.function.UnaryOperator;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.common.v2.ValueType;
+import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
 import lombok.Setter;
 import lombok.val;
@@ -47,7 +48,7 @@ public class BigDecimalValueSemantics
 extends ValueSemanticsAbstract<BigDecimal>
 implements
     DefaultsProvider<BigDecimal>,
-    EncoderDecoder<BigDecimal>,
+    ValueComposer<BigDecimal>,
     Parser<BigDecimal>,
     Renderer<BigDecimal> {
 
@@ -69,20 +70,17 @@ implements
         return BigDecimal.ZERO;
     }
 
-    // -- ENCODER DECODER
+    // -- COMPOSER
 
     @Override
-    public String toEncodedString(final BigDecimal value) {
-        try {
-            return value.toPlainString();
-        } catch (final Exception e) {
-            throw new UnrecoverableException(e);
-        }
+    public ValueDecomposition decompose(final BigDecimal value) {
+        return decomposeAsNullable(value, UnaryOperator.identity(), ()->null);
     }
 
     @Override
-    public BigDecimal fromEncodedString(final String data) {
-        return new BigDecimal(data);
+    public BigDecimal compose(final ValueDecomposition decomposition) {
+        return composeFromNullable(
+                decomposition, ValueWithTypeDto::getBigDecimal, UnaryOperator.identity(), ()->null);
     }
 
     // -- RENDERER
