@@ -80,13 +80,12 @@ implements
 
     @Override
     public ValueDecomposition decompose(final CalendarEvent value) {
-        return ValueDecomposition.ofComposite(
-                CommonDtoUtils.typedTupleBuilder(value)
+        return CommonDtoUtils.typedTupleBuilder(value)
                 .addFundamentalType(ValueType.LONG, "epochMillis", CalendarEvent::getEpochMillis)
                 .addFundamentalType(ValueType.STRING, "calendarName", CalendarEvent::getCalendarName)
                 .addFundamentalType(ValueType.STRING, "title", CalendarEvent::getTitle)
                 .addFundamentalType(ValueType.STRING, "notes", CalendarEvent::getNotes)
-                .build());
+                .buildAsDecomposition();
     }
 
     @Override

@@ -37,12 +37,14 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.applib.value.semantics.ValueComposer.ValueDecomposition;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.schema.cmd.v2.MapDto;
+import org.apache.isis.schema.cmd.v2.ParamDto;
 import org.apache.isis.schema.common.v2.BlobDto;
 import org.apache.isis.schema.common.v2.ClobDto;
 import org.apache.isis.schema.common.v2.EnumDto;
@@ -303,89 +305,16 @@ public final class CommonDtoUtils {
             return downCast;
         }
 
-        val dto = new ValueWithTypeDto();
-        dto.setType(valueType);
+        val liftedDto = new ValueWithTypeDto();
+        liftedDto.setType(valueType);
 
         if(valueDto==null) {
-            return dto; // null to empty
+            return liftedDto; // null to empty
         }
 
-        switch(valueType) {
-        case BIG_DECIMAL:
-            dto.setBigDecimal(valueDto.getBigDecimal());
-            break;
-        case BIG_INTEGER:
-            dto.setBigInteger(valueDto.getBigInteger());
-            break;
-        case BLOB:
-            dto.setBlob(valueDto.getBlob());
-            break;
-        case BOOLEAN:
-            dto.setBoolean(valueDto.isBoolean());
-            break;
-        case BYTE:
-            dto.setByte(valueDto.getByte());
-            break;
-        case CHAR:
-            dto.setChar(valueDto.getChar());
-            break;
-        case CLOB:
-            dto.setClob(valueDto.getClob());
-            break;
-        case COLLECTION:
-            dto.setCollection(valueDto.getCollection());
-            break;
-        case COMPOSITE:
-            dto.setComposite(valueDto.getComposite());
-            break;
-        case DOUBLE:
-            dto.setDouble(valueDto.getDouble());
-            break;
-        case ENUM:
-            dto.setEnum(valueDto.getEnum());
-            break;
-        case FLOAT:
-            dto.setFloat(valueDto.getFloat());
-            break;
-        case INT:
-            dto.setInt(valueDto.getInt());
-            break;
-        case LOCAL_DATE:
-            dto.setLocalDate(valueDto.getLocalDate());
-            break;
-        case LOCAL_DATE_TIME:
-            dto.setLocalDateTime(valueDto.getLocalDateTime());
-            break;
-        case LOCAL_TIME:
-            dto.setLocalTime(valueDto.getLocalTime());
-            break;
-        case LONG:
-            dto.setLong(valueDto.getLong());
-            break;
-        case OFFSET_DATE_TIME:
-            dto.setOffsetDateTime(valueDto.getOffsetDateTime());
-            break;
-        case OFFSET_TIME:
-            dto.setOffsetTime(valueDto.getOffsetTime());
-            break;
-        case REFERENCE:
-            dto.setReference(valueDto.getReference());
-            break;
-        case SHORT:
-            dto.setShort(valueDto.getShort());
-            break;
-        case STRING:
-            dto.setString(valueDto.getString());
-            break;
-        case VOID:
-            break;
-        case ZONED_DATE_TIME:
-            dto.setZonedDateTime(valueDto.getZonedDateTime());
-            break;
-        default:
-            throw _Exceptions.unmatchedCase(valueType);
-        }
-        return dto;
+        _copy(valueType, valueDto, liftedDto);
+
+        return liftedDto;
     }
 
     // -- MAP-DTO SUPPORT
@@ -419,6 +348,16 @@ public final class CommonDtoUtils {
                 .findFirst();
     }
 
+    // -- VALUE FACTORY
+
+    public static <T> ValueWithTypeDto fundamentalType(final ValueType vType, final T value) {
+        return recordFundamentalValue(vType, new ValueWithTypeDto(), value);
+    }
+
+    public static <T> ValueDecomposition fundamentalTypeAsDecomposition(final ValueType vType, final T value) {
+        return ValueDecomposition.ofFundamental(fundamentalType(vType, value));
+    }
+
     // -- TYPED TUPLE BUILDER
 
     @RequiredArgsConstructor
@@ -426,12 +365,6 @@ public final class CommonDtoUtils {
 
         private final T value;
         private final TypedTupleDto dto = new TypedTupleDto();
-
-        public TypedTupleDto build() {
-            dto.setType(value.getClass().getName());
-            dto.setCardinality(dto.getElement().size());
-            return dto;
-        }
 
         public TypedTupleBuilder<T> addFundamentalType(
                 final ValueType vType, final String fieldName, final Function<T, Object> getter) {
@@ -442,6 +375,17 @@ public final class CommonDtoUtils {
                     recordFundamentalValue(vType, elementDto, getter.apply(value)));
             return this;
         }
+
+        public TypedTupleDto build() {
+            dto.setType(value.getClass().getName());
+            dto.setCardinality(dto.getElement().size());
+            return dto;
+        }
+
+        public ValueDecomposition buildAsDecomposition() {
+            return ValueDecomposition.ofComposite(build());
+        }
+
     }
 
     public static <T> TypedTupleBuilder<T> typedTupleBuilder(final T value) {
@@ -461,5 +405,110 @@ public final class CommonDtoUtils {
         return map;
     }
 
+    // -- PARAM DTO FACTORIES
+
+    public static ParamDto paramDto(final @NonNull String paramName) {
+        val paramDto = new ParamDto();
+        if(paramName.isBlank()) {
+            throw _Exceptions.illegalArgument("paramName must not be blank '%s'", paramName);
+        }
+        paramDto.setName(paramName);
+        return paramDto;
+    }
+
+    // -- COPY UTILITIES
+
+    public static void copy(
+            final @NonNull ValueWithTypeDto src,
+            final @NonNull ValueWithTypeDto dst) {
+
+        val valueType = src.getType();
+        dst.setType(valueType);
+
+        _copy(valueType, src, dst);
+    }
+
+    private static void _copy(
+            final @NonNull ValueType valueType,
+            final @NonNull ValueDto src,
+            final @NonNull ValueDto dst) {
+
+        switch(valueType) {
+        case BIG_DECIMAL:
+            dst.setBigDecimal(src.getBigDecimal());
+            break;
+        case BIG_INTEGER:
+            dst.setBigInteger(src.getBigInteger());
+            break;
+        case BLOB:
+            dst.setBlob(src.getBlob());
+            break;
+        case BOOLEAN:
+            dst.setBoolean(src.isBoolean());
+            break;
+        case BYTE:
+            dst.setByte(src.getByte());
+            break;
+        case CHAR:
+            dst.setChar(src.getChar());
+            break;
+        case CLOB:
+            dst.setClob(src.getClob());
+            break;
+        case COLLECTION:
+            dst.setCollection(src.getCollection());
+            break;
+        case COMPOSITE:
+            dst.setComposite(src.getComposite());
+            break;
+        case DOUBLE:
+            dst.setDouble(src.getDouble());
+            break;
+        case ENUM:
+            dst.setEnum(src.getEnum());
+            break;
+        case FLOAT:
+            dst.setFloat(src.getFloat());
+            break;
+        case INT:
+            dst.setInt(src.getInt());
+            break;
+        case LOCAL_DATE:
+            dst.setLocalDate(src.getLocalDate());
+            break;
+        case LOCAL_DATE_TIME:
+            dst.setLocalDateTime(src.getLocalDateTime());
+            break;
+        case LOCAL_TIME:
+            dst.setLocalTime(src.getLocalTime());
+            break;
+        case LONG:
+            dst.setLong(src.getLong());
+            break;
+        case OFFSET_DATE_TIME:
+            dst.setOffsetDateTime(src.getOffsetDateTime());
+            break;
+        case OFFSET_TIME:
+            dst.setOffsetTime(src.getOffsetTime());
+            break;
+        case REFERENCE:
+            dst.setReference(src.getReference());
+            break;
+        case SHORT:
+            dst.setShort(src.getShort());
+            break;
+        case STRING:
+            dst.setString(src.getString());
+            break;
+        case VOID:
+            break;
+        case ZONED_DATE_TIME:
+            dst.setZonedDateTime(src.getZonedDateTime());
+            break;
+        default:
+            throw _Exceptions.unmatchedCase(valueType);
+        }
+
+    }
 
 }

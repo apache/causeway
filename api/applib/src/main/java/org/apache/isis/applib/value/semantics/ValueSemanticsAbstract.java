@@ -30,6 +30,7 @@ import java.time.format.FormatStyle;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
 
@@ -37,12 +38,15 @@ import org.apache.isis.applib.annotation.TimePrecision;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.EditingFormatDirection;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
+import org.apache.isis.applib.value.semantics.ValueComposer.ValueDecomposition;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.schema.common.v2.ValueType;
+import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
 import lombok.NonNull;
 import lombok.val;
@@ -119,6 +123,47 @@ implements
         return Optional.ofNullable(value)
                 .map(toString)
                 .orElse(NULL_REPRESENTATION);
+    }
+
+    // -- COMPOSITION UTILS
+
+    protected ValueDecomposition decomposeAsString(
+            final @Nullable T value,
+            final @NonNull Function<T, String> toString,
+            final @NonNull Supplier<String> onNull) {
+        return CommonDtoUtils.fundamentalTypeAsDecomposition(ValueType.STRING,
+                value!=null
+                    ? toString.apply(value)
+                    : onNull.get());
+    }
+
+    protected <V> ValueDecomposition decomposeNullable(
+            final @Nullable ValueType vType,
+            final @Nullable T value,
+            final @NonNull Function<T, V> onNonNull,
+            final @NonNull Supplier<V> onNull) {
+        return CommonDtoUtils.fundamentalTypeAsDecomposition(vType,
+                value!=null
+                    ? onNonNull.apply(value)
+                    : onNull.get());
+    }
+
+    protected T composeFromString(
+            final @Nullable ValueDecomposition decomposition,
+            final @NonNull Function<String, T> fromString,
+            final @NonNull Supplier<T> onNullOrEmpty) {
+        val string = decomposition.left().map(ValueWithTypeDto::getString).orElse(null);
+        return _Strings.isNotEmpty(string)
+                ? fromString.apply(string)
+                : onNullOrEmpty.get();
+    }
+
+    protected T composeNullable(
+            final @Nullable ValueDecomposition decomposition,
+            final @NonNull Function<ValueDecomposition, T> onNonNull) {
+        return decomposition!=null
+                ? onNonNull.apply(decomposition)
+                : null;
     }
 
     // -- NUMBER FORMATTING/PARSING

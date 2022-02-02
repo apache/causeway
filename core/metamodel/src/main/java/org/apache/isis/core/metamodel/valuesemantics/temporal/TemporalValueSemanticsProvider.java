@@ -33,7 +33,6 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.TimePrecision;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.applib.value.semantics.EncodingException;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
@@ -121,26 +120,18 @@ implements TemporalValueSemantics<T> {
         return compare(a, b, epsilon) == 0;
     }
 
-    // -- ENCODER/DECODER
+    // -- COMPOSER
 
     @Override
-    public final String toEncodedString(final T temporal) {
-        if(temporal==null) {
-            return null;
-        }
-        return getIsoFormat().format(temporal);
+    public ValueDecomposition decompose(final T temporal) {
+        //TODO[ISIS-2877] instead of STRING, use proper fundamental type
+        return decomposeAsString(temporal, getIsoFormat()::format, ()->null);
     }
 
     @Override
-    public final T fromEncodedString(final String data) {
-        if(data==null) {
-            return null;
-        }
-        try {
-            return getIsoFormat().parse(data, query);
-        } catch (final IllegalArgumentException e) {
-            throw new EncodingException(e);
-        }
+    public T compose(final ValueDecomposition decomposition) {
+        //TODO[ISIS-2877] instead of STRING, use proper fundamental type
+        return composeFromString(decomposition, data->getIsoFormat().parse(data, query), ()->null);
     }
 
     // -- RENDERER

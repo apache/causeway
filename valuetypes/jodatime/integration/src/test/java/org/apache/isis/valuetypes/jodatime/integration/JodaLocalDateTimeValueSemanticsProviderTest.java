@@ -22,13 +22,13 @@ import org.joda.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
-import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
-import org.apache.isis.valuetypes.jodatime.integration.valuesemantics.JodaLocalDateTimeValueSemantics;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
+import org.apache.isis.valuetypes.jodatime.integration.valuesemantics.JodaLocalDateTimeValueSemantics;
 
 import lombok.val;
 
@@ -54,8 +54,8 @@ public class JodaLocalDateTimeValueSemanticsProviderTest {
 
         final LocalDateTime t0 = LocalDateTime.now();
 
-        final String encoded = valueSemantics.toEncodedString(t0);
-        final LocalDateTime t1 = valueSemantics.fromEncodedString(encoded);
+        val encoded = valueSemantics.decompose(t0);
+        final LocalDateTime t1 = valueSemantics.compose(encoded);
 
         assertThat(t0, is(equalTo(t1)));
     }

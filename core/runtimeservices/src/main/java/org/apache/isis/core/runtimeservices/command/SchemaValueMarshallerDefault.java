@@ -87,6 +87,15 @@ extends SchemaValueMarshallerAbstract {
             break;
         }
 
+        //TODO[ISIS-2877] remove conditional, once composer is always present
+        if(context.getComposer().isPresent()) {
+            CommonDtoUtils.copy(
+                context.getComposer().get().decompose(_Casts.uncheckedCast(value.getPojo()))
+                        .leftIfAny(),
+                valueDto);
+            return valueDto;
+        }
+
         CommonDtoUtils.recordFundamentalValue(
                 context.getSchemaValueType(),
                 valueDto,
@@ -118,7 +127,9 @@ extends SchemaValueMarshallerAbstract {
 
         val recoveredValueAsPojo = valueDto.getType()==ValueType.COMPOSITE
                 ? fromTypedTuple(context, valueDto.getComposite())
-                : fromFundamentalValue(context, CommonDtoUtils.getValueAsObject(valueDto));
+                : context.getComposer().isPresent()
+                    ? context.getComposer().get().compose(ValueDecomposition.ofFundamental(valueDto))
+                    : fromFundamentalValue(context, CommonDtoUtils.getValueAsObject(valueDto));
 
         if(recoveredValueAsPojo==null) {
             return ManagedObject.empty(context.getElementType());

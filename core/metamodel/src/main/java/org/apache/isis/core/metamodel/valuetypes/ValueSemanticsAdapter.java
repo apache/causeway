@@ -19,24 +19,29 @@
 package org.apache.isis.core.metamodel.valuetypes;
 
 import org.apache.isis.applib.value.semantics.Converter;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
 
+/**
+ * @param <T> value-type
+ * @param <D> delegate value-type
+ * @param <E> order-relation type for measure of distance
+ */
 public abstract class ValueSemanticsAdapter<T, D, E>
 extends ValueSemanticsAbstract<T>
 implements
     OrderRelation<T, E>,
-    EncoderDecoder<T>,
     Parser<T>,
     Renderer<T>,
-    Converter<T, D>{
+    Converter<T, D>,
+    ValueComposer<T> {
 
     public abstract ValueSemanticsAbstract<D> getDelegate();
 
@@ -68,20 +73,17 @@ implements
                 .equals(toDelegateValue(a), toDelegateValue(b), epsilon);
     }
 
-    // -- CONVERTER
-
-
-    // -- ENCODER DECODER
+    // -- COMPOSER
 
     @Override
-    public String toEncodedString(final T object) {
-        val delegateValue = toDelegateValue(object);
-        return delegateEncoderDecoder().toEncodedString(delegateValue);
+    public ValueDecomposition decompose(final T value) {
+        val delegateValue = toDelegateValue(value);
+        return delegateComposer().decompose(delegateValue);
     }
 
     @Override
-    public T fromEncodedString(final String data) {
-        val delegateValue = delegateEncoderDecoder().fromEncodedString(data);
+    public T compose(final ValueDecomposition decomposition) {
+        val delegateValue = delegateComposer().compose(decomposition);
         return fromDelegateValue(delegateValue);
     }
 
@@ -146,8 +148,8 @@ implements
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private EncoderDecoder<D> delegateEncoderDecoder() {
-        return ((EncoderDecoder)getDelegate());
+    private ValueComposer<D> delegateComposer() {
+        return ((ValueComposer)getDelegate());
     }
 
 }

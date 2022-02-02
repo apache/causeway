@@ -23,10 +23,10 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
@@ -41,7 +41,7 @@ public class BookmarkValueSemantics
 extends ValueSemanticsAbstract<Bookmark>
 implements
     OrderRelation<Bookmark, Void>,
-    EncoderDecoder<Bookmark>,
+    ValueComposer<Bookmark>,
     Parser<Bookmark>,
     Renderer<Bookmark> {
 
@@ -80,16 +80,16 @@ implements
         return compare(a, b, epsilon) == 0;
     }
 
-    // -- ENCODER DECODER
+    // -- COMPOSER
 
     @Override
-    public String toEncodedString(final Bookmark object) {
-        return object.stringify();
+    public ValueDecomposition decompose(final Bookmark value) {
+        return decomposeAsString(value, Bookmark::stringify, ()->null);
     }
 
     @Override
-    public Bookmark fromEncodedString(final String data) {
-        return Bookmark.parseElseFail(data);
+    public Bookmark compose(final ValueDecomposition decomposition) {
+        return composeFromString(decomposition, Bookmark::parseElseFail, ()->null);
     }
 
     // -- RENDERER

@@ -23,9 +23,9 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
@@ -39,7 +39,7 @@ import lombok.val;
 public class ApplicationFeatureIdValueSemantics
 extends ValueSemanticsAbstract<ApplicationFeatureId>
 implements
-    EncoderDecoder<ApplicationFeatureId>,
+    ValueComposer<ApplicationFeatureId>,
     Parser<ApplicationFeatureId>,
     Renderer<ApplicationFeatureId> {
 
@@ -53,21 +53,16 @@ implements
         return ValueType.STRING; // this type can be easily converted to string and back
     }
 
-    // -- ENCODER DECODER
+    // -- COMPOSER
 
     @Override
-    public String toEncodedString(final ApplicationFeatureId object) {
-        return object!=null
-                ? object.asEncodedString()
-                : null;
+    public ValueDecomposition decompose(final ApplicationFeatureId value) {
+        return decomposeAsString(value, ApplicationFeatureId::asEncodedString, ()->null);
     }
 
     @Override
-    public ApplicationFeatureId fromEncodedString(final String data) {
-        if(data==null) {
-            return null;
-        }
-        return ApplicationFeatureId.parseEncoded(data);
+    public ApplicationFeatureId compose(final ValueDecomposition decomposition) {
+        return composeFromString(decomposition, ApplicationFeatureId::parseEncoded, ()->null);
     }
 
     // -- RENDERER

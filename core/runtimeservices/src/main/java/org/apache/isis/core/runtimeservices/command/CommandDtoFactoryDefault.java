@@ -123,7 +123,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
             // in case of non-scalar params returns the element type
             val elementType = actionParameter.getElementType();
 
-            val paramDto = new ParamDto();
+            final ParamDto paramDto = new ParamDto();
             paramDto.setName(actionParameter.getStaticFriendlyName()
                     .orElseThrow(_Exceptions::unexpectedCodeReach));
 
