@@ -151,7 +151,7 @@ class ObjectBookmarker_builtinHandlers {
             }
 
             val valueFacet = spec.getFacet(ValueFacet.class);
-            ValueComposer<Object> composer = (ValueComposer) valueFacet.selectDefaultComposer()
+            ValueComposer<Object> composer = (ValueComposer) valueFacet.selectDefaultSemantics()
                     .orElseThrow(()->_Exceptions.illegalArgument(
                             "Cannot create a bookmark for the value type %s, "
                           + "as no appropriate ValueComposer could be found.",

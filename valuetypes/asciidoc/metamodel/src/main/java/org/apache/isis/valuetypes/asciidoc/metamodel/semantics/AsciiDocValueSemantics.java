@@ -22,9 +22,9 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
@@ -36,9 +36,9 @@ import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 public class AsciiDocValueSemantics
 extends ValueSemanticsAbstract<AsciiDoc>
 implements
+    ValueComposer<AsciiDoc>,
     Renderer<AsciiDoc>,
-    Parser<AsciiDoc>,
-    EncoderDecoder<AsciiDoc> {
+    Parser<AsciiDoc> {
 
     @Override
     public Class<AsciiDoc> getCorrespondingClass() {
@@ -48,6 +48,18 @@ implements
     @Override
     public ValueType getSchemaValueType() {
         return ValueType.STRING;
+    }
+
+    // -- COMPOSER
+
+    @Override
+    public ValueDecomposition decompose(final AsciiDoc value) {
+        return decomposeAsString(value, AsciiDoc::getAdoc, ()->null);
+    }
+
+    @Override
+    public AsciiDoc compose(final ValueDecomposition decomposition) {
+        return composeFromString(decomposition, AsciiDoc::valueOf, ()->null);
     }
 
     // -- RENDERER
@@ -74,17 +86,7 @@ implements
         return 0;
     }
 
-    // -- ENCODER DECODER
-
-    @Override
-    public String toEncodedString(final AsciiDoc adoc) {
-        return parseableTextRepresentation(null, adoc);
-    }
-
-    @Override
-    public AsciiDoc fromEncodedString(final String encodedString) {
-        return AsciiDoc.valueOf(encodedString);
-    }
+    // -- EXAMPLES
 
     @Override
     public Can<AsciiDoc> getExamples() {

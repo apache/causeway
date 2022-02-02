@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.value.annotcfg;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.collections.Can;
@@ -63,9 +62,8 @@ import lombok.extern.log4j.Log4j2;
  * <p>
  * In addition, the following facets may be installed:
  * <ul>
- * <li> {@link EncodableFacet} - if an {@link EncoderDecoder} has been specified
- * explicitly in the annotation (or is picked up through an external
- * configuration file)</li>
+ * <li> {@link EncodableFacet} - if a {@link ValueSemanticsProvider} has been specified
+ * explicitly in the annotation (or is picked up through component registration)</li>
  * <li> {@link ImmutableFacet} - if specified explicitly in the annotation
  * </ul>
  * <p>

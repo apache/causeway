@@ -30,7 +30,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
@@ -75,7 +74,6 @@ public class ValueSemanticsTester<T> {
 
     public static interface PropertyInteractionProbe<T> {
         void testComposer(ValueSemanticsProvider.Context context, ValueComposer<T> composer);
-        void testEncoderDecoder(ValueSemanticsProvider.Context context, EncoderDecoder<T> codec);
         void testParser(ValueSemanticsProvider.Context context, Parser<T> parser);
         void testRenderer(ValueSemanticsProvider.Context context, Renderer<T> renderer);
         void testCommand(ValueSemanticsProvider.Context context, Command command);
@@ -94,14 +92,14 @@ public class ValueSemanticsTester<T> {
         val context = valueFacet(prop)
                 .createValueSemanticsContext(prop);
 
-        val composerIfAny = composer(prop);
-        if(composerIfAny.isPresent()) {
-            probe.testComposer(context, composerIfAny.get());
-        }
+        val semanticsIfAny = semantics(prop);
 
-        assertTrue(composerIfAny.isPresent(), ()->
-                        "composer must be available for "
-                            + context.getFeatureIdentifier());
+        assertTrue(semanticsIfAny.isPresent(), ()->
+            "value semantics must be available for "
+                + context.getFeatureIdentifier());
+
+        probe.testComposer(context, semanticsIfAny.get());
+
 
         val parserIfAny = parser(prop);
         if(parserIfAny.isPresent()) {
@@ -178,10 +176,10 @@ public class ValueSemanticsTester<T> {
         return _Casts.uncheckedCast(valueFacet);
     }
 
-    private Optional<ValueComposer<T>> composer(
+    private Optional<ValueSemanticsProvider<T>> semantics(
             final ObjectFeature feature) {
         val valueFacet = valueFacet(feature);
-        return valueFacet.selectDefaultComposer();
+        return valueFacet.selectDefaultSemantics();
     }
 
     private Optional<Parser<T>> parser(

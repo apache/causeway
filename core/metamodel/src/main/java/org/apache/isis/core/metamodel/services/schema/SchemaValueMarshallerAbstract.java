@@ -26,8 +26,6 @@ import org.apache.isis.applib.Identifier.Type;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.semantics.Converter;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
-import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.collections.Can;
@@ -76,26 +74,16 @@ implements SchemaValueMarshaller {
                 final ObjectFeature feature,
                 final ValueSemanticsProvider<T> semantics) {
 
-            val supportsConversionViaEncoderDecoder = semantics!=null
-                    && semantics.getSchemaValueType() == ValueType.STRING
-                    && !semantics.getCorrespondingClass().equals(String.class);
-
             return of(correspondingClass, feature, Optional.ofNullable(semantics),
-                    Optional.empty(),
                     semantics!=null
                         ? Optional.ofNullable(semantics.getConverter())
-                        : Optional.empty(),
-                    semantics!=null
-                        ? Optional.ofNullable(semantics.getComposer())
                         : Optional.empty());
         }
 
         private final @NonNull Class<T> correspondingClass;
         private final @NonNull ObjectFeature feature;
         private final @NonNull Optional<ValueSemanticsProvider<T>> semantics;
-        private final @NonNull Optional<EncoderDecoder<T>> encoderDecoder;
         private final @NonNull Optional<Converter<T, ?>> converter;
-        private final @NonNull Optional<ValueComposer<T>> composer;
 
         public ObjectSpecification getElementType() {
             return feature.getElementType();

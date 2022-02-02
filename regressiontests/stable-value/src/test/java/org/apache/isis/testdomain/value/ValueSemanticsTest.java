@@ -47,7 +47,6 @@ import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueComposer;
@@ -184,20 +183,6 @@ class ValueSemanticsTest {
                                     "serialization roundtrip failed");
                         }
 
-                    }
-
-                    @Override
-                    public void testEncoderDecoder(
-                            final ValueSemanticsProvider.Context context,
-                            final EncoderDecoder<T> codec) {
-
-                        // CoderDecoder round-trip test
-                        val serialized = codec.toEncodedString(example.getValue());
-
-                        tester.assertValueEquals(
-                                example.getValue(),
-                                codec.fromEncodedString(serialized),
-                                "serialization roundtrip failed");
                     }
 
                     @Override

@@ -88,9 +88,9 @@ extends SchemaValueMarshallerAbstract {
         }
 
         //TODO[ISIS-2877] remove conditional, once composer is always present
-        if(context.getComposer().isPresent()) {
+        if(context.getSemantics().isPresent()) {
             CommonDtoUtils.copy(
-                context.getComposer().get().decompose(_Casts.uncheckedCast(value.getPojo()))
+                context.getSemantics().get().decompose(_Casts.uncheckedCast(value.getPojo()))
                         .leftIfAny(),
                 valueDto);
             return valueDto;
@@ -127,8 +127,8 @@ extends SchemaValueMarshallerAbstract {
 
         val recoveredValueAsPojo = valueDto.getType()==ValueType.COMPOSITE
                 ? fromTypedTuple(context, valueDto.getComposite())
-                : context.getComposer().isPresent()
-                    ? context.getComposer().get().compose(ValueDecomposition.ofFundamental(valueDto))
+                : context.getSemantics().isPresent()
+                    ? context.getSemantics().get().compose(ValueDecomposition.ofFundamental(valueDto))
                     : fromFundamentalValue(context, CommonDtoUtils.getValueAsObject(valueDto));
 
         if(recoveredValueAsPojo==null) {
@@ -163,16 +163,14 @@ extends SchemaValueMarshallerAbstract {
     }
 
     private <T> TypedTupleDto toTypedTuple(final Context<T> context, final T valuePojo) {
-        return context.getComposer()
+        return context.getSemantics()
                 .orElseThrow()
                 .decompose(valuePojo)
                 .rightIfAny();
     }
 
     private <T> Object toFundamentalValue(final Context<T> context, final T valuePojo) {
-        return context.getEncoderDecoder().isPresent()
-                ? context.getEncoderDecoder().get().toEncodedString(valuePojo)
-                : context.getConverter()
+        return context.getConverter()
                     .<Object>map(converter->converter.toDelegateValue(valuePojo))
                     .orElse(valuePojo);
     }
@@ -183,7 +181,7 @@ extends SchemaValueMarshallerAbstract {
         if(typedTupleDto==null) {
             return null;
         }
-        return context.getComposer()
+        return context.getSemantics()
                 .orElseThrow()
                 .compose(ValueDecomposition.ofComposite(typedTupleDto));
     }
@@ -192,9 +190,7 @@ extends SchemaValueMarshallerAbstract {
         if(fundamentalValue==null) {
             return null;
         }
-        val valuePojo = context.getEncoderDecoder().isPresent()
-                ? context.getEncoderDecoder().get().fromEncodedString((String)fundamentalValue)
-                : context.getConverter()
+        val valuePojo = context.getConverter()
                     .<T>map(converter->converter.fromDelegateValue(_Casts.uncheckedCast(fundamentalValue)))
                     .orElse(_Casts.uncheckedCast(fundamentalValue));
         return valuePojo;

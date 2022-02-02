@@ -31,7 +31,6 @@ import org.apache.isis.applib.value.semantics.DefaultsProvider;
 import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
-import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider.Context;
 import org.apache.isis.commons.collections.Can;
@@ -133,14 +132,13 @@ implements ValueFacet<T> {
                 .findFirst();
     }
 
-    // -- COMPOSER
+    // -- DEFAULT SEMANTICS
 
     @Override
-    public Optional<ValueComposer<T>> selectDefaultComposer() {
+    public Optional<ValueSemanticsProvider<T>> selectDefaultSemantics() {
         return getValueSemantics()
                 .stream()
                 .filter(isMatchingAnyOf(Can.empty()))
-                .map(ValueSemanticsProvider::getComposer)
                 .filter(_NullSafe::isPresent)
                 .findFirst();
     }

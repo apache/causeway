@@ -30,8 +30,8 @@ import org.apache.isis.applib.graph.tree.TreeAdapter;
 import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.graph.tree.TreeState;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
@@ -45,7 +45,7 @@ import org.apache.isis.schema.common.v2.ValueType;
 public class TreeNodeValueSemantics
 extends ValueSemanticsAbstract<TreeNode<?>>
 implements
-    EncoderDecoder<TreeNode<?>>,
+    ValueComposer<TreeNode<?>>,
     Renderer<TreeNode<?>> {
 
     @Inject UrlEncodingService urlEncodingService;
@@ -58,21 +58,22 @@ implements
 
     @Override
     public ValueType getSchemaValueType() {
-        return UNREPRESENTED;
+        return ValueType.STRING;
     }
 
-    // -- RENDERER
+    // -- COMPOSER
 
     @Override
-    public String simpleTextPresentation(final Context context, final TreeNode<?> value) {
-        return super.render(value, TreeNode::toString);
+    public ValueDecomposition decompose(final TreeNode<?> value) {
+        return decomposeAsString(value, this::toEncodedString, ()->null);
     }
 
-    // -- ENCODER DECODER
-
     @Override
-    public String toEncodedString(final TreeNode<?> treeNode) {
+    public TreeNode<?> compose(final ValueDecomposition decomposition) {
+        return composeFromString(decomposition, this::fromEncodedString, ()->null);
+    }
 
+    private String toEncodedString(final TreeNode<?> treeNode) {
         final Memento memento = newMemento();
         memento.put("primaryValue", treeNode.getValue());
         memento.put("adapterClass", treeNode.getTreeAdapterClass());
@@ -81,13 +82,19 @@ implements
     }
 
     @SuppressWarnings("unchecked")
-    @Override
-    public TreeNode<?> fromEncodedString(final String input) {
+    private TreeNode<?> fromEncodedString(final String input) {
         final Memento memento = parseMemento(input);
         return TreeNode.of(
                 memento.get("primaryValue", Object.class),
                 memento.get("adapterClass", Class.class),
                 memento.get("treeState", TreeState.class));
+    }
+
+    // -- RENDERER
+
+    @Override
+    public String simpleTextPresentation(final Context context, final TreeNode<?> value) {
+        return super.render(value, TreeNode::toString);
     }
 
     // -- EXAMPLES

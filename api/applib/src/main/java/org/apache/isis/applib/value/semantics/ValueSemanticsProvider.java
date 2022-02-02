@@ -48,7 +48,7 @@ import org.apache.isis.schema.ixn.v2.InteractionDto;
  * @see DefaultsProvider
  * @since 1.x {@index}
  */
-public interface ValueSemanticsProvider<T> {
+public interface ValueSemanticsProvider<T> extends ValueComposer<T> {
 
     @lombok.Value(staticConstructor = "of")
     class Context {
@@ -63,6 +63,7 @@ public interface ValueSemanticsProvider<T> {
      * {@link ChangesDto}, where a mapping onto one of {@link ValueType}(s) as provided by the
      * XML schema is required.
      */
+    @Override
     ValueType getSchemaValueType();
 
     /**
@@ -74,11 +75,6 @@ public interface ValueSemanticsProvider<T> {
      * The {@link Converter}, if any.
      */
     Converter<T, ?> getConverter();
-
-    /**
-     * The {@link ValueComposer}, if any.
-     */
-    ValueComposer<T> getComposer();
 
     /**
      * The {@link Renderer}, if any.

@@ -41,7 +41,6 @@ import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.EditingFormatDirection;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
-import org.apache.isis.applib.value.semantics.ValueComposer.ValueDecomposition;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Strings;
@@ -76,21 +75,9 @@ implements
 
     @SuppressWarnings("unchecked")
     @Override
-    public ValueComposer<T> getComposer() {
-        return this instanceof ValueComposer ? (ValueComposer<T>)this : null;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
     public Renderer<T> getRenderer() {
         return this instanceof Renderer ? (Renderer<T>)this : null;
     }
-
-//    @SuppressWarnings("unchecked")
-//    @Override
-//    public EncoderDecoder<T> getEncoderDecoder() {
-//        return this instanceof EncoderDecoder ? (EncoderDecoder<T>)this : null;
-//    }
 
     @SuppressWarnings("unchecked")
     @Override

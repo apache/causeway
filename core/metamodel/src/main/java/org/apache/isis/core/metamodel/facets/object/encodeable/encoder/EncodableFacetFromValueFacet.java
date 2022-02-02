@@ -43,7 +43,7 @@ implements EncodableFacet {
     public static Optional<EncodableFacet> create(
             final ValueFacet<?> valueFacet,
             final FacetHolder holder) {
-        return valueFacet.selectDefaultComposer()
+        return valueFacet.selectDefaultSemantics()
                 .map(composer->new EncodableFacetFromValueFacet(composer, holder));
     }
 

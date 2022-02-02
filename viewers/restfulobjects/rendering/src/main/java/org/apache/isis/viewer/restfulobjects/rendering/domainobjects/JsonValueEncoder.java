@@ -169,7 +169,7 @@ public class JsonValueEncoder {
     @SuppressWarnings("unchecked")
     private static <T> Optional<ValueDecomposition> decompose(final ObjectSpecification spec, final T pojo) {
         return spec.lookupFacet(ValueFacet.class)
-            .flatMap(ValueFacet::selectDefaultComposer)
+            .flatMap(ValueFacet::selectDefaultSemantics)
             .map(ValueComposer.class::cast)
             .<ValueDecomposition>map(composer->((ValueComposer<T>)composer).decompose(pojo));
     }

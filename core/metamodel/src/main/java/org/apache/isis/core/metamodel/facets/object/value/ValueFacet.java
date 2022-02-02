@@ -29,7 +29,6 @@ import org.apache.isis.applib.value.semantics.DefaultsProvider;
 import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
-import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider.Context;
 import org.apache.isis.commons.collections.Can;
@@ -63,6 +62,9 @@ public interface ValueFacet<T> extends Facet {
     Context createValueSemanticsContext(@Nullable ObjectFeature feature);
     <X> Stream<X> streamValueSemantics(Class<X> requiredType);
 
+    /** no qualifiers allowed on the default semantics provider*/
+    Optional<ValueSemanticsProvider<T>> selectDefaultSemantics();
+
     // -- ORDER RELATION
 
     /** no qualifiers allowed on the default semantics provider*/
@@ -72,11 +74,6 @@ public interface ValueFacet<T> extends Facet {
 
     /** no qualifiers allowed on the default semantics provider*/
     Optional<DefaultsProvider<T>> selectDefaultDefaultsProvider();
-
-    // -- COMPOSER
-
-    /** no qualifiers allowed on the default semantics provider*/
-    Optional<ValueComposer<T>> selectDefaultComposer();
 
     // -- PARSER
 

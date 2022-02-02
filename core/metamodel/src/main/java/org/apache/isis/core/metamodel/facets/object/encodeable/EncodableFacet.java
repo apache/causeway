@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.object.encodeable;
 
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
@@ -28,14 +27,13 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 public interface EncodableFacet extends Facet {
 
     /**
-     * Equivalent to {@link EncoderDecoder#fromEncodedString(String)}, though
-     * may be implemented through some other equivalent mechanism.
+     * Converts an encoded string to an instance of the object.
      */
     ManagedObject fromEncodedString(String encodedData);
 
     /**
-     * Equivalent to {@link EncoderDecoder#toEncodedString(Object)}, though may
-     * be implemented through some other equivalent mechanism.
+     * Returns the provided object as an encoded string.
      */
     String toEncodedString(ManagedObject object);
+
 }

@@ -100,7 +100,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     protected void setSemantics(final ValueSemanticsAbstract<?> valueSemantics) {
         this.valueSemanticsProvider = valueSemantics;
         this.encodeableFacet = EncodableFacetFromValueFacet.forTesting(
-                valueSemantics.getComposer(),
+                valueSemantics,
                 mockFacetHolder);
     }
 
@@ -135,7 +135,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testDecodeNULL() throws Exception {
-        Assume.assumeThat(valueSemanticsProvider.getComposer(), is(not(nullValue())));
+        Assume.assumeThat(valueSemanticsProvider, is(not(nullValue())));
 
         final Object newValue = encodeableFacet.fromEncodedString(EncodableFacetFromValueFacet.ENCODED_NULL);
         assertNull(newValue);
@@ -143,7 +143,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testEmptyEncoding() {
-        Assume.assumeThat(valueSemanticsProvider.getComposer(), is(not(nullValue())));
+        Assume.assumeThat(valueSemanticsProvider, is(not(nullValue())));
 
         assertEquals(EncodableFacetFromValueFacet.ENCODED_NULL, encodeableFacet.toEncodedString(null));
     }
