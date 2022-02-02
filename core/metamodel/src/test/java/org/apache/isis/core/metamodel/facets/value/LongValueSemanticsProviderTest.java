@@ -68,15 +68,4 @@ extends ValueSemanticsProviderAbstractTestCase {
         assertEquals("120", parsed.toString());
     }
 
-    @Test
-    public void testEncode() throws Exception {
-        assertEquals("367322", value.toEncodedString(longObj));
-    }
-
-    @Test
-    public void test() throws Exception {
-        final Object parsed = value.fromEncodedString("234");
-        assertEquals("234", parsed.toString());
-    }
-
 }

@@ -60,16 +60,4 @@ extends ValueSemanticsProviderAbstractTestCase {
     public void testTitleOf() throws Exception {
         assertEquals("102", value.simpleTextPresentation(null, byteObj));
     }
-
-    @Test
-    public void testEncode() throws Exception {
-        assertEquals("102", value.toEncodedString(byteObj));
-    }
-
-    @Test
-    public void testDecode() throws Exception {
-        final Object parsed = value.fromEncodedString("-91");
-        assertEquals(Byte.valueOf((byte) -91), parsed);
-    }
-
 }

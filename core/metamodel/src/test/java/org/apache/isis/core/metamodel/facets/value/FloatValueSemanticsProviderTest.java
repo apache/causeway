@@ -73,10 +73,4 @@ extends ValueSemanticsProviderAbstractTestCase {
         assertEquals("32.5", getEncodeableFacet().toEncodedString(createAdapter(float1)));
     }
 
-    @Test
-    public void testDecode() throws Exception {
-        final Object restored = value.fromEncodedString("10.25");
-        assertEquals(10.25, ((Float) restored).floatValue(), 0.0);
-    }
-
 }

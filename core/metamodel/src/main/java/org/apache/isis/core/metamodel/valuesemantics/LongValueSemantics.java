@@ -18,19 +18,22 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
+import java.util.function.UnaryOperator;
+
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.common.v2.ValueType;
+import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
 import lombok.val;
 
@@ -43,7 +46,7 @@ public class LongValueSemantics
 extends ValueSemanticsAbstract<Long>
 implements
     DefaultsProvider<Long>,
-    EncoderDecoder<Long>,
+    ValueComposer<Long>,
     Parser<Long>,
     Renderer<Long> {
 
@@ -62,16 +65,17 @@ implements
         return 0L;
     }
 
-    // -- ENCODER DECODER
+    // -- COMPOSER
 
     @Override
-    public String toEncodedString(final Long object) {
-        return object.toString();
+    public ValueDecomposition decompose(final Long value) {
+        return decomposeAsNullable(value, UnaryOperator.identity(), ()->null);
     }
 
     @Override
-    public Long fromEncodedString(final String data) {
-        return Long.parseLong(data);
+    public Long compose(final ValueDecomposition decomposition) {
+        return composeFromNullable(
+                decomposition, ValueWithTypeDto::getLong, UnaryOperator.identity(), ()->null);
     }
 
     // -- RENDERER

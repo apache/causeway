@@ -18,17 +18,20 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
+import java.util.function.UnaryOperator;
+
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.common.v2.ValueType;
+import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
 import lombok.val;
 
@@ -41,7 +44,7 @@ public class FloatValueSemantics
 extends ValueSemanticsAbstract<Float>
 implements
     DefaultsProvider<Float>,
-    EncoderDecoder<Float>,
+    ValueComposer<Float>,
     Parser<Float>,
     Renderer<Float> {
 
@@ -60,16 +63,17 @@ implements
         return 0.f;
     }
 
-    // -- ENCODER DECODER
+    // -- COMPOSER
 
     @Override
-    public String toEncodedString(final Float object) {
-        return object.toString();
+    public ValueDecomposition decompose(final Float value) {
+        return decomposeAsNullable(value, UnaryOperator.identity(), ()->null);
     }
 
     @Override
-    public Float fromEncodedString(final String data) {
-        return Float.valueOf(data);
+    public Float compose(final ValueDecomposition decomposition) {
+        return composeFromNullable(
+                decomposition, ValueWithTypeDto::getFloat, UnaryOperator.identity(), ()->null);
     }
 
     // -- RENDERER

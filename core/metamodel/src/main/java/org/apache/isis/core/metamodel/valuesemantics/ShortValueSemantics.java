@@ -18,19 +18,22 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
+import java.util.function.UnaryOperator;
+
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.common.v2.ValueType;
+import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
 import lombok.val;
 
@@ -43,7 +46,7 @@ public class ShortValueSemantics
 extends ValueSemanticsAbstract<Short>
 implements
     DefaultsProvider<Short>,
-    EncoderDecoder<Short>,
+    ValueComposer<Short>,
     Parser<Short>,
     Renderer<Short> {
 
@@ -62,16 +65,17 @@ implements
         return Short.valueOf((short) 0);
     }
 
-    // -- ENCODER DECODER
+    // -- COMPOSER
 
     @Override
-    public String toEncodedString(final Short object) {
-        return object.toString();
+    public ValueDecomposition decompose(final Short value) {
+        return decomposeAsNullable(value, UnaryOperator.identity(), ()->null);
     }
 
     @Override
-    public Short fromEncodedString(final String data) {
-        return Short.parseShort(data);
+    public Short compose(final ValueDecomposition decomposition) {
+        return composeFromNullable(
+                decomposition, ValueWithTypeDto::getShort, UnaryOperator.identity(), ()->null);
     }
 
     // -- RENDERER

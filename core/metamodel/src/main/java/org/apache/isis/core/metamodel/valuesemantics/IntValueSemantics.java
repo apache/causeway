@@ -18,19 +18,22 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
+import java.util.function.UnaryOperator;
+
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.common.v2.ValueType;
+import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
 import lombok.val;
 
@@ -43,7 +46,7 @@ public class IntValueSemantics
 extends ValueSemanticsAbstract<Integer>
 implements
     DefaultsProvider<Integer>,
-    EncoderDecoder<Integer>,
+    ValueComposer<Integer>,
     Parser<Integer>,
     Renderer<Integer> {
 
@@ -62,16 +65,17 @@ implements
         return 0;
     }
 
-    // -- ENCODER DECODER
+    // -- COMPOSER
 
     @Override
-    public String toEncodedString(final Integer object) {
-        return object.toString();
+    public ValueDecomposition decompose(final Integer value) {
+        return decomposeAsNullable(value, UnaryOperator.identity(), ()->null);
     }
 
     @Override
-    public Integer fromEncodedString(final String data) {
-        return Integer.parseInt(data);
+    public Integer compose(final ValueDecomposition decomposition) {
+        return composeFromNullable(
+                decomposition, ValueWithTypeDto::getInt, UnaryOperator.identity(), ()->null);
     }
 
     // -- RENDERER

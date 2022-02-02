@@ -18,17 +18,20 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
+import java.util.function.UnaryOperator;
+
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
-import org.apache.isis.applib.value.semantics.EncoderDecoder;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.common.v2.ValueType;
+import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
 import lombok.val;
 
@@ -41,7 +44,7 @@ public class DoubleValueSemantics
 extends ValueSemanticsAbstract<Double>
 implements
     DefaultsProvider<Double>,
-    EncoderDecoder<Double>,
+    ValueComposer<Double>,
     Parser<Double>,
     Renderer<Double> {
 
@@ -60,16 +63,17 @@ implements
         return 0.;
     }
 
-    // -- ENCODER DECODER
+    // -- COMPOSER
 
     @Override
-    public String toEncodedString(final Double object) {
-        return object.toString();
+    public ValueDecomposition decompose(final Double value) {
+        return decomposeAsNullable(value, UnaryOperator.identity(), ()->null);
     }
 
     @Override
-    public Double fromEncodedString(final String data) {
-        return Double.valueOf(data);
+    public Double compose(final ValueDecomposition decomposition) {
+        return composeFromNullable(
+                decomposition, ValueWithTypeDto::getDouble, UnaryOperator.identity(), ()->null);
     }
 
     // -- RENDERER
