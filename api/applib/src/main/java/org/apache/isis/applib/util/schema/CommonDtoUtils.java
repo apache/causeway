@@ -39,7 +39,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
-import org.apache.isis.applib.value.semantics.ValueComposer.ValueDecomposition;
+import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;

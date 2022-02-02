@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.value.semantics.ValueComposer.ValueDecomposition;
+import org.apache.isis.applib.value.semantics.ValueDecomposition;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

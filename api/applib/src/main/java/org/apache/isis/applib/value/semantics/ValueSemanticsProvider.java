@@ -26,7 +26,9 @@ import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 import org.apache.isis.schema.cmd.v2.CommandDto;
+import org.apache.isis.schema.common.v2.TypedTupleDto;
 import org.apache.isis.schema.common.v2.ValueType;
+import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 
 /**
@@ -44,11 +46,10 @@ import org.apache.isis.schema.ixn.v2.InteractionDto;
  * framework to instantiate the object reflectively.
  *
  * @see Parser
- * @see EncoderDecoder
  * @see DefaultsProvider
  * @since 1.x {@index}
  */
-public interface ValueSemanticsProvider<T> extends ValueComposer<T> {
+public interface ValueSemanticsProvider<T> {
 
     @lombok.Value(staticConstructor = "of")
     class Context {
@@ -63,8 +64,32 @@ public interface ValueSemanticsProvider<T> extends ValueComposer<T> {
      * {@link ChangesDto}, where a mapping onto one of {@link ValueType}(s) as provided by the
      * XML schema is required.
      */
-    @Override
     ValueType getSchemaValueType();
+
+    /**
+     * Converts a value object into either a {@link ValueWithTypeDto}
+     * or {@link TypedTupleDto}.
+     */
+    ValueDecomposition decompose(T value);
+
+    /**
+     * Converts either a {@link ValueWithTypeDto} or
+     * a {@link TypedTupleDto}
+     * to an instance of the object.
+     *
+     * @see #decompose(Object)
+     */
+    T compose(ValueDecomposition decomposition);
+
+
+    // -- EXPERIMENTAL
+
+    default Object getValueMixin(final T value) {
+        return null;
+    }
+
+    // --
+
 
     /**
      * The {@link OrderRelation}, if any.

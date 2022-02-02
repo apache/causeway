@@ -24,6 +24,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.core.metamodel.valuesemantics.ChangesDtoValueSemantics;
 
 import lombok.NonNull;
@@ -35,7 +36,7 @@ public class ChangesDtoValueSemanticsPrettyRender
 extends ChangesDtoValueSemantics {
 
     @Override
-    protected String renderXml(@NonNull final Context context, @NonNull final String xml) {
+    protected String renderXml(@NonNull final ValueSemanticsProvider.Context context, @NonNull final String xml) {
         return _XmlToHtml.toHtml(xml);
     }
 

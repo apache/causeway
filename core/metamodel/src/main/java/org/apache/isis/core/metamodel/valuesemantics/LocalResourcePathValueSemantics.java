@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
-import org.apache.isis.applib.value.semantics.ValueComposer;
+import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -40,7 +40,6 @@ import lombok.val;
 public class LocalResourcePathValueSemantics
 extends ValueSemanticsAbstract<LocalResourcePath>
 implements
-    ValueComposer<LocalResourcePath>,
     Parser<LocalResourcePath>,
     Renderer<LocalResourcePath> {
 

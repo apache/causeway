@@ -31,7 +31,7 @@ import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.graph.tree.TreeState;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.applib.value.semantics.Renderer;
-import org.apache.isis.applib.value.semantics.ValueComposer;
+import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
@@ -45,7 +45,6 @@ import org.apache.isis.schema.common.v2.ValueType;
 public class TreeNodeValueSemantics
 extends ValueSemanticsAbstract<TreeNode<?>>
 implements
-    ValueComposer<TreeNode<?>>,
     Renderer<TreeNode<?>> {
 
     @Inject UrlEncodingService urlEncodingService;

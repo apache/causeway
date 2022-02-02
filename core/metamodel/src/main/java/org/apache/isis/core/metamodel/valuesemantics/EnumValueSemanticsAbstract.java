@@ -31,7 +31,7 @@ import org.apache.isis.applib.util.Enums;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
-import org.apache.isis.applib.value.semantics.ValueComposer;
+import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
@@ -52,7 +52,6 @@ public class EnumValueSemanticsAbstract<T extends Enum<T>>
 extends ValueSemanticsAbstract<T>
 implements
     DefaultsProvider<T>,
-    ValueComposer<T>,
     Parser<T>,
     Renderer<T> {
 

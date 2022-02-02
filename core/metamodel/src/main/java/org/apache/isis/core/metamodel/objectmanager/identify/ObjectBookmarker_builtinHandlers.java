@@ -25,7 +25,7 @@ import java.util.UUID;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.Oid;
-import org.apache.isis.applib.value.semantics.ValueComposer;
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.debug._Debug;
@@ -151,7 +151,7 @@ class ObjectBookmarker_builtinHandlers {
             }
 
             val valueFacet = spec.getFacet(ValueFacet.class);
-            ValueComposer<Object> composer = (ValueComposer) valueFacet.selectDefaultSemantics()
+            ValueSemanticsProvider<Object> composer = (ValueSemanticsProvider) valueFacet.selectDefaultSemantics()
                     .orElseThrow(()->_Exceptions.illegalArgument(
                             "Cannot create a bookmark for the value type %s, "
                           + "as no appropriate ValueComposer could be found.",

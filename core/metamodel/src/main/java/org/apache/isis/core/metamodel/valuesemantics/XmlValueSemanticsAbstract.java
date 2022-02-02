@@ -22,7 +22,7 @@ import java.util.Objects;
 
 import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.Renderer;
-import org.apache.isis.applib.value.semantics.ValueComposer;
+import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.schema.common.v2.ValueType;
 
@@ -33,7 +33,6 @@ public abstract class XmlValueSemanticsAbstract<T>
 extends ValueSemanticsAbstract<T>
 implements
     OrderRelation<T, Void>,
-    ValueComposer<T>,
     Renderer<T> {
 
     @Override

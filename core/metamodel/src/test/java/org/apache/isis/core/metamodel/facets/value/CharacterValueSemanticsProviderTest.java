@@ -25,7 +25,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.apache.isis.applib.exceptions.recoverable.InvalidEntryException;
-import org.apache.isis.applib.value.semantics.ValueComposer.ValueDecomposition;
+import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.core.metamodel.valuesemantics.CharacterValueSemantics;
 
 public class CharacterValueSemanticsProviderTest

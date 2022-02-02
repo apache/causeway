@@ -36,7 +36,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
 import org.apache.isis.applib.value.semantics.Renderer;
-import org.apache.isis.applib.value.semantics.ValueComposer;
+import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.common.v2.TypedTupleDto;
@@ -55,8 +55,7 @@ public class CalendarEventSemantics
 extends ValueSemanticsAbstract<CalendarEvent>
 implements
     DefaultsProvider<CalendarEvent>,
-    Renderer<CalendarEvent>,
-    ValueComposer<CalendarEvent> {
+    Renderer<CalendarEvent> {
 
     @Override
     public Class<CalendarEvent> getCorrespondingClass() {

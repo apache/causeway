@@ -41,7 +41,6 @@ import lombok.val;
 public interface TemporalValueSemantics<T extends Temporal>
 extends
     OrderRelation<T, Duration>,
-    ValueComposer<T>,
     Parser<T>,
     Renderer<T> {
 

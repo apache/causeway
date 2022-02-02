@@ -22,7 +22,7 @@ import org.apache.isis.applib.value.semantics.Converter;
 import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
-import org.apache.isis.applib.value.semantics.ValueComposer;
+import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.schema.common.v2.ValueType;
@@ -40,8 +40,7 @@ implements
     OrderRelation<T, E>,
     Parser<T>,
     Renderer<T>,
-    Converter<T, D>,
-    ValueComposer<T> {
+    Converter<T, D> {
 
     public abstract ValueSemanticsAbstract<D> getDelegate();
 
@@ -78,12 +77,12 @@ implements
     @Override
     public ValueDecomposition decompose(final T value) {
         val delegateValue = toDelegateValue(value);
-        return delegateComposer().decompose(delegateValue);
+        return getDelegate().decompose(delegateValue);
     }
 
     @Override
     public T compose(final ValueDecomposition decomposition) {
-        val delegateValue = delegateComposer().compose(decomposition);
+        val delegateValue = getDelegate().compose(decomposition);
         return fromDelegateValue(delegateValue);
     }
 
@@ -145,11 +144,6 @@ implements
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private Renderer<D> delegateRenderer() {
         return ((Renderer)getDelegate());
-    }
-
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    private ValueComposer<D> delegateComposer() {
-        return ((ValueComposer)getDelegate());
     }
 
 }

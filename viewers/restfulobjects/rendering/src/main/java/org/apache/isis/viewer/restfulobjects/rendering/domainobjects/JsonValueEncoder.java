@@ -35,8 +35,8 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.applib.value.semantics.ValueComposer;
-import org.apache.isis.applib.value.semantics.ValueComposer.ValueDecomposition;
+import org.apache.isis.applib.value.semantics.ValueDecomposition;
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -170,8 +170,7 @@ public class JsonValueEncoder {
     private static <T> Optional<ValueDecomposition> decompose(final ObjectSpecification spec, final T pojo) {
         return spec.lookupFacet(ValueFacet.class)
             .flatMap(ValueFacet::selectDefaultSemantics)
-            .map(ValueComposer.class::cast)
-            .<ValueDecomposition>map(composer->((ValueComposer<T>)composer).decompose(pojo));
+            .<ValueDecomposition>map(composer->((ValueSemanticsProvider<T>)composer).decompose(pojo));
     }
 
     private static <T> Optional<String> decomposeToJson(final ObjectSpecification spec, final T pojo) {

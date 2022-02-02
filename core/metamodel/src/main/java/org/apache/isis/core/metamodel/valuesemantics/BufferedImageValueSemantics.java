@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.applib.value.semantics.OrderRelation;
-import org.apache.isis.applib.value.semantics.ValueComposer;
+import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.image._Images;
@@ -45,8 +45,7 @@ public class BufferedImageValueSemantics
 extends ValueSemanticsAbstract<BufferedImage>
 implements
     ImageValueSemantics,
-    OrderRelation<BufferedImage, Void>,
-    ValueComposer<BufferedImage> {
+    OrderRelation<BufferedImage, Void> {
 
     @Override
     public Class<BufferedImage> getCorrespondingClass() {

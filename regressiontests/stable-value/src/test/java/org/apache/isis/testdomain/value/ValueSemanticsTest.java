@@ -49,8 +49,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
-import org.apache.isis.applib.value.semantics.ValueComposer;
-import org.apache.isis.applib.value.semantics.ValueComposer.ValueDecomposition;
+import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -134,31 +133,31 @@ class ValueSemanticsTest {
                     @Override
                     public void testComposer(
                             final ValueSemanticsProvider.Context context,
-                            final ValueComposer<T> composer) {
+                            final ValueSemanticsProvider<T> semantics) {
 
                         // composer round-trip test
-                        val decomposition = composer.decompose(example.getValue());
+                        val decomposition = semantics.decompose(example.getValue());
 
                         tester.assertValueEquals(
                                 example.getValue(),
-                                composer.compose(decomposition),
+                                semantics.compose(decomposition),
                                 "decompose/compose roundtrip failed");
 
                         // json roundtrip test on non-composites
-                        if(composer.getSchemaValueType()!=ValueType.COMPOSITE) {
+                        if(semantics.getSchemaValueType()!=ValueType.COMPOSITE) {
                             val json = decomposition.toJson();
                             assertNotNull(json);
                             assertFalse(json.isBlank());
 
                             val reconstructed = ValueDecomposition
-                                    .fromJson(composer.getSchemaValueType(), json);
+                                    .fromJson(semantics.getSchemaValueType(), json);
 
                             assertEquals(json, reconstructed.toJson());
 
                         }
 
 
-                        val valueMixin = composer.getValueMixin(example.getValue());
+                        val valueMixin = semantics.getValueMixin(example.getValue());
                         if(valueMixin!=null) {
 
                             val spec = specLoader.specForTypeElseFail(valueMixin.getClass());

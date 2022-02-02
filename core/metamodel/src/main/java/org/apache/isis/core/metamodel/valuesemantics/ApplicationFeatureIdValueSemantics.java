@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
-import org.apache.isis.applib.value.semantics.ValueComposer;
+import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
@@ -39,7 +39,6 @@ import lombok.val;
 public class ApplicationFeatureIdValueSemantics
 extends ValueSemanticsAbstract<ApplicationFeatureId>
 implements
-    ValueComposer<ApplicationFeatureId>,
     Parser<ApplicationFeatureId>,
     Renderer<ApplicationFeatureId> {
 

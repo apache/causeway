@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
-import org.apache.isis.applib.value.semantics.ValueComposer;
+import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -37,7 +37,6 @@ import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 public class PasswordValueSemantics
 extends ValueSemanticsAbstract<Password>
 implements
-    ValueComposer<Password>,
     Parser<Password>,
     Renderer<Password> {
 

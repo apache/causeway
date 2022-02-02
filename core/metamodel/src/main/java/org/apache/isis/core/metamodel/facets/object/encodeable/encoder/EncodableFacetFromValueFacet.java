@@ -21,15 +21,14 @@ package org.apache.isis.core.metamodel.facets.object.encodeable.encoder;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.value.semantics.ValueComposer;
-import org.apache.isis.applib.value.semantics.ValueComposer.ValueDecomposition;
+import org.apache.isis.applib.value.semantics.ValueDecomposition;
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
 
@@ -51,22 +50,20 @@ implements EncodableFacet {
      * JUnit support.
      */
     public static EncodableFacetFromValueFacet forTesting(
-            final ValueComposer<?> composer,
+            final ValueSemanticsProvider<?> semantics,
             final FacetHolder holder) {
-        return new EncodableFacetFromValueFacet(composer, holder);
+        return new EncodableFacetFromValueFacet(semantics, holder);
     }
 
     // -- CONSTRUCTION
 
-    private final ValueComposer<?> composer;
-    private final ValueType schemaValueType;
+    private final ValueSemanticsProvider<?> semantics;
 
     private EncodableFacetFromValueFacet(
-            final ValueComposer<?> composer,
+            final ValueSemanticsProvider<?> semantics,
             final FacetHolder holder) {
         super(EncodableFacet.class, holder);
-        this.composer = composer;
-        this.schemaValueType = composer.getSchemaValueType();
+        this.semantics = semantics;
     }
 
     @Override
@@ -75,8 +72,8 @@ implements EncodableFacet {
         if (ENCODED_NULL.equals(encodedData)) {
             return null;
         } else {
-            final Object decodedObject = composer.compose(
-                    ValueDecomposition.fromJson(schemaValueType, encodedData));
+            final Object decodedObject = semantics.compose(
+                    ValueDecomposition.fromJson(semantics.getSchemaValueType(), encodedData));
             return getObjectManager().adapt(decodedObject);
         }
     }
@@ -85,18 +82,18 @@ implements EncodableFacet {
     public String toEncodedString(final ManagedObject adapter) {
         return adapter == null
                 ? ENCODED_NULL
-                : encode(composer, adapter.getPojo());
+                : encode(semantics, adapter.getPojo());
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("composer", composer.toString());
+        visitor.accept("composer", semantics.toString());
     }
 
     // -- HELPER
 
-    private static <T> String encode(final ValueComposer<T> composer, final Object pojo) {
+    private static <T> String encode(final ValueSemanticsProvider<T> composer, final Object pojo) {
         @SuppressWarnings("unchecked")
         T pojoAsT = (T) pojo;
         val valueAsJson = composer.decompose(pojoAsT)

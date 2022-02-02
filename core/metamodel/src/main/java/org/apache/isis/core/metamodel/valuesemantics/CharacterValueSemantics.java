@@ -28,7 +28,7 @@ import org.apache.isis.applib.exceptions.recoverable.InvalidEntryException;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
-import org.apache.isis.applib.value.semantics.ValueComposer;
+import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -46,7 +46,6 @@ public class CharacterValueSemantics
 extends ValueSemanticsAbstract<Character>
 implements
     DefaultsProvider<Character>,
-    ValueComposer<Character>,
     Parser<Character>,
     Renderer<Character> {
 

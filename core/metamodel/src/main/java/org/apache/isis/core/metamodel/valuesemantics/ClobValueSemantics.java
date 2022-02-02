@@ -30,7 +30,7 @@ import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.applib.value.semantics.Renderer;
-import org.apache.isis.applib.value.semantics.ValueComposer;
+import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
@@ -41,7 +41,6 @@ import org.apache.isis.schema.common.v2.ValueType;
 public class ClobValueSemantics
 extends ValueSemanticsAbstract<Clob>
 implements
-    ValueComposer<Clob>,
     Renderer<Clob> {
 
     @Override

@@ -33,7 +33,6 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
-import org.apache.isis.applib.value.semantics.ValueComposer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Refs;
@@ -73,7 +72,7 @@ public class ValueSemanticsTester<T> {
     }
 
     public static interface PropertyInteractionProbe<T> {
-        void testComposer(ValueSemanticsProvider.Context context, ValueComposer<T> composer);
+        void testComposer(ValueSemanticsProvider.Context context, ValueSemanticsProvider<T> semantics);
         void testParser(ValueSemanticsProvider.Context context, Parser<T> parser);
         void testRenderer(ValueSemanticsProvider.Context context, Renderer<T> renderer);
         void testCommand(ValueSemanticsProvider.Context context, Command command);
