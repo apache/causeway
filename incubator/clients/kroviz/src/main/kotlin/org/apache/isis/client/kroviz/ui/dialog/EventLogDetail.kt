@@ -22,13 +22,16 @@ import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.to.bs3.Grid
-import org.apache.isis.client.kroviz.ui.core.*
+import org.apache.isis.client.kroviz.ui.core.Constants
+import org.apache.isis.client.kroviz.ui.core.FormItem
+import org.apache.isis.client.kroviz.ui.core.RoDialog
+import org.apache.isis.client.kroviz.ui.core.SessionManager
 import org.apache.isis.client.kroviz.ui.diagram.JsonDiagram
 import org.apache.isis.client.kroviz.ui.diagram.LayoutDiagram
 import org.apache.isis.client.kroviz.ui.diagram.LinkTreeDiagram
-import org.apache.isis.client.kroviz.utils.js.Flatted
 import org.apache.isis.client.kroviz.utils.StringUtils
 import org.apache.isis.client.kroviz.utils.XmlHelper
+import org.apache.isis.client.kroviz.utils.js.Flatted
 
 class EventLogDetail(logEntryFromTabulator: LogEntry) : Controller() {
     private var logEntry: LogEntry
@@ -37,7 +40,8 @@ class EventLogDetail(logEntryFromTabulator: LogEntry) : Controller() {
         // For a yet unknown reason, aggregators are not transmitted via tabulator.
         // As a WORKAROUND, we fetch the full-blown LogEntry from the EventStore again.
         val rs = ResourceSpecification(logEntryFromTabulator.title)
-        logEntry = SessionManager.getEventStore().findBy(rs) ?: logEntryFromTabulator  // in case of xml, we use the entry passed in
+        logEntry = SessionManager.getEventStore().findBy(rs)
+            ?: logEntryFromTabulator  // in case of xml, we use the entry passed in
     }
 
     // callback parameter
@@ -59,16 +63,26 @@ class EventLogDetail(logEntryFromTabulator: LogEntry) : Controller() {
 
         val customButtons = mutableListOf<FormItem>()
         customButtons.add(FormItem("Link Tree Diagram", ValueType.BUTTON, null, callBack = this, callBackAction = LNK))
-        customButtons.add(FormItem("Display Model Diagram", ValueType.BUTTON, null, callBack = this, callBackAction = DPM))
+        customButtons.add(
+            FormItem(
+                "Display Model Diagram",
+                ValueType.BUTTON,
+                null,
+                callBack = this,
+                callBackAction = DPM
+            )
+        )
         customButtons.add(FormItem("Console", ValueType.BUTTON, null, callBack = this, callBackAction = LOG))
 
         dialog = RoDialog(
-                caption = "Details :" + logEntry.title,
-                items = formItems,
-                controller = this,
-                defaultAction = "Response Diagram",
-                widthPerc = 60,
-                customButtons = customButtons)
+            caption = "Details :" + logEntry.title,
+            items = formItems,
+            controller = this,
+            defaultAction = "Response Diagram",
+            widthPerc = 60,
+            heightPerc = 55,
+            customButtons = customButtons
+        )
         super.open()
     }
 

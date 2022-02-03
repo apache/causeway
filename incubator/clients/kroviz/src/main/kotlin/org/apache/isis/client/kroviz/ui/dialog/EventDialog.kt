@@ -23,6 +23,7 @@ import io.kvision.core.CssSize
 import io.kvision.core.FlexDirection
 import io.kvision.core.UNIT
 import io.kvision.panel.VPanel
+import org.apache.isis.client.kroviz.core.event.EventState
 import org.apache.isis.client.kroviz.core.event.ReplayController
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.core.FormItem
@@ -31,11 +32,12 @@ import org.apache.isis.client.kroviz.ui.core.SessionManager
 import org.apache.isis.client.kroviz.ui.core.ViewManager
 import org.apache.isis.client.kroviz.ui.panel.EventLogTable
 
-class EventDialog : Controller() {
+class EventDialog(filterState: EventState? = null) : Controller() {
 
     private val eventPanel = VPanel(spacing = 3) {
         width = CssSize(100, UNIT.perc)
     }
+    private var eventTable: EventLogTable
 
     // callback parameter
     private val EXP: String = "exp"
@@ -58,7 +60,7 @@ class EventDialog : Controller() {
             heightPerc = 70,
             customButtons = customButtons
         )
-        val eventTable = EventLogTable(SessionManager.getEventStore().log)
+        eventTable = EventLogTable(SessionManager.getEventStore().log, filterState)
         eventTable.tabulator.addCssClass("tabulator-in-dialog")
         eventPanel.add(eventTable)
 

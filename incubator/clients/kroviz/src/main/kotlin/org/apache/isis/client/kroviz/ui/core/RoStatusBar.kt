@@ -25,12 +25,14 @@ import io.kvision.navbar.Nav
 import io.kvision.navbar.Navbar
 import io.kvision.navbar.NavbarType
 import io.kvision.panel.SimplePanel
+import kotlinx.browser.window
 import org.apache.isis.client.kroviz.core.event.EventState
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.StatusPo
 import org.apache.isis.client.kroviz.core.model.DiagramDM
 import org.apache.isis.client.kroviz.ui.diagram.ClassDiagram
 import org.apache.isis.client.kroviz.ui.dialog.DiagramDialog
+import org.apache.isis.client.kroviz.ui.dialog.EventDialog
 import org.apache.isis.client.kroviz.ui.dialog.NotificationDialog
 import org.apache.isis.client.kroviz.utils.IconManager
 
@@ -66,6 +68,9 @@ class RoStatusBar {
         nav.add(errors)
         nav.add(views)
         nav.add(userBtn)
+        initRunning()
+        initErrors()
+        initViews()
     }
 
     fun update(status: StatusPo) {
@@ -73,6 +78,27 @@ class RoStatusBar {
         running.text = status.runningNo.toString()
         errors.text = status.errorNo.toString()
         views.text = status.viewsNo.toString()
+    }
+
+    private fun initRunning() {
+        running.setAttribute(name = "title", value = "Number of Requests in State RUNNING")
+        running.onClick {
+            EventDialog(EventState.RUNNING).open()
+        }
+    }
+
+    private fun initErrors() {
+        errors.setAttribute(name = "title", value = "Number of Requests in State ERROR")
+        errors.onClick {
+            EventDialog(EventState.ERROR).open()
+        }
+    }
+
+    private fun initViews() {
+        views.setAttribute(name = "title", value = "Number of VIEWS")
+        views.onClick {
+            EventDialog(EventState.VIEW).open()
+        }
     }
 
     fun updateDiagram(dd: DiagramDM) {
@@ -125,7 +151,7 @@ class RoStatusBar {
         errors.icon = IconManager.find("Error")
         notify(text)
     }
-/*
+
     private fun isisButton(): Button {
         val classes = "isis-logo-button-image logo-button"
         val b = Button("", style = ButtonStyle.LINK)
@@ -143,5 +169,12 @@ class RoStatusBar {
             window.open("https://kvision.io")
         }
     }
-*/
+
+    /*
+    http://tabulator.info/images/tabulator_favicon_simple.png
+    http://tabulator.info/images/tabulator_small.png
+
+    https://kroki.io/assets/logo.svg
+     */
+
 }

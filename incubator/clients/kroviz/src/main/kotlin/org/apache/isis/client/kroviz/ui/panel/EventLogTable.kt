@@ -26,83 +26,88 @@ import io.kvision.panel.hPanel
 import io.kvision.tabulator.*
 import io.kvision.utils.obj
 import io.kvision.utils.px
+import org.apache.isis.client.kroviz.core.event.EventState
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.dialog.EventLogDetail
 import org.apache.isis.client.kroviz.utils.StringUtils
 
-class EventLogTable(val model: List<LogEntry>) : VPanel() {
+class EventLogTable(val model: List<LogEntry>, filterState: EventState? = null) : VPanel() {
     val tabulator: Tabulator<LogEntry>
 
     private val columns = listOf(
-            ColumnDefinition<LogEntry>(
-                    download = false,
-                    title = "",
-                    field = "state",
-                    width = "50",
-                    headerMenu = DynamicMenuBuilder().buildTableMenu(this),
-                    hozAlign = Align.CENTER,
-                    vertAlign = VAlign.MIDDLE,
-                    formatterComponentFunction = { _, _, data -> buildActionButton(data) }
-            ),
-            ColumnDefinition(
-                    download = false,
-                    title = "Title",
-                    field = "title",
-                    headerFilter = Editor.INPUT,
-                    width = "700",
-                    formatterComponentFunction = { _, _, data -> buildObjectButton(data) }
-            ),
-            ColumnDefinition(
-                    download = false,
-                    title = "Type",
-                    field = "type",
-                    headerFilter = Editor.INPUT,
-                    width = "200"
-            ),
-            ColumnDefinition("State", "state", width = "100", headerFilter = Editor.INPUT, download = false),
-            ColumnDefinition("Method", "method", width = "100", headerFilter = Editor.INPUT, download = false),
-            ColumnDefinition(
-                    download = false,
-                    title = "# of Agg.",
-                    field = "nOfAggregators",
-                    headerFilter = Editor.INPUT,
-                    width = "20"),
-            ColumnDefinition("req.len", field = "requestLength", width = "100", hozAlign = Align.RIGHT, download = false),
-            ColumnDefinition(
-                    download = false,
-                    title = "response",
-                    field = "response",
-                    headerFilter = Editor.INPUT,
-                    width = "200",
-            ),
-            ColumnDefinition("resp.len", field = "responseLength", width = "100", hozAlign = Align.RIGHT, download = false),
-            ColumnDefinition("cacheHits", field = "cacheHits", width = "100", hozAlign = Align.RIGHT, download = false),
-            ColumnDefinition("duration", field = "duration", width = "100", hozAlign = Align.RIGHT, download = false),
-            ColumnDefinition(
-                    download = false,
-                    title = "Created",
-                    field = "createdAt",
-                    sorter = Sorter.DATETIME,
-                    formatter = Formatter.DATETIME,
-                    formatterParams = obj { outputFormat = "HH:mm:ss.SSS" },
-                    width = "100"),
-            ColumnDefinition(
-                    download = false,
-                    title = "Updated",
-                    field = "updatedAt",
-                    sorter = Sorter.DATETIME,
-                    formatter = Formatter.DATETIME,
-                    formatterParams = obj { outputFormat = "HH:mm:ss.SSS" },
-                    width = "100")
+        ColumnDefinition<LogEntry>(
+            download = false,
+            title = "",
+            field = "state",
+            width = "50",
+            headerMenu = DynamicMenuBuilder().buildTableMenu(this),
+            hozAlign = Align.CENTER,
+            vertAlign = VAlign.MIDDLE,
+            formatterComponentFunction = { _, _, data -> buildActionButton(data) }
+        ),
+        ColumnDefinition(
+            download = false,
+            title = "Title",
+            field = "title",
+            headerFilter = Editor.INPUT,
+            width = "700",
+            formatterComponentFunction = { _, _, data -> buildObjectButton(data) }
+        ),
+        ColumnDefinition(
+            download = false,
+            title = "Type",
+            field = "type",
+            headerFilter = Editor.INPUT,
+            width = "200"
+        ),
+        ColumnDefinition("State", "state", width = "100", headerFilter = Editor.INPUT, download = false),
+        ColumnDefinition("Method", "method", width = "100", headerFilter = Editor.INPUT, download = false),
+        ColumnDefinition(
+            download = false,
+            title = "# of Agg.",
+            field = "nOfAggregators",
+            headerFilter = Editor.INPUT,
+            width = "20"
+        ),
+        ColumnDefinition("req.len", field = "requestLength", width = "100", hozAlign = Align.RIGHT, download = false),
+        ColumnDefinition(
+            download = false,
+            title = "response",
+            field = "response",
+            headerFilter = Editor.INPUT,
+            width = "200",
+        ),
+        ColumnDefinition("resp.len", field = "responseLength", width = "100", hozAlign = Align.RIGHT, download = false),
+        ColumnDefinition("cacheHits", field = "cacheHits", width = "100", hozAlign = Align.RIGHT, download = false),
+        ColumnDefinition("duration", field = "duration", width = "100", hozAlign = Align.RIGHT, download = false),
+        ColumnDefinition(
+            download = false,
+            title = "Created",
+            field = "createdAt",
+            sorter = Sorter.DATETIME,
+            formatter = Formatter.DATETIME,
+            formatterParams = obj { outputFormat = "HH:mm:ss.SSS" },
+            width = "100"
+        ),
+        ColumnDefinition(
+            download = false,
+            title = "Updated",
+            field = "updatedAt",
+            sorter = Sorter.DATETIME,
+            formatter = Formatter.DATETIME,
+            formatterParams = obj { outputFormat = "HH:mm:ss.SSS" },
+            width = "100"
+        )
     )
 
     private fun buildObjectButton(data: LogEntry): Button {
         val b = Button(
-                text = StringUtils.shorten(data.title),
-                icon = data.state.iconName,
-                style = ButtonStyle.LINK)
+            text = StringUtils.shorten(data.title),
+            icon = data.state.iconName,
+            style = ButtonStyle.LINK
+        )
         b.onClick {
             kotlinx.browser.window.open(data.title) //IMPROVE should be URL
         }
@@ -115,9 +120,10 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
 
     private fun buildActionButton(data: LogEntry): Button {
         val b = Button(
-                text = "",
-                icon = "fa fa-info-circle",
-                style = data.state.style        )
+            text = "",
+            icon = "fa fa-info-circle",
+            style = data.state.style
+        )
         b.onClick { EventLogDetail(data).open() }
         b.margin = CssSize(-10, UNIT.px)
         b.addCssClass("btn-sm")
@@ -125,22 +131,35 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
     }
 
     init {
-        hPanel(FlexWrap.NOWRAP,
-                alignItems = AlignItems.CENTER,
-                spacing = 20) {
+        hPanel(
+            FlexWrap.NOWRAP,
+            alignItems = AlignItems.CENTER,
+            spacing = 20
+        ) {
             border = Border(width = 1.px)
         }
 
         val options = TabulatorOptions(
-                movableColumns = true,
-                height = Constants.calcHeight,
-                layout = Layout.FITCOLUMNS,
-                columns = columns,
-                persistenceMode = false
+            movableColumns = true,
+            height = Constants.calcHeight,
+            layout = Layout.FITCOLUMNS,
+            columns = columns,
+            persistenceMode = false
         )
 
         tabulator = tabulator(model, options = options) {
             setEventListener<Tabulator<LogEntry>> {
+            }
+        }
+
+        tabulator.onEvent {
+            mouseover = {
+                console.log("[ED.init] dialog on init")
+                val jst = tabulator.jsTabulator
+                val value = filterState?.name
+                if (jst != null && value != null) {
+                    jst.setHeaderFilterValue("state", value)
+                }
             }
         }
     }
