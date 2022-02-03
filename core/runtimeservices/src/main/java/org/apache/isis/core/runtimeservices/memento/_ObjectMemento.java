@@ -36,7 +36,8 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer.Format;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -169,22 +170,23 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
     private enum RecreateStrategy {
         /**
          * The {@link ManagedObject} that this is the memento for, directly has
-         * an {@link EncodableFacet} (it is almost certainly a value), and so is
+         * an {@link ValueFacet} (it is almost certainly a value), and so is
          * stored directly.
          */
-        ENCODEABLE {
+        VALUE {
             @Override
             public ManagedObject recreateObject(
                     final _ObjectMemento memento,
                     final MetaModelContext mmc) {
 
-                EncodableFacet encodableFacet = mmc.getSpecificationLoader()
+                val valueFacet = mmc.getSpecificationLoader()
                         .specForLogicalType(memento.logicalType)
-                        .map(spec->spec.getFacet(EncodableFacet.class))
+                        .map(spec->spec.getFacet(ValueFacet.class))
                         .orElseThrow(()->_Exceptions.unrecoverableFormatted(
-                                "logical type %s is expected to have a EncodableFacet", memento.logicalType));
+                                "logical type %s is expected to have a ValueFacet", memento.logicalType));
 
-                return encodableFacet.fromEncodedString(memento.encodableValue);
+                return mmc.getObjectManager().adapt(
+                        valueFacet.fromEncodedString(Format.JSON, memento.encodableValue));
             }
 
             @Override
@@ -192,7 +194,7 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
                     final _ObjectMemento memento,
                     final _ObjectMemento otherMemento) {
 
-                return otherMemento.recreateStrategy == ENCODEABLE &&
+                return otherMemento.recreateStrategy == VALUE &&
                         memento.encodableValue.equals(otherMemento.encodableValue);
             }
 
@@ -349,7 +351,7 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
     private String titleHint;
 
     /**
-     * The current value, if {@link RecreateStrategy#ENCODEABLE}; will be <tt>null</tt> otherwise.
+     * The current value, if {@link RecreateStrategy#VALUE}; will be <tt>null</tt> otherwise.
      *
      * <p>
      * Also, populated only if {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}
@@ -410,9 +412,9 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
         this.cardinality = Cardinality.SCALAR;
         this.logicalType = spec.getLogicalType();
 
-        if(spec.isEncodeable()) {
+        if(spec.isValue()) {
             this.encodableValue = bookmark.getIdentifier();
-            this.recreateStrategy = RecreateStrategy.ENCODEABLE;
+            this.recreateStrategy = RecreateStrategy.VALUE;
             return;
         }
 
@@ -434,7 +436,7 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
         this.cardinality = Cardinality.SCALAR;
         this.logicalType = logicalType;
         this.encodableValue = encodableValue;
-        this.recreateStrategy = RecreateStrategy.ENCODEABLE;
+        this.recreateStrategy = RecreateStrategy.VALUE;
     }
 
 
@@ -452,11 +454,11 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
             return;
         }
 
-        val encodableFacet = spec.getFacet(EncodableFacet.class);
-        val isEncodable = encodableFacet != null;
+        val valueFacet = spec.getFacet(ValueFacet.class);
+        val isEncodable = valueFacet != null;
         if (isEncodable) {
-            encodableValue = encodableFacet.toEncodedString(adapter);
-            recreateStrategy = RecreateStrategy.ENCODEABLE;
+            encodableValue = valueFacet.toEncodedString(Format.JSON, adapter.getPojo());
+            recreateStrategy = RecreateStrategy.VALUE;
             return;
         }
 

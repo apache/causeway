@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.value;
 
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -60,24 +61,28 @@ implements ValueFacet<T> {
     }
 
     @Getter(onMethod_ = {@Override})
-    private final Can<ValueSemanticsProvider<T>> valueSemantics;
+    private final Can<ValueSemanticsProvider<T>> allValueSemantics;
+    private final ValueSerializer<T> valueSerializer;
 
     protected ValueFacetAbstract(
-            final Can<ValueSemanticsProvider<T>> valueSemantics,
+            final Can<ValueSemanticsProvider<T>> allValueSemantics,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
 
         super(type(), holder, precedence);
-        this.valueSemantics = valueSemantics;
+        this.allValueSemantics = allValueSemantics;
+        this.valueSerializer = selectDefaultSemantics()
+                .map(ValueSerializerDefault::forSemantics)
+                .orElse(null); // JUnit support
     }
 
     protected boolean hasSemanticsProvider() {
-        return !this.valueSemantics.isEmpty();
+        return !this.allValueSemantics.isEmpty();
     }
 
     @Override
     public <X> Stream<X> streamValueSemantics(final Class<X> requiredType) {
-        return valueSemantics.stream()
+        return allValueSemantics.stream()
         .filter(requiredType::isInstance)
         .map(requiredType::cast);
     }
@@ -85,12 +90,20 @@ implements ValueFacet<T> {
     @Override
     public boolean semanticEquals(@NonNull final Facet other) {
         return (other instanceof ValueFacetAbstract)
-                ? this.getValueSemantics().equals(((ValueFacetAbstract<?>)other).getValueSemantics())
+                ? this.getAllValueSemantics().equals(((ValueFacetAbstract<?>)other).getAllValueSemantics())
                 : false;
     }
 
     @Override
-    public final LogicalType getValueType() {
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("default-semantics", selectDefaultSemantics()
+                .map(ValueSemanticsProvider::toString)
+                .orElse("none"));
+    }
+
+    @Override
+    public final LogicalType getLogicalType() {
         return getFacetHolder().getFeatureIdentifier().getLogicalType();
     }
 
@@ -107,11 +120,23 @@ implements ValueFacet<T> {
                 iaProvider.currentInteractionContext().orElse(null));
     }
 
+    // -- TO STRING SERIALIZATION
+
+    @Override
+    public T fromEncodedString(final Format format, final String encodedData) {
+        return valueSerializer.fromEncodedString(format, encodedData);
+    }
+
+    @Override
+    public String toEncodedString(final Format format, final T value) {
+        return valueSerializer.toEncodedString(format, value);
+    }
+
     // -- ORDER RELATION
 
     @Override
     public Optional<OrderRelation<T, ?>> selectDefaultOrderRelation() {
-        return getValueSemantics()
+        return getAllValueSemantics()
                 .stream()
                 .filter(isMatchingAnyOf(Can.empty()))
                 .map(ValueSemanticsProvider::getOrderRelation)
@@ -124,7 +149,7 @@ implements ValueFacet<T> {
 
     @Override
     public Optional<DefaultsProvider<T>> selectDefaultDefaultsProvider() {
-        return getValueSemantics()
+        return getAllValueSemantics()
                 .stream()
                 .filter(isMatchingAnyOf(Can.empty()))
                 .map(ValueSemanticsProvider::getDefaultsProvider)
@@ -136,7 +161,7 @@ implements ValueFacet<T> {
 
     @Override
     public Optional<ValueSemanticsProvider<T>> selectDefaultSemantics() {
-        return getValueSemantics()
+        return getAllValueSemantics()
                 .stream()
                 .filter(isMatchingAnyOf(Can.empty()))
                 .filter(_NullSafe::isPresent)
@@ -147,7 +172,7 @@ implements ValueFacet<T> {
 
     @Override
     public Optional<Parser<T>> selectDefaultParser() {
-        return getValueSemantics()
+        return getAllValueSemantics()
                 .stream()
                 .filter(isMatchingAnyOf(Can.empty()))
                 .map(ValueSemanticsProvider::getParser)
@@ -173,14 +198,14 @@ implements ValueFacet<T> {
 
     @Override
     public Parser<T> fallbackParser(final Identifier featureIdentifier) {
-        return fallbackParser(getValueType(), featureIdentifier);
+        return fallbackParser(getLogicalType(), featureIdentifier);
     }
 
     // -- RENDERER
 
     @Override
     public Optional<Renderer<T>> selectDefaultRenderer() {
-        return getValueSemantics()
+        return getAllValueSemantics()
                 .stream()
                 .filter(isMatchingAnyOf(Can.empty()))
                 .map(ValueSemanticsProvider::getRenderer)
@@ -206,7 +231,7 @@ implements ValueFacet<T> {
 
     @Override
     public Renderer<T> fallbackRenderer(final Identifier featureIdentifier) {
-        return fallbackRenderer(getValueType(), featureIdentifier);
+        return fallbackRenderer(getLogicalType(), featureIdentifier);
     }
 
     // -- UTILITY
@@ -235,7 +260,7 @@ implements ValueFacet<T> {
 
     private Stream<ValueSemanticsProvider<T>> streamValueSemanticsHonoringQualifiers(
             final FacetHolder feature) {
-        return getValueSemantics()
+        return getAllValueSemantics()
                 .stream()
                 .filter(isMatchingAnyOf(qualifiersAccepted(feature)));
     }

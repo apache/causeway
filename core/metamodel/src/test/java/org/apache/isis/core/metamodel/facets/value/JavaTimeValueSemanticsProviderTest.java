@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -41,10 +41,9 @@ import lombok.NonNull;
 import lombok.val;
 
 /**
- * Actually testing the LocalDateTimeValueSemantics under the hood.
- * XXX Maybe move/rename this class.
+ * Testing the LocalDateTimeValueSemantics under the hood.
  */
-class JavaUtilDateValueSemanticsProviderTest
+public class JavaTimeValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {
 
     @SuppressWarnings("deprecation")
@@ -52,7 +51,7 @@ extends ValueSemanticsProviderAbstractTestCase {
     private JavaUtilDateValueSemantics valueSemantics;
 
     @Test
-    void testInvalidParse() {
+    public void testInvalidParse() {
         setSemantics(valueSemantics = createValueSemantics(TimePrecision.SECOND));
 
         assertThrows(TextEntryParseException.class, ()->{
@@ -61,14 +60,14 @@ extends ValueSemanticsProviderAbstractTestCase {
     }
 
     @Test
-    void testRendering() {
+    public void testRendering() {
         setSemantics(valueSemantics = createValueSemantics(TimePrecision.SECOND));
         val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         assertEquals("Mar 13, 2013, 5:59:03 PM", valueSemantics.simpleTextPresentation(_context , date));
     }
 
     @Test // support omitted parts on input
-    void testParseNoMinutes() {
+    public void testParseNoMinutes() {
         setSemantics(valueSemantics = createValueSemantics(TimePrecision.SECOND));
         val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17");
@@ -76,7 +75,7 @@ extends ValueSemanticsProviderAbstractTestCase {
     }
 
     @Test // support omitted parts on input
-    void testParseNoSeconds() {
+    public void testParseNoSeconds() {
         setSemantics(valueSemantics = createValueSemantics(TimePrecision.SECOND));
         val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59");
@@ -84,7 +83,7 @@ extends ValueSemanticsProviderAbstractTestCase {
     }
 
     @Test
-    void testParseSeconds() {
+    public void testParseSeconds() {
         setSemantics(valueSemantics = createValueSemantics(TimePrecision.SECOND));
         val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03");
@@ -92,7 +91,7 @@ extends ValueSemanticsProviderAbstractTestCase {
     }
 
     @Test
-    void testParseMillis() {
+    public void testParseMillis() {
         setSemantics(valueSemantics = createValueSemantics(TimePrecision.MILLI_SECOND));
         val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03.123");
@@ -100,7 +99,7 @@ extends ValueSemanticsProviderAbstractTestCase {
     }
 
     @Test
-    void testParseMicros() {
+    public void testParseMicros() {
         setSemantics(valueSemantics = createValueSemantics(TimePrecision.MICRO_SECOND));
         val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03.123456");
@@ -108,7 +107,7 @@ extends ValueSemanticsProviderAbstractTestCase {
     }
 
     @Test
-    void testParseNanos() {
+    public void testParseNanos() {
         setSemantics(valueSemantics = createValueSemantics(TimePrecision.NANO_SECOND));
         val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03.123456789");

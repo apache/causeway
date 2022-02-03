@@ -39,8 +39,8 @@ import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer.Format;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -96,9 +96,9 @@ public class JsonValueEncoder {
         if (!argValueRepr.isValue()) {
             throw new IllegalArgumentException("Representation must be of a value");
         }
-        final EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
-        if (encodableFacet == null) {
-            String reason = "ObjectSpec expected to have an EncodableFacet";
+        val valueFacet = objectSpec.getFacet(ValueFacet.class);
+        if (valueFacet == null) {
+            String reason = "ObjectSpec expected to have a ValueFacet";
             throw new IllegalArgumentException(reason);
         }
 
@@ -108,7 +108,8 @@ public class JsonValueEncoder {
             // best effort
             if (argValueRepr.isString()) {
                 final String argStr = argValueRepr.asString();
-                return encodableFacet.fromEncodedString(argStr);
+                return ManagedObject.of(objectSpec,
+                        valueFacet.fromEncodedString(Format.JSON, argStr));
             }
 
             throw new IllegalArgumentException("Unable to parse value");
@@ -123,7 +124,8 @@ public class JsonValueEncoder {
         if (argValueRepr.isString()) {
             final String argStr = argValueRepr.asString();
             try {
-                return encodableFacet.fromEncodedString(argStr);
+                return ManagedObject.of(objectSpec,
+                        valueFacet.fromEncodedString(Format.JSON, argStr));
             } catch(TextEntryParseException ex) {
                 throw new IllegalArgumentException(ex.getMessage());
             }
@@ -190,11 +192,11 @@ public class JsonValueEncoder {
         }
 
         // else
-        val encodableFacet = objectSpec.getFacet(EncodableFacet.class);
-        if (encodableFacet == null) {
-            throw new IllegalArgumentException("objectSpec expected to have EncodableFacet");
+        val valueFacet = objectSpec.getFacet(ValueFacet.class);
+        if (valueFacet == null) {
+            throw new IllegalArgumentException("objectSpec expected to have ValueFacet");
         }
-        return encodableFacet.toEncodedString(adapter);
+        return valueFacet.toEncodedString(Format.JSON, adapter.getPojo());
     }
 
 

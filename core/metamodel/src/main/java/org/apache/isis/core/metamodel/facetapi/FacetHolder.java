@@ -74,7 +74,7 @@ public interface FacetHolder extends HasMetaModelContext {
     default boolean hasValueSemantics(
             final @NonNull Class<?> requiredType) {
         return lookupFacet(ValueFacet.class).stream()
-        .map(ValueFacet::getValueSemantics)
+        .map(ValueFacet::getAllValueSemantics)
         .flatMap(Can<ValueSemanticsProvider<?>>::stream)
         .anyMatch(valueSemantics->requiredType.isAssignableFrom(valueSemantics.getClass()));
     }
@@ -83,7 +83,7 @@ public interface FacetHolder extends HasMetaModelContext {
     default <T> Stream<T> streamValueSemantics(
             final @NonNull Class<T> requiredType) {
         return lookupFacet(ValueFacet.class).stream()
-        .map(ValueFacet::getValueSemantics)
+        .map(ValueFacet::getAllValueSemantics)
         .flatMap(Can<ValueSemanticsProvider<?>>::stream)
         .filter(valueSemantics->requiredType.isAssignableFrom(valueSemantics.getClass()))
         .map(requiredType::cast);

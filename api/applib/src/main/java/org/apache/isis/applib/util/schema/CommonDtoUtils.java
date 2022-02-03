@@ -267,27 +267,27 @@ public final class CommonDtoUtils {
 
     @SneakyThrows
     static String enumDtoToJson(final EnumDto dto) {
-        val map = Map.<String, String>of(
-                "enumType", dto.getEnumType(),
-                "enumName", dto.getEnumName());
+        val map = new LinkedHashMap<String, Object>(); // preserve order
+        map.put("enumType", dto.getEnumType());
+        map.put("enumName", dto.getEnumName());
         return new ObjectMapper().writer().writeValueAsString(map);
     }
 
     @SneakyThrows
     static String blobDtoToJson(final BlobDto dto) {
-        val map = Map.<String, Object>of(
-                "name", dto.getName(),
-                "mimeType", dto.getMimeType(),
-                "bytes", dto.getBytes());
+        val map = new LinkedHashMap<String, Object>(); // preserve order
+        map.put("name", dto.getName());
+        map.put("mimeType", dto.getMimeType());
+        map.put("bytes", dto.getBytes());
         return new ObjectMapper().writer().writeValueAsString(map);
     }
 
     @SneakyThrows
     static String clobDtoToJson(final ClobDto dto) {
-        val map = Map.<String, Object>of(
-                "name", dto.getName(),
-                "mimeType", dto.getMimeType(),
-                "chars", dto.getChars());
+        val map = new LinkedHashMap<String, Object>(); // preserve order
+        map.put("name", dto.getName());
+        map.put("mimeType", dto.getMimeType());
+        map.put("chars", dto.getChars());
         return new ObjectMapper().writer().writeValueAsString(map);
     }
 

@@ -35,7 +35,8 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -194,9 +195,9 @@ public class PageParameterUtils {
         }
 
         final ObjectSpecification objSpec = adapter.getSpecification();
-        if(objSpec.isEncodeable()) {
-            final EncodableFacet encodeable = objSpec.getFacet(EncodableFacet.class);
-            return encodeable.toEncodedString(adapter);
+        if(objSpec.isValue()) {
+            val valueFacet = objSpec.getFacet(ValueFacet.class);
+            return valueFacet.toEncodedString(ValueSerializer.Format.JSON, adapter.getPojo());
         }
 
         return ManagedObjects.stringify(adapter).orElse(null);
@@ -210,9 +211,10 @@ public class PageParameterUtils {
             return null;
         }
 
-        if(objSpec.isEncodeable()) {
-            final EncodableFacet encodeable = objSpec.getFacet(EncodableFacet.class);
-            return encodeable.fromEncodedString(encoded);
+        if(objSpec.isValue()) {
+            val valueFacet = objSpec.getFacet(ValueFacet.class);
+            return ManagedObject.of(objSpec,
+                    valueFacet.fromEncodedString(ValueSerializer.Format.JSON, encoded));
         }
 
         try {

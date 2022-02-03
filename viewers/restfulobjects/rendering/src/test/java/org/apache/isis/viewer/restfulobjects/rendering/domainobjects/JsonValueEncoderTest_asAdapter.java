@@ -47,7 +47,8 @@ import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer.Format;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -57,14 +58,14 @@ import lombok.val;
 
 public class JsonValueEncoderTest_asAdapter {
 
-    @Rule public JUnitRuleMockery2 context = 
+    @Rule public JUnitRuleMockery2 context =
             JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     @Mock private ObjectSpecification mockObjectSpec;
-    @Mock private EncodableFacet mockEncodableFacet;
+    @Mock private ValueFacet mockValueFacet;
     @Mock private ManagedObject mockObjectAdapter;
     @Mock private SpecificationLoader specLoader;
-    
+
     private JsonRepresentation representation;
     private JsonValueEncoder jsonValueEncoder;
 
@@ -78,7 +79,7 @@ public class JsonValueEncoderTest_asAdapter {
 
     @After
     public void tearDown() throws Exception {
-        
+
     }
 
 
@@ -94,19 +95,19 @@ public class JsonValueEncoderTest_asAdapter {
 
     @Test(expected = IllegalArgumentException.class)
     public void whenReprIsAnArray() throws Exception {
-        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
+        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
         jsonValueEncoder.asAdapter(mockObjectSpec, JsonRepresentation.newArray(), null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void whenReprIsAMap() throws Exception {
-        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
+        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
         assertNull(jsonValueEncoder.asAdapter(mockObjectSpec, JsonRepresentation.newMap(), null));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void whenSpecDoesNotHaveAnEncodableFacet() throws Exception {
-        allowingObjectSpecHas(EncodableFacet.class, null);
+        allowingObjectSpecHas(ValueFacet.class, null);
 
         assertNull(jsonValueEncoder.asAdapter(mockObjectSpec, representation, null));
     }
@@ -123,7 +124,7 @@ public class JsonValueEncoderTest_asAdapter {
 
     private void whenReprIsBoolean(final Class<?> correspondingClass) {
         // given
-        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
+        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
         allowingObjectSpecCorrespondingClassAndObjectTypeIs(correspondingClass);
         final boolean value = true;
         representation = new JsonRepresentation(BooleanNode.valueOf(value));
@@ -144,12 +145,12 @@ public class JsonValueEncoderTest_asAdapter {
     @Test(expected = IllegalArgumentException.class)
     public void whenObjectSpecIsBooleanButReprIsNot() throws Exception {
         // given
-        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
+        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
         allowingObjectSpecCorrespondingClassAndObjectTypeIs(boolean.class);
 
         context.checking(new Expectations() {
             {
-                oneOf(mockEncodableFacet).fromEncodedString("aString");
+                oneOf(mockValueFacet).fromEncodedString(Format.JSON, "aString");
                 will(throwException(new TextEntryParseException("'aString' cannot be parsed as a boolean value")));
             }
         });
@@ -170,7 +171,7 @@ public class JsonValueEncoderTest_asAdapter {
 
     private void whenReprIsInteger(final Class<?> correspondingClass) {
         // given
-        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
+        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
         allowingObjectSpecCorrespondingClassAndObjectTypeIs(correspondingClass);
         final int value = 123;
         representation = new JsonRepresentation(IntNode.valueOf(value));
@@ -191,7 +192,7 @@ public class JsonValueEncoderTest_asAdapter {
     @Test(expected = IllegalArgumentException.class)
     public void whenObjectSpecIsIntegerButReprIsNot() throws Exception {
         // given
-        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
+        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
         allowingObjectSpecCorrespondingClassAndObjectTypeIs(int.class);
 
         representation = JsonRepresentation.newMap("foo", "bar");
@@ -212,7 +213,7 @@ public class JsonValueEncoderTest_asAdapter {
 
     private void whenReprIsLong(final Class<?> correspondingClass) {
         // given
-        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
+        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
         allowingObjectSpecCorrespondingClassAndObjectTypeIs(correspondingClass);
         final long value = 1234567890L;
         representation = new JsonRepresentation(LongNode.valueOf(value));
@@ -233,12 +234,12 @@ public class JsonValueEncoderTest_asAdapter {
     @Test(expected = IllegalArgumentException.class)
     public void whenObjectSpecIsLongButReprIsNot() throws Exception {
         // given
-        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
+        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
         allowingObjectSpecCorrespondingClassAndObjectTypeIs(long.class);
 
         context.checking(new Expectations() {
             {
-                oneOf(mockEncodableFacet).fromEncodedString("aString");
+                oneOf(mockValueFacet).fromEncodedString(Format.JSON, "aString");
                 will(throwException(new TextEntryParseException("'aString' cannot be parsed as a long value")));
             }
         });
@@ -259,7 +260,7 @@ public class JsonValueEncoderTest_asAdapter {
 
     private void whenReprIsDouble(final Class<?> correspondingClass) {
         // given
-        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
+        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
         allowingObjectSpecCorrespondingClassAndObjectTypeIs(correspondingClass);
         final double value = 123.45;
         representation = new JsonRepresentation(DoubleNode.valueOf(value));
@@ -280,7 +281,7 @@ public class JsonValueEncoderTest_asAdapter {
     @Test(expected = IllegalArgumentException.class)
     public void whenObjectSpecIsDoubleButReprIsNot() throws Exception {
         // given
-        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
+        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
         allowingObjectSpecCorrespondingClassAndObjectTypeIs(double.class);
 
         representation = JsonRepresentation.newMap("foo", "bar");
@@ -292,7 +293,7 @@ public class JsonValueEncoderTest_asAdapter {
     @Test
     public void whenReprIsBigInteger() throws Exception {
         // given
-        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
+        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
         allowingObjectSpecCorrespondingClassAndObjectTypeIs(BigInteger.class);
         final BigInteger value = BigInteger.valueOf(123);
         representation = new JsonRepresentation(BigIntegerNode.valueOf(value));
@@ -313,7 +314,7 @@ public class JsonValueEncoderTest_asAdapter {
     @Test(expected = IllegalArgumentException.class)
     public void whenObjectSpecIsBigIntegerButReprIsNot() throws Exception {
         // given
-        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
+        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
         allowingObjectSpecCorrespondingClassAndObjectTypeIs(BigInteger.class);
 
         representation = JsonRepresentation.newMap("foo", "bar");
@@ -325,7 +326,7 @@ public class JsonValueEncoderTest_asAdapter {
     @Test
     public void whenReprIsBigDecimal() throws Exception {
         // given
-        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
+        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
         allowingObjectSpecCorrespondingClassAndObjectTypeIs(BigDecimal.class);
         final BigDecimal value = new BigDecimal("123234234.45612312343535");
         representation = new JsonRepresentation(DecimalNode.valueOf(value));
@@ -346,7 +347,7 @@ public class JsonValueEncoderTest_asAdapter {
     @Test(expected = IllegalArgumentException.class)
     public void whenObjectSpecIsBigDecimalButReprIsNot() throws Exception {
         // given
-        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
+        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
         allowingObjectSpecCorrespondingClassAndObjectTypeIs(BigDecimal.class);
 
         representation = JsonRepresentation.newMap("foo", "bar");
@@ -358,7 +359,7 @@ public class JsonValueEncoderTest_asAdapter {
     @Test
     public void whenReprIsString() throws Exception {
         // given
-        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
+        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
         allowingObjectSpecCorrespondingClassAndObjectTypeIs(String.class);
         representation = new JsonRepresentation(TextNode.valueOf("aString"));
 

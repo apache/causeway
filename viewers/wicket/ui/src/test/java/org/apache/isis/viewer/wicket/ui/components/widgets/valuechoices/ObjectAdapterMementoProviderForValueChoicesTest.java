@@ -86,7 +86,7 @@ public class ObjectAdapterMementoProviderForValueChoicesTest {
             allowing(mockSpecificationLoader).specForLogicalType(fakeLocalType);
             will(returnValue(Optional.of(mockSpec)));
 
-            allowing(mockSpec).isEncodeable();
+            allowing(mockSpec).isValue();
             will(returnValue(true));
         }});
 

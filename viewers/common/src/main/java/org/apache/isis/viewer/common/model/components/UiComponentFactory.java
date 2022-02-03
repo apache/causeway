@@ -120,7 +120,7 @@ public interface UiComponentFactory<B, C> {
         public boolean hasFacetForValueType(final @Nullable Class<?> valueType) {
             return valueType!=null
                     ? getFeatureTypeSpec().lookupFacet(ValueFacet.class)
-                            .map(ValueFacet::getValueType)
+                            .map(ValueFacet::getLogicalType)
                             .map(LogicalType::getCorrespondingClass)
                             .map(valueType::equals)
                             .orElse(false)

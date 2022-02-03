@@ -51,7 +51,6 @@ import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
@@ -373,14 +372,6 @@ extends
     default boolean isValueOrIsParented() {
         return isValue() || isParented();
     }
-
-    /**
-     * Determines if objects of this type can be converted to a data-stream.
-     *
-     * <p>
-     * In effect, means has got {@link EncodableFacet}.
-     */
-    boolean isEncodeable();
 
     /**
      * Whether has the {@link ImmutableFacet}.

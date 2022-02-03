@@ -46,7 +46,7 @@ public class JsonParserHelper {
     private final ObjectSpecification objectSpec;
     private final JsonValueEncoder jsonValueEncoder;
 
-    public JsonParserHelper(IResourceContext resourceContext, ObjectSpecification objectSpecification) {
+    public JsonParserHelper(final IResourceContext resourceContext, final ObjectSpecification objectSpecification) {
         this.objectSpec = objectSpecification;
         this.resourceContext = resourceContext;
         this.jsonValueEncoder = resourceContext.getMetaModelContext().getServiceRegistry()
@@ -100,7 +100,7 @@ public class JsonParserHelper {
         final JsonRepresentation argValueRepr = argRepr.getRepresentation("value");
 
         // value (encodable)
-        if (objectSpec.isEncodeable()) {
+        if (objectSpec.isValue()) {
             try {
                 return jsonValueEncoder.asAdapter(objectSpec, argValueRepr, null);
             }catch(IllegalArgumentException ex) {

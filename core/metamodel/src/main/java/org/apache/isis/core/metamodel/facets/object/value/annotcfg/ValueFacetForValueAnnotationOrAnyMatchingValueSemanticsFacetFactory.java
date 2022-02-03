@@ -29,9 +29,8 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetFromValueFacet;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.facets.object.encodeable.encoder.EncodableFacetFromValueFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
@@ -62,8 +61,8 @@ import lombok.extern.log4j.Log4j2;
  * <p>
  * In addition, the following facets may be installed:
  * <ul>
- * <li> {@link EncodableFacet} - if a {@link ValueSemanticsProvider} has been specified
- * explicitly in the annotation (or is picked up through component registration)</li>
+ * <li> {@link DefaultedFacet} - if a {@link ValueSemanticsProvider} has been specified
+ * explicitly in the annotation (or is picked up through component registration), that provides defaults</li>
  * <li> {@link ImmutableFacet} - if specified explicitly in the annotation
  * </ul>
  * <p>
@@ -129,7 +128,6 @@ extends FacetFactoryAbstract {
         addFacet(new ImmutableFacetViaValueSemantics(holder));
         addFacet(TitleFacetFromValueFacet.create(valueFacet, holder));
 
-        addFacetIfPresent(EncodableFacetFromValueFacet.create(valueFacet, holder));
         addFacetIfPresent(TypicalLengthFacetFromValueFacet.create(valueFacet, holder));
         addFacetIfPresent(MaxLengthFacetFromValueFacet.create(valueFacet, holder));
         addFacetIfPresent(DefaultedFacetFromValueFacet.create(valueFacet, holder));

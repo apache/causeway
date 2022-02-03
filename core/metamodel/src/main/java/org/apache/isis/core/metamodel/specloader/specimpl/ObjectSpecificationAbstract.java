@@ -61,7 +61,6 @@ import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
@@ -849,11 +848,6 @@ implements ObjectSpecification {
     @Override
     public boolean isHidden() {
         return containsFacet(HiddenFacet.class);
-    }
-
-    @Override
-    public boolean isEncodeable() {
-        return containsFacet(EncodableFacet.class);
     }
 
     @Override

@@ -35,32 +35,34 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import org.apache.isis.applib.services.iactn.InteractionProvider;
+import org.apache.isis.applib.value.semantics.Parser;
+import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.facets.object.encodeable.encoder.EncodableFacetFromValueFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer;
+import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer.Format;
+import org.apache.isis.core.metamodel.facets.object.value.ValueSerializerDefault;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics;
+
+import lombok.Getter;
 
 public abstract class ValueSemanticsProviderAbstractTestCase {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    @Mock protected FacetHolder mockFacetHolder;
     @Mock protected InteractionProvider mockInteractionProvider;
     @Mock protected ManagedObject mockAdapter;
 
     protected MetaModelContext metaModelContext;
 
-    //private ValueSemanticsProviderAndFacetAbstract<?> valueSemanticsProvider;
-    private ValueSemanticsProvider<?> valueSemanticsProvider;
-    private EncodableFacetFromValueFacet encodeableFacet;
+    @Getter private ValueSemanticsProvider<?> semantics;
+    @Getter private ValueSerializer valueSerializer;
 
     @Before
     public void setUp() throws Exception {
@@ -73,12 +75,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
 
         context.checking(new Expectations() {
             {
-
                 never(mockInteractionProvider);
-                //never(mockSessionServiceInternal);
-
-                allowing(mockFacetHolder).getMetaModelContext();
-                will(returnValue(metaModelContext));
             }
         });
     }
@@ -98,33 +95,36 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     }
 
     protected void setSemantics(final ValueSemanticsAbstract<?> valueSemantics) {
-        this.valueSemanticsProvider = valueSemantics;
-        this.encodeableFacet = EncodableFacetFromValueFacet.forTesting(
-                valueSemantics,
-                mockFacetHolder);
-    }
-
-    protected EncodableFacet getEncodeableFacet() {
-        return encodeableFacet;
+        this.semantics = valueSemantics;
+        this.valueSerializer = ValueSerializerDefault
+                .forSemantics(valueSemantics);
     }
 
     protected ManagedObject createAdapter(final Object object) {
         return mockAdapter;
     }
 
+    protected Parser getParser() {
+        return semantics.getParser();
+    }
+
+    protected Renderer getRenderer() {
+        return semantics.getRenderer();
+    }
+
     @Test
     public void testParseNull() throws Exception {
-        Assume.assumeThat(valueSemanticsProvider.getParser(), is(not(nullValue())));
-        assertEquals(null, valueSemanticsProvider.getParser().parseTextRepresentation(null, null));
+        assumeValueSemanticsProviderIsSetup();
+        assertEquals(null, semantics.getParser().parseTextRepresentation(null, null));
     }
 
     @Test
     public void testParseEmptyString() throws Exception {
-        Assume.assumeThat(valueSemanticsProvider.getParser(), is(not(nullValue())));
+        assumeValueSemanticsProviderIsSetup();
 
-        final Object newValue = valueSemanticsProvider.getParser().parseTextRepresentation(null, "");
+        final Object newValue = semantics.getParser().parseTextRepresentation(null, "");
 
-        if(valueSemanticsProvider instanceof StringValueSemantics) {
+        if(semantics instanceof StringValueSemantics) {
             // string parsing is an unary identity
             assertEquals("", newValue);
         } else {
@@ -135,30 +135,41 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testDecodeNULL() throws Exception {
-        Assume.assumeThat(valueSemanticsProvider, is(not(nullValue())));
+        assumeValueSemanticsProviderIsSetup();
 
-        final Object newValue = encodeableFacet.fromEncodedString(EncodableFacetFromValueFacet.ENCODED_NULL);
+        final Object newValue = getValueSerializer()
+                .fromEncodedString(Format.JSON, ValueSerializerDefault.ENCODED_NULL);
         assertNull(newValue);
     }
 
     @Test
     public void testEmptyEncoding() {
-        Assume.assumeThat(valueSemanticsProvider, is(not(nullValue())));
+        assumeValueSemanticsProviderIsSetup();
 
-        assertEquals(EncodableFacetFromValueFacet.ENCODED_NULL, encodeableFacet.toEncodedString(null));
+        assertEquals(ValueSerializerDefault.ENCODED_NULL, getValueSerializer()
+                .toEncodedString(Format.JSON, null));
     }
 
     @Test
     public void testTitleOfForNullObject() {
+        assumeValueSemanticsProviderIsSetup();
 
-        if(valueSemanticsProvider instanceof StringValueSemantics) {
+        if(semantics instanceof StringValueSemantics) {
             // string representation has null-to-empty semantics
             assertEquals("",
-                    valueSemanticsProvider.getRenderer().simpleTextPresentation(null, null));
+                    semantics.getRenderer().simpleTextPresentation(null, null));
         } else {
             assertEquals(ValueSemanticsAbstract.NULL_REPRESENTATION,
-                    valueSemanticsProvider.getRenderer().simpleTextPresentation(null, null));
+                    semantics.getRenderer().simpleTextPresentation(null, null));
         }
 
     }
+
+    // precondition for testing
+    private void assumeValueSemanticsProviderIsSetup() {
+        Assume.assumeThat(semantics, is(not(nullValue())));
+    }
+
+
+
 }

@@ -46,8 +46,8 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer.Format;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -709,9 +709,9 @@ public class XmlSnapshot implements Snapshot {
 
                     // return encoded string, else title.
                     String valueStr;
-                    final EncodableFacet encodeableFacet = fieldNos.getFacet(EncodableFacet.class);
-                    if (encodeableFacet != null) {
-                        valueStr = encodeableFacet.toEncodedString(value);
+                    val valueFacet = fieldNos.getFacet(ValueFacet.class);
+                    if (valueFacet != null) {
+                        valueStr = valueFacet.toEncodedString(Format.JSON, value.getPojo());
                     } else {
                         valueStr = value.titleString();
                     }

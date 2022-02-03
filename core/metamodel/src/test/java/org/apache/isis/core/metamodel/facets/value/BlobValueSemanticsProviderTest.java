@@ -26,35 +26,51 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer.Format;
 import org.apache.isis.core.metamodel.valuesemantics.BlobValueSemantics;
 
 public class BlobValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase {
 
-    private BlobValueSemantics value;
     private Blob blob;
 
     @Before
     public void setUpObjects() throws Exception {
+        super.setUp();
+
         blob = new Blob("myfile1.docx", "application", "vnd.ms-word", new byte[]{1,2,3,4});
         allowMockAdapterToReturn(blob);
-        setSemantics(value = new BlobValueSemantics());
+        setSemantics(new BlobValueSemantics());
     }
 
     @Test
     public void testTitleOf() {
-        assertEquals("myfile1.docx", value.simpleTextPresentation(null, blob));
+        assertEquals("myfile1.docx", getRenderer().simpleTextPresentation(null, blob));
     }
 
     @Test
     public void testEncode_and_decode() {
-        String encoded = value.toEncodedString(blob);
-        assertEquals("myfile1.docx:application/vnd.ms-word:AQIDBA==", encoded);
-        Blob decoded = value.fromEncodedString(encoded);
+        String encoded = getValueSerializer().toEncodedString(Format.JSON, blob);
+        assertEquals(
+                "{\"name\":\"myfile1.docx\",\"mimeType\":\"application/vnd.ms-word\",\"bytes\":\"AQIDBA==\"}",
+                encoded);
+        Blob decoded = (Blob) getValueSerializer().fromEncodedString(Format.JSON, encoded);
         assertThat(decoded.getName(), is("myfile1.docx"));
         assertThat(decoded.getMimeType().getPrimaryType(), is("application"));
         assertThat(decoded.getMimeType().getSubType(), is("vnd.ms-word"));
         assertThat(decoded.getBytes().length, is(4));
+    }
+
+    @Test
+    @Override
+    public void testParseNull() throws Exception {
+        // disabled, blob has no parser
+    }
+
+    @Test
+    @Override
+    public void testParseEmptyString() throws Exception {
+        // disabled, blob has no parser
     }
 
 }

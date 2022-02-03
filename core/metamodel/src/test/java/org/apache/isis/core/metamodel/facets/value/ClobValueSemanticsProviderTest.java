@@ -45,4 +45,16 @@ extends ValueSemanticsProviderAbstractTestCase {
         assertEquals("myfile1.xml", value.simpleTextPresentation(null, clob));
     }
 
+    @Test
+    @Override
+    public void testParseNull() throws Exception {
+        // disabled, clob has no parser
+    }
+
+    @Test
+    @Override
+    public void testParseEmptyString() throws Exception {
+        // disabled, clob has no parser
+    }
+
 }

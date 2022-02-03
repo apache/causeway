@@ -46,18 +46,14 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
  * convenient term for a number of mostly optional semantics all of which are
  * defined elsewhere.
  */
-public interface ValueFacet<T> extends Facet {
+public interface ValueFacet<T>
+extends
+    ValueSerializer<T>,
+    Facet {
 
-    LogicalType getValueType();
-    Can<ValueSemanticsProvider<T>> getValueSemantics();
+    LogicalType getLogicalType();
 
-//    /**
-//     *  There might be multiple {@link ValueSemanticsProvider}(s) registered for
-//     *  a specific value-type. However, there should be one primary, that is not qualified.
-//     *  Used eg. to provide encoding/decoding.
-//     */
-//    ValueSemanticsProvider<T> getPrimaryValueSemantics();
-
+    Can<ValueSemanticsProvider<T>> getAllValueSemantics();
 
     Context createValueSemanticsContext(@Nullable ObjectFeature feature);
     <X> Stream<X> streamValueSemantics(Class<X> requiredType);

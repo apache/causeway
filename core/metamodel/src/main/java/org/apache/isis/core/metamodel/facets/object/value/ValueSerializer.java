@@ -16,24 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.encodeable;
+package org.apache.isis.core.metamodel.facets.object.value;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+public interface ValueSerializer<T> {
 
-/**
- * Indicates that this class can be encoded/decoded as a string.
- */
-public interface EncodableFacet extends Facet {
-
-    /**
-     * Converts an encoded string to an instance of the object.
-     */
-    ManagedObject fromEncodedString(String encodedData);
+    public enum Format {
+        JSON,
+        //XML
+    }
 
     /**
-     * Returns the provided object as an encoded string.
+     * Converts a string of provided {@link Format} to an instance of the object.
      */
-    String toEncodedString(ManagedObject object);
+    T fromEncodedString(Format format, String encodedData);
+
+    /**
+     * Converts the provided object into provided {@link Format}.
+     */
+    String toEncodedString(Format format, T value);
 
 }

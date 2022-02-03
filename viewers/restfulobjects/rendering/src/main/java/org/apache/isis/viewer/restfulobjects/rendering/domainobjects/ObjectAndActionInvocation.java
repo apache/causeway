@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -133,7 +133,7 @@ public class ObjectAndActionInvocation {
 
     //TODO[2449] need to check whether that strategy holds consistently
     private static boolean isScalarValue(final @NonNull ObjectSpecification spec) {
-        return spec.containsFacet(EncodableFacet.class);
+        return spec.containsFacet(ValueFacet.class);
     }
 
     private static boolean isVector(final @NonNull ObjectSpecification spec) {

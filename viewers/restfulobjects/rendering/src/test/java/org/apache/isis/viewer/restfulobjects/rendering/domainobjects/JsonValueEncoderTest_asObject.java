@@ -34,18 +34,18 @@ import static org.junit.Assert.assertSame;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class JsonValueEncoderTest_asObject {
 
-    @Rule public JUnitRuleMockery2 context = 
+    @Rule public JUnitRuleMockery2 context =
             JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     @Mock private ObjectSpecification mockObjectSpec;
-    @Mock private EncodableFacet mockEncodableFacet;
+    @Mock private ValueFacet mockValueFacet;
     @Mock private ManagedObject mockObjectAdapter;
     @Mock private SpecificationLoader specLoader;
 
@@ -62,12 +62,12 @@ public class JsonValueEncoderTest_asObject {
         });
 
         jsonValueEncoder = JsonValueEncoder.forTesting(specLoader);
-        
+
     }
 
     @After
     public void tearDown() throws Exception {
-        
+
     }
 
     @Test(expected = Exception.class)
@@ -87,8 +87,8 @@ public class JsonValueEncoderTest_asObject {
 
     private void whenBoolean(final Class<?> cls) {
         allowingObjectSpecCorrespondingClassIs(cls);
-        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
-        never(mockEncodableFacet);
+        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
+        never(mockValueFacet);
         context.checking(new Expectations() {
             {
                 oneOf(mockObjectAdapter).getPojo();
@@ -110,8 +110,8 @@ public class JsonValueEncoderTest_asObject {
 
     private void whenInteger(final Class<?> cls) {
         allowingObjectSpecCorrespondingClassIs(cls);
-        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
-        never(mockEncodableFacet);
+        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
+        never(mockValueFacet);
         context.checking(new Expectations() {
             {
                 oneOf(mockObjectAdapter).getPojo();
@@ -133,8 +133,8 @@ public class JsonValueEncoderTest_asObject {
 
     private void whenLong(final Class<?> cls) {
         allowingObjectSpecCorrespondingClassIs(cls);
-        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
-        never(mockEncodableFacet);
+        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
+        never(mockValueFacet);
         context.checking(new Expectations() {
             {
                 oneOf(mockObjectAdapter).getPojo();
@@ -156,8 +156,8 @@ public class JsonValueEncoderTest_asObject {
 
     private void whenDouble(final Class<?> cls) {
         allowingObjectSpecCorrespondingClassIs(cls);
-        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
-        never(mockEncodableFacet);
+        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
+        never(mockValueFacet);
         context.checking(new Expectations() {
             {
                 oneOf(mockObjectAdapter).getPojo();
@@ -170,8 +170,8 @@ public class JsonValueEncoderTest_asObject {
     @Test
     public void whenBigInteger() throws Exception {
         allowingObjectSpecCorrespondingClassIs(BigInteger.class);
-        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
-        never(mockEncodableFacet);
+        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
+        never(mockValueFacet);
         final BigInteger value = new BigInteger("123456789012345");
         context.checking(new Expectations() {
 
@@ -186,8 +186,8 @@ public class JsonValueEncoderTest_asObject {
     @Test
     public void whenBigDecimal() throws Exception {
         allowingObjectSpecCorrespondingClassIs(BigDecimal.class);
-        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
-        never(mockEncodableFacet);
+        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
+        never(mockValueFacet);
         final BigDecimal value = new BigDecimal("1234567890.1234567890");
         context.checking(new Expectations() {
 
@@ -202,7 +202,7 @@ public class JsonValueEncoderTest_asObject {
     @Test
     public void whenString() throws Exception {
         allowingObjectSpecCorrespondingClassIs(String.class);
-        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
+        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
         context.checking(new Expectations() {
             {
                 oneOf(mockObjectAdapter).getPojo();
@@ -237,10 +237,10 @@ public class JsonValueEncoderTest_asObject {
         });
     }
 
-    private void never(final EncodableFacet encodableFacet2) {
+    private void never(final ValueFacet vFacet) {
         context.checking(new Expectations() {
             {
-                never(encodableFacet2);
+                never(vFacet);
             }
         });
     }

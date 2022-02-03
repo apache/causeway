@@ -36,7 +36,7 @@ import static org.hamcrest.Matchers.nullValue;
 
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -44,22 +44,22 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 public class JsonValueEncoderTest_appendValueAndFormat {
 
-    @Rule public JUnitRuleMockery2 context = 
+    @Rule public JUnitRuleMockery2 context =
         JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     @Mock private ObjectSpecification mockObjectSpec;
-    @Mock private EncodableFacet mockEncodableFacet;
+    @Mock private ValueFacet mockValueFacet;
     @Mock private ManagedObject mockObjectAdapter;
     @Mock private SpecificationLoader specLoader;
-    
+
     private JsonRepresentation representation;
     private JsonValueEncoder jsonValueEncoder;
 
     @Before
     public void setUp() {
-        
+
         jsonValueEncoder = JsonValueEncoder.forTesting(specLoader);
-        
+
         representation = JsonRepresentation.newMap();
     }
 
@@ -400,11 +400,11 @@ public class JsonValueEncoderTest_appendValueAndFormat {
             {
                 allowing(mockObjectSpec).getCorrespondingClass();
                 will(returnValue(cls));
-                
+
                 allowing(mockObjectSpec).getLogicalType();
                 will(returnValue(LogicalType.fqcn(cls)));
-                
-                allowing(mockObjectSpec).getFacet(EncodableFacet.class);
+
+                allowing(mockObjectSpec).getFacet(ValueFacet.class);
                 will(returnValue(null));
             }
         });
@@ -415,7 +415,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
             {
                 oneOf(mockObjectAdapter).getPojo();
                 will(returnValue(pojo));
-                
+
                 allowing(mockObjectAdapter).getSpecification();
                 will(returnValue(mockObjectSpec));
             }

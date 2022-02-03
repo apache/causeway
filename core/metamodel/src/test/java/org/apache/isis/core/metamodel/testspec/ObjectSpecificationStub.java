@@ -235,11 +235,6 @@ implements ObjectSpecification {
     }
 
     @Override
-    public boolean isEncodeable() {
-        return false;
-    }
-
-    @Override
     public boolean isParented() {
         return false;
     }
