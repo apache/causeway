@@ -29,7 +29,7 @@
            
 	<xs:annotation>
 	   <xs:appinfo>
-	      <jaxb:globalBindings generateIsSetMethod="true">
+	      <jaxb:globalBindings generateIsSetMethod="false">
 	          <xjc:serializable uid="1"/>
 	      </jaxb:globalBindings>
 	   </xs:appinfo>

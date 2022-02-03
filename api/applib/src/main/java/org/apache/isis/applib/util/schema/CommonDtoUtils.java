@@ -244,20 +244,11 @@ public final class CommonDtoUtils {
         case ZONED_DATE_TIME:
             return _NullSafe.toString(valueDto.getZonedDateTime());
         case ENUM:
-            final EnumDto enumDto = valueDto.getEnum();
-            return enumDto!=null
-                    ? enumDtoToJson(enumDto)
-                    : null;
+            return dtoToJson(valueDto.getEnum());
         case BLOB:
-            final BlobDto blobDto = valueDto.getBlob();
-            return blobDto!=null
-                    ? blobDtoToJson(blobDto)
-                    : null;
+            return dtoToJson(valueDto.getBlob());
         case CLOB:
-            final ClobDto clobDto = valueDto.getClob();
-            return clobDto!=null
-                    ? clobDtoToJson(clobDto)
-                    : null;
+            return dtoToJson(valueDto.getClob());
         case VOID:
             return null;
         default:
@@ -266,29 +257,10 @@ public final class CommonDtoUtils {
     }
 
     @SneakyThrows
-    static String enumDtoToJson(final EnumDto dto) {
-        val map = new LinkedHashMap<String, Object>(); // preserve order
-        map.put("enumType", dto.getEnumType());
-        map.put("enumName", dto.getEnumName());
-        return new ObjectMapper().writer().writeValueAsString(map);
-    }
-
-    @SneakyThrows
-    static String blobDtoToJson(final BlobDto dto) {
-        val map = new LinkedHashMap<String, Object>(); // preserve order
-        map.put("name", dto.getName());
-        map.put("mimeType", dto.getMimeType());
-        map.put("bytes", dto.getBytes());
-        return new ObjectMapper().writer().writeValueAsString(map);
-    }
-
-    @SneakyThrows
-    static String clobDtoToJson(final ClobDto dto) {
-        val map = new LinkedHashMap<String, Object>(); // preserve order
-        map.put("name", dto.getName());
-        map.put("mimeType", dto.getMimeType());
-        map.put("chars", dto.getChars());
-        return new ObjectMapper().writer().writeValueAsString(map);
+    private String dtoToJson(final @Nullable Object dto) {
+        return dto!=null
+                ? new ObjectMapper().writer().writeValueAsString(dto)
+                : null;
     }
 
     // -- VALUE RECORD

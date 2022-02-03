@@ -340,7 +340,7 @@ implements SchemaValueMarshaller {
         val feature = getSpecificationLoader().loadFeatureElseFail(featureIdentifier);
 
         if(valueWithTypeDto==null
-                || (valueWithTypeDto.isSetNull()
+                || (valueWithTypeDto.isNull()!=null
                     && valueWithTypeDto.isNull())) {
             return cardinalityConstraint.isMultiple()
                     ? PackedManagedObject.pack(feature.getElementType(), Can.empty())
