@@ -208,7 +208,7 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public <T> T lookupService(final Class<T> service) {
-        return serviceRegistry.lookupService(service);
+        return serviceRegistry.lookupService(service).orElse(null);
     }
 
     /**

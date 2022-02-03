@@ -21,15 +21,39 @@ package org.apache.isis.applib.services.registry;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 public interface ServiceRegistry {
 
+    @Deprecated
     @Programmatic
     <T> T injectServicesInto(final T domainObject);
 
     @Programmatic
-    <T> T lookupService(Class<T> service);
+    <T> Optional<T> lookupService(Class<T> service);
 
+    @Deprecated
     @Programmatic
     <T> Iterable<T> lookupServices(Class<T> service);
+
+
+    /**
+     * Looks up a domain service of the requested type (same as
+     * {@link #lookupService(Class)}) but throws a
+     * {@link NoSuchElementException} if there are no such instances.
+     *
+     * @param serviceClass
+     * @param <T>
+     */
+    @Programmatic
+    default <T> T lookupServiceElseFail(final Class<T> serviceClass) {
+
+        return lookupService(serviceClass)
+                .orElseThrow(()->
+                        new NoSuchElementException("Could not locate service of type '" + serviceClass + "'"));
+
+        // ...
+    }
 
 }
