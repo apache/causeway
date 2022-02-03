@@ -7,12 +7,24 @@
 .CommonDtoUtils.java
 ----
 class CommonDtoUtils {
+  ValueWithTypeDto getFundamentalValueFromJson(ValueType valueType, String json)
+  String getFundamentalValueAsJson(ValueWithTypeDto valueDto)
+  String getFundamentalValueAsJson(ValueType valueType, ValueDto valueDto)
+  String enumDtoToJson(EnumDto dto)
+  String blobDtoToJson(BlobDto dto)
+  String clobDtoToJson(ClobDto dto)
   D recordFundamentalValue(ValueType valueType, D valueDto, Object pojo)
   Object getValueAsObject(ValueWithTypeDto valueDto)
   Object getValueAsObject(ValueType valueType, ValueDto valueDto)
   ValueWithTypeDto toValueWithTypeDto(ValueType valueType, ValueDto valueDto)
   String getMapValue(MapDto mapDto, String key)
   void putMapKeyValue(MapDto mapDto, String key, String value)
+  ValueWithTypeDto fundamentalType(ValueType vType, T value)
+  ValueDecomposition fundamentalTypeAsDecomposition(ValueType vType, T value)
+  TypedTupleBuilder<T> typedTupleBuilder(T value)
+  Map<String, Object> typedTupleAsMap(TypedTupleDto dto)
+  ParamDto paramDto(String paramName)
+  void copy(ValueWithTypeDto src, ValueWithTypeDto dst)
 }
 ----
 

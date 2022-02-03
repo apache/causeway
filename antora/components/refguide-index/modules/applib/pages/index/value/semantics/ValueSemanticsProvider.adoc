@@ -15,11 +15,13 @@ Whatever the class that implements this interface, it must also expose either a 
 interface ValueSemanticsProvider<T> {
   Class<T> getCorrespondingClass()
   ValueType getSchemaValueType()     // <.>
+  ValueDecomposition decompose(T value)     // <.>
+  T compose(ValueDecomposition decomposition)     // <.>
+  Object getValueMixin(T value)
   OrderRelation<T, ?> getOrderRelation()     // <.>
   Converter<T, ?> getConverter()     // <.>
   Renderer<T> getRenderer()     // <.>
   Parser<T> getParser()     // <.>
-  EncoderDecoder<T> getEncoderDecoder()     // <.>
   DefaultsProvider<T> getDefaultsProvider()     // <.>
   boolean isNumberType()
   boolean isTemporalType()
@@ -30,6 +32,16 @@ interface ValueSemanticsProvider<T> {
 +
 --
 Values might appear within _CommandDto_ , _InteractionDto_ and _ChangesDto_ , where a mapping onto one of _ValueType_ (s) as provided by the XML schema is required.
+--
+<.> xref:#decompose__T[decompose(T)]
++
+--
+Converts a value object into either a _ValueWithTypeDto_ or _TypedTupleDto_ .
+--
+<.> xref:#compose__ValueDecomposition[compose(ValueDecomposition)]
++
+--
+Converts either a _ValueWithTypeDto_ or a _TypedTupleDto_ to an instance of the object.
 --
 <.> xref:#getOrderRelation__[getOrderRelation()]
 +
@@ -51,11 +63,6 @@ The xref:refguide:applib:index/value/semantics/Renderer.adoc[Renderer] , if any.
 --
 The xref:refguide:applib:index/value/semantics/Parser.adoc[Parser] , if any.
 --
-<.> xref:#getEncoderDecoder__[getEncoderDecoder()]
-+
---
-The xref:refguide:applib:index/value/semantics/EncoderDecoder.adoc[EncoderDecoder] , if any.
---
 <.> xref:#getDefaultsProvider__[getDefaultsProvider()]
 +
 --
@@ -68,6 +75,16 @@ The xref:refguide:applib:index/value/semantics/DefaultsProvider.adoc[DefaultsPro
 === getSchemaValueType()
 
 Values might appear within _CommandDto_ , _InteractionDto_ and _ChangesDto_ , where a mapping onto one of _ValueType_ (s) as provided by the XML schema is required.
+
+[#decompose__T]
+=== decompose(T)
+
+Converts a value object into either a _ValueWithTypeDto_ or _TypedTupleDto_ .
+
+[#compose__ValueDecomposition]
+=== compose(ValueDecomposition)
+
+Converts either a _ValueWithTypeDto_ or a _TypedTupleDto_ to an instance of the object.
 
 [#getOrderRelation__]
 === getOrderRelation()
@@ -88,11 +105,6 @@ The xref:refguide:applib:index/value/semantics/Renderer.adoc[Renderer] , if any.
 === getParser()
 
 The xref:refguide:applib:index/value/semantics/Parser.adoc[Parser] , if any.
-
-[#getEncoderDecoder__]
-=== getEncoderDecoder()
-
-The xref:refguide:applib:index/value/semantics/EncoderDecoder.adoc[EncoderDecoder] , if any.
 
 [#getDefaultsProvider__]
 === getDefaultsProvider()

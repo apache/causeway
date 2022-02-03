@@ -11,7 +11,6 @@ class ValueSemanticsAbstract<T> {
   OrderRelation<T, ?> getOrderRelation()
   Converter<T, ?> getConverter()
   Renderer<T> getRenderer()
-  EncoderDecoder<T> getEncoderDecoder()
   Parser<T> getParser()
   DefaultsProvider<T> getDefaultsProvider()
   Can<T> getExamples()     // <.>
