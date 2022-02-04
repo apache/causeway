@@ -28,7 +28,7 @@ import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.valuesemantics.IntValueSemantics;
 
 public class IntValueSemanticsProviderTest
-extends ValueSemanticsProviderAbstractTestCase {
+extends ValueSemanticsProviderAbstractTestCase<Integer> {
 
     private IntValueSemantics value;
     private Integer integer;

@@ -51,7 +51,7 @@ import org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics;
 
 import lombok.Getter;
 
-public abstract class ValueSemanticsProviderAbstractTestCase {
+public abstract class ValueSemanticsProviderAbstractTestCase<T> {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
@@ -61,8 +61,8 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
 
     protected MetaModelContext metaModelContext;
 
-    @Getter private ValueSemanticsProvider<?> semantics;
-    @Getter private ValueSerializer valueSerializer;
+    @Getter private ValueSemanticsProvider<T> semantics;
+    @Getter private ValueSerializer<T> valueSerializer;
 
     @Before
     public void setUp() throws Exception {
@@ -94,7 +94,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         });
     }
 
-    protected void setSemantics(final ValueSemanticsAbstract<?> valueSemantics) {
+    protected void setSemantics(final ValueSemanticsAbstract<T> valueSemantics) {
         this.semantics = valueSemantics;
         this.valueSerializer = ValueSerializerDefault
                 .forSemantics(valueSemantics);
@@ -104,11 +104,11 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         return mockAdapter;
     }
 
-    protected Parser getParser() {
+    protected Parser<T> getParser() {
         return semantics.getParser();
     }
 
-    protected Renderer getRenderer() {
+    protected Renderer<T> getRenderer() {
         return semantics.getRenderer();
     }
 

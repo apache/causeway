@@ -211,23 +211,23 @@ public class _Json {
     public static interface JsonCustomizer extends UnaryOperator<ObjectMapper> {};
 
     /** enable indentation for the underlying generator */
-    public static JsonCustomizer indentedOutput() {
-        return mapper->mapper.enable(SerializationFeature.INDENT_OUTPUT);
+    public static ObjectMapper indentedOutput(final ObjectMapper mapper) {
+        return mapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
     /** only properties with non-null values are to be included */
-    public static JsonCustomizer onlyIncludeNonNull() {
-        return mapper->mapper.setSerializationInclusion(Include.NON_NULL);
+    public static ObjectMapper onlyIncludeNonNull(final ObjectMapper mapper) {
+        return mapper.setSerializationInclusion(Include.NON_NULL);
     }
 
     /** add support for JAXB annotations */
-    public static JsonCustomizer jaxbAnnotationSupport() {
-        return mapper->mapper.registerModule(new JaxbAnnotationModule());
+    public static ObjectMapper jaxbAnnotationSupport(final ObjectMapper mapper) {
+        return mapper.registerModule(new JaxbAnnotationModule());
     }
 
     /** when arrays or map, only non-null values are to be included */
-    public static JsonCustomizer onlyIncludeNonNullWhenNonScalar() {
-        return mapper->mapper
+    public static ObjectMapper onlyIncludeNonNullWhenNonScalar(final ObjectMapper mapper) {
+        return mapper
                 .disable(SerializationFeature.WRITE_NULL_MAP_VALUES) // doesn't seem to work...
                 .disable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
     }

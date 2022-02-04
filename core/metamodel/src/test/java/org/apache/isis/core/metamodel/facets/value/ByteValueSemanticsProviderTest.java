@@ -28,7 +28,7 @@ import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.valuesemantics.ByteValueSemantics;
 
 public class ByteValueSemanticsProviderTest
-extends ValueSemanticsProviderAbstractTestCase {
+extends ValueSemanticsProviderAbstractTestCase<Byte> {
 
     private ByteValueSemantics value;
 

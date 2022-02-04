@@ -28,7 +28,7 @@ import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.valuesemantics.FloatValueSemantics;
 
 public class FloatValueSemanticsProviderTest
-extends ValueSemanticsProviderAbstractTestCase {
+extends ValueSemanticsProviderAbstractTestCase<Float> {
 
     private FloatValueSemantics value;
     private Float float1;

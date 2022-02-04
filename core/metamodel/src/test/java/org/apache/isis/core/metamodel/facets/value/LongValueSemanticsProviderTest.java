@@ -28,7 +28,7 @@ import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.valuesemantics.LongValueSemantics;
 
 public class LongValueSemanticsProviderTest
-extends ValueSemanticsProviderAbstractTestCase {
+extends ValueSemanticsProviderAbstractTestCase<Long> {
 
     private LongValueSemantics value;
 

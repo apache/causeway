@@ -26,17 +26,18 @@ import java.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalDateValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaSqlDateValueSemantics;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import lombok.val;
 
-public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
+public class JavaSqlDateValueSemanticsProviderTest
+extends ValueSemanticsProviderAbstractTestCase<Date> {
 
     private JavaSqlDateValueSemantics value;
     private Date date;

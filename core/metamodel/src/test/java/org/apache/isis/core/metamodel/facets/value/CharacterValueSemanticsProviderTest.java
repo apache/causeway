@@ -29,7 +29,7 @@ import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.core.metamodel.valuesemantics.CharacterValueSemantics;
 
 public class CharacterValueSemanticsProviderTest
-extends ValueSemanticsProviderAbstractTestCase {
+extends ValueSemanticsProviderAbstractTestCase<Character> {
 
     private CharacterValueSemantics valueSemantics;
 

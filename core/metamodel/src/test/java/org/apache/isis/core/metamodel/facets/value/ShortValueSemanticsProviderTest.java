@@ -28,7 +28,7 @@ import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.valuesemantics.ShortValueSemantics;
 
 public class ShortValueSemanticsProviderTest
-extends ValueSemanticsProviderAbstractTestCase {
+extends ValueSemanticsProviderAbstractTestCase<Short> {
 
     private ShortValueSemantics value;
     private Short short1;

@@ -25,10 +25,6 @@ import javax.ws.rs.core.MediaType;
 import org.apache.isis.commons.internal.resources._Json;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 
-import static org.apache.isis.commons.internal.resources._Json.indentedOutput;
-import static org.apache.isis.commons.internal.resources._Json.jaxbAnnotationSupport;
-import static org.apache.isis.commons.internal.resources._Json.onlyIncludeNonNullWhenNonScalar;
-
 public enum SerializationStrategy {
 
     XML {
@@ -42,8 +38,8 @@ public enum SerializationStrategy {
         @Override public Object entity(final Object jaxbAnnotatedObject) {
             return _Json.toString(
                     jaxbAnnotatedObject,
-                    jaxbAnnotationSupport(),
-                    onlyIncludeNonNullWhenNonScalar());
+                    _Json::jaxbAnnotationSupport,
+                    _Json::onlyIncludeNonNullWhenNonScalar);
         }
 
     },
@@ -52,9 +48,9 @@ public enum SerializationStrategy {
         @Override public Object entity(final Object jaxbAnnotatedObject) {
             return _Json.toString(
                     jaxbAnnotatedObject,
-                    jaxbAnnotationSupport(),
-                    onlyIncludeNonNullWhenNonScalar(),
-                    indentedOutput());
+                    _Json::jaxbAnnotationSupport,
+                    _Json::onlyIncludeNonNullWhenNonScalar,
+                    _Json::indentedOutput);
         }
 
     },

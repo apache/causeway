@@ -56,9 +56,6 @@ import org.apache.isis.schema.common.v2.ValueDto;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
-import static org.apache.isis.commons.internal.resources._Json.jaxbAnnotationSupport;
-import static org.apache.isis.commons.internal.resources._Json.onlyIncludeNonNull;
-
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -258,10 +255,7 @@ public final class CommonDtoUtils {
     }
 
     private String dtoToJson(final @Nullable Object dto) {
-        return _Json.toString(
-                dto,
-                jaxbAnnotationSupport(),
-                onlyIncludeNonNull());
+        return _Json.toString(dto);
     }
 
     // -- VALUE RECORD

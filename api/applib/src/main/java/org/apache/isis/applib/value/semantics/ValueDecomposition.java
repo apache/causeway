@@ -25,9 +25,6 @@ import org.apache.isis.schema.common.v2.TypedTupleDto;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
-import static org.apache.isis.commons.internal.resources._Json.jaxbAnnotationSupport;
-import static org.apache.isis.commons.internal.resources._Json.onlyIncludeNonNull;
-
 public final class ValueDecomposition extends _Either<ValueWithTypeDto, TypedTupleDto> {
     private static final long serialVersionUID = 1L;
 
@@ -49,8 +46,8 @@ public final class ValueDecomposition extends _Either<ValueWithTypeDto, TypedTup
                 CommonDtoUtils::getFundamentalValueAsJson,
                 composite->_Json.toString(
                         composite,
-                        jaxbAnnotationSupport(),
-                        onlyIncludeNonNull()));
+                        _Json::jaxbAnnotationSupport,
+                        _Json::onlyIncludeNonNull));
     }
 
     // used by EncodableFacet

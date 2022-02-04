@@ -44,7 +44,7 @@ import lombok.val;
  * Testing the LocalDateTimeValueSemantics under the hood.
  */
 public class JavaTimeValueSemanticsProviderTest
-extends ValueSemanticsProviderAbstractTestCase {
+extends ValueSemanticsProviderAbstractTestCase<java.util.Date> {
 
     @SuppressWarnings("deprecation")
     private final java.util.Date date = new java.util.Date(2013-1900, 03-1, 13, 17, 59, 03);
