@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
@@ -65,12 +66,6 @@ extends SchemaValueMarshallerAbstract {
 
         valueDto.setType(context.getSchemaValueType());
 
-        val bookmark = value.getBookmark().orElse(null);
-        if(bookmark!=null) {
-            valueDto.setReference(bookmark.toOidDto());
-            return valueDto;
-        }
-
         switch (context.getSchemaValueType()) {
         case COMPOSITE:
             valueDto.setComposite(toTypedTuple(context, _Casts.<T>uncheckedCast(value.getPojo())));
@@ -79,7 +74,9 @@ extends SchemaValueMarshallerAbstract {
             recordValues(context, valueDto, ((PackedManagedObject)value).unpack());
             return valueDto;
         case REFERENCE:
-            // null reference
+            value.getBookmark()
+                .map(Bookmark::toOidDto)
+                .ifPresent(valueDto::setReference); // otherwise: null reference
             return valueDto;
 
         default:
