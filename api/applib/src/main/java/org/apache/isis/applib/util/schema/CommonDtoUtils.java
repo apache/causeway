@@ -563,14 +563,14 @@ public final class CommonDtoUtils {
             val elementDto = new NamedValueWithTypeDto();
             _Assert.assertTrue(_Strings.isNotEmpty(fieldName));
             elementDto.setName(fieldName);
-            dto.getElement().add(
+            dto.getElements().add(
                     recordFundamentalValue(vType, elementDto, getter.apply(value)));
             return this;
         }
 
         public TypedTupleDto build() {
             dto.setType(value.getClass().getName());
-            dto.setCardinality(dto.getElement().size());
+            dto.setCardinality(dto.getElements().size());
             return dto;
         }
 
@@ -590,7 +590,7 @@ public final class CommonDtoUtils {
 
         val map = new LinkedHashMap<String, Object>(dto.getCardinality()); // preserve order
 
-        dto.getElement()
+        dto.getElements()
             .forEach(elementDto->
                 map.put(elementDto.getName(), getValueAsObject(elementDto)));
 

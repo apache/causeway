@@ -72,7 +72,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="element" type="namedValueWithTypeDto" minOccurs="1" maxOccurs="unbounded"/>
+            <xs:element name="elements" type="namedValueWithTypeDto" minOccurs="1" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="type" use="required" type="xs:string"/>
         <xs:attribute name="cardinality" use="required" type="xs:int"/>
