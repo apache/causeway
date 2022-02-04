@@ -23,7 +23,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -74,7 +73,7 @@ extends SchemaValueMarshallerAbstract {
 
         switch (context.getSchemaValueType()) {
         case COMPOSITE:
-            valueDto.setComposite(toTypedTuple(context, (T)value.getPojo()));
+            valueDto.setComposite(toTypedTuple(context, _Casts.<T>uncheckedCast(value.getPojo())));
             return valueDto;
         case COLLECTION:
             recordValues(context, valueDto, ((PackedManagedObject)value).unpack());
@@ -87,19 +86,12 @@ extends SchemaValueMarshallerAbstract {
             break;
         }
 
-        //TODO[ISIS-2877] remove conditional, once composer is always present
-        if(context.getSemantics().isPresent()) {
-            CommonDtoUtils.copy(
-                context.getSemantics().get().decompose(_Casts.uncheckedCast(value.getPojo()))
-                        .leftIfAny(),
-                valueDto);
-            return valueDto;
-        }
+        val decomposedValueDto = context.getSemantics()
+                .decompose(_Casts.uncheckedCast(value.getPojo()))
+                .leftIfAny();
 
-        CommonDtoUtils.recordFundamentalValue(
-                context.getSchemaValueType(),
-                valueDto,
-                toFundamentalValue(context, _Casts.uncheckedCast(value.getPojo())));
+        // copy the decomposedValueDto into valueDto
+        CommonDtoUtils.copy(decomposedValueDto, valueDto);
 
         return valueDto;
     }
@@ -115,33 +107,6 @@ extends SchemaValueMarshallerAbstract {
         valueWithTypeDto.setNull(false);
         return valueWithTypeDto;
     }
-
-    // -- RECOVER VALUES FROM DTO
-
-    @Override
-    protected ManagedObject recoverScalarValue(
-            @NonNull final Context<?> context,
-            @NonNull final ValueWithTypeDto valueDto) {
-
-        val elementSpec = context.getElementType();
-
-        val recoveredValueAsPojo = valueDto.getType()==ValueType.COMPOSITE
-                ? fromTypedTuple(context, valueDto.getComposite())
-                : context.getSemantics().isPresent()
-                    ? context.getSemantics().get().compose(ValueDecomposition.ofFundamental(valueDto))
-                    : fromFundamentalValue(context, CommonDtoUtils.getValueAsObject(valueDto));
-
-        if(recoveredValueAsPojo==null) {
-            return ManagedObject.empty(context.getElementType());
-        }
-
-        val recoveredValue = recoveredValueAsPojo!=null
-                ? ManagedObject.of(elementSpec, recoveredValueAsPojo)
-                : ManagedObject.empty(context.getElementType());
-        return recoveredValue;
-    }
-
-    // -- HELPER - RECORDING
 
     private <T> CollectionDto asCollectionDto(
             final Context<T> context,
@@ -164,36 +129,39 @@ extends SchemaValueMarshallerAbstract {
 
     private <T> TypedTupleDto toTypedTuple(final Context<T> context, final T valuePojo) {
         return context.getSemantics()
-                .orElseThrow()
                 .decompose(valuePojo)
                 .rightIfAny();
     }
 
-    private <T> Object toFundamentalValue(final Context<T> context, final T valuePojo) {
-        return context.getConverter()
-                    .<Object>map(converter->converter.toDelegateValue(valuePojo))
-                    .orElse(valuePojo);
-    }
+    // -- RECOVER VALUES FROM DTO
 
-    // -- HELPER - RECOVERY
+    @Override
+    protected ManagedObject recoverScalarValue(
+            @NonNull final Context<?> context,
+            @NonNull final ValueWithTypeDto valueDto) {
+
+        val elementSpec = context.getElementType();
+
+        val recoveredValueAsPojo = valueDto.getType()==ValueType.COMPOSITE
+                ? fromTypedTuple(context, valueDto.getComposite())
+                : context.getSemantics().compose(ValueDecomposition.ofFundamental(valueDto));
+
+        if(recoveredValueAsPojo==null) {
+            return ManagedObject.empty(context.getElementType());
+        }
+
+        val recoveredValue = recoveredValueAsPojo!=null
+                ? ManagedObject.of(elementSpec, recoveredValueAsPojo)
+                : ManagedObject.empty(context.getElementType());
+        return recoveredValue;
+    }
 
     private <T> T fromTypedTuple(final Context<T> context, final TypedTupleDto typedTupleDto) {
         if(typedTupleDto==null) {
             return null;
         }
         return context.getSemantics()
-                .orElseThrow()
                 .compose(ValueDecomposition.ofComposite(typedTupleDto));
-    }
-
-    private <T> T fromFundamentalValue(final Context<T> context, final @Nullable Object fundamentalValue) {
-        if(fundamentalValue==null) {
-            return null;
-        }
-        val valuePojo = context.getConverter()
-                    .<T>map(converter->converter.fromDelegateValue(_Casts.uncheckedCast(fundamentalValue)))
-                    .orElse(_Casts.uncheckedCast(fundamentalValue));
-        return valuePojo;
     }
 
     // -- DEPENDENCIES
