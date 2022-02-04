@@ -44,7 +44,7 @@ import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyPro
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
         nature=Nature.ENTITY
-        , logicalTypeName = "demo.PropertyProjectingChildEntity"
+        , logicalTypeName = "demo.PropertyProjectingChildJdo"
         , editing = Editing.DISABLED
 )
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
@@ -53,7 +53,7 @@ public class PropertyProjectingChildJdo
     // ...
 //end::class[]
 
-    public PropertyProjectingChildJdo(String initialValue) {
+    public PropertyProjectingChildJdo(final String initialValue) {
         this.name = initialValue;
     }
 
