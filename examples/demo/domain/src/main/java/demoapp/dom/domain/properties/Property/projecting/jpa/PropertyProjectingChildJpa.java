@@ -49,7 +49,7 @@ import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyPro
 )
 @EntityListeners(IsisEntityListener.class)
 @DomainObject(
-    logicalTypeName = "demo.PropertyProjectingChildEntity"
+    logicalTypeName = "demo.PropertyProjectingChildJpa"
     , editing = Editing.DISABLED
 )
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)

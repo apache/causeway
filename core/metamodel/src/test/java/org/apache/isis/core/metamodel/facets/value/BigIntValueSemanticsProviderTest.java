@@ -30,7 +30,7 @@ import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.valuesemantics.BigIntegerValueSemantics;
 
 public class BigIntValueSemanticsProviderTest
-extends ValueSemanticsProviderAbstractTestCase {
+extends ValueSemanticsProviderAbstractTestCase<BigInteger> {
 
     private BigIntegerValueSemantics value;
     private BigInteger bigInt;

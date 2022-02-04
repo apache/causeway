@@ -28,7 +28,7 @@ import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.core.metamodel.valuesemantics.PasswordValueSemantics;
 
 public class PasswordValueSemanticsProviderTest
-extends ValueSemanticsProviderAbstractTestCase {
+extends ValueSemanticsProviderAbstractTestCase<Password> {
 
     private PasswordValueSemantics valueSemantics;
     private Password password;

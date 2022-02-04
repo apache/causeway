@@ -26,7 +26,7 @@ import static org.junit.Assert.assertEquals;
 import org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics;
 
 public class StringValueSemanticsProviderTest
-extends ValueSemanticsProviderAbstractTestCase {
+extends ValueSemanticsProviderAbstractTestCase<String> {
 
     private StringValueSemantics value;
 

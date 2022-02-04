@@ -30,7 +30,7 @@ import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 
 public class BigDecimalValueSemanticsProviderTest
-extends ValueSemanticsProviderAbstractTestCase {
+extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
 
     private BigDecimalValueSemantics value;
     private BigDecimal bigDecimal;

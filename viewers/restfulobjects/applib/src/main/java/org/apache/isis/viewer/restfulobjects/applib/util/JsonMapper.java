@@ -48,7 +48,7 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
  */
 public final class JsonMapper {
 
-    public static String getEntityAsStringFrom(Response response) {
+    public static String getEntityAsStringFrom(final Response response) {
 
         final Object result = response.getEntity();
 
@@ -74,7 +74,7 @@ public final class JsonMapper {
 
     private static final class JsonRepresentationDeserializer extends JsonDeserializer<JsonRepresentation> {
         @Override
-        public JsonRepresentation deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
+        public JsonRepresentation deserialize(final JsonParser jp, final DeserializationContext ctxt) throws IOException {
             JsonNode node = jp.getCodec().readTree(jp);
             return new JsonRepresentation(node);
         }
@@ -89,7 +89,7 @@ public final class JsonMapper {
         }
     }
 
-    private static ObjectMapper createObjectMapper(PrettyPrinting prettyPrinting) {
+    private static ObjectMapper createObjectMapper(final PrettyPrinting prettyPrinting) {
         final ObjectMapper objectMapper = new ObjectMapper();
         final SimpleModule jsonModule = new SimpleModule("json", new Version(1, 0, 0, null, "org.apache", "isis"));
         jsonModule.addDeserializer(JsonRepresentation.class, new JsonRepresentationDeserializer());
@@ -103,7 +103,7 @@ public final class JsonMapper {
         return objectMapper;
     }
 
-    private static Map<PrettyPrinting, JsonMapper> instanceByConfig = new ConcurrentHashMap();
+    private static Map<PrettyPrinting, JsonMapper> instanceByConfig = new ConcurrentHashMap<>();
 
     /**
      * Returns a {@link org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper.PrettyPrinting#ENABLE pretty-printing enabled} JSON mapper.
@@ -126,7 +126,7 @@ public final class JsonMapper {
 
     private final ObjectMapper objectMapper;
 
-    private JsonMapper(PrettyPrinting prettyPrinting) {
+    private JsonMapper(final PrettyPrinting prettyPrinting) {
         objectMapper = createObjectMapper(prettyPrinting);
     }
 

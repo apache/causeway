@@ -27,7 +27,7 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.metamodel.valuesemantics.ClobValueSemantics;
 
 public class ClobValueSemanticsProviderTest
-extends ValueSemanticsProviderAbstractTestCase {
+extends ValueSemanticsProviderAbstractTestCase<Clob> {
 
     private ClobValueSemantics value;
     private Clob clob;

@@ -22,10 +22,6 @@ import java.util.Collection;
 
 import javax.ws.rs.core.MediaType;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
-
 import org.apache.isis.commons.internal.resources._Json;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 
@@ -40,29 +36,19 @@ public enum SerializationStrategy {
 
     JSON {
         @Override public Object entity(final Object jaxbAnnotatedObject) {
-            final JaxbAnnotationModule jaxbAnnotationModule = new JaxbAnnotationModule();
-            final ObjectMapper objectMapper = new ObjectMapper()
-                    .registerModule(jaxbAnnotationModule)
-                    .disable(SerializationFeature.WRITE_NULL_MAP_VALUES) // doesn't seem to work...
-                    .disable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
-
-            return _Json.toString(objectMapper, jaxbAnnotatedObject)
-                    .presentElseFail();
+            return _Json.toString(
+                    jaxbAnnotatedObject,
+                    _Json::jaxbAnnotationSupport);
         }
 
     },
 
     JSON_INDENTED {
         @Override public Object entity(final Object jaxbAnnotatedObject) {
-            final JaxbAnnotationModule jaxbAnnotationModule = new JaxbAnnotationModule();
-            final ObjectMapper objectMapper = new ObjectMapper()
-                    .registerModule(jaxbAnnotationModule)
-                    .enable(SerializationFeature.INDENT_OUTPUT)
-                    .disable(SerializationFeature.WRITE_NULL_MAP_VALUES) // doesn't seem to work...
-                    .disable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
-
-            return _Json.toString(objectMapper, jaxbAnnotatedObject)
-                    .presentElseFail();
+            return _Json.toString(
+                    jaxbAnnotatedObject,
+                    _Json::jaxbAnnotationSupport,
+                    _Json::indentedOutput);
         }
 
     },

@@ -32,8 +32,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
@@ -256,11 +254,8 @@ public final class CommonDtoUtils {
         }
     }
 
-    @SneakyThrows
     private String dtoToJson(final @Nullable Object dto) {
-        return dto!=null
-                ? new ObjectMapper().writer().writeValueAsString(dto)
-                : null;
+        return _Json.toString(dto);
     }
 
     // -- VALUE RECORD

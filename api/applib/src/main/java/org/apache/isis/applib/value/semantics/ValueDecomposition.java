@@ -43,10 +43,11 @@ public final class ValueDecomposition extends _Either<ValueWithTypeDto, TypedTup
     // used by RO-Viewer to render values
     public String toJson() {
         return this.<String>fold(
-                fundamental->CommonDtoUtils.getFundamentalValueAsJson(fundamental),
-                composite->composite!=null
-                        ? _Json.toString(composite).presentElseFail()
-                        : null);
+                CommonDtoUtils::getFundamentalValueAsJson,
+                composite->_Json.toString(
+                        composite,
+                        _Json::jaxbAnnotationSupport,
+                        _Json::onlyIncludeNonNull));
     }
 
     // used by EncodableFacet

@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer.Format
 import org.apache.isis.core.metamodel.valuesemantics.BlobValueSemantics;
 
 public class BlobValueSemanticsProviderTest
-extends ValueSemanticsProviderAbstractTestCase {
+extends ValueSemanticsProviderAbstractTestCase<Blob> {
 
     private Blob blob;
 
@@ -54,7 +54,7 @@ extends ValueSemanticsProviderAbstractTestCase {
         assertEquals(
                 "{\"name\":\"myfile1.docx\",\"mimeType\":\"application/vnd.ms-word\",\"bytes\":\"AQIDBA==\"}",
                 encoded);
-        Blob decoded = (Blob) getValueSerializer().fromEncodedString(Format.JSON, encoded);
+        Blob decoded = getValueSerializer().fromEncodedString(Format.JSON, encoded);
         assertThat(decoded.getName(), is("myfile1.docx"));
         assertThat(decoded.getMimeType().getPrimaryType(), is("application"));
         assertThat(decoded.getMimeType().getSubType(), is("vnd.ms-word"));

@@ -74,15 +74,13 @@ implements SchemaValueMarshaller {
                 final ObjectFeature feature,
                 final ValueSemanticsProvider<T> semantics) {
 
-            return of(correspondingClass, feature, Optional.ofNullable(semantics),
-                    semantics!=null
-                        ? Optional.ofNullable(semantics.getConverter())
-                        : Optional.empty());
+            return of(correspondingClass, feature, semantics,
+                    Optional.ofNullable(semantics.getConverter()));
         }
 
         private final @NonNull Class<T> correspondingClass;
         private final @NonNull ObjectFeature feature;
-        private final @NonNull Optional<ValueSemanticsProvider<T>> semantics;
+        private final @NonNull ValueSemanticsProvider<T> semantics;
         private final @NonNull Optional<Converter<T, ?>> converter;
 
         public ObjectSpecification getElementType() {
@@ -90,9 +88,7 @@ implements SchemaValueMarshaller {
         }
 
         public ValueType getSchemaValueType() {
-            return semantics
-                    .map(ValueSemanticsProvider::getSchemaValueType)
-                    .orElse(ValueType.REFERENCE); // fallback
+            return semantics.getSchemaValueType();
         }
 
     }
