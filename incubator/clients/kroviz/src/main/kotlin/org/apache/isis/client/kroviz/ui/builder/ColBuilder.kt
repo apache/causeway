@@ -68,11 +68,13 @@ class ColBuilder : UiBuilder() {
         for (c in col.collectionList) {
             val key = c.id  // entities
             val objectDM = dsp.displayModel
-            val collectionDM = objectDM.collections.get(key)!!
-            val tblCpt = RoTable(collectionDM)
-            val fsPanel = FieldsetPanel(legend = StringUtils.capitalize(key)).add(tblCpt)
-            panel.add(fsPanel)
-            collectionDM.isRendered = true
+            val collectionDM = objectDM.collections.get(key)
+            if (collectionDM != null) {
+                val tblCpt = RoTable(collectionDM)
+                val fsPanel = FieldsetPanel(legend = StringUtils.capitalize(key)).add(tblCpt)
+                panel.add(fsPanel)
+                collectionDM.isRendered = true
+            }
         }
         return panel
     }

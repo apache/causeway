@@ -37,8 +37,12 @@ object StringUtils {
 
     @OptIn(ExperimentalStdlibApi::class)
     fun capitalize(input: String): String {
-        val output = input.substring(1, input.length)
-        return input.first().uppercaseChar() + output
+        return if (input != null && input.length > 0) {
+            val output = input.substring(1, input.length)
+            input.first().uppercaseChar() + output
+        } else {
+            input
+        }
     }
 
     @OptIn(ExperimentalStdlibApi::class)
@@ -126,10 +130,10 @@ object StringUtils {
     }
 
     internal fun argumentsAsString(
-            args: Map<String, Argument?>?,
-            start: String,
-            sep: String,
-            end: String
+        args: Map<String, Argument?>?,
+        start: String,
+        sep: String,
+        end: String
     ): String {
         return if (args.isNullOrEmpty()) "" else {
             var answer = start
@@ -144,10 +148,10 @@ object StringUtils {
     }
 
     internal fun argumentsAsList(
-            args: Map<String, Argument?>?,
-            start: String,
-            sep: String,
-            end: String
+        args: Map<String, Argument?>?,
+        start: String,
+        sep: String,
+        end: String
     ): String {
         return if (args.isNullOrEmpty()) "" else {
             var answer = start
@@ -214,13 +218,15 @@ object StringUtils {
                 val n: Int = (0xFF.and(raw[it].toInt()) shl 16) +
                         (0xFF.and(raw[it + 1].toInt()) shl 8) +
                         0xFF.and(raw[it + 2].toInt())
-                listOf<Int>((n shr 18) and 0x3F,
-                        (n shr 12) and 0x3F,
-                        (n shr 6) and 0x3F,
-                        n and 0x3F).forEach { append(BASE64_SET[it]) }
+                listOf<Int>(
+                    (n shr 18) and 0x3F,
+                    (n shr 12) and 0x3F,
+                    (n shr 6) and 0x3F,
+                    n and 0x3F
+                ).forEach { append(BASE64_SET[it]) }
             }
         }.dropLast(pad.length)
-                .toString() + pad
+            .toString() + pad
     }
 
     fun shorten(url: String): String {

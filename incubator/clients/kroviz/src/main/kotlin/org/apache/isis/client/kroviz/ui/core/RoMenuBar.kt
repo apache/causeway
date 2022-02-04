@@ -90,8 +90,11 @@ class RoMenuBar : SimplePanel() {
     }
 
     fun switch(session: Session) {
-        mainEntry.image = session.resString
-        mainEntry.icon = null
+        val resString = session.resString
+        if (resString != null) {
+            mainEntry.image = session.resString
+            mainEntry.icon = null
+        }
         mainEntry.image.apply { systemIconStyle }
         val logEntry = SessionManager.getEventStore().findMenuBarsBy(session.baseUrl)
         if (logEntry != null) {
