@@ -74,7 +74,7 @@ implements SchemaValueMarshaller {
                 final ObjectFeature feature,
                 final ValueSemanticsProvider<T> semantics) {
 
-            return of(correspondingClass, feature, Optional.ofNullable(semantics),
+            return of(correspondingClass, feature, Optional.of(semantics),
                     semantics!=null
                         ? Optional.ofNullable(semantics.getConverter())
                         : Optional.empty());

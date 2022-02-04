@@ -225,13 +225,6 @@ public class _Json {
         return mapper.registerModule(new JaxbAnnotationModule());
     }
 
-    /** when arrays or map, only non-null values are to be included */
-    public static ObjectMapper onlyIncludeNonNullWhenNonScalar(final ObjectMapper mapper) {
-        return mapper
-                .disable(SerializationFeature.WRITE_NULL_MAP_VALUES) // doesn't seem to work...
-                .disable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
-    }
-
     @SneakyThrows
     public static String toString(
             final @Nullable Object pojo,

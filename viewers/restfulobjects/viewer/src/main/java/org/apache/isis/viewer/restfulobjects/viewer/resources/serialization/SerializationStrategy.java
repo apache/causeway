@@ -38,8 +38,7 @@ public enum SerializationStrategy {
         @Override public Object entity(final Object jaxbAnnotatedObject) {
             return _Json.toString(
                     jaxbAnnotatedObject,
-                    _Json::jaxbAnnotationSupport,
-                    _Json::onlyIncludeNonNullWhenNonScalar);
+                    _Json::jaxbAnnotationSupport);
         }
 
     },
@@ -49,7 +48,6 @@ public enum SerializationStrategy {
             return _Json.toString(
                     jaxbAnnotatedObject,
                     _Json::jaxbAnnotationSupport,
-                    _Json::onlyIncludeNonNullWhenNonScalar,
                     _Json::indentedOutput);
         }
 
