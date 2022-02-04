@@ -21,6 +21,8 @@ package org.apache.isis.core.metamodel.services.schema;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.Identifier.Type;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -53,6 +55,7 @@ import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
@@ -63,32 +66,35 @@ implements SchemaValueMarshaller {
     @Value(staticConstructor = "of")
     public static class Context<T> {
 
-        public static <T> Context<T> withoutSemantics(
+        public static <T> Context<T> forNonValue(
                 final Class<T> correspondingClass,
                 final ObjectFeature feature) {
-            return of(correspondingClass, feature, null);
+            return new Context<T>(correspondingClass, feature,
+                    feature.getFeatureType().isCollection()
+                        ? ValueType.COLLECTION
+                        : ValueType.REFERENCE,
+                    /*semantics*/null, Optional.empty());
         }
 
-        public static <T> Context<T> of(
+        public static <T> Context<T> forValue(
                 final Class<T> correspondingClass,
                 final ObjectFeature feature,
-                final ValueSemanticsProvider<T> semantics) {
+                final @NonNull ValueSemanticsProvider<T> semantics) {
 
-            return of(correspondingClass, feature, semantics,
+            return of(correspondingClass, feature,
+                    semantics.getSchemaValueType(),
+                    semantics,
                     Optional.ofNullable(semantics.getConverter()));
         }
 
         private final @NonNull Class<T> correspondingClass;
         private final @NonNull ObjectFeature feature;
-        private final @NonNull ValueSemanticsProvider<T> semantics;
+        @Getter private final @NonNull ValueType schemaValueType;
+        private final @Nullable ValueSemanticsProvider<T> semantics;
         private final @NonNull Optional<Converter<T, ?>> converter;
 
         public ObjectSpecification getElementType() {
             return feature.getElementType();
-        }
-
-        public ValueType getSchemaValueType() {
-            return semantics.getSchemaValueType();
         }
 
     }
@@ -241,8 +247,8 @@ implements SchemaValueMarshaller {
         return getValueSemanticsResolver()
                 .selectValueSemantics(feature.getFeatureIdentifier(), valueCls)
                 .getFirst()
-                .map(valueSemantics->Context.of(valueCls, feature, valueSemantics))
-                .orElseGet(()->Context.withoutSemantics(valueCls, feature));
+                .map(valueSemantics->Context.forValue(valueCls, feature, valueSemantics))
+                .orElseGet(()->Context.forNonValue(valueCls, feature));
     }
 
     // -- LOW LEVEL IMPLEMENTATION - RECORDING
