@@ -25,6 +25,9 @@ import org.apache.isis.schema.common.v2.TypedTupleDto;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
+import static org.apache.isis.commons.internal.resources._Json.jaxbAnnotationSupport;
+import static org.apache.isis.commons.internal.resources._Json.onlyIncludeNonNull;
+
 public final class ValueDecomposition extends _Either<ValueWithTypeDto, TypedTupleDto> {
     private static final long serialVersionUID = 1L;
 
@@ -43,10 +46,11 @@ public final class ValueDecomposition extends _Either<ValueWithTypeDto, TypedTup
     // used by RO-Viewer to render values
     public String toJson() {
         return this.<String>fold(
-                fundamental->CommonDtoUtils.getFundamentalValueAsJson(fundamental),
-                composite->composite!=null
-                        ? _Json.toString(composite).presentElseFail()
-                        : null);
+                CommonDtoUtils::getFundamentalValueAsJson,
+                composite->_Json.toString(
+                        composite,
+                        jaxbAnnotationSupport(),
+                        onlyIncludeNonNull()));
     }
 
     // used by EncodableFacet

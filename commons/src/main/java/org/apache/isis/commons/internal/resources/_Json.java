@@ -22,15 +22,20 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.functional.Result;
 
+import lombok.SneakyThrows;
 import lombok.val;
 
 /**
@@ -51,7 +56,7 @@ public class _Json {
     private static <T> T _readJson(final Class<T> clazz, final InputStream content)
             throws JsonParseException, JsonMappingException, IOException {
 
-        return (T) new ObjectMapper().readValue(content, clazz);
+        return new ObjectMapper().readValue(content, clazz);
     }
 
     /**
@@ -90,7 +95,7 @@ public class _Json {
     private static <T> T _readJson(final Class<T> clazz, final String content)
             throws JsonParseException, JsonMappingException, IOException {
 
-        return (T) new ObjectMapper().readValue(content, clazz);
+        return new ObjectMapper().readValue(content, clazz);
     }
 
     /**
@@ -129,7 +134,7 @@ public class _Json {
     private static <T> T _readJson(final Class<T> clazz, final File content)
             throws JsonParseException, JsonMappingException, IOException {
 
-        return (T) new ObjectMapper().readValue(content, clazz);
+        return new ObjectMapper().readValue(content, clazz);
     }
 
     /**
@@ -143,7 +148,7 @@ public class _Json {
         return Result.of(()->_readJson(clazz, content));
     }
 
-    private static <T> List<T> _readJsonList(final Class<T> elementType, File content)
+    private static <T> List<T> _readJsonList(final Class<T> elementType, final File content)
             throws JsonParseException, JsonMappingException, IOException {
 
         val mapper = new ObjectMapper();
@@ -167,7 +172,7 @@ public class _Json {
     private static <T> T _readJson(final Class<T> clazz, final byte[] content)
             throws JsonParseException, JsonMappingException, IOException {
 
-        return (T) new ObjectMapper().readValue(content, clazz);
+        return new ObjectMapper().readValue(content, clazz);
     }
 
     /**
@@ -202,22 +207,43 @@ public class _Json {
 
     // -- WRITING
 
-    private static String _toString(ObjectMapper objectMapper, Object pojo) throws JsonProcessingException {
-        return objectMapper.writeValueAsString(pojo);
+    @FunctionalInterface
+    public static interface JsonCustomizer extends UnaryOperator<ObjectMapper> {};
+
+    /** enable indentation for the underlying generator */
+    public static JsonCustomizer indentedOutput() {
+        return mapper->mapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
-    public static Result<String> toString(ObjectMapper objectMapper, Object pojo) {
-        return Result.of(()->_toString(objectMapper, pojo));
+    /** only properties with non-null values are to be included */
+    public static JsonCustomizer onlyIncludeNonNull() {
+        return mapper->mapper.setSerializationInclusion(Include.NON_NULL);
     }
 
-    private static String _toString(Object pojo) throws JsonProcessingException {
-        val objectMapper = new ObjectMapper()
-                .enable(SerializationFeature.INDENT_OUTPUT);
-        return _toString(objectMapper, pojo);
+    /** add support for JAXB annotations */
+    public static JsonCustomizer jaxbAnnotationSupport() {
+        return mapper->mapper.registerModule(new JaxbAnnotationModule());
     }
 
-    public static Result<String> toString(Object pojo) {
-        return Result.of(()->_toString(pojo));
+    /** when arrays or map, only non-null values are to be included */
+    public static JsonCustomizer onlyIncludeNonNullWhenNonScalar() {
+        return mapper->mapper
+                .disable(SerializationFeature.WRITE_NULL_MAP_VALUES) // doesn't seem to work...
+                .disable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
+    }
+
+    @SneakyThrows
+    public static String toString(
+            final @Nullable Object pojo,
+            final JsonCustomizer ... customizers) {
+        if(pojo==null) {
+            return null;
+        }
+        var mapper = new ObjectMapper();
+        for(JsonCustomizer customizer : customizers) {
+            mapper = customizer.apply(mapper);
+        }
+        return mapper.writeValueAsString(pojo);
     }
 
 }

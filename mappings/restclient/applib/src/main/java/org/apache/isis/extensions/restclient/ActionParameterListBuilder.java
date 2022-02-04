@@ -36,7 +36,7 @@ public class ActionParameterListBuilder {
     @Getter
     private final Map<String, Class<?>> actionParameterTypes = new LinkedHashMap<>();
 
-    public ActionParameterListBuilder addActionParameter(String parameterName, String parameterValue) {
+    public ActionParameterListBuilder addActionParameter(final String parameterName, final String parameterValue) {
         actionParameters.put(parameterName, parameterValue != null
                 ? value("\"" + parameterValue + "\"")
                         : value(JSON_NULL_LITERAL));
@@ -44,43 +44,43 @@ public class ActionParameterListBuilder {
         return this;
     }
 
-    public ActionParameterListBuilder addActionParameter(String parameterName, int parameterValue) {
+    public ActionParameterListBuilder addActionParameter(final String parameterName, final int parameterValue) {
         actionParameters.put(parameterName, value(""+parameterValue));
         actionParameterTypes.put(parameterName, int.class);
         return this;
     }
 
-    public ActionParameterListBuilder addActionParameter(String parameterName, long parameterValue) {
+    public ActionParameterListBuilder addActionParameter(final String parameterName, final long parameterValue) {
         actionParameters.put(parameterName, value(""+parameterValue));
         actionParameterTypes.put(parameterName, long.class);
         return this;
     }
 
-    public ActionParameterListBuilder addActionParameter(String parameterName, byte parameterValue) {
+    public ActionParameterListBuilder addActionParameter(final String parameterName, final byte parameterValue) {
         actionParameters.put(parameterName, value(""+parameterValue));
         actionParameterTypes.put(parameterName, byte.class);
         return this;
     }
 
-    public ActionParameterListBuilder addActionParameter(String parameterName, short parameterValue) {
+    public ActionParameterListBuilder addActionParameter(final String parameterName, final short parameterValue) {
         actionParameters.put(parameterName, value(""+parameterValue));
         actionParameterTypes.put(parameterName, short.class);
         return this;
     }
 
-    public ActionParameterListBuilder addActionParameter(String parameterName, double parameterValue) {
+    public ActionParameterListBuilder addActionParameter(final String parameterName, final double parameterValue) {
         actionParameters.put(parameterName, value(""+parameterValue));
         actionParameterTypes.put(parameterName, double.class);
         return this;
     }
 
-    public ActionParameterListBuilder addActionParameter(String parameterName, float parameterValue) {
+    public ActionParameterListBuilder addActionParameter(final String parameterName, final float parameterValue) {
         actionParameters.put(parameterName, value(""+parameterValue));
         actionParameterTypes.put(parameterName, float.class);
         return this;
     }
 
-    public ActionParameterListBuilder addActionParameter(String parameterName, boolean parameterValue) {
+    public ActionParameterListBuilder addActionParameter(final String parameterName, final boolean parameterValue) {
         actionParameters.put(parameterName, value(""+parameterValue));
         actionParameterTypes.put(parameterName, boolean.class);
         return this;
@@ -108,19 +108,12 @@ public class ActionParameterListBuilder {
 
     private static final String JSON_NULL_LITERAL = "null";
 
-    private String value(String valueLiteral) {
+    private String value(final String valueLiteral) {
         return "{\"value\" : " + valueLiteral + "}";
     }
 
-//    @SneakyThrows
-//    private String dto(Object dto) {
-//        val mapper = new ObjectMapper();
-//        return mapper.writeValueAsString(dto);
-//    }
-
-    private String toJson(Map.Entry<String, String> entry) {
+    private String toJson(final Map.Entry<String, String> entry) {
         return "   \""+entry.getKey()+"\": "+entry.getValue();
     }
-
 
 }

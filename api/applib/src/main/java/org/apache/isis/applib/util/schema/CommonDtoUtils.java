@@ -32,8 +32,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
@@ -57,6 +55,9 @@ import org.apache.isis.schema.common.v2.TypedTupleDto;
 import org.apache.isis.schema.common.v2.ValueDto;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
+
+import static org.apache.isis.commons.internal.resources._Json.jaxbAnnotationSupport;
+import static org.apache.isis.commons.internal.resources._Json.onlyIncludeNonNull;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -256,11 +257,11 @@ public final class CommonDtoUtils {
         }
     }
 
-    @SneakyThrows
     private String dtoToJson(final @Nullable Object dto) {
-        return dto!=null
-                ? new ObjectMapper().writer().writeValueAsString(dto)
-                : null;
+        return _Json.toString(
+                dto,
+                jaxbAnnotationSupport(),
+                onlyIncludeNonNull());
     }
 
     // -- VALUE RECORD
