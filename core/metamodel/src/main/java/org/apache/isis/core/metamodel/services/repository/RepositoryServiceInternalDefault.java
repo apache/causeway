@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 
 import com.google.common.base.Predicate;
@@ -41,9 +40,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -182,15 +179,6 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
         return submitQuery(query);
     }
 
-    @Override
-    public <T> T detachedEntity(T entityPojo) {
-        if (entityPojo == null) {
-            throw new NullPointerException("entityPojo is marked non-null but is null");
-        }
-        servicesInjector.injectServicesInto(entityPojo);
-        return entityPojo;
-    }
-
     <T> List<T> submitQuery(final Query<T> query) {
         final List<ObjectAdapter> allMatching = persistenceSessionServiceInternal.allMatchingQuery(query);
         return ObjectAdapter.Util.unwrapT(allMatching);
@@ -276,6 +264,4 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
     @javax.inject.Inject
     PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
-    @javax.inject.Inject
-    ServicesInjector servicesInjector;
 }
