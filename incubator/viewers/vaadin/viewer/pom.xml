@@ -32,6 +32,11 @@
 	<dependencies>
 
 		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-runtimeservices</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
@@ -39,11 +44,6 @@
 		<dependency>
 			<groupId>org.apache.isis.incubator.viewer</groupId>
 			<artifactId>isis-viewer-vaadin-model</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtimeservices</artifactId>
 		</dependency>
 
 		<dependency>
@@ -75,6 +75,14 @@
 				<exclusion>
 					<groupId>com.vaadin</groupId>
 					<artifactId>vaadin-dev-server</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>io.swagger.core.v3</groupId>
+					<artifactId>swagger-models</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.github.fge</groupId>
+					<artifactId>jackson-coreutils</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>

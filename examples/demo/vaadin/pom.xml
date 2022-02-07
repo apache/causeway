@@ -33,63 +33,7 @@
 
 		<maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
 
-		<!-- Versions of node/npm/vaadin not yet listed in isis-app-starter-parent 
-			still investigating whether there is a way to not require these with the 
-			web-application. Ideally these dependencies are just referenced in module 
-			viewer-vaadin-ui. See https://nodejs.org/en/download/ for latest node and 
-			npm (lts) versions -->
-		<node.version>v16.13.2</node.version>
-		<npm.version>8.1.2</npm.version>
-		<vaadin.version>22.0.4</vaadin.version>
-
 	</properties>
-
-	<build>
-
-		<plugins>
-
-			<plugin>
-				<groupId>com.github.eirslett</groupId>
-				<artifactId>frontend-maven-plugin</artifactId>
-				<version>1.12.1</version>
-				<executions>
-
-					<execution>
-						<id>install node and npm</id>
-						<goals>
-							<goal>install-node-and-npm</goal>
-						</goals>
-						<configuration>
-							<!-- See https://nodejs.org/en/download/ for latest node and npm (lts) 
-								versions -->
-							<nodeVersion>${node.version}</nodeVersion>
-							<npmVersion>${npm.version}</npmVersion>
-						</configuration>
-					</execution>
-				</executions>
-
-			</plugin>
-
-
-			<plugin>
-				<groupId>com.vaadin</groupId>
-				<artifactId>vaadin-maven-plugin</artifactId>
-				<version>${vaadin.version}</version>
-				<configuration>
-					<pnpmEnable>true</pnpmEnable>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>prepare-frontend</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-		</plugins>
-
-	</build>
 
 	<dependencies>
 
@@ -237,7 +181,7 @@
 						<artifactId>jib-maven-plugin</artifactId>
 						<configuration>
 							<from>
-								<image>openjdk:15-alpine</image>
+								<image>openjdk:17-alpine</image>
 							</from>
 							<container>
 								<jvmFlags>
