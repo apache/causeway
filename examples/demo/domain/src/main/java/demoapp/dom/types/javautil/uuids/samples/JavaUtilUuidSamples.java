@@ -23,6 +23,8 @@ import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics;
+
 import demoapp.dom.types.Samples;
 
 @Service
@@ -30,7 +32,9 @@ public class JavaUtilUuidSamples implements Samples<UUID> {
 
     @Override
     public Stream<UUID> stream() {
-        return Stream.of(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
+        return new UUIDValueSemantics()
+                .getExamples()
+                .stream();
     }
 
 }

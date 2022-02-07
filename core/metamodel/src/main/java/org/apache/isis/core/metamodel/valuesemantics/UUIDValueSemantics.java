@@ -100,8 +100,9 @@ implements
     @Override
     public Can<UUID> getExamples() {
         return Can.of(
-                UUID.randomUUID(),
-                UUID.randomUUID());
+                UUID.fromString("57f2b7fa-1aed-41af-b9a2-8a25824335ac"),
+                UUID.fromString("d2302a34-a393-498c-977a-10ea6a6cb422"),
+                UUID.fromString("a89ba9b7-5e59-447d-bae7-5d91e2daa85b"));
     }
 
     //    private static final Pattern pattern = Pattern.compile(

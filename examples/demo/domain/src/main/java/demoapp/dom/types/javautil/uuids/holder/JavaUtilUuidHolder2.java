@@ -32,7 +32,7 @@ public interface JavaUtilUuidHolder2 extends JavaUtilUuidHolder {
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
         hidden = Where.ALL_TABLES,
-        fieldSetId = "label-positions", sequence = "1")  // <.>
+        fieldSetId = "label-positions", sequence = "1")     // <.>
     default java.util.UUID getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }

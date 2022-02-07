@@ -97,7 +97,8 @@ extends ChoiceProvider<ObjectMemento> {
 
         final List<ObjectMemento> mementos = _Lists.newArrayList(obtainMementos(term));
         // if not mandatory, and the list doesn't contain null already, then add it in.
-        if(!scalarModel.isRequired() && !mementos.contains(null)) {
+        if(!scalarModel.isRequired()
+                && !mementos.contains(null)) {
             mementos.add(0, null);
         }
         response.addAll(mementos);
