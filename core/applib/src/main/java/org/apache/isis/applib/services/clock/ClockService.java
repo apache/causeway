@@ -68,7 +68,7 @@ public class ClockService {
     }
 
     @Programmatic
-    public VirtualClock getCLock(){
+    public VirtualClock getClock(){
         return VIRTUAL_CLOCK;
     }
 
@@ -77,7 +77,9 @@ public class ClockService {
         return Clock.getTimeAsMillis();
     }
 
-    private static class VirtualClock{
+    public static class VirtualClock{
+
+        private VirtualClock(){}
 
         @Programmatic
         public LocalDate nowAsJodaLocalDate(){
