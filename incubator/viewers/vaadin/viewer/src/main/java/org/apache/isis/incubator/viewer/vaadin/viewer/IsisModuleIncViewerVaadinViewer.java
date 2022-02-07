@@ -36,6 +36,7 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
@@ -63,6 +64,7 @@ import lombok.val;
 
 
 })
+@PropertySource("classpath:/vaadin.properties")
 //disable standard vaadin spring boot bootstrapping
 @EnableAutoConfiguration(exclude = { SpringBootAutoConfiguration.class })
 public class IsisModuleIncViewerVaadinViewer {

@@ -4,9 +4,11 @@ drivers/
 error-screenshots/
 # More Node stuff as introduced with Vaadin
 node/
+frontend/
 package-lock.json
 package.json
 webpack.config.js
 webpack.generated.js
 pnpm*
+
 

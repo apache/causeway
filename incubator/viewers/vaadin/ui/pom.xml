@@ -38,7 +38,6 @@
 	<!-- </repositories> -->
 
 	<build>
-
 		<plugins>
 
 			<plugin>
@@ -60,26 +59,53 @@
 						</configuration>
 					</execution>
 				</executions>
-
 			</plugin>
 
 			<plugin>
 				<groupId>com.vaadin</groupId>
 				<artifactId>vaadin-maven-plugin</artifactId>
 				<version>${vaadin.version}</version>
-				<configuration>
-					<pnpmEnable>true</pnpmEnable>
-				</configuration>
 				<executions>
 					<execution>
+						<id>frontend</id>
+						<phase>compile</phase>
 						<goals>
 							<goal>prepare-frontend</goal>
 							<goal>build-frontend</goal>
 						</goals>
+						<configuration>
+							<productionMode>true</productionMode>
+							<!-- does not work due to realative path ../../ resolving issues;
+							instead we copy the frontend folder with the maven-resources-plugin below  
+						    <frontendDirectory>${project.basedir}/src/main/resources/static/frontend</frontendDirectory>
+						    -->
+    					</configuration>
 					</execution>
 				</executions>
 			</plugin>
-
+			
+			<plugin>
+			    <artifactId>maven-resources-plugin</artifactId>
+			    <executions>
+			        <execution>
+			            <id>copy-resource-one</id>
+			            <phase>validate</phase>
+			            <goals>
+			                <goal>copy-resources</goal>
+			            </goals>
+			            <configuration>
+			                <outputDirectory>${project.basedir}/src/main/resources/static/frontend</outputDirectory>
+			                <resources>
+			                    <resource>
+			                        <directory>frontend</directory>
+			                        <filtering>true</filtering>
+			                    </resource>
+			                </resources>
+			            </configuration>
+			        </execution>
+			    </executions>
+			</plugin>
+			
 		</plugins>
 	</build>
 

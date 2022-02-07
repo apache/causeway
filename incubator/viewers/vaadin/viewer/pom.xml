@@ -30,9 +30,53 @@
 	</properties>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.incubator.viewer</groupId>
+			<artifactId>isis-viewer-vaadin-model</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-runtimeservices</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.apache.isis.incubator.viewer</groupId>
 			<artifactId>isis-viewer-vaadin-ui</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>*</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-spring</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>com.vaadin</groupId>
+					<artifactId>flow-server</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-core</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>com.vaadin</groupId>
+					<artifactId>vaadin-dev-server</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 	</dependencies>
