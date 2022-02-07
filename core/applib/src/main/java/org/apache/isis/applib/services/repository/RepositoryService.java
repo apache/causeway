@@ -27,6 +27,8 @@ import com.google.common.base.Predicate;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.Query;
 
+import javax.annotation.Nonnull;
+
 public interface RepositoryService {
 
     /**
@@ -175,6 +177,31 @@ public interface RepositoryService {
      */
     @Programmatic
     <T> List<T> allMatches(Query<T> query);
+
+    /**
+     * Usually called as a precursor to persisting a domain entity, this method
+     * verifies that the object is an entity and injects domain services into
+     * it.
+     *
+     * <p>
+     *     This approach allows the domain entity to have regular constructor
+     *     (with parameters) to set up the initial state of the domain object.
+     *     This is preferred over {@link #detachedEntity(Class)}, which
+     *     also instantiates the class and then injects into it - but requires
+     *     that the domain object has a no-arg constructor to do so.
+     * </p>
+     *
+     *
+     * <p>
+     * This is the same functionality as exposed by
+     * {@link org.apache.isis.applib.services.factory.FactoryService#detachedEntity(Object)}.
+     * It is provided in this service as a convenience because instantiating and
+     * {@link #persist(Object) persisting} an object are often done together.
+     * </p>
+     *
+     * @since 2.0
+     */
+    <T> T detachedEntity(@Nonnull T entity);
 
     /**
      * Returns the first instance of the specified type (including subtypes)
