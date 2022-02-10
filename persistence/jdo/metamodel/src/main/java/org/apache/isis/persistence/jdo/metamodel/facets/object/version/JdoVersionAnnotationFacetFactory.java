@@ -18,8 +18,6 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.facets.object.version;
 
-import java.util.LinkedHashMap;
-
 import javax.inject.Inject;
 import javax.jdo.annotations.Version;
 
@@ -65,27 +63,26 @@ extends FacetFactoryAbstract {
                 .create(versionIfAny, processClassContext.getFacetHolder()));
 
         if(versionIfAny.isPresent()) {
-
-            val versionsFoundDirectly = _Maps.<Class<?>, Version>newLinkedHashMap();
-
-            _Reflect.streamTypeHierarchy(cls, InterfacePolicy.EXCLUDE)
-            .forEach(type->
-                _Annotations.synthesizeDirect(type, Version.class)
-                    .ifPresent(versionDirect->versionsFoundDirectly.put(type, versionDirect)));
-
-            guardAgainstAmbiguousVersion(processClassContext, versionsFoundDirectly);
+            guardAgainstAmbiguousVersion(processClassContext);
         }
-
     }
 
     private void guardAgainstAmbiguousVersion(
-            final ProcessClassContext processClassContext,
-            final LinkedHashMap<Class<?>, Version> versionsFoundDirectly) {
+            final ProcessClassContext processClassContext) {
+
+        val cls = processClassContext.getCls();
+
+        val versionsFoundDirectly = _Maps.<Class<?>, Version>newLinkedHashMap();
+
+        _Reflect.streamTypeHierarchy(cls, InterfacePolicy.EXCLUDE)
+        .forEach(type->
+            _Annotations.synthesizeDirect(type, Version.class)
+                .ifPresent(versionDirect->versionsFoundDirectly.put(type, versionDirect)));
 
         if(versionsFoundDirectly.size()>1) {
             ValidationFailure.raiseFormatted(
                     processClassContext.getFacetHolder(),
-                    "@Version annotation is ambiguos within a class hierarchy, there can be only one. "
+                    "@Version annotation is ambiguous within a class hierarchy, there can be only one. "
                     + "Conflicting types are: %s",
                     versionsFoundDirectly.keySet());
         }

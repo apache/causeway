@@ -113,7 +113,7 @@ public class JdoVersionAnnotationFacetFactoryTest_validate {
 
         assertThat(failures.getNumberOfFailures(), is(1));
         assertThat(failures.getMessages().iterator().next(),
-                CoreMatchers.containsString("@Version annotation is ambiguos within a class hierarchy"));
+                CoreMatchers.containsString("@Version annotation is ambiguous within a class hierarchy"));
     }
 
 
@@ -132,7 +132,7 @@ public class JdoVersionAnnotationFacetFactoryTest_validate {
 
         assertTrue(failures.getNumberOfFailures()>=1);
         assertThat(failures.getMessages().iterator().next(),
-                CoreMatchers.containsString("@Version annotation is ambiguos within a class hierarchy"));
+                CoreMatchers.containsString("@Version annotation is ambiguous within a class hierarchy"));
     }
 
     @Test

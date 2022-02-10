@@ -177,7 +177,6 @@ public final class _Annotations {
     // -- HELPER
 
     /**
-     * @param searchStrategy
      * @apiNote don't expose Spring's MergedAnnotations
      */
     static MergedAnnotations collect(
