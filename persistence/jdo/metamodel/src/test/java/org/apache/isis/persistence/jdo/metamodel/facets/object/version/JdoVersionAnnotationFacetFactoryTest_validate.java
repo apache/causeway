@@ -113,7 +113,7 @@ public class JdoVersionAnnotationFacetFactoryTest_validate {
 
         assertThat(failures.getNumberOfFailures(), is(1));
         assertThat(failures.getMessages().iterator().next(),
-                CoreMatchers.containsString("cannot have @Version annotated on this subclass and any of its supertypes; superclass: "));
+                CoreMatchers.containsString("@Version annotation is ambiguos within a class hierarchy"));
     }
 
 
@@ -132,8 +132,22 @@ public class JdoVersionAnnotationFacetFactoryTest_validate {
 
         assertTrue(failures.getNumberOfFailures()>=1);
         assertThat(failures.getMessages().iterator().next(),
-                CoreMatchers.containsString("cannot have @Version annotated on this subclass and any of its supertypes; superclass: "));
+                CoreMatchers.containsString("@Version annotation is ambiguos within a class hierarchy"));
     }
+
+    @Test
+    public void whenHasFacetWithAbstactParentTypeHasFacet() {
+
+        @Version
+        abstract class Parent {}
+
+        class Child extends Parent {}
+
+        val failures = processThenValidate(Child.class);
+
+        assertThat(failures.getNumberOfFailures(), is(0));
+    }
+
 
     private ValidationFailures processThenValidate(final Class<?> cls) {
         val specLoader = metaModelContext.getSpecificationLoader();

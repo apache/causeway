@@ -18,10 +18,15 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.facets.object.version;
 
+import java.util.LinkedHashMap;
+
 import javax.inject.Inject;
 import javax.jdo.annotations.Version;
 
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -60,29 +65,30 @@ extends FacetFactoryAbstract {
                 .create(versionIfAny, processClassContext.getFacetHolder()));
 
         if(versionIfAny.isPresent()) {
-            guardAgainstVersionInAnySuper(processClassContext, cls.getSuperclass());
+
+            val versionsFoundDirectly = _Maps.<Class<?>, Version>newLinkedHashMap();
+
+            _Reflect.streamTypeHierarchy(cls, InterfacePolicy.EXCLUDE)
+            .forEach(type->
+                _Annotations.synthesizeDirect(type, Version.class)
+                    .ifPresent(versionDirect->versionsFoundDirectly.put(type, versionDirect)));
+
+            guardAgainstAmbiguousVersion(processClassContext, versionsFoundDirectly);
         }
 
     }
 
-    private void guardAgainstVersionInAnySuper(
+    private void guardAgainstAmbiguousVersion(
             final ProcessClassContext processClassContext,
-            final Class<?> superclass) {
-        if(superclass == null) {
-            return;
-        }
-        val cls = processClassContext.getCls();
-        val synth = _Annotations.synthesizeInherited(superclass, Version.class);
-        if(synth.isPresent()) {
+            final LinkedHashMap<Class<?>, Version> versionsFoundDirectly) {
+
+        if(versionsFoundDirectly.size()>1) {
             ValidationFailure.raiseFormatted(
                     processClassContext.getFacetHolder(),
-                    "%s: cannot have @Version annotated on this subclass and any of its supertypes; superclass: %s",
-                    cls.getName(),
-                    superclass.getName());
+                    "@Version annotation is ambiguos within a class hierarchy, there can be only one. "
+                    + "Conflicting types are: %s",
+                    versionsFoundDirectly.keySet());
         }
-        guardAgainstVersionInAnySuper(processClassContext, superclass.getSuperclass()); // recursive call
-
     }
-
 
 }

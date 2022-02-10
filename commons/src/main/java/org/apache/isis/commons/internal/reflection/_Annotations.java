@@ -151,17 +151,49 @@ public final class _Annotations {
         return synthesized;
     }
 
+    /**
+     * Optionally create a type-safe synthesized version of this annotation based on presence.
+     * <p>
+     * Does NOT support attribute inheritance.
+     *
+     * @param <A>
+     * @param annotatedElement
+     * @param annotationType
+     * @return non-null
+     */
+    public static <A extends Annotation> Optional<A> synthesizeDirect(
+            final AnnotatedElement annotatedElement,
+            final Class<A> annotationType) {
+
+        val synthesized = _Annotations
+                .collectDirect(annotatedElement)
+                .get(annotationType)
+                .synthesize(MergedAnnotation::isPresent);
+
+        return synthesized;
+    }
+
 
     // -- HELPER
 
     /**
+     * @param searchStrategy
      * @apiNote don't expose Spring's MergedAnnotations
      */
-    static MergedAnnotations collect(final AnnotatedElement annotatedElement) {
+    static MergedAnnotations collect(
+            final AnnotatedElement annotatedElement) {
         val collected = MergedAnnotations.from(annotatedElement, SearchStrategy.TYPE_HIERARCHY);
         return collected;
     }
 
+    /**
+     * @apiNote don't expose Spring's MergedAnnotations
+     */
+    static MergedAnnotations collectDirect(
+            final AnnotatedElement annotatedElement) {
+        val collected = MergedAnnotations.from(annotatedElement, SearchStrategy.DIRECT);
+        return collected;
+    }
 
     private static boolean searchAnnotationOnField(final Class<? extends Annotation> annotationType) {
         val target = annotationType.getAnnotation(Target.class);
