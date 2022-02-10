@@ -52,8 +52,4 @@ public interface ProperInterface {
     @Property
     String getD();
 
-    // -- read only exemplar (with underscore)
-
-    String _getStuff();
-
 }
