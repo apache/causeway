@@ -118,7 +118,7 @@ implements ObjectAction {
                 .orElseGet(()->{
                     val returnType = getReturnType();
                     if(!returnType.isScalar()) {
-                        log.warn("non-scalar action return type requires a TypeOfFacet: %s", identifier);
+                        log.warn("non-scalar action return type requires a TypeOfFacet: {}", identifier);
                     }
                     return returnType;
                 });
