@@ -418,7 +418,7 @@ Country: US
 """
 
     init {
-        val map = maps(0, 0, 11, baseLayerProvider = BaseLayerProvider.EMPTY, crs = CRS.Simple) {
+        val map = maps(0, 0, 11, baseLayerProvider = BaseLayerProvider.EMPTY) {
             width = 100.pc
             height = 100.pc
         }
@@ -426,12 +426,13 @@ Country: US
         val svg = ScalableVectorGraphic(str)
         svg.scaleHorizontally()
         val svgDoc = svg.document
-        val svgElement = svgDoc.documentElement!!
+        val svgElement = svgDoc.documentElement
 
-        val bounds = LatLngBounds(
-                LatLng(0, 0),
-                LatLng(0.1, 0.1))
-        map.svgOverlay(svgElement, bounds)
-    }
+//TODO implement extension function  and adopt new version of kvsion.maps
+/*        val bounds = LatLngBounds(
+            LatLng(0, 0),
+            LatLng(0.1, 0.1))
+    map.svgOverlay(svgElement, bounds)*/
+}
 
 }

@@ -37,7 +37,7 @@ class IconHandler : BaseHandler() {
     }
 
     override fun update() {
-        logEntry.getAggregator().update(logEntry, Constants.pngMimeType)
+        logEntry.getAggregator()?.update(logEntry, Constants.pngMimeType)
     }
 
 }

@@ -23,16 +23,17 @@ package org.apache.isis.client.kroviz.ui.kv.override
 * add a dd menu to the icon
 * */
 
-import com.github.snabbdom.VNode
 import io.kvision.core.*
 import io.kvision.dropdown.DropDown
 import io.kvision.html.*
 import io.kvision.modal.CloseIcon
 import io.kvision.panel.SimplePanel
+import io.kvision.snabbdom.VNode
 import io.kvision.utils.obj
 import io.kvision.utils.px
 import io.kvision.window.MaximizeIcon
 import io.kvision.window.MinimizeIcon
+import kotlinx.browser.window
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
 import io.kvision.html.Link as KvisionHtmlLink
@@ -324,15 +325,15 @@ open class RoWindow(
                                 this@RoWindow.top = (dragStartY + (me).pageY - dragMouseY).toInt().px
                             }
                         }
-                        kotlinx.browser.window.addEventListener("mousemove", moveCallback)
+                        window.addEventListener("mousemove", moveCallback)
                         var upCallback: ((Event) -> Unit)? = null
                         upCallback = {
                             isDrag = false
                             setOpacity("1.0")
-                            kotlinx.browser.window.removeEventListener("mousemove", moveCallback)
-                            kotlinx.browser.window.removeEventListener("mouseup", upCallback)
+                            window.removeEventListener("mousemove", moveCallback)
+                            window.removeEventListener("mouseup", upCallback)
                         }
-                        kotlinx.browser.window.addEventListener("mouseup", upCallback)
+                        window.addEventListener("mouseup", upCallback)
                     }
                 }
             }

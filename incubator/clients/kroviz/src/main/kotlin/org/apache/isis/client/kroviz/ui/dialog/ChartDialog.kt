@@ -18,13 +18,11 @@
  */
 package org.apache.isis.client.kroviz.ui.dialog
 
-import io.data2viz.color.Colors
-import io.data2viz.geom.size
-import io.data2viz.scale.Scales
-import io.data2viz.viz.*
+//mport io.data2viz.viz.bindRendererOn
 import io.kvision.html.Canvas
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.ui.core.RoDialog
+import org.apache.isis.client.kroviz.ui.diagram.Data2VizDiagram
 import org.w3c.dom.HTMLCanvasElement
 
 class ChartDialog(
@@ -44,51 +42,11 @@ class ChartDialog(
         )
         val canvas = Canvas(200, 200)
         canvas.addAfterInsertHook {
+     /*       val viz = Data2VizDiagram().bubbleChartExample()
             val htmlCanvas = canvas.getElement().unsafeCast<HTMLCanvasElement>()
-            viz().bindRendererOn(htmlCanvas)
+            viz.bindRendererOn(htmlCanvas) */
         }
         dialog.add(canvas)
-    }
-
-    private fun viz(): Viz {
-        val vizSize = 500.0
-        val barHeight = 14.0
-        val cPadding = 2.0
-        val data = listOf(4, 8, 15, 16, 23, 42)
-
-        val xScale = Scales.Continuous.linear {
-            domain = listOf(.0, data.maxOrNull()!!.toDouble())
-            range = listOf(.0, vizSize - 2 * cPadding)
-        }
-
-        val viz = viz {
-            size = size(vizSize, vizSize)
-            data.forEachIndexed { index, datum ->
-                group {
-                    transform {
-                        translate(
-                            x = cPadding,
-                            y = cPadding + index * (cPadding + barHeight)
-                        )
-                    }
-                    rect {
-                        width = xScale(datum.toDouble())
-                        height = barHeight
-                        fill = Colors.Web.steelblue
-                    }
-                    text {
-                        textContent = datum.toString()
-                        hAlign = TextHAlign.RIGHT
-                        vAlign = TextVAlign.HANGING
-                        x = xScale(datum.toDouble()) - 2.0
-                        y = 1.5
-                        textColor = Colors.Web.white
-                        fontSize = 10.0
-                    }
-                }
-            }
-        }
-        return viz
     }
 
 }

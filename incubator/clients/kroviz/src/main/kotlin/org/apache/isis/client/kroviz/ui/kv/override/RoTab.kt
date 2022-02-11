@@ -24,7 +24,6 @@ package org.apache.isis.client.kroviz.ui.kv.override
  * * recreate svg from LogEntry on focus
  */
 
-import com.github.snabbdom.VNode
 import io.kvision.core.Component
 import io.kvision.core.ResString
 import io.kvision.core.onClick
@@ -34,6 +33,7 @@ import io.kvision.html.TAG
 import io.kvision.html.Tag
 import io.kvision.panel.TabPanel
 import io.kvision.routing.RoutingManager
+import io.kvision.snabbdom.VNode
 import io.kvision.utils.obj
 import org.apache.isis.client.kroviz.utils.DomUtil
 import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic

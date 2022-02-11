@@ -19,12 +19,12 @@
 package org.apache.isis.client.kroviz.ui.chart
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.ui.panel.EventChart
+import org.apache.isis.client.kroviz.ui.panel.EventBubbleChart
 
 class ChartFactory {
 
-    fun build(logEventList: MutableList<LogEntry> = mutableListOf<LogEntry>()): EventChart {
-        val model = EventChartModel(logEventList)
-        return EventChart(model)
+    fun build(logEventList: MutableList<LogEntry> = mutableListOf<LogEntry>()): EventBubbleChart {
+        val model = EventBubbleChartModel(logEventList)
+        return EventBubbleChart(model)
     }
 }

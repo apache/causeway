@@ -52,7 +52,7 @@ class EventChart(model: ChartModel) : SimplePanel() {
 //            callback = js(tickFormatter)
         }
     })
-
+/*
     private val options = ChartOptions(
             tooltips = TooltipOptions(enabled = true),
             hover = HoverOptions(animationDuration = 0),
@@ -62,7 +62,7 @@ class EventChart(model: ChartModel) : SimplePanel() {
                     xAxes = xAxes),
             showLines = true,
             title = TitleOptions(display = true))
-
+*/
     init {
         this.marginTop = 10.px
         this.width = 100.pc
@@ -71,7 +71,7 @@ class EventChart(model: ChartModel) : SimplePanel() {
                         type = ChartType.BAR,
                         dataSets = model.datasetList,
                         labels = model.labelList,
-                        options = options
+//                        options = options
                 ),
                 chartHeight = 1000,
                 chartWidth = 3000

@@ -80,7 +80,7 @@ class EventStore {
         val logEntry = findView(title)
         if (null != logEntry) {
             logEntry.setClose()
-            logEntry.getAggregator().reset()
+            logEntry.getAggregator()?.reset()
             updateStatus(logEntry)
         }
     }

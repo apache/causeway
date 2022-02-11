@@ -29,7 +29,7 @@ class SvgDispatcher(val callBack: Any) : BaseAggregator() {
         val response = logEntry.response
         when (callBack) {
             is UUID -> DomUtil.appendTo(callBack, response)
-            is SvgPanel -> callBack.renderSvg(response)
+//TODO            is SvgPanel -> callBack.renderSvg(response)
             else -> {
             }
         }

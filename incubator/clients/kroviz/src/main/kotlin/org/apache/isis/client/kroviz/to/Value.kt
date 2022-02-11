@@ -20,7 +20,9 @@ package org.apache.isis.client.kroviz.to
 
 import kotlinx.serialization.*
 import kotlinx.serialization.builtins.nullable
+import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
@@ -45,7 +47,7 @@ data class Value(
     @Serializer(forClass = Value::class)
     companion object : KSerializer<Value> {
 
-        @ExperimentalSerializationApi
+       // @ExperimentalSerializationApi
         override fun deserialize(decoder: Decoder): Value {
             val nss = JsonElement.serializer().nullable
             val jse: JsonElement? = decoder.decodeNullableSerializableValue(nss)!!
@@ -65,7 +67,7 @@ data class Value(
 
         private fun toLink(jse: JsonElement): Value {
             val linkStr = jse.toString()
-            val link = Json.decodeFromString(Link.serializer(), linkStr)
+            val link = Json.decodeFromString<Link>(linkStr)
             return Value(link)
         }
 
@@ -78,6 +80,13 @@ data class Value(
             } catch (ie: IllegalArgumentException) {
                 return false
             }
+        }
+
+        override val descriptor: SerialDescriptor
+            get() = TODO("Not yet implemented")
+
+        override fun serialize(encoder: Encoder, value: Value) {
+            TODO("Not yet implemented")
         }
     }
 

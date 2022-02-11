@@ -24,10 +24,10 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
-import org.apache.isis.client.kroviz.to.WithLinks
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.to.TransferObject
+import org.apache.isis.client.kroviz.to.WithLinks
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.ViewManager
 import org.w3c.files.Blob
@@ -59,8 +59,10 @@ data class LogEntry(
     @Contextual val createdAt: Date = Date()
 ) {
     val url: String = rs?.url
-        //?. is required, otherwise Tabulator.js/EventLogTable shows no entries
+
+    //?. is required, otherwise Tabulator.js/EventLogTable shows no entries
     val subType = rs?.subType
+
     //?. is required, otherwise Tabulator.js/EventLogTable shows no entries
     var state = EventState.INITIAL
     var title: String = ""
@@ -235,15 +237,18 @@ data class LogEntry(
         return fault != null
     }
 
-    fun getAggregator(): BaseAggregator {
+    fun getAggregator(): BaseAggregator? {
         //TODO the last aggt is not always the right one
         // callers need to filter  !!!
         if (aggregators.size == 0) {
             console.log("[LE.getAggregator]")
             console.log(this)
+            return null
+        } else {
+            return aggregators.last()
         }
-        return aggregators.last()
     }
+
 
     fun addAggregator(aggregator: BaseAggregator) {
         if (aggregator is ActionDispatcher) {

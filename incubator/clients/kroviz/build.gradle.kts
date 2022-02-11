@@ -30,7 +30,7 @@ plugins {
 var version = "2.0.0-SNAPSHOT"
 
 kotlin.sourceSets.all {
-    languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
+    languageSettings.optIn("org.mylibrary.OptInAnnotation")
 }
 
 repositories {
@@ -100,11 +100,27 @@ kotlin {
         implementation("io.kvision:kvision-rest:$kvisionVersion")
         implementation("io.kvision:kvision-moment:$kvisionVersion")
         implementation("io.kvision:kvision-maps:$kvisionVersion")
-        implementation("io.data2viz.d2v:d2v-core-js:0.9.1")
+/*
+        implementation("io.data2viz.d2v:d2v-axis-js:0.9.1")
+        implementation("io.data2viz.d2v:d2v-chord-js:0.9.1")
         implementation("io.data2viz.d2v:d2v-color-js:0.9.1")
+//        implementation("io.data2viz.d2v:d2v-contour-js:0.9.1")
+        implementation("io.data2viz.d2v:d2v-delaunay-js:0.9.1")
+        implementation("io.data2viz.d2v:d2v-dsv-js:0.9.1")
+        implementation("io.data2viz.d2v:d2v-ease-js:0.9.1")
+        implementation("io.data2viz.d2v:d2v-force-js:0.9.1")
+        implementation("io.data2viz.d2v:d2v-format-js:0.9.1")
+//        implementation("io.data2viz.d2v:d2v-geo-js:0.9.1")
+        implementation("io.data2viz.d2v:d2v-hexbin-js:0.9.1")
+        implementation("io.data2viz.d2v:d2v-hierarchy-js:0.9.1")
+        implementation("io.data2viz.d2v:d2v-quadtree-js:0.9.1")
+        implementation("io.data2viz.d2v:d2v-random-js:0.9.1")
         implementation("io.data2viz.d2v:d2v-scale-js:0.9.1")
-        implementation("io.data2viz.d2v:d2v-viz-js:0.9.1")
-
+        implementation("io.data2viz.d2v:d2v-shape-js:0.9.1")
+        implementation("io.data2viz.d2v:d2v-tile-js:0.9.1")
+        implementation("io.data2viz.d2v:d2v-time-js:0.9.1")
+        implementation("io.data2viz.d2v:d2v-timer-js:0.9.1")
+        implementation("io.data2viz.d2v:d2v-viz-js:0.9.1") */
         implementation(npm("xmltojson", "1.3.5", false))
         implementation(npm("flatted", "3.2.2", false))
         implementation(npm("diff", "5.0.0", false))

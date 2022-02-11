@@ -33,12 +33,10 @@ import io.kvision.utils.px
 import org.apache.isis.client.kroviz.core.Session
 import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.to.mb.Menubars
+import org.apache.isis.client.kroviz.ui.chart.EventBubbleChartModel
 import org.apache.isis.client.kroviz.ui.chart.SampleChartModel
 import org.apache.isis.client.kroviz.ui.dialog.*
-import org.apache.isis.client.kroviz.ui.panel.EventChart
-import org.apache.isis.client.kroviz.ui.panel.GeoMap
-import org.apache.isis.client.kroviz.ui.panel.ImageSample
-import org.apache.isis.client.kroviz.ui.panel.SvgMap
+import org.apache.isis.client.kroviz.ui.panel.*
 import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.utils.Point
 
@@ -162,7 +160,7 @@ class RoMenuBar : SimplePanel() {
 
         val chartTitle = "Sample Chart"
         mainMenu.add(
-            buildMenuEntry(chartTitle, "Chart", { ViewManager.add(chartTitle, EventChart(SampleChartModel())) })
+            buildMenuEntry(chartTitle, "Chart", { ViewManager.add(chartTitle, EventBubbleChart(EventBubbleChartModel(SessionManager.getEventStore().log))) })
         )
 
         val geoMapTitle = "Sample Geo Map"
@@ -195,12 +193,12 @@ class RoMenuBar : SimplePanel() {
             buildMenuEntry(testTitle, "Test", { this.executeAllMenuBarActions() })
         )
 
-        val d3Title = "BarchartExample"
+        val d3Title = "ChartExample"
         mainMenu.add(
             buildMenuEntry(
                 d3Title,
-                "Test",
-                { ChartDialog(SessionManager.getEventStore().log, "barchartExample").open() })
+                "Chart",
+                { ChartDialog(SessionManager.getEventStore().log, "3dTitle").open() })
         )
 
         /*

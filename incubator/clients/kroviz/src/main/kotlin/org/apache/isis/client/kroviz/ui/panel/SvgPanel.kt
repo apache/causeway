@@ -19,13 +19,12 @@
 
 package org.apache.isis.client.kroviz.ui.panel
 
-import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
-import io.kvision.maps.*
 import io.kvision.panel.HPanel
-import io.kvision.utils.pc
 
 class SvgPanel : HPanel() {
 
+    //TODO implement extension function  and adopt new version of kvsion.maps
+    /*
     val map: Maps = maps(0, 0, 11, baseLayerProvider = BaseLayerProvider.EMPTY, crs = CRS.Simple) {
         width = 100.pc
         height = 100.pc
@@ -46,5 +45,9 @@ class SvgPanel : HPanel() {
                 LatLng(0.05, 0.05))
         map.svgOverlay(svgElement, bounds)
     }
+
+}
+
+private fun Maps.svgOverlay(svgElement: Element, bounds: Any) {*/
 
 }
