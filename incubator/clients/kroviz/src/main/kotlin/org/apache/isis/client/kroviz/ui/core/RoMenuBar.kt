@@ -34,10 +34,7 @@ import org.apache.isis.client.kroviz.core.Session
 import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.chart.SampleChartModel
-import org.apache.isis.client.kroviz.ui.dialog.About
-import org.apache.isis.client.kroviz.ui.dialog.EventDialog
-import org.apache.isis.client.kroviz.ui.dialog.LoginPrompt
-import org.apache.isis.client.kroviz.ui.dialog.SvgInline
+import org.apache.isis.client.kroviz.ui.dialog.*
 import org.apache.isis.client.kroviz.ui.panel.EventChart
 import org.apache.isis.client.kroviz.ui.panel.GeoMap
 import org.apache.isis.client.kroviz.ui.panel.ImageSample
@@ -198,19 +195,27 @@ class RoMenuBar : SimplePanel() {
             buildMenuEntry(testTitle, "Test", { this.executeAllMenuBarActions() })
         )
 
+        val d3Title = "BarchartExample"
+        mainMenu.add(
+            buildMenuEntry(
+                d3Title,
+                "Test",
+                { ChartDialog(SessionManager.getEventStore().log, "barchartExample").open() })
+        )
+
         /*
-              val testTitle = "Test"
-                mainMenu.add(
-                    buildMenuEntry(testTitle, "Test", { this.testFirstSession() })
-                )
+               val testTitle = "Test"
+                 mainMenu.add(
+                     buildMenuEntry(testTitle, "Test", { this.testFirstSession() })
+                 )
 
-         mainMenu.add(
-             buildMenuEntry("Browser in IFrame", "Wikipedia", { BrowserWindow("https://isis.apache.org/").open() })
-         )
+          mainMenu.add(
+              buildMenuEntry("Browser in IFrame", "Wikipedia", { BrowserWindow("https://isis.apache.org/").open() })
+          )
 
-         mainMenu.add(
-             buildMenuEntry("SSH", "Terminal", { ShellWindow("localhost:8080").open() })
-         )*/
+          mainMenu.add(
+              buildMenuEntry("SSH", "Terminal", { ShellWindow("localhost:8080").open() })
+          )*/
 
         return mainMenu
     }

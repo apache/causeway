@@ -32,7 +32,7 @@ class FormItem(
         var callBack: Any? = null,
         var callBackAction: String? = null) {
 
-    private var originalContent: Any? = content
+    private val originalContent: Any? = content
     var readOnly = false
 
     init {

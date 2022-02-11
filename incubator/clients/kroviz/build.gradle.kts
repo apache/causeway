@@ -100,6 +100,11 @@ kotlin {
         implementation("io.kvision:kvision-rest:$kvisionVersion")
         implementation("io.kvision:kvision-moment:$kvisionVersion")
         implementation("io.kvision:kvision-maps:$kvisionVersion")
+        implementation("io.data2viz.d2v:d2v-core-js:0.9.1")
+        implementation("io.data2viz.d2v:d2v-color-js:0.9.1")
+        implementation("io.data2viz.d2v:d2v-scale-js:0.9.1")
+        implementation("io.data2viz.d2v:d2v-viz-js:0.9.1")
+
         implementation(npm("xmltojson", "1.3.5", false))
         implementation(npm("flatted", "3.2.2", false))
         implementation(npm("diff", "5.0.0", false))

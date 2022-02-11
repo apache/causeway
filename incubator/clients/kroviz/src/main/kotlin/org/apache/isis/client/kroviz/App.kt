@@ -26,17 +26,18 @@ import org.apache.isis.client.kroviz.ui.core.RoApp
 import org.apache.isis.client.kroviz.ui.core.ViewManager
 
 class App : Application() {
+    private val appName = "kroviz"
 
     var roApp : RoApp? = null
 
     init {
         Pace.init()
-        require("css/kroviz.css")
+        require("css/$appName.css")
         initRoApp()
     }
 
     override fun start() {
-        val r = root("kroviz", addRow = true)
+        val r = root(appName, addRow = true)
         val v = VPanel()
         v.add(roApp!!)
         r.add(v)
