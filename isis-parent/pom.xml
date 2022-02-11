@@ -339,7 +339,7 @@ under the License.
 		<assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
 		<!-- set this property for all derived projects:
         -->
-        <project.build.outputTimestamp>2021-08-22T15:43:00Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2022-02-11T22:20:00Z</project.build.outputTimestamp>
     </properties>
 
 <!-- breaks dependabot run: timeout due to repo not accessible
