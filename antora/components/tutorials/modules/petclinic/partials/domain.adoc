@@ -1,0 +1,60 @@
+
+[plantuml]
+----
+include::partial$skinparam.adoc[]
+
+package pets {
+
+    enum PetSpecies <<desc>> {
+        Dog
+        Cat
+        Hamster
+        Budgerigar
+    }
+
+    class Pet <<ppt>> {
+        +id
+        ..
+        #petOwner
+        #name
+        ..
+        -species
+        -notes
+        ..
+        -version
+    }
+
+
+    class PetOwner <<role>> {
+        +id
+        ..
+        #lastName
+        #firstName
+        ..
+        -phoneNumber
+        -emailAddress
+    }
+}
+
+
+package visits {
+
+    class Visit <<mi>> {
+        +id
+        ..
+        #pet
+        #visitAt: LocalDateTime
+        ..
+        -reason
+        ..
+        -cost
+        -paid: boolean
+        -outcome
+    }
+}
+
+
+PetOwner *-r--> "0..*" Pet
+Visit "   \n*" -r->  Pet
+Pet  "*" -u-> PetSpecies
+----

@@ -17,7 +17,7 @@ For example:
 
 [source,java]
 ----
-public class SomeLongRunningFixtureScript extends FixtureScript
+public class SomeLongRunningFixtureScript extends FixtureScript {
 
     protected void execute(final ExecutionContext executionContext) {
         // do some work

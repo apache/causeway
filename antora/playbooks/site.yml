@@ -97,6 +97,9 @@ content:
       start_path: examples/demo/domain/src/main/adoc # docs
       branches: HEAD
     - url: .
+      start_path: antora/components/tutorials # tutorials
+      branches: HEAD
+    - url: .
       start_path: regressiontests/adoc # core
       branches: HEAD
 

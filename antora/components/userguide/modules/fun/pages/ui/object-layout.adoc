@@ -251,6 +251,7 @@ All of the semantics in these layout annotations can also be specified in the `.
 In addition, xref:refguide:applib:index/annotation/ParameterLayout.adoc[@ParameterLayout] provides layout hints for action parameters.
 There is no way to specify these semantics in the `.layout.xml` file (action parameters are not enumerated in the file).
 
+[#layout-file-styles]
 === Layout file styles
 
 NOTE: TODO v2 - Style has been changed (WIP)
