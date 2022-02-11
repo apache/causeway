@@ -44,7 +44,7 @@ class ChartDialog(
         )
         val canvas = Canvas(200, 200)
         canvas.addAfterInsertHook {
-            val htmlCanvas = canvas.unsafeCast<HTMLCanvasElement>()
+            val htmlCanvas = canvas.getElement().unsafeCast<HTMLCanvasElement>()
             viz().bindRendererOn(htmlCanvas)
         }
         dialog.add(canvas)
