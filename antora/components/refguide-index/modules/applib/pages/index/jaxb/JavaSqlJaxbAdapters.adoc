@@ -6,7 +6,6 @@ Provides JAXB XmlAdapters for java sql temporal types.
 Example:
 
 ----
-
 @XmlElement @XmlJavaTypeAdapter(JavaSqlJaxbAdapters.DateAdapter.class)
 @Getter @Setter private java.sql.Date date;
 ----

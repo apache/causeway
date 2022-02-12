@@ -53,7 +53,7 @@ if [ -z "$SETTINGS_XML" ]; then
   SETTINGS_XML=$PROJECT_ROOT_PATH/.m2/settings.xml
 fi
 
-sh $SCRIPT_DIR/_print-environment.sh "build-artifacts"
+bash $SCRIPT_DIR/_print-environment.sh "build-artifacts"
 
 ### FUNCTIONS
 

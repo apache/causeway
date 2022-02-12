@@ -27,7 +27,6 @@ For syntax highlighting to work, the client/browser needs to load specific java-
 1) In your web-app's _scripts/application.js_ include the bundled _src/main/resources/prism1.14.js_ .
 
 ----
-
 function includeJs(jsFilePath) {
     var js = document.createElement("script");
     js.type = "text/javascript";
@@ -41,6 +40,5 @@ includeJs("/scripts/prism1.14.js");
 2) In your web-app's _css/application.css_ include the bundled _src/main/resources/prism.css_ .
 
 ----
-
  _@import "prism.css"_ .
 ----

@@ -6,7 +6,6 @@ Implementation of _org.apache.shiro.realm.ldap.JndiLdapRealm_ that also returns 
 Sample config for `shiro.ini` :
 
 ----
-
 contextFactory = org.apache.isis.extensions.shirorealmldap.realm.impl.IsisLdapContextFactory
 contextFactory.url = ldap://localhost:10389
 contextFactory.authenticationMechanism = CRAM-MD5
@@ -43,14 +42,12 @@ securityManager.realms = $ldapRealm
 The permissions for each role can be specified using the _#setResourcePath(String)_ to an 'ini' file with a [roles] section, eg:
 
 ----
-
 ldapRealm.resourcePath=classpath:webapp/myroles.ini
 ----
 
 where `myroles.ini` is in `src/main/resources/webapp` , and takes the form:
 
 ----
-
 [roles]
 user_role = *:ToDoItemsJdo:*:*,\
             *:ToDoItem:*:*
@@ -88,7 +85,7 @@ class IsisLdapRealm {
 <.> xref:#setResourcePath__String[setResourcePath(String)]
 +
 --
-
+ldapRealm.resourcePath=classpath:webapp/myroles.ini
 --
 
 == Members
@@ -97,14 +94,12 @@ class IsisLdapRealm {
 === setResourcePath(String)
 
 ----
-
 ldapRealm.resourcePath=classpath:webapp/myroles.ini
 ----
 
 where `myroles.ini` is in `src/main/resources/webapp` , and takes the form:This 'ini' file can then be referenced by other realms (if multiple realm are configured with the Shiro security manager).
 
 ----
-
 [roles]
 user_role = *:ToDoItemsJdo:*:*,\
             *:ToDoItem:*:*

@@ -45,6 +45,17 @@ For now this is _experimental_. Leave this disabled (the default).
 
 
 |
+[[isis.core.meta-model.introspector.policy]]
+isis.core.meta-model.introspector. +
+policy
+
+| 
+| Policy as to how introspection should process class members and supporting methods.
+
+Default is to only introspect public class members, while annotating these is optional.
+
+
+|
 [[isis.core.meta-model.introspector.validate-incrementally]]
 isis.core.meta-model.introspector. +
 validate-incrementally

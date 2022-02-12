@@ -53,7 +53,7 @@ if [ -z "$MVN_STAGES" ]; then
   MVN_STAGES="clean install"
 fi
 
-sh $SCRIPT_DIR/_print-environment.sh "build-demo-app"
+bash $SCRIPT_DIR/_print-environment.sh "build-demo-app"
 
 export ISIS_VERSION=$REVISION
 echo ""
@@ -71,10 +71,10 @@ function setRevision() {
 
 function revertRevision() {
 	local dir=${1}
-	
+
 	if [ ! -z "$REVISION" ]; then
 	  cd $PROJECT_ROOT_PATH/${dir}
-	  mvn versions:revert -DnewVersion=$REVISION -DprocessAllModules=true -Dmodule-all 
+	  mvn versions:revert -DnewVersion=$REVISION -DprocessAllModules=true -Dmodule-all
 	fi
 }
 
@@ -101,7 +101,7 @@ function buildDockerImage() {
 
 setRevision
 
-# -- debug the version rewriting -- 
+# -- debug the version rewriting --
 # 1) add an exit statement after the comments below
 # exit 0
 # 2) run this script from project root via:

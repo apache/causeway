@@ -15,7 +15,5 @@
 ** xref:refguide:config:sections/eclipselink.adoc[Eclipselink Configuration]
 ** xref:refguide:config:sections/resteasy.adoc[RestEasy Configuration]
 ** xref:refguide:config:sections/isis.extensions.adoc[Extensions]
-** xref:refguide:config:sections/isis.value-types.adoc[Value types]
 ** xref:refguide:config:sections/isis.testing.adoc[Testing]
-** xref:refguide:config:sections/isis.legacy.adoc[Legacy]
 ** xref:refguide:config:sections/Other.adoc[Other]

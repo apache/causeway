@@ -6,7 +6,6 @@ Zip utility for generating compressed output.
 Typical use:
 
 ----
-
 val zipWriter = ZipWriter.newInstance();
 
 for (Map.Entry entry : schemaMap.entrySet()) {

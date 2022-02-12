@@ -19,9 +19,7 @@
 package org.apache.isis.tooling.j2adoc.format;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -204,11 +202,13 @@ implements UnitFormatter {
         final File hooks = file.toPath().getParent().resolve("hooks").toFile();
         if (!hooks.exists() || !hooks.isDirectory()) {
             return Collections.emptyList();
-        } else {
-            return Arrays.stream(hooks.list((dir, name) -> name.startsWith(baseName + "_")))
-            .map(hookFileName -> "hooks/" + hookFileName)
-                    .collect(Collectors.toList());
         }
+        return Arrays.stream(
+                    Objects.requireNonNull(hooks.list((dir, name) -> name.startsWith(baseName + "_")))
+                )
+                .map(hookFileName -> "hooks/" + hookFileName)
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     static String determineBaseName(final String fileName) {
