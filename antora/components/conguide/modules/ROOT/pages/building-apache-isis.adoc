@@ -173,7 +173,7 @@ If you intend to contribute back patches to Apache Isis, note that while you can
 
 == Installing Maven
 
-Install Maven 3.0.x, downloadable http://maven.apache.org/download.html[here].
+Install Maven 3.6.3 or later, downloadable http://maven.apache.org/download.html[here].
 
 Set `MAVEN_OPTS` environment variable:
 

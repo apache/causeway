@@ -290,8 +290,8 @@ include::partial$design/dev-overview.adoc[]
 
 ==== Tool Chain
 
-* (Oracle) JDK 1.8_181 (or higher)
-* Apache Maven 3.6.0
+* (Oracle) JDK 11 (or higher)
+* Apache Maven 3.6.3 (or later)
 
 ==== Create from Archetype
 
