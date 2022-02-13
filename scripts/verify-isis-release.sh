@@ -115,7 +115,7 @@ _download_app(){
 download_cmd=
 curl --version > /dev/null 2>&1
 if [[ $? -eq 0 ]]; then
-    download_cmd="curl -L -O"
+    download_cmd="curl -L -O -k"
 fi
 if [[ -z "$download_cmd" ]]; then
     wget --version > /dev/null 2>&1
