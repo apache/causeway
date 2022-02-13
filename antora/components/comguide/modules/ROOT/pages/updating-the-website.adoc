@@ -20,11 +20,37 @@ git checkout {page-isisrel}
 
 * make documentation updates, and commit changes
 
+* make sure config properties are up-to-date:
++
+This is most easily done by rebuilding all:
++
+[source,bash,subs="attributes+"]
+----
+pushd isis-parent
+mvn clean install -DskipTests -Dreleased
+popd
+----
++
+Though it might be sufficient to just build the core/config module
++
+[source,bash,subs="attributes+"]
+----
+mvn clean install -pl core/config
+----
+
+
+* make sure the tooling is also built:
++
+[source,bash,subs="attributes+"]
+----
+mvn -D module-tooling -D skip.essential install -DskipTests
+----
+
 * generate the website:
 +
 [source,bash,subs="attributes+"]
 ----
-sh preview.sh
+bash preview.sh
 ----
 +
 This will write to `antora/target/site`; we'll use the results in the xref:#publish-website[next section].
