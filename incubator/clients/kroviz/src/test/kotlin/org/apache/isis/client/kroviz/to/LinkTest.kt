@@ -18,6 +18,7 @@
  */
 package org.apache.isis.client.kroviz.to
 
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.Response2Handler
 import kotlin.test.Test
@@ -39,7 +40,7 @@ class LinkTest {
         }"""
 
         // when
-        val link = Json.decodeFromString(Link.serializer(), jsonStr)
+        val link:Link = Json.decodeFromString(jsonStr)
 
         // then
         assertEquals("R", link.rel)

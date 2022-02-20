@@ -39,12 +39,17 @@ import org.w3c.files.Blob
  */
 class EventStore {
     var log = observableListOf<LogEntry>()
-    var logStartTime: Int = 0
 
     private fun log(logEntry: LogEntry) {
         log.add(logEntry)
-        if (log.size == 1) {
-            logStartTime = logEntry.createdAt.getMilliseconds()
+    }
+
+    fun getLogStartMilliSeconds(): Double {
+        return if (log.size >= 1) {
+            val le = log[0]
+            le.createdAt.getTime()
+        } else {
+            0.toDouble()
         }
     }
 
@@ -58,6 +63,7 @@ class EventStore {
         if (aggregator != null) {
             entry.addAggregator(aggregator)
         }
+        entry.runningAtStart = countRunning()
         log(entry)
         updateStatus(entry)
         return entry
@@ -97,6 +103,7 @@ class EventStore {
         if (entry != null) {
             entry.response = response
             entry.setSuccess()
+            entry.runningAtEnd = countRunning()
             updateStatus(entry)
         }
         return entry
@@ -112,6 +119,7 @@ class EventStore {
                 }
             }
             entry.setSuccess()
+            entry.runningAtEnd = countRunning()
             updateStatus(entry)
         }
         return entry
@@ -120,16 +128,21 @@ class EventStore {
     fun fault(reSpec: ResourceSpecification, fault: String) {
         val entry: LogEntry? = findBy(reSpec)
         entry!!.setError(fault)
+        entry.runningAtEnd = countRunning()
         updateStatus(entry)
     }
 
     internal fun updateStatus(entry: LogEntry) {
         val successNo = log.count { le -> le.isSuccess() }
-        val runningNo = log.count { le -> le.isRunning() }
+        val runningNo = countRunning()
         val errorNo = log.count { le -> le.isError() }
         val viewNo = log.count { le -> le.isView() }
         val status = StatusPo(successNo, runningNo, errorNo, viewNo)
         ViewManager.updateStatus(status)
+    }
+
+    private fun countRunning(): Int {
+        return log.count { le -> le.isRunning() }
     }
 
     /**

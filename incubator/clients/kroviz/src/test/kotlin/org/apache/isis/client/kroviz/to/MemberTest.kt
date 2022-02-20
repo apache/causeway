@@ -18,6 +18,7 @@
  */
 package org.apache.isis.client.kroviz.to
 
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.apache.isis.client.kroviz.handler.MemberHandler
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.COLLECTION_DESCRIPTION
@@ -85,7 +86,7 @@ class MemberTest() {
     }
 
     private fun parse(jsonStr: String): Member {
-        return Json.decodeFromString(Member.serializer(), jsonStr)
+        return Json.decodeFromString<Member>(jsonStr)
     }
 
     private fun buildJsonWith(value: Any): String {

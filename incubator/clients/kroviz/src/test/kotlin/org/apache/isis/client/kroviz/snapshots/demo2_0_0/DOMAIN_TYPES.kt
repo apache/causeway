@@ -1,3 +1,10 @@
+package org.apache.isis.client.kroviz.snapshots.demo2_0_0
+
+import org.apache.isis.client.kroviz.snapshots.Response
+
+class DOMAIN_TYPES: Response() {
+    override val url = "http://localhost:8080/restful/domain-types"
+    override val str = """
 {
   "links" : [ {
     "rel" : "self",
@@ -1182,4 +1189,6 @@
     "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
   } ],
   "extensions" : { }
+}        
+    """
 }

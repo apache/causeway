@@ -104,6 +104,9 @@ data class LogEntry(
     @Contextual
     var panel: SimplePanel? = null
 
+    var runningAtStart = 0
+    var runningAtEnd = 0
+
     // alternative constructor for UI events (eg. from user interaction)
     @JsName("secondaryConstructor")
     constructor(title: String, aggregator: BaseAggregator) : this(ResourceSpecification(""), "", "") {
