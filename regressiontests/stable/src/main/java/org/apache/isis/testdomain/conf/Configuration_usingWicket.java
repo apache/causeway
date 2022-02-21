@@ -107,7 +107,7 @@ public class Configuration_usingWicket {
         public static final String FAVORITE_BOOK_SCALAR = "theme:entityPageContainer:entity:rows:2"
                 + ":rowContents:1"
                 + ":col:fieldSets:1"
-                + ":memberGroup:properties:1"
+                + ":memberGroup:properties:2"
                 + ":property:scalarTypeContainer:scalarIfRegular";
 
         public static final String FAVORITE_BOOK_SCALAR_NAME = FAVORITE_BOOK_SCALAR
@@ -130,7 +130,7 @@ public class Configuration_usingWicket {
         public static final String INVENTORY_NAME_PROPERTY = "theme:entityPageContainer:entity:rows:2"
                 + ":rowContents:1"
                 + ":col:fieldSets:1"
-                + ":memberGroup:properties:2"
+                + ":memberGroup:properties:1"
                 + ":property";
 
         public static final String INVENTORY_NAME_PROPERTY_EDIT_LINK = INVENTORY_NAME_PROPERTY
