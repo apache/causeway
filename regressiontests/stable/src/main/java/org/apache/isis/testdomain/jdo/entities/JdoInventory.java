@@ -27,10 +27,12 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Version;
 import javax.jdo.annotations.VersionStrategy;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,7 +46,7 @@ import lombok.ToString;
 @DomainObject(
         logicalTypeName = "testdomain.jdo.Inventory",
         entityChangePublishing = Publishing.ENABLED)
-
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @NoArgsConstructor @AllArgsConstructor(staticName = "of") @ToString
 public class JdoInventory {
 

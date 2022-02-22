@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.jpa;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +42,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
+import org.apache.isis.testdomain.jpa.entities.JpaInventory;
 import org.apache.isis.testdomain.jpa.entities.JpaProduct;
 import org.apache.isis.testdomain.util.dto.IBook;
 
@@ -49,8 +51,9 @@ import lombok.Setter;
 
 @XmlRootElement(name = "root")
 @XmlType(
-        propOrder = {"name", "favoriteBook", "bookForTab1", "bookForTab2", "books",
-                "booksForTab1", "booksForTab2"}
+        propOrder = {
+                "name", "favoriteBook", "bookForTab1", "bookForTab2", "inventory",
+                "books", "booksForTab1", "booksForTab2"}
 )
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
@@ -96,6 +99,15 @@ public class JpaInventoryJaxbVm {
     @Getter @Setter
     private java.util.Collection<JpaBook> books = new ArrayList<>();
 
+    @Getter @Setter
+    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
+    @XmlElement(required = false)
+    private JpaInventory inventory;
+
+    @MemberSupport public List<JpaInventory> choicesInventory() {
+        return repository.allInstances(JpaInventory.class);
+    }
+
     // -- TAB TEST - TAB 1
 
     @Getter @Setter
@@ -119,6 +131,14 @@ public class JpaInventoryJaxbVm {
     @Collection
     @XmlElement(name = "book1")
     private java.util.Collection<JpaBook> booksForTab1 = new ArrayList<>();
+
+    @Collection
+    @XmlTransient
+    public java.util.Collection<JpaProduct> getProductsForTab1() {
+        return Optional.ofNullable(inventory)
+                .map(JpaInventory::getProducts)
+                .orElseGet(Collections::emptySet);
+    }
 
     // -- TAB TEST - TAB 2
 
@@ -144,5 +164,12 @@ public class JpaInventoryJaxbVm {
     @XmlElement(name = "book2")
     private java.util.Collection<JpaBook> booksForTab2 = new ArrayList<>();
 
+    @Collection
+    @XmlTransient
+    public java.util.Collection<JpaProduct> getProductsForTab2() {
+        return Optional.ofNullable(inventory)
+                .map(JpaInventory::getProducts)
+                .orElseGet(Collections::emptySet);
+    }
 
 }

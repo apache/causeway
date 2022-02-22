@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.jdo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +42,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
+import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testdomain.util.dto.IBook;
 
@@ -49,8 +51,9 @@ import lombok.Setter;
 
 @XmlRootElement(name = "root")
 @XmlType(
-        propOrder = {"name", "favoriteBook", "bookForTab1", "bookForTab2", "books",
-                "booksForTab1", "booksForTab2"}
+        propOrder = {
+                "name", "favoriteBook", "bookForTab1", "bookForTab2", "inventory",
+                "books", "booksForTab1", "booksForTab2"}
 )
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
@@ -96,6 +99,15 @@ public class JdoInventoryJaxbVm {
     @XmlElement(name = "book")
     private java.util.Collection<JdoBook> books = new ArrayList<>();
 
+    @Getter @Setter
+    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
+    @XmlElement(required = false)
+    private JdoInventory inventory;
+
+    @MemberSupport public List<JdoInventory> choicesInventory() {
+        return repository.allInstances(JdoInventory.class);
+    }
+
     // -- TAB TEST - TAB 1
 
     @Getter @Setter
@@ -119,6 +131,14 @@ public class JdoInventoryJaxbVm {
     @Collection
     @XmlElement(name = "book1")
     private java.util.Collection<JdoBook> booksForTab1 = new ArrayList<>();
+
+    @Collection
+    @XmlTransient
+    public java.util.Collection<JdoProduct> getProductsForTab1() {
+        return Optional.ofNullable(inventory)
+                .map(JdoInventory::getProducts)
+                .orElseGet(Collections::emptySet);
+    }
 
     // -- TAB TEST - TAB 2
 
@@ -144,5 +164,12 @@ public class JdoInventoryJaxbVm {
     @XmlElement(name = "book2")
     private java.util.Collection<JdoBook> booksForTab2 = new ArrayList<>();
 
+    @Collection
+    @XmlTransient
+    public java.util.Collection<JdoProduct> getProductsForTab2() {
+        return Optional.ofNullable(inventory)
+                .map(JdoInventory::getProducts)
+                .orElseGet(Collections::emptySet);
+    }
 
 }

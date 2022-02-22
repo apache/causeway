@@ -29,6 +29,7 @@
 							</cpt:fieldSet>
 							
 							<cpt:collection defaultView="table" id="booksForTab1" paged="12"/>
+							<cpt:collection defaultView="table" id="productsForTab1" paged="12"/>
 							
 						</bs3:col>
 					</bs3:row>
@@ -43,6 +44,7 @@
 							</cpt:fieldSet>
 							
 							<cpt:collection defaultView="table" id="booksForTab2" paged="12"/>
+							<cpt:collection defaultView="table" id="productsForTab2" paged="12"/>
 							
 						</bs3:col>
 					</bs3:row>
