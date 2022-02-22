@@ -43,6 +43,7 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
@@ -146,10 +147,14 @@ implements ScalarModelSubscriber {
             val scalarContainer = prop.getInlinePromptContext().getScalarIfRegular();
             if(scalarContainer instanceof FormGroup) {
                 val scalarFormComponent = ((FormGroup)scalarContainer).getFormComponent();
-                val untouchedPropertyValue = ManagedObjects.UnwrapUtil
-                        .single(prop.getManagedProperty().getPropertyValue());
-
-                scalarFormComponent.setDefaultModelObject(untouchedPropertyValue);
+                if(scalarFormComponent.getDefaultModel() instanceof ScalarModel) {
+                    val untouchedPropertyValue = prop.getManagedProperty().getPropertyValue();
+                    scalarFormComponent.setDefaultModelObject(untouchedPropertyValue);
+                } else {
+                    val untouchedPropertyValue = ManagedObjects.UnwrapUtil
+                            .single(prop.getManagedProperty().getPropertyValue());
+                    scalarFormComponent.setDefaultModelObject(untouchedPropertyValue);
+                }
             }
 
         });
