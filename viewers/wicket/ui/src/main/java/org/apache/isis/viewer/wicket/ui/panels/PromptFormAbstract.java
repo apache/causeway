@@ -223,7 +223,6 @@ implements ScalarModelSubscriber {
 
         Optional.ofNullable(formExecutorContext().getInlinePromptContext().getScalarTypeContainer())
         .ifPresent(scalarTypeContainer->{
-            //target.add(scalarTypeContainer);
             Wkt.javaScriptAdd(target, EventTopic.FOCUS_FIRST_PROPERTY, scalarTypeContainer.getMarkupId());
         });
     }
