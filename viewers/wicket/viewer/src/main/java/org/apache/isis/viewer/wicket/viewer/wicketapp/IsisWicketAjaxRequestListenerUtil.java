@@ -41,6 +41,7 @@ public final class IsisWicketAjaxRequestListenerUtil {
     public void setRootRequestMapper(
             final WebApplication app,
             final IsisAppCommonContext commonContext) {
+
         app.setRootRequestMapper(new SystemMapper(app) {
             @Override
             protected IRequestMapper newPageInstanceMapper() {
@@ -51,7 +52,7 @@ public final class IsisWicketAjaxRequestListenerUtil {
                         //final boolean isAjax = ((WebRequest)request).isAjax();
 
                         if(handler instanceof ListenerRequestHandler) {
-                            EntityPage.jaxbViewmodelRefresh(((ListenerRequestHandler)handler).getPage());
+                            EntityPage.viewmodelRefresh(((ListenerRequestHandler)handler).getPage());
                         }
 
                         return handler;
