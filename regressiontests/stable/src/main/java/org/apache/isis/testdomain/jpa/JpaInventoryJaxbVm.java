@@ -49,7 +49,8 @@ import lombok.Setter;
 
 @XmlRootElement(name = "root")
 @XmlType(
-        propOrder = {"name", "favoriteBook", "bookForTab1", "bookForTab2", "books"}
+        propOrder = {"name", "favoriteBook", "bookForTab1", "bookForTab2", "books",
+                "booksForTab1", "booksForTab2"}
 )
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
@@ -95,7 +96,7 @@ public class JpaInventoryJaxbVm {
     @Getter @Setter
     private java.util.Collection<JpaBook> books = new ArrayList<>();
 
-    // -- TAB TEST
+    // -- TAB TEST - TAB 1
 
     @Getter @Setter
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
@@ -114,6 +115,12 @@ public class JpaInventoryJaxbVm {
                 .orElse("none selected");
     }
 
+    @Getter @Setter
+    @Collection
+    @XmlElement(name = "book1")
+    private java.util.Collection<JpaBook> booksForTab1 = new ArrayList<>();
+
+    // -- TAB TEST - TAB 2
 
     @Getter @Setter
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
@@ -131,5 +138,11 @@ public class JpaInventoryJaxbVm {
                 .map(IBook::getName)
                 .orElse("none selected");
     }
+
+    @Getter @Setter
+    @Collection
+    @XmlElement(name = "book2")
+    private java.util.Collection<JpaBook> booksForTab2 = new ArrayList<>();
+
 
 }

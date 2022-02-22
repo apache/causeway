@@ -27,6 +27,9 @@
 								<cpt:property id="bookForTab1"/>
 								<cpt:property id="bookNameForTab1"/>
 							</cpt:fieldSet>
+							
+							<cpt:collection defaultView="table" id="booksForTab1" paged="12"/>
+							
 						</bs3:col>
 					</bs3:row>
 				</bs3:tab>
@@ -38,6 +41,9 @@
 								<cpt:property id="bookForTab2"/>
 								<cpt:property id="bookNameForTab2"/>
 							</cpt:fieldSet>
+							
+							<cpt:collection defaultView="table" id="booksForTab2" paged="12"/>
+							
 						</bs3:col>
 					</bs3:row>
 				</bs3:tab>
