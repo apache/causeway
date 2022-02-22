@@ -25,6 +25,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.util.lang.Args;
 
+import lombok.Getter;
+
 import de.agilecoders.wicket.core.util.Attributes;
 
 /**
@@ -35,6 +37,7 @@ public class FormGroup extends WebMarkupContainer {
 
     private static final long serialVersionUID = 1L;
 
+    @Getter
     private final FormComponent<?> formComponent;
 
     /**
@@ -43,14 +46,14 @@ public class FormGroup extends WebMarkupContainer {
      * @param id The component id
      * @param formComponent The form component that controls the validation state of the form group
      */
-    public FormGroup(String id, FormComponent<?> formComponent) {
+    public FormGroup(final String id, final FormComponent<?> formComponent) {
         super(id);
 
         this.formComponent = Args.notNull(formComponent, "formComponent");
     }
 
     @Override
-    protected void onComponentTag(ComponentTag tag) {
+    protected void onComponentTag(final ComponentTag tag) {
         super.onComponentTag(tag);
 
         Attributes.addClass(tag, "form-group");
@@ -58,7 +61,7 @@ public class FormGroup extends WebMarkupContainer {
         applyFeedbackClasses(tag, formComponent);
     }
 
-    protected void applyFeedbackClasses(ComponentTag tag, FormComponent<?> formComponent) {
+    protected void applyFeedbackClasses(final ComponentTag tag, final FormComponent<?> formComponent) {
         FeedbackMessages feedbackMessages = formComponent.getFeedbackMessages();
         for (FeedbackMessage feedbackMessage : feedbackMessages) {
             if (feedbackMessage.getLevel() == FeedbackMessage.ERROR) {

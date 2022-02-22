@@ -35,7 +35,9 @@ import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
+import org.apache.isis.commons.internal.functions._Functions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -44,6 +46,7 @@ import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.util.Components;
@@ -129,7 +132,27 @@ implements ScalarModelSubscriber {
 
     @Override
     public final void onCancelSubmitted(final AjaxRequestTarget target) {
+
+        _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
+                + "originating from User clicking CANCEL (or hitting ESC) on an inline editing form or "
+                + "action prompt.");
+
         setLastFocusHint();
+
+        getMemberModel()
+        .accept(_Functions.noopConsumer(), prop->{
+
+            // reset the UI form input field to the untouched property value
+            val scalarContainer = prop.getInlinePromptContext().getScalarIfRegular();
+            if(scalarContainer instanceof FormGroup) {
+                val scalarFormComponent = ((FormGroup)scalarContainer).getFormComponent();
+                val untouchedPropertyValue = ManagedObjects.UnwrapUtil
+                        .single(prop.getManagedProperty().getPropertyValue());
+
+                scalarFormComponent.setDefaultModelObject(untouchedPropertyValue);
+            }
+
+        });
         completePrompt(target);
     }
 
@@ -199,8 +222,10 @@ implements ScalarModelSubscriber {
         formExecutorContext().getInlinePromptContext().onCancel();
 
         Optional.ofNullable(formExecutorContext().getInlinePromptContext().getScalarTypeContainer())
-        .ifPresent(scalarTypeContainer->
-            Wkt.javaScriptAdd(target, EventTopic.FOCUS_FIRST_PROPERTY, scalarTypeContainer.getMarkupId()));
+        .ifPresent(scalarTypeContainer->{
+            //target.add(scalarTypeContainer);
+            Wkt.javaScriptAdd(target, EventTopic.FOCUS_FIRST_PROPERTY, scalarTypeContainer.getMarkupId());
+        });
     }
 
 }
