@@ -115,6 +115,7 @@ This is intended to be used so that an exclusive end date of an interval can be 
 For example:
 
 ----
+
 public void updateDates(
     @ParameterLayout(named="From") LocalDate startDate,
     @ParameterLayout(named="To"), renderDay=RenderDay.AS_DAY_BEFORE) LocalDate endDate) { ... }

@@ -6,6 +6,7 @@ Provides JAXB XmlAdapters for Java time temporal types.
 Example:
 
 ----
+
 @XmlElement @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.LocalDateAdapter.class)
 @Getter @Setter private java.time.LocalDate localDate;
 ----
