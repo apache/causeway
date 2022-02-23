@@ -47,7 +47,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
     protected final Component createComponentForCompact() {
         val label = Wkt.labelAddWithConverter(
                 getCompactFragment(CompactType.SPAN),
-                ID_SCALAR_IF_COMPACT, newTextFieldValueModel(), cls, getConverter(getModel()));
+                ID_SCALAR_IF_COMPACT, newTextFieldValueModel(), cls, getConverter(scalarModel()));
         label.setEnabled(false);
         return label;
     }

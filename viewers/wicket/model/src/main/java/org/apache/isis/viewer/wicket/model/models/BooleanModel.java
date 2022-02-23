@@ -19,6 +19,10 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.model.ChainingModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.NonNull;
 import lombok.val;
@@ -32,23 +36,64 @@ extends ChainingModel<Boolean> {
         return new BooleanModel(scalarModel);
     }
 
+    final boolean isPrimitive;
+
     protected BooleanModel(final ScalarModel scalarModel) {
         super(scalarModel);
+
+        val spec = scalarModel().getScalarTypeSpec();
+        this.isPrimitive = spec.getFullIdentifier().equals("boolean");
     }
 
     @Override
     public Boolean getObject() {
         val adapter = scalarModel().getObject();
-        return adapter != null
+        final Boolean value = adapter != null
                 ? (Boolean) adapter.getPojo()
                 : null;
+        return (isPrimitive
+                    && value==null)
+                ? Boolean.FALSE
+                : value;
     }
 
     @Override
-    public void setObject(final Boolean object) {
-        val objectAdapter = scalarModel().getCommonContext().getObjectManager().adapt(object);
-        scalarModel().setObject(objectAdapter);
+    public void setObject(final Boolean value) {
+        val adaptedValue = ManagedObject.of(
+                scalarModel().getScalarTypeSpec(),
+                (value==null
+                    && isPrimitive)
+                ? Boolean.FALSE
+                : value);
+        scalarModel().setObject(adaptedValue);
     }
+
+    // -- UTILITY
+
+    /**
+     * Translates boolean to text.
+     * eg used for checkbox inline edit form fields
+     */
+    public IModel<String> asStringModel(
+            final String notSetLiteral,
+            final String trueLiteral,
+            final String falseLiteral) {
+
+        return new Model<String>() {
+            private static final long serialVersionUID = 1L;
+
+            @Override public String getObject() {
+                final Boolean bool = BooleanModel.this.getObject();
+                return bool == null
+                        ? notSetLiteral // '(not set)'
+                        : bool
+                            ? trueLiteral // 'yes'
+                            : falseLiteral; // 'no'
+            }
+        };
+    }
+
+    // -- HELPER
 
     protected ScalarModel scalarModel() {
         return (ScalarModel) super.getTarget();

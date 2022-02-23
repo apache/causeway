@@ -70,6 +70,10 @@ import lombok.experimental.UtilityClass;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.util.Attributes;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig.Sizes;
+import de.agilecoders.wicket.jquery.Key;
 
 /**
  * Wicket common idioms, in alphabetical order.
@@ -228,6 +232,60 @@ public class Wkt {
             final WicketViewerSettings settings,
             final SerializableBiConsumer<AjaxButton, AjaxRequestTarget> onClick) {
         return add(markupContainer, buttonOk(id, labelModel, settings, onClick));
+    }
+
+    // -- CHECKBOX
+
+    public static CheckBoxX checkbox(
+            final String id,
+            final IModel<Boolean> checkedModel,
+            final boolean required,
+            final Sizes size) {
+
+         final CheckBoxXConfig config = new CheckBoxXConfig() {
+            private static final long serialVersionUID = 1L;
+            {
+                // so can tab to the checkbox
+                // not part of the API, so have to use this object initializer
+                put(new Key<String>("tabindex"), "0");
+            }
+        }
+        .withSize(size)
+        .withEnclosedLabel(false)
+        .withIconChecked("<i class='fa fa-fw fa-check'></i>")
+        .withIconNull("<i class='fa fa-fw fa-square'></i>")
+        .withThreeState(!required);
+
+        final CheckBoxX checkBox = new CheckBoxX(id, checkedModel) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public CheckBoxXConfig getConfig() {
+                return config;
+            }
+
+            @Override protected void onComponentTag(final ComponentTag tag) {
+                super.onComponentTag(tag);
+                //
+                // this is a horrid hack to allow the space bar to work as a way of toggling the checkbox.
+                // this hack works for 1.5.4 of the JS plugin (https://github.com/kartik-v/bootstrap-checkbox-x)
+                //
+                // the problem is that the "change" event is not fired for a keystroke; instead the callback in the
+                // JS code (https://github.com/kartik-v/bootstrap-checkbox-x/blob/v1.5.4/js/checkbox-x.js#L70)
+                // calls self.change().  This in turn calls validateCheckbox().  In that method it is possible to
+                // cause the "change" event to fire, but only if the input element is NOT type="checkbox".
+                // (https://github.com/kartik-v/bootstrap-checkbox-x/blob/v1.5.4/js/checkbox-x.js#L132)
+                //
+                // It's not possible to simply change the associated markup to input type='xx' because it falls foul
+                // of a check in super.onComponentTag(tag).  So instead we let that through then hack the tag
+                // afterwards:
+                //
+                tag.put("type", "xx");
+            }
+        };
+        checkBox.setOutputMarkupId(true); // allows AJAX updates to work
+        return checkBox;
     }
 
     // -- CONTAINER
@@ -611,6 +669,5 @@ public class Wkt {
                 ? String.format("Wicket.Event.publish(Isis.Topic.%s, '%s')", topic.name(), containerId)
                 : String.format("Wicket.Event.publish(Isis.Topic.%s)", topic.name());
     }
-
 
 }
