@@ -47,7 +47,7 @@ public class PrimitiveBooleanJdo                                        // <.>
         extends PrimitiveBooleanEntity {
 
 //end::class[]
-    public PrimitiveBooleanJdo(boolean initialValue) {
+    public PrimitiveBooleanJdo(final boolean initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
@@ -58,10 +58,16 @@ public class PrimitiveBooleanJdo                                        // <.>
     @Getter @Setter
     private boolean readOnlyProperty;                                   // <.>
 
+    @Setter
+    private boolean readWriteProperty;
+
+    //XXX lombok bug? - annotation not recognized when using @Getter
     @Property(editing = Editing.ENABLED)
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
-    @Getter @Setter
-    private boolean readWriteProperty;
+    @Override
+    public boolean isReadWriteProperty() {
+        return readWriteProperty;
+    }
 
 }
 //end::class[]
