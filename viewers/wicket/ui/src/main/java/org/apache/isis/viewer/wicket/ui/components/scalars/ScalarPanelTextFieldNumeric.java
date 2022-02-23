@@ -54,7 +54,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
 
     @Override
     protected final IModel<String> obtainInlinePromptModel() {
-        return super.toStringConvertingModelOf(getConverter(scalarModel));
+        return super.toStringConvertingModelOf(getConverter(scalarModel()));
     }
 
 }

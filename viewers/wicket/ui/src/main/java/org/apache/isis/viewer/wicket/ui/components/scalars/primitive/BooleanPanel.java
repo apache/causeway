@@ -59,26 +59,27 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
     @Override
     protected MarkupContainer createComponentForRegular() {
-        final String name = getModel().getFriendlyName();
+
+        val scalarModel = getModel();
 
         checkBox = createCheckBox(ID_SCALAR_VALUE, CheckBoxXConfig.Sizes.lg);
-
-        checkBox.setLabel(Model.of(name));
+        checkBox.setLabel(Model.of(scalarModel.getFriendlyName()));
 
         final FormGroup scalarIfRegularFormGroup = new FormGroup(ID_SCALAR_IF_REGULAR, checkBox);
         scalarIfRegularFormGroup.add(checkBox);
-        if(getModel().isRequired() && getModel().isEnabled()) {
+        if(scalarModel.isRequired()
+                && scalarModel.isEnabled()) {
             Wkt.cssAppend(scalarIfRegularFormGroup, "mandatory");
         }
 
-        final String labelCaption = getRendering().getLabelCaption(checkBox);
-        final Label scalarName = createScalarName(ID_SCALAR_NAME, labelCaption);
+        final Label scalarNameLabel = createScalarName(
+                ID_SCALAR_NAME,
+                getRendering().getLabelCaption(checkBox));
+        scalarIfRegularFormGroup.add(scalarNameLabel);
 
-        scalarIfRegularFormGroup.add(scalarName);
-
-        getModel()
-        .getDescribedAs()
-        .ifPresent(describedAs->Tooltips.addTooltip(scalarIfRegularFormGroup, describedAs));
+        scalarModel
+            .getDescribedAs()
+            .ifPresent(describedAs->Tooltips.addTooltip(scalarIfRegularFormGroup, describedAs));
 
         return scalarIfRegularFormGroup;
     }
@@ -102,21 +103,21 @@ public class BooleanPanel extends ScalarPanelAbstract {
     protected InlinePromptConfig getInlinePromptConfig() {
         return InlinePromptConfig.supportedAndHide(
                 // TODO: not sure why this is needed when the other subtypes have no similar guard...
-                scalarModel.mustBeEditable()
-                ? this.checkBox
-                        : null
+                scalarModel().mustBeEditable()
+                    ? this.checkBox
+                    : null
                 );
     }
 
     @Override
     protected IModel<String> obtainInlinePromptModel() {
+
         return new Model<String>() {
 
             private static final long serialVersionUID = 1L;
 
             @Override public String getObject() {
-                final ScalarModel model = getModel();
-                val adapter = model.getObject();
+                val adapter = scalarModel().getObject();
                 final Boolean bool = adapter != null ? (Boolean) adapter.getPojo() : null;
                 return bool == null? "(not set)" : bool ? "Yes" : "No";
             }
@@ -132,14 +133,15 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
             @Override
             public Boolean getObject() {
-                final ScalarModel model = getModel();
-                val adapter = model.getObject();
-                return adapter != null? (Boolean) adapter.getPojo(): null;
+                val adapter = scalarModel().getObject();
+                return adapter != null
+                        ? (Boolean) adapter.getPojo()
+                        : null;
             }
 
             @Override
             public void setObject(final Boolean object) {
-                val objectAdapter = scalarModel.getCommonContext().getObjectManager().adapt(object);
+                val objectAdapter = scalarModel().getCommonContext().getObjectManager().adapt(object);
                 getModel().setObject(objectAdapter);
             }
         }) {
@@ -178,7 +180,7 @@ public class BooleanPanel extends ScalarPanelAbstract {
         final ObjectSpecification objectSpecification = getModel().getScalarTypeSpec();
         if(objectSpecification.getFullIdentifier().equals("boolean")) {
             if(getModel().getObject() == null) {
-                val objectAdapter = scalarModel.getCommonContext().getObjectManager().adapt(Boolean.FALSE);
+                val objectAdapter = scalarModel().getCommonContext().getObjectManager().adapt(Boolean.FALSE);
                 getModel().setObject(objectAdapter);
             }
         }
@@ -221,9 +223,10 @@ public class BooleanPanel extends ScalarPanelAbstract {
     protected void onInitializeReadonly(final String disableReason) {
         super.onInitializeReadonly(disableReason);
         checkBox.setEnabled(false);
-        final AttributeModifier title = new AttributeModifier("title",
-                Model.of(disableReason != null ? disableReason : ""));
-        checkBox.add(title);
+        checkBox.add(new AttributeModifier("title",
+                Model.of(disableReason != null
+                    ? disableReason
+                    : "")));
     }
 
     @Override
@@ -244,14 +247,11 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
     @Override
     public String getVariation() {
-        String variation;
-        final LabelAtFacet facet = getModel().getFacet(LabelAtFacet.class);
-        if (facet != null && LabelPosition.RIGHT == facet.label()) {
-            variation = "labelRightPosition";
-        } else {
-            variation = super.getVariation();
-        }
-        return variation;
+        val labelAtFacet = getModel().getFacet(LabelAtFacet.class);
+        return labelAtFacet != null
+                && labelAtFacet.label() == LabelPosition.RIGHT
+            ? "labelRightPosition"
+            : super.getVariation();
     }
 
 }

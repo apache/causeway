@@ -74,8 +74,11 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
+import lombok.experimental.Accessors;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
@@ -203,7 +206,11 @@ implements ScalarModelSubscriber {
 
     // -- CONSTRUCTION
 
-    protected final ScalarModel scalarModel;
+    /**
+     * Identical to super.getModel()
+     */
+    @Getter(value = AccessLevel.PROTECTED) @Accessors(fluent = true)
+    private final ScalarModel scalarModel;
 
     private Component scalarIfCompact;
     private MarkupContainer scalarIfRegular;
@@ -598,13 +605,13 @@ implements ScalarModelSubscriber {
     protected Label createScalarName(final String id, final String labelCaption) {
         final Label scalarName = Wkt.label(id, labelCaption);
         final ScalarModel scalarModel = getModel();
-        if(scalarModel.isRequired() && scalarModel.isEnabled()) {
+        if(scalarModel.isRequired()
+                && scalarModel.isEnabled()) {
             final String label = scalarName.getDefaultModelObjectAsString();
             if(!_Strings.isNullOrEmpty(label)) {
                 Wkt.cssAppend(scalarName, "mandatory");
             }
         }
-
         scalarName.setEscapeModelStrings(true);
         return scalarName;
     }

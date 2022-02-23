@@ -312,7 +312,7 @@ implements TextFieldValueModel.ScalarModelProvider {
         }
 
         @Override public String getObject() {
-            val adapter = scalarModel.getObject();
+            val adapter = scalarModel().getObject();
             val value = ManagedObjects.UnwrapUtil.single(adapter);
             final String str = value != null
                     ? converter.convertToString(

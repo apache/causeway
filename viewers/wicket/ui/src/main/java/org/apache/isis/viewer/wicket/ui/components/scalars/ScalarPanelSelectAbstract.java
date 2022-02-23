@@ -57,9 +57,9 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
 
 
     protected Select2 createSelect2(final String id) {
-        final Select2 select2 = Select2.createSelect2(id, scalarModel);
+        final Select2 select2 = Select2.createSelect2(id, scalarModel());
         setProviderAndCurrAndPending(select2);
-        select2.setRequired(scalarModel.isRequired());
+        select2.setRequired(scalarModel().isRequired());
         return select2;
     }
 
@@ -84,7 +84,7 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
         setOutputMarkupId(true);
         select2.asComponent().setOutputMarkupId(true);
 
-        final String name = scalarModel.getFriendlyName();
+        final String name = scalarModel().getFriendlyName();
         select2.setLabel(Model.of(name));
 
         final FormGroup formGroup = createFormGroupAndName(formComponent, ID_SCALAR_IF_REGULAR, ID_SCALAR_NAME);
@@ -100,7 +100,7 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
 
     protected void addStandardSemantics() {
         select2.setRequired(getModel().isRequired());
-        select2.add(new Select2Validator(this.scalarModel));
+        select2.add(new Select2Validator(scalarModel()));
     }
 
     @Override

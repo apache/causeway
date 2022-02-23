@@ -47,10 +47,6 @@ extends ScalarPanelSelectAbstract {
         super(id, scalarModel);
     }
 
-    public ScalarModel scalarModel() {
-        return getModel();
-    }
-
     // --
 
     @Override
@@ -143,7 +139,7 @@ extends ScalarPanelSelectAbstract {
     // (choice vs autoComplete).  Here though - because values don't currently support autoComplete - no branch is required
     @Override
     protected ChoiceProvider<ObjectMemento> buildChoiceProvider() {
-        return new ObjectAdapterMementoProviderForValueChoices(scalarModel);
+        return new ObjectAdapterMementoProviderForValueChoices(scalarModel());
     }
 
     @Override
@@ -151,10 +147,6 @@ extends ScalarPanelSelectAbstract {
         if(scalarModel().isEmpty()) {
             select2.clear();
         }
-    }
-
-    public ScalarModel getScalarModel() {
-        return scalarModel;
     }
 
 }
