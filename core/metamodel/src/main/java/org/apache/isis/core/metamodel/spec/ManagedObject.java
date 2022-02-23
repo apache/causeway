@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -132,16 +131,16 @@ public interface ManagedObject {
 
     /** debug */
     default void assertSpecIsInSyncWithPojo() {
-        val pojo = getPojo();
-        val spec = getSpecification();
-        if(pojo==null
-                || spec==null) {
-            return;
-        }
-        val actualSpec = spec.getSpecificationLoader().specForType(pojo.getClass()).orElse(null);
-        if(!Objects.equals(spec,  actualSpec)) {
-            System.err.printf("spec mismatch %s %s%n", spec, actualSpec);
-        }
+//        val pojo = getPojo();
+//        val spec = getSpecification();
+//        if(pojo==null
+//                || spec==null) {
+//            return;
+//        }
+//        val actualSpec = spec.getSpecificationLoader().specForType(pojo.getClass()).orElse(null);
+//        if(!Objects.equals(spec,  actualSpec)) {
+//            System.err.printf("spec mismatch %s %s%n", spec, actualSpec);
+//        }
         //_Assert.assertEquals(spec, actualSpec);
     }
 
