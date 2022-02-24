@@ -42,5 +42,4 @@ public class InlinePromptContext implements Serializable {
         scalarIfRegularInlinePromptForm.setVisible(false);
     }
 
-
 }

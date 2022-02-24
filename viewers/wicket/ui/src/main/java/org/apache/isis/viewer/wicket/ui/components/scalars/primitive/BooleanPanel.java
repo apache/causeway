@@ -24,14 +24,13 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.viewer.wicket.model.models.BooleanModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
@@ -42,7 +41,6 @@ import lombok.val;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
-import de.agilecoders.wicket.jquery.Key;
 
 /**
  * Panel for rendering scalars of type {@link Boolean} or <tt>boolean</tt>.
@@ -59,26 +57,32 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
     @Override
     protected MarkupContainer createComponentForRegular() {
-        final String name = getModel().getFriendlyName();
 
-        checkBox = createCheckBox(ID_SCALAR_VALUE, CheckBoxXConfig.Sizes.lg);
+        val scalarModel = getModel();
 
-        checkBox.setLabel(Model.of(name));
+        checkBox = Wkt.checkbox(
+                ID_SCALAR_VALUE,
+                BooleanModel.forScalarModel(scalarModel),
+                scalarModel.isRequired(),
+                CheckBoxXConfig.Sizes.lg);
+
+        checkBox.setLabel(Model.of(scalarModel.getFriendlyName()));
 
         final FormGroup scalarIfRegularFormGroup = new FormGroup(ID_SCALAR_IF_REGULAR, checkBox);
         scalarIfRegularFormGroup.add(checkBox);
-        if(getModel().isRequired() && getModel().isEnabled()) {
+        if(scalarModel.isRequired()
+                && scalarModel.isEnabled()) {
             Wkt.cssAppend(scalarIfRegularFormGroup, "mandatory");
         }
 
-        final String labelCaption = getRendering().getLabelCaption(checkBox);
-        final Label scalarName = createScalarName(ID_SCALAR_NAME, labelCaption);
+        final Label scalarNameLabel = createScalarName(
+                ID_SCALAR_NAME,
+                getRendering().getLabelCaption(checkBox));
+        scalarIfRegularFormGroup.add(scalarNameLabel);
 
-        scalarIfRegularFormGroup.add(scalarName);
-
-        getModel()
-        .getDescribedAs()
-        .ifPresent(describedAs->Tooltips.addTooltip(scalarIfRegularFormGroup, describedAs));
+        scalarModel
+            .getDescribedAs()
+            .ifPresent(describedAs->Tooltips.addTooltip(scalarIfRegularFormGroup, describedAs));
 
         return scalarIfRegularFormGroup;
     }
@@ -94,7 +98,13 @@ public class BooleanPanel extends ScalarPanelAbstract {
      */
     @Override
     protected Component createComponentForCompact() {
-        return createCheckBox(ID_SCALAR_IF_COMPACT, CheckBoxXConfig.Sizes.sm);
+        val checkbox = Wkt.checkbox(
+                ID_SCALAR_IF_COMPACT,
+                BooleanModel.forScalarModel(scalarModel()),
+                scalarModel().isRequired(),
+                CheckBoxXConfig.Sizes.sm);
+        checkbox.setEnabled(false); // will be enabled before rendering if required
+        return checkbox;
     }
 
 
@@ -102,107 +112,17 @@ public class BooleanPanel extends ScalarPanelAbstract {
     protected InlinePromptConfig getInlinePromptConfig() {
         return InlinePromptConfig.supportedAndHide(
                 // TODO: not sure why this is needed when the other subtypes have no similar guard...
-                scalarModel.mustBeEditable()
-                ? this.checkBox
-                        : null
+                scalarModel().mustBeEditable()
+                    ? this.checkBox
+                    : null
                 );
     }
 
     @Override
     protected IModel<String> obtainInlinePromptModel() {
-        return new Model<String>() {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override public String getObject() {
-                final ScalarModel model = getModel();
-                val adapter = model.getObject();
-                final Boolean bool = adapter != null ? (Boolean) adapter.getPojo() : null;
-                return bool == null? "(not set)" : bool ? "Yes" : "No";
-            }
-        };
-    }
-
-    private CheckBoxX createCheckBox(final String id, final CheckBoxXConfig.Sizes size) {
-
-        final CheckBoxXConfig config = configFor(getModel().isRequired(), size);
-
-        final CheckBoxX checkBox = new CheckBoxX(id, new Model<Boolean>() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public Boolean getObject() {
-                final ScalarModel model = getModel();
-                val adapter = model.getObject();
-                return adapter != null? (Boolean) adapter.getPojo(): null;
-            }
-
-            @Override
-            public void setObject(final Boolean object) {
-                val objectAdapter = scalarModel.getCommonContext().getObjectManager().adapt(object);
-                getModel().setObject(objectAdapter);
-            }
-        }) {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public CheckBoxXConfig getConfig() {
-                return config;
-            }
-
-            @Override protected void onComponentTag(final ComponentTag tag) {
-                super.onComponentTag(tag);
-                //
-                // this is a horrid hack to allow the space bar to work as a way of toggling the checkbox.
-                // this hack works for 1.5.4 of the JS plugin (https://github.com/kartik-v/bootstrap-checkbox-x)
-                //
-                // the problem is that the "change" event is not fired for a keystroke; instead the callback in the
-                // JS code (https://github.com/kartik-v/bootstrap-checkbox-x/blob/v1.5.4/js/checkbox-x.js#L70)
-                // calls self.change().  This in turn calls validateCheckbox().  In that method it is possible to
-                // cause the "change" event to fire, but only if the input element is NOT type="checkbox".
-                // (https://github.com/kartik-v/bootstrap-checkbox-x/blob/v1.5.4/js/checkbox-x.js#L132)
-                //
-                // It's not possible to simply change the associated markup to input type='xx' because it falls foul
-                // of a check in super.onComponentTag(tag).  So instead we let that through then hack the tag
-                // afterwards:
-                //
-                tag.put("type", "xx");
-            }
-        };
-        checkBox.setOutputMarkupId(true);
-        checkBox.setEnabled(false); // will be enabled before rendering if
-        // required
-
-        // must prime the underlying model if this is a primitive boolean
-        final ObjectSpecification objectSpecification = getModel().getScalarTypeSpec();
-        if(objectSpecification.getFullIdentifier().equals("boolean")) {
-            if(getModel().getObject() == null) {
-                val objectAdapter = scalarModel.getCommonContext().getObjectManager().adapt(Boolean.FALSE);
-                getModel().setObject(objectAdapter);
-            }
-        }
-
-        return checkBox;
-    }
-
-    private static CheckBoxXConfig configFor(final boolean required, final CheckBoxXConfig.Sizes size) {
-        final CheckBoxXConfig config = new CheckBoxXConfig() {
-
-            private static final long serialVersionUID = 1L;
-
-            {
-                // so can tab to the checkbox
-                // not part of the API, so have to use this object initializer
-                put(new Key<String>("tabindex"), "0");
-            }
-        };
-        return config
-                .withSize(size)
-                .withEnclosedLabel(false)
-                .withIconChecked("<i class='fa fa-fw fa-check'></i>")
-                .withIconNull("<i class='fa fa-fw fa-square'></i>")
-                .withThreeState(!required);
+        //XXX not localized yet - maybe can be done at a more fundamental level - or replace with universal symbols
+        return BooleanModel.forScalarModel(scalarModel())
+                .asStringModel("(not set)", "Yes", "No");
     }
 
     @Override
@@ -221,9 +141,10 @@ public class BooleanPanel extends ScalarPanelAbstract {
     protected void onInitializeReadonly(final String disableReason) {
         super.onInitializeReadonly(disableReason);
         checkBox.setEnabled(false);
-        final AttributeModifier title = new AttributeModifier("title",
-                Model.of(disableReason != null ? disableReason : ""));
-        checkBox.add(title);
+        checkBox.add(new AttributeModifier("title",
+                Model.of(disableReason != null
+                    ? disableReason
+                    : "")));
     }
 
     @Override
@@ -244,14 +165,11 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
     @Override
     public String getVariation() {
-        String variation;
-        final LabelAtFacet facet = getModel().getFacet(LabelAtFacet.class);
-        if (facet != null && LabelPosition.RIGHT == facet.label()) {
-            variation = "labelRightPosition";
-        } else {
-            variation = super.getVariation();
-        }
-        return variation;
+        val labelAtFacet = getModel().getFacet(LabelAtFacet.class);
+        return labelAtFacet != null
+                && labelAtFacet.label() == LabelPosition.RIGHT
+            ? "labelRightPosition"
+            : super.getVariation();
     }
 
 }

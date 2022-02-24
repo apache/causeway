@@ -73,13 +73,13 @@ public class Annotations_getAnnotations_on_Field_Test {
         }
         
         val field = SomeDomainObject.class.getDeclaredField("name");
-        val nearestF = _Annotations.synthesizeInherited(field, Property.class);
+        val nearestF = _Annotations.synthesize(field, Property.class);
         
         assertThat(nearestF.isPresent(), is(true));
         assertThat(nearestF.get().executionPublishing(), is(Publishing.ENABLED));
         
         val method = SomeDomainObject.class.getMethod("getName");
-        val nearestM = _Annotations.synthesizeInherited(method, Property.class);
+        val nearestM = _Annotations.synthesize(method, Property.class);
 
         assertThat(nearestM.isPresent(), is(true));
         assertThat(nearestM.get().executionPublishing(), is(Publishing.ENABLED));
@@ -97,7 +97,7 @@ public class Annotations_getAnnotations_on_Field_Test {
         }
 
         val method = SomeDomainObject.class.getMethod("getName");
-        val nearestM = _Annotations.synthesizeInherited(method, Property.class);
+        val nearestM = _Annotations.synthesize(method, Property.class);
 
         assertThat(nearestM.isPresent(), is(true));
         assertThat(nearestM.get().executionPublishing(), is(Publishing.ENABLED));
@@ -115,7 +115,7 @@ public class Annotations_getAnnotations_on_Field_Test {
         }
 
         val method = SomeDomainObject.class.getMethod("getName");
-        val nearestM = _Annotations.synthesizeInherited(method, Property.class);
+        val nearestM = _Annotations.synthesize(method, Property.class);
 
         assertThat(nearestM.isPresent(), is(true));
         assertThat(nearestM.get().executionPublishing(), is(Publishing.ENABLED));
@@ -134,7 +134,7 @@ public class Annotations_getAnnotations_on_Field_Test {
         }
 
         val method = SomeDomainObject.class.getMethod("getName");
-        val nearestM = _Annotations.synthesizeInherited(method, Property.class);
+        val nearestM = _Annotations.synthesize(method, Property.class);
 
         assertThat(nearestM.isPresent(), is(true));
         assertThat(nearestM.get().executionPublishing(), is(Publishing.ENABLED));
@@ -153,7 +153,7 @@ public class Annotations_getAnnotations_on_Field_Test {
         }
 
         val method = SomeDomainObject.class.getMethod("getName");
-        val nearestM = _Annotations.synthesizeInherited(method, Property.class);
+        val nearestM = _Annotations.synthesize(method, Property.class);
 
         assertThat(nearestM.isPresent(), is(true));
         assertThat(nearestM.get().executionPublishing(), is(Publishing.DISABLED));
@@ -173,7 +173,7 @@ public class Annotations_getAnnotations_on_Field_Test {
         }
 
         val method = SomeDomainObject.class.getMethod("getName");
-        val nearestM = _Annotations.synthesizeInherited(method, Property.class);
+        val nearestM = _Annotations.synthesize(method, Property.class);
 
         assertThat(nearestM.isPresent(), is(true));
         assertThat(nearestM.get().executionPublishing(), is(Publishing.DISABLED));
@@ -194,7 +194,7 @@ public class Annotations_getAnnotations_on_Field_Test {
         }
 
         val method = SomeDomainObject.class.getMethod("getName");
-        val nearestM = _Annotations.synthesizeInherited(method, Property.class);
+        val nearestM = _Annotations.synthesize(method, Property.class);
 
         assertThat(nearestM.isPresent(), is(true));
         assertThat(nearestM.get().executionPublishing(), is(Publishing.ENABLED));

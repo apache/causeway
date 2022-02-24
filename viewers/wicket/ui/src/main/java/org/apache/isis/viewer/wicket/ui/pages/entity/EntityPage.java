@@ -142,12 +142,12 @@ public class EntityPage extends PageAbstract {
         if(XrayUi.isXrayEnabled()){
             _Debug.log("about to render EntityPage ..");
             val stopWatch = _Timing.now();
-            jaxbViewmodelRefresh(this);
+            viewmodelRefresh(this);
             super.renderPage();
             stopWatch.stop();
             _Debug.log(".. rendering took %s", stopWatch.toString());
         } else {
-            jaxbViewmodelRefresh(this);
+            viewmodelRefresh(this);
             super.renderPage();
         }
     }
@@ -236,9 +236,9 @@ public class EntityPage extends PageAbstract {
     // -- UTILIY
 
     /**
-     * Re-fetch entities for JAXB viewmodels, usually required once at begin of request.
+     * Re-fetch entities for view-models, usually required once at begin of request.
      */
-    public static void jaxbViewmodelRefresh(final IRequestablePage iRequestablePage) {
+    public static void viewmodelRefresh(final IRequestablePage iRequestablePage) {
         if(iRequestablePage instanceof EntityPage) {
 
             val entityPage = (EntityPage) iRequestablePage;

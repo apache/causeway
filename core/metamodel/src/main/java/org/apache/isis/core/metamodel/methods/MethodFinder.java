@@ -262,13 +262,13 @@ public class MethodFinder {
             final Class<? extends Annotation> annotationType,
             final Can<Class<? extends Annotation>> conflictingAnnotations) {
 
-        val isMarkerAnnotationPresent = _Annotations.synthesizeInherited(method, annotationType).isPresent();
+        val isMarkerAnnotationPresent = _Annotations.synthesize(method, annotationType).isPresent();
         if(isMarkerAnnotationPresent) {
 
             val isConflictingAnnotationPresent = conflictingAnnotations
             .stream()
             .anyMatch(conflictingAnnotationType->
-                    _Annotations.synthesizeInherited(method, conflictingAnnotationType).isPresent());
+                    _Annotations.synthesize(method, conflictingAnnotationType).isPresent());
 
             // do not pickup this method if conflicting - so meta-model validation will fail later on
             return !isConflictingAnnotationPresent;

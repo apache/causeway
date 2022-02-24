@@ -284,7 +284,7 @@ implements ValueFacet<T> {
 
             val qualifiersOnBean =
             _Annotations
-            .synthesizeInherited(valueSemantics.getClass(), Qualifier.class) //TODO memoize somewhere
+            .synthesize(valueSemantics.getClass(), Qualifier.class) //TODO memoize somewhere
             .map(Qualifier::value)
             .stream()
             .map(_Strings::emptyToNull)

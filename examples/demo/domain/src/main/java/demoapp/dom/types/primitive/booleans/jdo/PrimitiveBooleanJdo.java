@@ -47,7 +47,7 @@ public class PrimitiveBooleanJdo                                        // <.>
         extends PrimitiveBooleanEntity {
 
 //end::class[]
-    public PrimitiveBooleanJdo(boolean initialValue) {
+    public PrimitiveBooleanJdo(final boolean initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

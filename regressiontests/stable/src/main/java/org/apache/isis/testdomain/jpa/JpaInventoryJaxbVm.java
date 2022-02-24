@@ -19,7 +19,9 @@
 package org.apache.isis.testdomain.jpa;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -40,14 +42,18 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
+import org.apache.isis.testdomain.jpa.entities.JpaInventory;
 import org.apache.isis.testdomain.jpa.entities.JpaProduct;
+import org.apache.isis.testdomain.util.dto.IBook;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @XmlRootElement(name = "root")
 @XmlType(
-        propOrder = {"name", "favoriteBook", "books"}
+        propOrder = {
+                "name", "favoriteBook", "bookForTab1", "bookForTab2", "inventory",
+                "books", "booksForTab1", "booksForTab2"}
 )
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
@@ -81,7 +87,6 @@ public class JpaInventoryJaxbVm {
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @XmlElement(required = false)
-    //@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
     @Getter @Setter
     private JpaBook favoriteBook = null;
 
@@ -91,8 +96,80 @@ public class JpaInventoryJaxbVm {
 
     @Collection
     @XmlElement(name = "book")
-    //@XmlJavaTypeAdapter(PersistentEntitiesAdapter.class)
     @Getter @Setter
     private java.util.Collection<JpaBook> books = new ArrayList<>();
+
+    @Getter @Setter
+    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
+    @XmlElement(required = false)
+    private JpaInventory inventory;
+
+    @MemberSupport public List<JpaInventory> choicesInventory() {
+        return repository.allInstances(JpaInventory.class);
+    }
+
+    // -- TAB TEST - TAB 1
+
+    @Getter @Setter
+    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
+    @XmlElement(required = false)
+    private JpaBook bookForTab1 = null;
+
+    @MemberSupport public List<JpaBook> choicesBookForTab1() {
+        return listBooks();
+    }
+
+    @Property
+    @XmlTransient
+    public String getBookNameForTab1() {
+        return Optional.ofNullable(getBookForTab1())
+                .map(IBook::getName)
+                .orElse("none selected");
+    }
+
+    @Getter @Setter
+    @Collection
+    @XmlElement(name = "book1")
+    private java.util.Collection<JpaBook> booksForTab1 = new ArrayList<>();
+
+    @Collection
+    @XmlTransient
+    public java.util.Collection<JpaProduct> getProductsForTab1() {
+        return Optional.ofNullable(inventory)
+                .map(JpaInventory::getProducts)
+                .orElseGet(Collections::emptySet);
+    }
+
+    // -- TAB TEST - TAB 2
+
+    @Getter @Setter
+    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
+    @XmlElement(required = false)
+    private JpaBook bookForTab2 = null;
+
+    @MemberSupport public List<JpaBook> choicesBookForTab2() {
+        return listBooks();
+    }
+
+    @Property
+    @XmlTransient
+    public String getBookNameForTab2() {
+        return Optional.ofNullable(getBookForTab2())
+                .map(IBook::getName)
+                .orElse("none selected");
+    }
+
+    @Getter @Setter
+    @Collection
+    @XmlElement(name = "book2")
+    private java.util.Collection<JpaBook> booksForTab2 = new ArrayList<>();
+
+    @Collection
+    @XmlTransient
+    public java.util.Collection<JpaProduct> getProductsForTab2() {
+        return Optional.ofNullable(inventory)
+                .map(JpaInventory::getProducts)
+                .orElseGet(Collections::emptySet);
+    }
 
 }

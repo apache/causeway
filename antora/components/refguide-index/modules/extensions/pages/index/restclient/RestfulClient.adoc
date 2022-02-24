@@ -6,6 +6,7 @@ Setup the Restful Client with Basic-Auth:Synchronous example:Asynchronous exampl
 For example:
 
 ----
+
 RestfulClientConfig clientConfig = new RestfulClientConfig();
 clientConfig.setRestfulBase("http://localhost:8080/helloworld/restful/");
 clientConfig.setUseBasicAuth(true); // default = false

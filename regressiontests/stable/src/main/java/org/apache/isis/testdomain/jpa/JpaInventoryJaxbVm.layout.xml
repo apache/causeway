@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bs3:grid xsi:schemaLocation="http://isis.apache.org/applib/layout/component http://isis.apache.org/applib/layout/component/component.xsd http://isis.apache.org/applib/layout/links http://isis.apache.org/applib/layout/links/links.xsd http://isis.apache.org/applib/layout/grid/bootstrap3 http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd" xmlns:bs3="http://isis.apache.org/applib/layout/grid/bootstrap3" xmlns:cpt="http://isis.apache.org/applib/layout/component" xmlns:lnk="http://isis.apache.org/applib/layout/links" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <bs3:row>
+        <bs3:col span="12" unreferencedActions="true">
+            <cpt:domainObject/>
+        </bs3:col>
+    </bs3:row>
+    <bs3:row>
+        <bs3:col span="4">
+            <cpt:fieldSet name="General" unreferencedProperties="true">
+                <cpt:property id="name"/>
+                <cpt:property id="favoriteBook" />
+            </cpt:fieldSet>
+        </bs3:col>
+        <bs3:col span="12" unreferencedCollections="true">
+            <cpt:collection defaultView="table" id="books" paged="12"/>
+        </bs3:col>
+        
+        <bs3:col span="12">
+        
+        	<bs3:tabGroup>
+				
+				<bs3:tab name="Tab 1">
+					<bs3:row>
+						<bs3:col span="12">
+							<cpt:fieldSet id="fs1">
+								<cpt:property id="bookForTab1"/>
+								<cpt:property id="bookNameForTab1"/>
+							</cpt:fieldSet>
+							
+							<cpt:collection defaultView="table" id="booksForTab1" paged="12"/>
+							<cpt:collection defaultView="table" id="productsForTab1" paged="12"/>
+							
+						</bs3:col>
+					</bs3:row>
+				</bs3:tab>
+				
+				<bs3:tab name="Tab 2">
+					<bs3:row>
+						<bs3:col span="12">
+							<cpt:fieldSet id="fs2">
+								<cpt:property id="bookForTab2"/>
+								<cpt:property id="bookNameForTab2"/>
+							</cpt:fieldSet>
+							
+							<cpt:collection defaultView="table" id="booksForTab2" paged="12"/>
+							<cpt:collection defaultView="table" id="productsForTab2" paged="12"/>
+							
+						</bs3:col>
+					</bs3:row>
+				</bs3:tab>
+				
+			</bs3:tabGroup>
+			
+		</bs3:col>
+        
+    </bs3:row>
+</bs3:grid>

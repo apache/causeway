@@ -19,7 +19,9 @@
 package org.apache.isis.testdomain.jdo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -40,14 +42,18 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
+import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
+import org.apache.isis.testdomain.util.dto.IBook;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @XmlRootElement(name = "root")
 @XmlType(
-        propOrder = {"name", "favoriteBook", "books"}
+        propOrder = {
+                "name", "favoriteBook", "bookForTab1", "bookForTab2", "inventory",
+                "books", "booksForTab1", "booksForTab2"}
 )
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
@@ -82,7 +88,6 @@ public class JdoInventoryJaxbVm {
     @Getter @Setter
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @XmlElement(required = false)
-    //@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
     private JdoBook favoriteBook = null;
 
     @MemberSupport public List<JdoBook> choicesFavoriteBook() {
@@ -92,7 +97,79 @@ public class JdoInventoryJaxbVm {
     @Getter @Setter
     @Collection
     @XmlElement(name = "book")
-    //@XmlJavaTypeAdapter(PersistentEntitiesAdapter.class)
     private java.util.Collection<JdoBook> books = new ArrayList<>();
+
+    @Getter @Setter
+    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
+    @XmlElement(required = false)
+    private JdoInventory inventory;
+
+    @MemberSupport public List<JdoInventory> choicesInventory() {
+        return repository.allInstances(JdoInventory.class);
+    }
+
+    // -- TAB TEST - TAB 1
+
+    @Getter @Setter
+    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
+    @XmlElement(required = false)
+    private JdoBook bookForTab1 = null;
+
+    @MemberSupport public List<JdoBook> choicesBookForTab1() {
+        return listBooks();
+    }
+
+    @Property
+    @XmlTransient
+    public String getBookNameForTab1() {
+        return Optional.ofNullable(getBookForTab1())
+                .map(IBook::getName)
+                .orElse("none selected");
+    }
+
+    @Getter @Setter
+    @Collection
+    @XmlElement(name = "book1")
+    private java.util.Collection<JdoBook> booksForTab1 = new ArrayList<>();
+
+    @Collection
+    @XmlTransient
+    public java.util.Collection<JdoProduct> getProductsForTab1() {
+        return Optional.ofNullable(inventory)
+                .map(JdoInventory::getProducts)
+                .orElseGet(Collections::emptySet);
+    }
+
+    // -- TAB TEST - TAB 2
+
+    @Getter @Setter
+    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
+    @XmlElement(required = false)
+    private JdoBook bookForTab2 = null;
+
+    @MemberSupport public List<JdoBook> choicesBookForTab2() {
+        return listBooks();
+    }
+
+    @Property
+    @XmlTransient
+    public String getBookNameForTab2() {
+        return Optional.ofNullable(getBookForTab2())
+                .map(IBook::getName)
+                .orElse("none selected");
+    }
+
+    @Getter @Setter
+    @Collection
+    @XmlElement(name = "book2")
+    private java.util.Collection<JdoBook> booksForTab2 = new ArrayList<>();
+
+    @Collection
+    @XmlTransient
+    public java.util.Collection<JdoProduct> getProductsForTab2() {
+        return Optional.ofNullable(inventory)
+                .map(JdoInventory::getProducts)
+                .orElseGet(Collections::emptySet);
+    }
 
 }

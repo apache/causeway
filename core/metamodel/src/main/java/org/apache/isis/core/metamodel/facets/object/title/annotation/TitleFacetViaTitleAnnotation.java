@@ -190,7 +190,7 @@ implements ImperativeFacet {
             final AnnotatedElement annotatedElement,
             final Consumer<Title> onTitleFound){
         return _Annotations
-                .synthesizeInherited(annotatedElement, Title.class)
+                .synthesize(annotatedElement, Title.class)
                 .map(title->{onTitleFound.accept(title); return true;})
                 .orElse(false);
     }

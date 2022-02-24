@@ -78,6 +78,10 @@ body {
     margin-bottom: 0px;
 }
 
+footer > .navbar {
+    z-index: 1;
+}
+
 #veil {
     z-index: 40000;
     background-image: none;

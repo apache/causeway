@@ -181,7 +181,7 @@ implements MixedInMember {
     private boolean calculateIsExplicitlyAnnotated() {
         val javaMethod = getFacetedMethod().getMethod();
         return super.isExplicitlyAnnotated() // legacy programming style
-                || _Annotations.synthesizeInherited(javaMethod, Domain.Include.class).isPresent();
+                || _Annotations.synthesize(javaMethod, Domain.Include.class).isPresent();
     }
 
     private ExecutionPublisher getPublishingServiceInternal() {

@@ -19,15 +19,23 @@
 package org.apache.isis.commons.internal.reflection;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.springframework.util.ClassUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.isis.commons.internal._Constants;
+
+import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 
 class AnnotationsTest {
+
+    // -- SCENARIOS
 
     static abstract class AbstractBase {
         @DisplayName("hi") void action(){}
@@ -42,6 +50,20 @@ class AnnotationsTest {
         void action(){}
     }
 
+    static interface PrimitiveBooleanHolder {
+        @Order(42)
+        boolean isReadWriteProperty();
+        void setReadWriteProperty(boolean c);
+    }
+
+    static class PrimitiveBooleanEntity implements PrimitiveBooleanHolder {
+        @Order(43)
+        @Getter @Setter
+        private boolean readWriteProperty;
+    }
+
+    // -- TESTS
+
     @Test
     void inhertitedAnnotation() {
 
@@ -50,7 +72,7 @@ class AnnotationsTest {
                 .filter(m->m.getName().equals("action"))
                 // using filter over peek here, because peek is unreliable with 'count()' terminal
                 .filter(m->{
-                    val syn = _Annotations.synthesizeInherited(m, DisplayName.class);
+                    val syn = _Annotations.synthesize(m, DisplayName.class);
                     assertNotNull(syn);
                     assertTrue(syn.isPresent());
                     assertEquals("hi", syn.get().value());
@@ -70,7 +92,7 @@ class AnnotationsTest {
                 .filter(m->m.getName().equals("action"))
                 // using filter over peek here, because peek is unreliable with 'count()' terminal
                 .filter(m->{
-                    val syn = _Annotations.synthesizeInherited(m, DisplayName.class);
+                    val syn = _Annotations.synthesize(m, DisplayName.class);
                     assertNotNull(syn);
                     assertTrue(syn.isPresent());
                     assertEquals("hi", syn.get().value());
@@ -82,5 +104,12 @@ class AnnotationsTest {
 
     }
 
+    @Test
+    void inhertitedAnnotationWhenOverrideOnBooleanProperty() {
+        val getter = ClassUtils
+                .getMethod(PrimitiveBooleanEntity.class, "isReadWriteProperty", _Constants.emptyClasses);
+
+        assertEquals(43, _Annotations.synthesize(getter, Order.class).get().value());
+    }
 
 }

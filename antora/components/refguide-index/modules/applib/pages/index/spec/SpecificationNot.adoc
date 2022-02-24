@@ -8,6 +8,7 @@ Subclasses represent the logical inverse of a xref:refguide:applib:index/spec/Sp
 For example:
 
 ----
+
 public class NoSugarThanksSpec extends SpecificationNot {
     public NoSugarThanksSpec() {
         super(

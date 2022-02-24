@@ -423,8 +423,7 @@ implements HasMetaModelContext {
         }
 
         val hasActionAnnotation = _Annotations
-                .findNearestAnnotation(actionMethod, Action.class)
-                .isPresent();
+                .isPresent(actionMethod, Action.class);
 
         // just an optimization, not strictly required:
         // return false if both are true
@@ -442,7 +441,7 @@ implements HasMetaModelContext {
                 val type = actionMethod.getDeclaringClass();
 
                 //XXX for given type we do this for every method, could cache the result!
-                val mixedInMethodName = _Annotations.findNearestAnnotation(type, DomainObject.class)
+                val mixedInMethodName = _Annotations.synthesize(type, DomainObject.class)
                 .filter(domainObject->Nature.MIXIN.equals(domainObject.nature()))
                 .map(DomainObject::mixinMethod)
                 .orElse(null);

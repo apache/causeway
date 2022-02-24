@@ -81,7 +81,7 @@ public class Annotations_getAnnotations_on_Parameter_Test {
         }
 
         val method = SomeDomainObject.class.getMethod("updateName", String.class);
-        val nearest = _Annotations.synthesizeInherited(method.getParameters()[0], DomainObj.class);
+        val nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
@@ -99,7 +99,7 @@ public class Annotations_getAnnotations_on_Parameter_Test {
         }
 
         val method = SomeDomainObject.class.getMethod("updateName", String.class);
-        val nearest = _Annotations.synthesizeInherited(method.getParameters()[0], DomainObj.class);
+        val nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
@@ -116,7 +116,7 @@ public class Annotations_getAnnotations_on_Parameter_Test {
         }
 
         val method = SomeDomainObject.class.getMethod("updateName", String.class);
-        val nearest = _Annotations.synthesizeInherited(method.getParameters()[0], DomainObj.class);
+        val nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
@@ -134,7 +134,7 @@ public class Annotations_getAnnotations_on_Parameter_Test {
         }
 
         val method = SomeDomainObject.class.getMethod("updateName", String.class);
-        val nearest = _Annotations.synthesizeInherited(method.getParameters()[0], DomainObj.class);
+        val nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
@@ -152,7 +152,7 @@ public class Annotations_getAnnotations_on_Parameter_Test {
         }
 
         val method = SomeDomainObject.class.getMethod("updateName", String.class);
-        val nearest = _Annotations.synthesizeInherited(method.getParameters()[0], DomainObj.class);
+        val nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.NO));
@@ -171,7 +171,7 @@ public class Annotations_getAnnotations_on_Parameter_Test {
         }
 
         val method = SomeDomainObject.class.getMethod("updateName", String.class);
-        val nearest = _Annotations.synthesizeInherited(method.getParameters()[0], DomainObj.class);
+        val nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.NO));
@@ -191,7 +191,7 @@ public class Annotations_getAnnotations_on_Parameter_Test {
         }
 
         val method = SomeDomainObject.class.getMethod("updateName", String.class);
-        val nearest = _Annotations.synthesizeInherited(method.getParameters()[0], DomainObj.class);
+        val nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));

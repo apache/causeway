@@ -20,12 +20,13 @@ package org.apache.isis.commons.internal.reflection;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Target;
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
 
@@ -46,6 +47,14 @@ public final class _Annotations {
 
     /**
      * Determine if the specified annotation is either directly present or meta-present.
+     * <p>
+     * Also includes annotated fields, getter methods might be associated with.
+     * If annotations from a getter method are competing with annotations from its corresponding field,
+     * let the one win, that is 'nearer' to the <i>Class</i> that is subject to introspection.
+     * <p>
+     * Perform a full search of the entire type hierarchy,
+     * including super-classes and implemented interfaces.
+     * Super-class annotations do not need to be meta-annotated with {@link Inherited}.
      *
      * @param <A>
      * @param annotatedElement
@@ -56,83 +65,28 @@ public final class _Annotations {
             final AnnotatedElement annotatedElement,
             final Class<A> annotationType) {
 
-        return collect(annotatedElement).isPresent(annotationType);
-    }
+        val collected = collect(annotatedElement, SearchStrategy.TYPE_HIERARCHY);
 
-    /**
-     * Optionally returns the 'nearest' annotation of given type based on presence.
-     *
-     * @param <A>
-     * @param annotatedElement
-     * @param annotationType
-     * @return non-null
-     */
-    public static <A extends Annotation> Optional<A> findNearestAnnotation(
-            final AnnotatedElement annotatedElement,
-            final Class<A> annotationType) {
-        //XXX if synthesize has good runtime performance, then we simply us it here
-        return synthesize(annotatedElement, annotationType);
-    }
-
-    private static final _Annotations_SyntCache syntCache = new _Annotations_SyntCache();
-    public static void clearCache() {
-        syntCache.clear();
-    }
-
-    /**
-     * Optionally creates a type-safe synthesized version of this annotation based on presence.
-     * <p>
-     * Does support attribute inheritance.
-     *
-     * @param <A>
-     * @param annotatedElement
-     * @param annotationType
-     * @return non-null
-     */
-    public static <A extends Annotation> Optional<A> synthesizeInherited(
-            final AnnotatedElement annotatedElement,
-            final Class<A> annotationType) {
-
-        return calc_synthesizeInherited(annotatedElement, annotationType);
-    }
-
-    private static <A extends Annotation> Optional<A> calc_synthesizeInherited(
-            final AnnotatedElement annotatedElement,
-            final Class<A> annotationType) {
-
-        val collected = _Annotations
-                .collect(annotatedElement);
-
-        if(!collected.isPresent(annotationType)) {
-
-            // also handle fields, getter methods might be associated with
-            if(annotatedElement instanceof Method &&
-                    searchAnnotationOnField(annotationType) ) {
-
-                val method = (Method) annotatedElement;
-
-                val fieldForGetter = _ClassCache.getInstance()
-                        .fieldForGetter(method.getDeclaringClass(), (Method) annotatedElement)
-                        .orElse(null);
-                if(fieldForGetter!=null) {
-                    return synthesizeInherited(fieldForGetter, annotationType);
-                }
-            }
-
-            return Optional.empty();
+        if(collected.isPresent(annotationType)) {
+            return true;
         }
 
-        val proxy = _Annotations_SynthesizedMergedAnnotationInvocationHandler
-                .createProxy(collected, annotationType);
-
-        return Optional.of(proxy);
+        // also handle annotated fields, getter methods might be associated with
+        return annotatedFieldForAnnotatedElement(annotatedElement, annotationType)
+        .map(fieldForGetter->isPresent(fieldForGetter, annotationType))
+        .orElse(false);
     }
-
 
     /**
      * Optionally create a type-safe synthesized version of this annotation based on presence.
      * <p>
-     * Does NOT support attribute inheritance.
+     * Also includes annotated fields, getter methods might be associated with.
+     * If annotations from a getter method are competing with annotations from its corresponding field,
+     * let the one win, that is 'nearer' to the <i>Class</i> that is subject to introspection.
+     * <p>
+     * Perform a full search of the entire type hierarchy,
+     * including super-classes and implemented interfaces.
+     * Super-class annotations do not need to be meta-annotated with {@link Inherited}.
      *
      * @param <A>
      * @param annotatedElement
@@ -143,18 +97,19 @@ public final class _Annotations {
             final AnnotatedElement annotatedElement,
             final Class<A> annotationType) {
 
-        val synthesized = _Annotations
-                .collect(annotatedElement)
-                .get(annotationType)
-                .synthesize(MergedAnnotation::isPresent);
-
-        return synthesized;
+        return synthesize(annotatedElement, annotationType, SearchStrategy.TYPE_HIERARCHY);
     }
 
     /**
      * Optionally create a type-safe synthesized version of this annotation based on presence.
      * <p>
-     * Does NOT support attribute inheritance.
+     * Also includes annotated fields, getter methods might be associated with.
+     * If annotations from a getter method are competing with annotations from its corresponding field,
+     * let the one win, that is 'nearer' to the <i>Class</i> that is subject to introspection.
+     * <p>
+     * Find only directly declared annotations,
+     * without considering {@link Inherited} annotations and
+     * without searching super-classes or implemented interfaces.
      *
      * @param <A>
      * @param annotatedElement
@@ -165,36 +120,47 @@ public final class _Annotations {
             final AnnotatedElement annotatedElement,
             final Class<A> annotationType) {
 
-        val synthesized = _Annotations
-                .collectDirect(annotatedElement)
-                .get(annotationType)
-                .synthesize(MergedAnnotation::isPresent);
-
-        return synthesized;
+        return synthesize(annotatedElement, annotationType, SearchStrategy.DIRECT);
     }
-
 
     // -- HELPER
 
     /**
-     * @apiNote don't expose Spring's MergedAnnotations
+     * Optionally create a type-safe synthesized version of this annotation based on presence.
+     * <p>
+     * Also includes annotated fields, getter methods might be associated with.
+     * If annotations from a getter method are competing with annotations from its corresponding field,
+     * let the one win, that is 'nearer' to the <i>Class</i> that is subject to introspection.
      */
-    static MergedAnnotations collect(
-            final AnnotatedElement annotatedElement) {
-        val collected = MergedAnnotations.from(annotatedElement, SearchStrategy.TYPE_HIERARCHY);
-        return collected;
+    private static <A extends Annotation> Optional<A> synthesize(
+            final AnnotatedElement annotatedElement,
+            final Class<A> annotationType,
+            final SearchStrategy searchStrategy) {
+
+        val collected = collect(annotatedElement, searchStrategy);
+
+        // also handle annotated fields, getter methods might be associated with
+        val associated =
+                annotatedFieldForAnnotatedElement(annotatedElement, annotationType)
+                        .map(fieldForGetter->collect(fieldForGetter, searchStrategy));
+
+        val proxyIfAny = _Annotations_SynthesizedMergedAnnotationInvocationHandler
+                .createProxy(collected, associated, annotationType);
+
+        return proxyIfAny;
     }
 
     /**
-     * @apiNote don't expose Spring's MergedAnnotations
+     * @apiNote don't publicly expose Spring's {@link MergedAnnotations}
      */
-    static MergedAnnotations collectDirect(
-            final AnnotatedElement annotatedElement) {
-        val collected = MergedAnnotations.from(annotatedElement, SearchStrategy.DIRECT);
+    private static MergedAnnotations collect(
+            final AnnotatedElement annotatedElement,
+            final SearchStrategy searchStrategy) {
+        val collected = MergedAnnotations.from(annotatedElement, searchStrategy);
         return collected;
     }
 
-    private static boolean searchAnnotationOnField(final Class<? extends Annotation> annotationType) {
+    private static boolean isAnnotationAllowedOnField(final Class<? extends Annotation> annotationType) {
         val target = annotationType.getAnnotation(Target.class);
         if(target==null) {
             return false;
@@ -204,8 +170,28 @@ public final class _Annotations {
                 return true;
             }
         }
-
         return false;
+    }
+
+    private static <A extends Annotation> Optional<Field> annotatedFieldForAnnotatedElement(
+            final AnnotatedElement annotatedElement,
+            final Class<A> annotationType){
+
+        return annotatedElement instanceof Method
+                ? annotatedFieldForGetter((Method)annotatedElement, annotationType)
+                : Optional.empty();
+    }
+
+    private static <A extends Annotation> Optional<Field> annotatedFieldForGetter(
+            final Method method,
+            final Class<A> annotationType){
+
+        return (method.getName().startsWith("get")
+                    || method.getName().startsWith("is"))
+                && isAnnotationAllowedOnField(annotationType)
+                ? _ClassCache.getInstance()
+                        .fieldForGetter(method.getDeclaringClass(), method)
+                : Optional.empty();
     }
 
 }

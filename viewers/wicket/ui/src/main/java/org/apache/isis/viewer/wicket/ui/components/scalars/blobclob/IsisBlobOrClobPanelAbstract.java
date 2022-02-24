@@ -186,7 +186,7 @@ extends ScalarPanelAbstract {
                         }
 
                         val blob = getBlobOrClobFrom(fileUploads);
-                        val objectAdapter = scalarModel.getCommonContext().getObjectManager().adapt(blob);
+                        val objectAdapter = scalarModel().getCommonContext().getObjectManager().adapt(blob);
                         getModel().setObject(objectAdapter);
                     }
 
@@ -303,7 +303,7 @@ extends ScalarPanelAbstract {
     }
 
     private String getAcceptFilter(){
-        return scalarModel.getFileAccept();
+        return scalarModel().getFileAccept();
     }
 
     private void addAcceptFilterTo(final Component component){

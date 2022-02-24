@@ -130,6 +130,7 @@ This is intended to be used so that an exclusive end date of an interval can be 
 For example:
 
 ----
+
 public LocalDate getStartDate() { ... }
 
 @ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)
