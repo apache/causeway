@@ -536,6 +536,26 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
                     "you cannot edit the subscribed property");
         }
 
+        // -- SPECIAL SCENARIO ISIS-2963
+
+        static interface PrimitiveBooleanHolder {
+            @Property(editingDisabledReason = "a")
+            boolean isReadWriteProperty();
+            void setReadWriteProperty(boolean c);
+        }
+
+        static class PrimitiveBooleanEntity implements PrimitiveBooleanHolder {
+            @Property(
+                    editingDisabledReason = "b")
+            @Getter @Setter
+            private boolean readWriteProperty;
+        }
+
+        //@Test //FIXME[ISIS-2963] test fails - no facet is generated
+        public void isis2963() {
+            assertDisabledFacetOn(findMethod(PrimitiveBooleanEntity.class, "isReadWriteProperty"),
+                    "b");
+        }
 
         // -- HELPER
 
