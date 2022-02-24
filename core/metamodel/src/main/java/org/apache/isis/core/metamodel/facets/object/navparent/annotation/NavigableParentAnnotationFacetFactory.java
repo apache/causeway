@@ -113,7 +113,7 @@ implements MetaModelRefiner {
 
     private static boolean isNavigableParentFlagSet(final AnnotatedElement annotatedElement){
         return _Annotations
-                .synthesizeInherited(annotatedElement, PropertyLayout.class)
+                .synthesize(annotatedElement, PropertyLayout.class)
                 .map(propertyLayout->propertyLayout.navigable().isParent())
                 .orElse(false);
     }

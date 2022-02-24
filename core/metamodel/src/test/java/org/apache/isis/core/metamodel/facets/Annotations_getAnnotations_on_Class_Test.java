@@ -202,7 +202,7 @@ public class Annotations_getAnnotations_on_Class_Test {
         class SomeDomainObject {}
 
         val synthesized = _Annotations
-                .synthesizeInherited(SomeDomainObject.class, DomainObj.class);
+                .synthesize(SomeDomainObject.class, DomainObj.class);
 
         assertThat(synthesized.isPresent(), is(true));
         assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.NO));
@@ -216,7 +216,7 @@ public class Annotations_getAnnotations_on_Class_Test {
         class SomeDomainObject {}
 
         val synthesized = _Annotations
-                .synthesizeInherited(SomeDomainObject.class, DomainObj.class);
+                .synthesize(SomeDomainObject.class, DomainObj.class);
 
         assertThat(synthesized.isPresent(), is(true));
         assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));
@@ -233,7 +233,7 @@ public class Annotations_getAnnotations_on_Class_Test {
         class SomeDomainObject {}
 
         val synthesized = _Annotations
-                .synthesizeInherited(SomeDomainObject.class, DomainObj.class);
+                .synthesize(SomeDomainObject.class, DomainObj.class);
 
         assertThat(synthesized.isPresent(), is(true));
         assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));

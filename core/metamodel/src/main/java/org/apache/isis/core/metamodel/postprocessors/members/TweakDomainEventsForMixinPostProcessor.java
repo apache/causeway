@@ -109,7 +109,7 @@ extends ObjectSpecificationPostProcessorAbstract {
                 // ignoring stuff which is deprecated for Isis v2
 
                 final Property propertyAnnot =
-                        _Annotations.synthesizeInherited(method, Property.class)
+                        _Annotations.synthesize(method, Property.class)
                         .orElse(null);
 
                 if(propertyAnnot != null) {
@@ -150,7 +150,7 @@ extends ObjectSpecificationPostProcessorAbstract {
                 // ignoring stuff which is deprecated for Isis v2
 
                 final Collection collectionAnnot =
-                        _Annotations.synthesizeInherited(method, Collection.class)
+                        _Annotations.synthesize(method, Collection.class)
                                 .orElse(null);
 
                 if(collectionAnnot != null) {

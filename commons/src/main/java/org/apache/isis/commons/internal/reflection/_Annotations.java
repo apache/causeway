@@ -23,10 +23,10 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Target;
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
 
@@ -48,6 +48,8 @@ public final class _Annotations {
     /**
      * Determine if the specified annotation is either directly present or meta-present.
      * <p>
+     * Also includes annotated fields, getter methods might be associated with.
+     * <p>
      * Perform a full search of the entire type hierarchy,
      * including super-classes and implemented interfaces.
      * Super-class annotations do not need to be meta-annotated with {@link Inherited}.
@@ -61,54 +63,22 @@ public final class _Annotations {
             final AnnotatedElement annotatedElement,
             final Class<A> annotationType) {
 
-        return collect(annotatedElement, SearchStrategy.TYPE_HIERARCHY)
-                .isPresent(annotationType);
-    }
-
-    /**
-     * Optionally creates a type-safe synthesized version of this annotation based on presence.
-     * <p>
-     * Does support attribute inheritance.
-     *
-     * @param <A>
-     * @param annotatedElement
-     * @param annotationType
-     * @return non-null
-     */
-    public static <A extends Annotation> Optional<A> synthesizeInherited(
-            final AnnotatedElement annotatedElement,
-            final Class<A> annotationType) {
-
         val collected = collect(annotatedElement, SearchStrategy.TYPE_HIERARCHY);
 
-        if(!collected.isPresent(annotationType)) {
-
-            // also handle fields, getter methods might be associated with
-            if(annotatedElement instanceof Method &&
-                    searchAnnotationOnField(annotationType) ) {
-
-                val method = (Method) annotatedElement;
-
-                val fieldForGetter = _ClassCache.getInstance()
-                        .fieldForGetter(method.getDeclaringClass(), (Method) annotatedElement)
-                        .orElse(null);
-                if(fieldForGetter!=null) {
-                    return synthesizeInherited(fieldForGetter, annotationType);
-                }
-            }
-
-            return Optional.empty();
+        if(collected.isPresent(annotationType)) {
+            return true;
         }
 
-        val proxy = _Annotations_SynthesizedMergedAnnotationInvocationHandler
-                .createProxy(collected, annotationType);
-
-        return Optional.of(proxy);
+        // also handle annotated fields, getter methods might be associated with
+        return annotatedFieldForAnnotatedElement(annotatedElement, annotationType)
+        .map(fieldForGetter->isPresent(fieldForGetter, annotationType))
+        .orElse(false);
     }
-
 
     /**
      * Optionally create a type-safe synthesized version of this annotation based on presence.
+     * <p>
+     * Also includes annotated fields, getter methods might be associated with.
      * <p>
      * Perform a full search of the entire type hierarchy,
      * including super-classes and implemented interfaces.
@@ -123,15 +93,13 @@ public final class _Annotations {
             final AnnotatedElement annotatedElement,
             final Class<A> annotationType) {
 
-        val synthesized = collect(annotatedElement, SearchStrategy.TYPE_HIERARCHY)
-                .get(annotationType)
-                .synthesize(MergedAnnotation::isPresent);
-
-        return synthesized;
+        return synthesize(annotatedElement, annotationType, SearchStrategy.TYPE_HIERARCHY);
     }
 
     /**
      * Optionally create a type-safe synthesized version of this annotation based on presence.
+     * <p>
+     * Also includes annotated fields, getter methods might be associated with.
      * <p>
      * Find only directly declared annotations,
      * without considering {@link Inherited} annotations and
@@ -146,27 +114,47 @@ public final class _Annotations {
             final AnnotatedElement annotatedElement,
             final Class<A> annotationType) {
 
-        val synthesized = collect(annotatedElement, SearchStrategy.DIRECT)
-                .get(annotationType)
-                .synthesize(MergedAnnotation::isPresent);
-
-        return synthesized;
+        return synthesize(annotatedElement, annotationType, SearchStrategy.DIRECT);
     }
-
 
     // -- HELPER
 
     /**
-     * @apiNote don't expose Spring's MergedAnnotations
+     * Optionally create a type-safe synthesized version of this annotation based on presence.
+     * <p>
+     * Also includes annotated fields, getter methods might be associated with.
      */
-    static MergedAnnotations collect(
+    private static <A extends Annotation> Optional<A> synthesize(
+            final AnnotatedElement annotatedElement,
+            final Class<A> annotationType,
+            final SearchStrategy searchStrategy) {
+
+        val collected = collect(annotatedElement, searchStrategy);
+
+        if(!collected.isPresent(annotationType)) {
+
+            // also handle annotated fields, getter methods might be associated with
+            return annotatedFieldForAnnotatedElement(annotatedElement, annotationType)
+            .flatMap(fieldForGetter->synthesize(fieldForGetter, annotationType, searchStrategy));
+        }
+
+        val proxy = _Annotations_SynthesizedMergedAnnotationInvocationHandler
+                .createProxy(collected, annotationType);
+
+        return Optional.of(proxy);
+    }
+
+    /**
+     * @apiNote don't publicly expose Spring's {@link MergedAnnotations}
+     */
+    private static MergedAnnotations collect(
             final AnnotatedElement annotatedElement,
             final SearchStrategy searchStrategy) {
         val collected = MergedAnnotations.from(annotatedElement, searchStrategy);
         return collected;
     }
 
-    private static boolean searchAnnotationOnField(final Class<? extends Annotation> annotationType) {
+    private static boolean isAnnotationAllowedOnField(final Class<? extends Annotation> annotationType) {
         val target = annotationType.getAnnotation(Target.class);
         if(target==null) {
             return false;
@@ -177,6 +165,27 @@ public final class _Annotations {
             }
         }
         return false;
+    }
+
+    private static <A extends Annotation> Optional<Field> annotatedFieldForAnnotatedElement(
+            final AnnotatedElement annotatedElement,
+            final Class<A> annotationType){
+
+        return annotatedElement instanceof Method
+                ? annotatedFieldForGetter((Method)annotatedElement, annotationType)
+                : Optional.empty();
+    }
+
+    private static <A extends Annotation> Optional<Field> annotatedFieldForGetter(
+            final Method method,
+            final Class<A> annotationType){
+
+        return (method.getName().startsWith("get")
+                    || method.getName().startsWith("is"))
+                && isAnnotationAllowedOnField(annotationType)
+                ? _ClassCache.getInstance()
+                        .fieldForGetter(method.getDeclaringClass(), method)
+                : Optional.empty();
     }
 
 }

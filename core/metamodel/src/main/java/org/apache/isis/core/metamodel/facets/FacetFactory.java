@@ -98,7 +98,7 @@ public interface FacetFactory {
          * @since 2.0
          */
         public <A extends Annotation> Optional<A> synthesizeOnType(final Class<A> annotationType) {
-            return _Annotations.synthesizeInherited(cls, annotationType);
+            return _Annotations.synthesize(cls, annotationType);
         }
 
     }
@@ -256,7 +256,7 @@ public interface FacetFactory {
          * @since 2.0
          */
         public <A extends Annotation> Optional<A> synthesizeOnMethod(final Class<A> annotationType) {
-            return _Annotations.synthesizeInherited(getMethod(), annotationType);
+            return _Annotations.synthesize(getMethod(), annotationType);
         }
 
         /**
@@ -390,7 +390,7 @@ public interface FacetFactory {
          * @since 2.0
          */
         public <A extends Annotation> Optional<A> synthesizeOnParameter(final Class<A> annotationType) {
-            return _Annotations.synthesizeInherited(parameter, annotationType);
+            return _Annotations.synthesize(parameter, annotationType);
         }
 
     }

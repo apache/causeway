@@ -114,7 +114,7 @@ extends MetaModelVisitingValidatorAbstract {
         .streamDeclaredMethodsHaving(
                 type,
                 "domain-include",
-                method->_Annotations.synthesizeInherited(method, Domain.Include.class).isPresent())
+                method->_Annotations.synthesize(method, Domain.Include.class).isPresent())
         // filter away those that are recognized
         .filter(Predicate.not(memberMethods::contains))
         .filter(Predicate.not(supportMethods::contains))
@@ -163,7 +163,7 @@ extends MetaModelVisitingValidatorAbstract {
         val inheritedMethodsWithDomainIncludeSemantics =
             _Reflect.streamInheritedMethods(method)
             .filter(m->!Objects.equals(method.toString(), m.toString())) // exclude self
-            .filter(m->_Annotations.synthesizeInherited(m, Domain.Include.class).isPresent())
+            .filter(m->_Annotations.synthesize(m, Domain.Include.class).isPresent())
             .collect(Collectors.toSet());
 
         if(!inheritedMethodsWithDomainIncludeSemantics.isEmpty()) {

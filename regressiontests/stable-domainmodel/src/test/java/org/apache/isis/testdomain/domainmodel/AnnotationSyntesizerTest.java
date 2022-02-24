@@ -69,7 +69,7 @@ class AnnotationSyntesizerTest {
         val actionMethod = ReflectionUtils.findMethod(InvalidPropertyAnnotationOnAction.class, "exportToJson");
         assertNotNull(actionMethod);
 
-        val action = _Annotations.synthesizeInherited(actionMethod, Action.class).get();
+        val action = _Annotations.synthesize(actionMethod, Action.class).get();
         val domainEvent = action.domainEvent();
 
         if(!ActionDomainEvent.class.isAssignableFrom(domainEvent)) {
