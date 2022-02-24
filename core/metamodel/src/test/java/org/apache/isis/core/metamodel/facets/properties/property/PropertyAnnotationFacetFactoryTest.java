@@ -539,13 +539,16 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         // -- SPECIAL SCENARIO ISIS-2963
 
         static interface PrimitiveBooleanHolder {
-            @Property(editingDisabledReason = "a")
+            @Property(
+                    editing = org.apache.isis.applib.annotation.Editing.DISABLED,
+                    editingDisabledReason = "a")
             boolean isReadWriteProperty();
             void setReadWriteProperty(boolean c);
         }
 
         static class PrimitiveBooleanEntity implements PrimitiveBooleanHolder {
             @Property(
+                    editing = org.apache.isis.applib.annotation.Editing.DISABLED,
                     editingDisabledReason = "b")
             @Getter @Setter
             private boolean readWriteProperty;
@@ -553,6 +556,11 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
         //@Test //FIXME[ISIS-2963] test fails - no facet is generated
         public void isis2963() {
+
+            val m = findMethod(PrimitiveBooleanEntity.class, "isReadWriteProperty");
+
+            //_Annotations.synthesize(m, null);
+
             assertDisabledFacetOn(findMethod(PrimitiveBooleanEntity.class, "isReadWriteProperty"),
                     "b");
         }

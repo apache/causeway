@@ -20,6 +20,7 @@ package org.apache.isis.commons.internal.reflection;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Target;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
@@ -46,6 +47,10 @@ public final class _Annotations {
 
     /**
      * Determine if the specified annotation is either directly present or meta-present.
+     * <p>
+     * Perform a full search of the entire type hierarchy,
+     * including super-classes and implemented interfaces.
+     * Super-class annotations do not need to be meta-annotated with {@link Inherited}.
      *
      * @param <A>
      * @param annotatedElement
@@ -56,27 +61,8 @@ public final class _Annotations {
             final AnnotatedElement annotatedElement,
             final Class<A> annotationType) {
 
-        return collect(annotatedElement).isPresent(annotationType);
-    }
-
-    /**
-     * Optionally returns the 'nearest' annotation of given type based on presence.
-     *
-     * @param <A>
-     * @param annotatedElement
-     * @param annotationType
-     * @return non-null
-     */
-    public static <A extends Annotation> Optional<A> findNearestAnnotation(
-            final AnnotatedElement annotatedElement,
-            final Class<A> annotationType) {
-        //XXX if synthesize has good runtime performance, then we simply us it here
-        return synthesize(annotatedElement, annotationType);
-    }
-
-    private static final _Annotations_SyntCache syntCache = new _Annotations_SyntCache();
-    public static void clearCache() {
-        syntCache.clear();
+        return collect(annotatedElement, SearchStrategy.TYPE_HIERARCHY)
+                .isPresent(annotationType);
     }
 
     /**
@@ -93,15 +79,7 @@ public final class _Annotations {
             final AnnotatedElement annotatedElement,
             final Class<A> annotationType) {
 
-        return calc_synthesizeInherited(annotatedElement, annotationType);
-    }
-
-    private static <A extends Annotation> Optional<A> calc_synthesizeInherited(
-            final AnnotatedElement annotatedElement,
-            final Class<A> annotationType) {
-
-        val collected = _Annotations
-                .collect(annotatedElement);
+        val collected = collect(annotatedElement, SearchStrategy.TYPE_HIERARCHY);
 
         if(!collected.isPresent(annotationType)) {
 
@@ -132,7 +110,9 @@ public final class _Annotations {
     /**
      * Optionally create a type-safe synthesized version of this annotation based on presence.
      * <p>
-     * Does NOT support attribute inheritance.
+     * Perform a full search of the entire type hierarchy,
+     * including super-classes and implemented interfaces.
+     * Super-class annotations do not need to be meta-annotated with {@link Inherited}.
      *
      * @param <A>
      * @param annotatedElement
@@ -143,8 +123,7 @@ public final class _Annotations {
             final AnnotatedElement annotatedElement,
             final Class<A> annotationType) {
 
-        val synthesized = _Annotations
-                .collect(annotatedElement)
+        val synthesized = collect(annotatedElement, SearchStrategy.TYPE_HIERARCHY)
                 .get(annotationType)
                 .synthesize(MergedAnnotation::isPresent);
 
@@ -154,7 +133,9 @@ public final class _Annotations {
     /**
      * Optionally create a type-safe synthesized version of this annotation based on presence.
      * <p>
-     * Does NOT support attribute inheritance.
+     * Find only directly declared annotations,
+     * without considering {@link Inherited} annotations and
+     * without searching super-classes or implemented interfaces.
      *
      * @param <A>
      * @param annotatedElement
@@ -165,8 +146,7 @@ public final class _Annotations {
             final AnnotatedElement annotatedElement,
             final Class<A> annotationType) {
 
-        val synthesized = _Annotations
-                .collectDirect(annotatedElement)
+        val synthesized = collect(annotatedElement, SearchStrategy.DIRECT)
                 .get(annotationType)
                 .synthesize(MergedAnnotation::isPresent);
 
@@ -180,17 +160,9 @@ public final class _Annotations {
      * @apiNote don't expose Spring's MergedAnnotations
      */
     static MergedAnnotations collect(
-            final AnnotatedElement annotatedElement) {
-        val collected = MergedAnnotations.from(annotatedElement, SearchStrategy.TYPE_HIERARCHY);
-        return collected;
-    }
-
-    /**
-     * @apiNote don't expose Spring's MergedAnnotations
-     */
-    static MergedAnnotations collectDirect(
-            final AnnotatedElement annotatedElement) {
-        val collected = MergedAnnotations.from(annotatedElement, SearchStrategy.DIRECT);
+            final AnnotatedElement annotatedElement,
+            final SearchStrategy searchStrategy) {
+        val collected = MergedAnnotations.from(annotatedElement, searchStrategy);
         return collected;
     }
 
@@ -204,7 +176,6 @@ public final class _Annotations {
                 return true;
             }
         }
-
         return false;
     }
 

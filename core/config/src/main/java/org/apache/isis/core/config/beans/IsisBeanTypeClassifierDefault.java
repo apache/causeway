@@ -34,9 +34,8 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.TypeVetoMarker;
-
-import static org.apache.isis.commons.internal.reflection._Annotations.findNearestAnnotation;
 
 import lombok.AccessLevel;
 import lombok.NonNull;
@@ -83,12 +82,12 @@ implements IsisBeanTypeClassifier {
         // handle vetoing ...
 
         for(TypeVetoMarker vetoMarker : TypeVetoMarker.values()) {
-            if(findNearestAnnotation(type, vetoMarker.getAnnotationType()).isPresent()) {
+            if(_Annotations.synthesize(type, vetoMarker.getAnnotationType()).isPresent()) {
                 return BeanClassification.selfManaged(BeanSort.VETOED); // reject
             }
         }
 
-        val profiles = Can.ofArray(findNearestAnnotation(type, Profile.class)
+        val profiles = Can.ofArray(_Annotations.synthesize(type, Profile.class)
                 .map(Profile::value)
                 .orElse(null));
         if(profiles.isNotEmpty()
@@ -98,7 +97,7 @@ implements IsisBeanTypeClassifier {
 
         // handle value types ...
 
-        val aValue = findNearestAnnotation(type, org.apache.isis.applib.annotation.Value.class)
+        val aValue = _Annotations.synthesize(type, org.apache.isis.applib.annotation.Value.class)
                 .orElse(null);
         if(aValue!=null) {
             return BeanClassification.delegated(BeanSort.VALUE);
@@ -106,7 +105,7 @@ implements IsisBeanTypeClassifier {
 
         // handle actual bean types ...
 
-        val aDomainService = findNearestAnnotation(type, DomainService.class);
+        val aDomainService = _Annotations.synthesize(type, DomainService.class);
         if(aDomainService.isPresent()) {
             return BeanClassification
                     .delegated(BeanSort.MANAGED_BEAN_CONTRIBUTING,
@@ -125,19 +124,19 @@ implements IsisBeanTypeClassifier {
             return BeanClassification.selfManaged(BeanSort.VIEW_MODEL);
         }
 
-        val entityAnnotation = findNearestAnnotation(type, Entity.class).orElse(null);
+        val entityAnnotation = _Annotations.synthesize(type, Entity.class).orElse(null);
         if(entityAnnotation!=null) {
 
             String logicalTypeName = null;
 
-            val aDomainObject = findNearestAnnotation(type, DomainObject.class).orElse(null);
+            val aDomainObject = _Annotations.synthesize(type, DomainObject.class).orElse(null);
             if(aDomainObject!=null) {
                 logicalTypeName = aDomainObject.logicalTypeName();
             }
 
             // don't trample over the @DomainObject(logicalTypeName=..) if present
             if(_Strings.isEmpty(logicalTypeName)) {
-                val aTable = findNearestAnnotation(type, Table.class).orElse(null);
+                val aTable = _Annotations.synthesize(type, Table.class).orElse(null);
                 if(aTable!=null) {
                     val schema = aTable.schema();
                     if(_Strings.isNotEmpty(schema)) {
@@ -157,7 +156,7 @@ implements IsisBeanTypeClassifier {
             return BeanClassification.selfManaged(BeanSort.ENTITY);
         }
 
-        val aDomainObject = findNearestAnnotation(type, DomainObject.class).orElse(null);
+        val aDomainObject = _Annotations.synthesize(type, DomainObject.class).orElse(null);
         if(aDomainObject!=null) {
             switch (aDomainObject.nature()) {
             case BEAN:
@@ -175,7 +174,7 @@ implements IsisBeanTypeClassifier {
             }
         }
 
-        if(findNearestAnnotation(type, Component.class).isPresent()) {
+        if(_Annotations.isPresent(type, Component.class)) {
             return BeanClassification.delegated(BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING);
         }
 
