@@ -72,15 +72,8 @@ public class PrimitiveBooleanJpa
 
     @Property(editing = Editing.ENABLED)
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
-    @Setter
+    @Getter @Setter
     private boolean readWriteProperty;
-
-    //XXX lombok bug? - annotation not recognized when using @Getter
-    @Override
-    public boolean isReadWriteProperty() {
-        return readWriteProperty;
-    }
-
 
 }
 //end::class[]
