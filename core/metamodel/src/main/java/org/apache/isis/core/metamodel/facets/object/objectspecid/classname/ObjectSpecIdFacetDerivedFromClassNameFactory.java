@@ -184,7 +184,7 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactory
 
             // don't check if annotated with spring repository or service
             if(Arrays.stream(objectSpec.getCorrespondingClass().getAnnotations())
-                    .anyMatch(a -> a.getClass().getCanonicalName().startsWith("org.springframework.stereotype"))){
+                    .anyMatch(a -> a.annotationType().getName().startsWith("org.springframework.stereotype"))){
                 return false;
             }
 
