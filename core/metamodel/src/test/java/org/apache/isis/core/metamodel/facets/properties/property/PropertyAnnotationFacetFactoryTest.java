@@ -554,13 +554,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             private boolean readWriteProperty;
         }
 
-        //@Test //FIXME[ISIS-2963] test fails - no facet is generated
+        @Test //FIXME[ISIS-2963] test fails - no facet is generated
         public void isis2963() {
-
-            val m = findMethod(PrimitiveBooleanEntity.class, "isReadWriteProperty");
-
-            //_Annotations.synthesize(m, null);
-
             assertDisabledFacetOn(findMethod(PrimitiveBooleanEntity.class, "isReadWriteProperty"),
                     "b");
         }

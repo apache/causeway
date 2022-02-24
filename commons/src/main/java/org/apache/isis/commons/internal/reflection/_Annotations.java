@@ -49,6 +49,8 @@ public final class _Annotations {
      * Determine if the specified annotation is either directly present or meta-present.
      * <p>
      * Also includes annotated fields, getter methods might be associated with.
+     * If annotations from a getter method are competing with annotations from its corresponding field,
+     * let the one win, that is 'nearer' to the <i>Class</i> that is subject to introspection.
      * <p>
      * Perform a full search of the entire type hierarchy,
      * including super-classes and implemented interfaces.
@@ -79,6 +81,8 @@ public final class _Annotations {
      * Optionally create a type-safe synthesized version of this annotation based on presence.
      * <p>
      * Also includes annotated fields, getter methods might be associated with.
+     * If annotations from a getter method are competing with annotations from its corresponding field,
+     * let the one win, that is 'nearer' to the <i>Class</i> that is subject to introspection.
      * <p>
      * Perform a full search of the entire type hierarchy,
      * including super-classes and implemented interfaces.
@@ -100,6 +104,8 @@ public final class _Annotations {
      * Optionally create a type-safe synthesized version of this annotation based on presence.
      * <p>
      * Also includes annotated fields, getter methods might be associated with.
+     * If annotations from a getter method are competing with annotations from its corresponding field,
+     * let the one win, that is 'nearer' to the <i>Class</i> that is subject to introspection.
      * <p>
      * Find only directly declared annotations,
      * without considering {@link Inherited} annotations and
@@ -123,6 +129,8 @@ public final class _Annotations {
      * Optionally create a type-safe synthesized version of this annotation based on presence.
      * <p>
      * Also includes annotated fields, getter methods might be associated with.
+     * If annotations from a getter method are competing with annotations from its corresponding field,
+     * let the one win, that is 'nearer' to the <i>Class</i> that is subject to introspection.
      */
     private static <A extends Annotation> Optional<A> synthesize(
             final AnnotatedElement annotatedElement,
@@ -131,17 +139,15 @@ public final class _Annotations {
 
         val collected = collect(annotatedElement, searchStrategy);
 
-        if(!collected.isPresent(annotationType)) {
+        // also handle annotated fields, getter methods might be associated with
+        val associated =
+                annotatedFieldForAnnotatedElement(annotatedElement, annotationType)
+                        .map(fieldForGetter->collect(fieldForGetter, searchStrategy));
 
-            // also handle annotated fields, getter methods might be associated with
-            return annotatedFieldForAnnotatedElement(annotatedElement, annotationType)
-            .flatMap(fieldForGetter->synthesize(fieldForGetter, annotationType, searchStrategy));
-        }
+        val proxyIfAny = _Annotations_SynthesizedMergedAnnotationInvocationHandler
+                .createProxy(collected, associated, annotationType);
 
-        val proxy = _Annotations_SynthesizedMergedAnnotationInvocationHandler
-                .createProxy(collected, annotationType);
-
-        return Optional.of(proxy);
+        return proxyIfAny;
     }
 
     /**
