@@ -142,7 +142,7 @@ public class FactoryServiceDefault implements FactoryService {
 
         val spec = loadSpec(viewModelClass);
         val viewModelFacet = getViewModelFacet(spec);
-        val viewModel = viewModelFacet.createViewModelPojo(spec, bookmark, __->createObject(spec));
+        val viewModel = viewModelFacet.createViewModelPojo(spec, bookmark, this::createObject);
         return _Casts.uncheckedCast(viewModel);
     }
 

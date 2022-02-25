@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.recreatable;
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -68,14 +67,7 @@ implements
         // ViewModel interface
         if (ViewModel.class.isAssignableFrom(processClassContext.getCls())) {
             FacetUtil.addFacet(
-                    new RecreatableObjectFacetForRecreatableObjectInterface(
-                            facetHolder, postConstructMethodCache));
-        }
-
-        // RecreatableDomainObject interface
-        if (RecreatableDomainObject.class.isAssignableFrom(type)) {
-            FacetUtil.addFacet(
-                    new RecreatableObjectFacetForRecreatableDomainObjectInterface(
+                    new RecreatableObjectFacetForViewModelInterface(
                             facetHolder, postConstructMethodCache));
         }
 

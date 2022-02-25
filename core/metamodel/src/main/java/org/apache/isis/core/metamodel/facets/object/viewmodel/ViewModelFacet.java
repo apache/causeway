@@ -80,7 +80,11 @@ public interface ViewModelFacet extends Facet {
     }
 
     /**
-     * Whether this implementation supports the recreation of objects by {@link RecreationMechanism#INSTANTIATES instantiating} (and implicitly also initializing) a new pojo, or by {@link RecreationMechanism#INITIALIZES initializing} a pojo created and passed to it by the framework.
+     * Whether this implementation supports the recreation of objects
+     * by {@link RecreationMechanism#INSTANTIATES instantiating}
+     * (and implicitly also initializing) a new pojo,
+     * or by {@link RecreationMechanism#INITIALIZES initializing}
+     * a pojo created and passed to it by the framework.
      *
      * <p>
      *     Determines whether the framework then calls

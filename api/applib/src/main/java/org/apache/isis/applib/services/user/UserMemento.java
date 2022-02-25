@@ -290,6 +290,7 @@ public class UserMemento implements Serializable {
      *
      * @return true if the names match (is case sensitive).
      */
+    @Programmatic
     public boolean isCurrentUser(final @Nullable String userName) {
         return name.equals(userName);
     }
