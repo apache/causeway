@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.objectmanager.load;
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Bytes;
@@ -192,8 +193,8 @@ final class ObjectLoader_builtinHandlers {
             }
 
             val bookmark = objectLoadRequest.getBookmark();
-            final Object viewModelPojo = viewModelFacet.instantiate(spec.getCorrespondingClass(), bookmark);
-            return ManagedObject.bookmarked(spec, viewModelPojo, bookmark);
+            val viewModel = viewModelFacet.instantiate(spec, Optional.of(bookmark));
+            return ManagedObject.bookmarked(spec, viewModel.getPojo(), bookmark);
         }
 
     }

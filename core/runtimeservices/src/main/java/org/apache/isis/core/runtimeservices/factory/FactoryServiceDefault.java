@@ -19,6 +19,7 @@
 package org.apache.isis.core.runtimeservices.factory;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -140,11 +141,14 @@ public class FactoryServiceDefault implements FactoryService {
     @Override
     public <T> T viewModel(final @NonNull Class<T> viewModelClass, final @Nullable Bookmark bookmark) {
         val spec = loadSpec(viewModelClass);
+        if(!spec.isViewModel()) {
+            throw _Exceptions.illegalArgument("Type '%s' is not recogniced as a ViewModel by the framework.",
+                    viewModelClass);
+        }
         val viewModelFacet = getViewModelFacet(spec);
-        val viewModelPojo = viewModelFacet.createViewModelPojo(spec, bookmark);
-        serviceInjector.injectServicesInto(viewModelPojo);
-        objectLifecyclePublisher.onPostCreate(ManagedObject.of(spec, viewModelPojo));
-        return _Casts.uncheckedCast(viewModelPojo);
+        val viewModel = viewModelFacet.instantiate(spec, Optional.ofNullable(bookmark));
+        objectLifecyclePublisher.onPostCreate(viewModel);
+        return _Casts.uncheckedCast(viewModel.getPojo());
     }
 
     @Override

@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.object.viewmodel;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -41,22 +43,14 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  */
 public interface ViewModelFacet extends Facet {
 
-    default Object createViewModelPojo(
-            final ObjectSpecification spec,
-            final Bookmark bookmark) {
-
-        final Object viewModelPojo = instantiate(spec.getCorrespondingClass(), bookmark);
-        return viewModelPojo;
-    }
-
     /**
-     * Creates a view-model instance from given bookmark.
+     * Creates a view-model instance from given bookmark if any.
      */
-    <T> T instantiate(Class<T> viewModelClass, Bookmark bookmark);
+    ManagedObject instantiate(ObjectSpecification spec, final Optional<Bookmark> bookmark);
 
     /**
-     * Obtain a memento of the pojo, which can then be used to reinstantiate
-     * (either by {@link #instantiate(Class, Bookmark)} or {@link #initialize(Object, Bookmark)}) subsequently.
+     * Obtain a {@link Bookmark} of the pojo, which can then be used to re-instantiate
+     * by {@link #instantiate(ObjectSpecification, Optional)} subsequently.
      */
     Bookmark serializeToBookmark(ManagedObject managedObject);
 

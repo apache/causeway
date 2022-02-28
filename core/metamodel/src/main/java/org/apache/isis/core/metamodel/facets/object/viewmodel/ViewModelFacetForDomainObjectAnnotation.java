@@ -32,8 +32,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 
+import lombok.NonNull;
 import lombok.val;
 
 public class ViewModelFacetForDomainObjectAnnotation
@@ -77,16 +79,13 @@ extends ViewModelFacetAbstract {
     }
 
     @Override
-    protected Object doInstantiate(final Class<?> viewModelClass, final Optional<Bookmark> bookmark) {
-
-        val viewmodelSpec = getSpecificationLoader().loadSpecification(viewModelClass);
-        if(viewmodelSpec==null) {
-            return null;
-        }
+    protected ManagedObject createViewmodel(
+            @NonNull final ObjectSpecification viewmodelSpec,
+            @NonNull final Bookmark bookmark) {
 
         val viewmodel = viewmodelSpec.createObject();
 
-        val memento = parseMemento(bookmark.map(Bookmark::getIdentifier).orElse(null));
+        val memento = parseMemento(bookmark.getIdentifier());
         val mementoKeys = memento.keySet();
 
         if(mementoKeys.isEmpty()) {
@@ -94,8 +93,6 @@ extends ViewModelFacetAbstract {
         }
 
         val objectManager = super.getObjectManager();
-
-        getServiceInjector().injectServicesInto(viewmodel.getPojo());
 
         viewmodelSpec.streamProperties(MixedIn.EXCLUDED)
         .filter(property->mementoKeys.contains(property.getId()))
@@ -110,7 +107,7 @@ extends ViewModelFacetAbstract {
             }
         });
 
-        return viewmodel.getPojo();
+        return viewmodel;
     }
 
     @Override

@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
 import lombok.val;
@@ -60,21 +61,36 @@ implements ViewModelFacet {
     }
 
     @Override
-    public final <T> T instantiate(final Class<T> viewModelClass, final Bookmark bookmark) {
-        val viewModelPojo = bookmark==null
-                    || _Strings.isNullOrEmpty(bookmark.getIdentifier())
-                ? ClassExtensions.newInstance(viewModelClass)
-                : doInstantiate(viewModelClass, Optional.ofNullable(bookmark));
+    public final ManagedObject instantiate(
+            final ObjectSpecification spec,
+            final Optional<Bookmark> bookmarkIfAny) {
 
-        getServiceInjector().injectServicesInto(viewModelPojo);
-        invokePostConstructMethod(viewModelPojo);
-        return (T)viewModelPojo;
+        val bookmark = bookmarkIfAny.orElse(null);
+        val memento = bookmarkIfAny.map(Bookmark::getIdentifier).orElse(null);
+
+        val viewModel = bookmarkIfAny.isEmpty()
+                    || _Strings.isNullOrEmpty(memento)
+                ? ManagedObject.of(spec, ClassExtensions.newInstance(spec.getCorrespondingClass()))
+                : createViewmodel(spec, bookmark);
+
+        getServiceInjector().injectServicesInto(viewModel.getPojo());
+        invokePostConstructMethod(viewModel.getPojo());
+        return viewModel;
     }
 
     /**
-     * Hook for subclass; must be overridden.
+     * Create default viewmodel instance (without any {@link Bookmark} available).
      */
-    protected abstract Object doInstantiate(final Class<?> viewModelClass, final Optional<Bookmark> bookmark);
+    protected ManagedObject createViewmodel(final @NonNull ObjectSpecification spec) {
+        return ManagedObject.of(spec, ClassExtensions.newInstance(spec.getCorrespondingClass()));
+    }
+
+    /**
+     * Create viewmodel instance from a given valid {@link Bookmark}.
+     */
+    protected abstract ManagedObject createViewmodel(
+            @NonNull ObjectSpecification spec,
+            @NonNull Bookmark bookmark);
 
     private void invokePostConstructMethod(final Object viewModel) {
         final Method postConstructMethod = postConstructMethodCache.postConstructMethodFor(viewModel);
@@ -84,7 +100,7 @@ implements ViewModelFacet {
     }
 
     @Override
-    public final Bookmark serializeToBookmark(@NonNull final ManagedObject managedObject) {
+    public final Bookmark serializeToBookmark(final @NonNull ManagedObject managedObject) {
         return Bookmark.forLogicalTypeAndIdentifier(
                 managedObject.getSpecification().getLogicalType(),
                 serialize(managedObject));

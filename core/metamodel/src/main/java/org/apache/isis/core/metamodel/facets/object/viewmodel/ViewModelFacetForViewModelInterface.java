@@ -18,14 +18,14 @@
  */
 package org.apache.isis.core.metamodel.facets.object.viewmodel;
 
-import java.util.Optional;
-
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 
@@ -38,11 +38,23 @@ extends ViewModelFacetAbstract {
         super(holder, postConstructMethodCache);
     }
 
+    @Override
+    protected ManagedObject createViewmodel(
+            @NonNull final ObjectSpecification viewmodelSpec) {
+        return ManagedObject.of(
+                viewmodelSpec,
+                deserialize(viewmodelSpec, null));
+    }
+
     @SneakyThrows
     @Override
-    protected Object doInstantiate(final Class<?> viewModelClass, final Optional<Bookmark> bookmark) {
-        val constructorTakingMemento = viewModelClass.getConstructor(new Class<?>[]{String.class});
-        return constructorTakingMemento.newInstance(bookmark.map(Bookmark::getIdentifier).orElse(null));
+    protected ManagedObject createViewmodel(
+            @NonNull final ObjectSpecification viewmodelSpec,
+            @NonNull final Bookmark bookmark) {
+        return ManagedObject.bookmarked(
+                        viewmodelSpec,
+                        deserialize(viewmodelSpec, bookmark.getIdentifier()),
+                        bookmark);
     }
 
     @Override
@@ -50,4 +62,19 @@ extends ViewModelFacetAbstract {
         final ViewModel viewModelPojo = (ViewModel) viewModel.getPojo();
         return viewModelPojo.viewModelMemento();
     }
+
+    // -- HELPER
+
+    @SneakyThrows
+    private Object deserialize(
+            @NonNull final ObjectSpecification viewmodelSpec,
+            @NonNull final String memento) {
+        val constructorTakingMemento = viewmodelSpec
+                .getCorrespondingClass()
+                .getConstructor(new Class<?>[]{String.class});
+        val viewmodelPojo = constructorTakingMemento
+                .newInstance(memento);
+        return viewmodelPojo;
+    }
+
 }

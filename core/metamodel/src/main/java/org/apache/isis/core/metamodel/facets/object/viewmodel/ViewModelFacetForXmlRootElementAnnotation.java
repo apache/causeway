@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.object.viewmodel;
 
-import java.util.Optional;
-
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
@@ -28,9 +26,11 @@ import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.val;
 
 public class ViewModelFacetForXmlRootElementAnnotation
 extends ViewModelFacetAbstract {
@@ -43,10 +43,12 @@ extends ViewModelFacetAbstract {
     }
 
     @Override
-    protected Object doInstantiate(final Class<?> viewModelClass, final @NonNull Optional<Bookmark> bookmark) {
-        final String xmlStr = getUrlEncodingService().decodeToString(bookmark.map(Bookmark::getIdentifier).orElse(null));
-        final Object viewModelPojo = getJaxbService().fromXml(viewModelClass, xmlStr);
-        return viewModelPojo;
+    protected ManagedObject createViewmodel(
+            @NonNull final ObjectSpecification viewmodelSpec,
+            @NonNull final Bookmark bookmark) {
+        final String xmlStr = getUrlEncodingService().decodeToString(bookmark.getIdentifier());
+        val viewmodelPojo = getJaxbService().fromXml(viewmodelSpec.getCorrespondingClass(), xmlStr);
+        return ManagedObject.bookmarked(viewmodelSpec, viewmodelPojo, bookmark);
     }
 
     @Override
