@@ -17,6 +17,9 @@
 | `RecreatableDomainObject` interface removed
 | use `ViewModel` interface instead
 
+| `ViewModel.viewModelInit(String memento)` removed
+| use a single (String) argument constructor instead; this will allow Java Records to be used as viewmodels (future work)  
+
 |===
 
 == Configuration
