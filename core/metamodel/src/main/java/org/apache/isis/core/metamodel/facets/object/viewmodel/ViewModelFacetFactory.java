@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.viewmodel;
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -64,11 +63,9 @@ implements
         val postConstructMethodCache = this;
 
         // ViewModel interface
-        if (ViewModel.class.isAssignableFrom(processClassContext.getCls())) {
-            FacetUtil.addFacet(
-                    new ViewModelFacetForViewModelInterface(
-                            facetHolder, postConstructMethodCache));
-        }
+
+        FacetUtil.addFacetIfPresent(
+                ViewModelFacetForViewModelInterface.create(type, facetHolder, postConstructMethodCache));
 
         // XmlRootElement annotation
         val xmlRootElementIfAny = processClassContext.synthesizeOnType(XmlRootElement.class);

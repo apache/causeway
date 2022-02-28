@@ -49,6 +49,9 @@ public class ApplicationTypeCollection extends ApplicationTypeMember {
     public ApplicationTypeCollection(final ApplicationFeatureId featureId) {
         super(featureId);
     }
+    public ApplicationTypeCollection(final String memento) {
+        super(memento);
+    }
 
 
     // -- elementType

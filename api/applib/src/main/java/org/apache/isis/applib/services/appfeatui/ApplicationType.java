@@ -58,6 +58,9 @@ public class ApplicationType extends ApplicationFeatureViewModel {
     public ApplicationType(final ApplicationFeatureId featureId) {
         super(featureId);
     }
+    public ApplicationType(final String memento) {
+        super(memento);
+    }
 
 
 

@@ -18,21 +18,51 @@
  */
 package org.apache.isis.core.metamodel.facets.object.viewmodel;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 
+/**
+ * Corresponds to {@link ViewModel} interface.
+ */
 public class ViewModelFacetForViewModelInterface
 extends ViewModelFacetAbstract {
 
-    public ViewModelFacetForViewModelInterface(
+    public static Optional<ViewModelFacet> create(
+            final Class<?> cls,
+            final FacetHolder holder,
+            final HasPostConstructMethodCache postConstructMethodCache) {
+
+        if(!ViewModel.class.isAssignableFrom(cls)) {
+            return Optional.empty();
+        }
+
+        if(!ProgrammingModelConstants.ViewmodelConstructor.SINGLE_STRING_ARG
+            .get(cls)
+            .isPresent()) {
+
+            ValidationFailure.raiseFormatted(holder,
+                    ProgrammingModelConstants.Validation.VIEWMODEL_MISSING_DESERIALIZING_CONSTRUCTOR
+                        .getMessageForType(cls.getName()));
+
+            return Optional.empty();
+        }
+
+        return Optional.of(new ViewModelFacetForViewModelInterface(holder, postConstructMethodCache));
+    }
+
+    protected ViewModelFacetForViewModelInterface(
             final FacetHolder holder,
             final HasPostConstructMethodCache postConstructMethodCache) {
         super(holder, postConstructMethodCache);
@@ -69,9 +99,9 @@ extends ViewModelFacetAbstract {
     private Object deserialize(
             @NonNull final ObjectSpecification viewmodelSpec,
             @NonNull final String memento) {
-        val constructorTakingMemento = viewmodelSpec
-                .getCorrespondingClass()
-                .getConstructor(new Class<?>[]{String.class});
+        val constructorTakingMemento = ProgrammingModelConstants.ViewmodelConstructor.SINGLE_STRING_ARG
+                .get(viewmodelSpec.getCorrespondingClass())
+                .orElseThrow();
         val viewmodelPojo = constructorTakingMemento
                 .newInstance(memento);
         return viewmodelPojo;

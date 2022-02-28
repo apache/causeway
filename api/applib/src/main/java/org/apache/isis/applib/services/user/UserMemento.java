@@ -52,6 +52,7 @@ import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.resources._Serializables;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -70,7 +71,7 @@ import lombok.val;
 @DomainObjectLayout(
         titleUiEvent = UserMemento.TitleUiEvent.class
 )
-@lombok.Value @lombok.Builder
+@lombok.Value @lombok.Builder @AllArgsConstructor
 public class UserMemento
 implements Serializable, ViewModel {
 
@@ -355,10 +356,18 @@ implements Serializable, ViewModel {
     }
 
     // -- VIEWMODEL CONTRACT
-//FIXME[ISIS-2964]
-//    public UserMemento(final String memento) {
-//        //_Bytes.ofCompressedUrlBase64.apply(_Strings.toBytes(memento, StandardCharsets.UTF_8));
-//    }
+
+    //FIXME[ISIS-2964] as UserMemento is serializable, it should not even be required to implement ViewModel
+    public UserMemento(final String memento) {
+        this(_Serializables.read(UserMemento.class,
+                _Bytes.ofCompressedUrlBase64.apply(_Strings.toBytes(memento, StandardCharsets.UTF_8))));
+    }
+
+    private UserMemento(final UserMemento copy) {
+        this(copy.name, copy.realName, copy.avatarUrl, copy.languageLocale, copy.numberFormatLocale,
+                copy.timeFormatLocale, copy.authenticationSource, copy.impersonating,
+                copy.multiTenancyToken, copy.authenticationCode, copy.roles);
+    }
 
     @Programmatic
     @Override

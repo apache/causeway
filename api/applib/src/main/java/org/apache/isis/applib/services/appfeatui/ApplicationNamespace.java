@@ -53,6 +53,9 @@ public class ApplicationNamespace extends ApplicationFeatureViewModel {
     public ApplicationNamespace(final ApplicationFeatureId featureId) {
         super(featureId);
     }
+    public ApplicationNamespace(final String memento) {
+        super(memento);
+    }
 
 
 

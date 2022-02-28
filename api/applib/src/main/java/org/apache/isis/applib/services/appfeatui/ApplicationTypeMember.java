@@ -54,6 +54,9 @@ public abstract class ApplicationTypeMember extends ApplicationFeatureViewModel 
     public ApplicationTypeMember(final ApplicationFeatureId featureId) {
         super(featureId);
     }
+    public ApplicationTypeMember(final String memento) {
+        super(memento);
+    }
 
 
     // -- memberName (properties)

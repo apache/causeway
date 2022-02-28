@@ -30,6 +30,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
@@ -47,6 +48,7 @@ import org.apache.isis.applib.annotation.ObjectLifecycle;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
@@ -398,13 +400,20 @@ public final class ProgrammingModelConstants {
                 + "without enforcing annotations"),
         UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS("${type}#${member}: "
                 + "has synthesized (effective) annotation @Domain.Include, "
-                + "is assumed to represent or support a property, collection or action.");
+                + "is assumed to represent or support a property, collection or action."),
+        VIEWMODEL_MISSING_DESERIALIZING_CONSTRUCTOR(
+                "${type}: ViewModel contract violation: missing single (String) arg constructor "
+                + "(for de-serialization from memento string).");
         ;
         private final String template;
         public String getMessage(final Identifier featureIdentifier) {
             return getMessageForTypeAndMemberId(
                     featureIdentifier.getLogicalType().getClassName(),
                     featureIdentifier.getMemberLogicalName());
+        }
+        public String getMessageForType(final String type) {
+            return getMessage(Map.of(
+                    "type", type));
         }
         public String getMessageForTypeAndMemberId(final String type, final String memberId) {
             return getMessage(Map.of(
@@ -414,6 +423,23 @@ public final class ProgrammingModelConstants {
         public String getMessage(final Map<String, String> templateVars) {
             return processMessageTemplate(template, templateVars);
         }
+    }
+
+    public static enum ViewmodelConstructor {
+        SINGLE_STRING_ARG {
+
+            @Override
+            public <T> Optional<Constructor<T>> get(final Class<T> cls) {
+                // heap-pollution: only produces stack-traces when cls violates viewmodel contract,
+                // which is covered by mm validation
+                return Result.of(()->
+                        cls.getConstructor(new Class<?>[]{String.class}))
+                        .getValue();
+            }
+
+        };
+        public abstract <T> Optional<Constructor<T>> get(Class<T> correspondingClass);
+
     }
 
     // -- HELPER
