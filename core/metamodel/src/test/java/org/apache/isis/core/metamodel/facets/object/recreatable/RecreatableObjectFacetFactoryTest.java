@@ -22,9 +22,9 @@ import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetForViewModelInterface;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 
 public class RecreatableObjectFacetFactoryTest
@@ -45,20 +45,18 @@ extends AbstractFacetFactoryTest {
         super.tearDown();
     }
 
-    public void testViewModelInterfacePickedUpOnClassAndDefaultsToAlways() {
-        class Customer implements ViewModel {
+    static class Customer implements ViewModel {
 
-            @Override
-            public String viewModelMemento() {
-                return null;
-            }
-
-
-            @SuppressWarnings("unused")
-            public Customer(final String memento) {
-            }
-
+        @Override
+        public String viewModelMemento() {
+            return null;
         }
+
+        public Customer(final String memento) {
+        }
+    }
+
+    public void testViewModelInterfacePickedUpOnClassAndDefaultsToAlways() {
 
         facetFactory.process(ProcessClassContext
                 .forTesting(Customer.class, methodRemover, facetedMethod));
