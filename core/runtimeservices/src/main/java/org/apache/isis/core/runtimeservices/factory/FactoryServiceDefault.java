@@ -139,11 +139,12 @@ public class FactoryServiceDefault implements FactoryService {
 
     @Override
     public <T> T viewModel(final @NonNull Class<T> viewModelClass, final @Nullable Bookmark bookmark) {
-
         val spec = loadSpec(viewModelClass);
         val viewModelFacet = getViewModelFacet(spec);
-        val viewModel = viewModelFacet.createViewModelPojo(spec, bookmark, this::createObject);
-        return _Casts.uncheckedCast(viewModel);
+        val viewModelPojo = viewModelFacet.createViewModelPojo(spec, bookmark);
+        serviceInjector.injectServicesInto(viewModelPojo);
+        objectLifecyclePublisher.onPostCreate(ManagedObject.of(spec, viewModelPojo));
+        return _Casts.uncheckedCast(viewModelPojo);
     }
 
     @Override

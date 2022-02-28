@@ -144,18 +144,16 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         return "applicationFeature";
     }
 
-    // -- ViewModel impl
+    // -- VIEWMODEL CONTRACT
+
+    public ApplicationFeatureViewModel(final String encodedMemento) {
+        this(ApplicationFeatureId.parseEncoded(encodedMemento));
+    }
+
     @Override
     public String viewModelMemento() {
         return getFeatureId().asEncodedString();
     }
-
-    @Override
-    public void viewModelInit(final String encodedMemento) {
-        final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.parseEncoded(encodedMemento);
-        setFeatureId(applicationFeatureId);
-    }
-
 
     // -- featureId (property, programmatic)
 

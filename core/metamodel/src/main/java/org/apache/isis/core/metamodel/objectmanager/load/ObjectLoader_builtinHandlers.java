@@ -20,8 +20,6 @@ package org.apache.isis.core.metamodel.objectmanager.load;
 
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
-import java.lang.reflect.Array;
-import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.isis.commons.collections.Can;
@@ -33,7 +31,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -195,41 +192,8 @@ final class ObjectLoader_builtinHandlers {
             }
 
             val bookmark = objectLoadRequest.getBookmark();
-            final Object viewModelPojo;
-            if(viewModelFacet.getRecreationMechanism().isInitializes()) {
-                viewModelPojo = this.instantiateAndInjectServices(spec);
-                viewModelFacet.initialize(viewModelPojo, bookmark);
-            } else {
-                viewModelPojo = viewModelFacet.instantiate(spec.getCorrespondingClass(), bookmark);
-            }
-
+            final Object viewModelPojo = viewModelFacet.instantiate(spec.getCorrespondingClass(), bookmark);
             return ManagedObject.bookmarked(spec, viewModelPojo, bookmark);
-        }
-
-        private Object instantiateAndInjectServices(final ObjectSpecification spec) {
-
-            val type = spec.getCorrespondingClass();
-            if (type.isArray()) {
-                return Array.newInstance(type.getComponentType(), 0);
-            }
-
-            if (Modifier.isAbstract(type.getModifiers())) {
-                throw _Exceptions.illegalArgument("Cannot create an instance of an abstract class '%s', "
-                        + "loader: %s loading ObjectSpecification %s",
-                        type, this.getClass().getName(), spec);
-            }
-
-            final Object newInstance;
-            try {
-                newInstance = type.newInstance();
-            } catch (final IllegalAccessException | InstantiationException e) {
-                throw _Exceptions.illegalArgument("Failed to create instance of type '%s', "
-                        + "loader: %s loading ObjectSpecification %s",
-                        type, this.getClass().getName(), spec);
-            }
-
-            metaModelContext.getServiceInjector().injectServicesInto(newInstance);
-            return newInstance;
         }
 
     }

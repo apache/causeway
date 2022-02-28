@@ -121,16 +121,15 @@ public class UserPermissionViewModel implements ViewModel {
         return "userPermission";
     }
 
+    // -- VIEWMODEL CONTRACT
 
-    // -- ViewModel impl
-    @Override
-    public String viewModelMemento() {
-        return asEncodedString();
+    public UserPermissionViewModel(final String encodedMemento) {
+        parseEncoded(encodedMemento);
     }
 
     @Override
-    public void viewModelInit(final String encodedMemento) {
-        parseEncoded(encodedMemento);
+    public String viewModelMemento() {
+        return asEncodedString();
     }
 
     private static String asEncodedString(

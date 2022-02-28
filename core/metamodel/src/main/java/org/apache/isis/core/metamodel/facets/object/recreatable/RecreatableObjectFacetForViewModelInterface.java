@@ -26,7 +26,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-import lombok.NonNull;
+import lombok.SneakyThrows;
+import lombok.val;
 
 public class RecreatableObjectFacetForViewModelInterface
 extends RecreatableObjectFacetAbstract {
@@ -34,13 +35,14 @@ extends RecreatableObjectFacetAbstract {
     public RecreatableObjectFacetForViewModelInterface(
             final FacetHolder holder,
             final HasPostConstructMethodCache postConstructMethodCache) {
-        super(holder, RecreationMechanism.INITIALIZES, postConstructMethodCache);
+        super(holder, postConstructMethodCache);
     }
 
+    @SneakyThrows
     @Override
-    protected void doInitialize(final Object pojo, final @NonNull Optional<Bookmark> bookmark) {
-        final ViewModel viewModel = (ViewModel) pojo;
-        viewModel.viewModelInit(bookmark.map(Bookmark::getIdentifier).orElse(null));
+    protected Object doInstantiate(final Class<?> viewModelClass, final Optional<Bookmark> bookmark) {
+        val constructorTakingMemento = viewModelClass.getConstructor(new Class<?>[]{String.class});
+        return constructorTakingMemento.newInstance(bookmark.map(Bookmark::getIdentifier).orElse(null));
     }
 
     @Override

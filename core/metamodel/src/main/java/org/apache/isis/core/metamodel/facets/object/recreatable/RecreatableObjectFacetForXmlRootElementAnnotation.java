@@ -39,7 +39,7 @@ extends RecreatableObjectFacetAbstract {
             final FacetHolder holder,
             final HasPostConstructMethodCache postConstructMethodCache) {
 
-        super(holder, RecreationMechanism.INSTANTIATES, postConstructMethodCache, Precedence.HIGH);
+        super(holder, postConstructMethodCache, Precedence.HIGH);
     }
 
     @Override

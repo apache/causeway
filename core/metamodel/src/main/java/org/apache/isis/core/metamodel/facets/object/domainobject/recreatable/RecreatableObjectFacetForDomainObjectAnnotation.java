@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 
-import lombok.NonNull;
 import lombok.val;
 
 public class RecreatableObjectFacetForDomainObjectAnnotation
@@ -75,28 +74,31 @@ extends RecreatableObjectFacetAbstract {
             final HasPostConstructMethodCache postConstructMethodCache,
             final Facet.Precedence precedence) {
 
-        super(holder, RecreationMechanism.INITIALIZES, postConstructMethodCache, precedence);
+        super(holder, postConstructMethodCache, precedence);
     }
 
     @Override
-    protected void doInitialize(
-            final Object viewModelPojo,
-            final @NonNull Optional<Bookmark> bookmark) {
+    protected Object doInstantiate(final Class<?> viewModelClass, final Optional<Bookmark> bookmark) {
+
+        val viewmodelSpec = getSpecificationLoader().loadSpecification(viewModelClass);
+        if(viewmodelSpec==null) {
+            return null;
+        }
+
+        val viewmodel = viewmodelSpec.createObject();
 
         val memento = parseMemento(bookmark.map(Bookmark::getIdentifier).orElse(null));
         val mementoKeys = memento.keySet();
 
         if(mementoKeys.isEmpty()) {
-            return;
+            return viewmodel;
         }
 
         val objectManager = super.getObjectManager();
-        val viewModelAdapter = objectManager.adapt(viewModelPojo);
-        val spec = viewModelAdapter.getSpecification();
 
-        super.getServiceInjector().injectServicesInto(viewModelPojo);
+        getServiceInjector().injectServicesInto(viewmodel.getPojo());
 
-        spec.streamProperties(MixedIn.EXCLUDED)
+        viewmodelSpec.streamProperties(MixedIn.EXCLUDED)
         .filter(property->mementoKeys.contains(property.getId()))
         .forEach(property->{
 
@@ -105,10 +107,11 @@ extends RecreatableObjectFacetAbstract {
             val propertyValue = memento.get(propertyId, propertyType);
 
             if(propertyValue != null) {
-                property.set(viewModelAdapter, objectManager.adapt(propertyValue), InteractionInitiatedBy.FRAMEWORK);
+                property.set(viewmodel, objectManager.adapt(propertyValue), InteractionInitiatedBy.FRAMEWORK);
             }
         });
 
+        return viewmodel.getPojo();
     }
 
     @Override

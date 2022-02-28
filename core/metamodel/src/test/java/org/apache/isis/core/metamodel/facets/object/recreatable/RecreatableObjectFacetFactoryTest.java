@@ -51,8 +51,9 @@ extends AbstractFacetFactoryTest {
                 return null;
             }
 
-            @Override
-            public void viewModelInit(final String memento) {
+
+            @SuppressWarnings("unused")
+            public Customer(final String memento) {
             }
 
         }

@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.object.viewmodel;
 
-import java.util.function.Function;
-
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -43,65 +41,18 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  */
 public interface ViewModelFacet extends Facet {
 
-
-    public enum RecreationMechanism {
-        /**
-         * Instantiates a new instance and then populates
-         */
-        INSTANTIATES,
-        /**
-         * Initializes an instance already created by the framework
-         */
-        INITIALIZES;
-
-        public boolean isInstantiates() {
-            return this == INSTANTIATES;
-        }
-
-        public boolean isInitializes() {
-            return this == INITIALIZES;
-        }
-
-    }
-
     default Object createViewModelPojo(
             final ObjectSpecification spec,
-            final Bookmark bookmark,
-            final Function<ObjectSpecification, Object> viewModelPojoFactory) {
+            final Bookmark bookmark) {
 
-        final Object viewModelPojo;
-        if(getRecreationMechanism().isInitializes()) {
-            viewModelPojo = viewModelPojoFactory.apply(spec);
-            initialize(viewModelPojo, bookmark);
-        } else {
-            viewModelPojo = instantiate(spec.getCorrespondingClass(), bookmark);
-        }
+        final Object viewModelPojo = instantiate(spec.getCorrespondingClass(), bookmark);
         return viewModelPojo;
     }
 
     /**
-     * Whether this implementation supports the recreation of objects
-     * by {@link RecreationMechanism#INSTANTIATES instantiating}
-     * (and implicitly also initializing) a new pojo,
-     * or by {@link RecreationMechanism#INITIALIZES initializing}
-     * a pojo created and passed to it by the framework.
-     *
-     * <p>
-     *     Determines whether the framework then calls
-     *     {@link #instantiate(Class, Bookmark)} or if it calls {@link #initialize(Object, Bookmark)}.
-     * </p>
+     * Creates a view-model instance from given bookmark.
      */
-    RecreationMechanism getRecreationMechanism();
-
-    /**
-     * Will be called if {@link #getRecreationMechanism()} is {@link RecreationMechanism#INITIALIZES}.
-     */
-    void initialize(Object viewModelPojo, Bookmark bookmark);
-
-    /**
-     * Will be called only if {@link #getRecreationMechanism()} is {@link RecreationMechanism#INSTANTIATES}.
-     */
-    Object instantiate(final Class<?> viewModelClass, Bookmark bookmark);
+    <T> T instantiate(Class<T> viewModelClass, Bookmark bookmark);
 
     /**
      * Obtain a memento of the pojo, which can then be used to reinstantiate

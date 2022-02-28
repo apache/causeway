@@ -23,32 +23,19 @@ import org.apache.isis.applib.annotation.Programmatic;
 /**
  * Indicates that an object belongs to the UI/application layer, and is intended to be used as a view model.
  *
- * <p>
- *     Objects that are part of the domain object layer should instead implement {@link RecreatableDomainObject}.
- * </p>
- *
  * @since 1.x {@index}
  */
 public interface ViewModel {
 
     /**
      * Obtain a memento of the view model.
-     *
      * <p>
-     * Typically this will be the identifier of a backing domain entity, but it could also be an arbitrary string,
-     * for example a bunch of JSON.
-     *
-     * <p>
-     * This method is called by the framework in order that the view model may be recreated subsequently
-     * through {@link #viewModelInit(String)}.
+     * Instances of {@link ViewModel} must include a public single {@link String} argument constructor,
+     * that recreates an instance from a memento string.
+     * This constructor is not required to resolve injection points or fire domain events,
+     * instead this responsibility is encapsulated with the framework.
      */
     @Programmatic
     String viewModelMemento();
-
-    /**
-     * Used to re-initialize a view model with a memento obtained from {@link #viewModelMemento()}.
-     */
-    @Programmatic
-    void viewModelInit(String memento);
 
 }
