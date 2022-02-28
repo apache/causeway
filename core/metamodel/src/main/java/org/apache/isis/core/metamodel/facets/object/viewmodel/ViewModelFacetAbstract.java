@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.recreatable;
+package org.apache.isis.core.metamodel.facets.object.viewmodel;
 
 import java.lang.reflect.Method;
 import java.util.Optional;
@@ -29,13 +29,12 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.NonNull;
 import lombok.val;
 
-public abstract class RecreatableObjectFacetAbstract
+public abstract class ViewModelFacetAbstract
 extends FacetAbstract
 implements ViewModelFacet {
 
@@ -45,14 +44,14 @@ implements ViewModelFacet {
         return ViewModelFacet.class;
     }
 
-    protected RecreatableObjectFacetAbstract(
+    protected ViewModelFacetAbstract(
             final FacetHolder holder,
             final HasPostConstructMethodCache postConstructMethodCache) {
         super(type(), holder);
         this.postConstructMethodCache = postConstructMethodCache;
     }
 
-    protected RecreatableObjectFacetAbstract(
+    protected ViewModelFacetAbstract(
             final FacetHolder holder,
             final HasPostConstructMethodCache postConstructMethodCache,
             final Facet.Precedence precedence) {
@@ -73,9 +72,7 @@ implements ViewModelFacet {
     }
 
     /**
-     * Hook for subclass; must be overridden if {@link #getRecreationMechanism()} is
-     * {@link org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet.RecreationMechanism#INSTANTIATES}
-     * (ignored otherwise).
+     * Hook for subclass; must be overridden.
      */
     protected abstract Object doInstantiate(final Class<?> viewModelClass, final Optional<Bookmark> bookmark);
 

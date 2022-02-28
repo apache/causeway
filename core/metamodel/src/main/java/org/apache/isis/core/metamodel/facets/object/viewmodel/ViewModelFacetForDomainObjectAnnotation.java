@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.domainobject.recreatable;
+package org.apache.isis.core.metamodel.facets.object.viewmodel;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -30,17 +30,16 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
-import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetAbstract;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 
 import lombok.val;
 
-public class RecreatableObjectFacetForDomainObjectAnnotation
-extends RecreatableObjectFacetAbstract {
+public class ViewModelFacetForDomainObjectAnnotation
+extends ViewModelFacetAbstract {
 
-    public static Optional<RecreatableObjectFacetForDomainObjectAnnotation> create(
+    public static Optional<ViewModelFacetForDomainObjectAnnotation> create(
             final Optional<DomainObject> domainObjectIfAny,
             final FacetHolder holder,
             final HasPostConstructMethodCache postConstructMethodCache,
@@ -57,7 +56,7 @@ extends RecreatableObjectFacetAbstract {
                         // not a recreatable object, so no facet
                         return null;
                     case VIEW_MODEL:
-                        return new RecreatableObjectFacetForDomainObjectAnnotation(
+                        return new ViewModelFacetForDomainObjectAnnotation(
                                 holder, postConstructMethodCache, precedence);
                     }
                     // shouldn't happen, the above switch should match all cases.
@@ -69,7 +68,7 @@ extends RecreatableObjectFacetAbstract {
     private UrlEncodingService codec;
     private SerializingAdapter serializer;
 
-    protected RecreatableObjectFacetForDomainObjectAnnotation(
+    protected ViewModelFacetForDomainObjectAnnotation(
             final FacetHolder holder,
             final HasPostConstructMethodCache postConstructMethodCache,
             final Facet.Precedence precedence) {

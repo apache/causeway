@@ -57,10 +57,10 @@ import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveMethod
 import org.apache.isis.core.metamodel.facets.object.logicaltype.classname.LogicalTypeFacetFromClassNameFactory;
 import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImplFactory;
-import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.support.ObjectSupportFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetFactory;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethodFactory;
@@ -190,7 +190,7 @@ extends ProgrammingModelAbstract {
 
         val postConstructMethodsCache = new MethodByClassMap();
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new RecreatableObjectFacetFactory(mmc, postConstructMethodsCache));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ViewModelFacetFactory(mmc, postConstructMethodsCache));
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new JaxbFacetFactory(mmc));
 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new LogicalTypeFacetForLogicalTypeNameAnnotationFacetFactory(mmc, postConstructMethodsCache));

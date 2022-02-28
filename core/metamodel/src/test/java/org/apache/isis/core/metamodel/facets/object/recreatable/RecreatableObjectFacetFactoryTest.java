@@ -22,19 +22,21 @@ import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetForViewModelInterface;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 
 public class RecreatableObjectFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
-    private RecreatableObjectFacetFactory facetFactory;
+    private ViewModelFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new RecreatableObjectFacetFactory(metaModelContext, new MethodByClassMap());
+        facetFactory = new ViewModelFacetFactory(metaModelContext, new MethodByClassMap());
     }
 
     @Override
@@ -63,7 +65,7 @@ extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(ViewModelFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof RecreatableObjectFacetForViewModelInterface);
+        assertTrue(facet instanceof ViewModelFacetForViewModelInterface);
 
         assertNoMethodsRemoved();
     }

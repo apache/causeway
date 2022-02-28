@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.recreatable;
+package org.apache.isis.core.metamodel.facets.object.viewmodel;
 
 import java.util.Optional;
 
@@ -32,10 +32,10 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import lombok.Getter;
 import lombok.NonNull;
 
-public class RecreatableObjectFacetForXmlRootElementAnnotation
-extends RecreatableObjectFacetAbstract {
+public class ViewModelFacetForXmlRootElementAnnotation
+extends ViewModelFacetAbstract {
 
-    public RecreatableObjectFacetForXmlRootElementAnnotation(
+    public ViewModelFacetForXmlRootElementAnnotation(
             final FacetHolder holder,
             final HasPostConstructMethodCache postConstructMethodCache) {
 

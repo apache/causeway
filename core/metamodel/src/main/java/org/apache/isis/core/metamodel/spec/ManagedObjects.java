@@ -388,7 +388,7 @@ public final class ManagedObjects {
     /**
      * eg. in order to prevent wrapping an object that is already wrapped
      */
-    public static void assertPojoNotManaged(final @Nullable Object pojo) {
+    public static void assertPojoNotWrapped(final @Nullable Object pojo) {
         // can do this check only when the pojo is not null, otherwise is always considered valid
         if(pojo==null) {
             return;

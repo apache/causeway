@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.recreatable;
+package org.apache.isis.core.metamodel.facets.object.viewmodel;
 
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -28,7 +28,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
@@ -37,14 +36,14 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
-public class RecreatableObjectFacetFactory
+public class ViewModelFacetFactory
 extends FacetFactoryAbstract
 implements
     MetaModelRefiner,
     HasPostConstructMethodCache {
 
     @Inject
-    public RecreatableObjectFacetFactory(
+    public ViewModelFacetFactory(
             final MetaModelContext mmc,
             final MethodByClassMap postConstructMethodsCache) {
         super(mmc, FeatureType.OBJECTS_ONLY);
@@ -67,7 +66,7 @@ implements
         // ViewModel interface
         if (ViewModel.class.isAssignableFrom(processClassContext.getCls())) {
             FacetUtil.addFacet(
-                    new RecreatableObjectFacetForViewModelInterface(
+                    new ViewModelFacetForViewModelInterface(
                             facetHolder, postConstructMethodCache));
         }
 
@@ -75,7 +74,7 @@ implements
         val xmlRootElementIfAny = processClassContext.synthesizeOnType(XmlRootElement.class);
         if(xmlRootElementIfAny.isPresent()) {
             FacetUtil.addFacet(
-                    new RecreatableObjectFacetForXmlRootElementAnnotation(
+                    new ViewModelFacetForXmlRootElementAnnotation(
                             facetHolder, postConstructMethodCache));
         }
 

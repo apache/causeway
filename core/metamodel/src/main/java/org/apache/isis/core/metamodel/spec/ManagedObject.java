@@ -220,7 +220,7 @@ public interface ManagedObject {
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
 
-        ManagedObjects.assertPojoNotManaged(pojo);
+        ManagedObjects.assertPojoNotWrapped(pojo);
 
         //ISIS-2430 Cannot assume Action Param Spec to be correct when eagerly loaded
         //actual type in use (during runtime) might be a sub-class of the above, so re-adapt with hinting spec
@@ -249,7 +249,7 @@ public interface ManagedObject {
                     "pojo.toString() = %s",
                     spec.getCorrespondingClass(), pojo.getClass(), pojo.toString());
         }
-        ManagedObjects.assertPojoNotManaged(pojo);
+        ManagedObjects.assertPojoNotWrapped(pojo);
         return SimpleManagedObject.identified(spec, pojo, bookmark);
     }
 
@@ -266,7 +266,7 @@ public interface ManagedObject {
             _Assert.assertFalse(_Collections.isCollectionOrArrayOrCanType(pojo.getClass()));
         }
 
-        ManagedObjects.assertPojoNotManaged(pojo);
+        ManagedObjects.assertPojoNotWrapped(pojo);
         val adapter = new LazyManagedObject(cls->specLoader.specForType(cls).orElse(null), pojo);
         //ManagedObjects.warnIfAttachedEntity(adapter, "consider using ManagedObject.identified(...) for entity");
         return adapter;
