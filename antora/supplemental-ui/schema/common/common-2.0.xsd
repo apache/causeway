@@ -20,20 +20,7 @@
 <xs:schema targetNamespace="http://isis.apache.org/schema/common"
            elementFormDefault="qualified"
            xmlns="http://isis.apache.org/schema/common"
-           xmlns:xs="http://www.w3.org/2001/XMLSchema"
-
-           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
-           xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
-           jaxb:extensionBindingPrefixes="xjc"
-           jaxb:version="1.0">
-
-	<xs:annotation>
-	   <xs:appinfo>
-	      <jaxb:globalBindings generateIsSetMethod="false">
-	          <xjc:serializable uid="1"/>
-	      </jaxb:globalBindings>
-	   </xs:appinfo>
-	</xs:annotation>
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
     <xs:complexType name="valueDto">
         <xs:choice minOccurs="0" maxOccurs="1">
@@ -48,35 +35,26 @@
             <xs:element name="char" type="xs:string"/>
             <xs:element name="bigInteger" type="xs:integer"/>
             <xs:element name="bigDecimal" type="xs:decimal"/>
-
-            <!-- temporal types -->
+            <!-- java.time -->
             <xs:element name="localDate" type="xs:date"/>
             <xs:element name="localDateTime" type="xs:dateTime"/>
             <xs:element name="localTime" type="xs:time"/>
             <xs:element name="offsetTime" type="xs:time"/>
             <xs:element name="offsetDateTime" type="xs:dateTime"/>
             <xs:element name="zonedDateTime" type="xs:dateTime"/>
-
-            <!-- complex types -->
+            <!-- joda -->
+            <xs:element name="jodaDateTime" type="xs:dateTime"/>
+            <xs:element name="jodaLocalDate" type="xs:date"/>
+            <xs:element name="jodaLocalTime" type="xs:time"/>
+            <xs:element name="jodaLocalDateTime" type="xs:dateTime"/>
+            <!--  -->
+            <xs:element name="timestamp" type="xs:dateTime"/>
             <xs:element name="enum" type="enumDto"/>
             <xs:element name="reference" type="oidDto"/>
             <xs:element name="collection" type="collectionDto"/>
-            <xs:element name="composite" type="typedTupleDto"/>
             <xs:element name="blob" type="blobDto"/>
             <xs:element name="clob" type="clobDto"/>
         </xs:choice>
-    </xs:complexType>
-
-	<xs:complexType name="typedTupleDto">
-        <xs:annotation>
-            <xs:documentation>A fixed-size ordered list of named type/value pairs.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-            <xs:element name="elements" type="namedValueWithTypeDto" minOccurs="1" maxOccurs="unbounded"/>
-        </xs:sequence>
-        <xs:attribute name="type" use="required" type="xs:string"/>
-        <xs:attribute name="cardinality" use="required" type="xs:int"/>
     </xs:complexType>
 
     <xs:complexType name="oidDto">
@@ -137,14 +115,9 @@
         </xs:sequence>
     </xs:complexType>
 
+
     <xs:simpleType name="valueType">
         <xs:restriction base="xs:string">
-        	<xs:enumeration value="void">
-                <xs:annotation>
-                    <xs:documentation>Not valid to be used as the parameter type of an action; can be used as its return type.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:enumeration>
             <xs:enumeration value="string"/>
             <xs:enumeration value="byte"/>
             <xs:enumeration value="short"/>
@@ -156,20 +129,31 @@
             <xs:enumeration value="char"/>
             <xs:enumeration value="bigInteger"/>
             <xs:enumeration value="bigDecimal"/>
-            <!-- temporal types -->
+            <xs:enumeration value="javaSqlTimestamp"/>
+            <!-- java.time -->
             <xs:enumeration value="localDateTime"/>
             <xs:enumeration value="localDate"/>
             <xs:enumeration value="localTime"/>
             <xs:enumeration value="offsetDateTime"/>
             <xs:enumeration value="offsetTime"/>
             <xs:enumeration value="zonedDateTime"/>
-            <!-- complex types -->
+            <!-- joda -->
+            <xs:enumeration value="jodaDateTime"/>
+            <xs:enumeration value="jodaLocalDate"/>
+            <xs:enumeration value="jodaLocalTime"/>
+            <xs:enumeration value="jodaLocalDateTime"/>
+            <!--  -->
             <xs:enumeration value="enum"/>
             <xs:enumeration value="reference"/>
             <xs:enumeration value="collection"/>
-            <xs:enumeration value="composite"/>
             <xs:enumeration value="blob"/>
             <xs:enumeration value="clob"/>
+            <xs:enumeration value="void">
+                <xs:annotation>
+                    <xs:documentation>Not valid to be used as the parameter type of an action; can be used as its return type.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
         </xs:restriction>
     </xs:simpleType>
 
@@ -228,17 +212,6 @@
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:complexType name="namedValueWithTypeDto">
-        <xs:annotation>
-            <xs:documentation>Defines a named value, a tuple of: name, type and value.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:complexContent>
-            <xs:extension base="valueWithTypeDto">
-                <xs:attribute name="name" use="required" type="xs:string"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
 
     <xs:simpleType name="interactionType" >
         <xs:annotation>
