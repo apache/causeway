@@ -176,8 +176,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:complexContent>
-            <xs:extension base="com:valueWithTypeDto">
-                <xs:attribute name="name" use="required" type="xs:string"/>
+            <xs:extension base="com:namedValueWithTypeDto">
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
