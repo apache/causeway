@@ -157,22 +157,29 @@ Locate this property in `isis-parent/pom.xml` and update to the current date/tim
 
 The next step is to generate the website, ensuring that the config, examples, projdoc (system overview and global index) are all updated.
 
-Be careful that sometimes the configuration property pages (that are generated from the `core/config/target/classes/META-INF/spring-configuration-metadata.json` file) may be malformed; in particular for default values going missing.
-
+* Be careful that sometimes the configuration property pages (that are generated from the `core/config/target/classes/META-INF/spring-configuration-metadata.json` file) may be malformed; in particular for default values going missing.
++
 This seems to occur if the IDE (IntelliJ) has compiled the codebase.
-
++
 The workaround is to rebuild the `core/config` Maven module using `mvn` command line first.
-
++
 [source,bash,subs="attributes+"]
 ----
 mvn clean install -pl core/config
 ----
 
-Then, generate the website:
-
+* It's also necessary to make sure the tooling is built:
++
 [source,bash,subs="attributes+"]
 ----
-sh preview.sh
+mvn -D module-tooling -D skip.essential install -DskipTests
+----
+
+* Then, generate the website:
++
+[source,bash,subs="attributes+"]
+----
+bash preview.sh
 ----
 
 Check for any Asciidoc errors, and fix.
@@ -484,36 +491,13 @@ The general idea is that a release will fast-forward `jdo` to `jdo-SNAPSHOT` and
 
 In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$ISISBRANCH-jdo` and `$ISISBRANCH-jpa`:
 
-* for _helloworld_, we create a release branch for both variants:
+=== HelloWorld
 
-** for `jdo`:
+For _helloworld_, we create a release branch for both variants:
+
+* for `jpa`:
 +
-[source,bash,subs="attributes+"]
-----
-git checkout jdo-SNAPSHOT
-git pull --ff-only
-
-git checkout -b $ISISBRANCH-jdo
-
-mvn versions:update-parent -DparentVersion=$ISISREL # <.>
-mvn versions:set -DnewVersion=$ISISREL
-
-mvn clean install -o
-mvn spring-boot:run
-----
-+
-<.> the top-level `pom.xml` references the ASF staging repository, so this will pull down the release if not already present in `~/.m2/repository`.
-+
-Commit any changes and then push the branch to origin:
-+
-[source,bash,subs="attributes+"]
-----
-git add .
-git commit -m "$ISISJIRA - updates to $ISISREL (jdo)"
-git push -u origin $ISISBRANCH-jdo
-----
-
-** repeat for `jpa`:
+** Checkout the branch, bump versions, and commit:
 +
 [source,bash,subs="attributes+"]
 ----
@@ -522,28 +506,36 @@ git pull --ff-only
 
 git checkout -b $ISISBRANCH-jpa
 
-mvn versions:update-parent -DparentVersion=$ISISREL
+mvn versions:update-parent -DparentVersion=$ISISREL # <.>
 mvn versions:set -DnewVersion=$ISISREL
 
-mvn clean install -o
-mvn spring-boot:run
+git add .
+git commit -m "$ISISJIRA - updates to $ISISREL (jpa)"
 ----
 +
-Commit any changes and then push the branch to origin:
+<.> the top-level `pom.xml` references the ASF staging repository, so this will pull down the release if not already present in `~/.m2/repository`.
+
+** Test the app
 +
 [source,bash,subs="attributes+"]
 ----
-git add .
-git commit -m "$ISISJIRA - updates to $ISISREL (jpa)"
+mvn clean install -o
+mvn spring-boot:run
+----
+
+** Make any additional changes that might be required (eg update to `menubars.layout.xml`) commit and retest
+
+** Push the branch to origin:
++
+[source,bash,subs="attributes+"]
+----
 git push -u origin $ISISBRANCH-jpa
 ----
 
-* for _simple app_, the steps are almost the same:
-
-** for `jdo`:
+* for `jdo`:
 +
---
-
+** Checkout the branch, bump versions, and commit:
++
 [source,bash,subs="attributes+"]
 ----
 git checkout jdo-SNAPSHOT
@@ -551,44 +543,55 @@ git pull --ff-only
 
 git checkout -b $ISISBRANCH-jdo
 
-mvn versions:update-parent -DparentVersion=$ISISREL # <.>
+mvn versions:update-parent -DparentVersion=$ISISREL
 mvn versions:set -DnewVersion=$ISISREL
 
-mvn clean install -Dmetamodel.lockdown -B -o        # <.>
-----
-
-<.> the top-level `pom.xml` references the ASF staging repository, so this will pull down the release if not already present in `~/.m2/repository`.
-<.> the -B flag is required to avoid control characters in generated output
-
-Approve any failed lockdown tests (the mavendeps will fail first time around because the dependencies on Apache Isis itself have just be bumped).
-
-You could also check the output of the Cucumber tests, under:
-
-*** `webapp-tests/target/cucumber-reports` and
-*** `webapp-tests/target/cucumber-html-reports`.
-
-
-Repeat, then run the app as a sanity check:
-
-[source,bash,subs="attributes+"]
-----
-mvn -pl webapp spring-boot:run
-----
-
-Commit any changes and then push the branch to origin:
-
-[source,bash,subs="attributes+"]
-----
 git add .
 git commit -m "$ISISJIRA - updates to $ISISREL (jdo)"
+----
+
+** Test the app
++
+[source,bash,subs="attributes+"]
+----
+mvn clean install -o
+mvn spring-boot:run
+----
+
+** Make any additional changes that might be required, and re-test.
++
+This might be easiest to just cherry-pick commits made on the `jpa` branch.
+
+** Merge in the `jpa` branch, discarding any conflicts.
++
+[source,bash,subs="attributes+"]
+----
+git merge $ISISBRANCH-jpa --no-commit
+----
++
+The idea here is to show equivalence between the two branches.
+The merge commit should end up with no changes:
++
+[source,bash,subs="attributes+"]
+----
+git commit -m "$ISISJIRA - merge in jpa"
+----
+
+** Push the branch to origin:
++
+[source,bash,subs="attributes+"]
+----
 git push -u origin $ISISBRANCH-jdo
 ----
---
 
-** repeat for `jpa`:
+=== SimpleApp
+
+For _simple app_, the steps are almost the same:
+
+* for `jpa`:
+
+** Checkout the branch, bump versions, and commit:
 +
---
-
 [source,bash,subs="attributes+"]
 ----
 git checkout jpa-SNAPSHOT
@@ -596,31 +599,83 @@ git pull --ff-only
 
 git checkout -b $ISISBRANCH-jpa
 
-mvn versions:update-parent -DparentVersion=$ISISREL
+mvn versions:update-parent -DparentVersion=$ISISREL  # <.>
 mvn versions:set -DnewVersion=$ISISREL
 
-mvn clean install -Dmetamodel.lockdown -B -o
+git add .
+git commit -m "$ISISJIRA - updates to $ISISREL (jpa)"
 ----
+<.> the top-level `pom.xml` references the ASF staging repository, so this will pull down the release if not already present in `~/.m2/repository`.
 
-Approve any failed lockdown tests (the mavendeps will fail first time around because the dependencies on Apache Isis itself have just be bumped).
-
-Repeat, then run the app as a sanity check:
-
+** Test the app
++
 [source,bash,subs="attributes+"]
 ----
+mvn clean install -o
 mvn -pl webapp spring-boot:run
 ----
 
-Commit any changes and then push the branch to origin:
+** Make any additional changes that might be required (eg update to `menubars.layout.xml`) commit and retest
 
+** Push the branch to origin:
++
 [source,bash,subs="attributes+"]
 ----
-git add .
-git commit -m "$ISISJIRA - updates to $ISISREL (jpa)"
 git push -u origin $ISISBRANCH-jpa
 ----
 
---
+
+* for `jdo`:
++
+** Checkout the branch, bump versions, and commit:
++
+[source,bash,subs="attributes+"]
+----
+git checkout jdo-SNAPSHOT
+git pull --ff-only
+
+git checkout -b $ISISBRANCH-jdo
+
+mvn versions:update-parent -DparentVersion=$ISISREL
+mvn versions:set -DnewVersion=$ISISREL
+
+git add .
+git commit -m "$ISISJIRA - updates to $ISISREL (jdo)"
+----
+
+** Test the app
++
+[source,bash,subs="attributes+"]
+----
+mvn clean install -o
+mvn -pl webapp spring-boot:run
+----
+
+** Make any additional changes that might be required, and re-test.
++
+This might be easiest to just cherry-pick commits made on the `jpa` branch.
+
+** Merge in the `jpa` branch, discarding any conflicts.
++
+[source,bash,subs="attributes+"]
+----
+git merge $ISISBRANCH-jpa --no-commit
+----
++
+The idea here is to show equivalence between the two branches.
+The merge commit should end up with no changes:
++
+[source,bash,subs="attributes+"]
+----
+git commit -m "$ISISJIRA - merge in jpa"
+----
+
+** Push the branch to origin:
++
+[source,bash,subs="attributes+"]
+----
+git push -u origin $ISISBRANCH-jdo
+----
 
 
 == Preview website
@@ -664,14 +719,26 @@ popd
 ----
 cd ../isis-release
 
-sh preview.sh -A
+bash preview.sh -A
 ----
 +
 [WARNING]
 ====
 This procedure doesn't yet work; Antora does not yet support worktrees.
 
-So instead it's currently necessary to perform the preview in the main `../isis` directory (switch branches first, of course).
+So instead it's currently necessary to perform the preview in the main `../isis` directory, switching branches.
+You'll also need to rebuild all and then regenerate config files and tooling:
+
+[source,bash,subs="attributes+"]
+----
+git checkout $ISISBRANCH
+pushd isis-parent
+mvn clean install -DskipTests -Dreleased
+popd
+mvn clean install -pl core/config
+mvn -D module-tooling -D skip.essential install -DskipTests
+----
+
 ====
 
 
@@ -691,7 +758,7 @@ cd ../isis-site
 git add .
 git commit -m "$ISISJIRA : staging changes to website"
 
-sh preview.sh
+bash preview.sh
 ----
 
 * If happy, then push the changes:

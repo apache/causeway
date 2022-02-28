@@ -140,38 +140,40 @@ Note that the JRE is _not_ sufficient.
 If you intend to contribute back patches to Apache Isis, note that while you can develop using Java 11 or above within your IDE, be sure not to use any APIs more recent than Java 11.
 ====
 
-=== Configure Maven toolchains plugin
-
-If you are a committer that will be performing releases of Apache Isis, then you _must_ configure the
-link:http://maven.apache.org/plugins/maven-toolchains-plugin/[toolchains] plugin so that releases can be built using Java 11.
-
-This is done by placing the `toolchains.xml` file in `~/.m2` directory.
-Use the following file as a template, adjusting paths for your platform:
-
-[source,xml]
-----
-<?xml version="1.0" encoding="UTF8"?>
-<toolchains>
-    <toolchain>
-        <type>jdk</type>
-        <provides>
-            <version>1.8</version>            <!--.-->
-            <vendor>openjdk</vendor>
-        </provides>
-        <configuration>
-            <jdkHome>C:\Program Files\OpenJDK\openjdk-8u262-b10</jdkHome>    <!--.-->
-        </configuration>
-    </toolchain>
-</toolchains>
-----
-<.> The Apache Isis build is configured to search for the (`1.8, openjdk`) JDK toolchain.
-<.> adjust as necessary
-
-The Apache Isis parent `pom.xml` activates this plugin whenever the `apache-release` profile is enabled.
+// no longer required, I believe.
+//
+//=== Configure Maven toolchains plugin
+//
+//If you are a committer that will be performing releases of Apache Isis, then you _must_ configure the
+//link:http://maven.apache.org/plugins/maven-toolchains-plugin/[toolchains] plugin so that releases can be built using Java 11.
+//
+//This is done by placing the `toolchains.xml` file in `~/.m2` directory.
+//Use the following file as a template, adjusting paths for your platform:
+//
+//[source,xml]
+//----
+//<?xml version="1.0" encoding="UTF8"?>
+//<toolchains>
+//    <toolchain>
+//        <type>jdk</type>
+//        <provides>
+//            <version>1.8</version>            <!--.-->
+//            <vendor>openjdk</vendor>
+//        </provides>
+//        <configuration>
+//            <jdkHome>C:\Program Files\OpenJDK\openjdk-8u262-b10</jdkHome>    <!--.-->
+//        </configuration>
+//    </toolchain>
+//</toolchains>
+//----
+//<.> The Apache Isis build is configured to search for the (`1.8, openjdk`) JDK toolchain.
+//<.> adjust as necessary
+//
+//The Apache Isis parent `pom.xml` activates this plugin whenever the `apache-release` profile is enabled.
 
 == Installing Maven
 
-Install Maven 3.0.x, downloadable http://maven.apache.org/download.html[here].
+Install Maven 3.6.3 or later, downloadable http://maven.apache.org/download.html[here].
 
 Set `MAVEN_OPTS` environment variable:
 

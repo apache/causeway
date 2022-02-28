@@ -33,7 +33,7 @@ public interface IsisConfigurationLegacy {
     // -- VERSION
 
     public default String getVersion() {
-        return "2.0.0-M6";
+        return "2.0.0-M7";
     }
 
     // --

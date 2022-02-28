@@ -18,7 +18,10 @@
 | use `ViewModel` interface instead
 
 | `ViewModel.viewModelInit(String memento)` removed
-| use a single (String) argument constructor instead; this will allow Java Records to be used as viewmodels (future work)  
+| use a single (String) argument constructor instead; this will allow Java Records to be used as viewmodels (future work)
+
+|
+|
 
 |===
 
@@ -32,5 +35,11 @@ Following configuration options changed:
 | previously
 | new
 
+<<<<<<< HEAD
+=======
+|
+|
+
+>>>>>>> release-2.0.0-M7-RC2
 |===
 
