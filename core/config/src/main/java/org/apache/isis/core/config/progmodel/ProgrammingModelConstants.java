@@ -433,7 +433,7 @@ public final class ProgrammingModelConstants {
                 // heap-pollution: only produces stack-traces when cls violates viewmodel contract,
                 // which is covered by mm validation
                 return Result.of(()->
-                        cls.getConstructor(new Class<?>[]{String.class}))
+                        cls.getDeclaredConstructor(new Class<?>[]{String.class}))
                         .getValue();
             }
 

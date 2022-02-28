@@ -62,12 +62,15 @@ implements
         val type = processClassContext.getCls();
         val postConstructMethodCache = this;
 
-        // ViewModel interface
+        // (with default precedence)
+        FacetUtil
+        .addFacetIfPresent(
+            // either ViewModel interface
+            ViewModelFacetForViewModelInterface.create(type, facetHolder, postConstructMethodCache)
+            // or Serializable interface (if any)
+            .or(()->ViewModelFacetForSerializableInterface.create(type, facetHolder, postConstructMethodCache)));
 
-        FacetUtil.addFacetIfPresent(
-                ViewModelFacetForViewModelInterface.create(type, facetHolder, postConstructMethodCache));
-
-        // XmlRootElement annotation
+        // XmlRootElement annotation (with higher precedence)
         val xmlRootElementIfAny = processClassContext.synthesizeOnType(XmlRootElement.class);
         if(xmlRootElementIfAny.isPresent()) {
             FacetUtil.addFacet(

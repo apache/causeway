@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -33,7 +32,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -48,11 +46,8 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.resources._Serializables;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -71,9 +66,9 @@ import lombok.val;
 @DomainObjectLayout(
         titleUiEvent = UserMemento.TitleUiEvent.class
 )
-@lombok.Value @lombok.Builder @AllArgsConstructor
+@lombok.Value @lombok.Builder
 public class UserMemento
-implements Serializable, ViewModel {
+implements Serializable {
 
     public static class TitleUiEvent extends IsisModuleApplib.TitleUiEvent<UserMemento> {}
 
@@ -355,26 +350,26 @@ implements Serializable, ViewModel {
                 .build();
     }
 
-    // -- VIEWMODEL CONTRACT
+//    // -- VIEWMODEL CONTRACT
+//
+//    //FIXME[ISIS-2964] as UserMemento is serializable, it should not even be required to implement ViewModel
+//    public UserMemento(final String memento) {
+//        this(_Serializables.read(UserMemento.class,
+//                _Bytes.ofCompressedUrlBase64.apply(_Strings.toBytes(memento, StandardCharsets.UTF_8))));
+//    }
+//
+//    private UserMemento(final UserMemento copy) {
+//        this(copy.name, copy.realName, copy.avatarUrl, copy.languageLocale, copy.numberFormatLocale,
+//                copy.timeFormatLocale, copy.authenticationSource, copy.impersonating,
+//                copy.multiTenancyToken, copy.authenticationCode, copy.roles);
+//    }
 
-    //FIXME[ISIS-2964] as UserMemento is serializable, it should not even be required to implement ViewModel
-    public UserMemento(final String memento) {
-        this(_Serializables.read(UserMemento.class,
-                _Bytes.ofCompressedUrlBase64.apply(_Strings.toBytes(memento, StandardCharsets.UTF_8))));
-    }
-
-    private UserMemento(final UserMemento copy) {
-        this(copy.name, copy.realName, copy.avatarUrl, copy.languageLocale, copy.numberFormatLocale,
-                copy.timeFormatLocale, copy.authenticationSource, copy.impersonating,
-                copy.multiTenancyToken, copy.authenticationCode, copy.roles);
-    }
-
-    @Programmatic
-    @Override
-    public String viewModelMemento() {
-        val bytes = _Serializables.write(this);
-        return _Strings.ofBytes(_Bytes.asCompressedUrlBase64.apply(bytes), StandardCharsets.UTF_8);
-    }
+//    @Programmatic
+//    @Override
+//    public String viewModelMemento() {
+//        val bytes = _Serializables.write(this);
+//        return _Strings.ofBytes(_Bytes.asCompressedUrlBase64.apply(bytes), StandardCharsets.UTF_8);
+//    }
 
     // -- HELPER
 

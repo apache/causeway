@@ -39,7 +39,7 @@ extends ViewModelFacetAbstract {
             final FacetHolder holder,
             final HasPostConstructMethodCache postConstructMethodCache) {
 
-        super(holder, postConstructMethodCache, Precedence.HIGH);
+        super(holder, postConstructMethodCache, Precedence.HIGH); // overrules any other ViewModelFacet type
     }
 
     @Override

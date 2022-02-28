@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.objectmanager.identify;
 
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
@@ -146,9 +144,18 @@ class ObjectBookmarker_builtinHandlers {
 
             val spec = managedObject.getSpecification();
 
-            if(java.io.Serializable.class.isAssignableFrom(spec.getCorrespondingClass())) {
-                return new BookmarkForSerializable().handle(managedObject);
-            }
+//            if(java.io.Serializable.class.isAssignableFrom(spec.getCorrespondingClass())) {
+//
+//                val baos = new ByteArrayOutputStream();
+//                try(val oos = new ObjectOutputStream(baos)) {
+//                    oos.writeObject(managedObject.getPojo());
+//                    val identifier = _Strings.ofBytes(
+//                            _Bytes.asUrlBase64.apply(baos.toByteArray()),
+//                            StandardCharsets.UTF_8);
+//                    return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), identifier);
+//                }
+//
+//            }
 
             val valueFacet = spec.getFacet(ValueFacet.class);
             ValueSemanticsProvider<Object> composer = (ValueSemanticsProvider) valueFacet.selectDefaultSemantics()
@@ -165,31 +172,6 @@ class ObjectBookmarker_builtinHandlers {
                     StandardCharsets.UTF_8);
 
             return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), identifier);
-        }
-
-    }
-
-    static class BookmarkForSerializable implements Handler {
-
-        @Override
-        public boolean isHandling(final ManagedObject managedObject) {
-            val spec = managedObject.getSpecification();
-            return spec.isViewModel()
-                    && java.io.Serializable.class.isAssignableFrom(spec.getCorrespondingClass());
-        }
-
-        @SneakyThrows
-        @Override
-        public Bookmark handle(final ManagedObject managedObject) {
-            val spec = managedObject.getSpecification();
-            val baos = new ByteArrayOutputStream();
-            try(val oos = new ObjectOutputStream(baos)) {
-                oos.writeObject(managedObject.getPojo());
-                val identifier = _Strings.ofBytes(
-                        _Bytes.asUrlBase64.apply(baos.toByteArray()),
-                        StandardCharsets.UTF_8);
-                return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), identifier);
-            }
         }
 
     }

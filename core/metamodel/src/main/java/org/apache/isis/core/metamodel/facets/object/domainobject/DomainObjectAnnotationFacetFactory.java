@@ -48,7 +48,6 @@ import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -349,8 +348,7 @@ implements
                 .create(
                         domainObjectIfAny,
                         facetHolder,
-                        postConstructMethodCache,
-                        Precedence.LOW))
+                        postConstructMethodCache))
                 .isPresent()) {
             return;
         }

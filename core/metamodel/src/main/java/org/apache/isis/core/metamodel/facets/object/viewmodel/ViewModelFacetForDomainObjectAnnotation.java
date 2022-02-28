@@ -27,7 +27,6 @@ import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.commons.internal.memento._Mementos;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
@@ -44,8 +43,7 @@ extends ViewModelFacetAbstract {
     public static Optional<ViewModelFacetForDomainObjectAnnotation> create(
             final Optional<DomainObject> domainObjectIfAny,
             final FacetHolder holder,
-            final HasPostConstructMethodCache postConstructMethodCache,
-            final Facet.Precedence precedence) {
+            final HasPostConstructMethodCache postConstructMethodCache) {
 
         return domainObjectIfAny
                 .map(DomainObject::nature)
@@ -59,7 +57,7 @@ extends ViewModelFacetAbstract {
                         return null;
                     case VIEW_MODEL:
                         return new ViewModelFacetForDomainObjectAnnotation(
-                                holder, postConstructMethodCache, precedence);
+                                holder, postConstructMethodCache);
                     }
                     // shouldn't happen, the above switch should match all cases.
                     throw new IllegalArgumentException("nature of '" + nature + "' not recognized");
@@ -72,10 +70,9 @@ extends ViewModelFacetAbstract {
 
     protected ViewModelFacetForDomainObjectAnnotation(
             final FacetHolder holder,
-            final HasPostConstructMethodCache postConstructMethodCache,
-            final Facet.Precedence precedence) {
+            final HasPostConstructMethodCache postConstructMethodCache) {
 
-        super(holder, postConstructMethodCache, precedence);
+        super(holder, postConstructMethodCache, Precedence.LOW); // is overruled by any other ViewModelFacet type
     }
 
     @Override
