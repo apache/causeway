@@ -35,11 +35,5 @@ Following configuration options changed:
 | previously
 | new
 
-<<<<<<< HEAD
-=======
-|
-|
-
->>>>>>> release-2.0.0-M7-RC2
 |===
 
