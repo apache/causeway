@@ -24,8 +24,18 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.schema.cmd.v2.MapDto;
+import org.apache.isis.schema.common.v2.TypedTupleDto;
+import org.apache.isis.schema.common.v2.ValueType;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.ToString;
+import lombok.val;
 
 class CommonDtoUtils_Test {
 
@@ -56,6 +66,41 @@ class CommonDtoUtils_Test {
         CommonDtoUtils.putMapKeyValue(mapDto, "someKey", "someValue");
 
         assertThat(CommonDtoUtils.getMapValue(mapDto, "someKey"), is("someValue"));
+    }
+
+    @Getter
+    @ToString @EqualsAndHashCode
+    @AllArgsConstructor
+    private static class CompositeSample {
+        private final long epochMillis;
+        private final @NonNull String calendarName;
+    }
+
+    @Test
+    void roundtripOnComposites() {
+
+        val compositeSample = new CompositeSample(123456L, "sample");
+
+        TypedTupleDto compositeDto = CommonDtoUtils.typedTupleBuilder(compositeSample)
+            .addFundamentalType(ValueType.LONG, "epochMillis", CompositeSample::getEpochMillis)
+            .addFundamentalType(ValueType.STRING, "calendarName", CompositeSample::getCalendarName)
+            .build();
+
+        val json = CommonDtoUtils.getCompositeValueAsJson(compositeDto);
+
+        //XXX there is no guarantee, that the ordering of keys is exactly as follows - should do for now
+        val expectedJson = "{\"elements\":["
+                + "{\"long\":123456,\"type\":\"long\",\"name\":\"epochMillis\"},"
+                + "{\"string\":\"sample\",\"type\":\"string\",\"name\":\"calendarName\"}],"
+                + "\"type\":\"org.apache.isis.applib.util.schema.CommonDtoUtils_Test$CompositeSample\","
+                + "\"cardinality\":2}";
+
+        assertEquals(expectedJson, json);
+
+        val compositeAfterRoundtrip = CommonDtoUtils.getCompositeValueFromJson(json);
+
+        assertEquals(expectedJson, CommonDtoUtils.getCompositeValueAsJson(compositeAfterRoundtrip));
+
     }
 
 }
