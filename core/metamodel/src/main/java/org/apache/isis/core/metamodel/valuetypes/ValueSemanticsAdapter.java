@@ -89,11 +89,19 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextPresentation(final ValueSemanticsProvider.Context context, final T value) {
+    public String titlePresentation(final ValueSemanticsProvider.Context context, final T value) {
         val delegateValue = value!=null
                 ? toDelegateValue(value)
                 : null;
-        return delegateRenderer().simpleTextPresentation(context, delegateValue);
+        return delegateRenderer().titlePresentation(context, delegateValue);
+    }
+
+    @Override
+    public String htmlPresentation(final ValueSemanticsProvider.Context context, final T value) {
+        val delegateValue = value!=null
+                ? toDelegateValue(value)
+                : null;
+        return delegateRenderer().htmlPresentation(context, delegateValue);
     }
 
     // -- PARSER

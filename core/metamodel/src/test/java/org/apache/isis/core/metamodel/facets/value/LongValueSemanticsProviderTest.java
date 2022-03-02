@@ -53,7 +53,7 @@ extends ValueSemanticsProviderAbstractTestCase<Long> {
 
     @Test
     public void testOutputAsString() {
-        assertEquals("367,322", value.simpleTextPresentation(null, longObj));
+        assertEquals("367,322", value.titlePresentation(null, longObj));
     }
 
     @Test

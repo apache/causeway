@@ -63,7 +63,7 @@ extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
 
     @Test
     public void testTitleOf() {
-        assertEquals("34,132.199", value.simpleTextPresentation(null, bigDecimal));
+        assertEquals("34,132.199", value.titlePresentation(null, bigDecimal));
     }
 
 }

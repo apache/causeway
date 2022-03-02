@@ -40,7 +40,7 @@ extends ValueSemanticsProviderAbstractTestCase<String> {
 
     @Test
     public void testTitleOf() {
-        assertEquals("text entry", value.simpleTextPresentation(null, string));
+        assertEquals("text entry", value.titlePresentation(null, string));
     }
 
     @Test

@@ -94,7 +94,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextPresentation(final ValueSemanticsProvider.Context context, final Bookmark value) {
+    public String titlePresentation(final ValueSemanticsProvider.Context context, final Bookmark value) {
         return value == null ? "" : value.stringify();
     }
 

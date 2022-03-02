@@ -66,7 +66,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextPresentation(final Context context, final Password value) {
+    public String titlePresentation(final Context context, final Password value) {
         return render(value, v->"*");
     }
 

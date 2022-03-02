@@ -88,7 +88,12 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextPresentation(final Context context, final T value) {
+    public String titlePresentation(final Context context, final T value) {
+        return render(value, v->String.format("XML[length=%d]", toXml(v).length()));
+    }
+
+    @Override
+    public String htmlPresentation(final Context context, final T value) {
         return render(value, v->renderXml(context, toXml(v)));
     }
 

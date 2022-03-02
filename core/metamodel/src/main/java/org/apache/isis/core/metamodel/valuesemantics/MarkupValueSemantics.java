@@ -64,7 +64,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextPresentation(final ValueSemanticsProvider.Context context, final Markup value) {
+    public String titlePresentation(final ValueSemanticsProvider.Context context, final Markup value) {
         return value != null? value.asHtml(): "[null]";
     }
 

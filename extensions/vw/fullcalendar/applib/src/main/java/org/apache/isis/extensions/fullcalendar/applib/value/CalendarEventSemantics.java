@@ -30,6 +30,8 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -107,7 +109,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextPresentation(final Context context, final CalendarEvent value) {
+    public String titlePresentation(final Context context, final CalendarEvent value) {
         return render(value, v->v.toString());
     }
 
@@ -136,7 +138,7 @@ implements
 
     // -- EMBEDDING
 
-    // typed tuple of base-types
+    // typed tuple of fundamental types
     @Value @Accessors(fluent = true)
     public static class Parameters {
         final LocalDateTime dateTime;
@@ -180,6 +182,7 @@ implements
                 final LocalDateTime dateTime,
                 final String calendarName,
                 final String title,
+                @Parameter(optionality = Optionality.OPTIONAL)
                 @ParameterLayout(multiLine = 4)
                 final String notes) {
 

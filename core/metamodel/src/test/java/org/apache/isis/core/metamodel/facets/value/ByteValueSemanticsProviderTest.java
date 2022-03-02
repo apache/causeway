@@ -58,6 +58,6 @@ extends ValueSemanticsProviderAbstractTestCase<Byte> {
 
     @Test
     public void testTitleOf() throws Exception {
-        assertEquals("102", value.simpleTextPresentation(null, byteObj));
+        assertEquals("102", value.titlePresentation(null, byteObj));
     }
 }

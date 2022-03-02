@@ -114,9 +114,9 @@ implements
         case VIEWING:
             return propOrParam.fold(
                     prop->valueFacet.selectRendererForPropertyElseFallback(prop)
-                            .simpleTextPresentation(context, value),
+                            .titlePresentation(context, value),
                     param->valueFacet.selectRendererForParameterElseFallback(param)
-                            .simpleTextPresentation(context, value));
+                            .titlePresentation(context, value));
         }
 
         throw _Exceptions.unmatchedCase(scalarRepresentation);

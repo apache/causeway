@@ -64,7 +64,12 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextPresentation(final ValueSemanticsProvider.Context context, final AsciiDoc adoc) {
+    public String titlePresentation(final ValueSemanticsProvider.Context context, final AsciiDoc adoc) {
+        return render(adoc, AsciiDoc::toString);
+    }
+
+    @Override
+    public String htmlPresentation(final ValueSemanticsProvider.Context context, final AsciiDoc adoc) {
         return render(adoc, AsciiDoc::asHtml);
     }
 

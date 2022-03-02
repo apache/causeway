@@ -141,7 +141,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextPresentation(final Context context, final T value) {
+    public String titlePresentation(final Context context, final T value) {
         return render(value, v->friendlyName(context, v));
     }
 

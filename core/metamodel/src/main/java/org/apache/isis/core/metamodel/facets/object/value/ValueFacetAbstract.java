@@ -311,7 +311,7 @@ implements ValueFacet<T> {
         private final String message;
 
         @Override
-        public String simpleTextPresentation(final Context context, final T value) {
+        public String titlePresentation(final Context context, final T value) {
             return message;
         }
 
