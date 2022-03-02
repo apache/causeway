@@ -26,6 +26,7 @@ import java.util.function.UnaryOperator;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Collections;
@@ -34,7 +35,9 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.AccessLevel;
@@ -144,15 +147,43 @@ public interface ManagedObject {
         //_Assert.assertEquals(spec, actualSpec);
     }
 
+    // -- HTML
+
+    public default String htmlString(
+            final @Nullable ObjectFeature feature) {
+
+        if(getSpecification()==null) {
+            return "";
+        }
+
+        val spec = getSpecification();
+        val valueFacet = spec.getFacet(ValueFacet.class);
+
+        if(valueFacet==null) {
+            return String.format("missing ValueFacet %s", spec.getCorrespondingClass());
+        }
+
+        final Renderer renderer = (Renderer) valueFacet.selectRendererForFeature(feature).orElse(null);
+        if(renderer==null) {
+            return String.format("missing Renderer %s", spec.getCorrespondingClass());
+        }
+
+        return renderer.htmlPresentation(valueFacet.createValueSemanticsContext(feature), this.getPojo());
+    }
+
     // -- TITLE
 
     public default String titleString(final UnaryOperator<TitleRenderRequest.TitleRenderRequestBuilder> onBuilder) {
         return ManagedObjects.TitleUtil
-                .titleString(onBuilder.apply(TitleRenderRequest.builder().object(this)).build());
+                .titleString(onBuilder.apply(
+                        TitleRenderRequest.builder()
+                        .object(this))
+                        .build());
     }
 
     public default String titleString() {
-        return ManagedObjects.TitleUtil.titleString(TitleRenderRequest.builder()
+        return ManagedObjects.TitleUtil.titleString(
+                TitleRenderRequest.builder()
                 .object(this)
                 .build());
     }
@@ -429,8 +460,6 @@ public interface ManagedObject {
         }
 
     }
-
-
 
 
 }

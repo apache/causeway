@@ -34,12 +34,12 @@ import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 public class ParentedMarkupPanel extends MultiLineStringPanel {
 
     private static final long serialVersionUID = 1L;
-    private final transient MarkupComponentFactory markupComponentFactory;
+    private final transient MarkupComponentFactory<ScalarModel> markupComponentFactory;
 
     public ParentedMarkupPanel(
             final String id,
             final ScalarModel scalarModel,
-            final MarkupComponentFactory markupComponentFactory) {
+            final MarkupComponentFactory<ScalarModel> markupComponentFactory) {
 
         super(id, scalarModel);
         this.markupComponentFactory = markupComponentFactory;
@@ -78,7 +78,7 @@ public class ParentedMarkupPanel extends MultiLineStringPanel {
         return createMarkupComponent(ID_SCALAR_IF_COMPACT);
     }
 
-    protected MarkupComponent createMarkupComponent(final String id) {
+    protected final MarkupComponent createMarkupComponent(final String id) {
         return markupComponentFactory.newMarkupComponent(id, getModel());
     }
 

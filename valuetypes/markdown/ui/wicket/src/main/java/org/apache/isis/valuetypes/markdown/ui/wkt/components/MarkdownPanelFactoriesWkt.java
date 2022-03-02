@@ -21,7 +21,9 @@ package org.apache.isis.valuetypes.markdown.ui.wkt.components;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
-import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponentFactory;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ValueModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
 
 import lombok.val;
@@ -45,13 +47,10 @@ public class MarkdownPanelFactoriesWkt {
         }
 
         @Override
-        protected MarkupComponentFactory getMarkupComponentFactory() {
-            return (id, model) -> {
-                val markupComponent = new MarkdownComponentWkt(id, model);
-                markupComponent.setEnabled(false);
-                return markupComponent;
-            };
-
+        protected MarkupComponent newMarkupComponent(final String id, final ScalarModel model) {
+            val markupComponent = new MarkdownComponentWkt(id, model);
+            markupComponent.setEnabled(false);
+            return markupComponent;
         }
 
     }
@@ -67,8 +66,8 @@ public class MarkdownPanelFactoriesWkt {
         }
 
         @Override
-        protected MarkupComponentFactory getMarkupComponentFactory() {
-            return MarkdownComponentWkt::new;
+        protected MarkupComponent newMarkupComponent(final String id, final ValueModel model) {
+            return new MarkupComponent(id, model);
         }
 
     }

@@ -30,7 +30,8 @@ import lombok.NonNull;
 /**
  * Represents a standalone value (used for standalone value page).
  */
-public class ValueModel extends ModelAbstract<ManagedObject> {
+public class ValueModel
+extends ModelAbstract<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
 

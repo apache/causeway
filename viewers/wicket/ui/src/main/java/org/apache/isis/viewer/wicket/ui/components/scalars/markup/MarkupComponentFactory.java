@@ -21,8 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
 import org.apache.wicket.model.IModel;
 
 @FunctionalInterface
-public interface MarkupComponentFactory {
+public interface MarkupComponentFactory<T extends IModel<?>> {
 
-    MarkupComponent newMarkupComponent(String id, IModel<?> model);
+    MarkupComponent newMarkupComponent(String id, T model);
 
 }

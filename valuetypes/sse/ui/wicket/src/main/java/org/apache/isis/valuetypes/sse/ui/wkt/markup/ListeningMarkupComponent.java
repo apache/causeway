@@ -22,10 +22,11 @@ import javax.inject.Inject;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
-import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.core.config.viewer.web.WebAppContextPath;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 
 import lombok.val;
@@ -38,10 +39,21 @@ public class ListeningMarkupComponent extends MarkupComponent {
     @Inject
     private WebAppContextPath webAppContextPath;
 
-    public ListeningMarkupComponent(final String id, IModel<?> model, LocalResourcePath observing){
+    public ListeningMarkupComponent(
+            final String id,
+            final ScalarModel model,
+            final LocalResourcePath observing){
         super(id, model);
         this.observing = observing;
     }
+
+    public ListeningMarkupComponent(
+            final String id,
+            final ValueModel model){
+        super(id, model);
+        this.observing = null;
+    }
+
 
     @Override
     public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag){
@@ -51,11 +63,10 @@ public class ListeningMarkupComponent extends MarkupComponent {
                 openTag,
 
                 observing!=null
-                ? ListeningMarkupComponent_observing.decorate(htmlContent, observing, webAppContextPath)
-                        : htmlContent
+                    ? ListeningMarkupComponent_observing.decorate(htmlContent, observing, webAppContextPath)
+                    : htmlContent
 
                 );
     }
-
 
 }

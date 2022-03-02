@@ -29,6 +29,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 
@@ -38,7 +39,15 @@ public class MarkupComponent extends WebComponent {
 
     private static final long serialVersionUID = 1L;
 
-    public MarkupComponent(final String id, final IModel<?> model){
+    public MarkupComponent(final String id, final ScalarModel model){
+        super(id, model);
+    }
+
+    public MarkupComponent(final String id, final ValueModel model){
+        super(id, model);
+    }
+
+    public MarkupComponent(final String id, final IModel<String> model){
         super(id, model);
     }
 
@@ -71,7 +80,7 @@ public class MarkupComponent extends WebComponent {
             }
 
             val asHtml = lookupObjectFeatureIn(getDefaultModel())
-            .map(feature->adapter.titleString(conf->conf.feature(feature)))
+            .map(feature->adapter.htmlString(feature))
             .orElseGet(adapter::titleString);
 
             if(asHtml != null) {

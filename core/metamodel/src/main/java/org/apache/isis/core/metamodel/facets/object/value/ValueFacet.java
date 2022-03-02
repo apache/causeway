@@ -78,7 +78,10 @@ extends
     Optional<Parser<T>> selectParserForParameter(final ObjectActionParameter param);
     Optional<Parser<T>> selectParserForProperty(final OneToOneAssociation prop);
 
-    default Optional<Parser<T>> selectParserForFeature(final ObjectFeature feature) {
+    default Optional<Parser<T>> selectParserForFeature(final @Nullable ObjectFeature feature) {
+        if(feature==null) {
+            return selectDefaultParser();
+        }
         switch(feature.getFeatureType()) {
         case ACTION_PARAMETER_SCALAR:
             return selectParserForParameter((ObjectActionParameter)feature);
@@ -114,6 +117,20 @@ extends
     Optional<Renderer<T>> selectRendererForProperty(final OneToOneAssociation prop);
 
     Renderer<T> fallbackRenderer(Identifier featureIdentifier);
+
+    default Optional<Renderer<T>> selectRendererForFeature(final @Nullable ObjectFeature feature) {
+        if(feature==null) {
+            return selectDefaultRenderer();
+        }
+        switch(feature.getFeatureType()) {
+        case ACTION_PARAMETER_SCALAR:
+            return selectRendererForParameter((ObjectActionParameter)feature);
+        case PROPERTY:
+            return selectRendererForProperty((OneToOneAssociation)feature);
+        default:
+            return selectDefaultRenderer();
+        }
+    }
 
     default Renderer<T> selectRendererForParameterElseFallback(final ObjectActionParameter param) {
         return selectRendererForParameter(param)

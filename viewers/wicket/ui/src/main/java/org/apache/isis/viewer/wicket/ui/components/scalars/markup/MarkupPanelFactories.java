@@ -73,10 +73,10 @@ public class MarkupPanelFactories {
 
         @Override
         public final Component createComponent(final String id, final IModel<?> model) {
-            return new ParentedMarkupPanel(id, (ScalarModel) model, getMarkupComponentFactory());
+            return new ParentedMarkupPanel(id, (ScalarModel) model, this::newMarkupComponent);
         }
 
-        protected abstract MarkupComponentFactory getMarkupComponentFactory();
+        protected abstract MarkupComponent newMarkupComponent(String id, ScalarModel model);
 
     }
 
@@ -109,10 +109,10 @@ public class MarkupPanelFactories {
 
         @Override
         public final Component createComponent(final String id, final IModel<?> model) {
-            return new StandaloneMarkupPanel(id, (ValueModel) model, getMarkupComponentFactory());
+            return new StandaloneMarkupPanel(id, (ValueModel) model, this::newMarkupComponent);
         }
 
-        protected abstract MarkupComponentFactory getMarkupComponentFactory();
+        protected abstract MarkupComponent newMarkupComponent(String id, ValueModel model);
     }
 
     // -- CONCRETE COMPONENT FACTORY - PARENTED
@@ -125,12 +125,10 @@ public class MarkupPanelFactories {
         }
 
         @Override
-        protected MarkupComponentFactory getMarkupComponentFactory() {
-            return (id, model) -> {
-                val markupComponent = new MarkupComponent(id, model);
-                markupComponent.setEnabled(false);
-                return markupComponent;
-            };
+        protected MarkupComponent newMarkupComponent(final String id, final ScalarModel model) {
+            val markupComponent = new MarkupComponent(id, model);
+            markupComponent.setEnabled(false);
+            return markupComponent;
         }
 
     }
@@ -145,8 +143,8 @@ public class MarkupPanelFactories {
         }
 
         @Override
-        protected MarkupComponentFactory getMarkupComponentFactory() {
-            return MarkupComponent::new;
+        protected MarkupComponent newMarkupComponent(final String id, final ValueModel model) {
+            return new MarkupComponent(id, model);
         }
     }
 
