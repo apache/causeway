@@ -47,7 +47,6 @@ import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import lombok.val;
 
 /**
  * Represents a scalar of an entity, either a {@link EitherParamOrProp#PROPERTY property} or
@@ -192,25 +191,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
      * to false.
      */
     public boolean isCurrentValueAbsent() {
-        val proposedValue = proposedValue();
-        return proposedValue.isCurrentValueAbsent().booleanValue();
-    }
-
-    /** get the proposed value, subject to negotiation */
-    public String getObjectAsString() {
-        val proposedValue = proposedValue();
-        return proposedValue.isCurrentValueAbsent().booleanValue()
-                ? ""
-                : proposedValue.getValueAsParsableText().getValue();
-    }
-
-    /**
-     * set the proposed value, subject to negotiation, only updates the negotiation model
-     * actual application of the proposed value is only applied after passing verification (not done here)
-     */
-    public void setObjectAsString(final String enteredText) {
-        val proposedValue = proposedValue();
-        proposedValue.getValueAsParsableText().setValue(enteredText);
+        return proposedValue().isCurrentValueAbsent().booleanValue();
     }
 
     public abstract ManagedValue proposedValue();

@@ -251,21 +251,24 @@ implements TextFieldValueModel.ScalarModelProvider {
     // --
 
     /**
-     * Mandatory hook method to build the component to render the model when in
+     * Builds the component to render the model when in
      * {@link org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering#COMPACT}
      * format.
      * <p>
-     * This default implementation uses a {@link Label}, however it may be overridden if required.
+     * The (textual) default implementation uses a {@link Label}.
+     * However, it may be overridden if required.
      */
     @Override
     protected Component createComponentForCompact() {
-        //FIXME[ISIS-2882] wire-up with value semantics to use Renderer instead of Parser here
         return Wkt.labelAdd(
-                getCompactFragment(CompactType.SPAN), ID_SCALAR_IF_COMPACT,
+                getCompactFragment(CompactType.SPAN),
+                ID_SCALAR_IF_COMPACT,
                 ()->{
-                    val asText = getModel().getObjectAsString();
-                    //System.err.printf("!!!! asText ... %s%n", asText);
-                    return asText;});
+                    val scalarModel = getModel();
+                    return scalarModel.isCurrentValueAbsent()
+                            ? ""
+                            : scalarModel.proposedValue().getValueAsParsableText().getValue();
+                });
     }
 
     public enum CompactType {
@@ -274,17 +277,13 @@ implements TextFieldValueModel.ScalarModelProvider {
     }
 
     Fragment getCompactFragment(final CompactType type) {
-        Fragment compactFragment;
         switch (type) {
         case INPUT_CHECKBOX:
-            compactFragment = new Fragment(ID_SCALAR_IF_COMPACT, "compactAsInputCheckbox", ScalarPanelTextFieldAbstract.this);
-            break;
+            return new Fragment(ID_SCALAR_IF_COMPACT, "compactAsInputCheckbox", ScalarPanelTextFieldAbstract.this);
         case SPAN:
         default:
-            compactFragment = new Fragment(ID_SCALAR_IF_COMPACT, "compactAsSpan", ScalarPanelTextFieldAbstract.this);
-            break;
+            return new Fragment(ID_SCALAR_IF_COMPACT, "compactAsSpan", ScalarPanelTextFieldAbstract.this);
         }
-        return compactFragment;
     }
 
 

@@ -19,10 +19,13 @@
 package org.apache.isis.core.metamodel.interactions.managed;
 
 import org.apache.isis.applib.value.semantics.Parser;
+import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider.Context;
-import org.apache.isis.commons.binding.Bindable;
+import org.apache.isis.commons.binding.Observable;
+import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.binding._BindableAbstract;
 import org.apache.isis.commons.internal.binding._Bindables;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -38,31 +41,22 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 class _BindingUtil {
 
-    Bindable<String> bindAsParsableText(
-            final @NonNull ObjectActionParameter param,
-            final @NonNull _BindableAbstract<ManagedObject> bindableParamValue) {
-
-        val spec = param.getElementType();
-
-        if(param.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION) {
-            _Bindables.forValue(String.format("Non-scalar action parameters are not parseable: %s",
-                    param.getFeatureIdentifier()));
+    enum TargetFormat {
+        TITLE,
+        HTML,
+        PARSABLE_TEXT;
+        boolean requiresParser() {
+            return this==PARSABLE_TEXT;
         }
-
-        // value types should have associated parsers/formatters via value semantics
-        return spec.lookupFacet(ValueFacet.class)
-        .map(valueFacet->valueFacet.selectParserForParameterElseFallback(param))
-        .map(parser->bindAsParsableText(spec, bindableParamValue, parser, null))
-        .orElseGet(()->
-            // fallback Bindable that is floating free (unbound)
-            // writing to it has no effect on the domain
-            _Bindables.forValue(String.format("Could not find a ValueFacet for type %s",
-                    spec.getLogicalType()))
-        );
-
+        boolean requiresRenderer() {
+            return this==TITLE
+                    || this==HTML;
+        }
     }
 
-    Bindable<String> bindAsParsableText(
+    @SuppressWarnings({ "rawtypes" })
+    Observable<String> bindAsFormated(
+            final @NonNull TargetFormat format,
             final @NonNull OneToOneAssociation prop,
             final @NonNull _BindableAbstract<ManagedObject> bindablePropertyValue) {
 
@@ -70,8 +64,11 @@ class _BindingUtil {
 
         // value types should have associated parsers/formatters via value semantics
         return spec.lookupFacet(ValueFacet.class)
-        .map(valueFacet->valueFacet.selectParserForPropertyElseFallback(prop))
-        .map(parser->bindAsParsableText(spec, bindablePropertyValue, parser, null))
+        .map(valueFacet->format.requiresRenderer()
+                ? _Either.<Renderer, Parser>left(valueFacet.selectRendererForPropertyElseFallback(prop))
+                : _Either.<Renderer, Parser>right(valueFacet.selectParserForPropertyElseFallback(prop)))
+        .map(eitherRendererOrParser->
+                bindAsFormated(format, spec, bindablePropertyValue, eitherRendererOrParser, null))
         .orElseGet(()->
             // fallback Bindable that is floating free (unbound)
             // writing to it has no effect on the domain
@@ -81,25 +78,107 @@ class _BindingUtil {
 
     }
 
+    @SuppressWarnings({ "rawtypes" })
+    Observable<String> bindAsFormated(
+            final @NonNull TargetFormat format,
+            final @NonNull ObjectActionParameter param,
+            final @NonNull _BindableAbstract<ManagedObject> bindableParamValue) {
+
+        guardAgainstNonScalarParam(param);
+
+        val spec = param.getElementType();
+
+        // value types should have associated parsers/formatters via value semantics
+        return spec.lookupFacet(ValueFacet.class)
+        .map(valueFacet->format.requiresRenderer()
+                ? _Either.<Renderer, Parser>left(valueFacet.selectRendererForParameterElseFallback(param))
+                : _Either.<Renderer, Parser>right(valueFacet.selectParserForParameterElseFallback(param)))
+        .map(eitherRendererOrParser->
+                bindAsFormated(format, spec, bindableParamValue, eitherRendererOrParser, null))
+        .orElseGet(()->
+            // fallback Bindable that is floating free (unbound)
+            // writing to it has no effect on the domain
+            _Bindables.forValue(String.format("Could not find a ValueFacet for type %s",
+                    spec.getLogicalType()))
+        );
+
+    }
+
+    // -- PREDICATES
+
+    boolean hasParser(final @NonNull OneToOneAssociation prop) {
+        return prop.getElementType()
+                .lookupFacet(ValueFacet.class)
+                .map(valueFacet->valueFacet.selectRendererForProperty(prop).isPresent())
+                .orElse(false);
+    }
+
+    boolean hasParser(final @NonNull ObjectActionParameter param) {
+        return isNonScalarParam(param)
+                ? false
+                : param.getElementType()
+                    .lookupFacet(ValueFacet.class)
+                    .map(valueFacet->valueFacet.selectRendererForParameter(param).isPresent())
+                    .orElse(false);
+    }
+
+    // -- HELPER
+
+    private boolean isNonScalarParam(final @NonNull ObjectActionParameter param) {
+        return param.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION;
+    }
+
+    private void guardAgainstNonScalarParam(final @NonNull ObjectActionParameter param) {
+        if(isNonScalarParam(param)) {
+            throw _Exceptions.illegalArgument(
+                    "Non-scalar action parameters are neither parseable nor renderable: %s",
+                    param.getFeatureIdentifier());
+        }
+    }
+
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private Bindable<String> bindAsParsableText(
+    private Observable<String> bindAsFormated(
+            final @NonNull TargetFormat format,
             final @NonNull ObjectSpecification spec,
             final @NonNull _BindableAbstract<ManagedObject> bindableValue,
-            final @NonNull Parser parser,
+            final @NonNull _Either<Renderer, Parser> eitherRendererOrParser,
             final Context context) {
 
-        return bindableValue.mapToBindable(
-                value->{
-                    val pojo = ManagedObjects.UnwrapUtil.single(value);
-                    val text = parser.parseableTextRepresentation(context, pojo);
-                    //System.err.printf("toText: %s -> '%s'%n", ""+value, text);
-                    return text;
-                },
-                text->{
-                    val value = ManagedObject.of(spec, parser.parseTextRepresentation(context, text));
-                    //System.err.printf("fromText: '%s' -> %s%n", text, ""+value);
-                    return value;
-                });
+        switch (format) {
+        case TITLE: {
+            val renderer = eitherRendererOrParser.left().orElseThrow();
+            return bindableValue.map(value->{
+                        val pojo = ManagedObjects.UnwrapUtil.single(value);
+                        val title = renderer.titlePresentation(context, pojo);
+                        return title;
+                    });
+        }
+        case HTML: {
+            val renderer = eitherRendererOrParser.left().orElseThrow();
+            return bindableValue.map(value->{
+                        val pojo = ManagedObjects.UnwrapUtil.single(value);
+                        val html = renderer.htmlPresentation(context, pojo);
+                        return html;
+                    });
+        }
+        case PARSABLE_TEXT:
+            val parser = eitherRendererOrParser.right().orElseThrow();
+            return bindableValue.mapToBindable(
+                    value->{
+                        val pojo = ManagedObjects.UnwrapUtil.single(value);
+                        val text = parser.parseableTextRepresentation(context, pojo);
+                        //System.err.printf("toText: %s -> '%s'%n", ""+value, text);
+                        return text;
+                    },
+                    text->{
+                        val value = ManagedObject.of(spec, parser.parseTextRepresentation(context, text));
+                        //System.err.printf("fromText: '%s' -> %s%n", text, ""+value);
+                        return value;
+                    });
+        default:
+            throw _Exceptions.unmatchedCase(format);
+        }
     }
+
 
 }

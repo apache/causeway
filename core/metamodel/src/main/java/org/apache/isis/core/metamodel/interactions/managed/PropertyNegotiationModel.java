@@ -29,6 +29,7 @@ import org.apache.isis.commons.internal.binding._Observables.LazyObservable;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.interactions.managed._BindingUtil.TargetFormat;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
@@ -45,7 +46,9 @@ public class PropertyNegotiationModel implements ManagedValue {
     private final @NonNull _BindableAbstract<String> searchArgument;
     private final @NonNull LazyObservable<Can<ManagedObject>> choices;
     private final @NonNull ManagedProperty managedProperty;
-    private Bindable<String> proposedValueAsText;
+    private Observable<String> proposedValueAsTitle;
+    private Observable<String> proposedValueAsHtml;
+    private Bindable<String> proposedValueAsParsableText;
 
     PropertyNegotiationModel(
             final ManagedProperty managedProperty) {
@@ -114,13 +117,39 @@ public class PropertyNegotiationModel implements ManagedValue {
     }
 
     @Override
-    public Bindable<String> getValueAsParsableText() {
-        if(proposedValueAsText==null) {
-            // value types should have associated parsers/formatters via value semantics
-            proposedValueAsText = _BindingUtil
-                    .bindAsParsableText(managedProperty.getMetaModel(), proposedValue);
+    public Observable<String> getValueAsTitle() {
+        if(proposedValueAsTitle==null) {
+            // value types should have associated renderer via value semantics
+            proposedValueAsTitle = _BindingUtil
+                    .bindAsFormated(TargetFormat.TITLE, managedProperty.getMetaModel(), proposedValue);
         }
-        return proposedValueAsText;
+        return proposedValueAsTitle;
+    }
+
+    @Override
+    public Observable<String> getValueAsHtml() {
+        if(proposedValueAsHtml==null) {
+            // value types should have associated renderer via value semantics
+            proposedValueAsHtml = _BindingUtil
+                    .bindAsFormated(TargetFormat.HTML, managedProperty.getMetaModel(), proposedValue);
+        }
+        return proposedValueAsHtml;
+    }
+
+    @Override
+    public boolean isValueAsParsableTextSupported() {
+        return _BindingUtil.hasParser(managedProperty.getMetaModel());
+    }
+
+    @Override
+    public Bindable<String> getValueAsParsableText() {
+        if(proposedValueAsParsableText==null) {
+            // value types should have associated parsers/formatters via value semantics
+            // except for composite value types, which might have not
+            proposedValueAsParsableText = (Bindable<String>) _BindingUtil
+                    .bindAsFormated(TargetFormat.PARSABLE_TEXT, managedProperty.getMetaModel(), proposedValue);
+        }
+        return proposedValueAsParsableText;
     }
 
     @Override
