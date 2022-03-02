@@ -28,6 +28,7 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -38,8 +39,10 @@ import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.StringValidator;
 
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -85,9 +88,24 @@ implements TextFieldValueModel.ScalarModelProvider {
     @Getter(value = AccessLevel.PROTECTED)
     private AbstractTextComponent<T> textField;
 
-    protected ScalarPanelTextFieldAbstract(final String id, final ScalarModel scalarModel, final Class<T> cls) {
+    @Getter(value = AccessLevel.PROTECTED)
+    private TextFieldVariant textFieldVariant;
+
+    protected ScalarPanelTextFieldAbstract(
+            final String id,
+            final ScalarModel scalarModel,
+            final Class<T> cls) {
+        this(id, scalarModel, cls, TextFieldVariant.SINGLE_LINE);
+    }
+
+    protected ScalarPanelTextFieldAbstract(
+            final String id,
+            final ScalarModel scalarModel,
+            final Class<T> cls,
+            final TextFieldVariant textFieldVariant) {
         super(id, scalarModel);
         this.cls = cls;
+        this.textFieldVariant = textFieldVariant;
     }
 
     // -- CONVERSION
@@ -112,8 +130,11 @@ implements TextFieldValueModel.ScalarModelProvider {
      * TextField, with converter.
      */
     protected AbstractTextComponent<T> createTextField(final String id) {
-        return Wkt.textFieldWithConverter(
-                id, newTextFieldValueModel(), cls, getConverter(getModel()));
+        return getTextFieldVariant().isSingleLine()
+                ? Wkt.textFieldWithConverter(
+                        id, newTextFieldValueModel(), cls, getConverter(getModel()))
+                : setRowsAndMaxLengthAttributesOn(Wkt.textAreaWithConverter(
+                        id, newTextFieldValueModel(), cls, getConverter(getModel())));
     }
 
     protected final TextFieldValueModel<T> newTextFieldValueModel() {
@@ -173,7 +194,19 @@ implements TextFieldValueModel.ScalarModelProvider {
     }
 
     protected String createTextFieldFragmentId() {
-        return "text";
+        return getTextFieldVariant().isSingleLine()
+                ? "text"
+                : "textarea";
+    }
+
+    @Override
+    protected String obtainInlinePromptLinkCssIfAny() {
+        return getTextFieldVariant().isSingleLine()
+                ? super.obtainInlinePromptLinkCssIfAny()
+                /* Most other components require 'form-control form-control-sm' on the owning inline prompt link.
+                 * For TextArea, however, this instead appears on the TextArea itself.
+                 */
+                : null;
     }
 
     /**
@@ -185,9 +218,21 @@ implements TextFieldValueModel.ScalarModelProvider {
             final String id,
             final IModel<String> inlinePromptModel) {
 
-        val fragment = Wkt.fragmentAddNoTab(this, id, "textInlinePrompt");
-        Wkt.labelAdd(fragment, "scalarValue", inlinePromptModel);
-        return fragment;
+        switch(getTextFieldVariant()) {
+        case SINGLE_LINE:{
+            val fragment = Wkt.fragmentAddNoTab(this, id, "textInlinePrompt");
+            Wkt.labelAdd(fragment, "scalarValue", inlinePromptModel);
+            return fragment;
+        }
+        case MULTI_LINE:{
+            val fragment = new Fragment(id, "textareaInlinePrompt", this);
+            val inlinePromptTextArea = Wkt.textAreaAddNoTab(fragment, "scalarValue", inlinePromptModel);
+            setRowsAndMaxLengthAttributesOn(inlinePromptTextArea);
+            return fragment;
+        }
+        default:
+            throw _Exceptions.unmatchedCase(getTextFieldVariant());
+        }
     }
 
     protected void addStandardSemantics() {
@@ -411,6 +456,25 @@ implements TextFieldValueModel.ScalarModelProvider {
                 .lookupFacet(TypicalLengthFacet.class)
                 .map(TypicalLengthFacet::value)
                 .orElse(null);
+    }
+
+    private Component setAttribute(final TextArea<?> textField, final String attributeName, final int i) {
+        return textField.add(AttributeModifier.replace(attributeName, ""+i));
+    }
+
+    protected <X> TextArea<X> setRowsAndMaxLengthAttributesOn(final TextArea<X> textArea) {
+        val multiLineFacet = getModel().getFacet(MultiLineFacet.class);
+        if(multiLineFacet != null) {
+            setAttribute(textArea, "rows", multiLineFacet.numberOfLines());
+        }
+
+        val maxLength = getMaxLengthOf(getModel());
+        if(maxLength != null) {
+            // in conjunction with javascript in jquery.isis.wicket.viewer.js
+            // see http://stackoverflow.com/questions/4459610/set-maxlength-in-html-textarea
+            setAttribute(textArea, "maxlength", maxLength);
+        }
+        return textArea;
     }
 
 

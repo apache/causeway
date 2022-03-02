@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
 
+import java.io.Serializable;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
@@ -47,12 +49,14 @@ public class MarkupPanelFactories {
 
     // -- PARENTED (ABSTRACT)
 
-    public static abstract class ParentedAbstract extends ComponentFactoryAbstract {
+    public static abstract class ParentedAbstract<T extends Serializable>
+    extends ComponentFactoryAbstract {
+
         private static final long serialVersionUID = 1L;
 
-        private final Class<?> valueType;
+        private final Class<T> valueType;
 
-        public ParentedAbstract(final Class<?> valueType) {
+        public ParentedAbstract(final Class<T> valueType) {
             super(ComponentType.SCALAR_NAME_AND_VALUE, ParentedMarkupPanel.class);
             this.valueType = valueType;
         }
@@ -73,7 +77,7 @@ public class MarkupPanelFactories {
 
         @Override
         public final Component createComponent(final String id, final IModel<?> model) {
-            return new ParentedMarkupPanel(id, (ScalarModel) model, this::newMarkupComponent);
+            return new ParentedMarkupPanel<T>(id, (ScalarModel) model, valueType, this::newMarkupComponent);
         }
 
         protected abstract MarkupComponent newMarkupComponent(String id, ScalarModel model);
@@ -82,12 +86,12 @@ public class MarkupPanelFactories {
 
     // -- STANDALONE (ABSTRACT)
 
-    public static abstract class StandaloneAbstract extends ComponentFactoryAbstract {
+    public static abstract class StandaloneAbstract<T> extends ComponentFactoryAbstract {
         private static final long serialVersionUID = 1L;
 
-        private final Class<?> valueType;
+        private final Class<T> valueType;
 
-        public StandaloneAbstract(final Class<?> valueType) {
+        public StandaloneAbstract(final Class<T> valueType) {
             super(ComponentType.VALUE, StandaloneMarkupPanel.class);
             this.valueType = valueType;
         }
@@ -117,7 +121,7 @@ public class MarkupPanelFactories {
 
     // -- CONCRETE COMPONENT FACTORY - PARENTED
 
-    static class Parented extends ParentedAbstract {
+    static class Parented extends ParentedAbstract<Markup> {
         private static final long serialVersionUID = 1L;
 
         public Parented() {
@@ -135,7 +139,7 @@ public class MarkupPanelFactories {
 
     // -- CONCRETE COMPONENT FACTORY - STANDALONE
 
-    static class Standalone extends StandaloneAbstract {
+    static class Standalone extends StandaloneAbstract<Markup> {
         private static final long serialVersionUID = 1L;
 
         public Standalone() {

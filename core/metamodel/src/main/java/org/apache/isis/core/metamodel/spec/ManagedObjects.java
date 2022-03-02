@@ -154,7 +154,7 @@ public final class ManagedObjects {
             }
             val upperBound = ClassUtils.resolvePrimitiveIfNecessary(elementType.getCorrespondingClass());
             val objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.getSpecification().getCorrespondingClass());
-            throw _Exceptions.illegalArgument("Object has incompatible type %s,"
+            throw _Exceptions.illegalArgument("Object has incompatible type %s, "
                     + "must be an instance of %s.",
                     objectActualType.getName(),
                     upperBound.getName());

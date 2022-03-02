@@ -18,20 +18,24 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
 
+import java.io.Serializable;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.string.MultiLineStringPanel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
+import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldVariant;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 /**
  * Panel for rendering scalars of type {@link org.apache.isis.applib.value.Markup}.
  */
-public class ParentedMarkupPanel extends MultiLineStringPanel {
+public class ParentedMarkupPanel<T extends Serializable>
+extends ScalarPanelTextFieldWithValueSemantics<T> {
 
     private static final long serialVersionUID = 1L;
     private final transient MarkupComponentFactory<ScalarModel> markupComponentFactory;
@@ -39,9 +43,10 @@ public class ParentedMarkupPanel extends MultiLineStringPanel {
     public ParentedMarkupPanel(
             final String id,
             final ScalarModel scalarModel,
+            final Class<T> valueType,
             final MarkupComponentFactory<ScalarModel> markupComponentFactory) {
 
-        super(id, scalarModel);
+        super(id, scalarModel, valueType, TextFieldVariant.MULTI_LINE);
         this.markupComponentFactory = markupComponentFactory;
     }
 
@@ -81,5 +86,4 @@ public class ParentedMarkupPanel extends MultiLineStringPanel {
     protected final MarkupComponent createMarkupComponent(final String id) {
         return markupComponentFactory.newMarkupComponent(id, getModel());
     }
-
 }

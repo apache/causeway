@@ -16,22 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars.string;
+package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldTextualAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldVariant;
-
-/**
- * Panel for rendering MultiLine scalars of type String
- */
-public class MultiLineStringPanel
-extends ScalarPanelTextFieldTextualAbstract {
-
-    private static final long serialVersionUID = 1L;
-
-    public MultiLineStringPanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, TextFieldVariant.MULTI_LINE);
-    }
-
+public enum TextFieldVariant {
+    SINGLE_LINE,
+    MULTI_LINE;
+    public boolean isSingleLine() { return this==SINGLE_LINE; }
+    public boolean isMultiLine() { return this==MULTI_LINE; }
 }

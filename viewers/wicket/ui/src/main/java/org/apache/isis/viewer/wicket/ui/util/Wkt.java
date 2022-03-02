@@ -570,6 +570,32 @@ public class Wkt {
         return add(container, textAreaNoTab(id, textModel));
     }
 
+    /**
+     * @param converter - if {@code null} returns {@link TextArea} using Wicket's default converters.
+     */
+    public <T> TextArea<T> textAreaWithConverter(
+            final String id, final IModel<T> model, final Class<T> type,
+            final @Nullable IConverter<T> converter) {
+        return converter!=null
+            ? new TextArea<T>(id, model) {
+                    private static final long serialVersionUID = 1L;
+                    @SuppressWarnings("unchecked")
+                    @Override public <C> IConverter<C> getConverter(final Class<C> cType) {
+                        return cType == type
+                                ? (IConverter<C>) converter
+                                : super.getConverter(cType);}
+                    @Override public void error(final IValidationError error) {
+                        if(error instanceof ValidationError) {
+                            // use plain error message from ConversionException, circumventing resource bundles.
+                            this.error(((ValidationError)error).getMessage());
+                        } else {
+                            super.error(error);
+                        }
+                    }
+                }
+            : new TextArea<T>(id, model);
+    }
+
     // -- TEXT FIELD
 
     /**
