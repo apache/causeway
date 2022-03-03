@@ -116,6 +116,11 @@ extends ScalarPanelWithFormFieldAbstract<T> {
 //            Components.permanentlyHide(downloadLink, ID_FILE_NAME_IF_COMPACT);
 //        }
 
+        Components.permanentlyHide(getComponentForRegular(), ID_IMAGE);
+        Components.permanentlyHide(getComponentForRegular(), ID_SCALAR_NAME);
+        Components.permanentlyHide(getComponentForRegular(), ID_SCALAR_VALUE);
+        Components.permanentlyHide(getComponentForRegular(), "feedback");
+
         return scalarIfCompact;
     }
 

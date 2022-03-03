@@ -332,7 +332,6 @@ implements ScalarModelSubscriber, HasScalarModel {
             componentIfCompact = createComponentForCompact();
             componentIfRegular.setVisible(false);
             componentIfCompact.setVisible(true);
-            Components.permanentlyHide(componentIfRegular, ID_SCALAR_NAME);
             break;
         }
 
