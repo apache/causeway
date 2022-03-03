@@ -18,14 +18,17 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import java.util.Optional;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -55,7 +58,9 @@ extends ScalarPanelAbstract {
     // -- FORM COMPONENT
 
     private FormComponent<?> formComponent;
+    @Nullable
     protected final FormComponent<?> getFormComponent() { return formComponent; }
+
     /**
      * Builds the component to render the form field.
      */
@@ -67,8 +72,10 @@ extends ScalarPanelAbstract {
     protected final MarkupContainer createComponentForRegular() {
         val scalarModel = scalarModel();
 
+        val friendlyNameModel = Model.of(scalarModel.getFriendlyName());
+
         formComponent = createFormComponent(scalarModel);
-        formComponent.setLabel(Model.of(scalarModel.getFriendlyName()));
+        formComponent.setLabel(friendlyNameModel);
 
         final FormGroup formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, formComponent);
         formGroup.add(formComponent);
@@ -79,12 +86,7 @@ extends ScalarPanelAbstract {
             Wkt.cssAppend(formGroup, "mandatory");
         }
 
-        final String labelCaption = getRendering().getLabelCaption(formComponent);
-        final Label scalarName = createScalarName(ID_SCALAR_NAME, labelCaption);
-        formGroup.add(scalarName);
-
-        scalarModel.getDescribedAs()
-            .ifPresent(describedAs->Tooltips.addTooltip(scalarName, describedAs));
+        formGroup.add(createScalarNameLabel(ID_SCALAR_NAME, friendlyNameModel));
 
         formComponent.add(createValidator(scalarModel));
 
@@ -123,6 +125,84 @@ extends ScalarPanelAbstract {
             }
 
         };
+    }
+
+    @Override
+    protected InlinePromptConfig getInlinePromptConfig() {
+        return getFormComponent()!=null
+                ? InlinePromptConfig.supportedAndHide(getFormComponent())
+                : InlinePromptConfig.notSupported();
+    }
+
+    @Override
+    protected void onInitializeNotEditable() {
+        if(getFormComponent()!=null) {
+            //keep inlinePromptLink (if any) enabled
+            getFormComponent().setEnabled(false);
+        }
+        if(getWicketViewerSettings().isReplaceDisabledTagWithReadonlyTag()) {
+            Wkt.behaviorAddReplaceDisabledTagWithReadonlyTag(getFormComponent());
+        }
+        clearTooltip();
+    }
+
+    @Override
+    protected void onInitializeReadonly(final String disableReason) {
+        formComponentEnable(false);
+        if(getWicketViewerSettings().isReplaceDisabledTagWithReadonlyTag()) {
+            Wkt.behaviorAddReplaceDisabledTagWithReadonlyTag(getFormComponent());
+        }
+        setTooltip(disableReason);
+    }
+
+    @Override
+    protected void onInitializeEditable() {
+        formComponentEnable(true);
+        clearTooltip();
+    }
+
+    @Override
+    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
+        formComponentEnable(false);
+        setTooltip(disableReason);
+        target.ifPresent(this::formComponentAddTo);
+    }
+
+    @Override
+    protected void onEditable(final Optional<AjaxRequestTarget> target) {
+        formComponentEnable(true);
+        clearTooltip();
+        target.ifPresent(this::formComponentAddTo);
+    }
+
+    // -- HELPER
+
+    private void formComponentEnable(final boolean b) {
+        if(getFormComponent()!=null) {
+            getFormComponent().setEnabled(b);
+        }
+        if(inlinePromptLink!=null) {
+            inlinePromptLink.setEnabled(b);
+        }
+    }
+
+    private void formComponentAddTo(final AjaxRequestTarget ajax) {
+        if(getFormComponent()!=null) {
+            ajax.add(getFormComponent());
+        }
+        if(inlinePromptLink!=null) {
+            ajax.add(inlinePromptLink);
+        }
+    }
+
+    private void setTooltip(final String tooltip) {
+        Tooltips.addTooltip(getFormComponent(), tooltip);
+        Tooltips.addTooltip(inlinePromptLink, tooltip);
+    }
+
+    private void clearTooltip() {
+        Tooltips.clearTooltip(getFormComponent());
+        Tooltips.clearTooltip(inlinePromptLink);
     }
 
 }

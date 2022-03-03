@@ -30,7 +30,6 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
@@ -55,7 +54,6 @@ import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
@@ -71,6 +69,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices.ValueCho
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
@@ -117,6 +116,36 @@ implements ScalarModelSubscriber {
         ENTIRE_FORM,
         PARAM_ONLY,
         NOTHING
+    }
+
+    public static class InlinePromptConfig {
+        private final boolean supported;
+        private final Component componentToHideIfAny;
+
+        public static InlinePromptConfig supported() {
+            return new InlinePromptConfig(true, null);
+        }
+
+        public static InlinePromptConfig notSupported() {
+            return new InlinePromptConfig(false, null);
+        }
+
+        public static InlinePromptConfig supportedAndHide(final Component componentToHideIfAny) {
+            return new InlinePromptConfig(true, componentToHideIfAny);
+        }
+
+        private InlinePromptConfig(final boolean supported, final Component componentToHideIfAny) {
+            this.supported = supported;
+            this.componentToHideIfAny = componentToHideIfAny;
+        }
+
+        boolean isSupported() {
+            return supported;
+        }
+
+        Component getComponentToHideIfAny() {
+            return componentToHideIfAny;
+        }
     }
 
     /**
@@ -175,36 +204,6 @@ implements ScalarModelSubscriber {
                 : Repaint.NOTHING;
     }
 
-    public static class InlinePromptConfig {
-        private final boolean supported;
-        private final Component componentToHideIfAny;
-
-        public static InlinePromptConfig supported() {
-            return new InlinePromptConfig(true, null);
-        }
-
-        public static InlinePromptConfig notSupported() {
-            return new InlinePromptConfig(false, null);
-        }
-
-        public static InlinePromptConfig supportedAndHide(final Component componentToHideIfAny) {
-            return new InlinePromptConfig(true, componentToHideIfAny);
-        }
-
-        private InlinePromptConfig(final boolean supported, final Component componentToHideIfAny) {
-            this.supported = supported;
-            this.componentToHideIfAny = componentToHideIfAny;
-        }
-
-        boolean isSupported() {
-            return supported;
-        }
-
-        Component getComponentToHideIfAny() {
-            return componentToHideIfAny;
-        }
-    }
-
     // -- CONSTRUCTION
 
     /**
@@ -218,7 +217,7 @@ implements ScalarModelSubscriber {
     private Component componentIfCompact;
     protected final Component getComponentForCompact() { return componentIfCompact; }
     /**
-     * Builds the component to render the model when in {@link Rendering#COMPACT compact} format.
+     * Builds the component to render the model when in COMPACT format.
      * <p>Is added to {@link #scalarTypeContainer}.
      */
     protected abstract Component createComponentForCompact();
@@ -228,7 +227,7 @@ implements ScalarModelSubscriber {
     private MarkupContainer componentIfRegular;
     protected final MarkupContainer getComponentForRegular() { return componentIfRegular; }
     /**
-     * Builds the component to render the model when in {@link Rendering#REGULAR regular} format.
+     * Builds the component to render the model when in REGULAR format.
      * <p>Is added to {@link #scalarTypeContainer}.
      */
     protected abstract MarkupContainer createComponentForRegular();
@@ -258,15 +257,11 @@ implements ScalarModelSubscriber {
     @Override
     protected void onInitialize() {
         super.onInitialize();
-
         buildGuiAndCallHooks();
-
         setOutputMarkupId(true);
-
     }
 
     private void buildGuiAndCallHooks() {
-
         buildGui();
 
         final ScalarModel scalarModel = getModel();
@@ -286,7 +281,6 @@ implements ScalarModelSubscriber {
                 onInitializeEditable();
             }
         }
-
     }
 
     /**
@@ -327,9 +321,10 @@ implements ScalarModelSubscriber {
         scalarTypeContainer = Wkt.containerAdd(this, ID_SCALAR_TYPE_CONTAINER);
         Wkt.cssAppend(scalarTypeContainer, getCssClassName());
 
-        this.componentIfCompact = createComponentForCompact();
-        this.componentIfRegular = createComponentForRegular();
-        componentIfRegular.setOutputMarkupId(true);
+        componentIfRegular = createComponentForRegular();
+        componentIfCompact = createComponentForCompact();
+
+        componentIfRegular.setOutputMarkupId(true); // enable as AJAX target
 
         scalarTypeContainer.addOrReplace(componentIfCompact, componentIfRegular);
 
@@ -345,13 +340,13 @@ implements ScalarModelSubscriber {
         .map(LinkAndLabelFactory.forPropertyOrParameter(scalarModel))
         .collect(Can.toCan());
 
-        final InlinePromptConfig inlinePromptConfig = getInlinePromptConfig();
+        val inlinePromptConfig = getInlinePromptConfig();
         if(inlinePromptConfig.isSupported()) {
 
-            this.scalarIfRegularInlinePromptForm = createInlinePromptForm();
-            scalarTypeContainer.addOrReplace(scalarIfRegularInlinePromptForm);
-            inlinePromptLink = createInlinePromptLink();
-            componentIfRegular.add(inlinePromptLink);
+            scalarTypeContainer
+                .addOrReplace(scalarIfRegularInlinePromptForm = createInlinePromptForm());
+            componentIfRegular
+                .add(inlinePromptLink = createInlinePromptLink());
 
             // even if this particular scalarModel (property) is not configured for inline edits,
             // it's possible that one of the associated actions is.  Thus we set the prompt context
@@ -405,7 +400,22 @@ implements ScalarModelSubscriber {
         addEditPropertyTo(componentIfRegular);
         addFeedbackOnlyTo(componentIfRegular, getValidationFeedbackReceiver());
 
-        getRendering().buildGui(this);
+        switch(scalarModel.getRenderingHint()) {
+        case REGULAR:
+            //componentIfRegular = createComponentForRegular();
+            //componentIfCompact = Wkt.container(ID_SCALAR_IF_COMPACT); // empty component
+            componentIfRegular.setVisible(true);
+            componentIfCompact.setVisible(false);
+            break;
+        default:
+            //componentIfRegular = Wkt.container(ID_SCALAR_IF_REGULAR); // empty component
+            //componentIfCompact = createComponentForCompact();
+            componentIfRegular.setVisible(false);
+            componentIfCompact.setVisible(true);
+            Components.permanentlyHide(componentIfRegular, ID_SCALAR_NAME);
+            break;
+        }
+
         addCssFromMetaModel();
 
         notifyOnChange(this);
@@ -473,12 +483,8 @@ implements ScalarModelSubscriber {
      */
     @Override
     protected void onConfigure() {
-
-        final ScalarModel scalarModel = getModel();
-
-        final boolean hidden = scalarModel.whetherHidden();
+        final boolean hidden = scalarModel().whetherHidden();
         setVisibilityAllowed(!hidden);
-
         super.onConfigure();
     }
 
@@ -548,72 +554,22 @@ implements ScalarModelSubscriber {
     public void onError(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
     }
 
-
     // ///////////////////////////////////////////////////////////////////
 
-
-    public enum Rendering {
-        /**
-         * Does not show labels, eg for use in tables
-         */
-        COMPACT {
-            @Override
-            public String getLabelCaption(final LabeledWebMarkupContainer labeledContainer) {
-                return "";
-            }
-
-            @Override
-            public void buildGui(final ScalarPanelAbstract panel) {
-                panel.componentIfCompact.setVisible(true);
-                panel.componentIfRegular.setVisible(false);
-                Components.permanentlyHide(panel.componentIfRegular, ID_SCALAR_NAME);
-            }
-
-        },
-        /**
-         * Does show labels, eg for use in forms.
-         */
-        REGULAR {
-            @Override
-            public String getLabelCaption(final LabeledWebMarkupContainer labeledContainer) {
-                return labeledContainer.getLabel().getObject();
-            }
-
-            @Override
-            public void buildGui(final ScalarPanelAbstract panel) {
-                panel.componentIfRegular.setVisible(true);
-                panel.componentIfCompact.setVisible(false);
-            }
-
-        };
-
-        public abstract String getLabelCaption(LabeledWebMarkupContainer labeledContainer);
-
-        public abstract void buildGui(ScalarPanelAbstract panel);
-
-        private static Rendering renderingFor(final EntityModel.RenderingHint renderingHint) {
-            return renderingHint.isRegular()? Rendering.REGULAR :Rendering.COMPACT;
-        }
-    }
-
-    protected Rendering getRendering() {
-        return Rendering.renderingFor(scalarModel.getRenderingHint());
-    }
-
-    // ///////////////////////////////////////////////////////////////////
-
-    protected Label createScalarName(final String id, final String labelCaption) {
-        final Label scalarName = Wkt.label(id, labelCaption);
-        final ScalarModel scalarModel = getModel();
+    protected Label createScalarNameLabel(final String id, final IModel<String> labelCaption) {
+        final Label scalarNameLabel = Wkt.label(id, labelCaption);
+        val scalarModel = scalarModel();
         if(scalarModel.isRequired()
                 && scalarModel.isEnabled()) {
-            final String label = scalarName.getDefaultModelObjectAsString();
+            final String label = scalarNameLabel.getDefaultModelObjectAsString();
             if(!_Strings.isNullOrEmpty(label)) {
-                Wkt.cssAppend(scalarName, "mandatory");
+                Wkt.cssAppend(scalarNameLabel, "mandatory");
             }
         }
-        scalarName.setEscapeModelStrings(true);
-        return scalarName;
+        scalarNameLabel.setEscapeModelStrings(true);
+        scalarModel.getDescribedAs()
+            .ifPresent(describedAs->Tooltips.addTooltip(scalarNameLabel, describedAs));
+        return scalarNameLabel;
     }
 
     /**
@@ -686,7 +642,6 @@ implements ScalarModelSubscriber {
         target.add(scalarTypeContainer);
 
         Wkt.focusOnMarkerAttribute(scalarIfRegularInlinePromptForm, target);
-
     }
 
     private void switchFormForInlinePrompt(final AjaxRequestTarget target) {
@@ -706,9 +661,7 @@ implements ScalarModelSubscriber {
     protected void onSwitchFormForInlinePrompt(
             final WebMarkupContainer inlinePromptForm,
             final AjaxRequestTarget target) {
-
     }
-
 
     // ///////////////////////////////////////////////////////////////////
 

@@ -20,11 +20,9 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.io.Serializable;
 import java.util.Locale;
-import java.util.Optional;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -46,7 +44,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.AccessLevel;
@@ -57,18 +54,12 @@ import lombok.val;
 /**
  * Adapter for {@link PanelAbstract panel}s that use a {@link ScalarModel} as
  * their backing model.
- *
  * <p>
  * Supports the concept of being
- * {@link org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering#COMPACT}
- * (eg within a table) or
- * {@link org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering#REGULAR regular}
- * (eg within a form).
- * </p>
- *
+ * COMPACT (eg within a table) or
+ * REGULAR (eg within a form).
  * <p>
  * This implementation is for panels that use a textfield/text area.
- * </p>
  */
 public abstract class ScalarPanelTextFieldAbstract<T extends Serializable>
 extends ScalarPanelWithFormFieldAbstract
@@ -230,9 +221,7 @@ implements TextFieldValueModel.ScalarModelProvider {
     // --
 
     /**
-     * Builds the component to render the model when in
-     * {@link org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering#COMPACT}
-     * format.
+     * Builds the component to render the model when in COMPACT format.
      * <p>
      * The (textual) default implementation uses a {@link Label}.
      * However, it may be overridden if required.
@@ -269,11 +258,6 @@ implements TextFieldValueModel.ScalarModelProvider {
     // //////////////////////////////////////
 
     @Override
-    protected InlinePromptConfig getInlinePromptConfig() {
-        return InlinePromptConfig.supportedAndHide(getFormComponent());
-    }
-
-    @Override
     protected IModel<String> obtainInlinePromptModel() {
         IModel<?> model = getFormComponent().getModel();
         // must be "live", for ajax updates.
@@ -303,77 +287,6 @@ implements TextFieldValueModel.ScalarModelProvider {
 
     protected ToStringConvertingModel<T> toStringConvertingModelOf(final IConverter<T> converter) {
         return new ToStringConvertingModel<>(converter);
-    }
-
-    // //////////////////////////////////////
-
-
-    @Override
-    protected void onInitializeNotEditable() {
-        super.onInitializeNotEditable();
-
-        getFormComponent().setEnabled(false);
-
-        if(getWicketViewerSettings().isReplaceDisabledTagWithReadonlyTag()) {
-            Wkt.behaviorAddReplaceDisabledTagWithReadonlyTag(getFormComponent());
-        }
-
-        clearTooltip();
-    }
-
-    @Override
-    protected void onInitializeReadonly(final String disableReason) {
-        super.onInitializeReadonly(disableReason);
-
-        getFormComponent().setEnabled(false);
-
-        if(getWicketViewerSettings().isReplaceDisabledTagWithReadonlyTag()) {
-            Wkt.behaviorAddReplaceDisabledTagWithReadonlyTag(getFormComponent());
-        }
-
-        inlinePromptLink.setEnabled(false);
-
-        setTooltip(disableReason);
-    }
-
-    @Override
-    protected void onInitializeEditable() {
-        super.onInitializeEditable();
-        getFormComponent().setEnabled(true);
-        inlinePromptLink.setEnabled(true);
-        clearTooltip();
-    }
-
-    @Override
-    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
-        getFormComponent().setEnabled(false);
-        inlinePromptLink.setEnabled(false);
-        setTooltip(disableReason);
-        target.ifPresent(ajax->{
-            ajax.add(getFormComponent());
-            ajax.add(inlinePromptLink);
-        });
-    }
-
-    @Override
-    protected void onEditable(final Optional<AjaxRequestTarget> target) {
-        getFormComponent().setEnabled(true);
-        inlinePromptLink.setEnabled(true);
-        clearTooltip();
-        target.ifPresent(ajax->{
-            ajax.add(getFormComponent());
-            ajax.add(inlinePromptLink);
-        });
-    }
-
-    private void setTooltip(final String tooltip) {
-        Tooltips.addTooltip(getFormComponent(), tooltip);
-        Tooltips.addTooltip(inlinePromptLink, tooltip);
-    }
-
-    private void clearTooltip() {
-        Tooltips.clearTooltip(getFormComponent());
-        Tooltips.clearTooltip(inlinePromptLink);
     }
 
     // //////////////////////////////////////

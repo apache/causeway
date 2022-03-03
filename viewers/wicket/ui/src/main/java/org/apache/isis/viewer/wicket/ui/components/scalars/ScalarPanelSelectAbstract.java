@@ -68,36 +68,21 @@ extends ScalarPanelAbstract {
         return select2;
     }
 
-    protected FormGroup createFormGroupAndName(
-            final FormComponent<?> component,
-            final String formGroupId, final String nameId) {
-        final FormGroup formGroup = new FormGroup(formGroupId, component);
-        formGroup.add(component);
-
-        final String labelCaption = getRendering().getLabelCaption(select2.asComponent());
-        final Label scalarName = createScalarName(nameId, labelCaption);
-
-        getModel()
-        .getDescribedAs()
-        .ifPresent(describedAs->Tooltips.addTooltip(scalarName, describedAs));
-
-        formGroup.addOrReplace(scalarName);
-        return formGroup;
-    }
-
     protected FormGroup createFormGroup(final FormComponent<?> formComponent) {
+        val scalarModel = scalarModel();
+        val friendlyNameModel = Model.of(scalarModel.getFriendlyName());
+
         setOutputMarkupId(true);
         select2.asComponent().setOutputMarkupId(true);
+        select2.setLabel(friendlyNameModel);
 
-        final String name = scalarModel().getFriendlyName();
-        select2.setLabel(Model.of(name));
-
-        final FormGroup formGroup = createFormGroupAndName(formComponent, ID_SCALAR_IF_REGULAR, ID_SCALAR_NAME);
+        final FormGroup formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, formComponent);
+        formGroup.add(formComponent);
+        formGroup.addOrReplace(createScalarNameLabel(ID_SCALAR_NAME, friendlyNameModel));
 
         addStandardSemantics();
 
-        final ScalarModel model = getModel();
-        if(model.isRequired() && model.isEnabled()) {
+        if(scalarModel.isRequired() && scalarModel.isEnabled()) {
             Wkt.cssAppend(formGroup, "mandatory");
         }
         return formGroup;
