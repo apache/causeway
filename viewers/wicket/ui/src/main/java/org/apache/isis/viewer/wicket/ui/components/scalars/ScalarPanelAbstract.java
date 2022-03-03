@@ -321,12 +321,26 @@ implements ScalarModelSubscriber {
         scalarTypeContainer = Wkt.containerAdd(this, ID_SCALAR_TYPE_CONTAINER);
         Wkt.cssAppend(scalarTypeContainer, getCssClassName());
 
-        componentIfRegular = createComponentForRegular();
-        componentIfCompact = createComponentForCompact();
+        switch(scalarModel.getRenderingHint()) {
+        case REGULAR:
+            componentIfRegular = createComponentForRegular();
+            componentIfCompact = Wkt.container(ID_SCALAR_IF_COMPACT); // empty component
+            componentIfRegular.setVisible(true);
+            componentIfCompact.setVisible(false);
+            break;
+        default:
+            componentIfRegular = Wkt.container(ID_SCALAR_IF_REGULAR); // empty component
+            componentIfCompact = createComponentForCompact();
+            componentIfRegular.setVisible(false);
+            componentIfCompact.setVisible(true);
+            Components.permanentlyHide(componentIfRegular, ID_SCALAR_NAME);
+            break;
+        }
 
         componentIfRegular.setOutputMarkupId(true); // enable as AJAX target
 
-        scalarTypeContainer.addOrReplace(componentIfCompact, componentIfRegular);
+        scalarTypeContainer.addOrReplace(componentIfCompact, componentIfRegular,
+                scalarIfRegularInlinePromptForm = createInlinePromptForm());
 
         // find associated actions for this scalar property (only properties will have any.)
         final ScalarModel.AssociatedActions associatedActions =
@@ -343,8 +357,6 @@ implements ScalarModelSubscriber {
         val inlinePromptConfig = getInlinePromptConfig();
         if(inlinePromptConfig.isSupported()) {
 
-            scalarTypeContainer
-                .addOrReplace(scalarIfRegularInlinePromptForm = createInlinePromptForm());
             componentIfRegular
                 .add(inlinePromptLink = createInlinePromptLink());
 
@@ -399,22 +411,6 @@ implements ScalarModelSubscriber {
 
         addEditPropertyTo(componentIfRegular);
         addFeedbackOnlyTo(componentIfRegular, getValidationFeedbackReceiver());
-
-        switch(scalarModel.getRenderingHint()) {
-        case REGULAR:
-            //componentIfRegular = createComponentForRegular();
-            //componentIfCompact = Wkt.container(ID_SCALAR_IF_COMPACT); // empty component
-            componentIfRegular.setVisible(true);
-            componentIfCompact.setVisible(false);
-            break;
-        default:
-            //componentIfRegular = Wkt.container(ID_SCALAR_IF_REGULAR); // empty component
-            //componentIfCompact = createComponentForCompact();
-            componentIfRegular.setVisible(false);
-            componentIfCompact.setVisible(true);
-            Components.permanentlyHide(componentIfRegular, ID_SCALAR_NAME);
-            break;
-        }
 
         addCssFromMetaModel();
 
