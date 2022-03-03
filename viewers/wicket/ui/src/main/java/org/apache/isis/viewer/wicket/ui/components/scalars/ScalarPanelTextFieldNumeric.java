@@ -38,15 +38,15 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
     public ScalarPanelTextFieldNumeric(
             final String id,
             final ScalarModel scalarModel,
-            final Class<T> cls) {
-        super(id, scalarModel, cls);
+            final Class<T> type) {
+        super(id, scalarModel, type);
     }
 
     @Override
     protected final Component createComponentForCompact() {
         val label = Wkt.labelAddWithConverter(
                 getCompactFragment(CompactType.SPAN),
-                ID_SCALAR_IF_COMPACT, newTextFieldValueModel(), cls, getConverter(scalarModel()));
+                ID_SCALAR_IF_COMPACT, newTextFieldValueModel(), type, getConverter(scalarModel()));
         label.setEnabled(false);
         return label;
     }

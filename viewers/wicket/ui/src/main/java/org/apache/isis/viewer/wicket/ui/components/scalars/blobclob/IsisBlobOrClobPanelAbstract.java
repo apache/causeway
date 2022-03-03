@@ -51,7 +51,7 @@ import lombok.val;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 
 public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType>
-extends ScalarPanelWithFormFieldAbstract {
+extends ScalarPanelWithFormFieldAbstract<T> {
 
     private static final long serialVersionUID = 1L;
 
@@ -73,34 +73,10 @@ extends ScalarPanelWithFormFieldAbstract {
         EDITABLE, NOT_EDITABLE
     }
 
-//    @Override
-//    protected FormGroup createComponentForRegular() {
-//
-//        val friendlyNameModel = LambdaModel.of(()->getModel().getFriendlyName());
-//
-//        fileUploadField = createFileUploadField(ID_SCALAR_VALUE);
-//        fileUploadField.setLabel(friendlyNameModel);
-//
-//        final FormGroup scalarIfRegularFormGroup = new FormGroup(ID_SCALAR_IF_REGULAR, fileUploadField);
-//        scalarIfRegularFormGroup.add(fileUploadField);
-//
-//        Wkt.labelAdd(scalarIfRegularFormGroup, ID_SCALAR_NAME, friendlyNameModel);
-//
-//        wicketImage = asWicketImage(ID_IMAGE);
-//        if(wicketImage != null) {
-//            scalarIfRegularFormGroup.addOrReplace(wicketImage);
-//        } else {
-//            Components.permanentlyHide(scalarIfRegularFormGroup, ID_IMAGE);
-//        }
-//
-//        updateFileNameLabel(ID_FILE_NAME, scalarIfRegularFormGroup);
-//        updateDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, scalarIfRegularFormGroup);
-//
-//        return scalarIfRegularFormGroup;
-//    }
-
+    // generic type mismatch; no issue as long as we don't use conversion
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    protected FormComponent<?> createFormComponent(final ScalarModel scalarModel) {
+    protected FormComponent createFormComponent(final ScalarModel scalarModel) {
         fileUploadField = createFileUploadField(ID_SCALAR_VALUE);
         return fileUploadField;
     }
@@ -235,8 +211,8 @@ extends ScalarPanelWithFormFieldAbstract {
         return Optional.ofNullable((T)pojo);
     }
 
-    public IsisBlobOrClobPanelAbstract(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel);
+    protected IsisBlobOrClobPanelAbstract(final String id, final ScalarModel scalarModel, final Class<T> type) {
+        super(id, scalarModel, type);
     }
 
     private void updateRegularFormComponents(

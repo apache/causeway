@@ -34,7 +34,8 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
  * Panel for rendering scalars of type {@link Clob Isis' applib.Clob}.
  *
  * <p>
- *    TODO: for now, this only handles CLOBs encoded as UTF-8.  One option might be to 'guess' the character encoding, eg akin to cpdetector?
+ *    TODO: for now, this only handles CLOBs encoded as UTF-8.
+ *    One option might be to 'guess' the character encoding, eg akin to cpdetector?
  * </p>
  */
 public class IsisClobPanel extends IsisBlobOrClobPanelAbstract<Clob> {
@@ -44,7 +45,7 @@ public class IsisClobPanel extends IsisBlobOrClobPanelAbstract<Clob> {
     private static final Charset CHARSET = StandardCharsets.UTF_8;
 
     public IsisClobPanel(final String id, final ScalarModel model) {
-        super(id, model);
+        super(id, model, Clob.class);
     }
 
     @Override

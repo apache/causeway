@@ -62,12 +62,10 @@ import lombok.val;
  * This implementation is for panels that use a textfield/text area.
  */
 public abstract class ScalarPanelTextFieldAbstract<T extends Serializable>
-extends ScalarPanelWithFormFieldAbstract
+extends ScalarPanelWithFormFieldAbstract<T>
 implements TextFieldValueModel.ScalarModelProvider {
 
     private static final long serialVersionUID = 1L;
-
-    protected final Class<T> cls;
 
     private AbstractTextComponent<T> formField;
 
@@ -77,17 +75,16 @@ implements TextFieldValueModel.ScalarModelProvider {
     protected ScalarPanelTextFieldAbstract(
             final String id,
             final ScalarModel scalarModel,
-            final Class<T> cls) {
-        this(id, scalarModel, cls, TextFieldVariant.SINGLE_LINE);
+            final Class<T> type) {
+        this(id, scalarModel, type, TextFieldVariant.SINGLE_LINE);
     }
 
     protected ScalarPanelTextFieldAbstract(
             final String id,
             final ScalarModel scalarModel,
-            final Class<T> cls,
+            final Class<T> type,
             final TextFieldVariant textFieldVariant) {
-        super(id, scalarModel);
-        this.cls = cls;
+        super(id, scalarModel, type);
         this.textFieldVariant = textFieldVariant;
     }
 
@@ -113,11 +110,12 @@ implements TextFieldValueModel.ScalarModelProvider {
      * TextField, with converter.
      */
     protected AbstractTextComponent<T> createTextField(final String id) {
+        val converter = getConverter(scalarModel());
         return getTextFieldVariant().isSingleLine()
                 ? Wkt.textFieldWithConverter(
-                        id, newTextFieldValueModel(), cls, getConverter(getModel()))
+                        id, newTextFieldValueModel(), type, converter)
                 : setRowsAndMaxLengthAttributesOn(Wkt.textAreaWithConverter(
-                        id, newTextFieldValueModel(), cls, getConverter(getModel())));
+                        id, newTextFieldValueModel(), type, converter));
     }
 
     protected final TextFieldValueModel<T> newTextFieldValueModel() {
@@ -208,7 +206,7 @@ implements TextFieldValueModel.ScalarModelProvider {
 
         if(maxLength != null) {
             formComponent.add(new AttributeModifier("maxlength", Model.of("" + maxLength)));
-            if(cls.equals(String.class)) {
+            if(type.equals(String.class)) {
                 formComponent.add(StringValidator.maximumLength(maxLength));
             }
         }

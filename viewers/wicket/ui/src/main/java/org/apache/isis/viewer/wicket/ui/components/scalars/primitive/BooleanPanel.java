@@ -43,14 +43,14 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.Che
  * Panel for rendering scalars of type {@link Boolean} or <tt>boolean</tt>.
  */
 public class BooleanPanel
-extends ScalarPanelWithFormFieldAbstract {
+extends ScalarPanelWithFormFieldAbstract<Boolean> {
 
     private static final long serialVersionUID = 1L;
 
     private CheckBoxX checkBox;
 
     public BooleanPanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel);
+        super(id, scalarModel, Boolean.class);
     }
 
     @Override

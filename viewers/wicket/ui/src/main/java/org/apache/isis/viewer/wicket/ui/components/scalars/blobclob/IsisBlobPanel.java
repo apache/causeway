@@ -36,7 +36,7 @@ public class IsisBlobPanel extends IsisBlobOrClobPanelAbstract<Blob> {
     private static final long serialVersionUID = 1L;
 
     public IsisBlobPanel(final String id, final ScalarModel model) {
-        super(id, model);
+        super(id, model, Blob.class);
     }
 
 

@@ -41,13 +41,19 @@ import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
-public abstract class ScalarPanelWithFormFieldAbstract
+public abstract class ScalarPanelWithFormFieldAbstract<T>
 extends ScalarPanelAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    protected ScalarPanelWithFormFieldAbstract(final String id, final ScalarModel scalarModel) {
+    protected final Class<T> type;
+
+    protected ScalarPanelWithFormFieldAbstract(
+            final String id,
+            final ScalarModel scalarModel,
+            final Class<T> type) {
         super(id, scalarModel);
+        this.type = type;
     }
 
     @Override
@@ -57,14 +63,14 @@ extends ScalarPanelAbstract {
 
     // -- FORM COMPONENT
 
-    private FormComponent<?> formComponent;
+    private FormComponent<T> formComponent;
     @Nullable
-    protected final FormComponent<?> getFormComponent() { return formComponent; }
+    protected final FormComponent<T> getFormComponent() { return formComponent; }
 
     /**
      * Builds the component to render the form field.
      */
-    protected abstract FormComponent<?> createFormComponent(ScalarModel scalarModel);
+    protected abstract FormComponent<T> createFormComponent(ScalarModel scalarModel);
 
     // -- REGULAR
 
