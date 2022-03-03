@@ -522,15 +522,11 @@ span.containedButtonPanel {
 }
 
 /* add some space between an FA icon and the text on the right */
-.btn .fa {
-	margin-right: 4px;
+.btn .additionalLinkItem {
+	margin-left: 3px;
 }
 
 /* from additionalLinksPanel.css */
-
-span .fa {
-    padding-right: 2px;
-}
 
 span .fontAwesomeIcon {
     margin-right: 6px;
@@ -947,18 +943,8 @@ footer .footer-image {
     padding-right: 11px;
 }
 
-.editing .edit {
-    padding-top: 2px;
-    float: right;
-}
-
 .multiLineStringPanel .scalarValueInput .editing .edit {
     margin-top: -30px;
-}
-
-.scalarValueInput .editing .edit {
-    margin-top: -20px;
-	z-index: 20000;
 }
 
 .referencePanel .scalarValueInput .editing .edit,
@@ -966,12 +952,6 @@ footer .footer-image {
 .isisClobPanel .scalarValueInput .editing .edit,
 .booleanPanel .scalarValueInput .editing .edit {
     margin-top: 0px;
-}
-
-@-moz-document url-prefix() {
-    .scalarValueInput .editing .edit {
-        margin-right: -17px;
-    }
 }
 
 .actions-right .scalarPlaceholder .scalarValueInput {

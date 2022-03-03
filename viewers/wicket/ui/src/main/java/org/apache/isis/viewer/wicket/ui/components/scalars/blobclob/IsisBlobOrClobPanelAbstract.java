@@ -353,12 +353,12 @@ extends ScalarPanelWithFormFieldAbstract<T> {
 
     }
 
-    private MarkupContainer updateDownloadLink(final String downloadId, final MarkupContainer container) {
+    private MarkupContainer updateDownloadLink(final String downloadId, final MarkupContainer parent) {
         val resourceLink = createResourceLink(downloadId);
         if(resourceLink != null) {
-            container.addOrReplace(resourceLink);
+            parent.addOrReplace(resourceLink);
         } else {
-            Components.permanentlyHide(container, downloadId);
+            Components.permanentlyHide(parent, downloadId);
         }
         return resourceLink;
     }
