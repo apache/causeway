@@ -106,10 +106,10 @@ implements ScalarModelSubscriber, HasScalarModel {
      */
     public static final String ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM = "scalarIfRegularInlinePromptForm";
 
-    private static final String ID_EDIT_PROPERTY = "editProperty";
-    private static final String ID_FEEDBACK = "feedback";
-    private static final String ID_ASSOCIATED_ACTION_LINKS_BELOW = "associatedActionLinksBelow";
-    private static final String ID_ASSOCIATED_ACTION_LINKS_RIGHT = "associatedActionLinksRight";
+    protected static final String ID_EDIT_PROPERTY = "editProperty";
+    protected static final String ID_FEEDBACK = "feedback";
+    protected static final String ID_ASSOCIATED_ACTION_LINKS_BELOW = "associatedActionLinksBelow";
+    protected static final String ID_ASSOCIATED_ACTION_LINKS_RIGHT = "associatedActionLinksRight";
 
     public enum Repaint {
         ENTIRE_FORM,
@@ -326,44 +326,43 @@ implements ScalarModelSubscriber, HasScalarModel {
             componentIfCompact = createShallowComponentForCompact();
             componentIfRegular.setVisible(true);
             componentIfCompact.setVisible(false);
+            componentIfRegular.setOutputMarkupId(true); // enable as AJAX target
+
+            scalarTypeContainer.addOrReplace(componentIfCompact, componentIfRegular,
+                    scalarIfRegularInlinePromptForm = createInlinePromptForm());
+
+            // even if this particular scalarModel (property) is not configured for inline edits,
+            // it's possible that one of the associated actions is.  Thus we set the prompt context
+            scalarModel.setInlinePromptContext(
+                    new InlinePromptContext(
+                            scalarModel,
+                            scalarTypeContainer,
+                            getComponentForRegular(), scalarIfRegularInlinePromptForm));
+
+            val associatedLinksAndLabels = associatedLinksAndLabels();
+            addPositioningCssTo(componentIfRegular, associatedLinksAndLabels);
+            addActionLinksBelowAndRight(componentIfRegular, associatedLinksAndLabels);
+
+            addFeedbackOnlyTo(componentIfRegular, getValidationFeedbackReceiver());
+
             break;
         default:
             componentIfRegular = createShallowComponentForRegular();
             componentIfCompact = createComponentForCompact();
             componentIfRegular.setVisible(false);
             componentIfCompact.setVisible(true);
+
+            scalarTypeContainer.addOrReplace(componentIfCompact, componentIfRegular,
+                    scalarIfRegularInlinePromptForm = createInlinePromptForm());
+
             break;
         }
-
-        componentIfRegular.setOutputMarkupId(true); // enable as AJAX target
-
-        scalarTypeContainer.addOrReplace(componentIfCompact, componentIfRegular,
-                scalarIfRegularInlinePromptForm = createInlinePromptForm());
-
-        // find associated actions for this scalar property (only properties will have any.)
-        final ScalarModel.AssociatedActions associatedActions =
-                scalarModel.getAssociatedActions();
-        val inlineActionIfAny =
-                associatedActions.getFirstAssociatedWithInlineAsIfEdit();
-        val remainingAssociated = associatedActions.getRemainingAssociated();
-
-        // convert those actions into UI layer widgets
-        final Can<LinkAndLabel> remainingLinkAndLabels = remainingAssociated.stream()
-        .map(LinkAndLabelFactory.forPropertyOrParameter(scalarModel))
-        .collect(Can.toCan());
 
         val inlinePromptConfig = getInlinePromptConfig();
         if(inlinePromptConfig.isSupported()) {
 
             componentIfRegular
                 .add(inlinePromptLink = createInlinePromptLink());
-
-            // even if this particular scalarModel (property) is not configured for inline edits,
-            // it's possible that one of the associated actions is.  Thus we set the prompt context
-            scalarModel.setInlinePromptContext(
-                    new InlinePromptContext(
-                            getComponentForRegular(),
-                            scalarIfRegularInlinePromptForm, scalarTypeContainer));
 
             // start off assuming that neither the property nor any of the associated actions
             // are using inline prompts
@@ -377,6 +376,9 @@ implements ScalarModelSubscriber, HasScalarModel {
                 componentToHideRef.setValue(inlinePromptConfig.getComponentToHideIfAny());
 
             } else {
+
+                val inlineActionIfAny =
+                        scalarModel.getAssociatedActions().getFirstAssociatedWithInlineAsIfEdit();
 
                 // not editable property, but maybe one of the actions is.
                 inlineActionIfAny
@@ -404,18 +406,22 @@ implements ScalarModelSubscriber, HasScalarModel {
             Wkt.noTabbing(getValidationFeedbackReceiver());
         }
 
-        addPositioningCssTo(componentIfRegular, remainingLinkAndLabels);
-        addActionLinksBelowAndRight(componentIfRegular, remainingLinkAndLabels);
-
-        addEditPropertyTo(componentIfRegular);
-        addFeedbackOnlyTo(componentIfRegular, getValidationFeedbackReceiver());
-
+        addEditProperty();
         addCssFromMetaModel();
 
         notifyOnChange(this);
         addFormComponentBehaviourToUpdateSubscribers();
     }
 
+    private Can<LinkAndLabel> associatedLinksAndLabels() {
+        // find associated actions for this scalar property (only properties will have any.)
+        // convert those actions into UI layer widgets
+        return scalarModel.getAssociatedActions()
+                .getRemainingAssociated()
+                .stream()
+                .map(LinkAndLabelFactory.forPropertyOrParameter(scalarModel))
+                .collect(Can.toCan());
+    }
     /**
      * Builds the hidden REGULAR component when in COMPACT format.
      * <p>Is added to {@link #scalarTypeContainer}.
@@ -666,6 +672,7 @@ implements ScalarModelSubscriber, HasScalarModel {
         onSwitchFormForInlinePrompt(scalarIfRegularInlinePromptForm, target);
     }
 
+
     /**
      * Optional hook.
      */
@@ -676,16 +683,15 @@ implements ScalarModelSubscriber, HasScalarModel {
 
     // ///////////////////////////////////////////////////////////////////
 
-    protected void addEditPropertyTo(
-            final MarkupContainer scalarIfRegularFormGroup) {
+    protected void addEditProperty() {
 
         if(scalarModel.canEnterEditMode() &&
                 (scalarModel.getPromptStyle().isDialog() ||
                         !getInlinePromptConfig().isSupported())) {
-            val editProperty = Wkt.containerAdd(scalarIfRegularFormGroup, ID_EDIT_PROPERTY);
+            val editProperty = Wkt.containerAdd(componentIfRegular, ID_EDIT_PROPERTY);
             Wkt.behaviorAddOnClick(editProperty, this::onPropertyEditClick);
         } else {
-            Components.permanentlyHide(scalarIfRegularFormGroup, ID_EDIT_PROPERTY);
+            Components.permanentlyHide(componentIfRegular, ID_EDIT_PROPERTY);
         }
     }
 

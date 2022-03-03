@@ -24,22 +24,44 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
+import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.internal.functions._Functions;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
-@Getter
 @RequiredArgsConstructor
 public class InlinePromptContext implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final Component scalarIfRegular;
-    private final WebMarkupContainer scalarIfRegularInlinePromptForm;
+    private final ScalarModel scalarModel;
+
+    @Getter
     private final MarkupContainer scalarTypeContainer;
 
-    public void onCancel() {
+    private final Component scalarIfRegular;
+    private final WebMarkupContainer scalarIfRegularInlinePromptForm;
+
+    public void onPrompt() {
+        scalarIfRegular.setVisible(false);
+        scalarIfRegularInlinePromptForm.setVisible(true);
+    }
+
+    public void onCancel(final _Either<ActionModel, ScalarPropertyModel> memberModel) {
+
+        memberModel
+        .accept(_Functions.noopConsumer(), prop->{
+            // reset the UI form input field to the untouched property value
+            val untouchedPropertyValue = prop.getManagedProperty().getPropertyValue();
+            scalarModel.setObject(untouchedPropertyValue);
+        });
+
         scalarIfRegular.setVisible(true);
         scalarIfRegularInlinePromptForm.setVisible(false);
+
     }
+
 
 }

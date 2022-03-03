@@ -250,8 +250,8 @@ extends IndicatingAjaxLink<ManagedObject> {
         getComponentFactoryRegistry().addOrReplaceComponent(scalarTypeContainer,
                 ScalarPanelAbstract.ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM, ComponentType.PARAMETERS, actionModel);
 
-        inlinePromptContext.getScalarIfRegular().setVisible(false);
-        inlinePromptContext.getScalarIfRegularInlinePromptForm().setVisible(true);
+        inlinePromptContext.onPrompt();
+
         target.add(scalarTypeContainer);
     }
 

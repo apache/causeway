@@ -65,13 +65,13 @@ extends ScalarPanelWithFormFieldAbstract<Boolean> {
 
     @Override
     protected Component createComponentForCompact() {
-        val checkbox = Wkt.checkbox(
+        checkBox = Wkt.checkbox(
                 ID_SCALAR_IF_COMPACT,
                 BooleanModel.forScalarModel(scalarModel()),
                 scalarModel().isRequired(),
                 CheckBoxXConfig.Sizes.sm);
-        checkbox.setEnabled(false); // will be enabled before rendering if required
-        return checkbox;
+        checkBox.setEnabled(false); // will be enabled before rendering if required
+        return checkBox;
     }
 
 

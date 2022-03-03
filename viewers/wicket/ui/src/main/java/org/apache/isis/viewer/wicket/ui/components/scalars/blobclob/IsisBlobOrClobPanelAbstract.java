@@ -111,7 +111,8 @@ extends ScalarPanelWithFormFieldAbstract<T> {
     protected MarkupContainer createShallowComponentForRegular() {
         val shallowRegular = super.createShallowComponentForRegular();
         Components.permanentlyHide(shallowRegular,
-                ID_IMAGE, ID_SCALAR_NAME, ID_SCALAR_VALUE, "feedback");
+                ID_IMAGE, ID_SCALAR_NAME, ID_SCALAR_VALUE, ID_FEEDBACK,
+                ID_ASSOCIATED_ACTION_LINKS_BELOW, ID_ASSOCIATED_ACTION_LINKS_RIGHT);
         return shallowRegular;
     }
 
