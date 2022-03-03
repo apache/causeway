@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 import java.io.Serializable;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -50,11 +49,6 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
                 ID_SCALAR_IF_COMPACT, newTextFieldValueModel(), cls, getConverter(scalarModel()));
         label.setEnabled(false);
         return label;
-    }
-
-    @Override
-    protected final IModel<String> obtainInlinePromptModel() {
-        return super.toStringConvertingModelOf(getConverter(scalarModel()));
     }
 
 }

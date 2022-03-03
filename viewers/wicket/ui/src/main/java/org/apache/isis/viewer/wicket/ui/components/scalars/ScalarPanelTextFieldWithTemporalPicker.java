@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 import java.io.Serializable;
 
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -56,11 +55,6 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
     @Override
     protected String getTextFieldFragmentId() {
         return "date";
-    }
-
-    @Override
-    protected IModel<String> obtainInlinePromptModel() {
-        return super.toStringConvertingModelOf(getConverter(scalarModel()));
     }
 
 }

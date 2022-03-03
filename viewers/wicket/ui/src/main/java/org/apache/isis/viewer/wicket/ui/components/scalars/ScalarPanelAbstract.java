@@ -621,7 +621,8 @@ implements ScalarModelSubscriber {
     // ///////////////////////////////////////////////////////////////////
 
     /**
-     * Components returning true for {@link #getInlinePromptConfig()} are required to override and return a non-null value.
+     * Components returning true for {@link #getInlinePromptConfig()}
+     * are required to override and return a non-null value.
      */
     protected IModel<String> obtainInlinePromptModel() {
         return null;

@@ -21,13 +21,11 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
 import java.io.Serializable;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldVariant;
-
-import lombok.val;
+import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 
 /**
  * Panel for rendering scalars of type {@link org.apache.isis.applib.value.Markup}.
@@ -49,13 +47,13 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
     }
 
     @Override
-    protected Component createScalarValueContainer(final String id) {
-        val scalarModel = scalarModel();
-        if(scalarModel.isEditMode()) {
+    protected void onFormGroupCreated(final FormGroup formGroup) {
+        if(scalarModel().isEditMode()) {
             // fallback to text area
-            return super.createScalarValueContainer(id);
+            super.onFormGroupCreated(formGroup);
+        } else {
+            formGroup.add(createMarkupComponent(ID_SCALAR_VALUE_CONTAINER));
         }
-        return createMarkupComponent(id);
     }
 
     @Override
@@ -63,12 +61,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
         return createMarkupComponent(ID_SCALAR_IF_COMPACT);
     }
 
-    @Override
-    protected final IModel<String> obtainInlinePromptModel() {
-        return super.toStringConvertingModelOf(getConverter(scalarModel()));
-    }
-
     protected final MarkupComponent createMarkupComponent(final String id) {
-        return markupComponentFactory.newMarkupComponent(id, getModel());
+        return markupComponentFactory.newMarkupComponent(id, scalarModel());
     }
 }

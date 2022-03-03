@@ -142,14 +142,10 @@ implements TextFieldValueModel.ScalarModelProvider {
     @Override
     protected void onFormGroupCreated(final FormGroup formGroup) {
         super.onFormGroupCreated(formGroup);
-        formGroup.add(createScalarValueContainer(ID_SCALAR_VALUE_CONTAINER));
-        setTextFieldSizeAndMaxLengthIfSpecified();
-    }
-
-    protected Component createScalarValueContainer(final String id) {
-        final Fragment textFieldFragment = new Fragment(id, getTextFieldFragmentId(), this);
+        val textFieldFragment = new Fragment(ID_SCALAR_VALUE_CONTAINER, getTextFieldFragmentId(), this);
         textFieldFragment.add(getFormComponent());
-        return textFieldFragment;
+        formGroup.add(textFieldFragment);
+        setTextFieldSizeAndMaxLengthIfSpecified();
     }
 
     protected String getTextFieldFragmentId() {
@@ -254,14 +250,14 @@ implements TextFieldValueModel.ScalarModelProvider {
         }
     }
 
-
-    // //////////////////////////////////////
+    // -- CONVERSION
 
     @Override
-    protected IModel<String> obtainInlinePromptModel() {
-        IModel<?> model = getFormComponent().getModel();
-        // must be "live", for ajax updates.
-        return _Casts.uncheckedCast(model);
+    protected final IModel<String> obtainInlinePromptModel() {
+        val converter = getConverter(scalarModel());
+        return converter!=null
+                ? new ToStringConvertingModel<>(converter)
+                :  _Casts.uncheckedCast(getFormComponent().getModel());
     }
 
     protected class ToStringConvertingModel<X> extends Model<String> {
@@ -285,11 +281,7 @@ implements TextFieldValueModel.ScalarModelProvider {
         }
     }
 
-    protected ToStringConvertingModel<T> toStringConvertingModelOf(final IConverter<T> converter) {
-        return new ToStringConvertingModel<>(converter);
-    }
-
-    // //////////////////////////////////////
+    // -- HELPER
 
     private static Integer getMaxLengthOf(final @NonNull ScalarModel model) {
         return model.getScalarTypeSpec()
