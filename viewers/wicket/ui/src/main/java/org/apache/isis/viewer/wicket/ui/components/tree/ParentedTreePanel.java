@@ -40,12 +40,12 @@ extends ScalarPanelAbstract {
 
     @Override
     protected MarkupContainer createComponentForRegular() {
-        return createTreeComponent(ID_SCALAR_IF_REGULAR);
+        return createTreeComponent(getScalarTypeContainer(), ID_SCALAR_IF_REGULAR);
     }
 
     @Override
     protected MarkupContainer createComponentForCompact() {
-        return createTreeComponent(ID_SCALAR_IF_COMPACT);
+        return createTreeComponent(getScalarTypeContainer(), ID_SCALAR_IF_COMPACT);
     }
 
     @Override
@@ -60,12 +60,13 @@ extends ScalarPanelAbstract {
 
     // -- HELPER
 
-    private MarkupContainer createTreeComponent(final String id) {
+    private MarkupContainer createTreeComponent(final MarkupContainer parent, final String id) {
         val scalarModel = scalarModel();
-        val tree = (MarkupContainer) IsisToWicketTreeAdapter.adapt(id, scalarModel);
-        // adds the tree-theme behavior to the tree component
-        tree.add(getTreeThemeProvider().treeThemeFor(scalarModel));
-        return tree;
+        val tree = IsisToWicketTreeAdapter.adapt(id, scalarModel);
+        parent.add(tree);
+        // adds the tree-theme behavior to the tree's parent
+        parent.add(getTreeThemeProvider().treeThemeFor(scalarModel));
+        return (MarkupContainer) tree;
     }
 
 
