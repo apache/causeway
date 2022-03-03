@@ -44,6 +44,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelWithFormFi
 import org.apache.isis.viewer.wicket.ui.components.scalars.image.WicketImageUtil;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -357,6 +358,7 @@ extends ScalarPanelWithFormFieldAbstract<T> {
         val resourceLink = createResourceLink(downloadId);
         if(resourceLink != null) {
             parent.addOrReplace(resourceLink);
+            Tooltips.addTooltip(resourceLink, "download");
         } else {
             Components.permanentlyHide(parent, downloadId);
         }

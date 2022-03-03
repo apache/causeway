@@ -690,6 +690,7 @@ implements ScalarModelSubscriber, HasScalarModel {
                         !getInlinePromptConfig().isSupported())) {
             val editProperty = Wkt.containerAdd(componentIfRegular, ID_EDIT_PROPERTY);
             Wkt.behaviorAddOnClick(editProperty, this::onPropertyEditClick);
+            Tooltips.addTooltip(editProperty, "edit");
         } else {
             Components.permanentlyHide(componentIfRegular, ID_EDIT_PROPERTY);
         }
