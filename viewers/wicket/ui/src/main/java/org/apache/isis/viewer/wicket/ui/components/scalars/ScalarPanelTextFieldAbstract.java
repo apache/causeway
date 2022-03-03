@@ -62,8 +62,7 @@ import lombok.val;
  * This implementation is for panels that use a textfield/text area.
  */
 public abstract class ScalarPanelTextFieldAbstract<T extends Serializable>
-extends ScalarPanelWithFormFieldAbstract<T>
-implements TextFieldValueModel.ScalarModelProvider {
+extends ScalarPanelWithFormFieldAbstract<T> {
 
     private static final long serialVersionUID = 1L;
 

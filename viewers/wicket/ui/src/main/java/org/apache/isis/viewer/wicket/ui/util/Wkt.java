@@ -583,6 +583,7 @@ public class Wkt {
         return converter!=null
             ? new TextArea<T>(id, model) {
                     private static final long serialVersionUID = 1L;
+                    {setType(type);}
                     @SuppressWarnings("unchecked")
                     @Override public <C> IConverter<C> getConverter(final Class<C> cType) {
                         return cType == type

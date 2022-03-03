@@ -42,7 +42,6 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
@@ -63,8 +62,7 @@ import lombok.val;
  * </p>
  */
 abstract class ScalarPanelAbstractLegacy
-extends PanelAbstract<ManagedObject, ScalarModel>
-implements ScalarModelProvider {
+extends PanelAbstract<ManagedObject, ScalarModel> {
 
     private static final long serialVersionUID = 1L;
 

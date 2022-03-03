@@ -73,7 +73,6 @@ import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
@@ -84,7 +83,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
 
 public abstract class ScalarPanelAbstract
 extends PanelAbstract<ManagedObject, ScalarModel>
-implements ScalarModelSubscriber {
+implements ScalarModelSubscriber, HasScalarModel {
 
     private static final long serialVersionUID = 1L;
 
@@ -209,7 +208,7 @@ implements ScalarModelSubscriber {
     /**
      * Identical to super.getModel()
      */
-    @Getter(value = AccessLevel.PROTECTED) @Accessors(fluent = true)
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
     private final ScalarModel scalarModel;
 
     // -- COMPACT

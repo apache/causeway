@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 import java.io.Serializable;
 
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -33,31 +34,25 @@ import lombok.val;
  * For custom {@link ScalarPanelTextFieldAbstract}s to use as the {@link Model}
  * of their {@link TextField} (as constructed in {@link ScalarPanelTextFieldAbstract#createTextField(String)}).
  */
-public class TextFieldValueModel<T extends Serializable> extends Model<T> {
+public class TextFieldValueModel<T extends Serializable>
+extends ChainingModel<T> {
 
     private static final long serialVersionUID = 1L;
 
-    public interface ScalarModelProvider {
-        ScalarModel getModel();
-    }
-
-    private final ScalarModelProvider scalarModelProvider;
-
-    public TextFieldValueModel(final ScalarModelProvider scalarModelProvider) {
-        this.scalarModelProvider = scalarModelProvider;
+    public TextFieldValueModel(final HasScalarModel scalarModelHolder) {
+        super(scalarModelHolder);
     }
 
     @Override
     public T getObject() {
-        final ScalarModel model = scalarModelProvider.getModel();
-        val objectAdapter = model.getObject();
+        val objectAdapter = scalarModel().getObject();
         return unwrap(objectAdapter);
     }
 
     @Override
     public void setObject(final T object) {
 
-        val scalarModel = scalarModelProvider.getModel();
+        val scalarModel = scalarModel();
 
         if (object == null) {
             scalarModel.setObject(null);
@@ -72,6 +67,11 @@ public class TextFieldValueModel<T extends Serializable> extends Model<T> {
     @SuppressWarnings("unchecked")
     private T unwrap(final ManagedObject objectAdapter) {
         return (T) ManagedObjects.UnwrapUtil.single(objectAdapter);
+    }
+
+    private ScalarModel scalarModel() {
+        return ((HasScalarModel) super.getTarget())
+                .scalarModel();
     }
 
 
