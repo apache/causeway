@@ -106,9 +106,6 @@ extends ScalarPanelAbstract {
     protected void onFormGroupCreated(final FormGroup formGroup) {
     }
 
-    protected void onFormGroupNotCreated(final MarkupContainer emptyContainer) {
-    }
-
     protected IValidator<Object> createValidator(final ScalarModel scalarModel) {
         return new IValidator<Object>() {
             private static final long serialVersionUID = 1L;

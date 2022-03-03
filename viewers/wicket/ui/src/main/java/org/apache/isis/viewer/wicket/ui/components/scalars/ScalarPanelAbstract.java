@@ -323,12 +323,12 @@ implements ScalarModelSubscriber, HasScalarModel {
         switch(scalarModel.getRenderingHint()) {
         case REGULAR:
             componentIfRegular = createComponentForRegular();
-            componentIfCompact = Wkt.container(ID_SCALAR_IF_COMPACT); // empty component
+            componentIfCompact = createShallowComponentForCompact();
             componentIfRegular.setVisible(true);
             componentIfCompact.setVisible(false);
             break;
         default:
-            componentIfRegular = Wkt.container(ID_SCALAR_IF_REGULAR); // empty component
+            componentIfRegular = createShallowComponentForRegular();
             componentIfCompact = createComponentForCompact();
             componentIfRegular.setVisible(false);
             componentIfCompact.setVisible(true);
@@ -414,6 +414,22 @@ implements ScalarModelSubscriber, HasScalarModel {
 
         notifyOnChange(this);
         addFormComponentBehaviourToUpdateSubscribers();
+    }
+
+    /**
+     * Builds the hidden REGULAR component when in COMPACT format.
+     * <p>Is added to {@link #scalarTypeContainer}.
+     */
+    protected MarkupContainer createShallowComponentForRegular() {
+        return Wkt.container(ID_SCALAR_IF_REGULAR); // empty component;
+    }
+
+    /**
+     * Builds the hidden COMPACT component when in REGULAR format.
+     * <p>Is added to {@link #scalarTypeContainer}.
+     */
+    protected Component createShallowComponentForCompact() {
+        return Wkt.container(ID_SCALAR_IF_COMPACT); // empty component
     }
 
     /**

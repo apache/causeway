@@ -108,6 +108,14 @@ extends ScalarPanelWithFormFieldAbstract<T> {
     // //////////////////////////////////////
 
     @Override
+    protected MarkupContainer createShallowComponentForRegular() {
+        val shallowRegular = super.createShallowComponentForRegular();
+        Components.permanentlyHide(shallowRegular,
+                ID_IMAGE, ID_SCALAR_NAME, ID_SCALAR_VALUE, "feedback");
+        return shallowRegular;
+    }
+
+    @Override
     protected Component createComponentForCompact() {
         final MarkupContainer scalarIfCompact = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
         updateDownloadLink(ID_SCALAR_IF_COMPACT_DOWNLOAD, scalarIfCompact);
@@ -115,12 +123,6 @@ extends ScalarPanelWithFormFieldAbstract<T> {
 //            updateFileNameLabel(ID_FILE_NAME_IF_COMPACT, downloadLink);
 //            Components.permanentlyHide(downloadLink, ID_FILE_NAME_IF_COMPACT);
 //        }
-
-        Components.permanentlyHide(getComponentForRegular(), ID_IMAGE);
-        Components.permanentlyHide(getComponentForRegular(), ID_SCALAR_NAME);
-        Components.permanentlyHide(getComponentForRegular(), ID_SCALAR_VALUE);
-        Components.permanentlyHide(getComponentForRegular(), "feedback");
-
         return scalarIfCompact;
     }
 
