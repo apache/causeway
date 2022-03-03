@@ -22,9 +22,8 @@ import java.util.Optional;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -32,9 +31,7 @@ import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.viewer.wicket.model.models.BooleanModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
-import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelWithFormFieldAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -45,7 +42,8 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.Che
 /**
  * Panel for rendering scalars of type {@link Boolean} or <tt>boolean</tt>.
  */
-public class BooleanPanel extends ScalarPanelAbstract {
+public class BooleanPanel
+extends ScalarPanelWithFormFieldAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -56,46 +54,15 @@ public class BooleanPanel extends ScalarPanelAbstract {
     }
 
     @Override
-    protected MarkupContainer createComponentForRegular() {
-
-        val scalarModel = getModel();
-
+    protected FormComponent<Boolean> createFormComponent(final ScalarModel scalarModel) {
         checkBox = Wkt.checkbox(
                 ID_SCALAR_VALUE,
                 BooleanModel.forScalarModel(scalarModel),
                 scalarModel.isRequired(),
                 CheckBoxXConfig.Sizes.lg);
-
-        checkBox.setLabel(Model.of(scalarModel.getFriendlyName()));
-
-        final FormGroup scalarIfRegularFormGroup = new FormGroup(ID_SCALAR_IF_REGULAR, checkBox);
-        scalarIfRegularFormGroup.add(checkBox);
-        if(scalarModel.isRequired()
-                && scalarModel.isEnabled()) {
-            Wkt.cssAppend(scalarIfRegularFormGroup, "mandatory");
-        }
-
-        final Label scalarNameLabel = createScalarName(
-                ID_SCALAR_NAME,
-                getRendering().getLabelCaption(checkBox));
-        scalarIfRegularFormGroup.add(scalarNameLabel);
-
-        scalarModel
-            .getDescribedAs()
-            .ifPresent(describedAs->Tooltips.addTooltip(scalarIfRegularFormGroup, describedAs));
-
-        return scalarIfRegularFormGroup;
-    }
-
-    @Override
-    protected Component getScalarValueComponent() {
         return checkBox;
     }
 
-    /**
-     * Mandatory hook method to build the component to render the model when in
-     * {@link org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering#COMPACT compact} format.
-     */
     @Override
     protected Component createComponentForCompact() {
         val checkbox = Wkt.checkbox(

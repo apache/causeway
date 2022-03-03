@@ -28,11 +28,11 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LambdaModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.IResource;
 
@@ -40,7 +40,7 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelWithFormFieldAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.image.WicketImageUtil;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.Components;
@@ -51,20 +51,14 @@ import lombok.val;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 
 public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType>
-extends ScalarPanelAbstract {
-
+extends ScalarPanelWithFormFieldAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
     private static final String ID_SCALAR_IF_REGULAR_DOWNLOAD = "scalarIfRegularDownload";
     private static final String ID_FILE_NAME = "fileName";
-    //private static final String ID_FILE_NAME_IF_COMPACT = "fileNameIfCompact";
     private static final String ID_SCALAR_IF_REGULAR_CLEAR = "scalarIfRegularClear";
-    private static final String ID_SCALAR_NAME = "scalarName";
-    private static final String ID_SCALAR_VALUE = "scalarValue";
     private static final String ID_IMAGE = "scalarImage";
-    private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
     private static final String ID_SCALAR_IF_COMPACT_DOWNLOAD = "scalarIfCompactDownload";
 
     private Image wicketImage;
@@ -79,35 +73,49 @@ extends ScalarPanelAbstract {
         EDITABLE, NOT_EDITABLE
     }
 
+//    @Override
+//    protected FormGroup createComponentForRegular() {
+//
+//        val friendlyNameModel = LambdaModel.of(()->getModel().getFriendlyName());
+//
+//        fileUploadField = createFileUploadField(ID_SCALAR_VALUE);
+//        fileUploadField.setLabel(friendlyNameModel);
+//
+//        final FormGroup scalarIfRegularFormGroup = new FormGroup(ID_SCALAR_IF_REGULAR, fileUploadField);
+//        scalarIfRegularFormGroup.add(fileUploadField);
+//
+//        Wkt.labelAdd(scalarIfRegularFormGroup, ID_SCALAR_NAME, friendlyNameModel);
+//
+//        wicketImage = asWicketImage(ID_IMAGE);
+//        if(wicketImage != null) {
+//            scalarIfRegularFormGroup.addOrReplace(wicketImage);
+//        } else {
+//            Components.permanentlyHide(scalarIfRegularFormGroup, ID_IMAGE);
+//        }
+//
+//        updateFileNameLabel(ID_FILE_NAME, scalarIfRegularFormGroup);
+//        updateDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, scalarIfRegularFormGroup);
+//
+//        return scalarIfRegularFormGroup;
+//    }
+
     @Override
-    protected FormGroup createComponentForRegular() {
-
-        val friendlyNameModel = LambdaModel.of(()->getModel().getFriendlyName());
-
+    protected FormComponent<?> createFormComponent(final ScalarModel scalarModel) {
         fileUploadField = createFileUploadField(ID_SCALAR_VALUE);
-        fileUploadField.setLabel(friendlyNameModel);
-
-        final FormGroup scalarIfRegularFormGroup = new FormGroup(ID_SCALAR_IF_REGULAR, fileUploadField);
-        scalarIfRegularFormGroup.add(fileUploadField);
-
-        Wkt.labelAdd(scalarIfRegularFormGroup, ID_SCALAR_NAME, friendlyNameModel);
-
-        wicketImage = asWicketImage(ID_IMAGE);
-        if(wicketImage != null) {
-            scalarIfRegularFormGroup.addOrReplace(wicketImage);
-        } else {
-            Components.permanentlyHide(scalarIfRegularFormGroup, ID_IMAGE);
-        }
-
-        updateFileNameLabel(ID_FILE_NAME, scalarIfRegularFormGroup);
-        updateDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, scalarIfRegularFormGroup);
-
-        return scalarIfRegularFormGroup;
+        return fileUploadField;
     }
 
     @Override
-    protected Component getScalarValueComponent() {
-        return fileUploadField;
+    protected void onFormGroupCreated(final FormGroup formGroup) {
+        super.onFormGroupCreated(formGroup);
+        wicketImage = asWicketImage(ID_IMAGE);
+        if(wicketImage != null) {
+            formGroup.addOrReplace(wicketImage);
+        } else {
+            Components.permanentlyHide(formGroup, ID_IMAGE);
+        }
+        updateFileNameLabel(ID_FILE_NAME, formGroup);
+        updateDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, formGroup);
     }
 
     // //////////////////////////////////////
@@ -237,7 +245,7 @@ extends ScalarPanelAbstract {
             final String disabledReason,
             final Optional<AjaxRequestTarget> target) {
 
-        final MarkupContainer formComponent = (MarkupContainer) getComponentForRegular();
+        final MarkupContainer formComponent = getComponentForRegular();
         sync(formComponent, visibility, editability, disabledReason, target);
 
         // sonar-ignore-on (detects potential NPE, which is a false positive here)
@@ -336,7 +344,7 @@ extends ScalarPanelAbstract {
             final InputFieldEditability editability,
             final Optional<AjaxRequestTarget> target) {
 
-        final MarkupContainer formComponent = (MarkupContainer) getComponentForRegular();
+        final MarkupContainer formComponent = getComponentForRegular();
         formComponent.setOutputMarkupId(true); // enable ajax link
 
         final AjaxLink<Void> ajaxLink = Wkt.linkAdd(formComponent, ID_SCALAR_IF_REGULAR_CLEAR, ajaxTarget->{

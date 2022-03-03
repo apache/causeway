@@ -45,7 +45,8 @@ import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 import lombok.NonNull;
 import lombok.val;
 
-public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
+public abstract class ScalarPanelSelectAbstract
+extends ScalarPanelAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -55,6 +56,10 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
         super(id, scalarModel);
     }
 
+    @Override
+    protected Component getValidationFeedbackReceiver() {
+        return select2.asComponent();
+    }
 
     protected Select2 createSelect2(final String id) {
         final Select2 select2 = Select2.createSelect2(id, scalarModel());
@@ -101,11 +106,6 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
     protected void addStandardSemantics() {
         select2.setRequired(getModel().isRequired());
         select2.add(new Select2Validator(scalarModel()));
-    }
-
-    @Override
-    protected Component getScalarValueComponent() {
-        return select2.asComponent();
     }
 
 

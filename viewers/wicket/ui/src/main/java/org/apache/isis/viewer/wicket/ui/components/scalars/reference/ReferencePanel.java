@@ -211,7 +211,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         val adapter = scalarModel.getObject();
 
         // syncLinkWithInput
-        final MarkupContainer componentForRegular = (MarkupContainer) getComponentForRegular();
+        final MarkupContainer componentForRegular = getComponentForRegular();
 
         if(componentForRegular != null) {
 

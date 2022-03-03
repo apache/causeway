@@ -29,6 +29,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.ComponentTag;
@@ -694,6 +695,14 @@ public class Wkt {
         return _Strings.isNotEmpty(containerId)
                 ? String.format("Wicket.Event.publish(Isis.Topic.%s, '%s')", topic.name(), containerId)
                 : String.format("Wicket.Event.publish(Isis.Topic.%s)", topic.name());
+    }
+
+    // -- TABBING UTILITY
+
+    public static void noTabbing(final @Nullable Component component) {
+        if(component != null) {
+            component.add(new AttributeAppender("tabindex", "-1"));
+        }
     }
 
 }

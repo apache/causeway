@@ -54,7 +54,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
 
 
     @Override
-    protected String createTextFieldFragmentId() {
+    protected String getTextFieldFragmentId() {
         return "date";
     }
 

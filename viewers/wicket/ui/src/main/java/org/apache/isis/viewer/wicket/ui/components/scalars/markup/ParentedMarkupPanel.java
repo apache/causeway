@@ -21,15 +21,13 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
 import java.io.Serializable;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.IModel;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldVariant;
-import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
-import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+
+import lombok.val;
 
 /**
  * Panel for rendering scalars of type {@link org.apache.isis.applib.value.Markup}.
@@ -51,36 +49,23 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
     }
 
     @Override
-    protected MarkupContainer createScalarIfRegularFormGroup() {
-
-        if(getModel().isEditMode()) {
-            // fallback to text editor
-            return super.createScalarIfRegularFormGroup();
+    protected Component createScalarValueContainer(final String id) {
+        val scalarModel = scalarModel();
+        if(scalarModel.isEditMode()) {
+            // fallback to text area
+            return super.createScalarValueContainer(id);
         }
-
-        final MarkupComponent markupComponent =
-                createMarkupComponent("scalarValueContainer");
-
-        getTextField().setLabel(Model.of(getModel().getFriendlyName()));
-
-        final FormGroup formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, getTextField());
-        formGroup.add(markupComponent);
-
-        final String labelCaption = getRendering().getLabelCaption(getTextField());
-        final Label scalarName = createScalarName(ID_SCALAR_NAME, labelCaption);
-
-        getModel()
-        .getDescribedAs()
-        .ifPresent(describedAs->Tooltips.addTooltip(scalarName, describedAs));
-
-        formGroup.add(scalarName);
-
-        return formGroup;
+        return createMarkupComponent(id);
     }
 
     @Override
     protected Component createComponentForCompact() {
         return createMarkupComponent(ID_SCALAR_IF_COMPACT);
+    }
+
+    @Override
+    protected final IModel<String> obtainInlinePromptModel() {
+        return super.toStringConvertingModelOf(getConverter(scalarModel()));
     }
 
     protected final MarkupComponent createMarkupComponent(final String id) {

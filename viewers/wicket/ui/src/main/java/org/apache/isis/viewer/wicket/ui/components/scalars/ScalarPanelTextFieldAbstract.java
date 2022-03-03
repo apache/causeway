@@ -24,18 +24,15 @@ import java.util.Optional;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.validation.IValidatable;
-import org.apache.wicket.validation.IValidator;
-import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.StringValidator;
 
 import org.apache.isis.commons.internal.base._Casts;
@@ -44,13 +41,9 @@ import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
@@ -78,15 +71,14 @@ import lombok.val;
  * </p>
  */
 public abstract class ScalarPanelTextFieldAbstract<T extends Serializable>
-extends ScalarPanelAbstract
+extends ScalarPanelWithFormFieldAbstract
 implements TextFieldValueModel.ScalarModelProvider {
 
     private static final long serialVersionUID = 1L;
 
     protected final Class<T> cls;
 
-    @Getter(value = AccessLevel.PROTECTED)
-    private AbstractTextComponent<T> textField;
+    private AbstractTextComponent<T> formField;
 
     @Getter(value = AccessLevel.PROTECTED)
     private TextFieldVariant textFieldVariant;
@@ -144,56 +136,32 @@ implements TextFieldValueModel.ScalarModelProvider {
     // --
 
     @Override
-    protected MarkupContainer createComponentForRegular() {
+    protected FormComponent<T> createFormComponent(final ScalarModel scalarModel) {
 
         // even though only one of textField and scalarValueEditInlineContainer will ever be visible,
         // am instantiating both to avoid NPEs
         // elsewhere can use Component#isVisibilityAllowed or ScalarModel.getEditStyle() to check which is visible.
 
-        textField = createTextField(ID_SCALAR_VALUE);
-        textField.setOutputMarkupId(true);
+        formField = createTextField(ID_SCALAR_VALUE);
+        formField.setOutputMarkupId(true);
 
-        addStandardSemantics();
-
-        //
-        // read-only/dialog edit
-        //
-
-        final MarkupContainer scalarIfRegularFormGroup = createScalarIfRegularFormGroup();
-        return scalarIfRegularFormGroup;
+        return formField;
     }
 
     @Override
-    protected Component getScalarValueComponent() {
-        return textField;
+    protected void onFormGroupCreated(final FormGroup formGroup) {
+        super.onFormGroupCreated(formGroup);
+        formGroup.add(createScalarValueContainer(ID_SCALAR_VALUE_CONTAINER));
+        setTextFieldSizeAndMaxLengthIfSpecified();
     }
 
-    protected MarkupContainer createScalarIfRegularFormGroup() {
-        Fragment textFieldFragment = createTextFieldFragment("scalarValueContainer");
-        final String name = getModel().getFriendlyName();
-        textField.setLabel(Model.of(name));
-
-        final FormGroup formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, this.textField);
-        textFieldFragment.add(this.textField);
-        formGroup.add(textFieldFragment);
-
-        final String labelCaption = getRendering().getLabelCaption(textField);
-        final Label scalarName = createScalarName(ID_SCALAR_NAME, labelCaption);
-
-        getModel()
-        .getDescribedAs()
-        .ifPresent(describedAs->Tooltips.addTooltip(scalarName, describedAs));
-
-        formGroup.add(scalarName);
-
-        return formGroup;
+    protected Component createScalarValueContainer(final String id) {
+        final Fragment textFieldFragment = new Fragment(id, getTextFieldFragmentId(), this);
+        textFieldFragment.add(getFormComponent());
+        return textFieldFragment;
     }
 
-    private Fragment createTextFieldFragment(final String id) {
-        return new Fragment(id, createTextFieldFragmentId(), this);
-    }
-
-    protected String createTextFieldFragmentId() {
+    protected String getTextFieldFragmentId() {
         return getTextFieldVariant().isSingleLine()
                 ? "text"
                 : "textarea";
@@ -235,13 +203,9 @@ implements TextFieldValueModel.ScalarModelProvider {
         }
     }
 
-    protected void addStandardSemantics() {
-        textField.setRequired(getModel().isRequired());
-        setTextFieldSizeAndMaxLengthIfSpecified();
-        addValidatorForIsisValidation();
-    }
-
     private void setTextFieldSizeAndMaxLengthIfSpecified() {
+
+        val formComponent = getFormComponent();
 
         final Integer maxLength = getMaxLengthOf(getModel());
         Integer typicalLength = getTypicalLenghtOf(getModel());
@@ -252,45 +216,15 @@ implements TextFieldValueModel.ScalarModelProvider {
         }
 
         if (typicalLength != null) {
-            textField.add(new AttributeModifier("size", Model.of("" + typicalLength)));
+            formComponent.add(new AttributeModifier("size", Model.of("" + typicalLength)));
         }
 
         if(maxLength != null) {
-            textField.add(new AttributeModifier("maxlength", Model.of("" + maxLength)));
+            formComponent.add(new AttributeModifier("maxlength", Model.of("" + maxLength)));
             if(cls.equals(String.class)) {
-                textField.add(StringValidator.maximumLength(maxLength));
+                formComponent.add(StringValidator.maximumLength(maxLength));
             }
         }
-    }
-
-    private void addValidatorForIsisValidation() {
-        val scalarModel = getModel();
-
-        textField.add(new IValidator<T>() {
-            private static final long serialVersionUID = 1L;
-            private transient IsisAppCommonContext commonContext;
-
-            @Override
-            public void validate(final IValidatable<T> validatable) {
-                final T proposedValue = validatable.getValue();
-                final ManagedObject proposedAdapter = objectManager().adapt(proposedValue);
-                final String reasonIfAny = scalarModel.validate(proposedAdapter);
-                if (reasonIfAny != null) {
-                    final ValidationError error = new ValidationError();
-                    error.setMessage(reasonIfAny);
-                    validatable.error(error);
-                }
-            }
-
-            private ObjectManager objectManager() {
-                return getCommonContext().getObjectManager();
-            }
-
-            private IsisAppCommonContext getCommonContext() {
-                return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
-            }
-
-        });
     }
 
     // --
@@ -309,7 +243,7 @@ implements TextFieldValueModel.ScalarModelProvider {
                 getCompactFragment(CompactType.SPAN),
                 ID_SCALAR_IF_COMPACT,
                 ()->{
-                    val scalarModel = getModel();
+                    val scalarModel = scalarModel();
                     return scalarModel.isCurrentValueAbsent()
                             ? ""
                             : scalarModel.proposedValue().getValueAsParsableText().getValue();
@@ -321,7 +255,7 @@ implements TextFieldValueModel.ScalarModelProvider {
         SPAN
     }
 
-    Fragment getCompactFragment(final CompactType type) {
+    protected Fragment getCompactFragment(final CompactType type) {
         switch (type) {
         case INPUT_CHECKBOX:
             return new Fragment(ID_SCALAR_IF_COMPACT, "compactAsInputCheckbox", ScalarPanelTextFieldAbstract.this);
@@ -336,12 +270,12 @@ implements TextFieldValueModel.ScalarModelProvider {
 
     @Override
     protected InlinePromptConfig getInlinePromptConfig() {
-        return InlinePromptConfig.supportedAndHide(textField);
+        return InlinePromptConfig.supportedAndHide(getFormComponent());
     }
 
     @Override
     protected IModel<String> obtainInlinePromptModel() {
-        IModel<T> model = textField.getModel();
+        IModel<?> model = getFormComponent().getModel();
         // must be "live", for ajax updates.
         return _Casts.uncheckedCast(model);
     }
@@ -378,10 +312,10 @@ implements TextFieldValueModel.ScalarModelProvider {
     protected void onInitializeNotEditable() {
         super.onInitializeNotEditable();
 
-        textField.setEnabled(false);
+        getFormComponent().setEnabled(false);
 
         if(getWicketViewerSettings().isReplaceDisabledTagWithReadonlyTag()) {
-            Wkt.behaviorAddReplaceDisabledTagWithReadonlyTag(textField);
+            Wkt.behaviorAddReplaceDisabledTagWithReadonlyTag(getFormComponent());
         }
 
         clearTooltip();
@@ -391,10 +325,10 @@ implements TextFieldValueModel.ScalarModelProvider {
     protected void onInitializeReadonly(final String disableReason) {
         super.onInitializeReadonly(disableReason);
 
-        textField.setEnabled(false);
+        getFormComponent().setEnabled(false);
 
         if(getWicketViewerSettings().isReplaceDisabledTagWithReadonlyTag()) {
-            Wkt.behaviorAddReplaceDisabledTagWithReadonlyTag(textField);
+            Wkt.behaviorAddReplaceDisabledTagWithReadonlyTag(getFormComponent());
         }
 
         inlinePromptLink.setEnabled(false);
@@ -405,40 +339,40 @@ implements TextFieldValueModel.ScalarModelProvider {
     @Override
     protected void onInitializeEditable() {
         super.onInitializeEditable();
-        textField.setEnabled(true);
+        getFormComponent().setEnabled(true);
         inlinePromptLink.setEnabled(true);
         clearTooltip();
     }
 
     @Override
     protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
-        textField.setEnabled(false);
+        getFormComponent().setEnabled(false);
         inlinePromptLink.setEnabled(false);
         setTooltip(disableReason);
         target.ifPresent(ajax->{
-            ajax.add(textField);
+            ajax.add(getFormComponent());
             ajax.add(inlinePromptLink);
         });
     }
 
     @Override
     protected void onEditable(final Optional<AjaxRequestTarget> target) {
-        textField.setEnabled(true);
+        getFormComponent().setEnabled(true);
         inlinePromptLink.setEnabled(true);
         clearTooltip();
         target.ifPresent(ajax->{
-            ajax.add(textField);
+            ajax.add(getFormComponent());
             ajax.add(inlinePromptLink);
         });
     }
 
     private void setTooltip(final String tooltip) {
-        Tooltips.addTooltip(textField, tooltip);
+        Tooltips.addTooltip(getFormComponent(), tooltip);
         Tooltips.addTooltip(inlinePromptLink, tooltip);
     }
 
     private void clearTooltip() {
-        Tooltips.clearTooltip(textField);
+        Tooltips.clearTooltip(getFormComponent());
         Tooltips.clearTooltip(inlinePromptLink);
     }
 
