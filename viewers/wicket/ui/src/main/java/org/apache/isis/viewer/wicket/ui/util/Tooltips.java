@@ -28,7 +28,6 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipUiModel;
 import org.apache.isis.viewer.wicket.ui.util.ExtendedPopoverConfig.PopoverBoundary;
 
-import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
@@ -54,9 +53,11 @@ public class Tooltips {
      * @param tooltipUiModel
      */
     public static void addTooltip(
-            final @NonNull Component target,
+            final @Nullable Component target,
             final @Nullable TooltipUiModel tooltipUiModel) {
-        if(tooltipUiModel==null || _Strings.isEmpty(tooltipUiModel.getBody())) {
+        if(target ==null
+                || tooltipUiModel==null
+                || _Strings.isEmpty(tooltipUiModel.getBody())) {
             return; // no body so don't render
         }
 
@@ -71,7 +72,10 @@ public class Tooltips {
         target.add(tooltipBehavior);
     }
 
-    public static void clearTooltip(final Component target) {
+    public static void clearTooltip(final @Nullable Component target) {
+        if(target==null) {
+            return;
+        }
         target.getBehaviors(PopoverBehavior.class)
         .forEach(target::remove);
     }
@@ -80,13 +84,13 @@ public class Tooltips {
 
     //sonar-ignore-on ... fails to interpret _Strings.isEmpty as null guard
 
-    public static void addTooltip(@NonNull final Component target, @Nullable final String body) {
+    public static void addTooltip(final @Nullable Component target, @Nullable final String body) {
         addTooltip(target, _Strings.isEmpty(body)
                 ? null
                 : TooltipUiModel.ofBody(body));
     }
 
-    public static void addTooltip(@NonNull final Component target, @Nullable final String label, @Nullable final String body) {
+    public static void addTooltip(final @Nullable Component target, @Nullable final String label, @Nullable final String body) {
         addTooltip(target, _Strings.isEmpty(body)
                 ? null
                 : TooltipUiModel.of(label, body));

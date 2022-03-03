@@ -162,7 +162,10 @@ public class Wkt {
         return add(markupContainer, behaviorFireOnEscapeKey(onRespond));
     }
 
-    public void behaviorAddReplaceDisabledTagWithReadonlyTag(final Component component) {
+    public void behaviorAddReplaceDisabledTagWithReadonlyTag(final @Nullable Component component) {
+        if(component==null) {
+            return;
+        }
         if (component.getBehaviors(ReplaceDisabledTagWithReadonlyTagBehavior.class).isEmpty()) {
             component.add(new ReplaceDisabledTagWithReadonlyTagBehavior());
         }
