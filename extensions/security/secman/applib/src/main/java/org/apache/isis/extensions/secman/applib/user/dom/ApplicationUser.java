@@ -392,13 +392,15 @@ public abstract class ApplicationUser
 
     @Property(
             domainEvent = UserLocale.DomainEvent.class,
-            editing = Editing.DISABLED //  edit via update button
+            editing = Editing.DISABLED, //  edit via update button
+            maxLength = UserLocale.MAX_LENGTH
     )
     @PropertyLayout(
             fieldSetId = "regional"
     )
     @Parameter(
-            optionality = Optionality.OPTIONAL
+            optionality = Optionality.OPTIONAL,
+            maxLength = UserLocale.MAX_LENGTH
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
