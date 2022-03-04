@@ -18,6 +18,7 @@
  */
 package org.apache.isis.client.kroviz.handler
 
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.apache.isis.client.kroviz.core.aggregator.CollectionAggregator
 import org.apache.isis.client.kroviz.to.ResultList
@@ -32,7 +33,7 @@ class ResultListHandler : BaseHandler() {
 
 
     override fun parse(response: String): TransferObject {
-        return Json.decodeFromString(ResultList.serializer(), response)
+        return Json.decodeFromString<ResultList>(response)
     }
 
 }

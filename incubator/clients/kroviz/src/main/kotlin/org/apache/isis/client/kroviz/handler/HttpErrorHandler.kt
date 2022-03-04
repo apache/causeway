@@ -18,6 +18,7 @@
  */
 package org.apache.isis.client.kroviz.handler
 
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.apache.isis.client.kroviz.core.aggregator.ErrorDispatcher
 import org.apache.isis.client.kroviz.to.HttpError
@@ -31,6 +32,7 @@ class HttpErrorHandler : BaseHandler() {
     }
 
     override fun parse(response: String): TransferObject {
-        return Json.decodeFromString(HttpError.serializer(), response)
+        return Json.decodeFromString<HttpError>(response)
     }
+
 }

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.client.kroviz.handler
 
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.apache.isis.client.kroviz.core.aggregator.DomainTypesAggregator
 import org.apache.isis.client.kroviz.to.DomainTypes
@@ -27,7 +28,7 @@ import org.apache.isis.client.kroviz.ui.core.ViewManager
 class DomainTypesHandler : BaseHandler() {
 
     override fun parse(response: String): TransferObject {
-        return Json.decodeFromString(DomainTypes.serializer(), response)
+        return Json.decodeFromString<DomainTypes>(response)
     }
 
     override fun doHandle() {

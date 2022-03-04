@@ -19,65 +19,106 @@
 package org.apache.isis.client.kroviz.ui.panel
 
 import io.kvision.chart.*
+import io.kvision.chart.js.LegendItem
 import io.kvision.core.Color
+import io.kvision.core.CssSize
+import io.kvision.core.UNIT
 import io.kvision.panel.SimplePanel
 import io.kvision.utils.obj
-import io.kvision.utils.pc
-import io.kvision.utils.px
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.ui.core.SessionManager
+import kotlin.math.pow
 
 class EventBubbleChart() : SimplePanel() {
     private val model = SessionManager.getEventStore()
     private val logStart = model.getLogStartMilliSeconds()
 
     init {
-        this.marginTop = 10.px
-        this.width = 100.pc
+        width = CssSize(90, UNIT.vw)
         buildChart()
     }
 
     private fun buildChart(): Chart {
         return chart(
-            Configuration(
-                ChartType.BUBBLE,
-                listOf(buildDataSets()),
-                options = ChartOptions(
-                    plugins = PluginsOptions(legend = LegendOptions(display = true)),
-                    showLine = true,
-                    scales = mapOf(
-                        "x" to ChartScales(title = ScaleTitleOptions(text = "Time since Connect (ms)", display = true)),
-                        "y" to ChartScales(title = ScaleTitleOptions(text = "duration (ms)", display = true))
-                    )
+            configuration = buildConfiguration(),
+        )
+    }
+
+    private fun buildConfiguration(): Configuration {
+        val dataSetsList = listOf(buildDataSets())
+        return Configuration(
+            type = ChartType.BUBBLE,
+            dataSets = dataSetsList,
+            labels = buildLabels(),
+            options = buildChartOptions(dataSetsList)
+        )
+    }
+
+    // https://stackoverflow.com/questions/45249779/chart-js-bubble-chart-changing-dataset-labels
+    private fun buildChartOptions(dataSetsList: List<DataSets>): ChartOptions {
+        val chartOptions = ChartOptions(
+            plugins = PluginsOptions(tooltip = TooltipOptions(callbacks = toolTipCallback())),
+            hover = InteractionOptions(),
+            showLine = true,
+            scales = mapOf(
+                "x" to ChartScales(title = ScaleTitleOptions(text = "Time since Connect (ms)", display = true)),
+                "y" to ChartScales(
+                    title = ScaleTitleOptions(text = "duration (ms)", display = true),
+                    type = ScalesType.LOGARITHMIC
                 )
+            )
+        )
+        return chartOptions
+    }
+
+    // https://www.youtube.com/watch?v=UxJ5d-HGhJA
+    // https://en.wikipedia.org/wiki/Clarke%27s_three_laws -> #2
+    // I would have appreciated a real API.
+    private fun toolTipCallback(): TooltipCallback {
+        return TooltipCallback(
+            title = js(
+                "function(context) {" +
+                        "var ctx = context[0];" +
+                        "var chart = ctx.chart;" +
+                        "var ccc = chart.config._config;" +
+                        "var data = ccc.data;" +
+                        "var i = ctx.dataIndex;" +
+                        "var label = data.labels[i];" +
+                        "return label;" +
+                        "}"
             )
         )
     }
 
     private fun buildDataSets(): DataSets {
-        val dataSets = DataSets(
-//            pointBorderColor = listOf(Color.name(Col.BLACK)),
+        return DataSets(
             backgroundColor = buildBgColorList(),
-            //listOf(Color.rgba(155, 187, 89, 196)), //9BBB59
-            data = buildData(),
+            label = "Prefix", //data is only prefixed with label - not replaced
+            data = buildData()
         )
+    }
+
+    /**
+     * The term DataSets is severely miss leading:
+     * 1. a plural form is used (where actually a singular would be more appropriate) -> "a DataSets"
+     */
+    private fun buildData(): List<DataSets> {
+        val dataSets = mutableListOf<DataSets>()
+        model.log.forEach {
+            dataSets.add(it.asData())
+        }
         return dataSets
     }
 
-    private fun buildData(): List<dynamic> {
-        return model.log.map {
-            it.asData()
-       }
-    }
-
-    private fun LogEntry.asData() : dynamic {
+    private fun LogEntry.asData(): dynamic {
         val relativeStartTimeMs = createdAt.getTime() - logStart
         val bubbleSize = calculateBubbleSize()
-        return obj {
+        val data = obj {
             x = relativeStartTimeMs
             y = duration
             r = bubbleSize
         }
+        return data
     }
 
     private fun buildBgColorList(): List<Color> {
@@ -86,51 +127,67 @@ class EventBubbleChart() : SimplePanel() {
             val c = it.calculateBubbleColor()
             bgColorList.add(c)
         }
-        console.log("[EBC.buildBgColorList]")
-        console.log(bgColorList)
         return bgColorList
     }
 
     private fun LogEntry.calculateBubbleColor(): Color {
-        val violet = Color.hex(0x8064A2)
-        val red = Color.hex(0xC0504D)
-        val yellow = Color.hex(0xF79646)
-        val green = Color.hex(0x9BBB59)
-        val blue = Color.hex(0x4F81BD)
+        val violet = Color.rgba(0x80, 0x64, 0xA2, 0x80)
+        val redViolet = Color.rgba(0xA0, 0x5A, 0x78, 0x80)
+        val red = Color.rgba(0xC0, 0x50, 0x4D, 0x80)
+        val yellow = Color.rgba(0xF7, 0x96, 0x46, 0x80)
+        val green = Color.rgba(0x9B, 0xBB, 0x59, 0x80)
+        val lightBlue = Color.rgba(0x4B, 0xAC, 0xC6, 0x80)
+        val darkBlue = Color.rgba(0x4F, 0x81, 0xBD, 0x80)
 
-        val i = responseLength
+        val i = runningAtStart
         return when {
-            (i >= 0) && (i <= 1024) -> blue
-            (i > 1024) && (i <= 2048) -> green
-            (i > 2048) && (i <= 4096) -> yellow
-            (i > 4096) && (i <= 8192) -> red
+            (i >= 0) && (i <= 4) -> lightBlue
+            (i > 4) && (i <= 8) -> darkBlue
+            (i > 8) && (i <= 16) -> green
+            (i > 16) && (i <= 32) -> yellow
+            (i > 32) && (i <= 64) -> red
+            (i > 64) && (i <= 128) -> redViolet
             else -> violet
         }
     }
 
     private fun LogEntry.calculateBubbleSize(): Int {
-        val i = runningAtStart
-        return when {
-            (i >= 0) && (i <= 10) -> 2
-            (i > 10) && (i <= 20) -> 4
-            (i > 20) && (i <= 40) -> 8
-            (i > 40) && (i <= 80) -> 16
-            (i > 80) && (i <= 160) -> 32
-            else -> 64
-        }
+        val i = responseLength
+        return i.toDouble().pow(1 / 3.toDouble()).toInt()
     }
 
-    private fun buildLabels() {}
-    private fun buildLegend() {}
+    private fun buildLabels(): List<String> {
+        val labelList = mutableListOf<String>()
+        model.log.forEachIndexed { i, it ->
+            val l = it.toLabel(i)
+            labelList.add(l)
+        }
+        console.log("[EBC.buildLabels]")
+        console.log(labelList)
+        return labelList
+    }
 
-    fun LogEntry.toLabel(index: Int): String {
+    private fun LogEntry.toLabel(index: Int): String {
         val relativeStartTime = ((this.createdAt.getTime() - logStart) / 1000).toString()
         val sec_1 = relativeStartTime.substring(0, relativeStartTime.length - 2)
         return index.toString() + "\n" +
                 sec_1 + "\n" +
                 this.title + "\n" +
                 "start: " + this.createdAt.toISOString() + "\n" +
-                "rsp.len: " + this.responseLength
+                "rsp.len: " + this.responseLength + "\n" +
+                "parallel runs: " + this.runningAtStart
+    }
+
+    private fun buildLegendLabelOptions(): LegendLabelOptions {
+        val legend = LegendLabelOptions()
+        legend.generateLabels?.invoke() {
+
+        }
+        return legend
+    }
+
+    private fun generateLabels(): List<LegendItem> {
+        return mutableListOf<LegendItem>()
     }
 
 }

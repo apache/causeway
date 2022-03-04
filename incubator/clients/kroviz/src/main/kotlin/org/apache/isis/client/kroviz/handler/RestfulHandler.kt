@@ -18,6 +18,7 @@
  */
 package org.apache.isis.client.kroviz.handler
 
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.apache.isis.client.kroviz.core.aggregator.RestfulDispatcher
 import org.apache.isis.client.kroviz.to.Restful
@@ -31,7 +32,7 @@ class RestfulHandler : BaseHandler() {
     }
 
     override fun parse(response: String): TransferObject {
-        return Json.decodeFromString(Restful.serializer(), response)
+        return Json.decodeFromString<Restful>(response)
     }
 
 }
