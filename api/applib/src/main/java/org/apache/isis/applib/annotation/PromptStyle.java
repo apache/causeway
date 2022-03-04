@@ -42,7 +42,7 @@ public enum PromptStyle {
      * <p>
      *     This will be either modal dialog (same as if {@link #DIALOG_MODAL} was selected) or sidebar (same as if
      *     {@link #DIALOG_SIDEBAR} was selected) depending on the value of the
-     *     <code>isis.viweer.wicket.dialogMode</code> configuration property.
+     *     <code>isis.viewer.wicket.dialogMode</code> configuration property.
      * </p>
      */
     DIALOG,

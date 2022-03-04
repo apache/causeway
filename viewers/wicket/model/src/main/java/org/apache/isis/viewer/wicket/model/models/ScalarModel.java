@@ -48,6 +48,7 @@ import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.val;
 
 /**
  * Represents a scalar of an entity, either a {@link EitherParamOrProp#PROPERTY property} or
@@ -233,24 +234,33 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     @Override
     public final PromptStyle getPromptStyle() {
+        val promptStyle = getPromptStyleOrElse(PromptStyle.INLINE);
+        if(promptStyle.isInlineOrInlineAsIfEdit()
+                && !canEnterEditMode()) {
+            return PromptStyle.DIALOG;
+        }
+        return promptStyle;
+    }
+
+    private final PromptStyle getPromptStyleOrElse(final PromptStyle fallback) {
         final PromptStyleFacet facet = getFacet(PromptStyleFacet.class);
         if(facet == null) {
             // don't think this can happen actually, see PromptStyleFacetFallback
-            return PromptStyle.INLINE;
+            return fallback;
         }
-        PromptStyle promptStyle = facet.value();
+        val promptStyle = facet.value();
         if (promptStyle == PromptStyle.AS_CONFIGURED) {
             // I don't think this can happen, actually...
             // when the metamodel is built, it should replace AS_CONFIGURED with one of the other prompts
             // (see PromptStyleConfiguration and PromptStyleFacetFallback)
-            return PromptStyle.INLINE;
+            return fallback;
         }
         return promptStyle;
     }
 
     public boolean canEnterEditMode() {
-        boolean editable = isEnabled();
-        return editable && isViewMode();
+        return isEnabled()
+                && isViewMode();
     }
 
     public boolean isEnabled() {

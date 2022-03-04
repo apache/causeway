@@ -54,7 +54,6 @@ import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
-import org.apache.isis.viewer.wicket.model.models.HasScalarModel;
 import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
@@ -85,7 +84,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
 
 public abstract class ScalarPanelAbstract
 extends PanelAbstract<ManagedObject, ScalarModel>
-implements ScalarModelSubscriber, HasScalarModel {
+implements ScalarModelSubscriber {
 
     private static final long serialVersionUID = 1L;
 
@@ -209,7 +208,7 @@ implements ScalarModelSubscriber, HasScalarModel {
     /**
      * Identical to super.getModel()
      */
-    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    @Getter @Accessors(fluent = true)
     private final ScalarModel scalarModel;
 
     // -- COMPACT
