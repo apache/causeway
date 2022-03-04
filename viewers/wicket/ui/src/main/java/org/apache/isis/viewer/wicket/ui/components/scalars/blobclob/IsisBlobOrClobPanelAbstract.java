@@ -153,16 +153,12 @@ extends ScalarPanelWithFormFieldAbstract<T> {
 
     @Override
     protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
-        updateRegularFormComponents(
-                ScalarRenderMode.VIEWING,
-                disableReason, target);
+        updateRegularFormComponents(ScalarRenderMode.VIEWING, disableReason, target);
     }
 
     @Override
     protected void onEditable(final Optional<AjaxRequestTarget> target) {
-        updateRegularFormComponents(
-                ScalarRenderMode.VIEWING,
-                null, target);
+        updateRegularFormComponents(ScalarRenderMode.VIEWING, null, target);
     }
 
     @SuppressWarnings("unchecked")
@@ -194,7 +190,7 @@ extends ScalarPanelWithFormFieldAbstract<T> {
         addAcceptFilterTo(scalarValueComponent);
         fileNameLabel = createFileNameLabel(ID_FILE_NAME, formComponent);
 
-        updateClearLink(editingWidgetVisibility, target);
+        createClearLink(editingWidgetVisibility, target);
 
         // the visibility of download link is intentionally 'backwards';
         // if in edit mode then do NOT show
@@ -250,7 +246,7 @@ extends ScalarPanelWithFormFieldAbstract<T> {
         return fileNameLabel;
     }
 
-    private void updateClearLink(
+    private void createClearLink(
             final ScalarRenderMode renderMode,
             final Optional<AjaxRequestTarget> target) {
 
