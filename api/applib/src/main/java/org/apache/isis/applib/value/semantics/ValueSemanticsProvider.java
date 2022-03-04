@@ -137,4 +137,8 @@ public interface ValueSemanticsProvider<T> {
                 || getSchemaValueType().name().contains("TIME");
     }
 
+    default boolean isCompositeType() {
+        return getSchemaValueType()==ValueType.COMPOSITE;
+    }
+
 }

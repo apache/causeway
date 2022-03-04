@@ -63,6 +63,7 @@ import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPane
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithComposite;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithTemporalPicker;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
 import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisBlobPanelFactory;
@@ -295,6 +296,10 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
             return createScalarPanelUsingTemporalPicker(valueSemantics.getCorrespondingClass());
         }
 
+        if(valueSemantics.isCompositeType()) {
+            return createScalarPanelForComposite(valueSemantics.getCorrespondingClass());
+        }
+
         return createScalarPanelUsingTextField(valueSemantics.getCorrespondingClass());
     }
 
@@ -351,6 +356,26 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
             @Override
             public Component createComponent(final String id, final ScalarModel scalarModel) {
                 return new ScalarPanelTextFieldWithTemporalPicker<T>(id, scalarModel, valueTypeClass);
+            }
+
+        };
+    }
+
+    public static <T extends Serializable> ComponentFactoryScalarAbstract
+    createScalarPanelForComposite(final Class<T> valueTypeClass) {
+
+        // assuming there is no primitive temporal type
+        val valueTypeClasses = Can.<Class<?>>ofSingleton(valueTypeClass);
+
+        return new ComponentFactoryScalarAbstract(
+                ScalarPanelTextFieldWithComposite.class,
+                valueTypeClasses) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Component createComponent(final String id, final ScalarModel scalarModel) {
+                return new ScalarPanelTextFieldWithComposite<T>(id, scalarModel, valueTypeClass);
             }
 
         };

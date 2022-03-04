@@ -369,8 +369,7 @@ implements ScalarModelSubscriber {
 
             val componentToHideRef = _Refs.<Component>objectRef(inlinePromptLink);
 
-            if (scalarModel.getPromptStyle().isInline()
-                    && scalarModel.canEnterEditMode()) {
+            if (scalarModel.getPromptStyle().isInline()) {
 
                 // we configure the prompt link if _this_ property is configured for inline edits...
                 Wkt.behaviorAddOnClick(inlinePromptLink, this::onPropertyInlineEditClick);
