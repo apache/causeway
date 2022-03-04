@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.wicket.model.ChainingModel;
+import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.commons.collections.Can;
@@ -135,6 +136,10 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
             return ManagedObject.empty(proposedValue().getElementType());
         }
         return proposedValue().getValue().getValue();
+    }
+
+    public <T> IModel<T> unwrapped(final Class<T> type) {
+        return new ScalarUnwrappingModel<T>(type, this);
     }
 
     /**
@@ -348,7 +353,5 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         // was used to state that pending value is in sync with current value
         //getPendingPropertyModel().getValue().setValue(null);
     }
-
-
 
 }

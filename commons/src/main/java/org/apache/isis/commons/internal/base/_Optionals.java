@@ -43,7 +43,6 @@ public class _Optionals {
         return orNullable(orNullable(a, b), c);
     }
 
-
     public <T> OptionalInt toInt(
             final Optional<T> optional,
             final ToIntFunction<? super T> mapper) {

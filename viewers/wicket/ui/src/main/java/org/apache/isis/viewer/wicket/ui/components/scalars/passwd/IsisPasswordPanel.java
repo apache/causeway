@@ -40,7 +40,7 @@ extends ScalarPanelTextFieldWithValueSemantics<Password> {
     @Override
     protected AbstractTextComponent<Password> createTextField(final String id) {
         return Wkt.passwordFieldWithConverter(
-                id, newTextFieldValueModel(), type, getConverter(getModel()));
+                id, unwrappedModel(), type, getConverter(scalarModel()));
     }
 
 }

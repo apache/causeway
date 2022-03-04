@@ -48,7 +48,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
     @Override
     protected final TextField<T> createTextField(final String id) {
         return new TextFieldWithDateTimePicker<T>(
-                super.getCommonContext(), id, newTextFieldValueModel(), type, getConverter(scalarModel()));
+                super.getCommonContext(), id, unwrappedModel(), type, getConverter(scalarModel()));
     }
 
 

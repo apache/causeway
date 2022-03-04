@@ -47,6 +47,7 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.OddEvenItem;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.validation.IValidationError;
@@ -89,6 +90,24 @@ public class Wkt {
 
     public <T extends Behavior> T add(final MarkupContainer container, final T component) {
         container.add((Behavior)component);
+        return component;
+    }
+
+    // -- ATTRIBUTES
+
+    /**
+     * If any argument is null or empty, does nothing.
+     */
+    public <T extends Component> T attributeAppend(
+            final @Nullable T component,
+            final @Nullable String attributeName,
+            final @Nullable String attributeValue) {
+        if(component==null
+                || _Strings.isEmpty(attributeName)
+                || _Strings.isEmpty(attributeValue)) {
+            return component;
+        }
+        component.add(new AttributeModifier(attributeName, attributeValue));
         return component;
     }
 
@@ -371,6 +390,12 @@ public class Wkt {
         return _Strings.isNullOrEmpty(trimmed)
                 ? null
                 : cssClass.replaceAll("\\.", "-").replaceAll("[^A-Za-z0-9- ]", "").replaceAll("\\s+", "-");
+    }
+
+    // -- DOWNLOAD (RESOURCE LINK)
+
+    public ResourceLinkVolatile downloadLinkNoCache(final String id, final IResource resourceModel) {
+        return new ResourceLinkVolatile(id, resourceModel);
     }
 
     // -- FRAGMENT
@@ -708,5 +733,6 @@ public class Wkt {
             component.add(new AttributeAppender("tabindex", "-1"));
         }
     }
+
 
 }

@@ -16,12 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars;
+package org.apache.isis.viewer.wicket.model.models;
 
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import java.io.Serializable;
 
 @FunctionalInterface
-public interface HasScalarModel {
+public interface HasScalarModel extends Serializable {
 
     ScalarModel scalarModel();
 

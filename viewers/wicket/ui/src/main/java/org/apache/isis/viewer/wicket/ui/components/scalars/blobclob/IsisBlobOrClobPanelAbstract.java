@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.blobclob;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -33,11 +32,12 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.IResource;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType;
+import org.apache.isis.core.metamodel.render.ScalarRenderMode;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelWithFormFieldAbstract;
@@ -47,6 +47,9 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
+import static org.apache.isis.commons.internal.functions._Functions.peek;
+
+import lombok.NonNull;
 import lombok.val;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
@@ -63,15 +66,11 @@ extends ScalarPanelWithFormFieldAbstract<T> {
     private static final String ID_SCALAR_IF_COMPACT_DOWNLOAD = "scalarIfCompactDownload";
 
     private Image wicketImage;
-
     private FileUploadField fileUploadField;
     private Label fileNameLabel;
 
-    protected enum InputFieldVisibility {
-        VISIBLE, NOT_VISIBLE
-    }
-    protected enum InputFieldEditability{
-        EDITABLE, NOT_EDITABLE
+    protected IsisBlobOrClobPanelAbstract(final String id, final ScalarModel scalarModel, final Class<T> type) {
+        super(id, scalarModel, type);
     }
 
     // generic type mismatch; no issue as long as we don't use conversion
@@ -91,8 +90,8 @@ extends ScalarPanelWithFormFieldAbstract<T> {
         } else {
             Components.permanentlyHide(formGroup, ID_IMAGE);
         }
-        updateFileNameLabel(ID_FILE_NAME, formGroup);
-        updateDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, formGroup);
+        createFileNameLabel(ID_FILE_NAME, formGroup);
+        createDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, formGroup);
     }
 
     // //////////////////////////////////////
@@ -104,7 +103,6 @@ extends ScalarPanelWithFormFieldAbstract<T> {
     protected InlinePromptConfig getInlinePromptConfig() {
         return InlinePromptConfig.notSupported();
     }
-
 
     // //////////////////////////////////////
 
@@ -120,7 +118,7 @@ extends ScalarPanelWithFormFieldAbstract<T> {
     @Override
     protected Component createComponentForCompact() {
         final MarkupContainer scalarIfCompact = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
-        updateDownloadLink(ID_SCALAR_IF_COMPACT_DOWNLOAD, scalarIfCompact);
+        createDownloadLink(ID_SCALAR_IF_COMPACT_DOWNLOAD, scalarIfCompact);
 //        if(downloadLink != null) {
 //            updateFileNameLabel(ID_FILE_NAME_IF_COMPACT, downloadLink);
 //            Components.permanentlyHide(downloadLink, ID_FILE_NAME_IF_COMPACT);
@@ -128,71 +126,27 @@ extends ScalarPanelWithFormFieldAbstract<T> {
         return scalarIfCompact;
     }
 
-
-    // //////////////////////////////////////
-
-    private Image asWicketImage(final String id) {
-
-        val adapter = getModel().getObject();
-        if(adapter == null) {
-            return null;
-        }
-
-        val object = adapter.getPojo();
-        if(!(object instanceof Blob)) {
-            return null;
-        }
-
-        val blob = (Blob)object;
-
-        return WicketImageUtil.asWicketImage(id, blob).orElse(null);
-    }
-
-
     // //////////////////////////////////////
 
     @Override
     protected void onInitializeNotEditable() {
-        updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.NOT_EDITABLE, null, Optional.empty());
+        updateRegularFormComponents(ScalarRenderMode.VIEWING, null, Optional.empty());
     }
 
     @Override
     protected void onInitializeReadonly(final String disableReason) {
-        updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.NOT_EDITABLE, null, Optional.empty());
+        updateRegularFormComponents(ScalarRenderMode.VIEWING, null, Optional.empty());
     }
 
     @Override
     protected void onInitializeEditable() {
-        updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.EDITABLE, null, Optional.empty());
+        updateRegularFormComponents(ScalarRenderMode.EDITING, null, Optional.empty());
     }
 
     private FileUploadField createFileUploadField(final String componentId) {
-        final BootstrapFileInputField fileUploadField = new BootstrapFileInputField(
-                componentId, new IModel<List<FileUpload>>() {
+        val fileUploadField = new BootstrapFileInputField(
+                componentId, fileUploadModel());
 
-                    private static final long serialVersionUID = 1L;
-
-                    @Override
-                    public void setObject(final List<FileUpload> fileUploads) {
-                        if (fileUploads == null || fileUploads.isEmpty()) {
-                            return;
-                        }
-
-                        val blob = getBlobOrClobFrom(fileUploads);
-                        val objectAdapter = scalarModel().getCommonContext().getObjectManager().adapt(blob);
-                        getModel().setObject(objectAdapter);
-                    }
-
-                    @Override
-                    public void detach() {
-                    }
-
-                    @Override
-                    public List<FileUpload> getObject() {
-                        return null;
-                    }
-
-                });
         fileUploadField.getConfig().showUpload(false).mainClass("input-group-sm");
         return fileUploadField;
     }
@@ -200,18 +154,16 @@ extends ScalarPanelWithFormFieldAbstract<T> {
     @Override
     protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
         updateRegularFormComponents(
-                InputFieldVisibility.VISIBLE, InputFieldEditability.NOT_EDITABLE,
+                ScalarRenderMode.VIEWING,
                 disableReason, target);
     }
 
     @Override
     protected void onEditable(final Optional<AjaxRequestTarget> target) {
         updateRegularFormComponents(
-                InputFieldVisibility.VISIBLE, InputFieldEditability.EDITABLE,
+                ScalarRenderMode.VIEWING,
                 null, target);
     }
-
-    protected abstract T getBlobOrClobFrom(final List<FileUpload> fileUploads);
 
     @SuppressWarnings("unchecked")
     private Optional<T> getBlobOrClob(final ScalarModel model) {
@@ -220,100 +172,74 @@ extends ScalarPanelWithFormFieldAbstract<T> {
         return Optional.ofNullable((T)pojo);
     }
 
-    protected IsisBlobOrClobPanelAbstract(final String id, final ScalarModel scalarModel, final Class<T> type) {
-        super(id, scalarModel, type);
-    }
+    protected abstract IModel<List<FileUpload>> fileUploadModel();
+    protected abstract IResource newResource(final T namedWithMimeType);
+
+    // -- HELPER
 
     private void updateRegularFormComponents(
-            final InputFieldVisibility visibility,
-            final InputFieldEditability editability,
+            final ScalarRenderMode renderMode,
             final String disabledReason,
             final Optional<AjaxRequestTarget> target) {
 
         final MarkupContainer formComponent = getComponentForRegular();
-        sync(formComponent, visibility, editability, disabledReason, target);
+        setRenderModeOn(formComponent, renderMode, disabledReason, target);
 
-        // sonar-ignore-on (detects potential NPE, which is a false positive here)
-        final Component component = formComponent.get(ID_SCALAR_VALUE);
-        // sonar-ignore-off
-        final InputFieldVisibility editingWidgetVisibility = editability == InputFieldEditability.EDITABLE
-                ? InputFieldVisibility.VISIBLE
-                : InputFieldVisibility.NOT_VISIBLE;
-        sync(component, editingWidgetVisibility, null, disabledReason, target);
+        final Component scalarValueComponent = formComponent.get(ID_SCALAR_VALUE);
+        final ScalarRenderMode editingWidgetVisibility = renderMode.isEditing()
+                ? ScalarRenderMode.EDITING
+                : ScalarRenderMode.HIDING;
+        setRenderModeOn(scalarValueComponent, editingWidgetVisibility, disabledReason, target);
 
-        addAcceptFilterTo(component);
-        fileNameLabel = updateFileNameLabel(ID_FILE_NAME, formComponent);
+        addAcceptFilterTo(scalarValueComponent);
+        fileNameLabel = createFileNameLabel(ID_FILE_NAME, formComponent);
 
-        updateClearLink(editingWidgetVisibility, null, target);
+        updateClearLink(editingWidgetVisibility, target);
 
         // the visibility of download link is intentionally 'backwards';
         // if in edit mode then do NOT show
-        final MarkupContainer downloadLink = updateDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, formComponent);
-        sync(downloadLink, visibility, editability, disabledReason, target);
+        final MarkupContainer downloadLink = createDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, formComponent);
+        setRenderModeOn(downloadLink, renderMode, disabledReason, target);
         // ditto any image
-        sync(wicketImage, visibility, editability, disabledReason, target);
+        setRenderModeOn(wicketImage, renderMode, disabledReason, target);
     }
 
-    private void sync(
-            final Component component,
-            final InputFieldVisibility visibility,
-            final InputFieldEditability editability,
-            final String disabledReason,
-            final Optional<AjaxRequestTarget> target) {
+    private void setRenderModeOn(
+            final @Nullable Component component,
+            final @NonNull  ScalarRenderMode renderMode,
+            final @Nullable String disabledReason,
+            final @NonNull  Optional<AjaxRequestTarget> target) {
 
-        if(component == null) {
-            return;
-        }
+        if(component==null) return;
+
         component.setOutputMarkupId(true); // enable ajax link
+        component.setVisible(renderMode.isVisible());
+        target.ifPresent(ajax->{
+            Components.addToAjaxRequest(ajax, component);
+        });
 
-        if(visibility != null) {
-            component.setVisible(visibility == InputFieldVisibility.VISIBLE);
-            target.ifPresent(ajax->{
-                Components.addToAjaxRequest(ajax, component);
-            });
+//        // dynamic disablement doesn't yet work, this exception is thrown when form is submitted:
+//        //
+//        // Caused by: java.lang.IllegalStateException: ServletRequest does not contain multipart content.
+//        // One possible solution is to explicitly call Form.setMultipart(true), Wicket tries its best to
+//        // auto-detect multipart forms but there are certain situation where it cannot.
+//
+//        component.setEnabled(editability == InputFieldEditability.EDITABLE);
+//
+//        final AttributeModifier title = new AttributeModifier("title", Model.of(disabledReason != null ? disabledReason : ""));
+//        component.add(title);
+//
+//        if (target != null) {
+//            target.add(component);
+//        }
 
-        }
-
-
-        if(editability != null) {
-
-            //            // dynamic disablement doesn't yet work, this exception is thrown when form is submitted:
-            //            //
-            //            // Caused by: java.lang.IllegalStateException: ServletRequest does not contain multipart content.
-            //            // One possible solution is to explicitly call Form.setMultipart(true), Wicket tries its best to
-            //            // auto-detect multipart forms but there are certain situation where it cannot.
-            //
-            //            component.setEnabled(editability == InputFieldEditability.EDITABLE);
-            //
-            //            final AttributeModifier title = new AttributeModifier("title", Model.of(disabledReason != null ? disabledReason : ""));
-            //            component.add(title);
-            //
-            //            if (target != null) {
-            //                target.add(component);
-            //            }
-
-        }
-    }
-
-    private String getAcceptFilter(){
-        return scalarModel().getFileAccept();
     }
 
     private void addAcceptFilterTo(final Component component){
-        final String filter = getAcceptFilter();
-        if(component==null || filter==null || filter.isEmpty())
-            return; // ignore
-        class AcceptAttributeModel extends Model<String> {
-            private static final long serialVersionUID = 1L;
-            @Override
-            public String getObject() {
-                return filter;
-            }
-        }
-        component.add(new AttributeModifier("accept", new AcceptAttributeModel()));
+        Wkt.attributeAppend(component, "accept", scalarModel().getFileAccept());
     }
 
-    private Label updateFileNameLabel(final String idFileName, final MarkupContainer formComponent) {
+    private Label createFileNameLabel(final String idFileName, final MarkupContainer formComponent) {
 
         val fileNameLabel = Wkt.labelAdd(formComponent, idFileName, ()->
             getBlobOrClobFromModel()
@@ -325,12 +251,10 @@ extends ScalarPanelWithFormFieldAbstract<T> {
     }
 
     private void updateClearLink(
-            final InputFieldVisibility visibility,
-            final InputFieldEditability editability,
+            final ScalarRenderMode renderMode,
             final Optional<AjaxRequestTarget> target) {
 
         final MarkupContainer formComponent = getComponentForRegular();
-        formComponent.setOutputMarkupId(true); // enable ajax link
 
         final AjaxLink<Void> ajaxLink = Wkt.linkAdd(formComponent, ID_SCALAR_IF_REGULAR_CLEAR, ajaxTarget->{
             setEnabled(false);
@@ -343,7 +267,7 @@ extends ScalarPanelWithFormFieldAbstract<T> {
 
         final Optional<T> blobOrClob = getBlobOrClobFromModel();
         final Component clearButton = formComponent.get(ID_SCALAR_IF_REGULAR_CLEAR);
-        clearButton.setVisible(blobOrClob.isPresent() && visibility == InputFieldVisibility.VISIBLE);
+        clearButton.setVisible(blobOrClob.isPresent() && renderMode.isVisible());
         clearButton.setEnabled(blobOrClob.isPresent());
 
         target.ifPresent(ajax->{
@@ -354,33 +278,27 @@ extends ScalarPanelWithFormFieldAbstract<T> {
 
     }
 
-    private MarkupContainer updateDownloadLink(final String downloadId, final MarkupContainer parent) {
-        val resourceLink = createResourceLink(downloadId);
-        if(resourceLink != null) {
-            parent.addOrReplace(resourceLink);
-            Tooltips.addTooltip(resourceLink, "download");
-        } else {
-            Components.permanentlyHide(parent, downloadId);
-        }
-        return resourceLink;
-    }
-
-    private ResourceLinkVolatile createResourceLink(final String id) {
+    private MarkupContainer createDownloadLink(final String id, final MarkupContainer parent) {
         return getBlobOrClobFromModel()
         .map(this::newResource)
-        .map(resource->new ResourceLinkVolatile(id, resource))
-        .orElse(null);
+        .map(resource->Wkt.downloadLinkNoCache(id, resource))
+        .map(peek(downloadLink->{
+            parent.addOrReplace(downloadLink);
+            Tooltips.addTooltip(downloadLink, "download");
+        }))
+        .orElseGet(()->{
+            Components.permanentlyHide(parent, id);
+            return null;
+        });
     }
 
     private Optional<T> getBlobOrClobFromModel() {
         return getBlobOrClob(getModel());
     }
 
-
-    /**
-     * Mandatory hook method.
-     */
-    protected abstract IResource newResource(final T namedWithMimeType);
-
+    private Image asWicketImage(final String id) {
+        val blob = scalarModel().unwrapped(Blob.class).getObject();
+        return WicketImageUtil.asWicketImage(id, blob).orElse(null);
+    }
 
 }

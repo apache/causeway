@@ -19,22 +19,23 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.blobclob;
 
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CharSequenceResource;
 import org.apache.wicket.request.resource.IResource;
 
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.viewer.wicket.model.models.FileUploadModels;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 /**
- * Panel for rendering scalars of type {@link Clob Isis' applib.Clob}.
+ * Panel for rendering scalars of type {@link Clob}.
  *
  * <p>
- *    TODO: for now, this only handles CLOBs encoded as UTF-8.
+ *    TODO: for now, this only handles {@link Clob}s encoded as UTF-8.
  *    One option might be to 'guess' the character encoding, eg akin to cpdetector?
  * </p>
  */
@@ -42,20 +43,13 @@ public class IsisClobPanel extends IsisBlobOrClobPanelAbstract<Clob> {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Charset CHARSET = StandardCharsets.UTF_8;
-
     public IsisClobPanel(final String id, final ScalarModel model) {
         super(id, model, Clob.class);
     }
 
     @Override
-    protected Clob getBlobOrClobFrom(final List<FileUpload> fileUploads) {
-        final FileUpload fileUpload = fileUploads.get(0);
-        final String contentType = fileUpload.getContentType();
-        final String clientFileName = fileUpload.getClientFileName();
-        final String str = new String(fileUpload.getBytes(), CHARSET);
-        final Clob blob = new Clob(clientFileName, contentType, str);
-        return blob;
+    protected IModel<List<FileUpload>> fileUploadModel() {
+        return FileUploadModels.clob(scalarModel(), StandardCharsets.UTF_8);
     }
 
     @Override

@@ -16,31 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars;
+package org.apache.isis.viewer.wicket.model.models;
 
-import java.io.Serializable;
-
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.ChainingModel;
-import org.apache.wicket.model.Model;
+import org.springframework.util.ClassUtils;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
+import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 
 /**
- * For custom {@link ScalarPanelTextFieldAbstract}s to use as the {@link Model}
- * of their {@link TextField} (as constructed in {@link ScalarPanelTextFieldAbstract#createTextField(String)}).
+ * Wraps and unwraps the contained value within {@link ManagedObject},
+ * as provided by a {@link ScalarModel}.
  */
-public class TextFieldValueModel<T extends Serializable>
+public class ScalarUnwrappingModel<T>
 extends ChainingModel<T> {
 
     private static final long serialVersionUID = 1L;
 
-    public TextFieldValueModel(final HasScalarModel scalarModelHolder) {
-        super(scalarModelHolder);
+    @Getter @NonNull private final Class<T> type;
+
+    public ScalarUnwrappingModel(
+            final @NonNull Class<T> type,
+            final @NonNull ScalarModel scalarModel) {
+        super(scalarModel);
+        this.type = type;
     }
 
     @Override
@@ -51,9 +55,7 @@ extends ChainingModel<T> {
 
     @Override
     public void setObject(final T object) {
-
         val scalarModel = scalarModel();
-
         if (object == null) {
             scalarModel.setObject(null);
         } else {
@@ -64,15 +66,18 @@ extends ChainingModel<T> {
 
     // -- HELPER
 
-    @SuppressWarnings("unchecked")
     private T unwrap(final ManagedObject objectAdapter) {
-        return (T) ManagedObjects.UnwrapUtil.single(objectAdapter);
+        val pojo = ManagedObjects.UnwrapUtil.single(objectAdapter);
+        if(pojo==null
+                || !ClassUtils.resolvePrimitiveIfNecessary(type)
+                        .isAssignableFrom(ClassUtils.resolvePrimitiveIfNecessary(pojo.getClass()))) {
+            return null;
+        }
+        return _Casts.uncheckedCast(pojo);
     }
 
     private ScalarModel scalarModel() {
-        return ((HasScalarModel) super.getTarget())
-                .scalarModel();
+        return (ScalarModel) super.getTarget();
     }
-
 
 }

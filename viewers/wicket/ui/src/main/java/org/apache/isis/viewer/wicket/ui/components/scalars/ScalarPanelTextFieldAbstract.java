@@ -112,13 +112,13 @@ extends ScalarPanelWithFormFieldAbstract<T> {
         val converter = getConverter(scalarModel());
         return getTextFieldVariant().isSingleLine()
                 ? Wkt.textFieldWithConverter(
-                        id, newTextFieldValueModel(), type, converter)
+                        id, unwrappedModel(), type, converter)
                 : setRowsAndMaxLengthAttributesOn(Wkt.textAreaWithConverter(
-                        id, newTextFieldValueModel(), type, converter));
+                        id, unwrappedModel(), type, converter));
     }
 
-    protected final TextFieldValueModel<T> newTextFieldValueModel() {
-        return new TextFieldValueModel<>(this);
+    protected final IModel<T> unwrappedModel() {
+        return scalarModel().unwrapped(type);
     }
 
     // --
