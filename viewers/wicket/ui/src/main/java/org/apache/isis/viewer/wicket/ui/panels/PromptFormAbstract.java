@@ -172,9 +172,11 @@ implements ScalarModelSubscriber {
             return;
         }
         final MarkupContainer parentContainer = this.parentPanel.getParent();
-        if (parentContainer != null) {
-            entityModel.setHint(getPage(), PageAbstract.UIHINT_FOCUS, parentContainer.getPageRelativePath());
+        if (parentContainer == null) {
+            return;
+
         }
+        entityModel.setHint(getPage(), PageAbstract.UIHINT_FOCUS, parentContainer.getPageRelativePath());
     }
 
     private UiHintContainer pageUiHintContainerIfAny() {

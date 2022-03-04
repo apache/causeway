@@ -288,7 +288,6 @@ implements ActionPromptProvider {
                 if(childComponent != null) {
                     markupId = childComponent.getMarkupId();
                 }
-
             }
         }
 

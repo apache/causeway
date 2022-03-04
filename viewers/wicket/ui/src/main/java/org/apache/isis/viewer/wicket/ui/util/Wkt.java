@@ -728,10 +728,11 @@ public class Wkt {
 
     // -- TABBING UTILITY
 
-    public static void noTabbing(final @Nullable Component component) {
+    public Component noTabbing(final @Nullable Component component) {
         if(component != null) {
             component.add(new AttributeAppender("tabindex", "-1"));
         }
+        return component;
     }
 
 

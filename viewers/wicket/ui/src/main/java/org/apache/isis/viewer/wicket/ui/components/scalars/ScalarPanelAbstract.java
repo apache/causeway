@@ -76,6 +76,7 @@ import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.Accessors;
 
@@ -118,9 +119,11 @@ implements ScalarModelSubscriber, HasScalarModel {
         NOTHING
     }
 
+    @RequiredArgsConstructor
     public static class InlinePromptConfig {
-        private final boolean supported;
-        private final Component componentToHideIfAny;
+        @Getter private final boolean supported;
+        @Getter private final Component componentToHideIfAny;
+        @Getter private final boolean useEditIconWithLink;
 
         public static InlinePromptConfig supported() {
             return new InlinePromptConfig(true, null);
@@ -137,14 +140,11 @@ implements ScalarModelSubscriber, HasScalarModel {
         private InlinePromptConfig(final boolean supported, final Component componentToHideIfAny) {
             this.supported = supported;
             this.componentToHideIfAny = componentToHideIfAny;
+            this.useEditIconWithLink = false;
         }
 
-        boolean isSupported() {
-            return supported;
-        }
-
-        Component getComponentToHideIfAny() {
-            return componentToHideIfAny;
+        public InlinePromptConfig withEditIcon() {
+            return new InlinePromptConfig(supported, componentToHideIfAny, true);
         }
     }
 
@@ -264,7 +264,7 @@ implements ScalarModelSubscriber, HasScalarModel {
     private void buildGuiAndCallHooks() {
         buildGui();
 
-        final ScalarModel scalarModel = getModel();
+        final ScalarModel scalarModel = scalarModel();
 
         final String disableReasonIfAny = scalarModel.disableReasonIfAny();
         final boolean mustBeEditable = scalarModel.mustBeEditable();
@@ -372,6 +372,7 @@ implements ScalarModelSubscriber, HasScalarModel {
 
             if (scalarModel.getPromptStyle().isInline()
                     && scalarModel.canEnterEditMode()) {
+
                 // we configure the prompt link if _this_ property is configured for inline edits...
                 Wkt.behaviorAddOnClick(inlinePromptLink, this::onPropertyInlineEditClick);
                 componentToHideRef.setValue(inlinePromptConfig.getComponentToHideIfAny());
@@ -398,6 +399,11 @@ implements ScalarModelSubscriber, HasScalarModel {
             .ifPresent(componentToHide->componentToHide.setVisibilityAllowed(false));
         }
 
+        addEditPropertyIf(
+                scalarModel.canEnterEditMode()
+                && (scalarModel.getPromptStyle().isDialog()
+                        || !inlinePromptConfig.isSupported()));
+
         // prevent from tabbing into non-editable widgets.
         if(scalarModel.isProperty()
                 && scalarModel.getMode() == ScalarRepresentation.VIEWING
@@ -407,7 +413,6 @@ implements ScalarModelSubscriber, HasScalarModel {
             Wkt.noTabbing(getValidationFeedbackReceiver());
         }
 
-        addEditProperty();
         addCssFromMetaModel();
 
         notifyOnChange(this);
@@ -682,18 +687,17 @@ implements ScalarModelSubscriber, HasScalarModel {
             final AjaxRequestTarget target) {
     }
 
-    // ///////////////////////////////////////////////////////////////////
+    // -- EDIT PROPERTY ICON
 
-    protected void addEditProperty() {
-
-        if(scalarModel.canEnterEditMode() &&
-                (scalarModel.getPromptStyle().isDialog() ||
-                        !getInlinePromptConfig().isSupported())) {
+    protected WebMarkupContainer addEditPropertyIf(final boolean condition) {
+        if(condition) {
             val editProperty = Wkt.containerAdd(componentIfRegular, ID_EDIT_PROPERTY);
             Wkt.behaviorAddOnClick(editProperty, this::onPropertyEditClick);
             Tooltips.addTooltip(editProperty, "edit");
+            return editProperty;
         } else {
             Components.permanentlyHide(componentIfRegular, ID_EDIT_PROPERTY);
+            return null;
         }
     }
 

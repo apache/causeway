@@ -38,7 +38,6 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType;
 import org.apache.isis.core.metamodel.render.ScalarRenderMode;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelWithFormFieldAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.image.WicketImageUtil;
@@ -68,9 +67,11 @@ extends ScalarPanelWithFormFieldAbstract<T> {
     private Image wicketImage;
     private FileUploadField fileUploadField;
     private Label fileNameLabel;
+    private IModel<T> unwrapped;
 
     protected IsisBlobOrClobPanelAbstract(final String id, final ScalarModel scalarModel, final Class<T> type) {
         super(id, scalarModel, type);
+        this.unwrapped = scalarModel.unwrapped(type);
     }
 
     // generic type mismatch; no issue as long as we don't use conversion
@@ -144,9 +145,7 @@ extends ScalarPanelWithFormFieldAbstract<T> {
     }
 
     private FileUploadField createFileUploadField(final String componentId) {
-        val fileUploadField = new BootstrapFileInputField(
-                componentId, fileUploadModel());
-
+        val fileUploadField = new BootstrapFileInputField(componentId, fileUploadModel());
         fileUploadField.getConfig().showUpload(false).mainClass("input-group-sm");
         return fileUploadField;
     }
@@ -159,13 +158,6 @@ extends ScalarPanelWithFormFieldAbstract<T> {
     @Override
     protected void onEditable(final Optional<AjaxRequestTarget> target) {
         updateRegularFormComponents(ScalarRenderMode.VIEWING, null, target);
-    }
-
-    @SuppressWarnings("unchecked")
-    private Optional<T> getBlobOrClob(final ScalarModel model) {
-        val adapter = model.getObject();
-        val pojo = ManagedObjects.UnwrapUtil.single(adapter);
-        return Optional.ofNullable((T)pojo);
     }
 
     protected abstract IModel<List<FileUpload>> fileUploadModel();
@@ -236,7 +228,6 @@ extends ScalarPanelWithFormFieldAbstract<T> {
     }
 
     private Label createFileNameLabel(final String idFileName, final MarkupContainer formComponent) {
-
         val fileNameLabel = Wkt.labelAdd(formComponent, idFileName, ()->
             getBlobOrClobFromModel()
             .map(NamedWithMimeType::getName)
@@ -271,7 +262,6 @@ extends ScalarPanelWithFormFieldAbstract<T> {
             ajax.add(clearButton);
             ajax.add(ajaxLink);
         });
-
     }
 
     private MarkupContainer createDownloadLink(final String id, final MarkupContainer parent) {
@@ -289,7 +279,7 @@ extends ScalarPanelWithFormFieldAbstract<T> {
     }
 
     private Optional<T> getBlobOrClobFromModel() {
-        return getBlobOrClob(getModel());
+        return Optional.ofNullable(unwrapped.getObject());
     }
 
     private Image asWicketImage(final String id) {

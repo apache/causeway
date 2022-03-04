@@ -57,6 +57,11 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
     }
 
     @Override
+    protected InlinePromptConfig getInlinePromptConfig() {
+        return super.getInlinePromptConfig().withEditIcon();
+    }
+
+    @Override
     protected Component createComponentForCompact() {
         return createMarkupComponent(ID_SCALAR_IF_COMPACT);
     }

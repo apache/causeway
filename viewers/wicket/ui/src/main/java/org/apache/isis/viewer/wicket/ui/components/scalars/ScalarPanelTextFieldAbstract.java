@@ -25,6 +25,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -44,6 +45,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.AccessLevel;
@@ -170,6 +172,14 @@ extends ScalarPanelWithFormFieldAbstract<T> {
             final String id,
             final IModel<String> inlinePromptModel) {
 
+        if(getInlinePromptConfig().isUseEditIconWithLink()) {
+            val fragment = Wkt.fragmentAddNoTab(this, id, "editIconAsInlinePrompt");
+            val editPromptLink = new Button("scalarValue");
+            fragment.add(editPromptLink);
+            Tooltips.addTooltip(editPromptLink, "edit");
+            return fragment;
+        }
+
         switch(getTextFieldVariant()) {
         case SINGLE_LINE:{
             val fragment = Wkt.fragmentAddNoTab(this, id, "textInlinePrompt");
@@ -177,7 +187,7 @@ extends ScalarPanelWithFormFieldAbstract<T> {
             return fragment;
         }
         case MULTI_LINE:{
-            val fragment = new Fragment(id, "textareaInlinePrompt", this);
+            val fragment = Wkt.fragmentAddNoTab(this, id, "textareaInlinePrompt");
             val inlinePromptTextArea = Wkt.textAreaAddNoTab(fragment, "scalarValue", inlinePromptModel);
             setRowsAndMaxLengthAttributesOn(inlinePromptTextArea);
             return fragment;
