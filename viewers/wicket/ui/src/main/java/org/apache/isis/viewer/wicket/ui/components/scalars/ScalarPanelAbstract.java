@@ -331,14 +331,6 @@ implements ScalarModelSubscriber {
             scalarTypeContainer.addOrReplace(componentIfCompact, componentIfRegular,
                     scalarIfRegularInlinePromptForm = createInlinePromptForm());
 
-            // even if this particular scalarModel (property) is not configured for inline edits,
-            // it's possible that one of the associated actions is.  Thus we set the prompt context
-            scalarModel.setInlinePromptContext(
-                    new InlinePromptContext(
-                            scalarModel,
-                            scalarTypeContainer,
-                            getComponentForRegular(), scalarIfRegularInlinePromptForm));
-
             val associatedLinksAndLabels = associatedLinksAndLabels();
             addPositioningCssTo(componentIfRegular, associatedLinksAndLabels);
             addActionLinksBelowAndRight(componentIfRegular, associatedLinksAndLabels);
@@ -364,12 +356,21 @@ implements ScalarModelSubscriber {
             componentIfRegular
                 .add(inlinePromptLink = createInlinePromptLink());
 
+            // even if this particular scalarModel (property) is not configured for inline edits,
+            // it's possible that one of the associated actions is.  Thus we set the prompt context
+            scalarModel.setInlinePromptContext(
+                    new InlinePromptContext(
+                            scalarModel,
+                            scalarTypeContainer,
+                            componentIfRegular, scalarIfRegularInlinePromptForm));
+
             // start off assuming that neither the property nor any of the associated actions
             // are using inline prompts
 
             val componentToHideRef = _Refs.<Component>objectRef(inlinePromptLink);
 
-            if (scalarModel.getPromptStyle().isInline()) {
+            if (scalarModel.getPromptStyle().isInline()
+                    && scalarModel.canEnterEditMode()) {
 
                 // we configure the prompt link if _this_ property is configured for inline edits...
                 Wkt.behaviorAddOnClick(inlinePromptLink, this::onPropertyInlineEditClick);

@@ -234,12 +234,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     @Override
     public final PromptStyle getPromptStyle() {
-        val promptStyle = getPromptStyleOrElse(PromptStyle.INLINE);
-        if(promptStyle.isInlineOrInlineAsIfEdit()
-                && !canEnterEditMode()) {
-            return PromptStyle.DIALOG;
-        }
-        return promptStyle;
+        return getPromptStyleOrElse(PromptStyle.INLINE);
     }
 
     private final PromptStyle getPromptStyleOrElse(final PromptStyle fallback) {
