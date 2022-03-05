@@ -392,20 +392,17 @@ public abstract class ApplicationUser
 
     @Property(
             domainEvent = UserLocale.DomainEvent.class,
-            editing = Editing.DISABLED, //  edit via update button
-            maxLength = UserLocale.MAX_LENGTH
+            editing = Editing.DISABLED //  edit via update button
     )
     @PropertyLayout(
             fieldSetId = "regional"
     )
     @Parameter(
-            optionality = Optionality.OPTIONAL,
-            maxLength = UserLocale.MAX_LENGTH
+            optionality = Optionality.OPTIONAL
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface UserLocale {
-        int MAX_LENGTH = 120;
         class DomainEvent extends PropertyDomainEvent<Locale> {}
     }
 
