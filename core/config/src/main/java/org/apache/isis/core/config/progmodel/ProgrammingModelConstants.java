@@ -190,6 +190,14 @@ public final class ProgrammingModelConstants {
                             + "when using type '%s' as first argument",
                             mixinClass.getName(), mixinClass.getName())));
         }
+
+        // while this enum only has a single value, we just provide a (quasi) static method here
+        public <T> Can<Constructor<T>> getConstructors(final Class<T> candidateMixinType) {
+            val mixinContructors = _Reflect
+                    .getPublicConstructors(candidateMixinType)
+                    .filter(paramCount(1));
+            return _Casts.uncheckedCast(mixinContructors);
+        }
     }
 
     // -- LIFECYCLE CALLBACKS

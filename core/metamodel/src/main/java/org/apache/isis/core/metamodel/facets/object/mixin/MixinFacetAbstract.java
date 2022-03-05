@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 
+import lombok.NonNull;
 import lombok.val;
 
 //@Log4j2
@@ -35,9 +36,9 @@ public abstract class MixinFacetAbstract
 extends SingleValueFacetAbstract<String>
 implements MixinFacet {
 
-    private final Class<?> mixinType;
-    private final Class<?> holderType;
-    private final Constructor<?> constructor;
+    private final @NonNull Class<?> mixinType;
+    private final @NonNull Class<?> holderType;
+    private final @NonNull Constructor<?> constructor;
 
     private static final Class<? extends Facet> type() {
         return MixinFacet.class;
@@ -61,30 +62,36 @@ implements MixinFacet {
         if (candidateDomainType == null) {
             return false;
         }
+
         return holderType.isAssignableFrom(candidateDomainType);
     }
 
     @Override
-    public Object instantiate(final Object domainPojo) {
+    public Object instantiate(final Object mixee) {
         if(constructor == null) {
             throw _Exceptions.unrecoverableFormatted(
-                    "invalid mix-in declaration of type %s, missing contructor", mixinType);
+                    "Failed to instantiate mixin. "
+                    + "Invalid mix-in declaration of type %s, missing contructor", mixinType);
         }
-        if(domainPojo == null) {
+        if(mixee == null) {
             return null;
         }
-        if(!isMixinFor(domainPojo.getClass())) {
-            throw _Exceptions.unrecoverableFormatted(
-                    "invalid mix-in declaration of type %s, unexpect owner type %s",
-                    mixinType, domainPojo.getClass());
+        if(!isMixinFor(mixee.getClass())) {
+            throw _Exceptions.illegalArgument(
+                    "Failed to instantiate mixin. "
+                    + "Mixin class %s is not a mixin for supplied object [%s]. "
+                    + "Mixin construction expects type: %s",
+                    mixinType.getName(), mixee, holderType);
         }
         try {
-            val mixinPojo = constructor.newInstance(domainPojo);
+            val mixinPojo = constructor.newInstance(mixee);
             getServiceInjector().injectServicesInto(mixinPojo);
             return mixinPojo;
         } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
             throw _Exceptions.unrecoverableFormatted(
-                    "invalid mix-in declaration of type %s, failing instance construction with %s", mixinType, e);
+                    "Failed to instantiate mixin. "
+                    + "Invalid mix-in declaration of type %s, "
+                    + "failing instance construction with %s", mixinType, e);
         }
     }
 

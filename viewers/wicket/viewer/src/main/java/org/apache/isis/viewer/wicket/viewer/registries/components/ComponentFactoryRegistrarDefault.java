@@ -364,7 +364,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     public static <T extends Serializable> ComponentFactoryScalarAbstract
     createScalarPanelForComposite(final Class<T> valueTypeClass) {
 
-        // assuming there is no primitive temporal type
+        // assuming there is no primitive composite type
         val valueTypeClasses = Can.<Class<?>>ofSingleton(valueTypeClass);
 
         return new ComponentFactoryScalarAbstract(

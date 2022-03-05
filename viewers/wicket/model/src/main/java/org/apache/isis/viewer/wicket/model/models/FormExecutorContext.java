@@ -25,7 +25,9 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContex
 import org.apache.isis.viewer.common.model.HasParentUiModel;
 
 public interface FormExecutorContext
-extends HasParentUiModel<EntityModel>, HasCommonContext {
+extends
+    HasParentUiModel<EntityModel>,
+    HasCommonContext {
 
     PromptStyle getPromptStyle();
 

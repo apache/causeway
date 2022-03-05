@@ -50,7 +50,8 @@ public interface MixinFacet extends SingleValueFacet<String> {
     }
 
     /**
-     * Returns the mix-in around the provided domain object (<i>holder</i>)
+     * Returns the mix-in around the provided domain object (<i>holder</i>),
+     * also resolving any injection points.
      */
     Object instantiate(Object holderPojo);
 
