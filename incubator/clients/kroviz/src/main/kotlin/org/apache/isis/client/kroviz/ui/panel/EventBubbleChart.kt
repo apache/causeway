@@ -26,16 +26,32 @@ import io.kvision.core.UNIT
 import io.kvision.panel.SimplePanel
 import io.kvision.utils.obj
 import org.apache.isis.client.kroviz.core.event.LogEntry
+import org.apache.isis.client.kroviz.ui.dialog.EventLogDetail
 import org.apache.isis.client.kroviz.ui.core.SessionManager
 import kotlin.math.pow
+
+@OptIn(kotlin.js.ExperimentalJsExport::class)
+@JsExport
+fun openLogEntry(i: Int) {
+    console.log("[EBC.openLogEntry]")
+    console.log(i)
+    val logEntry = SessionManager.getEventStore().log[i]
+    console.log(logEntry)
+    EventLogDetail(logEntry).open()
+}
+
+@OptIn(kotlin.js.ExperimentalJsExport::class)
+@JsExport
+fun foo() = "Hello"
 
 class EventBubbleChart() : SimplePanel() {
     private val model = SessionManager.getEventStore()
     private val logStart = model.getLogStartMilliSeconds()
+    private var chart: Chart
 
     init {
         width = CssSize(90, UNIT.vw)
-        buildChart()
+        chart = buildChart()
     }
 
     private fun buildChart(): Chart {
@@ -57,13 +73,33 @@ class EventBubbleChart() : SimplePanel() {
     // https://stackoverflow.com/questions/45249779/chart-js-bubble-chart-changing-dataset-labels
     private fun buildChartOptions(dataSetsList: List<DataSets>): ChartOptions {
         val chartOptions = ChartOptions(
-            plugins = PluginsOptions(tooltip = TooltipOptions(callbacks = toolTipCallback())),
-            hover = InteractionOptions(),
+            plugins = PluginsOptions(
+                title = TitleOptions(
+                    text = listOf<String>("Request Duration over Time by Request Density and Response Size"),
+                    display = true
+                ),
+                tooltip = TooltipOptions(callbacks = toolTipCallback())
+            ),
+            onClick = js(
+                "function(e) {"
+                        + "var element = e.chart.getElementsAtEventForMode(e, 'nearest', {intersect: true}, true);"
+                        + "if (element.length > 0) {"
+                        + "var i = element[0].index;"
+                        + "console.log(i);"
+                        + "kroviz.org.apache.isis.client.kroviz.ui.panel.openLogEntry(i);"
+                        + "alert(kroviz.org.apache.isis.client.kroviz.ui.panel.hello());"
+                        + "}"
+                        + "}"
+            ),
             showLine = true,
             scales = mapOf(
-                "x" to ChartScales(title = ScaleTitleOptions(text = "Time since Connect (ms)", display = true)),
+                "x" to ChartScales(
+                    title = ScaleTitleOptions(
+                        text = "Time since Connect(ms)", display = true
+                    )
+                ),
                 "y" to ChartScales(
-                    title = ScaleTitleOptions(text = "duration (ms)", display = true),
+                    title = ScaleTitleOptions(text = "duration in ms (log)", display = true),
                     type = ScalesType.LOGARITHMIC
                 )
             )
@@ -76,24 +112,30 @@ class EventBubbleChart() : SimplePanel() {
     // I would have appreciated a real API.
     private fun toolTipCallback(): TooltipCallback {
         return TooltipCallback(
-            title = js(
-                "function(context) {" +
-                        "var ctx = context[0];" +
-                        "var chart = ctx.chart;" +
-                        "var ccc = chart.config._config;" +
-                        "var data = ccc.data;" +
-                        "var i = ctx.dataIndex;" +
-                        "var label = data.labels[i];" +
-                        "return label;" +
-                        "}"
+            footer = js(
+                "function(context) {"
+                        + "var ctx = context[0];"
+                        + "var chart = ctx.chart;"
+                        + "var ccc = chart.config._config;"
+                        + "var data = ccc.data;"
+                        + "var i = ctx.dataIndex;"
+                        + "return data.labels[i];"
+                        + "}"
             )
         )
+    }
+
+    private fun LogEntry.toLabel(index: Int): String {
+        return this.title +
+                "\nseq.no.: $index" +
+                "\nparallel runs: ${this.runningAtStart}" +
+                "\nrsp.len.: ${this.responseLength}" +
+                "\ntype: ${this.type}"
     }
 
     private fun buildDataSets(): DataSets {
         return DataSets(
             backgroundColor = buildBgColorList(),
-            label = "Prefix", //data is only prefixed with label - not replaced
             data = buildData()
         )
     }
@@ -131,23 +173,15 @@ class EventBubbleChart() : SimplePanel() {
     }
 
     private fun LogEntry.calculateBubbleColor(): Color {
-        val violet = Color.rgba(0x80, 0x64, 0xA2, 0x80)
-        val redViolet = Color.rgba(0xA0, 0x5A, 0x78, 0x80)
-        val red = Color.rgba(0xC0, 0x50, 0x4D, 0x80)
-        val yellow = Color.rgba(0xF7, 0x96, 0x46, 0x80)
-        val green = Color.rgba(0x9B, 0xBB, 0x59, 0x80)
-        val lightBlue = Color.rgba(0x4B, 0xAC, 0xC6, 0x80)
-        val darkBlue = Color.rgba(0x4F, 0x81, 0xBD, 0x80)
-
         val i = runningAtStart
         return when {
-            (i >= 0) && (i <= 4) -> lightBlue
-            (i > 4) && (i <= 8) -> darkBlue
-            (i > 8) && (i <= 16) -> green
-            (i > 16) && (i <= 32) -> yellow
-            (i > 32) && (i <= 64) -> red
-            (i > 64) && (i <= 128) -> redViolet
-            else -> violet
+            (i >= 0) && (i <= 4) -> EventBubbleChart.LIGHT_BLUE
+            (i > 4) && (i <= 8) -> EventBubbleChart.DARK_BLUE
+            (i > 8) && (i <= 16) -> EventBubbleChart.GREEN
+            (i > 16) && (i <= 32) -> EventBubbleChart.YELLOW
+            (i > 32) && (i <= 64) -> EventBubbleChart.RED
+            (i > 64) && (i <= 128) -> EventBubbleChart.RED_VIOLET
+            else -> EventBubbleChart.VIOLET
         }
     }
 
@@ -162,20 +196,7 @@ class EventBubbleChart() : SimplePanel() {
             val l = it.toLabel(i)
             labelList.add(l)
         }
-        console.log("[EBC.buildLabels]")
-        console.log(labelList)
         return labelList
-    }
-
-    private fun LogEntry.toLabel(index: Int): String {
-        val relativeStartTime = ((this.createdAt.getTime() - logStart) / 1000).toString()
-        val sec_1 = relativeStartTime.substring(0, relativeStartTime.length - 2)
-        return index.toString() + "\n" +
-                sec_1 + "\n" +
-                this.title + "\n" +
-                "start: " + this.createdAt.toISOString() + "\n" +
-                "rsp.len: " + this.responseLength + "\n" +
-                "parallel runs: " + this.runningAtStart
     }
 
     private fun buildLegendLabelOptions(): LegendLabelOptions {
@@ -188,6 +209,16 @@ class EventBubbleChart() : SimplePanel() {
 
     private fun generateLabels(): List<LegendItem> {
         return mutableListOf<LegendItem>()
+    }
+
+    companion object {
+        val VIOLET = Color.rgba(0x80, 0x64, 0xA2, 0x80)
+        val RED_VIOLET = Color.rgba(0xA0, 0x5A, 0x78, 0x80)
+        val RED = Color.rgba(0xC0, 0x50, 0x4D, 0x80)
+        val YELLOW = Color.rgba(0xF7, 0x96, 0x46, 0x80)
+        val GREEN = Color.rgba(0x9B, 0xBB, 0x59, 0x80)
+        val LIGHT_BLUE = Color.rgba(0x4B, 0xAC, 0xC6, 0x80)
+        val DARK_BLUE = Color.rgba(0x4F, 0x81, 0xBD, 0x80)
     }
 
 }
