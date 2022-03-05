@@ -25,6 +25,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.common.model.mixin.HasTitle;
@@ -48,8 +49,15 @@ extends HasTitle, HasActionInteraction {
     // -- VISABILITY
 
     default Consent getVisibilityConsent() {
+
+        // guard against missing action owner
+        val actionOwner = getActionOwner();
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(actionOwner)) {
+            return Veto.DEFAULT; // veto, so we don't render the action
+        }
+
         return getAction().isVisible(
-                getActionOwner(),
+                actionOwner,
                 InteractionInitiatedBy.USER,
                 Where.OBJECT_FORMS);
     }
