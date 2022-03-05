@@ -100,7 +100,6 @@ kotlin {
         implementation("io.kvision:kvision-rest:$kvisionVersion")
         implementation("io.kvision:kvision-moment:$kvisionVersion")
         implementation("io.kvision:kvision-maps:$kvisionVersion")
-        implementation(npm("chartjs-plugin-datalabels", "2.0.0", false))
         implementation(npm("xmltojson", "1.3.5", false))
         implementation(npm("flatted", "3.2.2", false))
         implementation(npm("diff", "5.0.0", false))
