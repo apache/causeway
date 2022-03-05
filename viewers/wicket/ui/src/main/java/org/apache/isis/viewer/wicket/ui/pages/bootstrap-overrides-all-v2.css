@@ -528,10 +528,6 @@ span.containedButtonPanel {
 
 /* from additionalLinksPanel.css */
 
-span .fontAwesomeIcon {
-    margin-right: 6px;
-}
-
 .additionalLinkList {
     float:left;
     margin:0;
