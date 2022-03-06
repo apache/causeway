@@ -35,17 +35,23 @@
 
 								<a href="##" name="scalarValueInlinePromptLink"
 									class="scalarValueInlinePromptLink"
-									wicket:id="scalarValueInlinePromptLink"> 
-									<wicket:container
-											wicket:id="scalarValueInlinePromptLabel" />
+									wicket:id="scalarValueInlinePromptLink">
+									
+									<!-- populated from fragments --> 
+									<wicket:container 
+										wicket:id="scalarValueInlinePromptLabel"/> 
+										 
 								</a> 
 							
-								<wicket:container wicket:id="scalarValueContainer" /> 
-								<a
-									href="##" class="edit btn btn-sm btn-link"
+								<!-- populated from fragments -->
+								<wicket:container 
+										wicket:id="scalarValueContainer" />
+								
+								<a href="##" class="edit btn btn-sm btn-link"
 									wicket:id="editProperty"> 
 									<span class="editIcon fa fa-edit"/>
 								</a>
+										  
 							</span>
 						</span> 
 						<span class="associatedActionLinksRight"
@@ -64,7 +70,10 @@
 				</div>
 			</div>
 
-			<wicket:container wicket:id="scalarIfCompact"></wicket:container>
+			<!-- populated from fragments -->
+			<wicket:container 
+				wicket:id="scalarIfCompact"/>
+				  
 		</div>
 
 		<wicket:fragment wicket:id="fragmentValueAsTextInput">
@@ -79,7 +88,7 @@
 				data-isis-focus="true" />
 		</wicket:fragment>
 
-		<wicket:fragment wicket:id="fragmentValueAsEditIconAsInlinePrompt">
+		<wicket:fragment wicket:id="fragmentValueAsEditIconInlinePrompt">
 			<button class="edit btn btn-sm btn-link" wicket:id="scalarValue">
 				<span class="editIcon fa fa-edit"/>
 			</button>

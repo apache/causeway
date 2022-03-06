@@ -45,7 +45,7 @@ public class _FragmentFactory {
         DATE_INPUT("fragmentValueAsDateInput"),
         TEXT_PROMPT("fragmentValueAsTextInlinePrompt"),
         TEXTAREA_PROMPT("fragmentValueAsTextareaInlinePrompt"),
-        EDIT_ICON_PROMPT("fragmentValueAsEditIconAsInlinePrompt"),
+        EDIT_ICON_PROMPT("fragmentValueAsEditIconInlinePrompt"),
         ;
         private final String fragmentId;
         public Fragment createFragment(final String id, final MarkupContainer container) {
