@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 import java.io.Serializable;
 import java.util.Locale;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -109,11 +108,12 @@ extends ScalarPanelWithFormFieldAbstract<T> {
      */
     protected AbstractTextComponent<T> createTextField(final String id) {
         val converter = getConverter(scalarModel());
-        return getTextFieldVariant().isSingleLine()
+        val formFieldComponent = getTextFieldVariant().isSingleLine()
                 ? Wkt.textFieldWithConverter(
                         id, unwrappedModel(), type, converter)
-                : setRowsAndMaxLengthAttributesOn(Wkt.textAreaWithConverter(
-                        id, unwrappedModel(), type, converter));
+                : Wkt.textAreaWithConverter(
+                        id, unwrappedModel(), type, converter);
+        return formFieldComponent;
     }
 
     protected final IModel<T> unwrappedModel() {
@@ -126,16 +126,16 @@ extends ScalarPanelWithFormFieldAbstract<T> {
     protected final FormComponent<T> createFormComponent(final String id, final ScalarModel scalarModel) {
         formField = createTextField(id);
         formField.setOutputMarkupId(true);
+        setFormComponentAttributes(formField);
         return formField;
     }
 
     @Override
     protected void onFormGroupCreated(final FormGroup formGroup) {
         super.onFormGroupCreated(formGroup);
-        val formFieldFragment = formGroup.add(
-                _FragmentFactory.createRegularFragment(getRegularFragmentType(), this));
+        val formFieldFragment = _FragmentFactory.createRegularFragment(getRegularFragmentType(), this);
         formFieldFragment.add(getFormComponent());
-        setTextFieldSizeAndMaxLengthIfSpecified();
+        formGroup.add(formFieldFragment);
     }
 
     protected RegularFragment getRegularFragmentType() {
@@ -171,33 +171,9 @@ extends ScalarPanelWithFormFieldAbstract<T> {
         case SINGLE_LINE:
             return _FragmentFactory.promptOnLabel(this, inlinePromptLabelModel);
         case MULTI_LINE:
-            return _FragmentFactory.promptOnTextarea(this, inlinePromptLabelModel, this::setRowsAndMaxLengthAttributesOn);
+            return _FragmentFactory.promptOnTextarea(this, inlinePromptLabelModel, this::setFormComponentAttributes);
         default:
             throw _Exceptions.unmatchedCase(getTextFieldVariant());
-        }
-    }
-
-    private void setTextFieldSizeAndMaxLengthIfSpecified() {
-
-        val formComponent = getFormComponent();
-
-        final Integer maxLength = getMaxLengthOf(getModel());
-        Integer typicalLength = getTypicalLenghtOf(getModel());
-
-        // doesn't make sense for typical length to be > maxLength
-        if(typicalLength != null && maxLength != null && typicalLength > maxLength) {
-            typicalLength = maxLength;
-        }
-
-        if (typicalLength != null) {
-            formComponent.add(new AttributeModifier("size", Model.of("" + typicalLength)));
-        }
-
-        if(maxLength != null) {
-            formComponent.add(new AttributeModifier("maxlength", Model.of("" + maxLength)));
-            if(type.equals(String.class)) {
-                formComponent.add(StringValidator.maximumLength(maxLength));
-            }
         }
     }
 
@@ -234,40 +210,55 @@ extends ScalarPanelWithFormFieldAbstract<T> {
 
     // -- HELPER
 
-    private static Integer getMaxLengthOf(final @NonNull ScalarModel model) {
+    private static Integer getMaxLengthOf(final ScalarModel model) {
         return model.getScalarTypeSpec()
                 .lookupFacet(MaxLengthFacet.class)
                 .map(MaxLengthFacet::value)
                 .orElse(null);
     }
 
-    private static Integer getTypicalLenghtOf(final @NonNull ScalarModel model) {
-        return model.getScalarTypeSpec()
+    private static Integer getTypicalLenghtOf(final ScalarModel model, final Integer maxLength) {
+        val typicalLength = model.getScalarTypeSpec()
                 .lookupFacet(TypicalLengthFacet.class)
                 .map(TypicalLengthFacet::value)
                 .orElse(null);
-    }
-
-    private Component setAttribute(final TextArea<?> textField, final String attributeName, final int i) {
-        return textField.add(AttributeModifier.replace(attributeName, ""+i));
-    }
-
-    protected <X> TextArea<X> setRowsAndMaxLengthAttributesOn(final TextArea<X> textArea) {
-        val scalarModel = scalarModel();
-        val multiLineFacet = scalarModel.getFacet(MultiLineFacet.class);
-        if(multiLineFacet != null) {
-            setAttribute(textArea, "rows", multiLineFacet.numberOfLines());
+        // doesn't make sense for typical length to be > maxLength
+        if(typicalLength != null
+                && maxLength != null
+                && typicalLength > maxLength) {
+            return maxLength;
         }
+        return typicalLength;
+    }
 
-        val maxLength = getMaxLengthOf(scalarModel);
-        if(maxLength != null) {
+    private static Integer getNumberOfLinesOf(final ScalarModel model) {
+        return model.getScalarTypeSpec()
+                .lookupFacet(MultiLineFacet.class)
+                .map(MultiLineFacet::numberOfLines)
+                .orElse(null);
+    }
+
+    private void setFormComponentAttributes(final FormComponent<?> formComponent) {
+
+        val scalarModel = scalarModel();
+
+        if(formComponent instanceof TextArea) {
+            Wkt.attributeReplace(formComponent, "rows", getNumberOfLinesOf(scalarModel));
             // in conjunction with javascript in jquery.isis.wicket.viewer.js
             // see http://stackoverflow.com/questions/4459610/set-maxlength-in-html-textarea
-            setAttribute(textArea, "maxlength", maxLength);
+            //Wkt.attributeReplace(textArea, "maxlength", getMaxLengthOf(scalarModel));
         }
-        return textArea;
-    }
 
+        final Integer maxLength = getMaxLengthOf(scalarModel);
+        if(maxLength != null) {
+            Wkt.attributeReplace(formComponent, "maxlength", maxLength);
+            if(type.equals(String.class)) {
+                formComponent.add(StringValidator.maximumLength(maxLength));
+            }
+        }
+
+        Wkt.attributeReplace(formComponent, "size", getTypicalLenghtOf(scalarModel, maxLength));
+    }
 
 }
 

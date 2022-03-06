@@ -97,7 +97,7 @@ public class Wkt {
     /**
      * If any argument is null or empty, does nothing.
      */
-    public <T extends Component> T attributeAppend(
+    public <T extends Component> T attributeReplace(
             final @Nullable T component,
             final @Nullable String attributeName,
             final @Nullable String attributeValue) {
@@ -106,8 +106,21 @@ public class Wkt {
                 || _Strings.isEmpty(attributeValue)) {
             return component;
         }
-        component.add(new AttributeModifier(attributeName, attributeValue));
+        component.add(AttributeModifier.replace(attributeName, attributeValue));
         return component;
+    }
+
+    /**
+     * If any argument is null or empty, does nothing.
+     */
+    public <T extends Component> T attributeReplace(
+            final @Nullable T component,
+            final @Nullable String attributeName,
+            final @Nullable Integer attributeValue) {
+        if(attributeValue==null) {
+            return component;
+        }
+        return attributeReplace(component, attributeName, ""+attributeValue);
     }
 
     // -- BEHAVIOR
@@ -742,6 +755,5 @@ public class Wkt {
         }
         return component;
     }
-
 
 }

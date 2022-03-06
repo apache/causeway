@@ -223,7 +223,7 @@ extends ScalarPanelWithFormFieldAbstract<T> {
     }
 
     private void addAcceptFilterTo(final Component component){
-        Wkt.attributeAppend(component, "accept", scalarModel().getFileAccept());
+        Wkt.attributeReplace(component, "accept", scalarModel().getFileAccept());
     }
 
     private Label createFileNameLabel(final String idFileName, final MarkupContainer formComponent) {

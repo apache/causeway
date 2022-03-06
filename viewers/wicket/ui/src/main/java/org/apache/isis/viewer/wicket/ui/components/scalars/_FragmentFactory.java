@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 
@@ -89,7 +89,9 @@ public class _FragmentFactory {
         return fragment;
     }
 
-    Fragment promptOnLabel(final MarkupContainer container, final IModel<String> promptLabelModel) {
+    Fragment promptOnLabel(
+            final MarkupContainer container,
+            final IModel<String> promptLabelModel) {
         val fragment = createInlinePromptFragment(RegularFragment.TEXT_PROMPT, container);
         Wkt.labelAdd(fragment, ScalarPanelAbstract.ID_SCALAR_VALUE, promptLabelModel);
         return fragment;
@@ -98,7 +100,7 @@ public class _FragmentFactory {
     Fragment promptOnTextarea(
             final MarkupContainer container,
             final IModel<String> promptLabelModel,
-            final Consumer<TextArea<String>> onComponentCreated) {
+            final Consumer<FormComponent<String>> onComponentCreated) {
         val fragment = _FragmentFactory.createInlinePromptFragment(RegularFragment.TEXTAREA_PROMPT, container);
         val inlinePromptTextArea = Wkt.textAreaAddNoTab(fragment, ScalarPanelAbstract.ID_SCALAR_VALUE, promptLabelModel);
         onComponentCreated.accept(inlinePromptTextArea);
