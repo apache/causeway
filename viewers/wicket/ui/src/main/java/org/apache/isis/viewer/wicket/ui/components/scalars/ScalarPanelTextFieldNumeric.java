@@ -23,6 +23,7 @@ import java.io.Serializable;
 import org.apache.wicket.Component;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.CompactFragment;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -43,10 +44,10 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
     }
 
     @Override
-    protected final Component createComponentForCompact() {
+    protected final Component createComponentForCompact(final String id) {
         val label = Wkt.labelAddWithConverter(
-                getCompactFragment(CompactType.SPAN),
-                ID_SCALAR_IF_COMPACT, unwrappedModel(), type, getConverter(scalarModel()));
+                _FragmentFactory.createCompactFragment(CompactFragment.SPAN, this),
+                id, unwrappedModel(), type, getConverter(scalarModel()));
         label.setEnabled(false);
         return label;
     }

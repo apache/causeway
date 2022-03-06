@@ -48,10 +48,9 @@ import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import static org.apache.isis.commons.internal.functions._Functions.peek;
 
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 import lombok.NonNull;
 import lombok.val;
-
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 
 public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType>
 extends ScalarPanelWithFormFieldAbstract<T> {
@@ -117,8 +116,8 @@ extends ScalarPanelWithFormFieldAbstract<T> {
     }
 
     @Override
-    protected Component createComponentForCompact() {
-        final MarkupContainer scalarIfCompact = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
+    protected Component createComponentForCompact(final String id) {
+        final MarkupContainer scalarIfCompact = new WebMarkupContainer(id);
         createDownloadLink(ID_SCALAR_IF_COMPACT_DOWNLOAD, scalarIfCompact);
 //        if(downloadLink != null) {
 //            updateFileNameLabel(ID_FILE_NAME_IF_COMPACT, downloadLink);

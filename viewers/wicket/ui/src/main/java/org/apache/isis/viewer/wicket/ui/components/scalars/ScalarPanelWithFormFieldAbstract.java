@@ -23,6 +23,7 @@ import java.util.Optional;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
@@ -35,6 +36,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
+import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.CompactFragment;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -100,6 +102,34 @@ extends ScalarPanelAbstract {
 
         return formGroup;
     }
+
+    // -- COMPACT
+
+    @Override
+    protected final Component createComponentForCompact() {
+        return createComponentForCompact(ID_SCALAR_IF_COMPACT);
+    }
+
+    /**
+     * Builds the component to render the model when in COMPACT format.
+     * <p>
+     * The (textual) default implementation uses a {@link Label}.
+     * However, it may be overridden if required.
+     */
+    protected Component createComponentForCompact(final String id) {
+        return Wkt.labelAdd(
+                _FragmentFactory.createCompactFragment(CompactFragment.SPAN, this),
+                id,
+                ()->{
+                    val scalarModel = scalarModel();
+                    return scalarModel.isCurrentValueAbsent()
+                            ? ""
+                            : scalarModel.proposedValue()
+                                .getValueAsHtml().getValue();
+                                //.getValueAsParsableText().getValue();
+                });
+    }
+
 
     // -- HOOKS
 

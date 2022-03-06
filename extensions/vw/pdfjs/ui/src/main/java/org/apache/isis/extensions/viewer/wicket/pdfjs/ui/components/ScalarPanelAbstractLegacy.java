@@ -46,6 +46,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
@@ -75,9 +76,14 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
     private static final String ID_ASSOCIATED_ACTION_LINKS_BELOW = "associatedActionLinksBelow";
     private static final String ID_ASSOCIATED_ACTION_LINKS_RIGHT = "associatedActionLinksRight";
 
+    @RequiredArgsConstructor
     public enum CompactType {
-        INPUT_CHECKBOX,
-        SPAN
+        INPUT_CHECKBOX("compactAsInputCheckbox"),
+        SPAN("compactAsSpan");
+        private final String fragmentId;
+        public Fragment createFragment(final String id, final MarkupContainer markupProvider) {
+            return new Fragment(id, fragmentId, markupProvider);
+        }
     }
 
     public enum Rendering {
@@ -141,18 +147,8 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
         this.scalarModel = scalarModel;
     }
 
-    protected Fragment getCompactFragment(final CompactType type) {
-        Fragment compactFragment;
-        switch (type) {
-        case INPUT_CHECKBOX:
-            compactFragment = new Fragment("scalarIfCompact", "compactAsInputCheckbox", ScalarPanelAbstractLegacy.this);
-            break;
-        case SPAN:
-        default:
-            compactFragment = new Fragment("scalarIfCompact", "compactAsSpan", ScalarPanelAbstractLegacy.this);
-            break;
-        }
-        return compactFragment;
+    protected final Fragment getCompactFragment(final CompactType type) {
+        return type.createFragment(ID_SCALAR_IF_COMPACT, this);
     }
 
     protected Rendering getRendering() {

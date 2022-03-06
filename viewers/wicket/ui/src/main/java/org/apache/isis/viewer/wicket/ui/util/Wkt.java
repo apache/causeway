@@ -65,10 +65,6 @@ import org.apache.isis.commons.internal.functions._Functions.SerializableFunctio
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
-import lombok.NonNull;
-import lombok.val;
-import lombok.experimental.UtilityClass;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.util.Attributes;
@@ -76,6 +72,9 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.Che
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig.Sizes;
 import de.agilecoders.wicket.jquery.Key;
+import lombok.NonNull;
+import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * Wicket common idioms, in alphabetical order.
@@ -403,10 +402,19 @@ public class Wkt {
     /**
      * @param container - The component whose markup contains the fragment's markup
      * @param id - The component id
-     * @param markupId - The associated id of the associated markup fragment
+     * @param fragmentId - The id of the associated markup fragment
      */
-    public Fragment fragmentAddNoTab(final MarkupContainer container, final String id, final String markupId) {
-        return new Fragment(id, markupId, container) {
+    public Fragment fragmentAdd(final MarkupContainer container, final String id, final String fragmentId) {
+        return new Fragment(id, fragmentId, container);
+    }
+
+    /**
+     * @param container - The component whose markup contains the fragment's markup
+     * @param id - The component id
+     * @param fragmentId - The id of the associated markup fragment
+     */
+    public Fragment fragmentAddNoTab(final MarkupContainer container, final String id, final String fragmentId) {
+        return new Fragment(id, fragmentId, container) {
             private static final long serialVersionUID = 1L;
             @Override protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);

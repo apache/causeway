@@ -23,12 +23,9 @@ import java.util.Locale;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
@@ -43,9 +40,9 @@ import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengt
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.RegularFragment;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.AccessLevel;
@@ -141,16 +138,16 @@ extends ScalarPanelWithFormFieldAbstract<T> {
     @Override
     protected void onFormGroupCreated(final FormGroup formGroup) {
         super.onFormGroupCreated(formGroup);
-        val textFieldFragment = new Fragment(ID_SCALAR_VALUE_CONTAINER, getTextFieldFragmentId(), this);
+        val textFieldFragment = _FragmentFactory.createRegularFragment(getRegularFragmentType(), this);
         textFieldFragment.add(getFormComponent());
         formGroup.add(textFieldFragment);
         setTextFieldSizeAndMaxLengthIfSpecified();
     }
 
-    protected String getTextFieldFragmentId() {
+    protected RegularFragment getRegularFragmentType() {
         return getTextFieldVariant().isSingleLine()
-                ? "text"
-                : "textarea";
+                ? RegularFragment.TEXT_INPUT
+                : RegularFragment.TEXTAREA_INPUT;
     }
 
     @Override
@@ -168,30 +165,19 @@ extends ScalarPanelWithFormFieldAbstract<T> {
      * or a text-area.
      */
     @Override
-    protected Component createInlinePromptComponent(
+    protected final Component createInlinePromptComponent(
             final String id,
-            final IModel<String> inlinePromptModel) {
+            final IModel<String> inlinePromptLabelModel) {
 
         if(getInlinePromptConfig().isUseEditIconWithLink()) {
-            val fragment = Wkt.fragmentAddNoTab(this, id, "editIconAsInlinePrompt");
-            val editPromptLink = new Button("scalarValue");
-            fragment.add(editPromptLink);
-            Tooltips.addTooltip(editPromptLink, "edit");
-            return fragment;
+            return _FragmentFactory.promptOnEditIcon(this, inlinePromptLabelModel);
         }
 
         switch(getTextFieldVariant()) {
-        case SINGLE_LINE:{
-            val fragment = Wkt.fragmentAddNoTab(this, id, "textInlinePrompt");
-            Wkt.labelAdd(fragment, "scalarValue", inlinePromptModel);
-            return fragment;
-        }
-        case MULTI_LINE:{
-            val fragment = Wkt.fragmentAddNoTab(this, id, "textareaInlinePrompt");
-            val inlinePromptTextArea = Wkt.textAreaAddNoTab(fragment, "scalarValue", inlinePromptModel);
-            setRowsAndMaxLengthAttributesOn(inlinePromptTextArea);
-            return fragment;
-        }
+        case SINGLE_LINE:
+            return _FragmentFactory.promptOnLabel(this, inlinePromptLabelModel);
+        case MULTI_LINE:
+            return _FragmentFactory.promptOnTextarea(this, inlinePromptLabelModel, this::setRowsAndMaxLengthAttributesOn);
         default:
             throw _Exceptions.unmatchedCase(getTextFieldVariant());
         }
@@ -218,42 +204,6 @@ extends ScalarPanelWithFormFieldAbstract<T> {
             if(type.equals(String.class)) {
                 formComponent.add(StringValidator.maximumLength(maxLength));
             }
-        }
-    }
-
-    // --
-
-    /**
-     * Builds the component to render the model when in COMPACT format.
-     * <p>
-     * The (textual) default implementation uses a {@link Label}.
-     * However, it may be overridden if required.
-     */
-    @Override
-    protected Component createComponentForCompact() {
-        return Wkt.labelAdd(
-                getCompactFragment(CompactType.SPAN),
-                ID_SCALAR_IF_COMPACT,
-                ()->{
-                    val scalarModel = scalarModel();
-                    return scalarModel.isCurrentValueAbsent()
-                            ? ""
-                            : scalarModel.proposedValue().getValueAsParsableText().getValue();
-                });
-    }
-
-    public enum CompactType {
-        INPUT_CHECKBOX,
-        SPAN
-    }
-
-    protected Fragment getCompactFragment(final CompactType type) {
-        switch (type) {
-        case INPUT_CHECKBOX:
-            return new Fragment(ID_SCALAR_IF_COMPACT, "compactAsInputCheckbox", ScalarPanelTextFieldAbstract.this);
-        case SPAN:
-        default:
-            return new Fragment(ID_SCALAR_IF_COMPACT, "compactAsSpan", ScalarPanelTextFieldAbstract.this);
         }
     }
 
@@ -309,12 +259,13 @@ extends ScalarPanelWithFormFieldAbstract<T> {
     }
 
     protected <X> TextArea<X> setRowsAndMaxLengthAttributesOn(final TextArea<X> textArea) {
-        val multiLineFacet = getModel().getFacet(MultiLineFacet.class);
+        val scalarModel = scalarModel();
+        val multiLineFacet = scalarModel.getFacet(MultiLineFacet.class);
         if(multiLineFacet != null) {
             setAttribute(textArea, "rows", multiLineFacet.numberOfLines());
         }
 
-        val maxLength = getMaxLengthOf(getModel());
+        val maxLength = getMaxLengthOf(scalarModel);
         if(maxLength != null) {
             // in conjunction with javascript in jquery.isis.wicket.viewer.js
             // see http://stackoverflow.com/questions/4459610/set-maxlength-in-html-textarea

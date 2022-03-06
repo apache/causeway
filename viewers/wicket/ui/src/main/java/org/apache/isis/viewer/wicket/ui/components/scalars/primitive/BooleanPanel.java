@@ -34,10 +34,9 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelWithFormFieldAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
+import lombok.val;
 
 /**
  * Panel for rendering scalars of type {@link Boolean} or <tt>boolean</tt>.
@@ -64,9 +63,9 @@ extends ScalarPanelWithFormFieldAbstract<Boolean> {
     }
 
     @Override
-    protected Component createComponentForCompact() {
+    protected Component createComponentForCompact(final String id) {
         checkBox = Wkt.checkbox(
-                ID_SCALAR_IF_COMPACT,
+                id,
                 BooleanModel.forScalarModel(scalarModel()),
                 scalarModel().isRequired(),
                 CheckBoxXConfig.Sizes.sm);

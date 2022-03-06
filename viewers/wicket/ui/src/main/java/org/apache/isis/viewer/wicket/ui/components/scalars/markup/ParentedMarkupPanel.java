@@ -62,8 +62,8 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
     }
 
     @Override
-    protected Component createComponentForCompact() {
-        return createMarkupComponent(ID_SCALAR_IF_COMPACT);
+    protected Component createComponentForCompact(final String id) {
+        return createMarkupComponent(id);
     }
 
     protected final MarkupComponent createMarkupComponent(final String id) {
