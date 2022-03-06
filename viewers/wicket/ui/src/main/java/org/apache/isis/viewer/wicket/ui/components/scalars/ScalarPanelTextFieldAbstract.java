@@ -123,24 +123,18 @@ extends ScalarPanelWithFormFieldAbstract<T> {
     // --
 
     @Override
-    protected FormComponent<T> createFormComponent(final ScalarModel scalarModel) {
-
-        // even though only one of textField and scalarValueEditInlineContainer will ever be visible,
-        // am instantiating both to avoid NPEs
-        // elsewhere can use Component#isVisibilityAllowed or ScalarModel.getEditStyle() to check which is visible.
-
-        formField = createTextField(ID_SCALAR_VALUE);
+    protected final FormComponent<T> createFormComponent(final String id, final ScalarModel scalarModel) {
+        formField = createTextField(id);
         formField.setOutputMarkupId(true);
-
         return formField;
     }
 
     @Override
     protected void onFormGroupCreated(final FormGroup formGroup) {
         super.onFormGroupCreated(formGroup);
-        val textFieldFragment = _FragmentFactory.createRegularFragment(getRegularFragmentType(), this);
-        textFieldFragment.add(getFormComponent());
-        formGroup.add(textFieldFragment);
+        val formFieldFragment = formGroup.add(
+                _FragmentFactory.createRegularFragment(getRegularFragmentType(), this));
+        formFieldFragment.add(getFormComponent());
         setTextFieldSizeAndMaxLengthIfSpecified();
     }
 

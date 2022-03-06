@@ -72,7 +72,7 @@ extends ScalarPanelAbstract {
     /**
      * Builds the component to render the form field.
      */
-    protected abstract FormComponent<T> createFormComponent(ScalarModel scalarModel);
+    protected abstract FormComponent<T> createFormComponent(String id, ScalarModel scalarModel);
 
     // -- REGULAR
 
@@ -82,10 +82,10 @@ extends ScalarPanelAbstract {
 
         val friendlyNameModel = Model.of(scalarModel.getFriendlyName());
 
-        formComponent = createFormComponent(scalarModel);
+        formComponent = createFormComponent(ID_SCALAR_VALUE, scalarModel);
         formComponent.setLabel(friendlyNameModel);
 
-        final FormGroup formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, formComponent);
+        val formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, formComponent);
         formGroup.add(formComponent);
 
         formComponent.setRequired(scalarModel.isRequired());

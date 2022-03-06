@@ -76,8 +76,8 @@ extends ScalarPanelWithFormFieldAbstract<T> {
     // generic type mismatch; no issue as long as we don't use conversion
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    protected FormComponent createFormComponent(final ScalarModel scalarModel) {
-        fileUploadField = createFileUploadField(ID_SCALAR_VALUE);
+    protected FormComponent createFormComponent(final String id, final ScalarModel scalarModel) {
+        fileUploadField = createFileUploadField(id);
         return fileUploadField;
     }
 

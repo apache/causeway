@@ -53,9 +53,9 @@ extends ScalarPanelWithFormFieldAbstract<Boolean> {
     }
 
     @Override
-    protected FormComponent<Boolean> createFormComponent(final ScalarModel scalarModel) {
+    protected FormComponent<Boolean> createFormComponent(final String id, final ScalarModel scalarModel) {
         checkBox = Wkt.checkbox(
-                ID_SCALAR_VALUE,
+                id,
                 BooleanModel.forScalarModel(scalarModel),
                 scalarModel.isRequired(),
                 CheckBoxXConfig.Sizes.lg);

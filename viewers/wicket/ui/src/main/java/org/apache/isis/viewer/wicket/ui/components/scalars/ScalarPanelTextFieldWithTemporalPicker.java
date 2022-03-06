@@ -41,7 +41,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
     }
 
     protected int getDateRenderAdjustDays() {
-        return getModel().lookupFacet(DateRenderAdjustFacet.class)
+        return scalarModel().lookupFacet(DateRenderAdjustFacet.class)
             .map(DateRenderAdjustFacet::getDateRenderAdjustDays)
             .orElse(0);
     }
@@ -49,7 +49,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
     @Override
     protected final TextField<T> createTextField(final String id) {
         return new TextFieldWithDateTimePicker<T>(
-                super.getCommonContext(), id, unwrappedModel(), type, getConverter(scalarModel()));
+                getCommonContext(), id, unwrappedModel(), type, getConverter(scalarModel()));
     }
 
     @Override
