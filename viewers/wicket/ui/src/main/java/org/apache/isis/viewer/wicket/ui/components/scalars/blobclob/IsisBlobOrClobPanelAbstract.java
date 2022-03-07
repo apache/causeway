@@ -39,7 +39,7 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType;
 import org.apache.isis.core.metamodel.render.ScalarRenderMode;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelWithFormFieldAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelFormFieldAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.image.WicketImageUtil;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.Components;
@@ -53,7 +53,7 @@ import lombok.NonNull;
 import lombok.val;
 
 public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType>
-extends ScalarPanelWithFormFieldAbstract<T> {
+extends ScalarPanelFormFieldAbstract<T> {
 
     private static final long serialVersionUID = 1L;
 

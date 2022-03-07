@@ -43,14 +43,14 @@ import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
-public abstract class ScalarPanelWithFormFieldAbstract<T>
+public abstract class ScalarPanelFormFieldAbstract<T>
 extends ScalarPanelAbstract {
 
     private static final long serialVersionUID = 1L;
 
     protected final Class<T> type;
 
-    protected ScalarPanelWithFormFieldAbstract(
+    protected ScalarPanelFormFieldAbstract(
             final String id,
             final ScalarModel scalarModel,
             final Class<T> type) {

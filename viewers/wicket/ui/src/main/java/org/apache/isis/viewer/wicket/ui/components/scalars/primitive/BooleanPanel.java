@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.viewer.wicket.model.models.BooleanModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelWithFormFieldAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelFormFieldAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
@@ -42,7 +42,7 @@ import lombok.val;
  * Panel for rendering scalars of type {@link Boolean} or <tt>boolean</tt>.
  */
 public class BooleanPanel
-extends ScalarPanelWithFormFieldAbstract<Boolean> {
+extends ScalarPanelFormFieldAbstract<Boolean> {
 
     private static final long serialVersionUID = 1L;
 
