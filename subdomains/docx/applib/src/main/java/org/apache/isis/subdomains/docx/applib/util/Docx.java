@@ -18,11 +18,18 @@
  */
 package org.apache.isis.subdomains.docx.applib.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import javax.xml.bind.JAXBException;
+
 import org.docx4j.com.google.common.base.Objects;
+import org.docx4j.convert.in.FlatOpcXmlImporter;
+import org.docx4j.convert.out.flatOpcXml.FlatOpcXmlCreator;
+import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.wml.Body;
 import org.docx4j.wml.R;
@@ -90,31 +97,20 @@ public class Docx {
         return docxDoc.getBody();
     }
 
-    public WordprocessingMLPackage clone(final WordprocessingMLPackage docxTemplate) throws MergeException {
-
-        val result = (WordprocessingMLPackage) docxTemplate.clone();
-        if(result==null) {
-            throw new MergeException("unable to defensive copy (problem exporting), see error log for details");
+    public WordprocessingMLPackage clone(WordprocessingMLPackage docxTemplate) throws MergeException {
+        val foxc = new FlatOpcXmlCreator(docxTemplate);
+        val baos = new ByteArrayOutputStream();
+        try {
+            foxc.marshal(baos);
+            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+            FlatOpcXmlImporter foxi = new FlatOpcXmlImporter(bais);
+            docxTemplate = (WordprocessingMLPackage) foxi.get();
+        } catch (Docx4JException e) {
+            throw new MergeException("unable to defensive copy (problem exporting)", e);
+        } catch (JAXBException e) {
+            throw new MergeException("unable to defensive copy (problem importing)", e);
         }
-        return result;
-
-//XXX legacy code ... since Bump docx4j.version from 11.3.2 to 11.4.5 requires jakarta's JAXBException
-//        val foxc = new FlatOpcXmlCreator(docxTemplate);
-//        val baos = new ByteArrayOutputStream();
-//        try {
-//
-//
-//
-//            foxc.marshal(baos);
-//            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-//            FlatOpcXmlImporter foxi = new FlatOpcXmlImporter(bais);
-//            docxTemplate = (WordprocessingMLPackage) foxi.get();
-//        } catch (Docx4JException e) {
-//            throw new MergeException("unable to defensive copy (problem exporting)", e);
-//        } catch (JAXBException e) {
-//            throw new MergeException("unable to defensive copy (problem importing)", e);
-//        }
-//        return docxTemplate;
+        return docxTemplate;
     }
 
 

@@ -93,11 +93,9 @@ public class Dump {
 
         if (p instanceof JaxbXmlPart) {
             Object o = ((JaxbXmlPart) p).getJaxbElement();
-
-//            if (o instanceof jakarta.xml.bind.JAXBElement) {
-//                sb.append(" containing JaxbElement:" + XmlUtils.JAXBElementDebug((jakarta.xml.bind.JAXBElement) o));
-//            } else
-            {
+            if (o instanceof javax.xml.bind.JAXBElement) {
+                sb.append(" containing JaxbElement:" + XmlUtils.JAXBElementDebug((javax.xml.bind.JAXBElement) o));
+            } else {
                 sb.append(" containing JaxbElement:" + o.getClass().getName());
             }
         }
