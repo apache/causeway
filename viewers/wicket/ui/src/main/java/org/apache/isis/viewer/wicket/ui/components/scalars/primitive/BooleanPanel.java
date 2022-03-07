@@ -20,23 +20,24 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
 import java.util.Optional;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.viewer.wicket.model.models.BooleanModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelFormFieldAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.CompactFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.RegularFragment;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+
+import lombok.val;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
-import lombok.val;
 
 /**
  * Panel for rendering scalars of type {@link Boolean} or <tt>boolean</tt>.
@@ -73,7 +74,6 @@ extends ScalarPanelFormFieldAbstract<Boolean> {
         return checkBox;
     }
 
-
     @Override
     protected InlinePromptConfig getInlinePromptConfig() {
         return InlinePromptConfig.supportedAndHide(
@@ -107,18 +107,13 @@ extends ScalarPanelFormFieldAbstract<Boolean> {
     protected void onInitializeReadonly(final String disableReason) {
         super.onInitializeReadonly(disableReason);
         checkBox.setEnabled(false);
-        checkBox.add(new AttributeModifier("title",
-                Model.of(disableReason != null
-                    ? disableReason
-                    : "")));
+        Wkt.attributeReplace(checkBox, "title", disableReason);
     }
 
     @Override
     protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
         checkBox.setEnabled(false);
-        final AttributeModifier title = new AttributeModifier("title",
-                Model.of(disableReason != null ? disableReason : ""));
-        checkBox.add(title);
+        Wkt.attributeReplace(checkBox, "title", disableReason);
         target.ifPresent(ajax->{
             ajax.add(checkBox);
         });

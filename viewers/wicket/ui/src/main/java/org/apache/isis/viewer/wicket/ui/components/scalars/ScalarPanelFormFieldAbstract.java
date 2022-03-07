@@ -37,6 +37,7 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.CompactFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.RegularFragment;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -133,7 +134,24 @@ extends ScalarPanelAbstract {
 
     // -- HOOKS
 
+    protected Optional<RegularFragment> getRegularFragmentType() {
+        return Optional.empty();
+    }
+
     protected void onFormGroupCreated(final FormGroup formGroup) {
+
+        if(scalarModel().isViewMode()
+                && getInlinePromptConfig().isUseEditIconWithLink()) {
+            formGroup.add(createComponentForCompact(ID_SCALAR_VALUE_CONTAINER));
+            return;
+        }
+
+        getRegularFragmentType()
+        .ifPresent(regularFragmentType->{
+            val formFieldFragment = _FragmentFactory.createRegularFragment(regularFragmentType, this);
+            formFieldFragment.add(getFormComponent());
+            formGroup.add(formFieldFragment);
+        });
     }
 
     protected IValidator<Object> createValidator(final ScalarModel scalarModel) {

@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.io.Serializable;
 import java.util.Locale;
+import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
@@ -40,7 +41,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.RegularFragment;
-import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
@@ -131,17 +131,10 @@ extends ScalarPanelFormFieldAbstract<T> {
     }
 
     @Override
-    protected void onFormGroupCreated(final FormGroup formGroup) {
-        super.onFormGroupCreated(formGroup);
-        val formFieldFragment = _FragmentFactory.createRegularFragment(getRegularFragmentType(), this);
-        formFieldFragment.add(getFormComponent());
-        formGroup.add(formFieldFragment);
-    }
-
-    protected RegularFragment getRegularFragmentType() {
-        return getTextFieldVariant().isSingleLine()
+    protected Optional<RegularFragment> getRegularFragmentType() {
+        return Optional.of(getTextFieldVariant().isSingleLine()
                 ? RegularFragment.TEXT_INPUT
-                : RegularFragment.TEXTAREA_INPUT;
+                : RegularFragment.TEXTAREA_INPUT);
     }
 
     @Override

@@ -87,6 +87,18 @@
 				class="form-control form-control-sm scalarValue"
 				data-isis-focus="true" />
 		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragmentValueAsCheckbox">
+	        <input type="checkbox" name="scalarValue"
+	        	class="scalarValue"
+				wicket:id="scalarValue" />
+		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragmentValueAsFile">
+			<span class="uploadFile form-text">
+      			<input type="file" name="scalarValue" wicket:id="scalarValue" />
+         	</span>
+		</wicket:fragment>
 
 		<wicket:fragment wicket:id="fragmentValueAsEditIconInlinePrompt">
 			<button class="edit btn btn-sm btn-link" wicket:id="scalarValue">

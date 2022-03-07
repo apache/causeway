@@ -65,6 +65,10 @@ import org.apache.isis.commons.internal.functions._Functions.SerializableFunctio
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
+import lombok.NonNull;
+import lombok.val;
+import lombok.experimental.UtilityClass;
+
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.util.Attributes;
@@ -72,9 +76,6 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.Che
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig.Sizes;
 import de.agilecoders.wicket.jquery.Key;
-import lombok.NonNull;
-import lombok.val;
-import lombok.experimental.UtilityClass;
 
 /**
  * Wicket common idioms, in alphabetical order.
@@ -95,15 +96,19 @@ public class Wkt {
     // -- ATTRIBUTES
 
     /**
-     * If any argument is null or empty, does nothing.
+     * If any of {@code component} or {@code attributeName} is null or empty, does nothing.
+     * On empty {@code attributeValue} removes the attribute.
      */
     public <T extends Component> T attributeReplace(
             final @Nullable T component,
             final @Nullable String attributeName,
             final @Nullable String attributeValue) {
         if(component==null
-                || _Strings.isEmpty(attributeName)
-                || _Strings.isEmpty(attributeValue)) {
+                || _Strings.isEmpty(attributeName)) {
+            return component;
+        }
+        if(_Strings.isEmpty(attributeValue)) {
+            component.add(AttributeModifier.remove(attributeName));
             return component;
         }
         component.add(AttributeModifier.replace(attributeName, attributeValue));
@@ -111,16 +116,16 @@ public class Wkt {
     }
 
     /**
-     * If any argument is null or empty, does nothing.
+     * If any of {@code component} or {@code attributeName} is null or empty, does nothing.
+     * On missing {@code attributeValue} removes the attribute.
      */
     public <T extends Component> T attributeReplace(
             final @Nullable T component,
             final @Nullable String attributeName,
             final @Nullable Integer attributeValue) {
-        if(attributeValue==null) {
-            return component;
-        }
-        return attributeReplace(component, attributeName, ""+attributeValue);
+        return attributeReplace(component, attributeName, attributeValue!=null
+                ? ""+attributeValue
+                : null);
     }
 
     // -- BEHAVIOR

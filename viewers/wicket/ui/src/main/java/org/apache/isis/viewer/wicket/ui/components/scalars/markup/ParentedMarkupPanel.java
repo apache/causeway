@@ -25,7 +25,6 @@ import org.apache.wicket.Component;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldVariant;
-import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 
 /**
  * Panel for rendering scalars of type {@link org.apache.isis.applib.value.Markup}.
@@ -44,16 +43,6 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
 
         super(id, scalarModel, valueType, TextFieldVariant.MULTI_LINE);
         this.markupComponentFactory = markupComponentFactory;
-    }
-
-    @Override
-    protected void onFormGroupCreated(final FormGroup formGroup) {
-        if(scalarModel().isEditMode()) {
-            // fallback to text area
-            super.onFormGroupCreated(formGroup);
-        } else {
-            formGroup.add(createMarkupComponent(ID_SCALAR_VALUE_CONTAINER));
-        }
     }
 
     @Override

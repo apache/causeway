@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import org.apache.wicket.markup.html.form.TextField;
 
@@ -53,8 +54,8 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
     }
 
     @Override
-    protected RegularFragment getRegularFragmentType() {
-        return RegularFragment.DATE_INPUT;
+    protected Optional<RegularFragment> getRegularFragmentType() {
+        return Optional.of(RegularFragment.DATE_INPUT);
     }
 
 }

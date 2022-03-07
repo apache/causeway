@@ -43,6 +43,9 @@ public class _FragmentFactory {
         TEXT_INPUT("fragmentValueAsTextInput"),
         TEXTAREA_INPUT("fragmentValueAsTextarea"),
         DATE_INPUT("fragmentValueAsDateInput"),
+        CHECKBOX_INPUT("fragmentValueAsCheckbox"),
+        FILE_INPUT("fragmentValueAsCheckbox"),
+
         TEXT_PROMPT("fragmentValueAsTextInlinePrompt"),
         TEXTAREA_PROMPT("fragmentValueAsTextareaInlinePrompt"),
         EDIT_ICON_PROMPT("fragmentValueAsEditIconInlinePrompt"),
