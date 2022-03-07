@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import java.io.Serializable;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -59,7 +58,7 @@ import lombok.val;
  * <p>
  * This implementation is for panels that use a textfield/text area.
  */
-public abstract class ScalarPanelTextFieldAbstract<T extends Serializable>
+public abstract class ScalarPanelTextFieldAbstract<T>
 extends ScalarPanelFormFieldAbstract<T> {
 
     private static final long serialVersionUID = 1L;

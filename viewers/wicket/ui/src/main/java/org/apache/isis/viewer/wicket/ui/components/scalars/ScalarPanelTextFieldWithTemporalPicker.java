@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import java.io.Serializable;
 import java.util.Optional;
 
 import org.apache.wicket.markup.html.form.TextField;
@@ -31,7 +30,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldW
 /**
  * Panel for rendering scalars representing dates, along with a date picker.
  */
-public class ScalarPanelTextFieldWithTemporalPicker<T extends Serializable>
+public class ScalarPanelTextFieldWithTemporalPicker<T>
 extends ScalarPanelTextFieldWithValueSemantics<T>  {
 
     private static final long serialVersionUID = 1L;

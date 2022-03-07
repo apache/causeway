@@ -18,11 +18,9 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import java.io.Serializable;
-
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
-public class ScalarPanelTextFieldWithComposite<T extends Serializable>
+public class ScalarPanelTextFieldWithComposite<T>
 extends ScalarPanelTextFieldWithValueSemantics<T> {
 
     private static final long serialVersionUID = 1L;

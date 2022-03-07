@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import java.io.Serializable;
-
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
@@ -35,7 +33,7 @@ import lombok.NonNull;
  * where the scalar (parameter or property) is a value-type,
  * using conversion that is backed by a {@link ValueSemanticsProvider}.
  */
-public class ScalarPanelTextFieldWithValueSemantics<T extends Serializable>
+public class ScalarPanelTextFieldWithValueSemantics<T>
 extends ScalarPanelTextFieldAbstract<T> {
 
     private static final long serialVersionUID = 1L;

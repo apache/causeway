@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import java.io.Serializable;
-
 import org.apache.wicket.Component;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -31,7 +29,7 @@ import lombok.val;
 /**
  * Panel for rendering numeric scalars.
  */
-public class ScalarPanelTextFieldNumeric<T extends Serializable>
+public class ScalarPanelTextFieldNumeric<T>
 extends ScalarPanelTextFieldWithValueSemantics<T> {
 
     private static final long serialVersionUID = 1L;

@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
 
-import java.io.Serializable;
-
 import org.apache.wicket.Component;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -29,13 +27,13 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldVariant;
 /**
  * Panel for rendering scalars of type {@link org.apache.isis.applib.value.Markup}.
  */
-public class ParentedMarkupPanel<T extends Serializable>
+public class ScalarMarkupPanel<T>
 extends ScalarPanelTextFieldWithValueSemantics<T> {
 
     private static final long serialVersionUID = 1L;
     private final transient MarkupComponentFactory<ScalarModel> markupComponentFactory;
 
-    public ParentedMarkupPanel(
+    public ScalarMarkupPanel(
             final String id,
             final ScalarModel scalarModel,
             final Class<T> valueType,

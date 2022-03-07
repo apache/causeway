@@ -33,7 +33,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import lombok.val;
 
 /**
- * {@link ComponentFactory} for {@link ParentedMarkupPanel}.
+ * {@link ComponentFactory} for {@link ScalarMarkupPanel}.
  */
 public class MarkupPanelFactories {
 
@@ -57,7 +57,7 @@ public class MarkupPanelFactories {
         private final Class<T> valueType;
 
         public ParentedAbstract(final Class<T> valueType) {
-            super(ComponentType.SCALAR_NAME_AND_VALUE, ParentedMarkupPanel.class);
+            super(ComponentType.SCALAR_NAME_AND_VALUE, ScalarMarkupPanel.class);
             this.valueType = valueType;
         }
 
@@ -77,7 +77,7 @@ public class MarkupPanelFactories {
 
         @Override
         public final Component createComponent(final String id, final IModel<?> model) {
-            return new ParentedMarkupPanel<T>(id, (ScalarModel) model, valueType, this::newMarkupComponent);
+            return new ScalarMarkupPanel<T>(id, (ScalarModel) model, valueType, this::newMarkupComponent);
         }
 
         protected abstract MarkupComponent newMarkupComponent(String id, ScalarModel model);
