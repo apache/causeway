@@ -473,7 +473,7 @@ under the License.
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>3.1.2</version>
+                    <version>3.2.2</version>
                     <configuration>
                         <pluginManagementExcludes>
                             <exclude>org.eclipse.m2e:lifecycle-mapping</exclude>
