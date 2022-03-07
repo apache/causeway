@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
+import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEventSemantics;
 
 import demoapp.dom.types.Samples;
 import demoapp.dom.types.javatime.javatimezoneddatetime.samples.JavaTimeZonedDateTimeSamples;
@@ -36,8 +37,10 @@ public class IsisCalendarEventSamples implements Samples<CalendarEvent> {
 
     @Override
     public Stream<CalendarEvent> stream() {
-        return zonedDateTimeSamples.stream()
-                .map(dateTime->CalendarEvent.of(dateTime, "A Calendar", "New Event"));
+        return new CalendarEventSemantics()
+                .getExamples()
+                .stream();
     }
+
 
 }

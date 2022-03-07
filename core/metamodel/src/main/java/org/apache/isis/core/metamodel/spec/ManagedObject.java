@@ -163,7 +163,7 @@ public interface ManagedObject {
             return String.format("missing ValueFacet %s", spec.getCorrespondingClass());
         }
 
-        final Renderer renderer = (Renderer) valueFacet.selectRendererForFeature(feature).orElse(null);
+        val renderer = (Renderer<Object>) valueFacet.selectRendererForFeature(feature).orElse(null);
         if(renderer==null) {
             return String.format("missing Renderer %s", spec.getCorrespondingClass());
         }

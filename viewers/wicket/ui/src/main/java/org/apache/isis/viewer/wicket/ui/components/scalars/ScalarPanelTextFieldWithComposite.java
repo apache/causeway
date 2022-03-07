@@ -18,7 +18,10 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import org.apache.wicket.Component;
+
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 
 public class ScalarPanelTextFieldWithComposite<T>
 extends ScalarPanelTextFieldWithValueSemantics<T> {
@@ -31,6 +34,16 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
             final Class<T> valueType) {
 
         super(id, scalarModel, valueType, TextFieldVariant.MULTI_LINE);
+    }
+
+    @Override
+    protected InlinePromptConfig getInlinePromptConfig() {
+        return super.getInlinePromptConfig().withEditIcon();
+    }
+
+    @Override
+    protected Component createComponentForCompact(final String id) {
+        return new MarkupComponent(id, scalarModel());
     }
 
 }

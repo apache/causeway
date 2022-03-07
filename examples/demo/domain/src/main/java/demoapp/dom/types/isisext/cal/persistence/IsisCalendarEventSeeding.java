@@ -32,7 +32,8 @@ public class IsisCalendarEventSeeding
 extends SeedServiceAbstract {
 
     @Inject
-    public IsisCalendarEventSeeding(final ValueHolderRepository<CalendarEvent, ? extends IsisCalendarEventEntity> entities) {
+    public IsisCalendarEventSeeding(
+            final ValueHolderRepository<CalendarEvent, ? extends IsisCalendarEventEntity> entities) {
         super(entities);
     }
 
