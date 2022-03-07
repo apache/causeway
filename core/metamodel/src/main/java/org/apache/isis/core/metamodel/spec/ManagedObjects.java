@@ -261,21 +261,23 @@ public final class ManagedObjects {
     private static final Comparator<ManagedObject> NATURAL_NULL_FIRST = new Comparator<ManagedObject>(){
         @SuppressWarnings({"rawtypes" })
         @Override
-        public int compare(final @Nullable ManagedObject p, final @Nullable ManagedObject q) {
-            val pPojo = UnwrapUtil.single(p);
-            val qPojo = UnwrapUtil.single(q);
-            if(pPojo instanceof Comparable && qPojo instanceof Comparable) {
-                return _Objects.compareNullsFirst((Comparable)pPojo, (Comparable)qPojo);
-            }
-            if(Objects.equals(pPojo, qPojo)) {
+        public int compare(final @Nullable ManagedObject a, final @Nullable ManagedObject b) {
+            val aPojo = UnwrapUtil.single(a);
+            val bPojo = UnwrapUtil.single(b);
+            if(Objects.equals(aPojo, bPojo)) {
                 return 0;
             }
-
-            final int hashCompare = Integer.compare(Objects.hashCode(pPojo), Objects.hashCode(qPojo));
+            if((aPojo==null
+                    || aPojo instanceof Comparable)
+                && (bPojo==null
+                        || bPojo instanceof Comparable)) {
+                return _Objects.compareNullsFirst((Comparable)aPojo, (Comparable)bPojo);
+            }
+            final int hashCompare = Integer.compare(Objects.hashCode(aPojo), Objects.hashCode(bPojo));
             if(hashCompare!=0) {
                 return hashCompare;
             }
-            //XXX what to return on hash-collision?
+            //XXX on hash-collision we return an arbitrary non-equal relation (unspecified behavior)
             return -1;
         }
 
