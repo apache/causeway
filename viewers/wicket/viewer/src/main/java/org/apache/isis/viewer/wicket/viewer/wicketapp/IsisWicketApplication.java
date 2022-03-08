@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.viewer.wicketapp;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
@@ -57,7 +58,6 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.resource.JQueryResourceReference;
 import org.apache.wicket.settings.RequestCycleSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-import org.apache.wicket.util.time.Duration;
 import org.wicketstuff.select2.ApplicationSettings;
 
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
@@ -267,7 +267,7 @@ implements
 
             // TODO ISIS-987 Either make the API better (no direct access to the map) or use DB records
             int maxEntries = 1000;
-            setMetaData(AccountConfirmationMap.KEY, new AccountConfirmationMap(maxEntries, Duration.days(1)));
+            setMetaData(AccountConfirmationMap.KEY, new AccountConfirmationMap(maxEntries, Duration.ofDays(1)));
 
             mountPages();
 
