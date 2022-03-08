@@ -1123,14 +1123,13 @@ such as https://chrome.google.com/webstore/detail/focus-indicator/heeoeadndnhebm
 h4.iconAndTitle a {
     outline: none;
     display: inline-block;
+    text-decoration: none;
 }
 h4.iconAndTitle a span.entityTitle:focus {
     outline: none;
 }
-h4.iconAndTitle a {
-    text-decoration: none;
-}
-h4.iconAndTitle a:hover {
+
+h4.iconAndTitleLabel a:hover {
 	text-decoration: underline;
 }
 
@@ -1208,4 +1207,24 @@ ul.navbar-wrap {
 .mr-auto, .mx-auto {
   margin-right: auto !important;
 }
+
+/* TOOLTIPS */
+
+.tooltip {
+	max-width: 300px;
+	text-align: center;
+ 	z-index: 9999;
+}
+
+span.wkt-component-with-tooltip,
+label.wkt-component-with-tooltip, 
+.wkt-component-with-tooltip label, 
+strong.wkt-component-with-tooltip  {
+	text-decoration-line: underline;
+	text-decoration-style: dotted;
+}
+
+.ui-helper-hidden-accessible { display:none; }
+
+/* --- */
 
