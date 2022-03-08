@@ -180,7 +180,7 @@
 		<vaadin.version>23.0.0</vaadin.version>
 
 		<wicket.version>9.8.0</wicket.version>
-		<wicket-bootstrap.version>6.0.0-M5</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
+		<wicket-bootstrap.version>6.0.0-M6</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
 		<wicket-fullcalendar.version>4.2</wicket-fullcalendar.version>
 		<wicket-webjars.version>3.0.4</wicket-webjars.version>
 		<wicket-viewer-jquery.version>3.5.1</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->
