@@ -301,6 +301,10 @@ footer > .navbar {
     margin-bottom: 0px;
 }
 
+.collectionContentsAsAjaxTablePanel tfoot tr {
+ 	border: none;
+}
+
 
 /* from CollectionContentsMultipleViewsPanel.css */
 /* AND ALSO duplicated in from EntityLinksSelectorPanel.css */
