@@ -33,8 +33,9 @@ body {
     margin-bottom: 0px;
 }
 
-/* emulate .dropdown-menu-right for secondary dropdown menus */
-.navbar-nav.secondary .dropdown-menu {
+/* emulate .dropdown-menu-right for secondary and tertiary dropdown menus */
+.navbar-nav.secondary .dropdown-menu, 
+.navbar-nav.tertiary .dropdown-menu {
 	right: 0;
 	left: auto;
 }
