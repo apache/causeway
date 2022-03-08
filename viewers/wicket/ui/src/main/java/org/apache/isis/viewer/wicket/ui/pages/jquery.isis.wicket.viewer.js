@@ -206,8 +206,18 @@ $(function() {
 	   		$(this).popover('hide');
 	    });
 	}
-
 	$(document, '.wkt-component-with-tooltip').on('click', hidePopover);
+
+	/* workaround wicket-bootstrap issue, where it cannot setup hover behavior on popover components*/
+
+	var popoverTriggerList = [].slice.call(document.querySelectorAll('[rel="popover"]'));
+	var popoverList = popoverTriggerList.map(function (elem) {
+	  	return new bootstrap.Popover(elem, {
+			"boundary":elem.getAttribute('data-bs-conf-boundary'),
+			"trigger":elem.getAttribute('data-bs-conf-trigger'),
+			"placement":elem.getAttribute('data-bs-conf-placement')});
+	})
+
 
 /*
     $('.editing .editable').parent().hover(function () {
@@ -273,7 +283,6 @@ $(function() {
 			})
 		});
 	});
-
 
 });
 

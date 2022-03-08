@@ -17,13 +17,17 @@
 package org.apache.isis.viewer.wicket.ui.util;
 
 import java.time.Duration;
+import java.util.Map;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.resources._Json;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipUiModel;
 import org.apache.isis.viewer.wicket.ui.util.ExtendedPopoverConfig.PopoverBoundary;
 
@@ -37,6 +41,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.components.PopoverConfig
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig.OpenTrigger;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig.Placement;
+import de.agilecoders.wicket.jquery.Config;
 
 @UtilityClass
 public class WktTooltips {
@@ -99,13 +104,41 @@ public class WktTooltips {
     private TooltipBehavior createTooltipBehavior(
             final @NonNull IModel<String> titleLabel,
             final @NonNull IModel<String> bodyLabel) {
-        return new PopoverBehavior(titleLabel, bodyLabel, getTooltipConfigBottom());
+        return createPopoverBehavior(titleLabel, bodyLabel, getTooltipConfigBottom());
     }
 
     private TooltipBehavior createTooltipBehavior(
             final @NonNull IModel<String> bodyLabel) {
-        return new PopoverBehavior(Model.of(), bodyLabel, getTooltipConfigBottom());
-        //return new TooltipBehavior(bodyLabel, getTooltipConfigTop());
+        return createPopoverBehavior(Model.of(), bodyLabel, getTooltipConfigBottom());
+    }
+
+    private PopoverBehavior createPopoverBehavior(
+            final IModel<String> titleLabel,
+            final IModel<String> bodyLabel,
+            final PopoverConfig config) {
+
+        return new PopoverBehavior(titleLabel, bodyLabel, getTooltipConfigBottom()) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onComponentTag(final Component component, final ComponentTag tag) {
+                super.onComponentTag(component, tag);
+                final Map<String, String> map =
+                        _Casts.uncheckedCast(_Json.readJson(Map.class, config.toJsonString()).getValue().get());
+                map.forEach((k, v)->{
+                    tag.put("data-bs-conf-" + k, ""+v);
+                });
+                //typical... {"boundary":"viewport","trigger":"hover","placement":"bottom"}
+            }
+
+            @Override
+            protected CharSequence createInitializerScript(final Component component, final Config config) {
+                // batch create these in
+                // isis-viewer-wicket-ui/src/main/java/org/apache/isis/viewer/wicket/ui/pages/jquery.isis.wicket.viewer.js
+                // val markupId = Strings2.getMarkupId(Args.notNull(component, "component"));
+                return "";
+            }
+        };
     }
 
     @Getter(lazy=true)
