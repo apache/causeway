@@ -1127,8 +1127,11 @@ h4.iconAndTitle a {
 h4.iconAndTitle a span.entityTitle:focus {
     outline: none;
 }
-h4.iconAndTitle a:focus {
+h4.iconAndTitle a {
     text-decoration: none;
+}
+h4.iconAndTitle a:hover {
+	text-decoration: underline;
 }
 
 li.list-separator {
