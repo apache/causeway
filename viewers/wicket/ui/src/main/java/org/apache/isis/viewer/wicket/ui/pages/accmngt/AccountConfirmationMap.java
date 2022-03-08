@@ -43,13 +43,18 @@ public class AccountConfirmationMap extends MostRecentlyUsedMap<String, Object>
      * The actual object that is stored as a value of the map. It wraps the email and
      * assigns it a creation time.
      */
-    private static class Value
-    {
+    private static class Value {
         /** the original email to store */
         private String email;
 
         /** the time when this email is stored */
         private Instant creationTime;
+
+        public boolean isExpired(final Duration lifetime) {
+            val elapsedTime = Duration.between(creationTime, Instant.now());
+            val isExpired = lifetime.minus(elapsedTime).isNegative();
+            return isExpired;
+        }
     }
 
     /**
@@ -65,26 +70,18 @@ public class AccountConfirmationMap extends MostRecentlyUsedMap<String, Object>
      * @param lifetime
      *            the duration of time to keep an entry in the map before considering it expired
      */
-    public AccountConfirmationMap(final int maxEntries, final Duration lifetime)
-    {
+    public AccountConfirmationMap(final int maxEntries, final Duration lifetime){
         super(maxEntries);
-
         this.lifetime = lifetime;
     }
 
     @Override
-    protected synchronized boolean removeEldestEntry(final java.util.Map.Entry<String, Object> eldest)
-    {
+    protected synchronized boolean removeEldestEntry(final java.util.Map.Entry<String, Object> eldest) {
         boolean removed = super.removeEldestEntry(eldest);
-        if (removed == false)
-        {
-            Value value = (Value)eldest.getValue();
-            if (value != null)
-            {
-                val elapsedTime = Duration.between(value.creationTime, Instant.now());
-                val isExpired = lifetime.minus(elapsedTime).isNegative();
-
-                if (isExpired) {
+        if (removed == false) {
+            val value = (Value)eldest.getValue();
+            if (value != null) {
+                if(value.isExpired(lifetime)) {
                     removedValue = value.email;
                     removed = true;
                 }
@@ -94,21 +91,18 @@ public class AccountConfirmationMap extends MostRecentlyUsedMap<String, Object>
     }
 
     @Override
-    public String put(final String key, final Object email)
-    {
-        if (!(email instanceof String))
-        {
+    public String put(final String key, final Object email) {
+        if (!(email instanceof String)) {
             throw new IllegalArgumentException(AccountConfirmationMap.class.getSimpleName() +
                     " can store only instances of " + String.class.getSimpleName() + ": " + email);
         }
 
-        Value value = new Value();
+        val value = new Value();
         value.creationTime = Instant.now();
         value.email = (String)email;
 
         Value oldValue;
-        synchronized (this)
-        {
+        synchronized (this) {
             oldValue = (Value)super.put(key, value);
         }
 
@@ -116,19 +110,14 @@ public class AccountConfirmationMap extends MostRecentlyUsedMap<String, Object>
     }
 
     @Override
-    public String get(final Object key)
-    {
+    public String get(final Object key) {
         String result = null;
         Value value;
-        synchronized (this)
-        {
+        synchronized (this) {
             value = (Value)super.get(key);
         }
-        if (value != null)
-        {
-            val elapsedTime = Duration.between(value.creationTime, Instant.now());
-            val isExpired = lifetime.minus(elapsedTime).isNegative();
-            if(isExpired) {
+        if (value != null) {
+            if(value.isExpired(lifetime)) {
                 // expired, remove it
                 remove(key);
             } else {
@@ -139,20 +128,16 @@ public class AccountConfirmationMap extends MostRecentlyUsedMap<String, Object>
     }
 
     @Override
-    public String remove(final Object key)
-    {
+    public String remove(final Object key) {
         Value removedValue;
-        synchronized (this)
-        {
+        synchronized (this) {
             removedValue = (Value)super.remove(key);
         }
-
         return removedValue != null ? removedValue.email : null;
     }
 
     @Override
-    public void putAll(final Map<? extends String, ?> m)
-    {
+    public void putAll(final Map<? extends String, ?> m) {
         throw new UnsupportedOperationException();
     }
 }
