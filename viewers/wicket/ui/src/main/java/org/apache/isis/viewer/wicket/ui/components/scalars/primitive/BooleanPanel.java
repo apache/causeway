@@ -30,8 +30,6 @@ import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.viewer.wicket.model.models.BooleanModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelFormFieldAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.CompactFragment;
-import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.RegularFragment;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;

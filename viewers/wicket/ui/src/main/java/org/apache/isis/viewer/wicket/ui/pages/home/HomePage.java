@@ -29,7 +29,7 @@ import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
-import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 
 import lombok.val;
 
@@ -66,12 +66,12 @@ public class HomePage extends PageAbstract {
                 requestCycle.setResponsePage(page);
             } catch (Exception ignore) {
                 // fallback (eg if permissions problem)
-                Components.permanentlyHide(themeDiv, ComponentType.ACTION_PROMPT);
+                WktComponents.permanentlyHide(themeDiv, ComponentType.ACTION_PROMPT);
                 getComponentFactoryRegistry().addOrReplaceComponent(themeDiv, ComponentType.WELCOME, null);
             }
 
         } else {
-            Components.permanentlyHide(themeDiv, ComponentType.ACTION_PROMPT);
+            WktComponents.permanentlyHide(themeDiv, ComponentType.ACTION_PROMPT);
             getComponentFactoryRegistry().addOrReplaceComponent(themeDiv, ComponentType.WELCOME, null);
         }
 

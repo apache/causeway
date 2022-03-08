@@ -34,7 +34,7 @@ import org.apache.isis.viewer.wicket.ui.components.collection.selector.Collectio
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -79,7 +79,7 @@ implements CollectionCountProvider, CollectionSelectorProvider {
         final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
 
         if (componentFactories.size() <= 1) {
-            Components.permanentlyHide(outerDiv, ID_SELECTOR_DROPDOWN);
+            WktComponents.permanentlyHide(outerDiv, ID_SELECTOR_DROPDOWN);
             this.selectorDropdownPanel = null;
         } else {
             CollectionSelectorPanel selectorDropdownPanel = new CollectionSelectorPanel(ID_SELECTOR_DROPDOWN, collectionModel);

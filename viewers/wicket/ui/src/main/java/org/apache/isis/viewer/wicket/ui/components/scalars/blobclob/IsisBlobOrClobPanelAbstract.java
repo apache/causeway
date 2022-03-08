@@ -42,8 +42,8 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelFormFieldAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.image.WicketImageUtil;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
-import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
+import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import static org.apache.isis.commons.internal.functions._Functions.peek;
@@ -88,7 +88,7 @@ extends ScalarPanelFormFieldAbstract<T> {
         if(wicketImage != null) {
             formGroup.addOrReplace(wicketImage);
         } else {
-            Components.permanentlyHide(formGroup, ID_IMAGE);
+            WktComponents.permanentlyHide(formGroup, ID_IMAGE);
         }
         createFileNameLabel(ID_FILE_NAME, formGroup);
         createDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, formGroup);
@@ -109,7 +109,7 @@ extends ScalarPanelFormFieldAbstract<T> {
     @Override
     protected MarkupContainer createShallowComponentForRegular() {
         val shallowRegular = super.createShallowComponentForRegular();
-        Components.permanentlyHide(shallowRegular,
+        WktComponents.permanentlyHide(shallowRegular,
                 ID_IMAGE, ID_SCALAR_NAME, ID_SCALAR_VALUE, ID_FEEDBACK,
                 ID_ASSOCIATED_ACTION_LINKS_BELOW, ID_ASSOCIATED_ACTION_LINKS_RIGHT);
         return shallowRegular;
@@ -202,7 +202,7 @@ extends ScalarPanelFormFieldAbstract<T> {
         component.setOutputMarkupId(true); // enable ajax link
         component.setVisible(renderMode.isVisible());
         target.ifPresent(ajax->{
-            Components.addToAjaxRequest(ajax, component);
+            WktComponents.addToAjaxRequest(ajax, component);
         });
 
 //        // dynamic disablement doesn't yet work, this exception is thrown when form is submitted:
@@ -269,10 +269,10 @@ extends ScalarPanelFormFieldAbstract<T> {
         .map(resource->Wkt.downloadLinkNoCache(id, resource))
         .map(peek(downloadLink->{
             parent.addOrReplace(downloadLink);
-            Tooltips.addTooltip(downloadLink, "download");
+            WktTooltips.addTooltip(downloadLink, "download");
         }))
         .orElseGet(()->{
-            Components.permanentlyHide(parent, id);
+            WktComponents.permanentlyHide(parent, id);
             return null;
         });
     }

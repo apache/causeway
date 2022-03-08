@@ -76,46 +76,33 @@
 				  
 		</div>
 
-		<wicket:fragment wicket:id="fragmentValueAsTextInput">
+		<!-- INPUT FRAGMENTS -->
+
+		<wicket:fragment wicket:id="fragment-input-text">
 			<input type="text" name="scalarValue"
 				class="form-control form-control-sm scalarValue"
 				wicket:id="scalarValue" />
 		</wicket:fragment>
 
-		<wicket:fragment wicket:id="fragmentValueAsTextarea">
+		<wicket:fragment wicket:id="fragment-input-textarea">
 			<textarea wicket:id="scalarValue" name="scalarValue"
 				class="form-control form-control-sm scalarValue"
 				data-isis-focus="true" />
 		</wicket:fragment>
 		
-		<wicket:fragment wicket:id="fragmentValueAsCheckbox">
+		<wicket:fragment wicket:id="fragment-input-checkbox">
 	        <input type="checkbox" name="scalarValue"
 	        	class="scalarValue"
 				wicket:id="scalarValue" />
 		</wicket:fragment>
 		
-		<wicket:fragment wicket:id="fragmentValueAsFile">
+		<wicket:fragment wicket:id="fragment-input-file">
 			<span class="uploadFile form-text">
       			<input type="file" name="scalarValue" wicket:id="scalarValue" />
          	</span>
 		</wicket:fragment>
-
-		<wicket:fragment wicket:id="fragmentValueAsEditIconInlinePrompt">
-			<button class="edit btn btn-sm btn-link" wicket:id="scalarValue">
-				<span class="editIcon fa fa-edit"/>
-			</button>
-		</wicket:fragment>
-
-		<wicket:fragment wicket:id="fragmentValueAsTextInlinePrompt">
-			<span wicket:id="scalarValue"/>
-		</wicket:fragment>
-
-		<wicket:fragment wicket:id="fragmentValueAsTextareaInlinePrompt">
-			<textarea wicket:id="scalarValue"
-				class="form-control form-control-sm scalarPrompt" readonly="true"/>
-		</wicket:fragment>
-
-		<wicket:fragment wicket:id="fragmentValueAsDateInput">
+		
+		<wicket:fragment wicket:id="fragment-input-date">
 			<div class="date">
 				<input type="text" name="scalarValue"
 					class="form-control form-control-sm scalarValue"
@@ -123,12 +110,31 @@
 			</div>
 		</wicket:fragment>
 
-		<wicket:fragment wicket:id="fragmentCompactAsCheckbox">
+		<!-- PROMPT FRAGMENTS -->
+
+		<wicket:fragment wicket:id="fragment-prompt-editicon">
+			<button class="edit btn btn-sm btn-link" wicket:id="scalarValue">
+				<span class="editIcon fa fa-edit"/>
+			</button>
+		</wicket:fragment>
+
+		<wicket:fragment wicket:id="fragment-prompt-label">
+			<span wicket:id="scalarValue"/>
+		</wicket:fragment>
+
+		<wicket:fragment wicket:id="fragment-prompt-textarea">
+			<textarea wicket:id="scalarValue"
+				class="form-control form-control-sm scalarPrompt" readonly="true"/>
+		</wicket:fragment>
+
+		<!-- COMPACT FRAGMENTS -->
+		
+		<wicket:fragment wicket:id="fragment-compact-checkbox">
 			<input wicket:id="scalarIfCompact" type="checkbox"
 				class="form-control" />
 		</wicket:fragment>
 
-		<wicket:fragment wicket:id="fragmentCompactAsSpan">
+		<wicket:fragment wicket:id="fragment-compact-label">
 			<span wicket:id="scalarIfCompact"/>
 		</wicket:fragment>
 

@@ -26,7 +26,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.ListOfLinksModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktLinks;
 
@@ -64,7 +64,7 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
             final Can<LinkAndLabel> links,
             final Style style) {
         if(links.isEmpty()) {
-            Components.permanentlyHide(markupContainer, id);
+            WktComponents.permanentlyHide(markupContainer, id);
             return null;
         }
         return Wkt.add(markupContainer, style.newPanel(id, links));

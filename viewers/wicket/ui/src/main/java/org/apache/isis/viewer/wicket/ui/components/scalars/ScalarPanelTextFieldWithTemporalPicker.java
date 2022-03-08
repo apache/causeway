@@ -24,7 +24,7 @@ import org.apache.wicket.markup.html.form.TextField;
 
 import org.apache.isis.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.RegularFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDateTimePicker;
 
 /**
@@ -53,8 +53,8 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
     }
 
     @Override
-    protected Optional<RegularFragment> getRegularFragmentType() {
-        return Optional.of(RegularFragment.DATE_INPUT);
+    protected Optional<InputFragment> getInputFragmentType() {
+        return Optional.of(InputFragment.DATE);
     }
 
 }

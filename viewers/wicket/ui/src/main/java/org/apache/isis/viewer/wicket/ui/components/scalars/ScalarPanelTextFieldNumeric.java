@@ -44,7 +44,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
     @Override
     protected final Component createComponentForCompact(final String id) {
         val label = Wkt.labelAddWithConverter(
-                _FragmentFactory.createCompactFragment(CompactFragment.SPAN, this),
+                CompactFragment.LABEL.createFragment(this),
                 id, unwrappedModel(), type, getConverter(scalarModel()));
         label.setEnabled(false);
         return label;

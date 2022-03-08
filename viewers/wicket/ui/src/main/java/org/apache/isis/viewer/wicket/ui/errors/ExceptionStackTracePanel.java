@@ -42,7 +42,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.Breadcrum
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
-import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.WktLinks;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
@@ -96,7 +96,7 @@ public class ExceptionStackTracePanel extends Panel {
 
                 final String ticketMarkup = ticket != null ? ticket.getMarkup(): null;
                 if(ticketMarkup == null) {
-                    Components.permanentlyHide(this, ID_TICKET_MARKUP);
+                    WktComponents.permanentlyHide(this, ID_TICKET_MARKUP);
                 } else {
                     add(new MarkupComponent(ID_TICKET_MARKUP, Model.of(ticket.getMarkup())));
                 }
@@ -106,7 +106,7 @@ public class ExceptionStackTracePanel extends Panel {
                         exceptionModel.isRecognized() ||
                         (ticket != null && ticket.getStackTracePolicy() == Ticket.StackTracePolicy.HIDE);
                 if(suppressExceptionDetail) {
-                    Components.permanentlyHide(this, ID_EXCEPTION_DETAIL_DIV);
+                    WktComponents.permanentlyHide(this, ID_EXCEPTION_DETAIL_DIV);
                 } else {
                     MarkupContainer container = new WebMarkupContainer(ID_EXCEPTION_DETAIL_DIV) {
                         private static final long serialVersionUID = 1L;

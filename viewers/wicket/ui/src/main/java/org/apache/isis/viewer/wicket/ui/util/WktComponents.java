@@ -28,10 +28,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.isis.commons.internal.exceptions._Exceptions.FluentException;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 
-public final class Components {
-
-    private Components() {
-    }
+public final class WktComponents {
 
     /**
      * Permanently hides by replacing with a {@link Label} that has an empty

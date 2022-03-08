@@ -39,7 +39,8 @@ import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengt
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.RegularFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.InputFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.PromptFragment;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
@@ -130,10 +131,10 @@ extends ScalarPanelFormFieldAbstract<T> {
     }
 
     @Override
-    protected Optional<RegularFragment> getRegularFragmentType() {
+    protected Optional<InputFragment> getInputFragmentType() {
         return Optional.of(getTextFieldVariant().isSingleLine()
-                ? RegularFragment.TEXT_INPUT
-                : RegularFragment.TEXTAREA_INPUT);
+                ? InputFragment.TEXT
+                : InputFragment.TEXTAREA);
     }
 
     @Override
@@ -156,14 +157,14 @@ extends ScalarPanelFormFieldAbstract<T> {
             final IModel<String> inlinePromptLabelModel) {
 
         if(getInlinePromptConfig().isUseEditIconWithLink()) {
-            return _FragmentFactory.promptOnEditIcon(this, inlinePromptLabelModel);
+            return PromptFragment.EDIT_ICON.createFragment(this, inlinePromptLabelModel, null);
         }
 
         switch(getTextFieldVariant()) {
         case SINGLE_LINE:
-            return _FragmentFactory.promptOnLabel(this, inlinePromptLabelModel);
+            return PromptFragment.LABEL.createFragment(this, inlinePromptLabelModel, null);
         case MULTI_LINE:
-            return _FragmentFactory.promptOnTextarea(this, inlinePromptLabelModel, this::setFormComponentAttributes);
+            return PromptFragment.TEXTAREA.createFragment(this, inlinePromptLabelModel, this::setFormComponentAttributes);
         default:
             throw _Exceptions.unmatchedCase(getTextFieldVariant());
         }

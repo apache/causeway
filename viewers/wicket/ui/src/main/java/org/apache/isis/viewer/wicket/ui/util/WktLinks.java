@@ -61,7 +61,7 @@ public final class WktLinks {
         val link = linkAndLabel.getUiComponent();
         val action = linkAndLabel.getManagedAction().getAction();
 
-        Tooltips.addTooltip(link, link instanceof ActionLink
+        WktTooltips.addTooltip(link, link instanceof ActionLink
                     && _Strings.isNotEmpty(((ActionLink) link).getReasonDisabledIfAny())
                 ? ((ActionLink) link).getReasonDisabledIfAny()
                 : linkAndLabel.getDescription().orElse(null));
@@ -84,12 +84,12 @@ public final class WktLinks {
                             .getTranslationService();
                     val confirmUiModel = ConfirmUiModel
                             .ofAreYouSure(translationService, Placement.BOTTOM);
-                    Decorators.getConfirm().decorate(link, confirmUiModel);
+                    WktDecorators.getConfirm().decorate(link, confirmUiModel);
                 }
             }
             // ensure links receive the danger style
             // don't care if expressed twice
-            Decorators.getDanger().decorate(link);
+            WktDecorators.getDanger().decorate(link);
         }
 
         linkAndLabel
@@ -100,8 +100,8 @@ public final class WktLinks {
                 linkAndLabel::getFriendlyName);
 
         val fontAwesome = linkAndLabel.getFontAwesomeUiModel();
-        Decorators.getIcon().decorate(viewTitleLabel, fontAwesome);
-        Decorators.getMissingIcon().decorate(viewTitleLabel, fontAwesome);
+        WktDecorators.getIcon().decorate(viewTitleLabel, fontAwesome);
+        WktDecorators.getMissingIcon().decorate(viewTitleLabel, fontAwesome);
 
         return link;
     }

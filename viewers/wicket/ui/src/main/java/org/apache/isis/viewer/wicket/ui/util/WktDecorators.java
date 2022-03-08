@@ -51,7 +51,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.Confi
  *
  */
 @UtilityClass
-public class Decorators {
+public class WktDecorators {
 
     // -- BASIC DECORATORS
     @Getter(lazy = true) private final static Tooltip tooltip = new Tooltip();
@@ -73,7 +73,7 @@ public class Decorators {
     public final static class Tooltip implements TooltipDecorator<Component> {
         @Override
         public void decorate(final Component uiComponent, final TooltipUiModel tooltipUiModel) {
-            Tooltips.addTooltip(uiComponent, tooltipUiModel);
+            WktTooltips.addTooltip(uiComponent, tooltipUiModel);
         }
     }
 
@@ -113,7 +113,7 @@ public class Decorators {
             if(uiComponent instanceof Button) {
                 // ensure dialog ok buttons receive the danger style as well
                 // don't care if expressed twice
-                Decorators.getDanger().decorate(uiComponent);
+                WktDecorators.getDanger().decorate(uiComponent);
             }
 
         }

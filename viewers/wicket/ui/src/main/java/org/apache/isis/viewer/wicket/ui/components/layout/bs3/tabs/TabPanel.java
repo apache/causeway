@@ -29,7 +29,7 @@ import org.apache.isis.viewer.wicket.ui.components.layout.bs3.col.RepeatingViewW
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.row.Row;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 public class TabPanel
@@ -76,7 +76,7 @@ implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
             Wkt.cssAppend(panel, bs3Tab.getCssClass());
             panel.add(div);
         } else {
-            Components.permanentlyHide(panel, div.getId());
+            WktComponents.permanentlyHide(panel, div.getId());
         }
 
     }

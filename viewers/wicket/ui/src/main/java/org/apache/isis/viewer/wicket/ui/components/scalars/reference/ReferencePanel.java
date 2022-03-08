@@ -45,8 +45,8 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceChoices;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceObjectAutoComplete;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete;
-import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
+import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
@@ -184,7 +184,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         val entityLinkModel = (HasRenderingHints) entityLink.getModel();
         entityLinkModel.toViewMode();
         entityLink.setEnabled(false);
-        Tooltips.addTooltip(entityLink, disableReason);
+        WktTooltips.addTooltip(entityLink, disableReason);
         syncWithInput();
     }
 
@@ -229,7 +229,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
             if(adapter != null
                     || isInlinePrompt) {
-                Components.permanentlyHide(componentForRegular, "entityTitleIfNull");
+                WktComponents.permanentlyHide(componentForRegular, "entityTitleIfNull");
             } else {
                 Wkt.labelAdd(componentForRegular, "entityTitleIfNull", "(none)");
             }
@@ -263,8 +263,8 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
             }
 
             if(componentForRegular != null) {
-                Components.permanentlyHide(componentForRegular, ID_ENTITY_ICON_TITLE);
-                Components.permanentlyHide(componentForRegular, "entityTitleIfNull");
+                WktComponents.permanentlyHide(componentForRegular, ID_ENTITY_ICON_TITLE);
+                WktComponents.permanentlyHide(componentForRegular, "entityTitleIfNull");
             }
 
             // syncUsability
@@ -273,11 +273,11 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
                 select2.setEnabled(mutability);
             }
 
-            Components.permanentlyHide(entityLink, "entityLinkIfNull");
+            WktComponents.permanentlyHide(entityLink, "entityLinkIfNull");
         } else {
             // this is horrid; adds a label to the id
             // should instead be a 'temporary hide'
-            Components.permanentlyHide(entityLink, ID_AUTO_COMPLETE);
+            WktComponents.permanentlyHide(entityLink, ID_AUTO_COMPLETE);
             // setSelect2(null); // this forces recreation next time around
         }
 

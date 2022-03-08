@@ -293,7 +293,7 @@ public class Wkt {
         .withSize(size)
         .withEnclosedLabel(false)
         .withIconChecked("<i class='fa fa-fw fa-check'></i>")
-        .withIconNull("<i class='fa fa-fw fa-square'></i>")
+        .withIconNull("<i class='fa-solid fa-square-question'></i>")
         .withThreeState(!required);
 
         final CheckBoxX checkBox = new CheckBoxX(id, checkedModel) {

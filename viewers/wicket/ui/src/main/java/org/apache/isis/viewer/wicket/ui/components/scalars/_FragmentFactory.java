@@ -19,14 +19,18 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
+import org.springframework.lang.Nullable;
 
-import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.RequiredArgsConstructor;
@@ -36,77 +40,67 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class _FragmentFactory {
 
-    // -- REGULAR
-
-    @RequiredArgsConstructor
-    public static enum RegularFragment {
-        TEXT_INPUT("fragmentValueAsTextInput"),
-        TEXTAREA_INPUT("fragmentValueAsTextarea"),
-        DATE_INPUT("fragmentValueAsDateInput"),
-        CHECKBOX_INPUT("fragmentValueAsCheckbox"),
-        FILE_INPUT("fragmentValueAsCheckbox"),
-
-        TEXT_PROMPT("fragmentValueAsTextInlinePrompt"),
-        TEXTAREA_PROMPT("fragmentValueAsTextareaInlinePrompt"),
-        EDIT_ICON_PROMPT("fragmentValueAsEditIconInlinePrompt"),
-        ;
-        private final String fragmentId;
-        public Fragment createFragment(final String id, final MarkupContainer container) {
-            return Wkt.fragmentAdd(container, id, fragmentId);
-        }
-        public Fragment createFragmentNoTab(final String id, final MarkupContainer container) {
-            return Wkt.fragmentAddNoTab(container, id, fragmentId);
-        }
-    }
-
-    Fragment createRegularFragment(final RegularFragment type, final MarkupContainer container) {
-        return type.createFragment(ScalarPanelAbstract.ID_SCALAR_VALUE_CONTAINER, container);
-    }
-
-    Fragment createInlinePromptFragment(final RegularFragment type, final MarkupContainer container) {
-        return type.createFragmentNoTab(ScalarPanelAbstract.ID_SCALAR_VALUE_INLINE_PROMPT_LABEL, container);
-    }
-
-    // -- COMPACT
+    // -- COMPACT FRAGMENTS
 
     @RequiredArgsConstructor
     public static enum CompactFragment {
-        CHECKBOX("fragmentCompactAsCheckbox"),
-        SPAN("fragmentCompactAsSpan");
+        CHECKBOX("fragment-compact-checkbox"),
+        LABEL("fragment-compact-label"),
+        ;
         private final String fragmentId;
-        public Fragment createFragment(final String id, final MarkupContainer container) {
-            return Wkt.fragmentAdd(container, id, fragmentId);
+        public Fragment createFragment(final MarkupContainer container) {
+            return Wkt.fragmentAdd(
+                    container, ScalarPanelAbstract.ID_SCALAR_IF_COMPACT, fragmentId);
         }
     }
 
-    Fragment createCompactFragment(final CompactFragment type, final MarkupContainer container) {
-        return type.createFragment(ScalarPanelAbstract.ID_SCALAR_IF_COMPACT, container);
+    // INPUT FRAGMENTS
+
+    @RequiredArgsConstructor
+    public static enum InputFragment {
+        TEXT("fragment-input-text"),
+        TEXTAREA("fragment-input-textarea"),
+        DATE("fragment-input-date"),
+        CHECKBOX("fragment-input-checkbox"),
+        FILE("fragment-input-file"),
+        ;
+        private final String fragmentId;
+        public Fragment createFragment(final MarkupContainer container, final FormComponent<?> inputComponent) {
+            val fragment = Wkt.fragmentAdd(
+                    container, ScalarPanelAbstract.ID_SCALAR_VALUE_CONTAINER, fragmentId);
+            fragment.add(inputComponent);
+            return fragment;
+        }
     }
 
-    // -- SHORTCUTS
+    // PROMPT FRAGMENTS
 
-    Fragment promptOnEditIcon(final MarkupContainer container, final IModel<String> promptLabelModel) {
-        val fragment = createInlinePromptFragment(RegularFragment.EDIT_ICON_PROMPT, container);
-        val editPromptLink = Wkt.add(fragment, new Button(ScalarPanelAbstract.ID_SCALAR_VALUE));
-        Tooltips.addTooltip(editPromptLink, "edit");
-        return fragment;
+    @RequiredArgsConstructor
+    public static enum PromptFragment {
+        EDIT_ICON("fragment-prompt-editicon", promptLabelModel->
+            WktTooltips.addTooltip(
+                new Button(ScalarPanelAbstract.ID_SCALAR_VALUE), "Click to edit")),
+        LABEL("fragment-prompt-label", promptLabelModel->
+            Wkt.label(ScalarPanelAbstract.ID_SCALAR_VALUE, promptLabelModel)),
+        TEXTAREA("fragment-prompt-textarea", promptLabelModel->
+            Wkt.textAreaNoTab(ScalarPanelAbstract.ID_SCALAR_VALUE, promptLabelModel)),
+        ;
+        private final String fragmentId;
+        private final Function<IModel<String>, Component> componentFactory;
+
+        public Fragment createFragment(final MarkupContainer container,
+                final IModel<String> promptLabelModel,
+                final @Nullable Consumer<FormComponent<String>> onComponentCreated) {
+            val fragment = Wkt.fragmentAdd(
+                    container, ScalarPanelAbstract.ID_SCALAR_VALUE_INLINE_PROMPT_LABEL, fragmentId);
+            val component = componentFactory.apply(promptLabelModel);
+            fragment.add(component);
+            if(onComponentCreated!=null
+                    && component instanceof FormComponent) {
+                onComponentCreated.accept(_Casts.uncheckedCast(component));
+            }
+            return fragment;
+        }
     }
 
-    Fragment promptOnLabel(
-            final MarkupContainer container,
-            final IModel<String> promptLabelModel) {
-        val fragment = createInlinePromptFragment(RegularFragment.TEXT_PROMPT, container);
-        Wkt.labelAdd(fragment, ScalarPanelAbstract.ID_SCALAR_VALUE, promptLabelModel);
-        return fragment;
-    }
-
-    Fragment promptOnTextarea(
-            final MarkupContainer container,
-            final IModel<String> promptLabelModel,
-            final Consumer<FormComponent<String>> onComponentCreated) {
-        val fragment = _FragmentFactory.createInlinePromptFragment(RegularFragment.TEXTAREA_PROMPT, container);
-        val inlinePromptTextArea = Wkt.textAreaAddNoTab(fragment, ScalarPanelAbstract.ID_SCALAR_VALUE, promptLabelModel);
-        onComponentCreated.accept(inlinePromptTextArea);
-        return fragment;
-    }
 }

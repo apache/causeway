@@ -47,7 +47,7 @@ import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.Link
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -126,7 +126,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
 
         // either add the built content, or hide entire
         if(properties.isEmpty()) {
-            Components.permanentlyHide(this, div.getId());
+            WktComponents.permanentlyHide(this, div.getId());
         } else {
             this.addOrReplace(div);
         }

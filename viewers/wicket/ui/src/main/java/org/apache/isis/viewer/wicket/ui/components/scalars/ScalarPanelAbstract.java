@@ -68,8 +68,8 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePa
 import org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices.ValueChoicesSelect2Panel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
+import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
@@ -589,7 +589,7 @@ implements ScalarModelSubscriber {
         }
         scalarNameLabel.setEscapeModelStrings(true);
         scalarModel.getDescribedAs()
-            .ifPresent(describedAs->Tooltips.addTooltip(scalarNameLabel, describedAs));
+            .ifPresent(describedAs->WktTooltips.addTooltip(scalarNameLabel, describedAs));
         return scalarNameLabel;
     }
 
@@ -692,10 +692,10 @@ implements ScalarModelSubscriber {
         if(condition) {
             val editProperty = Wkt.containerAdd(componentIfRegular, ID_EDIT_PROPERTY);
             Wkt.behaviorAddOnClick(editProperty, this::onPropertyEditClick);
-            Tooltips.addTooltip(editProperty, "edit");
+            WktTooltips.addTooltip(editProperty, "edit");
             return editProperty;
         } else {
-            Components.permanentlyHide(componentIfRegular, ID_EDIT_PROPERTY);
+            WktComponents.permanentlyHide(componentIfRegular, ID_EDIT_PROPERTY);
             return null;
         }
     }

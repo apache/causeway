@@ -37,9 +37,9 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.CompactFragment;
-import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.RegularFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
-import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -119,7 +119,7 @@ extends ScalarPanelAbstract {
      */
     protected Component createComponentForCompact(final String id) {
         return Wkt.labelAdd(
-                _FragmentFactory.createCompactFragment(CompactFragment.SPAN, this),
+                CompactFragment.LABEL.createFragment(this),
                 id,
                 ()->{
                     val scalarModel = scalarModel();
@@ -134,24 +134,19 @@ extends ScalarPanelAbstract {
 
     // -- HOOKS
 
-    protected Optional<RegularFragment> getRegularFragmentType() {
+    protected Optional<InputFragment> getInputFragmentType() {
         return Optional.empty();
     }
 
     protected void onFormGroupCreated(final FormGroup formGroup) {
-
         if(scalarModel().isViewMode()
                 && getInlinePromptConfig().isUseEditIconWithLink()) {
             formGroup.add(createComponentForCompact(ID_SCALAR_VALUE_CONTAINER));
             return;
         }
-
-        getRegularFragmentType()
-        .ifPresent(regularFragmentType->{
-            val formFieldFragment = _FragmentFactory.createRegularFragment(regularFragmentType, this);
-            formFieldFragment.add(getFormComponent());
-            formGroup.add(formFieldFragment);
-        });
+        getInputFragmentType()
+            .ifPresent(regularFragmentType->
+                formGroup.add(regularFragmentType.createFragment(this, getFormComponent())));
     }
 
     protected IValidator<Object> createValidator(final ScalarModel scalarModel) {
@@ -250,13 +245,13 @@ extends ScalarPanelAbstract {
     }
 
     private void setTooltip(final String tooltip) {
-        Tooltips.addTooltip(getFormComponent(), tooltip);
-        Tooltips.addTooltip(inlinePromptLink, tooltip);
+        WktTooltips.addTooltip(getFormComponent(), tooltip);
+        WktTooltips.addTooltip(inlinePromptLink, tooltip);
     }
 
     private void clearTooltip() {
-        Tooltips.clearTooltip(getFormComponent());
-        Tooltips.clearTooltip(inlinePromptLink);
+        WktTooltips.clearTooltip(getFormComponent());
+        WktTooltips.clearTooltip(inlinePromptLink);
     }
 
 }

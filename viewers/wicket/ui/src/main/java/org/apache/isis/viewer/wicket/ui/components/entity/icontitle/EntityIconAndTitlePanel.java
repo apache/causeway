@@ -38,8 +38,8 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
+import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -133,11 +133,11 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             if (iconName != null || cssClassFaFactory == null) {
                 Wkt.imageAddCachable(link, ID_ENTITY_ICON,
                                 getImageResourceCache().resourceReferenceFor(targetAdapter));
-                Components.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
+                WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
             } else {
                 Label dummy = Wkt.labelAdd(link, ID_ENTITY_FONT_AWESOME, "");
                 Wkt.cssAppend(dummy, cssClassFaFactory.asSpaceSeparatedWithAdditional("fa-2x"));
-                Components.permanentlyHide(link, ID_ENTITY_ICON);
+                WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
             }
 
             final String title = determineTitle();
@@ -145,7 +145,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
             String entityTypeName = determineFriendlyType() // from actual underlying model
                     .orElseGet(targetAdapter.getSpecification()::getSingularName); // not sure if this code path is ever reached
-            Tooltips.addTooltip(link, entityTypeName, title);
+            WktTooltips.addTooltip(link, entityTypeName, title);
         }
 
         return link;

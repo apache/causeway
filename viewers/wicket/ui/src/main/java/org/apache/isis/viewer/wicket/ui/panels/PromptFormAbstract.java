@@ -46,7 +46,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
-import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
@@ -123,7 +123,7 @@ implements ScalarModelSubscriber {
         if (outcome.isSuccess()) {
             completePrompt(target);
             okButton.send(target.getPage(), Broadcast.EXACT, newCompletedEvent(target, form));
-            Components.addToAjaxRequest(target, form);
+            WktComponents.addToAjaxRequest(target, form);
         }
     }
 

@@ -29,9 +29,9 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.Decorators;
-import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
+import org.apache.isis.viewer.wicket.ui.util.WktDecorators;
+import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
@@ -111,7 +111,7 @@ implements Serializable {
 
             linkAndLabel
             .getDescription()
-            .ifPresent(describedAs->Tooltips.addTooltip(actionLink, describedAs));
+            .ifPresent(describedAs->WktTooltips.addTooltip(actionLink, describedAs));
 
             if (ObjectAction.Util.returnsBlobOrClob(actionMeta)) {
                 Wkt.cssAppend(actionLink, "noVeil");           }
@@ -126,23 +126,23 @@ implements Serializable {
             Wkt.cssAppend(actionLink, linkAndLabel.getFeatureIdentifier());
 
             val fontAwesome = getLinkAndLabel().getFontAwesomeUiModel();
-            Decorators.getIcon().decorate(label, fontAwesome);
+            WktDecorators.getIcon().decorate(label, fontAwesome);
 
             linkAndLabel.getDisableUiModel().ifPresent(disableUiModel->{
-                Decorators.getDisable().decorate(actionLink, disableUiModel);
+                WktDecorators.getDisable().decorate(actionLink, disableUiModel);
             });
 
 
             // .. and hide label
-            Components.permanentlyHide(markupContainer, CssMenuItem.ID_MENU_LABEL);
+            WktComponents.permanentlyHide(markupContainer, CssMenuItem.ID_MENU_LABEL);
             return actionLink;
         } else {
             // hide link...
-            Components.permanentlyHide(markupContainer, ID_MENU_LINK);
+            WktComponents.permanentlyHide(markupContainer, ID_MENU_LINK);
             // ... and show label, along with disabled reason
 
             linkAndLabel.getDisableUiModel().ifPresent(disableUiModel->{
-                Tooltips.addTooltip(label, disableUiModel.getReason());
+                WktTooltips.addTooltip(label, disableUiModel.getReason());
             });
 
             label.add(new AttributeModifier("class", Model.of("disabled")));
@@ -156,7 +156,7 @@ implements Serializable {
     private void addSubMenuItemComponentsIfAnyTo(final MarkupContainer menuItemMarkup) {
         val subMenuItems = getSubMenuItems();
         if (subMenuItems.isEmpty()) {
-            Components.permanentlyHide(menuItemMarkup, CssMenuItem.ID_SUB_MENU_ITEMS);
+            WktComponents.permanentlyHide(menuItemMarkup, CssMenuItem.ID_SUB_MENU_ITEMS);
         } else {
             menuItemMarkup.add(
                     new CssSubMenuItemsPanel(CssMenuItem.ID_SUB_MENU_ITEMS, subMenuItems));

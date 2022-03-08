@@ -45,8 +45,8 @@ import org.apache.isis.viewer.wicket.ui.components.collection.selector.Collectio
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
+import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -96,7 +96,7 @@ implements HasDynamicallyVisibleContent {
         if(visible) {
             panel.add(div);
         } else {
-            Components.permanentlyHide(panel, div.getId());
+            WktComponents.permanentlyHide(panel, div.getId());
         }
 
     }
@@ -137,7 +137,7 @@ implements HasDynamicallyVisibleContent {
             div.add(labelComponent);
 
             collectionMetaModel.getDescription(collectionModel::getParentObject)
-            .ifPresent(description->Tooltips.addTooltip(labelComponent, description));
+            .ifPresent(description->WktTooltips.addTooltip(labelComponent, description));
 
             final Can<LinkAndLabel> links = collectionModel.getLinks();
             AdditionalLinksPanel.addAdditionalLinks(div,ID_ADDITIONAL_LINKS, links, AdditionalLinksPanel.Style.INLINE_LIST);

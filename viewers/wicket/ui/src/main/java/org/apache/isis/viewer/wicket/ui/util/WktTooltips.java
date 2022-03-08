@@ -37,14 +37,14 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig.Placement;
 
 @UtilityClass
-public class Tooltips {
+public class WktTooltips {
 
     /**
      * To include the tooltip-css when a page is rendered.
      * @param response
      */
     public static void renderHead(final IHeaderResponse response) {
-        response.render(CssHeaderItem.forReference(new CssResourceReference(Tooltips.class, "isis-tooltips.css")));
+        response.render(CssHeaderItem.forReference(new CssResourceReference(WktTooltips.class, "isis-tooltips.css")));
     }
 
     /**
@@ -52,13 +52,13 @@ public class Tooltips {
      * @param target
      * @param tooltipUiModel
      */
-    public static void addTooltip(
-            final @Nullable Component target,
+    public static <T extends Component> T addTooltip(
+            final @Nullable T target,
             final @Nullable TooltipUiModel tooltipUiModel) {
         if(target ==null
                 || tooltipUiModel==null
                 || _Strings.isEmpty(tooltipUiModel.getBody())) {
-            return; // no body so don't render
+            return target; // no body so don't render tooltip
         }
 
         final IModel<String> labelModel = tooltipUiModel
@@ -70,6 +70,7 @@ public class Tooltips {
         val tooltipBehavior = createTooltipBehavior(labelModel, bodyModel);
         Wkt.cssAppend(target, "isis-component-with-tooltip");
         target.add(tooltipBehavior);
+        return target;
     }
 
     public static void clearTooltip(final @Nullable Component target) {
@@ -82,21 +83,19 @@ public class Tooltips {
 
     // -- SHORTCUTS
 
-    //sonar-ignore-on ... fails to interpret _Strings.isEmpty as null guard
-
-    public static void addTooltip(final @Nullable Component target, @Nullable final String body) {
-        addTooltip(target, _Strings.isEmpty(body)
+    public static <T extends Component> T addTooltip(
+            final @Nullable T target, @Nullable final String body) {
+        return addTooltip(target, _Strings.isEmpty(body)
                 ? null
                 : TooltipUiModel.ofBody(body));
     }
 
-    public static void addTooltip(final @Nullable Component target, @Nullable final String label, @Nullable final String body) {
-        addTooltip(target, _Strings.isEmpty(body)
+    public static <T extends Component> T addTooltip(
+            final @Nullable T target, @Nullable final String label, @Nullable final String body) {
+        return addTooltip(target, _Strings.isEmpty(body)
                 ? null
                 : TooltipUiModel.of(label, body));
     }
-
-    //sonar-ignore-off
 
     // -- HELPER
 

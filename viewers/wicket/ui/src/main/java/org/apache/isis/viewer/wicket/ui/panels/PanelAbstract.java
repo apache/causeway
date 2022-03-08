@@ -26,7 +26,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.viewer.common.model.components.ComponentType;
-import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 
 /**
  * Convenience adapter for {@link Panel}s built up using {@link ComponentType}s.
@@ -80,14 +80,14 @@ extends PanelBase<T> {
      * For subclasses
      */
     protected void permanentlyHide(final ComponentType... componentIds) {
-        Components.permanentlyHide(this, componentIds);
+        WktComponents.permanentlyHide(this, componentIds);
     }
 
     /**
      * For subclasses
      */
     public void permanentlyHide(final String... ids) {
-        Components.permanentlyHide(this, ids);
+        WktComponents.permanentlyHide(this, ids);
     }
 
     protected static void setVisible(@Nullable final Component component, final boolean visible) {

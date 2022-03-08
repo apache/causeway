@@ -45,7 +45,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.act.ParameterUiModelWkt;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Decorators;
+import org.apache.isis.viewer.wicket.ui.util.WktDecorators;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -141,7 +141,7 @@ extends PromptFormAbstract<ActionModel> {
 
         if (action.getSemantics().isAreYouSure()) {
             val confirmUiModel = ConfirmUiModel.ofAreYouSure(getTranslationService(), Placement.BOTTOM);
-            Decorators.getConfirm().decorate(button, confirmUiModel);
+            WktDecorators.getConfirm().decorate(button, confirmUiModel);
         }
     }
 
