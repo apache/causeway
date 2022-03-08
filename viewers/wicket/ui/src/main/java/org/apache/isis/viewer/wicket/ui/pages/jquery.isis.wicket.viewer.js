@@ -207,7 +207,7 @@ $(function() {
 	    });
 	}
 
-	$(document, '.isis-component-with-tooltip').on('click', hidePopover);
+	$(document, '.wkt-component-with-tooltip').on('click', hidePopover);
 
 /*
     $('.editing .editable').parent().hover(function () {

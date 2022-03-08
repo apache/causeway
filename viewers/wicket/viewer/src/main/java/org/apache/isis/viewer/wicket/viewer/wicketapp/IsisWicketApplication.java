@@ -41,6 +41,7 @@ import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.core.request.mapper.MountedMapper;
+import org.apache.wicket.devutils.debugbar.DebugBarInitializer;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.ResourceAggregator;
@@ -273,30 +274,12 @@ implements
             //  side-effects?
             //  SharedResources sharedResources = getSharedResources();
 
-//            if(systemEnvironment.isPrototyping()) {
-//                DebugDiskDataStore.register(this);
-//                log.debug("DebugDiskDataStore registered; access via ~/wicket/internal/debug/diskDataStore");
-//                log.debug("DebugDiskDataStore: eg, http://localhost:8080/wicket/wicket/internal/debug/diskDataStore");
-//
-//                if(!getDebugSettings().isDevelopmentUtilitiesEnabled()) {
-//                    boolean enableDevUtils = configuration.getViewer().getWicket().getDevelopmentUtilities().isEnable();
-//                    if(enableDevUtils) {
-//                        getDebugSettings().setDevelopmentUtilitiesEnabled(true);
-//
-//                        // copied from DebugBarInitializer
-//                        // this is hacky, but need to do this because IInitializer#init() called before
-//                        // the Application's #init() is called.
-//                        // an alternative, better, design might be to move Isis' own initialization into an
-//                        // implementation of IInitializer?
-//                        DebugBar.registerContributor(VersionDebugContributor.DEBUG_BAR_CONTRIB, this);
-//                        DebugBar.registerContributor(InspectorDebugPanel.DEBUG_BAR_CONTRIB, this);
-//                        DebugBar.registerContributor(SessionSizeDebugPanel.DEBUG_BAR_CONTRIB, this);
-//                        //DebugBar.registerContributor(PageSizeDebugPanel.DEBUG_BAR_CONTRIB, this);
-//                    }
-//                }
-//            }
+            if(systemEnvironment.isPrototyping()
+                    && configuration.getViewer().getWicket().getDevelopmentUtilities().isEnable()) {
 
-//            log.debug("storeSettings.inmemoryCacheSize        : {}", getStoreSettings().getInmemoryCacheSize());
+                new DebugBarInitializer().init(this);
+            }
+
             log.debug("storeSettings.asynchronousQueueCapacity: {}", getStoreSettings().getAsynchronousQueueCapacity());
             log.debug("storeSettings.maxSizePerSession        : {}", getStoreSettings().getMaxSizePerSession());
             log.debug("storeSettings.fileStoreFolder          : {}", getStoreSettings().getFileStoreFolder());
