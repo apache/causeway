@@ -1197,3 +1197,7 @@ ul.navbar-wrap {
 .tabGroups {
     margin-bottom: 21px;
 }
+
+.float-right {
+  float: right !important;
+}
