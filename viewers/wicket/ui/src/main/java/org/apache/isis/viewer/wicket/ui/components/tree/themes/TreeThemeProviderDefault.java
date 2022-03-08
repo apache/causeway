@@ -20,12 +20,12 @@ package org.apache.isis.viewer.wicket.ui.components.tree.themes;
 
 import org.apache.wicket.behavior.Behavior;
 
-import org.apache.isis.viewer.wicket.ui.components.tree.themes.bootstrap.IsisBootstrapTreeTheme;
+import org.apache.isis.viewer.wicket.ui.components.tree.themes.bootstrap.WktBootstrapTreeTheme;
 
 public class TreeThemeProviderDefault implements TreeThemeProvider {
 
     // other options as provided by wicket-extensions: WindowsTheme, HumanTheme
-    private final Behavior bootstrapTheme = new IsisBootstrapTreeTheme();
+    private final Behavior bootstrapTheme = new WktBootstrapTreeTheme();
 
     @Override
     public Behavior treeThemeFor(Object model) {

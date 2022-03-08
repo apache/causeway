@@ -37,6 +37,7 @@
   display: block;
   float: left;
   width: 18px;
+  color: rgba(0,0,0,0);
 }
 
 .tree-theme-bootstrap .tree-junction-expanded {
