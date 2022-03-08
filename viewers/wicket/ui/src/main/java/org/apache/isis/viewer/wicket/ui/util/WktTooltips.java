@@ -104,25 +104,25 @@ public class WktTooltips {
 
     private TooltipBehavior createTooltipBehavior(
             final @NonNull IModel<String> bodyLabel) {
-        return new TooltipBehavior(bodyLabel, getTooltipConfigTop());
+        return new PopoverBehavior(Model.of(), bodyLabel, getTooltipConfigBottom());
+        //return new TooltipBehavior(bodyLabel, getTooltipConfigTop());
     }
 
     @Getter(lazy=true)
     private final PopoverConfig tooltipConfigTop =
-        new ExtendedPopoverConfig()
-        		.withBoundary(PopoverBoundary.viewport)
-                .withTrigger(OpenTrigger.hover)
-                .withPlacement(Placement.top)
-                .withDelay(Duration.ZERO)
-                .withAnimation(true);
+            createPopoverConfigDefault()
+            .withPlacement(Placement.top);
 
     @Getter(lazy=true)
     private final PopoverConfig tooltipConfigBottom =
-        new ExtendedPopoverConfig()
+            createPopoverConfigDefault()
+                .withPlacement(Placement.bottom);
+
+    private PopoverConfig createPopoverConfigDefault() {
+        return new ExtendedPopoverConfig()
                 .withBoundary(PopoverBoundary.viewport)
                 .withTrigger(OpenTrigger.hover)
-                .withPlacement(Placement.bottom)
                 .withDelay(Duration.ZERO)
                 .withAnimation(true);
-
+    }
 }
