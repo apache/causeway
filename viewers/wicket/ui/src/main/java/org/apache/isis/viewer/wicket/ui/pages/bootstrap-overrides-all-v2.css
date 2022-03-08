@@ -1201,3 +1201,8 @@ ul.navbar-wrap {
 .float-right {
   float: right !important;
 }
+
+.mr-auto, .mx-auto {
+  margin-right: auto !important;
+}
+
