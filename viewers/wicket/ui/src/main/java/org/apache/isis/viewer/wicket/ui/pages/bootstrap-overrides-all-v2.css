@@ -273,10 +273,6 @@ footer > .navbar {
     padding: 0;
 }
 
-.collectionContentsAsAjaxTablePanel table {
-    border: none;
-}
-
 .collectionContentsAsAjaxTablePanel table tr td:first-child,
 .collectionContentsAsAjaxTablePanel table tr th:first-child {
     border-left: none;
