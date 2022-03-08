@@ -588,6 +588,8 @@ ul.dropdown-menu {
 .dropup ul.dropdown-menu {
 	padding-bottom: 0;
 	margin-bottom: 0;
+	top: auto;
+	bottom: 100%;
 }
 
 /* removes the caret (arrow down) from the additional links selector dropdowns */
