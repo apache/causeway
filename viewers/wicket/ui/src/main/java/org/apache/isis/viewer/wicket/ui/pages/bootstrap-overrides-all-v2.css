@@ -1005,6 +1005,10 @@ footer .footer-image {
     margin-right: 10px;
 }
 
+.select2-container {
+	z-index: 1060; /* as bootstrap modal dialogs appear to have 1055 */
+}
+
 .select2-container-multi.input-sm {
     height: inherit;
 }
