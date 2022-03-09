@@ -56,7 +56,9 @@ extends ScalarPanelAbstract {
 
     @Override
     protected Component getValidationFeedbackReceiver() {
-        return select2.asComponent();
+        return select2!=null
+                ? select2.asComponent()
+                : null;
     }
 
     protected Select2 createSelect2(final String id) {

@@ -45,10 +45,10 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceChoices;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceObjectAutoComplete;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete;
-import org.apache.isis.viewer.wicket.ui.util.WktComponents;
-import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
+import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
 import lombok.val;
 
@@ -64,7 +64,8 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     private static final String ID_ENTITY_ICON_TITLE = "entityIconAndTitle";
 
     private EntityLinkSelect2Panel entityLink;
-    private EntityLinkSimplePanel entitySimpleLink;
+    private EntityLinkSimplePanel entityLinkOutputFormat;
+    private boolean isOutputFormat = false;
 
     public ReferencePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
@@ -81,17 +82,19 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     @Override
     protected Component createComponentForCompact() {
 
+        this.isOutputFormat = true;
+
         final ScalarModel scalarModel = getModel();
         final String name = scalarModel.getFriendlyName();
 
-        entitySimpleLink = (EntityLinkSimplePanel) getComponentFactoryRegistry()
+        this.entityLinkOutputFormat = (EntityLinkSimplePanel) getComponentFactoryRegistry()
                 .createComponent(ComponentType.ENTITY_LINK, scalarModel);
 
-        entitySimpleLink.setOutputMarkupId(true);
-        entitySimpleLink.setLabel(Model.of(name));
+        entityLinkOutputFormat.setOutputMarkupId(true);
+        entityLinkOutputFormat.setLabel(Model.of(name));
 
         final WebMarkupContainer labelIfCompact = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
-        labelIfCompact.add(entitySimpleLink);
+        labelIfCompact.add(entityLinkOutputFormat);
 
         return labelIfCompact;
     }
@@ -100,7 +103,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     @Override
     protected FormGroup createComponentForRegular() {
 
-        entityLink = new EntityLinkSelect2Panel(ComponentType.ENTITY_LINK.getId(), this);
+        this.entityLink = new EntityLinkSelect2Panel(ComponentType.ENTITY_LINK.getId(), this);
 
         entityLink.setRequired(getModel().isRequired());
         this.select2 = createSelect2AndSemantics();
@@ -146,12 +149,13 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     }
 
 
-
     // //////////////////////////////////////
 
     @Override
     protected InlinePromptConfig getInlinePromptConfig() {
-        return InlinePromptConfig.supportedAndHide(select2.asComponent());
+        return isOutputFormat
+                ? InlinePromptConfig.notSupported()
+                : InlinePromptConfig.supportedAndHide(select2.asComponent());
     }
 
     @Override
@@ -167,6 +171,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     @Override
     protected void onInitializeEditable() {
         super.onInitializeEditable();
+        if(isOutputFormat) return;
         entityLink.setEnabled(true);
         syncWithInput();
     }
@@ -174,6 +179,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     @Override
     protected void onInitializeNotEditable() {
         super.onInitializeNotEditable();
+        if(isOutputFormat) return;
         entityLink.setEnabled(false);
         syncWithInput();
     }
@@ -181,6 +187,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     @Override
     protected void onInitializeReadonly(final String disableReason) {
         super.onInitializeReadonly(disableReason);
+        if(isOutputFormat) return;
         val entityLinkModel = (HasRenderingHints) entityLink.getModel();
         entityLinkModel.toViewMode();
         entityLink.setEnabled(false);
@@ -191,7 +198,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     @Override
     protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
         super.onNotEditable(disableReason, target);
-
+        if(isOutputFormat) return;
         entityLink.setEnabled(false);
         entityLink.add(new AttributeModifier("title", Model.of(disableReason)));
     }
@@ -199,7 +206,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     @Override
     protected void onEditable(final Optional<AjaxRequestTarget> target) {
         super.onEditable(target);
-
+        if(isOutputFormat) return;
         entityLink.setEnabled(true);
         entityLink.add(new AttributeModifier("title", Model.of("")));
     }
