@@ -20,7 +20,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
 import java.util.Optional;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -108,8 +107,6 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         entityLink.setRequired(getModel().isRequired());
         this.select2 = createSelect2AndSemantics();
         entityLink.addOrReplace(select2.asComponent());
-
-        //syncWithInput();
 
         entityLink.setOutputMarkupId(true);
 
@@ -200,7 +197,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         super.onNotEditable(disableReason, target);
         if(isOutputFormat) return;
         entityLink.setEnabled(false);
-        entityLink.add(new AttributeModifier("title", Model.of(disableReason)));
+        Wkt.attributeReplace(entityLink, "title", disableReason);
     }
 
     @Override
@@ -208,7 +205,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         super.onEditable(target);
         if(isOutputFormat) return;
         entityLink.setEnabled(true);
-        entityLink.add(new AttributeModifier("title", Model.of("")));
+        Wkt.attributeReplace(entityLink, "title", "");
     }
 
     // called from onInitialize*
@@ -347,8 +344,6 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         val pendingAdapter = getModel().getObject();
         entityLink.setConvertedInput(pendingAdapter);
     }
-
-
 
     // //////////////////////////////////////
 
