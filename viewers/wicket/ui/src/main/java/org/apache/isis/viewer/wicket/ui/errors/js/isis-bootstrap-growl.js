@@ -1,5 +1,5 @@
 /*
-*  Project: Bootstrap Growl - v2.0.0
+*  Project: Bootstrap Growl - v2.0.0 (modified for Apache Isis / Bootstrap 5.1)
 *  Description: Turns standard Bootstrap alerts into "Growl-like" notifications.
 *  Author: Mouse0270 aka Robert McIntosh
 *  License: MIT License
@@ -33,7 +33,17 @@
 			onHide: null,
 			onHidden: null,
 			icon_type: 'class',
-			template: '<div data-growl="container" class="alert" role="alert"><button type="button" class="close" data-growl="dismiss"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><span data-growl="icon"></span><span data-growl="title"></span><span data-growl="message"></span><a href="#" data-growl="url"></a></div>'
+			// modified for Apache Isis (as of Bootstrap 5.1) ...
+			template: '<div data-growl="container" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">'
+			+ '<div class="d-flex">'
+			+ '<div class="toast-body">'
+			+ '<span data-growl="icon"></span>'
+			+ '<span data-growl="title"></span>'
+			+ '<span data-growl="message"></span>'
+			+ '</div>'
+			+ '<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" data-growl="dismiss" aria-label="Close"></button>'
+			+ '<a href="#" data-growl="url"></a>'
+			+ '</div></div>'
 		};	
 
 	// The actual plugin constructor
@@ -88,6 +98,7 @@
 		var $template = $(base.settings.template);
 
 		$template.addClass('alert-' + base.settings.type);
+		
 		$template.attr('data-growl-position', base.settings.placement.from + '-' + base.settings.placement.align);
 
 		$template.find('[data-growl="dismiss"]').css('display', 'none');
@@ -99,12 +110,12 @@
 	},
 	addContent = function($template, settings) {
 
-		$template.find('[data-growl="dismiss"]').css({
+/*	$template.find('[data-growl="dismiss"]').css({
 			'position': 'absolute',
 			'top': '5px',
 			'right': '10px',
 			'z-index': ((settings.z_index-1) >= 1 ? (settings.z_index-1) : 1)
-		});
+		});*/
 
 		if (settings.content.icon) {
 			if (settings.icon_type.toLowerCase() == 'class') {
