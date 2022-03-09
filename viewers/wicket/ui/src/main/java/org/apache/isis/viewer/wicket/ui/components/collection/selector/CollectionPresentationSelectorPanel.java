@@ -28,6 +28,7 @@ import org.apache.wicket.markup.html.link.DownloadLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.viewer.common.model.components.ComponentType;
@@ -39,6 +40,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktLinks;
+import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
 import lombok.val;
 
@@ -47,7 +49,7 @@ import lombok.val;
  * {@link org.apache.isis.viewer.common.model.components.ComponentType#COLLECTION_CONTENTS} with a backing
  * {@link org.apache.isis.viewer.wicket.model.models.EntityCollectionModel}.
  */
-public class CollectionSelectorPanel
+public class CollectionPresentationSelectorPanel
 extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 
     private static final long serialVersionUID = 1L;
@@ -62,25 +64,25 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
     private static final String ID_VIEW_BUTTON_TITLE = "viewButtonTitle";
     private static final String ID_VIEW_BUTTON_ICON = "viewButtonIcon";
 
-    private final CollectionSelectorHelper selectorHelper;
+    private final CollectionPresentationSelectorHelper selectorHelper;
     private final ComponentHintKey componentHintKey;
 
     private ComponentFactory selectedComponentFactory;
 
-    public CollectionSelectorPanel(
+    public CollectionPresentationSelectorPanel(
             final String id,
             final EntityCollectionModel model) {
         this(id, model, ComponentHintKey.noop());
     }
 
-    public CollectionSelectorPanel(
+    public CollectionPresentationSelectorPanel(
             final String id,
             final EntityCollectionModel model,
             final ComponentHintKey componentHintKey) {
         super(id, model);
         this.componentHintKey = componentHintKey;
 
-        selectorHelper = new CollectionSelectorHelper(
+        selectorHelper = new CollectionPresentationSelectorHelper(
                 model, getComponentFactoryRegistry(), componentHintKey);
     }
 
@@ -108,12 +110,14 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         final WebMarkupContainer views = new WebMarkupContainer(ID_VIEWS);
         final WebMarkupContainer container = new WebMarkupContainer(ID_VIEW_LIST);
 
+        WktTooltips.addTooltip(views, translate("Click to change view or export."));
+
         views.addOrReplace(container);
         views.setOutputMarkupId(true);
 
         this.setOutputMarkupId(true);
 
-        final Label viewButtonTitle = Wkt.labelAdd(views, ID_VIEW_BUTTON_TITLE, "Hidden");
+        final Label viewButtonTitle = Wkt.labelAdd(views, ID_VIEW_BUTTON_TITLE, translate("Hidden"));
         final Label viewButtonIcon = Wkt.labelAdd(views, ID_VIEW_BUTTON_ICON, "");
 
         Wkt.listViewAdd(container, ID_VIEW_ITEM, componentFactories, item->{
@@ -129,20 +133,20 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 
                 // add title and icon to the link
                 WktLinks.listItemAsDropdownLink(item, downloadLink,
-                        ID_VIEW_ITEM_TITLE, CollectionSelectorPanel::nameFor,
+                        ID_VIEW_ITEM_TITLE, CollectionPresentationSelectorPanel::nameFor,
                         ID_VIEW_ITEM_ICON, null,
-                        CollectionSelectorPanel::cssClassFor);
+                        CollectionPresentationSelectorPanel::cssClassFor);
                 return;
             }
 
             // on click: make the clicked item the new selected item
             val link = Wkt.linkAdd(item, ID_VIEW_LINK, target->{
-                final CollectionSelectorPanel linksSelectorPanel = CollectionSelectorPanel.this;
+                final CollectionPresentationSelectorPanel linksSelectorPanel = CollectionPresentationSelectorPanel.this;
                 linksSelectorPanel.setViewHintAndBroadcast(componentFactory.getName(), target);
 
                 linksSelectorPanel.selectedComponentFactory = componentFactory;
 
-                CollectionSelectorPanel.this.getModel().parentedHintingBookmark()
+                CollectionPresentationSelectorPanel.this.getModel().parentedHintingBookmark()
                 .ifPresent(bookmark->componentHintKey.set(bookmark, componentFactory.getName()));
 
                 target.add(linksSelectorPanel, views);
@@ -150,12 +154,12 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 
             // add title and icon to the link
             WktLinks.listItemAsDropdownLink(item, link,
-                    ID_VIEW_ITEM_TITLE, CollectionSelectorPanel::nameFor,
+                    ID_VIEW_ITEM_TITLE, CollectionPresentationSelectorPanel::nameFor,
                     ID_VIEW_ITEM_ICON, null,
-                    CollectionSelectorPanel::cssClassFor);
+                    CollectionPresentationSelectorPanel::cssClassFor);
 
             // hide the selected item
-            val isSelected = componentFactory == CollectionSelectorPanel.this.selectedComponentFactory;
+            val isSelected = componentFactory == CollectionPresentationSelectorPanel.this.selectedComponentFactory;
             if (isSelected) {
                 viewButtonTitle.setDefaultModel(nameFor(componentFactory));
                 final IModel<String> cssClass = cssClassFor(componentFactory, viewButtonIcon);
@@ -201,11 +205,17 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
     }
 
     protected void setViewHintAndBroadcast(final String viewName, final AjaxRequestTarget target) {
-        final CollectionSelectorPanel component = CollectionSelectorPanel.this;
+        final CollectionPresentationSelectorPanel component = CollectionPresentationSelectorPanel.this;
         final IsisSelectorEvent selectorEvent =
-                new IsisSelectorEvent(component, CollectionSelectorHelper.UIHINT_EVENT_VIEW_KEY, viewName, target);
+                new IsisSelectorEvent(component, CollectionPresentationSelectorHelper.UIHINT_EVENT_VIEW_KEY, viewName, target);
         send(getPage(), Broadcast.EXACT, selectorEvent);
     }
+
+    private String translate(final String raw) {
+        return getCommonContext().getTranslationService()
+            .translate(TranslationContext.empty(), raw);
+    }
+
 }
 
 

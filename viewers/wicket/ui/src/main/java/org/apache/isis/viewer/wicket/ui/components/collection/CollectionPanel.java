@@ -30,8 +30,8 @@ import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.MultiselectToggleProvider;
-import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
-import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
+import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;
+import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorProvider;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -50,7 +50,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
 public class CollectionPanel
 extends PanelAbstract<DataTableModel, EntityCollectionModelParented>
 implements
-    CollectionSelectorProvider,
+    CollectionPresentationSelectorProvider,
     MultiselectToggleProvider {
 
     private static final long serialVersionUID = 1L;
@@ -59,7 +59,7 @@ implements
 
     private Component collectionContents;
     private Label label;
-    @Getter @Setter private CollectionSelectorPanel selectorDropdownPanel;
+    @Getter @Setter private CollectionPresentationSelectorPanel selectorDropdownPanel;
 
     public CollectionPanel(
             final String id,
