@@ -31,6 +31,7 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.isis.viewer.common.model.PlacementDirection;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -110,7 +111,8 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         final WebMarkupContainer views = new WebMarkupContainer(ID_VIEWS);
         final WebMarkupContainer container = new WebMarkupContainer(ID_VIEW_LIST);
 
-        WktTooltips.addTooltip(views, translate("Click to change view or export."));
+        WktTooltips.addTooltip(PlacementDirection.TOP,
+                views, translate("Click to change view or see export options."));
 
         views.addOrReplace(container);
         views.setOutputMarkupId(true);

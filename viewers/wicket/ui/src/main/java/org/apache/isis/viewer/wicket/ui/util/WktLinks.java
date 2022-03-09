@@ -36,8 +36,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.viewer.common.model.PlacementDirection;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
-import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel.Placement;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 
@@ -83,7 +83,7 @@ public final class WktLinks {
                     val translationService = linkAndLabel.getAction().getMetaModelContext()
                             .getTranslationService();
                     val confirmUiModel = ConfirmUiModel
-                            .ofAreYouSure(translationService, Placement.BOTTOM);
+                            .ofAreYouSure(translationService, PlacementDirection.BOTTOM);
                     WktDecorators.getConfirm().decorate(link, confirmUiModel);
                 }
             }

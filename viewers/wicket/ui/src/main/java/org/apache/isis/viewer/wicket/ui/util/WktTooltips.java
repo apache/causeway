@@ -24,10 +24,11 @@ import org.apache.wicket.model.Model;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.viewer.common.model.PlacementDirection;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipUiModel;
 import org.apache.isis.viewer.wicket.ui.util.ExtendedPopoverConfig.PopoverBoundary;
 
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -57,13 +58,15 @@ public class WktTooltips {
             return target; // no body so don't render tooltip
         }
 
+        val placementDirection = tooltipUiModel.getPlacementDirection();
+
         final IModel<String> bodyModel = Model.of(tooltipUiModel.getBody());
 
         val tooltipBehavior = tooltipUiModel
                 .getTitle()
                 .map(title->Model.of(title))
-                .map(titleModel->createTooltipBehavior(titleModel, bodyModel))
-                .orElseGet(()->createTooltipBehavior(bodyModel));
+                .map(titleModel->createTooltipBehavior(placementDirection, titleModel, bodyModel))
+                .orElseGet(()->createTooltipBehavior(placementDirection, bodyModel));
         target.add(tooltipBehavior);
 
         Wkt.cssAppend(target, "wkt-component-with-tooltip");
@@ -83,29 +86,46 @@ public class WktTooltips {
     public <T extends Component> T addTooltip(
             final @Nullable T target,
             final @Nullable String body) {
-        return addTooltip(target, _Strings.isEmpty(body)
-                ? null
-                : TooltipUiModel.ofBody(body));
+        return addTooltip(PlacementDirection.BOTTOM, target, body);
     }
 
     public <T extends Component> T addTooltip(
             final @Nullable T target,
             final @Nullable String title,
             final @Nullable String body) {
-        return addTooltip(target, TooltipUiModel.ofTitleAndBody(title, body));
+        return addTooltip(PlacementDirection.BOTTOM, target, title, body);
+    }
+
+    public <T extends Component> T addTooltip(
+            final @NonNull PlacementDirection placementDirection,
+            final @Nullable T target,
+            final @Nullable String body) {
+        return addTooltip(target, _Strings.isEmpty(body)
+                ? null
+                : TooltipUiModel.ofBody(placementDirection, body));
+    }
+
+    public <T extends Component> T addTooltip(
+            final @NonNull PlacementDirection placementDirection,
+            final @Nullable T target,
+            final @Nullable String title,
+            final @Nullable String body) {
+        return addTooltip(target, TooltipUiModel.ofTitleAndBody(placementDirection, title, body));
     }
 
     // -- HELPER
 
     private TooltipBehavior createTooltipBehavior(
+            final @NonNull PlacementDirection placementDirection,
             final @NonNull IModel<String> titleLabel,
             final @NonNull IModel<String> bodyLabel) {
-        return createPopoverBehavior(titleLabel, bodyLabel, getTooltipConfigBottom());
+        return createPopoverBehavior(titleLabel, bodyLabel, getTooltipConfig(placementDirection));
     }
 
     private TooltipBehavior createTooltipBehavior(
+            final @NonNull PlacementDirection placementDirection,
             final @NonNull IModel<String> bodyLabel) {
-        return createPopoverBehavior(Model.of(), bodyLabel, getTooltipConfigBottom());
+        return createPopoverBehavior(Model.of(), bodyLabel, getTooltipConfig(placementDirection));
     }
 
     private PopoverBehavior createPopoverBehavior(
@@ -113,7 +133,7 @@ public class WktTooltips {
             final IModel<String> bodyLabel,
             final PopoverConfig config) {
 
-        return new PopoverBehavior(titleLabel, bodyLabel, getTooltipConfigBottom()) {
+        return new PopoverBehavior(titleLabel, bodyLabel, config) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -137,15 +157,34 @@ public class WktTooltips {
         };
     }
 
-    @Getter(lazy=true)
-    private final PopoverConfig tooltipConfigTop =
-            createPopoverConfigDefault()
-            .withPlacement(Placement.top);
-
-    @Getter(lazy=true)
-    private final PopoverConfig tooltipConfigBottom =
-            createPopoverConfigDefault()
+    private PopoverConfig getTooltipConfig(final PlacementDirection placementDirection) {
+        switch(placementDirection) {
+        case TOP:
+            return createPopoverConfigDefault()
+                .withPlacement(Placement.top);
+        case RIGHT:
+            return createPopoverConfigDefault()
+                .withPlacement(Placement.right);
+        case BOTTOM:
+            return createPopoverConfigDefault()
                 .withPlacement(Placement.bottom);
+        case LEFT:
+            return createPopoverConfigDefault()
+                .withPlacement(Placement.left);
+        default:
+            throw _Exceptions.unmatchedCase(placementDirection);
+        }
+    }
+
+//    @Getter(lazy=true)
+//    private final PopoverConfig tooltipConfigTop =
+//            createPopoverConfigDefault()
+//            .withPlacement(Placement.top);
+//
+//    @Getter(lazy=true)
+//    private final PopoverConfig tooltipConfigBottom =
+//            createPopoverConfigDefault()
+//                .withPlacement(Placement.bottom);
 
     private PopoverConfig createPopoverConfigDefault() {
         return new ExtendedPopoverConfig()

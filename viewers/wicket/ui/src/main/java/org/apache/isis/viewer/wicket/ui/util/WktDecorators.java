@@ -24,6 +24,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.Button;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.viewer.common.model.PlacementDirection;
 import org.apache.isis.viewer.common.model.action.decorator.ActionUiDecorator;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmDecorator;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
@@ -80,7 +81,7 @@ public class WktDecorators {
     public final static class Disable implements DisablingDecorator<Component> {
         @Override
         public void decorate(final Component uiComponent, final DisablingUiModel disableUiModel) {
-            val tooltipUiModel = TooltipUiModel.ofBody(disableUiModel.getReason());
+            val tooltipUiModel = TooltipUiModel.ofBody(PlacementDirection.BOTTOM, disableUiModel.getReason());
             getTooltip().decorate(uiComponent, tooltipUiModel);
 
             Wkt.cssAppend(uiComponent, "disabled");
@@ -170,7 +171,8 @@ public class WktDecorators {
 
             linkAndLabel.getDisableUiModel().ifPresent(disableUiModel->{
                 getDisableDecorator().decorate(uiComponent, disableUiModel);
-                getTooltipDecorator().decorate(uiComponent, TooltipUiModel.ofBody(disableUiModel.getReason()));
+                getTooltipDecorator().decorate(uiComponent,
+                        TooltipUiModel.ofBody(PlacementDirection.BOTTOM, disableUiModel.getReason()));
             });
 
             if (!linkAndLabel.getDisableUiModel().isPresent()) {
@@ -179,12 +181,13 @@ public class WktDecorators {
                 .getDescription()
                 .ifPresent(describedAs->
                     getTooltipDecorator()
-                    .decorate(uiComponent, TooltipUiModel.ofBody(describedAs)));
+                    .decorate(uiComponent,
+                            TooltipUiModel.ofBody(PlacementDirection.BOTTOM, describedAs)));
 
                 //XXX ISIS-1626, confirmation dialog for no-parameter menu actions
                 if (actionMeta.isImmediateConfirmationRequired()) {
 
-                    val confirmUiModel = ConfirmUiModel.ofAreYouSure(translationService, ConfirmUiModel.Placement.BOTTOM);
+                    val confirmUiModel = ConfirmUiModel.ofAreYouSure(translationService, PlacementDirection.BOTTOM);
                     getConfirmDecorator().decorate(actionLinkUiComponent, confirmUiModel);
 
                 }
