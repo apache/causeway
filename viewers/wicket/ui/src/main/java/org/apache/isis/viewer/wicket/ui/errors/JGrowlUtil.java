@@ -92,8 +92,6 @@ public class JGrowlUtil {
         buf.append(String.format(", offset: %d", messagePopups.getOffset()));
         buf.append('}');
         buf.append(");\n");
-
-        System.err.printf("jgrowl:%n %s%n", severity);
     }
 
     String escape(final String origMsg) {

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.services.message;
 
+import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 
@@ -177,5 +178,11 @@ public interface MessageService {
     String raiseError(
             TranslatableString message,
             final TranslationContext translationContext);
+
+    /**
+     * Sets a new application error message.
+     * Similar to {@link #raiseError(String)}, but without throwing a {@link RecoverableException}.
+     */
+    void setError(String message);
 
 }
