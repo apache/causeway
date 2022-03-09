@@ -41,7 +41,7 @@ public class MessageServiceNoop implements MessageService {
     }
 
     @Override
-    public String informUser(TranslatableString message, TranslationContext translationContext) {
+    public String informUser(final TranslatableString message, final TranslationContext translationContext) {
         throw notSupported();
     }
 
@@ -58,7 +58,7 @@ public class MessageServiceNoop implements MessageService {
     }
 
     @Override
-    public String warnUser(TranslatableString message, TranslationContext translationContext) {
+    public String warnUser(final TranslatableString message, final TranslationContext translationContext) {
         throw notSupported();
     }
 
@@ -75,7 +75,12 @@ public class MessageServiceNoop implements MessageService {
     }
 
     @Override
-    public String raiseError(TranslatableString message, TranslationContext translationContext) {
+    public String raiseError(final TranslatableString message, final TranslationContext translationContext) {
+        throw notSupported();
+    }
+
+    @Override
+    public void setError(final String message) {
         throw notSupported();
     }
 
@@ -84,6 +89,5 @@ public class MessageServiceNoop implements MessageService {
     private static UnsupportedOperationException notSupported() {
         return new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
     }
-
 
 }

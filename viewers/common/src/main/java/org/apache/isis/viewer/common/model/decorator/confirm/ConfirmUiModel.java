@@ -24,6 +24,7 @@ import java.util.Optional;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.config.messages.MessageRegistry;
+import org.apache.isis.viewer.common.model.PlacementDirection;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -36,17 +37,15 @@ public class ConfirmUiModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public enum Placement {
-        TOP, BOTTOM, RIGHT, LEFT;
-    }
-
     final @NonNull String title;
     final @NonNull Optional<String> message;
     final @NonNull String okLabel;
     final @NonNull String cancelLabel;
-    final @NonNull Placement placement;
+    final @NonNull PlacementDirection placement;
 
-    public static ConfirmUiModel ofAreYouSure(TranslationService translationService, Placement placement) {
+    public static ConfirmUiModel ofAreYouSure(
+            final TranslationService translationService,
+            final PlacementDirection placement) {
 
     	val context = TranslationContext.forClassName(MessageRegistry.class);
 
@@ -61,7 +60,7 @@ public class ConfirmUiModel implements Serializable {
 
     // -- HELPER
 
-    private static String translate(TranslationService translationService, TranslationContext context, String msg) {
+    private static String translate(final TranslationService translationService, final TranslationContext context, final String msg) {
         if(translationService!=null) {
             return translationService.translate(context, msg);
         }

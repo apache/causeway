@@ -16,27 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.viewer.common.model;
 
-.ui-tooltip {
-	max-width: 300px;
-	color: rgb(70, 69, 69);
-	background-color: WhiteSmoke;
-    text-align: center;
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-size: 12px;
- 	box-shadow: 0 0 7px black;
- 
-    position: absolute;
-    z-index: 9999;
+public enum PlacementDirection {
+    TOP, RIGHT, BOTTOM, LEFT;
 }
-
-span.isis-component-with-tooltip,
-label.isis-component-with-tooltip, 
-.isis-component-with-tooltip label, 
-strong.isis-component-with-tooltip  {
-	text-decoration-line: underline;
-	text-decoration-style: dotted;
-}
-
-.ui-helper-hidden-accessible { display:none; }

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.viewer.wicketapp;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
@@ -41,12 +42,7 @@ import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.core.request.mapper.MountedMapper;
-import org.apache.wicket.devutils.debugbar.DebugBar;
-import org.apache.wicket.devutils.debugbar.InspectorDebugPanel;
-import org.apache.wicket.devutils.debugbar.PageSizeDebugPanel;
-import org.apache.wicket.devutils.debugbar.SessionSizeDebugPanel;
-import org.apache.wicket.devutils.debugbar.VersionDebugContributor;
-import org.apache.wicket.devutils.diskstore.DebugDiskDataStore;
+import org.apache.wicket.devutils.debugbar.DebugBarInitializer;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.ResourceAggregator;
@@ -62,7 +58,6 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.resource.JQueryResourceReference;
 import org.apache.wicket.settings.RequestCycleSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-import org.apache.wicket.util.time.Duration;
 import org.wicketstuff.select2.ApplicationSettings;
 
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
@@ -108,7 +103,6 @@ import de.agilecoders.wicket.webjars.WicketWebjars;
 import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
-import net.ftlines.wicketsource.WicketSource;
 
 /**
  * Main application, subclassing the Wicket {@link Application} and
@@ -210,6 +204,8 @@ implements
     protected void init() {
         super.init();
 
+        getCspSettings().blocking().disabled(); // since Wicket 9, CSP is enabled by default [https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP]
+
         // Initialize Spring Dependency Injection (into Wicket components)
         val springInjector = new SpringComponentInjector(this);
         Injector.get().inject(this);
@@ -271,7 +267,7 @@ implements
 
             // TODO ISIS-987 Either make the API better (no direct access to the map) or use DB records
             int maxEntries = 1000;
-            setMetaData(AccountConfirmationMap.KEY, new AccountConfirmationMap(maxEntries, Duration.days(1)));
+            setMetaData(AccountConfirmationMap.KEY, new AccountConfirmationMap(maxEntries, Duration.ofDays(1)));
 
             mountPages();
 
@@ -281,26 +277,9 @@ implements
             if(systemEnvironment.isPrototyping()
                     && configuration.getViewer().getWicket().getDevelopmentUtilities().isEnable()) {
 
-                DebugDiskDataStore.register(this);
-                log.debug("DebugDiskDataStore registered; access via ~/wicket/internal/debug/diskDataStore");
-                log.debug("DebugDiskDataStore: eg, http://localhost:8080/wicket/wicket/internal/debug/diskDataStore");
-
-                if(!getDebugSettings().isDevelopmentUtilitiesEnabled()) {
-                    getDebugSettings().setDevelopmentUtilitiesEnabled(true);
-
-                    // copied from DebugBarInitializer
-                    // this is hacky, but need to do this because IInitializer#init() called before
-                    // the Application's #init() is called.
-                    // an alternative, better, design might be to move Isis' own initialization into an
-                    // implementation of IInitializer?
-                    DebugBar.registerContributor(VersionDebugContributor.DEBUG_BAR_CONTRIB, this);
-                    DebugBar.registerContributor(InspectorDebugPanel.DEBUG_BAR_CONTRIB, this);
-                    DebugBar.registerContributor(SessionSizeDebugPanel.DEBUG_BAR_CONTRIB, this);
-                    DebugBar.registerContributor(PageSizeDebugPanel.DEBUG_BAR_CONTRIB, this);
-                }
+                new DebugBarInitializer().init(this);
             }
 
-            log.debug("storeSettings.inmemoryCacheSize        : {}", getStoreSettings().getInmemoryCacheSize());
             log.debug("storeSettings.asynchronousQueueCapacity: {}", getStoreSettings().getAsynchronousQueueCapacity());
             log.debug("storeSettings.maxSizePerSession        : {}", getStoreSettings().getMaxSizePerSession());
             log.debug("storeSettings.fileStoreFolder          : {}", getStoreSettings().getFileStoreFolder());
@@ -387,9 +366,10 @@ implements
         }
     }
 
+    @Deprecated
     protected void configureWicketSourcePlugin() {
         if(systemEnvironment.isPrototyping()) {
-            WicketSource.configure(this);
+            //WicketSource.configure(this);
         }
     }
 

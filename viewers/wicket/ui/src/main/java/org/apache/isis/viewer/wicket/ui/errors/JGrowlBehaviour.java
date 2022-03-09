@@ -51,12 +51,12 @@ public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
     private static final long serialVersionUID = 1L;
     private transient IsisAppCommonContext commonContext;
 
-    public JGrowlBehaviour(IsisAppCommonContext commonContext) {
+    public JGrowlBehaviour(final IsisAppCommonContext commonContext) {
         this.commonContext = commonContext;
     }
 
     @Override
-    protected void respond(AjaxRequestTarget target) {
+    protected void respond(final AjaxRequestTarget target) {
 
         val configuration = getCommonContext().getConfiguration();
         getCommonContext().getMessageBroker().ifPresent(messageBroker->{
@@ -68,16 +68,16 @@ public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
     }
 
     @Override
-    public void renderHead(Component component, IHeaderResponse response) {
+    public void renderHead(final Component component, final IHeaderResponse response) {
         super.renderHead(component, response);
 
         renderFeedbackMessages(response);
     }
 
-    public void renderFeedbackMessages(IHeaderResponse response) {
+    public void renderFeedbackMessages(final IHeaderResponse response) {
         response.render(
                 JavaScriptHeaderItem
-                .forReference(new JavaScriptResourceReference(JGrowlBehaviour.class, "js/bootstrap-growl.js")));
+                .forReference(new JavaScriptResourceReference(JGrowlBehaviour.class, "js/isis-bootstrap-growl.js")));
 
         val configuration = getCommonContext().getConfiguration();
         getCommonContext().getMessageBroker().ifPresent(messageBroker->{

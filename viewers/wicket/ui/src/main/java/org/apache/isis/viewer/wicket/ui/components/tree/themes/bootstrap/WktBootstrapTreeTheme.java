@@ -26,19 +26,19 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
-public class IsisBootstrapTreeTheme extends Behavior {
+public class WktBootstrapTreeTheme extends Behavior {
     private static final long serialVersionUID = 1L;
 
     private static final ResourceReference CSS =
-            new CssResourceReference(IsisBootstrapTreeTheme.class, "theme.css");
+            new CssResourceReference(WktBootstrapTreeTheme.class, "wkt-tree-theme.css");
 
     @Override
-    public void onComponentTag(Component component, ComponentTag tag) {
+    public void onComponentTag(final Component component, final ComponentTag tag) {
         tag.append("class", "tree-theme-bootstrap", " ");
     }
 
     @Override
-    public void renderHead(Component component, IHeaderResponse response) {
+    public void renderHead(final Component component, final IHeaderResponse response) {
         response.render(CssHeaderItem.forReference(CSS));
     }
 }

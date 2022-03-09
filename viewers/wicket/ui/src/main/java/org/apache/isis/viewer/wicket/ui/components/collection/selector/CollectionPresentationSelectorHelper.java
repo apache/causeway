@@ -48,7 +48,7 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved
 import lombok.Getter;
 import lombok.val;
 
-public class CollectionSelectorHelper implements Serializable {
+public class CollectionPresentationSelectorHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -60,13 +60,13 @@ public class CollectionSelectorHelper implements Serializable {
     private final List<ComponentFactory> componentFactories;
     private final ComponentHintKey componentHintKey;
 
-    public CollectionSelectorHelper(
+    public CollectionPresentationSelectorHelper(
             final EntityCollectionModel collectionModel,
             final ComponentFactoryRegistry componentFactoryRegistry) {
         this(collectionModel, componentFactoryRegistry, ComponentHintKey.noop());
     }
 
-    public CollectionSelectorHelper(
+    public CollectionPresentationSelectorHelper(
             final EntityCollectionModel collectionModel,
             final ComponentFactoryRegistry componentFactoryRegistry,
             final ComponentHintKey componentHintKey) {
@@ -177,7 +177,7 @@ public class CollectionSelectorHelper implements Serializable {
     private static boolean hasRenderEagerlyFacet(final IModel<?> model) {
         return toParentedEntityCollectionModel(model)
         .map(EntityCollectionModelParented::getMetaModel)
-        .map(CollectionSelectorHelper::isRenderEagerly)
+        .map(CollectionPresentationSelectorHelper::isRenderEagerly)
         .orElse(false);
     }
 

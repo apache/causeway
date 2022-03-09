@@ -152,7 +152,7 @@ extends IndicatingAjaxLink<ManagedObject> {
     @Override
     protected void onComponentTag(final ComponentTag tag) {
         super.onComponentTag(tag);
-        Buttons.fixDisabledState(this, tag);
+        Wkt.fixDisabledState(this, tag);
     }
 
     @Override

@@ -20,19 +20,19 @@ package org.apache.isis.viewer.wicket.ui.components.collection.selector;
 
 import org.apache.wicket.Component;
 
-public interface CollectionSelectorProvider {
-    CollectionSelectorPanel getSelectorDropdownPanel();
+public interface CollectionPresentationSelectorProvider {
+    CollectionPresentationSelectorPanel getSelectorDropdownPanel();
 
     /**
      * Searches up the component hierarchy looking for a parent that implements
-     * {@link org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider}.
+     * {@link org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorProvider}.
      *
      * @return the panel, or null (if there are no alternative views)
      */
-    public static CollectionSelectorPanel getCollectionSelectorProvider(Component component) {
+    public static CollectionPresentationSelectorPanel getCollectionSelectorProvider(Component component) {
         while(component != null) {
-            if(component instanceof CollectionSelectorProvider) {
-                return ((CollectionSelectorProvider) component).getSelectorDropdownPanel();
+            if(component instanceof CollectionPresentationSelectorProvider) {
+                return ((CollectionPresentationSelectorProvider) component).getSelectorDropdownPanel();
             }
             component = component.getParent();
         }

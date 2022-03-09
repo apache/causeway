@@ -41,8 +41,8 @@ import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel;
-import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorHelper;
-import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
+import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorHelper;
+import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
@@ -70,7 +70,7 @@ implements HasDynamicallyVisibleContent {
 
     private final ComponentHintKey selectedItemHintKey;
 
-    CollectionSelectorPanel selectorDropdownPanel;
+    CollectionPresentationSelectorPanel selectorDropdownPanel;
 
     final WebMarkupContainer div;
 
@@ -142,8 +142,8 @@ implements HasDynamicallyVisibleContent {
             final Can<LinkAndLabel> links = collectionModel.getLinks();
             AdditionalLinksPanel.addAdditionalLinks(div,ID_ADDITIONAL_LINKS, links, AdditionalLinksPanel.Style.INLINE_LIST);
 
-            final CollectionSelectorHelper selectorHelper =
-                    new CollectionSelectorHelper(collectionModel, getComponentFactoryRegistry(),
+            final CollectionPresentationSelectorHelper selectorHelper =
+                    new CollectionPresentationSelectorHelper(collectionModel, getComponentFactoryRegistry(),
                             selectedItemHintKey);
 
             final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
@@ -151,7 +151,7 @@ implements HasDynamicallyVisibleContent {
             if (componentFactories.size() <= 1) {
                 permanentlyHide(ID_SELECTOR_DROPDOWN);
             } else {
-                selectorDropdownPanel = new CollectionSelectorPanel(ID_SELECTOR_DROPDOWN,
+                selectorDropdownPanel = new CollectionPresentationSelectorPanel(ID_SELECTOR_DROPDOWN,
                         collectionModel, selectedItemHintKey);
 
                 final Model<ComponentFactory> componentFactoryModel = new Model<>();

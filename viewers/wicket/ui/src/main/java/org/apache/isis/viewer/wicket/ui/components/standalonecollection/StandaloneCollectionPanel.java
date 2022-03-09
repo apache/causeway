@@ -30,9 +30,9 @@ import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelStandalone;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
-import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorHelper;
-import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
-import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
+import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorHelper;
+import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;
+import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -41,7 +41,7 @@ import lombok.val;
 
 public class StandaloneCollectionPanel
 extends PanelAbstract<DataTableModel, EntityCollectionModel>
-implements CollectionCountProvider, CollectionSelectorProvider {
+implements CollectionCountProvider, CollectionPresentationSelectorProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -50,7 +50,7 @@ implements CollectionCountProvider, CollectionSelectorProvider {
 
     private static final String ID_SELECTOR_DROPDOWN = "selectorDropdown";
 
-    private final CollectionSelectorPanel selectorDropdownPanel;
+    private final CollectionPresentationSelectorPanel selectorDropdownPanel;
 
 
     private MarkupContainer outerDiv = this;
@@ -74,7 +74,7 @@ implements CollectionCountProvider, CollectionSelectorProvider {
         Wkt.cssAppend(outerDiv, collectionModel.getElementType().getFeatureIdentifier());
 
         // selector
-        final CollectionSelectorHelper selectorHelper = new CollectionSelectorHelper(collectionModel, getComponentFactoryRegistry());
+        final CollectionPresentationSelectorHelper selectorHelper = new CollectionPresentationSelectorHelper(collectionModel, getComponentFactoryRegistry());
 
         final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
 
@@ -82,7 +82,7 @@ implements CollectionCountProvider, CollectionSelectorProvider {
             WktComponents.permanentlyHide(outerDiv, ID_SELECTOR_DROPDOWN);
             this.selectorDropdownPanel = null;
         } else {
-            CollectionSelectorPanel selectorDropdownPanel = new CollectionSelectorPanel(ID_SELECTOR_DROPDOWN, collectionModel);
+            CollectionPresentationSelectorPanel selectorDropdownPanel = new CollectionPresentationSelectorPanel(ID_SELECTOR_DROPDOWN, collectionModel);
 
             final Model<ComponentFactory> componentFactoryModel = new Model<>();
 
@@ -105,7 +105,7 @@ implements CollectionCountProvider, CollectionSelectorProvider {
     // -- CollectionSelectorProvider
 
     @Override
-    public CollectionSelectorPanel getSelectorDropdownPanel() {
+    public CollectionPresentationSelectorPanel getSelectorDropdownPanel() {
         return selectorDropdownPanel;
     }
 

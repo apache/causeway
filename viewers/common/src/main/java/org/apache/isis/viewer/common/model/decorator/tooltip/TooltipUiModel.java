@@ -23,6 +23,9 @@ import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.viewer.common.model.PlacementDirection;
+
 import lombok.NonNull;
 import lombok.Value;
 
@@ -31,15 +34,29 @@ public class TooltipUiModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    final @NonNull Optional<String> label;
+    final @NonNull PlacementDirection placementDirection;
+    final @NonNull Optional<String> title;
     final @NonNull String body;
 
-    public static TooltipUiModel ofBody(@NonNull String body) {
-        return of(Optional.empty(), body);
+    public static TooltipUiModel ofBody(
+            final @NonNull PlacementDirection placementDirection,
+            final @Nullable String body) {
+        return of(placementDirection, Optional.empty(), _Strings.nullToEmpty(body));
     }
 
-    public static TooltipUiModel of(@Nullable String label, @NonNull String body) {
-        return of(Optional.ofNullable(label), body);
+    public static TooltipUiModel ofTitleAndBody(
+            final @NonNull PlacementDirection placementDirection,
+            final @Nullable String title,
+            final @Nullable String body) {
+        return of(placementDirection, Optional.ofNullable(_Strings.emptyToNull(title)), _Strings.nullToEmpty(body));
+    }
+
+    public static TooltipUiModel empty() {
+        return ofBody(PlacementDirection.BOTTOM, "");
+    }
+
+    public boolean isEmpty() {
+        return body.isEmpty();
     }
 
 }

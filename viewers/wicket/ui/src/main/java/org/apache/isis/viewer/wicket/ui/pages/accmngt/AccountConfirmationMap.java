@@ -18,12 +18,14 @@
  */
 package org.apache.isis.viewer.wicket.ui.pages.accmngt;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Map;
 
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.util.collections.MostRecentlyUsedMap;
-import org.apache.wicket.util.time.Duration;
-import org.apache.wicket.util.time.Time;
+
+import lombok.val;
 
 /**
  * A map that contains the emails to be verified. It has a constraint on the maximum entries that it
@@ -41,13 +43,18 @@ public class AccountConfirmationMap extends MostRecentlyUsedMap<String, Object>
      * The actual object that is stored as a value of the map. It wraps the email and
      * assigns it a creation time.
      */
-    private static class Value
-    {
+    private static class Value {
         /** the original email to store */
         private String email;
 
         /** the time when this email is stored */
-        private Time creationTime;
+        private Instant creationTime;
+
+        public boolean isExpired(final Duration lifetime) {
+            val elapsedTime = Duration.between(creationTime, Instant.now());
+            val isExpired = lifetime.minus(elapsedTime).isNegative();
+            return isExpired;
+        }
     }
 
     /**
@@ -63,25 +70,18 @@ public class AccountConfirmationMap extends MostRecentlyUsedMap<String, Object>
      * @param lifetime
      *            the duration of time to keep an entry in the map before considering it expired
      */
-    public AccountConfirmationMap(int maxEntries, Duration lifetime)
-    {
+    public AccountConfirmationMap(final int maxEntries, final Duration lifetime){
         super(maxEntries);
-
         this.lifetime = lifetime;
     }
 
     @Override
-    protected synchronized boolean removeEldestEntry(java.util.Map.Entry<String, Object> eldest)
-    {
+    protected synchronized boolean removeEldestEntry(final java.util.Map.Entry<String, Object> eldest) {
         boolean removed = super.removeEldestEntry(eldest);
-        if (removed == false)
-        {
-            Value value = (Value)eldest.getValue();
-            if (value != null)
-            {
-                Duration elapsedTime = Time.now().subtract(value.creationTime);
-                if (lifetime.lessThanOrEqual(elapsedTime))
-                {
+        if (removed == false) {
+            val value = (Value)eldest.getValue();
+            if (value != null) {
+                if(value.isExpired(lifetime)) {
                     removedValue = value.email;
                     removed = true;
                 }
@@ -91,21 +91,18 @@ public class AccountConfirmationMap extends MostRecentlyUsedMap<String, Object>
     }
 
     @Override
-    public String put(String key, Object email)
-    {
-        if (!(email instanceof String))
-        {
+    public String put(final String key, final Object email) {
+        if (!(email instanceof String)) {
             throw new IllegalArgumentException(AccountConfirmationMap.class.getSimpleName() +
                     " can store only instances of " + String.class.getSimpleName() + ": " + email);
         }
 
-        Value value = new Value();
-        value.creationTime = Time.now();
+        val value = new Value();
+        value.creationTime = Instant.now();
         value.email = (String)email;
 
         Value oldValue;
-        synchronized (this)
-        {
+        synchronized (this) {
             oldValue = (Value)super.put(key, value);
         }
 
@@ -113,45 +110,34 @@ public class AccountConfirmationMap extends MostRecentlyUsedMap<String, Object>
     }
 
     @Override
-    public String get(Object key)
-    {
+    public String get(final Object key) {
         String result = null;
         Value value;
-        synchronized (this)
-        {
+        synchronized (this) {
             value = (Value)super.get(key);
         }
-        if (value != null)
-        {
-            Duration elapsedTime = Time.now().subtract(value.creationTime);
-            if (lifetime.greaterThan(elapsedTime))
-            {
-                result = value.email;
-            }
-            else
-            {
+        if (value != null) {
+            if(value.isExpired(lifetime)) {
                 // expired, remove it
                 remove(key);
+            } else {
+                result = value.email;
             }
         }
         return result;
     }
 
     @Override
-    public String remove(Object key)
-    {
+    public String remove(final Object key) {
         Value removedValue;
-        synchronized (this)
-        {
+        synchronized (this) {
             removedValue = (Value)super.remove(key);
         }
-
         return removedValue != null ? removedValue.email : null;
     }
 
     @Override
-    public void putAll(Map<? extends String, ?> m)
-    {
+    public void putAll(final Map<? extends String, ?> m) {
         throw new UnsupportedOperationException();
     }
 }

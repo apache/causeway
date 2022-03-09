@@ -1,4 +1,3 @@
-
 /*
  *  Licensed to the Apache Software Foundation (ASF) under one
  *  or more contributor license agreements.  See the NOTICE file
@@ -18,7 +17,6 @@
  *  under the License.
  */
 
-
 #container {
 	padding-left: 0px;
 	padding-right: 0px;
@@ -33,8 +31,9 @@ body {
     margin-bottom: 0px;
 }
 
-/* emulate .dropdown-menu-right for secondary dropdown menus */
-.navbar-nav.secondary .dropdown-menu {
+/* emulate .dropdown-menu-right for secondary and tertiary dropdown menus */
+.navbar-nav.secondary .dropdown-menu, 
+.navbar-nav.tertiary .dropdown-menu {
 	right: 0;
 	left: auto;
 }
@@ -272,10 +271,6 @@ footer > .navbar {
     padding: 0;
 }
 
-.collectionContentsAsAjaxTablePanel table {
-    border: none;
-}
-
 .collectionContentsAsAjaxTablePanel table tr td:first-child,
 .collectionContentsAsAjaxTablePanel table tr th:first-child {
     border-left: none;
@@ -302,6 +297,10 @@ footer > .navbar {
 
 .collectionContentsAsAjaxTablePanel .table {
     margin-bottom: 0px;
+}
+
+.collectionContentsAsAjaxTablePanel tfoot tr {
+ 	border: none;
 }
 
 
@@ -587,6 +586,8 @@ ul.dropdown-menu {
 .dropup ul.dropdown-menu {
 	padding-bottom: 0;
 	margin-bottom: 0;
+	top: auto;
+	bottom: 100%;
 }
 
 /* removes the caret (arrow down) from the additional links selector dropdowns */
@@ -1002,6 +1003,10 @@ footer .footer-image {
     margin-right: 10px;
 }
 
+.select2-container {
+	z-index: 1060; /* as bootstrap modal dialogs appear to have 1055 */
+}
+
 .select2-container-multi.input-sm {
     height: inherit;
 }
@@ -1120,12 +1125,14 @@ such as https://chrome.google.com/webstore/detail/focus-indicator/heeoeadndnhebm
 h4.iconAndTitle a {
     outline: none;
     display: inline-block;
+    text-decoration: none;
 }
 h4.iconAndTitle a span.entityTitle:focus {
     outline: none;
 }
-h4.iconAndTitle a:focus {
-    text-decoration: none;
+
+h4.iconAndTitleLabel a:hover {
+	text-decoration: underline;
 }
 
 li.list-separator {
@@ -1194,3 +1201,32 @@ ul.navbar-wrap {
 .tabGroups {
     margin-bottom: 21px;
 }
+
+.float-right {
+  float: right !important;
+}
+
+.mr-auto, .mx-auto {
+  margin-right: auto !important;
+}
+
+/* TOOLTIPS */
+
+.tooltip {
+	max-width: 300px;
+	text-align: center;
+ 	z-index: 9999;
+}
+
+span.wkt-component-with-tooltip,
+label.wkt-component-with-tooltip, 
+.wkt-component-with-tooltip label, 
+strong.wkt-component-with-tooltip  {
+	text-decoration-line: underline;
+	text-decoration-style: dotted;
+}
+
+.ui-helper-hidden-accessible { display:none; }
+
+/* --- */
+
