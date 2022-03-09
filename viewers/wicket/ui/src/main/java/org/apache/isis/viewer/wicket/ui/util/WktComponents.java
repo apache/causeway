@@ -24,9 +24,12 @@ import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.util.lang.Args;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions.FluentException;
 import org.apache.isis.viewer.common.model.components.ComponentType;
+
+import de.agilecoders.wicket.jquery.util.Strings2;
 
 public final class WktComponents {
 
@@ -107,6 +110,10 @@ public final class WktComponents {
             .suppressIfMessageContains("Cannot update component because its page is not the same");
         }
 
+    }
+
+    public static CharSequence getMarkupId(final Component component) {
+        return Strings2.getMarkupId(Args.notNull(component, "component"));
     }
 
 }

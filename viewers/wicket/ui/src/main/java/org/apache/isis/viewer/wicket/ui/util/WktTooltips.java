@@ -17,17 +17,13 @@
 package org.apache.isis.viewer.wicket.ui.util;
 
 import java.time.Duration;
-import java.util.Map;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.resources._Json;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipUiModel;
 import org.apache.isis.viewer.wicket.ui.util.ExtendedPopoverConfig.PopoverBoundary;
 
@@ -121,22 +117,22 @@ public class WktTooltips {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onComponentTag(final Component component, final ComponentTag tag) {
-                super.onComponentTag(component, tag);
-                final Map<String, String> map =
-                        _Casts.uncheckedCast(_Json.readJson(Map.class, config.toJsonString()).getValue().get());
-                map.forEach((k, v)->{
-                    tag.put("data-bs-conf-" + k, ""+v);
-                });
-                //typical... {"boundary":"viewport","trigger":"hover","placement":"bottom"}
-            }
-
-            @Override
             protected CharSequence createInitializerScript(final Component component, final Config config) {
-                // batch create these in
-                // isis-viewer-wicket-ui/src/main/java/org/apache/isis/viewer/wicket/ui/pages/jquery.isis.wicket.viewer.js
-                // val markupId = Strings2.getMarkupId(Args.notNull(component, "component"));
-                return "";
+                // bootstrap.Popover(...) will fail when the popover trigger element is not found
+                // so we wrap the call within a document search, that will only process elements,
+                // that actually exist within the DOM
+                val markupId = WktComponents.getMarkupId(component);
+                return String.format("document.querySelectorAll('#%s').forEach((elem)=>{"
+                        + "new bootstrap.Popover(elem, %s);"
+                        + "})",
+                        markupId,
+                        config.toJsonString());
+// alternative jQuery syntax ...
+//                return String.format("$('#%s').each((i,elem)=>{"
+//                        + "new bootstrap.Popover(elem, %s);"
+//                        + "})",
+//                        markupId,
+//                        config.toJsonString());
             }
         };
     }
