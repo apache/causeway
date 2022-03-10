@@ -778,10 +778,10 @@ public class Wkt {
     // -- ERROR MESSAGE UTILITY
 
     /**
-     * Reports a validation error against this form component.
+     * Reports a validation error against given form component.
      * Uses plain error message from ConversionException, circumventing resource bundles.
      */
-    private static void errorMessageIgnoringResourceBundles(
+    private void errorMessageIgnoringResourceBundles(
             final @Nullable FormComponent<?> formComponent,
             final @Nullable IValidationError error) {
         if(formComponent==null
@@ -793,6 +793,8 @@ public class Wkt {
             // use plain error message from ConversionException, circumventing resource bundles.
             if(_Strings.isNotEmpty(message)) {
                 formComponent.error(message);
+            } else {
+                formComponent.error("Unspecified error (no message associated).");
             }
         } else {
             formComponent.error(error);
