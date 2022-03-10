@@ -39,6 +39,7 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.Image;
@@ -72,7 +73,6 @@ import lombok.val;
 import lombok.experimental.UtilityClass;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.util.Attributes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
@@ -670,12 +670,7 @@ public class Wkt {
                                 ? (IConverter<C>) converter
                                 : super.getConverter(cType);}
                     @Override public void error(final IValidationError error) {
-                        if(error instanceof ValidationError) {
-                            // use plain error message from ConversionException, circumventing resource bundles.
-                            this.error(((ValidationError)error).getMessage());
-                        } else {
-                            super.error(error);
-                        }
+                        errorMessageIgnoringResourceBundles(this, error);
                     }
                 }
             : new TextArea<T>(id, model);
@@ -698,12 +693,7 @@ public class Wkt {
                                 ? (IConverter<C>) converter
                                 : super.getConverter(cType);}
                     @Override public void error(final IValidationError error) {
-                        if(error instanceof ValidationError) {
-                            // use plain error message from ConversionException, circumventing resource bundles.
-                            super.error(((IValidationError)error));
-                        } else {
-                            super.error(error);
-                        }
+                        errorMessageIgnoringResourceBundles(this, error);
                     }
                 }
             : new TextField<>(id, model, type);
@@ -720,12 +710,7 @@ public class Wkt {
                         ? (IConverter<C>) converter
                         : super.getConverter(cType);}
             @Override public void error(final IValidationError error) {
-                if(error instanceof ValidationError) {
-                    // use plain error message from ConversionException, circumventing resource bundles.
-                    super.error(((IValidationError)error));
-                } else {
-                    super.error(error);
-                }
+                errorMessageIgnoringResourceBundles(this, error);
             }
             @Override protected void onComponentTag(final ComponentTag tag) {
                 Attributes.set(tag, "type", "password");
@@ -788,6 +773,30 @@ public class Wkt {
             component.add(new AttributeAppender("tabindex", "-1"));
         }
         return component;
+    }
+
+    // -- ERROR MESSAGE UTILITY
+
+    /**
+     * Reports a validation error against this form component.
+     * Uses plain error message from ConversionException, circumventing resource bundles.
+     */
+    private static void errorMessageIgnoringResourceBundles(
+            final @Nullable FormComponent<?> formComponent,
+            final @Nullable IValidationError error) {
+        if(formComponent==null
+                || error==null) {
+            return;
+        }
+        if(error instanceof ValidationError) {
+            val message = ((ValidationError)error).getMessage();
+            // use plain error message from ConversionException, circumventing resource bundles.
+            if(_Strings.isNotEmpty(message)) {
+                formComponent.error(message);
+            }
+        } else {
+            formComponent.error(error);
+        }
     }
 
 }
