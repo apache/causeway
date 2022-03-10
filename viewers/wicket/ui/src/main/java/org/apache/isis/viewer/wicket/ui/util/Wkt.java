@@ -589,7 +589,7 @@ public class Wkt {
                     @Override public void error(final IValidationError error) {
                         if(error instanceof ValidationError) {
                             // use plain error message from ConversionException, circumventing resource bundles.
-                            this.error(((ValidationError)error).getMessage());
+                            super.error(((IValidationError)error));
                         } else {
                             super.error(error);
                         }
@@ -611,7 +611,7 @@ public class Wkt {
             @Override public void error(final IValidationError error) {
                 if(error instanceof ValidationError) {
                     // use plain error message from ConversionException, circumventing resource bundles.
-                    this.error(((ValidationError)error).getMessage());
+                    super.error(((IValidationError)error));
                 } else {
                     super.error(error);
                 }
