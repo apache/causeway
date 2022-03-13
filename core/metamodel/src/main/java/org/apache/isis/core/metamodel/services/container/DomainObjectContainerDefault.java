@@ -208,7 +208,7 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public <T> T lookupService(final Class<T> service) {
-        return serviceRegistry.lookupService(service);
+        return serviceRegistry.lookupService(service).orElse(null);
     }
 
     /**
@@ -500,7 +500,7 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public <T> T firstMatch(final Class<T> cls, final Predicate<T> predicate) {
-        return repositoryService.firstMatch(cls, predicate);
+        return repositoryService.firstMatch(cls, predicate).orElse(null);
     }
 
     @Programmatic
@@ -540,7 +540,7 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public <T> T uniqueMatch(final Class<T> type, final Predicate<T> predicate) {
-        return repositoryService.uniqueMatch(type, predicate);
+        return repositoryService.uniqueMatch(type, predicate).orElse(null);
     }
 
     @Programmatic
@@ -577,7 +577,7 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public <T> T uniqueMatch(final Query<T> query) {
-        return repositoryService.uniqueMatch(query);
+        return repositoryService.uniqueMatch(query).orElse(null);
     }
 
     private static <T> T firstInstanceElseNull(final List<T> instances) {

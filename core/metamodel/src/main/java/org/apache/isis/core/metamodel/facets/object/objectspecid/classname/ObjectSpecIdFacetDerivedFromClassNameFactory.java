@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.objectspecid.classname;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlType;
@@ -178,6 +179,12 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactory
             // don't check if domain service has only programmatic methods
             final List<ObjectAction> objectActions = objectSpec.getObjectActions(Contributed.INCLUDED);
             if(objectActions.isEmpty()) {
+                return false;
+            }
+
+            // don't check if annotated with spring repository or service
+            if(Arrays.stream(objectSpec.getCorrespondingClass().getAnnotations())
+                    .anyMatch(a -> a.annotationType().getName().startsWith("org.springframework.stereotype"))){
                 return false;
             }
 

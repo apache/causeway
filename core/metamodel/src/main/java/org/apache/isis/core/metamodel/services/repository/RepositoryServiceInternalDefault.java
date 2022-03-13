@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.services.repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
@@ -113,6 +114,12 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
         removeIfNotAlready(domainObject);
     }
 
+    @Override
+    @Programmatic
+    public <T> void removeAll(final Class<T> cls) {
+        this.allInstances(cls).forEach(this::remove);
+    }
+
     private void removeIfNotAlready(final Object object) {
         if (!isPersistent(object)) {
             return;
@@ -183,7 +190,7 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
 
     @Programmatic
     @Override
-    public <T> T uniqueMatch(final Class<T> type, final Predicate<T> predicate) {
+    public <T> Optional<T> uniqueMatch(final Class<T> type, final Predicate<T> predicate) {
         final List<T> instances = allMatches(type, predicate, 0, 2); // No need to fetch more than 2.
         if (instances.size() > 1) {
             throw new RepositoryException("Found more than one instance of " + type + " matching filter " + predicate);
@@ -194,7 +201,7 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
 
     @Programmatic
     @Override
-    public <T> T uniqueMatch(final Query<T> query) {
+    public <T> Optional<T> uniqueMatch(final Query<T> query) {
         final List<T> instances = allMatches(query); // No need to fetch more than 2.
         if (instances.size() > 1) {
             throw new RepositoryException("Found more that one instance for query:" + query.getDescription());
@@ -208,34 +215,35 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
 
     @Programmatic
     @Override
-    public <T> T firstMatch(final Class<T> cls, final Predicate<T> predicate) {
+    public <T> Optional<T> firstMatch(final Class<T> cls, final Predicate<T> predicate) {
         final List<T> allInstances = allInstances(cls); // Have to fetch all, as matching is done in next loop
         for (final T instance : allInstances) {
             if (predicate.apply(instance)) {
-                return instance;
+                return Optional.of(instance);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
 
     @Programmatic
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T firstMatch(final Query<T> query) {
+    public <T> Optional<T> firstMatch(final Query<T> query) {
         if(autoFlush) {
             transactionService.flushTransaction();
         }
         final ObjectAdapter firstMatching = persistenceSessionServiceInternal.firstMatchingQuery(query);
-        return (T) ObjectAdapter.Util.unwrap(firstMatching);
+        final T fm = (T) ObjectAdapter.Util.unwrap(firstMatching);
+        return Optional.ofNullable(fm);
     }
 
 
     // //////////////////////////////////////
 
 
-    private static <T> T firstInstanceElseNull(final List<T> instances) {
-        return instances.size() == 0 ? null : instances.get(0);
+    private static <T> Optional<T> firstInstanceElseNull(final List<T> instances) {
+        return instances.size() == 0 ? (Optional<T>)Optional.empty() : Optional.of(instances.get(0));
     }
 
 

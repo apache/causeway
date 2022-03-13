@@ -458,6 +458,30 @@ public abstract class FixtureScripts extends AbstractService {
     }
 
     @Programmatic
+    public <T> T runPersona(final PersonaWithBuilderScript persona) {
+        BuilderScriptAbstract fixtureScript = persona.builder();
+        return (T) runBuilder(fixtureScript);
+    }
+
+    /**
+     * Runs the builderScript within its own transactional boundary.
+     * @param <T>
+     * @param builderScript
+     */
+    @Programmatic
+    public <T> T runBuilder(final BuilderScriptAbstract<T,?> builderScript) {
+
+        serviceRegistry.injectServicesInto(builderScript);
+
+        builderScript.run(null);
+
+        final T object = builderScript.getObject();
+        transactionService.nextTransaction();
+
+        return object;
+    }
+
+    @Programmatic
     public <T,F extends BuilderScriptAbstract<T,F>> T runBuilderScript(final F fixtureScript) {
 
         serviceRegistry.injectServicesInto(fixtureScript);

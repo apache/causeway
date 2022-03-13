@@ -39,7 +39,9 @@ import org.apache.isis.applib.clock.Clock;
         menuOrder = "" + Integer.MAX_VALUE
 )
 public class ClockService {
-    
+
+    private static final VirtualClock VIRTUAL_CLOCK = new VirtualClock();
+
     @Programmatic
     public LocalDate now() {
         return Clock.getTimeAsLocalDate();
@@ -65,4 +67,24 @@ public class ClockService {
         return Clock.getTime();
     }
 
+    @Programmatic
+    public VirtualClock getClock(){
+        return VIRTUAL_CLOCK;
+    }
+
+    @Programmatic
+    public long getEpochMillis(){
+        return Clock.getTimeAsMillis();
+    }
+
+    public static class VirtualClock{
+
+        private VirtualClock(){}
+
+        @Programmatic
+        public LocalDate nowAsJodaLocalDate(){
+            return Clock.getTimeAsLocalDate();
+        }
+
+    }
 }

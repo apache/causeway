@@ -55,6 +55,10 @@ public interface FactoryService {
     @Programmatic
     <T> T instantiate(final Class<T> domainClass);
 
+    @Programmatic
+    default <T> T create(final Class<T> domainClass){
+        return instantiate( domainClass);
+    };
 
     @Programmatic
     <T> T mixin( Class<T> mixinClass, Object mixedIn);

@@ -44,8 +44,12 @@ public final class ValueSemanticsProviderUtil {
     @SuppressWarnings("unchecked")
     public static Class<? extends ValueSemanticsProvider<?>> valueSemanticsProviderOrNull(final Class<?> candidateClass, final String classCandidateName) {
         @SuppressWarnings("rawtypes")
-        final Class clazz = candidateClass != null ? ClassUtil.implementingClassOrNull(candidateClass.getName(), ValueSemanticsProvider.class, FacetHolder.class) : null;
-        return clazz != null ? clazz : ClassUtil.implementingClassOrNull(classCandidateName, ValueSemanticsProvider.class, FacetHolder.class);
+        Class clazz = candidateClass != null ? ClassUtil.implementingClassOrNull(candidateClass.getName(), ValueSemanticsProvider.class, FacetHolder.class) : null;
+
+        if(clazz == null){
+            clazz = ClassUtil.implementingClassOrNull(classCandidateName, ValueSemanticsProvider.class, FacetHolder.class);
+        }
+        return clazz;
     }
 
 }

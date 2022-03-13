@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.services.registry;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -45,8 +46,8 @@ public class ServiceRegistryDefault implements ServiceRegistry2, ServicesInjecto
 
     @Programmatic
     @Override
-    public <T> T lookupService(final Class<T> service) {
-        return servicesInjector.lookupService(service);
+    public <T> Optional<T> lookupService(final Class<T> service) {
+        return Optional.ofNullable( servicesInjector.lookupService(service));
     }
 
     @Programmatic
