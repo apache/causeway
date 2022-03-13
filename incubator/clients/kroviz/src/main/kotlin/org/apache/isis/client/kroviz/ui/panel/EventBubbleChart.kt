@@ -33,10 +33,7 @@ import kotlin.math.pow
 @OptIn(kotlin.js.ExperimentalJsExport::class)
 @JsExport
 fun openLogEntry(i: Int) {
-    console.log("[EBC.openLogEntry]")
-    console.log(i)
     val logEntry = SessionManager.getEventStore().log[i]
-    console.log(logEntry)
     EventLogDetail(logEntry).open()
 }
 
