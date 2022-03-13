@@ -37,10 +37,6 @@ fun openLogEntry(i: Int) {
     EventLogDetail(logEntry).open()
 }
 
-@OptIn(kotlin.js.ExperimentalJsExport::class)
-@JsExport
-fun foo() = "Hello"
-
 class EventBubbleChart() : SimplePanel() {
     private val model = SessionManager.getEventStore()
     private val logStart = model.getLogStartMilliSeconds()
@@ -82,9 +78,7 @@ class EventBubbleChart() : SimplePanel() {
                         + "var element = e.chart.getElementsAtEventForMode(e, 'nearest', {intersect: true}, true);"
                         + "if (element.length > 0) {"
                         + "var i = element[0].index;"
-                        + "console.log(i);"
                         + "kroviz.org.apache.isis.client.kroviz.ui.panel.openLogEntry(i);"
-                        + "alert(kroviz.org.apache.isis.client.kroviz.ui.panel.hello());"
                         + "}"
                         + "}"
             ),
