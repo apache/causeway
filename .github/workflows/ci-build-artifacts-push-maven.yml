@@ -38,7 +38,7 @@ jobs:
 #
     - name: Find baseline from search.maven.org
       id: calc-baseline
-      run: 'scripts/ci/calc-baseline.sh'
+      run: 'bash scripts/ci/calc-baseline.sh'
 
     - name: Share $BASELINE as Environment Variable
       run: echo "BASELINE=${{ steps.calc-baseline.outputs.baseline }}" >> $GITHUB_ENV
