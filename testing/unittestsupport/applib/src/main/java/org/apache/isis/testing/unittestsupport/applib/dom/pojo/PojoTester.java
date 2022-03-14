@@ -452,6 +452,15 @@ public class PojoTester {
 	}
 
 	/**
+	 * Convenience overload to provide a {@link DatumFactory} to the {@link PojoTester} for the specified
+	 * compile time type, also instantiatable as the runtime type (with a no-arg constructor).
+	 */
+	@lombok.SneakyThrows
+	public <T> PojoTester usingData(Class<T> compileTimeType) {
+		return usingData(compileTimeType, compileTimeType);
+	}
+
+	/**
 	 * Exercises all of the getters and setters of the provided bean, using the built-in {@link DatumFactory} and any
 	 * additional configured through previous calls to {@link #usingData(Class, Object[])} (or its overloads).
 	 */
