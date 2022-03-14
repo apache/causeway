@@ -50,6 +50,11 @@ jobs:
         ENV_CONTEXT: ${{ toJson(env) }}
       run: 'echo "$ENV_CONTEXT"'
 
+     - name: Dump GitHub context
+       env:
+         GITHUB_CONTEXT: ${{ toJson(github) }}
+       run: echo "$GITHUB_CONTEXT"
+
     - name: Activate Cache for Maven Downloads
       uses: actions/cache@v2.1.7
       env:
@@ -86,17 +91,13 @@ jobs:
           -Djacoco.skip=true
           -DskipTests
           -T 1C
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ github.token }}
         MVN_STAGES: deploy
         SOURCE_MODE: attach
         SETTINGS_FLAG: no-override
 
 
 # FOR DEBUG USE
-#   - name: Dump GitHub context
-#     env:
-#       GITHUB_CONTEXT: ${{ toJson(github) }}
-#     run: echo "$GITHUB_CONTEXT"
 #   - name: Dump job context
 #     env:
 #       JOB_CONTEXT: ${{ toJson(job) }}
