@@ -86,7 +86,7 @@ jobs:
           -Djacoco.skip=true
           -DskipTests
           -T 1C
-        GITHUB_TOKEN: ${{ github.token }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         MVN_STAGES: deploy
         SOURCE_MODE: attach
 
