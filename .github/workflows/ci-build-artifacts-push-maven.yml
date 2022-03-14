@@ -90,7 +90,6 @@ jobs:
           -Denforcer.failFast=true
           -Djacoco.skip=true
           -DskipTests
-          -T 1C
         GITHUB_TOKEN: ${{ github.token }}
         MVN_STAGES: deploy
         SOURCE_MODE: attach
