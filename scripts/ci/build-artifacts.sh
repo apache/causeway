@@ -147,6 +147,7 @@ if [ ! -z "$REVISION" ]; then
 
 fi
 
+
 cd $PROJECT_ROOT_PATH
 echo ""
 echo ""
