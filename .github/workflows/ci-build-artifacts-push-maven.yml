@@ -85,7 +85,7 @@ jobs:
         # -T 1C ... 1 build thread per core
         MVN_ADDITIONAL_OPTS: >-
           -f isis-parent/pom.xml
-          -Dreleased
+          -DreleasedXXX
           -Dgithub
           -Denforcer.failFast=true
           -Djacoco.skip=true
