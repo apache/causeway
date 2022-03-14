@@ -89,6 +89,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         MVN_STAGES: deploy
         SOURCE_MODE: attach
+        SETTINGS_FLAG: no-override
 
 
 # FOR DEBUG USE

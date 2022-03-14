@@ -147,13 +147,20 @@ if [ ! -z "$REVISION" ]; then
 
 fi
 
+if [ "SETTINGS_FLAG" = "no-override" ]
+then
+  SETTINGS_CLAUSE=""
+else
+  SETTINGS_CLAUSE="-s $SETTINGS_XML "
+fi
+
 cd $PROJECT_ROOT_PATH
 echo ""
 echo ""
-echo ">>> ${PROJECT_ROOT_PATH}: mvn -s $SETTINGS_XML $BATCH_MODE $SOURCE_MODE_OPTS -T1C $MVN_STAGES $MVN_ADDITIONAL_OPTS $*"
+echo ">>> ${PROJECT_ROOT_PATH}: mvn $SETTINGS_CLAUSE $BATCH_MODE $SOURCE_MODE_OPTS -T1C $MVN_STAGES $MVN_ADDITIONAL_OPTS $*"
 echo ""
 echo ""
-mvn -s $SETTINGS_XML \
+mvn $SETTINGS_CLAUSE \
     $BATCH_MODE \
     $SOURCE_MODE_OPTS \
     -T1C \
