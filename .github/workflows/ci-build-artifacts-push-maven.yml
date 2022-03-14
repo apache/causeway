@@ -42,6 +42,13 @@ jobs:
     - name: Share $BASELINE as Environment Variable
       run: echo "BASELINE=${{ steps.calc-baseline.outputs.baseline }}" >> $GITHUB_ENV
 
+    - name: Calculate new $REVISION
+      id: revision
+      run: 'bash scripts/ci/calc-revision.sh'
+
+    - name: Share $REVISION as Environment Variable
+      run: echo "REVISION=${{ steps.revision.outputs.revision }}" >> $GITHUB_ENV
+
     - name: Dump Env context
       env:
         ENV_CONTEXT: ${{ toJson(env) }}
@@ -60,14 +67,6 @@ jobs:
 #        restore-keys: |
 #          ${{ runner.os }}-${{ env.cache-name }}-
 #          ${{ runner.os }}-
-#
-#    - name: Calculate new $REVISION (if changed since last published, else skip)
-#      id: revision
-#      shell: bash
-#      run: bash scripts/ci/calc-revision.sh
-#
-#    - name: Share $REVISION as Environment Variable
-#      run: echo "REVISION=${{ steps.revision.outputs.revision }}" >> $GITHUB_ENV
 #
 #    - name: Setup Script Environment
 #      shell: bash
