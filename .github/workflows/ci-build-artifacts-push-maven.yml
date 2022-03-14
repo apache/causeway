@@ -27,7 +27,7 @@ jobs:
       # requires 'secrets' which we don't have yet
       MVN_STAGES: deploy
 
-  steps:
+    steps:
     - uses: actions/checkout@v3
 
     - name: Set up JDK 11
