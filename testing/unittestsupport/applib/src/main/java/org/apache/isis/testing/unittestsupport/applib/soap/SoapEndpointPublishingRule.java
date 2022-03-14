@@ -19,55 +19,47 @@
 package org.apache.isis.testing.unittestsupport.applib.soap;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.rules.TestRule;
-import org.junit.runner.Description;
-import org.junit.runners.model.Statement;
+import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
+public class SoapEndpointPublishingRule implements BeforeAllCallback {
 
-public class SoapEndpointPublishingRule implements TestRule {
+    private List<SoapEndpointSpec> soapEndpointSpecs;
 
     public SoapEndpointPublishingRule(final Class<?> endpointClass, final String endpointAddress) {
-        SoapPublishedEndpoints.instance().publishIfRequired(
-                new SoapEndpointSpec(endpointClass, endpointAddress));
+        soapEndpointSpecs = Collections.singletonList(new SoapEndpointSpec(endpointClass, endpointAddress));
     }
 
     public SoapEndpointPublishingRule(Class<?>... endpointClasses) {
-        SoapPublishedEndpoints.instance().publishIfRequired(
-                stream(endpointClasses)
-                    .map(SoapEndpointSpec::asSoapEndpointSpec)
-                    .collect(Collectors.toCollection(ArrayList::new)));
+        this.soapEndpointSpecs = stream(endpointClasses)
+                .map(SoapEndpointSpec::asSoapEndpointSpec)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public SoapEndpointPublishingRule(final List<Class<?>> endpointClasses) {
-        SoapPublishedEndpoints.instance().publishIfRequired(
-                stream(endpointClasses)
+        this.soapEndpointSpecs = stream(endpointClasses)
                 .map(SoapEndpointSpec::asSoapEndpointSpec)
-                .collect(Collectors.toCollection(ArrayList::new)));
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public SoapEndpointPublishingRule(SoapEndpointSpec... soapEndpointSpecs) {
-        SoapPublishedEndpoints.instance().publishIfRequired(
-                stream(soapEndpointSpecs)
-                    .collect(Collectors.toCollection(ArrayList::new)));
+        this.soapEndpointSpecs = stream(soapEndpointSpecs).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public SoapEndpointPublishingRule(final Iterable<SoapEndpointSpec> soapEndpointSpecs) {
-        SoapPublishedEndpoints.instance().publishIfRequired(
-                stream(soapEndpointSpecs)
-                .collect(Collectors.toCollection(ArrayList::new)));
+        this.soapEndpointSpecs = stream(soapEndpointSpecs).collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
-    public Statement apply(final Statement base, final Description description) {
-        // now a no-op
-        return base;
+    public void beforeAll(ExtensionContext extensionContext) throws Exception {
+        SoapPublishedEndpoints.instance().publishIfRequired(soapEndpointSpecs);
     }
-
     public String getEndpointAddress(Class<?> endpointClass) {
         return SoapPublishedEndpoints.instance().getEndpointAddress(endpointClass);
     }
