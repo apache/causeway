@@ -147,18 +147,14 @@ if [ ! -z "$REVISION" ]; then
 
 fi
 
-case $SETTINGS_MODE in
-  "skip") SETTINGS_CLAUSE="" ;;
-  "*")    SETTINGS_CLAUSE="-s $SETTINGS_XML " ;;
-esac
 
 cd $PROJECT_ROOT_PATH
 echo ""
 echo ""
-echo ">>> ${PROJECT_ROOT_PATH}: mvn $SETTINGS_CLAUSE $BATCH_MODE $SOURCE_MODE_OPTS -T1C $MVN_STAGES $MVN_ADDITIONAL_OPTS $*"
+echo ">>> ${PROJECT_ROOT_PATH}: mvn -s $SETTINGS_XML $BATCH_MODE $SOURCE_MODE_OPTS -T1C $MVN_STAGES $MVN_ADDITIONAL_OPTS $*"
 echo ""
 echo ""
-mvn $SETTINGS_CLAUSE \
+mvn -s $SETTINGS_XML \
     $BATCH_MODE \
     $SOURCE_MODE_OPTS \
     -T1C \
