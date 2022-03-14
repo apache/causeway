@@ -36,8 +36,10 @@ jobs:
         distribution: 'zulu'
         java-version: 11
 
+    - name: Install jq
+      run: sudo apt-get install jq -y
+
     - name: Find latest version from search.maven.org
-      uses: sergeysova/jq-action@v2
       id: version
       with:
         cmd: 'curl -k "https://search.maven.org/solrsearch/select?q=g:org.apache.isis.core+AND+a:isis-applib&rows=1&wt=json" | jq -r ".response.docs[0].latestVersion" '
