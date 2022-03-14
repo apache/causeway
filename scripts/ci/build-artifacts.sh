@@ -147,12 +147,10 @@ if [ ! -z "$REVISION" ]; then
 
 fi
 
-#if [ "SETTINGS_FLAG" = "no-override" ]
-#then
-  SETTINGS_CLAUSE=""
-#else
-#  SETTINGS_CLAUSE="-s $SETTINGS_XML "
-#fi
+case $SETTINGS_MODE in
+  "skip") SETTINGS_CLAUSE="" ;;
+  "*")    SETTINGS_CLAUSE="-s $SETTINGS_XML " ;;
+esac
 
 cd $PROJECT_ROOT_PATH
 echo ""

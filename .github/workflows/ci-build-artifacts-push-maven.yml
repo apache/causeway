@@ -85,7 +85,7 @@ jobs:
         # -T 1C ... 1 build thread per core
         MVN_ADDITIONAL_OPTS: >-
           -f isis-parent/pom.xml
-          -DreleasedXXX
+          -Dreleased
           -Dgithub
           -Denforcer.failFast=true
           -Djacoco.skip=true
@@ -93,7 +93,7 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
         MVN_STAGES: deploy
         SOURCE_MODE: attach
-        SETTINGS_FLAG: no-override
+        SETTINGS_MODE: skip
 
 
 # FOR DEBUG USE
