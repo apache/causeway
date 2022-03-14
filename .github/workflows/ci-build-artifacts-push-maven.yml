@@ -63,13 +63,13 @@ jobs:
           ${{ runner.os }}-${{ env.cache-name }}-
           ${{ runner.os }}-
 
-    - name: Create GitHub Release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ env.REVISION }}
-        release_name: Release ${{ env.REVISION }}
+#    - name: Create GitHub Release
+#      uses: actions/create-release@v1
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      with:
+#        tag_name: ${{ env.REVISION }}
+#        release_name: Release ${{ env.REVISION }}
 
     - name: Build Artifacts
       run: 'bash scripts/ci/build-artifacts.sh'
@@ -80,6 +80,7 @@ jobs:
         # -T 1C ... 1 build thread per core
         MVN_ADDITIONAL_OPTS: >-
           -Dreleased
+          -Dgithub
           -Denforcer.failFast=true
           -Djacoco.skip=true
           -DskipTests
