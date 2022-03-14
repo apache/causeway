@@ -36,22 +36,13 @@ jobs:
 #        distribution: 'zulu'
 #        java-version: 11
 #
-#    - name: Print Maven Version
-#      run: mvn --version
-#
-#    - name: Print jq Version
-#      run: jq --version
-
     - name: Find baseline from search.maven.org
-      id: baseline
-      run: 'curl -k "https://search.maven.org/solrsearch/select?q=g:org.apache.isis.core+AND+a:isis-applib&rows=1&wt=json" | jq -r ".response.docs[0].latestVersion" '
+      id: calc-baseline
+      run: 'scripts/ci/calc-baseline.sh'
 
-    - name: Show baseline
-      run: 'echo "baseline ${{ steps.baseline.outputs.value }}"'
+    - name: Share $BASELINE as Environment Variable
+      run: echo "BASELINE=${{ steps.calc-baseline.outputs.baseline }}" >> $GITHUB_ENV
 
-#
-#    - name: Print Maven Version
-#      run: mvn --version
 #
 #    - name: Activate Cache for Maven Downloads
 #      uses: actions/cache@v2.1.7
@@ -112,10 +103,10 @@ jobs:
 #        GITHUB_TOKEN: ${{ github.token }}
 
 # FOR DEBUG USE
-#   - name: Dump GitHub context
-#     env:
-#       ENV_CONTEXT: ${{ toJson(env) }}
-#     run: echo "$ENV_CONTEXT"
+   - name: Dump Env context
+     env:
+       ENV_CONTEXT: ${{ toJson(env) }}
+     run: echo "$ENV_CONTEXT"
 #   - name: Dump GitHub context
 #     env:
 #       GITHUB_CONTEXT: ${{ toJson(github) }}
