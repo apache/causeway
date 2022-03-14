@@ -93,7 +93,7 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
         MVN_STAGES: deploy
         SOURCE_MODE: attach
-        SETTINGS_MODE: skip
+        SETTINGS_MODE: include
 
 
 # FOR DEBUG USE
