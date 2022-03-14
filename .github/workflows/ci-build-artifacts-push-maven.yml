@@ -1,12 +1,12 @@
-name: Build, Test (Java 17)
+name: Build, Test, Push (Java 11)
 
 on:
   push:
     branches:
-      - master
+      - ISIS-2975
   pull_request:
     branches:
-      - master
+      - ISIS-2975
 
 jobs:
   build:
@@ -20,21 +20,21 @@ jobs:
 
       # not used, would be nice if we could transform the TIMESTAMP string into the REVISION
       # variable here, but it seems github not yet has any string expression manipulation
-      # operators other than concatination
+      # operators other than concatenation
       TIMESTAMP: ${{ github.event.head_commit.timestamp }}
 
       # set this to 'deploy' when intent is to push the built packages to a repo
       # requires 'secrets' which we don't have yet
-      MVN_STAGES: install
+      MVN_STAGES: deploy
 
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up JDK 17
+    - name: Set up JDK 11
       uses: actions/setup-java@v2
       with:
         distribution: 'zulu'
-        java-version: 17
+        java-version: 11
 
     - name: Print Maven Version
       run: mvn --version
@@ -52,34 +52,50 @@ jobs:
           ${{ runner.os }}-${{ env.cache-name }}-
           ${{ runner.os }}-
 
-    - name: Setup Script Environment
-      shell: bash
-      run: |
-        echo ==============  ENV  =================
-        echo BASELINE         \: $BASELINE
-        echo TIMESTAMP        \: $TIMESTAMP
-        echo PROJECT_ROOT_PATH\: $PROJECT_ROOT_PATH
-        echo CI_SCRIPTS_PATH  \: $CI_SCRIPTS_PATH
-        echo MVN_STAGES       \: $MVN_STAGES
-        echo ======================================
+  - name: Calculate new $REVISION (if changed since last published, else skip)
+    id: revision
+    shell: bash
+    run: bash scripts/ci/calc-revision.sh
 
-    - name: Build Artifacts
-      shell: bash
-      run: bash $CI_SCRIPTS_PATH/build-artifacts.sh
-      env:
-        # -Dmodule-all ... build all modules
-        # -Dmodule-all-except-incubator ... build all modules except 'incubator' (eg. when vaadin build fails)
-        # -Denforcer.failFast=true ... fail fast on convergence issues (enforcer plugin)
-        # -Dmaven.source.skip=true ... no need for the CI build to pull sources
-        # -Djacoco.skip=true ... no need for the CI build to add test coverage reports
-        # -T 1C ... 1 build thread per core
-        MVN_ADDITIONAL_OPTS: >-
-          -Dmodule-all
-          -Dproject.build.outputTimestamp=1
-          -Dmaven.source.skip=true
-          -Denforcer.failFast=true
-          -Djacoco.skip=true 
-          -T 1C
+  - name: Share $REVISION as Environment Variable
+    run: echo "REVISION=${{ steps.revision.outputs.revision }}" >> $GITHUB_ENV
+
+  - name: Setup Script Environment
+    shell: bash
+    run: |
+      echo ==============  ENV  =================
+      echo BASELINE         \: $BASELINE
+      echo TIMESTAMP        \: $TIMESTAMP
+      echo PROJECT_ROOT_PATH\: $PROJECT_ROOT_PATH
+      echo CI_SCRIPTS_PATH  \: $CI_SCRIPTS_PATH
+      echo REVISION         \: $REVISION
+      echo ======================================
+
+#  - name: Create GitHub Release
+#    uses: actions/create-release@v1
+#    env:
+#      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#    with:
+#      tag_name: ${{ env.REVISION }}
+#      release_name: Release ${{ env.REVISION }}
+#
+#  - name: Build Artifacts
+#      shell: bash
+#      run: bash scripts/ci/build-artifacts.sh
+#      env:
+#        # -Dreleased ... build only the released modules
+#        # -Denforcer.failFast=true ... fail fast on convergence issues (enforcer plugin)
+#        # -Dmaven.source.skip=true ... no need for the CI build to pull sources
+#        # -Djacoco.skip=true ... no need for the CI build to add test coverage reports
+#        # -T 1C ... 1 build thread per core
+#        MVN_ADDITIONAL_OPTS: >-
+#          -Dmodule-essential
+#          -Dproject.build.outputTimestamp=1
+#          -Denforcer.failFast=true
+#          -Djacoco.skip=true
+#          -DskipTests
+#          -T 1C
+#        GITHUB_TOKEN: ${{ github.token }}
 
 # FOR DEBUG USE
 #   - name: Dump GitHub context

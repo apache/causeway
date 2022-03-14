@@ -311,6 +311,11 @@ under the License.
 			<name>${distMgmtSnapshotsName}</name>
 			<url>${distMgmtSnapshotsUrl}</url>
 		</snapshotRepository>
+		<repository>
+			<id>github</id>
+			<name>Github Releases</name>
+			<url>https://maven.pkg.github.com/apache/isis</url>
+		</repository>
 	</distributionManagement>
 
 	<properties>
