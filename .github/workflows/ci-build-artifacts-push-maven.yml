@@ -6,7 +6,7 @@ on:
       - ISIS-2975
   pull_request:
     branches:
-      - ISIS-2975
+      - master
 
 jobs:
   build:
