@@ -27,23 +27,24 @@ jobs:
       # requires 'secrets' which we don't have yet
       MVN_STAGES: deploy
 
-  - name: Find latest version from search.maven.org
-    uses: sergeysova/jq-action@v2
-    id: version
-    with:
-      cmd: 'curl -k "https://search.maven.org/solrsearch/select?q=g:org.apache.isis.core+AND+a:isis-applib&rows=1&wt=json" | jq -r ".response.docs[0].latestVersion" '
+  steps:
+    - uses: actions/checkout@v3
 
-  - name: Show my version
-    run: 'echo "version ${{ steps.version.outputs.value }}"'
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'zulu'
+        java-version: 11
 
-#    steps:
-#    - uses: actions/checkout@v3
-#
-#    - name: Set up JDK 11
-#      uses: actions/setup-java@v2
-#      with:
-#        distribution: 'zulu'
-#        java-version: 11
+    - name: Find latest version from search.maven.org
+      uses: sergeysova/jq-action@v2
+      id: version
+      with:
+        cmd: 'curl -k "https://search.maven.org/solrsearch/select?q=g:org.apache.isis.core+AND+a:isis-applib&rows=1&wt=json" | jq -r ".response.docs[0].latestVersion" '
+
+    - name: Show my version
+      run: 'echo "version ${{ steps.version.outputs.value }}"'
+
 #
 #    - name: Print Maven Version
 #      run: mvn --version
