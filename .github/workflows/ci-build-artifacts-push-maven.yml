@@ -14,7 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # to be shared among all steps of this job
-      BASELINE: 2.0.0-M7
       PROJECT_ROOT_PATH: ${{ github.workspace }}
       CI_SCRIPTS_PATH: ${{ github.workspace }}/scripts/ci
 
@@ -43,10 +42,10 @@ jobs:
     - name: Share $BASELINE as Environment Variable
       run: echo "BASELINE=${{ steps.calc-baseline.outputs.baseline }}" >> $GITHUB_ENV
 
-#    - name: Dump Env context
-#      env:
-#        ENV_CONTEXT: ${{ toJson(env) }}
-#      run: echo "$ENV_CONTEXT"
+    - name: Dump Env context
+      env:
+        ENV_CONTEXT: ${{ toJson(env) }}
+      run: 'echo "$ENV_CONTEXT"'
 
 #
 #    - name: Activate Cache for Maven Downloads
