@@ -28,8 +28,8 @@ jobs:
       MVN_STAGES: deploy
 
     steps:
-#    - uses: actions/checkout@v3
-#
+    - uses: actions/checkout@v3
+
 #    - name: Set up JDK 11
 #      uses: actions/setup-java@v2
 #      with:
