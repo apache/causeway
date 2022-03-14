@@ -26,7 +26,7 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.testing.unittestsupport.applib.io.IndentPrinter;
