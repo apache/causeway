@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: build-local-no-push
+    name: build-local-push
     runs-on: ubuntu-latest
     env:
       # to be shared among all steps of this job
@@ -39,8 +39,8 @@ jobs:
     - name: Print Maven Version
       run: mvn --version
 
-#    - name: Install jq
-#      run: sudo apt-get install jq -y
+    - name: Install jq
+      run: sudo apt-get install jq -y
 #
 #    - name: Find latest version from search.maven.org
 #      id: version
