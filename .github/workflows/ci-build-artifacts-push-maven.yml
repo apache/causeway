@@ -54,38 +54,26 @@ jobs:
         ENV_CONTEXT: ${{ toJson(env) }}
       run: 'echo "$ENV_CONTEXT"'
 
-#
-#    - name: Activate Cache for Maven Downloads
-#      uses: actions/cache@v2.1.7
+    - name: Activate Cache for Maven Downloads
+      uses: actions/cache@v2.1.7
+      env:
+        # change the cache-name if we want to rebuild the cache
+        # currently there is no concept of cache clearing
+        cache-name: maven-2021-08
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-${{ env.cache-name }}-
+          ${{ runner.os }}-
+
+#    - name: Create GitHub Release
+#      uses: actions/create-release@v1
 #      env:
-#        # change the cache-name if we want to rebuild the cache
-#        # currently there is no concept of cache clearing
-#        cache-name: maven-2021-08
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #      with:
-#        path: ~/.m2/repository
-#        key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/pom.xml') }}
-#        restore-keys: |
-#          ${{ runner.os }}-${{ env.cache-name }}-
-#          ${{ runner.os }}-
-#
-#    - name: Setup Script Environment
-#      shell: bash
-#      run: |
-#        echo ==============  ENV  =================
-#        echo BASELINE         \: $BASELINE
-#        echo TIMESTAMP        \: $TIMESTAMP
-#        echo PROJECT_ROOT_PATH\: $PROJECT_ROOT_PATH
-#        echo CI_SCRIPTS_PATH  \: $CI_SCRIPTS_PATH
-#        echo REVISION         \: $REVISION
-#        echo ======================================
-#
-#  - name: Create GitHub Release
-#    uses: actions/create-release@v1
-#    env:
-#      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#    with:
-#      tag_name: ${{ env.REVISION }}
-#      release_name: Release ${{ env.REVISION }}
+#        tag_name: ${{ env.REVISION }}
+#        release_name: Release ${{ env.REVISION }}
 #
 #  - name: Build Artifacts
 #      shell: bash
