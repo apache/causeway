@@ -27,50 +27,59 @@ jobs:
       # requires 'secrets' which we don't have yet
       MVN_STAGES: deploy
 
-    steps:
-    - uses: actions/checkout@v3
+  - name: Find latest version from search.maven.org
+    uses: sergeysova/jq-action@v2
+    id: version
+    with:
+      cmd: 'curl -k "https://search.maven.org/solrsearch/select?q=g:org.apache.isis.core+AND+a:isis-applib&rows=1&wt=json" | jq -r ".response.docs[0].latestVersion" '
 
-    - name: Set up JDK 11
-      uses: actions/setup-java@v2
-      with:
-        distribution: 'zulu'
-        java-version: 11
+  - name: Show my version
+    run: 'echo "version ${{ steps.version.outputs.value }}"'
 
-    - name: Print Maven Version
-      run: mvn --version
-
-    - name: Activate Cache for Maven Downloads
-      uses: actions/cache@v2.1.7
-      env:
-        # change the cache-name if we want to rebuild the cache
-        # currently there is no concept of cache clearing
-        cache-name: maven-2021-08
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-${{ env.cache-name }}-
-          ${{ runner.os }}-
-
-  - name: Calculate new $REVISION (if changed since last published, else skip)
-    id: revision
-    shell: bash
-    run: bash scripts/ci/calc-revision.sh
-
-  - name: Share $REVISION as Environment Variable
-    run: echo "REVISION=${{ steps.revision.outputs.revision }}" >> $GITHUB_ENV
-
-  - name: Setup Script Environment
-    shell: bash
-    run: |
-      echo ==============  ENV  =================
-      echo BASELINE         \: $BASELINE
-      echo TIMESTAMP        \: $TIMESTAMP
-      echo PROJECT_ROOT_PATH\: $PROJECT_ROOT_PATH
-      echo CI_SCRIPTS_PATH  \: $CI_SCRIPTS_PATH
-      echo REVISION         \: $REVISION
-      echo ======================================
-
+#    steps:
+#    - uses: actions/checkout@v3
+#
+#    - name: Set up JDK 11
+#      uses: actions/setup-java@v2
+#      with:
+#        distribution: 'zulu'
+#        java-version: 11
+#
+#    - name: Print Maven Version
+#      run: mvn --version
+#
+#    - name: Activate Cache for Maven Downloads
+#      uses: actions/cache@v2.1.7
+#      env:
+#        # change the cache-name if we want to rebuild the cache
+#        # currently there is no concept of cache clearing
+#        cache-name: maven-2021-08
+#      with:
+#        path: ~/.m2/repository
+#        key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/pom.xml') }}
+#        restore-keys: |
+#          ${{ runner.os }}-${{ env.cache-name }}-
+#          ${{ runner.os }}-
+#
+#    - name: Calculate new $REVISION (if changed since last published, else skip)
+#      id: revision
+#      shell: bash
+#      run: bash scripts/ci/calc-revision.sh
+#
+#    - name: Share $REVISION as Environment Variable
+#      run: echo "REVISION=${{ steps.revision.outputs.revision }}" >> $GITHUB_ENV
+#
+#    - name: Setup Script Environment
+#      shell: bash
+#      run: |
+#        echo ==============  ENV  =================
+#        echo BASELINE         \: $BASELINE
+#        echo TIMESTAMP        \: $TIMESTAMP
+#        echo PROJECT_ROOT_PATH\: $PROJECT_ROOT_PATH
+#        echo CI_SCRIPTS_PATH  \: $CI_SCRIPTS_PATH
+#        echo REVISION         \: $REVISION
+#        echo ======================================
+#
 #  - name: Create GitHub Release
 #    uses: actions/create-release@v1
 #    env:
