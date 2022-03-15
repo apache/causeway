@@ -55,21 +55,20 @@ public class _OsUtil {
         public boolean isWindows() { return this==WINDOWS; }
         public boolean isLinux() { return this==LINUX; }
         public boolean isMacOs() { return this==MAC_OS; }
+        public static OS current() {
+            val osName = System.getProperty("os.name").toLowerCase();
+            if (osName.startsWith("windows")) {
+                return OS.WINDOWS;
+            }
+            if (osName.contains("linux")) {
+                return OS.LINUX;
+            }
+            if (osName.contains("mac")) {
+                return OS.MAC_OS;
+            }
+            return OS.OTHER;
+        }
     }
-
-    public OS currentOs() {
-        if (System.getProperty("os.name").toLowerCase().startsWith("windows")) {
-            return OS.WINDOWS;
-        }
-        if (System.getProperty("os.name").toLowerCase().contains("linux")) {
-            return OS.LINUX;
-        }
-        if (System.getProperty("os.name").toLowerCase().contains("mac")) {
-            return OS.MAC_OS;
-        }
-        return OS.OTHER;
-    }
-
 
     /**
      * Uses given {@code pidFile} as a way to communicate between processes,
@@ -109,7 +108,7 @@ public class _OsUtil {
             return; // do nothing
         }
         val rt = Runtime.getRuntime();
-        val os = currentOs();
+        val os = OS.current();
         final String cmd;
         switch(os) {
         case WINDOWS:
