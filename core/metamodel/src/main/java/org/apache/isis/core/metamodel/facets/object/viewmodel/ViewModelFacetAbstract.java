@@ -23,8 +23,8 @@ import java.util.Optional;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.commons.CanonicalInvoker;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
-import org.apache.isis.core.metamodel.commons.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -95,7 +95,7 @@ implements ViewModelFacet {
     private void invokePostConstructMethod(final Object viewModel) {
         final Method postConstructMethod = postConstructMethodCache.postConstructMethodFor(viewModel);
         if (postConstructMethod != null) {
-            MethodExtensions.invoke(postConstructMethod, viewModel);
+            CanonicalInvoker.invoke(postConstructMethod, viewModel);
         }
     }
 

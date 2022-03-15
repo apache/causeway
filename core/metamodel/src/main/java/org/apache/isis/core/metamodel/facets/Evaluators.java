@@ -42,6 +42,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 
 //@Log4j2
@@ -129,20 +130,25 @@ public final class Evaluators  {
 
         protected abstract MethodHandle createMethodHandle() throws IllegalAccessException;
 
+        @SneakyThrows
         @Override
         public Object value(final Object obj) {
 
-            return getMethodHandleRef()
-            .mapSuccess(mh->{
-                try {
-                    return mh.invoke(obj);
-                } catch (Throwable e) {
-                    return ThrowableExtensions.handleInvocationException(e, name());
-                }
-            })
+            val mh = getMethodHandleRef()
             .optionalElseThrow(ex->
                 new MetaModelException("failed to create a method handle for " + name(), ex))
             .orElse(null);
+
+            if(mh==null) {
+                return null;
+            }
+
+            try {
+                return mh.invoke(obj);
+            } catch (Throwable e) {
+                throw ThrowableExtensions.handleInvocationException(e, name());
+            }
+
         }
 
     }

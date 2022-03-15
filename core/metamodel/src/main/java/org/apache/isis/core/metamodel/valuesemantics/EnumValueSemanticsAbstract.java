@@ -38,7 +38,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
-import org.apache.isis.core.metamodel.commons.MethodExtensions;
+import org.apache.isis.core.metamodel.commons.CanonicalInvoker;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.schema.common.v2.EnumDto;
 import org.apache.isis.schema.common.v2.ValueType;
@@ -151,7 +151,7 @@ implements
             val translationContext = TranslationContext.forMethod(titleMethod);
 
             try {
-                final Object returnValue = MethodExtensions.invoke(titleMethod, object);
+                final Object returnValue = CanonicalInvoker.invoke(titleMethod, object);
                 if(returnValue instanceof String) {
                     return (String) returnValue;
                 }

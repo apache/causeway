@@ -49,9 +49,8 @@ import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.commons.CanonicalInvoker;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
-import org.apache.isis.core.metamodel.commons.MethodExtensions;
-import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
@@ -284,6 +283,16 @@ public final class ManagedObjects {
     };
 
     // -- DEFAULTS UTILITIES
+
+    public static ManagedObject nullToEmpty(
+            final @NonNull ObjectSpecification elementSpec,
+            final @Nullable ManagedObject adapter) {
+
+        if(adapter!=null) {
+            return adapter;
+        }
+        return ManagedObject.empty(elementSpec);
+    }
 
     public static ManagedObject emptyToDefault(
             final ObjectSpecification elementSpec,
@@ -878,9 +887,9 @@ public final class ManagedObjects {
                 final Can<ManagedObject> pendingArguments,
                 final List<Object> additionalArguments) {
 
-            val ppmTuple = MethodExtensions.construct(ppmConstructor, UnwrapUtil.multipleAsArray(pendingArguments));
+            val ppmTuple = CanonicalInvoker.construct(ppmConstructor, UnwrapUtil.multipleAsArray(pendingArguments));
             val paramPojos = _Arrays.combineWithExplicitType(Object.class, ppmTuple, additionalArguments.toArray());
-            return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), paramPojos);
+            return CanonicalInvoker.invoke(method, UnwrapUtil.single(adapter), paramPojos);
         }
 
         public static Object invokeWithPAT(
@@ -892,19 +901,19 @@ public final class ManagedObjects {
         }
 
         public static void invokeAll(final Iterable<Method> methods, final ManagedObject adapter) {
-            MethodUtil.invoke(methods, UnwrapUtil.single(adapter));
+            CanonicalInvoker.invokeAll(methods, UnwrapUtil.single(adapter));
         }
 
         public static Object invoke(final Method method, final ManagedObject adapter) {
-            return MethodExtensions.invoke(method, UnwrapUtil.single(adapter));
+            return CanonicalInvoker.invoke(method, UnwrapUtil.single(adapter));
         }
 
         public static Object invoke(final Method method, final ManagedObject adapter, final Object arg0) {
-            return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), new Object[] {arg0});
+            return CanonicalInvoker.invoke(method, UnwrapUtil.single(adapter), new Object[] {arg0});
         }
 
         public static Object invoke(final Method method, final ManagedObject adapter, final Can<ManagedObject> argumentAdapters) {
-            return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), UnwrapUtil.multipleAsArray(argumentAdapters));
+            return CanonicalInvoker.invoke(method, UnwrapUtil.single(adapter), UnwrapUtil.multipleAsArray(argumentAdapters));
         }
 
         public static Object invoke(final Method method, final ManagedObject adapter, final ManagedObject arg0Adapter) {
@@ -912,7 +921,7 @@ public final class ManagedObjects {
         }
 
         public static Object invoke(final Method method, final ManagedObject adapter, final ManagedObject[] argumentAdapters) {
-            return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), UnwrapUtil.multipleAsArray(argumentAdapters));
+            return CanonicalInvoker.invoke(method, UnwrapUtil.single(adapter), UnwrapUtil.multipleAsArray(argumentAdapters));
         }
 
         /**
@@ -945,7 +954,7 @@ public final class ManagedObjects {
 
             val argArray = adjust(method, pendingArgs, additionalArgValues);
 
-            return MethodExtensions.invoke(method, UnwrapUtil.single(target), argArray);
+            return CanonicalInvoker.invoke(method, UnwrapUtil.single(target), argArray);
         }
 
         /**

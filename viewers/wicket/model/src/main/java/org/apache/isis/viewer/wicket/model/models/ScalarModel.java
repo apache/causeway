@@ -127,20 +127,21 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         this.renderingHint = renderingHint;
     }
 
+
+    public <T> IModel<T> unwrapped(final Class<T> type) {
+        return new ScalarUnwrappingModel<T>(type, this);
+    }
+
     /**
      * Gets the proposed value as ManagedObject.
      * (override, so we don't return the target model, we are chained to)
      */
     @Override
     public final ManagedObject getObject() {
-        if(isCurrentValueAbsent()) {
-            return ManagedObject.empty(proposedValue().getElementType());
-        }
-        return proposedValue().getValue().getValue();
-    }
-
-    public <T> IModel<T> unwrapped(final Class<T> type) {
-        return new ScalarUnwrappingModel<T>(type, this);
+        val proposedValue = proposedValue();
+        return ManagedObjects.nullToEmpty(
+                proposedValue.getElementType(),
+                proposedValue.getValue().getValue());
     }
 
     /**
@@ -186,18 +187,6 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         final Class<?> scalarType = getScalarTypeSpec().getCorrespondingClass();
         return _NullSafe.streamNullable(requiredClass)
                 .anyMatch(x -> x.isAssignableFrom(scalarType));
-    }
-
-    /**
-     * Has no meaning for <i>Parameters</i>, only has meaning for <i>Properties</i>.
-     * For a <i>Property</i>
-     * the current value and the initial pending (negotiated) value might differ,
-     * if the current value is absent (null).
-     * For <i>Parameters</i> we always evaluate {@code isCurrentValueAbsent()}
-     * to false.
-     */
-    public boolean isCurrentValueAbsent() {
-        return proposedValue().isCurrentValueAbsent().booleanValue();
     }
 
     public abstract ManagedValue proposedValue();

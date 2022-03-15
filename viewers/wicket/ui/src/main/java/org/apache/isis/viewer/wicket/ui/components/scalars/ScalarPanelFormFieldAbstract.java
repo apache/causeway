@@ -39,8 +39,8 @@ import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.CompactFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
-import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
 import lombok.val;
 
@@ -123,11 +123,14 @@ extends ScalarPanelAbstract {
                 id,
                 ()->{
                     val scalarModel = scalarModel();
-                    return scalarModel.isCurrentValueAbsent()
-                            ? ""
-                            : scalarModel.proposedValue()
-                                .getValueAsHtml().getValue();
-                                //.getValueAsParsableText().getValue();
+                    return scalarModel.proposedValue()
+                            .getValueAsHtml().getValue();
+
+//                    return scalarModel.isCurrentValueAbsent()
+//                            ? ""
+//                            : scalarModel.proposedValue()
+//                                .getValueAsHtml().getValue();
+//                                //.getValueAsParsableText().getValue();
                 });
     }
 

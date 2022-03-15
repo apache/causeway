@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.commons;
 
 import java.lang.invoke.WrongMethodTypeException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.function.Consumer;
 
 import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
@@ -28,51 +27,31 @@ import org.apache.isis.applib.exceptions.unrecoverable.ReflectiveActionException
 
 public final class ThrowableExtensions {
 
-    public static Object handleInvocationException(
+    public static Exception handleInvocationException(
             final Throwable e,
             final String memberName) {
-        return handleInvocationException(e, memberName, null);
-    }
-
-    public static Object handleInvocationException(
-            final Throwable e,
-            final String memberName,
-            final Consumer<RecoverableException> recovery) {
 
         if(e instanceof InvocationTargetException) {
-            return handleInvocationException(((InvocationTargetException) e).getTargetException(), memberName, recovery);
+            return handleInvocationException(((InvocationTargetException) e).getTargetException(), memberName);
         }
         if(e instanceof WrongMethodTypeException) {
-            throw new MetaModelException("Wrong method type access of " + memberName, e);
+            return new MetaModelException("Wrong method type access of " + memberName, e);
         }
         if(e instanceof IllegalAccessException) {
-            throw new ReflectiveActionException("Illegal access of " + memberName, e);
+            return new ReflectiveActionException("Illegal access of " + memberName, e);
         }
         if(e instanceof IllegalStateException) {
-            throw new ReflectiveActionException( String.format(
+            return new ReflectiveActionException( String.format(
                     "IllegalStateException thrown while invoking %s %s",
                     memberName, e.getMessage()), e);
         }
         if(e instanceof RecoverableException) {
-            return handleRecoverableException((RecoverableException)e, memberName, recovery);
+            return new RecoverableException("Exception invoking " + memberName, e);
         }
         if (e instanceof RuntimeException) {
-            throw (RuntimeException) e;
+            return (RuntimeException) e;
         }
-        throw new MetaModelException("Exception invoking " + memberName, e);
-    }
-
-
-    private static Object handleRecoverableException(
-            final RecoverableException e,
-            final String memberName,
-            final Consumer<RecoverableException> recovery) {
-
-        if(recovery!=null)
-            recovery.accept(e);
-
-        // an application exception from the domain code is re-thrown as an
-        throw new RecoverableException("Exception invoking " + memberName, e);
+        return new MetaModelException("Exception invoking " + memberName, e);
     }
 
 }

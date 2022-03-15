@@ -25,15 +25,12 @@ import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.commons.binding.Bindable;
 import org.apache.isis.commons.binding.Observable;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.binding._Observables.BooleanObservable;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
 public interface ManagedValue {
-
-    BooleanObservable isCurrentValueAbsent();
 
     ObjectSpecification getElementType();
 

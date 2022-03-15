@@ -101,7 +101,6 @@ public class PropertyNegotiationModel implements ManagedValue {
             : (String)null);
     }
 
-    @Override
     public BooleanObservable isCurrentValueAbsent() {
         return isCurrentValueAbsent;
     }

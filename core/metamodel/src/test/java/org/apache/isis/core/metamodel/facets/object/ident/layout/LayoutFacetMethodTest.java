@@ -48,7 +48,7 @@ public class LayoutFacetMethodTest {
 
     public static class DomainObjectWithProblemInLayoutMethod {
         public String layout() {
-            throw new NullPointerException();
+            throw new NullPointerException("for testing purposes");
         }
     }
 
@@ -78,6 +78,7 @@ public class LayoutFacetMethodTest {
 
     @Test
     public void when_layout_throws_exception() {
+        //assertThrows(NullPointerException.class, ()->facet.layout(mockOwningAdapter));
         final String layout = facet.layout(mockOwningAdapter);
         assertThat(layout, is(nullValue()));
     }

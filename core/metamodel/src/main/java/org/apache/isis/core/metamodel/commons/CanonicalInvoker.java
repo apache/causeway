@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.commons;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
@@ -29,16 +28,16 @@ import java.util.Set;
 import java.util.SortedSet;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.reflection._Reflect;
 
-import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
-
 import lombok.NonNull;
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * Utility for method invocation pre-processing.
@@ -46,11 +45,15 @@ import lombok.val;
  * For a given array of parameters, we intercept and adapt those,
  * that are not compatible with the expected target parameter type.
  * <p>
- * We do this for collection parameter types List, Set, SortedSet, Collection, Can and Arrays.
+ * We do this for collection parameter types List, Set, SortedSet, Collection, Can, Arrays
+ * missing arguments and primitives that are not initialized.
  */
-public final class CanonicalParameterUtil {
+@UtilityClass
+public class CanonicalInvoker {
 
-    public static <T> T construct(final Constructor<T> constructor, final Object[] executionParameters) {
+    // -- CONSTRUCT
+
+    public <T> T construct(final Constructor<T> constructor, final Object[] executionParameters) {
         val adaptedExecutionParameters = preprocess(constructor, executionParameters);
 
         // supports effective private constructors as well
@@ -59,8 +62,17 @@ public final class CanonicalParameterUtil {
         .presentElseFail();
     }
 
-    public static Object invoke(final Method method, final Object targetPojo, final Object[] executionParameters)
-            throws IllegalAccessException, InvocationTargetException {
+    // -- INVOKE
+
+    public void invokeAll(final Iterable<Method> methods, final Object object) {
+        methods.forEach(method->invoke(method, object));
+    }
+
+    public Object invoke(final Method method, final Object object) {
+        return invoke(method, object, _Constants.emptyObjects);
+    }
+
+    public Object invoke(final Method method, final Object targetPojo, final Object[] executionParameters) {
 
         val adaptedExecutionParameters = preprocess(method, executionParameters);
 
@@ -71,14 +83,15 @@ public final class CanonicalParameterUtil {
         .orElse(null);
     }
 
-    private static Object[] preprocess(final Executable executable, final Object[] executionParameters) {
-        if (isEmpty(executionParameters)) {
-            return executionParameters;
+    // -- HELPER
+
+    private Object[] preprocess(final Executable executable, final Object[] executionParameters) {
+        final int paramCount = executable.getParameterCount();
+        if(paramCount==0) {
+            return _Constants.emptyObjects;
         }
         val parameterTypes = executable.getParameterTypes();
-        val paramCount = parameterTypes.length;
         val adaptedExecutionParameters = new Object[paramCount];
-
         for(int i=0; i<paramCount; ++i) {
             val origParam = _Arrays.get(executionParameters, i).orElse(null);
             adaptedExecutionParameters[i] = adapt(origParam, parameterTypes[i]);
@@ -86,18 +99,17 @@ public final class CanonicalParameterUtil {
         return adaptedExecutionParameters;
     }
 
-    // -- OBJECT ADAPTER
-
-
     /**
      * Replaces obj (if required) to be conform with the parameterType
      * @param obj
      * @param parameterType
      */
-    private static Object adapt(Object obj, final Class<?> parameterType) {
+    private Object adapt(Object obj, final Class<?> parameterType) {
 
         if(obj==null) {
-            return null;
+            return parameterType.isPrimitive()
+                    ? ClassUtil.defaultByPrimitive.get(parameterType)
+                    : null;
         }
 
         if(parameterType == Can.class) {
@@ -143,7 +155,7 @@ public final class CanonicalParameterUtil {
         return obj;
     }
 
-    private static Throwable toVerboseException(
+    private Throwable toVerboseException(
             final Executable executable,
             final Object[] adaptedExecutionParameters,
             final Throwable e) {
@@ -194,11 +206,10 @@ public final class CanonicalParameterUtil {
             }
         }
 
-        // re-throw more verbose
-        return e;
+        return ThrowableExtensions.handleInvocationException(e, executable.getName());
     }
 
-    private static boolean isValueCompatibleWithType(
+    private boolean isValueCompatibleWithType(
             final @NonNull Optional<Object> value,
             final @NonNull Class<?> type) {
 
@@ -216,6 +227,7 @@ public final class CanonicalParameterUtil {
 
         return type.isAssignableFrom(runtimeType);
     }
+
 
 
 }

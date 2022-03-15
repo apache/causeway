@@ -31,7 +31,6 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.binding._BindableAbstract;
 import org.apache.isis.commons.internal.binding._Bindables;
 import org.apache.isis.commons.internal.binding._Observables;
-import org.apache.isis.commons.internal.binding._Observables.BooleanObservable;
 import org.apache.isis.commons.internal.binding._Observables.LazyObservable;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -262,7 +261,6 @@ public class ParameterNegotiationModel {
         @Getter @NonNull private final LazyObservable<String> observableParamValidation;
         @Getter @NonNull private final _BindableAbstract<String> bindableParamSearchArgument;
         @Getter @NonNull private final LazyObservable<Can<ManagedObject>> observableParamChoices;
-        private final BooleanObservable isCurrentValueAbsent;
         private Observable<String> bindableParamAsTitle;
         private Observable<String> bindableParamAsHtml;
         private Bindable<String> bindableParamAsParsableText;
@@ -318,12 +316,6 @@ public class ParameterNegotiationModel {
                         .getReason()
                 : (String)null);
 
-            // has no meaning for params, only has meaning for properties
-            // however, there are behavioral subtleties, that is, for a property
-            // the current value and the initial pending (negotiated) value might differ
-            // if the current value is absent (null)
-            // hence for params we always evaluate isCurrentValueAbsent() to false
-            this.isCurrentValueAbsent = _Observables.lazyBoolean(()->false);
         }
 
         public void invalidateChoicesAndValidation() {
@@ -414,10 +406,6 @@ public class ParameterNegotiationModel {
             return observableParamChoices;
         }
 
-        @Override
-        public BooleanObservable isCurrentValueAbsent() {
-            return isCurrentValueAbsent;
-        }
     }
 
 

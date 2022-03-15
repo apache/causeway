@@ -115,7 +115,7 @@ public class TitleFacetViaTitleAnnotationTest {
             }
         });
 
-        final String title = _TitleFacetUtil.title(facet, mockManagedObject);
+        final String title = facet.title(mockManagedObject);
         assertThat(title, is("Normal Domain Object"));
     }
 
@@ -140,7 +140,7 @@ public class TitleFacetViaTitleAnnotationTest {
             }
         });
 
-        final String title = _TitleFacetUtil.title(facet, mockManagedObject);
+        final String title = facet.title(mockManagedObject);
         assertThat(title, is("Failed Title"));
     }
 

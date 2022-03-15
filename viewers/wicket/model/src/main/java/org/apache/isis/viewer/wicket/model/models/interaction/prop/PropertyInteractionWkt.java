@@ -34,6 +34,8 @@ import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationMo
 import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 
+import lombok.val;
+
 /**
  * The parent (container) model of multiple <i>property models</i> which implement
  * {@link ChainingModel}.
@@ -73,7 +75,15 @@ extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
 
         // restore the lazy field - don't evaluate yet
         propertyNegotiationModel =
-                _Lazy.threadSafe(()->propertyInteraction().startPropertyNegotiation());
+                _Lazy.threadSafe(()->{
+                    //bookmarkedObjectModel().getObjectAndRefetch();
+                    val propIa = propertyInteraction();
+                    val prop = propIa.getManagedProperty().orElseThrow();
+                    prop.getOwner().getBookmarkRefreshed();
+
+
+                    return propIa.startPropertyNegotiation();
+                });
 
         return PropertyInteraction.wrap(
                 ManagedProperty.lookupProperty(getBookmarkedOwner(), memberId, where)
