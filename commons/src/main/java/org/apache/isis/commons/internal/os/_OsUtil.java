@@ -50,9 +50,11 @@ public class _OsUtil {
     public static enum OS {
         WINDOWS,
         LINUX,
-        MAC,
+        MAC_OS,
         OTHER;
-        public boolean isWindows() { return this==WINDOWS;}
+        public boolean isWindows() { return this==WINDOWS; }
+        public boolean isLinux() { return this==LINUX; }
+        public boolean isMacOs() { return this==MAC_OS; }
     }
 
     public OS currentOs() {
@@ -63,7 +65,7 @@ public class _OsUtil {
             return OS.LINUX;
         }
         if (System.getProperty("os.name").toLowerCase().contains("mac")) {
-            return OS.MAC;
+            return OS.MAC_OS;
         }
         return OS.OTHER;
     }
@@ -115,10 +117,10 @@ public class _OsUtil {
             break;
         case LINUX:
             //XXX implement eventually
-        case MAC:
+        case MAC_OS:
             //XXX implement eventually
         default:
-            throw _Exceptions.unsupportedOperation("OS " + os + "not yet supported");
+            throw _Exceptions.unsupportedOperation("OS " + os + " not (yet) supported");
         }
         rt.exec(cmd);
     }
