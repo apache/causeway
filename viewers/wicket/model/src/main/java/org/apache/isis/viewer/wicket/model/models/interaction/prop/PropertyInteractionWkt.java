@@ -79,8 +79,7 @@ extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
                 _Lazy.threadSafe(()->{
                     val propIa = propertyInteraction();
                     val prop = propIa.getManagedProperty().orElseThrow();
-                    ManagedObjects.EntityUtil.refetch(prop.getPropertyValue());
-
+                    ManagedObjects.refreshViewmodel(prop.getOwner(), null);
                     return propIa.startPropertyNegotiation();
                 });
 

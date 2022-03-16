@@ -29,6 +29,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
@@ -48,6 +49,8 @@ import org.apache.isis.commons.internal.base._Objects;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.debug._Debug;
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.CanonicalInvoker;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
@@ -57,6 +60,7 @@ import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
@@ -1110,6 +1114,37 @@ public final class ManagedObjects {
                     .collect(_Sets.toUnmodifiable());
         }
 
+    }
+
+    public static void refreshViewmodel(
+            final @Nullable ManagedObject viewmodel,
+            final @Nullable Supplier<Bookmark> bookmarkSupplier) {
+
+        if(isNullOrUnspecifiedOrEmpty(viewmodel)) {
+            return; // do nothing
+        }
+
+        val spec = viewmodel.getSpecification();
+        if(spec.isViewModel()) {
+            val viewModelFacet = spec.getFacet(ViewModelFacet.class);
+            if(viewModelFacet.containsEntities()) {
+
+                _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+                    _Debug.log("about to refresh viewmodel ..");
+                });
+
+                if(viewmodel.isBookmarkMemoized()) {
+                    viewmodel.reloadViewmodelFromMemoizedBookmark();
+                } else {
+                    val bookmark = bookmarkSupplier!=null
+                            ? bookmarkSupplier.get()
+                            : null;
+                    if(bookmark!=null) {
+                        viewmodel.reloadViewmodelFromBookmark(bookmark);
+                    }
+                }
+            }
+        }
     }
 
 }
