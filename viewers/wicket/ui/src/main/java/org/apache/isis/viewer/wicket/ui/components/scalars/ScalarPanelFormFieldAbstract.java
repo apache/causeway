@@ -31,6 +31,7 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -118,19 +119,17 @@ extends ScalarPanelAbstract {
      * However, it may be overridden if required.
      */
     protected Component createComponentForCompact(final String id) {
+
         return Wkt.labelAdd(
                 CompactFragment.LABEL.createFragment(this),
                 id,
                 ()->{
-                    val scalarModel = scalarModel();
-                    return scalarModel.proposedValue()
-                            .getValueAsHtml().getValue();
-
-//                    return scalarModel.isCurrentValueAbsent()
-//                            ? ""
-//                            : scalarModel.proposedValue()
-//                                .getValueAsHtml().getValue();
-//                                //.getValueAsParsableText().getValue();
+                    val propertyNegotiationModel = (PropertyNegotiationModel)scalarModel().proposedValue();
+                    return propertyNegotiationModel.isCurrentValueAbsent().booleanValue()
+                            ? ""
+                            : propertyNegotiationModel
+                                .getValueAsHtml().getValue();
+                                //.getValueAsParsableText().getValue();
                 });
     }
 

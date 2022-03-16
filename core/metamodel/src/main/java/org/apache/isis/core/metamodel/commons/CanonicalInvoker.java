@@ -21,20 +21,16 @@ package org.apache.isis.core.metamodel.commons;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.SortedSet;
 
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal._Constants;
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.reflection._Reflect;
 
+import lombok.Builder;
 import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -51,14 +47,42 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class CanonicalInvoker {
 
+    @lombok.Value @Builder
+    public static class ObjectConstructionRequest {
+        final @NonNull Constructor<?> constructor;
+        final @Nullable Object[] params;
+        final @NonNull @Builder.Default ParameterAdapter parameterAdapter = ParameterAdapter.DEFAULT;
+        public Object[] getAdaptedParameters() {
+            return getParameterAdapter().adaptAll(getConstructor(), getParams());
+        }
+    }
+
+    @lombok.Value @Builder
+    public static class MethodInvocationRequest {
+        final @NonNull Method method;
+        final @NonNull Object targetPojo;
+        final @Nullable Object[] params;
+        final @NonNull @Builder.Default ParameterAdapter parameterAdapter = ParameterAdapter.DEFAULT;
+        public Object[] getAdaptedParameters() {
+            return getParameterAdapter().adaptAll(getMethod(), getParams());
+        }
+    }
+
     // -- CONSTRUCT
 
-    public <T> T construct(final Constructor<T> constructor, final Object[] executionParameters) {
-        val adaptedExecutionParameters = preprocess(constructor, executionParameters);
+    public <T> T construct(final Constructor<T> constructor, final @Nullable Object[] executionParameters) {
+        return _Casts.uncheckedCast(construct(ObjectConstructionRequest.builder()
+                .constructor(constructor)
+                .params(executionParameters)
+                .build()));
+    }
+
+    public Object construct(final ObjectConstructionRequest constructionRequest) {
+        val adaptedExecutionParameters = constructionRequest.getAdaptedParameters();
 
         // supports effective private constructors as well
-        return _Reflect.invokeConstructor(constructor, adaptedExecutionParameters)
-        .mapFailure(ex->toVerboseException(constructor, adaptedExecutionParameters, ex))
+        return _Reflect.invokeConstructor(constructionRequest.getConstructor(), adaptedExecutionParameters)
+        .mapFailure(ex->toVerboseException(constructionRequest.getConstructor(), adaptedExecutionParameters, ex))
         .presentElseFail();
     }
 
@@ -68,92 +92,44 @@ public class CanonicalInvoker {
         methods.forEach(method->invoke(method, object));
     }
 
-    public Object invoke(final Method method, final Object object) {
-        return invoke(method, object, _Constants.emptyObjects);
+    public Object invoke(
+            final Method method,
+            final Object targetPojo) {
+        return invoke(MethodInvocationRequest.builder()
+                .method(method)
+                .targetPojo(targetPojo)
+                .build());
     }
 
-    public Object invoke(final Method method, final Object targetPojo, final Object[] executionParameters) {
+    public Object invoke(
+            final Method method,
+            final Object targetPojo,
+            final @Nullable Object[] executionParameters) {
+        return invoke(MethodInvocationRequest.builder()
+                .method(method)
+                .targetPojo(targetPojo)
+                .params(executionParameters)
+                .build());
+    }
 
-        val adaptedExecutionParameters = preprocess(method, executionParameters);
+    public Object invoke(final MethodInvocationRequest invocationRequest) {
+
+        val adaptedExecutionParameters = invocationRequest.getAdaptedParameters();
 
         // supports effective private methods as well
-        return _Reflect.invokeMethodOn(method, targetPojo, adaptedExecutionParameters)
-        .mapFailure(ex->toVerboseException(method, adaptedExecutionParameters, ex))
+        return _Reflect.invokeMethodOn(
+                invocationRequest.getMethod(),
+                invocationRequest.getTargetPojo(),
+                adaptedExecutionParameters)
+        .mapFailure(ex->toVerboseException(
+                invocationRequest.getMethod(),
+                adaptedExecutionParameters,
+                ex))
         .optionalElseFail()
         .orElse(null);
     }
 
     // -- HELPER
-
-    private Object[] preprocess(final Executable executable, final Object[] executionParameters) {
-        final int paramCount = executable.getParameterCount();
-        if(paramCount==0) {
-            return _Constants.emptyObjects;
-        }
-        val parameterTypes = executable.getParameterTypes();
-        val adaptedExecutionParameters = new Object[paramCount];
-        for(int i=0; i<paramCount; ++i) {
-            val origParam = _Arrays.get(executionParameters, i).orElse(null);
-            adaptedExecutionParameters[i] = adapt(origParam, parameterTypes[i]);
-        }
-        return adaptedExecutionParameters;
-    }
-
-    /**
-     * Replaces obj (if required) to be conform with the parameterType
-     * @param obj
-     * @param parameterType
-     */
-    private Object adapt(Object obj, final Class<?> parameterType) {
-
-        if(obj==null) {
-            return parameterType.isPrimitive()
-                    ? ClassUtil.defaultByPrimitive.get(parameterType)
-                    : null;
-        }
-
-        if(parameterType == Can.class) {
-            if(obj instanceof Can) {
-                return obj;
-            }
-            return Can.ofStream(_NullSafe.streamAutodetect(obj));
-        }
-
-        if(obj instanceof Can) {
-            obj = ((Can<?>)obj).toList();
-        }
-
-        if(_Arrays.isArrayType(parameterType)) {
-            final Class<?> elementType = _Arrays.inferComponentType(parameterType).orElse(null);
-            if(elementType==null) {
-                return obj;
-            }
-            @SuppressWarnings("rawtypes") final List list = (List)obj;
-            return _Arrays.toArray(_Casts.uncheckedCast(list), elementType);
-        }
-
-        // allow no side effects on Collection arguments
-        if(Collection.class.equals(parameterType)) {
-            return _Collections.asUnmodifiableCollection((List<?>)obj);
-        }
-
-        // allow no side effects on List arguments
-        if(List.class.equals(parameterType)) {
-            return _Collections.asUnmodifiableList((List<?>)obj);
-        }
-
-        // adapt as Set (unmodifiable)
-        if(Set.class.equals(parameterType)) {
-            return _Collections.asUnmodifiableSet((List<?>)obj);
-        }
-
-        // adapt as SortedSet (unmodifiable)
-        if(SortedSet.class.equals(parameterType)) {
-            return _Collections.asUnmodifiableSortedSet((List<?>)obj);
-        }
-
-        return obj;
-    }
 
     private Throwable toVerboseException(
             final Executable executable,
@@ -227,7 +203,5 @@ public class CanonicalInvoker {
 
         return type.isAssignableFrom(runtimeType);
     }
-
-
 
 }

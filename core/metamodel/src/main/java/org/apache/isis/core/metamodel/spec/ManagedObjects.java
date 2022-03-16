@@ -880,6 +880,7 @@ public final class ManagedObjects {
     @UtilityClass
     public static final class InvokeUtil {
 
+        /** PAT ... Parameters as Tuple */
         public static Object invokeWithPAT(
                 final Constructor<?> ppmConstructor,
                 final Method method,
@@ -892,6 +893,7 @@ public final class ManagedObjects {
             return CanonicalInvoker.invoke(method, UnwrapUtil.single(adapter), paramPojos);
         }
 
+        /** PAT ... Parameters as Tuple */
         public static Object invokeWithPAT(
                 final Constructor<?> ppmConstructor,
                 final Method method,

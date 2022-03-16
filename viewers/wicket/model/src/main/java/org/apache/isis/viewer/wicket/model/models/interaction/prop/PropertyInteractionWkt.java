@@ -31,6 +31,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 
@@ -76,11 +77,9 @@ extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
         // restore the lazy field - don't evaluate yet
         propertyNegotiationModel =
                 _Lazy.threadSafe(()->{
-                    //bookmarkedObjectModel().getObjectAndRefetch();
                     val propIa = propertyInteraction();
                     val prop = propIa.getManagedProperty().orElseThrow();
-                    prop.getOwner().getBookmarkRefreshed();
-
+                    ManagedObjects.EntityUtil.refetch(prop.getPropertyValue());
 
                     return propIa.startPropertyNegotiation();
                 });
