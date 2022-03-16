@@ -71,7 +71,8 @@ class EventBubbleChart() : SimplePanel() {
                     text = listOf<String>("Request Duration over Time by Request Density and Response Size"),
                     display = true
                 ),
-                tooltip = TooltipOptions(callbacks = toolTipCallback())
+                tooltip = TooltipOptions(callbacks = toolTipCallback()),
+                legend = buildLegend()
             ),
             onClick = js(
                 "function(e) {"
@@ -190,12 +191,21 @@ class EventBubbleChart() : SimplePanel() {
         return labelList
     }
 
-    private fun buildLegendLabelOptions(): LegendLabelOptions {
-        val legend = LegendLabelOptions()
-        legend.generateLabels?.invoke() {
-
-        }
+    private fun buildLegend(): LegendOptions {
+        val legend = LegendOptions(
+            display = true,
+            position = Position.RIGHT,
+            labels = buildLegendLabelOptions(),
+            title = LegendTitleOptions(text = "title here")
+        )
         return legend
+    }
+
+    private fun buildLegendLabelOptions(): LegendLabelOptions {
+        val legendLabelOptions = LegendLabelOptions(
+            color = EventBubbleChart.YELLOW //mutableListOf(DARK_BLUE, LIGHT_BLUE, GREEN, YELLOW, RED, RED_VIOLET, VIOLET)
+        )
+        return legendLabelOptions
     }
 
     private fun generateLabels(): List<LegendItem> {
