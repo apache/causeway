@@ -30,17 +30,33 @@ import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class _FragmentFactory {
+public class ScalarFragmentFactory {
 
-    // -- COMPACT FRAGMENTS
+    @RequiredArgsConstructor
+    public static enum FragmentContainer {
+        SCALAR_IF_OUTPUT("scalarIfCompact"),
+        SCALAR_IF_INPUT("scalarIfRegular"),
+        ;
+        @Getter
+        private final String containerId;
+        public <T extends Component> T createComponent(final Function<String, T> factory) {
+            return factory.apply(containerId);
+        }
+    }
+
+    // -- OUTPUT FRAGMENTS
+
+    @Deprecated
+    private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
     @RequiredArgsConstructor
     public static enum CompactFragment {
@@ -50,11 +66,14 @@ public class _FragmentFactory {
         private final String fragmentId;
         public Fragment createFragment(final MarkupContainer container) {
             return Wkt.fragmentAdd(
-                    container, ScalarPanelAbstract.ID_SCALAR_IF_COMPACT, fragmentId);
+                    container, ID_SCALAR_IF_COMPACT, fragmentId);
         }
     }
 
     // INPUT FRAGMENTS
+
+    @Deprecated
+    private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
 
     @RequiredArgsConstructor
     public static enum InputFragment {

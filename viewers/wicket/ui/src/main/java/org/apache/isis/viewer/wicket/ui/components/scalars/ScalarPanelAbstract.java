@@ -62,16 +62,17 @@ import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.Link
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.components.propertyheader.PropertyEditPromptHeaderPanel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FragmentContainer;
 import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisBlobOrClobPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices.ValueChoicesSelect2Panel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.WktComponents;
-import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
+import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -91,8 +92,7 @@ implements ScalarModelSubscriber {
     protected static final String ID_SCALAR_TYPE_CONTAINER = "scalarTypeContainer";
     protected static final String ID_SCALAR_VALUE_CONTAINER = "scalarValueContainer";
 
-    protected static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
-    protected static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
+
     protected static final String ID_SCALAR_NAME = "scalarName";
     protected static final String ID_SCALAR_VALUE = "scalarValue";
 
@@ -211,33 +211,32 @@ implements ScalarModelSubscriber {
     @Getter @Accessors(fluent = true)
     private final ScalarModel scalarModel;
 
-    // -- COMPACT
+    // -- OUTPUT FORMAT
 
-    private Component componentIfCompact;
-    protected final Component getComponentForCompact() { return componentIfCompact; }
+    private Component componentIfOutput;
+    protected final Component getComponentForOutput() { return componentIfOutput; }
     /**
-     * Builds the component to render the model when in COMPACT format.
-     * <p>Is added to {@link #scalarTypeContainer}.
+     * Builds the component to render the model when in OUTPUT format.
+     * <p>Is added to {@link #getScalarInputOutputContainer()}.
      */
-    protected abstract Component createComponentForCompact();
+    protected abstract Component createComponentForOutput();
 
-    // -- REGULAR
+    // -- INPUT FORMAT
 
-    private MarkupContainer componentIfRegular;
-    protected final MarkupContainer getComponentForRegular() { return componentIfRegular; }
+    private MarkupContainer componentIfInput;
+    protected final MarkupContainer getComponentForInput() { return componentIfInput; }
     /**
-     * Builds the component to render the model when in REGULAR format.
-     * <p>Is added to {@link #scalarTypeContainer}.
+     * Builds the component to render the model when in INPUT format.
+     * <p>Is added to {@link #getScalarInputOutputContainer()}.
      */
-    protected abstract MarkupContainer createComponentForRegular();
+    protected abstract MarkupContainer createComponentForInput();
 
     // --
 
-    private WebMarkupContainer scalarTypeContainer;
-    protected final WebMarkupContainer getScalarTypeContainer() { return scalarTypeContainer; }
+    private WebMarkupContainer scalarInputOutputContainer;
+    protected final WebMarkupContainer getScalarInputOutputContainer() { return scalarInputOutputContainer; }
 
     /**
-     * Populated
      * Used by most subclasses
      * ({@link ScalarPanelAbstract}, {@link ReferencePanel}, {@link ValueChoicesSelect2Panel})
      * but not all ({@link IsisBlobOrClobPanelAbstract}, {@link BooleanPanel})
@@ -317,34 +316,34 @@ implements ScalarModelSubscriber {
      */
     private void buildGui() {
 
-        scalarTypeContainer = Wkt.containerAdd(this, ID_SCALAR_TYPE_CONTAINER);
-        Wkt.cssAppend(scalarTypeContainer, getCssClassName());
+        scalarInputOutputContainer = Wkt.containerAdd(this, ID_SCALAR_TYPE_CONTAINER);
+        Wkt.cssAppend(scalarInputOutputContainer, getCssClassName());
 
         switch(scalarModel.getRenderingHint()) {
         case REGULAR:
-            componentIfRegular = createComponentForRegular();
-            componentIfCompact = createShallowComponentForCompact();
-            componentIfRegular.setVisible(true);
-            componentIfCompact.setVisible(false);
-            componentIfRegular.setOutputMarkupId(true); // enable as AJAX target
+            componentIfInput = createComponentForInput();
+            componentIfOutput = createShallowComponentForOutput();
+            componentIfInput.setVisible(true);
+            componentIfOutput.setVisible(false);
+            componentIfInput.setOutputMarkupId(true); // enable as AJAX target
 
-            scalarTypeContainer.addOrReplace(componentIfCompact, componentIfRegular,
+            scalarInputOutputContainer.addOrReplace(componentIfOutput, componentIfInput,
                     scalarIfRegularInlinePromptForm = createInlinePromptForm());
 
             val associatedLinksAndLabels = associatedLinksAndLabels();
-            addPositioningCssTo(componentIfRegular, associatedLinksAndLabels);
-            addActionLinksBelowAndRight(componentIfRegular, associatedLinksAndLabels);
+            addPositioningCssTo(componentIfInput, associatedLinksAndLabels);
+            addActionLinksBelowAndRight(componentIfInput, associatedLinksAndLabels);
 
-            addFeedbackOnlyTo(componentIfRegular, getValidationFeedbackReceiver());
+            addFeedbackOnlyTo(componentIfInput, getValidationFeedbackReceiver());
 
             break;
         default:
-            componentIfRegular = createShallowComponentForRegular();
-            componentIfCompact = createComponentForCompact();
-            componentIfRegular.setVisible(false);
-            componentIfCompact.setVisible(true);
+            componentIfInput = createShallowComponentForInput();
+            componentIfOutput = createComponentForOutput();
+            componentIfInput.setVisible(false);
+            componentIfOutput.setVisible(true);
 
-            scalarTypeContainer.addOrReplace(componentIfCompact, componentIfRegular,
+            scalarInputOutputContainer.addOrReplace(componentIfOutput, componentIfInput,
                     scalarIfRegularInlinePromptForm = createInlinePromptForm());
 
             break;
@@ -353,7 +352,7 @@ implements ScalarModelSubscriber {
         val inlinePromptConfig = getInlinePromptConfig();
         if(inlinePromptConfig.isSupported()) {
 
-            componentIfRegular
+            componentIfInput
                 .add(inlinePromptLink = createInlinePromptLink());
 
             // even if this particular scalarModel (property) is not configured for inline edits,
@@ -361,8 +360,8 @@ implements ScalarModelSubscriber {
             scalarModel.setInlinePromptContext(
                     new InlinePromptContext(
                             scalarModel,
-                            scalarTypeContainer,
-                            componentIfRegular, scalarIfRegularInlinePromptForm));
+                            scalarInputOutputContainer,
+                            componentIfInput, scalarIfRegularInlinePromptForm));
 
             // start off assuming that neither the property nor any of the associated actions
             // are using inline prompts
@@ -428,19 +427,21 @@ implements ScalarModelSubscriber {
                 .collect(Can.toCan());
     }
     /**
-     * Builds the hidden REGULAR component when in COMPACT format.
-     * <p>Is added to {@link #scalarTypeContainer}.
+     * Builds the hidden INPUT component when in OUTPUT format.
+     * <p>Is added to {@link #getScalarInputOutputContainer()}.
      */
-    protected MarkupContainer createShallowComponentForRegular() {
-        return Wkt.container(ID_SCALAR_IF_REGULAR); // empty component;
+    protected MarkupContainer createShallowComponentForInput() {
+        return FragmentContainer.SCALAR_IF_INPUT
+                .createComponent(Wkt::container); // empty component;
     }
 
     /**
-     * Builds the hidden COMPACT component when in REGULAR format.
-     * <p>Is added to {@link #scalarTypeContainer}.
+     * Builds the hidden OUTPUT component when in INPUT format.
+     * <p>Is added to {@link #getScalarInputOutputContainer()}.
      */
-    protected Component createShallowComponentForCompact() {
-        return Wkt.container(ID_SCALAR_IF_COMPACT); // empty component
+    protected Component createShallowComponentForOutput() {
+        return FragmentContainer.SCALAR_IF_OUTPUT
+                .createComponent(Wkt::container); // empty component;
     }
 
     /**
@@ -658,10 +659,10 @@ implements ScalarModelSubscriber {
 
         switchFormForInlinePrompt(target);
 
-        getComponentForRegular().setVisible(false);
+        getComponentForInput().setVisible(false);
         scalarIfRegularInlinePromptForm.setVisible(true);
 
-        target.add(scalarTypeContainer);
+        target.add(scalarInputOutputContainer);
 
         Wkt.focusOnMarkerAttribute(scalarIfRegularInlinePromptForm, target);
     }
@@ -669,7 +670,7 @@ implements ScalarModelSubscriber {
     private void switchFormForInlinePrompt(final AjaxRequestTarget target) {
         scalarIfRegularInlinePromptForm = (PropertyEditFormPanel) getComponentFactoryRegistry()
                 .addOrReplaceComponent(
-                    scalarTypeContainer,
+                    scalarInputOutputContainer,
                     ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM,
                     ComponentType.PROPERTY_EDIT_FORM,
                     scalarModel);
@@ -690,12 +691,12 @@ implements ScalarModelSubscriber {
 
     protected WebMarkupContainer addEditPropertyIf(final boolean condition) {
         if(condition) {
-            val editProperty = Wkt.containerAdd(componentIfRegular, ID_EDIT_PROPERTY);
+            val editProperty = Wkt.containerAdd(componentIfInput, ID_EDIT_PROPERTY);
             Wkt.behaviorAddOnClick(editProperty, this::onPropertyEditClick);
             WktTooltips.addTooltip(editProperty, "edit");
             return editProperty;
         } else {
-            WktComponents.permanentlyHide(componentIfRegular, ID_EDIT_PROPERTY);
+            WktComponents.permanentlyHide(componentIfInput, ID_EDIT_PROPERTY);
             return null;
         }
     }

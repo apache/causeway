@@ -37,8 +37,9 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
-import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.CompactFragment;
-import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.InputFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FragmentContainer;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
@@ -72,14 +73,14 @@ extends ScalarPanelAbstract {
     protected final FormComponent<T> getFormComponent() { return formComponent; }
 
     /**
-     * Builds the component to render the form field.
+     * Builds the component to render the form input field.
      */
     protected abstract FormComponent<T> createFormComponent(String id, ScalarModel scalarModel);
 
     // -- REGULAR
 
     @Override
-    protected final MarkupContainer createComponentForRegular() {
+    protected final MarkupContainer createComponentForInput() {
         val scalarModel = scalarModel();
 
         val friendlyNameModel = Model.of(scalarModel.getFriendlyName());
@@ -87,7 +88,8 @@ extends ScalarPanelAbstract {
         formComponent = createFormComponent(ID_SCALAR_VALUE, scalarModel);
         formComponent.setLabel(friendlyNameModel);
 
-        val formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, formComponent);
+        val formGroup = FragmentContainer.SCALAR_IF_INPUT
+                .createComponent(id->new FormGroup(id, formComponent));
         formGroup.add(formComponent);
 
         formComponent.setRequired(scalarModel.isRequired());
@@ -108,8 +110,9 @@ extends ScalarPanelAbstract {
     // -- COMPACT
 
     @Override
-    protected final Component createComponentForCompact() {
-        return createComponentForCompact(ID_SCALAR_IF_COMPACT);
+    protected final Component createComponentForOutput() {
+        return FragmentContainer.SCALAR_IF_OUTPUT
+                .createComponent(this::createComponentForOutput);
     }
 
     /**
@@ -118,7 +121,7 @@ extends ScalarPanelAbstract {
      * The (textual) default implementation uses a {@link Label}.
      * However, it may be overridden if required.
      */
-    protected Component createComponentForCompact(final String id) {
+    protected Component createComponentForOutput(final String id) {
 
         return Wkt.labelAdd(
                 CompactFragment.LABEL.createFragment(this),
@@ -143,7 +146,7 @@ extends ScalarPanelAbstract {
     protected void onFormGroupCreated(final FormGroup formGroup) {
         if(scalarModel().isViewMode()
                 && getInlinePromptConfig().isUseEditIconWithLink()) {
-            formGroup.add(createComponentForCompact(ID_SCALAR_VALUE_CONTAINER));
+            formGroup.add(createComponentForOutput(ID_SCALAR_VALUE_CONTAINER));
             return;
         }
         getInputFragmentType()

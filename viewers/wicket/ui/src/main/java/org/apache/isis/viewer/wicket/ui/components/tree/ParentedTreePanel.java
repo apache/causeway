@@ -22,6 +22,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FragmentContainer;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 
 import lombok.val;
@@ -39,13 +40,15 @@ extends ScalarPanelAbstract {
     }
 
     @Override
-    protected MarkupContainer createComponentForRegular() {
-        return createTreeComponent(getScalarTypeContainer(), ID_SCALAR_IF_REGULAR);
+    protected MarkupContainer createComponentForInput() {
+        return FragmentContainer.SCALAR_IF_INPUT
+                .createComponent(this::createTreeComponent);
     }
 
     @Override
-    protected MarkupContainer createComponentForCompact() {
-        return createTreeComponent(getScalarTypeContainer(), ID_SCALAR_IF_COMPACT);
+    protected MarkupContainer createComponentForOutput() {
+        return FragmentContainer.SCALAR_IF_OUTPUT
+                .createComponent(this::createTreeComponent);
     }
 
     @Override
@@ -60,12 +63,13 @@ extends ScalarPanelAbstract {
 
     // -- HELPER
 
-    private MarkupContainer createTreeComponent(final MarkupContainer parent, final String id) {
+    private MarkupContainer createTreeComponent(final String id) {
+        val container = getScalarInputOutputContainer();
         val scalarModel = scalarModel();
         val tree = IsisToWicketTreeAdapter.adapt(id, scalarModel);
-        parent.add(tree);
+        container.add(tree);
         // adds the tree-theme behavior to the tree's parent
-        parent.add(getTreeThemeProvider().treeThemeFor(scalarModel));
+        container.add(getTreeThemeProvider().treeThemeFor(scalarModel));
         return (MarkupContainer) tree;
     }
 

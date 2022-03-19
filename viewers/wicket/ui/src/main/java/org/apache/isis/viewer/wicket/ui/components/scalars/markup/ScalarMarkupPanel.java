@@ -49,7 +49,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
     }
 
     @Override
-    protected Component createComponentForCompact(final String id) {
+    protected Component createComponentForOutput(final String id) {
         return createMarkupComponent(id);
     }
 

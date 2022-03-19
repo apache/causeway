@@ -23,6 +23,7 @@ import java.util.Optional;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.wicketstuff.select2.ChoiceProvider;
@@ -31,6 +32,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FragmentContainer;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForValueChoices;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -52,13 +54,14 @@ extends ScalarPanelSelectAbstract {
     // --
 
     @Override
-    protected Component createComponentForCompact() {
+    protected Component createComponentForOutput() {
         isOutputFormat = true;
-        return Wkt.label(ID_SCALAR_IF_COMPACT, "placeholder");
+        return FragmentContainer.SCALAR_IF_OUTPUT
+                .createComponent(id->Wkt.label(id, "placeholder"));
     }
 
     @Override
-    protected MarkupContainer createComponentForRegular() {
+    protected MarkupContainer createComponentForInput() {
         if(select2 == null) {
             this.select2 = createSelect2(ID_SCALAR_VALUE);
         } else {
@@ -108,7 +111,7 @@ extends ScalarPanelSelectAbstract {
     }
 
     private void clearTitleAttribute() {
-        val target = getComponentForRegular();
+        val target = getComponentForInput();
         WktTooltips.clearTooltip(target);
     }
 
@@ -117,7 +120,7 @@ extends ScalarPanelSelectAbstract {
             clearTitleAttribute();
             return;
         }
-        val target = getComponentForRegular();
+        val target = getComponentForInput();
         WktTooltips.addTooltip(target, titleAttribute);
     }
 

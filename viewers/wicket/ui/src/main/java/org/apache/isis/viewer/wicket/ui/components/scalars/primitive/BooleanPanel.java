@@ -62,7 +62,7 @@ extends ScalarPanelFormFieldAbstract<Boolean> {
     }
 
     @Override
-    protected Component createComponentForCompact(final String id) {
+    protected Component createComponentForOutput(final String id) {
         checkBox = Wkt.checkbox(
                 id,
                 BooleanModel.forScalarModel(scalarModel()),

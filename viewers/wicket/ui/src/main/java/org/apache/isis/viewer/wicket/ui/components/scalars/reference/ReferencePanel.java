@@ -38,6 +38,7 @@ import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHint
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FragmentContainer;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
@@ -79,7 +80,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
     // First called as a side-effect of {@link #beforeRender()}
     @Override
-    protected Component createComponentForCompact() {
+    protected Component createComponentForOutput() {
 
         this.isOutputFormat = true;
 
@@ -92,15 +93,17 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         entityLinkOutputFormat.setOutputMarkupId(true);
         entityLinkOutputFormat.setLabel(Model.of(name));
 
-        final WebMarkupContainer labelIfCompact = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
-        labelIfCompact.add(entityLinkOutputFormat);
+        val labelIfOutput = FragmentContainer.SCALAR_IF_OUTPUT
+                .createComponent(WebMarkupContainer::new); 
+                
+        labelIfOutput.add(entityLinkOutputFormat);
 
-        return labelIfCompact;
+        return labelIfOutput;
     }
 
     // First called as a side-effect of {@link #beforeRender()}
     @Override
-    protected FormGroup createComponentForRegular() {
+    protected FormGroup createComponentForInput() {
 
         this.entityLink = new EntityLinkSelect2Panel(ComponentType.ENTITY_LINK.getId(), this);
 
@@ -215,7 +218,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         val adapter = scalarModel.getObject();
 
         // syncLinkWithInput
-        final MarkupContainer componentForRegular = getComponentForRegular();
+        final MarkupContainer componentForRegular = getComponentForInput();
 
         if(componentForRegular != null) {
 
