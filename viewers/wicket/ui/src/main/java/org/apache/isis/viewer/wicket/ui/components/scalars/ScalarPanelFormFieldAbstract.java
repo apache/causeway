@@ -38,7 +38,7 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FragmentContainer;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -80,7 +80,7 @@ extends ScalarPanelAbstract {
     // -- REGULAR
 
     @Override
-    protected final MarkupContainer createComponentForInput() {
+    protected final MarkupContainer createRegularFrame() {
         val scalarModel = scalarModel();
 
         val friendlyNameModel = Model.of(scalarModel.getFriendlyName());
@@ -88,7 +88,7 @@ extends ScalarPanelAbstract {
         formComponent = createFormComponent(ID_SCALAR_VALUE, scalarModel);
         formComponent.setLabel(friendlyNameModel);
 
-        val formGroup = FragmentContainer.SCALAR_IF_INPUT
+        val formGroup = FrameFragment.REGULAR
                 .createComponent(id->new FormGroup(id, formComponent));
         formGroup.add(formComponent);
 
@@ -110,8 +110,8 @@ extends ScalarPanelAbstract {
     // -- COMPACT
 
     @Override
-    protected final Component createComponentForOutput() {
-        return FragmentContainer.SCALAR_IF_OUTPUT
+    protected final Component createCompactFrame() {
+        return FrameFragment.COMPACT
                 .createComponent(this::createComponentForOutput);
     }
 

@@ -32,7 +32,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FragmentContainer;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForValueChoices;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -54,14 +54,14 @@ extends ScalarPanelSelectAbstract {
     // --
 
     @Override
-    protected Component createComponentForOutput() {
+    protected Component createCompactFrame() {
         isOutputFormat = true;
-        return FragmentContainer.SCALAR_IF_OUTPUT
+        return FrameFragment.COMPACT
                 .createComponent(id->Wkt.label(id, "placeholder"));
     }
 
     @Override
-    protected MarkupContainer createComponentForInput() {
+    protected MarkupContainer createRegularFrame() {
         if(select2 == null) {
             this.select2 = createSelect2(ID_SCALAR_VALUE);
         } else {
@@ -111,7 +111,7 @@ extends ScalarPanelSelectAbstract {
     }
 
     private void clearTitleAttribute() {
-        val target = getComponentForInput();
+        val target = getRegularFrame();
         WktTooltips.clearTooltip(target);
     }
 
@@ -120,7 +120,7 @@ extends ScalarPanelSelectAbstract {
             clearTitleAttribute();
             return;
         }
-        val target = getComponentForInput();
+        val target = getRegularFrame();
         WktTooltips.addTooltip(target, titleAttribute);
     }
 

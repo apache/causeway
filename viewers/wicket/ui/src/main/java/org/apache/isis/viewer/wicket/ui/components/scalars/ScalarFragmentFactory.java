@@ -42,9 +42,9 @@ import lombok.experimental.UtilityClass;
 public class ScalarFragmentFactory {
 
     @RequiredArgsConstructor
-    public static enum FragmentContainer {
-        SCALAR_IF_OUTPUT("scalarIfCompact"),
-        SCALAR_IF_INPUT("scalarIfRegular"),
+    public static enum FrameFragment {
+        COMPACT("scalarIfCompact"),
+        REGULAR("scalarIfRegular"),
         ;
         @Getter
         private final String containerId;
@@ -55,9 +55,6 @@ public class ScalarFragmentFactory {
 
     // -- OUTPUT FRAGMENTS
 
-    @Deprecated
-    private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
-
     @RequiredArgsConstructor
     public static enum CompactFragment {
         CHECKBOX("fragment-compact-checkbox"),
@@ -66,14 +63,11 @@ public class ScalarFragmentFactory {
         private final String fragmentId;
         public Fragment createFragment(final MarkupContainer container) {
             return Wkt.fragmentAdd(
-                    container, ID_SCALAR_IF_COMPACT, fragmentId);
+                    container, FrameFragment.COMPACT.getContainerId(), fragmentId);
         }
     }
 
     // INPUT FRAGMENTS
-
-    @Deprecated
-    private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
 
     @RequiredArgsConstructor
     public static enum InputFragment {

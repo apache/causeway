@@ -34,7 +34,7 @@ import org.wicketstuff.select2.ChoiceProvider;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FragmentContainer;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderAbstract;
@@ -77,7 +77,7 @@ extends ScalarPanelAbstract {
         select2.asComponent().setOutputMarkupId(true);
         select2.setLabel(friendlyNameModel);
 
-        final FormGroup formGroup = FragmentContainer.SCALAR_IF_INPUT
+        final FormGroup formGroup = FrameFragment.REGULAR
                 .createComponent(id->new FormGroup(id, formComponent));
         formGroup.add(formComponent);
         formGroup.addOrReplace(createScalarNameLabel(ID_SCALAR_NAME, friendlyNameModel));

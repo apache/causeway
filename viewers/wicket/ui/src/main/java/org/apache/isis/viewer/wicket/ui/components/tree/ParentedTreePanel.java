@@ -22,7 +22,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FragmentContainer;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 
 import lombok.val;
@@ -40,14 +40,14 @@ extends ScalarPanelAbstract {
     }
 
     @Override
-    protected MarkupContainer createComponentForInput() {
-        return FragmentContainer.SCALAR_IF_INPUT
+    protected MarkupContainer createRegularFrame() {
+        return FrameFragment.REGULAR
                 .createComponent(this::createTreeComponent);
     }
 
     @Override
-    protected MarkupContainer createComponentForOutput() {
-        return FragmentContainer.SCALAR_IF_OUTPUT
+    protected MarkupContainer createCompactFrame() {
+        return FrameFragment.COMPACT
                 .createComponent(this::createTreeComponent);
     }
 
@@ -64,7 +64,7 @@ extends ScalarPanelAbstract {
     // -- HELPER
 
     private MarkupContainer createTreeComponent(final String id) {
-        val container = getScalarInputOutputContainer();
+        val container = getScalarFrameContainer();
         val scalarModel = scalarModel();
         val tree = IsisToWicketTreeAdapter.adapt(id, scalarModel);
         container.add(tree);

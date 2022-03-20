@@ -107,8 +107,8 @@ extends ScalarPanelFormFieldAbstract<T> {
     // //////////////////////////////////////
 
     @Override
-    protected MarkupContainer createShallowComponentForInput() {
-        val shallowRegular = super.createShallowComponentForInput();
+    protected MarkupContainer createShallowComponentForRegular() {
+        val shallowRegular = super.createShallowComponentForRegular();
         WktComponents.permanentlyHide(shallowRegular,
                 ID_IMAGE, ID_SCALAR_NAME, ID_SCALAR_VALUE, ID_FEEDBACK,
                 ID_ASSOCIATED_ACTION_LINKS_BELOW, ID_ASSOCIATED_ACTION_LINKS_RIGHT);
@@ -169,7 +169,7 @@ extends ScalarPanelFormFieldAbstract<T> {
             final String disabledReason,
             final Optional<AjaxRequestTarget> target) {
 
-        final MarkupContainer formComponent = getComponentForInput();
+        final MarkupContainer formComponent = getRegularFrame();
         setRenderModeOn(formComponent, renderMode, disabledReason, target);
 
         final Component scalarValueComponent = formComponent.get(ID_SCALAR_VALUE);
@@ -240,7 +240,7 @@ extends ScalarPanelFormFieldAbstract<T> {
             final ScalarRenderMode renderMode,
             final Optional<AjaxRequestTarget> target) {
 
-        final MarkupContainer formComponent = getComponentForInput();
+        final MarkupContainer formComponent = getRegularFrame();
 
         final AjaxLink<Void> ajaxLink = Wkt.linkAdd(formComponent, ID_SCALAR_IF_REGULAR_CLEAR, ajaxTarget->{
             setEnabled(false);
