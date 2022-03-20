@@ -23,7 +23,8 @@ import org.apache.wicket.MarkupContainer;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.InlinePromptConfig;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 
 import lombok.val;
 
@@ -31,7 +32,7 @@ import lombok.val;
  * Immutable tree, hooks into the ScalarPanelTextField without actually using its text field.
  */
 public class ParentedTreePanel
-extends ScalarPanelAbstract {
+extends ScalarPanelAbstract2 {
 
     private static final long serialVersionUID = 1L;
 

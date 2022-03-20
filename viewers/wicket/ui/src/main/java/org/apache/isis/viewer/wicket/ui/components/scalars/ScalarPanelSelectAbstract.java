@@ -45,7 +45,7 @@ import lombok.NonNull;
 import lombok.val;
 
 public abstract class ScalarPanelSelectAbstract
-extends ScalarPanelAbstract {
+extends ScalarPanelAbstract2 {
 
     private static final long serialVersionUID = 1L;
 

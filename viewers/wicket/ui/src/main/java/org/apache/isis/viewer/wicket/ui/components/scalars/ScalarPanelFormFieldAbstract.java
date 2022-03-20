@@ -47,7 +47,7 @@ import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 import lombok.val;
 
 public abstract class ScalarPanelFormFieldAbstract<T>
-extends ScalarPanelAbstract {
+extends ScalarPanelAbstract2 {
 
     private static final long serialVersionUID = 1L;
 

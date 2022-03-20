@@ -34,11 +34,9 @@ import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
@@ -54,20 +52,13 @@ import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
-import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
-import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.components.propertyheader.PropertyEditPromptHeaderPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
-import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisBlobOrClobPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices.ValueChoicesSelect2Panel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
@@ -147,62 +138,6 @@ implements ScalarModelSubscriber {
         }
     }
 
-    /**
-     *
-     * @param paramModel - the action being invoked
-     * @param target - in case there's more to be repainted...
-     *
-     * @return - true if changed as a result of these pending arguments.
-     */
-    public Repaint updateIfNecessary(
-            final @NonNull ParameterUiModel paramModel,
-            final @NonNull Optional<AjaxRequestTarget> target) {
-
-        // visibility
-        val visibilityConsent = paramModel.getParameterNegotiationModel().getVisibilityConsent(paramModel.getParameterIndex());
-        val visibilityBefore = isVisible();
-        val visibilityAfter = visibilityConsent.isAllowed();
-        setVisible(visibilityAfter);
-
-        // usability
-        val usabilityConsent = paramModel.getParameterNegotiationModel().getUsabilityConsent(paramModel.getParameterIndex());
-        val usabilityBefore = isEnabled();
-        val usabilityAfter = usabilityConsent.isAllowed();
-        if(usabilityAfter) {
-            onEditable(target);
-        } else {
-            onNotEditable(usabilityConsent.getReason(), target);
-        }
-
-        val paramValue = paramModel.getValue();
-        val valueChanged = !Objects.equals(scalarModel.getObject(), paramValue);
-
-        if(valueChanged) {
-            if(ManagedObjects.isNullOrUnspecifiedOrEmpty(paramValue)) {
-                scalarModel.setObject(null);
-            } else {
-                scalarModel.setObject(paramValue);
-            }
-            scalarModel.clearPending();
-        }
-
-
-        // repaint the entire form if visibility has changed
-        if (!visibilityBefore || !visibilityAfter) {
-            return Repaint.ENTIRE_FORM;
-        }
-
-        // repaint the param if usability has changed
-        if (!usabilityAfter || !usabilityBefore) {
-            return Repaint.PARAM_ONLY;
-        }
-
-        // also repaint the param if its pending arg has changed.
-        return valueChanged
-                ? Repaint.PARAM_ONLY
-                : Repaint.NOTHING;
-    }
-
     // -- CONSTRUCTION
 
     /**
@@ -221,7 +156,7 @@ implements ScalarModelSubscriber {
      */
     protected abstract Component createCompactFrame();
 
-    // -- INPUT FORMAT
+    // -- REGULAR FRAME
 
     private MarkupContainer frameIfRegular;
     protected final MarkupContainer getRegularFrame() { return frameIfRegular; }
@@ -231,19 +166,12 @@ implements ScalarModelSubscriber {
      */
     protected abstract MarkupContainer createRegularFrame();
 
-    // --
+    // -- FRAME CONTAINER
 
     private WebMarkupContainer scalarFrameContainer;
     protected final WebMarkupContainer getScalarFrameContainer() { return scalarFrameContainer; }
 
-    /**
-     * Used by most subclasses
-     * ({@link ScalarPanelAbstract}, {@link ReferencePanel}, {@link ValueChoicesSelect2Panel})
-     * but not all ({@link IsisBlobOrClobPanelAbstract}, {@link BooleanPanel})
-     */
-    private WebMarkupContainer scalarIfRegularInlinePromptForm;
-
-    WebMarkupContainer inlinePromptLink;
+    // -- CONSTRUCTION
 
     protected ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
@@ -255,30 +183,9 @@ implements ScalarModelSubscriber {
     @Override
     protected void onInitialize() {
         super.onInitialize();
-        buildGuiAndCallHooks();
-        setOutputMarkupId(true);
-    }
-
-    private void buildGuiAndCallHooks() {
         buildGui();
-
-        final ScalarModel scalarModel = scalarModel();
-
-        final String disableReasonIfAny = scalarModel.disableReasonIfAny();
-        final boolean mustBeEditable = scalarModel.mustBeEditable();
-        if (disableReasonIfAny != null) {
-            if(mustBeEditable) {
-                onInitializeNotEditable();
-            } else {
-                onInitializeReadonly(disableReasonIfAny);
-            }
-        } else {
-            if (scalarModel.isViewMode()) {
-                onInitializeNotEditable();
-            } else {
-                onInitializeEditable();
-            }
-        }
+        callHooks();
+        setOutputMarkupId(true);
     }
 
     /**
@@ -287,24 +194,6 @@ implements ScalarModelSubscriber {
     public final String getCssClassName() {
         return _Strings.decapitalize(getClass().getSimpleName());
     }
-
-    /**
-     * Mandatory hook for implementations to indicate whether it supports the {@link PromptStyle#INLINE inline} or
-     * {@link PromptStyle#INLINE_AS_IF_EDIT prompt}s, and if so, how.
-     *
-     * <p>
-     *     For those that do, both {@link #createInlinePromptForm()} and
-     *     {@link #createInlinePromptLink()} must return non-null values (and their corresponding markup
-     *     must define the corresponding elements).
-     * </p>
-     *
-     * <p>
-     *     Implementations that support inline prompts are: ({@link ScalarPanelAbstract}, {@link ReferencePanel} and
-     *     {@link ValueChoicesSelect2Panel}; those that don't are {@link IsisBlobOrClobPanelAbstract} and {@link BooleanPanel}.
-     * </p>
-     *
-     */
-    protected abstract InlinePromptConfig getInlinePromptConfig();
 
     /**
      * Builds GUI lazily prior to first render.
@@ -327,14 +216,15 @@ implements ScalarModelSubscriber {
             frameIfCompact.setVisible(false);
             frameIfRegular.setOutputMarkupId(true); // enable as AJAX target
 
-            scalarFrameContainer.addOrReplace(frameIfCompact, frameIfRegular,
-                    scalarIfRegularInlinePromptForm = createInlinePromptForm());
+            scalarFrameContainer.addOrReplace(frameIfCompact, frameIfRegular);
 
             val associatedLinksAndLabels = associatedLinksAndLabels();
             addPositioningCssTo(frameIfRegular, associatedLinksAndLabels);
             addActionLinksBelowAndRight(frameIfRegular, associatedLinksAndLabels);
 
             addFeedbackOnlyTo(frameIfRegular, getValidationFeedbackReceiver());
+
+            setupInlinePrompt();
 
             break;
         default:
@@ -344,63 +234,10 @@ implements ScalarModelSubscriber {
             frameIfCompact.setVisible(true);
 
             scalarFrameContainer.addOrReplace(frameIfCompact, frameIfRegular,
-                    scalarIfRegularInlinePromptForm = createInlinePromptForm());
+                    createShallowInlinePromptFormContainer());
 
             break;
         }
-
-        val inlinePromptConfig = getInlinePromptConfig();
-        if(inlinePromptConfig.isSupported()) {
-
-            frameIfRegular
-                .add(inlinePromptLink = createInlinePromptLink());
-
-            // even if this particular scalarModel (property) is not configured for inline edits,
-            // it's possible that one of the associated actions is.  Thus we set the prompt context
-            scalarModel.setInlinePromptContext(
-                    new InlinePromptContext(
-                            scalarModel,
-                            scalarFrameContainer,
-                            frameIfRegular, scalarIfRegularInlinePromptForm));
-
-            // start off assuming that neither the property nor any of the associated actions
-            // are using inline prompts
-
-            val componentToHideRef = _Refs.<Component>objectRef(inlinePromptLink);
-
-            if (scalarModel.getPromptStyle().isInline()
-                    && scalarModel.canEnterEditMode()) {
-
-                // we configure the prompt link if _this_ property is configured for inline edits...
-                Wkt.behaviorAddOnClick(inlinePromptLink, this::onPropertyInlineEditClick);
-                componentToHideRef.setValue(inlinePromptConfig.getComponentToHideIfAny());
-
-            } else {
-
-                val inlineActionIfAny =
-                        scalarModel.getAssociatedActions().getFirstAssociatedWithInlineAsIfEdit();
-
-                // not editable property, but maybe one of the actions is.
-                inlineActionIfAny
-                .map(LinkAndLabelFactory.forPropertyOrParameter(scalarModel))
-                .map(LinkAndLabel::getUiComponent)
-                .map(ActionLink.class::cast)
-                .filter(ActionLink::isVisible)
-                .filter(ActionLink::isEnabled)
-                .ifPresent(actionLinkInlineAsIfEdit->{
-                    Wkt.behaviorAddOnClick(inlinePromptLink, actionLinkInlineAsIfEdit::onClick);
-                    componentToHideRef.setValue(inlinePromptConfig.getComponentToHideIfAny());
-                });
-            }
-
-            componentToHideRef.getValue()
-            .ifPresent(componentToHide->componentToHide.setVisibilityAllowed(false));
-        }
-
-        addEditPropertyIf(
-                scalarModel.canEnterEditMode()
-                && (scalarModel.getPromptStyle().isDialog()
-                        || !inlinePromptConfig.isSupported()));
 
         // prevent from tabbing into non-editable widgets.
         if(scalarModel.isProperty()
@@ -416,6 +253,8 @@ implements ScalarModelSubscriber {
         notifyOnChange(this);
         addFormComponentBehaviourToUpdateSubscribers();
     }
+
+    protected abstract void setupInlinePrompt();
 
     private Can<LinkAndLabel> associatedLinksAndLabels() {
         // find associated actions for this scalar property (only properties will have any.)
@@ -442,6 +281,34 @@ implements ScalarModelSubscriber {
     protected Component createShallowComponentForCompact() {
         return FrameFragment.COMPACT
                 .createComponent(Wkt::container); // empty component;
+    }
+
+    private WebMarkupContainer createShallowInlinePromptFormContainer() {
+        val inlinePromptFormContainer =
+                new WebMarkupContainer(ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM);
+        inlinePromptFormContainer.setVisible(false);
+        return inlinePromptFormContainer;
+    }
+
+    private void callHooks() {
+
+        final ScalarModel scalarModel = scalarModel();
+
+        final String disableReasonIfAny = scalarModel.disableReasonIfAny();
+        final boolean mustBeEditable = scalarModel.mustBeEditable();
+        if (disableReasonIfAny != null) {
+            if(mustBeEditable) {
+                onInitializeNotEditable();
+            } else {
+                onInitializeReadonly(disableReasonIfAny);
+            }
+        } else {
+            if (scalarModel.isViewMode()) {
+                onInitializeNotEditable();
+            } else {
+                onInitializeEditable();
+            }
+        }
     }
 
     /**
@@ -594,42 +461,9 @@ implements ScalarModelSubscriber {
         return scalarNameLabel;
     }
 
-    /**
-     * Returns a container holding an empty form.  This can be switched out using {@link #switchFormForInlinePrompt(AjaxRequestTarget)}.
-     */
-    private WebMarkupContainer createInlinePromptForm() {
 
-        // (placeholder initially, create dynamically when needed - otherwise infinite loop because form references regular)
 
-        WebMarkupContainer scalarIfRegularInlinePromptForm =
-                new WebMarkupContainer( ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM);
-        scalarIfRegularInlinePromptForm.setOutputMarkupId(true);
-        scalarIfRegularInlinePromptForm.setVisible(false);
 
-        return scalarIfRegularInlinePromptForm;
-    }
-
-    private WebMarkupContainer createInlinePromptLink() {
-        final IModel<String> inlinePromptModel = obtainInlinePromptModel();
-        if(inlinePromptModel == null) {
-            throw new IllegalStateException(this.getClass().getName()
-                    + ": obtainInlinePromptModel() returning null is not compatible "
-                    + "with supportsInlinePrompt() returning true ");
-        }
-
-        final WebMarkupContainer inlinePromptLink =
-                new WebMarkupContainer(ID_SCALAR_VALUE_INLINE_PROMPT_LINK);
-        inlinePromptLink.setOutputMarkupId(true);
-        inlinePromptLink.setOutputMarkupPlaceholderTag(true);
-
-        configureInlinePromptLink(inlinePromptLink);
-
-        final Component editInlineLinkLabel =
-                createInlinePromptComponent(ID_SCALAR_VALUE_INLINE_PROMPT_LABEL, inlinePromptModel);
-        inlinePromptLink.add(editInlineLinkLabel);
-
-        return inlinePromptLink;
-    }
 
     protected void configureInlinePromptLink(final WebMarkupContainer inlinePromptLink) {
         Wkt.cssAppend(inlinePromptLink, obtainInlinePromptLinkCssIfAny());
@@ -645,47 +479,6 @@ implements ScalarModelSubscriber {
     }
 
     // ///////////////////////////////////////////////////////////////////
-
-    /**
-     * Components returning true for {@link #getInlinePromptConfig()}
-     * are required to override and return a non-null value.
-     */
-    protected IModel<String> obtainInlinePromptModel() {
-        return null;
-    }
-
-    private void onPropertyInlineEditClick(final AjaxRequestTarget target) {
-        scalarModel.toEditMode();
-
-        switchFormForInlinePrompt(target);
-
-        getRegularFrame().setVisible(false);
-        scalarIfRegularInlinePromptForm.setVisible(true);
-
-        target.add(scalarFrameContainer);
-
-        Wkt.focusOnMarkerAttribute(scalarIfRegularInlinePromptForm, target);
-    }
-
-    private void switchFormForInlinePrompt(final AjaxRequestTarget target) {
-        scalarIfRegularInlinePromptForm = (PropertyEditFormPanel) getComponentFactoryRegistry()
-                .addOrReplaceComponent(
-                    scalarFrameContainer,
-                    ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM,
-                    ComponentType.PROPERTY_EDIT_FORM,
-                    scalarModel);
-
-        onSwitchFormForInlinePrompt(scalarIfRegularInlinePromptForm, target);
-    }
-
-
-    /**
-     * Optional hook.
-     */
-    protected void onSwitchFormForInlinePrompt(
-            final WebMarkupContainer inlinePromptForm,
-            final AjaxRequestTarget target) {
-    }
 
     // -- EDIT PROPERTY ICON
 
@@ -809,6 +602,63 @@ implements ScalarModelSubscriber {
     public void repaint(final AjaxRequestTarget target) {
         target.add(this);
     }
+    /**
+    *
+    * @param paramModel - the action being invoked
+    * @param target - in case there's more to be repainted...
+    *
+    * @return - true if changed as a result of these pending arguments.
+    */
+
+   public Repaint updateIfNecessary(
+           final @NonNull ParameterUiModel paramModel,
+           final @NonNull Optional<AjaxRequestTarget> target) {
+
+       // visibility
+       val visibilityConsent = paramModel.getParameterNegotiationModel().getVisibilityConsent(paramModel.getParameterIndex());
+       val visibilityBefore = isVisible();
+       val visibilityAfter = visibilityConsent.isAllowed();
+       setVisible(visibilityAfter);
+
+       // usability
+       val usabilityConsent = paramModel.getParameterNegotiationModel().getUsabilityConsent(paramModel.getParameterIndex());
+       val usabilityBefore = isEnabled();
+       val usabilityAfter = usabilityConsent.isAllowed();
+       if(usabilityAfter) {
+           onEditable(target);
+       } else {
+           onNotEditable(usabilityConsent.getReason(), target);
+       }
+
+       val paramValue = paramModel.getValue();
+       val valueChanged = !Objects.equals(scalarModel.getObject(), paramValue);
+
+       if(valueChanged) {
+           if(ManagedObjects.isNullOrUnspecifiedOrEmpty(paramValue)) {
+               scalarModel.setObject(null);
+           } else {
+               scalarModel.setObject(paramValue);
+           }
+           scalarModel.clearPending();
+       }
+
+
+       // repaint the entire form if visibility has changed
+       if (!visibilityBefore || !visibilityAfter) {
+           return Repaint.ENTIRE_FORM;
+       }
+
+       // repaint the param if usability has changed
+       if (!usabilityAfter || !usabilityBefore) {
+           return Repaint.PARAM_ONLY;
+       }
+
+       // also repaint the param if its pending arg has changed.
+       return valueChanged
+               ? Repaint.PARAM_ONLY
+               : Repaint.NOTHING;
+   }
+
 
 
 }
