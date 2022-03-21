@@ -60,6 +60,10 @@ import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.components.propertyheader.PropertyEditPromptHeaderPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
+import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisBlobOrClobPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices.ValueChoicesSelect2Panel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
@@ -85,9 +89,6 @@ implements ScalarModelSubscriber {
 
     protected static final String ID_SCALAR_NAME = "scalarName";
     protected static final String ID_SCALAR_VALUE = "scalarValue";
-
-    protected static final String ID_SCALAR_VALUE_INLINE_PROMPT_LINK = "scalarValueInlinePromptLink";
-
 
     public enum Repaint {
         ENTIRE_FORM,
@@ -156,6 +157,16 @@ implements ScalarModelSubscriber {
      */
     protected abstract MarkupContainer createRegularFrame();
 
+    // -- INLINE EDIT FRAME
+
+    private WebMarkupContainer frameIfForm;
+    /**
+     * Used by most subclasses
+     * ({@link ScalarPanelAbstract}, {@link ReferencePanel}, {@link ValueChoicesSelect2Panel})
+     * but not all ({@link IsisBlobOrClobPanelAbstract}, {@link BooleanPanel})
+     */
+    protected final WebMarkupContainer getFormFrame() { return frameIfForm; }
+
     // -- FRAME CONTAINER
 
     private WebMarkupContainer scalarFrameContainer;
@@ -206,7 +217,8 @@ implements ScalarModelSubscriber {
             frameIfCompact.setVisible(false);
             frameIfRegular.setOutputMarkupId(true); // enable as AJAX target
 
-            scalarFrameContainer.addOrReplace(frameIfCompact, frameIfRegular);
+            scalarFrameContainer.addOrReplace(frameIfCompact, frameIfRegular,
+                    frameIfForm = createFormFrame());
 
             val associatedLinksAndLabels = associatedLinksAndLabels();
             addPositioningCssTo(frameIfRegular, associatedLinksAndLabels);
@@ -224,7 +236,7 @@ implements ScalarModelSubscriber {
             frameIfCompact.setVisible(true);
 
             scalarFrameContainer.addOrReplace(frameIfCompact, frameIfRegular,
-                    createShallowInlinePromptForm());
+                    frameIfForm = createFormFrame());
 
             break;
         }
@@ -280,11 +292,33 @@ implements ScalarModelSubscriber {
                 .createComponent(Wkt::container); // empty component;
     }
 
-    protected Component createShallowInlinePromptForm() {
-        return FrameFragment.INLINE_PROMPT_FORM
+    /**
+     * Builds the component to render the model when in INLINE EDITING FORM format.
+     * <p>Is added to {@link #getScalarFrameContainer()}.
+     */
+    protected WebMarkupContainer createFormFrame() {
+        val isRegular = scalarModel().getRenderingHint().isRegular();
+        return (WebMarkupContainer)FrameFragment.INLINE_PROMPT_FORM
                 .createComponent(WebMarkupContainer::new)
-                .setVisible(false); // empty hidden component;
+                .setVisible(false)
+                .setOutputMarkupId(isRegular);
     }
+
+    // -- FRAME SWITCHING
+
+    protected final void switchRegularFrameToFormFrame() {
+        getComponentFactoryRegistry()
+                .addOrReplaceComponent(
+                    getScalarFrameContainer(),
+                    FrameFragment.INLINE_PROMPT_FORM.getContainerId(),
+                    ComponentType.PROPERTY_EDIT_FORM,
+                    scalarModel());
+
+        getRegularFrame().setVisible(false);
+        getFormFrame().setVisible(true);
+    }
+
+    // -- HOOKS
 
     private void callHooks() {
 

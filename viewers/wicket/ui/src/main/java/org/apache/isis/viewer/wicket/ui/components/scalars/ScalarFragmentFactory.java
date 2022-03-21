@@ -56,8 +56,13 @@ public class ScalarFragmentFactory {
 
     @RequiredArgsConstructor
     public static enum RegularFrame {
+
+        @Deprecated
+        SCALAR_VALUE_INLINE_PROMPT_LINK("scalarValueInlinePromptLink"),
+
+        @Deprecated
         OUTPUT_FORMAT_CONTAINER("container-scalarValue-outputFormat"),
-        INPUT_FORMAT_CONTAINER("container-scalarValue-inputFormat"),
+        SCALAR_VALUE_CONTAINER("container-scalarValue"),
 
         EDIT_PROPERTY("editProperty"),
         FEEDBACK("feedback"),
@@ -100,7 +105,7 @@ public class ScalarFragmentFactory {
         private final String fragmentId;
         public Fragment createFragment(final MarkupContainer container, final FormComponent<?> inputComponent) {
             val fragment = Wkt.fragmentAdd(
-                    container, RegularFrame.INPUT_FORMAT_CONTAINER.getContainerId(), fragmentId);
+                    container, RegularFrame.SCALAR_VALUE_CONTAINER.getContainerId(), fragmentId);
             fragment.add(inputComponent);
             return fragment;
         }

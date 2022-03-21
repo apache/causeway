@@ -26,13 +26,10 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.commons.internal.base._Refs;
-import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
-import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisBlobOrClobPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanel;
@@ -41,8 +38,6 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices.ValueCho
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
-import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.val;
 
 /**
@@ -57,15 +52,6 @@ extends ScalarPanelAbstract {
 
     protected WebMarkupContainer inlinePromptLink;
 
-    // -- INLINE PROMPT FORM CONTAINER
-
-    /**
-     * Used by most subclasses
-     * ({@link ScalarPanelAbstract}, {@link ReferencePanel}, {@link ValueChoicesSelect2Panel})
-     * but not all ({@link IsisBlobOrClobPanelAbstract}, {@link BooleanPanel})
-     */
-    @Getter(AccessLevel.PROTECTED)
-    private WebMarkupContainer inlinePromptFormContainer;
 
     // -- CONSTRUCTION
 
@@ -77,7 +63,7 @@ extends ScalarPanelAbstract {
      * Mandatory hook for implementations to indicate whether it supports the {@link PromptStyle#INLINE inline} or
      * {@link PromptStyle#INLINE_AS_IF_EDIT prompt}s, and if so, how.
      * <p>
-     * For those that do, both {@link #createInlinePromptFormContainer()} and
+     * For those that do, both {@link #createFormFrame()} and
      * {@link #createInlinePromptLink()} must return non-null values (and their corresponding markup
      * must define the corresponding elements).
      * <p>
@@ -93,8 +79,6 @@ extends ScalarPanelAbstract {
         val regularFrame = getRegularFrame();
         val scalarFrameContainer = getScalarFrameContainer();
 
-        scalarFrameContainer.add(inlinePromptFormContainer = createInlinePromptFormContainer());
-
         val inlinePromptConfig = getInlinePromptConfig();
         if(inlinePromptConfig.isSupported()) {
 
@@ -107,7 +91,7 @@ extends ScalarPanelAbstract {
                     new InlinePromptContext(
                             scalarModel,
                             scalarFrameContainer,
-                            regularFrame, getInlinePromptFormContainer()));
+                            regularFrame, getFormFrame()));
 
             addOnClickBehaviorTo(inlinePromptLink, inlinePromptConfig);
         }
@@ -184,7 +168,9 @@ extends ScalarPanelAbstract {
         }
 
         final WebMarkupContainer inlinePromptLink =
-                new WebMarkupContainer(ID_SCALAR_VALUE_INLINE_PROMPT_LINK);
+                RegularFrame.SCALAR_VALUE_INLINE_PROMPT_LINK
+                    .createComponent(WebMarkupContainer::new);
+
         inlinePromptLink.setOutputMarkupId(true);
         inlinePromptLink.setOutputMarkupPlaceholderTag(true);
 
@@ -198,47 +184,17 @@ extends ScalarPanelAbstract {
         return inlinePromptLink;
     }
 
-    /**
-     * Returns a container holding an empty form.
-     * This can be switched out using {@link #switchFormForInlinePrompt(AjaxRequestTarget)}.
-     */
-    private WebMarkupContainer createInlinePromptFormContainer() {
-
-        val inlinePromptFormContainer = FrameFragment.INLINE_PROMPT_FORM
-                .createComponent(WebMarkupContainer::new);
-        inlinePromptFormContainer.setOutputMarkupId(true);
-        inlinePromptFormContainer.setVisible(false);
-
-        return inlinePromptFormContainer;
-    }
-
     private void onPropertyInlineEditClick(final AjaxRequestTarget target) {
-        val scalarModel = scalarModel();
-        val scalarFrameContainer = getScalarFrameContainer();
+        scalarModel().toEditMode();
 
-        scalarModel.toEditMode();
+        switchRegularFrameToFormFrame();
+        onSwitchFormForInlinePrompt(getFormFrame(), target);
 
-        switchFormForInlinePrompt(target);
+        target.add(getScalarFrameContainer());
 
-        getRegularFrame().setVisible(false);
-        inlinePromptFormContainer.setVisible(true);
-
-        target.add(scalarFrameContainer);
-
-        Wkt.focusOnMarkerAttribute(inlinePromptFormContainer, target);
+        Wkt.focusOnMarkerAttribute(getFormFrame(), target);
     }
 
-    private void switchFormForInlinePrompt(final AjaxRequestTarget target) {
-        val scalarFrameContainer = getScalarFrameContainer();
 
-        inlinePromptFormContainer = (PropertyEditFormPanel) getComponentFactoryRegistry()
-                .addOrReplaceComponent(
-                    scalarFrameContainer,
-                    FrameFragment.INLINE_PROMPT_FORM.getContainerId(),
-                    ComponentType.PROPERTY_EDIT_FORM,
-                    scalarModel());
-
-        onSwitchFormForInlinePrompt(inlinePromptFormContainer, target);
-    }
 
 }

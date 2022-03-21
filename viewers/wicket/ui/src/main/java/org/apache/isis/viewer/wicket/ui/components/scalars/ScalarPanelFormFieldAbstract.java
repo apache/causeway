@@ -147,7 +147,7 @@ extends ScalarPanelAbstract2 {
     protected void onFormGroupCreated(final FormGroup formGroup) {
         if(scalarModel().isViewMode()
                 && getInlinePromptConfig().isUseEditIconWithLink()) {
-            formGroup.add(RegularFrame.INPUT_FORMAT_CONTAINER
+            formGroup.add(RegularFrame.SCALAR_VALUE_CONTAINER
                     .createComponent(this::createComponentForOutput));
             return;
         }
