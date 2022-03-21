@@ -91,7 +91,7 @@ public class DomainServiceFacetAnnotationFactory extends FacetFactoryAbstract im
         FacetUtil.addFacet(
                 new IconFacetDerivedFromDomainServiceAnnotation(
                         facetHolder,
-                        annotation.repositoryFor()));
+                        repositoryFor));
 
 
         // the mixinOnlyValidator is only added if the config property is set.
