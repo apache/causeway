@@ -18,9 +18,10 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.string;
 
+import java.util.EnumSet;
+
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldTextualAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldVariant;
 
 /**
  * Panel for rendering MultiLine scalars of type String
@@ -31,7 +32,12 @@ extends ScalarPanelTextFieldTextualAbstract {
     private static final long serialVersionUID = 1L;
 
     public MultiLineStringPanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, TextFieldVariant.MULTI_LINE);
+        super(id, scalarModel);
+    }
+
+    @Override
+    protected void setupFormatModifiers(final EnumSet<FormatModifier> modifiers) {
+        modifiers.add(FormatModifier.MULITLINE);
     }
 
 }

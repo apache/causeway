@@ -43,8 +43,6 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
-import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
@@ -65,23 +63,11 @@ extends ScalarPanelFormFieldAbstract<T> {
 
     private AbstractTextComponent<T> formField;
 
-    @Getter(value = AccessLevel.PROTECTED)
-    private TextFieldVariant textFieldVariant;
-
     protected ScalarPanelTextFieldAbstract(
             final String id,
             final ScalarModel scalarModel,
             final Class<T> type) {
-        this(id, scalarModel, type, TextFieldVariant.SINGLE_LINE);
-    }
-
-    protected ScalarPanelTextFieldAbstract(
-            final String id,
-            final ScalarModel scalarModel,
-            final Class<T> type,
-            final TextFieldVariant textFieldVariant) {
         super(id, scalarModel, type);
-        this.textFieldVariant = textFieldVariant;
     }
 
     // -- CONVERSION
@@ -107,12 +93,11 @@ extends ScalarPanelFormFieldAbstract<T> {
      */
     protected AbstractTextComponent<T> createTextField(final String id) {
         val converter = getConverter(scalarModel());
-        val formFieldComponent = getTextFieldVariant().isSingleLine()
-                ? Wkt.textFieldWithConverter(
+        return getFormatModifiers().contains(FormatModifier.MULITLINE)
+                ? Wkt.textAreaWithConverter(
                         id, unwrappedModel(), type, converter)
-                : Wkt.textAreaWithConverter(
+                : Wkt.textFieldWithConverter(
                         id, unwrappedModel(), type, converter);
-        return formFieldComponent;
     }
 
     protected final IModel<T> unwrappedModel() {
@@ -131,14 +116,14 @@ extends ScalarPanelFormFieldAbstract<T> {
 
     @Override
     protected Optional<InputFragment> getInputFragmentType() {
-        return Optional.of(getTextFieldVariant().isSingleLine()
-                ? InputFragment.TEXT
-                : InputFragment.TEXTAREA);
+        return Optional.of(getFormatModifiers().contains(FormatModifier.MULITLINE)
+                ? InputFragment.TEXTAREA
+                : InputFragment.TEXT);
     }
 
     @Override
     protected String obtainInlinePromptLinkCssIfAny() {
-        return getTextFieldVariant().isSingleLine()
+        return !getFormatModifiers().contains(FormatModifier.MULITLINE)
                 ? super.obtainInlinePromptLinkCssIfAny()
                 /* Most other components require 'form-control form-control-sm' on the owning inline prompt link.
                  * For TextArea, however, this instead appears on the TextArea itself.

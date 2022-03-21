@@ -24,9 +24,6 @@ import org.apache.wicket.Component;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldVariant;
-
-import lombok.val;
 
 /**
  * Panel for rendering scalars of type {@link org.apache.isis.applib.value.Markup}.
@@ -43,16 +40,14 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
             final Class<T> valueType,
             final MarkupComponentFactory<ScalarModel> markupComponentFactory) {
 
-        super(id, scalarModel, valueType, TextFieldVariant.MULTI_LINE);
+        super(id, scalarModel, valueType);
         this.markupComponentFactory = markupComponentFactory;
     }
 
     @Override
-    protected EnumSet<FormatModifier> createFormatModifiers(final ScalarModel scalarModel) {
-        val modifiers = super.createFormatModifiers(scalarModel);
+    protected void setupFormatModifiers(final EnumSet<FormatModifier> modifiers) {
         modifiers.add(FormatModifier.MARKUP);
         modifiers.add(FormatModifier.MULITLINE);
-        return modifiers;
     }
 
     @Override

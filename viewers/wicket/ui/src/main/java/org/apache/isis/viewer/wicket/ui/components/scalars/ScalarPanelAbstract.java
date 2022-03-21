@@ -138,9 +138,7 @@ implements ScalarModelSubscriber {
 
     @Getter
     private final ImmutableEnumSet<FormatModifier> formatModifiers;
-    protected EnumSet<FormatModifier> createFormatModifiers(final ScalarModel scalarModel) {
-        return EnumSet.noneOf(FormatModifier.class);
-    }
+    protected void setupFormatModifiers(final EnumSet<FormatModifier> modifiers) {}
 
     // -- COMPACT FRAME
 
@@ -182,7 +180,11 @@ implements ScalarModelSubscriber {
     protected ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
         this.scalarModel = scalarModel;
-        this.formatModifiers = ImmutableEnumSet.from(createFormatModifiers(scalarModel));
+
+        val formatModifiers = EnumSet.noneOf(FormatModifier.class);
+        setupFormatModifiers(formatModifiers);
+
+        this.formatModifiers = ImmutableEnumSet.from(formatModifiers);
     }
 
     // -- INIT

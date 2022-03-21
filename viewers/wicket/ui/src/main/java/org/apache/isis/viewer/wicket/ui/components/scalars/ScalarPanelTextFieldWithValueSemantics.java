@@ -45,14 +45,6 @@ extends ScalarPanelTextFieldAbstract<T> {
         super(id, scalarModel, type);
     }
 
-    public ScalarPanelTextFieldWithValueSemantics(
-            final String id,
-            final ScalarModel scalarModel,
-            final Class<T> type,
-            final TextFieldVariant textFieldVariant) {
-        super(id, scalarModel, type, textFieldVariant);
-    }
-
     @Override
     protected final IConverter<T> getConverter(
             final @NonNull ObjectFeature propOrParam,

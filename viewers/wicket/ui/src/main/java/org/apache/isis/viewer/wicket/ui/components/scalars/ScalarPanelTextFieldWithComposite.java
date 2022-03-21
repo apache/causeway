@@ -25,8 +25,6 @@ import org.apache.wicket.Component;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 
-import lombok.val;
-
 public class ScalarPanelTextFieldWithComposite<T>
 extends ScalarPanelTextFieldWithValueSemantics<T> {
 
@@ -37,14 +35,12 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
             final ScalarModel scalarModel,
             final Class<T> valueType) {
 
-        super(id, scalarModel, valueType, TextFieldVariant.MULTI_LINE);
+        super(id, scalarModel, valueType);
     }
 
     @Override
-    protected EnumSet<FormatModifier> createFormatModifiers(final ScalarModel scalarModel) {
-        val modifiers = super.createFormatModifiers(scalarModel);
+    protected void setupFormatModifiers(final EnumSet<FormatModifier> modifiers) {
         modifiers.add(FormatModifier.COMPOSITE);
-        return modifiers;
     }
 
     @Override
