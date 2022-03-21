@@ -71,8 +71,9 @@ public class DomainServiceFacetAnnotationFactory extends FacetFactoryAbstract im
         }else{
             boolean spring=false;
             for(Annotation a:cls.getAnnotations()){
-                if("Service".equals(a.annotationType().getSimpleName())
-                || "Repository".equals(a.annotationType().getSimpleName())){
+                if("org.springframework.stereotype.Service".equals(a.annotationType().getName())
+                || "org.springframework.stereotype.Repository".equals(a.annotationType().getName())
+                || "org.springframework.stereotype.Component".equals(a.annotationType().getName())){
                     spring=true;
                     break;
                 }
