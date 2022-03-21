@@ -22,20 +22,21 @@
 	xmlns:wicket="http://wicket.apache.org" xml:lang="en" lang="en">
 <body>
 	<wicket:panel>
-		<div class="scalarNameAndValueComponentType"
-			wicket:id="scalarTypeContainer">
+		<div wicket:id="scalarTypeContainer"
+			class="scalarNameAndValueComponentType">
 
 			<div class="form-group" wicket:id="scalarIfRegular">
 
-				<label class="scalarName col-form-label" wicket:id="scalarName">[Label text]</label> 
+				<label wicket:id="scalarName"
+					class="scalarName col-form-label">[Label text]</label> 
 				<span class="scalarValueWrapper">
 					<div class="scalarPlaceholder">
 						<span class="scalarValueInput"> 
 							<span class="editing">
 
-								<a href="##" name="scalarValueInlinePromptLink"
-									class="scalarValueInlinePromptLink"
-									wicket:id="scalarValueInlinePromptLink">
+								<a wicket:id="scalarValueInlinePromptLink"
+									href="##" name="scalarValueInlinePromptLink"
+									class="scalarValueInlinePromptLink">
 									
 									<!-- populated from fragments --> 
 									<wicket:container 
@@ -54,8 +55,8 @@
 										  
 							</span>
 						</span> 
-						<span class="associatedActionLinksRight"
-							wicket:id="associatedActionLinksRight">[drop down]</span>
+						<span wicket:id="associatedActionLinksRight"
+							class="associatedActionLinksRight">[drop down]</span>
 					</div> 
 					<span wicket:id="feedback" class="form-text"/> 
 					<span wicket:id="associatedActionLinksBelow"/>
@@ -63,8 +64,8 @@
 				<div class="clearfix"/>
 			</div>
 
-			<div class="inlinePromptForm"
-				wicket:id="scalarIfRegularInlinePromptForm">
+			<div wicket:id="scalarIfRegularInlinePromptForm"
+				class="inlinePromptForm">
 				<div>
 					<span>[property edit form]</span>
 				</div>
