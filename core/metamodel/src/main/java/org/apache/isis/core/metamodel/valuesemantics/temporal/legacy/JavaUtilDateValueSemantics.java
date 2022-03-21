@@ -58,15 +58,19 @@ extends TemporalSemanticsAdapter<java.util.Date, LocalDateTime>  {
 
     @Override
     public Date fromDelegateValue(final LocalDateTime delegateValue) {
-        return java.util.Date.from(delegateValue
+        return delegateValue!=null
+                ? java.util.Date.from(delegateValue
                     .atZone(ZoneId.systemDefault())
-                    .toInstant());
+                    .toInstant())
+                : null;
     }
 
     @Override
     public LocalDateTime toDelegateValue(final java.util.Date value) {
-        return LocalDateTime.ofInstant(
-                        value.toInstant(), ZoneId.systemDefault());
+        return value!=null
+                ? LocalDateTime.ofInstant(
+                        value.toInstant(), ZoneId.systemDefault())
+                : null;
     }
 
     @Override

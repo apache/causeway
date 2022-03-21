@@ -50,12 +50,16 @@ extends TemporalSemanticsAdapter<Timestamp, LocalDateTime> {
 
     @Override
     public Timestamp fromDelegateValue(final LocalDateTime delegateValue) {
-        return Timestamp.valueOf(delegateValue);
+        return delegateValue!=null
+                ? Timestamp.valueOf(delegateValue)
+                : null;
     }
 
     @Override
     public LocalDateTime toDelegateValue(final Timestamp value) {
-        return value.toLocalDateTime();
+        return value!=null
+                ? value.toLocalDateTime()
+                : null;
     }
 
     @Override
