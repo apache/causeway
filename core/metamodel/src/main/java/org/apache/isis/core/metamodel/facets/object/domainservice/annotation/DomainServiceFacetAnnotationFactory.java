@@ -19,12 +19,14 @@
 package org.apache.isis.core.metamodel.facets.object.domainservice.annotation;
 
 
+import java.lang.annotation.Annotation;
 import java.util.List;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -61,13 +63,28 @@ public class DomainServiceFacetAnnotationFactory extends FacetFactoryAbstract im
     public void process(ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final DomainService annotation = Annotations.getAnnotation(cls, DomainService.class);
-        if (annotation == null) {
-            return;
+        Class<?> repositoryFor = null;
+        NatureOfService natureOfService = NatureOfService.DOMAIN;
+        if (annotation != null) {
+            repositoryFor=annotation.repositoryFor();
+            natureOfService=annotation.nature();
+        }else{
+            boolean spring=false;
+            for(Annotation a:cls.getAnnotations()){
+                if("Service".equals(a.annotationType().getSimpleName())
+                || "Repository".equals(a.annotationType().getSimpleName())){
+                    spring=true;
+                    break;
+                }
+            }
+            if(!spring)
+                return;
         }
+
         FacetHolder facetHolder = processClassContext.getFacetHolder();
         DomainServiceFacet domainServiceFacet = new DomainServiceFacetAnnotation(
                 facetHolder,
-                annotation.repositoryFor(), annotation.nature());
+                repositoryFor, natureOfService);
         FacetUtil.addFacet(domainServiceFacet);
 
 
