@@ -30,9 +30,9 @@ import java.util.stream.Collectors;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -78,7 +78,9 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
+import lombok.Setter;
 import lombok.val;
+import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -92,11 +94,12 @@ extends GridSystemServiceAbstract<BS3Grid> {
     public static final String TNS = "http://isis.apache.org/applib/layout/grid/bootstrap3";
     public static final String SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd";
 
-    private Provider<GridReaderUsingJaxb> gridReaderProvider;
+    @Inject @Lazy // circular dependency (late binding)
+    @Setter @Accessors(chain = true) // JUnit support
+    private GridReaderUsingJaxb gridReader;
 
     @Inject
     public GridSystemServiceBootstrap(
-            final Provider<GridReaderUsingJaxb> gridReaderProvider,
             final SpecificationLoader specificationLoader,
             final TranslationService translationService,
             final JaxbService jaxbService,
@@ -127,7 +130,7 @@ extends GridSystemServiceAbstract<BS3Grid> {
         try {
             final String content = _Resources.loadAsStringUtf8(getClass(), "GridFallbackLayout.xml");
             return Optional.ofNullable(content)
-                    .map(xml -> gridReaderProvider.get().loadGrid(xml))
+                    .map(xml -> gridReader.loadGrid(xml))
                     .filter(BS3Grid.class::isInstance)
                     .map(BS3Grid.class::cast)
                     .map(bs3Grid -> withDomainClass(bs3Grid, domainClass))

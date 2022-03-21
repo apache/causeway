@@ -439,12 +439,14 @@ implements MetaModelContext {
     private final GridService createGridService() {
         return new GridServiceDefault(
             getGridLoaderService(), _Lists.of(
-                    new GridSystemServiceBootstrap(this::getGridReader,
+                    new GridSystemServiceBootstrap(
                             getSpecificationLoader(),
                             getTranslationService(),
                             getJaxbService(),
                             getMessageService(),
-                            getSystemEnvironment()))); // support reloading
+                            getSystemEnvironment())
+                            .setGridReader(getGridReader())
+                    )); // support reloading
     }
 
     @Getter(lazy = true)
