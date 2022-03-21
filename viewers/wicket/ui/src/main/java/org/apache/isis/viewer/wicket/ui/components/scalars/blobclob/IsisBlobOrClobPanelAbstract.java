@@ -42,15 +42,16 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelFormFieldAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.image.WicketImageUtil;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
-import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import static org.apache.isis.commons.internal.functions._Functions.peek;
 
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 import lombok.NonNull;
 import lombok.val;
+
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 
 public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType>
 extends ScalarPanelFormFieldAbstract<T> {
@@ -109,9 +110,7 @@ extends ScalarPanelFormFieldAbstract<T> {
     @Override
     protected MarkupContainer createShallowComponentForRegular() {
         val shallowRegular = super.createShallowComponentForRegular();
-        WktComponents.permanentlyHide(shallowRegular,
-                ID_IMAGE, ID_SCALAR_NAME, ID_SCALAR_VALUE, ID_FEEDBACK,
-                ID_ASSOCIATED_ACTION_LINKS_BELOW, ID_ASSOCIATED_ACTION_LINKS_RIGHT);
+        WktComponents.permanentlyHide(shallowRegular, ID_IMAGE);
         return shallowRegular;
     }
 

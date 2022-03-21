@@ -54,9 +54,15 @@ public class ScalarFragmentFactory {
     }
 
     @RequiredArgsConstructor
-    public static enum CompactFrame {
+    public static enum RegularFrame {
         OUTPUT_FORMAT_CONTAINER("container-scalarValue-outputFormat"),
         INPUT_FORMAT_CONTAINER("container-scalarValue-inputFormat"),
+
+        EDIT_PROPERTY("editProperty"),
+        FEEDBACK("feedback"),
+        ASSOCIATED_ACTION_LINKS_BELOW("associatedActionLinksBelow"),
+        ASSOCIATED_ACTION_LINKS_RIGHT("associatedActionLinksRight"),
+
         ;
         @Getter
         private final String containerId;
@@ -93,7 +99,7 @@ public class ScalarFragmentFactory {
         private final String fragmentId;
         public Fragment createFragment(final MarkupContainer container, final FormComponent<?> inputComponent) {
             val fragment = Wkt.fragmentAdd(
-                    container, CompactFrame.INPUT_FORMAT_CONTAINER.getContainerId(), fragmentId);
+                    container, RegularFrame.INPUT_FORMAT_CONTAINER.getContainerId(), fragmentId);
             fragment.add(inputComponent);
             return fragment;
         }
@@ -118,7 +124,7 @@ public class ScalarFragmentFactory {
                 final IModel<String> promptLabelModel,
                 final @Nullable Consumer<FormComponent<String>> onComponentCreated) {
             val fragment = Wkt.fragmentAdd(
-                    container, CompactFrame.OUTPUT_FORMAT_CONTAINER.getContainerId(), fragmentId);
+                    container, RegularFrame.OUTPUT_FORMAT_CONTAINER.getContainerId(), fragmentId);
             val component = componentFactory.apply(promptLabelModel);
             fragment.add(component);
             if(onComponentCreated!=null

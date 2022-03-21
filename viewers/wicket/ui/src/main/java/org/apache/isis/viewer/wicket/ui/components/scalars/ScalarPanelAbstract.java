@@ -58,6 +58,7 @@ import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.Addi
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.components.propertyheader.PropertyEditPromptHeaderPanel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -94,11 +95,6 @@ implements ScalarModelSubscriber {
      * as per {@link #scalarIfRegularInlinePromptForm}.
      */
     public static final String ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM = "scalarIfRegularInlinePromptForm";
-
-    protected static final String ID_EDIT_PROPERTY = "editProperty";
-    protected static final String ID_FEEDBACK = "feedback";
-    protected static final String ID_ASSOCIATED_ACTION_LINKS_BELOW = "associatedActionLinksBelow";
-    protected static final String ID_ASSOCIATED_ACTION_LINKS_RIGHT = "associatedActionLinksRight";
 
     public enum Repaint {
         ENTIRE_FORM,
@@ -267,8 +263,15 @@ implements ScalarModelSubscriber {
      * <p>Is added to {@link #getScalarFrameContainer()}.
      */
     protected MarkupContainer createShallowComponentForRegular() {
-        return FrameFragment.REGULAR
-                .createComponent(Wkt::container); // empty component;
+        val shallowRegularFrame = FrameFragment.REGULAR
+                .createComponent(Wkt::container);
+        WktComponents.permanentlyHide(shallowRegularFrame,
+                ID_SCALAR_NAME, ID_SCALAR_VALUE,
+                RegularFrame.EDIT_PROPERTY.getContainerId(),
+                RegularFrame.FEEDBACK.getContainerId(),
+                RegularFrame.ASSOCIATED_ACTION_LINKS_BELOW.getContainerId(),
+                RegularFrame.ASSOCIATED_ACTION_LINKS_RIGHT.getContainerId());
+        return shallowRegularFrame;
     }
 
     /**
@@ -458,10 +461,6 @@ implements ScalarModelSubscriber {
         return scalarNameLabel;
     }
 
-
-
-
-
     protected void configureInlinePromptLink(final WebMarkupContainer inlinePromptLink) {
         Wkt.cssAppend(inlinePromptLink, obtainInlinePromptLinkCssIfAny());
     }
@@ -480,13 +479,14 @@ implements ScalarModelSubscriber {
     // -- EDIT PROPERTY ICON
 
     protected WebMarkupContainer addEditPropertyIf(final boolean condition) {
+        val editLinkId = RegularFrame.EDIT_PROPERTY.getContainerId();
         if(condition) {
-            val editProperty = Wkt.containerAdd(frameIfRegular, ID_EDIT_PROPERTY);
+            val editProperty = Wkt.containerAdd(frameIfRegular, editLinkId);
             Wkt.behaviorAddOnClick(editProperty, this::onPropertyEditClick);
             WktTooltips.addTooltip(editProperty, "edit");
             return editProperty;
         } else {
-            WktComponents.permanentlyHide(frameIfRegular, ID_EDIT_PROPERTY);
+            WktComponents.permanentlyHide(frameIfRegular, editLinkId);
             return null;
         }
     }
@@ -528,7 +528,8 @@ implements ScalarModelSubscriber {
             return;
         }
         markupContainer.addOrReplace(
-                new NotificationPanel(ID_FEEDBACK, component, new ComponentFeedbackMessageFilter(component)));
+                RegularFrame.FEEDBACK.createComponent(id->
+                    new NotificationPanel(id, component, new ComponentFeedbackMessageFilter(component))));
     }
 
     private void addActionLinksBelowAndRight(
@@ -538,12 +539,14 @@ implements ScalarModelSubscriber {
         val linksBelow = linkAndLabels
                 .filter(LinkAndLabel.isPositionedAt(ActionLayout.Position.BELOW));
         AdditionalLinksPanel.addAdditionalLinks(
-                labelIfRegular, ID_ASSOCIATED_ACTION_LINKS_BELOW, linksBelow, AdditionalLinksPanel.Style.INLINE_LIST);
+                labelIfRegular, RegularFrame.ASSOCIATED_ACTION_LINKS_BELOW.getContainerId(),
+                linksBelow, AdditionalLinksPanel.Style.INLINE_LIST);
 
         val linksRight = linkAndLabels
                 .filter(LinkAndLabel.isPositionedAt(ActionLayout.Position.RIGHT));
         AdditionalLinksPanel.addAdditionalLinks(
-                labelIfRegular, ID_ASSOCIATED_ACTION_LINKS_RIGHT, linksRight, AdditionalLinksPanel.Style.DROPDOWN);
+                labelIfRegular, RegularFrame.ASSOCIATED_ACTION_LINKS_RIGHT.getContainerId(),
+                linksRight, AdditionalLinksPanel.Style.DROPDOWN);
     }
 
     /**
