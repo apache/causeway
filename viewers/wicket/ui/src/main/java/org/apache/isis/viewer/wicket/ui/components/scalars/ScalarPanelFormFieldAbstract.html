@@ -25,6 +25,7 @@
 		<div wicket:id="scalarTypeContainer"
 			class="scalarNameAndValueComponentType">
 
+			<!-- regular frame -->
 			<div class="form-group" wicket:id="scalarIfRegular">
 
 				<label wicket:id="scalarName"
@@ -64,14 +65,15 @@
 				<div class="clearfix"/>
 			</div>
 
+			<!-- prompt form frame -->
 			<div wicket:id="scalarIfRegularInlinePromptForm"
 				class="inlinePromptForm">
 				<div>
-					<span>[property edit form]</span>
+					<span>[inline edit form]</span>
 				</div>
 			</div>
 
-			<!-- populated from fragments -->
+			<!-- compact frame -->
 			<wicket:container 
 				wicket:id="scalarIfCompact"/>
 				  

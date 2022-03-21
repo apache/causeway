@@ -282,7 +282,8 @@ implements ScalarModelSubscriber {
 
     protected Component createShallowInlinePromptForm() {
         return FrameFragment.INLINE_PROMPT_FORM
-                .createComponent(Wkt::container); // empty component;
+                .createComponent(WebMarkupContainer::new)
+                .setVisible(false); // empty hidden component;
     }
 
     private void callHooks() {
