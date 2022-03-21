@@ -53,8 +53,20 @@ public class ScalarFragmentFactory {
         }
     }
 
+    @RequiredArgsConstructor
+    public static enum CompactFrame {
+        OUTPUT_FORMAT_CONTAINER("container-scalarValue-outputFormat"),
+        ;
+        @Getter
+        private final String containerId;
+        public <T extends Component> T createComponent(final Function<String, T> factory) {
+            return factory.apply(containerId);
+        }
+    }
+
     // -- OUTPUT FRAGMENTS
 
+    //TODO CompactFragment and OutputFragment should be unified
     @RequiredArgsConstructor
     public static enum CompactFragment {
         CHECKBOX("fragment-compact-checkbox"),
@@ -105,7 +117,7 @@ public class ScalarFragmentFactory {
                 final IModel<String> promptLabelModel,
                 final @Nullable Consumer<FormComponent<String>> onComponentCreated) {
             val fragment = Wkt.fragmentAdd(
-                    container, ScalarPanelAbstract.ID_SCALAR_VALUE_INLINE_PROMPT_LABEL, fragmentId);
+                    container, CompactFrame.OUTPUT_FORMAT_CONTAINER.getContainerId(), fragmentId);
             val component = componentFactory.apply(promptLabelModel);
             fragment.add(component);
             if(onComponentCreated!=null

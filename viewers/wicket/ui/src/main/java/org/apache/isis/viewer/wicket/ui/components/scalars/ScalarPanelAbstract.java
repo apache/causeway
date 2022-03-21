@@ -91,7 +91,6 @@ implements ScalarModelSubscriber {
      * as per {@link #inlinePromptLink}
      */
     protected static final String ID_SCALAR_VALUE_INLINE_PROMPT_LINK = "scalarValueInlinePromptLink";
-    protected static final String ID_SCALAR_VALUE_INLINE_PROMPT_LABEL = "scalarValueInlinePromptLabel";
 
     /**
      * as per {@link #scalarIfRegularInlinePromptForm}.

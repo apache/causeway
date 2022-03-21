@@ -31,6 +31,7 @@ import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisBlobOrClobPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanel;
@@ -181,7 +182,7 @@ extends ScalarPanelAbstract {
         configureInlinePromptLink(inlinePromptLink);
 
         final Component editInlineLinkLabel =
-                createInlinePromptComponent(ID_SCALAR_VALUE_INLINE_PROMPT_LABEL, inlinePromptModel);
+                createInlinePromptComponent(CompactFrame.OUTPUT_FORMAT_CONTAINER.getContainerId(), inlinePromptModel);
         inlinePromptLink.add(editInlineLinkLabel);
 
         return inlinePromptLink;
