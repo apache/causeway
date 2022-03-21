@@ -98,7 +98,7 @@ implements ScalarModelSubscriber {
     @RequiredArgsConstructor
     public static class InlinePromptConfig {
         @Getter private final boolean supported;
-        @Getter private final Component componentToHideIfAny;
+        private final Component componentToHideIfAny;
         @Getter private final boolean useEditIconWithLink;
 
         public static InlinePromptConfig supported() {
@@ -121,6 +121,10 @@ implements ScalarModelSubscriber {
 
         public InlinePromptConfig withEditIcon() {
             return new InlinePromptConfig(supported, componentToHideIfAny, true);
+        }
+
+        public Optional<Component> getComponentToHide() {
+            return Optional.ofNullable(componentToHideIfAny);
         }
     }
 

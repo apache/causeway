@@ -79,7 +79,7 @@ extends ScalarPanelSelectAbstract {
     }
 
     @Override
-    protected IModel<String> obtainInlinePromptModel() {
+    protected IModel<String> obtainOutputFormatModel() {
         return select2.obtainInlinePromptModel2();
     }
 

@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
@@ -89,7 +90,7 @@ extends ScalarPanelAbstract {
     protected final void setupInlinePrompt() {
 
         val scalarModel = scalarModel();
-        val frameIfRegular = getRegularFrame();
+        val regularFrame = getRegularFrame();
         val scalarFrameContainer = getScalarFrameContainer();
 
         scalarFrameContainer.add(inlinePromptFormContainer = createInlinePromptFormContainer());
@@ -97,7 +98,7 @@ extends ScalarPanelAbstract {
         val inlinePromptConfig = getInlinePromptConfig();
         if(inlinePromptConfig.isSupported()) {
 
-            frameIfRegular
+            regularFrame
                 .add(inlinePromptLink = createInlinePromptLink());
 
             // even if this particular scalarModel (property) is not configured for inline edits,
@@ -106,40 +107,9 @@ extends ScalarPanelAbstract {
                     new InlinePromptContext(
                             scalarModel,
                             scalarFrameContainer,
-                            frameIfRegular, getInlinePromptFormContainer()));
+                            regularFrame, getInlinePromptFormContainer()));
 
-            // start off assuming that neither the property nor any of the associated actions
-            // are using inline prompts
-
-            val componentToHideRef = _Refs.<Component>objectRef(inlinePromptLink);
-
-            if (scalarModel.getPromptStyle().isInline()
-                    && scalarModel.canEnterEditMode()) {
-
-                // we configure the prompt link if _this_ property is configured for inline edits...
-                Wkt.behaviorAddOnClick(inlinePromptLink, this::onPropertyInlineEditClick);
-                componentToHideRef.setValue(inlinePromptConfig.getComponentToHideIfAny());
-
-            } else {
-
-                val inlineActionIfAny =
-                        scalarModel.getAssociatedActions().getFirstAssociatedWithInlineAsIfEdit();
-
-                // not editable property, but maybe one of the actions is.
-                inlineActionIfAny
-                .map(LinkAndLabelFactory.forPropertyOrParameter(scalarModel))
-                .map(LinkAndLabel::getUiComponent)
-                .map(ActionLink.class::cast)
-                .filter(ActionLink::isVisible)
-                .filter(ActionLink::isEnabled)
-                .ifPresent(actionLinkInlineAsIfEdit->{
-                    Wkt.behaviorAddOnClick(inlinePromptLink, actionLinkInlineAsIfEdit::onClick);
-                    componentToHideRef.setValue(inlinePromptConfig.getComponentToHideIfAny());
-                });
-            }
-
-            componentToHideRef.getValue()
-            .ifPresent(componentToHide->componentToHide.setVisibilityAllowed(false));
+            addOnClickBehaviorTo(inlinePromptLink, inlinePromptConfig);
         }
 
         addEditPropertyIf(
@@ -153,7 +123,7 @@ extends ScalarPanelAbstract {
      * Components returning true for {@link #getInlinePromptConfig()}
      * are required to override and return a non-null value.
      */
-    protected IModel<String> obtainInlinePromptModel() {
+    protected IModel<String> obtainOutputFormatModel() {
         return null;
     }
 
@@ -167,11 +137,49 @@ extends ScalarPanelAbstract {
 
     // -- HELPER
 
+    private void addOnClickBehaviorTo(
+            final MarkupContainer clickReceiver,
+            final InlinePromptConfig inlinePromptConfig) {
+        val scalarModel = scalarModel();
+
+        // start off assuming that neither the property nor any of the associated actions
+        // are using inline prompts
+        val componentToHideRef = _Refs.<Component>objectRef(clickReceiver);
+
+        if (scalarModel.getPromptStyle().isInline()
+                && scalarModel.canEnterEditMode()) {
+
+            // we configure the prompt link if _this_ property is configured for inline edits...
+            Wkt.behaviorAddOnClick(clickReceiver, this::onPropertyInlineEditClick);
+            componentToHideRef.setValue(inlinePromptConfig.getComponentToHide().orElse(null));
+
+        } else {
+
+            val inlineActionIfAny =
+                    scalarModel.getAssociatedActions().getFirstAssociatedWithInlineAsIfEdit();
+
+            // not editable property, but maybe one of the actions is.
+            inlineActionIfAny
+            .map(LinkAndLabelFactory.forPropertyOrParameter(scalarModel))
+            .map(LinkAndLabel::getUiComponent)
+            .map(ActionLink.class::cast)
+            .filter(ActionLink::isVisible)
+            .filter(ActionLink::isEnabled)
+            .ifPresent(actionLinkInlineAsIfEdit->{
+                Wkt.behaviorAddOnClick(clickReceiver, actionLinkInlineAsIfEdit::onClick);
+                componentToHideRef.setValue(inlinePromptConfig.getComponentToHide().orElse(null));
+            });
+        }
+
+        componentToHideRef.getValue()
+            .ifPresent(componentToHide->componentToHide.setVisibilityAllowed(false));
+    }
+
     private WebMarkupContainer createInlinePromptLink() {
-        final IModel<String> inlinePromptModel = obtainInlinePromptModel();
+        final IModel<String> inlinePromptModel = obtainOutputFormatModel();
         if(inlinePromptModel == null) {
             throw new IllegalStateException(this.getClass().getName()
-                    + ": obtainInlinePromptModel() returning null is not compatible "
+                    + ": obtainOutputFormatModel() returning null is not compatible "
                     + "with supportsInlinePrompt() returning true ");
         }
 

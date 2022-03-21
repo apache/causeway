@@ -173,7 +173,7 @@ extends ScalarPanelFormFieldAbstract<T> {
     // -- CONVERSION
 
     @Override
-    protected final IModel<String> obtainInlinePromptModel() {
+    protected final IModel<String> obtainOutputFormatModel() {
         val converter = getConverter(scalarModel());
         return converter!=null
                 ? new ToStringConvertingModel<>(converter)
