@@ -85,6 +85,8 @@ extends ScalarPanelAbstract {
             regularFrame
                 .add(inlinePromptLink = createInlinePromptLink());
 
+            addOnClickBehaviorTo(inlinePromptLink, inlinePromptConfig);
+
             // even if this particular scalarModel (property) is not configured for inline edits,
             // it's possible that one of the associated actions is.  Thus we set the prompt context
             scalarModel.setInlinePromptContext(
@@ -92,8 +94,6 @@ extends ScalarPanelAbstract {
                             scalarModel,
                             scalarFrameContainer,
                             regularFrame, getFormFrame()));
-
-            addOnClickBehaviorTo(inlinePromptLink, inlinePromptConfig);
         }
 
         addEditPropertyIf(
@@ -117,6 +117,19 @@ extends ScalarPanelAbstract {
     protected void onSwitchFormForInlinePrompt(
             final WebMarkupContainer inlinePromptForm,
             final AjaxRequestTarget target) {
+    }
+
+    protected void configureInlinePromptLink(final WebMarkupContainer inlinePromptLink) {
+        Wkt.cssAppend(inlinePromptLink, obtainInlinePromptLinkCssIfAny());
+    }
+
+    protected String obtainInlinePromptLinkCssIfAny() {
+        return "form-control form-control-sm";
+    }
+
+    protected Component createInlinePromptComponent(
+            final String id, final IModel<String> inlinePromptModel) {
+        return Wkt.labelNoTab(id, inlinePromptModel);
     }
 
     // -- HELPER
@@ -194,7 +207,5 @@ extends ScalarPanelAbstract {
 
         Wkt.focusOnMarkerAttribute(getFormFrame(), target);
     }
-
-
 
 }

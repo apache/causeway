@@ -491,19 +491,6 @@ implements ScalarModelSubscriber {
         return scalarNameLabel;
     }
 
-    protected void configureInlinePromptLink(final WebMarkupContainer inlinePromptLink) {
-        Wkt.cssAppend(inlinePromptLink, obtainInlinePromptLinkCssIfAny());
-    }
-
-    protected String obtainInlinePromptLinkCssIfAny() {
-        return "form-control form-control-sm";
-    }
-
-    protected Component createInlinePromptComponent(
-            final String id, final IModel<String> inlinePromptModel) {
-        return Wkt.labelNoTab(id, inlinePromptModel);
-    }
-
     // ///////////////////////////////////////////////////////////////////
 
     // -- EDIT PROPERTY ICON
