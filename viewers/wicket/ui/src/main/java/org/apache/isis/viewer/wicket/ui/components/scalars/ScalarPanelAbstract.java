@@ -81,8 +81,6 @@ implements ScalarModelSubscriber {
     private static final long serialVersionUID = 1L;
 
     protected static final String ID_SCALAR_TYPE_CONTAINER = "scalarTypeContainer";
-    protected static final String ID_SCALAR_VALUE_CONTAINER = "scalarValueContainer";
-
 
     protected static final String ID_SCALAR_NAME = "scalarName";
     protected static final String ID_SCALAR_VALUE = "scalarValue";

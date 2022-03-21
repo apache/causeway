@@ -38,6 +38,7 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
@@ -146,7 +147,8 @@ extends ScalarPanelAbstract2 {
     protected void onFormGroupCreated(final FormGroup formGroup) {
         if(scalarModel().isViewMode()
                 && getInlinePromptConfig().isUseEditIconWithLink()) {
-            formGroup.add(createComponentForOutput(ID_SCALAR_VALUE_CONTAINER));
+            formGroup.add(CompactFrame.INPUT_FORMAT_CONTAINER
+                    .createComponent(this::createComponentForOutput));
             return;
         }
         getInputFragmentType()

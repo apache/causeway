@@ -56,6 +56,7 @@ public class ScalarFragmentFactory {
     @RequiredArgsConstructor
     public static enum CompactFrame {
         OUTPUT_FORMAT_CONTAINER("container-scalarValue-outputFormat"),
+        INPUT_FORMAT_CONTAINER("container-scalarValue-inputFormat"),
         ;
         @Getter
         private final String containerId;
@@ -92,7 +93,7 @@ public class ScalarFragmentFactory {
         private final String fragmentId;
         public Fragment createFragment(final MarkupContainer container, final FormComponent<?> inputComponent) {
             val fragment = Wkt.fragmentAdd(
-                    container, ScalarPanelAbstract.ID_SCALAR_VALUE_CONTAINER, fragmentId);
+                    container, CompactFrame.INPUT_FORMAT_CONTAINER.getContainerId(), fragmentId);
             fragment.add(inputComponent);
             return fragment;
         }

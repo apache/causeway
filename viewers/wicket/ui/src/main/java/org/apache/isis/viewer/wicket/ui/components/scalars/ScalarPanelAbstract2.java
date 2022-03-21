@@ -181,8 +181,9 @@ extends ScalarPanelAbstract {
 
         configureInlinePromptLink(inlinePromptLink);
 
-        final Component editInlineLinkLabel =
-                createInlinePromptComponent(CompactFrame.OUTPUT_FORMAT_CONTAINER.getContainerId(), inlinePromptModel);
+        final Component editInlineLinkLabel = CompactFrame.OUTPUT_FORMAT_CONTAINER
+                .createComponent(id->createInlinePromptComponent(id, inlinePromptModel));
+
         inlinePromptLink.add(editInlineLinkLabel);
 
         return inlinePromptLink;
