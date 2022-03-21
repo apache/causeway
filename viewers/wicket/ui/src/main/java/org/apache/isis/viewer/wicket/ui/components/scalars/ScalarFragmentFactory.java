@@ -23,7 +23,6 @@ import java.util.function.Function;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
@@ -31,7 +30,6 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
-import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -57,12 +55,10 @@ public class ScalarFragmentFactory {
     @RequiredArgsConstructor
     public static enum RegularFrame {
 
-        @Deprecated
         SCALAR_VALUE_INLINE_PROMPT_LINK("scalarValueInlinePromptLink"),
 
-        @Deprecated
         OUTPUT_FORMAT_CONTAINER("container-scalarValue-outputFormat"),
-        SCALAR_VALUE_CONTAINER("container-scalarValue"),
+        INPUT_FORMAT_CONTAINER("container-scalarValue-inputFormat"),
 
         EDIT_PROPERTY("editProperty"),
         FEEDBACK("feedback"),
@@ -105,7 +101,7 @@ public class ScalarFragmentFactory {
         private final String fragmentId;
         public Fragment createFragment(final MarkupContainer container, final FormComponent<?> inputComponent) {
             val fragment = Wkt.fragmentAdd(
-                    container, RegularFrame.SCALAR_VALUE_CONTAINER.getContainerId(), fragmentId);
+                    container, RegularFrame.INPUT_FORMAT_CONTAINER.getContainerId(), fragmentId);
             fragment.add(inputComponent);
             return fragment;
         }
@@ -115,9 +111,6 @@ public class ScalarFragmentFactory {
 
     @RequiredArgsConstructor
     public static enum PromptFragment {
-        EDIT_ICON("fragment-prompt-editicon", promptLabelModel->
-            WktTooltips.addTooltip(
-                new Button(ScalarPanelAbstract.ID_SCALAR_VALUE), "Click to edit")),
         LABEL("fragment-prompt-label", promptLabelModel->
             Wkt.label(ScalarPanelAbstract.ID_SCALAR_VALUE, promptLabelModel)),
         TEXTAREA("fragment-prompt-textarea", promptLabelModel->

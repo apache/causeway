@@ -18,11 +18,15 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
 
+import java.util.EnumSet;
+
 import org.apache.wicket.Component;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldVariant;
+
+import lombok.val;
 
 /**
  * Panel for rendering scalars of type {@link org.apache.isis.applib.value.Markup}.
@@ -44,8 +48,11 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
     }
 
     @Override
-    protected InlinePromptConfig getInlinePromptConfig() {
-        return super.getInlinePromptConfig().withEditIcon();
+    protected EnumSet<FormatModifier> createFormatModifiers(final ScalarModel scalarModel) {
+        val modifiers = super.createFormatModifiers(scalarModel);
+        modifiers.add(FormatModifier.MARKUP);
+        modifiers.add(FormatModifier.MULITLINE);
+        return modifiers;
     }
 
     @Override

@@ -31,7 +31,6 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.validation.validator.StringValidator;
 
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
@@ -155,19 +154,11 @@ extends ScalarPanelFormFieldAbstract<T> {
     protected final Component createInlinePromptComponent(
             final String id,
             final IModel<String> inlinePromptLabelModel) {
-
-        if(getInlinePromptConfig().isUseEditIconWithLink()) {
-            return PromptFragment.EDIT_ICON.createFragment(this, inlinePromptLabelModel, null);
+        if(getFormatModifiers().contains(FormatModifier.MULITLINE)) {
+            return PromptFragment.TEXTAREA
+                    .createFragment(this, inlinePromptLabelModel, this::setFormComponentAttributes);
         }
-
-        switch(getTextFieldVariant()) {
-        case SINGLE_LINE:
-            return PromptFragment.LABEL.createFragment(this, inlinePromptLabelModel, null);
-        case MULTI_LINE:
-            return PromptFragment.TEXTAREA.createFragment(this, inlinePromptLabelModel, this::setFormComponentAttributes);
-        default:
-            throw _Exceptions.unmatchedCase(getTextFieldVariant());
-        }
+        return PromptFragment.LABEL.createFragment(this, inlinePromptLabelModel, null);
     }
 
     // -- CONVERSION

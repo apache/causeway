@@ -142,14 +142,14 @@ public class Configuration_usingWicket {
 
         public static final String INVENTORY_NAME_PROPERTY_EDIT_INLINE_FORM_TEXTFIELD = INVENTORY_NAME_PROPERTY
                 + ":property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:"
-                + RegularFrame.SCALAR_VALUE_CONTAINER.getContainerId() + ":scalarValue";
+                + RegularFrame.INPUT_FORMAT_CONTAINER.getContainerId() + ":scalarValue";
 
         public static final String INVENTORY_NAME_PROPERTY_EDIT_INLINE_PROMPT_FORM = INVENTORY_NAME_PROPERTY
                 + ":scalarTypeContainer:scalarIfRegularInlinePromptForm:inputForm";
 
         public static final String INLINE_PROMPT_FORM_FIELD = ""
                 + "property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:"
-                + RegularFrame.SCALAR_VALUE_CONTAINER.getContainerId() + ":scalarValue";
+                + RegularFrame.INPUT_FORMAT_CONTAINER.getContainerId() + ":scalarValue";
 
         public static final String INLINE_PROMPT_FORM_OK = INVENTORY_NAME_PROPERTY_EDIT_INLINE_PROMPT_FORM
                 + ":okButton";

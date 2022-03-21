@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -37,6 +38,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
@@ -90,6 +92,14 @@ implements ScalarModelSubscriber {
     protected static final String ID_SCALAR_NAME = "scalarName";
     protected static final String ID_SCALAR_VALUE = "scalarValue";
 
+    public enum FormatModifier {
+        READONLY,
+        MARKUP,
+        MULITLINE,
+        TRISTATE,
+        FLEX, COMPOSITE
+    }
+
     public enum Repaint {
         ENTIRE_FORM,
         PARAM_ONLY,
@@ -100,7 +110,6 @@ implements ScalarModelSubscriber {
     public static class InlinePromptConfig {
         @Getter private final boolean supported;
         private final Component componentToHideIfAny;
-        @Getter private final boolean useEditIconWithLink;
 
         public static InlinePromptConfig supported() {
             return new InlinePromptConfig(true, null);
@@ -112,16 +121,6 @@ implements ScalarModelSubscriber {
 
         public static InlinePromptConfig supportedAndHide(final Component componentToHideIfAny) {
             return new InlinePromptConfig(true, componentToHideIfAny);
-        }
-
-        private InlinePromptConfig(final boolean supported, final Component componentToHideIfAny) {
-            this.supported = supported;
-            this.componentToHideIfAny = componentToHideIfAny;
-            this.useEditIconWithLink = false;
-        }
-
-        public InlinePromptConfig withEditIcon() {
-            return new InlinePromptConfig(supported, componentToHideIfAny, true);
         }
 
         public Optional<Component> getComponentToHide() {
@@ -136,6 +135,12 @@ implements ScalarModelSubscriber {
      */
     @Getter @Accessors(fluent = true)
     private final ScalarModel scalarModel;
+
+    @Getter
+    private final ImmutableEnumSet<FormatModifier> formatModifiers;
+    protected EnumSet<FormatModifier> createFormatModifiers(final ScalarModel scalarModel) {
+        return EnumSet.noneOf(FormatModifier.class);
+    }
 
     // -- COMPACT FRAME
 
@@ -177,6 +182,7 @@ implements ScalarModelSubscriber {
     protected ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
         this.scalarModel = scalarModel;
+        this.formatModifiers = ImmutableEnumSet.from(createFormatModifiers(scalarModel));
     }
 
     // -- INIT
@@ -500,7 +506,7 @@ implements ScalarModelSubscriber {
         if(condition) {
             val editProperty = Wkt.containerAdd(frameIfRegular, editLinkId);
             Wkt.behaviorAddOnClick(editProperty, this::onPropertyEditClick);
-            WktTooltips.addTooltip(editProperty, "edit");
+            WktTooltips.addTooltip(editProperty, "Click to edit");
             return editProperty;
         } else {
             WktComponents.permanentlyHide(frameIfRegular, editLinkId);

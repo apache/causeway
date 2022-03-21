@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+@Deprecated //use FormatModifier instead
 public enum TextFieldVariant {
     SINGLE_LINE,
     MULTI_LINE;
