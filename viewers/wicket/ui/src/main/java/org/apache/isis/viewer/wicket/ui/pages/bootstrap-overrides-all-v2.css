@@ -1011,6 +1011,10 @@ li.select2-results__option {
     min-height: 30px;
 }
 
+.scalarName {
+	opacity: 0.8;
+}
+
 .scalarNameAndValueComponentType .inlinePromptForm {
     border: 2px solid;
     padding: 10px;
