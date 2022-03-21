@@ -72,6 +72,7 @@ import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -96,8 +97,9 @@ implements ScalarModelSubscriber {
         READONLY,
         MARKUP,
         MULITLINE,
+        COMPOSITE,
         TRISTATE,
-        FLEX, COMPOSITE
+        FLEX,
     }
 
     public enum Repaint {
@@ -142,8 +144,9 @@ implements ScalarModelSubscriber {
 
     // -- COMPACT FRAME
 
-    private Component frameIfCompact;
-    protected final Component getCompactFrame() { return frameIfCompact; }
+    @Getter(AccessLevel.PROTECTED)
+    private Component compactFrame;
+
     /**
      * Builds the component to render the model when in COMPACT form.
      * <p>Is added to {@link #getScalarFrameContainer()}.
@@ -152,8 +155,9 @@ implements ScalarModelSubscriber {
 
     // -- REGULAR FRAME
 
-    private MarkupContainer frameIfRegular;
-    protected final MarkupContainer getRegularFrame() { return frameIfRegular; }
+    @Getter(AccessLevel.PROTECTED)
+    private MarkupContainer regularFrame;
+
     /**
      * Builds the component to render the model when in REGULAR format.
      * <p>Is added to {@link #getScalarFrameContainer()}.
@@ -162,13 +166,13 @@ implements ScalarModelSubscriber {
 
     // -- INLINE EDIT FRAME
 
-    private WebMarkupContainer frameIfForm;
     /**
      * Used by most subclasses
      * ({@link ScalarPanelAbstract}, {@link ReferencePanel}, {@link ValueChoicesSelect2Panel})
      * but not all ({@link IsisBlobOrClobPanelAbstract}, {@link BooleanPanel})
      */
-    protected final WebMarkupContainer getFormFrame() { return frameIfForm; }
+    @Getter(AccessLevel.PROTECTED)
+    private WebMarkupContainer formFrame;
 
     // -- FRAME CONTAINER
 
@@ -219,32 +223,32 @@ implements ScalarModelSubscriber {
 
         switch(scalarModel.getRenderingHint()) {
         case REGULAR:
-            frameIfRegular = createRegularFrame();
-            frameIfCompact = createShallowCompactFrame();
-            frameIfRegular.setVisible(true);
-            frameIfCompact.setVisible(false);
-            frameIfRegular.setOutputMarkupId(true); // enable as AJAX target
+            regularFrame = createRegularFrame();
+            compactFrame = createShallowCompactFrame();
+            regularFrame.setVisible(true);
+            compactFrame.setVisible(false);
+            regularFrame.setOutputMarkupId(true); // enable as AJAX target
 
-            scalarFrameContainer.addOrReplace(frameIfCompact, frameIfRegular,
-                    frameIfForm = createFormFrame());
+            scalarFrameContainer.addOrReplace(compactFrame, regularFrame,
+                    formFrame = createFormFrame());
 
             val associatedLinksAndLabels = associatedLinksAndLabels();
-            addPositioningCssTo(frameIfRegular, associatedLinksAndLabels);
-            addActionLinksBelowAndRight(frameIfRegular, associatedLinksAndLabels);
+            addPositioningCssTo(regularFrame, associatedLinksAndLabels);
+            addActionLinksBelowAndRight(regularFrame, associatedLinksAndLabels);
 
-            addFeedbackOnlyTo(frameIfRegular, getValidationFeedbackReceiver());
+            addFeedbackOnlyTo(regularFrame, getValidationFeedbackReceiver());
 
             setupInlinePrompt();
 
             break;
         default:
-            frameIfRegular = createShallowRegularFrame();
-            frameIfCompact = createCompactFrame();
-            frameIfRegular.setVisible(false);
-            frameIfCompact.setVisible(true);
+            regularFrame = createShallowRegularFrame();
+            compactFrame = createCompactFrame();
+            regularFrame.setVisible(false);
+            compactFrame.setVisible(true);
 
-            scalarFrameContainer.addOrReplace(frameIfCompact, frameIfRegular,
-                    frameIfForm = createFormFrame());
+            scalarFrameContainer.addOrReplace(compactFrame, regularFrame,
+                    formFrame = createFormFrame());
 
             break;
         }
@@ -506,12 +510,12 @@ implements ScalarModelSubscriber {
     protected WebMarkupContainer addEditPropertyIf(final boolean condition) {
         val editLinkId = RegularFrame.EDIT_PROPERTY.getContainerId();
         if(condition) {
-            val editProperty = Wkt.containerAdd(frameIfRegular, editLinkId);
+            val editProperty = Wkt.containerAdd(regularFrame, editLinkId);
             Wkt.behaviorAddOnClick(editProperty, this::onPropertyEditClick);
             WktTooltips.addTooltip(editProperty, "Click to edit");
             return editProperty;
         } else {
-            WktComponents.permanentlyHide(frameIfRegular, editLinkId);
+            WktComponents.permanentlyHide(regularFrame, editLinkId);
             return null;
         }
     }
