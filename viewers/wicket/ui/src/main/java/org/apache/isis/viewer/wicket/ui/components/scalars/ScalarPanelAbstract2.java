@@ -31,6 +31,7 @@ import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisBlobOrClobPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanel;
@@ -195,8 +196,8 @@ extends ScalarPanelAbstract {
      */
     private WebMarkupContainer createInlinePromptFormContainer() {
 
-        WebMarkupContainer inlinePromptFormContainer =
-                new WebMarkupContainer(ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM);
+        val inlinePromptFormContainer = FrameFragment.INLINE_PROMPT_FORM
+                .createComponent(WebMarkupContainer::new);
         inlinePromptFormContainer.setOutputMarkupId(true);
         inlinePromptFormContainer.setVisible(false);
 
@@ -225,7 +226,7 @@ extends ScalarPanelAbstract {
         inlinePromptFormContainer = (PropertyEditFormPanel) getComponentFactoryRegistry()
                 .addOrReplaceComponent(
                     scalarFrameContainer,
-                    ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM,
+                    FrameFragment.INLINE_PROMPT_FORM.getContainerId(),
                     ComponentType.PROPERTY_EDIT_FORM,
                     scalarModel());
 

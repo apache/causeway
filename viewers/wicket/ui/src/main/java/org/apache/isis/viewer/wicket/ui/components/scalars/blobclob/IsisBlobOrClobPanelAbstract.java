@@ -108,8 +108,8 @@ extends ScalarPanelFormFieldAbstract<T> {
     // //////////////////////////////////////
 
     @Override
-    protected MarkupContainer createShallowComponentForRegular() {
-        val shallowRegular = super.createShallowComponentForRegular();
+    protected MarkupContainer createShallowRegularFrame() {
+        val shallowRegular = super.createShallowRegularFrame();
         WktComponents.permanentlyHide(shallowRegular, ID_IMAGE);
         return shallowRegular;
     }

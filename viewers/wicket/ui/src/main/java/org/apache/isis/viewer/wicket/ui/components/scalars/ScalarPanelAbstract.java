@@ -58,8 +58,8 @@ import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.Addi
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.components.propertyheader.PropertyEditPromptHeaderPanel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
@@ -86,15 +86,8 @@ implements ScalarModelSubscriber {
     protected static final String ID_SCALAR_NAME = "scalarName";
     protected static final String ID_SCALAR_VALUE = "scalarValue";
 
-    /**
-     * as per {@link #inlinePromptLink}
-     */
     protected static final String ID_SCALAR_VALUE_INLINE_PROMPT_LINK = "scalarValueInlinePromptLink";
 
-    /**
-     * as per {@link #scalarIfRegularInlinePromptForm}.
-     */
-    public static final String ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM = "scalarIfRegularInlinePromptForm";
 
     public enum Repaint {
         ENTIRE_FORM,
@@ -204,7 +197,7 @@ implements ScalarModelSubscriber {
         switch(scalarModel.getRenderingHint()) {
         case REGULAR:
             frameIfRegular = createRegularFrame();
-            frameIfCompact = createShallowComponentForCompact();
+            frameIfCompact = createShallowCompactFrame();
             frameIfRegular.setVisible(true);
             frameIfCompact.setVisible(false);
             frameIfRegular.setOutputMarkupId(true); // enable as AJAX target
@@ -221,13 +214,13 @@ implements ScalarModelSubscriber {
 
             break;
         default:
-            frameIfRegular = createShallowComponentForRegular();
+            frameIfRegular = createShallowRegularFrame();
             frameIfCompact = createCompactFrame();
             frameIfRegular.setVisible(false);
             frameIfCompact.setVisible(true);
 
             scalarFrameContainer.addOrReplace(frameIfCompact, frameIfRegular,
-                    createShallowInlinePromptFormContainer());
+                    createShallowInlinePromptForm());
 
             break;
         }
@@ -262,7 +255,7 @@ implements ScalarModelSubscriber {
      * Builds the hidden REGULAR component when in COMPACT format.
      * <p>Is added to {@link #getScalarFrameContainer()}.
      */
-    protected MarkupContainer createShallowComponentForRegular() {
+    protected MarkupContainer createShallowRegularFrame() {
         val shallowRegularFrame = FrameFragment.REGULAR
                 .createComponent(Wkt::container);
         WktComponents.permanentlyHide(shallowRegularFrame,
@@ -278,16 +271,14 @@ implements ScalarModelSubscriber {
      * Builds the hidden COMPACT component when in REGULAR format.
      * <p>Is added to {@link #getScalarFrameContainer()}.
      */
-    protected Component createShallowComponentForCompact() {
+    protected Component createShallowCompactFrame() {
         return FrameFragment.COMPACT
                 .createComponent(Wkt::container); // empty component;
     }
 
-    private WebMarkupContainer createShallowInlinePromptFormContainer() {
-        val inlinePromptFormContainer =
-                new WebMarkupContainer(ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM);
-        inlinePromptFormContainer.setVisible(false);
-        return inlinePromptFormContainer;
+    protected Component createShallowInlinePromptForm() {
+        return FrameFragment.INLINE_PROMPT_FORM
+                .createComponent(Wkt::container); // empty component;
     }
 
     private void callHooks() {

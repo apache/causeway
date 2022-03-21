@@ -43,7 +43,7 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.BS3GridPanel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
@@ -53,8 +53,6 @@ import static org.apache.isis.commons.internal.base._Casts.castTo;
 
 import lombok.NonNull;
 import lombok.val;
-
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 /**
  *
@@ -248,7 +246,7 @@ extends IndicatingAjaxLink<ManagedObject> {
         val scalarTypeContainer = inlinePromptContext.getScalarTypeContainer();
 
         getComponentFactoryRegistry().addOrReplaceComponent(scalarTypeContainer,
-                ScalarPanelAbstract.ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM, ComponentType.PARAMETERS, actionModel);
+                FrameFragment.INLINE_PROMPT_FORM.getContainerId(), ComponentType.PARAMETERS, actionModel);
 
         inlinePromptContext.onPrompt();
 

@@ -45,6 +45,7 @@ public class ScalarFragmentFactory {
     public static enum FrameFragment {
         COMPACT("scalarIfCompact"),
         REGULAR("scalarIfRegular"),
+        INLINE_PROMPT_FORM("scalarIfRegularInlinePromptForm")
         ;
         @Getter
         private final String containerId;
