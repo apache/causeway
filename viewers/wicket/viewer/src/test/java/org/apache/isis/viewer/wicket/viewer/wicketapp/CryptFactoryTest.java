@@ -45,14 +45,7 @@ import static org.mockito.Mockito.mock;
 import lombok.val;
 
 /**
- * Requires
- * <pre>{@code
- * <dependency>
- *     <groupId>javax.servlet</groupId>
- *     <artifactId>javax.servlet-api</artifactId>
- *     <scope>test</scope>
- * </dependency>}
- * </pre>
+ * Requires {@code javax/servlet/http/LocalStrings.properties}
  */
 class CryptFactoryTest {
 
@@ -89,11 +82,13 @@ class CryptFactoryTest {
             final String displayName,
             final ICrypt crypto) {
 
-        val strategy =
+        val strategy1 =
                 new DefaultAuthenticationStrategy("cookieKey", crypto);
+        strategy1.save("hello", "world", "appendix");
 
-        strategy.save("hello", "world");
-        val data = strategy.load();
+        val strategy2 =
+                new DefaultAuthenticationStrategy("cookieKey", crypto);
+        val data = strategy2.load();
 
         assertNotNull(data);
         assertEquals(2, data.length);
