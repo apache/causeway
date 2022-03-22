@@ -33,6 +33,7 @@ import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.cycle.RequestCycleContext;
 import org.apache.wicket.util.crypt.ICrypt;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -45,7 +46,7 @@ import static org.mockito.Mockito.mock;
 import lombok.val;
 
 /**
- * Requires {@code javax/servlet/http/LocalStrings.properties}
+ * Requires resource {@code javax/servlet/http/LocalStrings.properties} for Cookie testing.
  */
 class CryptFactoryTest {
 
@@ -74,6 +75,11 @@ class CryptFactoryTest {
                 mock(IRequestMapper.class),
                 mock(IExceptionMapper.class))));
 
+    }
+
+    @AfterEach
+    void cleanUp() throws Exception {
+        ThreadContext.setRequestCycle(null);
     }
 
     @ParameterizedTest(name = "{index} {0}")
