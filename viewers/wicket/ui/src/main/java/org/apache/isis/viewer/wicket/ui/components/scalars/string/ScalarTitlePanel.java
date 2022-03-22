@@ -19,17 +19,18 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.string;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldTextualAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
 
 /**
- * Panel for rendering scalars of type {@link String}.
+ * Panel for rendering titles for scalars of any type.
  */
-public class StringPanel extends ScalarPanelTextFieldTextualAbstract {
+public class ScalarTitlePanel<T> extends ScalarPanelTextFieldWithValueSemantics<T> {
 
     private static final long serialVersionUID = 1L;
 
-    public StringPanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel);
+    public ScalarTitlePanel(final String id, final ScalarModel scalarModel, final Class<T> type) {
+        super(id, scalarModel, type);
     }
+
 
 }

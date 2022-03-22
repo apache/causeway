@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.model.models;
 import org.apache.wicket.model.ChainingModel;
 import org.springframework.util.ClassUtils;
 
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -45,12 +46,17 @@ extends ChainingModel<T> {
             final @NonNull ScalarModel scalarModel) {
         super(scalarModel);
         this.type = type;
+        _Assert.assertTrue(scalarModel.getScalarTypeSpec().isAssignableFrom(type), ()->
+                String.format("cannot possibly unwrap model of type %s into target type %s",
+                        scalarModel.getScalarTypeSpec().getCorrespondingClass(),
+                        type));
     }
 
     @Override
     public T getObject() {
         val objectAdapter = scalarModel().getObject();
-        return unwrap(objectAdapter);
+        val pojo = unwrap(objectAdapter);
+        return pojo;
     }
 
     @Override

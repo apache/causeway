@@ -24,7 +24,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.string.StringPanel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.string.ScalarTitlePanel;
+
+import lombok.val;
 
 public class ValueChoicesSelect2PanelFactory extends ComponentFactoryAbstract {
 
@@ -55,7 +57,8 @@ public class ValueChoicesSelect2PanelFactory extends ComponentFactoryAbstract {
     public final Component createComponent(final String id, final IModel<?> model) {
         final ScalarModel scalarModel = (ScalarModel) model;
         if(scalarModel.isViewMode()) {
-            return new StringPanel(id, scalarModel);
+            val valueType = scalarModel.getScalarTypeSpec().getCorrespondingClass();
+            return new ScalarTitlePanel<>(id, scalarModel, valueType);
         } else {
             return new ValueChoicesSelect2Panel(id, scalarModel);
         }

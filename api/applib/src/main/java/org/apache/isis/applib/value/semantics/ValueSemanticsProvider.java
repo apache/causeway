@@ -121,6 +121,10 @@ public interface ValueSemanticsProvider<T> {
 
     // -- CATEGORIZATION
 
+    default boolean isEnumType() {
+        return getSchemaValueType()==ValueType.ENUM;
+    }
+
     default boolean isNumberType() {
         return getSchemaValueType()==ValueType.BIG_DECIMAL
                 || getSchemaValueType()==ValueType.BIG_INTEGER
