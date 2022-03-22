@@ -23,6 +23,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.commons.internal.os._OsUtil;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.ui.IsisModuleExtPdfjsUi;
 import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
@@ -33,7 +34,6 @@ import org.apache.isis.valuetypes.markdown.persistence.jpa.IsisModuleValMarkdown
 import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
 import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
-import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault;
 
 import demoapp.web.DemoAppManifestJpa;
 import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
@@ -76,6 +76,10 @@ public class DemoAppWicketJpa extends SpringBootServletInitializer {
      * entry point by searching for classes having a {@code main(...)}
      */
     public static void main(final String[] args) {
+
+        // activates when sys-env THERE_CAN_BE_ONLY_ONE=true
+        _OsUtil.thereCanBeOnlyOne();
+
     	IsisPresets.prototyping();
         //IsisPresets.logging(WebRequestCycleForIsis.class, "debug");
         //IsisPresets.logging(ComponentFactoryRegistryDefault.class, "debug");

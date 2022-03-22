@@ -105,6 +105,20 @@ public class _OsUtil {
         }
     }
 
+    /**
+     * Terminates an instance of this application,
+     * if there is an already running one found.
+     * <p>
+     * Use in conjunction with system environment variable
+     * {@code THERE_CAN_BE_ONLY_ONE=true}, in order to switch this feature on.
+     * @see #thereCanBeOnlyOne(File)
+     */
+    public void thereCanBeOnlyOne() {
+        if("true".equalsIgnoreCase(System.getenv("THERE_CAN_BE_ONLY_ONE"))) {
+            _OsUtil.thereCanBeOnlyOne(new File("pid.log"));
+        }
+    }
+
     @SneakyThrows
     public void terminateProcessByPid(final @Nullable String pid) {
         val pidTrimmed = _Strings.blankToNullOrTrim(pid);
