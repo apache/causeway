@@ -54,7 +54,7 @@ jobs:
       run: echo "$GITHUB_CONTEXT"
 
     - name: Activate Cache for Maven Downloads
-      uses: actions/cache@v2.1.7
+      uses: actions/cache@v3
       env:
         # change the cache-name if we want to rebuild the cache
         # currently there is no concept of cache clearing
