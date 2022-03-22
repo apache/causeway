@@ -131,6 +131,8 @@ public class _OsUtil {
     /**
      * Optionally returns a machine specific unique number, based on whether
      * the algorithm was able to generate one.
+     * <p>
+     * Should at least be stable until machine reboot.
      */
     public OptionalLong machineId() {
         try {
