@@ -184,6 +184,13 @@
             <scope>test</scope>
         </dependency>
 
+		<!-- so we can test Cookies -->
+		<dependency>
+		  <groupId>javax.servlet</groupId>
+		  <artifactId>javax.servlet-api</artifactId>
+		  <scope>test</scope>
+		</dependency>
+
         <dependency>
         	<groupId>org.jmock</groupId>
         	<artifactId>jmock-junit4</artifactId>
