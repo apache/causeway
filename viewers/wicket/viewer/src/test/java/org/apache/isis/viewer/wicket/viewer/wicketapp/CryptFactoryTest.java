@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.viewer.wicketapp;
 
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import javax.servlet.http.Cookie;
@@ -41,6 +42,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 
 import lombok.val;
@@ -84,16 +86,49 @@ class CryptFactoryTest {
 
     @ParameterizedTest(name = "{index} {0}")
     @MethodSource("provideCryptoCandidates")
-    void authenticationStrategyRoundtrip(
+    void authenticationStrategyRoundtrip_whenProduction(
             final String displayName,
-            final ICrypt crypto) {
+            final Function<String, ICrypt> cryptFactory) {
 
-        val strategy1 =
-                new DefaultAuthenticationStrategy("cookieKey", crypto);
-        strategy1.save("hello", "world", "appendix");
+        val encryptionKey = "any other than FIXED_SALT_FOR_PROTOTYPING";
+
+        val strategy =
+                new DefaultAuthenticationStrategy("cookieKey", cryptFactory.apply(encryptionKey));
+        strategy.save("hello", "world", "appendix");
+
+        val data = strategy.load();
+
+        assertNotNull(data);
+        assertEquals(2, data.length);
+        assertEquals("hello", data[0]);
+        assertEquals("world", data[1]);
+
+        // simulated application restart
 
         val strategy2 =
-                new DefaultAuthenticationStrategy("cookieKey", crypto);
+                new DefaultAuthenticationStrategy("cookieKey", cryptFactory.apply(encryptionKey));
+        val data2 = strategy2.load();
+
+        assertNull(data2);
+
+    }
+
+    @ParameterizedTest(name = "{index} {0}")
+    @MethodSource("provideCryptoCandidates")
+    void authenticationStrategyRoundtrip_whenPrototyping(
+            final String displayName,
+            final Function<String, ICrypt> cryptFactory) {
+
+        val encryptionKey = _CryptFactory.FIXED_SALT_FOR_PROTOTYPING;
+
+        val strategy1 =
+                new DefaultAuthenticationStrategy("cookieKey", cryptFactory.apply(encryptionKey));
+        strategy1.save("hello", "world", "appendix");
+
+        // simulated application restart
+
+        val strategy2 =
+                new DefaultAuthenticationStrategy("cookieKey", cryptFactory.apply(encryptionKey));
         val data = strategy2.load();
 
         assertNotNull(data);
@@ -102,17 +137,24 @@ class CryptFactoryTest {
         assertEquals("world", data[1]);
     }
 
-    private static Stream<Arguments> provideCryptoCandidates() {
+    // -- HELPER
 
+    private static Stream<Arguments> provideCryptoCandidates() {
         return Stream.of(
-          Arguments.of(
+                scenario(
                   "sunJceCrypt",
-                  _CryptFactory.sunJceCrypt("encryptionKey")),
-          Arguments.of(
+                  _CryptFactory::sunJceCrypt),
+                scenario(
                   "aesCrypt",
-                  _CryptFactory.aesCrypt("encryptionKey"))
+                  _CryptFactory::aesCrypt)
         );
     }
 
+    private static Arguments scenario(
+            final String displayName,
+            final Function<String, ICrypt> cryptFactory) {
+        return Arguments.of(
+                displayName, cryptFactory);
+    }
 
 }

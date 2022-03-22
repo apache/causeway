@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.viewer.wicketapp;
 
 import java.security.spec.KeySpec;
+import java.util.Random;
 
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -29,7 +30,10 @@ import org.apache.wicket.core.random.DefaultSecureRandomSupplier;
 import org.apache.wicket.core.random.ISecureRandomSupplier;
 import org.apache.wicket.core.util.crypt.AESCrypt;
 import org.apache.wicket.util.crypt.ICrypt;
+import org.apache.wicket.util.crypt.NoCrypt;
 import org.apache.wicket.util.crypt.SunJceCrypt;
+
+import org.apache.isis.commons.internal.os._OsUtil;
 
 import lombok.SneakyThrows;
 import lombok.val;
@@ -38,8 +42,10 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 class _CryptFactory {
 
+    static final String FIXED_SALT_FOR_PROTOTYPING = "PrototypingEncryptionKey";
+
     ICrypt sunJceCrypt(final String encryptionKey) {
-        final byte[] salt = SunJceCrypt.randomSalt();
+        final byte[] salt = getSalt(8, encryptionKey);
         val crypt = new SunJceCrypt(salt, 1000);
         crypt.setKey(encryptionKey);
         return crypt;
@@ -48,7 +54,7 @@ class _CryptFactory {
     @SneakyThrows
     ICrypt aesCrypt(final String encryptionKey) {
 
-        final byte[] salt = SunJceCrypt.randomSalt();
+        final byte[] salt = getSalt(8, encryptionKey);
 
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
         KeySpec spec = new PBEKeySpec(encryptionKey.toCharArray(), salt, 65536, 256);
@@ -60,6 +66,43 @@ class _CryptFactory {
         return new AESCrypt(secret, rGen);
     }
 
-    //XXX BCryptPasswordEncoder (Spring);
+    ICrypt noCrypt(final String encryptionKey) {
+        return new NoCrypt();
+    }
+
+    //XXX what about BCryptPasswordEncoder (Spring);
+
+    // -- HELPER
+
+    /**
+     * @param size
+     *      must be 8 bytes - for anything else PBES1Core throws
+     *      InvalidAlgorithmParameterException: Salt must be 8 bytes long
+     */
+    private byte[] getSalt(final int size, final String encryptionKey) {
+        final byte[] salt = FIXED_SALT_FOR_PROTOTYPING.equals(encryptionKey)
+                ? machineFixedSalt(size)
+                : randomSalt(size);
+        return salt;
+    }
+
+    /**
+     * cloned from {@link SunJceCrypt#randomSalt()}
+     */
+    private byte[] randomSalt(final int size) {
+        val salt = new byte[size];
+        new Random().nextBytes(salt);
+        return salt;
+    }
+
+    private byte[] machineFixedSalt(final int size) {
+        val machineFixedSeed = _OsUtil.machineId();
+        if(machineFixedSeed.isEmpty()){
+            return randomSalt(size);
+        }
+        val salt = new byte[size];
+        new Random(machineFixedSeed.getAsLong()).nextBytes(salt);
+        return salt;
+    }
 
 }

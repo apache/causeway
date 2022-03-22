@@ -336,6 +336,7 @@ implements
         val rememberMe = configuration.getViewer().getWicket().getRememberMe();
         val cookieKey = rememberMe.getCookieKey();
         val encryptionKey = rememberMe.getEncryptionKey().orElse(defaultEncryptionKey());
+        System.err.printf("encryptionKey: %s%n", encryptionKey);
         return new DefaultAuthenticationStrategy(cookieKey, _CryptFactory.sunJceCrypt(encryptionKey));
     }
 
@@ -347,7 +348,7 @@ implements
      */
     String defaultEncryptionKey() {
         return systemEnvironment.isPrototyping()
-                ? "PrototypingEncryptionKey"
+                ? _CryptFactory.FIXED_SALT_FOR_PROTOTYPING
                 : UUID.randomUUID().toString();
     }
 

@@ -20,10 +20,14 @@ package org.apache.isis.commons.internal.os;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.net.NetworkInterface;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.OptionalLong;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -122,6 +126,39 @@ public class _OsUtil {
             throw _Exceptions.unsupportedOperation("OS " + os + " not (yet) supported");
         }
         rt.exec(cmd);
+    }
+
+    /**
+     * Optionally returns a machine specific unique number, based on whether
+     * the algorithm was able to generate one.
+     */
+    public OptionalLong machineId() {
+        try {
+
+            long hash = 5381L;
+            boolean valid = false;
+
+            for (NetworkInterface netint : Collections.list(NetworkInterface.getNetworkInterfaces())) {
+                val hwAddr = netint.getHardwareAddress();
+                if(_NullSafe.size(hwAddr)<6) {
+                    continue;
+                }
+                for(byte b:hwAddr) {
+                    hash = hash*33L + b;
+                }
+                valid = true;
+            }
+
+            if(valid) {
+                return OptionalLong.of(hash);
+            }
+
+            // fallback to empty
+
+        } catch (Throwable e) {
+            // fallback to empty
+        }
+        return OptionalLong.empty();
     }
 
 }
