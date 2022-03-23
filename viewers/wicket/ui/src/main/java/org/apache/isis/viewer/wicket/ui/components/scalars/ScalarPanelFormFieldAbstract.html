@@ -73,7 +73,7 @@
 						<span style="color: blue;">λ</span>
 						<!-- output format --> 
 						<wicket:container 
-							wicket:id="container-scalarValue-outputFormat"/> 
+							wicket:id="container-scalarValue"/> 
 							 
 					</a> 
 					
@@ -95,41 +95,8 @@
 					<div>
 						<span style="color: purple;">α</span>
 						<wicket:container 
-							wicket:id="container-scalarValue-inputFormat" />
+							wicket:id="container-scalarValue" />
 					</div>
-							  
-				</span>
-			</span> 
-		</wicket:fragment>
-		
-
-		<wicket:fragment wicket:id="fragment-fieldFrame-unified">
-			<label wicket:id="debugLabel" style="font-size: x-small; color: burlywood;">[Debug text]</label>
-			<span class="scalarValueInput">
-				<span class="editing">
-				
-					<a wicket:id="scalarValueInlinePromptLink"
-						href="##" name="scalarValueInlinePromptLink"
-						class="scalarValueInlinePromptLink">
-						
-						<span style="color: blue;">λ</span>
-						<!-- output format --> 
-						<wicket:container 
-							wicket:id="container-scalarValue-outputFormat"/> 
-							 
-					</a> 
-				
-					<!-- input format (when editing or action dialog or read-only) -->
-					<div>
-						<span style="color: purple;">α</span>
-						<wicket:container 
-							wicket:id="container-scalarValue-inputFormat" />
-					</div>
-					
-					<a wicket:id="editProperty"
-						href="##" class="edit btn btn-sm btn-link"> 
-						<span class="editIcon fa fa-edit"/>
-					</a>
 							  
 				</span>
 			</span> 
@@ -138,9 +105,9 @@
 		<!-- INPUT FRAGMENTS -->
 
 		<wicket:fragment wicket:id="fragment-input-text">
-			<input type="text" name="scalarValue"
-				class="form-control form-control-sm scalarValue"
-				wicket:id="scalarValue" />
+			<input wicket:id="scalarValue"
+				type="text" name="scalarValue"
+				class="form-control form-control-sm scalarValue"/>
 		</wicket:fragment>
 
 		<wicket:fragment wicket:id="fragment-input-textarea">
@@ -150,29 +117,28 @@
 		</wicket:fragment>
 		
 		<wicket:fragment wicket:id="fragment-input-checkbox">
-	        <input type="checkbox" name="scalarValue"
-	        	class="scalarValue"
-				wicket:id="scalarValue" />
+	        <input wicket:id="scalarValue" type="checkbox" name="scalarValue"
+	        	class="scalarValue"/>
 		</wicket:fragment>
 		
 		<wicket:fragment wicket:id="fragment-input-file">
 			<span class="uploadFile form-text">
-      			<input type="file" name="scalarValue" wicket:id="scalarValue" />
+      			<input wicket:id="scalarValue" type="file" name="scalarValue"/>
          	</span>
 		</wicket:fragment>
 		
 		<wicket:fragment wicket:id="fragment-input-date">
 			<div class="date">
-				<input type="text" name="scalarValue"
-					class="form-control form-control-sm scalarValue"
-					wicket:id="scalarValue" />
+				<input wicket:id="scalarValue"
+					type="text" name="scalarValue"
+					class="form-control form-control-sm scalarValue"/>
 			</div>
 		</wicket:fragment>
 
 		<!-- PROMPT FRAGMENTS -->
 
 		<wicket:fragment wicket:id="fragment-prompt-editicon">
-			<button class="edit btn btn-sm btn-link" wicket:id="scalarValue">
+			<button wicket:id="scalarValue" class="edit btn btn-sm btn-link">
 				<span class="editIcon fa fa-edit"/>
 			</button>
 		</wicket:fragment>

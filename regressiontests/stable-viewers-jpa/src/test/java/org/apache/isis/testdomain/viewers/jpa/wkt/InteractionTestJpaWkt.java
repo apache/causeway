@@ -39,7 +39,7 @@ import org.apache.isis.testdomain.conf.Configuration_usingWicket.WicketTesterFac
 import org.apache.isis.testdomain.jpa.JpaTestFixtures;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
 import org.apache.isis.testdomain.util.dto.BookDto;
-import org.apache.isis.testdomain.viewers.jdo.wkt.TestAppJpaWkt;
+import org.apache.isis.testdomain.viewers.jpa.wkt.TestAppJpaWkt;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 
 import static org.apache.isis.testdomain.conf.Configuration_usingWicket.EntityPageTester.INLINE_PROMPT_FORM_FIELD;

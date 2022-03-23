@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.viewers.jdo.wkt;
+package org.apache.isis.testdomain.viewers.jpa.wkt;
 
 import javax.inject.Inject;
 

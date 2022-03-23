@@ -18,10 +18,10 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
+import java.util.EnumSet;
 import java.util.Optional;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.viewer.wicket.model.models.BooleanModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragement;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelFormFieldAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
@@ -54,10 +54,15 @@ extends ScalarPanelFormFieldAbstract<Boolean> {
     }
 
     @Override
-    protected MarkupContainer createFieldFrame() {
-        return Wkt.fragment(FieldFragement.LEGACY.getContainerId(),
-                FieldFragement.LEGACY.getFragmentId(),
-                this);
+    protected void setupFormatModifiers(final EnumSet<FormatModifier> modifiers) {
+        if(!scalarModel().isRequired()) {
+            modifiers.add(FormatModifier.TRISTATE);
+        }
+    }
+
+    @Override
+    protected Optional<InputFragment> getInputFragmentType() {
+        return Optional.of(InputFragment.CHECKBOX);
     }
 
     @Override

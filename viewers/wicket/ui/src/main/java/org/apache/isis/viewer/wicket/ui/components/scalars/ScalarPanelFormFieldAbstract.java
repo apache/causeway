@@ -189,7 +189,7 @@ extends ScalarPanelAbstract2 {
             //TODO we set the INPUT SLOT, but when links are used,
             // instead the OUTPUT SLOT becomes visible
 
-            fieldFrame.add(FieldFrame.INPUT_FORMAT_CONTAINER
+            fieldFrame.add(FieldFrame.SCALAR_VALUE_CONTAINER
                     .createComponent(this::createComponentForOutput));
         } else {
             getInputFragmentType()

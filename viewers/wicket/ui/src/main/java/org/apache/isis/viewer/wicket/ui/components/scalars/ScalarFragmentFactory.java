@@ -83,7 +83,11 @@ public class ScalarFragmentFactory {
     public static enum FieldFrame {
         SCALAR_VALUE_INLINE_PROMPT_LINK("scalarValueInlinePromptLink"),
 
+        SCALAR_VALUE_CONTAINER("container-scalarValue"),
+
+        @Deprecated
         OUTPUT_FORMAT_CONTAINER("container-scalarValue-outputFormat"),
+        @Deprecated
         INPUT_FORMAT_CONTAINER("container-scalarValue-inputFormat"),
 
         EDIT_PROPERTY("editProperty"),
@@ -105,7 +109,7 @@ public class ScalarFragmentFactory {
 
     @RequiredArgsConstructor
     public static enum FieldFragement {
-        LEGACY("fragment-fieldFrame-debug"),
+        LEGACY("fragment-fieldFrame-legacy"),
 
         LINK("fragment-fieldFrame-withLink"),
         NO_LINK("fragment-fieldFrame-withoutLink"),
@@ -157,7 +161,7 @@ public class ScalarFragmentFactory {
          */
         public Fragment createFragment(final MarkupContainer markupProvider, final FormComponent<?> inputComponent) {
             val fragment = Wkt.fragment(
-                    FieldFrame.INPUT_FORMAT_CONTAINER.getContainerId(), fragmentId, markupProvider);
+                    FieldFrame.SCALAR_VALUE_CONTAINER.getContainerId(), fragmentId, markupProvider);
             fragment.add(inputComponent);
             return fragment;
         }
@@ -182,7 +186,7 @@ public class ScalarFragmentFactory {
                 final IModel<String> promptLabelModel,
                 final @Nullable Consumer<FormComponent<String>> onComponentCreated) {
             val fragment = Wkt.fragment(
-                    FieldFrame.OUTPUT_FORMAT_CONTAINER.getContainerId(), fragmentId, markupProvider);
+                    FieldFrame.SCALAR_VALUE_CONTAINER.getContainerId(), fragmentId, markupProvider);
             val component = componentFactory.apply(promptLabelModel);
             fragment.add(component);
             if(onComponentCreated!=null
