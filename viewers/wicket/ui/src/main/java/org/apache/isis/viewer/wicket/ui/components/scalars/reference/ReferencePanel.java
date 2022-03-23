@@ -20,12 +20,15 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
 import java.util.Optional;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.convert.ConversionException;
+import org.apache.wicket.util.convert.IConverter;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Settings;
 
@@ -34,9 +37,9 @@ import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.common.model.components.ComponentType;
-import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
@@ -48,7 +51,6 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.Obj
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
-import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
 import lombok.val;
 
@@ -62,6 +64,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
     private static final String ID_AUTO_COMPLETE = "autoComplete";
     private static final String ID_ENTITY_ICON_TITLE = "entityIconAndTitle";
+    private static final String ID_ENTITY_TITLE_IF_NULL = "entityTitleIfNull";
 
     private EntityLinkSelect2Panel entityLink;
     private EntityLinkSimplePanel entityLinkOutputFormat;
@@ -70,6 +73,11 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     public ReferencePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
         this.isCompactFormat = !scalarModel.getRenderingHint().isRegular();
+    }
+
+    @Override
+    protected IModel<String> obtainOutputFormatModel() {
+        return select2.obtainInlinePromptModel();
     }
 
     @Override
@@ -97,80 +105,60 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     protected FormComponent<ManagedObject> createFormComponent(final String id, final ScalarModel scalarModel) {
 
         this.entityLink = new EntityLinkSelect2Panel(ComponentType.ENTITY_LINK.getId(), this);
+        entityLink.setRequired(scalarModel().isRequired());
 
-        entityLink.setRequired(getModel().isRequired());
-        this.select2 = createSelect2AndSemantics();
+        this.select2 = createSelect2(ID_AUTO_COMPLETE);
+        addSelect2Semantics(select2);
+
         entityLink.addOrReplace(select2.asComponent());
-
         entityLink.setOutputMarkupId(true);
 
         return this.entityLink;
     }
 
 
-    private Select2 createSelect2AndSemantics() {
-
-        final Select2 select2 = createSelect2(ID_AUTO_COMPLETE);
+    private void addSelect2Semantics(final Select2 select2) {
+        val scalarModel = scalarModel();
 
         final Settings settings = select2.getSettings();
 
         // one of these three case should be true
         // (as per the isEditableWithEitherAutoCompleteOrChoices() guard above)
-        if(getModel().hasChoices()) {
+        if(scalarModel.hasChoices()) {
 
-            settings.setPlaceholder(getModel().getFriendlyName());
+            settings.setPlaceholder(scalarModel.getFriendlyName());
 
-        } else if(getModel().hasAutoComplete()) {
+        } else if(scalarModel.hasAutoComplete()) {
 
-            final int minLength = getModel().getAutoCompleteMinLength();
+            final int minLength = scalarModel.getAutoCompleteMinLength();
             settings.setMinimumInputLength(minLength);
-            settings.setPlaceholder(getModel().getFriendlyName());
+            settings.setPlaceholder(scalarModel.getFriendlyName());
 
         } else if(hasObjectAutoComplete()) {
-            final ObjectSpecification typeOfSpecification = getModel().getScalarTypeSpec();
-            final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
+            val typeOfSpecification = scalarModel.getScalarTypeSpec();
+            val autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
             final int minLength = autoCompleteFacet.getMinLength();
             settings.setMinimumInputLength(minLength);
         }
-
-        return select2;
     }
 
-    // //////////////////////////////////////
-
-    @Override
-    protected IModel<String> obtainOutputFormatModel() {
-        return select2.obtainInlinePromptModel();
-    }
-
-    // //////////////////////////////////////
-    // onBeforeRender*
-    // //////////////////////////////////////
+    // -- ON BEFORE RENDER
 
     @Override
     protected void onInitializeEditable() {
         super.onInitializeEditable();
-        if(isCompactFormat) return;
-        entityLink.setEnabled(true);
         syncWithInput();
     }
 
     @Override
     protected void onInitializeNotEditable() {
         super.onInitializeNotEditable();
-        if(isCompactFormat) return;
-        entityLink.setEnabled(false);
         syncWithInput();
     }
 
     @Override
     protected void onInitializeReadonly(final String disableReason) {
         super.onInitializeReadonly(disableReason);
-        if(isCompactFormat) return;
-        val entityLinkModel = (HasRenderingHints) entityLink.getModel();
-        entityLinkModel.toViewMode();
-        entityLink.setEnabled(false);
-        WktTooltips.addTooltip(entityLink, disableReason);
         syncWithInput();
     }
 
@@ -192,13 +180,14 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
     private Optional<MarkupContainer> lookupScalarValueContainer() {
         return Optional.ofNullable(getFieldFrame())
-        .map(fieldFrame->fieldFrame.get("container-scalarValue")) // TODO don't hardcode id here
+        .flatMap(FieldFrame.SCALAR_VALUE_CONTAINER::lookupIn)
         .map(MarkupContainer.class::cast);
     }
 
     private void syncWithInput() {
+        if(isCompactFormat) return;
 
-        val scalarModel = getModel();
+        val scalarModel = scalarModel();
 
         lookupScalarValueContainer()
         .ifPresent(container->{
@@ -250,7 +239,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
             if(fieldFrame != null) {
                 WktComponents.permanentlyHide(fieldFrame, ID_ENTITY_ICON_TITLE);
-                WktComponents.permanentlyHide(fieldFrame, "entityTitleIfNull");
+                WktComponents.permanentlyHide(fieldFrame, ID_ENTITY_TITLE_IF_NULL);
             }
 
             // syncUsability
@@ -259,7 +248,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
                 select2.setEnabled(mutability);
             }
 
-            WktComponents.permanentlyHide(entityLink, "entityLinkIfNull");
+            WktComponents.permanentlyHide(entityLink, ID_ENTITY_TITLE_IF_NULL);
         } else {
             // this is horrid; adds a label to the id
             // should instead be a 'temporary hide'
@@ -269,27 +258,20 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
     }
 
-    // //////////////////////////////////////
-    // setProviderAndCurrAndPending
-    // //////////////////////////////////////
-
     @Override
     protected ChoiceProvider<ObjectMemento> buildChoiceProvider() {
 
-        val scalarModel = getModel();
+        val scalarModel = scalarModel();
 
         if (scalarModel.hasChoices()) {
             return new ObjectAdapterMementoProviderForReferenceChoices(scalarModel);
         }
-
         if(scalarModel.hasAutoComplete()) {
             return new ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(scalarModel);
         }
-
         return new ObjectAdapterMementoProviderForReferenceObjectAutoComplete(scalarModel);
     }
 
-    // called by setProviderAndCurrAndPending
     @Override
     protected void syncIfNull(final Select2 select2) {
         if(getModel().isScalar()) {
@@ -300,34 +282,42 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         }
     }
 
-    // //////////////////////////////////////
-    // getInput, convertInput
-    // //////////////////////////////////////
+    // -- GET INPUT AS TITLE
 
-    // called by EntityLinkSelect2Panel
-    String getInput() {
-        val pendingElseCurrentAdapter = getModel().getObject();
-        return pendingElseCurrentAdapter != null? pendingElseCurrentAdapter.titleString(): "(no object)";
+    String getTitleForFormComponentInput() {
+        val pendingElseCurrentAdapter = scalarModel().getObject();
+        return pendingElseCurrentAdapter != null
+                ? pendingElseCurrentAdapter.titleString()
+                : "(no object)";
     }
 
-    // //////////////////////////////////////
+    // -- CONVERT INPUT
 
-    // called by EntityLinkSelect2Panel
+    /**
+    * Converts and validates the conversion of the raw input string into the object specified by
+    * {@link FormComponent#getType()} and records any thrown {@link ConversionException}s.
+    * Converted value is available through {@link FormComponent#getConvertedInput()}.
+    * <p>
+    * Usually the user should do custom conversions by specifying an {@link IConverter} by
+    * registering it with the application by overriding {@link Application#getConverterLocator()},
+    * or at the component level by overriding {@link #getConverter(Class)} .
+    */
     void convertInput() {
+
+        val scalarModel = scalarModel();
+        val pendingValue = scalarModel.proposedValue().getValue();
+
         if(isEditableWithEitherAutoCompleteOrChoices()) {
 
-            // flush changes to pending
-
+            // flush changes to pending model
             val adapter = select2.getConvertedInputValue();
-            getModel().setObject(adapter);
-            getModel().clearPending();
+            pendingValue.setValue(adapter);
         }
 
-        val pendingAdapter = getModel().getObject();
-        entityLink.setConvertedInput(pendingAdapter);
+        entityLink.setConvertedInput(pendingValue.getValue());
     }
 
-    // //////////////////////////////////////
+    // --
 
     @Override
     public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
@@ -335,12 +325,8 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         Wkt.javaScriptAdd(target, EventTopic.CLOSE_SELECT2, getMarkupId());
     }
 
+    // -- HELPERS
 
-    // //////////////////////////////////////
-    // helpers querying model state
-    // //////////////////////////////////////
-
-    // called from convertInput, syncWithInput
     private boolean isEditableWithEitherAutoCompleteOrChoices() {
         if(getModel().getRenderingHint().isInTable()) {
             return false;
@@ -352,7 +338,6 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         return getModel().hasChoices() || getModel().hasAutoComplete() || hasObjectAutoComplete();
     }
 
-    // called by isEditableWithEitherAutoCompleteOrChoices
     private boolean hasObjectAutoComplete() {
         final ObjectSpecification typeOfSpecification = getModel().getScalarTypeSpec();
         final AutoCompleteFacet autoCompleteFacet =

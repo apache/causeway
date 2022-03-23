@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -99,6 +100,9 @@ public class ScalarFragmentFactory {
             return alreadyExisting!=null
                     ? alreadyExisting
                     : Wkt.add(container, createComponent(factory));
+        }
+        public Optional<Component> lookupIn(final MarkupContainer container) {
+            return Optional.ofNullable(container.get(containerId));
         }
     }
 

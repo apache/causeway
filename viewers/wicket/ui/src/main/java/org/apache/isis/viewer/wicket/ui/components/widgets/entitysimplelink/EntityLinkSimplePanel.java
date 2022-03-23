@@ -90,6 +90,11 @@ implements CancelHintRequired  {
     }
 
     @Override
+    public void updateModel() {
+        // no-op since immutable
+    }
+
+    @Override
     public void onCancel() {
     }
 

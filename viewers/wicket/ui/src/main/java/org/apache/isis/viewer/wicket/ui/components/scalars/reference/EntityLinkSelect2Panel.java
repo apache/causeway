@@ -34,7 +34,7 @@ implements CancelHintRequired  {
     ReferencePanel owningPanel;
 
     public EntityLinkSelect2Panel(final String id, final ReferencePanel owningPanel) {
-        super(id, owningPanel.getModel());
+        super(id, owningPanel.scalarModel());
         this.owningPanel = owningPanel;
 
         setType(ManagedObject.class);
@@ -56,7 +56,7 @@ implements CancelHintRequired  {
      */
     @Override
     public String getInput() {
-        return owningPanel.getInput();
+        return owningPanel.getTitleForFormComponentInput();
     }
 
     @Override
@@ -66,7 +66,7 @@ implements CancelHintRequired  {
 
     @Override
     public void onCancel() {
-        owningPanel.getModel().clearPending();
+        owningPanel.scalarModel().clearPending();
     }
 
 }
