@@ -26,8 +26,8 @@ import io.kvision.core.UNIT
 import io.kvision.panel.SimplePanel
 import io.kvision.utils.obj
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.ui.dialog.EventLogDetail
 import org.apache.isis.client.kroviz.ui.core.SessionManager
+import org.apache.isis.client.kroviz.ui.dialog.EventLogDetail
 import kotlin.math.pow
 
 @OptIn(kotlin.js.ExperimentalJsExport::class)
@@ -63,26 +63,34 @@ class EventBubbleChart() : SimplePanel() {
         )
     }
 
+    private fun buildLabelsNew(): List<String> {
+        val legendLabels = mutableListOf<String>()
+        legendLabels.add("0 .. 4")
+        legendLabels.add("5 .. 8")
+        legendLabels.add("9 .. 16")
+        legendLabels.add("17 .. 32")
+        legendLabels.add("33 .. 64")
+        legendLabels.add("65 .. 128")
+        legendLabels.add(">= 129")
+        return legendLabels
+    }
+
     // https://stackoverflow.com/questions/45249779/chart-js-bubble-chart-changing-dataset-labels
     private fun buildChartOptions(dataSetsList: List<DataSets>): ChartOptions {
-        val chartOptions = ChartOptions(
+        return ChartOptions(
             plugins = PluginsOptions(
                 title = TitleOptions(
                     text = listOf<String>("Request Duration over Time by Request Density and Response Size"),
                     display = true
                 ),
-                tooltip = TooltipOptions(callbacks = toolTipCallback()),
+                tooltip = TooltipOptions(
+                    callbacks = TooltipCallback(
+                        footer = tooltipCallbackFooterJsFunction()
+                    )
+                ),
                 legend = buildLegend()
             ),
-            onClick = js(
-                "function(e) {"
-                        + "var element = e.chart.getElementsAtEventForMode(e, 'nearest', {intersect: true}, true);"
-                        + "if (element.length > 0) {"
-                        + "var i = element[0].index;"
-                        + "kroviz.org.apache.isis.client.kroviz.ui.panel.openLogEntry(i);"
-                        + "}"
-                        + "}"
-            ),
+            onClick = onClickJsFunction(),
             showLine = true,
             scales = mapOf(
                 "x" to ChartScales(
@@ -94,25 +102,6 @@ class EventBubbleChart() : SimplePanel() {
                     title = ScaleTitleOptions(text = "duration in ms (log)", display = true),
                     type = ScalesType.LOGARITHMIC
                 )
-            )
-        )
-        return chartOptions
-    }
-
-    // https://www.youtube.com/watch?v=UxJ5d-HGhJA
-    // https://en.wikipedia.org/wiki/Clarke%27s_three_laws -> #2
-    // I would have appreciated a real API.
-    private fun toolTipCallback(): TooltipCallback {
-        return TooltipCallback(
-            footer = js(
-                "function(context) {"
-                        + "var ctx = context[0];"
-                        + "var chart = ctx.chart;"
-                        + "var ccc = chart.config._config;"
-                        + "var data = ccc.data;"
-                        + "var i = ctx.dataIndex;"
-                        + "return data.labels[i];"
-                        + "}"
             )
         )
     }
@@ -167,13 +156,13 @@ class EventBubbleChart() : SimplePanel() {
     private fun LogEntry.calculateBubbleColor(): Color {
         val i = runningAtStart
         return when {
-            (i >= 0) && (i <= 4) -> EventBubbleChart.LIGHT_BLUE
-            (i > 4) && (i <= 8) -> EventBubbleChart.DARK_BLUE
-            (i > 8) && (i <= 16) -> EventBubbleChart.GREEN
-            (i > 16) && (i <= 32) -> EventBubbleChart.YELLOW
-            (i > 32) && (i <= 64) -> EventBubbleChart.RED
-            (i > 64) && (i <= 128) -> EventBubbleChart.RED_VIOLET
-            else -> EventBubbleChart.VIOLET
+            (i >= 0) && (i <= 4) -> LIGHT_BLUE
+            (i > 4) && (i <= 8) -> DARK_BLUE
+            (i > 8) && (i <= 16) -> GREEN
+            (i > 16) && (i <= 32) -> YELLOW
+            (i > 32) && (i <= 64) -> RED
+            (i > 64) && (i <= 128) -> RED_VIOLET
+            else -> VIOLET
         }
     }
 
@@ -192,24 +181,27 @@ class EventBubbleChart() : SimplePanel() {
     }
 
     private fun buildLegend(): LegendOptions {
-        val legend = LegendOptions(
+        return LegendOptions(
             display = true,
             position = Position.RIGHT,
             labels = buildLegendLabelOptions(),
-            title = LegendTitleOptions(text = "title here")
+            title = LegendTitleOptions(text = "Parallel Requests", display = true),
         )
-        return legend
     }
 
     private fun buildLegendLabelOptions(): LegendLabelOptions {
         val legendLabelOptions = LegendLabelOptions(
-            color = EventBubbleChart.YELLOW //mutableListOf(DARK_BLUE, LIGHT_BLUE, GREEN, YELLOW, RED, RED_VIOLET, VIOLET)
+ /*           generateLabels = {
+                val legendItemList = mutableListOf<LegendItem>()
+                val li = obj {
+                    text = "0 ..4"
+                }
+                legendItemList.add(li as LegendItem)
+                legendItemList as Array<LegendItem>
+            },*/
+            color = YELLOW
         )
         return legendLabelOptions
-    }
-
-    private fun generateLabels(): List<LegendItem> {
-        return mutableListOf<LegendItem>()
     }
 
     companion object {
@@ -220,6 +212,31 @@ class EventBubbleChart() : SimplePanel() {
         val GREEN = Color.rgba(0x9B, 0xBB, 0x59, 0x80)
         val LIGHT_BLUE = Color.rgba(0x4B, 0xAC, 0xC6, 0x80)
         val DARK_BLUE = Color.rgba(0x4F, 0x81, 0xBD, 0x80)
+
+        fun onClickJsFunction(): dynamic {
+            return js(
+                """function(e) {
+                        var element = e.chart.getElementsAtEventForMode(e, 'nearest', {intersect: true}, true);
+                        if (element.length > 0) {
+                            var i = element[0].index;
+                            kroviz.org.apache.isis.client.kroviz.ui.panel.openLogEntry(i);
+                            }
+                        }"""
+            )
+        }
+
+        fun tooltipCallbackFooterJsFunction(): dynamic {
+            return js(
+                """function(context) {
+                            var ctx = context[0];
+                            var chart = ctx.chart;
+                            var ccc = chart.config._config;
+                            var data = ccc.data;
+                            var i = ctx.dataIndex;
+                            return data.labels[i];
+                }"""
+            )
+        }
     }
 
 }
