@@ -154,9 +154,8 @@ extends ScalarPanelAbstract2 {
                     .createComponent(this::createComponentForOutput));
         } else if(renderScenario.isCanEditAny()) {
 
-            //FieldFrame.SCALAR_VALUE_INLINE_PROMPT_LINK;
-
-
+            // this results in a link created;
+            // link stuff is handled later in ScalarPanelAbstract2.setupInlinePrompt
 
         } else {
             getInputFragmentType()
