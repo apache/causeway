@@ -35,8 +35,6 @@ import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.services.metamodel.BeanSort;
-import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Strings;
@@ -48,18 +46,12 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
-import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
-import org.apache.isis.viewer.wicket.ui.components.propertyheader.PropertyEditPromptHeaderPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisBlobOrClobPanelAbstract;
@@ -75,7 +67,6 @@ import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.Accessors;
 
@@ -99,7 +90,7 @@ implements ScalarModelSubscriber {
         MULITLINE,
         COMPOSITE,
         TRISTATE,
-        FLEX,
+        FLEX, BLOB,
     }
 
     public enum Repaint {
@@ -149,28 +140,6 @@ implements ScalarModelSubscriber {
         }
     }
 
-    @RequiredArgsConstructor
-    public static class InlinePromptConfig {
-        @Getter private final boolean supported;
-        private final Component componentToHideIfAny;
-
-        public static InlinePromptConfig supported() {
-            return new InlinePromptConfig(true, null);
-        }
-
-        public static InlinePromptConfig notSupported() {
-            return new InlinePromptConfig(false, null);
-        }
-
-        public static InlinePromptConfig supportedAndHide(final Component componentToHideIfAny) {
-            return new InlinePromptConfig(true, componentToHideIfAny);
-        }
-
-        public Optional<Component> getComponentToHide() {
-            return Optional.ofNullable(componentToHideIfAny);
-        }
-    }
-
     // -- CONSTRUCTION
 
     /**
@@ -205,7 +174,7 @@ implements ScalarModelSubscriber {
      */
     protected abstract MarkupContainer createRegularFrame();
 
-    // -- INLINE EDIT FRAME
+    // -- INLINE EDIT FORM FRAME
 
     /**
      * Used by most subclasses
@@ -335,7 +304,7 @@ implements ScalarModelSubscriber {
                 .createComponent(Wkt::container);
         WktComponents.permanentlyHide(shallowRegularFrame,
                 ID_SCALAR_NAME, ID_SCALAR_VALUE,
-                RegularFrame.EDIT_PROPERTY.getContainerId(),
+                RegularFrame.FIELD.getContainerId(),
                 RegularFrame.FEEDBACK.getContainerId(),
                 RegularFrame.ASSOCIATED_ACTION_LINKS_BELOW.getContainerId(),
                 RegularFrame.ASSOCIATED_ACTION_LINKS_RIGHT.getContainerId());
@@ -551,46 +520,6 @@ implements ScalarModelSubscriber {
     }
 
     // ///////////////////////////////////////////////////////////////////
-
-    // -- EDIT PROPERTY ICON
-
-    protected WebMarkupContainer addEditPropertyIf(final boolean condition) {
-        val editLinkId = RegularFrame.EDIT_PROPERTY.getContainerId();
-        if(condition) {
-            val editProperty = Wkt.containerAdd(regularFrame, editLinkId);
-            Wkt.behaviorAddOnClick(editProperty, this::onPropertyEditClick);
-            WktTooltips.addTooltip(editProperty, "Click to edit");
-            return editProperty;
-        } else {
-            WktComponents.permanentlyHide(regularFrame, editLinkId);
-            return null;
-        }
-    }
-
-    private void onPropertyEditClick(final AjaxRequestTarget target) {
-        final ObjectSpecification specification = scalarModel.getScalarTypeSpec();
-        final MetaModelService metaModelService = getServiceRegistry()
-                .lookupServiceElseFail(MetaModelService.class);
-        final BeanSort sort = metaModelService.sortOf(specification.getCorrespondingClass(), MetaModelService.Mode.RELAXED);
-
-        final ActionPrompt prompt = ActionPromptProvider
-                .getFrom(ScalarPanelAbstract.this).getActionPrompt(scalarModel.getPromptStyle(), sort);
-
-        PropertyEditPromptHeaderPanel titlePanel = new PropertyEditPromptHeaderPanel(
-                prompt.getTitleId(),
-                (ScalarPropertyModel)ScalarPanelAbstract.this.scalarModel);
-
-        final PropertyEditPanel propertyEditPanel =
-                (PropertyEditPanel) getComponentFactoryRegistry().createComponent(
-                        ComponentType.PROPERTY_EDIT_PROMPT, prompt.getContentId(),
-                        ScalarPanelAbstract.this.scalarModel);
-
-        propertyEditPanel.setShowHeader(false);
-
-        prompt.setTitle(titlePanel, target);
-        prompt.setPanel(propertyEditPanel, target);
-        prompt.showPrompt(target);
-    }
 
     /**
      * Component to attach feedback to.

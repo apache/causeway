@@ -25,18 +25,25 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.commons.internal.base._Refs;
+import org.apache.isis.applib.services.metamodel.BeanSort;
+import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.viewer.common.model.components.ComponentType;
+import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
-import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisBlobOrClobPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices.ValueChoicesSelect2Panel;
+import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
+import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
+import org.apache.isis.viewer.wicket.ui.components.propertyheader.PropertyEditPromptHeaderPanel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
+import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.val;
 
 /**
@@ -47,7 +54,14 @@ extends ScalarPanelAbstract {
 
     private static final long serialVersionUID = 1L;
 
+    // -- FIELD FRAME
+
+    @Getter(AccessLevel.PROTECTED)
+    protected MarkupContainer fieldFrame;
+
+
     // -- INLINE PROMPT LINK
+
 
     protected WebMarkupContainer inlinePromptLink;
 
@@ -58,33 +72,21 @@ extends ScalarPanelAbstract {
         super(id, scalarModel);
     }
 
-    /**
-     * Mandatory hook for implementations to indicate whether it supports the {@link PromptStyle#INLINE inline} or
-     * {@link PromptStyle#INLINE_AS_IF_EDIT prompt}s, and if so, how.
-     * <p>
-     * For those that do, both {@link #createFormFrame()} and
-     * {@link #createInlinePromptLink()} must return non-null values (and their corresponding markup
-     * must define the corresponding elements).
-     * <p>
-     * Implementations that support inline prompts are: ({@link ScalarPanelAbstract}, {@link ReferencePanel} and
-     * {@link ValueChoicesSelect2Panel}; those that don't are {@link IsisBlobOrClobPanelAbstract} and {@link BooleanPanel}.
-     */
-    protected abstract InlinePromptConfig getInlinePromptConfig();
-
     @Override
     protected final void setupInlinePrompt() {
 
         val scalarModel = scalarModel();
         val regularFrame = getRegularFrame();
+        val fieldFrame = getFieldFrame();
         val scalarFrameContainer = getScalarFrameContainer();
 
-        val inlinePromptConfig = getInlinePromptConfig();
-        if(inlinePromptConfig.isSupported()) {
 
-            regularFrame
+        if(fieldFrame!=null) {
+
+            fieldFrame
                 .add(inlinePromptLink = createInlinePromptLink());
 
-            addOnClickBehaviorTo(inlinePromptLink, inlinePromptConfig);
+            addOnClickBehaviorTo(inlinePromptLink);
 
             // even if this particular scalarModel (property) is not configured for inline edits,
             // it's possible that one of the associated actions is.  Thus we set the prompt context
@@ -92,19 +94,36 @@ extends ScalarPanelAbstract {
                     new InlinePromptContext(
                             scalarModel,
                             scalarFrameContainer,
-                            regularFrame, getFormFrame()));
+                            regularFrame,
+                            getFormFrame()));
         }
 
         addEditPropertyIf(
                 scalarModel.canEnterEditMode()
                 && (scalarModel.getPromptStyle().isDialog()
-                        || !inlinePromptConfig.isSupported()));
+                        || fieldFrame==null),
+                fieldFrame);
 
+        //XXX support for legacy panels
+        {
+            if(fieldFrame!=null) {
+                if(fieldFrame.get(ID_SCALAR_VALUE)==null) {
+                    Wkt.labelAdd(fieldFrame, ID_SCALAR_VALUE, "∅");
+                }
+            }
+            val link = (MarkupContainer)FieldFrame.SCALAR_VALUE_INLINE_PROMPT_LINK
+                    .addComponentIfMissing(regularFrame, WebMarkupContainer::new);
+            FieldFrame.OUTPUT_FORMAT_CONTAINER
+                .addComponentIfMissing(link, id->Wkt.label(id, "∅"));
+            FieldFrame.INPUT_FORMAT_CONTAINER
+                .addComponentIfMissing(regularFrame, id->Wkt.label(id, "∅"));
+            FieldFrame.EDIT_PROPERTY
+                .addComponentIfMissing(regularFrame, id->Wkt.label(id, "∅"));
+            }
     }
 
     /**
-     * Components returning true for {@link #getInlinePromptConfig()}
-     * are required to override and return a non-null value.
+     * Model for any non editing scenario.
      */
     protected IModel<String> obtainOutputFormatModel() {
         return ()->{
@@ -140,35 +159,66 @@ extends ScalarPanelAbstract {
 
     // -- HELPER
 
+    private WebMarkupContainer addEditPropertyIf(final boolean condition, final MarkupContainer fieldFrame) {
+        if(fieldFrame==null) return null;
+        val editLinkId = FieldFrame.EDIT_PROPERTY.getContainerId();
+        if(condition) {
+            val editProperty = Wkt.containerAdd(fieldFrame, editLinkId);
+            Wkt.behaviorAddOnClick(editProperty, this::onPropertyEditClick);
+            WktTooltips.addTooltip(editProperty, "Click to edit");
+            return editProperty;
+        } else {
+            WktComponents.permanentlyHide(fieldFrame, editLinkId);
+            return null;
+        }
+    }
+
+    private void onPropertyEditClick(final AjaxRequestTarget target) {
+        val scalarModel = scalarModel();
+        final ObjectSpecification specification = scalarModel.getScalarTypeSpec();
+        final MetaModelService metaModelService = getServiceRegistry()
+                .lookupServiceElseFail(MetaModelService.class);
+        final BeanSort sort = metaModelService.sortOf(specification.getCorrespondingClass(), MetaModelService.Mode.RELAXED);
+
+        final ActionPrompt prompt = ActionPromptProvider
+                .getFrom(ScalarPanelAbstract2.this).getActionPrompt(scalarModel.getPromptStyle(), sort);
+
+        PropertyEditPromptHeaderPanel titlePanel = new PropertyEditPromptHeaderPanel(
+                prompt.getTitleId(),
+                (ScalarPropertyModel)ScalarPanelAbstract2.this.scalarModel());
+
+        final PropertyEditPanel propertyEditPanel =
+                (PropertyEditPanel) getComponentFactoryRegistry().createComponent(
+                        ComponentType.PROPERTY_EDIT_PROMPT, prompt.getContentId(),
+                        ScalarPanelAbstract2.this.scalarModel());
+
+        propertyEditPanel.setShowHeader(false);
+
+        prompt.setTitle(titlePanel, target);
+        prompt.setPanel(propertyEditPanel, target);
+        prompt.showPrompt(target);
+    }
+
     private void addOnClickBehaviorTo(
-            final @Nullable MarkupContainer clickReceiver,
-            final InlinePromptConfig inlinePromptConfig) {
+            final @Nullable MarkupContainer clickReceiver) {
 
         if(clickReceiver==null) return;
 
         val scalarModel = scalarModel();
 
-        // start off assuming that neither the property nor any of the associated actions
-        // are using inline prompts
-        val componentToHideRef = _Refs.<Component>objectRef(clickReceiver);
-
         if (_Util.canPropertyEnterInlineEditDirectly(scalarModel)) {
 
             // we configure the prompt link if _this_ property is configured for inline edits...
             Wkt.behaviorAddOnClick(clickReceiver, this::onPropertyInlineEditClick);
-            componentToHideRef.setValue(inlinePromptConfig.getComponentToHide().orElse(null));
 
         } else {
 
             _Util.lookupPropertyActionForInlineEdit(scalarModel)
             .ifPresent(actionLinkInlineAsIfEdit->{
                 Wkt.behaviorAddOnClick(clickReceiver, actionLinkInlineAsIfEdit::onClick);
-                componentToHideRef.setValue(inlinePromptConfig.getComponentToHide().orElse(null));
             });
         }
 
-        componentToHideRef.getValue()
-            .ifPresent(componentToHide->componentToHide.setVisibilityAllowed(false));
     }
 
     private WebMarkupContainer createInlinePromptLink() {
@@ -180,7 +230,7 @@ extends ScalarPanelAbstract {
         }
 
         final WebMarkupContainer inlinePromptLink =
-                RegularFrame.SCALAR_VALUE_INLINE_PROMPT_LINK
+                FieldFrame.SCALAR_VALUE_INLINE_PROMPT_LINK
                     .createComponent(WebMarkupContainer::new);
 
         inlinePromptLink.setOutputMarkupId(true);
@@ -188,7 +238,7 @@ extends ScalarPanelAbstract {
 
         configureInlinePromptLink(inlinePromptLink);
 
-        final Component editInlineLinkLabel = RegularFrame.OUTPUT_FORMAT_CONTAINER
+        final Component editInlineLinkLabel = FieldFrame.OUTPUT_FORMAT_CONTAINER
                 .createComponent(id->createInlinePromptComponent(id, inlinePromptModel));
 
         inlinePromptLink.add(editInlineLinkLabel);

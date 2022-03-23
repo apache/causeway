@@ -23,7 +23,6 @@ import org.apache.wicket.MarkupContainer;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.InlinePromptConfig;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 
 import lombok.val;
@@ -50,11 +49,6 @@ extends ScalarPanelAbstract2 {
     protected MarkupContainer createCompactFrame() {
         return FrameFragment.COMPACT
                 .createComponent(this::createTreeComponent);
-    }
-
-    @Override
-    protected InlinePromptConfig getInlinePromptConfig() {
-        return InlinePromptConfig.notSupported();
     }
 
     @Override

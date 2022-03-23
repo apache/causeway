@@ -31,15 +31,17 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragement;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
@@ -64,6 +66,47 @@ extends ScalarPanelAbstract2 {
     @Override
     protected final Component getValidationFeedbackReceiver() {
         return getFormComponent();
+    }
+
+    // -- FIELD FRAME
+
+    /**
+     * Builds the field frame when in REGULAR format.
+     * <p>Is added to {@link #getRegularFrame()}.
+     */
+    protected MarkupContainer createFieldFrame() {
+        val renderScenario = getRenderScenario();
+        final FieldFragement fieldFragement;
+        switch (renderScenario) {
+        case READONLY:
+            // setup as output-format (no links)
+            // that is: disable links - place output-format into RegularFrame.INPUT_FORMAT_CONTAINER
+            fieldFragement = FieldFragement.NO_LINK;
+
+            break;
+        case CAN_EDIT:
+        case CAN_EDIT_INLINE:
+        case CAN_EDIT_INLINE_VIA_ACTION:
+
+            // setup as output-format (with links to edit)
+            // that is: enable links - place output-format into RegularFrame.OUTPUT_FORMAT_CONTAINER
+
+            fieldFragement = FieldFragement.LINK;
+
+            break;
+        case EDITING:
+            // setup as input-format
+            // that is: disable links - place input-format into RegularFrame.INPUT_FORMAT_CONTAINER
+            fieldFragement = FieldFragement.NO_LINK;
+            break;
+
+        default:
+            throw _Exceptions.unmatchedCase(renderScenario);
+        }
+
+        return Wkt.fragment(fieldFragement.getContainerId(),
+                fieldFragement.getFragmentId(),
+                this);
     }
 
     // -- FORM COMPONENT
@@ -92,6 +135,8 @@ extends ScalarPanelAbstract2 {
                 .createComponent(id->new FormGroup(id, formComponent));
         formGroup.add(formComponent);
 
+        formGroup.add(fieldFrame = createFieldFrame());
+
         formComponent.setRequired(scalarModel.isRequired());
         if(scalarModel.isRequired()
                 && scalarModel.isEnabled()) {
@@ -104,7 +149,7 @@ extends ScalarPanelAbstract2 {
 
         val renderScenario = getRenderScenario();
 
-        Wkt.labelAdd(formGroup, "debugLabel", String.format("%s", renderScenario.name()));
+        Wkt.labelAdd(fieldFrame, "debugLabel", String.format("%s", renderScenario.name()));
 
 //        switch (renderScenario) {
 //        case READONLY:
@@ -144,12 +189,12 @@ extends ScalarPanelAbstract2 {
             //TODO we set the INPUT SLOT, but when links are used,
             // instead the OUTPUT SLOT becomes visible
 
-            formGroup.add(RegularFrame.INPUT_FORMAT_CONTAINER
+            fieldFrame.add(FieldFrame.INPUT_FORMAT_CONTAINER
                     .createComponent(this::createComponentForOutput));
         } else {
             getInputFragmentType()
             .ifPresent(inputFragmentType->
-                formGroup.add(inputFragmentType.createFragment(this, formComponent)));
+                fieldFrame.add(inputFragmentType.createFragment(this, formComponent)));
         }
 
         onFormGroupCreated(formGroup);
@@ -213,13 +258,6 @@ extends ScalarPanelAbstract2 {
             }
 
         };
-    }
-
-    @Override
-    protected InlinePromptConfig getInlinePromptConfig() {
-        return getFormComponent()!=null
-                ? InlinePromptConfig.supportedAndHide(getFormComponent())
-                : InlinePromptConfig.notSupported();
     }
 
     @Override

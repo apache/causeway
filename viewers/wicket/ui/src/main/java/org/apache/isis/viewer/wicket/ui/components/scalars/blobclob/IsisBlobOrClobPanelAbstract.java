@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.blobclob;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,6 +75,11 @@ extends ScalarPanelFormFieldAbstract<T> {
         this.unwrapped = scalarModel.unwrapped(type);
     }
 
+    @Override
+    protected void setupFormatModifiers(final EnumSet<FormatModifier> modifiers) {
+        modifiers.add(FormatModifier.BLOB);
+    }
+
     // generic type mismatch; no issue as long as we don't use conversion
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
@@ -93,16 +99,6 @@ extends ScalarPanelFormFieldAbstract<T> {
         }
         createFileNameLabel(ID_FILE_NAME, formGroup);
         createDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, formGroup);
-    }
-
-    // //////////////////////////////////////
-
-    /**
-     * Inline prompts are <i>not</i> supported by this component.
-     */
-    @Override
-    protected InlinePromptConfig getInlinePromptConfig() {
-        return InlinePromptConfig.notSupported();
     }
 
     // //////////////////////////////////////

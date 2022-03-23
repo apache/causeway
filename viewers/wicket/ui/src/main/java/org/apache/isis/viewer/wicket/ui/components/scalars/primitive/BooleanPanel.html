@@ -38,29 +38,9 @@
 
                         <div class="scalarPlaceholder">
 
-                            <span class="scalarValueInput">
-                                <span class="editing">
-
-                                    <input type="checkbox"
-                                           name="scalarValue"
-                                           class="scalarValue"
-                                           wicket:id="scalarValue" />
-
-                                    <a href="##"
-                                        class="edit btn btn-sm btn-link" 
-                                        wicket:id="editProperty">
-                                     	<span class="editIcon fa fa-edit"></span>
-                                	</a>
-
-                                    <a href="#"
-                                       name="scalarValueInlinePromptLink"
-                                       class="form-control form-control-sm scalarValueInlinePromptLink"
-                                       wicket:id="scalarValueInlinePromptLink">
-                                        <span wicket:id="container-scalarValue-outputFormat"></span>
-                                    </a>
-
-                                </span>
-                            </span>
+							<wicket:container 
+								wicket:id="container-fieldFrame" />
+                            
                             <span class="associatedActionLinksRight"
                                   wicket:id="associatedActionLinksRight"
                             >[drop down]</span>
@@ -82,6 +62,35 @@
 
             </div>
             <div class="clearfix"/>
+            
+       	<wicket:fragment wicket:id="fragment-fieldFrame-debug">
+			<label wicket:id="debugLabel" style="font-size: x-small; color: burlywood;">[Debug text]</label>
+			<span class="scalarValueInput">
+                <span class="editing">
+
+                    <input type="checkbox"
+                           name="scalarValue"
+                           class="scalarValue"
+                           wicket:id="scalarValue" />
+
+                    <a href="##"
+                        class="edit btn btn-sm btn-link" 
+                        wicket:id="editProperty">
+                     	<span class="editIcon fa fa-edit"></span>
+                	</a>
+
+                    <a href="#"
+                       name="scalarValueInlinePromptLink"
+                       class="form-control form-control-sm scalarValueInlinePromptLink"
+                       wicket:id="scalarValueInlinePromptLink">
+                        <span wicket:id="container-scalarValue-outputFormat"/>
+                    </a>
+
+                </span>
+            </span>
+		</wicket:fragment>
+            
+            
         </wicket:panel>
     </body>
 </html>

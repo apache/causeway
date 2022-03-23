@@ -44,7 +44,7 @@ public class ScalarFragmentFactory {
     public static enum FrameFragment {
         COMPACT("scalarIfCompact"),
         REGULAR("scalarIfRegular"),
-        INLINE_PROMPT_FORM("scalarIfRegularInlinePromptForm")
+        INLINE_PROMPT_FORM("scalarIfRegularInlinePromptForm"),
         ;
         @Getter
         private final String containerId;
@@ -56,16 +56,11 @@ public class ScalarFragmentFactory {
     @RequiredArgsConstructor
     public static enum RegularFrame {
 
-        SCALAR_VALUE_INLINE_PROMPT_LINK("scalarValueInlinePromptLink"),
+        FIELD("container-fieldFrame"),
 
-        OUTPUT_FORMAT_CONTAINER("container-scalarValue-outputFormat"),
-        INPUT_FORMAT_CONTAINER("container-scalarValue-inputFormat"),
-
-        EDIT_PROPERTY("editProperty"),
         FEEDBACK("feedback"),
         ASSOCIATED_ACTION_LINKS_BELOW("associatedActionLinksBelow"),
         ASSOCIATED_ACTION_LINKS_RIGHT("associatedActionLinksRight"),
-
         ;
         @Getter
         private final String containerId;
@@ -83,6 +78,45 @@ public class ScalarFragmentFactory {
             }
         }
     }
+
+    @RequiredArgsConstructor
+    public static enum FieldFrame {
+        SCALAR_VALUE_INLINE_PROMPT_LINK("scalarValueInlinePromptLink"),
+
+        OUTPUT_FORMAT_CONTAINER("container-scalarValue-outputFormat"),
+        INPUT_FORMAT_CONTAINER("container-scalarValue-inputFormat"),
+
+        EDIT_PROPERTY("editProperty"),
+        ;
+        @Getter
+        private final String containerId;
+        public <T extends Component> T createComponent(final Function<String, T> factory) {
+            return factory.apply(containerId);
+        }
+        @Deprecated
+        public Component addComponentIfMissing(final MarkupContainer container,
+                final Function<String, ? extends Component> factory) {
+            val alreadyExisting = container.get(containerId);
+            return alreadyExisting!=null
+                    ? alreadyExisting
+                    : Wkt.add(container, createComponent(factory));
+        }
+    }
+
+    @RequiredArgsConstructor
+    public static enum FieldFragement {
+        LEGACY("fragment-fieldFrame-debug"),
+
+        LINK("fragment-fieldFrame-withLink"),
+        NO_LINK("fragment-fieldFrame-withoutLink"),
+
+        ;
+        @Getter
+        private final String fragmentId;
+        @Getter
+        private final String containerId = "container-fieldFrame";
+    }
+
 
     // -- OUTPUT/COMPACT FRAGMENTS
 
@@ -123,7 +157,7 @@ public class ScalarFragmentFactory {
          */
         public Fragment createFragment(final MarkupContainer markupProvider, final FormComponent<?> inputComponent) {
             val fragment = Wkt.fragment(
-                    RegularFrame.INPUT_FORMAT_CONTAINER.getContainerId(), fragmentId, markupProvider);
+                    FieldFrame.INPUT_FORMAT_CONTAINER.getContainerId(), fragmentId, markupProvider);
             fragment.add(inputComponent);
             return fragment;
         }
@@ -148,7 +182,7 @@ public class ScalarFragmentFactory {
                 final IModel<String> promptLabelModel,
                 final @Nullable Consumer<FormComponent<String>> onComponentCreated) {
             val fragment = Wkt.fragment(
-                    RegularFrame.OUTPUT_FORMAT_CONTAINER.getContainerId(), fragmentId, markupProvider);
+                    FieldFrame.OUTPUT_FORMAT_CONTAINER.getContainerId(), fragmentId, markupProvider);
             val component = componentFactory.apply(promptLabelModel);
             fragment.add(component);
             if(onComponentCreated!=null

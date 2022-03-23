@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 import java.util.Optional;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
@@ -29,6 +30,7 @@ import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.viewer.wicket.model.models.BooleanModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragement;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelFormFieldAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
@@ -52,6 +54,13 @@ extends ScalarPanelFormFieldAbstract<Boolean> {
     }
 
     @Override
+    protected MarkupContainer createFieldFrame() {
+        return Wkt.fragment(FieldFragement.LEGACY.getContainerId(),
+                FieldFragement.LEGACY.getFragmentId(),
+                this);
+    }
+
+    @Override
     protected FormComponent<Boolean> createFormComponent(final String id, final ScalarModel scalarModel) {
         checkBox = Wkt.checkbox(
                 id,
@@ -70,16 +79,6 @@ extends ScalarPanelFormFieldAbstract<Boolean> {
                 CheckBoxXConfig.Sizes.sm);
         checkBox.setEnabled(false); // will be enabled before rendering if required
         return checkBox;
-    }
-
-    @Override
-    protected InlinePromptConfig getInlinePromptConfig() {
-        return InlinePromptConfig.supportedAndHide(
-                // TODO: not sure why this is needed when the other subtypes have no similar guard...
-                scalarModel().mustBeEditable()
-                    ? this.checkBox
-                    : null
-                );
     }
 
     @Override

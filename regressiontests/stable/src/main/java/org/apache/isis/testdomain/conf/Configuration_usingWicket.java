@@ -63,6 +63,7 @@ import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
@@ -142,14 +143,16 @@ public class Configuration_usingWicket {
 
         public static final String INVENTORY_NAME_PROPERTY_EDIT_INLINE_FORM_TEXTFIELD = INVENTORY_NAME_PROPERTY
                 + ":property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:"
-                + RegularFrame.INPUT_FORMAT_CONTAINER.getContainerId() + ":scalarValue";
+                + RegularFrame.FIELD.getContainerId() + ":"
+                + FieldFrame.INPUT_FORMAT_CONTAINER.getContainerId() + ":scalarValue";
 
         public static final String INVENTORY_NAME_PROPERTY_EDIT_INLINE_PROMPT_FORM = INVENTORY_NAME_PROPERTY
                 + ":scalarTypeContainer:scalarIfRegularInlinePromptForm:inputForm";
 
         public static final String INLINE_PROMPT_FORM_FIELD = ""
                 + "property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:"
-                + RegularFrame.INPUT_FORMAT_CONTAINER.getContainerId() + ":scalarValue";
+                + RegularFrame.FIELD.getContainerId() + ":"
+                + FieldFrame.INPUT_FORMAT_CONTAINER.getContainerId() + ":scalarValue";
 
         public static final String INLINE_PROMPT_FORM_OK = INVENTORY_NAME_PROPERTY_EDIT_INLINE_PROMPT_FORM
                 + ":okButton";
