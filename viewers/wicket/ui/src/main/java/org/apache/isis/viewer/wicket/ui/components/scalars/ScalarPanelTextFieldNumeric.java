@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 import org.apache.wicket.Component;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -43,8 +42,8 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
 
     @Override
     protected final Component createComponentForOutput(final String id) {
-        val label = Wkt.labelAddWithConverter(
-                CompactFragment.LABEL.createFragment(this),
+        val label = Wkt.labelWithConverter(
+                //CompactFragment.LABEL.createFragment(this),
                 id, unwrappedModel(), type, getConverter(scalarModel()));
         label.setEnabled(false);
         return label;

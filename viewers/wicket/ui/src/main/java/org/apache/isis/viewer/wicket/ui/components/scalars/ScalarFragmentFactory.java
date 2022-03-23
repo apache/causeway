@@ -97,10 +97,15 @@ public class ScalarFragmentFactory {
         ;
         private final String fragmentId;
         /**
+         * @param id - Where to 'put' the fragment
          * @param markupProvider - The component whose markup contains the fragment's markup
+         * @param componentFactory - creates the scalarValue component to be added to the fragment
          */
-        public Fragment createFragment(final MarkupContainer markupProvider) {
-            return Wkt.fragment(FrameFragment.COMPACT.getContainerId(), fragmentId, markupProvider);
+        public <T extends Component> Fragment
+        createFragment(final String id, final MarkupContainer markupProvider, final Function<String, T> componentFactory) {
+            val fragment = Wkt.fragment(id, fragmentId, markupProvider);
+            fragment.add(componentFactory.apply(ScalarPanelAbstract.ID_SCALAR_VALUE));
+            return fragment;
         }
     }
 

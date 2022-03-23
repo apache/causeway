@@ -170,10 +170,8 @@ extends ScalarPanelAbstract2 {
      * However, it may be overridden if required.
      */
     protected Component createComponentForOutput(final String id) {
-        return Wkt.labelAdd(
-                CompactFragment.LABEL.createFragment(this),
-                id,
-                obtainOutputFormatModel());
+        return CompactFragment.LABEL.createFragment(id, this, scalarValueId->
+            Wkt.label(scalarValueId, obtainOutputFormatModel()));
     }
 
     // -- HOOKS
