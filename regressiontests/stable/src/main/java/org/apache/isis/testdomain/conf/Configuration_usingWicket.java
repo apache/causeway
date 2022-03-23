@@ -116,6 +116,7 @@ public class Configuration_usingWicket {
                 + ":scalarName";
 
         public static final String FAVORITE_BOOK_ENTITY_LINK = FAVORITE_BOOK_SCALAR
+                + ":container-fieldFrame:scalarValueInlinePromptLink:container-scalarValue:entityLink"
                 + ":entityIconAndTitle:entityLinkWrapper:entityLink";
 
         public static final String FAVORITE_BOOK_ENTITY_LINK_TITLE = FAVORITE_BOOK_ENTITY_LINK
@@ -128,7 +129,7 @@ public class Configuration_usingWicket {
                 + ":property";
 
         public static final String INVENTORY_NAME_PROPERTY_EDIT_LINK = INVENTORY_NAME_PROPERTY
-                + ":scalarTypeContainer:scalarIfRegular:scalarValueInlinePromptLink";
+                + ":scalarTypeContainer:scalarIfRegular:container-fieldFrame:scalarValueInlinePromptLink";
 
         public static final String INVENTORY_NAME_PROPERTY_EDIT_INLINE_FORM = INVENTORY_NAME_PROPERTY
                 + ":scalarTypeContainer:scalarIfRegularInlinePromptForm:inputForm";
@@ -232,6 +233,10 @@ public class Configuration_usingWicket {
          * @see #startPage(IPageProvider)
          */
         public EntityPage startEntityPage(final PageParameters pageParameters) {
+
+            //XXX set to false for less strict testing
+            ThreadContext.getApplication().getDebugSettings().setComponentUseCheck(false);
+
             val entityPage = EntityPage.forPageParameters(commonContext, pageParameters);
             val startedPage = startPage(entityPage);
             assertRenderedPage(EntityPage.class);
