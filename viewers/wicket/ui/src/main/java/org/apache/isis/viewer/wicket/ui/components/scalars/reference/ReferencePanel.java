@@ -23,7 +23,6 @@ import java.util.Optional;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -32,14 +31,15 @@ import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceChoices;
@@ -65,26 +65,17 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
     private EntityLinkSelect2Panel entityLink;
     private EntityLinkSimplePanel entityLinkOutputFormat;
-    private boolean isCompactFormat = false;
+    private final boolean isCompactFormat;
 
     public ReferencePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
+        this.isCompactFormat = !scalarModel.getRenderingHint().isRegular();
     }
 
-
-    Select2 getSelect2() {
-        return select2;
-    }
-
-    // //////////////////////////////////////
-
-    // First called as a side-effect of {@link #beforeRender()}
     @Override
-    protected Component createCompactFrame() {
+    protected Component createComponentForOutput(final String id) {
 
-        this.isCompactFormat = true;
-
-        final ScalarModel scalarModel = getModel();
+        val scalarModel = scalarModel();
         final String name = scalarModel.getFriendlyName();
 
         this.entityLinkOutputFormat = (EntityLinkSimplePanel) getComponentFactoryRegistry()
@@ -93,17 +84,17 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         entityLinkOutputFormat.setOutputMarkupId(true);
         entityLinkOutputFormat.setLabel(Model.of(name));
 
-        val labelIfOutput = FrameFragment.COMPACT
-                .createComponent(WebMarkupContainer::new);
-
-        labelIfOutput.add(entityLinkOutputFormat);
-
-        return labelIfOutput;
+        return CompactFragment.ENTITY_LINK
+                .createFragment(id, this, scalarValueId->entityLinkOutputFormat);
     }
 
-    // First called as a side-effect of {@link #beforeRender()}
     @Override
-    protected FormGroup createRegularFrame() {
+    protected Optional<InputFragment> getInputFragmentType() {
+        return Optional.of(InputFragment.SELECT2);
+    }
+
+    @Override
+    protected FormComponent<ManagedObject> createFormComponent(final String id, final ScalarModel scalarModel) {
 
         this.entityLink = new EntityLinkSelect2Panel(ComponentType.ENTITY_LINK.getId(), this);
 
@@ -113,16 +104,13 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
         entityLink.setOutputMarkupId(true);
 
-        FormComponent<?> formComponent = this.entityLink;
-
-        return createFormGroup(formComponent);
+        return this.entityLink;
     }
 
 
     private Select2 createSelect2AndSemantics() {
 
         final Select2 select2 = createSelect2(ID_AUTO_COMPLETE);
-
 
         final Settings settings = select2.getSettings();
 
@@ -202,38 +190,38 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         Wkt.attributeReplace(entityLink, "title", "");
     }
 
-    // called from onInitialize*
-    // (was previous called by EntityLinkSelect2Panel in onBeforeRender, this responsibility now moved)
+    private Optional<MarkupContainer> lookupScalarValueContainer() {
+        return Optional.ofNullable(getFieldFrame())
+        .map(fieldFrame->fieldFrame.get("container-scalarValue")) // TODO don't hardcode id here
+        .map(MarkupContainer.class::cast);
+    }
+
     private void syncWithInput() {
+
         val scalarModel = getModel();
-        val adapter = scalarModel.getObject();
 
-        // syncLinkWithInput
-        final MarkupContainer componentForRegular = getRegularFrame();
-
-        if(componentForRegular != null) {
-
+        lookupScalarValueContainer()
+        .ifPresent(container->{
             val componentFactory = getComponentFactoryRegistry()
                     .findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, scalarModel);
-            val component = componentFactory
+            val iconAndTitle = componentFactory
                     .createComponent(ComponentType.ENTITY_ICON_AND_TITLE.getId(), scalarModel);
-            componentForRegular.addOrReplace(component);
+            container.addOrReplace(iconAndTitle);
 
             val isInlinePrompt = scalarModel.isInlinePrompt();
             if(isInlinePrompt) {
                 // bit of a hack... allows us to suppress the title using CSS
-                Wkt.cssAppend(component, "inlinePrompt");
+                Wkt.cssAppend(iconAndTitle, "inlinePrompt");
             }
 
+            val adapter = scalarModel.getObject();
             if(adapter != null
                     || isInlinePrompt) {
-                WktComponents.permanentlyHide(componentForRegular, "entityTitleIfNull");
+                WktComponents.permanentlyHide(container, "entityTitleIfNull");
             } else {
-                Wkt.labelAdd(componentForRegular, "entityTitleIfNull", "(none)");
+                Wkt.labelAdd(container, "entityTitleIfNull", "(none)");
             }
-
-        }
-
+        });
 
         // syncLinkWithInputIfAutoCompleteOrChoices
         if(isEditableWithEitherAutoCompleteOrChoices()) {
@@ -260,9 +248,9 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
                 select2.clearInput();
             }
 
-            if(componentForRegular != null) {
-                WktComponents.permanentlyHide(componentForRegular, ID_ENTITY_ICON_TITLE);
-                WktComponents.permanentlyHide(componentForRegular, "entityTitleIfNull");
+            if(fieldFrame != null) {
+                WktComponents.permanentlyHide(fieldFrame, ID_ENTITY_ICON_TITLE);
+                WktComponents.permanentlyHide(fieldFrame, "entityTitleIfNull");
             }
 
             // syncUsability

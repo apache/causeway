@@ -21,10 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
@@ -32,69 +30,55 @@ import org.apache.wicket.validation.ValidationError;
 import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
 public abstract class ScalarPanelSelectAbstract
-extends ScalarPanelAbstract2 {
+extends ScalarPanelFormFieldAbstract<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
 
+    @Getter
     protected Select2 select2;
 
     public ScalarPanelSelectAbstract(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel);
+        super(id, scalarModel, ManagedObject.class);
     }
 
-    @Override
-    protected Component getValidationFeedbackReceiver() {
-        return select2!=null
-                ? select2.asComponent()
-                : null;
-    }
+//    @Override
+//    protected Component getValidationFeedbackReceiver() {
+//        return select2!=null
+//                ? select2.asComponent()
+//                : null;
+//    }
 
     protected Select2 createSelect2(final String id) {
         final Select2 select2 = Select2.createSelect2(id, scalarModel());
         setProviderAndCurrAndPending(select2);
         select2.setRequired(scalarModel().isRequired());
+        select2.add(new Select2Validator(scalarModel()));
         return select2;
     }
 
-    protected FormGroup createFormGroup(final FormComponent<?> formComponent) {
+    @Override
+    protected void onFormGroupCreated(final FormGroup formGroup) {
         val scalarModel = scalarModel();
         val friendlyNameModel = Model.of(scalarModel.getFriendlyName());
 
         setOutputMarkupId(true);
         select2.asComponent().setOutputMarkupId(true);
         select2.setLabel(friendlyNameModel);
-
-        final FormGroup formGroup = FrameFragment.REGULAR
-                .createComponent(id->new FormGroup(id, formComponent));
-        formGroup.add(formComponent);
-        formGroup.addOrReplace(createScalarNameLabel(ID_SCALAR_NAME, friendlyNameModel));
-
-        addStandardSemantics();
-
-        if(scalarModel.isRequired() && scalarModel.isEnabled()) {
-            Wkt.cssAppend(formGroup, "mandatory");
-        }
-        return formGroup;
     }
-
-    protected void addStandardSemantics() {
-        select2.setRequired(getModel().isRequired());
-        select2.add(new Select2Validator(scalarModel()));
-    }
-
 
     /**
      * sets up the choices, also ensuring that any currently held value is compatible.

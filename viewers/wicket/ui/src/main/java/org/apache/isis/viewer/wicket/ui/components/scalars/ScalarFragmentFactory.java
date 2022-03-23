@@ -85,11 +85,6 @@ public class ScalarFragmentFactory {
 
         SCALAR_VALUE_CONTAINER("container-scalarValue"),
 
-        @Deprecated
-        OUTPUT_FORMAT_CONTAINER("container-scalarValue-outputFormat"),
-        @Deprecated
-        INPUT_FORMAT_CONTAINER("container-scalarValue-inputFormat"),
-
         EDIT_PROPERTY("editProperty"),
         ;
         @Getter
@@ -109,11 +104,8 @@ public class ScalarFragmentFactory {
 
     @RequiredArgsConstructor
     public static enum FieldFragement {
-        LEGACY("fragment-fieldFrame-legacy"),
-
         LINK("fragment-fieldFrame-withLink"),
         NO_LINK("fragment-fieldFrame-withoutLink"),
-
         ;
         @Getter
         private final String fragmentId;
@@ -129,6 +121,7 @@ public class ScalarFragmentFactory {
     public static enum CompactFragment {
         LABEL("fragment-compact-label"),
         BADGE("fragment-compact-badge"),
+        ENTITY_LINK("fragment-compact-entityLink"),
         CHECKBOX_YES("fragment-compact-checkboxYes"),
         CHECKBOX_NO("fragment-compact-checkboxNo"),
         CHECKBOX_INTERMEDIATE("fragment-compact-checkboxIntermediate"),
@@ -169,6 +162,8 @@ public class ScalarFragmentFactory {
         DATE("fragment-input-date"),
         CHECKBOX("fragment-input-checkbox"),
         FILE("fragment-input-file"),
+        SELECT("fragment-input-select"),
+        SELECT2("fragment-input-select2"),
         ;
         private final String fragmentId;
         /**

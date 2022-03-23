@@ -1049,27 +1049,15 @@ a.form-control.scalarValueInlinePromptLink {
 .referencePanel .inlinePrompt .entityIconAndTitlePanel .entityImage {
     margin-right: 10px;
 }
-.referencePanel .inlinePrompt .entityIconAndTitlePanel .entityTitle {
-    display: none;
-}
 
-/*
-instead of this CSS (which would force this highlighting everywhere, instead suggest use a browser extension
-such as https://chrome.google.com/webstore/detail/focus-indicator/heeoeadndnhebmfebjccbhmccmaoedlf
-
-#container  a:focus,
-#container  .btn:focus,
-#container  input:focus,
-#container  :focus {
-    outline-color: maroon;
-    outline-style: solid;
-    outline-width: 2px;
+.entityTitle {
+    text-decoration: none;
+    color: var(--bs-success);
 }
-
-#container  a.edit:focus {
-    padding: 3px;
+.entityTitle:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }
-*/
 
 #container.page #wicketDebugBar {
     padding-top: 60px;

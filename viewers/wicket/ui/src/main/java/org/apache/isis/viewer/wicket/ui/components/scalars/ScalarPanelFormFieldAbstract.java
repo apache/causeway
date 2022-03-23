@@ -78,23 +78,16 @@ extends ScalarPanelAbstract2 {
         switch (renderScenario) {
         case READONLY:
             // setup as output-format (no links)
-            // that is: disable links - place output-format into RegularFrame.INPUT_FORMAT_CONTAINER
             fieldFragement = FieldFragement.NO_LINK;
-
             break;
         case CAN_EDIT:
         case CAN_EDIT_INLINE:
         case CAN_EDIT_INLINE_VIA_ACTION:
-
             // setup as output-format (with links to edit)
-            // that is: enable links - place output-format into RegularFrame.OUTPUT_FORMAT_CONTAINER
-
             fieldFragement = FieldFragement.LINK;
-
             break;
         case EDITING:
             // setup as input-format
-            // that is: disable links - place input-format into RegularFrame.INPUT_FORMAT_CONTAINER
             fieldFragement = FieldFragement.NO_LINK;
             break;
 

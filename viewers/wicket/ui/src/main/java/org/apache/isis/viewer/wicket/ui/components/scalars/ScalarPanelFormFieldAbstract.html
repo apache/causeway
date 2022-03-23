@@ -133,6 +133,19 @@
 					class="form-control form-control-sm scalarValue"/>
 			</div>
 		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-input-select">
+			<select wicket:id="scalarValue"
+				class="choices form-control-sm select2-remote"/>
+		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-input-select2">
+           <span class="autoCompletePlaceholder">
+               <span wicket:id="entityLink">link or drop down</span>
+               <span wicket:id="entityIconAndTitle">[icon and title]</span>
+           </span>
+           <span wicket:id="entityTitleIfNull">(none)</span>
+		</wicket:fragment>
 
 		<!-- PROMPT FRAGMENTS -->
 
@@ -192,6 +205,15 @@
 				<span wicket:id="scalarValue"></span>	
 			</div>
 		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-compact-entityLink">
+			<div class="scalarValue">
+                <div class="entityLink"
+                     wicket:id="entityLink"
+                >[property or parameter value]</div>
+            </div>
+		</wicket:fragment>
+		
 
 	</wicket:panel>
 </body>

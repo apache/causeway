@@ -42,7 +42,7 @@ public class ScalarTitleBadgePanel<T> extends ScalarPanelTextFieldWithValueSeman
 
     @Override
     protected void setupFormatModifiers(final EnumSet<FormatModifier> modifiers) {
-        modifiers.add(FormatModifier.MARKUP);
+        //modifiers.add(FormatModifier.MARKUP);
     }
 
     @Override
