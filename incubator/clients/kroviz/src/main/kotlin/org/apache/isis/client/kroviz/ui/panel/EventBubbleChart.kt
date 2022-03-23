@@ -19,7 +19,7 @@
 package org.apache.isis.client.kroviz.ui.panel
 
 import io.kvision.chart.*
-import io.kvision.chart.js.LegendItem
+import io.kvision.core.Col
 import io.kvision.core.Color
 import io.kvision.core.CssSize
 import io.kvision.core.UNIT
@@ -37,7 +37,7 @@ fun openLogEntry(i: Int) {
     EventLogDetail(logEntry).open()
 }
 
-class EventBubbleChart() : SimplePanel() {
+class EventBubbleChart : SimplePanel() {
     private val model = SessionManager.getEventStore()
     private val logStart = model.getLogStartMilliSeconds()
     private var chart: Chart
@@ -54,11 +54,20 @@ class EventBubbleChart() : SimplePanel() {
     }
 
     private fun buildConfiguration(): Configuration {
+        fun buildToolTipList(): List<String> {
+            val labelList = mutableListOf<String>()
+            model.log.forEachIndexed { i, it ->
+                val l = it.buildToolTip(i)
+                labelList.add(l)
+            }
+            return labelList
+        }
+
         val dataSetsList = listOf(buildDataSets())
         return Configuration(
             type = ChartType.BUBBLE,
             dataSets = dataSetsList,
-            labels = buildLabels(),
+            labels = buildToolTipList(),
             options = buildChartOptions(dataSetsList)
         )
     }
@@ -77,10 +86,34 @@ class EventBubbleChart() : SimplePanel() {
 
     // https://stackoverflow.com/questions/45249779/chart-js-bubble-chart-changing-dataset-labels
     private fun buildChartOptions(dataSetsList: List<DataSets>): ChartOptions {
+        fun buildLegend(): LegendOptions {
+            fun buildLegendLabelOptions(): LegendLabelOptions {
+                val legendLabelOptions = LegendLabelOptions(
+                    /*           generateLabels = {
+                                   val legendItemList = mutableListOf<LegendItem>()
+                                   val li = obj {
+                                       text = "0 ..4"
+                                   }
+                                   legendItemList.add(li as LegendItem)
+                                   legendItemList as Array<LegendItem>
+                               },*/
+                    color = YELLOW
+                )
+                return legendLabelOptions
+            }
+
+            return LegendOptions(
+                display = true,
+                position = Position.RIGHT,
+                labels = buildLegendLabelOptions(),
+                title = LegendTitleOptions(text = "Parallel Requests", display = true),
+            )
+        }
+
         return ChartOptions(
             plugins = PluginsOptions(
                 title = TitleOptions(
-                    text = listOf<String>("Request Duration over Time by Request Density and Response Size"),
+                    text = listOf<String>("Request Duration over Time by Request Parallelism and Response Size"),
                     display = true
                 ),
                 tooltip = TooltipOptions(
@@ -106,7 +139,51 @@ class EventBubbleChart() : SimplePanel() {
         )
     }
 
-    private fun LogEntry.toLabel(index: Int): String {
+    private fun buildDataSets(): DataSets {
+        fun buildBgColorList(): List<Color> {
+            val bgColorList = mutableListOf<Color>()
+            model.log.forEach {
+                val c = it.calculateBubbleColor()
+                bgColorList.add(c)
+            }
+            return bgColorList
+        }
+
+        fun buildBorderColorList(): List<Color> {
+            val borderColorList = mutableListOf<Color>()
+            model.log.forEach {
+                when {
+                    it.isError() -> borderColorList.add(Color.name(Col.RED))
+                    it.response.contains("httpStatusCode") -> borderColorList.add(Color.name(Col.RED))
+                    else -> borderColorList.add(Color.name(Col.LIGHTGRAY))
+                }
+            }
+            return borderColorList
+        }
+
+        /**
+         * The term DataSets is severely miss leading:
+         * 1. a plural form is used (where actually a singular would be more appropriate) -> "a DataSets"
+         * 2. datasets are used inside datasets, data inside data
+         */
+        fun buildData(): List<DataSets> {
+            val dataSets = mutableListOf<DataSets>()
+            model.log.forEach {
+                dataSets.add(it.buildData())
+            }
+            return dataSets
+        }
+
+        return DataSets(
+//            label = buildLabelList(),
+            backgroundColor = buildBgColorList(),
+            borderColor = buildBorderColorList(),
+            data = buildData()
+        )
+
+    }
+
+    private fun LogEntry.buildToolTip(index: Int): String {
         return this.title +
                 "\nseq.no.: $index" +
                 "\nparallel runs: ${this.runningAtStart}" +
@@ -114,43 +191,9 @@ class EventBubbleChart() : SimplePanel() {
                 "\ntype: ${this.type}"
     }
 
-    private fun buildDataSets(): DataSets {
-        return DataSets(
-            backgroundColor = buildBgColorList(),
-            data = buildData()
-        )
-    }
-
-    /**
-     * The term DataSets is severely miss leading:
-     * 1. a plural form is used (where actually a singular would be more appropriate) -> "a DataSets"
-     */
-    private fun buildData(): List<DataSets> {
-        val dataSets = mutableListOf<DataSets>()
-        model.log.forEach {
-            dataSets.add(it.asData())
-        }
-        return dataSets
-    }
-
-    private fun LogEntry.asData(): dynamic {
-        val relativeStartTimeMs = createdAt.getTime() - logStart
-        val bubbleSize = calculateBubbleSize()
-        val data = obj {
-            x = relativeStartTimeMs
-            y = duration
-            r = bubbleSize
-        }
-        return data
-    }
-
-    private fun buildBgColorList(): List<Color> {
-        val bgColorList = mutableListOf<Color>()
-        model.log.forEach {
-            val c = it.calculateBubbleColor()
-            bgColorList.add(c)
-        }
-        return bgColorList
+    private fun LogEntry.calculateBubbleSize(): Int {
+        val i = responseLength
+        return i.toDouble().pow(1 / 3.toDouble()).toInt()
     }
 
     private fun LogEntry.calculateBubbleColor(): Color {
@@ -166,42 +209,15 @@ class EventBubbleChart() : SimplePanel() {
         }
     }
 
-    private fun LogEntry.calculateBubbleSize(): Int {
-        val i = responseLength
-        return i.toDouble().pow(1 / 3.toDouble()).toInt()
-    }
-
-    private fun buildLabels(): List<String> {
-        val labelList = mutableListOf<String>()
-        model.log.forEachIndexed { i, it ->
-            val l = it.toLabel(i)
-            labelList.add(l)
+    private fun LogEntry.buildData(): dynamic {
+        val relativeStartTimeMs = createdAt.getTime() - logStart
+        val bubbleSize = calculateBubbleSize()
+        val data = obj {
+            x = relativeStartTimeMs
+            y = duration
+            r = bubbleSize
         }
-        return labelList
-    }
-
-    private fun buildLegend(): LegendOptions {
-        return LegendOptions(
-            display = true,
-            position = Position.RIGHT,
-            labels = buildLegendLabelOptions(),
-            title = LegendTitleOptions(text = "Parallel Requests", display = true),
-        )
-    }
-
-    private fun buildLegendLabelOptions(): LegendLabelOptions {
-        val legendLabelOptions = LegendLabelOptions(
- /*           generateLabels = {
-                val legendItemList = mutableListOf<LegendItem>()
-                val li = obj {
-                    text = "0 ..4"
-                }
-                legendItemList.add(li as LegendItem)
-                legendItemList as Array<LegendItem>
-            },*/
-            color = YELLOW
-        )
-        return legendLabelOptions
+        return data
     }
 
     companion object {
