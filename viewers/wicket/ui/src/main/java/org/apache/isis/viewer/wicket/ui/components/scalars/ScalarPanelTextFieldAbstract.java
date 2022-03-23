@@ -30,6 +30,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.validation.validator.StringValidator;
 
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
@@ -101,6 +102,13 @@ extends ScalarPanelFormFieldAbstract<T> {
     }
 
     protected final IModel<T> unwrappedModel() {
+
+        _Assert.assertTrue(scalarModel().getScalarTypeSpec().isAssignableFrom(type), ()->
+            String.format("[%s] cannot possibly unwrap model of type %s into target type %s",
+                    this.getClass().getSimpleName(),
+                    scalarModel().getScalarTypeSpec().getCorrespondingClass(),
+                    type));
+
         return scalarModel().unwrapped(type);
     }
 
@@ -153,7 +161,7 @@ extends ScalarPanelFormFieldAbstract<T> {
         val converter = getConverter(scalarModel());
         return converter!=null
                 ? new ToStringConvertingModel<>(converter)
-                :  _Casts.uncheckedCast(getFormComponent().getModel());
+                : super.obtainOutputFormatModel(); // _Casts.uncheckedCast(getFormComponent().getModel());
     }
 
     protected class ToStringConvertingModel<X> extends Model<String> {

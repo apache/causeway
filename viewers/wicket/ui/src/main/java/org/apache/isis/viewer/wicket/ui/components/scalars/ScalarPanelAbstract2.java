@@ -23,19 +23,18 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.commons.internal.base._Refs;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisBlobOrClobPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices.ValueChoicesSelect2Panel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -108,7 +107,14 @@ extends ScalarPanelAbstract {
      * are required to override and return a non-null value.
      */
     protected IModel<String> obtainOutputFormatModel() {
-        return null;
+        return ()->{
+            val propertyNegotiationModel = (PropertyNegotiationModel)scalarModel().proposedValue();
+            return propertyNegotiationModel.isCurrentValueAbsent().booleanValue()
+                    ? ""
+                    : propertyNegotiationModel
+                        .getValueAsHtml().getValue();
+                        //.getValueAsParsableText().getValue();
+        };
     }
 
     /**
@@ -135,16 +141,18 @@ extends ScalarPanelAbstract {
     // -- HELPER
 
     private void addOnClickBehaviorTo(
-            final MarkupContainer clickReceiver,
+            final @Nullable MarkupContainer clickReceiver,
             final InlinePromptConfig inlinePromptConfig) {
+
+        if(clickReceiver==null) return;
+
         val scalarModel = scalarModel();
 
         // start off assuming that neither the property nor any of the associated actions
         // are using inline prompts
         val componentToHideRef = _Refs.<Component>objectRef(clickReceiver);
 
-        if (scalarModel.getPromptStyle().isInline()
-                && scalarModel.canEnterEditMode()) {
+        if (_Util.canPropertyEnterInlineEditDirectly(scalarModel)) {
 
             // we configure the prompt link if _this_ property is configured for inline edits...
             Wkt.behaviorAddOnClick(clickReceiver, this::onPropertyInlineEditClick);
@@ -152,16 +160,7 @@ extends ScalarPanelAbstract {
 
         } else {
 
-            val inlineActionIfAny =
-                    scalarModel.getAssociatedActions().getFirstAssociatedWithInlineAsIfEdit();
-
-            // not editable property, but maybe one of the actions is.
-            inlineActionIfAny
-            .map(LinkAndLabelFactory.forPropertyOrParameter(scalarModel))
-            .map(LinkAndLabel::getUiComponent)
-            .map(ActionLink.class::cast)
-            .filter(ActionLink::isVisible)
-            .filter(ActionLink::isEnabled)
+            _Util.lookupPropertyActionForInlineEdit(scalarModel)
             .ifPresent(actionLinkInlineAsIfEdit->{
                 Wkt.behaviorAddOnClick(clickReceiver, actionLinkInlineAsIfEdit::onClick);
                 componentToHideRef.setValue(inlinePromptConfig.getComponentToHide().orElse(null));

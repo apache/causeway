@@ -420,27 +420,47 @@ public class Wkt {
     // -- FRAGMENT
 
     /**
-     * @param container - The component whose markup contains the fragment's markup
      * @param id - The component id
      * @param fragmentId - The id of the associated markup fragment
+     * @param markupProvider - The component whose markup contains the fragment's markup
      */
-    public Fragment fragmentAdd(final MarkupContainer container, final String id, final String fragmentId) {
-        return new Fragment(id, fragmentId, container);
+    public Fragment fragment(final String id, final String fragmentId, final MarkupContainer markupProvider) {
+        return new Fragment(id, fragmentId, markupProvider);
     }
 
     /**
-     * @param container - The component whose markup contains the fragment's markup
      * @param id - The component id
      * @param fragmentId - The id of the associated markup fragment
+     * @param markupProvider - The component whose markup contains the fragment's markup
      */
-    public Fragment fragmentAddNoTab(final MarkupContainer container, final String id, final String fragmentId) {
-        return new Fragment(id, fragmentId, container) {
+    public Fragment fragmentNoTab(final String id, final String fragmentId, final MarkupContainer markupProvider) {
+        return new Fragment(id, fragmentId, markupProvider) {
             private static final long serialVersionUID = 1L;
             @Override protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);
-                tag.put("tabindex", "-1");
-            }
-        };
+                tag.put("tabindex", "-1");}};
+    }
+
+    /**
+     * @param container - The component to add the fragment to
+     * @param id - The component id
+     * @param fragmentId - The id of the associated markup fragment
+     * @param markupProvider - The component whose markup contains the fragment's markup
+     */
+    public Fragment fragmentAdd(final MarkupContainer container,
+            final String id, final String fragmentId, final MarkupContainer markupProvider) {
+        return add(container, fragment(id, fragmentId, markupProvider));
+    }
+
+    /**
+     * @param container - The component to add the fragment to
+     * @param id - The component id
+     * @param fragmentId - The id of the associated markup fragment
+     * @param markupProvider - The component whose markup contains the fragment's markup
+     */
+    public Fragment fragmentAddNoTab(final MarkupContainer container,
+            final String id, final String fragmentId, final MarkupContainer markupProvider) {
+        return add(container, fragmentNoTab(id, fragmentId, markupProvider));
     }
 
     // -- IMAGE

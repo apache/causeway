@@ -31,7 +31,11 @@
 				<label wicket:id="scalarName"
 					class="scalarName col-form-label">[Label text]</label> 
 				<span class="scalarValueWrapper">
+				
 					<div class="scalarPlaceholder">
+					
+						<label wicket:id="debugLabel" style="font-size: x-small; color: burlywood;">[Debug text]</label>
+					
 						<span class="scalarValueInput"> 
 							<span class="editing">
 
@@ -39,15 +43,19 @@
 									href="##" name="scalarValueInlinePromptLink"
 									class="scalarValueInlinePromptLink">
 									
+									<span style="color: blue;">λ</span>
 									<!-- output format --> 
 									<wicket:container 
 										wicket:id="container-scalarValue-outputFormat"/> 
 										 
 								</a> 
 							
-								<!-- input format (when editing or action dialog) -->
-								<wicket:container 
+								<!-- input format (when editing or action dialog or read-only) -->
+								<div>
+									<span style="color: purple;">α</span>
+									<wicket:container 
 										wicket:id="container-scalarValue-inputFormat" />
+								</div>
 								
 								<a wicket:id="editProperty"
 									href="##" class="edit btn btn-sm btn-link"> 
@@ -133,12 +141,18 @@
 		<!-- COMPACT FRAGMENTS -->
 		
 		<wicket:fragment wicket:id="fragment-compact-checkbox">
-			<input wicket:id="scalarIfCompact" type="checkbox"
+			<input wicket:id="scalarValue" type="checkbox"
 				class="form-control" />
 		</wicket:fragment>
 
 		<wicket:fragment wicket:id="fragment-compact-label">
-			<span wicket:id="scalarIfCompact"/>
+			<span wicket:id="scalarValue"/>
+		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-compact-badge">
+			<div class="badge bg-info">
+				<span wicket:id="scalarValue"></span>	
+			</div>
 		</wicket:fragment>
 
 	</wicket:panel>

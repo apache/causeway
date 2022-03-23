@@ -30,6 +30,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -71,6 +72,18 @@ public class ScalarFragmentFactory {
         public <T extends Component> T createComponent(final Function<String, T> factory) {
             return factory.apply(containerId);
         }
+        public void permanentlyHideIn(final MarkupContainer container) {
+            container.streamChildren()
+            .filter(comp->containerId.equals(comp.getId()))
+            .findFirst()
+            .ifPresentOrElse(comp->{
+                comp.setVisibilityAllowed(false);
+                comp.setVisible(false);
+            },
+            ()->{
+                WktComponents.permanentlyHide(container, containerId);
+            });
+        }
     }
 
     // -- OUTPUT FRAGMENTS
@@ -80,11 +93,14 @@ public class ScalarFragmentFactory {
     public static enum CompactFragment {
         CHECKBOX("fragment-compact-checkbox"),
         LABEL("fragment-compact-label"),
+        BADGE("fragment-compact-badge"),
         ;
         private final String fragmentId;
-        public Fragment createFragment(final MarkupContainer container) {
-            return Wkt.fragmentAdd(
-                    container, FrameFragment.COMPACT.getContainerId(), fragmentId);
+        /**
+         * @param markupProvider - The component whose markup contains the fragment's markup
+         */
+        public Fragment createFragment(final MarkupContainer markupProvider) {
+            return Wkt.fragment(FrameFragment.COMPACT.getContainerId(), fragmentId, markupProvider);
         }
     }
 
@@ -99,9 +115,12 @@ public class ScalarFragmentFactory {
         FILE("fragment-input-file"),
         ;
         private final String fragmentId;
-        public Fragment createFragment(final MarkupContainer container, final FormComponent<?> inputComponent) {
-            val fragment = Wkt.fragmentAdd(
-                    container, RegularFrame.INPUT_FORMAT_CONTAINER.getContainerId(), fragmentId);
+        /**
+         * @param markupProvider - The component whose markup contains the fragment's markup
+         */
+        public Fragment createFragment(final MarkupContainer markupProvider, final FormComponent<?> inputComponent) {
+            val fragment = Wkt.fragment(
+                    RegularFrame.INPUT_FORMAT_CONTAINER.getContainerId(), fragmentId, markupProvider);
             fragment.add(inputComponent);
             return fragment;
         }
@@ -119,11 +138,14 @@ public class ScalarFragmentFactory {
         private final String fragmentId;
         private final Function<IModel<String>, Component> componentFactory;
 
-        public Fragment createFragment(final MarkupContainer container,
+        /**
+         * @param markupProvider - The component whose markup contains the fragment's markup
+         */
+        public Fragment createFragment(final MarkupContainer markupProvider,
                 final IModel<String> promptLabelModel,
                 final @Nullable Consumer<FormComponent<String>> onComponentCreated) {
-            val fragment = Wkt.fragmentAdd(
-                    container, RegularFrame.OUTPUT_FORMAT_CONTAINER.getContainerId(), fragmentId);
+            val fragment = Wkt.fragment(
+                    RegularFrame.OUTPUT_FORMAT_CONTAINER.getContainerId(), fragmentId, markupProvider);
             val component = componentFactory.apply(promptLabelModel);
             fragment.add(component);
             if(onComponentCreated!=null

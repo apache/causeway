@@ -108,6 +108,47 @@ implements ScalarModelSubscriber {
         NOTHING
     }
 
+    public enum RenderScenario {
+        /**
+         * Is viewing and cannot edit.
+         * But there might be associated actions with dialog feature inline-as-if-edit.
+         */
+        READONLY,
+        /**
+         * Is viewing and can edit.
+         */
+        CAN_EDIT,
+        CAN_EDIT_INLINE,
+        CAN_EDIT_INLINE_VIA_ACTION,
+        /**
+         * Is editing (either prompt form or other dialog).
+         */
+        EDITING;
+
+        public boolean isReadonly() { return this==READONLY;}
+        public boolean isCanEdit() { return this==CAN_EDIT;}
+        public boolean isEditing() { return this==EDITING;}
+
+        static RenderScenario inferFrom(final ScalarPanelAbstract scalarPanel) {
+            val scalarModel = scalarPanel.scalarModel();
+            if(!scalarModel.getRenderingHint().isRegular()) {
+                return READONLY;
+            }
+            if(scalarModel.isEditMode()) {
+                return EDITING;
+            }
+            if(_Util.canPropertyEnterInlineEditDirectly(scalarModel)) {
+                return CAN_EDIT_INLINE;
+            }
+            if(_Util.lookupPropertyActionForInlineEdit(scalarModel).isPresent()) {
+                return CAN_EDIT_INLINE_VIA_ACTION;
+            }
+            return scalarModel.isEnabled()
+                    ? CAN_EDIT
+                    : READONLY;
+        }
+    }
+
     @RequiredArgsConstructor
     public static class InlinePromptConfig {
         @Getter private final boolean supported;
@@ -179,6 +220,11 @@ implements ScalarModelSubscriber {
     private WebMarkupContainer scalarFrameContainer;
     protected final WebMarkupContainer getScalarFrameContainer() { return scalarFrameContainer; }
 
+    // -- RENDER SCENARIO
+
+    @Getter(AccessLevel.PROTECTED)
+    private final RenderScenario renderScenario;
+
     // -- CONSTRUCTION
 
     protected ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
@@ -189,6 +235,7 @@ implements ScalarModelSubscriber {
         setupFormatModifiers(formatModifiers);
 
         this.formatModifiers = ImmutableEnumSet.from(formatModifiers);
+        this.renderScenario = RenderScenario.inferFrom(this);
     }
 
     // -- INIT

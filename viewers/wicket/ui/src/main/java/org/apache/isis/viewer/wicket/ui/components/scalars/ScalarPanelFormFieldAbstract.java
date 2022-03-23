@@ -31,7 +31,6 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -103,6 +102,53 @@ extends ScalarPanelAbstract2 {
 
         formComponent.add(createValidator(scalarModel));
 
+        val renderScenario = getRenderScenario();
+
+        Wkt.labelAdd(formGroup, "debugLabel", String.format("%s", renderScenario.name()));
+
+//        switch (renderScenario) {
+//        case READONLY:
+//            // setup as output-format (no links)
+//            // that is: disable links - place output-format into RegularFrame.INPUT_FORMAT_CONTAINER
+//            formGroup.add(RegularFrame.INPUT_FORMAT_CONTAINER
+//                    .createComponent(this::createComponentForOutput));
+//
+//            //RegularFrame.SCALAR_VALUE_INLINE_PROMPT_LINK.permanentlyHideIn(formGroup);
+//
+//            break;
+//        case CAN_EDIT:
+//            // setup as output-format (with links to edit)
+//            // that is: enable links - place output-format into RegularFrame.OUTPUT_FORMAT_CONTAINER
+//            // this is done by the inline prompt setup later
+//            // hide formgr comp
+//            //formComponent.setVisibilityAllowed(false);
+//            RegularFrame.INPUT_FORMAT_CONTAINER.permanentlyHideIn(formGroup);
+//
+//            break;
+//        case EDITING:
+//            // setup as input-format
+//            // that is: disable links - place input-format into RegularFrame.INPUT_FORMAT_CONTAINER
+//            getInputFragmentType()
+//                .ifPresent(inputFragmentType->
+//                    formGroup.add(inputFragmentType.createFragment(this, formComponent)));
+//            break;
+//
+//        default:
+//            break;
+//        }
+
+        if(scalarModel().isViewMode()
+                //TODO remove this non intuitive logic
+                && getFormatModifiers().contains(FormatModifier.MARKUP)) {
+            //setRegularFrame(formGroup);
+            formGroup.add(RegularFrame.INPUT_FORMAT_CONTAINER
+                    .createComponent(this::createComponentForOutput));
+        } else {
+            getInputFragmentType()
+            .ifPresent(inputFragmentType->
+                formGroup.add(inputFragmentType.createFragment(this, formComponent)));
+        }
+
         onFormGroupCreated(formGroup);
 
         return formGroup;
@@ -117,26 +163,18 @@ extends ScalarPanelAbstract2 {
     }
 
     /**
-     * Builds the component to render the model when in COMPACT format.
+     * Builds the component to render the model when in COMPACT frame,
+     * or when in REGULAR frame rendering the OUTPUT-FORMAT.
      * <p>
      * The (textual) default implementation uses a {@link Label}.
      * However, it may be overridden if required.
      */
     protected Component createComponentForOutput(final String id) {
-
         return Wkt.labelAdd(
                 CompactFragment.LABEL.createFragment(this),
                 id,
-                ()->{
-                    val propertyNegotiationModel = (PropertyNegotiationModel)scalarModel().proposedValue();
-                    return propertyNegotiationModel.isCurrentValueAbsent().booleanValue()
-                            ? ""
-                            : propertyNegotiationModel
-                                .getValueAsHtml().getValue();
-                                //.getValueAsParsableText().getValue();
-                });
+                obtainOutputFormatModel());
     }
-
 
     // -- HOOKS
 
@@ -144,18 +182,10 @@ extends ScalarPanelAbstract2 {
         return Optional.empty();
     }
 
-    protected void onFormGroupCreated(final FormGroup formGroup) {
-        if(scalarModel().isViewMode()
-                //TODO remove this non intuitive logic
-                && getFormatModifiers().contains(FormatModifier.MARKUP)) {
-            formGroup.add(RegularFrame.INPUT_FORMAT_CONTAINER
-                    .createComponent(this::createComponentForOutput));
-            return;
-        }
-        getInputFragmentType()
-            .ifPresent(inputFragmentType->
-                formGroup.add(inputFragmentType.createFragment(this, getFormComponent())));
-    }
+    /**
+     * Optional hook, to eg. add additional components (like Blob which adds preview image)
+     */
+    protected void onFormGroupCreated(final FormGroup formGroup) {};
 
     protected IValidator<Object> createValidator(final ScalarModel scalarModel) {
         return new IValidator<Object>() {
@@ -261,5 +291,7 @@ extends ScalarPanelAbstract2 {
         WktTooltips.clearTooltip(getFormComponent());
         WktTooltips.clearTooltip(inlinePromptLink);
     }
+
+
 
 }
