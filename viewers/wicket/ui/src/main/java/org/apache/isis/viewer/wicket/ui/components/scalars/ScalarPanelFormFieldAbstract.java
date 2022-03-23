@@ -151,44 +151,7 @@ extends ScalarPanelAbstract2 {
 
         Wkt.labelAdd(fieldFrame, "debugLabel", String.format("%s", renderScenario.name()));
 
-//        switch (renderScenario) {
-//        case READONLY:
-//            // setup as output-format (no links)
-//            // that is: disable links - place output-format into RegularFrame.INPUT_FORMAT_CONTAINER
-//            formGroup.add(RegularFrame.INPUT_FORMAT_CONTAINER
-//                    .createComponent(this::createComponentForOutput));
-//
-//            //RegularFrame.SCALAR_VALUE_INLINE_PROMPT_LINK.permanentlyHideIn(formGroup);
-//
-//            break;
-//        case CAN_EDIT:
-//            // setup as output-format (with links to edit)
-//            // that is: enable links - place output-format into RegularFrame.OUTPUT_FORMAT_CONTAINER
-//            // this is done by the inline prompt setup later
-//            // hide formgr comp
-//            //formComponent.setVisibilityAllowed(false);
-//            RegularFrame.INPUT_FORMAT_CONTAINER.permanentlyHideIn(formGroup);
-//
-//            break;
-//        case EDITING:
-//            // setup as input-format
-//            // that is: disable links - place input-format into RegularFrame.INPUT_FORMAT_CONTAINER
-//            getInputFragmentType()
-//                .ifPresent(inputFragmentType->
-//                    formGroup.add(inputFragmentType.createFragment(this, formComponent)));
-//            break;
-//
-//        default:
-//            break;
-//        }
-
-        if(scalarModel().isViewMode()
-                //TODO remove this non intuitive logic
-                && getFormatModifiers().contains(FormatModifier.MARKUP)) {
-
-            //TODO we set the INPUT SLOT, but when links are used,
-            // instead the OUTPUT SLOT becomes visible
-
+        if(renderScenario.isReadonly()) {
             fieldFrame.add(FieldFrame.SCALAR_VALUE_CONTAINER
                     .createComponent(this::createComponentForOutput));
         } else {

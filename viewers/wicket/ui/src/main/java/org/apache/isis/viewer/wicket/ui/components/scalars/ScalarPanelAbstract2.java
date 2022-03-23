@@ -113,6 +113,8 @@ extends ScalarPanelAbstract {
             }
             val link = (MarkupContainer)FieldFrame.SCALAR_VALUE_INLINE_PROMPT_LINK
                     .addComponentIfMissing(regularFrame, WebMarkupContainer::new);
+//            FieldFrame.SCALAR_VALUE_CONTAINER
+//                .addComponentIfMissing(link, id->Wkt.label(id, "∅"));
             FieldFrame.OUTPUT_FORMAT_CONTAINER
                 .addComponentIfMissing(link, id->Wkt.label(id, "∅"));
             FieldFrame.INPUT_FORMAT_CONTAINER

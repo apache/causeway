@@ -127,9 +127,11 @@ public class ScalarFragmentFactory {
     /** Can be used for both CompactFrame and RegularFrame. */
     @RequiredArgsConstructor
     public static enum CompactFragment {
-        CHECKBOX("fragment-compact-checkbox"),
         LABEL("fragment-compact-label"),
         BADGE("fragment-compact-badge"),
+        CHECKBOX_YES("fragment-compact-checkboxYes"),
+        CHECKBOX_NO("fragment-compact-checkboxNo"),
+        CHECKBOX_INTERMEDIATE("fragment-compact-checkboxIntermediate"),
         ;
         private final String fragmentId;
         /**
@@ -142,6 +144,19 @@ public class ScalarFragmentFactory {
             val fragment = Wkt.fragment(id, fragmentId, markupProvider);
             fragment.add(componentFactory.apply(ScalarPanelAbstract.ID_SCALAR_VALUE));
             return fragment;
+        }
+        /**
+         * @param id - Where to 'put' the fragment
+         * @param markupProvider - The component whose markup contains the fragment's markup
+         */
+        public static Fragment
+        createCheckboxFragment(final String id, final MarkupContainer markupProvider, final Boolean value) {
+            final CompactFragment chkFragment = value==null
+                    ? CHECKBOX_INTERMEDIATE
+                    : value
+                        ? CHECKBOX_YES
+                        : CHECKBOX_NO;
+            return Wkt.fragment(id, chkFragment.fragmentId, markupProvider);
         }
     }
 
@@ -175,6 +190,9 @@ public class ScalarFragmentFactory {
             Wkt.label(ScalarPanelAbstract.ID_SCALAR_VALUE, promptLabelModel)),
         TEXTAREA("fragment-prompt-textarea", promptLabelModel->
             Wkt.textAreaNoTab(ScalarPanelAbstract.ID_SCALAR_VALUE, promptLabelModel)),
+        CHECKBOX_YES("fragment-prompt-checkboxYes", null),
+        CHECKBOX_NO("fragment-prompt-checkboxNo", null),
+        CHECKBOX_INTERMEDIATE("fragment-prompt-checkboxIntermediate", null),
         ;
         private final String fragmentId;
         private final Function<IModel<String>, Component> componentFactory;
@@ -194,6 +212,19 @@ public class ScalarFragmentFactory {
                 onComponentCreated.accept(_Casts.uncheckedCast(component));
             }
             return fragment;
+        }
+        /**
+         * @param id - Where to 'put' the fragment
+         * @param markupProvider - The component whose markup contains the fragment's markup
+         */
+        public static Fragment
+        createCheckboxFragment(final String id, final MarkupContainer markupProvider, final Boolean value) {
+            final PromptFragment chkFragment = value==null
+                    ? CHECKBOX_INTERMEDIATE
+                    : value
+                        ? CHECKBOX_YES
+                        : CHECKBOX_NO;
+            return Wkt.fragment(id, chkFragment.fragmentId, markupProvider);
         }
     }
 

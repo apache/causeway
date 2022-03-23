@@ -100,6 +100,7 @@ implements ScalarModelSubscriber {
     }
 
     public enum RenderScenario {
+        COMPACT,
         /**
          * Is viewing and cannot edit.
          * But there might be associated actions with dialog feature inline-as-if-edit.
@@ -116,6 +117,7 @@ implements ScalarModelSubscriber {
          */
         EDITING;
 
+        public boolean isCompact() { return this==COMPACT;}
         public boolean isReadonly() { return this==READONLY;}
         public boolean isCanEdit() { return this==CAN_EDIT;}
         public boolean isEditing() { return this==EDITING;}
@@ -123,7 +125,7 @@ implements ScalarModelSubscriber {
         static RenderScenario inferFrom(final ScalarPanelAbstract scalarPanel) {
             val scalarModel = scalarPanel.scalarModel();
             if(!scalarModel.getRenderingHint().isRegular()) {
-                return READONLY;
+                return COMPACT;
             }
             if(scalarModel.isEditMode()) {
                 return EDITING;

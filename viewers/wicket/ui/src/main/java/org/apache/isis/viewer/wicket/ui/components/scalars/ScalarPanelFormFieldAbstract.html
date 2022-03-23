@@ -151,12 +151,37 @@
 			<textarea wicket:id="scalarValue"
 				class="form-control form-control-sm scalarPrompt" readonly="true"/>
 		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-prompt-checkboxYes">
+			<label class="fs-4" style="color: green;"><i
+				class="fa-regular fa-check-square"></i></label>
+		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-prompt-checkboxNo">
+			<label class="fs-4"><i
+				class="fa-regular fa-square"></i></label>
+		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-prompt-checkboxIntermediate">
+			<label class="fs-4" style="color: silver;"><i
+				class="fa-regular fa-square-minus"></i></label>
+		</wicket:fragment>
 
 		<!-- COMPACT FRAGMENTS -->
 		
-		<wicket:fragment wicket:id="fragment-compact-checkbox">
-			<input wicket:id="scalarValue" type="checkbox"
-				class="form-control" />
+		<wicket:fragment wicket:id="fragment-compact-checkboxYes">
+			<label class="fs-5" style="color: green;"><i
+				class="fa-regular fa-check-square"></i></label>
+		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-compact-checkboxNo">
+			<label class="fs-5"><i
+				class="fa-regular fa-square"></i></label>
+		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-compact-checkboxIntermediate">
+			<label class="fs-5" style="color: silver;"><i
+				class="fa-regular fa-square-minus"></i></label>
 		</wicket:fragment>
 
 		<wicket:fragment wicket:id="fragment-compact-label">
