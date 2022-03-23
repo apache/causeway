@@ -121,6 +121,9 @@ implements ScalarModelSubscriber {
         public boolean isReadonly() { return this==READONLY;}
         public boolean isCanEdit() { return this==CAN_EDIT;}
         public boolean isEditing() { return this==EDITING;}
+        public boolean isCanEditAny() { return this==CAN_EDIT
+                ||this==CAN_EDIT_INLINE
+                ||this==CAN_EDIT_INLINE_VIA_ACTION; }
 
         static RenderScenario inferFrom(final ScalarPanelAbstract scalarPanel) {
             val scalarModel = scalarPanel.scalarModel();
@@ -140,6 +143,7 @@ implements ScalarModelSubscriber {
                     ? CAN_EDIT
                     : READONLY;
         }
+
     }
 
     // -- CONSTRUCTION

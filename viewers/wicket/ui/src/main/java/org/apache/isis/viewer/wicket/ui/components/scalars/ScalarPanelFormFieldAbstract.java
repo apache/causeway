@@ -23,7 +23,6 @@ import java.util.Optional;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
@@ -37,7 +36,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragement;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
@@ -154,6 +152,12 @@ extends ScalarPanelAbstract2 {
         if(renderScenario.isReadonly()) {
             fieldFrame.add(FieldFrame.SCALAR_VALUE_CONTAINER
                     .createComponent(this::createComponentForOutput));
+        } else if(renderScenario.isCanEditAny()) {
+
+            //FieldFrame.SCALAR_VALUE_INLINE_PROMPT_LINK;
+
+
+
         } else {
             getInputFragmentType()
             .ifPresent(inputFragmentType->
@@ -171,18 +175,6 @@ extends ScalarPanelAbstract2 {
     protected final Component createCompactFrame() {
         return FrameFragment.COMPACT
                 .createComponent(this::createComponentForOutput);
-    }
-
-    /**
-     * Builds the component to render the model when in COMPACT frame,
-     * or when in REGULAR frame rendering the OUTPUT-FORMAT.
-     * <p>
-     * The (textual) default implementation uses a {@link Label}.
-     * However, it may be overridden if required.
-     */
-    protected Component createComponentForOutput(final String id) {
-        return CompactFragment.LABEL.createFragment(id, this, scalarValueId->
-            Wkt.label(scalarValueId, obtainOutputFormatModel()));
     }
 
     // -- HOOKS

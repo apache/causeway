@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 import java.util.Locale;
 import java.util.Optional;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -40,7 +39,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.PromptFragment;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
@@ -137,21 +135,6 @@ extends ScalarPanelFormFieldAbstract<T> {
                  * For TextArea, however, this instead appears on the TextArea itself.
                  */
                 : null;
-    }
-
-    /**
-     * Overrides default to use a fragment, allowing the inner rendering to switch between a simple span
-     * or a text-area.
-     */
-    @Override
-    protected final Component createInlinePromptComponent(
-            final String id,
-            final IModel<String> inlinePromptLabelModel) {
-        if(getFormatModifiers().contains(FormatModifier.MULITLINE)) {
-            return PromptFragment.TEXTAREA
-                    .createFragment(this, inlinePromptLabelModel, this::setFormComponentAttributes);
-        }
-        return PromptFragment.LABEL.createFragment(this, inlinePromptLabelModel, null);
     }
 
     // -- CONVERSION

@@ -22,6 +22,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
@@ -37,6 +38,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.components.propertyheader.PropertyEditPromptHeaderPanel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
@@ -125,6 +127,23 @@ extends ScalarPanelAbstract {
     }
 
     /**
+     * Builds the component to render the model when in COMPACT frame,
+     * or when in REGULAR frame rendering the OUTPUT-FORMAT.
+     * <p>
+     * The (textual) default implementation uses a {@link Label}.
+     * However, it may be overridden if required.
+     */
+    protected Component createComponentForOutput(final String id) {
+//        if(getFormatModifiers().contains(FormatModifier.MULITLINE)) {
+//            return PromptFragment.TEXTAREA
+//                    .createFragment(this, obtainOutputFormatModel(), this::setFormComponentAttributes);
+//        }
+        return CompactFragment.LABEL
+                    .createFragment(id, this, scalarValueId->
+                        Wkt.label(scalarValueId, obtainOutputFormatModel()));
+    }
+
+    /**
      * Model for any non editing scenario.
      */
     protected IModel<String> obtainOutputFormatModel() {
@@ -152,11 +171,6 @@ extends ScalarPanelAbstract {
 
     protected String obtainInlinePromptLinkCssIfAny() {
         return "form-control form-control-sm";
-    }
-
-    protected Component createInlinePromptComponent(
-            final String id, final IModel<String> inlinePromptModel) {
-        return Wkt.labelNoTab(id, inlinePromptModel);
     }
 
     // -- HELPER
@@ -224,12 +238,6 @@ extends ScalarPanelAbstract {
     }
 
     private WebMarkupContainer createInlinePromptLink() {
-        final IModel<String> inlinePromptModel = obtainOutputFormatModel();
-        if(inlinePromptModel == null) {
-            throw new IllegalStateException(this.getClass().getName()
-                    + ": obtainOutputFormatModel() returning null is not compatible "
-                    + "with supportsInlinePrompt() returning true ");
-        }
 
         final WebMarkupContainer inlinePromptLink =
                 FieldFrame.SCALAR_VALUE_INLINE_PROMPT_LINK
@@ -241,7 +249,7 @@ extends ScalarPanelAbstract {
         configureInlinePromptLink(inlinePromptLink);
 
         final Component editInlineLinkLabel = FieldFrame.SCALAR_VALUE_CONTAINER
-                .createComponent(id->createInlinePromptComponent(id, inlinePromptModel));
+                .createComponent(id->createComponentForOutput(id));
 
         inlinePromptLink.add(editInlineLinkLabel);
 
