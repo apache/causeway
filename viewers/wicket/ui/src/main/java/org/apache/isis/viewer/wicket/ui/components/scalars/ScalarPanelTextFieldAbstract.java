@@ -144,7 +144,7 @@ extends ScalarPanelFormFieldAbstract<T> {
         val converter = getConverter(scalarModel());
         return converter!=null
                 ? new ToStringConvertingModel<>(converter)
-                : super.obtainOutputFormatModel(); // _Casts.uncheckedCast(getFormComponent().getModel());
+                : super.obtainOutputFormatModel();
     }
 
     protected class ToStringConvertingModel<X> extends Model<String> {
@@ -198,7 +198,7 @@ extends ScalarPanelFormFieldAbstract<T> {
                 .orElse(null);
     }
 
-    private void setFormComponentAttributes(final FormComponent<?> formComponent) {
+    void setFormComponentAttributes(final FormComponent<?> formComponent) {
 
         val scalarModel = scalarModel();
 

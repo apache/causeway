@@ -40,6 +40,7 @@ import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.components.propertyheader.PropertyEditPromptHeaderPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.PromptFragment;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
@@ -134,10 +135,17 @@ extends ScalarPanelAbstract {
      * However, it may be overridden if required.
      */
     protected Component createComponentForOutput(final String id) {
-//        if(getFormatModifiers().contains(FormatModifier.MULITLINE)) {
-//            return PromptFragment.TEXTAREA
-//                    .createFragment(this, obtainOutputFormatModel(), this::setFormComponentAttributes);
-//        }
+        if(getFormatModifiers().contains(FormatModifier.MULITLINE)
+                &&!getFormatModifiers().contains(FormatModifier.MARKUP)) {
+            return PromptFragment.TEXTAREA
+                    .createFragment(id, this, scalarValueId->{
+                        val textArea = Wkt.textAreaNoTab(scalarValueId, obtainOutputFormatModel());
+                        if(this instanceof ScalarPanelTextFieldAbstract) {
+                            ((ScalarPanelTextFieldAbstract)this).setFormComponentAttributes(textArea);
+                        }
+                        return textArea;
+                    });
+        }
         return CompactFragment.LABEL
                     .createFragment(id, this, scalarValueId->
                         Wkt.label(scalarValueId, obtainOutputFormatModel()));
