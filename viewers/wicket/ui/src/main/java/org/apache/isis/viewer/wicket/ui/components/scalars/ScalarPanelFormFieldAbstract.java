@@ -140,7 +140,10 @@ extends ScalarPanelAbstract2 {
         if(scalarModel().isViewMode()
                 //TODO remove this non intuitive logic
                 && getFormatModifiers().contains(FormatModifier.MARKUP)) {
-            //setRegularFrame(formGroup);
+
+            //TODO we set the INPUT SLOT, but when links are used,
+            // instead the OUTPUT SLOT becomes visible
+
             formGroup.add(RegularFrame.INPUT_FORMAT_CONTAINER
                     .createComponent(this::createComponentForOutput));
         } else {

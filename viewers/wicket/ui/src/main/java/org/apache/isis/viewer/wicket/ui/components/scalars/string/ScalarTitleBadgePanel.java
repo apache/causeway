@@ -29,12 +29,14 @@ import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 /**
  * Panel for rendering titles for scalars of any type.
+ * <p>
+ * Most prominently this is used for {@link Enum} values.
  */
-public class ScalarTitlePanel<T> extends ScalarPanelTextFieldWithValueSemantics<T> {
+public class ScalarTitleBadgePanel<T> extends ScalarPanelTextFieldWithValueSemantics<T> {
 
     private static final long serialVersionUID = 1L;
 
-    public ScalarTitlePanel(final String id, final ScalarModel scalarModel, final Class<T> type) {
+    public ScalarTitleBadgePanel(final String id, final ScalarModel scalarModel, final Class<T> type) {
         super(id, scalarModel, type);
     }
 

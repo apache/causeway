@@ -72,23 +72,21 @@ public class ScalarFragmentFactory {
         public <T extends Component> T createComponent(final Function<String, T> factory) {
             return factory.apply(containerId);
         }
+        @Deprecated
         public void permanentlyHideIn(final MarkupContainer container) {
-            container.streamChildren()
-            .filter(comp->containerId.equals(comp.getId()))
-            .findFirst()
-            .ifPresentOrElse(comp->{
-                comp.setVisibilityAllowed(false);
-                comp.setVisible(false);
-            },
-            ()->{
+            val toHide = container.get(containerId);
+            if (toHide != null) {
+                toHide.setVisibilityAllowed(false);
+                toHide.setVisible(false);
+            } else {
                 WktComponents.permanentlyHide(container, containerId);
-            });
+            }
         }
     }
 
-    // -- OUTPUT FRAGMENTS
+    // -- OUTPUT/COMPACT FRAGMENTS
 
-    //TODO CompactFragment and OutputFragment should be unified
+    /** Can be used for both CompactFrame and RegularFrame. */
     @RequiredArgsConstructor
     public static enum CompactFragment {
         CHECKBOX("fragment-compact-checkbox"),
