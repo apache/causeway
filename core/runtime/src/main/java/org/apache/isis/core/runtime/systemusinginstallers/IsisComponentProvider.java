@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.runtime.systemusinginstallers;
 
+import java.lang.annotation.Annotation;
+import java.lang.annotation.Inherited;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +38,9 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
+import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.vfs.Vfs;
 
 import org.apache.isis.applib.AppManifest;
@@ -117,6 +121,20 @@ public abstract class IsisComponentProvider {
         this.authorizationManager = authorizationManager;
     }
 
+    public class IsisReflections extends Reflections{
+
+        public IsisReflections(Object... params) {
+            super(params);
+        }
+
+        public Set<Class<?>> getTypesAnnotatedWith(String... annotations) {
+            Iterable<String> annotated = store.get(TypeAnnotationsScanner.class.getSimpleName(), annotations);
+            Iterable<String> classes = getAllAnnotated(annotated, false, false);
+            return Sets.newHashSet(Iterables.concat(ReflectionUtils.forNames(annotated, configuration.getClassLoaders()),
+                    ReflectionUtils.forNames(classes, configuration.getClassLoaders())));
+        }
+    }
+
     public AppManifest getAppManifest() {
         return appManifest;
     }
@@ -148,12 +166,17 @@ public abstract class IsisComponentProvider {
 
         Vfs.setDefaultURLTypes(ClassDiscoveryServiceUsingReflections.getUrlTypes());
 
-        final Reflections reflections = new Reflections(moduleAndFrameworkPackages);
+        final IsisReflections reflections = new IsisReflections(moduleAndFrameworkPackages);
 
         final Set<Class<?>> domainServiceTypes = Sets.newLinkedHashSet();
         domainServiceTypes.addAll(reflections.getTypesAnnotatedWith(DomainService.class));
 
         domainServiceTypes.addAll(reflections.getTypesAnnotatedWith(DomainServiceLayout.class));
+
+        domainServiceTypes.addAll(reflections.getTypesAnnotatedWith(
+                "org.springframework.stereotype.Component",
+                "org.springframework.stereotype.Repository",
+                "org.springframework.stereotype.Service"));
 
 
         final Set<Class<?>> persistenceCapableTypes = Sets.newLinkedHashSet();
