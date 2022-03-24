@@ -1032,10 +1032,15 @@ li.select2-results__option {
     width: 85%;
 }
 
-a.form-control.scalarValueInlinePromptLink {
+div.scalarValueInlinePromptLink.form-control {
     text-decoration: none;
     overflow: hidden;
 }
+div.scalarValueInlinePromptLink.form-control:hover {
+	cursor: pointer;
+	background-color: rgba(0, 0, 0, 0.08);
+}
+
 
 .booleanPanel div.label-left .scalarValueWrapper .form-control.scalarValueInlinePromptLink,
 .referencePanel div.label-left .scalarValueWrapper .form-control.scalarValueInlinePromptLink {
@@ -1047,7 +1052,8 @@ a.form-control.scalarValueInlinePromptLink {
 }
 
 .referencePanel .inlinePrompt .entityIconAndTitlePanel .entityImage {
-    margin-right: 10px;
+    width: 1.3em;
+	height: 1.3em;
 }
 
 .entityTitle {
