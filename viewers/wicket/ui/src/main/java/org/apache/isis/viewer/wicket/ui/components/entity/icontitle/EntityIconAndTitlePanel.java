@@ -30,7 +30,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
-import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
@@ -38,6 +37,7 @@ import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
@@ -140,7 +140,8 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     private AbstractLink createDynamicallyVisibleLink(final ManagedObject targetAdapter) {
 
         final ObjectAdapterModel entityModel = getModel();
-        final PageParameters pageParameters = pageParametersFor(targetAdapter);
+        final PageParameters pageParameters = PageParameterUtils
+                .createPageParametersForBookmarkablePageLink(getModel(), targetAdapter);
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
 
         final BookmarkablePageLink<Void> link = new BookmarkablePageLink<Void>(
@@ -161,18 +162,6 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         };
 
         return link;
-    }
-
-    private PageParameters pageParametersFor(final ManagedObject targetAdapter) {
-        return
-                ManagedObjects.isNullOrUnspecifiedOrEmpty(targetAdapter)
-                ? getModel().getPageParametersWithoutUiHints()
-                : EntityModel.ofAdapter(
-                    super.getCommonContext(),
-                    targetAdapter.getSpecification().lookupFacet(ProjectionFacet.class)
-                    .map(projectionFacet->projectionFacet.projected(targetAdapter))
-                    .orElse(targetAdapter))
-                    .getPageParametersWithoutUiHints();
     }
 
     private String titleAbbreviated(final String titleString) {

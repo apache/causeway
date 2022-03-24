@@ -342,10 +342,4 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         return getAssociatedActions().getFirstAssociatedWithInlineAsIfEdit().isPresent();
     }
 
-    public void clearPending() {
-        //TODO[ISIS-2871] is this really needed? - remove once we are sure
-        // was used to state that pending value is in sync with current value
-        //getPendingPropertyModel().getValue().setValue(null);
-    }
-
 }

@@ -66,7 +66,7 @@ implements CancelHintRequired  {
 
     @Override
     public void onCancel() {
-        owningPanel.scalarModel().clearPending();
+        // no-op
     }
 
 }

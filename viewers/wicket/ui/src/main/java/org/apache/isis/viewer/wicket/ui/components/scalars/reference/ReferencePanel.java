@@ -272,16 +272,6 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         return new ObjectAdapterMementoProviderForReferenceObjectAutoComplete(scalarModel);
     }
 
-    @Override
-    protected void syncIfNull(final Select2 select2) {
-        if(getModel().isScalar()) {
-            if(select2.isEmpty()) {
-                select2.clear(); // why?
-                getModel().setObject(null);
-            }
-        }
-    }
-
     // -- GET INPUT AS TITLE
 
     String getTitleForFormComponentInput() {

@@ -24,6 +24,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
 
 /**
@@ -92,6 +93,11 @@ implements ObjectAdapterModel {
     @Override
     public void setMode(final ScalarRepresentation mode) {
         throw _Exceptions.unexpectedCodeReach();
+    }
+
+    @Override
+    public IsisAppCommonContext getCommonContext() {
+        return scalarModel().getCommonContext();
     }
 
 }

@@ -32,7 +32,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForValueChoices;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
@@ -147,11 +146,6 @@ extends ScalarPanelSelectAbstract {
         return new ObjectAdapterMementoProviderForValueChoices(scalarModel());
     }
 
-    @Override
-    protected void syncIfNull(final Select2 select2) {
-        if(scalarModel().isEmpty()) {
-            select2.clear();
-        }
-    }
+
 
 }

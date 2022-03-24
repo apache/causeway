@@ -650,7 +650,6 @@ implements ScalarModelSubscriber {
            } else {
                scalarModel.setObject(paramValue);
            }
-           scalarModel.clearPending();
        }
 
 

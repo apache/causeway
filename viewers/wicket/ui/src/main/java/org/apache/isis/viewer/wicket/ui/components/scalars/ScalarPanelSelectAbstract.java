@@ -18,17 +18,15 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.validation.IValidatable;
-import org.apache.wicket.validation.IValidator;
-import org.apache.wicket.validation.ValidationError;
+import org.springframework.lang.Nullable;
 import org.wicketstuff.select2.ChoiceProvider;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
@@ -55,18 +53,12 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
         super(id, scalarModel, ManagedObject.class);
     }
 
-//    @Override
-//    protected Component getValidationFeedbackReceiver() {
-//        return select2!=null
-//                ? select2.asComponent()
-//                : null;
-//    }
-
     protected Select2 createSelect2(final String id) {
-        final Select2 select2 = Select2.createSelect2(id, scalarModel());
-        setProviderAndCurrAndPending(select2);
-        select2.setRequired(scalarModel().isRequired());
-        select2.add(new Select2Validator(scalarModel()));
+        val select2 = Select2.createSelect2(id, scalarModel());
+        //select2.setRequired(scalarModel().isRequired()); //TODO superflous, as already set
+        //XXX select2.add(new Select2Validator(scalarModel()));
+
+        updateChoices(select2);
         return select2;
     }
 
@@ -81,34 +73,9 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
     }
 
     /**
-     * sets up the choices, also ensuring that any currently held value is compatible.
-     */
-    private void setProviderAndCurrAndPending(
-            final Select2 select2) {
-
-        final ChoiceProvider<ObjectMemento> choiceProvider = buildChoiceProvider();
-
-        select2.setProvider(choiceProvider);
-        getModel().clearPending();
-
-        val dependsOnPreviousArgs = (choiceProvider instanceof ObjectAdapterMementoProviderAbstract)
-                && ((ObjectAdapterMementoProviderAbstract) choiceProvider).dependsOnPreviousArgs();
-
-        if(dependsOnPreviousArgs) {
-            syncIfNull(select2);
-        }
-
-    }
-
-    /**
-     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2)})
+     * Mandatory hook (is called by {@link #createSelect2(String)})
      */
     protected abstract ChoiceProvider<ObjectMemento> buildChoiceProvider();
-
-    /**
-     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2)})
-     */
-    protected abstract void syncIfNull(Select2 select2);
 
     // //////////////////////////////////////
 
@@ -146,7 +113,7 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
             final @NonNull Optional<AjaxRequestTarget> target) {
 
         val repaint = super.updateIfNecessary(paramModel, target);
-        final boolean choicesUpdated = updateChoices();
+        final boolean choicesUpdated = updateChoices(this.select2);
 
         if (repaint == Repaint.NOTHING) {
             if (choicesUpdated) {
@@ -159,11 +126,36 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
         }
     }
 
-    private boolean updateChoices() {
+    private boolean updateChoices(final @Nullable Select2 select2) {
         if (select2 == null) {
             return false;
         }
-        setProviderAndCurrAndPending(select2);
+
+        final ChoiceProvider<ObjectMemento> choiceProvider = buildChoiceProvider();
+        select2.setProvider(choiceProvider);
+
+        //sets up the choices, also ensuring that any currently held value is compatible.
+
+        _Casts.castTo(ObjectAdapterMementoProviderAbstract.class, choiceProvider)
+        .ifPresent(mementoProvider->{
+            if(mementoProvider.dependsOnPreviousArgs()){
+
+                System.err.printf("DEPENDSONPREVIOUSARGS scalarModel().isEmpty()? %b%n", scalarModel().isEmpty());
+
+//                if(scalarModel().isScalar()) {
+//                    if(select2.isEmpty()) {
+//                        select2.clear(); // why?
+//                        getModel().setObject(null);
+//                    }
+//                }
+//
+//                if(scalarModel().isEmpty()) {
+//                    select2.clear();
+//                }
+
+            }
+        });
+
         return true;
     }
 
@@ -178,43 +170,4 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
         target.add(this);
     }
 
-    static class Select2Validator implements IValidator<Object> {
-        private static final long serialVersionUID = 1L;
-
-        private final ScalarModel scalarModel;
-
-        public Select2Validator(final ScalarModel scalarModel) {
-
-            this.scalarModel = scalarModel;
-        }
-
-        @Override
-        public void validate(final IValidatable<Object> validatable) {
-            final Object proposedValueObj = validatable.getValue();
-
-            final ObjectMemento proposedValue;
-
-            if (proposedValueObj instanceof List) {
-                @SuppressWarnings("unchecked")
-                val proposedValueObjAsList = (List<ObjectMemento>) proposedValueObj;
-                if (proposedValueObjAsList.isEmpty()) {
-                    return;
-                }
-                val memento = proposedValueObjAsList.get(0);
-                val logicalType = memento.getLogicalType();
-                proposedValue = ObjectMemento.pack(proposedValueObjAsList, logicalType);
-            } else {
-                proposedValue = (ObjectMemento) proposedValueObj;
-            }
-
-            val proposedAdapter = scalarModel.getCommonContext().reconstructObject(proposedValue);
-            final String reasonIfAny = scalarModel.validate(proposedAdapter);
-            if (reasonIfAny != null) {
-                final ValidationError error = new ValidationError();
-                error.setMessage(reasonIfAny);
-                validatable.error(error);
-            }
-        }
-
-    }
 }

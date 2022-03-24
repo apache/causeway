@@ -25,17 +25,10 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.validation.IValidatable;
-import org.apache.wicket.validation.IValidator;
-import org.apache.wicket.validation.ValidationError;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragement;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
@@ -136,10 +129,11 @@ extends ScalarPanelAbstract2 {
 
         formGroup.add(createScalarNameLabel(ID_SCALAR_NAME, friendlyNameModel));
 
-        formComponent.add(createValidator(scalarModel));
+        formComponent.add(_Util.createValidatorFor(scalarModel));
 
         val renderScenario = getRenderScenario();
 
+        //XXX debug
         Wkt.labelAdd(fieldFrame, "debugLabel", String.format("%s", renderScenario.name()));
 
         if(renderScenario.isReadonly()) {
@@ -179,33 +173,6 @@ extends ScalarPanelAbstract2 {
      * Optional hook, to eg. add additional components (like Blob which adds preview image)
      */
     protected void onFormGroupCreated(final FormGroup formGroup) {};
-
-    protected IValidator<Object> createValidator(final ScalarModel scalarModel) {
-        return new IValidator<Object>() {
-            private static final long serialVersionUID = 1L;
-            private transient IsisAppCommonContext commonContext;
-
-            @Override
-            public void validate(final IValidatable<Object> validatable) {
-                final ManagedObject proposedAdapter = objectManager().adapt(validatable.getValue());
-                final String reasonIfAny = scalarModel.validate(proposedAdapter);
-                if (reasonIfAny != null) {
-                    final ValidationError error = new ValidationError();
-                    error.setMessage(reasonIfAny);
-                    validatable.error(error);
-                }
-            }
-
-            private ObjectManager objectManager() {
-                return getCommonContext().getObjectManager();
-            }
-
-            private IsisAppCommonContext getCommonContext() {
-                return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
-            }
-
-        };
-    }
 
     @Override
     protected void onInitializeNotEditable() {
