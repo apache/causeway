@@ -111,10 +111,10 @@ class ObjectBookmarker_builtinHandlers {
                 });
 
                 val msg = String.format(
-                        "The persistence layer does not recognize given object of type %s, "
+                        "The persistence layer does not recognize given object %s, "
                         + "meaning the object has no identifier that associates it with the persistence layer. "
                         + "(most likely, because the object is detached, eg. was not persisted after being new-ed up)",
-                        entityPojo.getClass().getName());
+                        managedObject);
 
                 // in case of the exception getting swallowed, also write a log
                 log.error(msg);
