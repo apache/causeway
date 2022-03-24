@@ -40,6 +40,7 @@ import org.apache.isis.viewer.common.model.PlacementDirection;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
+import org.apache.isis.viewer.wicket.ui.util.BootstrapConstants.ButtonSemantics;
 
 import lombok.NonNull;
 import lombok.val;
@@ -61,8 +62,11 @@ public final class WktLinks {
         val link = linkAndLabel.getUiComponent();
         val action = linkAndLabel.getManagedAction().getAction();
 
-        WktTooltips.addTooltip(link, link instanceof ActionLink
-                    && _Strings.isNotEmpty(((ActionLink) link).getReasonDisabledIfAny())
+        val hasDisabledReason = link instanceof ActionLink
+                ? _Strings.isNotEmpty(((ActionLink)link).getReasonDisabledIfAny())
+                : false;
+
+        WktTooltips.addTooltip(link, hasDisabledReason
                 ? ((ActionLink) link).getReasonDisabledIfAny()
                 : linkAndLabel.getDescription().orElse(null));
 
@@ -74,11 +78,12 @@ public final class WktLinks {
         }
         Wkt.cssAppend(link, linkAndLabel.getFeatureIdentifier());
 
+        Wkt.cssAppend(link, hasDisabledReason
+                ? ButtonSemantics.SECONDARY.buttonOutlineCss()
+                : ButtonSemantics.SECONDARY.buttonDefaultCss());
+
         if (action.getSemantics().isAreYouSure()) {
             if(action.getParameterCount()==0) {
-                val hasDisabledReason = link instanceof ActionLink
-                        ? _Strings.isNotEmpty(((ActionLink)link).getReasonDisabledIfAny())
-                        : false;
                 if (!hasDisabledReason) {
                     val translationService = linkAndLabel.getAction().getMetaModelContext()
                             .getTranslationService();
