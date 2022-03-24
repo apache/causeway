@@ -19,6 +19,7 @@
 package org.apache.isis.client.kroviz.ui.panel
 
 import io.kvision.chart.*
+import io.kvision.chart.js.LegendItem
 import io.kvision.core.Col
 import io.kvision.core.Color
 import io.kvision.core.CssSize
@@ -30,7 +31,7 @@ import org.apache.isis.client.kroviz.ui.core.SessionManager
 import org.apache.isis.client.kroviz.ui.dialog.EventLogDetail
 import kotlin.math.pow
 
-@OptIn(kotlin.js.ExperimentalJsExport::class)
+@OptIn(ExperimentalJsExport::class)
 @JsExport
 fun openLogEntry(i: Int) {
     val logEntry = SessionManager.getEventStore().log[i]
@@ -71,17 +72,24 @@ class EventBubbleChart : SimplePanel() {
     // https://stackoverflow.com/questions/45249779/chart-js-bubble-chart-changing-dataset-labels
     private fun buildChartOptions(): ChartOptions {
         fun buildLegend(): LegendOptions {
-            fun buildLegendLabelOptions(): LegendLabelOptions {
-                val legendLabelOptions = LegendLabelOptions(
-                    color = YELLOW
-                )
-                return legendLabelOptions
+            fun buildLegendLabelList(): Array<LegendItem> {
+                val legendLabelList = mutableListOf<LegendItem>()
+                color2Label.forEach {
+                    val li = obj {
+                        text = it.key
+                        fillStyle = it.value
+                    }
+                    legendLabelList.add(li as LegendItem)
+                }
+                return legendLabelList.toTypedArray()
             }
 
             return LegendOptions(
                 display = true,
                 position = Position.RIGHT,
-                labels = buildLegendLabelOptions(),
+                labels = LegendLabelOptions(generateLabels = {
+                    buildLegendLabelList()
+                }),
                 title = LegendTitleOptions(text = "Parallel Requests", display = true),
             )
         }
@@ -97,7 +105,7 @@ class EventBubbleChart : SimplePanel() {
                         footer = tooltipCallbackFooterJsFunction()
                     )
                 ),
-                legend = buildLegend()
+                legend = buildLegend(),
             ),
             onClick = onClickJsFunction(),
             showLine = true,
@@ -147,11 +155,6 @@ class EventBubbleChart : SimplePanel() {
             val dataSetsList = mutableListOf<DataSets>()
             model.log.forEach {
                 val d = it.buildData()
-/*                val l = it.determineLegendLabel()
-                val element = obj {
-                    label = l
-                    data = d
-                }*/
                 dataSetsList.add(d)
             }
             console.log(dataSetsList)
@@ -162,7 +165,6 @@ class EventBubbleChart : SimplePanel() {
             backgroundColor = buildBgColorList(),
             borderColor = buildBorderColorList(),
             data = buildDataSetsList(),
-            label = "test"
         )
     }
 
@@ -192,19 +194,6 @@ class EventBubbleChart : SimplePanel() {
         }
     }
 
-    private fun LogEntry.determineLegendLabel(): String {
-        val i = runningAtStart
-        return when {
-            (i >= 0) && (i <= 4) -> "0 .. 4"
-            (i > 4) && (i <= 8) -> "5 .. 8"
-            (i > 8) && (i <= 16) -> "9 .. 16"
-            (i > 16) && (i <= 32) -> "17 .. 32"
-            (i > 32) && (i <= 64) -> "33 .. 64"
-            (i > 64) && (i <= 128) -> "65 .. 128"
-            else -> ">= 129"
-        }
-    }
-
     private fun LogEntry.buildData(): dynamic {
         val relativeStartTimeMs = createdAt.getTime() - logStart
         val bubbleSize = calculateBubbleSize()
@@ -222,8 +211,18 @@ class EventBubbleChart : SimplePanel() {
         val RED = Color.rgba(0xC0, 0x50, 0x4D, 0x80)
         val YELLOW = Color.rgba(0xF7, 0x96, 0x46, 0x80)
         val GREEN = Color.rgba(0x9B, 0xBB, 0x59, 0x80)
-        val LIGHT_BLUE = Color.rgba(0x4B, 0xAC, 0xC6, 0x80)
         val DARK_BLUE = Color.rgba(0x4F, 0x81, 0xBD, 0x80)
+        val LIGHT_BLUE = Color.rgba(0x4B, 0xAC, 0xC6, 0x80)
+
+        val color2Label = mapOf(
+            "0 .. 4" to LIGHT_BLUE,
+            "5 .. 8" to DARK_BLUE,
+            "9 .. 16" to GREEN,
+            "17 .. 32" to YELLOW,
+            "33 .. 64" to RED,
+            "65 .. 128" to RED_VIOLET,
+            ">= 129" to VIOLET
+        )
 
         fun onClickJsFunction(): dynamic {
             return js(
