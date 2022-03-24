@@ -233,10 +233,6 @@ public class Configuration_usingWicket {
          * @see #startPage(IPageProvider)
          */
         public EntityPage startEntityPage(final PageParameters pageParameters) {
-
-            //XXX set to false for less strict testing
-            ThreadContext.getApplication().getDebugSettings().setComponentUseCheck(false);
-
             val entityPage = EntityPage.forPageParameters(commonContext, pageParameters);
             val startedPage = startPage(entityPage);
             assertRenderedPage(EntityPage.class);
@@ -315,8 +311,10 @@ public class Configuration_usingWicket {
             final IBootstrapSettings settings = new BootstrapSettings();
             settings.setDeferJavascript(false);
             Bootstrap.install(this, settings);
-            setHeaderResponseDecorator(response ->
+            getHeaderResponseDecorators().add(response ->
                 new ResourceAggregator(new JavaScriptFilteredIntoFooterHeaderResponse(response, "footerJS")));
+            //XXX set to false for less strict testing
+            getDebugSettings().setComponentUseCheck(false);
         }
 
         @Getter
