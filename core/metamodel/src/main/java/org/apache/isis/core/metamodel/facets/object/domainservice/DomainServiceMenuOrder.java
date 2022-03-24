@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainservice;
 
+import javax.annotation.Priority;
+
 import org.apache.isis.applib.annotation.Constants;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
@@ -29,10 +31,12 @@ public class DomainServiceMenuOrder {
     private DomainServiceMenuOrder(){}
 	
     public static String orderOf(final Class<?> cls) {
+        final Priority priority = cls.getAnnotation(Priority.class);
         final DomainService domainService = cls.getAnnotation(DomainService.class);
         final DomainServiceLayout domainServiceLayout = cls.getAnnotation(DomainServiceLayout.class);
 
-        String dsOrder = domainService != null ? domainService.menuOrder() : null;
+        String dsOrder = priority !=null ? new Integer(priority.value()).toString() :
+                domainService != null ? domainService.menuOrder() : null;
         String dslayoutOrder = domainServiceLayout != null ? domainServiceLayout.menuOrder(): null;
 
         String min = minimumOf(dslayoutOrder, dsOrder);
