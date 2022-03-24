@@ -44,12 +44,8 @@ class EventBubbleChart : SimplePanel() {
 
     init {
         width = CssSize(90, UNIT.vw)
-        chart = buildChart()
-    }
-
-    private fun buildChart(): Chart {
-        return chart(
-            configuration = buildConfiguration(),
+        chart = chart(
+            configuration = buildConfiguration()
         )
     }
 
@@ -68,35 +64,15 @@ class EventBubbleChart : SimplePanel() {
             type = ChartType.BUBBLE,
             dataSets = dataSetsList,
             labels = buildToolTipList(),
-            options = buildChartOptions(dataSetsList)
+            options = buildChartOptions(),
         )
     }
 
-    private fun buildLabelsNew(): List<String> {
-        val legendLabels = mutableListOf<String>()
-        legendLabels.add("0 .. 4")
-        legendLabels.add("5 .. 8")
-        legendLabels.add("9 .. 16")
-        legendLabels.add("17 .. 32")
-        legendLabels.add("33 .. 64")
-        legendLabels.add("65 .. 128")
-        legendLabels.add(">= 129")
-        return legendLabels
-    }
-
     // https://stackoverflow.com/questions/45249779/chart-js-bubble-chart-changing-dataset-labels
-    private fun buildChartOptions(dataSetsList: List<DataSets>): ChartOptions {
+    private fun buildChartOptions(): ChartOptions {
         fun buildLegend(): LegendOptions {
             fun buildLegendLabelOptions(): LegendLabelOptions {
                 val legendLabelOptions = LegendLabelOptions(
-                    /*           generateLabels = {
-                                   val legendItemList = mutableListOf<LegendItem>()
-                                   val li = obj {
-                                       text = "0 ..4"
-                                   }
-                                   legendItemList.add(li as LegendItem)
-                                   legendItemList as Array<LegendItem>
-                               },*/
                     color = YELLOW
                 )
                 return legendLabelOptions
@@ -113,7 +89,7 @@ class EventBubbleChart : SimplePanel() {
         return ChartOptions(
             plugins = PluginsOptions(
                 title = TitleOptions(
-                    text = listOf<String>("Request Duration over Time by Request Parallelism and Response Size"),
+                    text = listOf("Request Duration over Time by Request Parallelism and Response Size"),
                     display = true
                 ),
                 tooltip = TooltipOptions(
@@ -143,7 +119,7 @@ class EventBubbleChart : SimplePanel() {
         fun buildBgColorList(): List<Color> {
             val bgColorList = mutableListOf<Color>()
             model.log.forEach {
-                val c = it.calculateBubbleColor()
+                val c = it.determineBubbleColor()
                 bgColorList.add(c)
             }
             return bgColorList
@@ -166,21 +142,28 @@ class EventBubbleChart : SimplePanel() {
          * 1. a plural form is used (where actually a singular would be more appropriate) -> "a DataSets"
          * 2. datasets are used inside datasets, data inside data
          */
-        fun buildData(): List<DataSets> {
-            val dataSets = mutableListOf<DataSets>()
+        fun buildDataSetsList(): List<DataSets> {
+            console.log("[EBC.buildData]")
+            val dataSetsList = mutableListOf<DataSets>()
             model.log.forEach {
-                dataSets.add(it.buildData())
+                val d = it.buildData()
+/*                val l = it.determineLegendLabel()
+                val element = obj {
+                    label = l
+                    data = d
+                }*/
+                dataSetsList.add(d)
             }
-            return dataSets
+            console.log(dataSetsList)
+            return dataSetsList
         }
 
         return DataSets(
-//            label = buildLabelList(),
             backgroundColor = buildBgColorList(),
             borderColor = buildBorderColorList(),
-            data = buildData()
+            data = buildDataSetsList(),
+            label = "test"
         )
-
     }
 
     private fun LogEntry.buildToolTip(index: Int): String {
@@ -196,7 +179,7 @@ class EventBubbleChart : SimplePanel() {
         return i.toDouble().pow(1 / 3.toDouble()).toInt()
     }
 
-    private fun LogEntry.calculateBubbleColor(): Color {
+    private fun LogEntry.determineBubbleColor(): Color {
         val i = runningAtStart
         return when {
             (i >= 0) && (i <= 4) -> LIGHT_BLUE
@@ -206,6 +189,19 @@ class EventBubbleChart : SimplePanel() {
             (i > 32) && (i <= 64) -> RED
             (i > 64) && (i <= 128) -> RED_VIOLET
             else -> VIOLET
+        }
+    }
+
+    private fun LogEntry.determineLegendLabel(): String {
+        val i = runningAtStart
+        return when {
+            (i >= 0) && (i <= 4) -> "0 .. 4"
+            (i > 4) && (i <= 8) -> "5 .. 8"
+            (i > 8) && (i <= 16) -> "9 .. 16"
+            (i > 16) && (i <= 32) -> "17 .. 32"
+            (i > 32) && (i <= 64) -> "33 .. 64"
+            (i > 64) && (i <= 128) -> "65 .. 128"
+            else -> ">= 129"
         }
     }
 
