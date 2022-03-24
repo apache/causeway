@@ -25,6 +25,7 @@ import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -33,6 +34,7 @@ import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -341,5 +343,14 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     public final boolean hasAssociatedActionWithInlineAsIfEdit() {
         return getAssociatedActions().getFirstAssociatedWithInlineAsIfEdit().isPresent();
     }
+
+    public Optional<ValueSemanticsProvider<?>> lookupDefaultValueSemantics() {
+        if(!getScalarTypeSpec().isValue()) {
+            return Optional.empty();
+        }
+        return getMetaModel().lookupNonFallbackFacet(ValueFacet.class)
+        .<ValueSemanticsProvider<?>>flatMap(ValueFacet::selectDefaultSemantics);
+    }
+
 
 }

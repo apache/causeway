@@ -237,8 +237,14 @@ extends ScalarPanelAbstract {
 
         if (_Util.canPropertyEnterInlineEditDirectly(scalarModel)) {
 
-            // we configure the prompt link if _this_ property is configured for inline edits...
-            Wkt.behaviorAddOnClick(clickReceiver, this::onPropertyInlineEditClick);
+            _Util.lookupPropertyActionForCompositeUpdate(scalarModel)
+            .ifPresentOrElse(actionLinkInlineAsIfEdit->{
+                // composite value type support
+                Wkt.behaviorAddOnClick(clickReceiver, actionLinkInlineAsIfEdit::onClick);
+            },()->{
+                // we configure the prompt link if _this_ property is configured for inline edits...
+                Wkt.behaviorAddOnClick(clickReceiver, this::onPropertyInlineEditClick);
+            });
 
         } else {
 

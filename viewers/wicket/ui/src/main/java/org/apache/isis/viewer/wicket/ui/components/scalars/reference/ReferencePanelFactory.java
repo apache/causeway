@@ -22,7 +22,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -45,8 +44,7 @@ public class ReferencePanelFactory extends ComponentFactoryAbstract {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         final ScalarModel scalarModel = (ScalarModel) model;
-        final ObjectSpecification specification = scalarModel.getScalarTypeSpec();
-        return appliesIf(!specification.containsFacet(ValueFacet.class));
+        return appliesIf(!scalarModel.getScalarTypeSpec().containsFacet(ValueFacet.class));
     }
 
     @Override

@@ -48,4 +48,5 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
         return new MarkupComponent(id, scalarModel());
     }
 
+
 }
