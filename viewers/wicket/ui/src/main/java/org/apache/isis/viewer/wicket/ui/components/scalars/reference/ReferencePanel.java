@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFac
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
@@ -199,8 +200,10 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
             val isInlinePrompt = scalarModel.isInlinePrompt();
             if(isInlinePrompt) {
+                iconAndTitle.setVisible(false);
+
                 // bit of a hack... allows us to suppress the title using CSS
-                Wkt.cssAppend(iconAndTitle, "inlinePrompt");
+                //Wkt.cssAppend(iconAndTitle, "inlinePrompt");
             }
 
             val adapter = scalarModel.getObject();

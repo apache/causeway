@@ -178,9 +178,11 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
     private String determineTitle() {
         val managedObject = getModel().getObject();
-        return managedObject != null
-                ? managedObject.titleString(conf->conf.skipTitlePartEvaluator(this::isContextAdapter))
-                : "(no object)";
+        return managedObject instanceof PackedManagedObject
+                ? "(multiple objects)"
+                : managedObject != null
+                    ? managedObject.titleString(conf->conf.skipTitlePartEvaluator(this::isContextAdapter))
+                    : "(no object)";
     }
 
     private int abbreviateTo(final ObjectAdapterModel model, final String titleString) {

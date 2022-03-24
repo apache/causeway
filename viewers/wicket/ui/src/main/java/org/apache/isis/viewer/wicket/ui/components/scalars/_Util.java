@@ -62,7 +62,7 @@ class _Util {
             final IValidatable<Object> validatable,
             final ScalarModel scalarModel){
 
-        System.err.printf("%s%n", "RECOVERPROPOSEDVALUE");
+        System.err.printf("RECOVERPROPOSEDVALUE %s%n", validatable.getValue());
 
         return Optional.ofNullable(scalarModel.getObjectManager()
                 .adapt(validatable.getValue()));

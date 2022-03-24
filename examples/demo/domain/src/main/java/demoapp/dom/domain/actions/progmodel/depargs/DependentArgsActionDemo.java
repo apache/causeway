@@ -47,6 +47,10 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.DependentArgs", editing=Editing.ENABLED)
 public class DependentArgsActionDemo implements HasAsciiDocDescription {
 
+    public String title() {
+        return "Dependent Arguments Demo";
+    }
+
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(describedAs = "Default for first dialog paramater in 'Choices', 'Auto Complete' and 'Default'")
     @Getter @Setter

@@ -140,13 +140,14 @@ public class PageParameterUtils {
             final ManagedObject adapter) {
         return
                 ManagedObjects.isIdentifiable(adapter)
-                ? callingEntityModel.getPageParametersWithoutUiHints()
-                : EntityModel.ofAdapter(
+                    && !ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
+                ? EntityModel.ofAdapter(
                     callingEntityModel.getCommonContext(),
                     adapter.getSpecification().lookupFacet(ProjectionFacet.class)
                     .map(projectionFacet->projectionFacet.projected(adapter))
                     .orElse(adapter))
-                    .getPageParametersWithoutUiHints();
+                    .getPageParametersWithoutUiHints()
+                : callingEntityModel.getPageParametersWithoutUiHints();
     }
 
 

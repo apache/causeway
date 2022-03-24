@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.objectmanager.identify.ObjectBookmarker.Handler;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 
 import lombok.SneakyThrows;
 import lombok.val;
@@ -180,7 +181,9 @@ class ObjectBookmarker_builtinHandlers {
 
         @Override
         public boolean isHandling(final ManagedObject managedObject) {
-            return managedObject.getSpecification().containsFacet(ViewModelFacet.class);
+            return (managedObject instanceof PackedManagedObject)
+                    ? false
+                    : managedObject.getSpecification().containsFacet(ViewModelFacet.class);
         }
 
         @Override

@@ -27,11 +27,11 @@ import org.springframework.lang.Nullable;
 import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -53,23 +53,21 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
         super(id, scalarModel, ManagedObject.class);
     }
 
-    protected Select2 createSelect2(final String id) {
+    protected final Select2 createSelect2(final String id) {
+        val scalarModel = scalarModel();
+
         val select2 = Select2.createSelect2(id, scalarModel());
-        //select2.setRequired(scalarModel().isRequired()); //TODO superflous, as already set
-        //XXX select2.add(new Select2Validator(scalarModel()));
+        setOutputMarkupId(true);
+        select2.asComponent().setOutputMarkupId(true);
+
+        select2.setLabel(Model.of(scalarModel.getFriendlyName()));
+
+        //TODO potentially superfluous, as already set in super ...
+        //select2.setRequired(scalarModel().isRequired());
+        //select2.add(new Select2Validator(scalarModel()));
 
         updateChoices(select2);
         return select2;
-    }
-
-    @Override
-    protected void onFormGroupCreated(final FormGroup formGroup) {
-        val scalarModel = scalarModel();
-        val friendlyNameModel = Model.of(scalarModel.getFriendlyName());
-
-        setOutputMarkupId(true);
-        select2.asComponent().setOutputMarkupId(true);
-        select2.setLabel(friendlyNameModel);
     }
 
     /**
@@ -87,16 +85,6 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
             final WebMarkupContainer inlinePromptForm,
             final AjaxRequestTarget target) {
         Wkt.javaScriptAdd(target, EventTopic.OPEN_SELECT2, inlinePromptForm.getMarkupId());
-    }
-
-    @Override
-    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
-        setEnabled(false);
-    }
-
-    @Override
-    protected void onEditable(final Optional<AjaxRequestTarget> target) {
-        setEnabled(true);
     }
 
     // //////////////////////////////////////
@@ -140,8 +128,13 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
         .ifPresent(mementoProvider->{
             if(mementoProvider.dependsOnPreviousArgs()){
 
-                System.err.printf("DEPENDSONPREVIOUSARGS scalarModel().isEmpty()? %b%n", scalarModel().isEmpty());
+                _Debug.log("ChoiceProvider with DependsOnPreviousArgs while scalarModel() %s",
+                        scalarModel().isEmpty()? "is empty" : "is not empty");
 
+                System.err.printf("ChoiceProvider with DependsOnPreviousArgs while scalarModel() %s%n",
+                        scalarModel().isEmpty()? "is empty" : "is not empty");
+
+                //XXX what to do?
 //                if(scalarModel().isScalar()) {
 //                    if(select2.isEmpty()) {
 //                        select2.clear(); // why?
