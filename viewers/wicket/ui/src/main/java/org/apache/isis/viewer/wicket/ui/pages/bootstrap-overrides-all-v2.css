@@ -1041,6 +1041,10 @@ div.scalarValueInlinePromptLink.form-control:hover {
 	background-color: rgba(0, 0, 0, 0.08);
 }
 
+.entityUrlSource {
+	cursor: pointer;
+}
+
 
 .booleanPanel div.label-left .scalarValueWrapper .form-control.scalarValueInlinePromptLink,
 .referencePanel div.label-left .scalarValueWrapper .form-control.scalarValueInlinePromptLink {
