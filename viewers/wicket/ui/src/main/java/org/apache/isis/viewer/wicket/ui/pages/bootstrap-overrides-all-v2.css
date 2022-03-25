@@ -517,8 +517,8 @@ span.containedButtonPanel {
 }
 
 /* add some space between an FA icon and the text on the right */
-.btn .additionalLinkItem {
-	margin-left: 3px;
+.additionalLinkItem .fa {
+	margin-right: 2px;
 }
 
 /* from additionalLinksPanel.css */
