@@ -87,7 +87,6 @@ extends ScalarPanelAbstract2 {
         default:
             throw _Exceptions.unmatchedCase(renderScenario);
         }
-
         return Wkt.fragment(fieldFragement.getContainerId(),
                 fieldFragement.getFragmentId(),
                 this);

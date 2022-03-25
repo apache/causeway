@@ -28,6 +28,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
@@ -38,6 +39,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.components.propertyheader.PropertyEditPromptHeaderPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragement;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.PromptFragment;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -82,8 +84,7 @@ extends ScalarPanelAbstract {
         val fieldFrame = getFieldFrame();
         val scalarFrameContainer = getScalarFrameContainer();
 
-
-        if(fieldFrame!=null) {
+        if(FieldFragement.LINK.isInstance(fieldFrame)) {
 
             fieldFrame
                 .add(inlinePromptLink = createInlinePromptLink());
@@ -118,6 +119,7 @@ extends ScalarPanelAbstract {
             FieldFrame.SCALAR_VALUE_CONTAINER
             .addComponentIfMissing(regularFrame, id->Wkt.label(id, "∅"));*/
 
+            // edit as if inline fix
 //            FieldFrame.SCALAR_VALUE_INLINE_PROMPT_LINK
 //            .addComponentIfMissing(regularFrame, id->{
 //                val link = new WebMarkupContainer(id);
@@ -162,12 +164,11 @@ extends ScalarPanelAbstract {
     protected IModel<String> obtainOutputFormatModel() {
         return ()->{
             val propertyNegotiationModel = scalarModel().proposedValue();
-            return false
-                    //propertyNegotiationModel.isCurrentValueAbsent().booleanValue()
-                    ? ""
-                    : propertyNegotiationModel
-                        .getValueAsHtml().getValue();
-                        //.getValueAsParsableText().getValue();
+            return _Strings.nullToEmpty(
+                    propertyNegotiationModel
+                        .getValueAsHtml().getValue()
+                        //.getValueAsParsableText().getValue()
+                        );
         };
     }
 

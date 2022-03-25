@@ -428,6 +428,23 @@ public class Wkt {
         return new Fragment(id, fragmentId, markupProvider);
     }
 
+    public Fragment fragmentDebug(final String id, final String fragmentId, final MarkupContainer markupProvider) {
+        return new Fragment(id, fragmentId, markupProvider) {
+            private static final long serialVersionUID = 1L;
+            @Override public MarkupContainer add(final Component... children) {
+                for(var child:children) {
+
+                    System.err.printf("add %s -> %s %n", this.getId(), child.getId());
+                }
+                return super.add(children); }
+            @Override public MarkupContainer addOrReplace(final Component... children) {
+                for(var child:children) {
+                    System.err.printf("addOrReplace %s -> %s %n", this.getId(), child.getId());
+                }
+                return super.addOrReplace(children); }
+        };
+    }
+
     /**
      * @param id - The component id
      * @param fragmentId - The id of the associated markup fragment
