@@ -69,7 +69,6 @@ class EventBubbleChart : SimplePanel() {
         )
     }
 
-    // https://stackoverflow.com/questions/45249779/chart-js-bubble-chart-changing-dataset-labels
     private fun buildChartOptions(): ChartOptions {
         fun buildLegend(): LegendOptions {
             fun buildLegendLabelList(): Array<LegendItem> {
@@ -81,6 +80,18 @@ class EventBubbleChart : SimplePanel() {
                     }
                     legendLabelList.add(li as LegendItem)
                 }
+                val error = obj {
+                    text = "error"
+                    fillStyle = TRANSPARENT
+                    strokeStyle = ERROR
+                }
+                legendLabelList.add(error as LegendItem)
+                val size = obj {
+                    text = "bubble size ^= response size"
+                    fillStyle = TRANSPARENT
+                    strokeStyle = TRANSPARENT
+                }
+                legendLabelList.add(size as LegendItem)
                 return legendLabelList.toTypedArray()
             }
 
@@ -137,8 +148,8 @@ class EventBubbleChart : SimplePanel() {
             val borderColorList = mutableListOf<Color>()
             model.log.forEach {
                 when {
-                    it.isError() -> borderColorList.add(Color.name(Col.RED))
-                    it.response.contains("httpStatusCode") -> borderColorList.add(Color.name(Col.RED))
+                    it.isError() -> borderColorList.add(ERROR)
+                    it.response.contains("httpStatusCode") -> borderColorList.add(ERROR)
                     else -> borderColorList.add(Color.name(Col.LIGHTGRAY))
                 }
             }
@@ -206,13 +217,15 @@ class EventBubbleChart : SimplePanel() {
     }
 
     companion object {
-        val VIOLET = Color.rgba(0x80, 0x64, 0xA2, 0x80)
-        val RED_VIOLET = Color.rgba(0xA0, 0x5A, 0x78, 0x80)
-        val RED = Color.rgba(0xC0, 0x50, 0x4D, 0x80)
-        val YELLOW = Color.rgba(0xF7, 0x96, 0x46, 0x80)
-        val GREEN = Color.rgba(0x9B, 0xBB, 0x59, 0x80)
-        val DARK_BLUE = Color.rgba(0x4F, 0x81, 0xBD, 0x80)
+        val TRANSPARENT = Color.rgba(0xFF, 0xFF, 0xFF, 0x00)
+        val ERROR = Color.rgba(0xFF, 0x00, 0x00, 0xFF)
         val LIGHT_BLUE = Color.rgba(0x4B, 0xAC, 0xC6, 0x80)
+        val DARK_BLUE = Color.rgba(0x4F, 0x81, 0xBD, 0x80)
+        val GREEN = Color.rgba(0x9B, 0xBB, 0x59, 0x80)
+        val YELLOW = Color.rgba(0xF7, 0x96, 0x46, 0x80)
+        val RED = Color.rgba(0xC0, 0x50, 0x4D, 0x80)
+        val RED_VIOLET = Color.rgba(0xA0, 0x5A, 0x78, 0x80)
+        val VIOLET = Color.rgba(0x80, 0x64, 0xA2, 0x80)
 
         val color2Label = mapOf(
             "0 .. 4" to LIGHT_BLUE,
