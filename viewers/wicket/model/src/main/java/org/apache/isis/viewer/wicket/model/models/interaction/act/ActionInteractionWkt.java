@@ -136,30 +136,15 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
             if(valueTypeSpec.isValue()
                     && valueTypeSpec.lookupFacet(ValueFacet.class)
                         .map(ValueFacet::isCompositeValueType)
-                        .orElse(false)) {
+                        .orElse(false)
+                    && ownerSpec.getAction(memberId, MixedIn.INCLUDED).isEmpty()) {
 
-                //XXX there should be a simpler way to check this
-                if(ownerSpec.getProperty(memberId, MixedIn.INCLUDED).isEmpty()
-                        && ownerSpec.getAction(memberId, MixedIn.INCLUDED).isEmpty()) {
-                    val compositeValue0 = prop
-                            .get(getBookmarkedOwner()); //XXX make this nullToEmpty in OneToOneAssociation
-                    val compositeValue =
-                            ManagedObjects.nullToEmpty(prop.getElementType(), compositeValue0);
-                    return ActionInteraction.start(compositeValue, memberId, where);
-                }
-
+                val compositeValue0 = prop
+                        .get(getBookmarkedOwner()); //XXX make this nullToEmpty in OneToOneAssociation
+                val compositeValue =
+                        ManagedObjects.nullToEmpty(prop.getElementType(), compositeValue0);
+                return ActionInteraction.start(compositeValue, memberId, where);
             }
-        }
-
-//        //XXX
-        if(memberId.equals("updatec")) {
-            val propertyId = associatedWithPropertyIfAny.getIdentifier();
-            val prop = getBookmarkedOwner().getSpecification().getPropertyElseFail(propertyId);
-            val compositeValue0 = prop
-                    .get(getBookmarkedOwner()); //XXX make this nullToEmpty in OneToOneAssoziation
-            val compositeValue =
-                    ManagedObjects.nullToEmpty(prop.getElementType(), compositeValue0);
-            return ActionInteraction.start(compositeValue, memberId, where);
         }
 
         return ActionInteraction.start(getBookmarkedOwner(), memberId, where);
