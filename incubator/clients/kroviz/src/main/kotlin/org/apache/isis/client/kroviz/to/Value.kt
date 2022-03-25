@@ -20,7 +20,6 @@ package org.apache.isis.client.kroviz.to
 
 import kotlinx.serialization.*
 import kotlinx.serialization.builtins.nullable
-import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
@@ -39,15 +38,15 @@ import kotlinx.serialization.json.jsonPrimitive
  */
 @Serializable
 data class Value(
-        //IMPROVE: make content immutable (again) and handle property edits eg. via a wrapper
-        @Contextual @SerialName("value") var content: Any? = null
+    //IMPROVE: make content immutable (again) and handle property edits e.g. via a wrapper
+    @Contextual @SerialName("value") var content: Any? = null,
 ) : TransferObject {
 
     @ExperimentalSerializationApi
     @Serializer(forClass = Value::class)
     companion object : KSerializer<Value> {
 
-       // @ExperimentalSerializationApi
+        // @ExperimentalSerializationApi
         override fun deserialize(decoder: Decoder): Value {
             val nss = JsonElement.serializer().nullable
             val jse: JsonElement? = decoder.decodeNullableSerializableValue(nss)!!
@@ -72,18 +71,15 @@ data class Value(
         }
 
         private fun isNumeric(jse: JsonElement): Boolean {
-            try {
+            return try {
                 jse.jsonPrimitive.content.toLong()
-                return true
+                true
             } catch (nfe: NumberFormatException) {
-                return false
+                false
             } catch (ie: IllegalArgumentException) {
-                return false
+                false
             }
         }
-
-        override val descriptor: SerialDescriptor
-            get() = TODO("Not yet implemented")
 
         override fun serialize(encoder: Encoder, value: Value) {
             TODO("Not yet implemented")
