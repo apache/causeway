@@ -26,10 +26,12 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
@@ -126,6 +128,15 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         this.parentEntityModel = parentEntityModel;
         this.mode = viewOrEdit;
         this.renderingHint = renderingHint;
+    }
+
+    public final _Either<ScalarParameterModel, ScalarPropertyModel> getSpecialization() {
+        switch(getParamOrProp()) {
+        case PARAMETER: return _Either.left((ScalarParameterModel) this);
+        case PROPERTY: return _Either.right((ScalarPropertyModel) this);
+        default:
+            throw _Exceptions.unmatchedCase(getParamOrProp());
+        }
     }
 
 
@@ -349,9 +360,15 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         if(!spec.isValue()) {
             return Optional.empty();
         }
-        return spec.lookupFacet(ValueFacet.class)
-        .<ObjectAction>flatMap(valueFacet->
-            valueFacet.selectCompositeValueMixinForFeature(getMetaModel()));
+        return getSpecialization().<Optional<ObjectAction>>fold(
+                param->{
+                    return Optional.empty(); //XXX add support later
+                },
+                prop->{
+                    return spec.lookupFacet(ValueFacet.class)
+                            .<ObjectAction>flatMap(valueFacet->
+                                valueFacet.selectCompositeValueMixinForFeature(prop.getManagedProperty()));
+                });
     }
 
 }

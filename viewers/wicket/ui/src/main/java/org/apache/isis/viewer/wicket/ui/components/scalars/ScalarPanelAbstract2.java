@@ -84,7 +84,7 @@ extends ScalarPanelAbstract {
         val fieldFrame = getFieldFrame();
         val scalarFrameContainer = getScalarFrameContainer();
 
-        if(FieldFragement.LINK.isInstance(fieldFrame)) {
+        if(FieldFragement.LINK.isMatching(fieldFrame)) {
 
             fieldFrame
                 .add(inlinePromptLink = createInlinePromptLink());
@@ -108,29 +108,15 @@ extends ScalarPanelAbstract {
                         || fieldFrame==null),
                 fieldFrame);
 
-        //XXX support for legacy panels
+        //XXX support for legacy panels, remove eventually
         {
-            if(fieldFrame!=null) {
-                if(fieldFrame.get(ID_SCALAR_VALUE)==null) {
-                    Wkt.labelAdd(fieldFrame, ID_SCALAR_VALUE, "∅");
-                }
+            if(fieldFrame!=null
+                &&fieldFrame.get(ID_SCALAR_VALUE)==null) {
+                Wkt.labelAdd(fieldFrame, ID_SCALAR_VALUE, "∅");
             }
-/*
-            FieldFrame.SCALAR_VALUE_CONTAINER
-            .addComponentIfMissing(regularFrame, id->Wkt.label(id, "∅"));*/
-
-            // edit as if inline fix
-//            FieldFrame.SCALAR_VALUE_INLINE_PROMPT_LINK
-//            .addComponentIfMissing(regularFrame, id->{
-//                val link = new WebMarkupContainer(id);
-//                  FieldFrame.SCALAR_VALUE_CONTAINER
-//                      .addComponentIfMissing(link, _id->Wkt.label(_id, "∅"));
-//                return link;
-//            });
-
             FieldFrame.EDIT_PROPERTY
                 .addComponentIfMissing(regularFrame, id->Wkt.label(id, "∅"));
-            }
+        }
     }
 
     /**

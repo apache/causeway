@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
 import org.apache.isis.applib.value.semantics.OrderRelation;
@@ -32,12 +33,26 @@ import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider.Context;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.delegate._Delegate;
+import org.apache.isis.core.metamodel.commons.CanonicalInvoker;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.schema.common.v2.ValueType;
+
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.experimental.Delegate;
 
 /**
  * Indicates that this class has value semantics.
@@ -152,13 +167,94 @@ extends
         .orElse(false);
     }
 
-    default Optional<ObjectAction> selectCompositeValueMixinForFeature(final ObjectFeature feature) {
+    default Optional<ObjectAction> selectCompositeValueMixinForFeature(final ManagedProperty managedProperty) {
         if(!isCompositeValueType()) {
             return Optional.empty();
         }
+        //feed the action's invocation result back into the scalarModel's proposed value, then submit
+
         //XXX the mixin is found on the value-type's (eg on CalendarEvent) ObjectSpecifcation
         //no customization support yet
-        return feature.getElementType().getAction("updatec");
+        return managedProperty.getElementType().getAction("updatec")
+        .map(m->wrap(managedProperty, (ObjectActionMixedIn) m));
+    }
+
+    static interface X {
+      Identifier getFeatureIdentifier();
+      ObjectSpecification getReturnType();
+      ManagedObject executeWithRuleChecking(final InteractionHead head, final Can<ManagedObject> parameters,
+              final InteractionInitiatedBy interactionInitiatedBy, final Where where) throws AuthorizationException;
+      ManagedObject execute(final InteractionHead head, final Can<ManagedObject> parameters,
+              final InteractionInitiatedBy interactionInitiatedBy);
+    }
+
+    @SuppressWarnings("unused")
+    @RequiredArgsConstructor
+    public static class CompositeValueUpdateAction {
+
+        private final ManagedProperty managedProperty;
+
+        @Delegate(excludes=X.class)
+        private final ObjectActionMixedIn delegate;
+
+        public ObjectSpecification getReturnType() {
+            return managedProperty.getElementType();
+        }
+
+        public Identifier getFeatureIdentifier() {
+            val id = delegate.getFeatureIdentifier();
+            return Identifier
+                    .actionIdentifier(
+                            id.getLogicalType(),
+                            id.getMemberLogicalName(),
+                            id.getMemberParameterClassNames());
+        }
+
+        public ManagedObject executeWithRuleChecking(
+                final InteractionHead head, final Can<ManagedObject> parameters,
+                final InteractionInitiatedBy interactionInitiatedBy, final Where where)
+                        throws AuthorizationException {
+//            val valueType = delegate
+//                    .execute(head, parameters, interactionInitiatedBy);
+            return map(simpleExecute(head, parameters));
+        }
+
+        public ManagedObject execute(
+                final InteractionHead head, final Can<ManagedObject> parameters,
+                final InteractionInitiatedBy interactionInitiatedBy) {
+//            val valueType = delegate
+//                    .execute(head, parameters, interactionInitiatedBy);
+            return map(simpleExecute(head, parameters));
+        }
+
+        private ManagedObject simpleExecute(
+                final InteractionHead head, final Can<ManagedObject> parameters) {
+            val method = delegate.getFacetedMethod().getMethod();
+
+            final Object[] executionParameters = UnwrapUtil.multipleAsArray(parameters);
+            final Object targetPojo = UnwrapUtil.single(head.getTarget());
+
+            val resultPojo = CanonicalInvoker
+                    .invoke(method, targetPojo, executionParameters);
+
+            return ManagedObject.of(delegate.getReturnType(), resultPojo);
+        }
+
+        private ManagedObject map(final ManagedObject valueType) {
+            val propNeg = managedProperty.startNegotiation();
+            propNeg.getValue().setValue(valueType);
+            propNeg.submit();
+            val propertyOwnerSpec = managedProperty.getOwner().getSpecification();
+            return managedProperty.getOwner();
+        }
+
+    }
+
+    static ObjectAction wrap(
+            final ManagedProperty managedProperty,
+            final ObjectActionMixedIn delegate) {
+        return _Delegate.createProxy(ObjectAction.class,
+                new CompositeValueUpdateAction(managedProperty, delegate));
     }
 
 }

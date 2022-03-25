@@ -33,6 +33,7 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -143,7 +144,15 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
                         .get(getBookmarkedOwner()); //XXX make this nullToEmpty in OneToOneAssociation
                 val compositeValue =
                         ManagedObjects.nullToEmpty(prop.getElementType(), compositeValue0);
-                return ActionInteraction.start(compositeValue, memberId, where);
+
+                val action = valueTypeSpec.lookupFacet(ValueFacet.class)
+                        .<ObjectAction>flatMap(valueFacet->
+                            valueFacet.selectCompositeValueMixinForFeature(associatedWithPropertyIfAny
+                                    .getManagedProperty()))
+                        .orElseThrow();
+
+                val managedAction = ManagedAction.of(compositeValue, action, where);
+                return ActionInteraction.wrap(managedAction);
             }
         }
 

@@ -27,6 +27,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.routing.RoutingService;
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.base._Lazy;
@@ -34,6 +35,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.commons.CanonicalInvoker;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -158,7 +160,12 @@ public final class ManagedAction extends ManagedMember {
     // -- INVOKE HELPER
 
     private boolean isValueTypeMixin() {
-        return getOwner().getSpecification().isValue();
+        return getOwner().getSpecification().isValue()
+                && !getOwner().getSpecification().lookupFacet(ValueFacet.class)
+                .<ValueSemanticsProvider>flatMap(ValueFacet::selectDefaultSemantics)
+                .map(ValueSemanticsProvider::isCompositeType)
+                .orElse(false);
+
     }
 
     /**

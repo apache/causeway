@@ -113,7 +113,7 @@ public class ScalarFragmentFactory {
         private final String fragmentId;
         @Getter
         private final String containerId = "container-fieldFrame";
-        public boolean isInstance(final @Nullable MarkupContainer container) {
+        public boolean isMatching(final @Nullable MarkupContainer container) {
             if(container instanceof Fragment) {
                 return fragmentId.equals(((Fragment)container).getAssociatedMarkupId());
             }
