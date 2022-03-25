@@ -55,7 +55,7 @@ import lombok.experimental.Accessors;
 
 @Component
 @Import({
-    CalendarEventSemantics.CalendarEvent_update.class
+    CalendarEventSemantics.CalendarEvent_updatec.class
 })
 public class CalendarEventSemantics
 extends ValueSemanticsAbstract<CalendarEvent>
@@ -200,9 +200,9 @@ implements
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
+    @ActionLayout(promptStyle = PromptStyle.INLINE_AS_IF_EDIT)
     @RequiredArgsConstructor
-    public static class CalendarEvent_update {
+    public static class CalendarEvent_updatec {
 
         private final CalendarEvent mixee;
 

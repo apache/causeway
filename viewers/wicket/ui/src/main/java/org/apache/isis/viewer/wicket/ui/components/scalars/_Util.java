@@ -1,3 +1,21 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.util.List;
@@ -8,12 +26,12 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
@@ -30,18 +48,33 @@ class _Util {
                 && scalarModel.canEnterEditMode();
     }
 
-    Optional<ActionLink> lookupPropertyActionForCompositeUpdate(final ScalarModel scalarModel) {
+    Optional<ActionLink> lookupMixinForCompositeValueUpdate(final ScalarModel scalarModel) {
         if(!canPropertyEnterInlineEditDirectly(scalarModel)) {
             return Optional.empty();
         }
-        val compositeValueSemantics = lookupCompositeValueSemantics(scalarModel)
+        final ObjectAction compositeValueMixinForFeature = scalarModel.lookupCompositeValueMixinForFeature()
         .orElse(null);
 
-        //TODO get compositeValueUpdateMixin from compositeValueSemantics
+        if(compositeValueMixinForFeature==null) {
+            return Optional.empty();
+        }
 
-        ObjectAction compositeValueUpdateMixin = null;
-
-        return toActionLink(compositeValueUpdateMixin, scalarModel);
+        return toActionLinkWithRuleChecking(compositeValueMixinForFeature, scalarModel).stream()
+                .peek(actionLink->{
+                    val ipc = actionLink.getActionModel().getInlinePromptContext();
+                    val ps = actionLink.getActionModel().getPromptStyle();
+                    _Assert.assertNotNull(ipc, ()->String.format(
+                            "with feature %s, "
+                            + "for composite-value-type mixins to work an InlinePromptContext is required",
+                            compositeValueMixinForFeature.getFeatureIdentifier()));
+                    _Assert.assertTrue(ps==PromptStyle.INLINE_AS_IF_EDIT, ()->String.format(
+                            "with feature %s, "
+                            + "for composite-value-type mixins to work PromptStyle must be INLINE_AS_IF_EDIT "
+                            + "yet found %s",
+                            compositeValueMixinForFeature.getFeatureIdentifier(),
+                            ps));
+                })
+                .findAny();
     }
 
     Optional<ActionLink> lookupPropertyActionForInlineEdit(final ScalarModel scalarModel) {
@@ -51,15 +84,10 @@ class _Util {
         // not editable property, but maybe one of the actions is.
         return scalarModel.getAssociatedActions()
                 .getFirstAssociatedWithInlineAsIfEdit()
-                .flatMap(action->toActionLink(action, scalarModel));
+                .flatMap(action->toActionLinkWithRuleChecking(action, scalarModel));
     }
 
-    private Optional<ValueSemanticsProvider<?>> lookupCompositeValueSemantics(final ScalarModel scalarModel) {
-        return scalarModel.lookupDefaultValueSemantics()
-                .filter(valueSemantics->valueSemantics.getSchemaValueType()==ValueType.COMPOSITE);
-    }
-
-    private Optional<ActionLink> toActionLink(
+    private Optional<ActionLink> toActionLinkWithRuleChecking(
             final @Nullable ObjectAction action,
             final ScalarModel scalarModel) {
 
@@ -70,7 +98,6 @@ class _Util {
         .filter(ActionLink::isVisible)
         .filter(ActionLink::isEnabled);
     }
-
 
     IValidator<Object> createValidatorFor(final ScalarModel scalarModel) {
         return new IValidator<Object>() {

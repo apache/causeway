@@ -33,9 +33,11 @@ import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider.Context;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.schema.common.v2.ValueType;
 
 /**
  * Indicates that this class has value semantics.
@@ -140,6 +142,23 @@ extends
     default Renderer<T> selectRendererForPropertyElseFallback(final OneToOneAssociation prop) {
         return selectRendererForProperty(prop)
                 .orElseGet(()->fallbackRenderer(prop.getFeatureIdentifier()));
+    }
+
+    // -- COMPOSITE VALUE SUPPORT
+
+    default boolean isCompositeValueType() {
+        return selectDefaultSemantics()
+        .map(valueSemantics->valueSemantics.getSchemaValueType()==ValueType.COMPOSITE)
+        .orElse(false);
+    }
+
+    default Optional<ObjectAction> selectCompositeValueMixinForFeature(final ObjectFeature feature) {
+        if(!isCompositeValueType()) {
+            return Optional.empty();
+        }
+        //XXX the mixin is found on the value-type's (eg on CalendarEvent) ObjectSpecifcation
+        //no customization support yet
+        return feature.getElementType().getAction("updatec");
     }
 
 }

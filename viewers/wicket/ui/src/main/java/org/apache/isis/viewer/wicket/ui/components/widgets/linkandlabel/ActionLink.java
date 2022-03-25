@@ -108,7 +108,8 @@ extends IndicatingAjaxLink<ManagedObject> {
         }
     }
 
-    ActionModel getActionModel() {
+    //XXX temporary public
+    public ActionModel getActionModel() {
         return (ActionModel) getModel();
     }
 
@@ -172,8 +173,8 @@ extends IndicatingAjaxLink<ManagedObject> {
 
         val actionModel = this.getActionModel();
 
-        if(actionModel.getInlinePromptContext() == null ||
-                actionModel.getPromptStyle().isDialog()) {
+        if(actionModel.getInlinePromptContext() == null
+                || actionModel.getPromptStyle().isDialog()) {
 
             if(actionModel.hasParameters()) {
                 startDialogWithParams(target);

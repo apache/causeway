@@ -25,7 +25,6 @@ import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -344,13 +343,15 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         return getAssociatedActions().getFirstAssociatedWithInlineAsIfEdit().isPresent();
     }
 
-    public Optional<ValueSemanticsProvider<?>> lookupDefaultValueSemantics() {
-        if(!getScalarTypeSpec().isValue()) {
+    @SuppressWarnings("unchecked")
+    public Optional<ObjectAction> lookupCompositeValueMixinForFeature() {
+        val spec = getScalarTypeSpec();
+        if(!spec.isValue()) {
             return Optional.empty();
         }
-        return getMetaModel().lookupNonFallbackFacet(ValueFacet.class)
-        .<ValueSemanticsProvider<?>>flatMap(ValueFacet::selectDefaultSemantics);
+        return spec.lookupFacet(ValueFacet.class)
+        .<ObjectAction>flatMap(valueFacet->
+            valueFacet.selectCompositeValueMixinForFeature(getMetaModel()));
     }
-
 
 }

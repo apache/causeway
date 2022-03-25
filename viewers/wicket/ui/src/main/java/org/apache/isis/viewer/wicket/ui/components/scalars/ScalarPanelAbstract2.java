@@ -89,8 +89,6 @@ extends ScalarPanelAbstract {
             fieldFrame
                 .add(inlinePromptLink = createInlinePromptLink());
 
-            addOnClickBehaviorTo(inlinePromptLink);
-
             // even if this particular scalarModel (property) is not configured for inline edits,
             // it's possible that one of the associated actions is.  Thus we set the prompt context
             scalarModel.setInlinePromptContext(
@@ -99,6 +97,9 @@ extends ScalarPanelAbstract {
                             scalarFrameContainer,
                             regularFrame,
                             getFormFrame()));
+
+            // needs InlinePromptContext to properly initialize
+            addOnClickBehaviorTo(inlinePromptLink);
         }
 
         addEditPropertyIf(
@@ -237,10 +238,10 @@ extends ScalarPanelAbstract {
 
         if (_Util.canPropertyEnterInlineEditDirectly(scalarModel)) {
 
-            _Util.lookupPropertyActionForCompositeUpdate(scalarModel)
-            .ifPresentOrElse(actionLinkInlineAsIfEdit->{
+            _Util.lookupMixinForCompositeValueUpdate(scalarModel)
+            .ifPresentOrElse(mixinForCompositeValueEdit->{
                 // composite value type support
-                Wkt.behaviorAddOnClick(clickReceiver, actionLinkInlineAsIfEdit::onClick);
+                Wkt.behaviorAddOnClick(clickReceiver, mixinForCompositeValueEdit::onClick);
             },()->{
                 // we configure the prompt link if _this_ property is configured for inline edits...
                 Wkt.behaviorAddOnClick(clickReceiver, this::onPropertyInlineEditClick);

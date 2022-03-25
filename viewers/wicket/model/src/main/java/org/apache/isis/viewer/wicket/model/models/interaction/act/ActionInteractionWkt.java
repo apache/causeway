@@ -31,8 +31,11 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -118,10 +121,48 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
             return ActionInteraction.start(paramValue, memberId, where);
         }
 
-        return associatedWithCollectionIfAny!=null
-                ? ActionInteraction.startWithMultiselect(getBookmarkedOwner(), memberId, where,
-                        associatedWithCollectionIfAny.getDataTableModel())
-                : ActionInteraction.start(getBookmarkedOwner(), memberId, where);
+        if(associatedWithCollectionIfAny!=null) {
+            return ActionInteraction.startWithMultiselect(getBookmarkedOwner(), memberId, where,
+                    associatedWithCollectionIfAny.getDataTableModel());
+        }
+
+        // composite value type support via mixin
+        if(associatedWithPropertyIfAny!=null) {
+            val ownerSpec = getBookmarkedOwner().getSpecification();
+            val propertyId = associatedWithPropertyIfAny.getIdentifier();
+            val prop = ownerSpec.getPropertyElseFail(propertyId);
+            val valueTypeSpec = prop.getElementType();
+
+            if(valueTypeSpec.isValue()
+                    && valueTypeSpec.lookupFacet(ValueFacet.class)
+                        .map(ValueFacet::isCompositeValueType)
+                        .orElse(false)) {
+
+                //XXX there should be a simpler way to check this
+                if(ownerSpec.getProperty(memberId, MixedIn.INCLUDED).isEmpty()
+                        && ownerSpec.getAction(memberId, MixedIn.INCLUDED).isEmpty()) {
+                    val compositeValue0 = prop
+                            .get(getBookmarkedOwner()); //XXX make this nullToEmpty in OneToOneAssociation
+                    val compositeValue =
+                            ManagedObjects.nullToEmpty(prop.getElementType(), compositeValue0);
+                    return ActionInteraction.start(compositeValue, memberId, where);
+                }
+
+            }
+        }
+
+//        //XXX
+        if(memberId.equals("updatec")) {
+            val propertyId = associatedWithPropertyIfAny.getIdentifier();
+            val prop = getBookmarkedOwner().getSpecification().getPropertyElseFail(propertyId);
+            val compositeValue0 = prop
+                    .get(getBookmarkedOwner()); //XXX make this nullToEmpty in OneToOneAssoziation
+            val compositeValue =
+                    ManagedObjects.nullToEmpty(prop.getElementType(), compositeValue0);
+            return ActionInteraction.start(compositeValue, memberId, where);
+        }
+
+        return ActionInteraction.start(getBookmarkedOwner(), memberId, where);
     }
 
     public final ActionInteraction actionInteraction() {

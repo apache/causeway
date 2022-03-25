@@ -81,13 +81,6 @@ public interface ValueSemanticsProvider<T> {
      */
     T compose(ValueDecomposition decomposition);
 
-
-    // -- EXPERIMENTAL
-
-    default Object getValueMixin(final T value) {
-        return null;
-    }
-
     // --
 
 
