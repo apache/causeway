@@ -132,9 +132,7 @@ public class WktDecorators {
 
             uiComponent.add(cssButtonSemanticsRemover);
 
-            Wkt.cssAppend(uiComponent, uiComponent.isEnabled()
-                    ? ButtonSemantics.DANGER.buttonDefaultCss()
-                    : ButtonSemantics.DANGER.buttonOutlineCss());
+            Wkt.cssAppend(uiComponent, ButtonSemantics.DANGER.buttonDefaultCss());
         }
     }
 

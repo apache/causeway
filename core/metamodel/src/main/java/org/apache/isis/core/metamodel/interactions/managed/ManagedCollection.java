@@ -22,10 +22,12 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 import lombok.Getter;
@@ -73,6 +75,10 @@ public final class ManagedCollection extends ManagedMember {
     @Override
     public MemberType getMemberType() {
         return MemberType.COLLECTION;
+    }
+
+    public Can<ObjectAction> getAssociatedActions() {
+        return Can.ofStream(ObjectAction.Util.findForAssociation(getOwner(), getCollection()));
     }
 
     public ManagedObject getCollectionValue() {

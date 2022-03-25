@@ -78,10 +78,6 @@ public final class WktLinks {
         }
         Wkt.cssAppend(link, linkAndLabel.getFeatureIdentifier());
 
-        Wkt.cssAppend(link, hasDisabledReason
-                ? ButtonSemantics.SECONDARY.buttonOutlineCss()
-                : ButtonSemantics.SECONDARY.buttonDefaultCss());
-
         if (action.getSemantics().isAreYouSure()) {
             if(action.getParameterCount()==0) {
                 if (!hasDisabledReason) {
@@ -95,6 +91,10 @@ public final class WktLinks {
             // ensure links receive the danger style
             // don't care if expressed twice
             WktDecorators.getDanger().decorate(link);
+        } else {
+            Wkt.cssAppend(link, linkAndLabel.isRenderOutlined()
+                    ? ButtonSemantics.SECONDARY.buttonOutlineCss()
+                    : ButtonSemantics.SECONDARY.buttonDefaultCss());
         }
 
         linkAndLabel

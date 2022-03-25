@@ -28,7 +28,6 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
-import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
@@ -162,8 +161,9 @@ extends ScalarPanelAbstract {
      */
     protected IModel<String> obtainOutputFormatModel() {
         return ()->{
-            val propertyNegotiationModel = (PropertyNegotiationModel)scalarModel().proposedValue();
-            return propertyNegotiationModel.isCurrentValueAbsent().booleanValue()
+            val propertyNegotiationModel = scalarModel().proposedValue();
+            return false
+                    //propertyNegotiationModel.isCurrentValueAbsent().booleanValue()
                     ? ""
                     : propertyNegotiationModel
                         .getValueAsHtml().getValue();

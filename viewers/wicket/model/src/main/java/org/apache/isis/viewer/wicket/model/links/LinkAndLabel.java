@@ -93,4 +93,10 @@ implements
         return HasManagedAction.isPositionedAt(panel);
     }
 
+    public boolean isRenderOutlined() {
+        return isPositionedAt(Position.BELOW)
+                .or(isPositionedAt(Position.RIGHT))
+                        .test(this);
+    }
+
 }

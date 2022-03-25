@@ -16,15 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.actions.position;
+package org.apache.isis.core.metamodel.facets.collections.layout;
 
-import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
+import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacetAbstract;
 
-public class ActionPositionFacetFallback extends ActionPositionFacetAbstract {
+public class DefaultViewFacetAsConfigured
+extends DefaultViewFacetAbstract {
 
-    public ActionPositionFacetFallback(final FacetHolder holder) {
-        super(ActionLayout.Position.BELOW, holder, Precedence.FALLBACK);
+    public static DefaultViewFacet create(
+            final FacetHolder holder) {
+        final String defaultView = holder.getConfiguration().getApplib().getAnnotation()
+                .getCollectionLayout().getDefaultView().toNameLower();
+        return new DefaultViewFacetAsConfigured(_Strings.nullToEmpty(defaultView), holder);
     }
 
+    private DefaultViewFacetAsConfigured(final String value, final FacetHolder holder) {
+        super(value, holder, Precedence.LOW);
+    }
 }

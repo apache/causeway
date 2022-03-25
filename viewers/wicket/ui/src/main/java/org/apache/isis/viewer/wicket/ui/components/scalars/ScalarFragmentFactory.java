@@ -83,9 +83,7 @@ public class ScalarFragmentFactory {
     @RequiredArgsConstructor
     public static enum FieldFrame {
         SCALAR_VALUE_INLINE_PROMPT_LINK("scalarValueInlinePromptLink"),
-
         SCALAR_VALUE_CONTAINER("container-scalarValue"),
-
         EDIT_PROPERTY("editProperty"),
         ;
         @Getter

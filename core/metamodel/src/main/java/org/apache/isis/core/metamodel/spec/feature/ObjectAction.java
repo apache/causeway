@@ -279,10 +279,33 @@ public interface ObjectAction extends ObjectMember {
             return false;
         }
 
-        public static ActionLayout.Position actionLayoutPositionOf(final ObjectAction action) {
-            return action.lookupFacet(ActionPositionFacet.class)
+        public static boolean isDirectlyAssociatedWithAnyProperty(
+                final ObjectAction action) {
+
+            val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+            if (layoutGroupFacet == null) {
+                return false;
+            }
+            val layoutGroupId = layoutGroupFacet.getGroupId();
+            if (_Strings.isNullOrEmpty(layoutGroupId)) {
+                return false;
+            }
+            val prop = action.getDeclaringType().getProperty(layoutGroupId, MixedIn.INCLUDED)
+                    .orElse(null);
+            if (prop == null) {
+                return false;
+            }
+            return true;
+        }
+
+        public static ActionLayout.Position actionLayoutPositionOf(
+                final ObjectAction action) {
+            return action.lookupNonFallbackFacet(ActionPositionFacet.class)
             .map(ActionPositionFacet::position)
-            .orElse(ActionLayout.Position.BELOW);
+            .orElseGet(()->
+                isDirectlyAssociatedWithAnyProperty(action)
+                        ? ActionLayout.Position.BELOW
+                        : ActionLayout.Position.PANEL);
         }
 
         public static Optional<CssClassFaFactory> cssClassFaFactoryFor(
@@ -376,7 +399,7 @@ public interface ObjectAction extends ObjectMember {
         public static Predicate<ObjectAction> isSameLayoutGroupAs(
                 final @NonNull ObjectAssociation association) {
 
-            final String assocIdLower = association.getId();
+            final String memberId = association.getId();
 
             return (final ObjectAction objectAction) -> {
 
@@ -388,7 +411,7 @@ public interface ObjectAction extends ObjectMember {
                 if (_Strings.isNullOrEmpty(layoutGroupId)) {
                     return false;
                 }
-                return layoutGroupId.equals(assocIdLower);
+                return layoutGroupId.equals(memberId);
             };
         }
 
