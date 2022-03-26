@@ -133,7 +133,7 @@ object StringUtils {
         args: Map<String, Argument?>?,
         start: String,
         sep: String,
-        end: String
+        end: String,
     ): String {
         return if (args.isNullOrEmpty()) "" else {
             var answer = start
@@ -151,7 +151,7 @@ object StringUtils {
         args: Map<String, Argument?>?,
         start: String,
         sep: String,
-        end: String
+        end: String,
     ): String {
         return if (args.isNullOrEmpty()) "" else {
             var answer = start
@@ -239,6 +239,18 @@ object StringUtils {
             result = StringUtils.removeHexCode(result)
         }
         return result
+    }
+
+    fun format(input: Int): String {
+        var output = ""
+        val str = input.toString()
+        str.reversed().forEachIndexed() { i, c ->
+            if (i > 0 && i % 3 == 0) {
+                output += "."
+            }
+            output += c
+        }
+        return output.reversed()
     }
 
 }

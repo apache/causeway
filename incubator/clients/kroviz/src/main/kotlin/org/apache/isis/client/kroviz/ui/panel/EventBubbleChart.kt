@@ -29,6 +29,7 @@ import io.kvision.utils.obj
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.ui.core.SessionManager
 import org.apache.isis.client.kroviz.ui.dialog.EventLogDetail
+import org.apache.isis.client.kroviz.utils.StringUtils
 import kotlin.math.pow
 
 @OptIn(ExperimentalJsExport::class)
@@ -83,7 +84,7 @@ class EventBubbleChart : SimplePanel() {
                 val error = obj {
                     text = "error"
                     fillStyle = TRANSPARENT
-                    strokeStyle = ERROR
+                    strokeStyle = ERROR_COLOR
                 }
                 legendLabelList.add(error as LegendItem)
                 val size = obj {
@@ -148,8 +149,7 @@ class EventBubbleChart : SimplePanel() {
             val borderColorList = mutableListOf<Color>()
             model.log.forEach {
                 when {
-                    it.isError() -> borderColorList.add(ERROR)
-                    it.response.contains("httpStatusCode") -> borderColorList.add(ERROR)
+                    it.isError() -> borderColorList.add(ERROR_COLOR)
                     else -> borderColorList.add(Color.name(Col.LIGHTGRAY))
                 }
             }
@@ -162,13 +162,11 @@ class EventBubbleChart : SimplePanel() {
          * 2. datasets are used inside datasets, data inside data
          */
         fun buildDataSetsList(): List<DataSets> {
-            console.log("[EBC.buildData]")
             val dataSetsList = mutableListOf<DataSets>()
             model.log.forEach {
                 val d = it.buildData()
                 dataSetsList.add(d)
             }
-            console.log(dataSetsList)
             return dataSetsList
         }
 
@@ -180,10 +178,12 @@ class EventBubbleChart : SimplePanel() {
     }
 
     private fun LogEntry.buildToolTip(index: Int): String {
-        return this.title +
+        val size = StringUtils.format(this.responseLength)
+        val title = StringUtils.shortTitle(this.title)
+        return title +
                 "\nseq.no.: $index" +
                 "\nparallel runs: ${this.runningAtStart}" +
-                "\nrsp.len.: ${this.responseLength}" +
+                "\nrsp.len.: $size" +
                 "\ntype: ${this.type}"
     }
 
@@ -218,7 +218,7 @@ class EventBubbleChart : SimplePanel() {
 
     companion object {
         val TRANSPARENT = Color.rgba(0xFF, 0xFF, 0xFF, 0x00)
-        val ERROR = Color.rgba(0xFF, 0x00, 0x00, 0xFF)
+        val ERROR_COLOR = Color.rgba(0xFF, 0x00, 0x00, 0xFF)
         val LIGHT_BLUE = Color.rgba(0x4B, 0xAC, 0xC6, 0x80)
         val DARK_BLUE = Color.rgba(0x4F, 0x81, 0xBD, 0x80)
         val GREEN = Color.rgba(0x9B, 0xBB, 0x59, 0x80)
