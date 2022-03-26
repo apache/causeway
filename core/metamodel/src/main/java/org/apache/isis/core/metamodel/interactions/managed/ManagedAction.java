@@ -27,23 +27,18 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.routing.RoutingService;
-import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.metamodel.commons.CanonicalInvoker;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -127,11 +122,9 @@ public final class ManagedAction extends ManagedMember {
             final @NonNull Can<ManagedObject> actionParameters,
             final @NonNull InteractionInitiatedBy interactionInitiatedBy) {
 
-        if(isValueTypeMixin()) {
-            return _Either.left(invokeValueTypeMixin(actionParameters));
-        }
-
         final ManagedObject actionResult = getAction()
+                // under the hood intercepts cases, where the owner is a value-type;
+                // executions on value-types have no rule checking and trigger no domain events
                 .execute(interactionHead(), actionParameters, interactionInitiatedBy);
 
         return _Either.left(route(actionResult));
@@ -146,45 +139,16 @@ public final class ManagedAction extends ManagedMember {
     public ManagedObject invokeWithRuleChecking(
             final @NonNull Can<ManagedObject> actionParameters) throws AuthorizationException {
 
-        if(isValueTypeMixin()) {
-            return invokeValueTypeMixin(actionParameters);
-        }
-
         final ManagedObject actionResult = getAction()
+                // under the hood intercepts cases, where the owner is a value-type;
+                // executions on value-types have no rule checking and trigger no domain events
                 .executeWithRuleChecking(
                         interactionHead(), actionParameters, InteractionInitiatedBy.USER, getWhere());
 
         return route(actionResult);
     }
 
-    // -- INVOKE HELPER
-
-    private boolean isValueTypeMixin() {
-        return getOwner().getSpecification().isValue()
-                && !getOwner().getSpecification().lookupFacet(ValueFacet.class)
-                .<ValueSemanticsProvider>flatMap(ValueFacet::selectDefaultSemantics)
-                .map(ValueSemanticsProvider::isCompositeType)
-                .orElse(false);
-
-    }
-
-    /**
-     *  value-type mixins have no rule-checking, no domain events and no routing
-     */
-    @SneakyThrows
-    private ManagedObject invokeValueTypeMixin(
-            final @NonNull Can<ManagedObject> actionParameters) {
-
-        val method = ((ObjectMemberAbstract)action).getFacetedMethod().getMethod();
-
-        final Object[] executionParameters = UnwrapUtil.multipleAsArray(actionParameters);
-        final Object targetPojo = UnwrapUtil.single(interactionHead().getTarget());
-
-        val resultPojo = CanonicalInvoker
-                .invoke(method, targetPojo, executionParameters);
-
-        return mmc().getObjectManager().adapt(resultPojo);
-    }
+    // -- ACTION RESULT ROUTING
 
     private ManagedObject route(final @Nullable ManagedObject actionResult) {
 
@@ -208,8 +172,6 @@ public final class ManagedAction extends ManagedMember {
         getServiceInjector().injectServicesInto(resultAdapter.getPojo());
         return resultAdapter;
     }
-
-    // -- ACTION RESULT ROUTING
 
     private Can<RoutingService> getRoutingServices() {
         return routingServices.get();

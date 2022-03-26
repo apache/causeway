@@ -31,12 +31,8 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -127,33 +123,10 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
                     associatedWithCollectionIfAny.getDataTableModel());
         }
 
-        // composite value type support via mixin
         if(associatedWithPropertyIfAny!=null) {
-            val ownerSpec = getBookmarkedOwner().getSpecification();
-            val propertyId = associatedWithPropertyIfAny.getIdentifier();
-            val prop = ownerSpec.getPropertyElseFail(propertyId);
-            val valueTypeSpec = prop.getElementType();
-
-            if(valueTypeSpec.isValue()
-                    && valueTypeSpec.lookupFacet(ValueFacet.class)
-                        .map(ValueFacet::isCompositeValueType)
-                        .orElse(false)
-                    && ownerSpec.getAction(memberId, MixedIn.INCLUDED).isEmpty()) {
-
-                val compositeValue0 = prop
-                        .get(getBookmarkedOwner()); //XXX make this nullToEmpty in OneToOneAssociation
-                val compositeValue =
-                        ManagedObjects.nullToEmpty(prop.getElementType(), compositeValue0);
-
-                val action = valueTypeSpec.lookupFacet(ValueFacet.class)
-                        .<ObjectAction>flatMap(valueFacet->
-                            valueFacet.selectCompositeValueMixinForFeature(associatedWithPropertyIfAny
-                                    .getManagedProperty()))
-                        .orElseThrow();
-
-                val managedAction = ManagedAction.of(compositeValue, action, where);
-                return ActionInteraction.wrap(managedAction);
-            }
+            // supports composite-value-types via mixin
+            return ActionInteraction.startAsBoundToProperty(
+                    associatedWithPropertyIfAny.getManagedProperty(), memberId, where);
         }
 
         return ActionInteraction.start(getBookmarkedOwner(), memberId, where);

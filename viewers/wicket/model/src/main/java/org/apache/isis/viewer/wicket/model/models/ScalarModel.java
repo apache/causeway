@@ -130,6 +130,11 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         this.renderingHint = renderingHint;
     }
 
+    /**
+     * This instance is either a {@link ScalarParameterModel} or a {@link ScalarPropertyModel}.
+     * <p>
+     * Corresponds to the enum {@link #getParamOrProp()}.
+     */
     public final _Either<ScalarParameterModel, ScalarPropertyModel> getSpecialization() {
         switch(getParamOrProp()) {
         case PARAMETER: return _Either.left((ScalarParameterModel) this);

@@ -418,12 +418,6 @@ implements ObjectAction {
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
-
-        //XXX debug
-        if(getFeatureIdentifier().getMemberLogicalName().equals("updatec")) {
-            System.err.printf("[%s] about to invoke updatec %n", this.getClass().getName());
-        }
-
         val actionInvocationFacet = getFacet(ActionInvocationFacet.class);
         return actionInvocationFacet
                 .invoke(this, head, argumentAdapters, interactionInitiatedBy);

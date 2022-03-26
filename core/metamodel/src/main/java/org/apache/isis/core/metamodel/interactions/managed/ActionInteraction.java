@@ -25,8 +25,11 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
 
@@ -187,6 +190,37 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
     ManagedAction getManagedActionElseFail() {
         return getManagedActionElseThrow(veto->
             _Exceptions.unrecoverable("action vetoed: " + veto.getReason()));
+    }
+
+    /** Supports composite-value-types via mixin (in case detected). */
+    public static ActionInteraction startAsBoundToProperty(
+            final ManagedProperty associatedWithProperty,
+            final String memberId,
+            final Where where) {
+        val owner = associatedWithProperty.getOwner();
+        val prop = associatedWithProperty.getMetaModel();
+
+        val valueFacet = prop.getElementType().isValue()
+                ? (ValueFacet<?>) prop.getElementType().getFacet(ValueFacet.class)
+                : null;
+
+        if(valueFacet!=null
+                && valueFacet.isCompositeValueType()
+                //XXX guard against memberId collision / maybe improve programming model so this cannot happen
+                && owner.getSpecification().getAction(memberId, MixedIn.INCLUDED).isEmpty()) {
+
+            val compositeValue0 = prop
+                    .get(owner); //XXX maybe make this nullToEmpty in OneToOneAssociation
+            val compositeValue =
+                    ManagedObjects.nullToEmpty(prop.getElementType(), compositeValue0);
+
+            val mixinAction = valueFacet.selectCompositeValueMixinForFeature(associatedWithProperty);
+            if(mixinAction.isPresent()) {
+                val managedAction = ManagedAction.of(compositeValue, mixinAction.get(), where);
+                return ActionInteraction.wrap(managedAction);
+            }
+        }
+        return ActionInteraction.start(owner, memberId, where);
     }
 
 }

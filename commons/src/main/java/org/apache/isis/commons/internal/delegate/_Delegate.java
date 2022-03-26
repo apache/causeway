@@ -24,6 +24,18 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class _Delegate {
 
+    /**
+     * For given {@code bluePrint} creates an instance, that implements all interfaces of
+     * {@code bluePrint}, while delegating method calls to the {@code delegate} object.
+     * The {@code delegate} object, does not necessarily need to implement any of the
+     * {@code bluePrint}'s interfaces.
+     * <p>
+     * Particularly useful in connection with {@link lombok.experimental.Delegate}.
+     * @param <T>
+     * @param bluePrint
+     * @param delegate
+     * @see lombok.experimental.Delegate
+     */
     @SuppressWarnings("unchecked")
     public <T> T createProxy(final Class<T> bluePrint, final Object delegate) {
         Class<?>[] ifcs = ClassUtils.getAllInterfacesForClass(
@@ -39,27 +51,24 @@ public class _Delegate {
         final Object delegate;
 
         @Override
-        public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
-            // Invocation on interface coming in...
-
-            System.err.printf("PROXY call %s%n", method);
+        public Object invoke(final Object proxy, final Method method, final Object[] args)
+                throws Throwable {
 
             if (method.getName().equals("equals")) {
                 // Only consider equal when proxies are identical.
                 return (proxy == args[0]);
             }
             else if (method.getName().equals("hashCode")) {
-                // Use hashCode of PersistenceManagerFactory proxy.
+                // Use hashCode of proxy rather than the delegate.
                 return System.identityHashCode(proxy);
             }
 
-            // Invoke method on delegate
+            // Invoke method with same signature on delegate
             try {
                 val delegateMethod = delegate.getClass()
                         .getDeclaredMethod(method.getName(), method.getParameterTypes());
                 return delegateMethod.invoke(delegate, args);
-            }
-            catch (InvocationTargetException ex) {
+            } catch (InvocationTargetException ex) {
                 throw ex.getTargetException();
             }
         }
