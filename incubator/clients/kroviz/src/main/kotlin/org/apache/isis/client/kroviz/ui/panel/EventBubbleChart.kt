@@ -74,7 +74,7 @@ class EventBubbleChart : SimplePanel() {
         fun buildLegend(): LegendOptions {
             fun buildLegendLabelList(): Array<LegendItem> {
                 val legendLabelList = mutableListOf<LegendItem>()
-                color2Label.forEach {
+                label2color.forEach {
                     val li = obj {
                         text = it.key
                         fillStyle = it.value
@@ -227,7 +227,7 @@ class EventBubbleChart : SimplePanel() {
         val RED_VIOLET = Color.rgba(0xA0, 0x5A, 0x78, 0x80)
         val VIOLET = Color.rgba(0x80, 0x64, 0xA2, 0x80)
 
-        val color2Label = mapOf(
+        val label2color = mapOf(
             "0 .. 4" to LIGHT_BLUE,
             "5 .. 8" to DARK_BLUE,
             "9 .. 16" to GREEN,
