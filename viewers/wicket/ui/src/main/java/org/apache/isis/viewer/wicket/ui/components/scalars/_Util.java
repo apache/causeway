@@ -27,6 +27,7 @@ import org.apache.wicket.validation.ValidationError;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
@@ -73,6 +74,16 @@ class _Util {
         return scalarModel.getAssociatedActions()
                 .getFirstAssociatedWithInlineAsIfEdit()
                 .flatMap(action->toActionLinkWithRuleChecking(action, scalarModel));
+    }
+
+    Can<LinkAndLabel> associatedLinksAndLabels(final ScalarModel scalarModel) {
+        // find associated actions for this scalar property (only properties will have any.)
+        // convert those actions into UI layer widgets
+        return scalarModel.getAssociatedActions()
+                .getRemainingAssociated()
+                .stream()
+                .map(LinkAndLabelFactory.forPropertyOrParameter(scalarModel))
+                .collect(Can.toCan());
     }
 
     private Optional<ActionLink> toActionLinkWithRuleChecking(

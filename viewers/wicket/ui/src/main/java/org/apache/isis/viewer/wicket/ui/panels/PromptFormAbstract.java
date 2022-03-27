@@ -96,7 +96,7 @@ implements ScalarModelSubscriber {
     @Override
     protected final void configureCancelButton(final AjaxButton cancelButton) {
         super.configureCancelButton(cancelButton);
-        if (formExecutorContext().getPromptStyle().isInlineOrInlineAsIfEdit()) {
+        if (formExecutorContext().getPromptStyle().isInlineAny()) {
             Wkt.behaviorAddFireOnEscapeKey(cancelButton, this::onCancelSubmitted);
         }
     }

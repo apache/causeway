@@ -51,7 +51,6 @@ import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisBlobOrClobPanelAbstract;
@@ -64,13 +63,12 @@ import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.Accessors;
-
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 
 public abstract class ScalarPanelAbstract
@@ -254,7 +252,7 @@ implements ScalarModelSubscriber {
             scalarFrameContainer.addOrReplace(compactFrame, regularFrame,
                     formFrame = createFormFrame());
 
-            val associatedLinksAndLabels = associatedLinksAndLabels();
+            val associatedLinksAndLabels = _Util.associatedLinksAndLabels(scalarModel);
             addPositioningCssTo(regularFrame, associatedLinksAndLabels);
             addActionLinksBelowAndRight(regularFrame, associatedLinksAndLabels);
 
@@ -278,7 +276,7 @@ implements ScalarModelSubscriber {
         // prevent from tabbing into non-editable widgets.
         if(scalarModel.isProperty()
                 && scalarModel.getMode() == ScalarRepresentation.VIEWING
-                && (scalarModel.getPromptStyle().isDialog()
+                && (scalarModel.getPromptStyle().isDialogAny()
                         || !scalarModel.canEnterEditMode())) {
 
             Wkt.noTabbing(getValidationFeedbackReceiver());
@@ -292,15 +290,6 @@ implements ScalarModelSubscriber {
 
     protected abstract void setupInlinePrompt();
 
-    private Can<LinkAndLabel> associatedLinksAndLabels() {
-        // find associated actions for this scalar property (only properties will have any.)
-        // convert those actions into UI layer widgets
-        return scalarModel.getAssociatedActions()
-                .getRemainingAssociated()
-                .stream()
-                .map(LinkAndLabelFactory.forPropertyOrParameter(scalarModel))
-                .collect(Can.toCan());
-    }
     /**
      * Builds the hidden REGULAR component when in COMPACT format.
      * <p>Is added to {@link #getScalarFrameContainer()}.

@@ -81,7 +81,7 @@ implements ObjectAdapterModel {
 
     @Override
     public boolean isInlinePrompt() {
-        return scalarModel().getPromptStyle().isInlineOrInlineAsIfEdit()
+        return scalarModel().getPromptStyle().isInlineAny()
                 && scalarModel().isEnabled();
     }
 

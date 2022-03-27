@@ -35,6 +35,7 @@ import org.apache.isis.commons.collections.CanVector;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
@@ -257,6 +258,42 @@ public interface ObjectAction extends ObjectMember {
      */
     default ActionMemento getMemento() {
         return ActionMemento.forAction(this);
+    }
+
+    default PromptStyle getPromptStyle() {
+        val promptStyle = lookupFacet(PromptStyleFacet.class)
+                .map(PromptStyleFacet::value);
+        if(getDeclaringType().isManagedBean() // <-- menu actions
+                // no-arg DIALOG is correctly handled,
+                // whereas for INLINE it would render a form with no fields
+                || getParameterCount() == 0) {
+            if (promptStyle.isPresent()) {
+                if (promptStyle.get().isDialogAny()) {
+                    // preserve dialog specialization
+                    return promptStyle.get();
+                }
+            }
+            // fallback to generic dialog
+            return PromptStyle.DIALOG;
+        }
+
+        val needsFallback = promptStyle.isEmpty()
+                || promptStyle.get() == PromptStyle.AS_CONFIGURED;
+
+        if(needsFallback) {
+            // modal vs side-bar
+            val dialogModeAsConfigured = Optional.ofNullable(
+                    getMetaModelContext().getConfiguration().getViewer().getWicket().getDialogMode())
+                    .orElseGet(()->new Wicket().getDialogMode());
+            switch (dialogModeAsConfigured) {
+            case SIDEBAR:
+                return PromptStyle.DIALOG_SIDEBAR;
+            case MODAL:
+            default:
+                return PromptStyle.DIALOG_MODAL;
+            }
+        }
+        return promptStyle.get();
     }
 
     // -- UTIL

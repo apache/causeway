@@ -84,19 +84,19 @@ extends ScalarPanelAbstract {
         val fieldFrame = getFieldFrame();
         val scalarFrameContainer = getScalarFrameContainer();
 
+        // even if this particular scalarModel (property) is not configured for inline edits,
+        // it's possible that one of the associated actions is.  Thus we set the prompt context
+        scalarModel.setInlinePromptContext(
+                new InlinePromptContext(
+                        scalarModel,
+                        scalarFrameContainer,
+                        regularFrame,
+                        getFormFrame()));
+
         if(FieldFragement.LINK.isMatching(fieldFrame)) {
 
             fieldFrame
                 .add(inlinePromptLink = createInlinePromptLink());
-
-            // even if this particular scalarModel (property) is not configured for inline edits,
-            // it's possible that one of the associated actions is.  Thus we set the prompt context
-            scalarModel.setInlinePromptContext(
-                    new InlinePromptContext(
-                            scalarModel,
-                            scalarFrameContainer,
-                            regularFrame,
-                            getFormFrame()));
 
             // needs InlinePromptContext to properly initialize
             addOnClickBehaviorTo(inlinePromptLink);
@@ -104,7 +104,7 @@ extends ScalarPanelAbstract {
 
         addEditPropertyIf(
                 scalarModel.canEnterEditMode()
-                && (scalarModel.getPromptStyle().isDialog()
+                && (scalarModel.getPromptStyle().isDialogAny()
                         || fieldFrame==null),
                 fieldFrame);
 
