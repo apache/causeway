@@ -57,10 +57,12 @@ public class _Delegate {
             if (method.getName().equals("equals")) {
                 // Only consider equal when proxies are identical.
                 return (proxy == args[0]);
-            }
-            else if (method.getName().equals("hashCode")) {
+            } else if (method.getName().equals("hashCode")) {
                 // Use hashCode of proxy rather than the delegate.
                 return System.identityHashCode(proxy);
+            } else if (method.getName().equals("toString")) {
+                // delegate Object.toString() method
+                return "Proxy(" + delegate.toString() + ")";
             }
 
             // Invoke method with same signature on delegate
