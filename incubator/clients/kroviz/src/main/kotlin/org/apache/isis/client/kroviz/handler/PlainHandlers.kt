@@ -63,13 +63,6 @@ class ServiceHandler : BaseHandler() {
     }
 }
 
-class TObjectHandler : BaseHandler() {
-
-    override fun parse(response: String): TransferObject {
-        return Json.decodeFromString<TObject>(response)
-    }
-}
-
 class UserHandler : BaseHandler() {
 
     override fun parse(response: String): TransferObject {

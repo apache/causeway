@@ -62,12 +62,6 @@ class DynamicMenuBuilder {
         })
         menu.add(bubble)
 
-        val pieTitle = "Pie Chart"
-        val pie = buildMenuEntry(pieTitle, pieTitle, {
-            ViewManager.add(pieTitle, EventPieChart())
-        })
-        menu.add(pie)
-
         return menu.toTypedArray().asDynamic()
     }
 

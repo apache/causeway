@@ -33,8 +33,13 @@ import io.kvision.utils.px
 import org.apache.isis.client.kroviz.core.Session
 import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.to.mb.Menubars
-import org.apache.isis.client.kroviz.ui.dialog.*
-import org.apache.isis.client.kroviz.ui.panel.*
+import org.apache.isis.client.kroviz.ui.dialog.About
+import org.apache.isis.client.kroviz.ui.dialog.EventDialog
+import org.apache.isis.client.kroviz.ui.dialog.LoginPrompt
+import org.apache.isis.client.kroviz.ui.dialog.SvgInline
+import org.apache.isis.client.kroviz.ui.panel.GeoMap
+import org.apache.isis.client.kroviz.ui.panel.ImageSample
+import org.apache.isis.client.kroviz.ui.panel.SvgMap
 import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.utils.Point
 
@@ -186,6 +191,11 @@ class RoMenuBar : SimplePanel() {
             buildMenuEntry(testTitle, "Test", { this.executeAllMenuBarActions() })
         )
 
+        val stats = "Log Handler Stats"
+        mainMenu.add(
+            buildMenuEntry(stats, "Console", { this.logStats() })
+        )
+
         /*
                val testTitle = "Test"
                  mainMenu.add(
@@ -231,6 +241,12 @@ class RoMenuBar : SimplePanel() {
                     ResourceProxy().fetch(sa.link!!)
                 }
             }
+        }
+    }
+
+    fun logStats() {
+        SessionManager.responseHandlerStatistics.forEach {
+            console.log("${it.key} -> ${it.value}")
         }
     }
 

@@ -20,6 +20,7 @@ package org.apache.isis.client.kroviz.ui.core
 
 import org.apache.isis.client.kroviz.core.Session
 import org.apache.isis.client.kroviz.core.event.EventStore
+import org.apache.isis.client.kroviz.handler.BaseHandler
 
 /**
  * Handle multiple Sessions
@@ -29,6 +30,7 @@ object SessionManager {
     private val sessions = mutableSetOf<Session>()
     private val eventStore = EventStore()
     private var activeSession: Session? = null
+    val responseHandlerStatistics = mutableMapOf<String, Int>()
 
     fun getBaseUrl(): String? {
         return activeSession?.baseUrl
@@ -67,6 +69,16 @@ object SessionManager {
         activeSession?.resString = iconUrl
         val menuBar = ViewManager.getRoApp().roMenuBar
         menuBar.updateIcon(activeSession!!)
+    }
+
+    fun logInvocation(responseHandler: BaseHandler) {
+        val className = responseHandler::class.simpleName!!
+        val value = responseHandlerStatistics.get(className)
+        if (value == null) {
+            responseHandlerStatistics.put(className, 1)
+        } else {
+            responseHandlerStatistics.put(className, value + 1)
+        }
     }
 
 }
