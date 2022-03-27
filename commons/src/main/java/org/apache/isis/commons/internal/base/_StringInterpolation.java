@@ -16,12 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.webapp.modules.templresources;
+package org.apache.isis.commons.internal.base;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings.KeyValuePair;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
@@ -29,27 +32,42 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 import lombok.NonNull;
 
 /**
- * Package private mixin for ResourceServlet
+ * <h1>- internal use only -</h1>
+ * <p>
+ * String interpolation support. Yet use only for small input!
+ * Not optimized for large input, with many variables.
+ * </p>
+ * <p>
+ * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
+ * These may be changed or removed without notice!
+ * </p>
+ *
  * @since 2.0
  */
-final class TemplateResourceServlet_HtmlTemplateVariables {
+public final class _StringInterpolation {
 
-    final Map<String, String> placeholders = new HashMap<>();
+    final Map<String, String> variables;
 
-    public TemplateResourceServlet_HtmlTemplateVariables(@NonNull final KeyValuePair ... kvPairs) {
+    public _StringInterpolation(final @NonNull KeyValuePair ... kvPairs) {
+        this.variables = new HashMap<>();
         stream(kvPairs)
-        .forEach(kvPair->placeholders.put(kvPair.getKey(), kvPair.getValue()));
+        .forEach(kvPair->variables.put(kvPair.getKey(), kvPair.getValue()));
+    }
+
+    public _StringInterpolation(final @NonNull Map<String, String> variables) {
+        this.variables = variables;
     }
 
     /**
-     * @param template HTML template containing placeholders
-     * @return HTML post-processed template with all the placeholders replaced by their values
+     * Returns a String from given template, with all its variables replaced by their value.
      */
-    public String applyTo(final String template) {
+    public String applyTo(final @Nullable String template) {
 
-        String acc = template;
+        if(template == null) return null;
 
-        for ( Entry<String, String> entry : placeholders.entrySet()) {
+        var acc = template;
+
+        for ( Entry<String, String> entry : variables.entrySet()) {
             final String placeholderLiteral = "${" + entry.getKey() + "}";
             final String placeholderValue = entry.getValue();
 
@@ -57,6 +75,12 @@ final class TemplateResourceServlet_HtmlTemplateVariables {
         }
 
         return acc;
+    }
+
+    public Can<String> applyTo(final @Nullable Can<String> lines) {
+        if(lines == null) return Can.empty();
+
+        return lines.map(this::applyTo);
     }
 
 }
