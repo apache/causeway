@@ -18,11 +18,14 @@
  */
 package org.apache.isis.extensions.fullcalendar.applib.value;
 
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -44,7 +47,9 @@ import org.apache.isis.applib.value.semantics.TemporalValueSemantics;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._StringInterpolation;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.schema.common.v2.TypedTupleDto;
 import org.apache.isis.schema.common.v2.ValueType;
 
@@ -119,24 +124,27 @@ implements
         return render(value, v->v.toString());
     }
 
+    private final Can<String> htmlTemplate = _Text.readLinesFromResource(this.getClass(),
+            "CalendarEvent.html", StandardCharsets.UTF_8);
+
     @Override
     public String htmlPresentation(final Context context, final CalendarEvent value) {
         return render(value, v->{
 
-            return String.format("<section style=\""
-                    + "border: 1px solid rgba(0,0,0,.125);"
-                    + "padding: 2px 4px;"
-                    + "\">"
-                    + "<h6>%s (%s)</h6>"
-                    + "<span>%s</span>"
-                    + "<p>%s</p>"
-                    + "</section>",
-                    v.getTitle(),
-                    v.getCalendarName(),
-                    zonedDateTimeValueSemantics
+            val html = new _StringInterpolation(Map.of(
+                    "title", v.getTitle(),
+                    "calendar-name", v.getCalendarName(),
+                    "timestamp", zonedDateTimeValueSemantics
                         .htmlPresentation(context,
                                 v.asDateTime(context.getInteractionContext().getTimeZone())),
-                    _Strings.nullToEmpty(v.getNotes()));
+                    "notes", _Strings.nullToEmpty(v.getNotes())
+                    ))
+                    .applyTo(htmlTemplate)
+                    .stream()
+                    .collect(Collectors.joining())
+                    ;
+
+            return html;
         });
     }
 
@@ -147,20 +155,20 @@ implements
 
         val a = CalendarEvent.of(
                 ZonedDateTime.of(2022, 05, 13, 17, 30, 15, 0, ZoneOffset.ofHours(3)),
-                "a-name",
-                "a-title",
+                "Business",
+                "Weekly Meetup",
                 "Calendar Notes");
 
         val b = CalendarEvent.of(
                 ZonedDateTime.of(2022, 06, 14, 18, 31, 16, 0, ZoneOffset.ofHours(4)),
-                "b-name",
-                "b-title",
+                "Private",
+                "Dentist Appointment",
                 "Calendar Notes");
 
         val c = CalendarEvent.of(
                 ZonedDateTime.of(2022, 07, 15, 19, 32, 17, 0, ZoneOffset.ofHours(5)),
-                "c-name",
-                "c-title");
+                "Family and Friends",
+                "Birthday Party");
 
         return Can.of(a, b, c);
     }
