@@ -206,7 +206,8 @@ extends ScalarPanelAbstract {
 
         final PropertyEditPanel propertyEditPanel =
                 (PropertyEditPanel) getComponentFactoryRegistry().createComponent(
-                        ComponentType.PROPERTY_EDIT_PROMPT, prompt.getContentId(),
+                        prompt.getContentId(),
+                        ComponentType.PROPERTY_EDIT_PROMPT,
                         ScalarPanelAbstract2.this.scalarModel());
 
         propertyEditPanel.setShowHeader(false);

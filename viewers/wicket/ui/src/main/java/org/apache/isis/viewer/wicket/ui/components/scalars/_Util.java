@@ -50,26 +50,19 @@ class _Util {
     }
 
     Optional<LinkAndLabel> lookupMixinForCompositeValueUpdate(final ScalarModel scalarModel) {
-        if(!canPropertyEnterInlineEditDirectly(scalarModel)) {
-            return Optional.empty();
-        }
-        final ObjectAction compositeValueMixinForFeature = scalarModel.lookupCompositeValueMixinForFeature()
-        .orElse(null);
-
-        if(compositeValueMixinForFeature==null) {
-            return Optional.empty();
-        }
-
-        return toLinkAndLabelWithRuleChecking(compositeValueMixinForFeature, scalarModel).stream()
-                .filter(_Util::guardAgainstInvalidCompositeMixinScenarios)
-                .findAny();
+//        if(!canPropertyEnterInlineEditDirectly(scalarModel)) {
+//            return Optional.empty();
+//        }
+        return scalarModel.lookupCompositeValueMixinForFeature()
+            .flatMap(compositeValueMixinForFeature->
+                toLinkAndLabelWithRuleChecking(compositeValueMixinForFeature, scalarModel))
+            .filter(_Util::guardAgainstInvalidCompositeMixinScenarios);
     }
 
-
     Optional<LinkAndLabel> lookupPropertyActionForInlineEdit(final ScalarModel scalarModel) {
-        if(canPropertyEnterInlineEditDirectly(scalarModel)) {
-            return Optional.empty();
-        }
+//        if(canPropertyEnterInlineEditDirectly(scalarModel)) {
+//            return Optional.empty();
+//        }
         // not editable property, but maybe one of the actions is.
         return scalarModel.getAssociatedActions()
                 .getFirstAssociatedWithInlineAsIfEdit()

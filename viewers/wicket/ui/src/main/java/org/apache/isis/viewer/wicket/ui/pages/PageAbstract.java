@@ -214,7 +214,7 @@ implements ActionPromptProvider {
      * @return The container that should be used as a page header/navigation bar
      */
     protected MarkupContainer createPageHeader(final String id) {
-        Component header = getComponentFactoryRegistry().createComponent(ComponentType.HEADER, id, null);
+        Component header = getComponentFactoryRegistry().createComponent(id, ComponentType.HEADER, null);
         return (MarkupContainer) header;
     }
 
@@ -225,7 +225,7 @@ implements ActionPromptProvider {
      * @return The container that should be used as a page header/navigation bar
      */
     protected MarkupContainer createPageFooter(final String id) {
-        Component footer = getComponentFactoryRegistry().createComponent(ComponentType.FOOTER, id, null);
+        Component footer = getComponentFactoryRegistry().createComponent(id, ComponentType.FOOTER, null);
         return (MarkupContainer) footer;
     }
 
@@ -370,7 +370,7 @@ implements ActionPromptProvider {
 
         final Component bookmarks = getBookmarkedPagesModel()
             .map(bm->getComponentFactoryRegistry()
-                            .createComponent(ComponentType.BOOKMARKED_PAGES, ID_BOOKMARKED_PAGES, bm))
+                            .createComponent(ID_BOOKMARKED_PAGES, ComponentType.BOOKMARKED_PAGES, bm))
             .orElseGet(()->new EmptyPanel(ID_BOOKMARKED_PAGES).setVisible(false));
 
         container.add(bookmarks);

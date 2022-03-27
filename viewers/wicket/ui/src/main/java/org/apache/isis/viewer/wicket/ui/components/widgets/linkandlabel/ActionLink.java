@@ -183,33 +183,6 @@ extends IndicatingAjaxLink<ManagedObject> {
         }
     }
 
-    private void startDialogWithParams(final AjaxRequestTarget target) {
-
-        val actionModel = this.getActionModel();
-        val actionOwnerSpec = actionModel.getActionOwner().getSpecification();
-        val actionPrompt = ActionPromptProvider
-                .getFrom(this.getPage())
-                .getActionPrompt(actionModel.getPromptStyle(), actionOwnerSpec.getBeanSort());
-
-        val actionParametersPanel = (ActionParametersPanel)
-                getComponentFactoryRegistry()
-                .createComponent(
-                        ComponentType.ACTION_PROMPT, actionPrompt.getContentId(), actionModel);
-
-        actionParametersPanel.setShowHeader(false);
-
-        val label = Wkt.label(actionPrompt.getTitleId(), actionModel::getFriendlyName);
-        actionPrompt.setTitle(label, target);
-        actionPrompt.setPanel(actionParametersPanel, target);
-        actionPrompt.showPrompt(target);
-
-        castTo(ActionPromptWithExtraContent.class, actionPrompt)
-        .ifPresent(promptWithExtraContent->{
-            BS3GridPanel.extraContentForMixin(promptWithExtraContent.getExtraContentId(), actionModel)
-            .ifPresent(gridPanel->promptWithExtraContent.setExtraContentPanel(gridPanel, target));
-        });
-    }
-
     private void executeWithoutParams() {
         val actionModel = this.getActionModel();
 
@@ -236,8 +209,33 @@ extends IndicatingAjaxLink<ManagedObject> {
         }
     }
 
-    private void startDialogInline(final AjaxRequestTarget target) {
+    private void startDialogWithParams(final AjaxRequestTarget target) {
+        val actionModel = this.getActionModel();
+        val actionOwnerSpec = actionModel.getActionOwner().getSpecification();
+        val actionPrompt = ActionPromptProvider
+                .getFrom(this.getPage())
+                .getActionPrompt(actionModel.getPromptStyle(), actionOwnerSpec.getBeanSort());
 
+        val actionParametersPanel = (ActionParametersPanel)
+                getComponentFactoryRegistry()
+                .createComponent(actionPrompt.getContentId(),
+                        ComponentType.ACTION_PROMPT, actionModel);
+
+        actionParametersPanel.setShowHeader(false);
+
+        val label = Wkt.label(actionPrompt.getTitleId(), actionModel::getFriendlyName);
+        actionPrompt.setTitle(label, target);
+        actionPrompt.setPanel(actionParametersPanel, target);
+        actionPrompt.showPrompt(target);
+
+        castTo(ActionPromptWithExtraContent.class, actionPrompt)
+        .ifPresent(promptWithExtraContent->{
+            BS3GridPanel.extraContentForMixin(promptWithExtraContent.getExtraContentId(), actionModel)
+            .ifPresent(gridPanel->promptWithExtraContent.setExtraContentPanel(gridPanel, target));
+        });
+    }
+
+    private void startDialogInline(final AjaxRequestTarget target) {
         val actionModel = this.getActionModel();
         val inlinePromptContext = actionModel.getInlinePromptContext();
         val scalarTypeContainer = inlinePromptContext.getScalarTypeContainer();
