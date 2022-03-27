@@ -63,12 +63,9 @@ extends ScalarPanelAbstract {
     @Getter(AccessLevel.PROTECTED)
     protected MarkupContainer fieldFrame;
 
-
     // -- INLINE PROMPT LINK
 
-
     protected WebMarkupContainer inlinePromptLink;
-
 
     // -- CONSTRUCTION
 
@@ -242,7 +239,6 @@ extends ScalarPanelAbstract {
                 Wkt.behaviorAddOnClick(clickReceiver, actionLinkInlineAsIfEdit.getUiComponent()::onClick);
             });
         }
-
     }
 
     private WebMarkupContainer createInlinePromptLink() {

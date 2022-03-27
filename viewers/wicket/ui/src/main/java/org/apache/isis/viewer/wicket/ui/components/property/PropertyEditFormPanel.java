@@ -38,6 +38,8 @@ extends PromptFormPanelAbstract<ManagedObject, ScalarPropertyModel> {
     private static final long serialVersionUID = 1L;
 
     static final String ID_PROPERTY = "property";
+    static final String ID_INPUT_FORM = "inputForm";
+
 
     public PropertyEditFormPanel(final String id, final ScalarPropertyModel model) {
         super(id, model);
@@ -46,7 +48,7 @@ extends PromptFormPanelAbstract<ManagedObject, ScalarPropertyModel> {
 
     private void buildGui() {
         ScalarPropertyModel model = getModel();
-        add(new PropertyEditForm("inputForm", this, this.getWicketViewerSettings(), model));
+        add(new PropertyEditForm(ID_INPUT_FORM, this, this.getWicketViewerSettings(), model));
     }
 
 }

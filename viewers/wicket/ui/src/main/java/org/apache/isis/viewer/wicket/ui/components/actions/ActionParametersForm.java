@@ -48,9 +48,8 @@ import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktDecorators;
 
-import lombok.val;
-
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
+import lombok.val;
 
 class ActionParametersForm
 extends PromptFormAbstract<ActionModel> {
@@ -65,13 +64,13 @@ extends PromptFormAbstract<ActionModel> {
         super(id, parentPanel, settings, actionModel);
     }
 
-    private ActionModel getActionModel() {
+    protected ActionModel actionModel() {
         return (ActionModel) super.getModel();
     }
 
     @Override
     protected void addParameters() {
-        val actionModel = getActionModel();
+        val actionModel = actionModel();
 
         val repeatingView =
                 Wkt.add(this, new RepeatingView(ActionParametersFormPanel.ID_ACTION_PARAMETERS));
@@ -96,12 +95,13 @@ extends PromptFormAbstract<ActionModel> {
             final WebMarkupContainer container,
             final ParameterUiModelWkt paramModel) {
 
-        val id = "scalarNameAndValue";
+        //XXX add support for composite-value-types
 
         val scalarParamModel = ScalarParameterModel.wrap(paramModel);
 
         final Component component = getComponentFactoryRegistry()
-                .addOrReplaceComponent(container, id, ComponentType.SCALAR_NAME_AND_VALUE, scalarParamModel);
+                .addOrReplaceComponent(container, ActionParametersFormPanel.ID_SCALAR_NAME_AND_VALUE,
+                        ComponentType.SCALAR_NAME_AND_VALUE, scalarParamModel);
 
         if(!(component instanceof ScalarPanelAbstract)) {
             return Optional.empty();
@@ -121,7 +121,7 @@ extends PromptFormAbstract<ActionModel> {
 
     @Override
     protected Object newCompletedEvent(final AjaxRequestTarget target, final Form<?> form) {
-        return new IsisActionCompletedEvent(getActionModel(), target, form);
+        return new IsisActionCompletedEvent(actionModel(), target, form);
     }
 
     @Override
@@ -136,7 +136,7 @@ extends PromptFormAbstract<ActionModel> {
      * @param button The button which action should be confirmed
      */
     private void applyAreYouSure(final AjaxButton button) {
-        val actionModel = getActionModel();
+        val actionModel = actionModel();
         val action = actionModel.getAction();
 
         if (action.getSemantics().isAreYouSure()) {
@@ -152,7 +152,7 @@ extends PromptFormAbstract<ActionModel> {
             _Debug.log("about to update Param Form ..");
         });
 
-        val actionModel = getActionModel();
+        val actionModel = actionModel();
 
         val updatedParamModel = (ParameterUiModel)scalarPanelUpdated.getModel();
         final int paramNumberUpdated = updatedParamModel.getParameterIndex();
@@ -204,7 +204,7 @@ extends PromptFormAbstract<ActionModel> {
 
     @Override
     protected _Either<ActionModel, ScalarPropertyModel> getMemberModel() {
-        return _Either.left(getActionModel());
+        return _Either.left(actionModel());
     }
 
 }

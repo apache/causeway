@@ -219,7 +219,8 @@ extends IndicatingAjaxLink<ManagedObject> {
         val actionParametersPanel = (ActionParametersPanel)
                 getComponentFactoryRegistry()
                 .createComponent(actionPrompt.getContentId(),
-                        ComponentType.ACTION_PROMPT, actionModel);
+                        ComponentType.ACTION_PROMPT,
+                        actionModel);
 
         actionParametersPanel.setShowHeader(false);
 
@@ -241,7 +242,9 @@ extends IndicatingAjaxLink<ManagedObject> {
         val scalarTypeContainer = inlinePromptContext.getScalarTypeContainer();
 
         getComponentFactoryRegistry().addOrReplaceComponent(scalarTypeContainer,
-                FrameFragment.INLINE_PROMPT_FORM.getContainerId(), ComponentType.PARAMETERS, actionModel);
+                FrameFragment.INLINE_PROMPT_FORM.getContainerId(),
+                ComponentType.PARAMETERS,
+                actionModel);
 
         inlinePromptContext.onPrompt();
 
