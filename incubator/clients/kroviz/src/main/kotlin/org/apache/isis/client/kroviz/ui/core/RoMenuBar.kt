@@ -156,19 +156,6 @@ class RoMenuBar : SimplePanel() {
             buildMenuEntry("Events", "Event", { EventDialog().open() })
         )
 
-        val chartTitle = "Sample Chart"
-        mainMenu.add(
-            buildMenuEntry(
-                chartTitle,
-                "Chart",
-                {
-                    ViewManager.add(
-                        chartTitle,
-                        EventBubbleChart()
-                    )
-                })
-        )
-
         val geoMapTitle = "Sample Geo Map"
         mainMenu.add(
             buildMenuEntry(geoMapTitle, "Map", { ViewManager.add(geoMapTitle, GeoMap()) })

@@ -47,7 +47,7 @@ class App : Application() {
         return mapOf()
     }
 
-    fun initRoApp() {
+    private fun initRoApp() {
         roApp = RoApp()
         ViewManager.app = this
     }

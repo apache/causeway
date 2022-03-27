@@ -88,6 +88,7 @@ object IconManager {
         "OK" to "check",
         "Open" to "book",
         "Other" to "asterisk",
+        "Pie" to "pie-chart",
         "Pin" to "map-pin",
         "Primitives" to "hashtag",
         "Properties" to "indent",

@@ -46,21 +46,27 @@ class DynamicMenuBuilder {
     fun buildTableMenu(table: EventLogTable): dynamic {
         val menu = mutableListOf<dynamic>()
 
-        val a2 = buildMenuEntry("Export", "Export Events ...", {
+        val export = buildMenuEntry("Export", "Export Events ...", {
             EventExportDialog().open()
         })
-        menu.add(a2)
+        menu.add(export)
 
-        val a3 = buildMenuEntry("Tabulator Download", "Tabulator Download", {
+        val download = buildMenuEntry("Tabulator Download", "Tabulator Download", {
             this.downLoadCsv(table)
         })
-        menu.add(a3)
+        menu.add(download)
 
-        val title = "Chart"
-        val a4 = buildMenuEntry(title, title, {
-            ViewManager.add(title, EventBubbleChart())
+        val bubbleTitle = "Bubble Chart"
+        val bubble = buildMenuEntry(bubbleTitle, bubbleTitle, {
+            ViewManager.add(bubbleTitle, EventBubbleChart())
         })
-        menu.add(a4)
+        menu.add(bubble)
+
+        val pieTitle = "Pie Chart"
+        val pie = buildMenuEntry(pieTitle, pieTitle, {
+            ViewManager.add(pieTitle, EventPieChart())
+        })
+        menu.add(pie)
 
         return menu.toTypedArray().asDynamic()
     }
