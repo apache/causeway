@@ -60,22 +60,10 @@ class _Util {
         }
 
         return toActionLinkWithRuleChecking(compositeValueMixinForFeature, scalarModel).stream()
-                .peek(actionLink->{
-                    val ipc = actionLink.getActionModel().getInlinePromptContext();
-                    val ps = actionLink.getActionModel().getPromptStyle();
-                    _Assert.assertNotNull(ipc, ()->String.format(
-                            "with feature %s, "
-                            + "for composite-value-type mixins to work an InlinePromptContext is required",
-                            compositeValueMixinForFeature.getFeatureIdentifier()));
-                    _Assert.assertTrue(ps==PromptStyle.INLINE_AS_IF_EDIT, ()->String.format(
-                            "with feature %s, "
-                            + "for composite-value-type mixins to work PromptStyle must be INLINE_AS_IF_EDIT "
-                            + "yet found %s",
-                            compositeValueMixinForFeature.getFeatureIdentifier(),
-                            ps));
-                })
+                .filter(_Util::guardAgainstInvalidCompositeMixinScenarios)
                 .findAny();
     }
+
 
     Optional<ActionLink> lookupPropertyActionForInlineEdit(final ScalarModel scalarModel) {
         if(canPropertyEnterInlineEditDirectly(scalarModel)) {
@@ -112,6 +100,22 @@ class _Util {
                 });
             }
         };
+    }
+
+    private boolean guardAgainstInvalidCompositeMixinScenarios(final ActionLink actionLink) {
+        val ipc = actionLink.getActionModel().getInlinePromptContext();
+        val ps = actionLink.getActionModel().getPromptStyle();
+        _Assert.assertNotNull(ipc, ()->String.format(
+                "with feature %s, "
+                + "for composite-value-type mixins to work an InlinePromptContext is required",
+                actionLink.getObjectAction().getFeatureIdentifier()));
+        _Assert.assertTrue(ps==PromptStyle.INLINE_AS_IF_EDIT, ()->String.format(
+                "with feature %s, "
+                + "for composite-value-type mixins to work PromptStyle must be INLINE_AS_IF_EDIT "
+                + "yet found %s",
+                actionLink.getObjectAction().getFeatureIdentifier(),
+                ps));
+        return true;
     }
 
     private Optional<ManagedObject> recoverProposedValue(
