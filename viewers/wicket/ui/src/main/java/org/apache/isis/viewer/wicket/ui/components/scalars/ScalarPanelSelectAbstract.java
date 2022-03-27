@@ -51,15 +51,13 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
 
     public ScalarPanelSelectAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, ManagedObject.class);
+        setOutputMarkupId(true);
     }
 
     protected final Select2 createSelect2(final String id) {
         val scalarModel = scalarModel();
 
         val select2 = Select2.createSelect2(id, scalarModel());
-        setOutputMarkupId(true);
-        select2.asComponent().setOutputMarkupId(true);
-
         select2.setLabel(Model.of(scalarModel.getFriendlyName()));
 
         //TODO potentially superfluous, as already set in super ...

@@ -53,6 +53,7 @@ import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.schema.common.v2.TypedTupleDto;
 import org.apache.isis.schema.common.v2.ValueType;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
@@ -119,9 +120,16 @@ implements
 
     // -- RENDERER
 
+    private final String titleTemplate =
+            "[${calendar-name}] ${title} @ ${timestamp}";
+
     @Override
     public String titlePresentation(final Context context, final CalendarEvent value) {
-        return render(value, v->v.toString());
+        return render(value, v->{
+            val title = new _StringInterpolation(toMap(context, value))
+                    .applyTo(titleTemplate);
+            return title;
+        });
     }
 
     private final Can<String> htmlTemplate = _Text.readLinesFromResource(this.getClass(),
@@ -130,22 +138,22 @@ implements
     @Override
     public String htmlPresentation(final Context context, final CalendarEvent value) {
         return render(value, v->{
-
-            val html = new _StringInterpolation(Map.of(
-                    "title", v.getTitle(),
-                    "calendar-name", v.getCalendarName(),
-                    "timestamp", zonedDateTimeValueSemantics
-                        .htmlPresentation(context,
-                                v.asDateTime(context.getInteractionContext().getTimeZone())),
-                    "notes", _Strings.nullToEmpty(v.getNotes())
-                    ))
+            val html = new _StringInterpolation(toMap(context, value))
                     .applyTo(htmlTemplate)
                     .stream()
-                    .collect(Collectors.joining())
-                    ;
-
+                    .collect(Collectors.joining());
             return html;
         });
+    }
+
+    private Map<String, @NonNull String> toMap(final Context context, final CalendarEvent v) {
+        return Map.of(
+                "title", v.getTitle(),
+                "calendar-name", v.getCalendarName(),
+                "timestamp", zonedDateTimeValueSemantics
+                    .htmlPresentation(context,
+                            v.asDateTime(context.getInteractionContext().getTimeZone())),
+                "notes", _Strings.nullToEmpty(v.getNotes()));
     }
 
     // -- EXAMPLES
