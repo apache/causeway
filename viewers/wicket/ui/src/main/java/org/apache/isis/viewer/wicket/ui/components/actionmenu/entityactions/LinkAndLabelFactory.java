@@ -20,8 +20,6 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 
 import java.util.function.Function;
 
-import org.apache.wicket.markup.html.link.AbstractLink;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -143,7 +141,7 @@ extends Function<ObjectAction, LinkAndLabel> {
     static class MenuLinkFactory implements ActionLinkUiComponentFactoryWkt {
         private static final long serialVersionUID = 1L;
         @Override
-        public AbstractLink newActionLinkUiComponent(@NonNull final ActionModel actionModel) {
+        public ActionLink newActionLinkUiComponent(@NonNull final ActionModel actionModel) {
             return ActionLink.create(PageAbstract.ID_MENU_LINK, actionModel);
         }
     }
@@ -151,7 +149,7 @@ extends Function<ObjectAction, LinkAndLabel> {
     static class AdditionalLinkFactory implements ActionLinkUiComponentFactoryWkt {
         private static final long serialVersionUID = 1L;
         @Override
-        public AbstractLink newActionLinkUiComponent(@NonNull final ActionModel actionModel) {
+        public ActionLink newActionLinkUiComponent(@NonNull final ActionModel actionModel) {
             return ActionLink.create(AdditionalLinksPanel.ID_ADDITIONAL_LINK, actionModel);
         }
     }

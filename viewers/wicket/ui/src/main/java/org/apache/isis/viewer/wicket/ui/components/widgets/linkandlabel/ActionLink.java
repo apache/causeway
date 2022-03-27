@@ -135,10 +135,6 @@ extends IndicatingAjaxLink<ManagedObject> {
 
     @Override
     public boolean isVisible() {
-//        _Debug.onCondition(!getActionModel().getVisibilityConsent().isAllowed(), ()->{
-//            System.err.printf("not allowed %s -> %s%n", getObjectAction().getFeatureIdentifier(),
-//                    getActionModel().getVisibilityConsent().getReason());
-//        });
         return getActionModel().getVisibilityConsent().isAllowed();
     }
 

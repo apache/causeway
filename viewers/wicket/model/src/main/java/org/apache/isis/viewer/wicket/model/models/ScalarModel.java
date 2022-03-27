@@ -367,6 +367,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         }
         return getSpecialization().<Optional<ObjectAction>>fold(
                 param->{
+                    System.err.printf("lookupCompositeValueMixinForFeature %s%n", param.getParameterNegotiationModel());
                     return Optional.empty(); //XXX add support later
                 },
                 prop->{

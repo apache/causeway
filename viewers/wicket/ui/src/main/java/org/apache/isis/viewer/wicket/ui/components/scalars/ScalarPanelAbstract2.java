@@ -228,7 +228,7 @@ extends ScalarPanelAbstract {
             _Util.lookupMixinForCompositeValueUpdate(scalarModel)
             .ifPresentOrElse(mixinForCompositeValueEdit->{
                 // composite value type support
-                Wkt.behaviorAddOnClick(clickReceiver, mixinForCompositeValueEdit::onClick);
+                Wkt.behaviorAddOnClick(clickReceiver, mixinForCompositeValueEdit.getUiComponent()::onClick);
             },()->{
                 // we configure the prompt link if _this_ property is configured for inline edits...
                 Wkt.behaviorAddOnClick(clickReceiver, this::onPropertyInlineEditClick);
@@ -238,7 +238,7 @@ extends ScalarPanelAbstract {
 
             _Util.lookupPropertyActionForInlineEdit(scalarModel)
             .ifPresent(actionLinkInlineAsIfEdit->{
-                Wkt.behaviorAddOnClick(clickReceiver, actionLinkInlineAsIfEdit::onClick);
+                Wkt.behaviorAddOnClick(clickReceiver, actionLinkInlineAsIfEdit.getUiComponent()::onClick);
             });
         }
 

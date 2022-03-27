@@ -22,10 +22,11 @@ import java.io.Serializable;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 
 import org.apache.isis.applib.annotation.ActionLayout.Position;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.common.model.action.HasManagedAction;
 import org.apache.isis.viewer.common.model.mixin.HasUiComponent;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -33,12 +34,11 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class LinkAndLabel
 implements
-    HasUiComponent<AbstractLink>,
+    HasUiComponent<AjaxLink<ManagedObject>>,
     HasManagedAction,
     Serializable {
 
@@ -50,7 +50,7 @@ implements
         return new LinkAndLabel(actionModel, uiComponentFactory);
     }
 
-    private final ActionModel actionModel;
+    @Getter private final ActionModel actionModel;
     protected final ActionLinkUiComponentFactoryWkt uiComponentFactory;
 
     @Override
@@ -65,7 +65,7 @@ implements
 
     // implements HasUiComponent<T>
     @Getter(lazy = true, onMethod_ = {@Override})
-    private final AbstractLink uiComponent = uiComponentFactory
+    private final AjaxLink<ManagedObject> uiComponent = uiComponentFactory
         .newActionLinkUiComponent(actionModel);
 
     @Override
@@ -74,18 +74,15 @@ implements
                 " ~ " + actionModel.getAction().getFeatureIdentifier().getFullIdentityString();
     }
 
-    // -- VISIBILITY
+    // -- RULE CHECKING SHORTCUTS
 
     public boolean isVisible() {
-
-        // check whether action owner type is hidden
-        if (actionModel.getActionOwner().getSpecification().isHidden()) {
-            return false;
-        }
-        val visibilityVeto = getManagedAction().checkVisibility();
-        return visibilityVeto.isEmpty();
+        return actionModel.getVisibilityConsent().isAllowed();
     }
 
+    public boolean isEnabled() {
+        return actionModel.getUsabilityConsent().isAllowed();
+    }
 
     // -- UTILITY
 

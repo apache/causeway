@@ -34,9 +34,9 @@ import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
-import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -49,7 +49,7 @@ class _Util {
                 && scalarModel.canEnterEditMode();
     }
 
-    Optional<ActionLink> lookupMixinForCompositeValueUpdate(final ScalarModel scalarModel) {
+    Optional<LinkAndLabel> lookupMixinForCompositeValueUpdate(final ScalarModel scalarModel) {
         if(!canPropertyEnterInlineEditDirectly(scalarModel)) {
             return Optional.empty();
         }
@@ -60,20 +60,20 @@ class _Util {
             return Optional.empty();
         }
 
-        return toActionLinkWithRuleChecking(compositeValueMixinForFeature, scalarModel).stream()
+        return toLinkAndLabelWithRuleChecking(compositeValueMixinForFeature, scalarModel).stream()
                 .filter(_Util::guardAgainstInvalidCompositeMixinScenarios)
                 .findAny();
     }
 
 
-    Optional<ActionLink> lookupPropertyActionForInlineEdit(final ScalarModel scalarModel) {
+    Optional<LinkAndLabel> lookupPropertyActionForInlineEdit(final ScalarModel scalarModel) {
         if(canPropertyEnterInlineEditDirectly(scalarModel)) {
             return Optional.empty();
         }
         // not editable property, but maybe one of the actions is.
         return scalarModel.getAssociatedActions()
                 .getFirstAssociatedWithInlineAsIfEdit()
-                .flatMap(action->toActionLinkWithRuleChecking(action, scalarModel));
+                .flatMap(action->toLinkAndLabelWithRuleChecking(action, scalarModel));
     }
 
     Can<LinkAndLabel> associatedLinksAndLabels(final ScalarModel scalarModel) {
@@ -86,16 +86,19 @@ class _Util {
                 .collect(Can.toCan());
     }
 
-    private Optional<ActionLink> toActionLinkWithRuleChecking(
+    private Optional<LinkAndLabel> toLinkAndLabelNoRuleChecking(
             final @Nullable ObjectAction action,
             final ScalarModel scalarModel) {
-
         return Optional.ofNullable(action)
-        .map(LinkAndLabelFactory.forPropertyOrParameter(scalarModel))
-        .map(LinkAndLabel::getUiComponent)
-        .map(ActionLink.class::cast)
-        .filter(ActionLink::isVisible)
-        .filter(ActionLink::isEnabled);
+        .map(LinkAndLabelFactory.forPropertyOrParameter(scalarModel));
+    }
+
+    private Optional<LinkAndLabel> toLinkAndLabelWithRuleChecking(
+            final @Nullable ObjectAction action,
+            final ScalarModel scalarModel) {
+        return toLinkAndLabelNoRuleChecking(action, scalarModel)
+        .filter(LinkAndLabel::isVisible)
+        .filter(LinkAndLabel::isEnabled);
     }
 
     IValidator<Object> createValidatorFor(final ScalarModel scalarModel) {
@@ -113,19 +116,21 @@ class _Util {
         };
     }
 
-    private boolean guardAgainstInvalidCompositeMixinScenarios(final ActionLink actionLink) {
-        val ipc = actionLink.getActionModel().getInlinePromptContext();
-        val ps = actionLink.getActionModel().getPromptStyle();
-        _Assert.assertNotNull(ipc, ()->String.format(
+    private boolean guardAgainstInvalidCompositeMixinScenarios(final LinkAndLabel linkAndLabel) {
+        return guardAgainstInvalidCompositeMixinScenarios(linkAndLabel.getActionModel());
+    }
+
+    private boolean guardAgainstInvalidCompositeMixinScenarios(final ActionModel actionModel) {
+        _Assert.assertNotNull(actionModel.getInlinePromptContext(), ()->String.format(
                 "with feature %s, "
                 + "for composite-value-type mixins to work an InlinePromptContext is required",
-                actionLink.getObjectAction().getFeatureIdentifier()));
-        _Assert.assertTrue(ps==PromptStyle.INLINE_AS_IF_EDIT, ()->String.format(
+                actionModel.getAction().getFeatureIdentifier()));
+        _Assert.assertTrue(actionModel.getPromptStyle()==PromptStyle.INLINE_AS_IF_EDIT, ()->String.format(
                 "with feature %s, "
                 + "for composite-value-type mixins to work PromptStyle must be INLINE_AS_IF_EDIT "
                 + "yet found %s",
-                actionLink.getObjectAction().getFeatureIdentifier(),
-                ps));
+                actionModel.getAction().getFeatureIdentifier(),
+                actionModel.getPromptStyle()));
         return true;
     }
 
