@@ -129,9 +129,11 @@ implements ScalarModelSubscriber {
                 return COMPACT;
             }
             if(scalarModel.isEditMode()) {
-                return _Util.lookupMixinForCompositeValueUpdate(scalarModel).isPresent()
-                        ? CAN_EDIT_INLINE_VIA_ACTION // nested/embedded dialog
-                        : EDITING;
+                return
+//                        _Util.lookupMixinForCompositeValueUpdate(scalarModel).isPresent()
+//                        ? CAN_EDIT_INLINE_VIA_ACTION // nested/embedded dialog
+//                        :
+                            EDITING;
             }
             if(_Util.canPropertyEnterInlineEditDirectly(scalarModel)) {
                 return CAN_EDIT_INLINE;
