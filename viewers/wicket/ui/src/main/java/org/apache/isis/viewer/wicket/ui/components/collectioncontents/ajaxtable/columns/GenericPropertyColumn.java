@@ -34,12 +34,11 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel;
-import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
 import lombok.val;
 
@@ -116,14 +115,14 @@ extends GenericColumnAbstract {
         val property = domainObject.getSpecification().getPropertyElseFail(propertyId);
         val entityModel = EntityModel.ofAdapter(super.getCommonContext(), domainObject);
 
-        final ScalarModel scalarModel = entityModel
+        val scalarModel = entityModel
                 .getPropertyModel(
                         property,
                         ScalarRepresentation.VIEWING,
                         collectionVariant.getColumnRenderingHint());
 
-        final ComponentFactory componentFactory = findComponentFactory(ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
-        return componentFactory.createComponent(id, scalarModel);
+        return findComponentFactory(ComponentType.SCALAR_NAME_AND_VALUE, scalarModel)
+                .createComponent(id, scalarModel);
     }
 
 }

@@ -108,7 +108,7 @@ extends ScalarPanelAbstract {
         //XXX support for legacy panels, remove eventually
         {
             if(fieldFrame!=null
-                &&fieldFrame.get(ID_SCALAR_VALUE)==null) {
+                && fieldFrame.get(ID_SCALAR_VALUE)==null) {
                 Wkt.labelAdd(fieldFrame, ID_SCALAR_VALUE, "∅");
             }
             FieldFrame.EDIT_PROPERTY
@@ -125,8 +125,8 @@ extends ScalarPanelAbstract {
      */
     protected Component createComponentForOutput(final String id) {
         if(getFormatModifiers().contains(FormatModifier.MULITLINE)
-                &&!getFormatModifiers().contains(FormatModifier.MARKUP)
-                &&!getRenderScenario().isCompact()) {
+                && !getFormatModifiers().contains(FormatModifier.MARKUP)
+                && !getRenderScenario().isCompact()) {
             return PromptFragment.TEXTAREA
                     .createFragment(id, this, scalarValueId->{
                         val textArea = Wkt.textAreaNoTab(scalarValueId, obtainOutputFormatModel());

@@ -21,11 +21,12 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
+
+import lombok.val;
 
 /**
  * {@link ComponentFactory} for {@link ReferencePanel}.
@@ -43,13 +44,13 @@ public class ReferencePanelFactory extends ComponentFactoryAbstract {
         if (!(model instanceof ScalarModel)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        final ScalarModel scalarModel = (ScalarModel) model;
-        return appliesIf(!scalarModel.getScalarTypeSpec().containsFacet(ValueFacet.class));
+        val scalarModel = (ScalarModel) model;
+        return appliesIf(!scalarModel.getScalarTypeSpec().isValue());
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final ScalarModel scalarModel = (ScalarModel) model;
+        val scalarModel = (ScalarModel) model;
         return new ReferencePanel(id, scalarModel);
     }
 }

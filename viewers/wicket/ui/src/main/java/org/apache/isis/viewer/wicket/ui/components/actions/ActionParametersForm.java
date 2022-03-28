@@ -19,15 +19,16 @@
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
@@ -83,40 +84,31 @@ extends PromptFormAbstract<ActionModel> {
 
             val container = Wkt.containerAdd(repeatingView, repeatingView.newChildId());
 
-            newParamPanel(container, paramModel)
-            .ifPresent(paramPanels::add);
+            newParamPanel(container, paramModel, paramPanels::add);
 
         });
 
         setOutputMarkupId(true);
     }
 
-    private Optional<ScalarPanelAbstract> newParamPanel(
+    private void newParamPanel(
             final WebMarkupContainer container,
-            final ParameterUiModelWkt paramModel) {
-
-        //XXX add support for composite-value-types
+            final ParameterUiModelWkt paramModel,
+            final Consumer<ScalarPanelAbstract> onNewScalarPanel) {
 
         val scalarParamModel = ScalarParameterModel.wrap(paramModel);
 
-        final Component component = getComponentFactoryRegistry()
+        // returned ScalarPanelAbstract should already have added any associated LinkAndLabel(s)
+        val component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ActionParametersFormPanel.ID_SCALAR_NAME_AND_VALUE,
                         ComponentType.SCALAR_NAME_AND_VALUE, scalarParamModel);
 
-        if(!(component instanceof ScalarPanelAbstract)) {
-            return Optional.empty();
-        }
+        _Casts.castTo(ScalarPanelAbstract.class, component)
+        .ifPresent(scalarPanel->{
+            scalarPanel.notifyOnChange(this); // handling onUpdate and onError
+            onNewScalarPanel.accept(scalarPanel);
+        });
 
-        if(component instanceof MarkupContainer) {
-            Wkt.cssAppend(component, scalarParamModel.getCssClass());
-        }
-
-        // ScalarPanelAbstract at this point should have added any associated LinkAndLabel(s)
-
-        val paramPanel = (ScalarPanelAbstract) component;
-        paramPanel.setOutputMarkupId(true);
-        paramPanel.notifyOnChange(this); // this is a ScalarModelSubscriber, handling onUpdate and onError
-        return Optional.of(paramPanel);
     }
 
     @Override

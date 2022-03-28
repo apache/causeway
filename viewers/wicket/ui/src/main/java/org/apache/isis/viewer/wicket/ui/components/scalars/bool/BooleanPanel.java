@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
+package org.apache.isis.viewer.wicket.ui.components.scalars.bool;
 
 import java.util.EnumSet;
 import java.util.Optional;

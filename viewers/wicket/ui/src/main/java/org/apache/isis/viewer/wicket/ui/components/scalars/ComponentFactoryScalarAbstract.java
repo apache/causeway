@@ -27,6 +27,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 
 import lombok.Getter;
+import lombok.val;
 
 public abstract class ComponentFactoryScalarAbstract
 extends ComponentFactoryAbstract {
@@ -54,14 +55,13 @@ extends ComponentFactoryAbstract {
         if (!(model instanceof ScalarModel)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        final ScalarModel scalarModel = (ScalarModel) model;
+        val scalarModel = (ScalarModel) model;
         if(!scalarModel.isScalarTypeAnyOf(scalarTypes)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        final boolean hasChoices = scalarModel.hasChoices();
         // autoComplete not supported on values, only references
-        // final boolean hasAutoComplete = scalarModel.hasAutoComplete();
-        return appliesIf( !(hasChoices /*|| hasAutoComplete*/) );
+        return appliesIf( !(scalarModel.hasChoices()
+                /*|| scalarModel.hasAutoComplete()*/) );
     }
 
     @Override

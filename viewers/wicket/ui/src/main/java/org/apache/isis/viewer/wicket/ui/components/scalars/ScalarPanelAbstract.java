@@ -54,7 +54,7 @@ import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.Addi
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisBlobOrClobPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.bool.BooleanPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices.ValueChoicesSelect2Panel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -396,18 +396,16 @@ implements ScalarModelSubscriber {
     }
 
     private void addCssFromMetaModel() {
-        final String cssForMetaModel = getModel().getCssClass();
-        Wkt.cssAppend(this, cssForMetaModel);
+        val scalarModel = scalarModel();
 
-        ScalarModel model = getModel();
-        final CssClassFacet facet = model.getFacet(CssClassFacet.class);
-        if(facet != null) {
+        Wkt.cssAppend(this, scalarModel.getCssClass());
+
+        scalarModel.lookupFacet(CssClassFacet.class)
+        .ifPresent(cssClassFacet->{
             val parentAdapter =
-                    model.getParentUiModel().getManagedObject();
-
-            final String cssClass = facet.cssClass(parentAdapter);
-            Wkt.cssAppend(this, cssClass);
-        }
+                    scalarModel.getParentUiModel().getManagedObject();
+            Wkt.cssAppend(this, cssClassFacet.cssClass(parentAdapter));
+        });
     }
 
 

@@ -16,21 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars;
+package org.apache.isis.viewer.wicket.ui.components.scalars.composite;
 
 import java.util.EnumSet;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.FormComponentPanel;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelFormFieldAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.FormatModifier;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 
-public class ScalarPanelTextFieldWithComposite<T>
-extends ScalarPanelTextFieldWithValueSemantics<T> {
+public class CompositeValuePanel<T>
+extends ScalarPanelFormFieldAbstract<T> {
 
     private static final long serialVersionUID = 1L;
 
-    public ScalarPanelTextFieldWithComposite(
+    public CompositeValuePanel(
             final String id,
             final ScalarModel scalarModel,
             final Class<T> valueType) {
@@ -41,11 +46,27 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
     @Override
     protected void setupFormatModifiers(final EnumSet<FormatModifier> modifiers) {
         modifiers.add(FormatModifier.COMPOSITE);
+        modifiers.add(FormatModifier.READONLY);
     }
 
     @Override
     protected Component createComponentForOutput(final String id) {
         return new MarkupComponent(id, scalarModel());
+    }
+
+    @Override
+    protected FormComponent<T> createFormComponent(final String id, final ScalarModel scalarModel) {
+        return new FormComponentPanel<>(id) {
+            private static final long serialVersionUID = 1L;
+
+        };
+
+//        return new AjaxButton(id, labelModel) {
+//            private static final long serialVersionUID = 1L;
+//            @Override public void onSubmit(final AjaxRequestTarget target) {
+//                onClick.accept(this, target);
+//            }
+//        };
     }
 
 
