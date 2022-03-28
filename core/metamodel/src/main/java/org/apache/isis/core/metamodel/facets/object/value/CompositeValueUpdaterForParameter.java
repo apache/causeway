@@ -56,7 +56,7 @@ extends CompositeValueUpdater {
     @Override
     protected ManagedObject map(final ManagedObject newParamValue) {
         parameterNegotiationModel.setParamValue(paramIndex, newParamValue);
-        return parameterNegotiationModel.getActionTarget();
+        return newParamValue;
     }
 
 }

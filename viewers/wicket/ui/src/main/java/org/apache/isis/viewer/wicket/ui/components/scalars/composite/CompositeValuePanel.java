@@ -41,7 +41,6 @@ extends ScalarPanelFormFieldAbstract<T> {
             final String id,
             final ScalarModel scalarModel,
             final Class<T> valueType) {
-
         super(id, scalarModel, valueType);
     }
 
@@ -69,10 +68,30 @@ extends ScalarPanelFormFieldAbstract<T> {
 
     @Override
     protected FormComponent<T> createFormComponent(final String id, final ScalarModel scalarModel) {
-        // no-op FormComponent, to receive the param/property name label
+        // read-only FormComponent, to receive the param/property name label
         return new AbstractTextComponent<T>(id) {
             private static final long serialVersionUID = 1L;
+            @Override
+            public void validate() {
+                // this is a nested form component,
+                // the parent form does validation
+            }
+            @Override
+            public boolean checkRequired() {
+                if (scalarModel().isRequired()){
+                    return !scalarModel().isEmpty();
+                }
+                return true;
+            }
+            @Override
+            public void updateModel() {
+                // update not allowed; the CompositeValueUpdaterForParameter updates
+                // the underlying ScalarModel on nested dialog submission
+            }
+
         };
     }
+
+
 
 }
