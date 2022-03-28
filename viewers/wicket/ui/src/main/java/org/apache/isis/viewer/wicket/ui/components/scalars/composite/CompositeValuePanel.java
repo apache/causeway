@@ -19,16 +19,18 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.composite;
 
 import java.util.EnumSet;
+import java.util.Optional;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.FormComponentPanel;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelFormFieldAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.FormatModifier;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
+import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 
 public class CompositeValuePanel<T>
 extends ScalarPanelFormFieldAbstract<T> {
@@ -46,7 +48,6 @@ extends ScalarPanelFormFieldAbstract<T> {
     @Override
     protected void setupFormatModifiers(final EnumSet<FormatModifier> modifiers) {
         modifiers.add(FormatModifier.COMPOSITE);
-        modifiers.add(FormatModifier.READONLY);
     }
 
     @Override
@@ -55,19 +56,23 @@ extends ScalarPanelFormFieldAbstract<T> {
     }
 
     @Override
-    protected FormComponent<T> createFormComponent(final String id, final ScalarModel scalarModel) {
-        return new FormComponentPanel<>(id) {
-            private static final long serialVersionUID = 1L;
-
-        };
-
-//        return new AjaxButton(id, labelModel) {
-//            private static final long serialVersionUID = 1L;
-//            @Override public void onSubmit(final AjaxRequestTarget target) {
-//                onClick.accept(this, target);
-//            }
-//        };
+    protected Optional<InputFragment> getInputFragmentType() {
+        return Optional.empty();
     }
 
+    @Override
+    protected void onFormGroupCreated(final FormGroup formGroup) {
+        super.onFormGroupCreated(formGroup);
+        fieldFrame.addOrReplace(FieldFrame.SCALAR_VALUE_CONTAINER
+                .createComponent(this::createComponentForOutput));
+    }
+
+    @Override
+    protected FormComponent<T> createFormComponent(final String id, final ScalarModel scalarModel) {
+        // no-op FormComponent, to receive the param/property name label
+        return new AbstractTextComponent<T>(id) {
+            private static final long serialVersionUID = 1L;
+        };
+    }
 
 }
