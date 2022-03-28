@@ -42,8 +42,6 @@ import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 
-import lombok.val;
-
 /**
  * The parent (container) model of multiple <i>parameter models</i> which implement
  * {@link ChainingModel}.
@@ -114,8 +112,9 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
 
         if(associatedWithParameterIfAny!=null) {
             final int paramIndex = associatedWithParameterIfAny.getParameterIndex();
-            val paramValue = associatedWithParameterIfAny.getParameterNegotiationModel().getParamValue(paramIndex);
-            return ActionInteraction.start(paramValue, memberId, where);
+            // supports composite-value-types via mixin
+            return ActionInteraction.startAsBoundToParameter(
+                    associatedWithParameterIfAny.getParameterNegotiationModel(), paramIndex, memberId, where);
         }
 
         if(associatedWithCollectionIfAny!=null) {

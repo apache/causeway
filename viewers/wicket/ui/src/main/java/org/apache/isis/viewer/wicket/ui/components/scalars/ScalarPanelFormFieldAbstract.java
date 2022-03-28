@@ -80,8 +80,7 @@ extends ScalarPanelAbstract2 {
             fieldFragement = FieldFragement.LINK;
             break;
         case EDITING:
-            // setup as input-format
-            fieldFragement = FieldFragement.NO_LINK;
+            fieldFragement = FieldFragement.NO_LINK; // setup as input-format
             break;
 
         default:

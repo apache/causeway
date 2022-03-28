@@ -22,6 +22,7 @@ import java.util.EnumSet;
 import java.util.Optional;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.FormComponent;
 
@@ -31,6 +32,9 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelFormFieldAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
+
+import lombok.val;
 
 public class CompositeValuePanel<T>
 extends ScalarPanelFormFieldAbstract<T> {
@@ -52,7 +56,9 @@ extends ScalarPanelFormFieldAbstract<T> {
 
     @Override
     protected Component createComponentForOutput(final String id) {
-        return new MarkupComponent(id, scalarModel());
+        val component = new MarkupComponent(id, scalarModel());
+        Wkt.behaviorAddOnClick(component, this::onClick);
+        return component;
     }
 
     @Override
@@ -73,6 +79,10 @@ extends ScalarPanelFormFieldAbstract<T> {
         return new AbstractTextComponent<T>(id) {
             private static final long serialVersionUID = 1L;
         };
+    }
+
+    protected void onClick(final AjaxRequestTarget ajaxTarget) {
+        System.err.printf("%s%n", "gotcha");
     }
 
 }

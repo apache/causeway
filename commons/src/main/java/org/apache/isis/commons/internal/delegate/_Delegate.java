@@ -7,6 +7,8 @@ import java.lang.reflect.Proxy;
 
 import org.springframework.util.ClassUtils;
 
+import org.apache.isis.commons.internal.reflection._ClassCache;
+
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -49,6 +51,7 @@ public class _Delegate {
     static class DelegatingInvocationHandler implements InvocationHandler {
 
         final Object delegate;
+        final _ClassCache classCache = _ClassCache.getInstance();
 
         @Override
         public Object invoke(final Object proxy, final Method method, final Object[] args)
@@ -65,10 +68,11 @@ public class _Delegate {
                 return "Proxy(" + delegate.toString() + ")";
             }
 
-            // Invoke method with same signature on delegate
+            // Invoke method with same signature on delegate ()
             try {
-                val delegateMethod = delegate.getClass()
-                        .getDeclaredMethod(method.getName(), method.getParameterTypes());
+                val delegateMethod =
+                        classCache.lookupPublicOrDeclaredMethod(delegate.getClass(),
+                                method.getName(), method.getParameterTypes());
                 return delegateMethod.invoke(delegate, args);
             } catch (InvocationTargetException ex) {
                 throw ex.getTargetException();

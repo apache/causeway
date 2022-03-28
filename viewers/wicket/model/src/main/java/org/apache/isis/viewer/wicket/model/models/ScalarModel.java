@@ -367,13 +367,17 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         }
         return getSpecialization().<Optional<ObjectAction>>fold(
                 param->{
-                    System.err.printf("lookupCompositeValueMixinForFeature %s%n", param.getParameterNegotiationModel());
-                    return Optional.empty(); //XXX add support later
+                    return spec.lookupFacet(ValueFacet.class)
+                            .<ObjectAction>flatMap(valueFacet->
+                                valueFacet.selectCompositeValueMixinForParameter(
+                                        param.getParameterNegotiationModel(), param.getParameterIndex()));
+
+
                 },
                 prop->{
                     return spec.lookupFacet(ValueFacet.class)
                             .<ObjectAction>flatMap(valueFacet->
-                                valueFacet.selectCompositeValueMixinForFeature(prop.getManagedProperty()));
+                                valueFacet.selectCompositeValueMixinForProperty(prop.getManagedProperty()));
                 });
     }
 

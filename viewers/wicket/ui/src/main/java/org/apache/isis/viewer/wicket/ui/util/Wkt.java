@@ -68,16 +68,15 @@ import org.apache.isis.commons.internal.functions._Functions.SerializableFunctio
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
-import lombok.NonNull;
-import lombok.val;
-import lombok.experimental.UtilityClass;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.util.Attributes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig.Sizes;
 import de.agilecoders.wicket.jquery.Key;
+import lombok.NonNull;
+import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * Wicket common idioms, in alphabetical order.
@@ -90,9 +89,9 @@ public class Wkt {
         return component;
     }
 
-    public <T extends Behavior> T add(final MarkupContainer container, final T component) {
-        container.add((Behavior)component);
-        return component;
+    public <T extends Behavior> T add(final Component component, final T behavior) {
+        component.add((Behavior)behavior);
+        return behavior;
     }
 
     // -- ATTRIBUTES
@@ -189,15 +188,15 @@ public class Wkt {
     }
 
     public Behavior behaviorAddOnClick(
-            final MarkupContainer markupContainer,
+            final Component component,
             final SerializableConsumer<AjaxRequestTarget> onClick) {
-        return add(markupContainer, behaviorOnClick(onClick));
+        return add(component, behaviorOnClick(onClick));
     }
 
     public Behavior behaviorAddFireOnEscapeKey(
-            final MarkupContainer markupContainer,
+            final Component component,
             final SerializableConsumer<AjaxRequestTarget> onRespond) {
-        return add(markupContainer, behaviorFireOnEscapeKey(onRespond));
+        return add(component, behaviorFireOnEscapeKey(onRespond));
     }
 
     public void behaviorAddReplaceDisabledTagWithReadonlyTag(final @Nullable Component component) {

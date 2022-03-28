@@ -199,9 +199,10 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
             final Where where) {
         val owner = associatedWithProperty.getOwner();
         val prop = associatedWithProperty.getMetaModel();
+        val elementType = prop.getElementType();
 
-        val valueFacet = prop.getElementType().isValue()
-                ? (ValueFacet<?>) prop.getElementType().getFacet(ValueFacet.class)
+        val valueFacet = elementType.isValue()
+                ? (ValueFacet<?>) elementType.getFacet(ValueFacet.class)
                 : null;
 
         if(valueFacet!=null
@@ -212,15 +213,51 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
             val compositeValue0 = prop
                     .get(owner); //XXX maybe make this nullToEmpty in OneToOneAssociation
             val compositeValue =
-                    ManagedObjects.nullToEmpty(prop.getElementType(), compositeValue0);
+                    ManagedObjects.nullToEmpty(elementType, compositeValue0);
 
-            val mixinAction = valueFacet.selectCompositeValueMixinForFeature(associatedWithProperty);
+            val mixinAction = valueFacet.selectCompositeValueMixinForProperty(associatedWithProperty);
             if(mixinAction.isPresent()) {
                 val managedAction = ManagedAction.of(compositeValue, mixinAction.get(), where);
                 return ActionInteraction.wrap(managedAction);
             }
         }
+        // fallback if not a composite value
         return ActionInteraction.start(owner, memberId, where);
+    }
+
+    /** Supports composite-value-types via mixin (in case detected). */
+    public static ActionInteraction startAsBoundToParameter(
+            final ParameterNegotiationModel parameterNegotiationModel,
+            final int paramIndex,
+            final String memberId,
+            final Where where) {
+
+        val owner = parameterNegotiationModel.getActionTarget();
+        val param = parameterNegotiationModel.getParamModels().getElseFail(paramIndex);
+        val elementType = param.getMetaModel().getElementType();
+
+        val valueFacet = elementType.isValue()
+                ? (ValueFacet<?>) elementType.getFacet(ValueFacet.class)
+                : null;
+        if(valueFacet!=null
+                && valueFacet.isCompositeValueType()
+                //XXX guard against memberId collision / maybe improve programming model so this cannot happen
+                && owner.getSpecification().getAction(memberId, MixedIn.INCLUDED).isEmpty()) {
+
+            val compositeValue0 = parameterNegotiationModel.getParamValue(paramIndex);
+            val compositeValue =
+                    ManagedObjects.nullToEmpty(elementType, compositeValue0);
+
+            val mixinAction = valueFacet.selectCompositeValueMixinForParameter(parameterNegotiationModel, paramIndex);
+            if(mixinAction.isPresent()) {
+                val managedAction = ManagedAction.of(compositeValue, mixinAction.get(), where);
+                return ActionInteraction.wrap(managedAction);
+            }
+        }
+
+        // fallback if not a composite value
+        val paramValue = parameterNegotiationModel.getParamValue(paramIndex);
+        return ActionInteraction.start(paramValue, memberId, where);
     }
 
 }
