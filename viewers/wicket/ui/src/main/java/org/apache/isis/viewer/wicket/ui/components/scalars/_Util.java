@@ -49,10 +49,13 @@ class _Util {
                 && scalarModel.canEnterEditMode();
     }
 
+    boolean canParameterEnterNestedEdit(final ScalarModel scalarModel) {
+        return scalarModel.isParameter()
+                && !scalarModel.hasChoices() // handled by select2 panels instead
+                && scalarModel.lookupCompositeValueMixinForFeature().isPresent();
+    }
+
     Optional<LinkAndLabel> lookupMixinForCompositeValueUpdate(final ScalarModel scalarModel) {
-//        if(!canPropertyEnterInlineEditDirectly(scalarModel)) {
-//            return Optional.empty();
-//        }
         return scalarModel.lookupCompositeValueMixinForFeature()
             .flatMap(compositeValueMixinForFeature->
                 toLinkAndLabelWithRuleChecking(compositeValueMixinForFeature, scalarModel))
@@ -60,9 +63,6 @@ class _Util {
     }
 
     Optional<LinkAndLabel> lookupPropertyActionForInlineEdit(final ScalarModel scalarModel) {
-//        if(canPropertyEnterInlineEditDirectly(scalarModel)) {
-//            return Optional.empty();
-//        }
         // not editable property, but maybe one of the actions is.
         return scalarModel.getAssociatedActions()
                 .getFirstAssociatedWithInlineAsIfEdit()

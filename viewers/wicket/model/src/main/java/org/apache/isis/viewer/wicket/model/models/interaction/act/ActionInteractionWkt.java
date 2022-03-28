@@ -181,7 +181,9 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     public InlinePromptContext getInlinePromptContext() {
         return associatedWithPropertyIfAny != null
                 ? associatedWithPropertyIfAny.getInlinePromptContext()
-                : null;
+                : associatedWithParameterIfAny!=null
+                    ? associatedWithParameterIfAny.getInlinePromptContext()
+                    : null;
     }
 
 }

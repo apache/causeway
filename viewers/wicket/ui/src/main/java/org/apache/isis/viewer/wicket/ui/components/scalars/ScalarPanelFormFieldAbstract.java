@@ -76,6 +76,7 @@ extends ScalarPanelAbstract2 {
         case CAN_EDIT:
         case CAN_EDIT_INLINE:
         case CAN_EDIT_INLINE_VIA_ACTION:
+        case EDITING_WITH_LINK_TO_NESTED:
             // setup as output-format (with links to edit)
             fieldFragement = FieldFragement.LINK;
             break;

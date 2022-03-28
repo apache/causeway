@@ -113,15 +113,21 @@ implements ScalarModelSubscriber {
         /**
          * Is editing (either prompt form or other dialog).
          */
-        EDITING;
+        EDITING,
+        EDITING_WITH_LINK_TO_NESTED,
+        ;
 
         public boolean isCompact() { return this==COMPACT;}
         public boolean isReadonly() { return this==READONLY;}
         public boolean isCanEdit() { return this==CAN_EDIT;}
         public boolean isEditing() { return this==EDITING;}
-        public boolean isCanEditAny() { return this==CAN_EDIT
-                ||this==CAN_EDIT_INLINE
-                ||this==CAN_EDIT_INLINE_VIA_ACTION; }
+        public boolean isEditingAny() {
+            return this==EDITING
+                    || this==CAN_EDIT_INLINE_VIA_ACTION;}
+        public boolean isCanEditAny() {
+            return this==CAN_EDIT
+                || this==CAN_EDIT_INLINE
+                || this==CAN_EDIT_INLINE_VIA_ACTION; }
 
         static RenderScenario inferFrom(final ScalarPanelAbstract scalarPanel) {
             val scalarModel = scalarPanel.scalarModel();
@@ -130,10 +136,9 @@ implements ScalarModelSubscriber {
             }
             if(scalarModel.isEditMode()) {
                 return
-//                        _Util.lookupMixinForCompositeValueUpdate(scalarModel).isPresent()
-//                        ? CAN_EDIT_INLINE_VIA_ACTION // nested/embedded dialog
-//                        :
-                            EDITING;
+                        _Util.canParameterEnterNestedEdit(scalarModel)
+                        ? EDITING_WITH_LINK_TO_NESTED // nested/embedded dialog
+                        : EDITING;
             }
             if(_Util.canPropertyEnterInlineEditDirectly(scalarModel)) {
                 return CAN_EDIT_INLINE;
