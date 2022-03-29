@@ -345,7 +345,7 @@ implements ValueFacet<T> {
     protected Optional<ObjectAction> resolveCompositeValueMixinForFeature(final ObjectFeature feature) {
         return qualifiersAccepted(feature).add("default")
         .stream()
-        .map(qualifier->feature.getElementType().getAction(qualifier, MixedIn.INCLUDED))
+        .map(qualifier->feature.getElementType().getAction(qualifier, MixedIn.ONLY))
         .filter(Optional::isPresent)
         .map(Optional::get)
         .findFirst();
