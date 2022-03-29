@@ -62,14 +62,18 @@
 		<!-- FIELD FRAME FRAGMENTS -->
 
 		<wicket:fragment wicket:id="fragment-fieldFrame-withLink">
+			<label wicket:id="debugLabel" style="font-size: x-small; color: burlywood;">[Debug text]</label>
 			<span class="scalarValueInput">
 				<span class="editing">
 				
 					<div wicket:id="scalarValueInlinePromptLink"
 						class="scalarValueInlinePromptLink">
+						
+						<span style="color: blue;">λ</span>
 						<!-- output format --> 
 						<wicket:container 
 							wicket:id="container-scalarValue"/> 
+							 
 					</div> 
 					
 					<a wicket:id="editProperty"
@@ -82,11 +86,13 @@
 		</wicket:fragment>
 		
 		<wicket:fragment wicket:id="fragment-fieldFrame-withoutLink">
+			<label wicket:id="debugLabel" style="font-size: x-small; color: burlywood;">[Debug text]</label>
 			<span class="scalarValueInput">
 				<span class="editing">
 				
 					<!-- input format (when editing or action dialog or read-only) -->
 					<div>
+						<span style="color: purple;">α</span>
 						<wicket:container 
 							wicket:id="container-scalarValue" />
 					</div>

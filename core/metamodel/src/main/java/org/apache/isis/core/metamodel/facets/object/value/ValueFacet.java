@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
 import org.apache.isis.applib.value.semantics.OrderRelation;
@@ -33,19 +32,13 @@ import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider.Context;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.schema.common.v2.ValueType;
 
 /**
@@ -155,45 +148,15 @@ extends
 
     // -- COMPOSITE VALUE SUPPORT
 
+    Optional<ObjectAction> selectCompositeValueMixinForParameter(
+            final ParameterNegotiationModel parameterNegotiationModel,
+            final int paramIndex);
+    Optional<ObjectAction> selectCompositeValueMixinForProperty(final ManagedProperty managedProperty);
+
     default boolean isCompositeValueType() {
         return selectDefaultSemantics()
         .map(valueSemantics->valueSemantics.getSchemaValueType()==ValueType.COMPOSITE)
         .orElse(false);
     }
-
-    default Optional<ObjectAction> selectCompositeValueMixinForParameter(
-            final ParameterNegotiationModel parameterNegotiationModel,
-            final int paramIndex) {
-        if(!isCompositeValueType()) {
-            return Optional.empty();
-        }
-        return parameterNegotiationModel.getParamMetamodel(paramIndex).getElementType().getAction("updatec")
-                .map(m->CompositeValueUpdaterForParameter
-                        .createProxy(parameterNegotiationModel, paramIndex, (ObjectActionMixedIn) m));
-    }
-
-    default Optional<ObjectAction> selectCompositeValueMixinForProperty(final ManagedProperty managedProperty) {
-        if(!isCompositeValueType()) {
-            return Optional.empty();
-        }
-        //feed the action's invocation result back into the scalarModel's proposed value, then submit
-
-        //XXX the mixin is found on the value-type's (eg on CalendarEvent) ObjectSpecifcation
-        //no customization support yet
-        return managedProperty.getElementType().getAction("updatec")
-        .map(m->CompositeValueUpdaterForProperty.createProxy(managedProperty, (ObjectActionMixedIn) m));
-    }
-
-    static interface X {
-      Identifier getFeatureIdentifier();
-      ObjectSpecification getReturnType();
-      ManagedObject executeWithRuleChecking(final InteractionHead head, final Can<ManagedObject> parameters,
-              final InteractionInitiatedBy interactionInitiatedBy, final Where where) throws AuthorizationException;
-      ManagedObject execute(final InteractionHead head, final Can<ManagedObject> parameters,
-              final InteractionInitiatedBy interactionInitiatedBy);
-    }
-
-
-
 
 }

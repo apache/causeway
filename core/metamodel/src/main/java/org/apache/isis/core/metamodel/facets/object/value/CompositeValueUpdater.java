@@ -23,7 +23,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.CanonicalInvoker;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet.X;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
@@ -38,6 +37,16 @@ import lombok.experimental.Delegate;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class CompositeValueUpdater {
+
+    static interface X {
+        Identifier getFeatureIdentifier();
+        ObjectSpecification getReturnType();
+        ManagedObject executeWithRuleChecking(final InteractionHead head, final Can<ManagedObject> parameters,
+                final InteractionInitiatedBy interactionInitiatedBy, final Where where) throws AuthorizationException;
+        ManagedObject execute(final InteractionHead head, final Can<ManagedObject> parameters,
+                final InteractionInitiatedBy interactionInitiatedBy);
+    }
+
 
     @Delegate(excludes=X.class)
     private final ObjectActionMixedIn delegate;
