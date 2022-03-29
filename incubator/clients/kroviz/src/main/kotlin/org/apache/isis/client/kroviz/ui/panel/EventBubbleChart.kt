@@ -150,7 +150,7 @@ class EventBubbleChart : SimplePanel() {
             model.log.forEach {
                 when {
                     it.isError() -> borderColorList.add(ERROR_COLOR)
-                    else -> borderColorList.add(Color.name(Col.LIGHTGRAY))
+                    else -> borderColorList.add(TRANSPARENT)
                 }
             }
             return borderColorList
@@ -179,11 +179,13 @@ class EventBubbleChart : SimplePanel() {
 
     private fun LogEntry.buildToolTip(index: Int): String {
         val size = StringUtils.format(this.responseLength)
+        val ms = StringUtils.format(this.duration)
         val title = StringUtils.shortTitle(this.title)
         return title +
                 "\nseq.no.: $index" +
                 "\nparallel runs: ${this.runningAtStart}" +
                 "\nrsp.len.: $size" +
+                "\nduration: $ms" +
                 "\ntype: ${this.type}"
     }
 

@@ -113,7 +113,13 @@ class EventStore {
         val entry: LogEntry? = findBy(reSpec, pumlCode)
         if (entry != null) {
             when (response) {
-                is String -> entry.response = response
+                is String -> {
+                    if (response.isEmpty()) {
+                        throw IllegalStateException("CORS issue while accessing layout xml")
+                    } else {
+                        entry.response = response
+                    }
+                }
                 is Blob -> entry.blob = response
                 else -> {
                 }

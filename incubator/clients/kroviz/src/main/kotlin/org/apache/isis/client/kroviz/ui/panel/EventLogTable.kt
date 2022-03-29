@@ -154,7 +154,6 @@ class EventLogTable(val model: List<LogEntry>, filterState: EventState? = null) 
 
         tabulator.onEvent {
             mouseover = {
-                console.log("[ED.init] dialog on init")
                 val jst = tabulator.jsTabulator
                 val value = filterState?.name
                 if (jst != null && value != null) {

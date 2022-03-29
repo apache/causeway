@@ -18,33 +18,35 @@
  */
 package org.apache.isis.client.kroviz.ui.dialog
 
+import io.kvision.html.Image
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
-import org.apache.isis.client.kroviz.utils.UUID
 
 class About : Controller() {
     private val formItems = mutableListOf<FormItem>()
-    private val _LI = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    private val _LI =
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 
     init {
         // see: https://upload.wikimedia.org/wikipedia/commons/6/6c/Trajans-Column-lower-animated.svg
         val fiImg = FormItem(
-                label = "svg",
-                type = ValueType.SVG_INLINE,
-                callBack = UUID())
+            label = "",
+            type = ValueType.IMAGE,
+            content = Image(src = "img/WheatFieldWithCrows.png"))
         formItems.add(fiImg)
         val fiText = FormItem(
-                label = "",
-                content = _LI,
-                type = ValueType.TEXT_AREA,
-                size = 10)
+            label = "",
+            content = _LI,
+            type = ValueType.TEXT_AREA,
+            size = 5)
         formItems.add(fiText)
         dialog = RoDialog(
-                widthPerc = 50,
-                caption = "About",
-                items = formItems,
-                controller = this)
+            widthPerc = 50,
+            heightPerc = 50,
+            caption = "About",
+            items = formItems,
+            controller = this)
     }
 
 }

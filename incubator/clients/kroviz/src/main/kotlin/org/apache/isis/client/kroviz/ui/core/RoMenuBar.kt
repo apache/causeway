@@ -23,6 +23,7 @@ import io.kvision.core.ResString
 import io.kvision.core.UNIT
 import io.kvision.core.style
 import io.kvision.dropdown.DropDown
+import io.kvision.dropdown.dropDown
 import io.kvision.dropdown.separator
 import io.kvision.html.ButtonStyle
 import io.kvision.html.Link
@@ -161,30 +162,12 @@ class RoMenuBar : SimplePanel() {
             buildMenuEntry("Events", "Event", { EventDialog().open() })
         )
 
-        val geoMapTitle = "Sample Geo Map"
-        mainMenu.add(
-            buildMenuEntry(geoMapTitle, "Map", { ViewManager.add(geoMapTitle, GeoMap()) })
-        )
-
-        val svgMapTitle = "Sample SVG Map"
-        mainMenu.add(
-            buildMenuEntry(svgMapTitle, "Diagram", { ViewManager.add(svgMapTitle, SvgMap()) })
-        )
-
-        val svgInlineTitle = "Sample SVG Inline (interactive)"
-        mainMenu.add(
-            buildMenuEntry(svgInlineTitle, "Diagram", { SvgInline().open() })
-        )
-
-        val imageTitle = "Sample Image"
-        mainMenu.add(
-            buildMenuEntry(imageTitle, "Image", { ViewManager.add(imageTitle, ImageSample) })
-        )
-
         val aboutTitle = "About"
         mainMenu.add(
             buildMenuEntry(aboutTitle, "About", { ViewManager.add(aboutTitle, About().dialog) })
         )
+
+        mainMenu.separator()
 
         val testTitle = "Execute All MenuBar Actions"
         mainMenu.add(
@@ -196,19 +179,30 @@ class RoMenuBar : SimplePanel() {
             buildMenuEntry(stats, "Console", { this.logStats() })
         )
 
-        /*
-               val testTitle = "Test"
-                 mainMenu.add(
-                     buildMenuEntry(testTitle, "Test", { this.testFirstSession() })
-                 )
+        mainMenu.separator()
 
-          mainMenu.add(
-              buildMenuEntry("Browser in IFrame", "Wikipedia", { BrowserWindow("https://isis.apache.org/").open() })
-          )
+        val subMenu = dropDown("Samples", icon = "fas fa-expand", forDropDown = true)
+        val geoMapTitle = "Sample Geo Map"
+        subMenu.add(
+            buildMenuEntry(geoMapTitle, "Map", { ViewManager.add(geoMapTitle, GeoMap()) })
+        )
 
-          mainMenu.add(
-              buildMenuEntry("SSH", "Terminal", { ShellWindow("localhost:8080").open() })
-          )*/
+        val svgMapTitle = "Sample SVG Map"
+        subMenu.add(
+            buildMenuEntry(svgMapTitle, "Diagram", { ViewManager.add(svgMapTitle, SvgMap()) })
+        )
+
+        val svgInlineTitle = "Sample SVG Inline (interactive)"
+        subMenu.add(
+            buildMenuEntry(svgInlineTitle, "Diagram", { SvgInline().open() })
+        )
+
+        val imageTitle = "Sample Image"
+        subMenu.add(
+            buildMenuEntry(imageTitle, "Image", { ViewManager.add(imageTitle, ImageSample) })
+        )
+
+        mainMenu.add(subMenu)
 
         return mainMenu
     }
