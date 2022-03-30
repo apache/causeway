@@ -74,6 +74,8 @@ extends
 
     /** no qualifiers allowed on the default semantics provider*/
     Optional<DefaultsProvider<T>> selectDefaultDefaultsProvider();
+    Optional<DefaultsProvider<T>> selectDefaultsProviderForParameter(final ObjectActionParameter param);
+    Optional<DefaultsProvider<T>> selectDefaultsProviderForProperty(final OneToOneAssociation prop);
 
     // -- PARSER
 

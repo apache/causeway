@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
 
 import lombok.Getter;
@@ -215,8 +216,8 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
             val compositeValueNullable = prop.get(propertyOwner);
             val compositeValue =
                     ManagedObjects.nullOrEmptyToDefault(elementType, compositeValueNullable, ()->
-                        valueFacet.selectDefaultDefaultsProvider()
-                            .orElseThrow()
+                        valueFacet.selectDefaultsProviderForProperty(prop)
+                            .orElseThrow(()->onMissingDefaultsProvider(prop))
                             .getDefaultValue());
 
             val mixinAction = valueFacet.selectCompositeValueMixinForProperty(associatedWithProperty);
@@ -245,6 +246,7 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
                 : null;
         if(valueFacet!=null
                 && valueFacet.isCompositeValueType()
+                //XXX guard against memberId collision,
                 // such that if there is a conflict, the conventional member wins
                 // (maybe improve programming model so this cannot happen)
                 && actionOwner.getSpecification().getAction(memberId, MixedIn.INCLUDED).isEmpty()) {
@@ -252,8 +254,8 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
             val compositeValueNullable = parameterNegotiationModel.getParamValue(paramIndex);
             val compositeValue =
                     ManagedObjects.nullOrEmptyToDefault(elementType, compositeValueNullable, ()->
-                        valueFacet.selectDefaultDefaultsProvider()
-                            .orElseThrow()
+                        valueFacet.selectDefaultsProviderForParameter(param.getMetaModel())
+                            .orElseThrow(()->onMissingDefaultsProvider(param.getMetaModel()))
                             .getDefaultValue());
 
             val mixinAction = valueFacet.selectCompositeValueMixinForParameter(parameterNegotiationModel, paramIndex);
@@ -267,5 +269,13 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
         val paramValue = parameterNegotiationModel.getParamValue(paramIndex);
         return ActionInteraction.start(paramValue, memberId, where);
     }
+
+    // -- HELPER
+
+    private static RuntimeException onMissingDefaultsProvider(final ObjectFeature feature) {
+        return _Exceptions.unrecoverableFormatted("Could not find a DefaultsProvider for ObjectFeature %s",
+                feature.getFeatureIdentifier());
+    }
+
 
 }

@@ -151,6 +151,17 @@ implements ValueFacet<T> {
                 .map(rel->(OrderRelation<T, ?>)rel);
     }
 
+    // -- DEFAULT SEMANTICS
+
+    @Override
+    public Optional<ValueSemanticsProvider<T>> selectDefaultSemantics() {
+        return getAllValueSemantics()
+                .stream()
+                .filter(isMatchingAnyOf(Can.empty()))
+                .filter(_NullSafe::isPresent)
+                .findFirst();
+    }
+
     // -- DEFAULTS PROVIDER
 
     @Override
@@ -163,13 +174,18 @@ implements ValueFacet<T> {
                 .findFirst();
     }
 
-    // -- DEFAULT SEMANTICS
+    @Override
+    public Optional<DefaultsProvider<T>> selectDefaultsProviderForParameter(final ObjectActionParameter param) {
+        return streamValueSemanticsHonoringQualifiers(param)
+                .map(ValueSemanticsProvider::getDefaultsProvider)
+                .filter(_NullSafe::isPresent)
+                .findFirst();
+    }
 
     @Override
-    public Optional<ValueSemanticsProvider<T>> selectDefaultSemantics() {
-        return getAllValueSemantics()
-                .stream()
-                .filter(isMatchingAnyOf(Can.empty()))
+    public Optional<DefaultsProvider<T>> selectDefaultsProviderForProperty(final OneToOneAssociation prop) {
+        return streamValueSemanticsHonoringQualifiers(prop)
+                .map(ValueSemanticsProvider::getDefaultsProvider)
                 .filter(_NullSafe::isPresent)
                 .findFirst();
     }
