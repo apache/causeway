@@ -31,12 +31,12 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.binding._BindableAbstract;
 import org.apache.isis.commons.internal.binding._Bindables;
 import org.apache.isis.commons.internal.binding._Observables;
-import org.apache.isis.commons.internal.binding._Observables.BooleanObservable;
 import org.apache.isis.commons.internal.binding._Observables.LazyObservable;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.interactions.managed._BindingUtil.TargetFormat;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
@@ -261,9 +261,9 @@ public class ParameterNegotiationModel {
         @Getter @NonNull private final LazyObservable<String> observableParamValidation;
         @Getter @NonNull private final _BindableAbstract<String> bindableParamSearchArgument;
         @Getter @NonNull private final LazyObservable<Can<ManagedObject>> observableParamChoices;
-        private final BooleanObservable isCurrentValueAbsent;
-
-        private Bindable<String> bindableParamAsText;
+        private Observable<String> bindableParamAsTitle;
+        private Observable<String> bindableParamAsHtml;
+        private Bindable<String> bindableParamAsParsableText;
 
         private ParameterModel(
                 final int paramNr,
@@ -316,12 +316,6 @@ public class ParameterNegotiationModel {
                         .getReason()
                 : (String)null);
 
-            // has no meaning for params, only has meaning for properties
-            // however, there are behavioral subtleties, that is, for a property
-            // the current value and the initial pending (negotiated) value might differ
-            // if the current value is absent (null)
-            // hence for params we always evaluate isCurrentValueAbsent() to false
-            this.isCurrentValueAbsent = _Observables.lazyBoolean(()->false);
         }
 
         public void invalidateChoicesAndValidation() {
@@ -362,12 +356,39 @@ public class ParameterNegotiationModel {
         }
 
         @Override
-        public Bindable<String> getValueAsParsableText() {
-            if(bindableParamAsText==null) {
-                // value types should have associated parsers/formatters via value semantics
-                bindableParamAsText = _BindingUtil.bindAsParsableText(metaModel, bindableParamValue);
+        public Observable<String> getValueAsTitle() {
+            if(bindableParamAsTitle==null) {
+                // value types should have associated rederers via value semantics
+                bindableParamAsTitle = _BindingUtil
+                        .bindAsFormated(TargetFormat.TITLE, metaModel, bindableParamValue);
             }
-            return bindableParamAsText;
+            return bindableParamAsTitle;
+        }
+
+        @Override
+        public Observable<String> getValueAsHtml() {
+            if(bindableParamAsHtml==null) {
+                // value types should have associated rederers via value semantics
+                bindableParamAsHtml = _BindingUtil
+                        .bindAsFormated(TargetFormat.HTML, metaModel, bindableParamValue);
+            }
+            return bindableParamAsHtml;
+        }
+
+        @Override
+        public boolean isValueAsParsableTextSupported() {
+            return _BindingUtil.hasParser(metaModel);
+        }
+
+        @Override
+        public Bindable<String> getValueAsParsableText() {
+            if(bindableParamAsParsableText==null) {
+                // value types should have associated parsers/formatters via value semantics
+                // except for composite value types, which might have not
+                bindableParamAsParsableText = (Bindable<String>) _BindingUtil
+                        .bindAsFormated(TargetFormat.PARSABLE_TEXT, metaModel, bindableParamValue);
+            }
+            return bindableParamAsParsableText;
         }
 
         @Override
@@ -385,10 +406,6 @@ public class ParameterNegotiationModel {
             return observableParamChoices;
         }
 
-        @Override
-        public BooleanObservable isCurrentValueAbsent() {
-            return isCurrentValueAbsent;
-        }
     }
 
 

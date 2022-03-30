@@ -51,6 +51,9 @@ public class ApplicationTypeAction extends ApplicationTypeMember {
     public ApplicationTypeAction(final ApplicationFeatureId featureId) {
         super(featureId);
     }
+    public ApplicationTypeAction(final String memento) {
+        super(memento);
+    }
 
 
     // -- returnTypeName (property)

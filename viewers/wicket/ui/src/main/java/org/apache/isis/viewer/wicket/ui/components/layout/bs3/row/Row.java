@@ -31,7 +31,7 @@ import org.apache.isis.viewer.wicket.ui.components.layout.bs3.col.Col;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.col.RepeatingViewWithDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 public class Row
@@ -90,7 +90,7 @@ implements HasDynamicallyVisibleContent {
             Wkt.cssAppend(panel, bs3Row.getCssClass());
             panel.add(rv);
         } else {
-            Components.permanentlyHide(panel, rv.getId());
+            WktComponents.permanentlyHide(panel, rv.getId());
         }
 
     }

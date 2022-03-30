@@ -24,21 +24,27 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
+import javax.inject.Inject;
+
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.TemporalValueSemantics;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.common.v2.TypedTupleDto;
 import org.apache.isis.schema.common.v2.ValueType;
 
@@ -56,6 +62,8 @@ extends ValueSemanticsAbstract<CalendarEvent>
 implements
     DefaultsProvider<CalendarEvent>,
     Renderer<CalendarEvent> {
+
+    @Inject private TemporalValueSemantics<ZonedDateTime> zonedDateTimeValueSemantics;
 
     @Override
     public Class<CalendarEvent> getCorrespondingClass() {
@@ -107,8 +115,29 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextPresentation(final Context context, final CalendarEvent value) {
+    public String titlePresentation(final Context context, final CalendarEvent value) {
         return render(value, v->v.toString());
+    }
+
+    @Override
+    public String htmlPresentation(final Context context, final CalendarEvent value) {
+        return render(value, v->{
+
+            return String.format("<section style=\""
+                    + "border: 1px solid rgba(0,0,0,.125);"
+                    + "padding: 2px 4px;"
+                    + "\">"
+                    + "<h6>%s (%s)</h6>"
+                    + "<span>%s</span>"
+                    + "<p>%s</p>"
+                    + "</section>",
+                    v.getTitle(),
+                    v.getCalendarName(),
+                    zonedDateTimeValueSemantics
+                        .htmlPresentation(context,
+                                v.asDateTime(context.getInteractionContext().getTimeZone())),
+                    _Strings.nullToEmpty(v.getNotes()));
+        });
     }
 
     // -- EXAMPLES
@@ -119,12 +148,14 @@ implements
         val a = CalendarEvent.of(
                 ZonedDateTime.of(2022, 05, 13, 17, 30, 15, 0, ZoneOffset.ofHours(3)),
                 "a-name",
-                "a-title");
+                "a-title",
+                "Calendar Notes");
 
         val b = CalendarEvent.of(
                 ZonedDateTime.of(2022, 06, 14, 18, 31, 16, 0, ZoneOffset.ofHours(4)),
                 "b-name",
-                "b-title");
+                "b-title",
+                "Calendar Notes");
 
         val c = CalendarEvent.of(
                 ZonedDateTime.of(2022, 07, 15, 19, 32, 17, 0, ZoneOffset.ofHours(5)),
@@ -136,7 +167,7 @@ implements
 
     // -- EMBEDDING
 
-    // typed tuple of base-types
+    // typed tuple of fundamental types
     @Value @Accessors(fluent = true)
     public static class Parameters {
         final LocalDateTime dateTime;
@@ -180,6 +211,7 @@ implements
                 final LocalDateTime dateTime,
                 final String calendarName,
                 final String title,
+                @Parameter(optionality = Optionality.OPTIONAL)
                 @ParameterLayout(multiLine = 4)
                 final String notes) {
 

@@ -14,8 +14,11 @@ enum Nature {
   VIEW_MODEL     // <.>
   MIXIN     // <.>
   BEAN     // <.>
+  boolean isNotSpecified()
   boolean isEntity()
   boolean isMixin()
+  boolean isViewModel()
+  boolean isBean()
 }
 ----
 

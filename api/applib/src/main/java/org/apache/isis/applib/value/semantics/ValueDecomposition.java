@@ -20,7 +20,6 @@ package org.apache.isis.applib.value.semantics;
 
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.commons.internal.base._Either;
-import org.apache.isis.commons.internal.resources._Json;
 import org.apache.isis.schema.common.v2.TypedTupleDto;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
@@ -44,19 +43,14 @@ public final class ValueDecomposition extends _Either<ValueWithTypeDto, TypedTup
     public String toJson() {
         return this.<String>fold(
                 CommonDtoUtils::getFundamentalValueAsJson,
-                composite->_Json.toString(
-                        composite,
-                        _Json::jaxbAnnotationSupport,
-                        _Json::onlyIncludeNonNull));
+                CommonDtoUtils::getCompositeValueAsJson);
     }
 
     // used by EncodableFacet
     public static ValueDecomposition fromJson(final ValueType vType, final String json) {
-        if(vType==ValueType.COMPOSITE) {
-            return _Json.readJson(ValueDecomposition.class, json).presentElseFail();
-        }
-        return ofFundamental(
-                CommonDtoUtils.getFundamentalValueFromJson(vType, json));
+        return vType==ValueType.COMPOSITE
+            ? ofComposite(CommonDtoUtils.getCompositeValueFromJson(json))
+            : ofFundamental(CommonDtoUtils.getFundamentalValueFromJson(vType, json));
     }
 
 }

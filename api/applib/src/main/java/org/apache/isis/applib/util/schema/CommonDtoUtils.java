@@ -188,7 +188,7 @@ public final class CommonDtoUtils {
         if(valueDto==null) {
             return null;
         }
-        return getFundamentalValueAsJson(valueDto.getType(),valueDto);
+        return getFundamentalValueAsJson(valueDto.getType(), valueDto);
     }
 
     @SneakyThrows
@@ -252,6 +252,25 @@ public final class CommonDtoUtils {
         default:
             throw _Exceptions.unmatchedCase(valueType);
         }
+    }
+
+    @Nullable
+    public String getCompositeValueAsJson(final @Nullable TypedTupleDto composite) {
+        return composite!=null
+            ? _Json.toString(
+                composite,
+                _Json::jaxbAnnotationSupport,
+                _Json::onlyIncludeNonNull)
+            : null;
+    }
+
+    @SneakyThrows
+    @Nullable
+    public TypedTupleDto getCompositeValueFromJson(final @Nullable String json) {
+        return _Strings.isNotEmpty(json)
+                ? _Json.readJson(TypedTupleDto.class, json, _Json::jaxbAnnotationSupport)
+                        .presentElseFail()
+                : null;
     }
 
     private String dtoToJson(final @Nullable Object dto) {

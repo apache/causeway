@@ -76,13 +76,13 @@ extends ValueSemanticsProviderAbstractTestCase<Boolean> {
 
     @Test
     public void testTitle() throws Exception {
-        assertEquals("True", value.simpleTextPresentation(null, booleanObj));
+        assertEquals("True", value.titlePresentation(null, booleanObj));
     }
 
     @Test
     public void testTitleWhenNotSet() throws Exception {
         assertEquals(ValueSemanticsAbstract.NULL_REPRESENTATION,
-                value.simpleTextPresentation(null, null));
+                value.titlePresentation(null, null));
     }
 
 }

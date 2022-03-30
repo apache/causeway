@@ -34,13 +34,14 @@ import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
+import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
+import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
 import lombok.val;
 
@@ -63,27 +64,12 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             final String id,
             final ObjectAdapterModel objectAdapterModel) {
         super(id, objectAdapterModel);
-
-        val model = getModel();
-        val obj = model.getObject();
-
-        val isNonEmptyAbstract = isNonEmptyAbstract(obj);
-        // GUARD against non-empty abstract
-        _Assert.assertFalse(isNonEmptyAbstract,
-                ()->"model for EntityIconAndTitlePanel, when non-empty, must not represent abstract types");
+        guardAgainstNonEmptyAbstractScalar(objectAdapterModel);
     }
 
     protected ManagedObject getTargetAdapter() {
         val targetAdapter = EntityUtil.refetch(getModel().getObject());
         return targetAdapter;
-    }
-
-    static boolean isNonEmptyAbstract(final ManagedObject obj) {
-        if(obj==null
-                || obj.getPojo()==null) {
-            return false;
-        }
-        return obj.getSpecification().isAbstract();
     }
 
     @Override
@@ -133,11 +119,11 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             if (iconName != null || cssClassFaFactory == null) {
                 Wkt.imageAddCachable(link, ID_ENTITY_ICON,
                                 getImageResourceCache().resourceReferenceFor(targetAdapter));
-                Components.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
+                WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
             } else {
                 Label dummy = Wkt.labelAdd(link, ID_ENTITY_FONT_AWESOME, "");
                 Wkt.cssAppend(dummy, cssClassFaFactory.asSpaceSeparatedWithAdditional("fa-2x"));
-                Components.permanentlyHide(link, ID_ENTITY_ICON);
+                WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
             }
 
             final String title = determineTitle();
@@ -145,7 +131,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
             String entityTypeName = determineFriendlyType() // from actual underlying model
                     .orElseGet(targetAdapter.getSpecification()::getSingularName); // not sure if this code path is ever reached
-            Tooltips.addTooltip(link, entityTypeName, title);
+            WktTooltips.addTooltip(link, entityTypeName, title);
         }
 
         return link;
@@ -228,6 +214,25 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             return str;
         }
         return maxLength <= 3 ? "" : str.substring(0, maxLength - 3) + "...";
+    }
+
+    private static void guardAgainstNonEmptyAbstractScalar(final ObjectAdapterModel objectAdapterModel) {
+        val obj = objectAdapterModel.getObject();
+        _Assert.assertFalse(isNonEmptyAbstractScalar(obj),
+                ()->String.format("model for EntityIconAndTitlePanel, "
+                        + "when non-empty, must not represent abstract types; "
+                        + "however, got an abstract %s for object of type %s",
+                        obj.getSpecification(),
+                        obj.getPojo().getClass().getName()));
+    }
+
+    private static boolean isNonEmptyAbstractScalar(final ManagedObject obj) {
+        if(obj==null
+                || obj.getPojo()==null
+                || obj instanceof PackedManagedObject) {
+            return false;
+        }
+        return obj.getSpecification().isAbstract();
     }
 
 }

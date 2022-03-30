@@ -31,8 +31,11 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
+
+import lombok.val;
 
 /**
  * The parent (container) model of multiple <i>property models</i> which implement
@@ -73,7 +76,12 @@ extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
 
         // restore the lazy field - don't evaluate yet
         propertyNegotiationModel =
-                _Lazy.threadSafe(()->propertyInteraction().startPropertyNegotiation());
+                _Lazy.threadSafe(()->{
+                    val propIa = propertyInteraction();
+                    val prop = propIa.getManagedProperty().orElseThrow();
+                    ManagedObjects.refreshViewmodel(prop.getOwner(), /* bookmark provider*/ null);
+                    return propIa.startPropertyNegotiation();
+                });
 
         return PropertyInteraction.wrap(
                 ManagedProperty.lookupProperty(getBookmarkedOwner(), memberId, where)

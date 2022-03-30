@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
@@ -43,7 +42,6 @@ import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
-import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.interactions.AccessContext;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
@@ -54,6 +52,7 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
@@ -278,10 +277,15 @@ implements
             final @NonNull Class<?> mixinType,
             final @NonNull ManagedObject mixee) {
 
-        val spec = getSpecificationLoader().loadSpecification(mixinType);
-        val mixinFacet = spec.getFacet(MixinFacet.class);
-        val mixinPojo = mixinFacet.instantiate(mixee.getPojo() /*nullable for action parameter mixins*/);
-        return ManagedObject.of(spec, Objects.requireNonNull(mixinPojo));
+        val mixinSpec = getSpecificationLoader().loadSpecification(mixinType);
+
+        // nullable for action parameter mixins
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(mixee)) {
+            return ManagedObject.empty(mixinSpec);
+        }
+
+        val mixinPojo = getMetaModelContext().getFactoryService().mixin(mixinType, mixee.getPojo());
+        return ManagedObject.of(mixinSpec, mixinPojo);
     }
 
     // -- OBJECT CONTRACT

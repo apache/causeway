@@ -92,12 +92,6 @@ public class _Json {
 
     // -- STRING CONTENT
 
-    private static <T> T _readJson(final Class<T> clazz, final String content)
-            throws JsonParseException, JsonMappingException, IOException {
-
-        return new ObjectMapper().readValue(content, clazz);
-    }
-
     /**
      * Either deserialize JSON content from given JSON content String into an instance of
      * given {@code clazz} type, or any exception that occurred during parsing.
@@ -105,8 +99,11 @@ public class _Json {
      * @param clazz
      * @param content
      */
-    public static <T> Result<T> readJson(final Class<T> clazz, final String content) {
-        return Result.of(()->_readJson(clazz, content));
+    public static <T> Result<T> readJson(
+            final Class<T> clazz,
+            final String content,
+            final JsonCustomizer ... customizers) {
+        return Result.of(()->mapper(customizers).readValue(content, clazz));
     }
 
     private static <T> List<T> _readJsonList(final Class<T> elementType, final String content)
@@ -226,17 +223,24 @@ public class _Json {
     }
 
     @SneakyThrows
+    @Nullable
     public static String toString(
             final @Nullable Object pojo,
             final JsonCustomizer ... customizers) {
-        if(pojo==null) {
-            return null;
-        }
+        return pojo!=null
+                ? mapper(customizers).writeValueAsString(pojo)
+                : null;
+    }
+
+    // -- GET MAPPER
+
+    private static ObjectMapper mapper(
+            final JsonCustomizer ... customizers) {
         var mapper = new ObjectMapper();
         for(JsonCustomizer customizer : customizers) {
             mapper = customizer.apply(mapper);
         }
-        return mapper.writeValueAsString(pojo);
+        return mapper;
     }
 
 }

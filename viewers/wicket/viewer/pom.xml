@@ -134,19 +134,10 @@
             </exclusions>
         </dependency>
 
-		<dependency>
-		    <groupId>org.webjars</groupId>
-		    <artifactId>popper.js</artifactId>		    
-		</dependency>
-
         <dependency>
             <groupId>de.agilecoders.wicket</groupId>
             <artifactId>wicket-bootstrap-core</artifactId>
             <exclusions>
-				<exclusion>
-				    <groupId>org.webjars</groupId>
-				    <artifactId>popper.js</artifactId>
-				</exclusion>
                 <exclusion>
                     <groupId>org.apache.wicket</groupId>
                     <artifactId>wicket-util</artifactId>
@@ -174,23 +165,6 @@
             </exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>net.ftlines.wicket-source</groupId>
-            <!-- <groupId>com.github.jennybrown8.wicket-source</groupId> -->
-            <artifactId>wicket-source</artifactId>
-            <exclusions>
-                <exclusion>
-                    <!-- for dependency convergence -->
-                    <groupId>org.apache.wicket</groupId>
-                    <artifactId>wicket-core</artifactId>
-                </exclusion>
-            	<exclusion>
-            		<groupId>org.slf4j</groupId>
-            		<artifactId>slf4j-api</artifactId>
-            	</exclusion>
-            </exclusions>
-        </dependency>
-        
         <!-- Spring -->
 
 		<dependency>

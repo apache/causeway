@@ -34,10 +34,6 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class MethodUtil {
 
-    public static void invoke(final Iterable<Method> methods, final Object object) {
-        methods.forEach(method->MethodExtensions.invoke(method, object));
-    }
-
     public static boolean isNotStatic(final Method method) {
         return !isStatic(method);
     }

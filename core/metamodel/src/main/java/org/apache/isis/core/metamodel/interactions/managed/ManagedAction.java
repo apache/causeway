@@ -31,7 +31,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.metamodel.commons.CanonicalParameterUtil;
+import org.apache.isis.core.metamodel.commons.CanonicalInvoker;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
@@ -173,7 +173,7 @@ public final class ManagedAction extends ManagedMember {
         final Object[] executionParameters = UnwrapUtil.multipleAsArray(actionParameters);
         final Object targetPojo = UnwrapUtil.single(interactionHead().getTarget());
 
-        val resultPojo = CanonicalParameterUtil
+        val resultPojo = CanonicalInvoker
                 .invoke(method, targetPojo, executionParameters);
 
         return mmc().getObjectManager().adapt(resultPojo);

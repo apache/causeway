@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 export ANTORA_CACHE_DIR=.antora-cache-dir
 export ANTORA_TARGET_SITE=antora/target/site
@@ -139,7 +139,7 @@ export ANTORA_CMD=antora
 
 SECONDS=0
 echo "\$PLAYBOOK_FILE = $PLAYBOOK_FILE"
-sh build-site.sh $PLAYBOOK_FILE || exit 1
+bash build-site.sh $PLAYBOOK_FILE || exit 1
 
 if [[ "$SKIP_SERVE" == "true" ]]; then
   echo "skipping serving"

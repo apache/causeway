@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -27,6 +26,7 @@ import java.util.function.UnaryOperator;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Collections;
@@ -35,7 +35,9 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.AccessLevel;
@@ -132,28 +134,56 @@ public interface ManagedObject {
 
     /** debug */
     default void assertSpecIsInSyncWithPojo() {
-        val pojo = getPojo();
-        val spec = getSpecification();
-        if(pojo==null
-                || spec==null) {
-            return;
-        }
-        val actualSpec = spec.getSpecificationLoader().specForType(pojo.getClass()).orElse(null);
-        if(!Objects.equals(spec,  actualSpec)) {
-            System.err.printf("spec mismatch %s %s%n", spec, actualSpec);
-        }
+//        val pojo = getPojo();
+//        val spec = getSpecification();
+//        if(pojo==null
+//                || spec==null) {
+//            return;
+//        }
+//        val actualSpec = spec.getSpecificationLoader().specForType(pojo.getClass()).orElse(null);
+//        if(!Objects.equals(spec,  actualSpec)) {
+//            System.err.printf("spec mismatch %s %s%n", spec, actualSpec);
+//        }
         //_Assert.assertEquals(spec, actualSpec);
+    }
+
+    // -- HTML
+
+    public default String htmlString(
+            final @Nullable ObjectFeature feature) {
+
+        if(getSpecification()==null) {
+            return "";
+        }
+
+        val spec = getSpecification();
+        val valueFacet = spec.getFacet(ValueFacet.class);
+
+        if(valueFacet==null) {
+            return String.format("missing ValueFacet %s", spec.getCorrespondingClass());
+        }
+
+        val renderer = (Renderer<Object>) valueFacet.selectRendererForFeature(feature).orElse(null);
+        if(renderer==null) {
+            return String.format("missing Renderer %s", spec.getCorrespondingClass());
+        }
+
+        return renderer.htmlPresentation(valueFacet.createValueSemanticsContext(feature), this.getPojo());
     }
 
     // -- TITLE
 
     public default String titleString(final UnaryOperator<TitleRenderRequest.TitleRenderRequestBuilder> onBuilder) {
         return ManagedObjects.TitleUtil
-                .titleString(onBuilder.apply(TitleRenderRequest.builder().object(this)).build());
+                .titleString(onBuilder.apply(
+                        TitleRenderRequest.builder()
+                        .object(this))
+                        .build());
     }
 
     public default String titleString() {
-        return ManagedObjects.TitleUtil.titleString(TitleRenderRequest.builder()
+        return ManagedObjects.TitleUtil.titleString(
+                TitleRenderRequest.builder()
                 .object(this)
                 .build());
     }
@@ -221,7 +251,7 @@ public interface ManagedObject {
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
 
-        ManagedObjects.assertPojoNotManaged(pojo);
+        ManagedObjects.assertPojoNotWrapped(pojo);
 
         //ISIS-2430 Cannot assume Action Param Spec to be correct when eagerly loaded
         //actual type in use (during runtime) might be a sub-class of the above, so re-adapt with hinting spec
@@ -250,7 +280,7 @@ public interface ManagedObject {
                     "pojo.toString() = %s",
                     spec.getCorrespondingClass(), pojo.getClass(), pojo.toString());
         }
-        ManagedObjects.assertPojoNotManaged(pojo);
+        ManagedObjects.assertPojoNotWrapped(pojo);
         return SimpleManagedObject.identified(spec, pojo, bookmark);
     }
 
@@ -267,7 +297,7 @@ public interface ManagedObject {
             _Assert.assertFalse(_Collections.isCollectionOrArrayOrCanType(pojo.getClass()));
         }
 
-        ManagedObjects.assertPojoNotManaged(pojo);
+        ManagedObjects.assertPojoNotWrapped(pojo);
         val adapter = new LazyManagedObject(cls->specLoader.specForType(cls).orElse(null), pojo);
         //ManagedObjects.warnIfAttachedEntity(adapter, "consider using ManagedObject.identified(...) for entity");
         return adapter;
@@ -430,8 +460,6 @@ public interface ManagedObject {
         }
 
     }
-
-
 
 
 }

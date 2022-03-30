@@ -166,7 +166,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
             ignoring(mockStringSpec).assertPojoCompatible(with(any(String.class)));
 
         }});
-        final String title = _TitleFacetUtil.title(titleFacetViaTitleAnnotation, mockObjectAdapter);
+        final String title = titleFacetViaTitleAnnotation.title(mockObjectAdapter);
         assertThat(title, is("titleElement1. titleElement3,titleElement2"));
     }
 

@@ -206,8 +206,7 @@ $(function() {
 	   		$(this).popover('hide');
 	    });
 	}
-
-	$(document, '.isis-component-with-tooltip').on('click', hidePopover);
+	$(document, '.wkt-component-with-tooltip').on('click', hidePopover);
 
 /*
     $('.editing .editable').parent().hover(function () {
@@ -235,9 +234,9 @@ $(function() {
 		   disabled for additional-action-links,
            as it currently does not work consistently eg. with AJAX requests
 
-		   let autoShowSelector = 'a[data-toggle], button[data-toggle]';
+		   let autoShowSelector = 'a[data-bs-toggle], button[data-bs-toggle]';
 		*/
-		let autoShowSelector = 'a[data-toggle]';
+		let autoShowSelector = 'a[data-bs-toggle]';
 
 		everyitem.addEventListener('mouseover', function(e){
 			if(window.innerWidth<768){
@@ -274,7 +273,6 @@ $(function() {
 		});
 	});
 
-
 });
 
 /**
@@ -290,5 +288,3 @@ $(function() {
         }
     })
 });
-
-

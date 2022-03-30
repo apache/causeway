@@ -73,7 +73,7 @@ implements
     // RENDERER
 
     @Override
-    public String simpleTextPresentation(final ValueSemanticsProvider.Context context, final Blob value) {
+    public String titlePresentation(final ValueSemanticsProvider.Context context, final Blob value) {
         return render(value, Blob::getName);
     }
 

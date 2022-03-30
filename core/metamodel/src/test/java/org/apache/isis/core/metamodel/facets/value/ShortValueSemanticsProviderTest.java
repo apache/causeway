@@ -53,12 +53,12 @@ extends ValueSemanticsProviderAbstractTestCase<Short> {
 
     @Test
     public void testTitleOfForPositiveValue() {
-        assertEquals("32", value.simpleTextPresentation(null, short1));
+        assertEquals("32", value.titlePresentation(null, short1));
     }
 
     @Test
     public void testTitleOfForLargestNegativeValue() {
-        assertEquals("-128", value.simpleTextPresentation(null, Short.valueOf((short) -128)));
+        assertEquals("-128", value.titlePresentation(null, Short.valueOf((short) -128)));
     }
 
     @Test

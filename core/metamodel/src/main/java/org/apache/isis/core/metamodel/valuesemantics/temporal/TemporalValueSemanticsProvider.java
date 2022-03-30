@@ -140,7 +140,7 @@ implements TemporalValueSemantics<T> {
     // -- RENDERER
 
     @Override
-    public final String simpleTextPresentation(
+    public final String titlePresentation(
             final ValueSemanticsProvider.Context context,
             final T value) {
         return render(value, getRenderingFormat(context)::format);

@@ -1,0 +1,182 @@
+[[r2.0.0-M7]]
+= 2.0.0-M7
+
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+Highlights of this release:
+
+* New xref:refguide:applib:index/annotation/DomainObject.adoc#introspection[introspection] policy of xref:refguide:applib:index/annotation/Introspection.adoc#ENCAPSULATION_ENABLED[ENCAPSULATION_ENABLED], meaning that members (and their supporting methods) can have non-public visibility.
+
+* Substantially reworked of the treatment of value types and refactoring of implementation within Wicket viewer (on the way towards supporting composite value type).
+
+* Support for xref:refguide:applib:index/locale/UserLocale.adoc[UserLocale] (languate, number format, time format) as an attributed of the current user / xref:refguide:applib:index/services/user/UserMemento.adoc[user memento].
+
+* Rationalization of the handling of xref:refguide:applib:index/annotation/LogicalTypeName.adoc[logical type name] for superclasses/supertypes.
+
+* Update to DataNucleus 6.
+
+
+
+== New Feature
+
+* link:https://issues.apache.org/jira/browse/ISIS-2952[ISIS-2952] - [Testing] Support for declarative Interaction Context Specification
+* link:https://issues.apache.org/jira/browse/ISIS-2951[ISIS-2951] - [Secman] TenantedAuthorizationFacetDefault to recognize System User as not to be vetoed
+* link:https://issues.apache.org/jira/browse/ISIS-2918[ISIS-2918] - [SecMan] Support for per User Locale
+* link:https://issues.apache.org/jira/browse/ISIS-2917[ISIS-2917] - [Wicket Viewer] Allow direct export of Collection Views
+* link:https://issues.apache.org/jira/browse/ISIS-2916[ISIS-2916] - Introduce @LogicalTypeName to properly map abstract types onto the security model
+* link:https://issues.apache.org/jira/browse/ISIS-2883[ISIS-2883] - [Prototyping] Site-Map Export (AsciiDoc)
+* link:https://issues.apache.org/jira/browse/ISIS-2867[ISIS-2867] - Further archtest rules
+* link:https://issues.apache.org/jira/browse/ISIS-2774[ISIS-2774] - Allow members (and their supporting methods) to have non-public visibility. Allow properties/collections to have no getters & setters, or non-public getters and setters.
+* link:https://issues.apache.org/jira/browse/ISIS-2768[ISIS-2768] - [RO] Make Application Logo Available via REST
+
+
+
+== Improvement
+
+* link:https://issues.apache.org/jira/browse/ISIS-2938[ISIS-2938] - Don't allow DomainObject Annotation on Interfaces
+* link:https://issues.apache.org/jira/browse/ISIS-2920[ISIS-2920] - [i18n] Remove LocaleProvider, instead use the InteractionContext
+* link:https://issues.apache.org/jira/browse/ISIS-2914[ISIS-2914] - @XmlJavaTypeAdapter on Properties should be optional if the referenced Type has it already
+* link:https://issues.apache.org/jira/browse/ISIS-2906[ISIS-2906] - [RO Viewer] JsonRepresentation to preserve Map<K, V> Ordering
+* link:https://issues.apache.org/jira/browse/ISIS-2891[ISIS-2891] - Remove @ComponentScan where can be replaced by a Component Listing
+* link:https://issues.apache.org/jira/browse/ISIS-2882[ISIS-2882] - [Wicket Viewer] Support for generic Value-Type Conversion based on ValueSemantics
+* link:https://issues.apache.org/jira/browse/ISIS-2880[ISIS-2880] - Multi line textfield should have the cursor in the field after clicking in order to start typing right away
+* link:https://issues.apache.org/jira/browse/ISIS-2871[ISIS-2871] - Value Types need Semantics on a per Member/Param Basis
+* link:https://issues.apache.org/jira/browse/ISIS-2866[ISIS-2866] - Ensure @MemberSupport for all framework-provided members
+* link:https://issues.apache.org/jira/browse/ISIS-2863[ISIS-2863] - Remove DN5 suffix from maven artifact names
+* link:https://issues.apache.org/jira/browse/ISIS-2862[ISIS-2862] - Remove WizardFacet
+* link:https://issues.apache.org/jira/browse/ISIS-2861[ISIS-2861] - Remove ViewModel.Cloneable
+* link:https://issues.apache.org/jira/browse/ISIS-2856[ISIS-2856] - Remove Deprecations marked as such till 2.0.0-M6
+* link:https://issues.apache.org/jira/browse/ISIS-2852[ISIS-2852] - AuthorizorSecman: Permission Caching per Interaction
+* link:https://issues.apache.org/jira/browse/ISIS-2741[ISIS-2741] - Show a more appropriate message when invalid BigDecimal shown; ideally allow it to be customised using @Digits.message
+* link:https://issues.apache.org/jira/browse/ISIS-2737[ISIS-2737] - Metamodel: accept Can<T> as vector type (along java.util.Collection)
+* link:https://issues.apache.org/jira/browse/ISIS-2729[ISIS-2729] - [Wicket] use generic RoleName 'org.apache.isis.security.AUTHORIZED_USER_ROLE'
+
+
+
+
+== Bug
+
+* link:https://issues.apache.org/jira/browse/ISIS-2963[ISIS-2963] - facet-processing: annotations not recognized on primitive boolean properties
+* link:https://issues.apache.org/jira/browse/ISIS-2962[ISIS-2962] - [Wicket Viewer] Re-hydrate issues when jumping between tabs in a non-Jaxb view model
+* link:https://issues.apache.org/jira/browse/ISIS-2961[ISIS-2961] - [Wicket Viewer] When cancelling update on textfield, the cancelled text remains visible (until page refresh)
+* link:https://issues.apache.org/jira/browse/ISIS-2956[ISIS-2956] - [Metamodel] False positive when guarding against JDO Version Annotation Override
+* link:https://issues.apache.org/jira/browse/ISIS-2950[ISIS-2950] - Various Glitches detected by Trying all Demo Menu Actions
+* link:https://issues.apache.org/jira/browse/ISIS-2948[ISIS-2948] - [RO Viewer] Element-type not correctly represented for Collections.
+* link:https://issues.apache.org/jira/browse/ISIS-2944[ISIS-2944] - [Metamodel] Support Method Discovery is not reliable when not annotated
+* link:https://issues.apache.org/jira/browse/ISIS-2942[ISIS-2942] - Tenancy Child Removal not working
+* link:https://issues.apache.org/jira/browse/ISIS-2941[ISIS-2941] - Regression: Generic numerical primitive Field Editing throws due to missing Conversion
+* link:https://issues.apache.org/jira/browse/ISIS-2936[ISIS-2936] - [Regression] Starters are not aware of 'Bill of Materials'
+* link:https://issues.apache.org/jira/browse/ISIS-2935[ISIS-2935] - Wrapper: null arguments not properly adapted
+* link:https://issues.apache.org/jira/browse/ISIS-2940[ISIS-2940] - wrapper's call to filterIfRequired results in an empty collection being converted to null.
+* link:https://issues.apache.org/jira/browse/ISIS-2931[ISIS-2931] - [Wicket] ChoiceProviders for EntityPage Features are populated eagerly.
+* link:https://issues.apache.org/jira/browse/ISIS-2930[ISIS-2930] - Use of Collection Annotation w/o specifying a typeOf always yields Object.class
+* link:https://issues.apache.org/jira/browse/ISIS-2929[ISIS-2929] - [Wicket] Sorting or expanding a table results in new DataTableModel detached from Checkbox-Toggle-Model
+* link:https://issues.apache.org/jira/browse/ISIS-2921[ISIS-2921] - ScalarModelWithMultiChoice might throw Exception
+* link:https://issues.apache.org/jira/browse/ISIS-2915[ISIS-2915] - [Regression] SecMan User Manager throws RuntimeEx on rendering
+* link:https://issues.apache.org/jira/browse/ISIS-2911[ISIS-2911] - Entity Choice Providers appear detached when using JDO
+* link:https://issues.apache.org/jira/browse/ISIS-2910[ISIS-2910] - Viewmodels after Modification must invalidate their memoized Bookmark
+* link:https://issues.apache.org/jira/browse/ISIS-2907[ISIS-2907] - css-class-fa not applied to menu items based on action classes
+* link:https://issues.apache.org/jira/browse/ISIS-2904[ISIS-2904] - Wicket Viewer: ScalarPropertyModel.getManagedProperty() fails when mixed in
+* link:https://issues.apache.org/jira/browse/ISIS-2903[ISIS-2903] - Recreation fails for ViewModels containing Entities
+* link:https://issues.apache.org/jira/browse/ISIS-2901[ISIS-2901] - Using namedXxx with Mixins does not work
+* link:https://issues.apache.org/jira/browse/ISIS-2897[ISIS-2897] - Wicket viewer caching old instance of mixin (and thus entity), resulting in NPE when invoke action prompt
+* link:https://issues.apache.org/jira/browse/ISIS-2896[ISIS-2896] - Regression: char/Character Property not rendered correctly
+* link:https://issues.apache.org/jira/browse/ISIS-2894[ISIS-2894] - Metamodel validation "orphan" errors if implement interface.
+* link:https://issues.apache.org/jira/browse/ISIS-2893[ISIS-2893] - Command log does not publish for mixin actions.
+* link:https://issues.apache.org/jira/browse/ISIS-2890[ISIS-2890] - @ComponentScan missing in IsisModuleSubdomainsDocxApplib
+* link:https://issues.apache.org/jira/browse/ISIS-2884[ISIS-2884] - Passwords not matching after restart
+* link:https://issues.apache.org/jira/browse/ISIS-2881[ISIS-2881] - Scale for BigDecimal property is not picked up in JPA version
+* link:https://issues.apache.org/jira/browse/ISIS-2879[ISIS-2879] - Multiline textfield can be 'edited' but data not persisted without edit mode being active (chrome, firefox)
+* link:https://issues.apache.org/jira/browse/ISIS-2876[ISIS-2876] - DomainModelValidator validation fails on IsisModuleSubdomainsExcelApplib
+* link:https://issues.apache.org/jira/browse/ISIS-2875[ISIS-2875] - ArchitectureJdoRules should check only root identities
+* link:https://issues.apache.org/jira/browse/ISIS-2870[ISIS-2870] - [Regression] Various UI glitches - temporal values, ...
+* link:https://issues.apache.org/jira/browse/ISIS-2865[ISIS-2865] - [Regression] Menu links to Swagger and RO don't honor context path (URL)
+* link:https://issues.apache.org/jira/browse/ISIS-2855[ISIS-2855] - Wicket Viewer fails to render singleton (scalar) Values like Strings
+* link:https://issues.apache.org/jira/browse/ISIS-2846[ISIS-2846] - Layout Information Missing in RO Viewer
+* link:https://issues.apache.org/jira/browse/ISIS-2703[ISIS-2703] - ApplicationTenancy's autocomplete doesn't seem to work (not available for secman-admin)
+* link:https://issues.apache.org/jira/browse/ISIS-2670[ISIS-2670] - Bootstrap tooltips do not disappear
+* link:https://issues.apache.org/jira/browse/ISIS-2653[ISIS-2653] - Meta-annotation with JDO @Column(allowNulls="true") not picked up.
+* link:https://issues.apache.org/jira/browse/ISIS-1968[ISIS-1968] - @Title on a field should use the getter (to allow the ORM to lazily retrieve the data)
+
+
+
+== Docs and Website
+
+* link:https://issues.apache.org/jira/browse/ISIS-2937[ISIS-2937] - Update Cheatsheets for M7
+
+
+== Dependency upgrade
+
+* link:https://issues.apache.org/jira/browse/ISIS-2857[ISIS-2857] - Bump Datanucleus from 5.x to 6.x
+
+
+== Demo and Starter Apps
+
+
+* link:https://issues.apache.org/jira/browse/ISIS-2954[ISIS-2954] - [Demo] UUID Value-Type Choice Select fails with '... value required'
+* link:https://issues.apache.org/jira/browse/ISIS-2909[ISIS-2909] - [Demo] Enable http-2 per default
+* link:https://issues.apache.org/jira/browse/ISIS-2869[ISIS-2869] - [Demo] Add CalenderEvent
+* link:https://issues.apache.org/jira/browse/ISIS-2864[ISIS-2864] - [Demo] Unreferenced Java Sources (Adoc)
+* link:https://issues.apache.org/jira/browse/ISIS-2718[ISIS-2718] - Demo webapp - fix permissions and ensure all isis roles are seeded
+* link:https://issues.apache.org/jira/browse/ISIS-2529[ISIS-2529] - Crop Logo Images
+
+
+== Tooling
+
+* link:https://issues.apache.org/jira/browse/ISIS-2945[ISIS-2945] - [Tooling] Verify support for simplified <p> paragraph syntax within java-doc
+* link:https://issues.apache.org/jira/browse/ISIS-2933[ISIS-2933] - [Tooling] Ignore the 'final' keyword with method signatures when generating adoc
+
+
+
+== Task
+
+* link:https://issues.apache.org/jira/browse/ISIS-2859[ISIS-2859] - 2.0.0-M7 release activities
+
+
+
+
+== Won't Fix / Not a Problem / Duplicates
+
+No code changes were made to close these tickets:
+
+* link:https://issues.apache.org/jira/browse/ISIS-2943[ISIS-2943] - Reinstate ApplicationAdvice.APPLIES_EXCLUSIVELY
+* link:https://issues.apache.org/jira/browse/ISIS-2939[ISIS-2939] - [WON'T DO] Rename o.a.i.applib.annotation to o.a.i.applib.annotations (plural)
+* link:https://issues.apache.org/jira/browse/ISIS-2934[ISIS-2934] - [WON'T DO] Merge up /isis-core/ bill of materials into root pom
+* link:https://issues.apache.org/jira/browse/ISIS-2932[ISIS-2932] - [was reverted] Remove the /isis-parent/ module.
+* link:https://issues.apache.org/jira/browse/ISIS-2899[ISIS-2899] - [DUPLICATE] Relax arch rule (ArchitectureJdoRules.every_jdo_PersistenceCapable_with_DATASTORE_identityType_must_be_annotated_as_DataStoreIdentity())
+* link:https://issues.apache.org/jira/browse/ISIS-2898[ISIS-2898] - [WON'T DO] Add `@LogicalTypeName` as a meta-annotation
+* link:https://issues.apache.org/jira/browse/ISIS-2895[ISIS-2895] - [Not a Problem] Property referencing a DomainObject rendered as empty Box
+* link:https://issues.apache.org/jira/browse/ISIS-2860[ISIS-2860] - [NOT A BUG] Entities not Picked Up During Application Start
+* link:https://issues.apache.org/jira/browse/ISIS-2804[ISIS-2804] - [WON'T DO] Remove hard-coding of the Wicket role in impersonation etc.
+* link:https://issues.apache.org/jira/browse/ISIS-2792[ISIS-2792] - JPA ElSettings probably shouldn't hard code eclipselink.weaving=false
+* link:https://issues.apache.org/jira/browse/ISIS-2782[ISIS-2782] - [Duplicate] Add config properties to require explicit @Property, @Collection and @MemberSupport. (isis.applib.annotation.property.explicit etc)
+* link:https://issues.apache.org/jira/browse/ISIS-2765[ISIS-2765] - [CANNOT REPRODUCE] Method ModuleWithFixtures.getTeardownFixture not executed after failed test
+* link:https://issues.apache.org/jira/browse/ISIS-2749[ISIS-2749] - [Duplicate] Convert IsisConverterLocator into a domain service and allow Wicket Converters to be substituted in.
+* link:https://issues.apache.org/jira/browse/ISIS-2649[ISIS-2649] - [WON'T FIX] Regression: ObjectSpecification Predicates isEntity() and isViewModel() are always false when abstract
+* link:https://issues.apache.org/jira/browse/ISIS-2624[ISIS-2624] - [WON'T FIX] Changing the seeding password for an existing admin user should update the password
+* link:https://issues.apache.org/jira/browse/ISIS-2482[ISIS-2482] - [duplicate] Enabling HTTP/2
+* link:https://issues.apache.org/jira/browse/ISIS-841[ISIS-841] - [NOT A PROBLEM] Remove mention of a "loading()" callback; this can never fire (for JDO objectstore).
+
+
+
+== Incubating features
+
+These are not formally released.
+
+=== Kroviz
+
+* link:https://issues.apache.org/jira/browse/ISIS-2955[ISIS-2955] - [kroviz] Build fails on Windows (commands 'cp' and 'mv' not available)
+* link:https://issues.apache.org/jira/browse/ISIS-2949[ISIS-2949] - [kroviz] Execute All MenuBar Actions at Once
+* link:https://issues.apache.org/jira/browse/ISIS-2913[ISIS-2913] - [kroviz] Handle Multiple Server Connections (Gracefully)
+* link:https://issues.apache.org/jira/browse/ISIS-2878[ISIS-2878] - [kroviz] Package Client into demo/domain
+* link:https://issues.apache.org/jira/browse/ISIS-2872[ISIS-2872] - [kroviz] Upgrade Kotlin/KVision Dependencies
+* link:https://issues.apache.org/jira/browse/ISIS-2838[ISIS-2838] - [kroviz] Basic Types / Strings
+* link:https://issues.apache.org/jira/browse/ISIS-2348[ISIS-2348] - [kroviz] Replay User Events
+
+=== Vaadin
+
+* link:https://issues.apache.org/jira/browse/ISIS-2924[ISIS-2924] - [Vaa] Encapsulate node.js within Vaadin Viewer's Maven Artifacts
+

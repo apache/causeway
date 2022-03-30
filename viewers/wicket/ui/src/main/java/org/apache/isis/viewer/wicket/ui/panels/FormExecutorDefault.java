@@ -102,7 +102,7 @@ implements FormExecutor {
                                 prop->prop.getReasonInvalidIfAny()));
 
             if (invalidReasonIfAny.isPresent()) {
-                raiseWarning(ajaxTarget, feedbackFormIfAny, invalidReasonIfAny.get());
+                raiseErrorMessage(ajaxTarget, feedbackFormIfAny, invalidReasonIfAny.get());
                 return FormExecutionOutcome.FAILURE_RECOVERABLE_SO_STAY_ON_PAGE; // invalid args, stay on page
             }
 
@@ -209,11 +209,11 @@ implements FormExecutor {
             final Form<?> feedbackForm) {
 
         val recognition = getExceptionRecognizerService().recognize(ex);
-        recognition.ifPresent(recog->raiseWarning(target, feedbackForm, recog));
+        recognition.ifPresent(recog->raiseErrorMessage(target, feedbackForm, recog));
         return recognition;
     }
 
-    private void raiseWarning(
+    private void raiseErrorMessage(
             final @Nullable AjaxRequestTarget targetIfAny,
             final @Nullable Form<?> feedbackFormIfAny,
             final @NonNull  Recognition recognition) {
@@ -228,7 +228,7 @@ implements FormExecutor {
             targetIfAny.add(feedbackFormIfAny);
             feedbackFormIfAny.error(errorMsg);
         } else {
-            getMessageService().warnUser(errorMsg);
+            getMessageService().setError(errorMsg);
         }
     }
 

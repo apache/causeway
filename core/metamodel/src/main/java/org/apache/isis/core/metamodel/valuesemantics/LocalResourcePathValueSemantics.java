@@ -68,7 +68,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextPresentation(final Context context, final LocalResourcePath value) {
+    public String titlePresentation(final Context context, final LocalResourcePath value) {
         return render(value, LocalResourcePath::getValue);
     }
 

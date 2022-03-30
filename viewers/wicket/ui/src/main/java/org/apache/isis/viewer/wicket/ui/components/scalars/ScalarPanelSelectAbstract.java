@@ -24,7 +24,6 @@ import java.util.Optional;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
@@ -38,14 +37,14 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
 import lombok.NonNull;
 import lombok.val;
 
-public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
+public abstract class ScalarPanelSelectAbstract
+extends ScalarPanelAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -55,44 +54,35 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
         super(id, scalarModel);
     }
 
+    @Override
+    protected Component getValidationFeedbackReceiver() {
+        return select2!=null
+                ? select2.asComponent()
+                : null;
+    }
 
     protected Select2 createSelect2(final String id) {
-        final Select2 select2 = Select2.createSelect2(id, scalarModel);
+        final Select2 select2 = Select2.createSelect2(id, scalarModel());
         setProviderAndCurrAndPending(select2);
-        select2.setRequired(scalarModel.isRequired());
+        select2.setRequired(scalarModel().isRequired());
         return select2;
     }
 
-    protected FormGroup createFormGroupAndName(
-            final FormComponent<?> component,
-            final String formGroupId, final String nameId) {
-        final FormGroup formGroup = new FormGroup(formGroupId, component);
-        formGroup.add(component);
-
-        final String labelCaption = getRendering().getLabelCaption(select2.asComponent());
-        final Label scalarName = createScalarName(nameId, labelCaption);
-
-        getModel()
-        .getDescribedAs()
-        .ifPresent(describedAs->Tooltips.addTooltip(scalarName, describedAs));
-
-        formGroup.addOrReplace(scalarName);
-        return formGroup;
-    }
-
     protected FormGroup createFormGroup(final FormComponent<?> formComponent) {
+        val scalarModel = scalarModel();
+        val friendlyNameModel = Model.of(scalarModel.getFriendlyName());
+
         setOutputMarkupId(true);
         select2.asComponent().setOutputMarkupId(true);
+        select2.setLabel(friendlyNameModel);
 
-        final String name = scalarModel.getFriendlyName();
-        select2.setLabel(Model.of(name));
-
-        final FormGroup formGroup = createFormGroupAndName(formComponent, ID_SCALAR_IF_REGULAR, ID_SCALAR_NAME);
+        final FormGroup formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, formComponent);
+        formGroup.add(formComponent);
+        formGroup.addOrReplace(createScalarNameLabel(ID_SCALAR_NAME, friendlyNameModel));
 
         addStandardSemantics();
 
-        final ScalarModel model = getModel();
-        if(model.isRequired() && model.isEnabled()) {
+        if(scalarModel.isRequired() && scalarModel.isEnabled()) {
             Wkt.cssAppend(formGroup, "mandatory");
         }
         return formGroup;
@@ -100,12 +90,7 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
 
     protected void addStandardSemantics() {
         select2.setRequired(getModel().isRequired());
-        select2.add(new Select2Validator(this.scalarModel));
-    }
-
-    @Override
-    protected Component getScalarValueComponent() {
-        return select2.asComponent();
+        select2.add(new Select2Validator(scalarModel()));
     }
 
 

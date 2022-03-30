@@ -47,7 +47,7 @@ import org.apache.isis.viewer.wicket.ui.components.layout.bs3.row.Row;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.tabs.TabGroupPanel;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -83,7 +83,7 @@ implements HasDynamicallyVisibleContent {
         setRenderBodyOnly(true);
 
         if(bs3Col.getSpan() == 0) {
-            Components.permanentlyHide(this, ID_COL);
+            WktComponents.permanentlyHide(this, ID_COL);
             return;
         }
 
@@ -111,7 +111,7 @@ implements HasDynamicallyVisibleContent {
 
             visible = true;
         } else {
-            Components.permanentlyHide(div, ID_ENTITY_HEADER_PANEL);
+            WktComponents.permanentlyHide(div, ID_ENTITY_HEADER_PANEL);
             actionOwner = div;
             actionIdToUse = "actions";
             actionIdToHide = null;
@@ -136,10 +136,10 @@ implements HasDynamicallyVisibleContent {
             AdditionalLinksPanel.addAdditionalLinks(actionOwner, actionIdToUse, visibleActions, AdditionalLinksPanel.Style.INLINE_LIST);
             visible = true;
         } else {
-            Components.permanentlyHide(actionOwner, actionIdToUse);
+            WktComponents.permanentlyHide(actionOwner, actionIdToUse);
         }
         if(actionIdToHide != null) {
-            Components.permanentlyHide(div, actionIdToHide);
+            WktComponents.permanentlyHide(div, actionIdToHide);
         }
 
 
@@ -150,7 +150,7 @@ implements HasDynamicallyVisibleContent {
             div.add(rowsRv);
             visible = visible || rowsRv.isVisible();
         } else {
-            Components.permanentlyHide(div, ID_ROWS);
+            WktComponents.permanentlyHide(div, ID_ROWS);
         }
 
 
@@ -200,7 +200,7 @@ implements HasDynamicallyVisibleContent {
             div.add(tabGroupRv);
             visible = visible || tabGroupRv.isVisible();
         } else {
-            Components.permanentlyHide(div, ID_TAB_GROUPS);
+            WktComponents.permanentlyHide(div, ID_TAB_GROUPS);
         }
 
 
@@ -226,7 +226,7 @@ implements HasDynamicallyVisibleContent {
             div.add(fieldSetRv);
             visible = visible || fieldSetRv.isVisible();
         } else {
-            Components.permanentlyHide(div, ID_FIELD_SETS);
+            WktComponents.permanentlyHide(div, ID_FIELD_SETS);
         }
 
 
@@ -269,7 +269,7 @@ implements HasDynamicallyVisibleContent {
             entityModel.setCollectionLayoutData(snapshot);
 
         } else {
-            Components.permanentlyHide(div, ID_COLLECTIONS);
+            WktComponents.permanentlyHide(div, ID_COLLECTIONS);
         }
 
 
@@ -277,7 +277,7 @@ implements HasDynamicallyVisibleContent {
         if(visible) {
             panel.add(div);
         } else {
-            Components.permanentlyHide(panel, div.getId());
+            WktComponents.permanentlyHide(panel, div.getId());
         }
 
     }

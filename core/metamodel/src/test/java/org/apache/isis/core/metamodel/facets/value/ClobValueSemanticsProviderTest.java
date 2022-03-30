@@ -42,7 +42,7 @@ extends ValueSemanticsProviderAbstractTestCase<Clob> {
 
     @Test
     public void testTitleOf() {
-        assertEquals("myfile1.xml", value.simpleTextPresentation(null, clob));
+        assertEquals("myfile1.xml", value.titlePresentation(null, clob));
     }
 
     @Test

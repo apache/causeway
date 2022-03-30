@@ -40,8 +40,8 @@ import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -142,12 +142,12 @@ public class EntityPage extends PageAbstract {
         if(XrayUi.isXrayEnabled()){
             _Debug.log("about to render EntityPage ..");
             val stopWatch = _Timing.now();
-            jaxbViewmodelRefresh(this);
+            viewmodelRefresh(this);
             super.renderPage();
             stopWatch.stop();
             _Debug.log(".. rendering took %s", stopWatch.toString());
         } else {
-            jaxbViewmodelRefresh(this);
+            viewmodelRefresh(this);
             super.renderPage();
         }
     }
@@ -236,9 +236,9 @@ public class EntityPage extends PageAbstract {
     // -- UTILIY
 
     /**
-     * Re-fetch entities for JAXB viewmodels, usually required once at begin of request.
+     * Re-fetch entities for view-models, usually required once at begin of request.
      */
-    public static void jaxbViewmodelRefresh(final IRequestablePage iRequestablePage) {
+    public static void viewmodelRefresh(final IRequestablePage iRequestablePage) {
         if(iRequestablePage instanceof EntityPage) {
 
             val entityPage = (EntityPage) iRequestablePage;
@@ -249,27 +249,11 @@ public class EntityPage extends PageAbstract {
             }
 
             val entityModel = (EntityModel)entityPage.getUiHintContainerIfAny();
-            val spec = entityModel.getObject().getSpecification();
-            if(spec.isViewModel()) {
 
-                val viewModelFacet = spec.getFacet(ViewModelFacet.class);
-                if(viewModelFacet.containsEntities()) {
-
-                    _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                        _Debug.log("about to refresh EntityPage ..");
-                    });
-
-                    val viewmodel = entityModel.getBookmarkedOwner();
-                    if(viewmodel.isBookmarkMemoized()) {
-                        viewmodel.reloadViewmodelFromMemoizedBookmark();
-                    } else {
-                        val bookmark = PageParameterUtils
-                                .toBookmark(entityPage.getPageParameters()).orElseThrow();
-                        viewmodel.reloadViewmodelFromBookmark(bookmark);
-                    }
-
-                }
-            }
+            ManagedObjects.refreshViewmodel(entityModel.getObject(),
+                    ()->PageParameterUtils
+                            .toBookmark(entityPage.getPageParameters())
+                            .orElseThrow());
         }
     }
 

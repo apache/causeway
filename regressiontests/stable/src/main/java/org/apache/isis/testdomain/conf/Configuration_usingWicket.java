@@ -107,7 +107,7 @@ public class Configuration_usingWicket {
         public static final String FAVORITE_BOOK_SCALAR = "theme:entityPageContainer:entity:rows:2"
                 + ":rowContents:1"
                 + ":col:fieldSets:1"
-                + ":memberGroup:properties:1"
+                + ":memberGroup:properties:2"
                 + ":property:scalarTypeContainer:scalarIfRegular";
 
         public static final String FAVORITE_BOOK_SCALAR_NAME = FAVORITE_BOOK_SCALAR
@@ -130,7 +130,7 @@ public class Configuration_usingWicket {
         public static final String INVENTORY_NAME_PROPERTY = "theme:entityPageContainer:entity:rows:2"
                 + ":rowContents:1"
                 + ":col:fieldSets:1"
-                + ":memberGroup:properties:2"
+                + ":memberGroup:properties:1"
                 + ":property";
 
         public static final String INVENTORY_NAME_PROPERTY_EDIT_LINK = INVENTORY_NAME_PROPERTY
@@ -327,6 +327,7 @@ public class Configuration_usingWicket {
         @Override
         protected void init() {
             super.init();
+            getCspSettings().blocking().disabled(); // since Wicket 9, CSP is enabled by default [https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP]
             final IBootstrapSettings settings = new BootstrapSettings();
             settings.setDeferJavascript(false);
             Bootstrap.install(this, settings);
@@ -362,7 +363,7 @@ public class Configuration_usingWicket {
         @Override
         protected void internalInit() {
             super.internalInit();
-            // intercept AJAX requests and reloads JAXB viewmodels so any detached entities are re-fetched
+            // intercept AJAX requests and reload view-models so any detached entities are re-fetched
             IsisWicketAjaxRequestListenerUtil.setRootRequestMapper(this, commonContext);
         }
 

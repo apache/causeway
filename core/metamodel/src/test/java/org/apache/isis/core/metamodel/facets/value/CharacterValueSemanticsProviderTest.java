@@ -52,7 +52,7 @@ extends ValueSemanticsProviderAbstractTestCase<Character> {
 
     @Test
     public void testTitleOf() {
-        assertEquals("r", valueSemantics.simpleTextPresentation(null, character));
+        assertEquals("r", valueSemantics.titlePresentation(null, character));
     }
 
     @Test

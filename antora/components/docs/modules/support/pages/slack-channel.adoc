@@ -5,47 +5,10 @@
 
 
 To supplement our xref:mailing-list.adoc[mailing list] we also have a channel on the ASF Slack.
-Anyone can join:
+This is a place where the project's committers hang out, so can be a great place to ask questions.
 
-* navigate to https://s.apache.org/slack-invite[]
-+
-image::slack/010.png[]
+image::slack/slack-screenshot.png[]
 
-* enter your email:
-+
-image::slack/020.png[]
-+
-image::slack/030.png[]
+To access the channel, send an email to the xref:mailing-list.adoc[mailing list] requesting access.
 
-* as it says, check your email:
-+
-image::slack/040.png[]
-
-* as it says, check your email:
-+
-image::slack/050.png[]
-
-* Create an account on the Slack:
-+
-image::slack/060.png[]
-
-* you'll then arrive in the Slack, with the following welcome page.  You can skip this first step (1):
-+
-image::slack/070.png[]
-
-* Instead, scroll down the page to the step (2) to browse channels:
-+
-image::slack/080.png[]
-
-* Enter 'isis' in the search box, and click through to the `#apache-isis` channel:
-+
-image::slack/090.png[]
-
-* At this point you are still just previewing the channel, so press `Join Channel`:
-+
-image::slack/100.png[]
-
-* Finally, say hello:
-+
-image::slack/110.png[]
 

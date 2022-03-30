@@ -26,6 +26,7 @@ import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
@@ -63,8 +64,13 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextPresentation(final Context context, final Markdown value) {
-        return render(value, Markdown::asHtml);
+    public String titlePresentation(final Context context, final Markdown value) {
+        return render(value, Markdown::toString);
+    }
+
+    @Override
+    public String htmlPresentation(final ValueSemanticsProvider.Context context, final Markdown adoc) {
+        return render(adoc, Markdown::asHtml);
     }
 
     // -- PARSER

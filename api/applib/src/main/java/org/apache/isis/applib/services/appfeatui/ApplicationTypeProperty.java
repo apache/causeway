@@ -54,6 +54,9 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
     public ApplicationTypeProperty(final ApplicationFeatureId featureId) {
         super(featureId);
     }
+    public ApplicationTypeProperty(final String memento) {
+        super(memento);
+    }
 
 
 

@@ -18,6 +18,17 @@
  */
 package org.apache.isis.core.runtimeservices.message;
 
+import java.util.Optional;
+
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Provider;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
@@ -25,15 +36,6 @@ import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.interaction.session.MessageBroker;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Provider;
-import java.util.Optional;
 
 @Service
 @Named("isis.runtimeservices.MessageServiceDefault")
@@ -95,6 +97,12 @@ public class MessageServiceDefault implements MessageService {
     @Override
     public void raiseError(final String message) {
         throw new RecoverableException(message);
+    }
+
+    @Override
+    public void setError(final String message) {
+        currentMessageBroker()
+        .ifPresent(broker->broker.setApplicationError(message));
     }
 
     @Override

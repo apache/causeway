@@ -23,10 +23,8 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-
-import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramCount;
 
 import lombok.val;
 
@@ -43,9 +41,9 @@ extends MixinFacetAbstract {
         .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
         .map(domainObject -> {
 
-            val mixinContructors = _Reflect
-                    .getPublicConstructors(candidateMixinType)
-                    .filter(paramCount(1));
+            val mixinContructors =
+                    ProgrammingModelConstants.MixinConstructor.PUBLIC_SINGLE_ARG_RECEIVING_MIXEE
+                    .getConstructors(candidateMixinType);
 
             return mixinContructors.getSingleton() // empty if cardinality!=1
             .map(constructor -> new MixinFacetForDomainObjectAnnotation(
@@ -60,9 +58,8 @@ extends MixinFacetAbstract {
     private MixinFacetForDomainObjectAnnotation(
             final Class<?> mixinClass,
             final String mixinMethodName,
-            final Constructor<?> constructorType,
+            final Constructor<?> constructor,
             final FacetHolder holder) {
-
-        super(mixinClass, mixinMethodName, constructorType, holder);
+        super(mixinClass, mixinMethodName, constructor, holder);
     }
 }

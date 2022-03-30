@@ -25,9 +25,12 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.springframework.core.annotation.AnnotationConfigurationException;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.core.annotation.SynthesizedAnnotation;
 import org.springframework.lang.Nullable;
@@ -38,6 +41,7 @@ import org.springframework.util.ReflectionUtils;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -56,7 +60,8 @@ import lombok.val;
 final class _Annotations_SynthesizedMergedAnnotationInvocationHandler<A extends Annotation>
 implements InvocationHandler {
 
-    private final MergedAnnotations mergedAnnotations;
+    private final @NonNull MergedAnnotations mergedAnnotations;
+    private final @Nullable MergedAnnotations additionalAnnotations;
     private final Class<A> type;
     private final _Annotations_AttributeMethods attributes;
 
@@ -66,12 +71,14 @@ implements InvocationHandler {
 
     private _Annotations_SynthesizedMergedAnnotationInvocationHandler(
             final MergedAnnotations mergedAnnotations,
+            final MergedAnnotations additionalAnnotations,
             final Class<A> type) {
 
         Assert.notNull(mergedAnnotations, "MergedAnnotations must not be null");
         Assert.notNull(type, "Type must not be null");
         Assert.isTrue(type.isAnnotation(), "Type must be an annotation");
         this.mergedAnnotations = mergedAnnotations;
+        this.additionalAnnotations = additionalAnnotations;
         this.type = type;
         this.attributes = _Annotations_AttributeMethods.forAnnotationType(type);
         for (int i = 0; i < this.attributes.size(); i++) {
@@ -191,8 +198,8 @@ implements InvocationHandler {
         val defaultValue = method.getDefaultValue();
 
         // for all discovered annotations of this.type determine the effective (attribute) value
-        val attributeValue = this.mergedAnnotations.stream(this.type)
-        .map(annotation->(Object)annotation.getValue(name, type).orElse(null))
+        val attributeValue = streamAnnotations()
+        .map(mergedAnnotation->(Object)mergedAnnotation.getValue(name, type).orElse(null))
         .filter(_NullSafe::isPresent)
         .filter(value->!value.equals(defaultValue))
         .findFirst()
@@ -202,16 +209,35 @@ implements InvocationHandler {
     }
 
     @SuppressWarnings("unchecked")
-    static <A extends Annotation> A createProxy(
-            final MergedAnnotations mergedAnnotations,
-            final Class<A> type) {
+    static <A extends Annotation> Optional<A> createProxy(
+            final @NonNull MergedAnnotations collected,
+            final @NonNull Optional<MergedAnnotations> additional,
+            final @NonNull Class<A> annotationType) {
 
-        ClassLoader classLoader = type.getClassLoader();
-        InvocationHandler handler =
-                new _Annotations_SynthesizedMergedAnnotationInvocationHandler<>(mergedAnnotations, type);
-        Class<?>[] interfaces = isVisible(classLoader, SynthesizedAnnotation.class) ?
-                new Class<?>[] {type, SynthesizedAnnotation.class} : new Class<?>[] {type};
-        return (A) Proxy.newProxyInstance(classLoader, interfaces, handler);
+        val hasCollected = collected
+                .isPresent(annotationType);
+        val hasAdditional = additional
+                .map(mergedAnnotations->mergedAnnotations.isPresent(annotationType))
+                .orElse(false);
+
+        if(!hasCollected
+                && !hasAdditional) {
+            // annotation is neither present on getter nor field
+            return Optional.empty();
+        }
+
+        val invocationHandler = hasCollected
+                ? new _Annotations_SynthesizedMergedAnnotationInvocationHandler<>(
+                        collected, additional.orElse(null), annotationType)
+                : new _Annotations_SynthesizedMergedAnnotationInvocationHandler<>(
+                        additional.get(), null, annotationType);
+
+        val classLoader = annotationType.getClassLoader();
+        val interfaces = isVisible(classLoader, SynthesizedAnnotation.class)
+                ? new Class<?>[] {annotationType, SynthesizedAnnotation.class}
+                : new Class<?>[] {annotationType};
+        val proxy = (A) Proxy.newProxyInstance(classLoader, interfaces, invocationHandler);
+        return Optional.of(proxy);
     }
 
     private static boolean isVisible(final ClassLoader classLoader, final Class<?> interfaceClass) {
@@ -223,6 +249,16 @@ implements InvocationHandler {
         }
     }
 
+    /**
+     * If annotations from a getter method are competing with annotations from its corresponding field,
+     * let the one win, that is 'nearer' to the <i>Class</i> that is subject to introspection.
+     */
+    private Stream<MergedAnnotation<A>> streamAnnotations() {
+        return additionalAnnotations!=null
+                ? Stream.concat(mergedAnnotations.stream(type), additionalAnnotations.stream(type))
+                        .sorted((a, b)->Integer.compare(a.getAggregateIndex(), b.getAggregateIndex()))
+                : mergedAnnotations.stream(type);
+    }
 
 }
 

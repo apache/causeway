@@ -45,7 +45,7 @@ extends ValueSemanticsProviderAbstractTestCase<Blob> {
 
     @Test
     public void testTitleOf() {
-        assertEquals("myfile1.docx", getRenderer().simpleTextPresentation(null, blob));
+        assertEquals("myfile1.docx", getRenderer().titlePresentation(null, blob));
     }
 
     @Test

@@ -20,19 +20,17 @@ package org.apache.isis.viewer.wicket.ui.components.tree;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.Model;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldTextualAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+
+import lombok.val;
 
 /**
  * Immutable tree, hooks into the ScalarPanelTextField without actually using its text field.
  */
 public class ParentedTreePanel
-extends ScalarPanelTextFieldTextualAbstract {
+extends ScalarPanelAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -41,44 +39,34 @@ extends ScalarPanelTextFieldTextualAbstract {
     }
 
     @Override
-    protected MarkupContainer createScalarIfRegularFormGroup() {
-
-        if(getModel().isEditMode()) {
-            // fallback to text editor
-            return super.createScalarIfRegularFormGroup();
-        }
-
-        final Component treeComponent = createTreeComponent("scalarValueContainer");
-        final Behavior treeTheme = getTreeThemeProvider().treeThemeFor(super.getModel());
-
-        getTextField().setLabel(Model.of(getModel().getFriendlyName()));
-
-        final FormGroup formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, getTextField());
-        formGroup.add(treeComponent);
-
-        final String labelCaption = getRendering().getLabelCaption(getTextField());
-        final Label scalarName = createScalarName(ID_SCALAR_NAME, labelCaption);
-        formGroup.add(scalarName);
-
-        // adds the tree-theme behavior to the container, that contains the tree component
-        return (MarkupContainer) formGroup.add(treeTheme);
+    protected MarkupContainer createComponentForRegular() {
+        return createTreeComponent(getScalarTypeContainer(), ID_SCALAR_IF_REGULAR);
     }
 
     @Override
-    protected Component createComponentForCompact() {
-        final Component tree = createTreeComponent(ID_SCALAR_IF_COMPACT);
+    protected MarkupContainer createComponentForCompact() {
+        return createTreeComponent(getScalarTypeContainer(), ID_SCALAR_IF_COMPACT);
+    }
 
-        // adds the tree-theme behavior to the tree component
-        //TODO [2088] not tested yet: if tree renders without applying the theme, behavior needs
-        // to go to a container up the hierarchy
-        final Behavior treeTheme = getTreeThemeProvider().treeThemeFor(super.getModel());
-        return tree.add(treeTheme);
+    @Override
+    protected InlinePromptConfig getInlinePromptConfig() {
+        return InlinePromptConfig.notSupported();
+    }
+
+    @Override
+    protected Component getValidationFeedbackReceiver() {
+        return null;
     }
 
     // -- HELPER
 
-    private Component createTreeComponent(final String id) {
-        return IsisToWicketTreeAdapter.adapt(id, getModel());
+    private MarkupContainer createTreeComponent(final MarkupContainer parent, final String id) {
+        val scalarModel = scalarModel();
+        val tree = IsisToWicketTreeAdapter.adapt(id, scalarModel);
+        parent.add(tree);
+        // adds the tree-theme behavior to the tree's parent
+        parent.add(getTreeThemeProvider().treeThemeFor(scalarModel));
+        return (MarkupContainer) tree;
     }
 
 

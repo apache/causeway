@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.runtimeservices.factory;
 
-import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -36,7 +36,6 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MixinConstructor;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
@@ -98,30 +97,19 @@ public class FactoryServiceDefault implements FactoryService {
     }
 
     @Override
-    public <T> T mixin(final @NonNull Class<T> mixinClass, final @NonNull Object mixedIn) {
+    public <T> T mixin(final @NonNull Class<T> mixinClass, final @NonNull Object mixee) {
         val mixinSpec = loadSpec(mixinClass);
         val mixinFacet = mixinSpec.getFacet(MixinFacet.class);
         if(mixinFacet == null) {
-            throw _Exceptions.illegalArgument("Class '%s' is not a mixin", mixinClass.getName());
+            throw _Exceptions.illegalArgument("Class '%s' is not a mixin",
+                    mixinClass.getName());
         }
         if(mixinSpec.isAbstract()) {
-            throw _Exceptions.illegalArgument("Cannot instantiate abstract type '%s' as a mixin", mixinClass.getName());
+            throw _Exceptions.illegalArgument("Cannot instantiate abstract type '%s' as a mixin",
+                    mixinClass.getName());
         }
-        if(!mixinFacet.isMixinFor(mixedIn.getClass())) {
-            throw _Exceptions.illegalArgument("Mixin class '%s' is not a mixin for supplied object '%s'",
-                    mixinClass.getName(), mixedIn);
-        }
-        val mixinConstructor = MixinConstructor.PUBLIC_SINGLE_ARG_RECEIVING_MIXEE
-                .getConstructorElseFail(mixinClass, mixedIn.getClass());
-
-        try {
-            val mixin = mixinConstructor.newInstance(mixedIn);
-            return _Casts.uncheckedCast(serviceInjector.injectServicesInto(mixin));
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw _Exceptions.illegalArgument(
-                    "Failed to invoke constructor of '%s' using single argument '%s'",
-                    mixinClass.getName(), mixedIn);
-        }
+        val mixin = mixinFacet.instantiate(mixee);
+        return _Casts.uncheckedCast(mixin);
     }
 
     @Override
@@ -139,11 +127,15 @@ public class FactoryServiceDefault implements FactoryService {
 
     @Override
     public <T> T viewModel(final @NonNull Class<T> viewModelClass, final @Nullable Bookmark bookmark) {
-
         val spec = loadSpec(viewModelClass);
+        if(!spec.isViewModel()) {
+            throw _Exceptions.illegalArgument("Type '%s' is not recogniced as a ViewModel by the framework.",
+                    viewModelClass);
+        }
         val viewModelFacet = getViewModelFacet(spec);
-        val viewModel = viewModelFacet.createViewModelPojo(spec, bookmark, __->createObject(spec));
-        return _Casts.uncheckedCast(viewModel);
+        val viewModel = viewModelFacet.instantiate(spec, Optional.ofNullable(bookmark));
+        objectLifecyclePublisher.onPostCreate(viewModel);
+        return _Casts.uncheckedCast(viewModel.getPojo());
     }
 
     @Override

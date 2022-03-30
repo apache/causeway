@@ -29,6 +29,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.ComponentTag;
@@ -37,15 +38,19 @@ import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.OddEvenItem;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.validation.IValidationError;
@@ -68,8 +73,11 @@ import lombok.val;
 import lombok.experimental.UtilityClass;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.util.Attributes;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig.Sizes;
+import de.agilecoders.wicket.jquery.Key;
 
 /**
  * Wicket common idioms, in alphabetical order.
@@ -85,6 +93,41 @@ public class Wkt {
     public <T extends Behavior> T add(final MarkupContainer container, final T component) {
         container.add((Behavior)component);
         return component;
+    }
+
+    // -- ATTRIBUTES
+
+    /**
+     * If any of {@code component} or {@code attributeName} is null or empty, does nothing.
+     * On empty {@code attributeValue} removes the attribute.
+     */
+    public <T extends Component> T attributeReplace(
+            final @Nullable T component,
+            final @Nullable String attributeName,
+            final @Nullable String attributeValue) {
+        if(component==null
+                || _Strings.isEmpty(attributeName)) {
+            return component;
+        }
+        if(_Strings.isEmpty(attributeValue)) {
+            component.add(AttributeModifier.remove(attributeName));
+            return component;
+        }
+        component.add(AttributeModifier.replace(attributeName, attributeValue));
+        return component;
+    }
+
+    /**
+     * If any of {@code component} or {@code attributeName} is null or empty, does nothing.
+     * On missing {@code attributeValue} removes the attribute.
+     */
+    public <T extends Component> T attributeReplace(
+            final @Nullable T component,
+            final @Nullable String attributeName,
+            final @Nullable Integer attributeValue) {
+        return attributeReplace(component, attributeName, attributeValue!=null
+                ? ""+attributeValue
+                : null);
     }
 
     // -- BEHAVIOR
@@ -121,7 +164,7 @@ public class Wkt {
                 super.renderHead(component, response);
                 final String javascript = PRE_JS + getCallbackScript() + POST_JS;
                 response.render(
-                        JavaScriptContentHeaderItem.forScript(javascript, null, null));
+                        new JavaScriptContentHeaderItem(javascript, null));
             }
             @Override protected void respond(final AjaxRequestTarget target) {
                 onRespond.accept(target);
@@ -157,7 +200,10 @@ public class Wkt {
         return add(markupContainer, behaviorFireOnEscapeKey(onRespond));
     }
 
-    public void behaviorAddReplaceDisabledTagWithReadonlyTag(final Component component) {
+    public void behaviorAddReplaceDisabledTagWithReadonlyTag(final @Nullable Component component) {
+        if(component==null) {
+            return;
+        }
         if (component.getBehaviors(ReplaceDisabledTagWithReadonlyTagBehavior.class).isEmpty()) {
             component.add(new ReplaceDisabledTagWithReadonlyTagBehavior());
         }
@@ -228,6 +274,60 @@ public class Wkt {
             final WicketViewerSettings settings,
             final SerializableBiConsumer<AjaxButton, AjaxRequestTarget> onClick) {
         return add(markupContainer, buttonOk(id, labelModel, settings, onClick));
+    }
+
+    // -- CHECKBOX
+
+    public static CheckBoxX checkbox(
+            final String id,
+            final IModel<Boolean> checkedModel,
+            final boolean required,
+            final Sizes size) {
+
+         final CheckBoxXConfig config = new CheckBoxXConfig() {
+            private static final long serialVersionUID = 1L;
+            {
+                // so can tab to the checkbox
+                // not part of the API, so have to use this object initializer
+                put(new Key<String>("tabindex"), "0");
+            }
+        }
+        .withSize(size)
+        .withEnclosedLabel(false)
+        .withIconChecked("<i class='fa fa-fw fa-check'></i>")
+        .withIconNull("<i class='fa-solid fa-square-question'></i>")
+        .withThreeState(!required);
+
+        final CheckBoxX checkBox = new CheckBoxX(id, checkedModel) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public CheckBoxXConfig getConfig() {
+                return config;
+            }
+
+            @Override protected void onComponentTag(final ComponentTag tag) {
+                super.onComponentTag(tag);
+                //
+                // this is a horrid hack to allow the space bar to work as a way of toggling the checkbox.
+                // this hack works for 1.5.4 of the JS plugin (https://github.com/kartik-v/bootstrap-checkbox-x)
+                //
+                // the problem is that the "change" event is not fired for a keystroke; instead the callback in the
+                // JS code (https://github.com/kartik-v/bootstrap-checkbox-x/blob/v1.5.4/js/checkbox-x.js#L70)
+                // calls self.change().  This in turn calls validateCheckbox().  In that method it is possible to
+                // cause the "change" event to fire, but only if the input element is NOT type="checkbox".
+                // (https://github.com/kartik-v/bootstrap-checkbox-x/blob/v1.5.4/js/checkbox-x.js#L132)
+                //
+                // It's not possible to simply change the associated markup to input type='xx' because it falls foul
+                // of a check in super.onComponentTag(tag).  So instead we let that through then hack the tag
+                // afterwards:
+                //
+                tag.put("type", "xx");
+            }
+        };
+        checkBox.setOutputMarkupId(true); // allows AJAX updates to work
+        return checkBox;
     }
 
     // -- CONTAINER
@@ -311,15 +411,30 @@ public class Wkt {
                 : cssClass.replaceAll("\\.", "-").replaceAll("[^A-Za-z0-9- ]", "").replaceAll("\\s+", "-");
     }
 
+    // -- DOWNLOAD (RESOURCE LINK)
+
+    public ResourceLinkVolatile downloadLinkNoCache(final String id, final IResource resourceModel) {
+        return new ResourceLinkVolatile(id, resourceModel);
+    }
+
     // -- FRAGMENT
 
     /**
      * @param container - The component whose markup contains the fragment's markup
      * @param id - The component id
-     * @param markupId - The associated id of the associated markup fragment
+     * @param fragmentId - The id of the associated markup fragment
      */
-    public Fragment fragmentAddNoTab(final MarkupContainer container, final String id, final String markupId) {
-        return new Fragment(id, markupId, container) {
+    public Fragment fragmentAdd(final MarkupContainer container, final String id, final String fragmentId) {
+        return new Fragment(id, fragmentId, container);
+    }
+
+    /**
+     * @param container - The component whose markup contains the fragment's markup
+     * @param id - The component id
+     * @param fragmentId - The id of the associated markup fragment
+     */
+    public Fragment fragmentAddNoTab(final MarkupContainer container, final String id, final String fragmentId) {
+        return new Fragment(id, fragmentId, container) {
             private static final long serialVersionUID = 1L;
             @Override protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);
@@ -399,12 +514,39 @@ public class Wkt {
             @Override public void onClick(final AjaxRequestTarget target) {
                 onClick.accept(target);
             }
-            @SuppressWarnings("deprecation")
             @Override protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);
-                Buttons.fixDisabledState(this, tag);
+                fixDisabledState(this, tag);
             }
         };
+    }
+
+    /**
+     * MOVED over from Wicket 8 - potentially no longer required
+     * <p>
+     * HACK issue #79: wicket changes tag name if component wasn't enabled
+     *
+     * @param component the component to fix
+     * @param tag       the component tag
+     * @deprecated since Wicket 7.0: doesn't mangle the link/button's markup anymore
+     */
+    @Deprecated
+    public static void fixDisabledState(final Component component, final ComponentTag tag) {
+        if (!component.isEnabledInHierarchy()) {
+            if (component instanceof AbstractLink) {
+                tag.setName("a");
+            } else if (component instanceof Button) {
+                tag.setName("button");
+            } else {
+                if (tag.getAttribute("value") != null) {
+                    tag.setName("input");
+                } else {
+                    tag.setName("button");
+                }
+            }
+
+            tag.put("disabled", "disabled");
+        }
     }
 
     public AjaxLink<Void> linkAdd(
@@ -512,6 +654,28 @@ public class Wkt {
         return add(container, textAreaNoTab(id, textModel));
     }
 
+    /**
+     * @param converter - if {@code null} returns {@link TextArea} using Wicket's default converters.
+     */
+    public <T> TextArea<T> textAreaWithConverter(
+            final String id, final IModel<T> model, final Class<T> type,
+            final @Nullable IConverter<T> converter) {
+        return converter!=null
+            ? new TextArea<T>(id, model) {
+                    private static final long serialVersionUID = 1L;
+                    {setType(type);}
+                    @SuppressWarnings("unchecked")
+                    @Override public <C> IConverter<C> getConverter(final Class<C> cType) {
+                        return cType == type
+                                ? (IConverter<C>) converter
+                                : super.getConverter(cType);}
+                    @Override public void error(final IValidationError error) {
+                        errorMessageIgnoringResourceBundles(this, error);
+                    }
+                }
+            : new TextArea<T>(id, model);
+    }
+
     // -- TEXT FIELD
 
     /**
@@ -529,12 +693,7 @@ public class Wkt {
                                 ? (IConverter<C>) converter
                                 : super.getConverter(cType);}
                     @Override public void error(final IValidationError error) {
-                        if(error instanceof ValidationError) {
-                            // use plain error message from ConversionException, circumventing resource bundles.
-                            this.error(((ValidationError)error).getMessage());
-                        } else {
-                            super.error(error);
-                        }
+                        errorMessageIgnoringResourceBundles(this, error);
                     }
                 }
             : new TextField<>(id, model, type);
@@ -551,12 +710,7 @@ public class Wkt {
                         ? (IConverter<C>) converter
                         : super.getConverter(cType);}
             @Override public void error(final IValidationError error) {
-                if(error instanceof ValidationError) {
-                    // use plain error message from ConversionException, circumventing resource bundles.
-                    this.error(((ValidationError)error).getMessage());
-                } else {
-                    super.error(error);
-                }
+                errorMessageIgnoringResourceBundles(this, error);
             }
             @Override protected void onComponentTag(final ComponentTag tag) {
                 Attributes.set(tag, "type", "password");
@@ -612,5 +766,39 @@ public class Wkt {
                 : String.format("Wicket.Event.publish(Isis.Topic.%s)", topic.name());
     }
 
+    // -- TABBING UTILITY
+
+    public Component noTabbing(final @Nullable Component component) {
+        if(component != null) {
+            component.add(new AttributeAppender("tabindex", "-1"));
+        }
+        return component;
+    }
+
+    // -- ERROR MESSAGE UTILITY
+
+    /**
+     * Reports a validation error against given form component.
+     * Uses plain error message from ConversionException, circumventing resource bundles.
+     */
+    private void errorMessageIgnoringResourceBundles(
+            final @Nullable FormComponent<?> formComponent,
+            final @Nullable IValidationError error) {
+        if(formComponent==null
+                || error==null) {
+            return;
+        }
+        if(error instanceof ValidationError) {
+            val message = ((ValidationError)error).getMessage();
+            // use plain error message from ConversionException, circumventing resource bundles.
+            if(_Strings.isNotEmpty(message)) {
+                formComponent.error(message);
+            } else {
+                formComponent.error("Unspecified error (no message associated).");
+            }
+        } else {
+            formComponent.error(error);
+        }
+    }
 
 }

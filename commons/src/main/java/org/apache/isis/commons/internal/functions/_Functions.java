@@ -23,6 +23,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 /**
  * <h1>- internal use only -</h1>
@@ -42,6 +43,15 @@ public final class _Functions {
 
     public static <T> Consumer<T> noopConsumer() {
         return t->{};
+    }
+
+    // -- PEEK
+
+    public static <T> UnaryOperator<T> peek(final Consumer<T> c) {
+        return x -> {
+            c.accept(x);
+            return x;
+        };
     }
 
     // --

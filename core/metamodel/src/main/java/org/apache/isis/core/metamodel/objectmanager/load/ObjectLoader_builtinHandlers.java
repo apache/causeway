@@ -18,25 +18,17 @@
  */
 package org.apache.isis.core.metamodel.objectmanager.load;
 
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
-import java.lang.reflect.Array;
-import java.lang.reflect.Modifier;
-import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Bytes;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
-import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.val;
 
@@ -142,37 +134,6 @@ final class ObjectLoader_builtinHandlers {
     // -- VIEW MODELS
 
     @Value
-    public static class LoadSerializable implements ObjectLoader.Handler {
-
-        private final @NonNull MetaModelContext metaModelContext;
-
-        @Override
-        public boolean isHandling(final ObjectLoader.Request objectLoadRequest) {
-
-            val spec = objectLoadRequest.getObjectSpecification();
-            return spec.isViewModel()
-                   && java.io.Serializable.class.isAssignableFrom(spec.getCorrespondingClass());
-        }
-
-        @SneakyThrows
-        @Override
-        public ManagedObject handle(final ObjectLoader.Request objectLoadRequest) {
-
-            val spec = objectLoadRequest.getObjectSpecification();
-
-            val bookmark = objectLoadRequest.getBookmark();
-            val bytes = _Bytes.ofUrlBase64.apply(_Strings.toBytes(bookmark.getIdentifier(), StandardCharsets.UTF_8));
-            val ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
-            val viewModelPojo = ois.readObject();
-            ois.close();
-            metaModelContext.getServiceInjector().injectServicesInto(viewModelPojo);
-
-            return ManagedObject.of(spec, viewModelPojo);
-        }
-
-    }
-
-    @Value
     public static class LoadViewModel implements ObjectLoader.Handler {
 
         private final @NonNull MetaModelContext metaModelContext;
@@ -195,41 +156,8 @@ final class ObjectLoader_builtinHandlers {
             }
 
             val bookmark = objectLoadRequest.getBookmark();
-            final Object viewModelPojo;
-            if(viewModelFacet.getRecreationMechanism().isInitializes()) {
-                viewModelPojo = this.instantiateAndInjectServices(spec);
-                viewModelFacet.initialize(viewModelPojo, bookmark);
-            } else {
-                viewModelPojo = viewModelFacet.instantiate(spec.getCorrespondingClass(), bookmark);
-            }
-
-            return ManagedObject.bookmarked(spec, viewModelPojo, bookmark);
-        }
-
-        private Object instantiateAndInjectServices(final ObjectSpecification spec) {
-
-            val type = spec.getCorrespondingClass();
-            if (type.isArray()) {
-                return Array.newInstance(type.getComponentType(), 0);
-            }
-
-            if (Modifier.isAbstract(type.getModifiers())) {
-                throw _Exceptions.illegalArgument("Cannot create an instance of an abstract class '%s', "
-                        + "loader: %s loading ObjectSpecification %s",
-                        type, this.getClass().getName(), spec);
-            }
-
-            final Object newInstance;
-            try {
-                newInstance = type.newInstance();
-            } catch (final IllegalAccessException | InstantiationException e) {
-                throw _Exceptions.illegalArgument("Failed to create instance of type '%s', "
-                        + "loader: %s loading ObjectSpecification %s",
-                        type, this.getClass().getName(), spec);
-            }
-
-            metaModelContext.getServiceInjector().injectServicesInto(newInstance);
-            return newInstance;
+            val viewModel = viewModelFacet.instantiate(spec, Optional.of(bookmark));
+            return ManagedObject.bookmarked(spec, viewModel.getPojo(), bookmark);
         }
 
     }

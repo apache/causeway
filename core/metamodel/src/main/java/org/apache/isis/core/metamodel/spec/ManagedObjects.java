@@ -29,6 +29,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
@@ -48,16 +49,18 @@ import org.apache.isis.commons.internal.base._Objects;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.debug._Debug;
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.commons.CanonicalInvoker;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
-import org.apache.isis.core.metamodel.commons.MethodExtensions;
-import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
@@ -154,7 +157,7 @@ public final class ManagedObjects {
             }
             val upperBound = ClassUtils.resolvePrimitiveIfNecessary(elementType.getCorrespondingClass());
             val objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.getSpecification().getCorrespondingClass());
-            throw _Exceptions.illegalArgument("Object has incompatible type %s,"
+            throw _Exceptions.illegalArgument("Object has incompatible type %s, "
                     + "must be an instance of %s.",
                     objectActualType.getName(),
                     upperBound.getName());
@@ -261,27 +264,39 @@ public final class ManagedObjects {
     private static final Comparator<ManagedObject> NATURAL_NULL_FIRST = new Comparator<ManagedObject>(){
         @SuppressWarnings({"rawtypes" })
         @Override
-        public int compare(final @Nullable ManagedObject p, final @Nullable ManagedObject q) {
-            val pPojo = UnwrapUtil.single(p);
-            val qPojo = UnwrapUtil.single(q);
-            if(pPojo instanceof Comparable && qPojo instanceof Comparable) {
-                return _Objects.compareNullsFirst((Comparable)pPojo, (Comparable)qPojo);
-            }
-            if(Objects.equals(pPojo, qPojo)) {
+        public int compare(final @Nullable ManagedObject a, final @Nullable ManagedObject b) {
+            val aPojo = UnwrapUtil.single(a);
+            val bPojo = UnwrapUtil.single(b);
+            if(Objects.equals(aPojo, bPojo)) {
                 return 0;
             }
-
-            final int hashCompare = Integer.compare(Objects.hashCode(pPojo), Objects.hashCode(qPojo));
+            if((aPojo==null
+                    || aPojo instanceof Comparable)
+                && (bPojo==null
+                        || bPojo instanceof Comparable)) {
+                return _Objects.compareNullsFirst((Comparable)aPojo, (Comparable)bPojo);
+            }
+            final int hashCompare = Integer.compare(Objects.hashCode(aPojo), Objects.hashCode(bPojo));
             if(hashCompare!=0) {
                 return hashCompare;
             }
-            //XXX what to return on hash-collision?
+            //XXX on hash-collision we return an arbitrary non-equal relation (unspecified behavior)
             return -1;
         }
 
     };
 
     // -- DEFAULTS UTILITIES
+
+    public static ManagedObject nullToEmpty(
+            final @NonNull ObjectSpecification elementSpec,
+            final @Nullable ManagedObject adapter) {
+
+        if(adapter!=null) {
+            return adapter;
+        }
+        return ManagedObject.empty(elementSpec);
+    }
 
     public static ManagedObject emptyToDefault(
             final ObjectSpecification elementSpec,
@@ -388,7 +403,7 @@ public final class ManagedObjects {
     /**
      * eg. in order to prevent wrapping an object that is already wrapped
      */
-    public static void assertPojoNotManaged(final @Nullable Object pojo) {
+    public static void assertPojoNotWrapped(final @Nullable Object pojo) {
         // can do this check only when the pojo is not null, otherwise is always considered valid
         if(pojo==null) {
             return;
@@ -869,6 +884,7 @@ public final class ManagedObjects {
     @UtilityClass
     public static final class InvokeUtil {
 
+        /** PAT ... Parameters as Tuple */
         public static Object invokeWithPAT(
                 final Constructor<?> ppmConstructor,
                 final Method method,
@@ -876,11 +892,12 @@ public final class ManagedObjects {
                 final Can<ManagedObject> pendingArguments,
                 final List<Object> additionalArguments) {
 
-            val ppmTuple = MethodExtensions.construct(ppmConstructor, UnwrapUtil.multipleAsArray(pendingArguments));
+            val ppmTuple = CanonicalInvoker.construct(ppmConstructor, UnwrapUtil.multipleAsArray(pendingArguments));
             val paramPojos = _Arrays.combineWithExplicitType(Object.class, ppmTuple, additionalArguments.toArray());
-            return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), paramPojos);
+            return CanonicalInvoker.invoke(method, UnwrapUtil.single(adapter), paramPojos);
         }
 
+        /** PAT ... Parameters as Tuple */
         public static Object invokeWithPAT(
                 final Constructor<?> ppmConstructor,
                 final Method method,
@@ -890,19 +907,19 @@ public final class ManagedObjects {
         }
 
         public static void invokeAll(final Iterable<Method> methods, final ManagedObject adapter) {
-            MethodUtil.invoke(methods, UnwrapUtil.single(adapter));
+            CanonicalInvoker.invokeAll(methods, UnwrapUtil.single(adapter));
         }
 
         public static Object invoke(final Method method, final ManagedObject adapter) {
-            return MethodExtensions.invoke(method, UnwrapUtil.single(adapter));
+            return CanonicalInvoker.invoke(method, UnwrapUtil.single(adapter));
         }
 
         public static Object invoke(final Method method, final ManagedObject adapter, final Object arg0) {
-            return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), new Object[] {arg0});
+            return CanonicalInvoker.invoke(method, UnwrapUtil.single(adapter), new Object[] {arg0});
         }
 
         public static Object invoke(final Method method, final ManagedObject adapter, final Can<ManagedObject> argumentAdapters) {
-            return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), UnwrapUtil.multipleAsArray(argumentAdapters));
+            return CanonicalInvoker.invoke(method, UnwrapUtil.single(adapter), UnwrapUtil.multipleAsArray(argumentAdapters));
         }
 
         public static Object invoke(final Method method, final ManagedObject adapter, final ManagedObject arg0Adapter) {
@@ -910,7 +927,7 @@ public final class ManagedObjects {
         }
 
         public static Object invoke(final Method method, final ManagedObject adapter, final ManagedObject[] argumentAdapters) {
-            return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), UnwrapUtil.multipleAsArray(argumentAdapters));
+            return CanonicalInvoker.invoke(method, UnwrapUtil.single(adapter), UnwrapUtil.multipleAsArray(argumentAdapters));
         }
 
         /**
@@ -943,7 +960,7 @@ public final class ManagedObjects {
 
             val argArray = adjust(method, pendingArgs, additionalArgValues);
 
-            return MethodExtensions.invoke(method, UnwrapUtil.single(target), argArray);
+            return CanonicalInvoker.invoke(method, UnwrapUtil.single(target), argArray);
         }
 
         /**
@@ -1097,6 +1114,37 @@ public final class ManagedObjects {
                     .collect(_Sets.toUnmodifiable());
         }
 
+    }
+
+    public static void refreshViewmodel(
+            final @Nullable ManagedObject viewmodel,
+            final @Nullable Supplier<Bookmark> bookmarkSupplier) {
+
+        if(isNullOrUnspecifiedOrEmpty(viewmodel)) {
+            return; // do nothing
+        }
+
+        val spec = viewmodel.getSpecification();
+        if(spec.isViewModel()) {
+            val viewModelFacet = spec.getFacet(ViewModelFacet.class);
+            if(viewModelFacet.containsEntities()) {
+
+                _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+                    _Debug.log("about to refresh viewmodel ..");
+                });
+
+                if(viewmodel.isBookmarkMemoized()) {
+                    viewmodel.reloadViewmodelFromMemoizedBookmark();
+                } else {
+                    val bookmark = bookmarkSupplier!=null
+                            ? bookmarkSupplier.get()
+                            : null;
+                    if(bookmark!=null) {
+                        viewmodel.reloadViewmodelFromBookmark(bookmark);
+                    }
+                }
+            }
+        }
     }
 
 }

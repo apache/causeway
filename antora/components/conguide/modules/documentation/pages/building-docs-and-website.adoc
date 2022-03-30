@@ -9,27 +9,54 @@ The Apache Isis website and documentation are written in link:https://asciidocto
 The prerequisites to install are:
 
 * Node LTS (link:https://nodejs.org/[])
-* Antora (comprising: link:https://www.npmjs.com/package/@antora/cli[@antora/cli] and link:https://www.npmjs.com/package/@antora/site-generator-default[@antora/site-generator-default])
-
-* Asciidoctor Kroki (link:https://www.npmjs.com/package/asciidoctor-kroki[asciidoctor-kroki])
 +
-for diagramming support for Antora
-
-Assuming you have installed the latest Node LTS, these can be installed using:
-
 [source,bash]
 ----
-npm i -g @antora/cli @antora/site-generator-default asciidoctor-kroki
+sudo apt install nodejs
+sudo apt install npm
 ----
 
+* Antora (link:https://www.npmjs.com/package/@antora/cli[@antora/cli] & link:https://www.npmjs.com/package/@antora/site-generator-default[@antora/site-generator-default]), and Kroki (link:https://www.npmjs.com/package/asciidoctor-kroki[asciidoctor-kroki]) for diagramming support:
++
+[source,bash]
+----
+npm i -g @antora/cli@2.3.4 @antora/site-generator-default@2.3.4 asciidoctor-kroki@0.15.4
+----
++
 See the link:https://docs.antora.org/antora/2.3/install/install-antora/[Antora docs] for details.
+
+* Serve (link:https://www.npmjs.com/package/serve[serve]) for previewing:
++
+[source,bash]
+----
+npm i -g serve@13.0.2
+----
 
 We also generate some Asciidoc files dynamically from other source code.
 This requires:
 
 * link:https://groovy.apache.org/download.html[Groovy 2.x]
++
+eg, using link:https://sdkman.io/install[sdkman]:
++
+[source,bash]
+----
+sdk install groovy 2.5.15
+----
 
 * link:https://pandoc.org/installing.html[pandoc]
++
+[source,bash]
+----
+sudo apt install pandoc
+----
+
+* dos2unix
++
+[source,bash]
+----
+sudo apt install dos2unix
+----
 
 
 == Authoring

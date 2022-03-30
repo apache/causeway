@@ -157,16 +157,17 @@ public class ApplicationFeatureChoices {
                     : "<no id>";
         }
 
+        // -- VIEWMODEL CONTRACT
+
+        public AppFeat(final String memento) {
+            this(ApplicationFeatureId.parseEncoded(memento)); // fail by intention if memento is '<no id>'
+        }
+
         @Override
         public String viewModelMemento() {
             return featureId!=null
                     ? featureId.asEncodedString()
                     : "<no id>";
-        }
-
-        @Override
-        public void viewModelInit(final String memento) {
-            featureId = ApplicationFeatureId.parseEncoded(memento); // fail by intention if memento is '<no id>'
         }
 
     }

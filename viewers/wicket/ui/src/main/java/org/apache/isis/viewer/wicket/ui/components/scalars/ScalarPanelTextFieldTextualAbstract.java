@@ -36,8 +36,14 @@ extends ScalarPanelTextFieldAbstract<String> {
 
     private static final long serialVersionUID = 1L;
 
-    protected ScalarPanelTextFieldTextualAbstract(final String id, final ScalarModel scalarModel) {
+    protected ScalarPanelTextFieldTextualAbstract(
+            final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, String.class);
+    }
+
+    protected ScalarPanelTextFieldTextualAbstract(
+            final String id, final ScalarModel scalarModel, final TextFieldVariant textFieldVariant) {
+        super(id, scalarModel, String.class, textFieldVariant);
     }
 
     @Override

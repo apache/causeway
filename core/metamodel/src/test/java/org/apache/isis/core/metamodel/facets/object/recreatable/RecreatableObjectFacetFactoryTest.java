@@ -23,18 +23,20 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetForViewModelInterface;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 
 public class RecreatableObjectFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
-    private RecreatableObjectFacetFactory facetFactory;
+    private ViewModelFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new RecreatableObjectFacetFactory(metaModelContext, new MethodByClassMap());
+        facetFactory = new ViewModelFacetFactory(metaModelContext, new MethodByClassMap());
     }
 
     @Override
@@ -43,26 +45,25 @@ extends AbstractFacetFactoryTest {
         super.tearDown();
     }
 
-    public void testViewModelInterfacePickedUpOnClassAndDefaultsToAlways() {
-        class Customer implements ViewModel {
+    static class Customer implements ViewModel {
 
-            @Override
-            public String viewModelMemento() {
-                return null;
-            }
-
-            @Override
-            public void viewModelInit(final String memento) {
-            }
-
+        @Override
+        public String viewModelMemento() {
+            return null;
         }
+
+        public Customer(final String memento) {
+        }
+    }
+
+    public void testViewModelInterfacePickedUpOnClassAndDefaultsToAlways() {
 
         facetFactory.process(ProcessClassContext
                 .forTesting(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ViewModelFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof RecreatableObjectFacetForRecreatableObjectInterface);
+        assertTrue(facet instanceof ViewModelFacetForViewModelInterface);
 
         assertNoMethodsRemoved();
     }

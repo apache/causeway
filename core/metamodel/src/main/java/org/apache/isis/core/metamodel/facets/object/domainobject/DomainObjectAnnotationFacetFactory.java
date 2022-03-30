@@ -48,7 +48,6 @@ import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -73,9 +72,9 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.editing.Immutab
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.introspection.IntrospectionPolicyFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype.LogicalTypeFacetForDomainObjectAnnotation;
-import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -345,12 +344,11 @@ implements
 
         // handle with least priority
         if(addFacetIfPresent(
-                RecreatableObjectFacetForDomainObjectAnnotation
+                ViewModelFacetForDomainObjectAnnotation
                 .create(
                         domainObjectIfAny,
                         facetHolder,
-                        postConstructMethodCache,
-                        Precedence.LOW))
+                        postConstructMethodCache))
                 .isPresent()) {
             return;
         }

@@ -92,7 +92,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextPresentation(final Context context, final TreeNode<?> value) {
+    public String titlePresentation(final Context context, final TreeNode<?> value) {
         return super.render(value, TreeNode::toString);
     }
 

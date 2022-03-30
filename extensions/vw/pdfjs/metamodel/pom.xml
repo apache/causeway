@@ -49,12 +49,6 @@
         <dependency>
             <groupId>de.agilecoders.wicket</groupId>
             <artifactId>wicket-bootstrap-core</artifactId>
-            <exclusions>
-				<exclusion>
-				    <groupId>org.webjars</groupId>
-				    <artifactId>popper.js</artifactId>
-				</exclusion>
-            </exclusions>
         </dependency>
 
     </dependencies>

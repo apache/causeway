@@ -35,7 +35,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandName;
 import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -109,8 +109,8 @@ extends PanelAbstract<String, Model<String>> {
 
     protected void addServiceActionMenuBars(final HeaderUiModel headerUiModel) {
         if (getPage() instanceof ErrorPage) {
-            Components.permanentlyHide(this, ID_PRIMARY_MENU_BAR);
-            Components.permanentlyHide(this, ID_SECONDARY_MENU_BAR);
+            WktComponents.permanentlyHide(this, ID_PRIMARY_MENU_BAR);
+            WktComponents.permanentlyHide(this, ID_SECONDARY_MENU_BAR);
             addMenuBar(ID_TERTIARY_MENU_BAR, headerUiModel.getTertiary());
         } else {
             addMenuBar(ID_PRIMARY_MENU_BAR, headerUiModel.getPrimary());

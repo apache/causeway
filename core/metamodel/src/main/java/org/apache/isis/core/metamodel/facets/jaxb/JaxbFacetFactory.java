@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetForXmlRootElementAnnotation;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetForXmlRootElementAnnotation;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -160,7 +160,7 @@ implements MetaModelRefiner {
             }
 
             final ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
-            if (!(facet instanceof RecreatableObjectFacetForXmlRootElementAnnotation)) {
+            if (!(facet instanceof ViewModelFacetForXmlRootElementAnnotation)) {
                 return;
             }
 

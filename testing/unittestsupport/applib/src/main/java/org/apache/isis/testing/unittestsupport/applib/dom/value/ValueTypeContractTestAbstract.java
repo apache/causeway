@@ -20,8 +20,8 @@ package org.apache.isis.testing.unittestsupport.applib.dom.value;
 
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
@@ -40,7 +40,7 @@ import static org.junit.Assume.assumeThat;
  */
 public abstract class ValueTypeContractTestAbstract<T> {
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         assertSizeAtLeast(getObjectsWithSameValue(), 2);
         assertSizeAtLeast(getObjectsWithDifferentValue(), 1);

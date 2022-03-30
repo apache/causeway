@@ -18,12 +18,10 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import java.io.Serializable;
-
 import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.CompactFragment;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -31,7 +29,7 @@ import lombok.val;
 /**
  * Panel for rendering numeric scalars.
  */
-public class ScalarPanelTextFieldNumeric<T extends Serializable>
+public class ScalarPanelTextFieldNumeric<T>
 extends ScalarPanelTextFieldWithValueSemantics<T> {
 
     private static final long serialVersionUID = 1L;
@@ -39,22 +37,17 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
     public ScalarPanelTextFieldNumeric(
             final String id,
             final ScalarModel scalarModel,
-            final Class<T> cls) {
-        super(id, scalarModel, cls);
+            final Class<T> type) {
+        super(id, scalarModel, type);
     }
 
     @Override
-    protected final Component createComponentForCompact() {
+    protected final Component createComponentForCompact(final String id) {
         val label = Wkt.labelAddWithConverter(
-                getCompactFragment(CompactType.SPAN),
-                ID_SCALAR_IF_COMPACT, newTextFieldValueModel(), cls, getConverter(getModel()));
+                CompactFragment.LABEL.createFragment(this),
+                id, unwrappedModel(), type, getConverter(scalarModel()));
         label.setEnabled(false);
         return label;
-    }
-
-    @Override
-    protected final IModel<String> obtainInlinePromptModel() {
-        return super.toStringConvertingModelOf(getConverter(scalarModel));
     }
 
 }

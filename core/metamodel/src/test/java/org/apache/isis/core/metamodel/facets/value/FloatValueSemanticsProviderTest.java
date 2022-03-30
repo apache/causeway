@@ -53,7 +53,7 @@ extends ValueSemanticsProviderAbstractTestCase<Float> {
 
     @Test
     public void testTitleOf() {
-        assertEquals("32.5", value.simpleTextPresentation(null, float1));
+        assertEquals("32.5", value.titlePresentation(null, float1));
     }
 
     @Test

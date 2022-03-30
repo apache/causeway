@@ -51,8 +51,9 @@ public class EventBusServiceDemoVm implements HasAsciiDocDescription {
 
     @DomainObject(nature = Nature.VIEW_MODEL, logicalTypeName = "demo.EventBusServiceDemoVm.UiButtonEvent")
     public static class UiButtonEvent implements ViewModel {
+        // -- VIEWMODEL CONTRACT
+        public UiButtonEvent(final String memento) { }
         @Override public String viewModelMemento() { return ""; }
-        @Override public void viewModelInit(final String memento) { }
     }
 
     @ActionLayout(
@@ -61,7 +62,7 @@ public class EventBusServiceDemoVm implements HasAsciiDocDescription {
             position = Position.PANEL)
     @Action
     public EventBusServiceDemoVm triggerEvent(){
-        eventBusService.post(new UiButtonEvent());
+        eventBusService.post(new UiButtonEvent(null));
         return this;
     }
 

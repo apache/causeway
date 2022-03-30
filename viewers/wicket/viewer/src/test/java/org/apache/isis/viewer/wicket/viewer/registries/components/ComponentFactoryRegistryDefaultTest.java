@@ -32,7 +32,7 @@ import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory.ApplicationAdvice;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
-import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorHelper;
+import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorHelper;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
 
 import lombok.val;
@@ -70,7 +70,7 @@ class ComponentFactoryRegistryDefaultTest {
                 ajaxTableComponentFactory,
                 two));
 
-        val orderAjaxTableToEnd = new CollectionSelectorHelper(null, compRegistry)
+        val orderAjaxTableToEnd = new CollectionPresentationSelectorHelper(null, compRegistry)
                 .getComponentFactories();
 
         assertThat(orderAjaxTableToEnd, Matchers.contains(

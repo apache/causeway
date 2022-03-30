@@ -51,12 +51,6 @@
             <artifactId>wicket-bootstrap-core</artifactId>
             <!-- to avoid polluting the classpath -->
             <optional>true</optional>
-            <exclusions>
-				<exclusion>
-				    <groupId>org.webjars</groupId>
-				    <artifactId>popper.js</artifactId>
-				</exclusion>
-            </exclusions>
         </dependency>
 
     </dependencies>

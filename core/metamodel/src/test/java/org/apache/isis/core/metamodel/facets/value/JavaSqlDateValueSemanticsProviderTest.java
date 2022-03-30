@@ -71,7 +71,7 @@ extends ValueSemanticsProviderAbstractTestCase<Date> {
 
     @Test
     public void testTitleOf() {
-        assertEquals(DateFormat.getDateInstance(SimpleDateFormat.MEDIUM).format(new Date(0)), value.simpleTextPresentation(null, date));
+        assertEquals(DateFormat.getDateInstance(SimpleDateFormat.MEDIUM).format(new Date(0)), value.titlePresentation(null, date));
     }
 
     @Test

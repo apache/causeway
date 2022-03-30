@@ -56,7 +56,6 @@ git tag -d isis-{page-isisrel}-RC1
 ----
 <.> deletes the remote branch (update `RCn` as necessary)
 <.> deletes the remote origin server's tag (update `RCn` as necessary)
-These steps:
 <.> delete the tags that were created locally (update `RCn` as necessary)
 
 * For helloworld starter app, similarly:

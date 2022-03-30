@@ -23,27 +23,25 @@ import org.apache.wicket.util.string.Strings;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.interaction.session.MessageBroker;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class JGrowlUtil {
-
-    private JGrowlUtil(){}
 
     static enum MessageSeverity {
         INFO {
-            @Override long delay(IsisConfiguration.Viewer.Wicket.MessagePopups messagePopups) {
+            @Override long delayMillis(final IsisConfiguration.Viewer.Wicket.MessagePopups messagePopups) {
                 return messagePopups.getInfoDelay().toMillis();
             }
         },
         WARNING {
-            @Override long delay(IsisConfiguration.Viewer.Wicket.MessagePopups messagePopups) {
+            @Override long delayMillis(final IsisConfiguration.Viewer.Wicket.MessagePopups messagePopups) {
                 return messagePopups.getWarningDelay().toMillis();
             }
         }, // sticky
         DANGER{
-            @Override long delay(IsisConfiguration.Viewer.Wicket.MessagePopups messagePopups) {
+            @Override long delayMillis(final IsisConfiguration.Viewer.Wicket.MessagePopups messagePopups) {
                 return messagePopups.getErrorDelay().toMillis();
             }
         } // sticky
@@ -53,29 +51,31 @@ public class JGrowlUtil {
             return name().toLowerCase();
         }
 
-        abstract long delay(IsisConfiguration.Viewer.Wicket.MessagePopups messagePopups);
+        abstract long delayMillis(IsisConfiguration.Viewer.Wicket.MessagePopups messagePopups);
     }
 
-    public static String asJGrowlCalls(final MessageBroker messageBroker, IsisConfiguration configuration) {
+    public String asJGrowlCalls(final MessageBroker messageBroker, final IsisConfiguration configuration) {
         val buf = new StringBuilder();
 
-        val messagePopups = configuration.getViewer().getWicket().getMessagePopups();
+        val messagePopupConfig = configuration.getViewer().getWicket().getMessagePopups();
         for (String info : messageBroker.drainMessages()) {
-            addJGrowlCall(info, JGrowlUtil.MessageSeverity.INFO, messagePopups, buf);
+            addJGrowlCall(info, JGrowlUtil.MessageSeverity.INFO, messagePopupConfig, buf);
         }
 
         for (String warning : messageBroker.drainWarnings()) {
-            addJGrowlCall(warning, JGrowlUtil.MessageSeverity.WARNING, messagePopups, buf);
+            addJGrowlCall(warning, JGrowlUtil.MessageSeverity.WARNING, messagePopupConfig, buf);
         }
 
         messageBroker.drainApplicationError()
         .ifPresent(error->
-            addJGrowlCall(error, MessageSeverity.DANGER, messagePopups, buf));
+            addJGrowlCall(error, MessageSeverity.DANGER, messagePopupConfig, buf));
 
         return buf.toString();
     }
 
-    private static void addJGrowlCall(
+    // -- HELPER
+
+    private void addJGrowlCall(
             final String origMsg,
             final MessageSeverity severity,
             final IsisConfiguration.Viewer.Wicket.MessagePopups messagePopups,
@@ -84,18 +84,17 @@ public class JGrowlUtil {
         final CharSequence escapedMsg = escape(origMsg);
         buf.append("$.growl(\"")
         .append(escapedMsg)
-        .append("&#160;&#160;&#160;") // add some space so that the dismiss icon (x) doesn't overlap with the text
         .append('"');
         buf.append(", {");
         buf.append("type: \"").append(severity.cssClassSuffix()).append('"');
-        buf.append(String.format(", delay: %d", severity.delay(messagePopups)));
+        buf.append(String.format(", delay: %d", severity.delayMillis(messagePopups)));
         buf.append(String.format(", placement: { from: '%s', align: '%s' }", messagePopups.getPlacement().getVertical().name().toLowerCase(), messagePopups.getPlacement().getHorizontal().name().toLowerCase()));
         buf.append(String.format(", offset: %d", messagePopups.getOffset()));
         buf.append('}');
         buf.append(");\n");
     }
 
-    static String escape(String origMsg) {
+    String escape(final String origMsg) {
         final String escaped = Strings.escapeMarkup(origMsg).toString();
 
         // convert (what would originally have been either) ' or " to '

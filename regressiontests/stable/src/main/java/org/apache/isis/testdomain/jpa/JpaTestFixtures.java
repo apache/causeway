@@ -21,6 +21,7 @@ package org.apache.isis.testdomain.jpa;
 import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import javax.inject.Inject;
@@ -88,6 +89,8 @@ public class JpaTestFixtures {
             inventoryJaxbVm.setName("Bookstore");
             inventoryJaxbVm.setBooks(books);
             inventoryJaxbVm.setFavoriteBook(favoriteBook);
+            inventoryJaxbVm.setBooksForTab1(books.stream().skip(1).collect(Collectors.toList()));
+            inventoryJaxbVm.setBooksForTab2(books.stream().limit(2).collect(Collectors.toList()));
         }
         return inventoryJaxbVm;
     }

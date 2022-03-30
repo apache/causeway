@@ -1,0 +1,117 @@
+name: Apache Isis Nightly Build
+
+on:
+  workflow_dispatch:
+  schedule:
+    ## daily 02:00 (UTC) in the morning
+    - cron: '0 2 * * *'
+
+jobs:
+  build:
+    name: build-local-push
+    runs-on: ubuntu-latest
+    env:
+      # to be shared among all steps of this job
+      PROJECT_ROOT_PATH: ${{ github.workspace }}
+      CI_SCRIPTS_PATH: ${{ github.workspace }}/scripts/ci
+
+      # not used, would be nice if we could transform the TIMESTAMP string into the REVISION
+      # variable here, but it seems github not yet has any string expression manipulation
+      # operators other than concatenation
+      TIMESTAMP: ${{ github.event.head_commit.timestamp }}
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'zulu'
+        java-version: 11
+
+    - name: Find baseline from search.maven.org
+      id: calc-baseline
+      run: 'bash scripts/ci/calc-baseline.sh'
+
+    - name: Share $BASELINE as Environment Variable
+      run: echo "BASELINE=${{ steps.calc-baseline.outputs.baseline }}" >> $GITHUB_ENV
+
+    - name: Calculate new $REVISION
+      id: revision
+      run: 'bash scripts/ci/calc-revision.sh'
+
+    - name: Share $REVISION as Environment Variable
+      run: echo "REVISION=${{ steps.revision.outputs.revision }}" >> $GITHUB_ENV
+
+    - name: Dump Env context
+      env:
+        ENV_CONTEXT: ${{ toJson(env) }}
+      run: 'echo "$ENV_CONTEXT"'
+
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "$GITHUB_CONTEXT"
+
+    - name: Activate Cache for Maven Downloads
+      uses: actions/cache@v2.1.7
+      env:
+        # change the cache-name if we want to rebuild the cache
+        # currently there is no concept of cache clearing
+        cache-name: maven-2021-08
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-${{ env.cache-name }}-
+          ${{ runner.os }}-
+
+#    - name: Create GitHub Release
+#      uses: actions/create-release@v1
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      with:
+#        tag_name: ${{ env.REVISION }}
+#        release_name: Release ${{ env.REVISION }}
+
+    - name: Build Artifacts
+      run: 'bash scripts/ci/build-artifacts.sh'
+      env:
+        # -Dreleased ... build only the released modules
+        # -Denforcer.failFast=true ... fail fast on convergence issues (enforcer plugin)
+        # -Djacoco.skip=true ... no need for the CI build to add test coverage reports
+        # -T 1C ... 1 build thread per core
+        MVN_ADDITIONAL_OPTS: >-
+          -f isis-parent/pom.xml
+          -Dreleased
+          -Dgithub
+          -Denforcer.failFast=true
+          -Djacoco.skip=true
+          -DinstallAtEnd=true -DdeployAtEnd=true
+        GITHUB_TOKEN: ${{ github.token }}
+        MVN_STAGES: deploy
+        SOURCE_MODE: attach
+
+
+# FOR DEBUG USE
+#   - name: Dump job context
+#     env:
+#       JOB_CONTEXT: ${{ toJson(job) }}
+#     run: echo "$JOB_CONTEXT"
+#   - name: Dump steps context
+#     env:
+#       STEPS_CONTEXT: ${{ toJson(steps) }}
+#     run: echo "$STEPS_CONTEXT"
+#   - name: Dump runner context
+#     env:
+#       RUNNER_CONTEXT: ${{ toJson(runner) }}
+#     run: echo "$RUNNER_CONTEXT"
+#   - name: Dump strategy context
+#     env:
+#       STRATEGY_CONTEXT: ${{ toJson(strategy) }}
+#     run: echo "$STRATEGY_CONTEXT"
+#   - name: Dump matrix context
+#     env:
+#       MATRIX_CONTEXT: ${{ toJson(matrix) }}
+#     run: echo "$MATRIX_CONTEXT"
+

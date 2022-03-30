@@ -505,13 +505,13 @@ This means:
 
 Most of the time you'll probably want to run the app from within your IDE.
 The mechanics of doing this will vary by IDE; see the xref:setupguide:ROOT:about.adoc[Setup Guide] for details of setting up Eclipse or IntelliJ IDEA.
-Basically, though, it amounts to running the `main()` method in the `HelloWorldApp`, but also (and this bit is important) ensuring that the xref:setupguide:hints-and-tips:about.adoc#datanucleus-enhancer[DataNucleus enhancer] has properly processed all domain entities.
+Basically, though, it amounts to running the `main()` method in the `HelloWorldApp` class.
 
 Here's what the setup looks like in IntelliJ IDEA:
 
 image::helloworld/helloworld.png[width="600px"]
 
-If using JDO as the ORM, then the DataNucleus enhancer must be run beforehand.
+If using JDO as the ORM (rather than JPA), then the DataNucleus enhancer must be run beforehand.
 With IntelliJ this can be done by setting up a different _Run Configuration_ to be executed beforehand:
 
 image::helloworld/helloworld-before-launch.png[width="600px"]

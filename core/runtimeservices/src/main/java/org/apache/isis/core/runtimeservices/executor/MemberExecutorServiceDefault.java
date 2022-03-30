@@ -45,7 +45,7 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.commons.CanonicalParameterUtil;
+import org.apache.isis.core.metamodel.commons.CanonicalInvoker;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.execution.InteractionInternal;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
@@ -257,7 +257,7 @@ implements MemberExecutorService {
 
         final Object[] executionParameters = UnwrapUtil.multipleAsArray(arguments);
         final Object targetPojo = UnwrapUtil.single(head.getTarget());
-        return CanonicalParameterUtil.invoke(method, targetPojo, executionParameters);
+        return CanonicalInvoker.invoke(method, targetPojo, executionParameters);
     }
 
     private void setCommandResultIfEntity(

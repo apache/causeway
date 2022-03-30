@@ -24,7 +24,8 @@ import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.Markup;
 import org.apache.isis.valuetypes.sse.metamodel.facets.SseObserveFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponentFactory;
+import org.apache.isis.viewer.wicket.model.models.ValueModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
 
 import lombok.val;
@@ -40,7 +41,7 @@ public class ListeningMarkupPanelFactoriesForWicket {
     // -- PARENTED
 
     @Component
-    public static class Parented extends MarkupPanelFactories.ParentedAbstract {
+    public static class Parented extends MarkupPanelFactories.ParentedAbstract<Markup> {
         private static final long serialVersionUID = 1L;
 
         public Parented() {
@@ -49,32 +50,28 @@ public class ListeningMarkupPanelFactoriesForWicket {
 
 
         @Override
-        protected MarkupComponentFactory getMarkupComponentFactory() {
-            return (id, model) -> {
-                val markupComponent = new ListeningMarkupComponent(
-                        id, model, getEventStreamResource((ScalarModel)model));
-                markupComponent.setEnabled(false);
-                getCommonContext().getServiceInjector().injectServicesInto(markupComponent);
-                return markupComponent;
-            };
+        protected MarkupComponent newMarkupComponent(final String id, final ScalarModel model) {
+            val markupComponent = new ListeningMarkupComponent(
+                    id, model, getEventStreamResource(model));
+            markupComponent.setEnabled(false);
+            return getCommonContext().getServiceInjector().injectServicesInto(markupComponent);
         }
 
         // -- HELPER
 
-        private LocalResourcePath getEventStreamResource(ScalarModel scalarModel) {
+        private LocalResourcePath getEventStreamResource(final ScalarModel scalarModel) {
             val observeFacet  = scalarModel.getFacet(SseObserveFacet.class);
             return observeFacet!=null
                     ? observeFacet.getEventStreamResource()
-                            : null;
+                    : null;
         }
-
 
     }
 
     // -- STANDALONE
 
     @Component
-    public static class Standalone extends MarkupPanelFactories.StandaloneAbstract {
+    public static class Standalone extends MarkupPanelFactories.StandaloneAbstract<Markup> {
         private static final long serialVersionUID = 1L;
 
         public Standalone() {
@@ -82,12 +79,10 @@ public class ListeningMarkupPanelFactoriesForWicket {
         }
 
         @Override
-        protected MarkupComponentFactory getMarkupComponentFactory() {
-            return (id, model) -> {
-                val markupComponent = new ListeningMarkupComponent(id, model, /*observing*/ null);
-                getCommonContext().getServiceInjector().injectServicesInto(markupComponent);
-                return markupComponent;
-            };
+        protected MarkupComponent newMarkupComponent(final String id, final ValueModel model) {
+            return getCommonContext()
+                    .getServiceInjector()
+                    .injectServicesInto(new ListeningMarkupComponent(id, model));
         }
 
     }

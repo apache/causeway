@@ -74,7 +74,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextPresentation(final Context context, final BigInteger value) {
+    public String titlePresentation(final Context context, final BigInteger value) {
         return render(value, getNumberFormat(context)::format);
     }
 

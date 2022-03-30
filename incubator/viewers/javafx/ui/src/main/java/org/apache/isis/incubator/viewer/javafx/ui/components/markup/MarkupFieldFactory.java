@@ -65,7 +65,7 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
 //        val pojo = request.getFeatureValue(Object.class);
 //
 //        val markupHtml = request.getFeatureTypeSpec().streamValueSemantics(HtmlRenderer.class)
-//        .map(htmlRenderer->htmlRenderer.simpleTextPresentation(null, pojo))
+//        .map(htmlRenderer->htmlRenderer.titlePresentation(null, pojo))
 //        .filter(_NullSafe::isPresent)
 //        .findFirst()
 //        .orElse("");

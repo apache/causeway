@@ -48,7 +48,7 @@ public class IconFacetMethodTest {
 
     public static class DomainObjectWithProblemInIconNameMethod {
         public String iconName() {
-            throw new NullPointerException();
+            throw new NullPointerException("for testing purposes");
         }
     }
 
@@ -78,6 +78,7 @@ public class IconFacetMethodTest {
 
     @Test
     public void testIconNameThrowsException() {
+        //assertThrows(Exception.class, ()->facet.iconName(mockOwningAdapter));
         final String iconName = facet.iconName(mockOwningAdapter);
         assertThat(iconName, is(nullValue()));
     }

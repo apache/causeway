@@ -1,0 +1,63 @@
+
+* xref:010-getting-started.adoc[Getting Started]
+** xref:010-getting-started.adoc#prereqs[Prereqs]
+** xref:010-getting-started.adoc#exercise-1-1-starter-apps-clone-the-repo[image:hand.png[] *1.1*: Starter apps / clone the repo]
+** xref:010-getting-started.adoc#exercise-1-2-explore-the-simple-app[1.2: Explore the Simple App]
+** xref:010-getting-started.adoc#exercise-1-3-running-from-the-ide[1.3: Running from the IDE]
+** xref:010-getting-started.adoc#exercise-1-4-naked-objects-pattern[1.4: Naked Objects pattern]
+** xref:010-getting-started.adoc#exercise-1-5-ui-hints[1.5: UI Hints]
+
+* xref:020-the-petclinic-domain.adoc[The PetClinic Domain]
+** xref:020-the-petclinic-domain.adoc#exercise-2-1-refactor-simpleobject-to-petowner[image:hand.png[] *2.1*: Refactor SimpleObject to PetOwner]
+
+* xref:030-petowner-entity.adoc[PetOwner entity]
+** xref:030-petowner-entity.adoc#exercise-3-1-rename-petowners-name-property[image:hand.png[] *3.1*: Rename PetOwner's name property]
+** xref:030-petowner-entity.adoc#exercise-3-2-add-petowners-firstname-property[image:hand.png[] *3.2*: Add PetOwner's firstName property]
+** xref:030-petowner-entity.adoc#exercise-3-3-modify-petowners-updatename-action[image:hand.png[] *3.3*: Modify PetOwner's updateName action]
+** xref:030-petowner-entity.adoc#exercise-3-4-modify-the-menu-action-to-create-petowners[image:hand.png[] *3.4*: Modify the menu action to create PetOwners]
+** xref:030-petowner-entity.adoc#exercise-3-5-initial-fixture-script[image:hand.png[] *3.5*: Initial Fixture Script]
+** xref:030-petowner-entity.adoc#exercise-3-6-prompt-styles[image:hand.png[] *3.6*: Prompt styles]
+** xref:030-petowner-entity.adoc#exercise-3-7-derived-name-property[image:hand.png[] *3.7*: Derived name property]
+** xref:030-petowner-entity.adoc#exercise-3-8-add-other-properties-for-petowner[image:hand.png[] *3.8*: Add other properties for PetOwner]
+** xref:030-petowner-entity.adoc#exercise-3-9-validation[image:hand.png[] *3.9*: Validation]
+** xref:030-petowner-entity.adoc#exercise-3-10-field-layout[image:hand.png[] *3.10*: Field layout]
+** xref:030-petowner-entity.adoc#exercise-3-11-column-orders[image:hand.png[] *3.11*: Column Orders]
+
+
+* xref:040-pet-entity.adoc[Pet entity]
+** xref:040-pet-entity.adoc#exercise-4-1-pet-entitys-key-properties[image:hand.png[] *4.1*: Pet entity's key properties]
+** xref:040-pet-entity.adoc#exercise-4-2-add-petrepository[image:hand.png[] *4.2*: Add PetRepository]
+** xref:040-pet-entity.adoc#exercise-4-3-add-petowners-collection-of-pets[image:hand.png[] *4.3*: Add PetOwner's collection of Pets]
+** xref:040-pet-entity.adoc#exercise-4-4-add-pets-remaining-properties[image:hand.png[] *4.4*: Add Pet's remaining properties]
+** xref:040-pet-entity.adoc#exercise-4-5-digression-clean-up-casing-of-database-schema[image:hand.png[] *4.5*: Digression: clean-up casing of database schema]
+** xref:040-pet-entity.adoc#exercise-4-6-add-petowner-action-to-add-pets[image:hand.png[] *4.6*: Add PetOwner action to add Pets]
+** xref:040-pet-entity.adoc#exercise-4-7-add-pets-ui-customisation[image:hand.png[] *4.7*: Add Pet's UI customisation]
+** xref:040-pet-entity.adoc#exercise-4-8-update-fixture-script-using-pet-personas[image:hand.png[] *4.8*: Update fixture script using Pet personas]
+** xref:040-pet-entity.adoc#exercise-4-9-add-petowner-action-to-delete-a-pet[image:hand.png[] *4.9*: Add PetOwner action to delete a Pet]
+** xref:040-pet-entity.adoc#exercise-4-10-cleanup[image:hand.png[] *4.10*: Cleanup]
+
+* xref:050-visit-entity.adoc[Visit module and entity]
+** xref:050-visit-entity.adoc#exercise-5-1-the-visits-module[image:hand.png[] *5.1*: The visits module]
+** xref:050-visit-entity.adoc#exercise-5-2-visit-entitys-key-properties[image:hand.png[] *5.2*: Visit entity's key properties]
+** xref:050-visit-entity.adoc#exercise-5-3-book-visit-action[image:hand.png[] *5.3*: "Book Visit" action]
+
+
+* xref:060-unit-testing.adoc[Unit Testing]
+** xref:060-unit-testing.adoc#exercise-6-1-unit-test-the-default-time-when-booking-visits[image:hand.png[] *6.1*: Unit test the default time when booking visits]
+
+* xref:070-modularity.adoc[Modularity (domain events)]
+** xref:070-modularity.adoc#exercise-7-1-refactor-petowners-delete-action[image:hand.png[] *7.1*: refactor PetOwner's delete action]
+
+
+* xref:080-view-models.adoc[View Models]
+** xref:080-view-models.adoc#exercise-8-1-extend-the-home-page[image:hand.png[] *8.1*: Extend the Home Page.]
+** xref:080-view-models.adoc#exercise-8-2-add-a-convenience-action[image:hand.png[] *8.2*: Add a convenience action]
+** xref:080-view-models.adoc#exercise-8-3-using-a-view-model-as-a-projection-of-an-entity[image:hand.png[] *8.3*: Using a view model as a projection of an entity]
+
+
+* xref:090-integration-testing.adoc[Integration Testing]
+** xref:090-integration-testing.adoc#exercise-9-1-testing-bookvisit-using-an-integtest[image:hand.png[] *9.1*: Testing bookVisit using an integtest]
+
+
+
+//* xref:i18n.adoc[i18n]

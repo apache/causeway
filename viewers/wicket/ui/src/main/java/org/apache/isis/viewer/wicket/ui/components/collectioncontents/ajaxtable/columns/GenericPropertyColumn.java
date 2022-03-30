@@ -38,7 +38,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel;
-import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -87,7 +87,7 @@ extends GenericColumnAbstract {
         final Label label = new Label(componentId, getDisplayModel());
         label.setEscapeModelStrings(escaped);
         if(describedAs!=null) {
-            Tooltips.addTooltip(label, describedAs);
+            WktTooltips.addTooltip(label, describedAs);
         }
         return label;
     }

@@ -143,15 +143,6 @@ This setting can be overridden on a case-by-case basis using ``Action#executionD
 
 
 |
-[[isis.applib.annotation.action.explicit]]
-isis.applib.annotation.action. +
-explicit
-
-| 
-| Whether or not a public method needs to be annotated with @``Action`` in order to be picked up as an action in the metamodel.
-
-
-|
 [[isis.applib.annotation.collection-layout.default-view]]
 isis.applib.annotation. +
 collection-layout.default-view

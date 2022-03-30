@@ -33,7 +33,7 @@ import org.apache.isis.viewer.common.model.menu.MenuVisitor;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
-import org.apache.isis.viewer.wicket.ui.util.Decorators;
+import org.apache.isis.viewer.wicket.ui.util.WktDecorators;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.RequiredArgsConstructor;
@@ -54,14 +54,14 @@ public final class ServiceActionUtil {
         val menuItemActionLink = actionUiModel.getUiComponent();
         val menuItemLabel = Wkt.labelAdd(menuItemActionLink, "menuLinkLabel", menuItem.getName());
 
-        Decorators.getActionLink().decorateMenuItem(
+        WktDecorators.getActionLink().decorateMenuItem(
                 listItem,
                 actionUiModel,
                 commonContext.getTranslationService());
 
         val fontAwesome = actionUiModel.getFontAwesomeUiModel();
-        Decorators.getIcon().decorate(menuItemLabel, fontAwesome);
-        Decorators.getMissingIcon().decorate(menuItemActionLink, fontAwesome);
+        WktDecorators.getIcon().decorate(menuItemLabel, fontAwesome);
+        WktDecorators.getMissingIcon().decorate(menuItemActionLink, fontAwesome);
 
         val leafItem = new Fragment("content", "leafItem", parent);
         leafItem.add(menuItemActionLink);

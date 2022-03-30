@@ -64,8 +64,13 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextPresentation(final ValueSemanticsProvider.Context context, final Markup value) {
-        return value != null? value.asHtml(): "[null]";
+    public String titlePresentation(final Context context, final Markup value) {
+        return render(value, Markup::toString);
+    }
+
+    @Override
+    public String htmlPresentation(final ValueSemanticsProvider.Context context, final Markup adoc) {
+        return render(adoc, Markup::asHtml);
     }
 
     // -- PARSER

@@ -20,10 +20,11 @@ package org.apache.isis.core.metamodel.interactions.managed;
 
 import java.util.function.UnaryOperator;
 
+import org.apache.isis.applib.value.semantics.Parser;
+import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.commons.binding.Bindable;
 import org.apache.isis.commons.binding.Observable;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.binding._Observables.BooleanObservable;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -31,11 +32,22 @@ import lombok.val;
 
 public interface ManagedValue {
 
-    BooleanObservable isCurrentValueAbsent();
-
     ObjectSpecification getElementType();
 
     Bindable<ManagedObject> getValue();
+
+    /** Corresponds to value type semantics as provided by {@link Renderer}. */
+    Observable<String> getValueAsTitle();
+    /** Corresponds to value type semantics as provided by {@link Renderer}. */
+    Observable<String> getValueAsHtml();
+
+    /** Corresponds to whether the value type has a {@link Parser}. */
+    boolean isValueAsParsableTextSupported();
+    /**
+     * Corresponds to value type semantics as provided by {@link Parser}.
+     * Value types should have associated parsers/formatters via value semantics,
+     * except for composite value types, which might have not.
+     */
     Bindable<String> getValueAsParsableText();
 
     Observable<String> getValidationMessage();

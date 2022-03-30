@@ -19,7 +19,7 @@ extends AsciiDocValueSemantics {
     @Inject AsciiDocConverterService asciiDocConverterService;
 
     @Override
-    public String simpleTextPresentation(final ValueSemanticsProvider.Context context, final AsciiDoc adoc) {
+    public String htmlPresentation(final ValueSemanticsProvider.Context context, final AsciiDoc adoc) {
 
         return render(adoc, plainAdoc->
             asciiDocConverterService

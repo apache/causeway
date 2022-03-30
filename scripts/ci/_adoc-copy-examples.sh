@@ -29,5 +29,5 @@ echo "doc gen: copying over examples ..."
 for examples_sh in $(find $PROJECT_ROOT_PATH -name examples.sh -print)
 do
   echo $examples_sh
-  sh $examples_sh
+  /bin/bash $examples_sh
 done

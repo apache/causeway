@@ -154,14 +154,6 @@ public final class ClassExtensions {
         return ClassUtil.defaultByPrimitive.get(extendee);
     }
 
-    /**
-     * Returns the corresponding 'null' value for the primitives, or just
-     * <tt>null</tt> if the class represents a non-primitive type.
-     */
-    public static Object getNullOrDefault(final Class<?> type) {
-        return ClassUtil.defaultByPrimitive.get(type);
-    }
-
     public static boolean isCompatibleAsReturnType(final Class<?> returnTypeExtendee, final CanBeVoid canBeVoid, final Class<?> type) {
         boolean mayBeVoid = canBeVoid == CanBeVoid.TRUE;
 

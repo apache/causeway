@@ -37,11 +37,13 @@ import lombok.val;
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
+        named = "Update (experimental)",
         associateWith = "readWriteProperty"
         //promptStyle = PromptStyle.INLINE_AS_IF_EDIT
         )
 @RequiredArgsConstructor
 //FIXME[ISIS-2877] intermediate, remove when resolved
+@Deprecated
 public class IsisCalendarEventJpa_update {
 
     private final IsisCalendarEventJpa mixee;

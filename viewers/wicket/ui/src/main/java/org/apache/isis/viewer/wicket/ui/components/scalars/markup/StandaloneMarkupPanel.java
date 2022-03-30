@@ -31,9 +31,9 @@ extends PanelAbstract<ManagedObject, ValueModel> {
     private static final String ID_STANDALONE_VALUE = "standaloneValue";
 
     public StandaloneMarkupPanel(
-            String id,
-            ValueModel valueModel,
-            MarkupComponentFactory markupComponentFactory) {
+            final String id,
+            final ValueModel valueModel,
+            final MarkupComponentFactory<ValueModel> markupComponentFactory) {
 
         super(id, valueModel);
         val markupComponent = markupComponentFactory

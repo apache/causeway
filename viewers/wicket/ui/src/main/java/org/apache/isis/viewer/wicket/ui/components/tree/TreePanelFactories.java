@@ -26,12 +26,11 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.markup.ParentedMarkupPanel;
 
 import lombok.val;
 
 /**
- * {@link ComponentFactory} for {@link ParentedMarkupPanel}.
+ * {@link ComponentFactory} for {@link ParentedTreePanel}.
  */
 public class TreePanelFactories {
 

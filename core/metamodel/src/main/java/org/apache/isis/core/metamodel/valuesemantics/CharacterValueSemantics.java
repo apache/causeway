@@ -87,7 +87,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextPresentation(final Context context, final Character value) {
+    public String titlePresentation(final Context context, final Character value) {
         return render(value, c->""+c);
     }
 

@@ -33,7 +33,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.core.metamodel.commons.CanonicalParameterUtil;
+import org.apache.isis.core.metamodel.commons.CanonicalInvoker;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.execution.InteractionInternal;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -155,11 +155,11 @@ implements ImperativeFacet {
             final QueryResultsCache queryResultsCache = getQueryResultsCache();
             final Object[] targetPojoPlusExecutionParameters = _Arrays.combine(executionParameters, targetPojo);
             return queryResultsCache.execute(
-                    ()->CanonicalParameterUtil.invoke(method, targetPojo, executionParameters),
+                    ()->CanonicalInvoker.invoke(method, targetPojo, executionParameters),
                     targetPojo.getClass(), method.getName(), targetPojoPlusExecutionParameters);
 
         } else {
-            return CanonicalParameterUtil.invoke(method, targetPojo, executionParameters);
+            return CanonicalInvoker.invoke(method, targetPojo, executionParameters);
         }
     }
 

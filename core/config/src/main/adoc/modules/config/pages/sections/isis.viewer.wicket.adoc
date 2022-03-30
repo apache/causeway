@@ -204,16 +204,6 @@ NOTE: For further discussion, see for example https://stackoverflow.com/question
 
 
 |
-[[isis.viewer.wicket.date-pattern]]
-isis.viewer.wicket.date-pattern
-
-|  dd-MM-yyyy
-| The pattern used for rendering and parsing dates.
-
-Each Date scalar panel will use ``#getDatePattern()`` or ``#getDateTimePattern()`` depending on its date type. In the case of panels with a date picker, the pattern will be dynamically adjusted so that it can be used by the https://github.com/Eonasdan/bootstrap-datetimepicker[Bootstrap Datetime Picker] component (which uses http://momentjs.com/docs/#/parsing/string-format/[Moment.js formats], rather than those of regular Java code).
-
-
-|
 [[isis.viewer.wicket.date-picker.max-date]]
 isis.viewer.wicket.date-picker. +
 max-date
@@ -233,17 +223,6 @@ min-date
 | Defines the first date available in the date picker.
 
 As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
-
-
-|
-[[isis.viewer.wicket.date-time-pattern]]
-isis.viewer.wicket. +
-date-time-pattern
-
-|  dd-MM-yyyy HH:mm
-| The pattern used for rendering and parsing date/times.
-
-Each Date scalar panel will use ``#getDatePattern()`` or ``#getDateTimePattern()`` depending on its date type. In the case of panels with a date time picker, the pattern will be dynamically adjusted so that it can be used by the https://github.com/Eonasdan/bootstrap-datetimepicker[Bootstrap Datetime Picker] component (which uses http://momentjs.com/docs/#/parsing/string-format/[Moment.js formats], rather than those of regular Java code).
 
 
 |
@@ -422,7 +401,7 @@ isis.viewer.wicket.prompt-style
 
 This can be overridden on a case-by-case basis using ``@PropertyLayout#promptStyle`` and ``@ActionLayout#promptStyle``.
 
-This behaviour is disabled by default; the viewer will use an inline prompt in these cases, making for a smoother user experience. If enabled then this reinstates the pre-1.15.0 behaviour of using a dialog prompt in all cases.
+This behaviour is disabled by default; the viewer will use an inline prompt in these cases, making for a smoother user experience.
 
 
 |
@@ -545,16 +524,6 @@ Expected to be in the list of ``#getEnabled()`` themes.
 
 
 |
-[[isis.viewer.wicket.themes.provider]]
-isis.viewer.wicket.themes.provider
-
-|  org.apache.isis.viewer.wicket.ui. +
-components.widgets.themepicker. +
-IsisWicketThemeSupportDefault
-| Specifies an implementation of ``IsisWicketThemeSupport``
-
-
-|
 [[isis.viewer.wicket.themes.show-chooser]]
 isis.viewer.wicket.themes. +
 show-chooser
@@ -602,15 +571,6 @@ wicket-source-plugin
 | Whether the Wicket source plugin should be enabled; if so, the markup includes links to the Wicket source.
 
 This behaviour is disabled by default. Please be aware that enabloing it can substantially impact performance.
-
-
-|
-[[isis.viewer.wicket.timestamp-pattern]]
-isis.viewer.wicket. +
-timestamp-pattern
-
-|  yyyy-MM-dd HH:mm:ss.SSS
-| @deprecated - seemingly unused
 
 
 

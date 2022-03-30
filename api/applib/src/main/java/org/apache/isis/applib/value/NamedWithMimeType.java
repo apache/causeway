@@ -24,17 +24,39 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.Getter;
 
 /**
  * @since 1.x {@index}
  */
-public interface NamedWithMimeType extends Serializable {
+public interface NamedWithMimeType
+extends
+    Serializable,
+    Comparable<NamedWithMimeType> {
 
-    public String getName();
+    String getName();
 
-    public MimeType getMimeType();
+    MimeType getMimeType();
+
+    @Override
+    default int compareTo(final NamedWithMimeType o) {
+        int c = _Strings.compareNullsFirst(
+                this.getName(),
+                o!=null
+                    ? o.getName()
+                    : null);
+        if(c!=0) {
+            return c;
+        }
+
+        return _Strings.compareNullsFirst(
+                this.getMimeType().getBaseType(),
+                o!=null
+                    ? o.getMimeType().getBaseType()
+                    : null);
+    }
 
     /**
      * Subset of MimeTypes most commonly used.

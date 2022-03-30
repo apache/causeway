@@ -403,7 +403,6 @@ public abstract class ApplicationUser
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface UserLocale {
-        int MAX_LENGTH = 120;
         class DomainEvent extends PropertyDomainEvent<Locale> {}
     }
 

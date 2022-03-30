@@ -64,7 +64,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextPresentation(final Context context, final String value) {
+    public String titlePresentation(final Context context, final String value) {
         return value == null ? "" : value;
     }
 

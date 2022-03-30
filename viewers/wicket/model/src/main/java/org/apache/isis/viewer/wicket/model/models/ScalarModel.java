@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.wicket.model.ChainingModel;
+import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.commons.collections.Can;
@@ -126,16 +127,21 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         this.renderingHint = renderingHint;
     }
 
+
+    public <T> IModel<T> unwrapped(final Class<T> type) {
+        return new ScalarUnwrappingModel<T>(type, this);
+    }
+
     /**
      * Gets the proposed value as ManagedObject.
      * (override, so we don't return the target model, we are chained to)
      */
     @Override
     public final ManagedObject getObject() {
-        if(isCurrentValueAbsent()) {
-            return ManagedObject.empty(proposedValue().getElementType());
-        }
-        return proposedValue().getValue().getValue();
+        val proposedValue = proposedValue();
+        return ManagedObjects.nullToEmpty(
+                proposedValue.getElementType(),
+                proposedValue.getValue().getValue());
     }
 
     /**
@@ -183,36 +189,6 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
                 .anyMatch(x -> x.isAssignableFrom(scalarType));
     }
 
-    /**
-     * Has no meaning for <i>Parameters</i>, only has meaning for <i>Properties</i>.
-     * For a <i>Property</i>
-     * the current value and the initial pending (negotiated) value might differ,
-     * if the current value is absent (null).
-     * For <i>Parameters</i> we always evaluate {@code isCurrentValueAbsent()}
-     * to false.
-     */
-    public boolean isCurrentValueAbsent() {
-        val proposedValue = proposedValue();
-        return proposedValue.isCurrentValueAbsent().booleanValue();
-    }
-
-    /** get the proposed value, subject to negotiation */
-    public String getObjectAsString() {
-        val proposedValue = proposedValue();
-        return proposedValue.isCurrentValueAbsent().booleanValue()
-                ? ""
-                : proposedValue.getValueAsParsableText().getValue();
-    }
-
-    /**
-     * set the proposed value, subject to negotiation, only updates the negotiation model
-     * actual application of the proposed value is only applied after passing verification (not done here)
-     */
-    public void setObjectAsString(final String enteredText) {
-        val proposedValue = proposedValue();
-        proposedValue.getValueAsParsableText().setValue(enteredText);
-    }
-
     public abstract ManagedValue proposedValue();
 
     public abstract boolean whetherHidden();
@@ -247,24 +223,28 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     @Override
     public final PromptStyle getPromptStyle() {
+        return getPromptStyleOrElse(PromptStyle.INLINE);
+    }
+
+    private final PromptStyle getPromptStyleOrElse(final PromptStyle fallback) {
         final PromptStyleFacet facet = getFacet(PromptStyleFacet.class);
         if(facet == null) {
             // don't think this can happen actually, see PromptStyleFacetFallback
-            return PromptStyle.INLINE;
+            return fallback;
         }
-        PromptStyle promptStyle = facet.value();
+        val promptStyle = facet.value();
         if (promptStyle == PromptStyle.AS_CONFIGURED) {
             // I don't think this can happen, actually...
             // when the metamodel is built, it should replace AS_CONFIGURED with one of the other prompts
             // (see PromptStyleConfiguration and PromptStyleFacetFallback)
-            return PromptStyle.INLINE;
+            return fallback;
         }
         return promptStyle;
     }
 
     public boolean canEnterEditMode() {
-        boolean editable = isEnabled();
-        return editable && isViewMode();
+        return isEnabled()
+                && isViewMode();
     }
 
     public boolean isEnabled() {
@@ -367,6 +347,5 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         // was used to state that pending value is in sync with current value
         //getPendingPropertyModel().getValue().setValue(null);
     }
-
 
 }

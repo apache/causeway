@@ -67,7 +67,8 @@ import lombok.val;
         titleUiEvent = UserMemento.TitleUiEvent.class
 )
 @lombok.Value @lombok.Builder
-public class UserMemento implements Serializable {
+public class UserMemento
+implements Serializable {
 
     public static class TitleUiEvent extends IsisModuleApplib.TitleUiEvent<UserMemento> {}
 
@@ -290,6 +291,7 @@ public class UserMemento implements Serializable {
      *
      * @return true if the names match (is case sensitive).
      */
+    @Programmatic
     public boolean isCurrentUser(final @Nullable String userName) {
         return name.equals(userName);
     }
@@ -348,6 +350,27 @@ public class UserMemento implements Serializable {
                 .build();
     }
 
+//    // -- VIEWMODEL CONTRACT
+//
+//    //FIXME[ISIS-2964] as UserMemento is serializable, it should not even be required to implement ViewModel
+//    public UserMemento(final String memento) {
+//        this(_Serializables.read(UserMemento.class,
+//                _Bytes.ofCompressedUrlBase64.apply(_Strings.toBytes(memento, StandardCharsets.UTF_8))));
+//    }
+//
+//    private UserMemento(final UserMemento copy) {
+//        this(copy.name, copy.realName, copy.avatarUrl, copy.languageLocale, copy.numberFormatLocale,
+//                copy.timeFormatLocale, copy.authenticationSource, copy.impersonating,
+//                copy.multiTenancyToken, copy.authenticationCode, copy.roles);
+//    }
+
+//    @Programmatic
+//    @Override
+//    public String viewModelMemento() {
+//        val bytes = _Serializables.write(this);
+//        return _Strings.ofBytes(_Bytes.asCompressedUrlBase64.apply(bytes), StandardCharsets.UTF_8);
+//    }
+
     // -- HELPER
 
     private static UserMementoBuilder builderWithDefaults(final String name) {
@@ -358,4 +381,6 @@ public class UserMemento implements Serializable {
         return UserMemento.builder()
                 .name(name);
     }
+
+
 }

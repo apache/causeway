@@ -21,7 +21,7 @@ package org.apache.isis.testing.unittestsupport.applib.dom.comparable;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * @since 2.0 {@index}

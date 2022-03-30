@@ -28,7 +28,7 @@ import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
-import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 
 /**
  * Convenience adapter for {@link FormComponent}s that are implemented using the
@@ -76,14 +76,14 @@ extends FormComponentPanel<T> {
      * For subclasses
      */
     protected void permanentlyHide(final MarkupContainer container, final ComponentType... componentIds) {
-        Components.permanentlyHide(container, componentIds);
+        WktComponents.permanentlyHide(container, componentIds);
     }
 
     /**
      * For subclasses
      */
     public void permanentlyHide(final MarkupContainer container, final String... ids) {
-        Components.permanentlyHide(container, ids);
+        WktComponents.permanentlyHide(container, ids);
     }
 
 

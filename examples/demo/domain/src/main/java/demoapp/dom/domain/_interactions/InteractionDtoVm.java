@@ -70,14 +70,15 @@ public class InteractionDtoVm implements ViewModel {
     @Getter @Setter
     private InteractionDto interactionDto;
 
-    @Override
-    public String viewModelMemento() {
-        return encodingService.encodeString(InteractionDtoUtils.toXml(interactionDto));
+    // -- VIEWMODEL CONTRACT
+
+    public InteractionDtoVm(final String memento) {
+        interactionDto = InteractionDtoUtils.fromXml(encodingService.decodeToString(memento));
     }
 
     @Override
-    public void viewModelInit(final String memento) {
-        interactionDto =  InteractionDtoUtils.fromXml(encodingService.decodeToString(memento));
+    public String viewModelMemento() {
+        return encodingService.encodeString(InteractionDtoUtils.toXml(interactionDto));
     }
 
 }

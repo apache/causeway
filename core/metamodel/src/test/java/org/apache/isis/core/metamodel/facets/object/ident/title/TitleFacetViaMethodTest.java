@@ -46,7 +46,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
     public static class DomainObjectWithProblemInItsTitleMethod {
         public String title() {
-            throw new NullPointerException();
+            throw new NullPointerException("for testing purposes");
         }
     }
 
@@ -78,7 +78,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
     @Test
     public void testTitleThrowsException() {
-        final String title = _TitleFacetUtil.title(facet, mockOwningAdapter);
+        final String title = facet.title(mockOwningAdapter);
         assertThat(title, is("Failed Title"));
     }
 

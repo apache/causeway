@@ -24,8 +24,15 @@ package org.apache.isis.applib.value.semantics;
 public interface Renderer<T> {
 
     /**
-     * The value in its read-only summarizing text presentation form. (irreversible)
+     * The value in its read-only summarizing text presentation form. (title form)
      */
-    String simpleTextPresentation(ValueSemanticsProvider.Context context, T value);
+    String titlePresentation(ValueSemanticsProvider.Context context, T value);
+
+    /**
+     * The value rendered as HTML.
+     */
+    default String htmlPresentation(final ValueSemanticsProvider.Context context, final T value) {
+        return titlePresentation(context, value);
+    }
 
 }

@@ -69,7 +69,7 @@ implements
     // RENDERER
 
     @Override
-    public String simpleTextPresentation(final ValueSemanticsProvider.Context context, final Clob value) {
+    public String titlePresentation(final ValueSemanticsProvider.Context context, final Clob value) {
         return render(value, Clob::getName);
     }
 

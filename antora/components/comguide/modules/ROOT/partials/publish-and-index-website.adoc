@@ -45,7 +45,7 @@ git add .
 ----
 git commit -m "updates website"
 
-sh preview.sh
+bash preview.sh
 ----
 
 * If everything looks ok, then push the changes to make live, and switch back to the `isis` repo:

@@ -81,7 +81,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextPresentation(final ValueSemanticsProvider.Context context, final Boolean value) {
+    public String titlePresentation(final ValueSemanticsProvider.Context context, final Boolean value) {
         return render(value, v->v.booleanValue() ? "True" : "False");
     }
 

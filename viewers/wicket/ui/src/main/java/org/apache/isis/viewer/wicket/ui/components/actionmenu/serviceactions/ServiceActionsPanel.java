@@ -26,7 +26,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.viewer.wicket.ui.util.SSESupport;
-import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -64,7 +63,6 @@ public class ServiceActionsPanel extends MenuActionPanel {
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
         response.render(CssHeaderItem.forReference(new CssResourceReference(ServiceActionsPanel.class, "ServiceActionsPanel.css")));
-        Tooltips.renderHead(response);
         SSESupport.renderHead(response);
     }
 

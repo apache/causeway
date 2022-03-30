@@ -23,12 +23,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.RecreatableDomainObject;
-import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
@@ -77,66 +74,6 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
 
         val validationFailures = processThenValidate(ValidAnnotatedDomainObjectAndDomainObjectLayout.class);
         assertThat(validationFailures.getNumberOfFailures(), is(0));
-    }
-
-    @Test
-    public void whenValidDomainObjectWithViewModelNatureImplementingRecreatableDomainObject() throws Exception {
-
-        @org.apache.isis.applib.annotation.DomainObject(nature = Nature.VIEW_MODEL)
-        class ValidDomainObjectWithViewModelNatureImplementingRecreatableDomainObject implements RecreatableDomainObject {
-            @Override
-            public String __isis_memento() {
-                return null;
-            }
-            @Override
-            public void __isis_recreate(final String memento) {
-            }
-        }
-
-        val validationFailures = processThenValidate(
-                ValidDomainObjectWithViewModelNatureImplementingRecreatableDomainObject.class);
-        assertThat(validationFailures.getNumberOfFailures(), is(0));
-    }
-
-    @Test
-    public void whenInvalidDomainObjectWithNatureNotSpecifiedImplementingRecreatableDomainObject() throws Exception {
-
-        @org.apache.isis.applib.annotation.DomainObject(nature = Nature.NOT_SPECIFIED)
-        class InvalidDomainObjectWithNatureNotSpecifiedImplementingRecreatableDomainObject implements RecreatableDomainObject {
-            @Override
-            public String __isis_memento() {
-                return null;
-            }
-            @Override
-            public void __isis_recreate(final String memento) {
-            }
-        }
-
-        val validationFailures = processThenValidate(
-                InvalidDomainObjectWithNatureNotSpecifiedImplementingRecreatableDomainObject.class);
-        assertThat(validationFailures.getNumberOfFailures(), is(1));
-        assertThat(validationFailures.getMessages().iterator().next(), containsString("should not be annotated with @DomainObject with nature of NOT_SPECIFIED and also implement RecreatableDomainObject (specify a nature of VIEW_MODEL)"));
-    }
-
-    @Test
-    public void whenInvalidDomainObjectWithNatureJdoEntityImplementingRecreatableDomainObject() throws Exception {
-
-        @org.apache.isis.applib.annotation.DomainObject(nature = Nature.ENTITY)
-        class InvalidDomainObjectWithNatureJdoEntityImplementingRecreatableDomainObject implements RecreatableDomainObject {
-            @Override
-            public String __isis_memento() {
-                return null;
-            }
-            @Override
-            public void __isis_recreate(final String memento) {
-            }
-        }
-
-        val validationFailures = processThenValidate(
-                InvalidDomainObjectWithNatureJdoEntityImplementingRecreatableDomainObject.class);
-        assertThat(validationFailures.getNumberOfFailures(), is(1));
-        assertThat(validationFailures.getMessages().iterator().next(),
-                containsString("should not be annotated with @DomainObject with nature of ENTITY and also implement RecreatableDomainObject (specify a nature of VIEW_MODEL)"));
     }
 
     // -- HELPER

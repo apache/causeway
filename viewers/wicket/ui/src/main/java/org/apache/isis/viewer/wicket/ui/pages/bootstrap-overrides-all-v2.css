@@ -1,4 +1,3 @@
-
 /*
  *  Licensed to the Apache Software Foundation (ASF) under one
  *  or more contributor license agreements.  See the NOTICE file
@@ -18,7 +17,6 @@
  *  under the License.
  */
 
-
 #container {
 	padding-left: 0px;
 	padding-right: 0px;
@@ -33,8 +31,9 @@ body {
     margin-bottom: 0px;
 }
 
-/* emulate .dropdown-menu-right for secondary dropdown menus */
-.navbar-nav.secondary .dropdown-menu {
+/* emulate .dropdown-menu-right for secondary and tertiary dropdown menus */
+.navbar-nav.secondary .dropdown-menu, 
+.navbar-nav.tertiary .dropdown-menu {
 	right: 0;
 	left: auto;
 }
@@ -64,7 +63,6 @@ body {
     cursor: default;
     outline: none;
     -webkit-box-shadow: none;
-    -moz-box-shadow: none;
     box-shadow: none;
 }
 
@@ -76,6 +74,10 @@ body {
 .navbar {
     border-radius: 0;
     margin-bottom: 0px;
+}
+
+footer > .navbar {
+    z-index: 1;
 }
 
 #veil {
@@ -90,7 +92,6 @@ body {
     height: 100%;
     width: 100%;
     opacity: 0.5;
-    filter: alpha(opacity=50);
 }
 
 #veil .text-center {
@@ -268,10 +269,6 @@ body {
     padding: 0;
 }
 
-.collectionContentsAsAjaxTablePanel table {
-    border: none;
-}
-
 .collectionContentsAsAjaxTablePanel table tr td:first-child,
 .collectionContentsAsAjaxTablePanel table tr th:first-child {
     border-left: none;
@@ -300,6 +297,10 @@ body {
     margin-bottom: 0px;
 }
 
+.collectionContentsAsAjaxTablePanel tfoot tr {
+ 	border: none;
+}
+
 
 /* from CollectionContentsMultipleViewsPanel.css */
 /* AND ALSO duplicated in from EntityLinksSelectorPanel.css */
@@ -320,13 +321,11 @@ body {
 
 .linksSelectorPanel ul.viewList li.viewItem:first-child span {
     border-radius:4px 0 0 4px;
-    -moz-border-radius:4px 0 0 4px;
     -webkit-border-radius:4px 0 0 4px;
 }
 
 .linksSelectorPanel ul.viewList li.viewItem:last-child span {
     border-radius:0 4px 4px 0;
-    -moz-border-radius:0 4px 4px 0;
     -webkit-border-radius:0 4px 4px 0;
 }
 
@@ -518,19 +517,11 @@ span.containedButtonPanel {
 }
 
 /* add some space between an FA icon and the text on the right */
-.btn .fa {
-	margin-right: 4px;
+.btn .additionalLinkItem {
+	margin-left: 3px;
 }
 
 /* from additionalLinksPanel.css */
-
-span .fa {
-    padding-right: 2px;
-}
-
-span .fontAwesomeIcon {
-    margin-right: 6px;
-}
 
 .additionalLinkList {
     float:left;
@@ -591,6 +582,8 @@ ul.dropdown-menu {
 .dropup ul.dropdown-menu {
 	padding-bottom: 0;
 	margin-bottom: 0;
+	top: auto;
+	bottom: 100%;
 }
 
 /* removes the caret (arrow down) from the additional links selector dropdowns */
@@ -943,18 +936,8 @@ footer .footer-image {
     padding-right: 11px;
 }
 
-.editing .edit {
-    padding-top: 2px;
-    float: right;
-}
-
 .multiLineStringPanel .scalarValueInput .editing .edit {
     margin-top: -30px;
-}
-
-.scalarValueInput .editing .edit {
-    margin-top: -20px;
-	z-index: 20000;
 }
 
 .referencePanel .scalarValueInput .editing .edit,
@@ -962,12 +945,6 @@ footer .footer-image {
 .isisClobPanel .scalarValueInput .editing .edit,
 .booleanPanel .scalarValueInput .editing .edit {
     margin-top: 0px;
-}
-
-@-moz-document url-prefix() {
-    .scalarValueInput .editing .edit {
-        margin-right: -17px;
-    }
 }
 
 .actions-right .scalarPlaceholder .scalarValueInput {
@@ -1020,6 +997,10 @@ footer .footer-image {
     margin-top: 7px;
     margin-left: -5px;
     margin-right: 10px;
+}
+
+.select2-container {
+	z-index: 1060; /* as bootstrap modal dialogs appear to have 1055 */
 }
 
 .select2-container-multi.input-sm {
@@ -1130,7 +1111,6 @@ such as https://chrome.google.com/webstore/detail/focus-indicator/heeoeadndnhebm
 .aboutPanel .aboutMessage {
     background:#FFFFFF;
     border-radius:4px;
-    -moz-border-radius:4px;
     -webkit-border-radius:4px;
     padding: 5px;
     display: block;
@@ -1140,12 +1120,14 @@ such as https://chrome.google.com/webstore/detail/focus-indicator/heeoeadndnhebm
 h4.iconAndTitle a {
     outline: none;
     display: inline-block;
+    text-decoration: none;
 }
 h4.iconAndTitle a span.entityTitle:focus {
     outline: none;
 }
-h4.iconAndTitle a:focus {
-    text-decoration: none;
+
+h4.iconAndTitleLabel a:hover {
+	text-decoration: underline;
 }
 
 li.list-separator {
@@ -1214,3 +1196,32 @@ ul.navbar-wrap {
 .tabGroups {
     margin-bottom: 21px;
 }
+
+.float-right {
+  float: right !important;
+}
+
+.mr-auto, .mx-auto {
+  margin-right: auto !important;
+}
+
+/* TOOLTIPS */
+
+.tooltip {
+	max-width: 300px;
+	text-align: center;
+ 	z-index: 9999;
+}
+
+span.wkt-component-with-tooltip,
+label.wkt-component-with-tooltip, 
+.wkt-component-with-tooltip label, 
+strong.wkt-component-with-tooltip  {
+	text-decoration-line: underline;
+	text-decoration-style: dotted;
+}
+
+.ui-helper-hidden-accessible { display:none; }
+
+/* --- */
+

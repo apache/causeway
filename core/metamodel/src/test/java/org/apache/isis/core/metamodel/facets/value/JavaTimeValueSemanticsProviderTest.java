@@ -63,7 +63,7 @@ extends ValueSemanticsProviderAbstractTestCase<java.util.Date> {
     public void testRendering() {
         setSemantics(valueSemantics = createValueSemantics(TimePrecision.SECOND));
         val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
-        assertEquals("Mar 13, 2013, 5:59:03 PM", valueSemantics.simpleTextPresentation(_context , date));
+        assertEquals("Mar 13, 2013, 5:59:03 PM", valueSemantics.titlePresentation(_context , date));
     }
 
     @Test // support omitted parts on input

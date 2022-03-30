@@ -28,11 +28,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -47,6 +49,7 @@ import lombok.ToString;
 @NamedQuery(
         name = "JpaInventory.findAffordableProducts",
         query = "SELECT p FROM JpaInventory i, IN(i.products) p WHERE p.price <= :priceUpperBound")
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 public class JpaInventory {

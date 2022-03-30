@@ -46,7 +46,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
-import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
@@ -123,12 +123,17 @@ implements ScalarModelSubscriber {
         if (outcome.isSuccess()) {
             completePrompt(target);
             okButton.send(target.getPage(), Broadcast.EXACT, newCompletedEvent(target, form));
-            Components.addToAjaxRequest(target, form);
+            WktComponents.addToAjaxRequest(target, form);
         }
     }
 
     @Override
     public final void onCancelSubmitted(final AjaxRequestTarget target) {
+
+        _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
+                + "originating from User clicking CANCEL (or hitting ESC) on an inline editing form or "
+                + "action prompt.");
+
         setLastFocusHint();
         completePrompt(target);
     }
@@ -167,9 +172,11 @@ implements ScalarModelSubscriber {
             return;
         }
         final MarkupContainer parentContainer = this.parentPanel.getParent();
-        if (parentContainer != null) {
-            entityModel.setHint(getPage(), PageAbstract.UIHINT_FOCUS, parentContainer.getPageRelativePath());
+        if (parentContainer == null) {
+            return;
+
         }
+        entityModel.setHint(getPage(), PageAbstract.UIHINT_FOCUS, parentContainer.getPageRelativePath());
     }
 
     private UiHintContainer pageUiHintContainerIfAny() {
@@ -196,11 +203,12 @@ implements ScalarModelSubscriber {
             .setVisible(false);
 
         // change visibility of inline components
-        formExecutorContext().getInlinePromptContext().onCancel();
+        formExecutorContext().getInlinePromptContext().onCancel(getMemberModel());
 
         Optional.ofNullable(formExecutorContext().getInlinePromptContext().getScalarTypeContainer())
-        .ifPresent(scalarTypeContainer->
-            Wkt.javaScriptAdd(target, EventTopic.FOCUS_FIRST_PROPERTY, scalarTypeContainer.getMarkupId()));
+        .ifPresent(scalarTypeContainer->{
+            Wkt.javaScriptAdd(target, EventTopic.FOCUS_FIRST_PROPERTY, scalarTypeContainer.getMarkupId());
+        });
     }
 
 }

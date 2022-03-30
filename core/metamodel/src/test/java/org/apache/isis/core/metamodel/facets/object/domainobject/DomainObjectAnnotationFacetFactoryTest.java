@@ -51,10 +51,10 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepub
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured;
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype.LogicalTypeFacetForDomainObjectAnnotation;
-import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
@@ -672,7 +672,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
             final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
             Assert.assertNotNull(facet);
 
-            Assert.assertTrue(facet instanceof RecreatableObjectFacetForDomainObjectAnnotation);
+            Assert.assertTrue(facet instanceof ViewModelFacetForDomainObjectAnnotation);
 
             expectNoMethodsRemoved();
         }

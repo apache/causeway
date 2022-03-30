@@ -33,9 +33,9 @@ import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.viewer.common.model.PlacementDirection;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
-import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel.Placement;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -45,8 +45,8 @@ import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.act.ParameterUiModelWkt;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Decorators;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.WktDecorators;
 
 import lombok.val;
 
@@ -140,8 +140,8 @@ extends PromptFormAbstract<ActionModel> {
         val action = actionModel.getAction();
 
         if (action.getSemantics().isAreYouSure()) {
-            val confirmUiModel = ConfirmUiModel.ofAreYouSure(getTranslationService(), Placement.BOTTOM);
-            Decorators.getConfirm().decorate(button, confirmUiModel);
+            val confirmUiModel = ConfirmUiModel.ofAreYouSure(getTranslationService(), PlacementDirection.BOTTOM);
+            WktDecorators.getConfirm().decorate(button, confirmUiModel);
         }
     }
 

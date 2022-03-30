@@ -18,19 +18,19 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import java.io.Serializable;
+import java.util.Optional;
 
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDateTimePicker;
 
 /**
  * Panel for rendering scalars representing dates, along with a date picker.
  */
-public class ScalarPanelTextFieldWithTemporalPicker<T extends Serializable>
+public class ScalarPanelTextFieldWithTemporalPicker<T>
 extends ScalarPanelTextFieldWithValueSemantics<T>  {
 
     private static final long serialVersionUID = 1L;
@@ -41,7 +41,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
     }
 
     protected int getDateRenderAdjustDays() {
-        return getModel().lookupFacet(DateRenderAdjustFacet.class)
+        return scalarModel().lookupFacet(DateRenderAdjustFacet.class)
             .map(DateRenderAdjustFacet::getDateRenderAdjustDays)
             .orElse(0);
     }
@@ -49,18 +49,12 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
     @Override
     protected final TextField<T> createTextField(final String id) {
         return new TextFieldWithDateTimePicker<T>(
-                super.getCommonContext(), id, newTextFieldValueModel(), cls, getConverter(scalarModel));
-    }
-
-
-    @Override
-    protected String createTextFieldFragmentId() {
-        return "date";
+                getCommonContext(), id, unwrappedModel(), type, getConverter(scalarModel()));
     }
 
     @Override
-    protected IModel<String> obtainInlinePromptModel() {
-        return super.toStringConvertingModelOf(getConverter(scalarModel));
+    protected Optional<InputFragment> getInputFragmentType() {
+        return Optional.of(InputFragment.DATE);
     }
 
 }

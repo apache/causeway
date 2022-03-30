@@ -67,7 +67,7 @@ implements
     // -- RENDERER
 
     @Override
-    public String simpleTextPresentation(final ValueSemanticsProvider.Context context, final ApplicationFeatureId value) {
+    public String titlePresentation(final ValueSemanticsProvider.Context context, final ApplicationFeatureId value) {
         return value == null ? "" : value.stringify();
     }
 

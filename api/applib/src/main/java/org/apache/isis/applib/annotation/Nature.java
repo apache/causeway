@@ -81,6 +81,10 @@ public enum Nature {
     BEAN,
     ;
 
+    public boolean isNotSpecified() {
+        return this == Nature.NOT_SPECIFIED;
+    }
+
     public boolean isEntity() {
         return this == Nature.ENTITY;
     }
@@ -88,4 +92,13 @@ public enum Nature {
     public boolean isMixin() {
         return this == Nature.MIXIN;
     }
+
+    public boolean isViewModel() {
+        return this == Nature.VIEW_MODEL;
+    }
+
+    public boolean isBean() {
+        return this == Nature.BEAN;
+    }
+
 }

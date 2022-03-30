@@ -61,7 +61,7 @@ extends ValueSemanticsProviderAbstractTestCase<BigInteger> {
 
     @Test
     public void testTitle() throws Exception {
-        assertEquals("132,199", value.simpleTextPresentation(null, bigInt));
+        assertEquals("132,199", value.titlePresentation(null, bigInt));
     }
 
 }

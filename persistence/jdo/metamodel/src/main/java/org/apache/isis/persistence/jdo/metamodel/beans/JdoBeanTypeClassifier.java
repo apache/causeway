@@ -25,9 +25,8 @@ import javax.jdo.annotations.EmbeddedOnly;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
-
-import static org.apache.isis.commons.internal.reflection._Annotations.findNearestAnnotation;
 
 import lombok.val;
 
@@ -41,21 +40,21 @@ public class JdoBeanTypeClassifier implements IsisBeanTypeClassifier {
     public BeanClassification classify(
             final Class<?> type) {
 
-        val persistenceCapableAnnot = findNearestAnnotation(type, javax.jdo.annotations.PersistenceCapable.class);
+        val persistenceCapableAnnot = _Annotations.synthesize(type, javax.jdo.annotations.PersistenceCapable.class);
         if(persistenceCapableAnnot.isPresent()) {
 
             val embeddedOnlyAttribute = persistenceCapableAnnot.get().embeddedOnly();
             // Whether objects of this type can only be embedded,
             // hence have no ID that binds them to the persistence layer
             final boolean embeddedOnly = Boolean.valueOf(embeddedOnlyAttribute)
-                    || findNearestAnnotation(type, EmbeddedOnly.class).isPresent();
+                    || _Annotations.synthesize(type, EmbeddedOnly.class).isPresent();
             if(embeddedOnly) {
                 return null; // don't categorize as entity ... fall through in the caller's logic
             }
 
             String logicalTypeName = null;
 
-            val aDomainObject = findNearestAnnotation(type, DomainObject.class).orElse(null);
+            val aDomainObject = _Annotations.synthesize(type, DomainObject.class).orElse(null);
             if(aDomainObject!=null) {
                 logicalTypeName = aDomainObject.logicalTypeName();
             }

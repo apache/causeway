@@ -27,6 +27,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.ResourceReference;
 
 import org.apache.isis.valuetypes.prism.wkt.PrismResourcesWkt;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent_reloadJs;
 
@@ -36,9 +38,18 @@ public class MarkdownComponentWkt extends MarkupComponent {
 
     private static final long serialVersionUID = 1L;
 
-    public MarkdownComponentWkt(final String id, final IModel<?> model) {
+    public MarkdownComponentWkt(final String id, final ScalarModel model){
         super(id, model);
     }
+
+    public MarkdownComponentWkt(final String id, final ValueModel model){
+        super(id, model);
+    }
+
+    public MarkdownComponentWkt(final String id, final IModel<String> model){
+        super(id, model);
+    }
+
 
     @Override
     public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag) {
