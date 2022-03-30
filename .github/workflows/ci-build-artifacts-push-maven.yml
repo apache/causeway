@@ -83,6 +83,7 @@ jobs:
         # -T 1C ... 1 build thread per core
         MVN_CLI_OPTS: >-
           -Dgithub
+          -s .m2/settings.xml
           -Denforcer.failFast=true
           -DinstallAtEnd=true -DdeployAtEnd=true
           -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN 
