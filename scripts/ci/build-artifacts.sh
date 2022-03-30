@@ -130,12 +130,12 @@ if [ ! -z "$REVISION" ]; then
 
   echo ""
   echo ""
-  echo ">>> sed'ing version in starters and parent ..."
-  echo ""
-  echo ""
-  cd $PROJECT_ROOT_PATH/starters
-  CURR=$(grep "<version>" pom.xml | head -1 | cut -d'>' -f2 | cut -d'<' -f1)
-  sed -i "s|<version>$CURR</version>|<version>$REVISION</version>|g" pom.xml
+#  echo ">>> sed'ing version in starters and parent ..."
+#  echo ""
+#  echo ""
+#  cd $PROJECT_ROOT_PATH/starters
+#  CURR=$(grep "<version>" pom.xml | head -1 | cut -d'>' -f2 | cut -d'<' -f1)
+#  sed -i "s|<version>$CURR</version>|<version>$REVISION</version>|g" pom.xml
 
   # -- debug the version rewriting --
   # 1) add an exit statement after the fi below
@@ -209,11 +209,11 @@ if [ ! -z "$REVISION" ]; then
 
   echo ""
   echo ""
-  echo ">>> sed'ing to revert version in starters and parent ..."
-  echo ""
-  echo ""
-  cd $PROJECT_ROOT_PATH/starters
-  sed -i "s|<version>$REVISION</version>|<version>$CURR</version>|g" pom.xml
+#  echo ">>> sed'ing to revert version in starters and parent ..."
+#  echo ""
+#  echo ""
+#  cd $PROJECT_ROOT_PATH/starters
+#  sed -i "s|<version>$REVISION</version>|<version>$CURR</version>|g" pom.xml
 fi
 
 cd $PROJECT_ROOT_PATH
