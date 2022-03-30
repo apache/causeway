@@ -139,24 +139,11 @@ class ObjectBookmarker_builtinHandlers {
         @SneakyThrows
         @Override
         public Bookmark handle(final ManagedObject managedObject) {
-//            throw _Exceptions.illegalArgument("cannot 'identify' the value type %s, "
-//                    + "as values have no identifier",
-//                    managedObject.getSpecification().getCorrespondingClass().getName());
-
             val spec = managedObject.getSpecification();
-
-//            if(java.io.Serializable.class.isAssignableFrom(spec.getCorrespondingClass())) {
-//
-//                val baos = new ByteArrayOutputStream();
-//                try(val oos = new ObjectOutputStream(baos)) {
-//                    oos.writeObject(managedObject.getPojo());
-//                    val identifier = _Strings.ofBytes(
-//                            _Bytes.asUrlBase64.apply(baos.toByteArray()),
-//                            StandardCharsets.UTF_8);
-//                    return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), identifier);
-//                }
-//
-//            }
+            val valuePojo = managedObject.getPojo();
+            if(valuePojo==null) {
+                return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), "{}");
+            }
 
             val valueFacet = spec.getFacet(ValueFacet.class);
             ValueSemanticsProvider<Object> composer = (ValueSemanticsProvider) valueFacet.selectDefaultSemantics()

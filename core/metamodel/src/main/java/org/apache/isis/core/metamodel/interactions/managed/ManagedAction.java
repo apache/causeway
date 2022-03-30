@@ -28,6 +28,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.routing.RoutingService;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -89,6 +90,10 @@ public final class ManagedAction extends ManagedMember {
             final @NonNull MultiselectChoices multiselectChoices) {
 
         super(owner, where);
+        _Assert.assertFalse(ManagedObjects.isNullOrUnspecifiedOrEmpty(owner), ()->
+                String.format("cannot create managed-action for action %s with an empty owner %s",
+                        action.getFeatureIdentifier(),
+                        owner));
         this.action = action;
         this.multiselectChoices = multiselectChoices;
     }

@@ -302,6 +302,15 @@ public final class ManagedObjects {
         return ManagedObject.empty(elementSpec);
     }
 
+    public static ManagedObject nullOrEmptyToDefault(
+            final @NonNull ObjectSpecification elementSpec,
+            final @Nullable ManagedObject adapter,
+            final @NonNull Supplier<Object> pojoDefaultSupplier) {
+        return isNullOrUnspecifiedOrEmpty(adapter)
+            ? ManagedObject.of(elementSpec, Objects.requireNonNull(pojoDefaultSupplier.get()))
+            : adapter;
+    }
+
     public static ManagedObject emptyToDefault(
             final ObjectSpecification elementSpec,
             final boolean mandatory,
