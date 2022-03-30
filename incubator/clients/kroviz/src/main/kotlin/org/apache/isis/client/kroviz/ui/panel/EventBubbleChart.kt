@@ -20,7 +20,6 @@ package org.apache.isis.client.kroviz.ui.panel
 
 import io.kvision.chart.*
 import io.kvision.chart.js.LegendItem
-import io.kvision.core.Col
 import io.kvision.core.Color
 import io.kvision.core.CssSize
 import io.kvision.core.UNIT
@@ -87,6 +86,12 @@ class EventBubbleChart : SimplePanel() {
                     strokeStyle = ERROR_COLOR
                 }
                 legendLabelList.add(error as LegendItem)
+                val running = obj {
+                    text = "running"
+                    fillStyle = TRANSPARENT
+                    strokeStyle = RUNNING_COLOR
+                }
+                legendLabelList.add(running as LegendItem)
                 val size = obj {
                     text = "bubble size ^= response size"
                     fillStyle = TRANSPARENT
@@ -150,6 +155,7 @@ class EventBubbleChart : SimplePanel() {
             model.log.forEach {
                 when {
                     it.isError() -> borderColorList.add(ERROR_COLOR)
+                    it.isRunning() -> borderColorList.add(RUNNING_COLOR)
                     else -> borderColorList.add(TRANSPARENT)
                 }
             }
@@ -208,10 +214,14 @@ class EventBubbleChart : SimplePanel() {
     }
 
     private fun LogEntry.buildData(): dynamic {
-        val relativeStartTimeMs = createdAt.getTime() - logStart
+        var time = createdAt.getTime()
+        if (updatedAt != null) {
+            time = updatedAt!!.getTime()
+        }
+        val relativeTimeMs = time -logStart
         val bubbleSize = calculateBubbleSize()
         val data = obj {
-            x = relativeStartTimeMs
+            x = relativeTimeMs
             y = duration
             r = bubbleSize
         }
@@ -221,6 +231,7 @@ class EventBubbleChart : SimplePanel() {
     companion object {
         val TRANSPARENT = Color.rgba(0xFF, 0xFF, 0xFF, 0x00)
         val ERROR_COLOR = Color.rgba(0xFF, 0x00, 0x00, 0xFF)
+        val RUNNING_COLOR = Color.rgba(0xFF, 0xFF, 0x00, 0xFF)
         val LIGHT_BLUE = Color.rgba(0x4B, 0xAC, 0xC6, 0x80)
         val DARK_BLUE = Color.rgba(0x4F, 0x81, 0xBD, 0x80)
         val GREEN = Color.rgba(0x9B, 0xBB, 0x59, 0x80)
