@@ -19,12 +19,15 @@
 
 package org.apache.isis.core.runtime.system.session;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -137,6 +140,13 @@ public class IsisSessionFactory
                 transactionManager.endTransaction();
             }
 
+            //
+            // Register all subscribers
+            //
+            EventBusService eventBusService = servicesInjector.lookupService(EventBusService.class);
+            servicesInjector.getRegisteredServices().stream()
+                    .filter(service -> shouldRegister(service))
+                    .forEach( service -> eventBusService.register(service));
 
             //
             // installFixturesIfRequired
@@ -190,6 +200,10 @@ public class IsisSessionFactory
         }
     }
 
+    private boolean shouldRegister(Object service) {
+        return Arrays.stream(service.getClass().getMethods())
+                .anyMatch(method -> method.getAnnotation(org.axonframework.eventhandling.annotation.EventHandler.class) != null);
+    }
 
     @Programmatic
     public void destroyServicesAndShutdown() {
