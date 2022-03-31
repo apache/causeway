@@ -202,7 +202,7 @@ public class IsisSessionFactory
 
     private boolean shouldRegister(Object service) {
         return Arrays.stream(service.getClass().getMethods())
-                .anyMatch(method -> method.getAnnotation(com.google.common.eventbus.Subscribe.class) != null);
+                .anyMatch(method -> method.getAnnotation(org.axonframework.eventhandling.annotation.EventHandler.class) != null);
     }
 
     @Programmatic
