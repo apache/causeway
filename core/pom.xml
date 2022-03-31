@@ -2523,8 +2523,9 @@ ${license.additional-notes}
 
     <distributionManagement>
         <repository>
-            <id>gitlab-maven</id>
-            <url>https://gitlab.com/api/v4/projects/26265305/packages/maven</url>
+            <id>github</id>
+            <name>Github Releases</name>
+            <url>https://maven.pkg.github.com/ecpnv-devops/isis</url>
         </repository>
     </distributionManagement>
 
