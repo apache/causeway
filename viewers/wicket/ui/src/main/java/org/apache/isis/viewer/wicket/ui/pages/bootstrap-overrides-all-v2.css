@@ -1057,6 +1057,8 @@ div.scalarValueInlinePromptLink.form-control:hover {
 
 .entityUrlSource {
 	cursor: pointer;
+	white-space: nowrap;
+	display: inline;
 }
 
 

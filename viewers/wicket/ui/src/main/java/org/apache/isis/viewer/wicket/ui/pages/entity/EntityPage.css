@@ -28,24 +28,6 @@
     height: 16px !important;
 }
 
-ul.whereAmI {
-    padding: 8px 12px;
-    list-style: none;
-    background-color: #eee;
-}
-
-/* Display list items side by side */
-ul.whereAmI li {
-    display: inline;
-}
-
-/* Add a slash symbol (/) before/behind each list item */
-ul.whereAmI li+li:before {
-    padding: 4px;
-    color: black;
-    content: "/\00a0";
-}
-
 /* alignment of the icons in certain cases ISIS-2588 */
 .whereAmI .fa-2x {
     font-size: unset;
