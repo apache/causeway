@@ -26,6 +26,8 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -47,7 +49,9 @@ public class WrapperBooleanHolder_updateReadOnlyPropertyWithChoices {
 
     private final WrapperBooleanHolder holder;
 
-    @MemberSupport public WrapperBooleanHolder act(final Boolean newValue) {
+    @MemberSupport public WrapperBooleanHolder act(
+            @Parameter(optionality = Optionality.OPTIONAL)
+            final Boolean newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
