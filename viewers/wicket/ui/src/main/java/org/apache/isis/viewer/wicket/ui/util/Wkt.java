@@ -42,6 +42,8 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -77,6 +79,7 @@ import de.agilecoders.wicket.core.util.Attributes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig.Sizes;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 import de.agilecoders.wicket.jquery.Key;
 
 /**
@@ -435,6 +438,14 @@ public class Wkt {
 
     public ResourceLinkVolatile downloadLinkNoCache(final String id, final IResource resourceModel) {
         return new ResourceLinkVolatile(id, resourceModel);
+    }
+
+    // -- FILE UPLOAD
+
+    public FileUploadField fileUploadField(final String id, final IModel<List<FileUpload>> model) {
+        val fileUploadField = new BootstrapFileInputField(id, model);
+        fileUploadField.getConfig().showUpload(false).mainClass("input-group-sm");
+        return fileUploadField;
     }
 
     // -- FRAGMENT
@@ -857,5 +868,8 @@ public class Wkt {
             formComponent.error(error);
         }
     }
+
+
+
 
 }

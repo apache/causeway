@@ -128,12 +128,14 @@ public class ScalarFragmentFactory {
     @RequiredArgsConstructor
     public static enum CompactFragment {
         LABEL("fragment-compact-label"),
+        LINK("fragment-compact-link"),
         BADGE("fragment-compact-badge"),
         ENTITY_LINK("fragment-compact-entityLink"),
         CHECKBOX_YES("fragment-compact-checkboxYes"),
         CHECKBOX_NO("fragment-compact-checkboxNo"),
         CHECKBOX_INTERMEDIATE("fragment-compact-checkboxIntermediate"),
         ;
+        public static String ID_LINK_LABEL = "linkLabel";
         private final String fragmentId;
         /**
          * @param id - Where to 'put' the fragment

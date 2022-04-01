@@ -36,7 +36,6 @@ import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFac
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
@@ -64,7 +63,6 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     private static final long serialVersionUID = 1L;
 
     private static final String ID_AUTO_COMPLETE = "autoComplete";
-    private static final String ID_ENTITY_ICON_TITLE = "entityIconAndTitle";
     private static final String ID_ENTITY_TITLE_IF_NULL = "entityTitleIfNull";
 
     private EntityLinkSelect2Panel entityLink;
@@ -209,9 +207,9 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
             val adapter = scalarModel.getObject();
             if(adapter != null
                     || isInlinePrompt) {
-                WktComponents.permanentlyHide(container, "entityTitleIfNull");
+                WktComponents.permanentlyHide(container, ID_ENTITY_TITLE_IF_NULL);
             } else {
-                Wkt.labelAdd(container, "entityTitleIfNull", "(none)");
+                Wkt.labelAdd(container, ID_ENTITY_TITLE_IF_NULL, "(none)"); //XXX missing i18n support
             }
         });
 
@@ -241,7 +239,6 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
             }
 
             if(fieldFrame != null) {
-                WktComponents.permanentlyHide(fieldFrame, ID_ENTITY_ICON_TITLE);
                 WktComponents.permanentlyHide(fieldFrame, ID_ENTITY_TITLE_IF_NULL);
             }
 

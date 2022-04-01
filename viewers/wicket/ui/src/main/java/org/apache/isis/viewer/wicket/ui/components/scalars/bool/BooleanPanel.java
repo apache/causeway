@@ -26,8 +26,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.viewer.wicket.model.models.BooleanModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
@@ -35,8 +33,6 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.PromptFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelFormFieldAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
-
-import lombok.val;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
@@ -136,11 +132,12 @@ extends ScalarPanelFormFieldAbstract<Boolean> {
 
     @Override
     public String getVariation() {
-        val labelAtFacet = getModel().getFacet(LabelAtFacet.class);
-        return labelAtFacet != null
-                && labelAtFacet.label() == LabelPosition.RIGHT
-            ? "labelRightPosition"
-            : super.getVariation();
+//        val labelAtFacet = getModel().getFacet(LabelAtFacet.class);
+//        return labelAtFacet != null
+//                && labelAtFacet.label() == LabelPosition.RIGHT
+//            ? "labelRightPosition"
+//            : super.getVariation();
+        return super.getVariation();
     }
 
 }

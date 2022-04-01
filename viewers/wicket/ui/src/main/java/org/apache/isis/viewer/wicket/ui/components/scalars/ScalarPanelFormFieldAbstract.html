@@ -135,7 +135,6 @@
 		
 		<wicket:fragment wicket:id="fragment-input-select2">
            <span class="autoCompletePlaceholder">
-<!--                <span wicket:id="entityIconAndTitle">[icon and title]</span> -->
                <span wicket:id="entityLink">link or drop down</span>
            </span>
            <span wicket:id="entityTitleIfNull">(none)</span>
@@ -192,6 +191,12 @@
 
 		<wicket:fragment wicket:id="fragment-compact-label">
 			<span wicket:id="scalarValue"/>
+		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-compact-link">
+			<a wicket:id="scalarValue" class="link-primary">
+				<span wicket:id="linkLabel" />
+			</a>
 		</wicket:fragment>
 		
 		<wicket:fragment wicket:id="fragment-compact-badge">
