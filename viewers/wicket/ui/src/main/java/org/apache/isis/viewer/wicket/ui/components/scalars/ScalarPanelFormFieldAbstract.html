@@ -67,9 +67,12 @@
 				
 					<div wicket:id="scalarValueInlinePromptLink"
 						class="scalarValueInlinePromptLink">
-						<!-- output format --> 
-						<wicket:container 
-							wicket:id="container-scalarValue"/> 
+						<div class="no-click-bubbling">
+							<!-- output format -->
+							<wicket:container 
+								wicket:id="container-scalarValue"
+								class="no-event-prop" /> 
+						</div>
 					</div> 
 					
 					<a wicket:id="editProperty"
@@ -194,7 +197,7 @@
 		</wicket:fragment>
 		
 		<wicket:fragment wicket:id="fragment-compact-link">
-			<a wicket:id="scalarValue" class="no-click-bubbling link-primary">
+			<a wicket:id="scalarValue" class="link-primary">
 				<span wicket:id="linkLabel" />
 			</a>
 		</wicket:fragment>
