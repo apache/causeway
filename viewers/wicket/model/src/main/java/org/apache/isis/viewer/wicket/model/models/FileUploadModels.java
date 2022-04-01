@@ -28,6 +28,7 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -70,7 +71,9 @@ public class FileUploadModels {
         return new ScalarConvertingModel<List<FileUpload>, Clob>(scalarModel) {
 
             private static final long serialVersionUID = 1L;
+            private final String charsetName = charset.name(); // Charset is not serializable
 
+            @SneakyThrows
             @Override
             protected Clob toScalarValue(final @Nullable List<FileUpload> fileUploads) {
 
@@ -82,7 +85,7 @@ public class FileUploadModels {
                 final FileUpload fileUpload = fileUploads.get(0);
                 final String contentType = fileUpload.getContentType();
                 final String clientFileName = fileUpload.getClientFileName();
-                final String str = new String(fileUpload.getBytes(), charset);
+                final String str = new String(fileUpload.getBytes(), charsetName);
                 final Clob clob = new Clob(clientFileName, contentType, str);
                 return clob;
             }
