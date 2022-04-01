@@ -30,10 +30,8 @@ import lombok.val;
 /**
  * {@link PanelAbstract Panel} to capture the arguments for an action
  * invocation.
- *
  * <p>
- *     corresponding panel for property edits is {@link PropertyEditFormPanel}.
- * </p>
+ * Corresponding panel for property edits is {@link PropertyEditFormPanel}.
  */
 public class ActionParametersFormPanel
 extends PromptFormPanelAbstract<ManagedObject, ActionModel> {

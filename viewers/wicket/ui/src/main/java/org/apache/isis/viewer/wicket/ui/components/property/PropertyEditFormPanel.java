@@ -27,10 +27,8 @@ import org.apache.isis.viewer.wicket.ui.panels.PromptFormPanelAbstract;
 /**
  * {@link PanelAbstract Panel} to capture the arguments for an action
  * invocation.
- *
  * <p>
- *     corresponding panel for property edits is {@link ActionParametersFormPanel}.
- * </p>
+ * Corresponding panel for property edits is {@link ActionParametersFormPanel}.
  */
 public class PropertyEditFormPanel
 extends PromptFormPanelAbstract<ManagedObject, ScalarPropertyModel> {
@@ -39,7 +37,6 @@ extends PromptFormPanelAbstract<ManagedObject, ScalarPropertyModel> {
 
     static final String ID_PROPERTY = "property";
     static final String ID_INPUT_FORM = "inputForm";
-
 
     public PropertyEditFormPanel(final String id, final ScalarPropertyModel model) {
         super(id, model);

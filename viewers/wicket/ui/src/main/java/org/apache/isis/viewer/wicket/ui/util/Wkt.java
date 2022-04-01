@@ -68,15 +68,16 @@ import org.apache.isis.commons.internal.functions._Functions.SerializableFunctio
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
+import lombok.NonNull;
+import lombok.val;
+import lombok.experimental.UtilityClass;
+
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.util.Attributes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig.Sizes;
 import de.agilecoders.wicket.jquery.Key;
-import lombok.NonNull;
-import lombok.val;
-import lombok.experimental.UtilityClass;
 
 /**
  * Wicket common idioms, in alphabetical order.
@@ -277,6 +278,25 @@ public class Wkt {
 
     // -- CHECKBOX
 
+    /**
+     * In correspondence with ScalarPanelFormFieldAbstract.html
+     * <wicket:fragment wicket:id="fragment-prompt-checkboxYes">
+     */
+    final String fragment_prompt_checkboxYes = "<label class=\"fs-4\" style=\"color: green;\">"
+            + "<i class=\"fa-regular fa-check-square\"></i></label>";
+    /**
+     * In correspondence with ScalarPanelFormFieldAbstract.html
+     * <wicket:fragment wicket:id="fragment-prompt-checkboxNo">
+     */
+    final String fragment_prompt_checkboxNo = "<label class=\"fs-4\">"
+            + "<i class=\"fa-regular fa-square\"></i></label>";
+    /**
+     * In correspondence with ScalarPanelFormFieldAbstract.html
+     * <wicket:fragment wicket:id="fragment-prompt-checkboxIntermediate">
+     */
+    final String fragment_prompt_checkboxIntermediate = "<label class=\"fs-4\" style=\"color: silver;\">"
+            + "<i class=\"fa-regular fa-square-minus\"></i></label>";
+
     public static CheckBoxX checkbox(
             final String id,
             final IModel<Boolean> checkedModel,
@@ -293,8 +313,9 @@ public class Wkt {
         }
         .withSize(size)
         .withEnclosedLabel(false)
-        .withIconChecked("<i class='fa fa-fw fa-check'></i>")
-        .withIconNull("<i class='fa-solid fa-square-question'></i>")
+        .withIconChecked(fragment_prompt_checkboxYes)
+        .withIconNull(fragment_prompt_checkboxIntermediate)
+        .withIconUnchecked(fragment_prompt_checkboxNo)
         .withThreeState(!required);
 
         final CheckBoxX checkBox = new CheckBoxX(id, checkedModel) {

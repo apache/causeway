@@ -73,7 +73,7 @@ extends ScalarPanelFormFieldAbstract<Boolean> {
                 id,
                 BooleanModel.forScalarModel(scalarModel),
                 scalarModel.isRequired(),
-                CheckBoxXConfig.Sizes.md);
+                CheckBoxXConfig.Sizes.xl);
         return checkBox;
     }
 
