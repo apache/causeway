@@ -2,9 +2,9 @@ name: ecpnv-devops/isis (prod) adhoc build
 
 on:
   workflow_dispatch:
-#  push:
-#    branches:
-#    - 'prod'
+  push:
+    branches:
+    - 'prod'
 
 jobs:
   build:
