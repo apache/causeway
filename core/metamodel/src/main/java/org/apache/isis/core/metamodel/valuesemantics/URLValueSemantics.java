@@ -79,7 +79,16 @@ implements
 
     @Override
     public String titlePresentation(final ValueSemanticsProvider.Context context, final java.net.URL value) {
-        return value != null ? value.toString(): "";
+        return render(value, v->v.toString());
+    }
+
+    @Override
+    public String htmlPresentation(final ValueSemanticsProvider.Context context, final java.net.URL value) {
+        return render(value, v->toHtmlLink(v));
+    }
+
+    private String toHtmlLink(final java.net.URL url) {
+        return String.format("<a target=\"_blank\" href=\"%s\">%s</a>", url.toString(), url.toString());
     }
 
     // -- PARSER
