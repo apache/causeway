@@ -1057,10 +1057,8 @@ div.scalarValueInlinePromptLink.form-control:hover {
 
 .entityUrlSource {
 	cursor: pointer;
-	white-space: nowrap;
 	display: inline;
 }
-
 
 .booleanPanel div.label-left .scalarValueWrapper .form-control.scalarValueInlinePromptLink,
 .referencePanel div.label-left .scalarValueWrapper .form-control.scalarValueInlinePromptLink {
