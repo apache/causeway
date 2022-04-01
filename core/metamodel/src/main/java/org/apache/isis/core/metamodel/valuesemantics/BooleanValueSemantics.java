@@ -88,7 +88,7 @@ implements
 
     @Override
     public String titlePresentation(final ValueSemanticsProvider.Context context, final Boolean value) {
-        val title = render(value, v->v.booleanValue() ? "Yes" : "No");
+        val title = render(value, v->v.booleanValue() ? "True" : "False");
         return translationService!=null
                 ? translationService.translate(TranslationContext.empty(), title)
                 : title;

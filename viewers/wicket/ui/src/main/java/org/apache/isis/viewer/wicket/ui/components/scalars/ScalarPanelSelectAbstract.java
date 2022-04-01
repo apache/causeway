@@ -60,10 +60,6 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
         val select2 = Select2.createSelect2(id, scalarModel());
         select2.setLabel(Model.of(scalarModel.getFriendlyName()));
 
-        //TODO potentially superfluous, as already set in super ...
-        //select2.setRequired(scalarModel().isRequired());
-        //select2.add(new Select2Validator(scalarModel()));
-
         updateChoices(select2);
         return select2;
     }
@@ -157,7 +153,6 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
      */
     @Override
     public void repaint(final AjaxRequestTarget target) {
-        //target.add(select2.component());
         target.add(this);
     }
 
